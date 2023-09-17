@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,22 +18,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_FP_UPGRADE_H
-#define JOB_FP_UPGRADE_H
+#include <jobs/job_export_pcb_drill.h>
 
-#include <kicommon.h>
-#include <wx/string.h>
-#include "job.h"
-
-class KICOMMON_API JOB_FP_UPGRADE : public JOB
+JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL( bool aIsCli ) :
+    JOB( "drill", aIsCli ),
+    m_filename(),
+    m_outputDir(),
+    m_excellonMirrorY( false ),
+    m_excellonMinimalHeader( false ),
+    m_excellonCombinePTHNPTH( true ),
+    m_excellonOvalDrillRoute( false ),
+    m_format( DRILL_FORMAT::EXCELLON ),
+    m_drillOrigin( DRILL_ORIGIN::ABS ),
+    m_drillUnits( DRILL_UNITS::INCHES ),
+    m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
+    m_mapFormat( MAP_FORMAT::PDF ),
+    m_gerberPrecision( 5 ),
+    m_generateMap( false )
 {
-public:
-    JOB_FP_UPGRADE( bool aIsCli );
-
-    wxString m_libraryPath;
-    wxString m_outputLibraryPath;
-
-    bool m_force;
-};
-
-#endif
+}

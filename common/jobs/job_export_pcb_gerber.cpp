@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,45 +18,30 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_PCB_DRC_H
-#define JOB_PCB_DRC_H
+#include <jobs/job_export_pcb_gerber.h>
 
-#include <kicommon.h>
-#include <layer_ids.h>
-#include <wx/string.h>
-#include <widgets/report_severity.h>
-#include "job.h"
 
-class KICOMMON_API JOB_PCB_DRC : public JOB
+JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli ) :
+    JOB( aType, aIsCli ),
+    m_filename(),
+    m_outputFile(),
+    m_drawingSheet(),
+    m_plotFootprintValues( true ),
+    m_plotRefDes( true ),
+    m_plotBorderTitleBlocks( false ),
+    m_subtractSolderMaskFromSilk( false ),
+    m_includeNetlistAttributes( true ),
+    m_useX2Format( true ),
+    m_disableApertureMacros( false ),
+    m_useAuxOrigin( false ),
+    m_useProtelFileExtension( true ),
+    m_precision( 5 ),
+    m_printMaskLayer()
 {
-public:
-    JOB_PCB_DRC( bool aIsCli );
+}
 
-    wxString m_filename;
-    wxString m_outputFile;
 
-    bool m_reportAllTrackErrors;
-
-    enum class UNITS
-    {
-        INCHES,
-        MILLIMETERS,
-        MILS
-    };
-
-    UNITS m_units;
-
-    int m_severity;
-
-    enum class OUTPUT_FORMAT
-    {
-        REPORT,
-        JSON
-    };
-
-    OUTPUT_FORMAT m_format;
-
-    bool m_exitCodeViolations;
-};
-
-#endif
+JOB_EXPORT_PCB_GERBER::JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
+    JOB_EXPORT_PCB_GERBER( "gerber", aIsCli )
+{
+}

@@ -21,22 +21,14 @@
 #ifndef JOB_SYM_EXPORT_SVG_H
 #define JOB_SYM_EXPORT_SVG_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_SYM_EXPORT_SVG : public JOB
+class KICOMMON_API JOB_SYM_EXPORT_SVG : public JOB
 {
 public:
-    JOB_SYM_EXPORT_SVG( bool aIsCli ) :
-            JOB( "symsvg", aIsCli ),
-            m_libraryPath(),
-            m_symbol(),
-            m_outputDirectory(),
-            m_blackAndWhite( false ),
-            m_includeHiddenPins( false ),
-            m_includeHiddenFields( false )
-    {
-    }
+    JOB_SYM_EXPORT_SVG( bool aIsCli );
 
     wxString m_libraryPath;
     wxString m_symbol;

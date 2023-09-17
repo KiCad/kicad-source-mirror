@@ -21,18 +21,14 @@
 #ifndef JOB_EXPORT_SCH_PYTHONBOM_H
 #define JOB_EXPORT_SCH_PYTHONBOM_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_SCH_PYTHONBOM : public JOB
+class KICOMMON_API JOB_EXPORT_SCH_PYTHONBOM : public JOB
 {
 public:
-    JOB_EXPORT_SCH_PYTHONBOM( bool aIsCli ) :
-            JOB( "pythonbom", aIsCli ),
-            m_filename(),
-            m_outputFile()
-    {
-    }
+    JOB_EXPORT_SCH_PYTHONBOM( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

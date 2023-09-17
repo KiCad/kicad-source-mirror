@@ -21,21 +21,16 @@
 #ifndef JOB_EXPORT_PCB_GERBERS_H
 #define JOB_EXPORT_PCB_GERBERS_H
 
+#include <kicommon.h>
 #include "job_export_pcb_gerber.h"
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_GERBERS : public JOB_EXPORT_PCB_GERBER
+class KICOMMON_API JOB_EXPORT_PCB_GERBERS : public JOB_EXPORT_PCB_GERBER
 {
 public:
-    JOB_EXPORT_PCB_GERBERS( bool aIsCli ) :
-            JOB_EXPORT_PCB_GERBER( "gerbers", aIsCli ),
-            m_layersIncludeOnAll(),
-            m_layersIncludeOnAllSet( false ),
-            m_useBoardPlotParams( false )
-    {
-    }
+    JOB_EXPORT_PCB_GERBERS( bool aIsCli );
 
     LSET m_layersIncludeOnAll;
 

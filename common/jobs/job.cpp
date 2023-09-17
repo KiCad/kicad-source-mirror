@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,22 +18,11 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_FP_UPGRADE_H
-#define JOB_FP_UPGRADE_H
+#include <jobs/job.h>
 
-#include <kicommon.h>
-#include <wx/string.h>
-#include "job.h"
-
-class KICOMMON_API JOB_FP_UPGRADE : public JOB
+JOB::JOB( const std::string& aType, bool aIsCli ) :
+        m_type( aType ),
+        m_isCli( aIsCli ),
+        m_varOverrides()
 {
-public:
-    JOB_FP_UPGRADE( bool aIsCli );
-
-    wxString m_libraryPath;
-    wxString m_outputLibraryPath;
-
-    bool m_force;
-};
-
-#endif
+}

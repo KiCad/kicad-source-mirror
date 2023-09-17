@@ -21,33 +21,14 @@
 #ifndef JOB_EXPORT_SCH_BOM_H
 #define JOB_EXPORT_SCH_BOM_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_SCH_BOM : public JOB
+class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB
 {
 public:
-    JOB_EXPORT_SCH_BOM( bool aIsCli ) :
-            JOB( "bom", aIsCli ),
-            m_filename(),
-            m_outputFile(),
-
-            m_fieldDelimiter(),
-            m_stringDelimiter(),
-            m_refDelimiter(),
-            m_refRangeDelimiter(),
-            m_keepTabs( false ),
-            m_keepLineBreaks( false ),
-
-            m_fieldsOrdered(),
-            m_fieldsLabels(),
-            m_fieldsGroupBy(),
-            m_sortField(),
-            m_sortAsc( true ),
-            m_filterString(),
-            m_excludeDNP( false )
-    {
-    }
+    JOB_EXPORT_SCH_BOM( bool aIsCli );
 
     // Basic options
     wxString m_filename;

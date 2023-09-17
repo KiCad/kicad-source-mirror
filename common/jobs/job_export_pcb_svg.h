@@ -21,28 +21,15 @@
 #ifndef JOB_EXPORT_PCB_SVG_H
 #define JOB_EXPORT_PCB_SVG_H
 
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_SVG : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_SVG : public JOB
 {
 public:
-    JOB_EXPORT_PCB_SVG( bool aIsCli ) :
-            JOB( "svg", aIsCli ),
-            m_filename(),
-            m_outputFile(),
-            m_colorTheme(),
-            m_drawingSheet(),
-            m_mirror( false ),
-            m_blackAndWhite( false ),
-            m_negative( false ),
-            m_plotDrawingSheet( true ),
-            m_pageSizeMode( 0 ),
-            m_printMaskLayer(),
-            m_drillShapeOption( 2 )
-    {
-    }
+    JOB_EXPORT_PCB_SVG( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

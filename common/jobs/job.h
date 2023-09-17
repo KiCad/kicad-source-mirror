@@ -21,21 +21,17 @@
 #ifndef JOB_H
 #define JOB_H
 
+#include <kicommon.h>
 #include <map>
 #include <wx/string.h>
 
 /**
  * An simple container class that lets us dispatch output jobs to kifaces
  */
-class JOB
+class KICOMMON_API JOB
 {
 public:
-    JOB( const std::string& aType, bool aIsCli ) :
-            m_type( aType ),
-            m_isCli( aIsCli ),
-            m_varOverrides()
-    {
-    }
+    JOB( const std::string& aType, bool aIsCli );
 
     virtual ~JOB() {}
 

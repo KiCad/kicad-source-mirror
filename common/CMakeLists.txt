@@ -69,6 +69,25 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 set( KICOMMON_SRCS
     gal/color4d.cpp
 
+    jobs/job.cpp
+    jobs/job_export_pcb_drill.cpp
+    jobs/job_export_pcb_dxf.cpp
+    jobs/job_export_pcb_gerber.cpp
+    jobs/job_export_pcb_gerbers.cpp
+    jobs/job_export_pcb_pdf.cpp
+    jobs/job_export_pcb_pos.cpp
+    jobs/job_export_pcb_svg.cpp
+    jobs/job_export_pcb_3d.cpp
+    jobs/job_export_sch_bom.cpp
+    jobs/job_export_sch_netlist.cpp
+    jobs/job_export_sch_pythonbom.cpp
+    jobs/job_fp_export_svg.cpp
+    jobs/job_fp_upgrade.cpp
+    jobs/job_pcb_drc.cpp
+    jobs/job_sch_erc.cpp
+    jobs/job_sym_export_svg.cpp
+    jobs/job_sym_upgrade.cpp
+
     asset_archive.cpp
     array_axis.cpp
     array_options.cpp

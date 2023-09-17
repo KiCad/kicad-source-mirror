@@ -21,36 +21,16 @@
 #ifndef JOB_EXPORT_PCB_GERBER_H
 #define JOB_EXPORT_PCB_GERBER_H
 
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_GERBER : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_GERBER : public JOB
 {
 public:
-    JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli ) :
-            JOB( aType, aIsCli ),
-            m_filename(),
-            m_outputFile(),
-            m_drawingSheet(),
-            m_plotFootprintValues( true ),
-            m_plotRefDes( true ),
-            m_plotBorderTitleBlocks( false ),
-            m_subtractSolderMaskFromSilk( false ),
-            m_includeNetlistAttributes( true ),
-            m_useX2Format( true ),
-            m_disableApertureMacros( false ),
-            m_useAuxOrigin( false ),
-            m_useProtelFileExtension( true ),
-            m_precision( 5 ),
-            m_printMaskLayer()
-    {
-    }
-
-    JOB_EXPORT_PCB_GERBER( bool aIsCli ) :
-            JOB_EXPORT_PCB_GERBER( "gerber", aIsCli )
-    {
-    }
+    JOB_EXPORT_PCB_GERBER( const std::string& aType, bool aIsCli );
+    JOB_EXPORT_PCB_GERBER( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

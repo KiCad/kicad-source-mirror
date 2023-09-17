@@ -21,28 +21,15 @@
 #ifndef JOB_EXPORT_PCB_POS_H
 #define JOB_EXPORT_PCB_POS_H
 
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_POS : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_POS : public JOB
 {
 public:
-    JOB_EXPORT_PCB_POS( bool aIsCli ) :
-            JOB( "pos", aIsCli ),
-            m_filename(),
-            m_outputFile(),
-            m_useDrillPlaceFileOrigin( true ),
-            m_smdOnly( false ),
-            m_excludeFootprintsWithTh( false ),
-            m_excludeDNP( false ),
-            m_negateBottomX( false )
-    {
-        m_side = SIDE::BOTH;
-        m_units = UNITS::MILLIMETERS;
-        m_format = FORMAT::ASCII;
-        m_gerberBoardEdge = true;
-    }
+    JOB_EXPORT_PCB_POS( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

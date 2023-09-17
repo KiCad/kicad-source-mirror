@@ -21,29 +21,16 @@
 #ifndef JOB_EXPORT_PCB_PDF_H
 #define JOB_EXPORT_PCB_PDF_H
 
+#include <kicommon.h>
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_PDF : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_PDF : public JOB
 {
 public:
-    JOB_EXPORT_PCB_PDF( bool aIsCli ) :
-            JOB( "pdf", aIsCli ),
-            m_filename(),
-            m_outputFile(),
-            m_colorTheme(),
-            m_drawingSheet(),
-            m_mirror( false ),
-            m_blackAndWhite( false ),
-            m_negative( false ),
-            m_plotFootprintValues( true ),
-            m_plotRefDes( true ),
-            m_plotBorderTitleBlocks( false ),
-            m_printMaskLayer(),
-            m_drillShapeOption( 2 )
-    {
-    }
+    JOB_EXPORT_PCB_PDF( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

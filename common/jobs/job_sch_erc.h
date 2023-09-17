@@ -21,23 +21,16 @@
 #ifndef JOB_PCB_DRC_H
 #define JOB_PCB_DRC_H
 
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include <widgets/report_severity.h>
 #include "job.h"
 
-class JOB_SCH_ERC : public JOB
+class KICOMMON_API JOB_SCH_ERC : public JOB
 {
 public:
-    JOB_SCH_ERC( bool aIsCli ) :
-            JOB( "erc", aIsCli ),
-            m_filename(),
-            m_units( JOB_SCH_ERC::UNITS::MILLIMETERS ),
-            m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
-            m_format( OUTPUT_FORMAT::REPORT ),
-            m_exitCodeViolations( false )
-    {
-    }
+    JOB_SCH_ERC( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

@@ -21,19 +21,14 @@
 #ifndef JOB_EXPORT_SCH_NETLIST_H
 #define JOB_EXPORT_SCH_NETLIST_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_SCH_NETLIST : public JOB
+class KICOMMON_API JOB_EXPORT_SCH_NETLIST : public JOB
 {
 public:
-    JOB_EXPORT_SCH_NETLIST( bool aIsCli ) :
-            JOB( "netlist", aIsCli ),
-            m_filename(),
-            m_outputFile()
-    {
-        format = FORMAT::KICADSEXPR;
-    }
+    JOB_EXPORT_SCH_NETLIST( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputFile;

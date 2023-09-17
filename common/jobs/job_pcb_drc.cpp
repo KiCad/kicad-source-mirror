@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,22 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_FP_UPGRADE_H
-#define JOB_FP_UPGRADE_H
+#include <jobs/job_pcb_drc.h>
 
-#include <kicommon.h>
-#include <wx/string.h>
-#include "job.h"
 
-class KICOMMON_API JOB_FP_UPGRADE : public JOB
+JOB_PCB_DRC::JOB_PCB_DRC( bool aIsCli ) :
+    JOB( "drc", aIsCli ),
+    m_filename(),
+    m_reportAllTrackErrors( false ),
+    m_units( JOB_PCB_DRC::UNITS::MILLIMETERS ),
+    m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
+    m_format( OUTPUT_FORMAT::REPORT ),
+    m_exitCodeViolations( false )
 {
-public:
-    JOB_FP_UPGRADE( bool aIsCli );
-
-    wxString m_libraryPath;
-    wxString m_outputLibraryPath;
-
-    bool m_force;
-};
-
-#endif
+}

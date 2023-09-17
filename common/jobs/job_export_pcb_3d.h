@@ -21,36 +21,14 @@
 #ifndef JOB_EXPORT_STEP_H
 #define JOB_EXPORT_STEP_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_3D : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_3D : public JOB
 {
 public:
-    JOB_EXPORT_PCB_3D( bool aIsCli ) :
-            JOB( "3d", aIsCli ),
-            m_overwrite( false ),
-            m_useGridOrigin( false ),
-            m_useDrillOrigin( false ),
-            m_hasUserOrigin( false ),
-            m_boardOnly( false ),
-            m_includeUnspecified( false ),
-            m_includeDNP( false ),
-            m_substModels( false ),
-            m_filename(),
-            m_outputFile(),
-            m_xOrigin( 0.0 ),
-            m_yOrigin( 0.0 ),
-            // max dist to chain 2 items (lines or curves) to build the board outlines
-            m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
-            m_exportTracks( false ),     // Extremely time consuming if true
-            m_exportZones( false ),      // Extremely time consuming if true
-            m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
-            m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
-            m_vrmlModelDir( wxEmptyString ),
-            m_vrmlRelativePaths( false )
-    {
-    }
+    JOB_EXPORT_PCB_3D( bool aIsCli );
 
     enum class FORMAT
     {

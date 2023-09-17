@@ -21,30 +21,15 @@
 #ifndef JOB_EXPORT_PCB_DRILL_H
 #define JOB_EXPORT_PCB_DRILL_H
 
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_DRILL : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_DRILL : public JOB
 {
 public:
-    JOB_EXPORT_PCB_DRILL( bool aIsCli ) :
-            JOB( "drill", aIsCli ),
-            m_filename(),
-            m_outputDir(),
-            m_excellonMirrorY( false ),
-            m_excellonMinimalHeader( false ),
-            m_excellonCombinePTHNPTH( true ),
-            m_excellonOvalDrillRoute( false ),
-            m_format( DRILL_FORMAT::EXCELLON ),
-            m_drillOrigin( DRILL_ORIGIN::ABS ),
-            m_drillUnits( DRILL_UNITS::INCHES ),
-            m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
-            m_mapFormat( MAP_FORMAT::PDF ),
-            m_gerberPrecision( 5 ),
-            m_generateMap( false )
-    {
-    }
+    JOB_EXPORT_PCB_DRILL( bool aIsCli );
 
     wxString m_filename;
     wxString m_outputDir;

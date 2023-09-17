@@ -21,19 +21,14 @@
 #ifndef JOB_SYM_UPGRADE_H
 #define JOB_SYM_UPGRADE_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_SYM_UPGRADE : public JOB
+class KICOMMON_API JOB_SYM_UPGRADE : public JOB
 {
 public:
-    JOB_SYM_UPGRADE( bool aIsCli ) :
-            JOB( "symupgrade", aIsCli ),
-            m_libraryPath(),
-            m_outputLibraryPath(),
-            m_force( false )
-    {
-    }
+    JOB_SYM_UPGRADE( bool aIsCli );
 
     wxString m_libraryPath;
     wxString m_outputLibraryPath;

@@ -21,26 +21,15 @@
 #ifndef JOB_EXPORT_PCB_DXF_H
 #define JOB_EXPORT_PCB_DXF_H
 
+#include <kicommon.h>
 #include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_DXF : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_DXF : public JOB
 {
 public:
-    JOB_EXPORT_PCB_DXF( bool aIsCli ) :
-            JOB( "dxf", aIsCli ),
-            m_filename(),
-            m_outputFile(),
-            m_drawingSheet(),
-            m_plotFootprintValues( true ),
-            m_plotRefDes( true ),
-            m_plotGraphicItemsUsingContours( true ),
-            m_plotBorderTitleBlocks( false ),
-            m_dxfUnits( DXF_UNITS::INCHES ),
-            m_printMaskLayer()
-    {
-    }
+    JOB_EXPORT_PCB_DXF( bool aIsCli );
 
     enum class DXF_UNITS
     {

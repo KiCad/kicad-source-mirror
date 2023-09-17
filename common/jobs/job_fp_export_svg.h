@@ -21,20 +21,15 @@
 #ifndef JOB_FP_EXPORT_SVG_H
 #define JOB_FP_EXPORT_SVG_H
 
+#include <kicommon.h>
+#include <layer_ids.h>
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_FP_EXPORT_SVG : public JOB
+class KICOMMON_API JOB_FP_EXPORT_SVG : public JOB
 {
 public:
-    JOB_FP_EXPORT_SVG( bool aIsCli ) :
-            JOB( "fpsvg", aIsCli ),
-            m_libraryPath(),
-            m_footprint(),
-            m_outputDirectory(),
-            m_blackAndWhite( false )
-    {
-    }
+    JOB_FP_EXPORT_SVG( bool aIsCli );
 
     wxString m_libraryPath;
     wxString m_footprint;
