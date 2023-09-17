@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-08-09 07:55+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -526,34 +526,28 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "マテリアルのディフューズ カラーに基づいた CAD カラー スタイルを使用"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "スルーホールの3Dモデル表示を切り替え"
+msgstr "スルーホール部品の3Dモデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "「スルーホール」タイプの部品の 3D モデル表示を切り替え"
+msgstr "「スルーホール」タイプのフットプリントの 3D モデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "3D 面実装部品 (SMD) モデルを表示"
+msgstr "SMD部品の3Dモデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "「表面実装」タイプの部品の 3D モデル表示を切り替え"
+msgstr "「表面実装」タイプの部品の 3D モデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "その他の3Dモデル表示の切り替え"
+msgstr "タイプ未指定の部品の3Dモデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "「その他」タイプの部品の 3D モデル表示を切り替え"
+msgstr "「未指定」タイプの部品の 3D モデルを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
 #, fuzzy
@@ -6180,13 +6174,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "バス グループ %s の解析に失敗"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
 "find project.json."
 msgstr ""
-"ファイル '%s'\n"
-"は有効なKiCadプロジェクト ファイルではないようです。"
+"'%s' は有効なEasyEDA (JLCEDA) Pro プロジェクト ファイルではないようです。"
+"project.json が見つかりません。"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:101
 #, fuzzy, c-format
@@ -7296,7 +7290,6 @@ msgid "Min grid spacing:"
 msgstr "最小グリッド間隔:"
 
 #: common/widgets/gal_options_panel_base.cpp:84
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "グリッドにスナップ:"
 
@@ -9013,7 +9006,7 @@ msgstr "データベースライブラリの設定ファイルを再読み込み
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
 msgid "Caching"
-msgstr "キャッシュ化."
+msgstr "キャッシュ"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
 msgid "Cache size:"
@@ -11615,31 +11608,28 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "DC"
-msgstr "DRC"
+msgstr "DC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "OP"
-msgstr "OSP"
+msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "SP"
-msgstr "OSP"
+msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25 pcbnew/pad.cpp:1700
 msgid "Custom"
@@ -11974,9 +11964,8 @@ msgstr "左:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:826
 #: eeschema/dialogs/dialog_sim_command_base.cpp:867
-#, fuzzy
 msgid "70"
-msgstr "0"
+msgstr "70"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:839
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:579
@@ -12269,7 +12258,7 @@ msgstr "数量"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:594
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:623
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:714
@@ -12894,14 +12883,12 @@ msgid "User-defined Signals"
 msgstr "ユーザー定義原点"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "ワイヤー"
+msgstr "ワイヤー/バス"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:232
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "バスを移動"
+msgstr "ワイヤー/バス"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -13956,24 +13943,23 @@ msgid "Symbol library was not updated\n"
 msgstr "シンボル ライブラリは更新されていません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:788
-#, fuzzy
 msgid "Running ERC...\n"
-msgstr "DRC を実行..."
+msgstr "DRC を実行...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:796 pcbnew/pcbnew_jobs_handler.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "DRC違反を許容する"
+msgstr "%d 個の違反を検出しました\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:810
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "リポジトリの解析ができません: %s"
+msgstr "ERC レポートを %s に保存できません\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "DRC レポート ファイルを保存"
+msgstr "DRC レポートを %s に保存しました\n"
 
 #: eeschema/eeschema_settings.cpp:70
 #, fuzzy
@@ -17551,11 +17537,9 @@ msgstr ""
 "す"
 
 #: eeschema/sim/legacy_workbook.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"基板ファイルのロード エラー:\n"
-"%s"
+msgstr "ワークブックの読み込みエラー: 行: %d: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:133
 #, fuzzy
@@ -22253,9 +22237,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "有効なオプション: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "有効なオプション: absolute,plot"
+msgstr "有効なオプション: route,alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Output units, valid options:in,mm"
@@ -22300,9 +22283,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "不正なゼロの扱いが指定されています\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:189
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "不正なマップ ファイル形式が指定されています\n"
+msgstr "不正な長円のドリルが指定されています\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:217
 msgid "Invalid map format specified\n"
@@ -22421,16 +22403,16 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "基板を反転 (裏面から表示するのに便利です)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:77
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "カラー テーマを使用する (pcbnewの設定でのデフォルト)"
+msgstr "カラー テーマを使用する (PCBエディターのデフォルト設定)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:81
 #: kicad/cli/command_pcb_export_svg.cpp:81
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "パッド/ビアの形状オプションを設定します (0 = 形状指定なし, 1 = 小さな形状, 2 "
+"= 実際の形状)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -24682,9 +24664,8 @@ msgid "Current density"
 msgstr "現在のキー:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
-#, fuzzy
 msgid "A/mm^2"
-msgstr "mm^2"
+msgstr "A/mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:167
 msgid "Application"
@@ -24854,9 +24835,8 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:160
-#, fuzzy
 msgid "kV"
-msgstr "V"
+msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
@@ -24951,24 +24931,20 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD1"
-msgstr "PDF"
+msgstr "PD1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD2"
-msgstr "PDF"
+msgstr "PD2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD3"
-msgstr "PDF"
+msgstr "PD3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD4"
-msgstr "PDF"
+msgstr "PD4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:194
 #, fuzzy
@@ -24993,11 +24969,11 @@ msgstr "I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
 #, fuzzy
@@ -29426,9 +29402,8 @@ msgid "Export STEP / GLTF"
 msgstr "STEP をエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:218
-#, fuzzy
 msgid "Command line:\n"
-msgstr "コマンド ライン:"
+msgstr "コマンド ライン:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -32109,7 +32084,7 @@ msgstr "出力フォーマット:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
-msgstr "ガーバー"
+msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:271
@@ -36996,11 +36971,9 @@ msgstr ""
 "** STEP ファイル の書き込み中にエラーが発生しました。 **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"STEP ファイル '%s' が作成されました。\n"
+msgstr "%s ファイル '%s' が作成されました。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:544
 #: pcbnew/exporters/step/exporter_step.cpp:550
@@ -37028,11 +37001,13 @@ msgid "%s file has been created, but there are warnings."
 msgstr "STEP ファイルが作成されましたが、警告があります。"
 
 #: pcbnew/exporters/step/exporter_step.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "リロード時間 %.3f s"
+msgstr ""
+"\n"
+"エクスポート時間 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
 #, fuzzy, c-format
@@ -38650,14 +38625,12 @@ msgid "Suppress Trailing Zeroes"
 msgstr "後方ゼロ省略 (トレイリング ゼロ サプレス)"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "カーソルを右へ移動"
+msgstr "十字線の高さ"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "寸法補助線へのオフセット:"
+msgstr "寸法補助線のオーバーシュート:"
 
 #: pcbnew/pcb_dimension.cpp:1492
 msgid "Leader Length"
@@ -39056,9 +39029,8 @@ msgid "Successfully exported VRML to %s"
 msgstr "svgファイルの作成に成功しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "ファイルの展開エラー!"
+msgstr "VRMLエクスポートのエラー"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:210
 msgid "Successfully created svg file"
@@ -39099,18 +39071,17 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "フットプリント '%s' '%s' にプロット\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:962
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "DRC を実行..."
+msgstr "DRC を実行...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:974 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "未配線アイテム (%s)"
+msgstr "%d 個の未配線アイテムを検出しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:995
 #, c-format
@@ -39118,14 +39089,14 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "リポジトリの解析ができません: %s"
+msgstr "%s にDRC レポートを保存できません\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "DRC レポート ファイルを保存"
+msgstr "%s にDRC レポートを保存\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -39265,9 +39236,9 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "ファイルが見つかりません: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "フットプリント ライブラリが見つかりません。"
+msgstr "フットプリント ディレクトリが見つかりません: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:755
 #, c-format
@@ -39959,10 +39930,9 @@ msgstr ""
 "Eagle のレイヤー '%s'（%d）がマップされていないため、ポリゴンを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Eagle のレイヤー '%s'（%d）がマップされていないため、ポリゴンを無視します"
+msgstr "外形線の1つではないため '%s'（%d）のポリゴンを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1820
 #, c-format
@@ -40008,9 +39978,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle ver. 6.x XML ライブラリ ファイル"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "不明なModel_type "
+msgstr "nodeType %d の不明なSVGNODE"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
 #, fuzzy, c-format
@@ -40019,11 +39989,9 @@ msgstr "'%s' を開くための PDF ビューアーが見つかりませんで�
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:266
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"基板ロード中のエラー \n"
-"%s"
+msgstr "基板ロード中のエラー '%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
@@ -40416,7 +40384,7 @@ msgid ""
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "以前のゾーンの塗りつぶし方式は現在ではサポートされていません。\n"
-"ゾーンの塗りつぶしは可能な限り忠実に変換されます。"
+"ゾーンの塗りつぶしを可能な限り忠実に変換します。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5721
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2518
@@ -40425,7 +40393,7 @@ msgid ""
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "以前のセグメントの塗りつぶしモードは現在サポートされていません。\n"
-"ゾーン塗りつぶしは可能な限り忠実に変換されます。"
+"ゾーンの塗りつぶしを可能な限り忠実に変換します。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:90
 #, c-format
