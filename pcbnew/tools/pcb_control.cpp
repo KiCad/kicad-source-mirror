@@ -58,6 +58,7 @@
 #include <string>
 #include <tool/tool_manager.h>
 #include <footprint_edit_frame.h>
+#include <footprint_editor_settings.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
 #include <wx/hyperlink.h>
@@ -1345,7 +1346,10 @@ int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::SnapMode( const TOOL_EVENT& aEvent )
 {
-    bool& snapMode = m_frame->GetPcbNewSettings()->m_MagneticItems.allLayers;
+    MAGNETIC_SETTINGS& settings = m_isFootprintEditor
+                                          ? m_frame->GetFootprintEditorSettings()->m_MagneticItems
+                                          : m_frame->GetPcbNewSettings()->m_MagneticItems;
+    bool& snapMode = settings.allLayers;
 
     if( aEvent.IsAction( &PCB_ACTIONS::magneticSnapActiveLayer ) )
         snapMode = false;
@@ -1374,11 +1378,12 @@ int PCB_CONTROL::SnapModeFeedback( const TOOL_EVENT& aEvent )
 
     HOTKEY_CYCLE_POPUP* popup = m_frame->GetHotkeyPopup();
 
+    MAGNETIC_SETTINGS& settings = m_isFootprintEditor
+                                          ? m_frame->GetFootprintEditorSettings()->m_MagneticItems
+                                          : m_frame->GetPcbNewSettings()->m_MagneticItems;
+
     if( popup )
-    {
-        popup->Popup( _( "Object Snapping" ), labels,
-                      static_cast<int>( m_frame->GetPcbNewSettings()->m_MagneticItems.allLayers ) );
-    }
+        popup->Popup( _( "Object Snapping" ), labels, static_cast<int>( settings.allLayers ) );
 
     return 0;
 }

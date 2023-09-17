@@ -50,9 +50,10 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_LastExportPath(),
         m_FootprintTextShownColumns()
 {
-    m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
-    m_MagneticItems.tracks   = MAGNETIC_OPTIONS::NO_EFFECT;
-    m_MagneticItems.graphics = true;
+    m_MagneticItems.pads      = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    m_MagneticItems.tracks    = MAGNETIC_OPTIONS::NO_EFFECT;
+    m_MagneticItems.graphics  = true;
+    m_MagneticItems.allLayers = false;
 
     m_AuiPanels.appearance_panel_tab = 0;
     m_AuiPanels.right_panel_width = -1;
@@ -94,6 +95,9 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
             &m_MagneticItems.graphics, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.magnetic_all_layers",
+            &m_MagneticItems.allLayers, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
             &m_PolarCoords, false ) );
