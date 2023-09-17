@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-08-31 12:51+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -812,7 +812,7 @@ msgstr "Renderingsalternativ"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Visa gränsrutor för modell"
+msgstr "Visa gränslådor för modell"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
@@ -3195,7 +3195,7 @@ msgstr "Redigering"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Warp mouse to origin of moved object"
-msgstr "Förflytta musen till det flyttade objektets origo"
+msgstr "Flytta musmarkören till det flyttade objektets origo"
 
 #: common/dialogs/panel_common_settings_base.cpp:254
 msgid "First hotkey selects tool"
@@ -6339,7 +6339,7 @@ msgstr "Växla inaktiva lager mellan normala, nedtonade och dolda"
 
 #: common/tool/actions.cpp:564
 msgid "Draw Bounding Boxes"
-msgstr "Rita avgränsningsboxar"
+msgstr "Rita avgränsningslådor"
 
 #: common/tool/actions.cpp:569
 msgid "Select item(s)"
@@ -6650,7 +6650,6 @@ msgid "Min grid spacing:"
 msgstr "Minsta rutnätsavstånd:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Fäst mot rutnät:"
 
@@ -19729,9 +19728,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Giltiga alternativ är: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Giltiga alternativ är: absolute,plot"
+msgstr "Giltiga alternativ är: route, alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19782,9 +19780,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Ogiltigt nollformat specificerat\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Ogiltigt kartformat specificerat\n"
+msgstr "Ogiltigt format för oval borrning specificerat\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -19897,6 +19894,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Sätt alternativ för lödytans / viats borrform (0 = ingen form, 1 = liten "
+"form, 2 = verklig form)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -26386,9 +26385,8 @@ msgid "Export STEP"
 msgstr "Exportera STEG"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Kommando:"
+msgstr "Kommandorad\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -36175,9 +36173,9 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
+msgstr "Ignorerar en polygon på lager '%s' (%d): antal konturer är inte 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
