@@ -539,16 +539,17 @@ void KIPLATFORM::UI::InfiniteDragReleaseWindow()
 {
     wxLogTrace( traceWayland, wxS( "InfiniteDragReleaseWindow" ) );
 
-    if( s_wl_confined_pointer == NULL )
+    if( s_wl_confined_pointer )
     {
-        return;
+        zwp_confined_pointer_v1_destroy( s_wl_confined_pointer );
+        s_wl_confined_pointer = NULL;
     }
 
-    zwp_confined_pointer_v1_destroy( s_wl_confined_pointer );
-    wl_region_destroy( s_wl_confinement_region );
-
-    s_wl_confined_pointer = NULL;
-    s_wl_confinement_region = NULL;
+    if( s_wl_confinement_region )
+    {
+        wl_region_destroy( s_wl_confinement_region );
+        s_wl_confinement_region = NULL;
+    }
 };
 
 
