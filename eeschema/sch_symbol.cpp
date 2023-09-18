@@ -1282,7 +1282,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
-        *token = parts[ 0 ];
+        if( parts.Count() > 0 )
+            *token = parts[ 0 ];
+        else
+            *token = wxEmptyString;
+
         return true;
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
@@ -1291,7 +1295,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
-        *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
+        if( parts.Count() > 1 )
+            *token = parts[ std::min( 1, (int) parts.size() - 1 ) ];
+        else
+            *token = wxEmptyString;
+
         return true;
     }
     else if( token->IsSameAs( wxT( "UNIT" ) ) )
