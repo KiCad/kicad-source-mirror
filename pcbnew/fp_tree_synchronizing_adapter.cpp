@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -100,12 +100,19 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
     {
         if( m_libMap.count( libName ) == 0 )
         {
-            const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
-            bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
-                            || alg::contains( project.m_PinnedFootprintLibs, libName );
+            try
+            {
+                const FP_LIB_TABLE_ROW* library = m_libs->FindRow( libName, true );
+                bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
+                                || alg::contains( project.m_PinnedFootprintLibs, libName );
 
-            DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
-            m_libMap.insert( libName  );
+                DoAddLibrary( libName, library->GetDescr(), getFootprints( libName ), pinned, true );
+                m_libMap.insert( libName  );
+            }
+            catch( ... )
+            {
+                // do nothing if libname is not found. Just skip it
+            }
         }
     }
 
