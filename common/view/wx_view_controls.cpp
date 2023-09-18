@@ -198,9 +198,12 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     ( *m_MotionEventCounter )++;
 
-    bool isAutoPanning = false;
-    int x = aEvent.GetX();
-    int y = aEvent.GetY();
+    // Because Weston sends a motion event to previous location after warping the pointer
+    wxPoint mouseRel = m_parentPanel->ScreenToClient( KIPLATFORM::UI::GetMousePosition() );
+
+    bool     isAutoPanning = false;
+    int      x = mouseRel.x;
+    int      y = mouseRel.y;
     VECTOR2D mousePos( x, y );
 
     // Automatic focus switching between SCH and PCB windows on canvas mouse motion

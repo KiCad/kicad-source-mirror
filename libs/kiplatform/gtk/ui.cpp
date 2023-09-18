@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <Ian.S.McInerney at ieee.org>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,6 +24,7 @@
 #include <wx/nonownedwnd.h>
 #include <wx/settings.h>
 #include <wx/window.h>
+#include <wx/log.h>
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
@@ -39,6 +40,10 @@
 #ifdef KICAD_WAYLAND
 #include "wayland-pointer-constraints-unstable-v1.h"
 #endif
+
+// Set WXTRACE=KICAD_WAYLAND to see logs
+const wxString traceWayland = wxS( "KICAD_WAYLAND" );
+
 
 bool KIPLATFORM::UI::IsDarkTheme()
 {
@@ -211,7 +216,12 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 }
 
 
-// GDK doesn't know if we've moved the cursor using pointer constraints.
+#if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
+
+static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkWindow* aWindow,
+                                  GdkDevice* aPtrDev, int aX, int aY );
+
+// GDK doesn't know if we've moved the cursor using Wayland pointer constraints.
 // So emulate the actual position here
 static wxPoint s_warped_from;
 static wxPoint s_warped_to;
@@ -222,6 +232,9 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 
     if( wx_pos == s_warped_from )
     {
+        wxLogTrace( traceWayland, wxS( "Faked mouse pos %d %d -> %d %d" ), wx_pos.x, wx_pos.y,
+                    s_warped_to.x, s_warped_to.y );
+
         return s_warped_to;
     }
     else
@@ -233,12 +246,6 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 
     return wx_pos;
 }
-
-
-#if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
-
-static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkWindow* aWindow,
-                                  GdkDevice* aPtrDev, int aX, int aY );
 
 #endif
 
@@ -267,6 +274,9 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
             {
                 s_warped_from = initialPos;
                 s_warped_to = aWindow->ClientToScreen( wxPoint( aX, aY ) );
+
+                wxLogTrace( traceWayland, wxS( "Set warped from %d %d to %d %d" ), s_warped_from.x,
+                            s_warped_from.y, s_warped_to.x, s_warped_to.y );
             }
         }
 #endif
@@ -304,17 +314,22 @@ static struct wl_compositor*              s_wl_compositor = NULL;
 static struct zwp_pointer_constraints_v1* s_wl_pointer_constraints = NULL;
 static struct zwp_confined_pointer_v1*    s_wl_confined_pointer = NULL;
 static struct wl_region*                  s_wl_confinement_region = NULL;
+static bool                               s_wl_locked_flag = false;
 
 static void handle_global( void* data, struct wl_registry* registry, uint32_t name,
                            const char* interface, uint32_t version )
 {
     if( strcmp( interface, wl_compositor_interface.name ) == 0 )
     {
+        wxLogTrace( traceWayland, "handle_global received %s", interface );
+
         s_wl_compositor = static_cast<wl_compositor*>(
                 wl_registry_bind( registry, name, &wl_compositor_interface, version ) );
     }
     else if( strcmp( interface, zwp_pointer_constraints_v1_interface.name ) == 0 )
     {
+        wxLogTrace( traceWayland, "handle_global received %s", interface );
+        
         s_wl_pointer_constraints = static_cast<zwp_pointer_constraints_v1*>( wl_registry_bind(
                 registry, name, &zwp_pointer_constraints_v1_interface, version ) );
     }
@@ -323,6 +338,38 @@ static void handle_global( void* data, struct wl_registry* registry, uint32_t na
 static const struct wl_registry_listener registry_listener = {
     .global = handle_global,
     .global_remove = NULL,
+};
+
+static void confined_handler( void* data, struct zwp_confined_pointer_v1* zwp_confined_pointer_v1 )
+{
+    wxLogTrace( traceWayland, wxS( "Pointer confined" ) );
+}
+
+static void unconfined_handler( void*                           data,
+                                struct zwp_confined_pointer_v1* zwp_confined_pointer_v1 )
+{
+    wxLogTrace( traceWayland, wxS( "Pointer unconfined" ) );
+}
+
+static const struct zwp_confined_pointer_v1_listener confined_pointer_listener = {
+    .confined = confined_handler,
+    .unconfined = unconfined_handler
+};
+
+static void locked_handler( void* data, struct zwp_locked_pointer_v1* zwp_locked_pointer_v1 )
+{
+    s_wl_locked_flag = true;
+    wxLogTrace( traceWayland, wxS( "Pointer locked" ) );
+}
+
+static void unlocked_handler( void* data, struct zwp_locked_pointer_v1* zwp_locked_pointer_v1 )
+{
+    wxLogTrace( traceWayland, wxS( "Pointer unlocked" ) );
+}
+
+static const struct zwp_locked_pointer_v1_listener locked_pointer_listener = {
+    .locked = locked_handler,
+    .unlocked = unlocked_handler
 };
 
 
@@ -343,6 +390,46 @@ static void initialize_wayland( wl_display* wldisp )
 }
 
 
+struct zwp_locked_pointer_v1* s_wl_locked_pointer = NULL;
+
+static int s_after_paint_handler_id = 0;
+
+static void on_frame_clock_after_paint( GdkFrameClock* clock, GtkWidget* widget )
+{
+    if( s_wl_locked_pointer )
+    {
+        zwp_locked_pointer_v1_destroy( s_wl_locked_pointer );
+        s_wl_locked_pointer = NULL;
+
+        wxLogTrace( traceWayland, wxS( "after-paint: locked_pointer destroyed" ) );
+
+        g_signal_handler_disconnect( (gpointer) clock, s_after_paint_handler_id );
+        s_after_paint_handler_id = 0;
+
+        // restore confinement
+        if( s_wl_confinement_region != NULL )
+        {
+            wxLogTrace( traceWayland, wxS( "after-paint: Restoring confinement" ) );
+
+            GdkDisplay* disp = gtk_widget_get_display( widget );
+            GdkSeat*    seat = gdk_display_get_default_seat( disp );
+            GdkDevice*  ptrdev = gdk_seat_get_pointer( seat );
+            GdkWindow*  window = gtk_widget_get_window( widget );
+
+            wl_display* wldisp = gdk_wayland_display_get_wl_display( disp );
+            wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( window );
+            wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( ptrdev );
+
+            s_wl_confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
+                    s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
+                    ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+
+            wl_display_roundtrip( wldisp );
+        }
+    }
+}
+
+
 static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkWindow* aWindow,
                                   GdkDevice* aPtrDev, int aX, int aY )
 {
@@ -350,43 +437,63 @@ static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkW
     wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( aWindow );
     wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( aPtrDev );
 
+    if( s_after_paint_handler_id )
+    {
+        // Previous paint not done yet
+        wxLogTrace( traceWayland, wxS( "Not warping: after-paint pending" ) );
+        return false;
+    }
+
     initialize_wayland( wldisp );
 
+    if( s_wl_locked_pointer )
+    {
+        // This shouldn't happen but let's be safe
+        wxLogTrace( traceWayland, wxS( "** Destroying previous locked_pointer **" ) );
+        zwp_locked_pointer_v1_destroy( s_wl_locked_pointer );
+        wl_display_roundtrip( wldisp );
+        s_wl_locked_pointer = NULL;
+    }
+
+    // wl_surface_commit causes an assert on GNOME, but has to be called on KDE
+    // before destroying the locked pointer, so wait until GDK commits the surface.
+    GdkFrameClock* frame_clock = gdk_window_get_frame_clock( aWindow );
+    s_after_paint_handler_id = g_signal_connect_after(
+            frame_clock, "after-paint", G_CALLBACK( on_frame_clock_after_paint ), aWidget );
+
     // temporary disable confinement to allow pointer warping
-    if( s_wl_confinement_region != NULL )
+    if( s_wl_confinement_region && s_wl_confined_pointer )
     {
         zwp_confined_pointer_v1_destroy( s_wl_confined_pointer );
+        wl_display_roundtrip( wldisp );
         s_wl_confined_pointer = NULL;
     }
 
-    struct zwp_locked_pointer_v1* locked_pointer =
+    s_wl_locked_flag = false;
+
+    s_wl_locked_pointer =
             zwp_pointer_constraints_v1_lock_pointer( s_wl_pointer_constraints, wlsurf, wlptr, NULL,
                                                      ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+
+    zwp_locked_pointer_v1_add_listener(s_wl_locked_pointer, &locked_pointer_listener, NULL);
 
     gint wx, wy;
     gtk_widget_translate_coordinates( aWidget, gtk_widget_get_toplevel( aWidget ), 0, 0, &wx, &wy );
 
-    zwp_locked_pointer_v1_set_cursor_position_hint( locked_pointer, wl_fixed_from_int( aX + wx ),
+    zwp_locked_pointer_v1_set_cursor_position_hint( s_wl_locked_pointer, wl_fixed_from_int( aX + wx ),
                                                     wl_fixed_from_int( aY + wy ) );
 
-    zwp_locked_pointer_v1_destroy( locked_pointer );
+    // Don't call wl_surface_commit, wait for GDK because of an assert on GNOME.
+    wl_display_roundtrip( wldisp ); // To receive "locked" event
 
-    // restore confinement
-    if( s_wl_confinement_region != NULL )
-    {
-        s_wl_confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
-                s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
-                ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
-    }
-
-    wl_display_roundtrip( wldisp );
-
-    return true;
+    return s_wl_locked_flag;
 }
 
 
 void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 {
+    wxLogTrace( traceWayland, wxS( "InfiniteDragPrepareWindow" ) );
+
     if( s_wl_confined_pointer != NULL )
     {
         KIPLATFORM::UI::InfiniteDragReleaseWindow();
@@ -410,16 +517,19 @@ void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 
     initialize_wayland( wldisp );
 
-    gint x, y, width, height, wx, wy;
-    gdk_window_get_geometry( win, &x, &y, &width, &height );
-    gtk_widget_translate_coordinates( widget, gtk_widget_get_toplevel( widget ), 0, 0, &wx, &wy );
+    gint x, y, width, height;
+    gdk_window_get_geometry( gdk_window_get_toplevel( win ), &x, &y, &width, &height );
+
+    wxLogTrace( traceWayland, wxS( "Confine region: %d %d %d %d" ), x, y, width, height );
 
     s_wl_confinement_region = wl_compositor_create_region( s_wl_compositor );
-    wl_region_add( s_wl_confinement_region, x + wx - 1, y + wy - 1, width + 2, height + 2 );
+    wl_region_add( s_wl_confinement_region, x, y, width, height );
 
     s_wl_confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
             s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
             ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+
+    zwp_confined_pointer_v1_add_listener(s_wl_confined_pointer, &confined_pointer_listener, NULL);
 
     wl_display_roundtrip( wldisp );
 };
@@ -427,6 +537,8 @@ void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 
 void KIPLATFORM::UI::InfiniteDragReleaseWindow()
 {
+    wxLogTrace( traceWayland, wxS( "InfiniteDragReleaseWindow" ) );
+
     if( s_wl_confined_pointer == NULL )
     {
         return;
