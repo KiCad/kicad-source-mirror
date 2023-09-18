@@ -518,7 +518,7 @@ TOOL_ACTION ACTIONS::cursorUpFast( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + WXK_UP )
         .MenuText( _( "Cursor Up Fast" ) )
         .Flags( AF_NONE )
-        .Parameter( CURSOR_UP | CURSOR_FAST_MOVE ) );
+        .Parameter( CURSOR_UP_FAST ) );
 
 TOOL_ACTION ACTIONS::cursorDownFast( TOOL_ACTION_ARGS()
         .Name( "common.Control.cursorDownFast" )
@@ -526,7 +526,7 @@ TOOL_ACTION ACTIONS::cursorDownFast( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + WXK_DOWN )
         .MenuText( _( "Cursor Down Fast" ) )
         .Flags( AF_NONE )
-        .Parameter( CURSOR_DOWN | CURSOR_FAST_MOVE ) );
+        .Parameter( CURSOR_DOWN_FAST ) );
 
 TOOL_ACTION ACTIONS::cursorLeftFast( TOOL_ACTION_ARGS()
         .Name( "common.Control.cursorLeftFast" )
@@ -534,7 +534,7 @@ TOOL_ACTION ACTIONS::cursorLeftFast( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + WXK_LEFT )
         .MenuText( _( "Cursor Left Fast" ) )
         .Flags( AF_NONE )
-        .Parameter( CURSOR_LEFT | CURSOR_FAST_MOVE ) );
+        .Parameter( CURSOR_LEFT_FAST ) );
 
 TOOL_ACTION ACTIONS::cursorRightFast( TOOL_ACTION_ARGS()
         .Name( "common.Control.cursorRightFast" )
@@ -542,7 +542,7 @@ TOOL_ACTION ACTIONS::cursorRightFast( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + WXK_RIGHT )
         .MenuText( _( "Cursor Right Fast" ) )
         .Flags( AF_NONE )
-        .Parameter( CURSOR_RIGHT | CURSOR_FAST_MOVE ) );
+        .Parameter( CURSOR_RIGHT_FAST ) );
 
 TOOL_ACTION ACTIONS::cursorClick( TOOL_ACTION_ARGS()
         .Name( "common.Control.cursorClick" )

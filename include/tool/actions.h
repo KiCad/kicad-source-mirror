@@ -193,12 +193,29 @@ public:
     static TOOL_ACTION reportBug;
 
     ///< Cursor control event types
-    enum CURSOR_EVENT_TYPE { CURSOR_NONE, CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
-                             CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_RIGHT_CLICK,
-                             CURSOR_FAST_MOVE = 0x8000 };
+    enum CURSOR_EVENT_TYPE
+    {
+        CURSOR_NONE = 0,
+        CURSOR_UP,
+        CURSOR_UP_FAST,
+        CURSOR_DOWN,
+        CURSOR_DOWN_FAST,
+        CURSOR_LEFT,
+        CURSOR_LEFT_FAST,
+        CURSOR_RIGHT,
+        CURSOR_RIGHT_FAST,
+        CURSOR_CLICK,
+        CURSOR_DBL_CLICK,
+        CURSOR_RIGHT_CLICK
+    };
 
     ///< Remove event modifier flags
-    enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01, CUT = 0x02 };
+    enum class REMOVE_FLAGS
+    {
+        NORMAL = 0x00,
+        ALT    = 0x01,
+        CUT    = 0x02
+    };
 };
 
 

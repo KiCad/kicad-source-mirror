@@ -42,6 +42,7 @@
 #include <tool/tool_manager.h>
 #include <view/view.h>
 #include <view/view_controls.h>
+#include "macros.h"
 
 
 COMMON_TOOLS::COMMON_TOOLS() :
@@ -100,32 +101,38 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
 // Cursor control
 int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 {
-    long type = static_cast<long>( aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>() );
+    ACTIONS::CURSOR_EVENT_TYPE type = aEvent.Parameter<ACTIONS::CURSOR_EVENT_TYPE>();
 
-    bool fastMove = type & ACTIONS::CURSOR_FAST_MOVE;
-    type &= ~ACTIONS::CURSOR_FAST_MOVE;
-    bool mirroredX = getView()->IsMirroredX();
-
+    bool     mirroredX = getView()->IsMirroredX();
     VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
     VECTOR2D gridSize = getView()->GetGAL()->GetGridSize();
 
-    if( fastMove )
-        gridSize = gridSize * 10;
-
     switch( type )
     {
+    case ACTIONS::CURSOR_UP_FAST:
+        gridSize *= 10;
+        KI_FALLTHROUGH;
     case ACTIONS::CURSOR_UP:
         cursor -= VECTOR2D( 0, gridSize.y );
         break;
 
+    case ACTIONS::CURSOR_DOWN_FAST:
+        gridSize *= 10;
+        KI_FALLTHROUGH;
     case ACTIONS::CURSOR_DOWN:
         cursor += VECTOR2D( 0, gridSize.y );
         break;
 
+    case ACTIONS::CURSOR_LEFT_FAST:
+        gridSize *= 10;
+        KI_FALLTHROUGH;
     case ACTIONS::CURSOR_LEFT:
         cursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
         break;
 
+    case ACTIONS::CURSOR_RIGHT_FAST:
+        gridSize *= 10;
+        KI_FALLTHROUGH;
     case ACTIONS::CURSOR_RIGHT:
         cursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
         break;
@@ -134,9 +141,9 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
     case ACTIONS::CURSOR_DBL_CLICK:
     case ACTIONS::CURSOR_RIGHT_CLICK:
     {
-        TOOL_ACTIONS action = TA_MOUSE_CLICK;
+        TOOL_ACTIONS       action = TA_MOUSE_CLICK;
         TOOL_MOUSE_BUTTONS button = BUT_LEFT;
-        int modifiers = 0;
+        int                modifiers = 0;
 
         modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
         modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
@@ -144,11 +151,10 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 
         if( type == ACTIONS::CURSOR_DBL_CLICK )
             action = TA_MOUSE_DBLCLICK;
-
-        if( type == ACTIONS::CURSOR_RIGHT_CLICK )
+        else if( type == ACTIONS::CURSOR_RIGHT_CLICK )
             button = BUT_RIGHT;
 
-        TOOL_EVENT evt( TC_MOUSE, action, button | modifiers );
+        TOOL_EVENT evt( TC_MOUSE, action, static_cast<int>( button | modifiers ) );
         evt.SetParameter( type );
         evt.SetMousePosition( getViewControls()->GetMousePosition() );
         m_toolMgr->ProcessEvent( evt );
