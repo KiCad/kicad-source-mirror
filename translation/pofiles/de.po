@@ -19,15 +19,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-08-22 20:51+0000\n"
-"Last-Translator: ulikoehler <weblate@techoverflow.net>\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6717,7 +6717,6 @@ msgid "Min grid spacing:"
 msgstr "Mindestrasterweite:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Am Raster fangen:"
 
@@ -19951,9 +19950,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Gültige Optionen: decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Gültige Optionen: absolute, plot"
+msgstr "Gültige Optionen: route, alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -20004,9 +20002,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Ungültiges Nullen-Format angegeben\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Ungültiges Bohrplan-Format angegeben\n"
+msgstr "Ungültiges Oval-Bohrformat angegeben\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -20104,9 +20101,9 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Platine spiegeln (nützlich, um Unterseiten darzustellen)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Zu verwendendes Farbthema (Standard sind pcbnew-Einstellungen)"
+msgstr ""
+"Zu verwendendes Farbthema (Standard sind Leiterplatteneditor-Einstellungen)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -26635,9 +26632,8 @@ msgid "Export STEP"
 msgstr "STEP-Export"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Kommandozeile:"
+msgstr "Kommandozeile:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -33351,9 +33347,8 @@ msgid "Checking pads..."
 msgstr "Prüfe Pads ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Abstand Text und Grafiken...\n"
+msgstr "Prüfe Freiräume von Kupfer-Grafikelementen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -35886,9 +35881,9 @@ msgid "'%s' was not fully parsed."
 msgstr "Die Datei \"%s\" wurde nicht vollständig gelesen."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Footprintbibliothek nicht gefunden."
+msgstr "Footprintverzeichnis nicht gefunden: \"%s\"."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
@@ -36565,11 +36560,10 @@ msgstr ""
 "wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
 msgstr ""
-"Ein Polygon wird ignoriert, da die Eagle-Lage \"%s\" (%d) nicht zugeordnet "
-"wurde"
+"Ein Polygon auf Lage \"%s\" (%d) wird übersprungen: Umrissanzahl ist nicht 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36944,23 +36938,21 @@ msgstr ""
 "Spalte: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Die alte Strategie zum Ausfüllen von Zonen wird nicht mehr unterstützt.\n"
-"Zonen in geglättete Polygonfüllungen umwandeln?"
+"Zonenfüllungen werden bestmöglich umgewandelt."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "Der alte Modus zum Ausfüllen von Segmenten wird nicht mehr unterstützt.\n"
-"Zonen in geglättete Polygonfüllungen umwandeln?"
+"Zonenfüllungen werden bestmöglich umgewandelt."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
