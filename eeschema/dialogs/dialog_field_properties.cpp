@@ -35,7 +35,6 @@
 #include <sch_edit_frame.h>
 #include <ee_collectors.h>
 #include <sch_symbol.h>
-#include <sch_label.h>
 #include <lib_field.h>
 #include <template_fieldnames.h>
 #include <symbol_library.h>
@@ -46,8 +45,6 @@
 #include <sch_text.h>
 #include <scintilla_tricks.h>
 #include <wildcards_and_files_ext.h>
-#include <sim/sim_model.h>
-#include <sim/sim_lib_mgr.h>
 
 
 DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
