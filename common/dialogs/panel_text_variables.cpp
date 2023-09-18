@@ -42,6 +42,7 @@ enum TEXT_VAR_GRID_COLUMNS
 PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject ) :
     PANEL_TEXT_VARIABLES_BASE( aParent ),
     m_project( aProject ),
+    m_lastCheckedTicker( 0 ),
     m_errorRow( -1 ), m_errorCol( -1 ),
     m_gridWidthsDirty( true )
 {

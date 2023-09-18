@@ -466,8 +466,6 @@ struct ASCH_ROUND_RECTANGLE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BO
 
     VECTOR2I CornerRadius;
 
-    bool IsTransparent;
-
     explicit ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& aProps );
 };
 
@@ -516,7 +514,6 @@ struct ASCH_SIGNAL_HARNESS : ASCH_OWNER_INTERFACE
     std::vector<VECTOR2I> Points;
 
     int Color;
-    int indexinsheet;
     int LineWidth;
 
     explicit ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aProps );
@@ -546,7 +543,6 @@ struct ASCH_HARNESS_ENTRY : ASCH_OWNER_INTERFACE
     int AreaColor;
     int Color;
     int DistanceFromTop;
-    int indexinsheet;
     int TextColor;
     int TextFontID;
     int TextStyle;
@@ -563,7 +559,6 @@ struct ASCH_HARNESS_ENTRY : ASCH_OWNER_INTERFACE
 struct ASCH_HARNESS_TYPE : ASCH_OWNER_INTERFACE
 {
     int Color;
-    int indexinsheet;
     int FontID;
 
     bool IsHidden;
@@ -581,8 +576,6 @@ struct ASCH_RECTANGLE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_I
 {
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
-
-    bool IsTransparent;
 
     explicit ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps );
 };

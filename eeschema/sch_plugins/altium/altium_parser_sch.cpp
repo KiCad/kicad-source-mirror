@@ -275,6 +275,7 @@ ASCH_LABEL::ASCH_LABEL( const std::map<wxString, wxString>& aProps ) :
 
     text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
 
+    textColor  = 0;
     fontId     = ALTIUM_PARSER::ReadInt( aProps, "FONTID", 0 );
     isMirrored = ALTIUM_PARSER::ReadBool( aProps, "ISMIRRORED", false );
 

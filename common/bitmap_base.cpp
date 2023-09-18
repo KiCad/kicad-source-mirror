@@ -39,6 +39,7 @@
 BITMAP_BASE::BITMAP_BASE( const VECTOR2I& pos )
 {
     m_scale  = 1.0;                     // 1.0 = original bitmap size
+    m_imageType = wxBITMAP_TYPE_INVALID;
     m_bitmap = nullptr;
     m_image  = nullptr;
     m_originalImage = nullptr;

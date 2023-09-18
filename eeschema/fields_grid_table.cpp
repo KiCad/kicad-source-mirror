@@ -718,7 +718,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 
     case FDC_H_ALIGN:
     {
-        GR_TEXT_H_ALIGN_T horizontalJustification;
+        GR_TEXT_H_ALIGN_T horizontalJustification = GR_TEXT_H_ALIGN_CENTER;
 
         if( value == _( "Left" ) )
             horizontalJustification = GR_TEXT_H_ALIGN_LEFT;
@@ -742,7 +742,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 
     case FDC_V_ALIGN:
     {
-        GR_TEXT_V_ALIGN_T verticalJustification;
+        GR_TEXT_V_ALIGN_T verticalJustification = GR_TEXT_V_ALIGN_BOTTOM;
 
         if( value == _( "Top" ) )
             verticalJustification = GR_TEXT_V_ALIGN_TOP;
