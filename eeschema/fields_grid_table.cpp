@@ -249,7 +249,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     vAlignNames.Add( _( "Bottom" ) );
     m_vAlignAttr = new wxGridCellAttr;
     m_vAlignAttr->SetEditor( new wxGridCellChoiceEditor( vAlignNames ) );
-    m_vAlignAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_vAlignAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
     wxArrayString hAlignNames;
     hAlignNames.Add( _( "Left" ) );
@@ -257,14 +257,14 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     hAlignNames.Add(_( "Right" ) );
     m_hAlignAttr = new wxGridCellAttr;
     m_hAlignAttr->SetEditor( new wxGridCellChoiceEditor( hAlignNames ) );
-    m_hAlignAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_hAlignAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
     wxArrayString orientationNames;
     orientationNames.Add( _( "Horizontal" ) );
     orientationNames.Add(_( "Vertical" ) );
     m_orientationAttr = new wxGridCellAttr;
     m_orientationAttr->SetEditor( new wxGridCellChoiceEditor( orientationNames ) );
-    m_orientationAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_orientationAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
     wxArrayString   existingNetclasses;
