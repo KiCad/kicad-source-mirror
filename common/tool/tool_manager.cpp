@@ -29,6 +29,7 @@
 #include <map>
 #include <stack>
 #include <trace_helpers.h>
+#include <kiplatform/ui.h>
 
 #include <wx/event.h>
 #include <wx/clipbrd.h>
@@ -307,7 +308,7 @@ VECTOR2D TOOL_MANAGER::GetMousePosition() const
     if( m_viewControls )
         return m_viewControls->GetMousePosition();
     else
-        return ToVECTOR2D( wxGetMousePosition() );
+        return ToVECTOR2D( KIPLATFORM::UI::GetMousePosition() );
 }
 
 
@@ -316,7 +317,7 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
    if( m_viewControls )
        return m_viewControls->GetCursorPosition();
    else
-       return ToVECTOR2D( wxGetMousePosition() );
+       return ToVECTOR2D( KIPLATFORM::UI::GetMousePosition() );
 }
 
 

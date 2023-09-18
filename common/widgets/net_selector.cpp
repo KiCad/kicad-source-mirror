@@ -361,7 +361,7 @@ protected:
     {
         // Generate synthetic (but reliable) MouseMoved events
         static wxPoint lastPos;
-        wxPoint screenPos = wxGetMousePosition();
+        wxPoint screenPos = KIPLATFORM::UI::GetMousePosition();
 
         if( screenPos != lastPos )
         {

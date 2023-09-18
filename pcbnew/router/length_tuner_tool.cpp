@@ -21,6 +21,7 @@
 
 #include <class_draw_panel_gal.h>
 #include <dialogs/dialog_pns_length_tuning_settings.h>
+#include <kiplatform/ui.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/zone_filler_tool.h>
@@ -129,7 +130,7 @@ void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 void LENGTH_TUNER_TOOL::updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup )
 {
     // fixme: wx code not allowed inside tools!
-    wxPoint p = wxGetMousePosition();
+    wxPoint p = KIPLATFORM::UI::GetMousePosition();
 
     p.x += 20;
     p.y += 20;

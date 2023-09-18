@@ -23,6 +23,7 @@
  */
 
 #include "drawing_tool.h"
+#include <kiplatform/ui.h>
 #include "pcb_actions.h"
 #include <pcb_edit_frame.h>
 #include <view/view.h>
@@ -621,8 +622,9 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
         {
             if( aLayers != nullptr )
             {
-                PCB_LAYER_ID destLayer = frame()->SelectOneLayer( PCB_LAYER_ID::PCB_LAYER_ID_COUNT,
-                                                                  *aLayers, wxGetMousePosition() );
+                PCB_LAYER_ID destLayer =
+                        frame()->SelectOneLayer( PCB_LAYER_ID::PCB_LAYER_ID_COUNT, *aLayers,
+                                                 KIPLATFORM::UI::GetMousePosition() );
 
                 view()->ClearPreview();
 

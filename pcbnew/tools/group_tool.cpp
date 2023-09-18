@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiplatform/ui.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -178,7 +179,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     picker->SetMotionHandler(
             [&] ( const VECTOR2D& aPos )
             {
-                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+                statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
             } );
 
     picker->SetCancelHandler(
@@ -196,7 +197,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
                 done = true;
             } );
 
-    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+    statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 

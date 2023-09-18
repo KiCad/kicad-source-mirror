@@ -26,6 +26,7 @@
 
 #include <advanced_config.h>
 #include <limits>
+#include <kiplatform/ui.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -2466,7 +2467,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     picker->SetMotionHandler(
             [&]( const VECTOR2D& aPos )
             {
-                m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+                m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
             } );
 
     picker->SetCancelHandler(
@@ -2489,7 +2490,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
                 done = true;
             } );
 
-    m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
     m_statusPopup->Popup();
     canvas()->SetStatusPopup( m_statusPopup->GetPanel() );
 

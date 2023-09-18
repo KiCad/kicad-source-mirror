@@ -24,6 +24,7 @@
 
 #include "pad_tool.h"
 #include "pcb_painter.h"
+#include <kiplatform/ui.h>
 #include <macros.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
@@ -373,7 +374,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     setPopupTextForValue( seqPadNum );
     statusPopup.Popup();
-    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+    statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
     while( TOOL_EVENT* evt = Wait() )
@@ -507,7 +508,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         // Prepare the next loop by updating the old cursor mouse position
         // to this last mouse cursor position
         oldCursorPos = getViewControls()->GetCursorPosition();
-        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
     }
 
     for( PAD* p : board()->GetFirstFootprint()->Pads() )

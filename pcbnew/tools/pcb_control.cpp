@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kiplatform/ui.h>
 #include <tools/edit_tool.h>
 #include <tools/board_inspection_tool.h>
 #include <router/router_tool.h>
@@ -616,7 +617,8 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
                         m_statusPopup->SetText( _( "Item locked." ) );
                         m_statusPopup->PopupFor( 2000 );
-                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
+                                             + wxPoint( 20, 20 ) );
                         return true;
                     }
 

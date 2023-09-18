@@ -23,6 +23,7 @@
  */
 
 
+#include <kiplatform/ui.h>
 #include <confirm.h>
 #include <pcb_base_frame.h>
 #include <widgets/layer_box_selector.h>
@@ -149,7 +150,7 @@ void PCB_ONE_LAYER_SELECTOR::OnMouseMove( wxUpdateUIEvent& aEvent )
     /// MouseMove events.  It seems to only get them on the edges.  So, for now we use this
     /// workaround
 
-    wxPoint mouse_pos = wxGetMousePosition();
+    wxPoint mouse_pos = KIPLATFORM::UI::GetMousePosition();
     wxPoint left_pos = m_leftGridLayers->ScreenToClient( mouse_pos );
     wxPoint right_pos = m_rightGridLayers->ScreenToClient( mouse_pos );
 

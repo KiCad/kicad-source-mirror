@@ -1007,7 +1007,7 @@ void WX_VIEW_CONTROLS::refreshMouse( bool aSetModifiers )
 
 wxPoint WX_VIEW_CONTROLS::getMouseScreenPosition() const
 {
-    wxPoint msp = wxGetMousePosition();
+    wxPoint msp = KIPLATFORM::UI::GetMousePosition();
     m_parentPanel->ScreenToClient( &msp.x, &msp.y );
     return msp;
 }

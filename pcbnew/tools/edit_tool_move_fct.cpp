@@ -26,6 +26,7 @@
 
 #include <functional>
 #include <limits>
+#include <kiplatform/ui.h>
 #include <board.h>
 #include <board_commit.h>
 #include <pad.h>
@@ -416,7 +417,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
         updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );
         statusPopup.Popup();
-        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
         canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
         m_selectionTool->ClearSelection();
@@ -661,7 +662,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             }
 
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+            statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
 
             m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, movement );
         }

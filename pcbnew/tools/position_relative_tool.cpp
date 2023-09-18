@@ -25,6 +25,7 @@
 #include <memory>
 using namespace std::placeholders;
 
+#include <kiplatform/ui.h>
 #include <tools/position_relative_tool.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -200,7 +201,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     picker->SetMotionHandler(
         [&] ( const VECTOR2D& aPos )
         {
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+            statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
         } );
 
     picker->SetCancelHandler(
@@ -218,7 +219,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
             done = true;
         } );
 
-    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
+    statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 

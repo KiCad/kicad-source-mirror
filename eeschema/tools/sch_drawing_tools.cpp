@@ -24,6 +24,7 @@
 
 #include <memory>
 
+#include <kiplatform/ui.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/ee_selection_tool.h>
@@ -1345,7 +1346,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     {
                         m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                         m_statusPopup->SetText( _( "Click over a sheet." ) );
-                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
+                                             + wxPoint( 20, 20 ) );
                         m_statusPopup->PopupFor( 2000 );
                         item = nullptr;
                     }
@@ -1357,7 +1359,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         {
                             m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                             m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                            m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
+                                                 + wxPoint( 20, 20 ) );
                             m_statusPopup->PopupFor( 2000 );
                             item = nullptr;
 
@@ -1442,7 +1445,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     {
                         m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
                         m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
+                                             + wxPoint( 20, 20 ) );
                         m_statusPopup->PopupFor( 2000 );
                         item = nullptr;
 

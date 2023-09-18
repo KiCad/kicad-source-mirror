@@ -139,6 +139,12 @@ namespace KIPLATFORM
         bool AllowIconsInMenus();
 
         /**
+         * Returns the mouse position in screen coordinates.
+         * If we've just warped the cursor, returns the new coordinates.
+         */
+        wxPoint GetMousePosition();
+
+        /**
          * Move the mouse cursor to a specific position relative to the window
          * @param aWindow Window in which to position to mouse cursor
          * @param aX destination x position

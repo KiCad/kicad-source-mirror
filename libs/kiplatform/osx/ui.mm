@@ -166,6 +166,12 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 }
 
 
+wxPoint KIPLATFORM::UI::GetMousePosition()
+{
+    return wxGetMousePosition();
+}
+
+
 void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 {
     aWindow->WarpPointer( aX, aY );

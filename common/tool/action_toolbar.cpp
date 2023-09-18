@@ -565,7 +565,7 @@ void ACTION_TOOLBAR::onItemDrag( wxAuiToolBarEvent& aEvent )
 void ACTION_TOOLBAR::onTimerDone( wxTimerEvent& aEvent )
 {
     // We need to search for the tool using the client coordinates
-    wxPoint mousePos = ScreenToClient( wxGetMousePosition() );
+    wxPoint mousePos = ScreenToClient( KIPLATFORM::UI::GetMousePosition() );
 
     wxAuiToolBarItem* item = FindToolByPosition( mousePos.x, mousePos.y );
 
