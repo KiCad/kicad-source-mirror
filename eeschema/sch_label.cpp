@@ -1217,6 +1217,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
         {
             aPlotter->MoveTo( s_poly[0] );
             aPlotter->LineTo( s_poly[1] );
+            aPlotter->PenFinish();
 
             int diameter = ( s_poly[2] - s_poly[1] ).EuclideanNorm() * 2;
             aPlotter->FilledCircle( s_poly[2], diameter , FILLED, nullptr );
@@ -1225,6 +1226,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
         {
             aPlotter->MoveTo( s_poly[0] );
             aPlotter->LineTo( s_poly[1] );
+            aPlotter->PenFinish();
 
             int diameter = ( s_poly[2] - s_poly[1] ).EuclideanNorm() * 2;
             aPlotter->ThickCircle( s_poly[2], diameter, penWidth, FILLED, nullptr );
