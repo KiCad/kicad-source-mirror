@@ -1075,7 +1075,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
                     // Legacy libraries are readable, but modifying legacy format is not allowed
                     // So prompt the user if he try to add/replace a footprint in a legacy lib
-                    const FP_LIB_TABLE_ROW* row = Prj().PcbFootprintLibs()->FindRow( libraryName );
+                    const FP_LIB_TABLE_ROW* row = Prj().PcbFootprintLibs()->FindRow( newLib );
                     wxString                libPath = row->GetFullURI();
                     IO_MGR::PCB_FILE_T      piType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
@@ -1085,13 +1085,13 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
                         return false;
                     }
 
-                    footprintExists = tbl->FootprintExists( libraryName, footprintName );
+                    footprintExists = tbl->FootprintExists( newLib, newName );
 
                     if( footprintExists )
                     {
                         wxString msg = wxString::Format( _( "Footprint %s already exists in %s." ),
-                                                         footprintName,
-                                                         libraryName );
+                                                         newName,
+                                                         newLib );
 
                         KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
                                            wxOK | wxCANCEL | wxICON_WARNING );
