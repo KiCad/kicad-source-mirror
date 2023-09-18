@@ -37,7 +37,6 @@
 #include <gal/cursors.h>
 #include <gal/definitions.h>
 #include <gal/gal_display_options.h>
-#include <newstroke_font.h>
 #include <font/stroke_font.h>
 #include <geometry/eda_angle.h>
 

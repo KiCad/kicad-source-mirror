@@ -3,7 +3,6 @@ set( GAL_SRCS
     # Common part
     ../callback_gal.cpp
     ../gl_context_mgr.cpp
-    ../newstroke_font.cpp
     painter.cpp
     cursors.cpp
     dpi_scaling.cpp

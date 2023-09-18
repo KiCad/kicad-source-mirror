@@ -67,8 +67,11 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # Functions and data all need to use the #include <import_export.h> and be declared
 # as APIEXPORT
 set( KICOMMON_SRCS
+    # Fonts
+    newstroke_font.cpp
+    # Gal
     gal/color4d.cpp
-
+    # Jobs
     jobs/job.cpp
     jobs/job_export_pcb_drill.cpp
     jobs/job_export_pcb_dxf.cpp
