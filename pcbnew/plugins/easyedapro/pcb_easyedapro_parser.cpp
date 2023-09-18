@@ -46,6 +46,7 @@
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
+#include <font/font.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_simple.h>

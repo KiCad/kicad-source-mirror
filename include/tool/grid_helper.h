@@ -161,10 +161,7 @@ protected:
      * Check whether it is possible to use the grid -- this depends both on local grid helper
      * settings and global (tool manager) KiCad settings.
      */
-    bool canUseGrid() const
-    {
-        return m_enableGrid && m_toolMgr->GetView()->GetGAL()->GetGridSnapping();
-    }
+    bool canUseGrid() const;
 
     VECTOR2I computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid,
                              const VECTOR2I& aOffset ) const;

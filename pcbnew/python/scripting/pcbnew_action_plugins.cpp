@@ -30,6 +30,7 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <menus_helpers.h>

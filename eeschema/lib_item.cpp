@@ -24,6 +24,7 @@
  */
 
 #include <pgm_base.h>
+#include <font/font.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
 #include <sch_draw_panel.h>

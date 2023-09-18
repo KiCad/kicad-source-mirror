@@ -25,6 +25,7 @@
 
 #include <tool/tool_manager.h>
 #include <board_commit.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
 #include <pcb_draw_panel_gal.h>
 #include <pgm_base.h>

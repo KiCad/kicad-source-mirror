@@ -23,6 +23,7 @@
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerber_file_image.h>

@@ -25,6 +25,7 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <gal/graphics_abstraction_layer.h>
 #include <math/util.h>      // for KiROUND
 #include <math/vector2d.h>
 #include <tool/tool_manager.h>
@@ -158,3 +159,7 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
 }
 
 
+bool GRID_HELPER::canUseGrid() const
+{
+    return m_enableGrid && m_toolMgr->GetView()->GetGAL()->GetGridSnapping();
+}

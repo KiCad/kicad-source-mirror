@@ -26,6 +26,7 @@
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <kiplatform/ui.h>
 #include <pcb_base_frame.h>
 #include <preview_items/ruler_item.h>

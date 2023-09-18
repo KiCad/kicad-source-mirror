@@ -27,7 +27,6 @@
 #ifndef OUTLINE_FONT_H_
 #define OUTLINE_FONT_H_
 
-#include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_poly_set.h>
 #ifdef _MSC_VER
 #include <ft2build.h>

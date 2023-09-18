@@ -21,6 +21,7 @@
 #include "nl_schematic_plugin_impl.h"
 
 // KiCAD includes
+#include <gal/graphics_abstraction_layer.h>
 #include <sch_base_frame.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>

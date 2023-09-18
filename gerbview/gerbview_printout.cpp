@@ -24,6 +24,7 @@
 
 #include <base_units.h>
 #include <base_screen.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>

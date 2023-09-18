@@ -22,6 +22,7 @@
  */
 
 #include <preview_items/polygon_item.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 #include <view/view.h>
 

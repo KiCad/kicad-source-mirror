@@ -33,6 +33,7 @@
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <gestfich.h>
 #include <dialogs/html_message_box.h>
 #include <core/ignore.h>

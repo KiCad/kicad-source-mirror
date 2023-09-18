@@ -26,6 +26,7 @@
 #include "pcb_picker_tool.h"
 #include "pcb_actions.h"
 #include "pcb_grid_helper.h"
+#include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
 #include <tools/zone_filler_tool.h>
 

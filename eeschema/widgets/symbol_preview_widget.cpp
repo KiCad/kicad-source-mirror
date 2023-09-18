@@ -20,6 +20,7 @@
 #include "symbol_preview_widget.h"
 #include <sch_view.h>
 #include <gal/gal_display_options.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <math/vector2wx.h>
 #include <symbol_lib_table.h>
 #include <sch_preview_panel.h>

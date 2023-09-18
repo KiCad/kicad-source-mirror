@@ -24,6 +24,7 @@
 #include <board.h>
 #include <pcb_base_frame.h>
 #include <bitmaps.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>

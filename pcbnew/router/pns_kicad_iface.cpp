@@ -37,6 +37,7 @@
 #include <tool/tool_manager.h>
 #include <settings/app_settings.h>
 
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 
 #include <geometry/shape.h>

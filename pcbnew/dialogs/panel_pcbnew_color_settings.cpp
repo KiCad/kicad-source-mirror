@@ -23,6 +23,7 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <layer_ids.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <panel_pcbnew_color_settings.h>
 #include <math/vector2wx.h>
 #include <widgets/wx_panel.h>

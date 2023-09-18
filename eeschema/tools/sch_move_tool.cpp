@@ -25,6 +25,7 @@
 #include <cmath>
 #include <wx/log.h>
 #include <trigo.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/ee_selection_tool.h>

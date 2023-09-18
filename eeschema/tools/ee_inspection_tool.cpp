@@ -27,6 +27,7 @@
 #include <kiway.h>
 #include <confirm.h>
 #include <string_utils.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
 #include <tools/ee_actions.h>

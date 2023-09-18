@@ -41,6 +41,7 @@
 #include <dialogs/dialog_net_inspector.h>
 #include <dialog_board_setup.h>
 #include <invoke_pcb_dialog.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <board.h>
 #include <pcb_group.h>
 #include <board_design_settings.h>

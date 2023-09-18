@@ -47,6 +47,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <confirm.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <gal/painter.h>

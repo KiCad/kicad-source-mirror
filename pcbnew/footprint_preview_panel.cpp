@@ -31,6 +31,7 @@
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <kiway.h>
 #include <math/box2.h>
 #include <pcb_painter.h>

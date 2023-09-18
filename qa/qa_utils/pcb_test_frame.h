@@ -31,6 +31,7 @@
 #include <memory>
 
 #include <pcb_draw_panel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
 
 using std::unique_ptr;
 

@@ -28,7 +28,6 @@
 #define __VIEW_OVERLAY_H
 
 #include <view/view_item.h>
-#include <gal/graphics_abstraction_layer.h>
 
 #include <vector>
 #include <deque>

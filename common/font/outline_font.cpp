@@ -34,6 +34,7 @@
 #include <trigo.h>
 #include <font/fontconfig.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <core/utf8.h>
 
 using namespace KIFONT;
 

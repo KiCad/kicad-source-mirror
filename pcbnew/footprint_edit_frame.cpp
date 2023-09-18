@@ -42,6 +42,7 @@
 #include <footprint_info_impl.h>
 #include <footprint_tree_pane.h>
 #include <fp_lib_table.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway.h>

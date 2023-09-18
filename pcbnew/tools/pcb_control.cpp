@@ -40,6 +40,7 @@
 #include <board_item.h>
 #include <dialogs/dialog_paste_special.h>
 #include <pcb_dimension.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
 #include <pcb_group.h>
 #include <pcb_textbox.h>

@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_segment.h>
 #include <dialog_pad_properties.h>
 #include <dialogs/html_message_box.h>

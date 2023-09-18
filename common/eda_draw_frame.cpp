@@ -32,6 +32,7 @@
 #include <dialogs/hotkey_cycle_popup.h>
 #include <eda_draw_frame.h>
 #include <file_history.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <id.h>
 #include <kiface_base.h>
 #include <lockfile.h>

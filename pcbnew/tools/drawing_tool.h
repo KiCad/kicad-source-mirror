@@ -27,6 +27,7 @@
 #ifndef __DRAWING_TOOL_H
 #define __DRAWING_TOOL_H
 
+#include <stack>
 #include <optional>
 #include <tool/tool_menu.h>
 #include <tools/pcb_tool_base.h>

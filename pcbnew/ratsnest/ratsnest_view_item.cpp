@@ -31,6 +31,7 @@
 #include <ratsnest/ratsnest_view_item.h>
 
 #include <kiface_base.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <pcbnew_settings.h>
 #include <pcb_painter.h>
 #include <ratsnest/ratsnest_data.h>

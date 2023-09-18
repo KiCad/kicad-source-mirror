@@ -29,6 +29,7 @@
 #include <kiplatform/ui.h>
 #include <board.h>
 #include <board_commit.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_edit_frame.h>

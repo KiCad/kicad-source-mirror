@@ -29,6 +29,7 @@
 #include <pgm_base.h>
 #include <eda_list_dialog.h>
 #include <eeschema_settings.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <project/project_file.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <sch_draw_panel.h>

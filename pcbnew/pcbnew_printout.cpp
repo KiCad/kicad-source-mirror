@@ -28,6 +28,7 @@
 #include "pcbnew_printout.h"
 #include <board.h>
 #include <math/util.h>      // for KiROUND
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 #include <view/view.h>

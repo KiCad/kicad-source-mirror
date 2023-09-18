@@ -29,6 +29,7 @@
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_painter.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <project.h>
 #include <view/view.h>
 

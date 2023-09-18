@@ -33,6 +33,7 @@
 
 #include <wx/log.h>
 
+#include <font/font.h>
 #include <footprint.h>
 #include <progress_reporter.h>
 #include <board.h>

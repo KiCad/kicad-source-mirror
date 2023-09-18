@@ -34,6 +34,7 @@
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/oval.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>

@@ -24,6 +24,7 @@
 
 #include <core/typeinfo.h>
 #include <core/kicad_algo.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_compound.h>
 #include <ee_actions.h>
 #include <ee_collectors.h>

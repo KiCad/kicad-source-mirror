@@ -33,6 +33,7 @@
 #include <board_design_settings.h>
 #include <pcb_group.h>
 #include <footprint.h>
+#include <font/font.h>
 
 
 BOARD_ITEM::~BOARD_ITEM()

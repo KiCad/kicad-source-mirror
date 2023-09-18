@@ -28,6 +28,7 @@
 
 #include <view/view.h>
 #include <gal/gal_print.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 #include <pcbplot.h>
 #include <settings/app_settings.h>

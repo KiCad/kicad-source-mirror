@@ -22,6 +22,7 @@
 
 #include <eeschema_settings.h>
 #include <gal/gal_display_options.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <layer_ids.h>
 #include <lib_shape.h>
 #include <math/vector2wx.h>

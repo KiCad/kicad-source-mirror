@@ -26,6 +26,7 @@
 #include <optional>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_pin_tool.h>
 #include <tools/ee_grid_helper.h>

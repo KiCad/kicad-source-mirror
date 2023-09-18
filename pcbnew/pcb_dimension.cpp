@@ -28,6 +28,7 @@
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <font/font.h>
 #include <pcb_dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_compound.h>

@@ -32,6 +32,7 @@
 #include <footprint_editor_settings.h>
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_track_via_size.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <import_gfx/dialog_import_gfx.h>

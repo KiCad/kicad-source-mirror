@@ -22,6 +22,7 @@
  */
 
 #include <common.h>
+#include <font/font.h>
 #include <sch_draw_panel.h>
 #include <plotters/plotter.h>
 #include <trigo.h>

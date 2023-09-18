@@ -23,6 +23,7 @@
 #include <functional>
 using namespace std::placeholders;
 
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 

@@ -22,6 +22,7 @@
 #include <deque>
 #include <gal/color4d.h>
 
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
 #include <pcb_painter.h>

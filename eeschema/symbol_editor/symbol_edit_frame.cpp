@@ -32,6 +32,7 @@
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
 #include <env_paths.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>

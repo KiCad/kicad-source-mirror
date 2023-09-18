@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <macros.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_painter.h>

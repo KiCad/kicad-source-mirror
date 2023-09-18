@@ -31,6 +31,7 @@
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
 #include <erc_sch_pin_context.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <string_utils.h>
 #include <lib_pin.h>
 #include <sch_edit_frame.h>

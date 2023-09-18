@@ -30,6 +30,7 @@
 #include <confirm.h>
 #include <ctype.h>
 #include <dialog_board_reannotate.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <string_utils.h>  // StrNumCmp
 #include <kiface_base.h>
 #include <pcbnew_settings.h>

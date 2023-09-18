@@ -27,6 +27,7 @@
 #include <ee_actions.h>
 #include <ee_grid_helper.h>
 #include <eda_item.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <lib_shape.h>
 #include <sch_commit.h>
 #include <wx/log.h>

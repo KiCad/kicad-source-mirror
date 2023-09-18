@@ -33,6 +33,7 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_dimension.h>
 #include <footprint.h>
 #include <footprint_info_impl.h>

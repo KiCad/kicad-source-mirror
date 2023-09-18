@@ -29,6 +29,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_grid_helper.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <pgm_base.h>

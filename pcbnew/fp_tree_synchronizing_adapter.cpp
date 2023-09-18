@@ -30,6 +30,7 @@
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
 #include <footprint_info_impl.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <string_utils.h>
 #include <board.h>
 #include <footprint.h>
