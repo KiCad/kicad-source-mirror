@@ -53,7 +53,7 @@ DIALOG_PLUGIN_OPTIONS_BASE::DIALOG_PLUGIN_OPTIONS_BASE( wxWindow* parent, wxWind
 	// Label Appearance
 
 	// Cell Defaults
-	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_grid_sizer->Add( m_grid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonsSizer;

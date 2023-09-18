@@ -45,7 +45,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	// Label Appearance
 
 	// Cell Defaults
-	m_leftGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_leftGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerUpper->Add( m_leftGridLayers, 1, wxALL|wxEXPAND, 5 );
 
 	m_rightGridLayers = new wxGrid( this, ID_RIGHT_LIST, wxDefaultPosition, wxDefaultSize, 0 );
@@ -74,7 +74,7 @@ DIALOG_LAYER_SELECTION_BASE::DIALOG_LAYER_SELECTION_BASE( wxWindow* parent, wxWi
 	// Label Appearance
 
 	// Cell Defaults
-	m_rightGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_rightGridLayers->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerUpper->Add( m_rightGridLayers, 1, wxALL|wxEXPAND, 5 );
 
 

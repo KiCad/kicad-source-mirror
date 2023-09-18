@@ -248,7 +248,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	// Label Appearance
 
 	// Cell Defaults
-	m_pinAssignmentsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_pinAssignmentsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizer10->Add( m_pinAssignmentsGrid, 1, wxALL|wxEXPAND, 5 );
 
 	m_subcktLabel = new wxStaticText( m_pinAssignmentsPanel, wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );

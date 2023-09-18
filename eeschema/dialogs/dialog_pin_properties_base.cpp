@@ -223,7 +223,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	// Label Appearance
 
 	// Cell Defaults
-	m_alternatesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_alternatesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_alternatesGrid->SetMinSize( wxSize( -1,100 ) );
 
 	bRightMargin->Add( m_alternatesGrid, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );

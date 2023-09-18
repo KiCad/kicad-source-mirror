@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,7 +74,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	// Label Appearance
 
 	// Cell Defaults
-	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_itemsGrid->SetMinSize( wxSize( 800,140 ) );
 
 	sbSizerTexts->Add( m_itemsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -159,7 +159,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	// Label Appearance
 
 	// Cell Defaults
-	m_privateLayersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_privateLayersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerPrivateLayers->Add( m_privateLayersGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bButtonSize1;
@@ -369,7 +369,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	// Label Appearance
 
 	// Cell Defaults
-	m_padGroupsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_padGroupsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_padGroupsGrid->SetMinSize( wxSize( -1,30 ) );
 
 	sbSizerNetTies->Add( m_padGroupsGrid, 1, wxALL|wxEXPAND, 5 );

@@ -101,7 +101,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	// Label Appearance
 
 	// Cell Defaults
-	m_netsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_netsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizer192->Add( m_netsGrid, 0, wxALL|wxEXPAND, 5 );
 
 

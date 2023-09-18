@@ -51,7 +51,7 @@ DIALOG_FOOTPRINT_ASSOCIATIONS_BASE::DIALOG_FOOTPRINT_ASSOCIATIONS_BASE( wxWindow
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridLibrary->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_gridLibrary->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_gridLibrary->SetMaxSize( wxSize( -1,300 ) );
 
 	bMainBoxSizer->Add( m_gridLibrary, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
@@ -92,7 +92,7 @@ DIALOG_FOOTPRINT_ASSOCIATIONS_BASE::DIALOG_FOOTPRINT_ASSOCIATIONS_BASE( wxWindow
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridSymbol->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_gridSymbol->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bMainBoxSizer->Add( m_gridSymbol, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerBottom;

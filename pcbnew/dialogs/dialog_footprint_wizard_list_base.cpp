@@ -53,7 +53,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	// Label Appearance
 
 	// Cell Defaults
-	m_footprintGeneratorsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_footprintGeneratorsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_footprintGeneratorsGrid->SetMinSize( wxSize( 485,120 ) );
 
 	bSizerpanelGen->Add( m_footprintGeneratorsGrid, 1, wxALL|wxEXPAND, 5 );

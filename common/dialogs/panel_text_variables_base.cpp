@@ -47,7 +47,7 @@ PANEL_TEXT_VARIABLES_BASE::PANEL_TEXT_VARIABLES_BASE( wxWindow* parent, wxWindow
 	// Label Appearance
 
 	// Cell Defaults
-	m_TextVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_TextVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_TextVars->SetMinSize( wxSize( 604,170 ) );
 
 	bSizer3->Add( m_TextVars, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );

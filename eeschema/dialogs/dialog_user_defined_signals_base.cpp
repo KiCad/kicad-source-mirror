@@ -52,7 +52,7 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::DIALOG_USER_DEFINED_SIGNALS_BASE( wxWindow* pa
 	// Label Appearance
 
 	// Cell Defaults
-	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_grid->SetMinSize( wxSize( -1,120 ) );
 
 	bMainSizer->Add( m_grid, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );

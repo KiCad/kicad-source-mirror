@@ -90,7 +90,7 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridEnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_gridEnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerEnvVar->Add( m_gridEnvVars, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 

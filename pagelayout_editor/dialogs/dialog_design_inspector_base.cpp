@@ -48,7 +48,7 @@ DIALOG_INSPECTOR_BASE::DIALOG_INSPECTOR_BASE( wxWindow* parent, wxWindowID id, c
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridListItems->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_gridListItems->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerListMain->Add( m_gridListItems, 1, wxALL|wxEXPAND, 5 );
 
 

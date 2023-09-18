@@ -73,7 +73,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	// Label Appearance
 
 	// Cell Defaults
-	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP, 1 );
 
 	wxBoxSizer* buttonBoxSizer;
@@ -146,7 +146,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	// Label Appearance
 
 	// Cell Defaults
-	m_assignmentGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_assignmentGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizer14->Add( m_assignmentGrid, 2, wxEXPAND|wxFIXED_MINSIZE|wxLEFT, 5 );
 
 

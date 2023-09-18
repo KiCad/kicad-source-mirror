@@ -60,7 +60,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	// Label Appearance
 
 	// Cell Defaults
-	m_global_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_global_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_global_sizer->Add( m_global_grid, 5, wxALL|wxEXPAND, 5 );
 
 
@@ -109,7 +109,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	// Label Appearance
 
 	// Cell Defaults
-	m_project_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_project_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_project_grid->SetMinSize( wxSize( 600,-1 ) );
 
 	m_project_sizer->Add( m_project_grid, 2, wxALL|wxEXPAND, 5 );
@@ -199,7 +199,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	// Label Appearance
 
 	// Cell Defaults
-	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_path_subs_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_path_subs_grid->SetToolTip( _("This is a read-only table which shows pertinent environment variables.") );
 
 	bMainSizer->Add( m_path_subs_grid, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

@@ -35,7 +35,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer6->Add( m_choiceRepository, 1, wxALIGN_CENTER|wxALL, 5 );
 
 	m_buttonManage = new wxButton( m_panelRepository, wxID_ANY, _("Manage..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_buttonManage, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer6->Add( m_buttonManage, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizer4->Add( bSizer6, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -97,7 +97,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridPendingActions->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_gridPendingActions->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizer8->Add( m_gridPendingActions, 1, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizer9;
@@ -135,7 +135,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_BottomSizer->Add( m_installLocalButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_openPackageDirButton = new wxButton( this, wxID_ANY, _("Open Package Directory"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_openPackageDirButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_BottomSizer->Add( m_openPackageDirButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_BottomSizer->Add( 0, 0, 1, 0, 5 );

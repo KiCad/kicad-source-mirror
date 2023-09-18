@@ -124,7 +124,7 @@ SIMULATOR_FRAME_UI_BASE::SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID i
 	// Label Appearance
 
 	// Cell Defaults
-	m_signalsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_signalsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerSignals->Add( m_signalsGrid, 1, wxEXPAND, 5 );
 
 
@@ -179,7 +179,7 @@ SIMULATOR_FRAME_UI_BASE::SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID i
 	// Label Appearance
 
 	// Cell Defaults
-	m_cursorsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_cursorsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerCursors->Add( m_cursorsGrid, 1, wxEXPAND, 5 );
 
 
@@ -232,7 +232,7 @@ SIMULATOR_FRAME_UI_BASE::SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID i
 	// Label Appearance
 
 	// Cell Defaults
-	m_measurementsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_measurementsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	bSizerMeasurements->Add( m_measurementsGrid, 1, wxEXPAND, 5 );
 
 

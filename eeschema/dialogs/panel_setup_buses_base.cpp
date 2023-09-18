@@ -53,7 +53,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	// Label Appearance
 
 	// Cell Defaults
-	m_aliasesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_aliasesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_aliasesGrid->SetMinSize( wxSize( -1,180 ) );
 
 	bLeftCol->Add( m_aliasesGrid, 1, wxEXPAND, 10 );
@@ -123,7 +123,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 	// Label Appearance
 
 	// Cell Defaults
-	m_membersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_membersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_membersGrid->SetMinSize( wxSize( -1,180 ) );
 
 	bSizer7->Add( m_membersGrid, 1, wxEXPAND, 5 );

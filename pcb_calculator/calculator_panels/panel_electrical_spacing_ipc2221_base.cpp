@@ -111,7 +111,7 @@ PANEL_ELECTRICAL_SPACING_IPC2221_BASE::PANEL_ELECTRICAL_SPACING_IPC2221_BASE( wx
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridElectricalSpacingValues->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridElectricalSpacingValues->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	m_electricalSpacingSizer->Add( m_gridElectricalSpacingValues, 0, wxALL, 5 );
 
 	m_stHelp = new wxStaticText( this, wxID_ANY, _("*  B1 - Internal Conductors\n*  B2 - External Conductors, uncoated, sea level to 3050 m\n*  B3 - External Conductors, uncoated, over 3050 m\n*  B4 - External Conductors, with permanent polymer coating (any elevation)\n*  A5 - External Conductors, with conformal coating over assembly (any elevation)\n*  A6 - External Component lead/termination, uncoated\n*  A7 - External Component lead termination, with conformal coating (any elevation)"), wxDefaultPosition, wxDefaultSize, 0 );

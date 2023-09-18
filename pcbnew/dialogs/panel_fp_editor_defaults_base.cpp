@@ -61,7 +61,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	// Label Appearance
 
 	// Cell Defaults
-	m_textItemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_textItemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_textItemsGrid->SetMinSize( wxSize( -1,140 ) );
 
 	defaultTextItemsSizer->Add( m_textItemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
@@ -148,7 +148,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	// Label Appearance
 
 	// Cell Defaults
-	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxEXPAND|wxBOTTOM, 1 );
 
 

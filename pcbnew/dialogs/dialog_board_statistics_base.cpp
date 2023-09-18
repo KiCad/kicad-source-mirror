@@ -63,7 +63,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridComponents->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridComponents->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	m_gridComponents->SetMaxSize( wxSize( -1,300 ) );
 
 	bSizerComponents->Add( m_gridComponents, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -102,7 +102,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridPads->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridPads->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	m_gridPads->SetMaxSize( wxSize( -1,300 ) );
 
 	bSizerPads->Add( m_gridPads, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -141,7 +141,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridBoard->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridBoard->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	m_gridBoard->SetMaxSize( wxSize( -1,300 ) );
 
 	bSizerBrdSize->Add( m_gridBoard, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -179,7 +179,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridVias->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridVias->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	m_gridVias->SetMaxSize( wxSize( -1,300 ) );
 
 	bSizerVias->Add( m_gridVias, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -243,7 +243,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridDrills->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridDrills->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	bDrillsSizer->Add( m_gridDrills, 1, wxALL|wxEXPAND, 5 );
 
 

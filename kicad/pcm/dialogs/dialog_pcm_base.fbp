@@ -263,7 +263,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL</property>
+                                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxButton" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -545,7 +545,7 @@
                                                     <property name="cell_font"></property>
                                                     <property name="cell_horiz_alignment">wxALIGN_LEFT</property>
                                                     <property name="cell_text"></property>
-                                                    <property name="cell_vert_alignment">wxALIGN_TOP</property>
+                                                    <property name="cell_vert_alignment">wxALIGN_CENTER</property>
                                                     <property name="center_pane">0</property>
                                                     <property name="close_button">1</property>
                                                     <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
@@ -872,7 +872,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="1">
                                 <property name="BottomDockable">1</property>
