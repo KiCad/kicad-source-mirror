@@ -580,7 +580,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromBool( field.IsNameShown() );
 
     case FDC_H_ALIGN:
-        switch ( field.GetHorizJustify() )
+        switch ( field.GetEffectiveHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:   return _( "Left" );
         case GR_TEXT_H_ALIGN_CENTER: return _( "Center" );
@@ -590,7 +590,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         break;
 
     case FDC_V_ALIGN:
-        switch ( field.GetVertJustify() )
+        switch ( field.GetEffectiveVertJustify() )
         {
         case GR_TEXT_V_ALIGN_TOP:    return _( "Top" );
         case GR_TEXT_V_ALIGN_CENTER: return _( "Center" );
@@ -727,28 +727,52 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_H_ALIGN:
+    {
+        GR_TEXT_H_ALIGN_T horizontalJustification;
+
         if( value == _( "Left" ) )
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            horizontalJustification = GR_TEXT_H_ALIGN_LEFT;
         else if( value == _( "Center" ) )
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            horizontalJustification = GR_TEXT_H_ALIGN_CENTER;
         else if( value == _( "Right" ) )
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            horizontalJustification = GR_TEXT_H_ALIGN_RIGHT;
         else
             wxFAIL_MSG( wxT( "unknown horizontal alignment: " ) + value );
 
+        // Note that we must set justifications before we can ask if they're flipped.  If the old
+        // justification is center then it won't know (whereas if the new justification is center
+        // the we don't care).
+        field.SetHorizJustify( horizontalJustification );
+
+        if( field.IsHorizJustifyFlipped() )
+            field.SetHorizJustify( EDA_TEXT::MapHorizJustify( - horizontalJustification ) );
+
         break;
+    }
 
     case FDC_V_ALIGN:
+    {
+        GR_TEXT_V_ALIGN_T verticalJustification;
+
         if( value == _( "Top" ) )
-            field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            verticalJustification = GR_TEXT_V_ALIGN_TOP;
         else if( value == _( "Center" ) )
-            field.SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            verticalJustification = GR_TEXT_V_ALIGN_CENTER;
         else if( value == _( "Bottom" ) )
-            field.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            verticalJustification = GR_TEXT_V_ALIGN_BOTTOM;
         else
             wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + value);
 
+        // Note that we must set justifications before we can ask if they're flipped.  If the old
+        // justification is center then it won't know (whereas if the new justification is center
+        // the we don't care).
+        field.SetVertJustify( verticalJustification );
+
+        if( field.IsVertJustifyFlipped() )
+            field.SetVertJustify( EDA_TEXT::MapVertJustify( -verticalJustification ) );
+
         break;
+    }
 
     case FDC_ITALIC:
         field.SetItalic( BoolFromString( value ) );

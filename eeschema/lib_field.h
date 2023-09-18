@@ -118,6 +118,12 @@ public:
 
     KIFONT::FONT* getDrawFont() const override;
 
+    bool IsHorizJustifyFlipped() const { return false; }
+    bool IsVertJustifyFlipped() const  { return false; }
+
+    GR_TEXT_H_ALIGN_T GetEffectiveHorizJustify() const { return GetHorizJustify(); }
+    GR_TEXT_V_ALIGN_T GetEffectiveVertJustify() const  { return GetVertJustify();  }
+
     /**
      * Copy parameters of this field to another field. Pointers are not copied.
      *
