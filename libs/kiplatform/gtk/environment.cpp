@@ -34,40 +34,13 @@ void KIPLATFORM::ENV::Init()
     wxString wm;
 
     if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
-        wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
+        wxSetEnv( wxT( "UBUNTU_MENUPROXY" ), wxT( "0" ) );
 
-    wxString gdkBackend;
-    wxGetEnv( wxT( "GDK_BACKEND" ), &gdkBackend );
-
-#ifdef KICAD_WAYLAND
-    bool waylandTricks = true;
-#else
-    bool waylandTricks = false;
+#if !wxUSE_GLCANVAS_EGL
+    // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
+    // required until wxWidgets supports the Wayland compositors
+    wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
 #endif
-
-    if( wxGetEnv( wxT( "KICAD_WAYLAND_TRICKS" ), nullptr ) )
-        waylandTricks = true;
-
-    // Set KICAD_WAYLAND_TRICKS to develop for native Wayland.
-    if( waylandTricks )
-    {
-        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "wayland" ) );
-        gdk_set_allowed_backends( "wayland" );
-    }
-    else
-    {
-        if( gdkBackend == wxT( "broadway" ) )
-        {
-            // Work around static setter in wx
-            gdk_set_allowed_backends( "broadway" );
-        }
-        else if( gdkBackend != wxT( "wayland" ) )
-        {
-            // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
-            // required until wxWidgets supports the Wayland compositors
-            wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
-        }
-    }
 
     // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
     // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
