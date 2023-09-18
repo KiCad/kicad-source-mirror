@@ -191,10 +191,11 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
     VECTOR2I              textAnchor;
     VECTOR2I              offset;
 
-    if( IsMirrored() )
-    {
+    if( IsBackLayer( GetLayer() ) )
         std::swap( corners[0], corners[1] );
 
+    if( IsMirrored() )
+    {
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:   effectiveAlignment = GR_TEXT_H_ALIGN_RIGHT;  break;

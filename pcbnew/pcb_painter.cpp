@@ -1971,8 +1971,8 @@ void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
     m_gal->SetIsStroke( font->IsStroke() );
 
     VECTOR2I pos( aPosition );
-    VECTOR2I fudge
-    { KiROUND( 0.16 * aAttrs.m_StrokeWidth ), 0 };
+    VECTOR2I fudge( KiROUND( 0.16 * aAttrs.m_StrokeWidth ), 0 );
+
     RotatePoint( fudge, aAttrs.m_Angle );
 
     if( ( aAttrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && !aAttrs.m_Mirrored )

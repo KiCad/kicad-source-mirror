@@ -359,9 +359,9 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     m_textBox->SetBorderEnabled( m_borderCheckbox->GetValue() );
     STROKE_PARAMS stroke = m_textBox->GetStroke();
+
     if( !m_borderWidth.IsIndeterminate() )
         stroke.SetWidth( m_borderWidth.GetValue() );
-
 
     auto it = lineTypeNames.begin();
     std::advance( it, m_borderStyleCombo->GetSelection() );
