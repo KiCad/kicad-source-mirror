@@ -49,6 +49,7 @@
 #include <dialogs/dialog_text_entry.h>
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
+#include "kiplatform/app.h"
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
@@ -2552,6 +2553,11 @@ void SIMULATOR_FRAME_UI::OnSimUpdate()
 
 void SIMULATOR_FRAME_UI::OnSimReport( const wxString& aMsg )
 {
+    // Required in win32 to ensure wxTimer events get scheduled in between other events
+    // Or else we may stall them out entirely and never get them during actions like rapid
+    // console updates.
+    KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary();
+
     m_simConsole->AppendText( aMsg + "\n" );
     m_simConsole->SetInsertionPointEnd();
 }
