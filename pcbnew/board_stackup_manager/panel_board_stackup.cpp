@@ -1271,6 +1271,12 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
         modified = true;
     }
 
+    if( brd_stackup.m_HasDielectricConstrains != m_impedanceControlled->GetValue() )
+    {
+        brd_stackup.m_HasDielectricConstrains = m_impedanceControlled->GetValue();
+        modified = true;
+    }
+
     if( !m_brdSettings->m_HasStackup )
     {
         m_brdSettings->m_HasStackup = true;
