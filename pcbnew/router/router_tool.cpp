@@ -2107,20 +2107,17 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
                                                    NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( selection.Size() == 1 )
-    {
-        const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
+    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
 
-        // Note: EDIT_TOOL::Drag temporarily handles items of type PCB_ARC_T on its own using
-        // DragArcTrack(), so PCB_ARC_T should never occur here.
-        if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
-        {
-            // Footprints cannot be dragged freely.
-            if( item->IsType( { PCB_FOOTPRINT_T } ) )
-                return !( aDragMode & PNS::DM_FREE_ANGLE );
-            else
-                return true;
-        }
+    // Note: EDIT_TOOL::Drag temporarily handles items of type PCB_ARC_T on its own using
+    // DragArcTrack(), so PCB_ARC_T should never occur here.
+    if( item->IsType( GENERAL_COLLECTOR::DraggableItems ) )
+    {
+        // Footprints cannot be dragged freely.
+        if( item->IsType( { PCB_FOOTPRINT_T } ) )
+            return !( aDragMode & PNS::DM_FREE_ANGLE );
+        else
+            return true;
     }
 
     return false;
@@ -2137,7 +2134,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                                                        NeighboringSegmentFilter );
     }
 
-    if( selection.Size() != 1 )
+    if( selection.Empty() )
         return 0;
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
@@ -2147,6 +2144,25 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
          && item->Type() != PCB_FOOTPRINT_T )
     {
         return 0;
+    }
+
+    std::set<FOOTPRINT*> footprints;
+
+    // We can drag multiple footprints, but not a grab-bag of items
+    if( selection.Size() > 1 )
+    {
+        if( item->Type() != PCB_FOOTPRINT_T )
+            return 0;
+
+        footprints.insert( static_cast<FOOTPRINT*>( item ) );
+
+        for( int idx = 1; idx < selection.Size(); ++idx )
+        {
+            if( static_cast<BOARD_ITEM*>( selection.GetItem( idx ) )->Type() != PCB_FOOTPRINT_T )
+                return 0;
+
+            footprints.insert( static_cast<FOOTPRINT*>( selection.GetItem( idx ) ) );
+        }
     }
 
     // If we overrode locks, we want to clear the flag from the source item before SyncWorld is
@@ -2171,7 +2187,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     PNS::ITEM*    startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
-    FOOTPRINT*    footprint = nullptr;
 
     bool showCourtyardConflicts = frame()->GetPcbNewSettings()->m_ShowCourtyardCollisions;
 
@@ -2183,36 +2198,37 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     std::unique_ptr<CONNECTIVITY_DATA>  dynamicData = nullptr;
     VECTOR2I                            lastOffset;
 
-    if( item->Type() == PCB_FOOTPRINT_T )
+    if( !footprints.empty() )
     {
-        footprint = static_cast<FOOTPRINT*>( item );
-
-        for( PAD* pad : footprint->Pads() )
-        {
-            PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
-
-            if( solid )
-                itemsToDrag.Add( solid );
-
-            if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
-            {
-                if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
-                    dynamicItems.push_back( pad );
-            }
-        }
-
-        for( ZONE* zone : footprint->Zones() )
-        {
-            std::vector<PNS::ITEM*> solids = m_router->GetWorld()->FindItemsByZone( zone );
-
-            for( PNS::ITEM* solid : solids )
-                itemsToDrag.Add( solid );
-        }
-
         if( showCourtyardConflicts )
-        {
             courtyardClearanceDRC.Init( board() );
-            courtyardClearanceDRC.m_FpInMove.push_back( footprint );
+
+        for( FOOTPRINT* footprint : footprints )
+        {
+            for( PAD* pad : footprint->Pads() )
+            {
+                PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
+
+                if( solid )
+                    itemsToDrag.Add( solid );
+
+                if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
+                {
+                    if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
+                        dynamicItems.push_back( pad );
+                }
+            }
+
+            for( ZONE* zone : footprint->Zones() )
+            {
+                std::vector<PNS::ITEM*> solids = m_router->GetWorld()->FindItemsByZone( zone );
+
+                for( PNS::ITEM* solid : solids )
+                    itemsToDrag.Add( solid );
+            }
+
+            if( showCourtyardConflicts )
+                courtyardClearanceDRC.m_FpInMove.push_back( footprint );
         }
 
         dynamicData = std::make_unique<CONNECTIVITY_DATA>( dynamicItems, true );
@@ -2241,8 +2257,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         if( m_startItem->Net() )
             highlightNets( true, { m_startItem->Net() } );
     }
-    else if( footprint )
+    else if( !footprints.empty() )
     {
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+
         // The mouse is going to be moved on grid before dragging begins.
         VECTOR2I             tweakedMousePos;
         PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
@@ -2319,56 +2337,63 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
 
-            if( footprint )
+            if( !footprints.empty() )
             {
                 VECTOR2I offset = m_endSnapPoint - p;
                 BOARD_ITEM* previewItem;
 
                 view()->ClearPreview();
 
-                for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
+                for( FOOTPRINT* footprint : footprints )
                 {
-                    previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
-                    previewItem->Move( offset );
-
-                    view()->AddToPreview( previewItem );
-                    view()->Hide( drawing, true );
-                }
-
-                for( PAD* pad : footprint->Pads() )
-                {
-                    if( ( pad->GetLayerSet() & LSET::AllCuMask() ).none()
-                            && pad->GetDrillSize().x == 0 )
+                    for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
                     {
-                        previewItem = static_cast<BOARD_ITEM*>( pad->Clone() );
+                        previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
                         previewItem->Move( offset );
 
                         view()->AddToPreview( previewItem );
+                        view()->Hide( drawing, true );
                     }
-                    else
+
+                    for( PAD* pad : footprint->Pads() )
                     {
-                        // Pads with copper or holes are handled by the router
+                        if( ( pad->GetLayerSet() & LSET::AllCuMask() ).none()
+                            && pad->GetDrillSize().x == 0 )
+                        {
+                            previewItem = static_cast<BOARD_ITEM*>( pad->Clone() );
+                            previewItem->Move( offset );
+
+                            view()->AddToPreview( previewItem );
+                        }
+                        else
+                        {
+                            // Pads with copper or holes are handled by the router
+                        }
+
+                        view()->Hide( pad, true );
                     }
 
-                    view()->Hide( pad, true );
+                    previewItem = static_cast<BOARD_ITEM*>( footprint->Reference().Clone() );
+                    previewItem->Move( offset );
+                    view()->AddToPreview( previewItem );
+                    view()->Hide( &footprint->Reference() );
+
+                    previewItem = static_cast<BOARD_ITEM*>( footprint->Value().Clone() );
+                    previewItem->Move( offset );
+                    view()->AddToPreview( previewItem );
+                    view()->Hide( &footprint->Value() );
+
+                    if( showCourtyardConflicts )
+                        footprint->Move( offset );
                 }
-
-                previewItem = static_cast<BOARD_ITEM*>( footprint->Reference().Clone() );
-                previewItem->Move( offset );
-                view()->AddToPreview( previewItem );
-                view()->Hide( &footprint->Reference() );
-
-                previewItem = static_cast<BOARD_ITEM*>( footprint->Value().Clone() );
-                previewItem->Move( offset );
-                view()->AddToPreview( previewItem );
-                view()->Hide( &footprint->Value() );
 
                 if( showCourtyardConflicts )
                 {
-                    footprint->Move( offset );
                     courtyardClearanceDRC.Run();
                     courtyardClearanceDRC.UpdateConflicts( getView(), false );
-                    footprint->Move( -offset );
+
+                    for( FOOTPRINT* footprint : footprints )
+                        footprint->Move( -offset );
                 }
 
                 // Update ratsnest
@@ -2422,16 +2447,19 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         handleCommonEvents( *evt );
     }
 
-    if( footprint )
+    if( !footprints.empty() )
     {
-        for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
-            view()->Hide( drawing, false );
+        for( FOOTPRINT* footprint : footprints )
+        {
+            for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
+                view()->Hide( drawing, false );
 
-        view()->Hide( &footprint->Reference(), false );
-        view()->Hide( &footprint->Value(), false );
+            view()->Hide( &footprint->Reference(), false );
+            view()->Hide( &footprint->Value(), false );
 
-        for( PAD* pad : footprint->Pads() )
-            view()->Hide( pad, false );
+            for( PAD* pad : footprint->Pads() )
+                view()->Hide( pad, false );
+        }
 
         view()->ClearPreview();
         view()->ShowPreview( false );
