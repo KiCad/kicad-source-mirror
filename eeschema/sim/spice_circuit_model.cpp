@@ -34,6 +34,8 @@ SIM_TRACE_TYPE SPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
                                                     wxString& aSignal ) const
 {
     static wxString BRANCH( wxS( "#branch" ) );
+    static wxString POWER( wxS( ":power" ) );
+
     // See ngspice manual chapt. 31.1 "Accessing internal device parameters"
     static wxRegEx internalDevParameter( wxS( "^@(\\w*[\\.\\w+]*)\\[(\\w*)\\]$" ), wxRE_ADVANCED );
 
@@ -45,6 +47,11 @@ SIM_TRACE_TYPE SPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
         {
             aSignal = wxT( "I(" ) + vector.Left( vector.Length() - BRANCH.Length() ) + wxT( ")" );
             return SPT_CURRENT;
+        }
+        else if( vector.EndsWith( POWER ) )
+        {
+            aSignal = wxT( "P(" ) + vector.Left( vector.Length() - POWER.Length() ) + wxT( ")" );
+            return SPT_POWER;
         }
         else
         {

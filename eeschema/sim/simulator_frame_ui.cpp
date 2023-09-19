@@ -1301,26 +1301,28 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
         {
             switch( plotTab->GetSimType() )
             {
-                case SIM_TYPE::ST_TRAN:
+                case ST_TRAN:
                     if ( signalType.StartsWith( 'P' ) )
                         units = wxS( "J" );
                     else
                         units += wxS( ".s" );
+
                     break;
-                case SIM_TYPE::ST_AC:
-                case SIM_TYPE::ST_SP:
-                case SIM_TYPE::ST_DISTO:
-                case SIM_TYPE::ST_NOISE:
-                case SIM_TYPE::ST_FFT:
-                case SIM_TYPE::ST_SENS: // If there is a vector, it is frequency
+
+                case ST_AC:
+                case ST_SP:
+                case ST_DISTO:
+                case ST_NOISE:
+                case ST_FFT:
+                case ST_SENS:       // If there is a vector, it is frequency
                     units += wxS( "·Hz" );
                     break;
-                case SIM_TYPE::ST_DC: // Could be a lot of things : V, A, deg C, ohm, ...
-                case SIM_TYPE::ST_OP: // There is no vector for integration
-                case SIM_TYPE::ST_PZ: // There is no vector for integration
-                case SIM_TYPE::ST_TF: // There is no vector for integration
-                default:
 
+                case ST_DC:         // Could be a lot of things : V, A, deg C, ohm, ...
+                case ST_OP:         // There is no vector for integration
+                case ST_PZ:         // There is no vector for integration
+                case ST_TF:         // There is no vector for integration
+                default:
                     units += wxS( "·?" );
                     break;
             }
@@ -2713,7 +2715,20 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             const size_t tab = 25; //characters
             size_t       padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
 
-            value.Append( type == SPT_CURRENT ? wxS( "A" ) : wxS( "V" ) );
+            switch( type )
+            {
+            case SPT_VOLTAGE:
+                value.Append( wxS( "V" ) );
+                break;
+
+            case SPT_CURRENT:
+                value.Append( wxS( "A" ) );
+                break;
+
+            case SPT_POWER:
+                value.Append( wxS( "W" ) );
+                break;
+            }
 
             msg.Printf( wxT( "%s%s\n" ),
                         ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
