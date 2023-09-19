@@ -95,8 +95,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_group_properties_base.cpp
     dialogs/dialog_push_pad_properties.cpp
     dialogs/dialog_push_pad_properties_base.cpp
-    dialogs/dialog_graphic_item_properties.cpp
-    dialogs/dialog_graphic_item_properties_base.cpp
+    dialogs/dialog_shape_properties.cpp
+    dialogs/dialog_shape_properties_base.cpp
     dialogs/dialog_image_properties.cpp
     dialogs/dialog_image_properties_base.cpp
     dialogs/dialog_import_settings.cpp

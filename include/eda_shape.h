@@ -309,14 +309,12 @@ public:
     void SetSegmentAngle( const EDA_ANGLE& aAngle );
 
     /**
-     * Return the length of the track using the hypotenuse calculation.
-     *
-     * @return the length of the track
+     * @return the length of the segment using the hypotenuse calculation.
      */
     double GetLength() const;
 
-    long long int GetRectangleHeight() const;
-    long long int GetRectangleWidth() const;
+    int GetRectangleHeight() const;
+    int GetRectangleWidth() const;
 
     /**
      * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.

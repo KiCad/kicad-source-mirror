@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-370-gc831f1f7)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,10 +21,10 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <widgets/net_selector.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -32,14 +32,15 @@ class PCB_LAYER_BOX_SELECTOR;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
+/// Class DIALOG_SHAPE_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
+class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
 	protected:
-		wxGridBagSizer* m_sizerLeft;
+		wxBoxSizer* m_upperSizer;
+		wxGridBagSizer* m_sizerStartEnd;
 		wxStaticText* m_startPointLabel;
 		wxStaticText* m_startXLabel;
 		wxTextCtrl* m_startXCtrl;
@@ -54,6 +55,7 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_endYLabel;
 		wxTextCtrl* m_endYCtrl;
 		wxStaticText* m_endYUnits;
+		wxGridBagSizer* m_sizerBezier;
 		wxStaticText* m_bezierCtrlPt1Label;
 		wxStaticText* m_BezierPointC1XLabel;
 		wxTextCtrl* m_BezierC1X_Ctrl;
@@ -99,17 +101,15 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_StandardButtonsSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onFilledCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLayerSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Graphic Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE();
+		~DIALOG_SHAPE_PROPERTIES_BASE();
 
 };
 

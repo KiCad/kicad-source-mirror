@@ -149,7 +149,7 @@ double EDA_SHAPE::GetLength() const
     }
 }
 
-long long int EDA_SHAPE::GetRectangleHeight() const
+int EDA_SHAPE::GetRectangleHeight() const
 {
     switch( m_shape )
     {
@@ -161,7 +161,7 @@ long long int EDA_SHAPE::GetRectangleHeight() const
     }
 }
 
-long long int EDA_SHAPE::GetRectangleWidth() const
+int EDA_SHAPE::GetRectangleWidth() const
 {
     switch( m_shape )
     {

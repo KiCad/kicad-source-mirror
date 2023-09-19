@@ -38,28 +38,19 @@
 #include <macros.h>
 #include <widgets/unit_binder.h>
 
-#include <dialog_graphic_item_properties_base.h>
+#include <dialog_shape_properties_base.h>
 #include <tools/drawing_tool.h>
 
 
-class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
+class DIALOG_SHAPE_PROPERTIES : public DIALOG_SHAPE_PROPERTIES_BASE
 {
 public:
-    DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape );
-    ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
+    DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape );
+    ~DIALOG_SHAPE_PROPERTIES() {};
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
-
-    void OnInitDlg( wxInitDialogEvent& event ) override
-    {
-        // Call the default wxDialog handler of a wxInitDialogEvent
-        TransferDataToWindow();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        finishDialogSettings();
-    }
 
     void onFilledCheckbox( wxCommandEvent& event ) override;
 
@@ -93,9 +84,8 @@ private:
     bool                  m_flipStartEnd;
 };
 
-DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                                PCB_SHAPE* aShape ):
-    DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent ),
+DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_SHAPE* aShape ):
+    DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
     m_parent( aParent ),
     m_item( aShape ),
     m_startX( aParent, m_startXLabel, m_startXCtrl, m_startXUnits ),
@@ -114,6 +104,9 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
     m_flipStartEnd( false )
 {
+    SetTitle( wxString::Format( GetTitle(), m_item->GetFriendlyName() ) );
+    m_hash_key = TO_UTF8( GetTitle() );
+
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_startY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
@@ -172,19 +165,61 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
         m_netSelector->SetIndeterminate();
     }
 
+    if( m_item->GetShape() == SHAPE_T::POLY )
+        m_sizerStartEnd->Show( false );
+
+    // Only a Bezeier curve has control points. So do not show these parameters for other shapes
+    if( m_item->GetShape() != SHAPE_T::BEZIER )
+        m_sizerBezier->Show( false );
+
+    // Only a segment has this format
+    if( m_item->GetShape() != SHAPE_T::SEGMENT )
+    {
+        m_segmentLength.Show( false );
+        m_segmentAngle.Show( false );
+    }
+
+    if( m_item->GetShape() != SHAPE_T::RECTANGLE )
+    {
+        m_rectangleHeight.Show( false );
+        m_rectangleWidth.Show( false );
+    }
+
+    // Only an arc has a angle parameter. So do not show this parameter for other shapes
+    if( m_item->GetShape() != SHAPE_T::ARC )
+        m_angle.Show( false );
+
+    if( m_item->GetShape() == SHAPE_T::ARC || m_item->GetShape() == SHAPE_T::SEGMENT )
+        m_filledCtrl->Show( false );
+
+    // Change texts for circles:
+    if( m_item->GetShape() == SHAPE_T::CIRCLE )
+    {
+        m_startPointLabel->SetLabel( _( "Center Point" ) );
+        m_endPointLabel->SetLabel( _( "Radius" ) );
+
+        m_endXLabel->Show( false );
+        m_endX.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
+        m_endY.Show( false );
+    }
+
     showHideNetInfo();
 
     SetInitialFocus( m_startXCtrl );
 
     SetupStandardButtons();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    finishDialogSettings();
+    Layout();
 }
 
 
 void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 {
-    wxCHECK_RET( aShape != NULL, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
+    wxCHECK_RET( aShape, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
 
-    DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aShape );
+    DIALOG_SHAPE_PROPERTIES dlg( this, aShape );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
@@ -197,7 +232,7 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 }
 
 
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::onLayerSelection( wxCommandEvent& event )
+void DIALOG_SHAPE_PROPERTIES::onLayerSelection( wxCommandEvent& event )
 {
     if( m_LayerSelectionCtrl->GetLayerSelection() >= 0 )
     {
@@ -207,7 +242,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::onLayerSelection( wxCommandEvent& event )
 }
 
 
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
+void DIALOG_SHAPE_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
 {
     if( m_filledCtrl->GetValue() )
     {
@@ -230,100 +265,29 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
     }
 }
 
-bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
+bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 {
     if( !m_item )
         return false;
 
-    // Only a segment has this format
-    if( m_item->GetShape() != SHAPE_T::SEGMENT )
-    {
-        m_segmentLength.Show( false );
-        m_segmentAngle.Show( false );
-    }
-
-    if( m_item->GetShape() != SHAPE_T::RECTANGLE )
-    {
-        m_rectangleHeight.Show( false );
-        m_rectangleWidth.Show( false );
-    }
-
-    // Only an arc has a angle parameter. So do not show this parameter for other shapes
-    if( m_item->GetShape() != SHAPE_T::ARC )
-        m_angle.Show( false );
-
-    // Only a Bezeier curve has control points. So do not show these parameters for other shapes
-    if( m_item->GetShape() != SHAPE_T::BEZIER )
-    {
-        m_bezierCtrlPt1Label->Show( false );
-        m_bezierCtrl1X.Show( false );
-        m_bezierCtrl1Y.Show( false );
-        m_bezierCtrlPt2Label->Show( false );
-        m_bezierCtrl2X.Show( false );
-        m_bezierCtrl2Y.Show( false );
-    }
-
-    m_netSelector->Show( m_item->IsOnCopperLayer() );
-    m_netLabel->Show( m_item->IsOnCopperLayer() );
-
-    // Change texts according to the segment shape:
-    switch( m_item->GetShape() )
-    {
-    case SHAPE_T::CIRCLE:
-        SetTitle( _( "Circle Properties" ) );
-        m_startPointLabel->SetLabel( _( "Center Point" ) );
-
-        m_endPointLabel->SetLabel( _( "Radius" ) );
-        m_endXLabel->Show( false );
-        m_endX.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
-
-        m_endY.Show( false );
-
-        m_filledCtrl->Show( true );
-        break;
-
-    case SHAPE_T::ARC:
-        SetTitle( _( "Arc Properties" ) );
+    if( m_item->GetShape() == SHAPE_T::ARC )
         m_angle.SetAngleValue( m_item->GetArcAngle() );
-        m_filledCtrl->Show( false );
-        break;
 
-    case SHAPE_T::POLY:
-        SetTitle( _( "Polygon Properties" ) );
-        m_sizerLeft->Show( false );
-        m_filledCtrl->Show( true );
-        break;
-
-    case SHAPE_T::RECTANGLE:
-        SetTitle( _( "Rectangle Properties" ) );
-
+    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
+    {
         m_rectangleHeight.SetValue( m_item->GetRectangleHeight() );
         m_rectangleWidth.SetValue( m_item->GetRectangleWidth() );
+    }
 
-        m_filledCtrl->Show( true );
-        break;
-
-    case SHAPE_T::SEGMENT:
-        SetTitle( _( "Line Segment Properties" ) );
-
+    if( m_item->GetShape() == SHAPE_T::SEGMENT )
+    {
         if( m_item->GetStart().x == m_item->GetEnd().x )
             m_flipStartEnd = m_item->GetStart().y > m_item->GetEnd().y;
         else
             m_flipStartEnd = m_item->GetStart().x > m_item->GetEnd().x;
 
-        m_segmentLength.SetValue( m_item->GetLength() );
+        m_segmentLength.SetValue( KiROUND( m_item->GetLength() ) );
         m_segmentAngle.SetAngleValue( m_item->GetSegmentAngle() );
-
-        m_filledCtrl->Show( false );
-        break;
-
-    case SHAPE_T::BEZIER:
-        SetTitle( _( "Curve Properties" ) );
-        m_filledCtrl->Show( true );
-        break;
-
-    default:
-        break;
     }
 
     if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
@@ -352,11 +316,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_endY.SetValue( m_item->GetEnd().y );
     }
 
-    // For Bezier curve:
-    m_bezierCtrl1X.SetValue( m_item->GetBezierC1().x );
-    m_bezierCtrl1Y.SetValue( m_item->GetBezierC1().y );
-    m_bezierCtrl2X.SetValue( m_item->GetBezierC2().x );
-    m_bezierCtrl2Y.SetValue( m_item->GetBezierC2().y );
+    if( m_item->GetShape() == SHAPE_T::BEZIER )
+    {
+        m_bezierCtrl1X.SetValue( m_item->GetBezierC1().x );
+        m_bezierCtrl1Y.SetValue( m_item->GetBezierC1().y );
+        m_bezierCtrl2X.SetValue( m_item->GetBezierC2().x );
+        m_bezierCtrl2Y.SetValue( m_item->GetBezierC2().y );
+    }
 
     m_filledCtrl->SetValue( m_item->IsFilled() );
     m_locked->SetValue( m_item->IsLocked() );
@@ -374,26 +340,25 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
-    return DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataToWindow();
+    return DIALOG_SHAPE_PROPERTIES_BASE::TransferDataToWindow();
 }
 
 
-bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 {
-    if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
+    if( !DIALOG_SHAPE_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
     if( !m_item )
         return true;
 
-    int          layer = m_LayerSelectionCtrl->GetLayerSelection();
-
+    int       layer = m_LayerSelectionCtrl->GetLayerSelection();
     VECTOR2I  begin_point = m_item->GetStart();
     VECTOR2I  end_point = m_item->GetEnd();
-    long long int segment_length = 0;
-    EDA_ANGLE     segment_angle = EDA_ANGLE( 0, RADIANS_T );
-    long long int rectangle_height = 0;
-    long long int rectangle_width = 0;
+    int       segment_length = 0;
+    EDA_ANGLE segment_angle = EDA_ANGLE( 0, RADIANS_T );
+    int       rectangle_height = 0;
+    int       rectangle_width = 0;
 
     BOARD_COMMIT commit( m_parent );
 
@@ -401,7 +366,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     if( m_item->GetShape() == SHAPE_T::SEGMENT )
     {
-        segment_length = m_item->GetLength();
+        segment_length = KiROUND( m_item->GetLength() );
         segment_angle = m_item->GetSegmentAngle().Round( 3 );
     }
 
@@ -413,43 +378,41 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
-        m_item->SetEndX( m_startX.GetValue() );
-        m_item->SetEndY( m_startY.GetValue() );
+        m_item->SetEndX( m_startX.GetIntValue() );
+        m_item->SetEndY( m_startY.GetIntValue() );
     }
     else
     {
-        m_item->SetStartX( m_startX.GetValue() );
-        m_item->SetStartY( m_startY.GetValue() );
+        m_item->SetStartX( m_startX.GetIntValue() );
+        m_item->SetStartY( m_startY.GetIntValue() );
     }
 
     if( m_item->GetShape() == SHAPE_T::CIRCLE )
     {
-        m_item->SetEnd( m_item->GetStart() + VECTOR2I( m_endX.GetValue(), 0 ) );
+        m_item->SetEnd( m_item->GetStart() + VECTOR2I( m_endX.GetIntValue(), 0 ) );
     }
     else if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
-        m_item->SetStartX( m_endX.GetValue() );
-        m_item->SetStartY( m_endY.GetValue() );
+        m_item->SetStartX( m_endX.GetIntValue() );
+        m_item->SetStartY( m_endY.GetIntValue() );
     }
     else
     {
-        m_item->SetEndX( m_endX.GetValue() );
-        m_item->SetEndY( m_endY.GetValue() );
+        m_item->SetEndX( m_endX.GetIntValue() );
+        m_item->SetEndY( m_endY.GetIntValue() );
     }
 
-     if( m_item->GetShape() == SHAPE_T::SEGMENT )
-     {
-        bool change_begin = ( begin_point != m_item->GetStart() );
-        bool change_end = ( end_point != m_item->GetEnd() );
-        bool change_length = ( segment_length != m_segmentLength.GetValue() );
+    if( m_item->GetShape() == SHAPE_T::SEGMENT )
+    {
+        bool      change_begin = ( begin_point != m_item->GetStart() );
+        bool      change_end = ( end_point != m_item->GetEnd() );
+        bool      change_length = ( segment_length != m_segmentLength.GetValue() );
         EDA_ANGLE difference = std::abs( segment_angle - m_segmentAngle.GetAngleValue() );
-
-        bool change_angle =
-                ( difference >= EDA_ANGLE( 0.00049, DEGREES_T ) );
+        bool      change_angle = ( difference >= EDA_ANGLE( 0.00049, DEGREES_T ) );
 
         if( !( change_begin && change_end ) )
         {
-            segment_length = m_segmentLength.GetValue();
+            segment_length = m_segmentLength.GetIntValue();
             segment_angle = m_segmentAngle.GetAngleValue().Round( 3 );
 
             if( change_length || change_angle )
@@ -457,22 +420,22 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
                 if( change_end )
                 {
                     m_item->SetStartX( m_item->GetEndX()
-                                       - segment_length * segment_angle.Cos() );
+                                       - KiROUND( segment_length * segment_angle.Cos() ) );
                     m_item->SetStartY( m_item->GetEndY()
-                                       + segment_length * segment_angle.Sin() );
+                                       + KiROUND( segment_length * segment_angle.Sin() ) );
                 }
                 else
                 {
                     m_item->SetEndX( m_item->GetStartX()
-                                     + segment_length * segment_angle.Cos() );
+                                     + KiROUND( segment_length * segment_angle.Cos() ) );
                     m_item->SetEndY( m_item->GetStartY()
-                                     - segment_length * segment_angle.Sin() );
+                                     - KiROUND( segment_length * segment_angle.Sin() ) );
                 }
             }
         }
 
         if( change_length )
-            m_item->SetLength( m_segmentLength.GetValue() );
+            m_item->SetLength( m_segmentLength.GetIntValue() );
         else
             m_item->SetLength( m_item->GetLength() );
 
@@ -480,8 +443,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
             m_item->SetSegmentAngle( m_segmentAngle.GetAngleValue().Round( 3 ) );
         else
             m_item->SetSegmentAngle( m_item->GetSegmentAngle().Round( 3 ) );
-
-     }
+    }
 
     if( m_item->GetShape() == SHAPE_T::RECTANGLE )
     {
@@ -490,11 +452,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         bool change_height = ( rectangle_height != m_rectangleHeight.GetValue() );
         bool change_width = ( rectangle_width != m_rectangleWidth.GetValue() );
 
-
         if( !( change_begin && change_end ) )
         {
-           rectangle_height = m_rectangleHeight.GetValue();
-           rectangle_width = m_rectangleWidth.GetValue();
+           rectangle_height = m_rectangleHeight.GetIntValue();
+           rectangle_width = m_rectangleWidth.GetIntValue();
 
            if( change_height || change_width )
            {
@@ -518,8 +479,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
      // For Bezier curve: Set the two control points
     if( m_item->GetShape() == SHAPE_T::BEZIER )
     {
-        m_item->SetBezierC1( VECTOR2I( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );
-        m_item->SetBezierC2( VECTOR2I( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
+        m_item->SetBezierC1( VECTOR2I( m_bezierCtrl1X.GetIntValue(), m_bezierCtrl1Y.GetIntValue() ) );
+        m_item->SetBezierC2( VECTOR2I( m_bezierCtrl2X.GetIntValue(), m_bezierCtrl2Y.GetIntValue() ) );
     }
 
     if( m_item->GetShape() == SHAPE_T::ARC )
@@ -536,7 +497,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     STROKE_PARAMS stroke = m_item->GetStroke();
 
-    stroke.SetWidth( m_thickness.GetValue() );
+    stroke.SetWidth( m_thickness.GetIntValue() );
 
     auto it = lineTypeNames.begin();
     std::advance( it, m_lineStyleCombo->GetSelection() );
@@ -567,11 +528,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 }
 
 
-bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
+bool DIALOG_SHAPE_PROPERTIES::Validate()
 {
     wxArrayString errors;
 
-    if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::Validate() )
+    if( !DIALOG_SHAPE_PROPERTIES_BASE::Validate() )
         return false;
 
     // Type specific checks.
@@ -589,8 +550,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         }
         else
         {
-            VECTOR2D start( m_startX.GetValue(), m_startY.GetValue() );
-            VECTOR2D end( m_endX.GetValue(), m_endY.GetValue() );
+            VECTOR2D start( m_startX.GetIntValue(), m_startY.GetIntValue() );
+            VECTOR2D end( m_endX.GetIntValue(), m_endY.GetIntValue() );
             VECTOR2D center = CalcArcCenter( start, end, m_angle.GetAngleValue() );
 
             double radius = ( center - start ).EuclideanNorm();
