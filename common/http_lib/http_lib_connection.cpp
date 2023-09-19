@@ -54,21 +54,20 @@ HTTP_LIB_CONNECTION::~HTTP_LIB_CONNECTION()
 
 bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
 {
+    m_endpointValid = false;
     std::string res = "";
 
-    std::unique_ptr<KICAD_CURL_EASY> m_curl = createCurlEasyObject();
-    m_curl->SetURL( m_rootURL );
+    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
+    curl->SetURL( m_rootURL );
 
     try
     {
-        m_curl->Perform();
+        curl->Perform();
 
-        res = m_curl->GetBuffer();
+        res = curl->GetBuffer();
 
-        if( !checkServerResponse( m_curl ) )
-        {
+        if( !checkServerResponse( curl ) )
             return false;
-        }
 
         if( res.length() == 0 )
         {
@@ -81,9 +80,9 @@ bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
             // Check that the endpoints exist, if not fail.
             if( !response.at( http_endpoint_categories ).empty()
                 && !response.at( http_endpoint_parts ).empty() )
-                m_enpointValid = true;
-            else
-                m_enpointValid = false;
+            {
+                m_endpointValid = true;
+            }
         }
     }
     catch( const std::exception& e )
@@ -96,27 +95,27 @@ bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
                          "connection: %s" ),
                     m_lastError );
 
-        m_enpointValid = false;
+        m_endpointValid = false;
     }
 
-    if( IsValidEnpoint() )
+    if( m_endpointValid )
     {
         syncCategories();
     }
 
-    return IsValidEnpoint();
+    return m_endpointValid;
 }
 
 
-bool HTTP_LIB_CONNECTION::IsValidEnpoint() const
+bool HTTP_LIB_CONNECTION::isValidEndpoint() const
 {
-    return m_enpointValid;
+    return m_endpointValid;
 }
 
 
 bool HTTP_LIB_CONNECTION::syncCategories()
 {
-    if( !IsValidEnpoint() )
+    if( !isValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "syncCategories: without valid connection!" ) );
         return false;
@@ -124,16 +123,16 @@ bool HTTP_LIB_CONNECTION::syncCategories()
 
     std::string res = "";
 
-    std::unique_ptr<KICAD_CURL_EASY> m_curl = createCurlEasyObject();
-    m_curl->SetURL( m_rootURL + http_endpoint_categories + ".json" );
+    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
+    curl->SetURL( m_rootURL + http_endpoint_categories + ".json" );
 
     try
     {
-        m_curl->Perform();
+        curl->Perform();
 
-        res = m_curl->GetBuffer();
+        res = curl->GetBuffer();
 
-        if( !checkServerResponse( m_curl ) )
+        if( !checkServerResponse( curl ) )
         {
             return false;
         }
@@ -169,9 +168,9 @@ bool HTTP_LIB_CONNECTION::syncCategories()
 }
 
 
-bool HTTP_LIB_CONNECTION::SelectOne( const std::string aPartID, HTTP_LIB_PART& aFetchedPart )
+bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart )
 {
-    if( !IsValidEnpoint() )
+    if( !isValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "SelectOne: without valid connection!" ) );
         return false;
@@ -187,16 +186,16 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string aPartID, HTTP_LIB_PART& a
 
     std::string res = "";
 
-    std::unique_ptr<KICAD_CURL_EASY> m_curl = createCurlEasyObject();
-    m_curl->SetURL( m_rootURL + fmt::format( http_endpoint_parts + "/{}.json", aPartID ) );
+    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
+    curl->SetURL( m_rootURL + fmt::format( http_endpoint_parts + "/{}.json", aPartID ) );
 
     try
     {
-        m_curl->Perform();
+        curl->Perform();
 
-        res = m_curl->GetBuffer();
+        res = curl->GetBuffer();
 
-        if( !checkServerResponse( m_curl ) )
+        if( !checkServerResponse( curl ) )
         {
             return false;
         }
@@ -269,7 +268,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string aPartID, HTTP_LIB_PART& a
 bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
                                      std::vector<HTTP_LIB_PART>& aParts )
 {
-    if( !IsValidEnpoint() )
+    if( !isValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "SelectAll: without valid connection!" ) );
         return false;
@@ -277,21 +276,21 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
 
     std::string res = "";
 
-    std::unique_ptr<KICAD_CURL_EASY> m_curl = createCurlEasyObject();
-    m_curl->SetURL( m_rootURL
+    std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
+    curl->SetURL( m_rootURL
                     + fmt::format( http_endpoint_parts + "/category/{}.json", aCategory.id ) );
 
     try
     {
-        m_curl->Perform();
+        curl->Perform();
 
-        res = m_curl->GetBuffer();
+        res = curl->GetBuffer();
 
         nlohmann::json response = nlohmann::json::parse( res );
         std::string    key = "";
         std::string    value = "";
 
-        for( nlohmann::json item : response )
+        for( nlohmann::json& item : response )
         {
             //PART result;
             HTTP_LIB_PART part;
@@ -329,12 +328,12 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
 }
 
 
-bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& m_curl )
+bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl )
 {
 
     long http_code = 0;
 
-    curl_easy_getinfo( m_curl->GetCurl(), CURLINFO_RESPONSE_CODE, &http_code );
+    curl_easy_getinfo( aCurl->GetCurl(), CURLINFO_RESPONSE_CODE, &http_code );
 
     if( http_code != 200 )
     {
@@ -388,76 +387,81 @@ bool HTTP_LIB_CONNECTION::boolFromString( const std::any& aVal )
 *
 *    see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 */
-wxString HTTP_LIB_CONNECTION::httpErrorCodeDescription( uint16_t http_code )
+wxString HTTP_LIB_CONNECTION::httpErrorCodeDescription( uint16_t aHttpCode )
 {
-    switch( http_code )
-    {
-    case 100: return "100" + _( "Continue" );
-    case 101: return "101" + _( "Switching Protocols" );
-    case 102: return "102" + _( "Processing" );
-    case 103: return "103" + _( "Early Hints" );
+    auto codeDescription =
+            []( uint16_t aCode ) -> wxString
+            {
+                switch( aCode )
+                {
+                case 100: return wxS( "Continue" );
+                case 101: return wxS( "Switching Protocols" );
+                case 102: return wxS( "Processing" );
+                case 103: return wxS( "Early Hints" );
 
-    case 200: return "200" + _( "OK" );
-    case 201: return "201" + _( "Created" );
-    case 203: return "203" + _( "Non-Authoritative Information" );
-    case 204: return "204" + _( "No Content" );
-    case 205: return "205" + _( "Reset Content" );
-    case 206: return "206" + _( "Partial Content" );
-    case 207: return "207" + _( "Multi-Status" );
-    case 208: return "208" + _( "Already Reporte" );
-    case 226: return "226" + _( "IM Used" );
+                case 200: return wxS( "OK" );
+                case 201: return wxS( "Created" );
+                case 203: return wxS( "Non-Authoritative Information" );
+                case 204: return wxS( "No Content" );
+                case 205: return wxS( "Reset Content" );
+                case 206: return wxS( "Partial Content" );
+                case 207: return wxS( "Multi-Status" );
+                case 208: return wxS( "Already Reporte" );
+                case 226: return wxS( "IM Used" );
 
-    case 300: return "300" + _( "Multiple Choices" );
-    case 301: return "301" + _( "Moved Permanently" );
-    case 302: return "302" + _( "Found" );
-    case 303: return "303" + _( "See Other" );
-    case 304: return "304" + _( "Not Modified" );
-    case 305: return "305" + _( "Use Proxy (Deprecated)" );
-    case 306: return "306" + _( "Unused" );
-    case 307: return "307" + _( "Temporary Redirect" );
-    case 308: return "308" + _( "Permanent Redirect" );
+                case 300: return wxS( "Multiple Choices" );
+                case 301: return wxS( "Moved Permanently" );
+                case 302: return wxS( "Found" );
+                case 303: return wxS( "See Other" );
+                case 304: return wxS( "Not Modified" );
+                case 305: return wxS( "Use Proxy (Deprecated)" );
+                case 306: return wxS( "Unused" );
+                case 307: return wxS( "Temporary Redirect" );
+                case 308: return wxS( "Permanent Redirect" );
 
-    case 400: return "400" + _( "Bad Request" );
-    case 401: return "401" + _( "Unauthorized" );
-    case 402: return "402" + _( "Payment Required (Experimental)" );
-    case 403: return "403" + _( "Forbidden" );
-    case 404: return "404" + _( "Not Found" );
-    case 405: return "405" + _( "Method Not Allowed" );
-    case 406: return "406" + _( "Not Acceptable" );
-    case 407: return "407" + _( "Proxy Authentication Required" );
-    case 408: return "408" + _( "Request Timeout" );
-    case 409: return "409" + _( "Conflict" );
-    case 410: return "410" + _( "Gone" );
-    case 411: return "411" + _( "Length Required" );
-    case 412: return "413" + _( "Payload Too Large" );
-    case 414: return "414" + _( "URI Too Long" );
-    case 415: return "415" + _( "Unsupported Media Type" );
-    case 416: return "416" + _( "Range Not Satisfiable" );
-    case 417: return "417" + _( "Expectation Failed" );
-    case 418: return "418" + _( "I'm a teapot" );
-    case 421: return "421" + _( "Misdirected Request" );
-    case 422: return "422" + _( "Unprocessable Conten" );
-    case 423: return "423" + _( "Locked" );
-    case 424: return "424" + _( "Failed Dependency" );
-    case 425: return "425" + _( "Too Early (Experimental)" );
-    case 426: return "426" + _( "Upgrade Required" );
-    case 428: return "428" + _( "Precondition Required" );
-    case 429: return "429" + _( "Too Many Requests" );
-    case 431: return "431" + _( "Request Header Fields Too Large" );
-    case 451: return "451" + _( "Unavailable For Legal Reasons" );
+                case 400: return wxS( "Bad Request" );
+                case 401: return wxS( "Unauthorized" );
+                case 402: return wxS( "Payment Required (Experimental)" );
+                case 403: return wxS( "Forbidden" );
+                case 404: return wxS( "Not Found" );
+                case 405: return wxS( "Method Not Allowed" );
+                case 406: return wxS( "Not Acceptable" );
+                case 407: return wxS( "Proxy Authentication Required" );
+                case 408: return wxS( "Request Timeout" );
+                case 409: return wxS( "Conflict" );
+                case 410: return wxS( "Gone" );
+                case 411: return wxS( "Length Required" );
+                case 412: return wxS( "Payload Too Large" );
+                case 414: return wxS( "URI Too Long" );
+                case 415: return wxS( "Unsupported Media Type" );
+                case 416: return wxS( "Range Not Satisfiable" );
+                case 417: return wxS( "Expectation Failed" );
+                case 418: return wxS( "I'm a teapot" );
+                case 421: return wxS( "Misdirected Request" );
+                case 422: return wxS( "Unprocessable Conten" );
+                case 423: return wxS( "Locked" );
+                case 424: return wxS( "Failed Dependency" );
+                case 425: return wxS( "Too Early (Experimental)" );
+                case 426: return wxS( "Upgrade Required" );
+                case 428: return wxS( "Precondition Required" );
+                case 429: return wxS( "Too Many Requests" );
+                case 431: return wxS( "Request Header Fields Too Large" );
+                case 451: return wxS( "Unavailable For Legal Reasons" );
 
-    case 500: return "500" + _( "Internal Server Error" );
-    case 501: return "501" + _( "Not Implemented" );
-    case 502: return "502" + _( "Bad Gateway" );
-    case 503: return "503" + _( "Service Unavailable" );
-    case 504: return "504" + _( "Gateway Timeout" );
-    case 505: return "505" + _( "HTTP Version Not Supported" );
-    case 506: return "506" + _( "Variant Also Negotiates" );
-    case 507: return "507" + _( "Insufficient Storag" );
-    case 508: return "508" + _( "Loop Detecte" );
-    case 510: return "510" + _( "Not Extended" );
-    case 511: return "511" + _( "Network Authentication Required" );
-    }
+                case 500: return wxS( "Internal Server Error" );
+                case 501: return wxS( "Not Implemented" );
+                case 502: return wxS( "Bad Gateway" );
+                case 503: return wxS( "Service Unavailable" );
+                case 504: return wxS( "Gateway Timeout" );
+                case 505: return wxS( "HTTP Version Not Supported" );
+                case 506: return wxS( "Variant Also Negotiates" );
+                case 507: return wxS( "Insufficient Storag" );
+                case 508: return wxS( "Loop Detecte" );
+                case 510: return wxS( "Not Extended" );
+                case 511: return wxS( "Network Authentication Required" );
+                default:  return wxS( "Unknown" );
+                }
+            };
 
-    return wxString::Format( _( "Code Unkonwn: %d" ), http_code );
+    return wxString::Format( wxS( "%d: %s" ), aHttpCode, codeDescription( aHttpCode ) );
 }

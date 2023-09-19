@@ -299,7 +299,7 @@ void SCH_HTTP_LIB_PLUGIN::ensureConnection()
 
     connect();
 
-    if( !m_conn || !m_conn->IsValidEnpoint() )
+    if( !m_conn || !m_conn->isValidEndpoint() )
     {
         wxString msg = wxString::Format(
                 _( "Could not connect to %s. Errors: %s" ),
@@ -319,7 +319,7 @@ void SCH_HTTP_LIB_PLUGIN::connect()
 
         m_conn = std::make_unique<HTTP_LIB_CONNECTION>( m_settings->m_Source, true );
 
-        if( !m_conn->IsValidEnpoint() )
+        if( !m_conn->isValidEndpoint() )
         {
             m_lastError = m_conn->GetLastError();
             return;

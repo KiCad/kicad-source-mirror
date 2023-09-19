@@ -38,8 +38,7 @@ public:
 
     ~HTTP_LIB_CONNECTION();
 
-    bool IsValidEnpoint() const;
-
+    bool isValidEndpoint() const;
 
     /**
      * Retrieves a single part with full details from the HTTP library.
@@ -47,7 +46,7 @@ public:
      * @param aResult will conatain the part if one was found
      * @return true if aResult was filled; false otherwise
      */
-    bool SelectOne( const std::string aPartID, HTTP_LIB_PART& aFetchedPart );
+    bool SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart );
 
     /**
      * Retrieves all parts from a specific category from the HTTP library.
@@ -72,8 +71,6 @@ private:
 
         std::unique_ptr<KICAD_CURL_EASY> aCurl( new KICAD_CURL_EASY() );
 
-        //KICAD_CURL_EASY* aCurl = new KICAD_CURL_EASY();
-
         // prepare curl
         aCurl->SetHeader( "Accept", "application/json" );
         aCurl->SetHeader( "Authorization", "Token " + m_token );
@@ -85,11 +82,11 @@ private:
 
     bool syncCategories();
 
-    bool checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& m_curl );
+    bool checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl );
 
     bool boolFromString( const std::any& aVal );
 
-    wxString httpErrorCodeDescription( uint16_t http_code );
+    wxString httpErrorCodeDescription( uint16_t aHttpCode );
 
     std::string m_token;
     std::string m_rootURL;
@@ -103,7 +100,7 @@ private:
     //        part.name               part.id     category.id
     std::map<std::string, std::tuple<std::string, std::string>> m_cache;
 
-    bool m_enpointValid = false;
+    bool m_endpointValid = false;
 
     std::string m_lastError;
 
