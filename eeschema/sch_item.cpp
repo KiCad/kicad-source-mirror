@@ -167,7 +167,12 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
 void SCH_ITEM::SetConnectionGraph( CONNECTION_GRAPH* aGraph )
 {
     for( auto& [path, conn] : m_connection_map )
+    {
         conn->SetGraph( aGraph );
+
+        for( auto& member : conn->AllMembers() )
+            member->SetGraph( aGraph );
+    }
 }
 
 
