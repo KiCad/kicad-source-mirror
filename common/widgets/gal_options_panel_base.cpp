@@ -50,7 +50,7 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 	bSizerGridStyle->Add( m_rbCrosses, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	mainSizer->Add( bSizerGridStyle, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( bSizerGridStyle, 0, wxEXPAND|wxALL, 5 );
 
 	wxGridBagSizer* gbGridSettings;
 	gbGridSettings = new wxGridBagSizer( 5, 5 );
@@ -124,7 +124,7 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 	fgSizer1->Add( m_forceCursorDisplay, 0, wxLEFT, 5 );
 
 
-	mainSizer->Add( fgSizer1, 1, wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( fgSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );
