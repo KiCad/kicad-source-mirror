@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,6 +245,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
 
     // Run the callbacks once to process the dialog contents
     setControlEnablement();
+    setCircularArrayEnablement();
     calculateCircularArrayProperties();
 
     SetupStandardButtons();
@@ -252,18 +253,20 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     SetMinSize( GetSize() );
 }
 
+
 void DIALOG_CREATE_ARRAY::OnButtonPosition( wxCommandEvent& event )
 {
-    if( m_radioBtnSetByPos->GetValue() )
-    {
-        m_entryCentreX->Enable();
-        m_entryCentreY->Enable();
-        m_tcValueCircRadius->Disable();
-        m_tcValueCircCenterAngle->Disable();
-    }
+    setCircularArrayEnablement();
 }
 
+
 void DIALOG_CREATE_ARRAY::OnButtonRadius( wxCommandEvent& event )
+{
+    setCircularArrayEnablement();
+}
+
+
+void DIALOG_CREATE_ARRAY::setCircularArrayEnablement()
 {
     if( m_radioBtnSetByRadius->GetValue() )
     {
@@ -272,17 +275,22 @@ void DIALOG_CREATE_ARRAY::OnButtonRadius( wxCommandEvent& event )
         m_tcValueCircRadius->Enable();
         m_tcValueCircCenterAngle->Enable();
     }
-}
-
-void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
-{
-    if( m_radioBtnSetByPos->GetValue() )
+    else
     {
         m_entryCentreX->Enable();
         m_entryCentreY->Enable();
         m_tcValueCircRadius->Disable();
         m_tcValueCircCenterAngle->Disable();
+    }
+}
 
+
+void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
+{
+    setCircularArrayEnablement();
+
+    if( m_radioBtnSetByPos->GetValue() )
+    {
         setControlEnablement();
         calculateCircularArrayProperties();
     }
@@ -290,13 +298,10 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 
 void DIALOG_CREATE_ARRAY::OnRadiusChanged( wxCommandEvent& event )
 {
+    setCircularArrayEnablement();
+
     if( m_radioBtnSetByRadius->GetValue() )
     {
-        m_entryCentreX->Disable();
-        m_entryCentreY->Disable();
-        m_tcValueCircRadius->Enable();
-        m_tcValueCircCenterAngle->Enable();
-
         setControlEnablement();
         calculateCircularArrayProperties();
     }
