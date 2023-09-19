@@ -64,11 +64,79 @@ static const wxChar DanglingProfileMask[] = wxT( "CONN_PROFILE" );
 static const wxChar ConnTrace[] = wxT( "CONN" );
 
 
+void CONNECTION_SUBGRAPH::RemoveItem( SCH_ITEM* aItem )
+{
+    m_items.erase( aItem );
+    m_drivers.erase( aItem );
+
+    if( aItem == m_driver )
+    {
+        m_driver = nullptr;
+        m_driver_connection = nullptr;
+    }
+
+    if( aItem->Type() == SCH_SHEET_PIN_T )
+        m_hier_pins.erase( static_cast<SCH_SHEET_PIN*>( aItem ) );
+
+    if( aItem->Type() == SCH_HIER_LABEL_T )
+        m_hier_ports.erase( static_cast<SCH_HIERLABEL*>( aItem ) );
+}
+
+
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 {
-    PRIORITY               highest_priority = PRIORITY::INVALID;
-    std::vector<SCH_ITEM*> candidates;
-    std::vector<SCH_ITEM*> strong_drivers;
+    auto candidate_cmp = [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
+        {
+            // meet irreflexive requirements of std::sort
+            if( a == b )
+                return false;
+
+            SCH_CONNECTION* ac = a->Connection( &m_sheet );
+            SCH_CONNECTION* bc = b->Connection( &m_sheet );
+
+            // Ensure we don't pick the subset over the superset
+            if( ac->IsBus() && bc->IsBus() )
+                return bc->IsSubsetOf( ac );
+
+            // Ensure we don't pick a hidden power pin on a regular symbol over
+            // one on a power symbol
+            if( a->Type() == SCH_PIN_T && b->Type() == SCH_PIN_T )
+            {
+                SCH_PIN* pa = static_cast<SCH_PIN*>( a );
+                SCH_PIN* pb = static_cast<SCH_PIN*>( b );
+
+                bool aPower = pa->GetLibPin()->GetParent()->IsPower();
+                bool bPower = pb->GetLibPin()->GetParent()->IsPower();
+
+                if( aPower && !bPower )
+                    return true;
+                else if( bPower && !aPower )
+                    return false;
+            }
+
+            const wxString& a_name = GetNameForDriver( a );
+            const wxString& b_name = GetNameForDriver( b );
+            bool     a_lowQualityName = a_name.Contains( "-Pad" );
+            bool     b_lowQualityName = b_name.Contains( "-Pad" );
+
+            if( a_lowQualityName && !b_lowQualityName )
+                return false;
+            else if( b_lowQualityName && !a_lowQualityName )
+                return true;
+            else
+                return a_name < b_name;
+        };
+
+    auto strong_cmp = [this]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
+    {
+            const wxString& a_name = GetNameForDriver( a );
+            const wxString& b_name = GetNameForDriver( b );
+            return a_name < b_name;
+    };
+
+    PRIORITY            highest_priority = PRIORITY::INVALID;
+    std::set<SCH_ITEM*, decltype( candidate_cmp )> candidates( candidate_cmp );
+    std::set<SCH_ITEM*, decltype( strong_cmp )> strong_drivers( strong_cmp );
 
     m_driver = nullptr;
 
@@ -88,17 +156,17 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
             continue;
 
         if( item_priority >= PRIORITY::HIER_LABEL )
-            strong_drivers.push_back( item );
+            strong_drivers.insert( item );
 
         if( item_priority > highest_priority )
         {
             candidates.clear();
-            candidates.push_back( item );
+            candidates.insert( item );
             highest_priority = item_priority;
         }
         else if( !candidates.empty() && ( item_priority == highest_priority ) )
         {
-            candidates.push_back( item );
+            candidates.insert( item );
         }
     }
 
@@ -128,56 +196,10 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                     }
                 }
             }
-            else
-            {
-                // For all other driver types, sort by quality of name
-                std::sort( candidates.begin(), candidates.end(),
-                           [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
-                           {
-                               // meet irreflexive requirements of std::sort
-                               if( a == b )
-                                   return false;
-
-                               SCH_CONNECTION* ac = a->Connection( &m_sheet );
-                               SCH_CONNECTION* bc = b->Connection( &m_sheet );
-
-                               // Ensure we don't pick the subset over the superset
-                               if( ac->IsBus() && bc->IsBus() )
-                                   return bc->IsSubsetOf( ac );
-
-                               // Ensure we don't pick a hidden power pin on a regular symbol over
-                               // one on a power symbol
-                               if( a->Type() == SCH_PIN_T && b->Type() == SCH_PIN_T )
-                               {
-                                   SCH_PIN* pa = static_cast<SCH_PIN*>( a );
-                                   SCH_PIN* pb = static_cast<SCH_PIN*>( b );
-
-                                   bool aPower = pa->GetLibPin()->GetParent()->IsPower();
-                                   bool bPower = pb->GetLibPin()->GetParent()->IsPower();
-
-                                   if( aPower && !bPower )
-                                       return true;
-                                   else if( bPower && !aPower )
-                                       return false;
-                               }
-
-                               const wxString& a_name = GetNameForDriver( a );
-                               const wxString& b_name = GetNameForDriver( b );
-                               bool     a_lowQualityName = a_name.Contains( "-Pad" );
-                               bool     b_lowQualityName = b_name.Contains( "-Pad" );
-
-                               if( a_lowQualityName && !b_lowQualityName )
-                                   return false;
-                               else if( b_lowQualityName && !a_lowQualityName )
-                                   return true;
-                               else
-                                   return a_name < b_name;
-                           } );
-            }
         }
 
         if( !m_driver )
-            m_driver = candidates[0];
+            m_driver = *candidates.begin();
     }
 
     if( strong_drivers.size() > 1 )
@@ -185,7 +207,10 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 
     // Drop weak drivers
     if( m_strong_driver )
-        m_drivers = strong_drivers;
+    {
+        m_drivers.clear();
+        m_drivers.insert( strong_drivers.begin(), strong_drivers.end() );
+    }
 
     // Cache driver connection
     if( m_driver )
@@ -198,30 +223,6 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
     else if( !m_is_bus_member )
     {
         m_driver_connection = nullptr;
-    }
-
-    if( aCheckMultipleDrivers && m_multiple_drivers )
-    {
-        // First check if all the candidates are actually the same
-        bool same = true;
-        const wxString& first = GetNameForDriver( candidates[0] );
-        SCH_ITEM* second_item = nullptr;
-
-        for( unsigned i = 1; i < candidates.size(); i++ )
-        {
-            if( GetNameForDriver( candidates[i] ) != first )
-            {
-                second_item = candidates[i];
-                same = false;
-                break;
-            }
-        }
-
-        if( !same )
-        {
-            m_first_driver  = m_driver;
-            m_second_driver = second_item;
-        }
     }
 
     return ( m_driver != nullptr );
@@ -242,11 +243,7 @@ void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PAT
     aSubgraphs.insert( sg->m_absorbed_subgraphs.begin(), sg->m_absorbed_subgraphs.end() );
 
     for( SCH_ITEM* item : sg->m_items )
-    {
-        item->Connection( &m_sheet )->Reset();
-        item->ConnectedItems( m_sheet ).clear();
         aItems.emplace( m_sheet, item );
-    }
 
     for( CONNECTION_SUBGRAPH* child_sg : sg->m_hier_children )
         child_sg->getAllConnectedItems( aItems, aSubgraphs );
@@ -441,15 +438,15 @@ void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
 
 void CONNECTION_SUBGRAPH::AddItem( SCH_ITEM* aItem )
 {
-    m_items.push_back( aItem );
+    m_items.insert( aItem );
 
     if( aItem->Connection( &m_sheet )->IsDriver() )
-        m_drivers.push_back( aItem );
+        m_drivers.insert( aItem );
 
     if( aItem->Type() == SCH_SHEET_PIN_T )
-        m_hier_pins.push_back( static_cast<SCH_SHEET_PIN*>( aItem ) );
+        m_hier_pins.insert( static_cast<SCH_SHEET_PIN*>( aItem ) );
     else if( aItem->Type() == SCH_HIER_LABEL_T )
-        m_hier_ports.push_back( static_cast<SCH_HIERLABEL*>( aItem ) );
+        m_hier_ports.insert( static_cast<SCH_HIERLABEL*>( aItem ) );
 }
 
 
@@ -606,6 +603,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     PROF_TIMER update_items( "updateItemConnectivity" );
 
     m_sheetList = aSheetList;
+    std::set<SCH_ITEM*> dirty_items;
 
     for( const SCH_SHEET_PATH& sheet : aSheetList )
     {
@@ -621,6 +619,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                 wxLogTrace( ConnTrace, wxT( "Adding item %s to connectivity graph update" ),
                             item->GetTypeDesc() );
                 items.push_back( item );
+                dirty_items.insert( item );
             }
             // Ensure the hierarchy info stored in SCREENS is built and up to date
             // (multi-unit symbols)
@@ -652,6 +651,9 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
             item.first->UpdateUnit( item.second );
         }
     }
+
+    for( SCH_ITEM* item : dirty_items )
+        item->SetConnectivityDirty( false );
 
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         update_items.Show();
@@ -966,8 +968,6 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
             for( const VECTOR2I& point : points )
                 connection_map[ point ].push_back( item );
         }
-
-        item->SetConnectivityDirty( false );
     }
 
     for( const auto& it : connection_map )
@@ -1679,9 +1679,15 @@ void CONNECTION_GRAPH::processSubGraphs()
         // by the chosen driver of the subgraph, so we need to create a dummy connection
         add_connections_to_check( subgraph );
 
+        std::set<SCH_CONNECTION*> checked_connections;
+
         for( unsigned i = 0; i < connections_to_check.size(); i++ )
         {
             auto member = connections_to_check[i];
+
+            // Don't check the same connection twice
+            if( !checked_connections.insert( member.get() ).second )
+                continue;
 
             if( member->IsBus() )
             {
@@ -2898,38 +2904,7 @@ int CONNECTION_GRAPH::RunERC()
 bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     wxCHECK( aSubgraph, false );
-    /*
-     * This was changed late in 6.0 to fix https://gitlab.com/kicad/code/kicad/-/issues/9367
-     * so I'm going to leave the original code in for just a little while.  If anyone comes
-     * across this in 7.0 development (or later), feel free to delete.
-     */
-#if 0
-    if( aSubgraph->m_second_driver )
-    {
-        SCH_ITEM* primary   = aSubgraph->m_first_driver;
-        SCH_ITEM* secondary = aSubgraph->m_second_driver;
 
-        wxPoint pos = primary->Type() == SCH_PIN_T ?
-                      static_cast<SCH_PIN*>( primary )->GetTransformedPosition() :
-                      primary->GetPosition();
-
-        const wxString& primaryName   = aSubgraph->GetNameForDriver( primary );
-        const wxString& secondaryName = aSubgraph->GetNameForDriver( secondary );
-
-        wxString msg = wxString::Format( _( "Both %s and %s are attached to the same "
-                                            "items; %s will be used in the netlist" ),
-                                         primaryName, secondaryName, primaryName );
-
-        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
-        ercItem->SetItems( primary, secondary );
-        ercItem->SetErrorMessage( msg );
-
-        SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
-        aSubgraph->m_sheet.LastScreen()->Append( marker );
-
-        return false;
-    }
-#else
     if( aSubgraph->m_multiple_drivers )
     {
         for( SCH_ITEM* driver : aSubgraph->m_drivers )
@@ -2964,7 +2939,6 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
             }
         }
     }
-#endif
 
     return true;
 }

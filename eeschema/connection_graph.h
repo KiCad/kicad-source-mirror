@@ -86,8 +86,6 @@ public:
               m_bus_entry( nullptr ),
               m_hier_parent( nullptr ),
               m_driver( nullptr ),
-              m_first_driver( nullptr ),
-              m_second_driver( nullptr ),
               m_no_connect( nullptr ),
               m_driver_connection( nullptr )
     {}
@@ -133,7 +131,7 @@ public:
     void UpdateItemConnections();
 
     /// Provides a read-only reference to the items in the subgraph
-    const std::vector<SCH_ITEM*>& GetItems() const
+    const std::set<SCH_ITEM*>& GetItems() const
     {
         return m_items;
     }
@@ -196,6 +194,8 @@ public:
         return m_sheet;
     }
 
+    void RemoveItem( SCH_ITEM* aItem );
+
 private:
     wxString driverName( SCH_ITEM* aItem ) const;
 
@@ -236,7 +236,7 @@ private:
     /// Bus entry in graph, if any
     SCH_ITEM* m_bus_entry;
 
-    std::vector<SCH_ITEM*> m_drivers;
+    std::set<SCH_ITEM*> m_drivers;
 
     /**
      * If a subgraph is a bus, this map contains links between the bus members and any
@@ -258,10 +258,10 @@ private:
                         std::unordered_set<CONNECTION_SUBGRAPH*> > m_bus_parents;
 
     // Cache for lookup of any hierarchical (sheet) pins on this subgraph (for referring down)
-    std::vector<SCH_SHEET_PIN*> m_hier_pins;
+    std::set<SCH_SHEET_PIN*> m_hier_pins;
 
     // Cache for lookup of any hierarchical ports on this subgraph (for referring up)
-    std::vector<SCH_HIERLABEL*> m_hier_ports;
+    std::set<SCH_HIERLABEL*> m_hier_ports;
 
     // If not null, this indicates the subgraph on a higher level sheet that is linked to this one
     CONNECTION_SUBGRAPH* m_hier_parent;
@@ -275,17 +275,8 @@ private:
     /// Fully-resolved driver for the subgraph (might not exist in this subgraph)
     SCH_ITEM* m_driver;
 
-    /**
-     * Stores the primary driver for the multiple drivers ERC check.  This is the chosen driver
-     * before subgraphs are absorbed (so m_driver may be different)
-     */
-    SCH_ITEM* m_first_driver;
-
-    /// Used for multiple drivers ERC message; stores the second possible driver (or nullptr)
-    SCH_ITEM* m_second_driver;
-
     /// Contents of the subgraph
-    std::vector<SCH_ITEM*> m_items;
+    std::set<SCH_ITEM*> m_items;
 
     /// No-connect item in graph, if any
     SCH_ITEM* m_no_connect;
