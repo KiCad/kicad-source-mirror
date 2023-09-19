@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"PO-Revision-Date: 2023-09-19 21:34+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -621,22 +621,18 @@ msgid "Show back copper / surface finish color"
 msgstr "導体/表面の仕上がり色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "接着剤"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Show adhesive"
 msgstr "接着剤 (Adhesive) レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Solder Paste"
-msgstr "ハンダペースト:"
+msgstr "ハンダペースト レイヤー"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Show solder paste"
 msgstr "ハンダペースト レイヤーを表示"
 
@@ -645,36 +641,32 @@ msgid "F.Silkscreen"
 msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "表面シルクスクリーン"
+msgstr "表面シルクスクリーン レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Silkscreen"
 msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "裏面のシルクスクリーン層"
+msgstr "裏面シルクスクリーン レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "表面ハンダマスク"
+msgstr "表面ハンダマスク レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "裏面のハンダマスク層"
+msgstr "裏面ハンダマスク レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "User.Drawings"
@@ -690,37 +682,32 @@ msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "ハンダマスク レイヤーを表示"
+msgstr "ユーザーコメント レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "ECO レイヤーを表示"
+msgstr "ユーザー ECO1 レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "ECO レイヤーを表示"
+msgstr "ユーザー ECO2 レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "スルーホール パッド"
+msgstr "スルーホール モデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D モデル"
+msgstr "表面実装モデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 #, fuzzy
@@ -3113,14 +3100,12 @@ msgid "MyLabel"
 msgstr "マイラベル"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:79
-#, fuzzy
 msgid "X label:"
-msgstr "ラベル"
+msgstr "X ラベル:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:90
-#, fuzzy
 msgid "Y label:"
-msgstr "ラベル"
+msgstr "Y ラベル:"
 
 #: common/dialogs/dialog_unit_entry_base.h:45
 msgid "Title"
@@ -3656,14 +3641,14 @@ msgid "Reset Unique Id"
 msgstr "固有IDのリセット"
 
 #: common/dialogs/panel_grid_settings.cpp:124 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "%sページ (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "'%s' はすでに存在します。"
+msgstr "グリッドサイズ '%s' はすでに存在します。"
 
 #: common/dialogs/panel_grid_settings.cpp:262
 #, fuzzy
@@ -3671,14 +3656,12 @@ msgid "At least one grid size is required."
 msgstr "デフォルトのネットクラスが必要です。"
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "グリッド"
+msgstr "グリッド:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "高速切替"
+msgstr "高速グリッド切替"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4479,7 +4462,6 @@ msgstr "表示オプション"
 #: common/eda_base_frame.cpp:1102 common/eda_base_frame.cpp:1111
 #: common/eda_base_frame.cpp:1132 common/eda_base_frame.cpp:1142
 #: common/eda_base_frame.cpp:1188 common/tool/common_tools.cpp:549
-#, fuzzy
 msgid "Grids"
 msgstr "グリッド"
 
@@ -4641,9 +4623,8 @@ msgid "Constrain to H, V, 45"
 msgstr "水平、垂直、45度に制限"
 
 #: common/eda_draw_frame.cpp:390 common/tool/actions.cpp:689
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "ユーザー グリッドを編集..."
+msgstr "グリッドを編集..."
 
 #: common/eda_draw_frame.cpp:546
 msgid "Zoom Auto"
@@ -4851,9 +4832,8 @@ msgid "Draw Item"
 msgstr "アイテムを描画"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "サーマル スポーク幅"
+msgstr "サーマル スポーク"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:678
 msgid "Number Box"
@@ -5993,18 +5973,16 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf と '%s' との間で型が不整合です"
 
 #: common/notifications_manager.cpp:90
-#, fuzzy
 msgid "View Details"
-msgstr "詳細"
+msgstr "詳細を表示"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
 msgstr ""
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "位置合わせ"
+msgstr "通知"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -6809,9 +6787,8 @@ msgid "Edit grid definitions"
 msgstr "グリッドの寸法を設定"
 
 #: common/tool/actions.cpp:696
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "グリッド原点"
+msgstr "グリッド原点..."
 
 #: common/tool/actions.cpp:697
 msgid "Set the grid origin point"
@@ -7318,12 +7295,10 @@ msgid "Cursor Options"
 msgstr "カーソル オプション"
 
 #: common/widgets/gal_options_panel_base.cpp:114
-#, fuzzy
 msgid "Small crosshairs"
 msgstr "小さな十字線"
 
 #: common/widgets/gal_options_panel_base.cpp:117
-#, fuzzy
 msgid "Full window crosshairs"
 msgstr "全画面十字線"
 
@@ -7695,9 +7670,8 @@ msgid "PostScript files"
 msgstr "PostScript ファイル"
 
 #: common/wildcards_and_files_ext.cpp:381
-#, fuzzy
 msgid "Json files"
-msgstr "ジョブ ファイル"
+msgstr "Json ファイル"
 
 #: common/wildcards_and_files_ext.cpp:387
 msgid "Report files"
@@ -9746,9 +9720,8 @@ msgid "-- leave unchanged --"
 msgstr "-- 変更しない --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(フィールドのみ)"
+msgstr "(ラベルのみ)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -11836,9 +11809,8 @@ msgid "Load directives from schematic"
 msgstr "回路図から指令をロード"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:560
-#, fuzzy
 msgid "Transfer function:"
-msgstr "伝達関数"
+msgstr "伝達関数:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:564
 msgid "(output voltage) / (input voltage)"
@@ -11849,9 +11821,8 @@ msgid "(output voltage) / (input current)"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:570
-#, fuzzy
 msgid "Input:"
-msgstr "入力"
+msgstr "入力:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:579
 #: eeschema/dialogs/dialog_sim_command_base.cpp:597
@@ -11859,14 +11830,12 @@ msgid "Ref:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:588
-#, fuzzy
 msgid "Output:"
-msgstr "出力"
+msgstr "出力:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:612
-#, fuzzy
 msgid "Find:"
-msgstr "検索"
+msgstr "検索:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
 #, fuzzy
@@ -11915,9 +11884,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:672
-#, fuzzy
 msgid "SPICE Command"
-msgstr "コマンド"
+msgstr "SPICE コマンド"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:679
 #: eeschema/dialogs/dialog_sim_command_base.cpp:718
@@ -11943,19 +11911,16 @@ msgid "Show grid"
 msgstr "グリッドの表示"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:799
-#, fuzzy
 msgid "Show legend"
-msgstr "凡例を表示 (&l)"
+msgstr "凡例を表示"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:802
-#, fuzzy
 msgid "Dotted current/phase"
 msgstr "点線 電流/位相"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:812
-#, fuzzy
 msgid "Margins:"
-msgstr "マージン"
+msgstr "マージン:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:822
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -11983,9 +11948,8 @@ msgid "Bottom:"
 msgstr "下:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:852
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:863
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:565
@@ -12285,9 +12249,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "本当に '%s' を削除してもよろしいですか？"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:714
-#, fuzzy
 msgid "Rename Field"
-msgstr "ファイル名を変更"
+msgstr "フィールド名を変更"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:729
 #, c-format
@@ -12407,7 +12370,6 @@ msgid "Edit"
 msgstr "編集"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "Field delimeter:"
 msgstr "フィールド区切り文字:"
 
@@ -12426,12 +12388,10 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Reference delimiter:"
 msgstr "リファレンス区切り文字:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
-#, fuzzy
 msgid "Range delimiter:"
 msgstr "範囲区切り文字:"
 
@@ -12445,12 +12405,10 @@ msgid "Leave blank to disable ranges."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Keep tabs"
 msgstr "タブを保持:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:260
-#, fuzzy
 msgid "Keep line breaks"
 msgstr "改行を保持:"
 
@@ -12460,9 +12418,8 @@ msgid "Format presets:"
 msgstr "フォーマット %s"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:282
-#, fuzzy
 msgid "Output file:"
-msgstr "出力フォルダー:"
+msgstr "出力ファイル:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:327
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:337
@@ -12842,9 +12799,8 @@ msgid "Net names"
 msgstr "ネット名"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "その他のシート フィールド"
+msgstr "その他のフィールド"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
@@ -17738,9 +17694,8 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:569
-#, fuzzy
 msgid "Ampltiude"
-msgstr "振幅:"
+msgstr "振幅"
 
 #: eeschema/sim/sim_plot_tab.cpp:601
 msgid "Noise (V/√Hz)"
@@ -18043,9 +17998,8 @@ msgid "Small-Signal Distortion Analysis"
 msgstr ""
 
 #: eeschema/sim/spice_simulator.cpp:62
-#, fuzzy
 msgid "Noise Analysis"
-msgstr "過渡応答解析"
+msgstr "ノイズ解析"
 
 #: eeschema/sim/spice_simulator.cpp:63
 #, fuzzy
@@ -20756,14 +20710,12 @@ msgid "Active layer name:"
 msgstr "非アクティブ レイヤー:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
-#, fuzzy
 msgid "Offset X"
-msgstr "オフセット X:"
+msgstr "オフセット X"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:49
-#, fuzzy
 msgid "Offset Y"
-msgstr "オフセット Y:"
+msgstr "オフセット Y"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
 #, fuzzy
@@ -21992,9 +21944,8 @@ msgid "Input file"
 msgstr "入力ファイル"
 
 #: kicad/cli/command.cpp:134
-#, fuzzy
 msgid "Output directory"
-msgstr "出力ディレクトリ:"
+msgstr "出力ディレクトリ"
 
 #: kicad/cli/command.cpp:141
 msgid "Output file name"
@@ -22492,7 +22443,6 @@ msgid "No drawing sheet"
 msgstr "図面シートを含めない"
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
 msgstr "回路図"
 
@@ -22814,14 +22764,12 @@ msgid "Export HPGL"
 msgstr "PNG をエクスポート..."
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export PDF"
-msgstr "IDFv3のエクスポート"
+msgstr "PFDにエクスポート"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export PS"
-msgstr "STEP をエクスポート"
+msgstr "PSをエクスポート"
 
 #: kicad/kicad_cli.cpp:151
 #, fuzzy
@@ -24963,9 +24911,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
-#, fuzzy
 msgid "II"
-msgstr "I"
+msgstr "II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
@@ -26043,9 +25990,8 @@ msgid "Regulators"
 msgstr "レギュレーター"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:163
-#, fuzzy
 msgid "Resistor Calculator"
-msgstr "E系列 抵抗計算機"
+msgstr "抵抗計算機"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:165
 msgid "Power, current and isolation"
@@ -26657,9 +26603,8 @@ msgid "Best Length Ratio"
 msgstr "最適な長さ:"
 
 #: pcbnew/board_connected_item.cpp:249
-#, fuzzy
 msgid "Max Length"
-msgstr "最大長:"
+msgstr "最大長"
 
 #: pcbnew/board_connected_item.cpp:255
 #, fuzzy
@@ -26667,9 +26612,8 @@ msgid "Best Width Ratio"
 msgstr "テキストの幅"
 
 #: pcbnew/board_connected_item.cpp:261
-#, fuzzy
 msgid "Max Width"
-msgstr "最大幅:"
+msgstr "最大幅"
 
 #: pcbnew/board_connected_item.cpp:267
 #, fuzzy
@@ -29675,9 +29619,8 @@ msgid "Footprint: "
 msgstr "フットプリント: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:96
-#, fuzzy
 msgid "Symbol:"
-msgstr "シンボル"
+msgstr "シンボル:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
 msgid "Sheet: "
@@ -30235,9 +30178,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
-#, fuzzy
 msgid "Gerber X3"
-msgstr "Gerber X2"
+msgstr "Gerber X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
@@ -33166,7 +33108,6 @@ msgid "Set Unused Pad Properties"
 msgstr "未使用のパッドのプロパティを設定"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:33
-#, fuzzy
 msgid "&Selected only"
 msgstr "選択対象のみ(&S)"
 
@@ -36301,9 +36242,9 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s 最小 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "パッド %s\t"
+msgstr "パッド %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:195
 #, fuzzy, c-format
@@ -37020,22 +36961,18 @@ msgid "Cutting %d/%d %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:972
-#, fuzzy
 msgid "pads"
-msgstr "パッドなし"
+msgstr "パッド"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:973
-#, fuzzy
 msgid "shapes"
 msgstr "形状"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:974
-#, fuzzy
 msgid "tracks"
 msgstr "配線"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:975
-#, fuzzy
 msgid "zones"
 msgstr "ゾーン"
 
@@ -38725,7 +38662,6 @@ msgid "Diff Footprint with Library"
 msgstr "フットプリントをライブラリにエクスポート..."
 
 #: pcbnew/pcb_field.cpp:93
-#, fuzzy
 msgid "User Field"
 msgstr "ユーザーフィールド"
 
@@ -39103,9 +39039,8 @@ msgid "Multiple Layers"
 msgstr "複数のレイヤー"
 
 #: pcbnew/plot_board_layers.cpp:115
-#, fuzzy
 msgid "Library Description"
-msgstr "説明"
+msgstr "ライブラリの説明"
 
 #: pcbnew/plugin.cpp:193
 msgid ""
@@ -41308,7 +41243,6 @@ msgid "Some zones did not intersect and were not merged."
 msgstr "一部のゾーンは交差していなかったのでマージされませんでした。"
 
 #: pcbnew/tools/board_editor_control.cpp:1435
-#, fuzzy
 msgid "Duplicate Zone"
 msgstr "ゾーンを複製"
 
@@ -41729,9 +41663,8 @@ msgid "Convert to Polygon"
 msgstr "ポリゴンに変換"
 
 #: pcbnew/tools/convert_tool.cpp:508
-#, fuzzy
 msgid "Create Polygon"
-msgstr "ゾーンを作成"
+msgstr "ポリゴンを作成"
 
 #: pcbnew/tools/convert_tool.cpp:513
 #, fuzzy
@@ -41739,19 +41672,16 @@ msgid "Convert to Zone"
 msgstr "線に変換"
 
 #: pcbnew/tools/convert_tool.cpp:515
-#, fuzzy
 msgid "Create Zone"
 msgstr "ゾーンを作成"
 
 #: pcbnew/tools/convert_tool.cpp:1066
-#, fuzzy
 msgid "Create Lines"
-msgstr "ゾーンを作成"
+msgstr "線を作成"
 
 #: pcbnew/tools/convert_tool.cpp:1153
-#, fuzzy
 msgid "Create Arc"
-msgstr "配列を作成"
+msgstr "円弧を作成"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:245
 msgid "Layer Name"
@@ -41861,12 +41791,10 @@ msgid "Place Image"
 msgstr "画像を配置する"
 
 #: pcbnew/tools/drawing_tool.cpp:946
-#, fuzzy
 msgid "Place Text"
 msgstr "テキストを配置"
 
 #: pcbnew/tools/drawing_tool.cpp:1273
-#, fuzzy
 msgid "Draw Dimension"
 msgstr "寸法線を描画"
 
@@ -41875,9 +41803,8 @@ msgid "No graphic items found in file."
 msgstr "グラフィック アイテムがファイルに見つかりません。"
 
 #: pcbnew/tools/drawing_tool.cpp:1531 pcbnew/tools/drawing_tool.cpp:1618
-#, fuzzy
 msgid "Import Graphic"
-msgstr "グラフィックスをインポート..."
+msgstr "グラフィックをインポート"
 
 #: pcbnew/tools/drawing_tool.cpp:1699
 #, fuzzy
@@ -44795,9 +44722,9 @@ msgid "Non-copper Zone"
 msgstr "非導体ゾーン"
 
 #: pcbnew/zone.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "on %s"
-msgstr "%s (%s 上)"
+msgstr "%s 上"
 
 #: pcbnew/zone.cpp:836
 #, fuzzy, c-format
