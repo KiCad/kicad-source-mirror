@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-07-07 10:24+0200\n"
+"PO-Revision-Date: 2023-09-19 11:32+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -6774,7 +6774,6 @@ msgid "Min grid spacing:"
 msgstr "Spaziatura minima griglia:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Griglia magnetica:"
 
@@ -19896,9 +19895,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Opzioni valide sono: decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Opzioni valide sono: absolute, plot"
+msgstr "Opzioni valide sono: route, alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19949,9 +19947,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Formato zeri specificato non valido\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Formato mappa specificata non valido\n"
+msgstr "Formato foratura ovale specificata non valido\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -20050,16 +20047,15 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Rendi speculare la scheda (utile a mostrare gli strati inferiori)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Tema colore da usare (predefinito per le impostazioni pcbnew)"
+msgstr "Tema colore da usare (predefinito sulle impostazione dell'editor di C.S.)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "Imposta l'opzione forma foratura piazzola/via (0 = nessuna forma, 1 = formapiccola, 2 = forma corrente)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -26539,9 +26535,8 @@ msgid "Export STEP"
 msgstr "Esporta STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Comando:"
+msgstr "Riga di comando:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -33205,9 +33200,8 @@ msgid "Checking pads..."
 msgstr "Controllo piazzole..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Controllo distanze zone in rame..."
+msgstr "Controllo distanze grafiche in rame..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -35715,9 +35709,9 @@ msgid "'%s' was not fully parsed."
 msgstr "\"%s\" non analizzato completamente"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Libreria impronte non trovata."
+msgstr "Cartella impronte non trovata: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
@@ -36390,9 +36384,9 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Poligono ignorato poiché lo strato Eagle \"%s\" (%d) non era mappato"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Poligono ignorato poiché lo strato Eagle \"%s\" (%d) non era mappato"
+msgstr "Poligono ignorato sullo strato '%s' (%d): conteggio contorno non è 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36763,23 +36757,21 @@ msgstr ""
 "scostamento: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "La strategia riempimento zona tradizionale non è più supportata.\n"
-"Convertite le zone a riempimento poligonale smussato?"
+"Gli riempimenti di zona verranno convertiti cercando di ottenere il miglior risultato possibile."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"La modalità riempimento segmento tradizionale non è più supportata.\n"
-"Convertite le zone a riempimento poligonale smussato?"
+"La modalità riempimento segmento tradizionale non è più supportata\n"
+"Gli riempimenti di zona verranno convertiti cercando di ottenere il miglior risultato possibile."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -41460,33 +41452,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Converting zone fills"
-#~ msgstr "Conversione riempimenti zone"
-
-#~ msgid "Convert Zone(s)"
-#~ msgstr "Converti zone"
-
-#~ msgid "Legacy Zone Warning"
-#~ msgstr "Avviso zona obsoleta"
-
-#~ msgid ""
-#~ "The segment zone fill mode is no longer supported.\n"
-#~ "Convert zones to smoothed polygon fills?"
-#~ msgstr ""
-#~ "La modalità riempimento zona a segmento non è più supportata.\n"
-#~ "Convertite le zone a riempimento poligonale smussato?"
-
-#, fuzzy
-#~ msgid "Board thickness:"
-#~ msgstr "Spessore scheda: "
-
-#, fuzzy
-#~ msgid "3D Preview Options"
-#~ msgstr "Impostazioni anteprima"
-
-#~ msgid "Loading zones..."
-#~ msgstr "Caricamento zone..."
-
-#~ msgid "Board Thickness"
-#~ msgstr "Spessore scheda"
