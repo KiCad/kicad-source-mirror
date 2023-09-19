@@ -532,6 +532,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
         {
             SYMBOL_LIB_TABLE_ROW& row = dynamic_cast<SYMBOL_LIB_TABLE_ROW&>( table->At( r ) );
 
+            // Newly-added rows won't have set this yet
+            row.SetParent( table );
+
             if( !row.GetIsEnabled() )
                 continue;
 
