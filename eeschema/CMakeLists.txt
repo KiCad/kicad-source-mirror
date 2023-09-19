@@ -395,6 +395,7 @@ set( EESCHEMA_SRCS
     sch_plugins/legacy/sch_legacy_plugin.cpp
     sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
     sch_plugins/database/sch_database_plugin.cpp
+    sch_plugins/http_lib/sch_http_lib_plugin.cpp
 
     tools/assign_footprints.cpp
     tools/backannotate.cpp

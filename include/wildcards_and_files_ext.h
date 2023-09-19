@@ -136,6 +136,7 @@ extern const std::string HtmlFileExtension;
 extern const std::string EquFileExtension;
 extern const std::string HotkeyFileExtension;
 extern const std::string DatabaseLibraryFileExtension;
+extern const std::string HTTPLibraryFileExtension;
 
 extern const std::string ArchiveFileExtension;
 

@@ -152,6 +152,7 @@ const std::string HtmlFileExtension( "html" );
 const std::string EquFileExtension( "equ" );
 const std::string HotkeyFileExtension( "hotkeys" );
 const std::string DatabaseLibraryFileExtension( "kicad_dbl" );
+const std::string HTTPLibraryFileExtension( "kicad_httplib" );
 
 const std::string ArchiveFileExtension( "zip" );
 

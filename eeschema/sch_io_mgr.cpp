@@ -34,6 +34,7 @@
 #include <sch_plugins/easyedapro/sch_easyedapro_plugin.h>
 #include <sch_plugins/database/sch_database_plugin.h>
 #include <sch_plugins/ltspice/ltspice_sch_plugin.h>
+#include <sch_plugins/http_lib/sch_http_lib_plugin.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
 
 #include <wildcards_and_files_ext.h>
@@ -72,6 +73,7 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_EASYEDA:         return new SCH_EASYEDA_PLUGIN();
     case SCH_EASYEDAPRO:      return new SCH_EASYEDAPRO_PLUGIN();
     case SCH_LTSPICE:         return new SCH_LTSPICE_PLUGIN();
+    case SCH_HTTP:            return new SCH_HTTP_LIB_PLUGIN();
     default:                  return nullptr;
     }
 }
@@ -104,6 +106,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_EASYEDA:         return wxString( wxT( "EasyEDA (JLCEDA) Std" ) );
     case SCH_EASYEDAPRO:      return wxString( wxT( "EasyEDA (JLCEDA) Pro" ) );
     case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
+    case SCH_HTTP:            return wxString( wxT( "HTTP" ) );
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
                                                        aType );
     }
@@ -134,6 +137,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_EASYEDAPRO;
     else if( aType == wxT( "LTspice" ) )
         return SCH_LTSPICE;
+    else if( aType == wxT( "HTTP" ) )
+        return SCH_HTTP;
 
     // wxASSERT( blow up here )
 

@@ -561,6 +561,10 @@ set( COMMON_SRCS
 
     database/database_connection.cpp
     database/database_lib_settings.cpp
+
+    http_lib/http_lib_connection.cpp
+    http_lib/http_lib_settings.cpp
+
     )
 
 add_library( common STATIC
