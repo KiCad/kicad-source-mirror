@@ -521,7 +521,12 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
             std::back_inserter( m_subgraphs ) );
 
     for( CONNECTION_SUBGRAPH* sg : aGraph.m_subgraphs )
+    {
+        if( sg->m_driver_connection )
+            sg->m_driver_connection->SetGraph( this );
+
         sg->m_graph = this;
+    }
 
     std::copy( aGraph.m_driver_subgraphs.begin(),
             aGraph.m_driver_subgraphs.end(),
@@ -558,6 +563,7 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
     m_last_bus_code = std::max( m_last_bus_code, aGraph.m_last_bus_code );
     m_last_net_code = std::max( m_last_net_code, aGraph.m_last_net_code );
     m_last_subgraph_code = std::max( m_last_subgraph_code, aGraph.m_last_subgraph_code );
+
 }
 
 
@@ -775,23 +781,23 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
         {
             auto it = std::lower_bound( m_driver_subgraphs.begin(), m_driver_subgraphs.end(), sg );
 
-            if( it != m_driver_subgraphs.end() )
-                m_driver_subgraphs.erase( it );
+            while( it != m_driver_subgraphs.end() && *it == sg )
+                it = m_driver_subgraphs.erase( it );
         }
 
         {
             auto it = std::lower_bound( m_subgraphs.begin(), m_subgraphs.end(), sg );
 
-            if( it != m_subgraphs.end() )
-                m_subgraphs.erase( it );
+            while( it != m_subgraphs.end() && *it == sg )
+                it = m_subgraphs.erase( it );
         }
 
         for( auto& el : m_sheet_to_subgraphs_map )
         {
             auto it = std::lower_bound( el.second.begin(), el.second.end(), sg );
 
-            if( it != el.second.end() )
-                el.second.erase( it );
+            while( it != el.second.end() && *it == sg )
+                it = el.second.erase( it );
         }
 
         auto remove_sg = [sg]( auto it ) -> bool
@@ -870,6 +876,7 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
     for( CONNECTION_SUBGRAPH* sg : aSubgraphs )
     {
         sg->m_code = -1;
+        sg->m_graph = nullptr;
         delete sg;
     }
 }
