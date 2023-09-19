@@ -616,6 +616,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
     {
         const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
         m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
+        m_HasDielectricConstrains = source_stackup.m_HasDielectricConstrains;
         m_CastellatedPads = source_stackup.m_CastellatedPads;
         m_EdgePlating     = source_stackup.m_EdgePlating;
         m_FinishType      = source_stackup.m_FinishType;
