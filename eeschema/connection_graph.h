@@ -86,9 +86,7 @@ public:
               m_bus_entry( nullptr ),
               m_driver( nullptr ),
               m_driver_connection( nullptr ),
-              m_hier_parent( nullptr ),
-              m_first_driver( nullptr ),
-              m_second_driver( nullptr )
+              m_hier_parent( nullptr )
     {}
 
     ~CONNECTION_SUBGRAPH() = default;
@@ -130,7 +128,7 @@ public:
     void UpdateItemConnections();
 
     /// Provides a read-only reference to the items in the subgraph
-    const std::vector<SCH_ITEM*>& GetItems() const
+    const std::set<SCH_ITEM*>& GetItems() const
     {
         return m_items;
     }
@@ -161,6 +159,8 @@ public:
         else
             return PRIORITY::NONE;
     }
+
+    void RemoveItem( SCH_ITEM* aItem );
 
 private:
     wxString driverName( SCH_ITEM* aItem ) const;
@@ -206,9 +206,9 @@ public:
     /// Bus entry in graph, if any
     SCH_ITEM* m_bus_entry;
 
-    std::vector<SCH_ITEM*> m_items;
+    std::set<SCH_ITEM*> m_items;
 
-    std::vector<SCH_ITEM*> m_drivers;
+    std::set<SCH_ITEM*> m_drivers;
 
     SCH_ITEM* m_driver;
 
@@ -237,10 +237,10 @@ public:
                         std::unordered_set<CONNECTION_SUBGRAPH*> > m_bus_parents;
 
     // Cache for lookup of any hierarchical (sheet) pins on this subgraph (for referring down)
-    std::vector<SCH_SHEET_PIN*> m_hier_pins;
+    std::set<SCH_SHEET_PIN*> m_hier_pins;
 
     // Cache for lookup of any hierarchical ports on this subgraph (for referring up)
-    std::vector<SCH_HIERLABEL*> m_hier_ports;
+    std::set<SCH_HIERLABEL*> m_hier_ports;
 
     // If not null, this indicates the subgraph on a higher level sheet that is linked to this one
     CONNECTION_SUBGRAPH* m_hier_parent;
@@ -251,14 +251,6 @@ public:
     /// A cache of escaped netnames from schematic items
     mutable std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
 
-    /**
-     * Stores the primary driver for the multiple drivers ERC check.  This is the chosen driver
-     * before subgraphs are absorbed (so m_driver may be different)
-     */
-    SCH_ITEM* m_first_driver;
-
-    /// Used for multiple drivers ERC message; stores the second possible driver (or nullptr)
-    SCH_ITEM* m_second_driver;
 };
 
 struct NET_NAME_CODE_CACHE_KEY

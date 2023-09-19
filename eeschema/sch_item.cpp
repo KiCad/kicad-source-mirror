@@ -149,9 +149,6 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
     if( !IsConnectable() )
         return nullptr;
 
-    wxCHECK_MSG( !IsConnectivityDirty(), nullptr,
-                  wxT( "Shouldn't be asking for connection if connectivity is dirty!" ) );
-
     if( !aSheet )
         aSheet = &Schematic()->CurrentSheet();
 
@@ -218,10 +215,11 @@ void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
                                                 CONNECTION_GRAPH* aGraph )
 {
-    SetConnectivityDirty( false );
-
     SCH_CONNECTION* connection = Connection( &aSheet );
 
+    // N.B. Do not clear the dirty connectivity flag here because we may need
+    // to create a connection for a different sheet, and we don't want to
+    // skip the connection creation because the flag is cleared.
     if( connection )
     {
         connection->Reset();
@@ -243,8 +241,6 @@ SCH_CONNECTION* SCH_ITEM::GetOrInitConnection( const SCH_SHEET_PATH& aSheet,
 {
     if( !IsConnectable() )
         return nullptr;
-
-    SetConnectivityDirty( false );
 
     SCH_CONNECTION* connection = Connection( &aSheet );
 
