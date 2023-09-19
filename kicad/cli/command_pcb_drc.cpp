@@ -40,7 +40,7 @@
 
 CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 {
-    addCommonArgs( true, true, false );
+    addCommonArgs( true, true, false, false );
     addDefineArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB and creates a report" ) ) );

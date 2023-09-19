@@ -55,7 +55,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_format( aFormat )
 {
     m_argParser.add_description( aDescription );
-    addCommonArgs( true, true, false );
+    addCommonArgs( true, true, false, false );
     addDefineArg();
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )

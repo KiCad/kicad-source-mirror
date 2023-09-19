@@ -36,7 +36,7 @@
 
 CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : COMMAND( "svg" )
 {
-    addCommonArgs( true, true, false );
+    addCommonArgs( true, true, false, true );
 
     m_argParser.add_description( UTF8STDSTR( _( "Exports the symbol or entire symbol library to SVG" ) ) );
 

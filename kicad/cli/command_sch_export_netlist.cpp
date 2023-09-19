@@ -33,7 +33,7 @@
 CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : COMMAND( "netlist" )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Export a Netlist" ) ) );
-    addCommonArgs( true, true, false );
+    addCommonArgs( true, true, false, false );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "kicadsexpr" ) )

@@ -50,7 +50,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 {
     m_argParser.add_description( aDescription );
 
-    addCommonArgs( true, true, aOutputIsDir );
+    addCommonArgs( true, true, false, aOutputIsDir );
     addDrawingSheetArg();
     addDefineArg();
 

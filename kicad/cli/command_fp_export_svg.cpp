@@ -32,7 +32,7 @@
 
 #define ARG_FOOTPRINT "--footprint"
 
-CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
+CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg", true )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Exports the footprint or entire footprint library to SVG" ) ) );
 

@@ -41,7 +41,7 @@
 #define ARG_MAP_FORMAT "--map-format"
 #define ARG_DRILL_ORIGIN "--drill-origin"
 
-CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drill" )
+CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drill", false, true )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate Drill Files" ) ) );
 

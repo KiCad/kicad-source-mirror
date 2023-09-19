@@ -31,7 +31,7 @@
 CLI::SCH_EXPORT_PYTHONBOM_COMMAND::SCH_EXPORT_PYTHONBOM_COMMAND() :
         COMMAND( "python-bom" )
 {
-    addCommonArgs( true, true, false );
+    addCommonArgs( true, true, false, false );
 
     m_argParser.add_description( UTF8STDSTR( _( "Export the legacy bom xml format used in the "
                                                 "schematic editor with python scripts" ) ) );

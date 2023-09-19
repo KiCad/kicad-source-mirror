@@ -112,7 +112,7 @@ int CLI::COMMAND::doPerform( KIWAY& aKiway )
 }
 
 
-void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
+void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aInputIsDir, bool aOutputIsDir )
 {
     m_hasInputArg = aInput;
     m_hasOutputArg = aOutput;
@@ -120,9 +120,18 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
 
     if( aInput )
     {
-        m_argParser.add_argument( ARG_INPUT )
-                    .help( UTF8STDSTR( _( "Input file" ) ) )
-                    .metavar( "INPUT_FILE" );
+        if( aInputIsDir )
+        {
+            m_argParser.add_argument( ARG_INPUT )
+                    .help( UTF8STDSTR( _( "Input directory" ) ) )
+                    .metavar( "INPUT_DIR" );
+        }
+        else
+        {
+            m_argParser.add_argument( ARG_INPUT )
+                        .help( UTF8STDSTR( _( "Input file" ) ) )
+                        .metavar( "INPUT_FILE" );
+        }
     }
 
     if( aOutput )
@@ -138,7 +147,7 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
         {
             m_argParser.add_argument( "-o", ARG_OUTPUT )
                     .default_value( std::string() )
-                    .help( UTF8STDSTR( _( "Output file name" ) ) )
+                    .help( UTF8STDSTR( _( "Output file" ) ) )
                     .metavar( "OUTPUT_FILE" );
         }
     }
