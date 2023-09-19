@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-09-19 21:34+0000\n"
+"PO-Revision-Date: 2023-09-21 15:08+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -6484,9 +6484,8 @@ msgid "Unselect All"
 msgstr "全て選択解除"
 
 #: common/tool/actions.cpp:233
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "画面上のすべてのアイテムを選択"
+msgstr "画面上のすべてのアイテムの選択を解除"
 
 #: common/tool/actions.cpp:238
 msgid "Paste Special..."
@@ -7447,9 +7446,8 @@ msgid "Clear Assigned Hotkey"
 msgstr "割り当てられたホットキーをクリア"
 
 #: common/widgets/widget_hotkey_list.cpp:424
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "割り当てられたホットキーをクリア"
+msgstr "割り当てられた代替キーをクリア"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Restore Defaults"
@@ -8449,9 +8447,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "部品表(BOM)の生成には回路図の完全なアノテーションが必要です。"
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "ファイル '%s' の作成に失敗しました。"
+msgstr "ファイルの作成に失敗しました。"
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -11558,9 +11555,8 @@ msgid "A DC source must be specified."
 msgstr "シートは指定されたファイルを持つ必要があります。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:359
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "ソース 1 とソース 2 は異なっていなければなりません"
+msgstr "ソース 1 とソース 2 は別のものでなければなりません。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:414
 msgid "A frequency range must be specified."
@@ -11572,9 +11568,8 @@ msgid "New Simulation Tab"
 msgstr "シミュレーション"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "DC/AC 解析:"
+msgstr "解析タイプ:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
@@ -11752,9 +11747,8 @@ msgid "(optional; default 0)"
 msgstr "(オプション; デフォルト 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:290
-#, fuzzy
 msgid "Max time step:"
-msgstr "時間ステップ:"
+msgstr "最大時間ステップ:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:301
 #, fuzzy
@@ -11762,14 +11756,12 @@ msgid "(optional; default min{tstep, (tstop-tstart)/50})"
 msgstr "(オプション; デフォルト 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:305
-#, fuzzy
 msgid "Use initial conditions"
-msgstr "ヤードポンド法の単位を使用"
+msgstr "初期状態を使用"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "入力ピン"
+msgstr "入力信号:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
 #, fuzzy
@@ -11843,9 +11835,8 @@ msgid "Poles and Zeros"
 msgstr "極零点"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
-#, fuzzy
 msgid "Poles"
-msgstr "穴"
+msgstr "極"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
 msgid "Zeros"
@@ -11898,13 +11889,13 @@ msgstr "フィールド %s (%s)"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:729
 #: eeschema/dialogs/dialog_sim_command_base.cpp:766
 msgid "Min:"
-msgstr ""
+msgstr "最小:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
 #: eeschema/dialogs/dialog_sim_command_base.cpp:773
 msgid "Max:"
-msgstr ""
+msgstr "最大:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:795
 msgid "Show grid"
@@ -11957,9 +11948,8 @@ msgid "Right:"
 msgstr "右:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:882
-#, fuzzy
 msgid "Plot Setup"
-msgstr "用紙設定"
+msgstr "プロット設定"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
 #, fuzzy
@@ -13918,9 +13908,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "DRC レポートを %s に保存しました\n"
 
 #: eeschema/eeschema_settings.cpp:70
-#, fuzzy
 msgid "Net Navigator"
-msgstr "階層ナビゲーター"
+msgstr "ネット ナビゲーター"
 
 #: eeschema/eeschema_settings.cpp:92 pagelayout_editor/pl_editor_frame.cpp:188
 #: pcbnew/footprint_edit_frame.cpp:226 pcbnew/pcb_edit_frame.cpp:306
@@ -14013,9 +14002,8 @@ msgstr ""
 "双方向ピンがシンボル %s の配置されていないユニット %s に含まれています。"
 
 #: eeschema/erc.cpp:605
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
-msgstr "\"未接続\" タイプのピンが接続されています"
+msgstr "'未接続' タイプのピンが接続されています"
 
 #: eeschema/erc.cpp:731
 #, c-format
@@ -14597,7 +14585,6 @@ msgid "V Justification"
 msgstr "垂直位置合わせ"
 
 #: eeschema/lib_field.cpp:602 eeschema/sch_field.cpp:1312
-#, fuzzy
 msgid "Show Field Name"
 msgstr "フィールド名を表示"
 
@@ -14731,29 +14718,29 @@ msgid "Position Y"
 msgstr "位置 Y"
 
 #: eeschema/lib_shape.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Arc with radius %s"
-msgstr "円弧、半径 %s"
+msgstr "半径 %s の円弧"
 
 #: eeschema/lib_shape.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Circle with radius %s"
-msgstr "円、半径 %s"
+msgstr "半径 %s の円"
 
 #: eeschema/lib_shape.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle with width %s height %s"
-msgstr "矩形, 幅 %s 高さ %s"
+msgstr "幅 %s 高さ %s の矩形"
 
 #: eeschema/lib_shape.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline with %d points"
-msgstr "ポリライン %d ポイント"
+msgstr "%d 点のポリライン"
 
 #: eeschema/lib_shape.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve with %d points"
-msgstr "ベジェ曲線, %d 点"
+msgstr "%d 点のベジェ曲線"
 
 #: eeschema/lib_symbol.cpp:285
 #, fuzzy
@@ -15930,9 +15917,8 @@ msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR 回路図アーカイブ ファイル"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:69
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "CADSTAR アーカイブ ファイル"
+msgstr "CADSTAR 部品ライブラリ ファイル"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:84
 #, c-format
@@ -16245,9 +16231,8 @@ msgid "expected unquoted string"
 msgstr "引用符で囲まれていない文字列を期待"
 
 #: eeschema/sch_plugins/ltspice/ltspice_sch_plugin.h:58
-#, fuzzy
 msgid "LTspice schematic files"
-msgstr "Ltspice 回路図ファイル"
+msgstr "LTspice 回路図ファイル"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:210
 #, c-format
@@ -16447,7 +16432,6 @@ msgid "Excluded from board"
 msgstr "基板から除外"
 
 #: eeschema/sch_symbol.cpp:1338
-#, fuzzy
 msgid "Excluded from simulation"
 msgstr "シミュレーションから除外"
 
@@ -17975,9 +17959,8 @@ msgstr ""
 "めの)"
 
 #: eeschema/sim/spice_simulator.cpp:57
-#, fuzzy
 msgid "DC Operating Point"
-msgstr "動作点"
+msgstr "DC動作点"
 
 #: eeschema/sim/spice_simulator.cpp:58
 #, fuzzy
@@ -17985,9 +17968,8 @@ msgid "Small-Signal Analysis"
 msgstr "過渡応答解析"
 
 #: eeschema/sim/spice_simulator.cpp:59
-#, fuzzy
 msgid "DC Sweep Analysis"
-msgstr "DC/AC 解析"
+msgstr "DCスイープ解析"
 
 #: eeschema/sim/spice_simulator.cpp:60
 msgid "Transient Analysis"
@@ -18835,9 +18817,9 @@ msgid "Add field '%s' with value '%s'."
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field '%s.'"
-msgstr "フィールドを削除"
+msgstr "フィールド '%s.' を削除"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -20705,9 +20687,8 @@ msgid "Clear layer %d?"
 msgstr "レイヤー %d をクリアしますか？"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
-#, fuzzy
 msgid "Active layer name:"
-msgstr "非アクティブ レイヤー:"
+msgstr "アクティブ レイヤー名:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
 msgid "Offset X"
@@ -20723,9 +20704,8 @@ msgid "Rotation CCW"
 msgstr "回転"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "Active layer"
-msgstr "非アクティブ レイヤー:"
+msgstr "アクティブ レイヤー"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -20738,9 +20718,8 @@ msgid "All visible layers"
 msgstr "表示レイヤー"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
-msgstr "ページ設定"
+msgstr "レイヤー設定"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:144
 #, c-format
@@ -22071,9 +22050,8 @@ msgid "Invalid units specified\n"
 msgstr "不正な単位が指定されています\n"
 
 #: kicad/cli/command_pcb_drc.cpp:153 kicad/cli/command_sch_erc.cpp:142
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "不正な フォーマットです\n"
+msgstr "不正なレポート フォーマットです\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (gerbers, drill, position files, etc)"
@@ -22151,9 +22129,8 @@ msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:181
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "不正なマップ ファイル形式が指定されています\n"
+msgstr "不正なフォーマットが指定されています\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:101
 #, c-format
@@ -22749,32 +22726,28 @@ msgid "Export STEP"
 msgstr "STEP をエクスポート"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export VRML"
-msgstr "SVG ファイルのエクスポート (&G)"
+msgstr "VRMLとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "IDFv3のエクスポート"
+msgstr "DXFとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:148
-#, fuzzy
 msgid "Export HPGL"
-msgstr "PNG をエクスポート..."
+msgstr "HPGLとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:149
 msgid "Export PDF"
-msgstr "PFDにエクスポート"
+msgstr "PDFとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:150
 msgid "Export PS"
-msgstr "PSをエクスポート"
+msgstr "PSとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export SVG"
-msgstr "SVG ファイルのエクスポート (&G)"
+msgstr "SVGとしてエクスポート"
 
 #: kicad/kicad_cli.cpp:317
 msgid "prints version information and exits"
@@ -23333,9 +23306,8 @@ msgid "Preparing to fetch repositories"
 msgstr "リポジトリを管理"
 
 #: kicad/pcm/pcm.cpp:1132
-#, fuzzy
 msgid "Fetching repository..."
-msgstr "リポジトリを取得"
+msgstr "リポジトリを取得..."
 
 #: kicad/pcm/pcm.cpp:1145
 #, fuzzy
@@ -24607,9 +24579,8 @@ msgid "Ampacity:"
 msgstr "電流容量:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Current density"
-msgstr "現在のキー:"
+msgstr "電流密度:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
 msgid "A/mm^2"
@@ -28517,9 +28488,8 @@ msgid "Distance between Ref point and Center pos."
 msgstr "ストリップラインと上部導体の距離"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:322
-#, fuzzy
 msgid "Duplicate parameters"
-msgstr "基本要素を複製"
+msgstr "パラメーターを複製"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:335
 msgid ""
@@ -28529,18 +28499,16 @@ msgstr ""
 "正の角度は左回りを意味します。 角度 0 は完全な円を \"Count\" で等分割します。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:343
-#, fuzzy
 msgid "Item count:"
-msgstr "ピン数:"
+msgstr "アイテム数:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
 msgid "How many items in the array."
 msgstr "配列中のアイテム数。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Rotate items:"
-msgstr "アイテムを回転"
+msgstr "アイテムを回転:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:361
 msgid ""
@@ -29223,9 +29191,8 @@ msgstr ""
 "完全な解析のためにDRCを実行してください。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:382
-#, fuzzy
 msgid "STEP/GLTF Export"
-msgstr "STEP エクスポート"
+msgstr "STEP/GLTFとしてエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
@@ -29307,9 +29274,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid "Export zones (time consuming)"
-msgstr "配線をエクスポート (時間がかかる)"
+msgstr "ゾーンをエクスポート (時間がかかります)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid ""
@@ -29341,9 +29307,8 @@ msgid ""
 msgstr "許容誤差は接続されたと見做される２点間の距離を規定します。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:80
-#, fuzzy
 msgid "Export STEP / GLTF"
-msgstr "STEP をエクスポート"
+msgstr "STEP / GLTF をエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:218
 msgid "Command line:\n"
@@ -30830,19 +30795,16 @@ msgid "uVia Diameter"
 msgstr "マイクロビアの直径"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
-#, fuzzy
 msgid "Filter tracks by width:"
-msgstr "ネットでフィルター:"
+msgstr "配線を幅でフィルター:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:99
-#, fuzzy
 msgid "Filter vias by size:"
-msgstr "ネットでフィルター:"
+msgstr "ビアをサイズでフィルター:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "Via size:"
-msgstr "ビア サイズ"
+msgstr "ビア サイズ:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "Set to net class values:"
@@ -32445,14 +32407,12 @@ msgid "Meandering"
 msgstr "蛇行"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:109
-#, fuzzy
 msgid "Min amplitude (A):"
-msgstr "最小振幅 (Amin):"
+msgstr "最小振幅 (A):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:120
-#, fuzzy
 msgid "Max amplitude (A):"
-msgstr "最大振幅 (Amax):"
+msgstr "最大振幅 (A):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
 msgid "Min spacing (s):"
@@ -33414,9 +33374,8 @@ msgid "3D Model(s)"
 msgstr "3D モデル"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:49
-#, fuzzy
 msgid "Net names:"
-msgstr "ネット名"
+msgstr "ネット名:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
@@ -38773,9 +38732,8 @@ msgid "PCB Text Box on %s"
 msgstr "基板上のテキスト ボックスが %s 上"
 
 #: pcbnew/pcb_textbox.cpp:606
-#, fuzzy
 msgid "Border Properties"
-msgstr "曲線のプロパティ"
+msgstr "境界のプロパティ"
 
 #: pcbnew/pcb_textbox.cpp:616
 #, fuzzy
@@ -40417,7 +40375,6 @@ msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "予期しないファイル '%s' がライブラリ パス '%s' に見つかりました。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.h:289
-#, fuzzy
 msgid "KiCad footprint file"
 msgstr "KiCad フットプリント ファイル"
 
@@ -41667,9 +41624,8 @@ msgid "Create Polygon"
 msgstr "ポリゴンを作成"
 
 #: pcbnew/tools/convert_tool.cpp:513
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "線に変換"
+msgstr "ゾーンに変換"
 
 #: pcbnew/tools/convert_tool.cpp:515
 msgid "Create Zone"
@@ -41769,7 +41725,6 @@ msgid "Draw Line"
 msgstr "線を描く"
 
 #: pcbnew/tools/drawing_tool.cpp:411
-#, fuzzy
 msgid "Draw Text Box"
 msgstr "テキスト ボックスを描画"
 
@@ -41807,9 +41762,8 @@ msgid "Import Graphic"
 msgstr "グラフィックをインポート"
 
 #: pcbnew/tools/drawing_tool.cpp:1699
-#, fuzzy
 msgid "Move Footprint Anchor"
-msgstr "フットプリントのアンカーを配置"
+msgstr "フットプリントのアンカーを移動"
 
 #: pcbnew/tools/drawing_tool.cpp:3043
 msgid "Via location violates DRC."
@@ -44747,19 +44701,19 @@ msgid "Rule Area Cutout %s"
 msgstr "ルールエリア切り抜き ( %s 上)"
 
 #: pcbnew/zone.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout %s"
-msgstr "ゾーン切り抜き ( %s 上)"
+msgstr "ゾーン切り抜き %s"
 
 #: pcbnew/zone.cpp:866
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area %s"
-msgstr "ルールエリア"
+msgstr "ルールエリア %s"
 
 #: pcbnew/zone.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s"
-msgstr "ゾーン %s ( %s 上)"
+msgstr "ゾーン %s %s"
 
 #: pcbnew/zone.cpp:1538
 msgid "Minimum Width"
