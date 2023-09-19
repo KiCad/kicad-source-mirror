@@ -27,12 +27,14 @@
 
 #include <deque>
 #include <io_mgr.h>
+#include <layer_ids.h>
 
 class PCB_EDIT_FRAME;
 class BOARD;
 class SETTINGS_MANAGER;
 class BOARD_ITEM;
 enum class EDA_UNITS;
+enum PCB_LAYER_ID; 
 
 /* we could be including all these methods as static in a class, but
  * we want plain pcbnew.<method_name> access from python
@@ -178,6 +180,14 @@ int GetUserUnits();
  * Get the list of selected objects.
  */
 std::deque<BOARD_ITEM*> GetCurrentSelection();
+
+/**
+ * Focus the view on the target item.
+ *
+ * @param aItem is the target board item.
+ * @param aLayer is the layer ID of the target item.
+ */
+void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 /**
  * Are we currently in an action plugin?

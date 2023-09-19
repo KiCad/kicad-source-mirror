@@ -84,7 +84,6 @@ void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
         s_PcbEditFrame = nullptr;
 }
 
-
 BOARD* LoadBoard( wxString& aFileName )
 {
     if( aFileName.EndsWith( KiCadPcbFileExtension ) )
@@ -455,6 +454,14 @@ std::deque<BOARD_ITEM*> GetCurrentSelection()
     }
 
     return items;
+}
+
+void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
+{
+    if( s_PcbEditFrame )
+    {
+        s_PcbEditFrame->FocusOnItem( aItem, aLayer );
+    }
 }
 
 
