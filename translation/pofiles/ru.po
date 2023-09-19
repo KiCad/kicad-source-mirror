@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"PO-Revision-Date: 2023-09-19 21:34+0000\n"
 "Last-Translator: xXx <xxx_xxx_xxxxxxxxx@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -35358,14 +35358,12 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Дорожки одинакового размера не нуждаются в каплях."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:398
-#, fuzzy
 msgid "(as a percentage of larger track width)"
-msgstr "Ширина дорожек диф.пары"
+msgstr "(в процентах от большей ширины трассы)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphics and text:"
-msgstr "По умолчанию для новых графических элементов:"
+msgstr "Свойства по умолчанию для новой графики и текста:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
@@ -35428,9 +35426,8 @@ msgid "Hole"
 msgstr "Сверло"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:153
-#, fuzzy
 msgid "Differential pairs:"
-msgstr "Диф.пары"
+msgstr "Дифференциальные пары:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
@@ -35492,9 +35489,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "класс цепей '%s' (диф.пара)"
 
 #: pcbnew/drc/drc_engine.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "класс цепей '%s' (диф.пара)"
+msgstr "сетевой класс '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:419
 msgid "keepout area"
@@ -35614,9 +35611,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "Проверка ширины дорожки %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:971
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Проверка ширины дорожки %s: opt %s."
+msgstr "Проверка %s ширины дорожки: мин%s."
 
 #: pcbnew/drc/drc_engine.cpp:979
 #, c-format
@@ -35629,9 +35626,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Проверка диаметра перех.отв. %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Проверка диаметра перех.отв. %s: opt %s."
+msgstr "Проверка %s по диаметру: мин %s."
 
 #: pcbnew/drc/drc_engine.cpp:1002
 #, c-format
@@ -35639,9 +35636,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "Проверка размера отверстия %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Проверка размера отверстия %s: opt %s."
+msgstr "Проверка размера отверстия %s: мин %s."
 
 #: pcbnew/drc/drc_engine.cpp:1018
 #, c-format
@@ -35654,14 +35651,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Проверка зазора диф.пары %s: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Проверяется %s зазор: %s."
+msgstr "Проверка зазора %s: минимум %s."
 
 #: pcbnew/drc/drc_engine.cpp:1040
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Проверка размера отверстия %s: opt %s."
+msgstr "Проверка %s от отверстия к отверстию: минимум %s."
 
 #: pcbnew/drc/drc_engine.cpp:1046 pcbnew/drc/drc_engine.cpp:1072
 #: pcbnew/drc/drc_engine.cpp:1516
@@ -35675,14 +35672,13 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Проверяется %s: мин. %s; оптим. %s; макс. %s."
 
 #: pcbnew/drc/drc_engine.cpp:1082
-#, fuzzy
 msgid "Netclass clearances apply only between copper items."
-msgstr "Зазоры платы и класса цепей применимы только к медным элементам."
+msgstr "Зазоры сетевого класса применяются только между медными изделиями."
 
 #: pcbnew/drc/drc_engine.cpp:1086 pcbnew/drc/drc_engine.cpp:1091
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Rule ignored."
-msgstr "%s – не сверленное отверстие; правило игнорируется."
+msgstr "%s не содержит меди. Правило игнорируется."
 
 #: pcbnew/drc/drc_engine.cpp:1147
 msgid "Keepout constraint not met."
@@ -35707,9 +35703,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Cлой правила не совпадает; правило проигнорировано."
 
 #: pcbnew/drc/drc_engine.cpp:1192
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "Нет совпадений со слоями зоны запрета."
+msgstr "Слой ограничения не соответствует."
 
 #: pcbnew/drc/drc_engine.cpp:1212
 #, c-format
@@ -35754,9 +35749,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Условие не соблюдено; правило проигнорировано."
 
 #: pcbnew/drc/drc_engine.cpp:1333 pcbnew/drc/drc_engine.cpp:1355
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s: %s."
-msgstr "Локальные зазор на %s; зазор: %s."
+msgstr "Локальный зазор на%s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1414
 #, c-format
@@ -36316,358 +36311,344 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s мин. %s; текущий %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "Конт.пл. %s\t"
+msgstr "Панель %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid "%s has clearance override."
-msgstr "Установка зазора"
+msgstr "%s имеет переопределение зазора."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder mask expansion override."
-msgstr "Расширение паяльной маски:"
+msgstr "%s имеет переопределение расширения паяльной маски."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:199
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder paste clearance override."
-msgstr "Абсолютный зазор паяльной пасты:"
+msgstr "%s имеет переопределение зазора для паяльной пасты."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone connection override."
-msgstr "Стиль соединения с зоной"
+msgstr "%s имеет переопределение подключения к зоне."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief gap override."
-msgstr "Зазор терморазгрузки %s: %s."
+msgstr "%s имеет переопределение температурного зазора."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "Разрешенная ширина мостика терморазгрузки: %s."
+msgstr "%s имеет переопределение ширины теплового подреза."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "Разрешенная ширина мостика терморазгрузки: %s."
+msgstr "%s имеет переопределение угла теплового подреза."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone knockout setting override."
-msgstr "Стиль соединения с зоной"
+msgstr "%s имеет переопределение настройки исключения зон."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad to die length differs."
-msgstr "Длина от конт.пл. до чипа"
+msgstr "%s длина контактной площадки до матрицы отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "%s position differs."
-msgstr "Кол. конт.пл."
+msgstr "%s Позиция отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "%s has different numbers."
-msgstr "Перекрытие с  другой конт.площадкой"
+msgstr "%s имеет разные номера."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:250
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "%s layers differ."
-msgstr "Слой %s является обязательным."
+msgstr "%s Слои отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs."
-msgstr "Тип посад.места:"
+msgstr "%s Тип формы контактной площадки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad type differs."
-msgstr "Тип посад.места:"
+msgstr "%s Тип контактной площадки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "%s fabrication property differs."
-msgstr "Подключение конт.пл. %s: %s."
+msgstr "%s Свойства производителя отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "%s orientation differs."
-msgstr "Область правил на %s"
+msgstr "%s Ориентация отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs."
-msgstr "Кол. конт.пл."
+msgstr "%s Размер отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs."
-msgstr "Кол. конт.пл."
+msgstr "%s Дельта трапеции отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ."
-msgstr "Кол. конт.пл."
+msgstr "%s закругленные углы отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ."
-msgstr "Кол. конт.пл."
+msgstr "%s углы со скошенными краями отличаются друг от друга."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs."
-msgstr "Подключение конт.пл. %s: %s."
+msgstr "%s смещение формы относительно отверстия отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill shape differs."
-msgstr "Тип посад.места:"
+msgstr "%s форма сверла отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:301
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill size differs."
-msgstr "Тип посад.места:"
+msgstr "Размер сверла %s отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ."
-msgstr "Слой %s является обязательным."
+msgstr "%s примитивы формы отличаются друг от друга."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr ""
+msgstr "%s Параметр сглаживания углов отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:449
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr ""
+msgstr "%s радиус сглаживания углов отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "%s name differs."
-msgstr "Кол. конт.пл."
+msgstr "%s Имя отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s priority differs."
-msgstr "Кол. конт.пл."
+msgstr "%s Приоритет отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:456
 #, c-format
 msgid "%s keep-out property differs."
-msgstr ""
+msgstr "%s Свойство блокировки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out copper fill setting differs."
-msgstr "Запретить заполнение медью"
+msgstr "%s отличается от настроек заполнения медью."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "Не учитывать область установки в DRC"
+msgstr "%s поддерживает разные параметры компоновочных образов."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:462
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr ""
+msgstr "%s держитесь в стороне от накладки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Удалить дорожки, соединяющие разные цепи"
+msgstr "%s Настройки исключения треков отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:466
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr ""
+msgstr "%s настройка запрета переходных отверстий отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection property differs."
-msgstr "Подключение конт.пл. %s: %s."
+msgstr "%s Свойства подключения контактной площадки отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%s local clearance differs."
-msgstr "Вычисленный зазор: %s."
+msgstr "%s Местный зазор отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap differs."
-msgstr "Зазор терморазгрузки %s: %s."
+msgstr "%s Температурный зазор отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "Разрешенная ширина мостика терморазгрузки: %s."
+msgstr "%s ширина спиц с термическим рельефом отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness differs."
-msgstr "Мин. толщина %s: %s."
+msgstr "%s минимальная толщина отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr ""
+msgstr "%s настройка удаления островов отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s minimum island size setting differs."
-msgstr "Минимальная площадь островка:"
+msgstr "Отличаются настройки минимального размера острова %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "%s fill type differs."
-msgstr "Тип посад.места:"
+msgstr "%s Тип заливки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:491
 #, c-format
 msgid "%s hatch width differs."
-msgstr ""
+msgstr "%s ширина штриховки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:493
 #, c-format
 msgid "%s hatch gap differs."
-msgstr ""
+msgstr "%s зазор штриховки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch orientation differs."
-msgstr "Область правил на %s"
+msgstr "%s ориентация штриховки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:497
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr ""
+msgstr "%s уровень сглаживания штриховки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:499
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr ""
+msgstr "%s Степень сглаживания штриховки отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:501
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s Минимальная настройка люкового отверстия отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "%s outline corner count differs."
-msgstr "Область правил на %s"
+msgstr "%s количество углов контура отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "%s corners differ."
-msgstr "Кол. конт.пл."
+msgstr "%s углы различаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:532
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "Путь поиска 3D моделей"
+msgstr "Масштаб 3D-модели не соответствует: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:533
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "Вращение 3D-модели не соответствует: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:534
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "Цепь конт.пл. не соответствует схеме"
+msgstr "Смещение 3D-модели не соответствует: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:535
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "Непрозрачность 3D-модели не соответствует: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:536
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "Путь поиска 3D моделей"
+msgstr "3D-модель не соответствует: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:537
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "Отображение 3D-моделей"
+msgstr "Видимость 3D-модели не соответствует: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "Файлы сопоставления посад.мест"
+msgstr "Описания следов различаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:584
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "Порядок посад.мест"
+msgstr "Ключевые слова посадочных мест различаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:589
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "Тип посад.места:"
+msgstr "Типы следов различаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:591
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "Разрешить слияние вырезов в паяльной маске между конт.пл."
+msgstr ""
+"Допускайте, чтобы отверстия паяльной маски с перемычками между контактными "
+"площадками отличались друг от друга."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:593
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "Не учитывать область установки в DRC"
+msgstr "Освобожденные от требований к внутреннему двору настройки отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:606
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "Установка зазора"
+msgstr "Зазор между накладками отменен."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:608
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "Расширение паяльной маски:"
+msgstr "Расширение маски припоя отменено."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:610
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "Абсолютный зазор паяльной пасты:"
+msgstr "Абсолютный зазор паяльной пасты отменен."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:612
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "Относительный зазор паяльной пасты:"
+msgstr "Относительный зазор паяльной пасты отменен."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:615
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "Стиль соединения с зоной"
+msgstr "Соединение с зоной переопределено."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:619
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:624
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "Группы подвязок для сетки различаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:688
-#, fuzzy
 msgid "Pad count differs."
-msgstr "Кол. конт.пл."
+msgstr "Количество прокладок отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:706
 msgid "3D model count differs."
-msgstr ""
+msgstr "Количество 3D-моделей различается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:728
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "Область правил на %s"
+msgstr "Количество административных единиц отличается."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:747
 msgid "No project loaded, skipping library parity tests."
@@ -36881,14 +36862,14 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s макс. диаметр %s; текущий %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(%s мин. кол-во мостиков терморазгрузки: %d; текущее: %d)"
+msgstr "(слой %s; %d спицами соединен с изолированным островком)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(%s мин. кол-во мостиков терморазгрузки: %d; текущее: %d)"
+msgstr "(слой %s; %s минимальное количество спиц %d; фактическое %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:230
 msgid "Checking thermal reliefs..."
@@ -36975,9 +36956,9 @@ msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "Толщина платы из стека: %.3f мм\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Build %s data\n"
-msgstr "Построение данных STEP\n"
+msgstr "Строить %s данные\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:517
 msgid ""
@@ -36988,84 +36969,80 @@ msgstr ""
 "** Ошибка построения модели платы STEP. Экспорт прерван. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Writing %s file\n"
-msgstr "Запись файла STEP\n"
+msgstr "Запись файла %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
 "\n"
-"** Ошибка записи файла STEP. **\n"
+"** Ошибка записи файла %s. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"Файл STEP '%s' создан.\n"
+msgstr "%s файл '%s' создан.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:544
 #: pcbnew/exporters/step/exporter_step.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** Ошибка экспорта файла STEP. Экспорт прерван. **\n"
+"** Ошибка при экспорте файла %s. Экспорт прерван. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"Не удаётся создать файл STEP.\n"
-"Проверьте, что у платы верные контур и модели."
+"Невозможно создать файл %s.\n"
+"Убедитесь, что доска имеет действительный контур и модели."
 
 #: pcbnew/exporters/step/exporter_step.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "%s file has been created, but there are warnings."
-msgstr "STEP файл был создан, но имеются предупреждения."
+msgstr "Файл %s создан, но есть предупреждения."
 
 #: pcbnew/exporters/step/exporter_step.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Время обновления %.3f с"
+msgstr ""
+"\n"
+"Время экспорта %.3f с\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy, c-format
+#, c-format
 msgid "Build holes for %s\n"
-msgstr "Построение технического слоя %d"
+msgstr "Построить отверстия для %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:953
 #, c-format
 msgid "Cutting %d/%d %s\n"
-msgstr ""
+msgstr "Резка %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:972
-#, fuzzy
 msgid "pads"
-msgstr "Без конт.пл."
+msgstr "подушечки"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:973
-#, fuzzy
 msgid "shapes"
-msgstr "Форма"
+msgstr "формы"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:974
-#, fuzzy
 msgid "tracks"
-msgstr "Дорожки"
+msgstr "секции"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:975
-#, fuzzy
 msgid "zones"
 msgstr "зоны"
 
@@ -37141,9 +37118,8 @@ msgid "Creating PCB"
 msgstr "Создание платы"
 
 #: pcbnew/files.cpp:618
-#, fuzzy
 msgid "File format is not supported"
-msgstr "(несколько контуров плат не поддерживается)"
+msgstr "Формат файлов не поддерживается"
 
 #: pcbnew/files.cpp:654 pcbnew/files.cpp:664
 #, c-format
@@ -37326,9 +37302,8 @@ msgid "Library link"
 msgstr "Библиотека"
 
 #: pcbnew/footprint.cpp:3152
-#, fuzzy
 msgid "Library description"
-msgstr "Описание псевдонима:"
+msgstr "Описание библиотеки"
 
 #: pcbnew/footprint.cpp:3173 pcbnew/pad.cpp:1830 pcbnew/zone.cpp:1529
 msgid "Overrides"
@@ -37571,9 +37546,9 @@ msgstr "Создать посад.место"
 
 #: pcbnew/footprint_libraries_utils.cpp:1233
 #: pcbnew/tools/footprint_editor_control.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' already exists in library '%s'."
-msgstr "Имя посад.места '%s' уже используется в библиотеке '%s'."
+msgstr "Отпечаток «%s» уже существует в библиотеке «%s»."
 
 #: pcbnew/footprint_viewer_frame.cpp:131
 msgid "KiCad Footprint Library Viewer"
@@ -37592,18 +37567,22 @@ msgstr ""
 "будет сравниваться с количеством выводов."
 
 #: pcbnew/footprint_viewer_frame.cpp:1083
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint library not found. The current configuration does not include "
 "library '%s'."
-msgstr "Текущая конфигурация не содержит библиотеку '%s'."
+msgstr ""
+"Библиотека посадочных мест не найдена. Текущая конфигурация не включает "
+"библиотеку «%s»."
 
 #: pcbnew/footprint_viewer_frame.cpp:1095
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint library not enabled. Library '%s' is not enabled in the current "
 "configuration."
-msgstr "Библиотека '%s' не задействована в текущей конфигурации."
+msgstr ""
+"Библиотека посадочных мест не включена. Библиотека «%s» не включена в "
+"текущей конфигурации."
 
 #: pcbnew/footprint_wizard_frame.cpp:83
 #: pcbnew/footprint_wizard_frame_functions.cpp:81
@@ -37773,9 +37752,9 @@ msgid "Footprints [%u items]"
 msgstr "Посад.мест [%u шт.]"
 
 #: pcbnew/load_select_footprint.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a writer for '%s'."
-msgstr "Не удалось найти PDF-просмотрщик для '%s'."
+msgstr "Невозможно найти автора для \"%s\"."
 
 #: pcbnew/load_select_footprint.cpp:462
 #, c-format
@@ -38112,34 +38091,34 @@ msgid "Updated %s symbol association from %s to %s."
 msgstr "У символа %s сменилось посад.место с %s на %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s fields."
-msgstr "Обновить поля"
+msgstr "Обновить поля %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s fields."
-msgstr "Обновить поля"
+msgstr "Обновлены поля %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "Обновлено %s с %s в %s."
+msgstr "Обновите имя листа %s на «%s»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "Обновлено %s с %s в %s."
+msgstr "Имя листа %s обновлено на «%s»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "Обновлено %s с %s в %s."
+msgstr "Обновите файл листа %s до «%s»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "Обновлено %s с %s в %s."
+msgstr "Листовой файл %s обновлен до «%s»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
 #, c-format
@@ -38166,28 +38145,24 @@ msgstr ""
 "Удаление производственного атрибута 'исключён из перечня элементов' из %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr ""
-"Установка производственного атрибута 'исключён из перечня элементов' для %s."
+msgstr "Добавьте атрибут производителя %s «Не размещать»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr ""
-"Удаление производственного атрибута 'исключён из перечня элементов' из %s."
+msgstr "Удалить атрибут производителя %s «Не размещать»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr ""
-"Установка производственного атрибута 'исключён из перечня элементов' для %s."
+msgstr "Добавлен атрибут изготовления %s «Не размещать»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr ""
-"Удаление производственного атрибута 'исключён из перечня элементов' из %s."
+msgstr "Удален атрибут производителя %s «Не размещать»."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:598
 #, c-format
@@ -38200,9 +38175,11 @@ msgid "Disconnected %s pin %s."
 msgstr "Отключена цепь от %s вывод %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
-msgstr "Нет цепи у компонента %s, вывод %s."
+msgstr ""
+"Для контактной площадки %s компонента %s не найдена цепь (в обозначении нет "
+"контакта %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:668
 #, c-format
@@ -38568,9 +38545,8 @@ msgid "Size Y"
 msgstr "Размер Y"
 
 #: pcbnew/pad.cpp:1797
-#, fuzzy
 msgid "Corner Radius Ratio"
-msgstr "Относительный радиус скругления"
+msgstr "Соотношение углового радиуса"
 
 #: pcbnew/pad.cpp:1809
 msgid "Hole Size X"
@@ -38609,16 +38585,12 @@ msgid "Error loading project footprint libraries."
 msgstr "Ошибка загрузки библиотек посад.мест проекта."
 
 #: pcbnew/pcb_base_frame.cpp:1280
-#, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
 msgstr ""
-"Имя файла форматной рамки изменено.\n"
-"Желаете использовать относительный путь:\n"
-"\"%s\"\n"
-"вместо\n"
-"\"%s\"?"
+"Библиотека, содержащая текущий след, изменилась.\n"
+"Хотите перезагрузить след?"
 
 #: pcbnew/pcb_bitmap.cpp:266
 msgid "Bitmap Properties"
@@ -38646,44 +38618,36 @@ msgid "Dimension '%s' on %s"
 msgstr "Размер '%s' на %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 мм"
+msgstr "1234.0 мм"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (мм)"
+msgstr "1234.0 (мм)"
 
 #: pcbnew/pcb_dimension.cpp:1374
-#, fuzzy
 msgid "Units Format"
-msgstr "Формат ед.изм.:"
+msgstr "Формат единиц измерения"
 
 #: pcbnew/pcb_dimension.cpp:1382
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Подавлять завершающие нули"
+msgstr "Подавлять конечные нули"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Курсор правее"
+msgstr "Высота перекладины"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Отступ от точки измерения:"
+msgstr "Перерегулирование выносной линии"
 
 #: pcbnew/pcb_dimension.cpp:1492
-#, fuzzy
 msgid "Leader Length"
-msgstr "Длина перех.отв."
+msgstr "Длина выноски"
 
 #: pcbnew/pcb_dimension.cpp:1538
 msgid "Text Frame"
@@ -38769,14 +38733,12 @@ msgid "Constraints Report"
 msgstr "Отчёт об ограничениях"
 
 #: pcbnew/pcb_edit_frame.cpp:2516 pcbnew/tools/pcb_actions.cpp:1765
-#, fuzzy
 msgid "Diff Footprint with Library"
-msgstr "Посад.места в библиотеку..."
+msgstr "Различный размер с библиотекой"
 
 #: pcbnew/pcb_field.cpp:93
-#, fuzzy
 msgid "User Field"
-msgstr "Поля пользователя"
+msgstr "Пользовательское поле"
 
 #: pcbnew/pcb_field.cpp:102
 #, c-format
@@ -38789,19 +38751,19 @@ msgid "Value '%s' of %s"
 msgstr "Значение '%s' посад.места %s"
 
 #: pcbnew/pcb_field.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' of %s"
-msgstr "Надпись '%s' посад.места %s"
+msgstr "Занимаемая площадь '%s' от %s"
 
 #: pcbnew/pcb_field.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet '%s' of %s"
-msgstr "Значение '%s' посад.места %s"
+msgstr "Технический паспорт '%s' из %s"
 
 #: pcbnew/pcb_field.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' of %s"
-msgstr "Поле %s (%s)"
+msgstr "Поле '%s' из %s"
 
 #: pcbnew/pcb_group.cpp:377
 #, c-format
@@ -38844,9 +38806,9 @@ msgid "Drawing"
 msgstr "Чертёж"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
-msgstr "%s на %s"
+msgstr "%s %s на%s"
 
 #: pcbnew/pcb_shape.cpp:491
 #, c-format
@@ -38854,9 +38816,8 @@ msgid "%s on %s"
 msgstr "%s на %s"
 
 #: pcbnew/pcb_shape.cpp:676
-#, fuzzy
 msgid "Pad Primitives"
-msgstr "Добавить примитив"
+msgstr "Примитивы колодок"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -38886,14 +38847,12 @@ msgid "PCB Text Box on %s"
 msgstr "Текстовый блок на %s"
 
 #: pcbnew/pcb_textbox.cpp:606
-#, fuzzy
 msgid "Border Properties"
-msgstr "Свойства кривой"
+msgstr "Пограничные свойства"
 
 #: pcbnew/pcb_textbox.cpp:616
-#, fuzzy
 msgid "Border Style"
-msgstr "Стиль границ:"
+msgstr "Пограничный стиль"
 
 #: pcbnew/pcb_track.cpp:141
 #, c-format
@@ -39032,15 +38991,14 @@ msgid "Missing group name argument to %s."
 msgstr "Отсутствует аргумент имени группы для %s."
 
 #: pcbnew/pcbexpr_functions.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Отсутствует аргумент имени слоя для %s."
+msgstr "Отсутствует аргумент имени листа для %s."
 
 #: pcbnew/pcbexpr_functions.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (reference designator) to %s."
-msgstr ""
-"Отсутствует аргумент посад.места (A, B или позиционное обозначение) для %s."
+msgstr "Отсутствует аргумент посадочного места (указатель ссылки) для %s."
 
 #: pcbnew/pcbexpr_functions.cpp:984
 #, c-format
@@ -39069,14 +39027,13 @@ msgid "Loading board\n"
 msgstr "Загрузка платы\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "Файл svg успешно создан"
+msgstr "Успешно экспортирован VRML в %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "Ошибка извлечения файла!"
+msgstr "Ошибка при экспорте VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:210
 msgid "Successfully created svg file"
@@ -39117,48 +39074,48 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Черчение посад.места '%s' в '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:962
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "Выполнить DRC..."
+msgstr "Запуск DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:974 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Группа %s содержит удалённый элемент %s"
+msgstr "Найдено %d неподключенных элементов\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:995
 #, c-format
 msgid "Found %d schematic parity issues\n"
-msgstr ""
+msgstr "Обнаружено %d нарушений четности схем\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Не удаётся обработать репозиторий: %s"
+msgstr "Невозможно сохранить отчет DRC в %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Сохранить отчёт DRC"
+msgstr "Сохранение отчета DRC в %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
 msgstr "Несколько слоёв"
 
 #: pcbnew/plot_board_layers.cpp:115
-#, fuzzy
 msgid "Library Description"
-msgstr "Описание"
+msgstr "Описание библиотеки"
 
 #: pcbnew/plugin.cpp:193
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported."
 msgstr ""
+"Выбранный файл содержит несколько отпечатков. Будет импортирован только "
+"первый из них."
 
 #: pcbnew/plugin.cpp:269
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -39276,11 +39233,14 @@ msgid ""
 "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
+"Похоже, этот файл не в допустимом двоичном формате PCB версии 6.0. В Altium "
+"Designer обязательно сохраните как \"Двоичные файлы печатных плат (*.PcbDoc)"
+"\"."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s' for directory '%s'."
-msgstr "Файл не найден: '%s'."
+msgstr "Файл не найден: «%s» для каталога «%s»."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:636
 #, c-format
@@ -39310,6 +39270,8 @@ msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr ""
+"Обнаружено более одного сетевого класса Altium с именем «%s». Импортируется "
+"только первый."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1095
 msgid "Loading components..."
@@ -39370,13 +39332,13 @@ msgstr "Загрузка областей платы..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1962
 #: pcbnew/plugins/altium/altium_pcb.cpp:2073
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Зона на слое Altium (%d) не имеет аналога в KiCad. Она будет размещена на "
-"слое Eco1_User."
+"Пунктирный контур найден на слое Altium (%d), не имеющем эквивалента в "
+"KiCad. Он был перенесен на слой KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2003
 #: pcbnew/plugins/altium/altium_pcb.cpp:2106
@@ -39501,9 +39463,8 @@ msgid "Loading rectangles..."
 msgstr "Загрузка прямоугольников..."
 
 #: pcbnew/plugins/altium/solidworks_pcb_plugin.cpp:52
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Файлы платы Solidworks"
+msgstr "Файлы печатных плат Solidworks"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -39575,13 +39536,13 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
 msgstr ""
-"Дизайн CADSTAR содержит каплевидные переходы. Этот импортер их пока не "
-"поддерживает, поэтому каплевидные переходы в дизайне были проигнорированы."
+"Конструктивный слой CADSTAR '%s' находится на внешней поверхности платы. Он "
+"был проигнорирован."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
@@ -40028,9 +39989,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Файлы библиотек Eagle ver. 6.x XML"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Неизвестный Model_type "
+msgstr "Неизвестный тип узла SVGNODE %d"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
 #, fuzzy, c-format
