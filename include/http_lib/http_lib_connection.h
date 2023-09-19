@@ -38,7 +38,7 @@ public:
 
     ~HTTP_LIB_CONNECTION();
 
-    bool isValidEndpoint() const;
+    bool IsValidEndpoint() const;
 
     /**
      * Retrieves a single part with full details from the HTTP library.

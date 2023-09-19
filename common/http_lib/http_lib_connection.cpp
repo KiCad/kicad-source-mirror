@@ -107,7 +107,7 @@ bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
 }
 
 
-bool HTTP_LIB_CONNECTION::isValidEndpoint() const
+bool HTTP_LIB_CONNECTION::IsValidEndpoint() const
 {
     return m_endpointValid;
 }
@@ -115,7 +115,7 @@ bool HTTP_LIB_CONNECTION::isValidEndpoint() const
 
 bool HTTP_LIB_CONNECTION::syncCategories()
 {
-    if( !isValidEndpoint() )
+    if( !IsValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "syncCategories: without valid connection!" ) );
         return false;
@@ -170,7 +170,7 @@ bool HTTP_LIB_CONNECTION::syncCategories()
 
 bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart )
 {
-    if( !isValidEndpoint() )
+    if( !IsValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "SelectOne: without valid connection!" ) );
         return false;
@@ -268,7 +268,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
 bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
                                      std::vector<HTTP_LIB_PART>& aParts )
 {
-    if( !isValidEndpoint() )
+    if( !IsValidEndpoint() )
     {
         wxLogTrace( traceHTTPLib, wxT( "SelectAll: without valid connection!" ) );
         return false;

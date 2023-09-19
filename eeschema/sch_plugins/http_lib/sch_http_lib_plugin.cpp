@@ -93,7 +93,6 @@ void SCH_HTTP_LIB_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
 
         for( const HTTP_LIB_PART& part : found_parts )
         {
-
             wxString libIDString( part.name );
 
             LIB_SYMBOL* symbol = loadSymbolFromPart( libIDString, category, part );
@@ -132,24 +131,23 @@ LIB_SYMBOL* SCH_HTTP_LIB_PLUGIN::LoadSymbol( const wxString&        aLibraryPath
     for( const HTTP_LIB_CATEGORY& categoryIter : categories )
     {
         std::string associatedCatID = std::get<1>( relations );
+
         if( categoryIter.id == associatedCatID )
         {
             foundCategory = &categoryIter;
-
             break;
         }
     }
 
     // return Null if no category was found. This should never happen
-    if( foundCategory == NULL )
+    if( foundCategory == nullptr )
     {
         wxLogTrace( traceHTTPLib, wxT( "loadSymbol: no category found for %s" ), partName );
-
-        return NULL;
+        return nullptr;
     }
 
     // get the matching query ID
-    for( const auto& part : m_cachedParts[foundCategory->id] )
+    for( const HTTP_LIB_PART& part : m_cachedParts[foundCategory->id] )
     {
         if( part.id == std::get<0>( relations ) )
         {
@@ -226,7 +224,8 @@ void SCH_HTTP_LIB_PLUGIN::ensureSettings( const wxString& aSettingsPath )
         if( m_settings->m_Source.api_version.empty() )
         {
             wxString msg = wxString::Format(
-                    _( "HTTP library settings file %s is missing the API version number!" ), aSettingsPath );
+                    _( "HTTP library settings file %s is missing the API version number!" ),
+                    aSettingsPath );
 
             THROW_IO_ERROR( msg );
         }
@@ -234,7 +233,7 @@ void SCH_HTTP_LIB_PLUGIN::ensureSettings( const wxString& aSettingsPath )
         if( m_settings->getSupportedAPIVersion() != m_settings->m_Source.api_version )
         {
             wxString msg = wxString::Format(
-                    _( "HTTP library settings file %s indicates API version conflict (Settings file: %s <-> KiCad: %s)!" ),
+                    _( "HTTP library settings file %s uses API version %s, but KiCad requires version %s" ),
                     aSettingsPath,
                     m_settings->m_Source.api_version,
                     m_settings->getSupportedAPIVersion() );
@@ -253,10 +252,12 @@ void SCH_HTTP_LIB_PLUGIN::ensureSettings( const wxString& aSettingsPath )
 
         // map lib source type
         m_settings->m_Source.type = m_settings->get_HTTP_LIB_SOURCE_TYPE();
+
         if( m_settings->m_Source.type == HTTP_LIB_SOURCE_TYPE::INVALID )
         {
             wxString msg = wxString::Format(
-                    _( "HTTP library settings file has an invalid library type" ), aSettingsPath );
+                    _( "HTTP library settings file %s has an invalid library type" ),
+                    aSettingsPath );
 
             THROW_IO_ERROR( msg );
         }
@@ -299,7 +300,7 @@ void SCH_HTTP_LIB_PLUGIN::ensureConnection()
 
     connect();
 
-    if( !m_conn || !m_conn->isValidEndpoint() )
+    if( !m_conn || !m_conn->IsValidEndpoint() )
     {
         wxString msg = wxString::Format(
                 _( "Could not connect to %s. Errors: %s" ),
@@ -316,17 +317,14 @@ void SCH_HTTP_LIB_PLUGIN::connect()
 
     if( !m_conn )
     {
-
         m_conn = std::make_unique<HTTP_LIB_CONNECTION>( m_settings->m_Source, true );
 
-        if( !m_conn->isValidEndpoint() )
+        if( !m_conn->IsValidEndpoint() )
         {
             m_lastError = m_conn->GetLastError();
             return;
         }
-
     }
-
 }
 
 
