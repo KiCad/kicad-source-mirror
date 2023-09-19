@@ -176,16 +176,42 @@ void FP_SHAPE::SetCenter0( const VECTOR2I& aCenter )
 }
 
 
+void FP_SHAPE::CalcArcAngles0( EDA_ANGLE& aStartAngle0, EDA_ANGLE& aEndAngle0 ) const {
+    VECTOR2D startRadial( GetStart0() - GetCenter0() );
+    VECTOR2D endRadial( GetEnd0() - GetCenter0() );
+
+    aStartAngle0 = EDA_ANGLE( startRadial );
+    aEndAngle0 = EDA_ANGLE( endRadial );
+
+    if( aEndAngle0 == aStartAngle0 )
+        aEndAngle0 = aStartAngle0 + ANGLE_360;   // ring, not null
+
+    while( aEndAngle0 < aStartAngle0 )
+        aEndAngle0 += ANGLE_360;
+}
+
+
+EDA_ANGLE FP_SHAPE::GetArcAngle0() const
+{
+    EDA_ANGLE startAngle0;
+    EDA_ANGLE endAngle0;
+
+    CalcArcAngles0( startAngle0, endAngle0 );
+
+    return endAngle0 - startAngle0;
+}
+
+
 VECTOR2I FP_SHAPE::GetArcMid0() const
 {
     // If none of the input data have changed since we loaded the arc,
     // keep the original mid point data to minimize churn
-    if( m_arcMidData_0.start == m_start && m_arcMidData_0.end == m_end
-            && m_arcMidData_0.center == m_arcCenter )
+    if( m_arcMidData_0.start == m_start0 && m_arcMidData_0.end == m_end0
+            && m_arcMidData_0.center == m_arcCenter0 )
         return m_arcMidData_0.mid;
 
     VECTOR2I mid0 = m_start0;
-    RotatePoint( mid0, m_arcCenter0, -GetArcAngle() / 2.0 );
+    RotatePoint( mid0, m_arcCenter0, -GetArcAngle0() / 2.0 );
     return mid0;
 }
 
@@ -198,21 +224,49 @@ void FP_SHAPE::SetArcAngleAndEnd0( const EDA_ANGLE& aAngle, bool aCheckNegativeA
     RotatePoint( m_end0, m_arcCenter0, -angle.Normalize720() );
 
     if( aCheckNegativeAngle && aAngle < ANGLE_0 )
+    {
         std::swap( m_start0, m_end0 );
+        m_endsSwapped = true;
+    }
+}
+
+
+void FP_SHAPE::SetCachedArcData0( const VECTOR2I& aStart0, const VECTOR2I& aMid0,
+                                  const VECTOR2I& aEnd0, const VECTOR2I& aCenter0 )
+{
+    m_arcMidData_0.start = aStart0;
+    m_arcMidData_0.end = aEnd0;
+    m_arcMidData_0.center = aCenter0;
+    m_arcMidData_0.mid = aMid0;
 }
 
 
 void FP_SHAPE::SetArcGeometry0( const VECTOR2I& aStart0, const VECTOR2I& aMid0,
                                 const VECTOR2I& aEnd0 )
 {
+    m_arcMidData_0 = {};
     m_start0 = aStart0;
     m_end0 = aEnd0;
     m_arcCenter0 = CalcArcCenter( aStart0, aMid0, aEnd0 );
+    const VECTOR2I new_mid = GetArcMid0();
 
-    m_arcMidData_0.center = m_arcCenter0;
-    m_arcMidData_0.end = m_end0;
-    m_arcMidData_0.mid = aMid0;
-    m_arcMidData_0.start = m_start0;
+    m_endsSwapped = false;
+
+    SetCachedArcData0( aStart0, aMid0, aEnd0, m_arcCenter0 );
+
+    /*
+     * If the input winding doesn't match our internal winding, the calculated midpoint will end
+     * up on the other side of the arc.  In this case, we need to flip the start/end points and
+     * flag this change for the system.
+     */
+    VECTOR2D dist( new_mid - aMid0 );
+    VECTOR2D dist2( new_mid - m_arcCenter0 );
+
+    if( dist.SquaredEuclideanNorm() > dist2.SquaredEuclideanNorm() )
+    {
+        std::swap( m_start0, m_end0 );
+        m_endsSwapped = true;
+    }
 }
 
 

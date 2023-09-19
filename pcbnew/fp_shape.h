@@ -105,6 +105,12 @@ public:
 
     VECTOR2I GetArcMid0() const;
 
+    void CalcArcAngles0( EDA_ANGLE& aStartAngle, EDA_ANGLE& aEndAngle ) const;
+    EDA_ANGLE GetArcAngle0() const;
+
+    void SetCachedArcData0( const VECTOR2I& aStart0, const VECTOR2I& aMid0, const VECTOR2I& aEnd0,
+                            const VECTOR2I& aCenter0 );
+
     /**
      * Set relative coordinates from draw coordinates.
      * Call in only when the geometry or the footprint is modified and therefore the relative
