@@ -71,7 +71,9 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_CircRotatationStep( false ),
             m_ArrayTypeTab( 0 ),                     // start on grid view
             m_FootprintKeepAnnotations( false ),
-            m_FootprintReannotate( true )            // Assign unique by default
+            m_FootprintReannotate( true ),           // Assign unique by default
+            m_CenterByRadius( false ),
+            m_CenterByPosition( true )
     {
     }
 
@@ -109,6 +111,8 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long      m_ArrayTypeTab;
     bool      m_FootprintKeepAnnotations;
     bool      m_FootprintReannotate;
+    bool      m_CenterByRadius;
+    bool      m_CenterByPosition;
 };
 
 // Persistent options settings
@@ -162,6 +166,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
         m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
         m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
         m_circRadius( aParent, m_labelCircRadius, m_tcValueCircRadius, m_unitLabelCircRadius ),
+        m_circCenterAngle( aParent, m_labelCircCenterAngle, m_tcValueCircCenterAngle, m_unitLabelCircCenterAngle ),
         m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
         m_cfg_persister( pcbIUScale, s_arrayOptions.m_OptionsSet )
 {
@@ -188,6 +193,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_choiceSecAxisNumbering->SetSelection( 0 );
     m_choiceCircNumbering->SetSelection( 0 );
 
+    m_circCenterAngle.SetUnits( EDA_UNITS::DEGREES );
     m_circAngle.SetUnits( EDA_UNITS::DEGREES );
 
     // bind grid options to persister
@@ -232,6 +238,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_cfg_persister.Add( *m_radioBtnKeepRefs, s_arrayOptions.m_FootprintKeepAnnotations );
     m_cfg_persister.Add( *m_radioBtnUniqueRefs, s_arrayOptions.m_FootprintReannotate );
 
+    m_cfg_persister.Add( *m_radioBtnSetByPos, s_arrayOptions.m_CenterByPosition );
+    m_cfg_persister.Add( *m_radioBtnSetByRadius, s_arrayOptions.m_CenterByRadius );
+
     m_cfg_persister.RestoreConfigToControls();
 
     // Run the callbacks once to process the dialog contents
@@ -243,11 +252,54 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     SetMinSize( GetSize() );
 }
 
+void DIALOG_CREATE_ARRAY::OnButtonPosition( wxCommandEvent& event )
+{
+    if( m_radioBtnSetByPos->GetValue() )
+    {
+        m_entryCentreX->Enable();
+        m_entryCentreY->Enable();
+        m_tcValueCircRadius->Disable();
+        m_tcValueCircCenterAngle->Disable();
+    }
+}
+
+void DIALOG_CREATE_ARRAY::OnButtonRadius( wxCommandEvent& event )
+{
+    if( m_radioBtnSetByRadius->GetValue() )
+    {
+        m_entryCentreX->Disable();
+        m_entryCentreY->Disable();
+        m_tcValueCircRadius->Enable();
+        m_tcValueCircCenterAngle->Enable();
+    }
+}
 
 void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 {
-    setControlEnablement();
-    calculateCircularArrayProperties();
+    if( m_radioBtnSetByPos->GetValue() )
+    {
+        m_entryCentreX->Enable();
+        m_entryCentreY->Enable();
+        m_tcValueCircRadius->Disable();
+        m_tcValueCircCenterAngle->Disable();
+
+        setControlEnablement();
+        calculateCircularArrayProperties();
+    }
+}
+
+void DIALOG_CREATE_ARRAY::OnRadiusChanged( wxCommandEvent& event )
+{
+    if( m_radioBtnSetByRadius->GetValue() )
+    {
+        m_entryCentreX->Disable();
+        m_entryCentreY->Disable();
+        m_tcValueCircRadius->Enable();
+        m_tcValueCircCenterAngle->Enable();
+
+        setControlEnablement();
+        calculateCircularArrayProperties();
+    }
 }
 
 
@@ -518,13 +570,29 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 
 void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
 {
-    VECTOR2I centre( m_hCentre.GetValue(), m_vCentre.GetValue() );
+    if( m_radioBtnSetByPos->GetValue() )
+    {
+        VECTOR2I centre( m_hCentre.GetValue(), m_vCentre.GetValue() );
 
-    // Find the radius, etc of the circle
-    centre -= m_originalItemPosition;
+        // Find the radius, etc of the circle
+        centre -= m_originalItemPosition;
+        EDA_ANGLE angle( centre );
 
-    m_circRadius.SetValue( int( centre.EuclideanNorm() ) );
+        m_circRadius.SetValue( int( centre.EuclideanNorm() ) );
+        m_circCenterAngle.SetAngleValue( angle.Round( 4 ) );
 
-    m_refPosX.SetValue( m_originalItemPosition.x );
-    m_refPosY.SetValue( m_originalItemPosition.y );
+        m_refPosX.SetValue( m_originalItemPosition.x );
+        m_refPosY.SetValue( m_originalItemPosition.y );
+    }
+    else
+    {
+        m_refPosX.SetValue( m_originalItemPosition.x );
+        m_refPosY.SetValue( m_originalItemPosition.y );
+
+        double radius = m_circRadius.GetValue();
+        EDA_ANGLE angle = m_circCenterAngle.GetAngleValue();
+
+        m_hCentre.SetValue( m_originalItemPosition.x + radius * angle.Cos() );
+        m_vCentre.SetValue( m_originalItemPosition.y + radius * angle.Sin() );
+    }
 }

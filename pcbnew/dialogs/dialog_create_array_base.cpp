@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -255,6 +255,13 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizerCircParams;
 	sbSizerCircParams = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Circular array params") ), wxVERTICAL );
 
+	m_radioBtnSetByPos = new wxRadioButton( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Set center by position"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_radioBtnSetByPos->SetValue( true );
+	sbSizerCircParams->Add( m_radioBtnSetByPos, 0, wxALL, 5 );
+
+	m_radioBtnSetByRadius = new wxRadioButton( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Set center by radius"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerCircParams->Add( m_radioBtnSetByRadius, 0, wxALL, 5 );
+
 	m_stInfoItems1 = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("This is the position of the center of the circle\ndefining the circular area to create"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stInfoItems1->Wrap( -1 );
 	sbSizerCircParams->Add( m_stInfoItems1, 0, wxALL, 5 );
@@ -300,7 +307,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerRadiusValue;
 	bSizerRadiusValue = new wxBoxSizer( wxHORIZONTAL );
 
-	m_tcValueCircRadius = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_tcValueCircRadius = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_tcValueCircRadius->SetToolTip( _("Distance between Ref point and Center pos.") );
 
 	bSizerRadiusValue->Add( m_tcValueCircRadius, 1, wxALL|wxEXPAND, 5 );
@@ -311,6 +318,33 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 
 	bSizerRadius->Add( bSizerRadiusValue, 1, wxEXPAND, 5 );
+
+	m_labelCircCenterAngle = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Array angle,\nfrom Ref point pos and array center:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircCenterAngle->Wrap( -1 );
+	bSizerRadius->Add( m_labelCircCenterAngle, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizerRadiusValue1;
+	bSizerRadiusValue1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_tcValueCircCenterAngle = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	#ifdef __WXGTK__
+	if ( !m_tcValueCircCenterAngle->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_tcValueCircCenterAngle->SetMaxLength( 8 );
+	}
+	#else
+	m_tcValueCircCenterAngle->SetMaxLength( 8 );
+	#endif
+	m_tcValueCircCenterAngle->SetToolTip( _("Angle between Ref point and Center pos.") );
+
+	bSizerRadiusValue1->Add( m_tcValueCircCenterAngle, 1, wxALL|wxEXPAND, 5 );
+
+	m_unitLabelCircCenterAngle = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCircCenterAngle->Wrap( -1 );
+	bSizerRadiusValue1->Add( m_unitLabelCircCenterAngle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerRadius->Add( bSizerRadiusValue1, 1, wxEXPAND, 5 );
 
 
 	sbSizerCircParams->Add( bSizerRadius, 0, wxEXPAND, 5 );
@@ -484,8 +518,12 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_entryStagger->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbGridStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_radioBoxGridNumberingScheme->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_radioBtnSetByPos->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonPosition ), NULL, this );
+	m_radioBtnSetByRadius->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonRadius ), NULL, this );
 	m_entryCentreX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_tcValueCircRadius->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
+	m_tcValueCircCenterAngle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
 	m_entryCircAngle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbCircStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
@@ -504,8 +542,12 @@ DIALOG_CREATE_ARRAY_BASE::~DIALOG_CREATE_ARRAY_BASE()
 	m_entryStagger->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbGridStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_radioBoxGridNumberingScheme->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_radioBtnSetByPos->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonPosition ), NULL, this );
+	m_radioBtnSetByRadius->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnButtonRadius ), NULL, this );
 	m_entryCentreX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_tcValueCircRadius->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
+	m_tcValueCircCenterAngle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnRadiusChanged ), NULL, this );
 	m_entryCircAngle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_rbCircStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );

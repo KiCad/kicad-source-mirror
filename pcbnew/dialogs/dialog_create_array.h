@@ -53,7 +53,11 @@ public:
 
 private:
     // Event callbacks
+    void OnButtonPosition( wxCommandEvent& event ) override;
+    void OnButtonRadius( wxCommandEvent& event ) override;
+
     void OnParameterChanged( wxCommandEvent& event ) override;
+    void OnRadiusChanged( wxCommandEvent& event ) override;
 
     // Internal callback handlers
     void setControlEnablement();
@@ -79,7 +83,10 @@ private:
     UNIT_BINDER m_refPosX, m_refPosY;
     UNIT_BINDER m_hCentre, m_vCentre;
     UNIT_BINDER m_circRadius;
+    UNIT_BINDER m_circCenterAngle;
     UNIT_BINDER m_circAngle;
+    bool m_CenterByRadius;
+    bool m_CenterByPosition;
 
     WIDGET_SAVE_RESTORE m_cfg_persister;
 };

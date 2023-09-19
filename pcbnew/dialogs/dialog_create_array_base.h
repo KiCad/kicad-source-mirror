@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,8 +30,8 @@ class TEXT_CTRL_EVAL;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbox.h>
-#include <wx/notebook.h>
 #include <wx/radiobut.h>
+#include <wx/notebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -92,6 +92,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_stRefPosYTxt;
 		wxTextCtrl* m_tcRefPosY;
 		wxStaticText* m_stRefPosYUnit;
+		wxRadioButton* m_radioBtnSetByPos;
+		wxRadioButton* m_radioBtnSetByRadius;
 		wxStaticText* m_stInfoItems1;
 		wxStaticText* m_labelCentreX;
 		wxTextCtrl* m_entryCentreX;
@@ -102,6 +104,9 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelCircRadius;
 		wxTextCtrl* m_tcValueCircRadius;
 		wxStaticText* m_unitLabelCircRadius;
+		wxStaticText* m_labelCircCenterAngle;
+		wxTextCtrl* m_tcValueCircCenterAngle;
+		wxStaticText* m_unitLabelCircCenterAngle;
 		wxStaticText* m_labelCircAngle;
 		wxTextCtrl* m_entryCircAngle;
 		wxStaticText* m_unitLabelCircAngle;
@@ -128,6 +133,9 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonPosition( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonRadius( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRadiusChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
