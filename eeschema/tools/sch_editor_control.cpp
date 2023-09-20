@@ -2113,6 +2113,14 @@ int SCH_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 {
+    EditSymbolFields( aEvent );
+    m_frame->GetSymbolFieldsTableDialog()->ShowExportTab();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::GenerateBOMLegacy( const TOOL_EVENT& aEvent )
+{
     InvokeDialogCreateBOM( m_frame );
     return 0;
 }
@@ -2462,6 +2470,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UpdateFromPCB,         ACTIONS::updateSchematicFromPcb.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ExportNetlist,         EE_ACTIONS::exportNetlist.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::GenerateBOMLegacy,     EE_ACTIONS::generateBOMLegacy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::DrawSheetOnClipboard,  EE_ACTIONS::drawSheetOnClipboard.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ShowSearch,            EE_ACTIONS::showSearch.MakeEvent() );

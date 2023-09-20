@@ -48,6 +48,8 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ShowExportTab();
+
 private:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();

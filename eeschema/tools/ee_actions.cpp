@@ -1047,6 +1047,13 @@ TOOL_ACTION EE_ACTIONS::generateBOM( TOOL_ACTION_ARGS()
         .Tooltip( _( "Generate a bill of materials for the current schematic" ) )
         .Icon( BITMAPS::post_bom ) );
 
+TOOL_ACTION EE_ACTIONS::generateBOMLegacy( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.generateBOMLegacy" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Generate BOM (Legacy)..." ) )
+        .Tooltip( _( "Generate a bill of materials for the current schematic (Legacy Generator)" ) )
+        );
+
 TOOL_ACTION EE_ACTIONS::exportSymbolsToLibrary( TOOL_ACTION_ARGS()
        .Name( "eeschema.EditorControl.exportSymbolsToLibrary" )
        .Scope( AS_GLOBAL )

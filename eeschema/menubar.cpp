@@ -288,6 +288,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::assignFootprints );
     toolsMenu->Add( EE_ACTIONS::generateBOM );
+    toolsMenu->Add( EE_ACTIONS::generateBOMLegacy );
 
     toolsMenu->AppendSeparator();
     update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );

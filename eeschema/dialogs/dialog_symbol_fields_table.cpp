@@ -1153,6 +1153,12 @@ BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::GetCurrentBomFmtSettings()
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::ShowExportTab()
+{
+    m_nbPages->SetSelection( 1 );
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.

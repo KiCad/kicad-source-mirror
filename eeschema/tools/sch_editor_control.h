@@ -121,6 +121,7 @@ public:
     int ImportFPAssignments( const TOOL_EVENT& aEvent );
     int ExportNetlist( const TOOL_EVENT& aEvent );
     int GenerateBOM( const TOOL_EVENT& aEvent );
+    int GenerateBOMLegacy( const TOOL_EVENT& aEvent );
     int DrawSheetOnClipboard( const TOOL_EVENT& aEvent );
 
     int ShowSearch( const TOOL_EVENT& aEvent );
