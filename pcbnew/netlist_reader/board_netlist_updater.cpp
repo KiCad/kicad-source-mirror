@@ -556,7 +556,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     bool changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( PAD* pad : aFootprint->Pads() )
+    PADS pads = aFootprint->Pads();
+    std::set<wxString> padNetnames;
+
+    std::sort( pads.begin(), pads.end(), []( PAD* a, PAD* b ) {
+        return a->m_Uuid < b->m_Uuid;
+    } );
+
+    for( PAD* pad : pads )
     {
         const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetNumber() );
 
@@ -637,7 +644,20 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
         }
         else                                 // New footprint pad has a net.
         {
-            const wxString& netName = net.GetNetName();
+            wxString netName = net.GetNetName();
+
+            if( pad->IsNoConnectPad() )
+            {
+                netName = wxString::Format( wxT( "unconnected-(%s-Pad%s)" ),
+                                            aFootprint->GetReference(), pad->GetNumber() );
+
+                for( int jj = 0; !padNetnames.insert( netName ).second; jj++ )
+                {
+                    netName = wxString::Format( wxT( "unconnected-(%s-Pad%s_%d)" ),
+                                                aFootprint->GetReference(), pad->GetNumber(), jj );
+                }
+            }
+
             NETINFO_ITEM* netinfo = m_board->FindNet( netName );
 
             if( netinfo && !m_isDryRun )

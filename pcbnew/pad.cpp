@@ -180,8 +180,7 @@ bool PAD::SharesNetTieGroup( const PAD* aOther ) const
 
 bool PAD::IsNoConnectPad() const
 {
-    return GetShortNetname().StartsWith( wxT( "unconnected-(" ) )
-            && ( m_pinType == wxT( "no_connect" ) || m_pinType.EndsWith( wxT( "+no_connect" ) ) );
+    return m_pinType.Contains( wxT( "no_connect" ) );
 }
 
 
