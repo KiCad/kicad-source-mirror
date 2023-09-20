@@ -702,8 +702,15 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
             OPENGL_RENDER_LIST* anti_board = nullptr;
 
-            if( LSET::PhysicalLayersMask().test( layer_id ) )
+            if( ( layer_id == F_SilkS || layer_id == B_SilkS )
+                    && m_boardAdapter.m_Cfg->m_Render.opengl_show_off_board_silk )
+            {
+                anti_board = nullptr;
+            }
+            else if( LSET::PhysicalLayersMask().test( layer_id ) )
+            {
                 anti_board = m_antiBoard;
+            }
 
             if( anti_board )
             {
@@ -723,6 +730,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 }
             }
             else if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
+                  && !m_boardAdapter.m_Cfg->m_Render.opengl_show_off_board_silk
                   && (   ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
                       || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
             {

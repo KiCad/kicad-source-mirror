@@ -462,6 +462,7 @@ enum LAYER_3D_ID : int
         LAYER_3D_MODELS_MARKED_DNP,
         LAYER_3D_AXES,
         LAYER_3D_BOUNDING_BOXES,
+        LAYER_3D_OFF_BOARD_SILK,
 
         LAYER_3D_END
 };
