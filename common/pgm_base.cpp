@@ -338,7 +338,11 @@ void PGM_BASE::sentryInit()
         tmp.AssignDir( PATHS::GetUserCachePath() );
         tmp.AppendDir( "sentry" );
 
+#ifdef __WINDOWS__
         sentry_options_set_database_pathw( options, tmp.GetPathWithSep().wc_str() );
+#else
+        sentry_options_set_database_path( options, tmp.GetPathWithSep().c_str() );
+#endif
         sentry_options_set_symbolize_stacktraces( options, true );
         sentry_options_set_auto_session_tracking( options, false );
 
