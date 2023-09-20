@@ -47,6 +47,9 @@ if( APPLE )
     set_target_properties( idfcyl idfrect dxf2idf idf2vrml PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
         )
+    set_target_properties( idfcyl idfrect dxf2idf idf2vrml PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks" )
+    set_target_properties( idfcyl idfrect dxf2idf idf2vrml PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
 else()
     install( TARGETS idfcyl idfrect idf2vrml
         dxf2idf
