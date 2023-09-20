@@ -2148,13 +2148,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     std::set<FOOTPRINT*> footprints;
 
+    if( item->Type() == PCB_FOOTPRINT_T )
+        footprints.insert( static_cast<FOOTPRINT*>( item ) );
+
     // We can drag multiple footprints, but not a grab-bag of items
     if( selection.Size() > 1 )
     {
         if( item->Type() != PCB_FOOTPRINT_T )
             return 0;
-
-        footprints.insert( static_cast<FOOTPRINT*>( item ) );
 
         for( int idx = 1; idx < selection.Size(); ++idx )
         {
