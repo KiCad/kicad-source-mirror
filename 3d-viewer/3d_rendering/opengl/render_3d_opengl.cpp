@@ -700,7 +700,10 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                                                - pLayerDispList->GetZBot() );
             }
 
-            OPENGL_RENDER_LIST* anti_board = m_antiBoard;
+            OPENGL_RENDER_LIST* anti_board = nullptr;
+
+            if( LSET::PhysicalLayersMask().test( layer_id ) )
+                anti_board = m_antiBoard;
 
             if( anti_board )
             {

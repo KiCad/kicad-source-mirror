@@ -584,8 +584,11 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         {
             polyListSubtracted = *map_poly.at( layer_id );;
 
-            polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
-                                                    SHAPE_POLY_SET::PM_FAST );
+            if( LSET::PhysicalLayersMask().test( layer_id ) )
+            {
+                polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
+                                                        SHAPE_POLY_SET::PM_FAST );
+            }
 
             if( layer_id != B_Mask && layer_id != F_Mask )
             {
