@@ -152,6 +152,9 @@ if( APPLE )
         LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_LIB_DIR}"
         INSTALL_NAME_DIR "${OSX_BUNDLE_BUILD_LIB_DIR}"
     )
+    set_target_properties( kicommon PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks" )
+    set_target_properties( kicommon PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
 endif()
 
 target_compile_definitions( kicommon PRIVATE KICOMMON_DLL=1 )
