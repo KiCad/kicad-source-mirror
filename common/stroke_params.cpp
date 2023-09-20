@@ -32,6 +32,15 @@
 using namespace STROKEPARAMS_T;
 
 
+const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
+    { PLOT_DASH_TYPE::SOLID, { _( "Solid" ), BITMAPS::stroke_solid } },
+    { PLOT_DASH_TYPE::DASH, { _( "Dashed" ), BITMAPS::stroke_dash } },
+    { PLOT_DASH_TYPE::DOT, { _( "Dotted" ), BITMAPS::stroke_dot } },
+    { PLOT_DASH_TYPE::DASHDOT, { _( "Dash-Dot" ), BITMAPS::stroke_dashdot } },
+    { PLOT_DASH_TYPE::DASHDOTDOT, { _( "Dash-Dot-Dot" ), BITMAPS::stroke_dashdotdot } }
+};
+
+
 void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int aWidth,
                             const KIGFX::RENDER_SETTINGS* aRenderSettings,
                             std::function<void( const VECTOR2I& a, const VECTOR2I& b )> aStroker )
