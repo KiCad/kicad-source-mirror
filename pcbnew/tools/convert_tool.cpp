@@ -394,7 +394,10 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         }
 
         if( !getPolys( resolvedSettings ) )
+        {
+            DisplayErrorMessage( m_frame, _( "Could not convert selection" ), _( "Objects must form a closed shape" ) );
             return 0;
+        }
 
         for( const SHAPE_POLY_SET& poly : polys )
         {
