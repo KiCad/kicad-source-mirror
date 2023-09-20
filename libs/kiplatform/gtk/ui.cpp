@@ -484,7 +484,9 @@ static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkW
                                                     wl_fixed_from_int( aY + wy ) );
 
     // Don't call wl_surface_commit, wait for GDK because of an assert on GNOME.
-    wl_display_roundtrip( wldisp ); // To receive "locked" event
+    wl_display_roundtrip( wldisp ); // To receive "locked" event.
+    gtk_widget_queue_draw( aWidget ); // Needed on some GNOME environment to trigger
+                                      // the "after-paint" event handler.
 
     return s_wl_locked_flag;
 }
