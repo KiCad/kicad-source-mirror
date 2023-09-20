@@ -1541,14 +1541,28 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
 
         BOM_PRESET* preset = &m_bomPresets[name];
-        m_currentBomPreset = preset;
 
         if( !exists )
         {
             index = m_cbBomPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
         }
+        else if( preset->readOnly )
+        {
+            wxMessageBox( _( "Cannot modify default presets." ), _( "Error" ), wxOK | wxICON_ERROR,
+                          this );
+            return;
+        }
         else
         {
+            // Ask the user if they want to overwrite the existing preset
+            if( wxMessageBox( _( "Overwrite existing preset?" ), _( "Save BOM Preset" ),
+                              wxYES_NO | wxICON_QUESTION, this )
+                != wxYES )
+            {
+                resetSelection();
+                return;
+            }
+
             *preset = m_dataModel->GetBomSettings();
             preset->name = name;
 
@@ -1556,6 +1570,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
             m_bomPresetMRU.Remove( name );
         }
 
+        m_currentBomPreset = preset;
         m_cbBomPresets->SetSelection( index );
         m_bomPresetMRU.Insert( name, 0 );
 
@@ -1929,14 +1944,28 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         }
 
         BOM_FMT_PRESET* preset = &m_bomFmtPresets[name];
-        m_currentBomFmtPreset = preset;
 
         if( !exists )
         {
             index = m_cbBomFmtPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
         }
+        else if( preset->readOnly )
+        {
+            wxMessageBox( _( "Cannot modify default presets." ), _( "Error" ), wxOK | wxICON_ERROR,
+                          this );
+            return;
+        }
         else
         {
+            // Ask the user if they want to overwrite the existing preset
+            if( wxMessageBox( _( "Overwrite existing preset?" ), _( "Save BOM Preset" ),
+                              wxYES_NO | wxICON_QUESTION, this )
+                != wxYES )
+            {
+                resetSelection();
+                return;
+            }
+
             *preset = GetCurrentBomFmtSettings();
             preset->name = name;
 
@@ -1944,6 +1973,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
             m_bomFmtPresetMRU.Remove( name );
         }
 
+        m_currentBomFmtPreset = preset;
         m_cbBomFmtPresets->SetSelection( index );
         m_bomFmtPresetMRU.Insert( name, 0 );
 
