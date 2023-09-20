@@ -27,8 +27,6 @@
 #ifndef HIDPI_GL_CANVAS_H
 #define HIDPI_GL_CANVAS_H
 
-#include <pgm_base.h>
-#include <settings/common_settings.h>
 #include <view/view_controls.h>
 #include <wx/glcanvas.h>
 
