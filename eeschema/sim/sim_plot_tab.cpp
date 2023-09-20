@@ -191,26 +191,40 @@ class TIME_SCALE : public LIN_SCALE<mpScaleX>
 {
 public:
     TIME_SCALE( const wxString& name, const wxString& unit, int flags ) :
-            LIN_SCALE( name, unit, flags )
+            LIN_SCALE( name, unit, flags ),
+            m_startTime( 0.0 ),
+            m_endTime( 1.0 )
     {};
 
     void ExtendDataRange( double minV, double maxV ) override
     {
-        if( !m_rangeSet )
-        {
-            m_minV = minV;
-            m_maxV = maxV;
-            m_rangeSet = true;
-        }
-        else
-        {
-            if( minV < m_minV )
-                m_minV -= abs( maxV - minV );
+        LIN_SCALE::ExtendDataRange( minV, maxV );
 
-            if( maxV > m_maxV )
-                m_maxV += abs( maxV - minV );
-        }
+        // Time is never longer than the simulation itself
+        if( m_minV < m_startTime )
+            m_minV = m_startTime;
+
+        if( m_maxV > m_endTime )
+            m_maxV = m_endTime;
+    };
+
+    void SetStartAndEnd( double aStartTime, double aEndTime )
+    {
+        m_startTime = aStartTime;
+        m_endTime = aEndTime;
+        ResetDataRange();
     }
+
+    void ResetDataRange() override
+    {
+        m_minV = m_startTime;
+        m_maxV = m_endTime;
+        m_rangeSet = true;
+    }
+
+protected:
+    double m_startTime;
+    double m_endTime;
 };
 
 
@@ -975,7 +989,32 @@ void SIM_PLOT_TAB::EnableCursor( const wxString& aVectorName, int aType, int aCu
 void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
 {
     if( m_axis_x && aIncludeX )
+    {
         m_axis_x->ResetDataRange();
+
+        if( GetSimType() == ST_TRAN )
+        {
+            wxStringTokenizer tokenizer( GetSimCommand(), wxS( " \t\n\r" ), wxTOKEN_STRTOK );
+            wxString          cmd = tokenizer.GetNextToken().Lower();
+
+            wxASSERT( cmd == wxS( ".tran" ) );
+
+            SPICE_VALUE step;
+            SPICE_VALUE end( 1.0 );
+            SPICE_VALUE start( 0.0 );
+
+            if( tokenizer.HasMoreTokens() )
+                step = SPICE_VALUE( tokenizer.GetNextToken() );
+
+            if( tokenizer.HasMoreTokens() )
+                end = SPICE_VALUE( tokenizer.GetNextToken() );
+
+            if( tokenizer.HasMoreTokens() )
+                start = SPICE_VALUE( tokenizer.GetNextToken() );
+
+            static_cast<TIME_SCALE*>( m_axis_x )->SetStartAndEnd( start.ToDouble(), end.ToDouble() );
+        }
+    }
 
     if( m_axis_y1 )
         m_axis_y1->ResetDataRange();

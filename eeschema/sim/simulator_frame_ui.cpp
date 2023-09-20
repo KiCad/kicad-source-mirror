@@ -2555,11 +2555,6 @@ void SIMULATOR_FRAME_UI::OnSimUpdate()
 
 void SIMULATOR_FRAME_UI::OnSimReport( const wxString& aMsg )
 {
-    // Required in win32 to ensure wxTimer events get scheduled in between other events
-    // Or else we may stall them out entirely and never get them during actions like rapid
-    // console updates.
-    KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary();
-
     m_simConsole->AppendText( aMsg + "\n" );
     m_simConsole->SetInsertionPointEnd();
 }
@@ -2727,6 +2722,10 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 
             case SPT_POWER:
                 value.Append( wxS( "W" ) );
+                break;
+
+            default:
+                value.Append( wxS( "?" ) );
                 break;
             }
 

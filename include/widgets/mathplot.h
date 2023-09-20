@@ -664,7 +664,7 @@ public:
         }
     }
 
-    void ResetDataRange()
+    virtual void ResetDataRange()
     {
         m_rangeSet = false;
     }
