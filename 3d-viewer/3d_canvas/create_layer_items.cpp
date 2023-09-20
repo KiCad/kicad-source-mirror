@@ -1071,6 +1071,33 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
     // End Build Tech layers
 
+#if 1
+    // A somewhat experimental feature: if we're rendering off-board silk, turn any pads of
+    // footprints which are entirely outside the board outline into silk.  This makes off-board
+    // footprints more visually recognizable.
+    if( m_Cfg->m_Render.opengl_show_off_board_silk )
+    {
+        BOX2I boardBBox = m_board_poly.BBox();
+
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+        {
+            if( !footprint->GetBoundingBox().Intersects( boardBBox ) )
+            {
+                if( footprint->IsFlipped() )
+                {
+                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ B_SilkS ];
+                    addPads( footprint, layerContainer, B_Cu, false, false );
+                }
+                else
+                {
+                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ F_SilkS ];
+                    addPads( footprint, layerContainer, F_Cu, false, false );
+                }
+            }
+        }
+    }
+#endif
+
     // Build BVH (Bounding volume hierarchy) for holes and vias
 
     if( aStatusReporter )
