@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"PO-Revision-Date: 2023-09-21 15:08+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -1739,7 +1739,7 @@ msgstr "Symbole"
 
 #: common/dialog_about/AboutDialog_main.cpp:1188
 msgid "Footprints by"
-msgstr "Footprinty"
+msgstr "Footprinty wg"
 
 #: common/dialog_about/AboutDialog_main.cpp:1201
 msgid "Icons by"
@@ -19978,9 +19978,8 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Odbij płytkę (przydatne ukazania dolnych warstw)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Kolorystyka w użyciu (domyślną ustawia Pcbnew)"
+msgstr "Używana kolorystyka (będzie domyślną dla edytora PCB)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -19988,6 +19987,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Ustaw opcję kształtu pola/owiertu (0 = brak kształtu, 1 = mały kształt, 2 = "
+"rzeczywisty kształt)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -36326,10 +36327,10 @@ msgstr ""
 "Zignorowano wielokąt, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
 msgstr ""
-"Zignorowano wielokąt, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
+"Zignorowano wielokąt na warstwie '%s' (%d): liczba konturów nie wynosi 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36709,23 +36710,21 @@ msgstr ""
 "przesunięcie: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"Wypełnianie segmentami z poprzednich wydań nie jest już wspierane.\n"
-"Dokonać konwersji na wypełnienie wygładzonymi polygonami?"
+"Strategia wypełnień z poprzednich wydań nie jest już wspierana.\n"
+"Wypełnienia zostaną poddane konwersji na najlepiej dostosowane do wymagań."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "Wypełnianie segmentami z poprzednich wydań nie jest już wspierane.\n"
-"Dokonać konwersji na wypełnienie wygładzonymi polygonami?"
+"Wypełnienia zostaną poddane konwersji na najlepiej dostosowane do wymagań."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
