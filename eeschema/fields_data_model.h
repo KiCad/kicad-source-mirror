@@ -132,6 +132,7 @@ public:
     }
 
     bool ColIsReference( int aCol );
+    bool ColIsValue( int aCol );
     bool ColIsQuantity( int aCol );
     bool ColIsItemNumber( int aCol );
     bool ColIsAttribute( int aCol );

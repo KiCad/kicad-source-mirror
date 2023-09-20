@@ -234,6 +234,12 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
     return m_cols[aCol].m_fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD );
 }
 
+bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    return m_cols[aCol].m_fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE_FIELD );
+}
+
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );

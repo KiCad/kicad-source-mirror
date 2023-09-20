@@ -457,6 +457,8 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     EE_SELECTION&      selection = selectionTool->GetSelection();
     SCH_SYMBOL*        symbol = nullptr;
 
+    UpdateScope();
+
     if( selection.GetSize() == 1 )
     {
         EDA_ITEM*      item = selection.Front();
@@ -485,13 +487,32 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 
             if( found )
             {
-                m_grid->GoToCell( row, 1 );
+                // Find the value column and the reference column if they're shown
+                int valueCol = -1;
+                int refCol = -1;
+                int anyCol = -1;
+
+                for( int col = 0; col < m_dataModel->GetNumberCols(); col++ )
+                {
+                    if( m_dataModel->ColIsValue( col ) )
+                        valueCol = col;
+                    else if( m_dataModel->ColIsReference( col ) )
+                        refCol = col;
+                    else if( anyCol == -1 && m_dataModel->GetShowColumn( col ) )
+                        anyCol = col;
+                }
+
+                if( valueCol != -1 && m_dataModel->GetShowColumn( valueCol ) )
+                    m_grid->GoToCell( row, valueCol );
+                else if( refCol != -1 && m_dataModel->GetShowColumn( refCol ) )
+                    m_grid->GoToCell( row, refCol );
+                else if( anyCol != -1 )
+                    m_grid->GoToCell( row, anyCol );
+
                 break;
             }
         }
     }
-
-    UpdateScope();
 
     // We don't want table range selection events to happen until we've loaded the data or we
     // we'll clear our selection as the grid is built before the code above can get the
