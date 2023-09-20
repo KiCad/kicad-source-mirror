@@ -170,6 +170,12 @@ BOM_PRESET BOM_PRESET::Attributes()
     return p;
 }
 
+std::vector<BOM_PRESET> BOM_PRESET::BuiltInPresets()
+{
+    return { BOM_PRESET::GroupedByValue(), BOM_PRESET::GroupedByValueFootprint(),
+             BOM_PRESET::Attributes() };
+}
+
 //Implementations for BOM_FMT_PRESET
 bool BOM_FMT_PRESET::operator==( const BOM_FMT_PRESET& rhs ) const
 {
@@ -232,4 +238,9 @@ BOM_FMT_PRESET BOM_FMT_PRESET::Semicolons()
     return {
         _HKI( "Semicolons" ), true, wxS( ";" ), wxT( "'" ), wxT( "," ), wxT( "" ), false, false
     };
+}
+
+std::vector<BOM_FMT_PRESET> BOM_FMT_PRESET::BuiltInPresets()
+{
+    return { BOM_FMT_PRESET::CSV(), BOM_FMT_PRESET::TSV(), BOM_FMT_PRESET::Semicolons() };
 }

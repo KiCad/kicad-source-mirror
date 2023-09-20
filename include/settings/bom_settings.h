@@ -62,6 +62,8 @@ struct BOM_PRESET
     static BOM_PRESET GroupedByValue();
     static BOM_PRESET GroupedByValueFootprint();
     static BOM_PRESET Attributes();
+
+    static std::vector<BOM_PRESET> BuiltInPresets();
 };
 
 bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
@@ -88,6 +90,8 @@ struct BOM_FMT_PRESET
     static BOM_FMT_PRESET CSV();
     static BOM_FMT_PRESET TSV();
     static BOM_FMT_PRESET Semicolons();
+
+    static std::vector<BOM_FMT_PRESET> BuiltInPresets();
 };
 
 bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );

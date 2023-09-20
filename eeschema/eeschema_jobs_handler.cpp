@@ -343,30 +343,63 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     BOM_PRESET preset;
 
-    size_t i = 0;
-    for( wxString fieldName : aBomJob->m_fieldsOrdered )
+    // Load a preset if one is specified
+    if( !aBomJob->m_bomPresetName.IsEmpty() )
     {
-        struct BOM_FIELD field;
+        // Make sure the built-in presets are loaded
+        for( const BOM_PRESET& p : BOM_PRESET::BuiltInPresets() )
+            sch->Settings().m_BomPresets.emplace_back( p );
 
-        field.name = fieldName;
-        field.show = true;
-        field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(), aBomJob->m_fieldsGroupBy.end(),
-                                   field.name )
-                        != aBomJob->m_fieldsGroupBy.end();
-        field.label =
-                ( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
-                        ? aBomJob->m_fieldsLabels[i]
-                        : field.name;
+        // Find the preset
+        BOM_PRESET* schPreset = nullptr;
 
-        preset.fieldsOrdered.emplace_back( field );
-        i++;
+        for( BOM_PRESET& p : sch->Settings().m_BomPresets )
+        {
+            if( p.name == aBomJob->m_bomPresetName )
+            {
+                schPreset = &p;
+                break;
+            }
+        }
+
+        if( !schPreset )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "BOM preset '%s' not found" ), aBomJob->m_bomPresetName ),
+                    RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        preset = *schPreset;
     }
+    else
+    {
+        size_t i = 0;
+        for( wxString fieldName : aBomJob->m_fieldsOrdered )
+        {
+            struct BOM_FIELD field;
 
-    preset.sortAsc = aBomJob->m_sortAsc;
-    preset.sortField = aBomJob->m_sortField;
-    preset.filterString = aBomJob->m_filterString;
-    preset.groupSymbols = ( aBomJob->m_fieldsGroupBy.size() > 0 );
-    preset.excludeDNP = aBomJob->m_excludeDNP;
+            field.name = fieldName;
+            field.show = true;
+            field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(),
+                                       aBomJob->m_fieldsGroupBy.end(), field.name )
+                            != aBomJob->m_fieldsGroupBy.end();
+            field.label = ( ( aBomJob->m_fieldsLabels.size() > i )
+                            && !aBomJob->m_fieldsLabels[i].IsEmpty() )
+                                  ? aBomJob->m_fieldsLabels[i]
+                                  : field.name;
+
+            preset.fieldsOrdered.emplace_back( field );
+            i++;
+        }
+
+        preset.sortAsc = aBomJob->m_sortAsc;
+        preset.sortField = aBomJob->m_sortField;
+        preset.filterString = aBomJob->m_filterString;
+        preset.groupSymbols = ( aBomJob->m_fieldsGroupBy.size() > 0 );
+        preset.excludeDNP = aBomJob->m_excludeDNP;
+    }
 
     dataModel.ApplyBomPreset( preset );
 
@@ -391,12 +424,46 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     BOM_FMT_PRESET fmt;
-    fmt.fieldDelimiter = aBomJob->m_fieldDelimiter;
-    fmt.stringDelimiter = aBomJob->m_stringDelimiter;
-    fmt.refDelimiter = aBomJob->m_refDelimiter;
-    fmt.refRangeDelimiter = aBomJob->m_refRangeDelimiter;
-    fmt.keepTabs = aBomJob->m_keepTabs;
-    fmt.keepLineBreaks = aBomJob->m_keepLineBreaks;
+
+    // Load a format preset if one is specified
+    if( !aBomJob->m_bomFmtPresetName.IsEmpty() )
+    {
+        // Make sure the built-in presets are loaded
+        for( const BOM_FMT_PRESET& p : BOM_FMT_PRESET::BuiltInPresets() )
+            sch->Settings().m_BomFmtPresets.emplace_back( p );
+
+        // Find the preset
+        BOM_FMT_PRESET* schFmtPreset = nullptr;
+
+        for( BOM_FMT_PRESET& p : sch->Settings().m_BomFmtPresets )
+        {
+            if( p.name == aBomJob->m_bomFmtPresetName )
+            {
+                schFmtPreset = &p;
+                break;
+            }
+        }
+
+        if( !schFmtPreset )
+        {
+            m_reporter->Report( wxString::Format( _( "BOM format preset '%s' not found" ),
+                                                  aBomJob->m_bomFmtPresetName ),
+                                RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        fmt = *schFmtPreset;
+    }
+    else
+    {
+        fmt.fieldDelimiter = aBomJob->m_fieldDelimiter;
+        fmt.stringDelimiter = aBomJob->m_stringDelimiter;
+        fmt.refDelimiter = aBomJob->m_refDelimiter;
+        fmt.refRangeDelimiter = aBomJob->m_refRangeDelimiter;
+        fmt.keepTabs = aBomJob->m_keepTabs;
+        fmt.keepLineBreaks = aBomJob->m_keepLineBreaks;
+    }
 
     bool res = f.Write( dataModel.Export( fmt ) );
 

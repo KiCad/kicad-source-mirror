@@ -1387,9 +1387,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomPresets()
     m_bomPresetMRU.clear();
 
     // Load the read-only defaults
-    for( const BOM_PRESET& preset : { BOM_PRESET::GroupedByValue(),
-                                      BOM_PRESET::GroupedByValueFootprint(),
-                                      BOM_PRESET::Attributes() } )
+    for( const BOM_PRESET& preset : BOM_PRESET::BuiltInPresets() )
     {
         m_bomPresets[preset.name] = preset;
         m_bomPresets[preset.name].readOnly = true;
@@ -1805,8 +1803,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomFmtPresets()
     m_bomFmtPresetMRU.clear();
 
     // Load the read-only defaults
-    for( const BOM_FMT_PRESET& preset :
-         { BOM_FMT_PRESET::CSV(), BOM_FMT_PRESET::TSV(), BOM_FMT_PRESET::Semicolons() } )
+    for( const BOM_FMT_PRESET& preset : BOM_FMT_PRESET::BuiltInPresets() )
     {
         m_bomFmtPresets[preset.name] = preset;
         m_bomFmtPresets[preset.name].readOnly = true;

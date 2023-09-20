@@ -35,6 +35,10 @@ public:
     wxString m_filename;
     wxString m_outputFile;
 
+    // Preset options (from schematic)
+    wxString m_bomPresetName;
+    wxString m_bomFmtPresetName;
+
     // Format options
     wxString m_fieldDelimiter;
     wxString m_stringDelimiter;
