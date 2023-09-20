@@ -48,6 +48,7 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ShowEditTab();
     void ShowExportTab();
 
 private:
