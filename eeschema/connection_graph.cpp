@@ -25,6 +25,7 @@
 #include <vector>
 #include <unordered_map>
 #include <core/profile.h>
+#include <core/kicad_algo.h>
 #include <common.h>
 #include <core/kicad_algo.h>
 #include <erc.h>
@@ -974,8 +975,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
     {
         std::vector<SCH_ITEM*> connection_vec = it.second;
         std::sort( connection_vec.begin(), connection_vec.end() );
-        connection_vec.erase( std::unique( connection_vec.begin(), connection_vec.end() ),
-                connection_vec.end() );
+        alg::remove_duplicates( connection_vec );
 
         // Pre-scan to see if we have a bus at this location
         SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
