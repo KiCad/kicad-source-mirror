@@ -628,29 +628,24 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
                     if( viasHolesLayer != nullptr )
                     {
-                        pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                          m_outerThroughHoles,
-                                                                          viasHolesLayer,
-                                                                          m_antiBoard );
+                        pLayerDispList->DrawAllCameraCulled( drawMiddleSegments,
+                                                             m_outerThroughHoles, viasHolesLayer,
+                                                             m_antiBoard );
 
                         // Draw plated pads
                         if( layer_id == F_Cu && m_platedPadsFront )
                         {
                             setPlatedCopperAndDepthOffset( layer_id );
-                            m_platedPadsFront->DrawAllCameraCulledSubtractLayer(
-                                    drawMiddleSegments,
-                                    m_outerThroughHoles,
-                                    viasHolesLayer,
-                                    m_antiBoard );
+                            m_platedPadsFront->DrawAllCameraCulled( drawMiddleSegments,
+                                                                    m_outerThroughHoles,
+                                                                    viasHolesLayer, m_antiBoard );
                         }
                         else if( layer_id == B_Cu && m_platedPadsBack )
                         {
                             setPlatedCopperAndDepthOffset( layer_id );
-                            m_platedPadsBack->DrawAllCameraCulledSubtractLayer(
-                                    drawMiddleSegments,
-                                    m_outerThroughHoles,
-                                    viasHolesLayer,
-                                    m_antiBoard );
+                            m_platedPadsBack->DrawAllCameraCulled( drawMiddleSegments,
+                                                                   m_outerThroughHoles,
+                                                                   viasHolesLayer, m_antiBoard );
                         }
 
                         unsetDepthOffset();
@@ -658,23 +653,20 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 }
                 else
                 {
-                    pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                      m_outerThroughHoles,
-                                                                      m_antiBoard );
+                    pLayerDispList->DrawAllCameraCulled( drawMiddleSegments, m_outerThroughHoles,
+                                                         m_antiBoard );
 
                     if( layer_id == F_Cu && m_platedPadsFront )
                     {
                         setPlatedCopperAndDepthOffset( layer_id );
-                        m_platedPadsFront->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                             m_outerThroughHoles,
-                                                                             m_antiBoard );
+                        m_platedPadsFront->DrawAllCameraCulled( drawMiddleSegments,
+                                                                m_outerThroughHoles, m_antiBoard );
                     }
                     else if( layer_id == B_Cu && m_platedPadsBack )
                     {
                         setPlatedCopperAndDepthOffset( layer_id );
-                        m_platedPadsBack->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                            m_outerThroughHoles,
-                                                                            m_antiBoard );
+                        m_platedPadsBack->DrawAllCameraCulled( drawMiddleSegments,
+                                                               m_outerThroughHoles, m_antiBoard );
                     }
 
                     unsetDepthOffset();
@@ -724,10 +716,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 // Do not render Paste layers when skipRenderHoles is enabled
                 // otherwise it will cause z-fight issues
                 if( layer_id != B_Paste && layer_id != F_Paste )
-                {
-                    pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                      anti_board );
-                }
+                    pLayerDispList->DrawAllCameraCulled( drawMiddleSegments, anti_board );
             }
             else if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
                   && !m_boardAdapter.m_Cfg->m_Render.opengl_show_off_board_silk
@@ -738,18 +727,17 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
                 const OPENGL_RENDER_LIST* pLayerDispListMask = m_layers.at( layerMask_id );
 
-                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                  pLayerDispListMask,
-                                                                  throughHolesOuter, anti_board );
+                pLayerDispList->DrawAllCameraCulled( drawMiddleSegments, pLayerDispListMask,
+                                                     throughHolesOuter, anti_board );
             }
             else if( throughHolesOuter )
             {
-                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
-                                                                  throughHolesOuter, anti_board );
+                pLayerDispList->DrawAllCameraCulled( drawMiddleSegments, throughHolesOuter,
+                                                     anti_board );
             }
             else
             {
-                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, anti_board );
+                pLayerDispList->DrawAllCameraCulled( drawMiddleSegments, anti_board );
             }
         }
 
@@ -1025,8 +1013,8 @@ void RENDER_3D_OPENGL::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
             }
             else
             {
-                m_board->DrawAllCameraCulledSubtractLayer( aDrawMiddleSegments, pLayerDispListMask,
-                                                           m_outerViaThroughHoles );
+                m_board->DrawAllCameraCulled( aDrawMiddleSegments, pLayerDispListMask,
+                                              m_outerViaThroughHoles );
             }
         }
         else
@@ -1047,8 +1035,7 @@ void RENDER_3D_OPENGL::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
             }
             else
             {
-                m_board->DrawAllCameraCulledSubtractLayer( aDrawMiddleSegments,
-                                                           m_outerViaThroughHoles );
+                m_board->DrawAllCameraCulled( aDrawMiddleSegments, m_outerViaThroughHoles );
             }
         }
     }

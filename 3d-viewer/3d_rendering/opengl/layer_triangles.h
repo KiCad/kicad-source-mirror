@@ -196,11 +196,11 @@ public:
      */
     void DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle = true ) const;
 
-    void DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
-                               const OPENGL_RENDER_LIST* aLayerToSubtractA = nullptr,
-                               const OPENGL_RENDER_LIST* aLayerToSubtractB = nullptr,
-                               const OPENGL_RENDER_LIST* aLayerToSubtractC = nullptr,
-                               const OPENGL_RENDER_LIST* aLayerToSubtractD = nullptr ) const;
+    void DrawAllCameraCulled( bool aDrawMiddle,
+                              const OPENGL_RENDER_LIST* aLayerToSubtractA = nullptr,
+                              const OPENGL_RENDER_LIST* aLayerToSubtractB = nullptr,
+                              const OPENGL_RENDER_LIST* aLayerToSubtractC = nullptr,
+                              const OPENGL_RENDER_LIST* aLayerToSubtractD = nullptr ) const;
 
     void ApplyScalePosition( float aZposition, float aZscale );
 

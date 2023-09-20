@@ -498,11 +498,11 @@ void OPENGL_RENDER_LIST::DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle
 }
 
 
-void OPENGL_RENDER_LIST::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
-                                        const OPENGL_RENDER_LIST* aLayerToSubtractA,
-                                        const OPENGL_RENDER_LIST* aLayerToSubtractB,
-                                        const OPENGL_RENDER_LIST* aLayerToSubtractC,
-                                        const OPENGL_RENDER_LIST* aLayerToSubtractD ) const
+void OPENGL_RENDER_LIST::DrawAllCameraCulled( bool aDrawMiddle,
+                                              const OPENGL_RENDER_LIST* aLayerToSubtractA,
+                                              const OPENGL_RENDER_LIST* aLayerToSubtractB,
+                                              const OPENGL_RENDER_LIST* aLayerToSubtractC,
+                                              const OPENGL_RENDER_LIST* aLayerToSubtractD ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
