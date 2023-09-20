@@ -2680,20 +2680,22 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
                 updateTrace( traceInfo.first, traceInfo.second, plotTab );
         }
 
-        rebuildSignalsGrid( m_filter->GetValue() );
-        updateSignalsGrid();
-
         plotTab->GetPlotWin()->UpdateAll();
 
         if( aFinal )
+        {
+            rebuildSignalsGrid( m_filter->GetValue() );
+            updateSignalsGrid();
+
+            for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
+                UpdateMeasurement( row );
+
             plotTab->ResetScales( true );
+        }
 
         plotTab->GetPlotWin()->Fit();
 
         updatePlotCursors();
-
-        for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
-            UpdateMeasurement( row );
     }
     else if( simType == ST_OP && aFinal )
     {
