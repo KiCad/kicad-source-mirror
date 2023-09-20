@@ -67,14 +67,7 @@ struct lineTypeStruct
 /*
  * Conversion map between PLOT_DASH_TYPE values and style names displayed
  */
-const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames =
-{
-    { PLOT_DASH_TYPE::SOLID,      { _( "Solid" ),        BITMAPS::stroke_solid      } },
-    { PLOT_DASH_TYPE::DASH,       { _( "Dashed" ),       BITMAPS::stroke_dash       } },
-    { PLOT_DASH_TYPE::DOT,        { _( "Dotted" ),       BITMAPS::stroke_dot        } },
-    { PLOT_DASH_TYPE::DASHDOT,    { _( "Dash-Dot" ),     BITMAPS::stroke_dashdot    } },
-    { PLOT_DASH_TYPE::DASHDOTDOT, { _( "Dash-Dot-Dot" ), BITMAPS::stroke_dashdotdot } }
-};
+extern const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames;
 
 
 #define DEFAULT_STYLE _( "Default" )
