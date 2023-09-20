@@ -70,6 +70,15 @@
 #include <wx/base64.h>
 #include <wx/mstream.h>
 
+// We currently represent board units as integers.  Any values that are
+// larger or smaller than those board units represent undefined behavior for
+// the system.  We limit values to the largest usable
+// i.e. std::numeric_limits<int>::max().
+// However to avoid issues in comparisons, use a slightly smaller value
+// Note also the usable limits are much smaller to avoid overflows in intermediate
+// calculations.
+constexpr double INT_LIMIT = std::numeric_limits<int>::max() - 10;
+
 using namespace PCB_KEYS_T;
 
 
@@ -187,10 +196,7 @@ int PCB_PARSER::parseBoardUnits()
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
     // the system.  We limit values to the largest that is visible on the screen
-    // This is the diagonal distance of the full screen ~1.5m
-    constexpr double int_limit =
-            std::numeric_limits<int>::max() * 0.7071; // 0.7071 = roughly 1/sqrt(2)
-    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
+    return KiROUND( Clamp<double>( -INT_LIMIT, retval, INT_LIMIT ) );
 }
 
 
@@ -201,11 +207,7 @@ int PCB_PARSER::parseBoardUnits( const char* aExpected )
     // N.B. we currently represent board units as integers.  Any values that are
     // larger or smaller than those board units represent undefined behavior for
     // the system.  We limit values to the largest that is visible on the screen
-    constexpr double int_limit = std::numeric_limits<int>::max() * 0.7071;
-
-    // Use here #KiROUND, not EKIROUND (see comments about them) when having a function as
-    // argument, because it will be called twice with #KIROUND.
-    return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
+    return KiROUND( Clamp<double>( -INT_LIMIT, retval, INT_LIMIT ) );
 }
 
 

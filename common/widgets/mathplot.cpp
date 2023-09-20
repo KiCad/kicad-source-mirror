@@ -5,7 +5,7 @@
 // Maintainer:      Davide Rondini
 // Contributors:    Jose Luis Blanco, Val Greene, Maciej Suminski, Tomasz Wlostowski
 // Created:         21/07/2003
-// Last edit:       25/08/2016
+// Last edit:       2023
 // Copyright:       (c) David Schalig, Davide Rondini
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -959,7 +959,7 @@ void mpScaleXLog::recalculateTicks( wxDC& dc, mpWindow& w )
     // Half the number of ticks according to window size.
     // The value 96 is used to have only 4 ticks when m_scrX is 268.
     // For each 96 device context units, is possible to add a new tick.
-    while( visibleDecades - 2 >= m_scrX / 96 )
+    while( visibleDecades - 2 >= m_scrX / 96.0 )
     {
         step *= 10.0;
         visibleDecades = log( maxVvis / minVvis ) / log( step );
@@ -1872,9 +1872,9 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
     m_desiredXmax   = m_posX + (m_scrX - m_marginLeft - m_marginRight) / m_scaleX;
     m_desiredYmax   = m_posY;
     m_desiredYmin   = m_posY - (m_scrY - m_marginTop - m_marginBottom) / m_scaleY;
-    
+
     AdjustLimitedView();
-    
+
     if( !CheckXLimits( m_desiredXmax, m_desiredXmin )
         || !CheckYLimits( m_desiredYmax, m_desiredYmin ) )
     {

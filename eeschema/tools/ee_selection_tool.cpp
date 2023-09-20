@@ -1117,7 +1117,8 @@ int EE_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
                 EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pin );
-                if( Selectable( item ) )
+
+                if( item && Selectable( item ) )
                     unselect( item );
             }
         }
