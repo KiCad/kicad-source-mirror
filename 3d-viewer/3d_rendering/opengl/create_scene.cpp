@@ -464,7 +464,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         aStatusReporter->Report( _( "Load OpenGL: board" ) );
 
     // Create Board
-    m_board = createBoard( m_boardAdapter.GetBoardPoly(), &m_boardAdapter.GetThroughHoleIds() );
+    m_board = createBoard( m_boardAdapter.GetBoardPoly(), &m_boardAdapter.GetTH_IDs() );
 
     m_antiBoardPolys.RemoveAllContours();
     m_antiBoardPolys.NewOutline();
@@ -479,10 +479,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     m_antiBoard = createBoard( m_antiBoardPolys );
 
     SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly().CloneDropTriangulation();
-    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
-                                           SHAPE_POLY_SET::PM_FAST );
-    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
-                                           SHAPE_POLY_SET::PM_FAST );
+    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
 
     m_boardWithHoles = createBoard( board_poly_with_holes );
 
@@ -493,24 +491,22 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: holes and vias" ) );
 
-    SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetThroughHoleOdPolys().CloneDropTriangulation();
+    SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetTH_ODPolys().CloneDropTriangulation();
 
     outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
                                       SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    m_outerThroughHoles = generateHoles( m_boardAdapter.GetThroughHoleOds().GetList(),
-                                         outerPolyTHT, 1.0f, 0.0f, false,
-                                         &m_boardAdapter.GetThroughHoleIds() );
+    m_outerThroughHoles = generateHoles( m_boardAdapter.GetTH_ODs().GetList(), outerPolyTHT,
+                                         1.0f, 0.0f, false, &m_boardAdapter.GetTH_IDs() );
 
-    m_outerViaThroughHoles = generateHoles(
-            m_boardAdapter.GetThroughHoleViaOds().GetList(),
-            m_boardAdapter.GetThroughHoleViaOdPolys(), 1.0f, 0.0f, false );
+    m_outerViaThroughHoles = generateHoles( m_boardAdapter.GetViaTH_ODs().GetList(),
+                                            m_boardAdapter.GetViaTH_ODPolys(), 1.0f, 0.0f, false );
 
     if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus )
     {
-        m_outerThroughHoleRings = generateHoles(
-                m_boardAdapter.GetThroughHoleAnnularRings().GetList(),
-                m_boardAdapter.GetThroughHoleAnnularRingPolys(), 1.0f, 0.0f, false );
+        m_outerThroughHoleRings = generateHoles( m_boardAdapter.GetTHAnnularRings().GetList(),
+                                                 m_boardAdapter.GetTHAnnularRingPolys(),
+                                                 1.0f, 0.0f, false );
     }
 
     const MAP_POLY& innerMapHoles = m_boardAdapter.GetHoleIdPolysMap();
@@ -592,9 +588,9 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
             if( layer_id != B_Mask && layer_id != F_Mask )
             {
-                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
+                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(),
                                                     SHAPE_POLY_SET::PM_FAST );
-                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
+                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(),
                                                     SHAPE_POLY_SET::PM_FAST );
             }
 
@@ -616,7 +612,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         }
 
         OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, polyList, layer_id,
-                                                         &m_boardAdapter.GetThroughHoleIds() );
+                                                         &m_boardAdapter.GetTH_IDs() );
 
         if( oglList != nullptr )
             m_layers[layer_id] = oglList;
@@ -631,12 +627,9 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         if( frontPlatedPadPolys )
         {
             SHAPE_POLY_SET polySubtracted = frontPlatedPadPolys->CloneDropTriangulation();
-            polySubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
-                                                SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
-                                            SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
-                                            SHAPE_POLY_SET::PM_FAST );
+            polySubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+            polySubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+            polySubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
 
             m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(),
                                                    &polySubtracted, F_Cu );
@@ -649,12 +642,9 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         if( backPlatedPadPolys )
         {
             SHAPE_POLY_SET polySubtracted = backPlatedPadPolys->CloneDropTriangulation();
-            polySubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
-                                                SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
-                                            SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
-                                            SHAPE_POLY_SET::PM_FAST );
+            polySubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+            polySubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+            polySubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
 
             m_platedPadsBack = generateLayerList( m_boardAdapter.GetPlatedPadsBack(),
                                                   &polySubtracted, B_Cu );

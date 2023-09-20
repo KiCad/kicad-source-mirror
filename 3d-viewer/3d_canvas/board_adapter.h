@@ -247,8 +247,8 @@ public:
     const BVH_CONTAINER_2D* GetPlatedPadsBack() const noexcept { return m_platedPadsBack; }
 
     const MAP_CONTAINER_2D_BASE& GetLayerHoleMap() const noexcept { return m_layerHoleMap; }
-    const BVH_CONTAINER_2D& GetThroughHoleIds() const noexcept { return m_throughHoleIds; }
-    const BVH_CONTAINER_2D& GetThroughHoleOds() const noexcept { return m_throughHoleOds; }
+    const BVH_CONTAINER_2D& GetTH_IDs() const noexcept { return m_TH_IDs; }
+    const BVH_CONTAINER_2D& GetTH_ODs() const noexcept { return m_TH_ODs; }
 
     /**
      * Get through hole outside diameter 2D polygons.
@@ -257,37 +257,37 @@ public:
      *
      * @return a container with through hold outside diameter 2D polygons.
      */
-    const SHAPE_POLY_SET& GetThroughHoleOdPolys() const noexcept
+    const SHAPE_POLY_SET& GetTH_ODPolys() const noexcept
     {
-        return m_throughHoleOdPolys;
+        return m_TH_ODPolys;
     }
 
-    const BVH_CONTAINER_2D& GetThroughHoleAnnularRings() const noexcept
+    const BVH_CONTAINER_2D& GetTHAnnularRings() const noexcept
     {
-        return m_throughHoleAnnularRings;
+        return m_THAnnularRings;
     }
 
-    const SHAPE_POLY_SET& GetThroughHoleAnnularRingPolys() const noexcept
+    const SHAPE_POLY_SET& GetTHAnnularRingPolys() const noexcept
     {
-        return m_throughHoleAnnularRingPolys;
+        return m_THAnnularRingPolys;
     }
 
-    const SHAPE_POLY_SET& GetOuterNonPlatedThroughHolePoly() const noexcept
+    const SHAPE_POLY_SET& GetNPTH_ODPolys() const noexcept
     {
-        return m_nonPlatedThroughHoleOdPolys;
+        return m_NPTH_ODPolys;
     }
 
     /**
      * @return a container with through hole via hole outside diameters.
      */
-    const BVH_CONTAINER_2D& GetThroughHoleViaOds() const noexcept
+    const BVH_CONTAINER_2D& GetViaTH_ODs() const noexcept
     {
-        return m_throughHoleViaOds;
+        return m_viaTH_ODs;
     }
 
-    const SHAPE_POLY_SET& GetThroughHoleViaOdPolys() const noexcept
+    const SHAPE_POLY_SET& GetViaTH_ODPolys() const noexcept
     {
-        return m_throughHoleViaOdPolys;
+        return m_viaTH_ODPolys;
     }
 
     unsigned int GetViaCount() const noexcept { return m_viaCount; }
@@ -441,27 +441,27 @@ private:
     SHAPE_POLY_SET*   m_frontPlatedPadPolys;
     SHAPE_POLY_SET*   m_backPlatedPadPolys;
 
-    MAP_POLY          m_layerHoleOdPolys;              ///< Hole outer diameters (per layer)
-    MAP_POLY          m_layerHoleIdPolys;              ///< Hole inner diameters (per layer)
+    MAP_POLY          m_layerHoleOdPolys;            ///< Hole outer diameters (per layer)
+    MAP_POLY          m_layerHoleIdPolys;            ///< Hole inner diameters (per layer)
 
-    SHAPE_POLY_SET    m_nonPlatedThroughHoleOdPolys;   ///< NPTH outer diameters
-    SHAPE_POLY_SET    m_throughHoleOdPolys;            ///< PTH outer diameters
-    SHAPE_POLY_SET    m_throughHoleViaOdPolys;         ///< Via hole outer diameters
-    SHAPE_POLY_SET    m_throughHoleAnnularRingPolys;   ///< Via annular ring outer diameters
+    SHAPE_POLY_SET    m_NPTH_ODPolys;                ///< NPTH outer diameters
+    SHAPE_POLY_SET    m_TH_ODPolys;                  ///< PTH outer diameters
+    SHAPE_POLY_SET    m_viaTH_ODPolys;               ///< Via hole outer diameters
+    SHAPE_POLY_SET    m_THAnnularRingPolys;          ///< Via annular ring outer diameters
 
-    SHAPE_POLY_SET    m_board_poly;                    ///< Board outline polygon.
+    SHAPE_POLY_SET    m_board_poly;                   ///< Board outline polygon.
 
-    MAP_CONTAINER_2D_BASE  m_layerMap;                 ///< 2D elements for each layer.
-    MAP_CONTAINER_2D_BASE  m_layerHoleMap;             ///< Holes for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerMap;                ///< 2D elements for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerHoleMap;            ///< Holes for each layer.
 
     BVH_CONTAINER_2D* m_platedPadsFront;
     BVH_CONTAINER_2D* m_platedPadsBack;
 
-    BVH_CONTAINER_2D  m_throughHoleOds;                ///< List of PTH outer diameters
-    BVH_CONTAINER_2D  m_throughHoleIds;                ///< List of PTH inner diameters
-    BVH_CONTAINER_2D  m_throughHoleAnnularRings;       ///< List of via annular rings
-    BVH_CONTAINER_2D  m_throughHoleViaOds;             ///< List of via hole outer diameters
-    BVH_CONTAINER_2D  m_throughHoleViaIds;             ///< List of via hole inner diameters
+    BVH_CONTAINER_2D  m_TH_ODs;                       ///< List of PTH outer diameters
+    BVH_CONTAINER_2D  m_TH_IDs;                       ///< List of PTH inner diameters
+    BVH_CONTAINER_2D  m_THAnnularRings;               ///< List of via annular rings
+    BVH_CONTAINER_2D  m_viaTH_ODs;                    ///< List of via hole outer diameters
+    BVH_CONTAINER_2D  m_throughHoleViaIds;            ///< List of via hole inner diameters
 
     unsigned int      m_copperLayersCount;
 

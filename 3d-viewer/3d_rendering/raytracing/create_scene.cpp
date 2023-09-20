@@ -276,8 +276,8 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
             const BVH_CONTAINER_2D& throughHoleOuter =
                     m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
                         && ( aLayer_id == B_SilkS || aLayer_id == F_SilkS ) ?
-                                                    m_boardAdapter.GetThroughHoleAnnularRings() :
-                                                    m_boardAdapter.GetThroughHoleOds();
+                                                            m_boardAdapter.GetTHAnnularRings() :
+                                                            m_boardAdapter.GetTH_ODs();
 
             if( !throughHoleOuter.GetList().empty() )
             {
@@ -444,9 +444,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     std::vector<const OBJECT_2D*>* object2d_B = new std::vector<const OBJECT_2D*>();
 
                     // Check if there are any THT that intersects this outline object part
-                    if( !m_boardAdapter.GetThroughHoleOds().GetList().empty() )
+                    if( !m_boardAdapter.GetTH_ODs().GetList().empty() )
                     {
-                        const BVH_CONTAINER_2D& throughHoles = m_boardAdapter.GetThroughHoleOds();
+                        const BVH_CONTAINER_2D& throughHoles = m_boardAdapter.GetTH_ODs();
                         CONST_LIST_OBJECT2D     intersecting;
 
                         throughHoles.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
@@ -510,9 +510,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 // a polygon or dummy block) it will cut also the render of the hole.
                 // So this will add a full hole.
                 // In fact, that is not need if the hole have copper.
-                if( !m_boardAdapter.GetThroughHoleOds().GetList().empty() )
+                if( !m_boardAdapter.GetTH_ODs().GetList().empty() )
                 {
-                    const LIST_OBJECT2D& holeList = m_boardAdapter.GetThroughHoleOds().GetList();
+                    const LIST_OBJECT2D& holeList = m_boardAdapter.GetTH_ODs().GetList();
 
                     for( const OBJECT_2D* hole2d : holeList )
                     {
@@ -702,9 +702,9 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     std::vector<const OBJECT_2D*>* object2d_B = new std::vector<const OBJECT_2D*>();
 
                     // Check if there are any THT that intersects this outline object part
-                    if( !m_boardAdapter.GetThroughHoleOds().GetList().empty() )
+                    if( !m_boardAdapter.GetTH_ODs().GetList().empty() )
                     {
-                        const BVH_CONTAINER_2D& throughHoles = m_boardAdapter.GetThroughHoleOds();
+                        const BVH_CONTAINER_2D& throughHoles = m_boardAdapter.GetTH_ODs();
                         CONST_LIST_OBJECT2D     intersecting;
 
                         throughHoles.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
@@ -1115,12 +1115,11 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 
         // Check if there are any other THT that intersects this hole
         // It will use the non inflated holes
-        if( !m_boardAdapter.GetThroughHoleIds().GetList().empty() )
+        if( !m_boardAdapter.GetTH_IDs().GetList().empty() )
         {
             CONST_LIST_OBJECT2D intersecting;
 
-            m_boardAdapter.GetThroughHoleIds().GetIntersectingObjects( object2d_A->GetBBox(),
-                                                                       intersecting );
+            m_boardAdapter.GetTH_IDs().GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
             for( const OBJECT_2D* hole2d : intersecting )
             {

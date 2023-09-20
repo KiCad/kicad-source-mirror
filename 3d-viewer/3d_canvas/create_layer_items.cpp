@@ -109,16 +109,16 @@ void BOARD_ADAPTER::destroyLayers()
         m_layerHoleMap.clear();
     }
 
-    m_throughHoleIds.Clear();
-    m_throughHoleOds.Clear();
-    m_throughHoleAnnularRings.Clear();
-    m_throughHoleViaOds.Clear();
+    m_TH_IDs.Clear();
+    m_TH_ODs.Clear();
+    m_THAnnularRings.Clear();
+    m_viaTH_ODs.Clear();
     m_throughHoleViaIds.Clear();
-    m_nonPlatedThroughHoleOdPolys.RemoveAllContours();
-    m_throughHoleOdPolys.RemoveAllContours();
+    m_NPTH_ODPolys.RemoveAllContours();
+    m_TH_ODPolys.RemoveAllContours();
 
-    m_throughHoleViaOdPolys.RemoveAllContours();
-    m_throughHoleAnnularRingPolys.RemoveAllContours();
+    m_viaTH_ODPolys.RemoveAllContours();
+    m_THAnnularRingPolys.RemoveAllContours();
 }
 
 
@@ -307,25 +307,20 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 else if( layer == layer_ids[0] ) // it only adds once the THT holes
                 {
                     // Add through hole object
-                    m_throughHoleOds.Add( new FILLED_CIRCLE_2D( via_center,
-                                                                hole_inner_radius + thickness,
-                                                                *track ) );
-                    m_throughHoleViaOds.Add( new FILLED_CIRCLE_2D( via_center,
-                                                                   hole_inner_radius + thickness,
-                                                                   *track ) );
+                    m_TH_ODs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness,
+                                                        *track ) );
+                    m_viaTH_ODs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness,
+                                                           *track ) );
 
                     if( m_Cfg->m_Render.clip_silk_on_via_annulus && ring_radius > 0.0 )
                     {
-                        m_throughHoleAnnularRings.Add( new FILLED_CIRCLE_2D( via_center,
-                                                                             ring_radius,
-                                                                             *track ) );
+                        m_THAnnularRings.Add( new FILLED_CIRCLE_2D( via_center, ring_radius,
+                                                                    *track ) );
                     }
 
                     if( hole_inner_radius > 0.0 )
                     {
-                        m_throughHoleIds.Add( new FILLED_CIRCLE_2D( via_center,
-                                                                    hole_inner_radius,
-                                                                    *track ) );
+                        m_TH_IDs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius, *track ) );
                     }
                 }
             }
@@ -397,16 +392,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     const int hole_outer_ring_radius = via->GetWidth() / 2.0f;
 
                     // Add through hole contours
-                    TransformCircleToPolygon( m_throughHoleOdPolys, via->GetStart(),
-                                              hole_outer_radius, maxError, ERROR_INSIDE );
+                    TransformCircleToPolygon( m_TH_ODPolys, via->GetStart(), hole_outer_radius,
+                                              maxError, ERROR_INSIDE );
 
                     // Add same thing for vias only
-                    TransformCircleToPolygon( m_throughHoleViaOdPolys, via->GetStart(),
-                                              hole_outer_radius, maxError, ERROR_INSIDE );
+                    TransformCircleToPolygon( m_viaTH_ODPolys, via->GetStart(), hole_outer_radius,
+                                              maxError, ERROR_INSIDE );
 
                     if( m_Cfg->m_Render.clip_silk_on_via_annulus )
                     {
-                        TransformCircleToPolygon( m_throughHoleAnnularRingPolys, via->GetStart(),
+                        TransformCircleToPolygon( m_THAnnularRingPolys, via->GetStart(),
                                                   hole_outer_ring_radius, maxError, ERROR_INSIDE );
                     }
                 }
@@ -464,12 +459,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             m_averageHoleDiameter += ( ( pad->GetDrillSize().x +
                                              pad->GetDrillSize().y ) / 2.0f ) * m_biuTo3Dunits;
 
-            createPadWithHole( pad, &m_throughHoleOds, inflate );
+            createPadWithHole( pad, &m_TH_ODs, inflate );
 
             if( m_Cfg->m_Render.clip_silk_on_via_annulus )
-                createPadWithHole( pad, &m_throughHoleAnnularRings, inflate );
+                createPadWithHole( pad, &m_THAnnularRings, inflate );
 
-            createPadWithHole( pad, &m_throughHoleIds, 0 );
+            createPadWithHole( pad, &m_TH_IDs, 0 );
         }
     }
 
@@ -492,25 +487,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
             {
                 if( m_Cfg->m_Render.clip_silk_on_via_annulus )
-                {
-                    pad->TransformHoleToPolygon( m_throughHoleAnnularRingPolys, inflate, maxError,
-                                                 ERROR_INSIDE );
-                }
+                    pad->TransformHoleToPolygon( m_THAnnularRingPolys, inflate, maxError, ERROR_INSIDE );
 
-                pad->TransformHoleToPolygon( m_throughHoleOdPolys, inflate, maxError,
-                                             ERROR_INSIDE );
+                pad->TransformHoleToPolygon( m_TH_ODPolys, inflate, maxError, ERROR_INSIDE );
             }
             else
             {
                 // If not plated, no copper.
                 if( m_Cfg->m_Render.clip_silk_on_via_annulus )
-                {
-                    pad->TransformHoleToPolygon( m_throughHoleAnnularRingPolys, 0, maxError,
-                                                 ERROR_INSIDE );
-                }
+                    pad->TransformHoleToPolygon( m_THAnnularRingPolys, 0, maxError, ERROR_INSIDE );
 
-                pad->TransformHoleToPolygon( m_nonPlatedThroughHoleOdPolys, 0, maxError,
-                                             ERROR_INSIDE );
+                pad->TransformHoleToPolygon( m_NPTH_ODPolys, 0, maxError, ERROR_INSIDE );
             }
         }
     }
@@ -852,10 +839,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // End Build Copper layers
 
     // This will make a union of all added contours
-    m_throughHoleOdPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_nonPlatedThroughHoleOdPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_throughHoleViaOdPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_throughHoleAnnularRingPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_TH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_NPTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_viaTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_THAnnularRingPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     // Build Tech layers
     // Based on:
@@ -1089,9 +1076,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( aStatusReporter )
         aStatusReporter->Report( _( "Build BVH for holes and vias" ) );
 
-    m_throughHoleIds.BuildBVH();
-    m_throughHoleOds.BuildBVH();
-    m_throughHoleAnnularRings.BuildBVH();
+    m_TH_IDs.BuildBVH();
+    m_TH_ODs.BuildBVH();
+    m_THAnnularRings.BuildBVH();
 
     if( !m_layerHoleMap.empty() )
     {
