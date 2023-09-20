@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gl_context_mgr.h>
+#include <gal/opengl/gl_context_mgr.h>
 #include <wx/debug.h>
 
 

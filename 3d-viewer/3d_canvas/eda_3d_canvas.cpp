@@ -23,7 +23,7 @@
  */
 
 #include <gal/opengl/kiglew.h>    // Must be included first
-#include <gl_utils.h>
+#include <gal/opengl/gl_utils.h>
 #include <wx/tokenzr.h>
 
 #include "../common_ogl/ogl_utils.h"
@@ -35,7 +35,7 @@
 #include <advanced_config.h>
 #include <board.h>
 #include <reporter.h>
-#include <gl_context_mgr.h>
+#include <gal/opengl/gl_context_mgr.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>
 #include <macros.h>

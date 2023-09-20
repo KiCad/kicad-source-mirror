@@ -35,7 +35,7 @@
 #include "../3d_cache/3d_cache.h"
 #include <wx/dcclient.h>
 #include <base_units.h>
-#include <gl_context_mgr.h>
+#include <gal/opengl/gl_context_mgr.h>
 #include <settings/common_settings.h>
 #include <pgm_base.h>
 #include <gal/dpi_scaling.h>

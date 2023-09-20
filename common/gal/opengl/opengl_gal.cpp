@@ -36,7 +36,7 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
-#include <gl_context_mgr.h>
+#include <gal/opengl/gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
 #include <math/vector2wx.h>
 #include <bitmap_base.h>
@@ -53,7 +53,7 @@
 #include <core/profile.h>
 #include <trace_helpers.h>
 
-#include <gl_utils.h>
+#include <gal/opengl/gl_utils.h>
 
 #include <functional>
 #include <limits>
