@@ -282,6 +282,9 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
     }
 
+    if( m_parent )
+        m_parent->SetFocus();
+
     return ret;
 }
 
@@ -482,6 +485,9 @@ int DIALOG_SHIM::ShowQuasiModal()
     event_loop.Run();
 
     m_qmodal_showing = false;
+
+    if( parent )
+        parent->SetFocus();
 
     return GetReturnCode();
 }
