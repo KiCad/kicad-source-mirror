@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-07-03 07:52+0000\n"
+"PO-Revision-Date: 2023-09-27 16:00+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -292,21 +292,18 @@ msgstr "Зовнішній вигляд"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:518
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Редактор друкованих плат"
+msgstr "Слідкуйте за PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:519
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Налаштування фільтру"
+msgstr "Слідкуйте за налаштуванням PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:586
-#, fuzzy
 msgid "legacy colors"
-msgstr "Використовувати кольори:"
+msgstr "кольори попередньої версії"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:725
 msgid "3D Image File Name"
@@ -516,54 +513,44 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Використовувати кольори стилю CAD для матеріалу, що використовується"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Перемкнути показ 3D-моделі вивідного монтажу"
+msgstr "Показ 3D моделей наскрізних отворів"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Перемкнути показ 3D-моделей компонентів вивідного монтажу"
+msgstr "Показ 3D моделей посадкових місць з типом \"Наскрізні отвори\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Перемкнути показ 3D-моделей поверхневого монтажу (SMD)"
+msgstr "Показати 3D моделі SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Перемкнути показ 3D-моделей компонентів поверхневого монтажу"
+msgstr "Показ 3D моделей посадкових місць з типом \"Поверхневим монтажем\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Перемкнути невизначені 3D-моделі"
+msgstr "Показати невизначені 3D моделі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Перемикання 3D-моделей для компонентів «невизначеного» типу"
+msgstr "Показ 3D моделей посадкових місць з типом \"невизначені\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Перемкнути 3D-моделі, яких немає в pos-файлі"
+msgstr "Показати 3D моделі, яких немає в pos-файлі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Перемкнути 3D-моделі, яких немає в pos-файлі"
+msgstr "Показати 3D моделі, навіть якщо немає в .pos файлі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Перемкнути 3D-моделі відмічені як немонтовані DNP"
+msgstr "Показати 3D моделі відмічені як DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:346
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Перемкнути 3D-моделі для компонентів помічених 'Не розміщені'"
+msgstr "Показати 3D моделі помічених 'Не розміщати'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
 msgid "Show Model Bounding Boxes"
@@ -590,9 +577,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Показати/приховати менеджер вигляду"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
-#, fuzzy
 msgid "Board Body"
-msgstr "Тіло плати:"
+msgstr "Тіло плати"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
 msgid "Show board body"
@@ -617,24 +603,20 @@ msgid "Show back copper / surface finish color"
 msgstr "Покриття міді:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "Клеєння"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Show adhesive"
-msgstr "Показати клейові шари"
+msgstr "Показати клей"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Паяльна паста:"
+msgstr "Паяльна паста"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Показати шари паяльної пасти"
+msgstr "Показати паяльну пасту"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "F.Silkscreen"
@@ -673,14 +655,12 @@ msgid "Show back solder mask"
 msgstr "Нижня паяльна маска"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Креслення"
+msgstr "User.Drawings"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Показати шари коментаря та креслення"
+msgstr "Показати шари креслення користувача"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "User.Comments"
@@ -696,18 +676,16 @@ msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Показати ECO шари"
+msgstr "Показати ECO1 шар"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Показати ECO шари"
+msgstr "Показати ECO2 шар"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 #, fuzzy
@@ -715,24 +693,20 @@ msgid "Through-hole Models"
 msgstr "Контактні площадки з наскрізними отворами"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D моделі"
+msgstr "SMD моделі"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Virtual Models"
-msgstr "3D моделі"
+msgstr "Віртуальні моделі"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Перемкнути 3D-моделі, яких немає в pos-файлі"
+msgstr "Моделі відсутні в pos файлі"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Перемкнути 3D-моделі відмічені як немонтовані DNP"
+msgstr "Моделі з маркуванням DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 #, fuzzy
@@ -774,14 +748,12 @@ msgid "Show all footprint text"
 msgstr "Показати всі надписи посадкових місць"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "3D Axis"
-msgstr "Вісь X"
+msgstr "Осі 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Background Start"
-msgstr "Фон"
+msgstr "Запуски у фоні"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #, fuzzy
@@ -45092,19 +45064,19 @@ msgid "Priority"
 msgstr "Пріоритет"
 
 #: pcbnew/zone.cpp:611
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
-msgstr "%"
+msgstr "%s"
 
 #: pcbnew/zone.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s і %s"
+msgstr "%s, %s і %s"
 
 #: pcbnew/zone.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s та %d ще"
+msgstr "%s, %s і %d більше"
 
 #: pcbnew/zone.cpp:646 pcbnew/zone.cpp:1479
 msgid "Fill Mode"
@@ -45135,24 +45107,24 @@ msgid "Non-copper Zone"
 msgstr "Не мідна зона"
 
 #: pcbnew/zone.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "on %s"
-msgstr "%s на %s"
+msgstr "на %s"
 
 #: pcbnew/zone.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "on %s and %s"
-msgstr "%s і %s"
+msgstr "на %s і %s"
 
 #: pcbnew/zone.cpp:842
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %s"
-msgstr "(звʼязки %s та %s)"
+msgstr "на %s, %s і %s"
 
 #: pcbnew/zone.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %zu more"
-msgstr "%s та %d ще"
+msgstr "на %s, %s і %zu більше"
 
 #: pcbnew/zone.cpp:859
 #, fuzzy, c-format
@@ -45165,14 +45137,14 @@ msgid "Zone Cutout %s"
 msgstr "Виріз зони на %s"
 
 #: pcbnew/zone.cpp:866
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area %s"
-msgstr "Області з правилами"
+msgstr "Область правил %s"
 
 #: pcbnew/zone.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s"
-msgstr "Зона %s на %s"
+msgstr "Зона %s %s"
 
 #: pcbnew/zone.cpp:1538
 msgid "Minimum Width"
