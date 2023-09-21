@@ -672,6 +672,11 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
                                              ERROR_INSIDE );
 
+            // Some polygons can be a bit complex (especially when coming from a
+            // picture ot a text converted to a polygon
+            // So call Simplify before calling ConvertPolygonToTriangles, just in case.
+            polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+
             if( polyList.IsEmpty() ) // Just for caution
                 break;
 
