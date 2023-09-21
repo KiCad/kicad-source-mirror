@@ -45,7 +45,8 @@ typedef std::pair<KIID, wxString> FILE_INFO_PAIR;
  */
 enum LAST_PATH_TYPE : unsigned int
 {
-    LAST_PATH_NETLIST = 0,
+    LAST_PATH_FIRST = 0,
+    LAST_PATH_NETLIST = LAST_PATH_FIRST,
     LAST_PATH_STEP,
     LAST_PATH_IDF,
     LAST_PATH_VRML,
