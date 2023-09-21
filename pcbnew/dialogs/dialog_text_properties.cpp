@@ -51,8 +51,16 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     wxString title;
 
     // Configure display origin transforms
-    m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
-    m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    if( m_item->GetParentFootprint() )
+    {
+        m_posX.SetCoordType( ORIGIN_TRANSFORMS::REL_X_COORD );
+        m_posY.SetCoordType( ORIGIN_TRANSFORMS::REL_Y_COORD );
+    }
+    else
+    {
+        m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
+        m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    }
 
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
