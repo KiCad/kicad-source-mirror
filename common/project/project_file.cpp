@@ -613,6 +613,7 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
     updatePathByPtr( "schematic.page_layout_descr_file" );
     updatePathByPtr( "schematic.plot_directory" );
     updatePathByPtr( "schematic.ngspice.workbook_filename" );
+    updatePathByPtr( "pcbnew.page_layout_descr_file" );
 
     // While performing Save As, we have already checked that we can write to the directory
     // so don't carry the previous flag
