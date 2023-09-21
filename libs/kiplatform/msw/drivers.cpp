@@ -32,7 +32,7 @@ bool KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion()
 
     // Open the registry key for 3dConnexion
     if( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-                      L"Software\\3Dconnexion\\3DxWare Version",
+                      L"Software\\3Dconnexion\\3DxSoftware\\Version",
                       0, KEY_READ, &hKey ) == ERROR_SUCCESS )
     {
         char  buffer[256];
