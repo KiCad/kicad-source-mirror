@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"PO-Revision-Date: 2023-09-21 15:08+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -706,11 +706,11 @@ msgstr "Visa lager för anvisningstryck"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Kapa anvisningstryck vid lödmaskens kanter"
+msgstr "Beskär anvisningstryck vid lödmaskens kanter"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Clip silkscreen at via annuli"
-msgstr "Kapa anvisningstryck vid via-kragar"
+msgstr "Beskär anvisningstryck vid via-kragar"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show solder mask layers"
@@ -4152,7 +4152,7 @@ msgstr "Mönsterkortsredigerare"
 
 #: common/eda_base_frame.cpp:1117
 msgid "Action Plugins"
-msgstr "Action Plugins"
+msgstr "Åtgärdsinsticksprogram"
 
 #: common/eda_base_frame.cpp:1118
 msgid "Origins & Axes"
@@ -4200,7 +4200,7 @@ msgstr "Ritningsarksredigerare"
 #: common/eda_base_frame.cpp:1167 kicad/pcm/dialogs/dialog_pcm.cpp:206
 #: kicad/tools/kicad_manager_actions.cpp:127
 msgid "Plugin and Content Manager"
-msgstr "Insticksmoduls- och innehålls-hanterare"
+msgstr "Insticksprograms- och innehållshanterare"
 
 #: common/eda_base_frame.cpp:1251
 #, c-format
@@ -4836,7 +4836,7 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
-"En katalog med tredjeparts insticksmoduler, bibliotek och annat "
+"En katalog med tredjeparts insticksprogram, bibliotek och annat "
 "nedladdningsbart innehåll."
 
 #: common/env_vars.cpp:86
@@ -4986,7 +4986,7 @@ msgstr "fp-lib-tabellfiler innehåller inget bibliotek med namnet '%s'."
 
 #: common/fp_lib_table.cpp:546 eeschema/symbol_lib_table.cpp:583
 msgid "Added by Plugin and Content Manager"
-msgstr "Tillagd via insticksmoduls- och innehålls-hanteraren"
+msgstr "Tillagd via instickprograms- och innehållshanteraren"
 
 #: common/fp_lib_table.cpp:572 eeschema/symbol_lib_table.cpp:611
 #, c-format
@@ -8740,7 +8740,7 @@ msgstr "Export av nätlistan kräver ett fullständigt numrerat schema."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:712
 msgid "This plugin already exists."
-msgstr "Den här insticksmodulen finns redan."
+msgstr "Det här insticksprogrammet finns redan."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:745
 msgid "You must provide a netlist generator command string"
@@ -13872,12 +13872,12 @@ msgstr "Arkreferenser"
 #: eeschema/sch_io_mgr.cpp:36 pcbnew/io_mgr.cpp:42
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr "Plugin \"%s\" implementerar inte funktionen \"%s\"."
+msgstr "Insticksprogram \"%s\" implementerar inte funktionen \"%s\"."
 
 #: eeschema/sch_io_mgr.cpp:37 pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr "Plugin-typen \"%s\" hittades inte."
+msgstr "Insticksprogramstyp \"%s\" hittades inte."
 
 #: eeschema/sch_io_mgr.cpp:95
 #, c-format
@@ -20260,7 +20260,7 @@ msgstr "Återställer '%s'"
 #: kicad/kicad_manager_frame.cpp:906
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
-"Vill du automatiskt söka efter uppdateringar för insticksmoduler vid "
+"Vill du automatiskt söka efter uppdateringar för insticksprogram vid "
 "uppstart?"
 
 #: kicad/kicad_manager_frame.cpp:907
@@ -20360,7 +20360,7 @@ msgstr "Hantera mjukvaruförråd"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
 msgid "Plugins (%d)"
-msgstr "Insticksmoduler (%d)"
+msgstr "Insticksprogram (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
@@ -20471,7 +20471,7 @@ msgstr "Öppna paketbibliotek"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
-msgstr "Insticksmoduls- och innehållshanterare"
+msgstr "Insticksprograms- och innehållshanterare"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:58
 msgid "Aborting remaining tasks."
@@ -21088,7 +21088,7 @@ msgstr "Ändra ritningsarkets ram och namnruta"
 
 #: kicad/tools/kicad_manager_actions.cpp:127
 msgid "Run Plugin and Content Manager"
-msgstr "Starta insticksmoduls- och innehållshanteraren"
+msgstr "Starta insticksprograms- och innehållshanteraren"
 
 #: kicad/tools/kicad_manager_actions.cpp:133
 msgid "Open Text Editor"
@@ -27156,7 +27156,7 @@ msgstr "Alternativ för bibliotek '%s'"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:26
 msgid "Plugin Options"
-msgstr "Pluginalternativ"
+msgstr "Alternativ för insticksprogram"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:78
 msgid "Option Choices"
@@ -27164,7 +27164,7 @@ msgstr "Alternativval"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr "Alternativ som stöds av nuvarande plugin"
+msgstr "Alternativ som stöds av nuvarande insticksprogram"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
@@ -30499,15 +30499,15 @@ msgstr "Kategori"
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:76
 #: pcbnew/tools/pcb_actions.cpp:621
 msgid "Open Plugin Directory"
-msgstr "Öppna Plugin Directory"
+msgstr "Öppna mapp med insticksprogram"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:81
 msgid "Reload Plugins"
-msgstr "Ladda om insticksmoduler"
+msgstr "Ladda om insticksprogram"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:86
 msgid "Show Plugin Errors"
-msgstr "Visa plugin-fel"
+msgstr "Visa insticksprogramsfel"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
@@ -32785,11 +32785,11 @@ msgstr "Lödmasköppning överbryggar objekt från olika nät"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Silkscreen clipped by solder mask"
-msgstr "Anvisningstryck klippt av lödmask"
+msgstr "Anvisningstryck beskuret av lödmask"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Silkscreen clipped by board edge"
-msgstr "Anvisningstryck klippt av mönsterkortskant"
+msgstr "Anvisningstryck beskuret av mönsterkortskant"
 
 #: pcbnew/drc/drc_item.cpp:217
 msgid "Silkscreen overlap"
@@ -34144,7 +34144,7 @@ msgstr "Objekt i den importerade filen kunde inte hanteras ordentligt."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:281
 msgid "There is no plugin to handle this file type."
-msgstr "Det finns inget plugin för att hantera den här filtypen."
+msgstr "Det finns inget insticksprogram för att hantera den här filtypen."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:27
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:32
@@ -38979,20 +38979,21 @@ msgstr "Redigera lödyte-egenskaperna som används när du skapar nya lödytor"
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Refresh Plugins"
-msgstr "Uppdatera insticksmoduler"
+msgstr "Uppdatera insticksprogram"
 
 #: pcbnew/tools/pcb_actions.cpp:613
 msgid "Reload all python plugins and refresh plugin menus"
 msgstr ""
-"Ladda om alla python-insticksmoduler och uppdatera insticksmoduls menyer"
+"Läs in alla python-insticksprogram på nytt och uppdatera "
+"insticksprogramsmenyer"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Reveal Plugin Folder in Finder"
-msgstr "Avslöja plugin-mappen i Finder"
+msgstr "Avslöja insticksprogramsmappen i Finder"
 
 #: pcbnew/tools/pcb_actions.cpp:619
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "Visar insticksmodulskatalogen i ett Finder-fönster"
+msgstr "Visar insticksprogramsmappen i ett Finder-fönster"
 
 #: pcbnew/tools/pcb_actions.cpp:629
 msgid "Board Setup..."
