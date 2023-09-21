@@ -41,8 +41,8 @@ PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( wxWindow* aParent ) :
 void PANEL_3D_OPENGL_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 {
     m_checkBoxCuThickness->SetValue( aCfg->m_Render.opengl_copper_thickness );
-    m_checkBoxBoundingBoxes->SetValue( aCfg->m_Render.opengl_show_model_bbox );
-    m_checkBoxHighlightOnRollOver->SetValue( aCfg->m_Render.opengl_highlight_on_rollover );
+    m_checkBoxBoundingBoxes->SetValue( aCfg->m_Render.show_model_bbox );
+    m_checkBoxHighlightOnRollOver->SetValue( aCfg->m_Render.highlight_on_rollover );
 
     m_choiceAntiAliasing->SetSelection( static_cast<int>( aCfg->m_Render.opengl_AA_mode ) );
     m_selectionColorSwatch->SetSwatchColor( aCfg->m_Render.opengl_selection_color, false );
@@ -69,8 +69,8 @@ bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
     EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
     cfg->m_Render.opengl_copper_thickness = m_checkBoxCuThickness->GetValue();
-    cfg->m_Render.opengl_show_model_bbox = m_checkBoxBoundingBoxes->GetValue();
-    cfg->m_Render.opengl_highlight_on_rollover = m_checkBoxHighlightOnRollOver->GetValue();
+    cfg->m_Render.show_model_bbox = m_checkBoxBoundingBoxes->GetValue();
+    cfg->m_Render.highlight_on_rollover = m_checkBoxHighlightOnRollOver->GetValue();
 
     cfg->m_Render.opengl_AA_mode = static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() );
     cfg->m_Render.opengl_selection_color = m_selectionColorSwatch->GetSwatchColor();

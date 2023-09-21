@@ -73,13 +73,12 @@ public:
 
 private:
     OPENGL_RENDER_LIST* generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
-                                       const SHAPE_POLY_SET& aPoly, float aZtop,
-                                       float aZbot, bool aInvertFaces,
+                                       const SHAPE_POLY_SET& aPoly, float aZtop, float aZbot,
+                                       bool aInvertFaces,
                                        const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
     OPENGL_RENDER_LIST* generateLayerList( const BVH_CONTAINER_2D* aContainer,
-                                           const SHAPE_POLY_SET* aPolyList,
-                                           PCB_LAYER_ID aLayerId,
+                                           const SHAPE_POLY_SET* aPolyList, PCB_LAYER_ID aLayerId,
                                            const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
     OPENGL_RENDER_LIST* generateEmptyLayerList( PCB_LAYER_ID aLayerId );
@@ -93,17 +92,17 @@ private:
     void addObjectTriangles( const POLYGON_4PT_2D* aPoly, TRIANGLE_DISPLAY_LIST* aDstLayer,
                              float aZtop, float aZbot );
 
-    void addObjectTriangles( const FILLED_CIRCLE_2D* aFilledCircle,
-                             TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop, float aZbot );
+    void addObjectTriangles( const FILLED_CIRCLE_2D* aCircle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                             float aZtop, float aZbot );
 
     void addObjectTriangles( const TRIANGLE_2D* aTri, TRIANGLE_DISPLAY_LIST* aDstLayer,
                              float aZtop, float aZbot );
 
-    void addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
-                             TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop, float aZbot );
+    void addObjectTriangles( const ROUND_SEGMENT_2D* aSeg, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                             float aZtop, float aZbot );
 
-    void renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPosition,
-                                bool aDrawMiddleSegments, bool aSkipRenderHoles );
+    void renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos, bool aDrawMiddleSegments,
+                                bool aSkipRenderHoles );
 
     void renderBoardBody( bool aSkipRenderHoles );
 
@@ -154,15 +153,12 @@ private:
     void renderOpaqueModels( const glm::mat4 &aCameraViewMatrix );
     void renderTransparentModels( const glm::mat4 &aCameraViewMatrix );
 
-    void renderModel( const glm::mat4 &aCameraViewMatrix,
-                      const MODELTORENDER &aModelToRender,
-                      const SFVEC3F &aSelColor,
-                      const SFVEC3F *aCameraWorldPos );
+    void renderModel( const glm::mat4 &aCameraViewMatrix, const MODELTORENDER &aModelToRender,
+                      const SFVEC3F &aSelColor, const SFVEC3F *aCameraWorldPos );
 
 
-    void get3dModelsSelected( std::list<MODELTORENDER> &aDstRenderList,
-                              bool aGetTop, bool aGetBot, bool aRenderTransparentOnly,
-                              bool aRenderSelectedOnly );
+    void get3dModelsSelected( std::list<MODELTORENDER> &aDstRenderList, bool aGetTop, bool aGetBot,
+                              bool aRenderTransparentOnly, bool aRenderSelectedOnly );
 
     void get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstRenderList,
                                    const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
@@ -234,8 +230,8 @@ private:
     OPENGL_RENDER_LIST* m_padHoles;
 
     // Caches
-    std::map< wxString, MODEL_3D* >            m_3dModelMap;
-    std::map< std::vector<float>, glm::mat4 > m_3dModelMatrixMap;
+    std::map<wxString, MODEL_3D*>           m_3dModelMap;
+    std::map<std::vector<float>, glm::mat4> m_3dModelMatrixMap;
 
     BOARD_ITEM*         m_currentRollOverItem;
 

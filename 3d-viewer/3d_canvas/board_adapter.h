@@ -379,12 +379,6 @@ private:
 
     void buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer, int aWidth );
 
-    // Helper functions to create poly contours
-    void buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aBuffer, int aWidth) const;
-
-    void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
-                                     SHAPE_POLY_SET& aBuffer ) const;
-
 public:
     static CUSTOM_COLORS_LIST   g_SilkColors;
     static CUSTOM_COLORS_LIST   g_MaskColors;
@@ -407,18 +401,18 @@ public:
 
     bool              m_IsBoardView;
     bool              m_MousewheelPanning;
-    bool              m_IsPreviewer;        ///< true if the board adaptater is living in a 3D
-                                            ///<   preview panel, false for the standard 3D viewer
+    bool              m_IsPreviewer;          ///< true if we're in a 3D preview panel, false
+                                              ///<   for the standard 3D viewer
 
-    SFVEC4F           m_BgColorBot;         ///< background bottom color
-    SFVEC4F           m_BgColorTop;         ///< background top color
-    SFVEC4F           m_BoardBodyColor;     ///< in realistic mode: FR4 board color
-    SFVEC4F           m_SolderMaskColorBot; ///< in realistic mode: solder mask color ( bot )
-    SFVEC4F           m_SolderMaskColorTop; ///< in realistic mode: solder mask color ( top )
-    SFVEC4F           m_SolderPasteColor;   ///< in realistic mode: solder paste color
-    SFVEC4F           m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
-    SFVEC4F           m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
-    SFVEC4F           m_CopperColor;        ///< in realistic mode: copper color
+    SFVEC4F           m_BgColorBot;           ///< background bottom color
+    SFVEC4F           m_BgColorTop;           ///< background top color
+    SFVEC4F           m_BoardBodyColor;       ///< in realistic mode: FR4 board color
+    SFVEC4F           m_SolderMaskColorBot;   ///< in realistic mode: solder mask color ( bot )
+    SFVEC4F           m_SolderMaskColorTop;   ///< in realistic mode: solder mask color ( top )
+    SFVEC4F           m_SolderPasteColor;     ///< in realistic mode: solder paste color
+    SFVEC4F           m_SilkScreenColorBot;   ///< in realistic mode: SilkScreen color ( bot )
+    SFVEC4F           m_SilkScreenColorTop;   ///< in realistic mode: SilkScreen color ( top )
+    SFVEC4F           m_CopperColor;          ///< in realistic mode: copper color
     SFVEC4F           m_UserDrawingsColor;
     SFVEC4F           m_UserCommentsColor;
     SFVEC4F           m_ECO1Color;
@@ -430,43 +424,42 @@ private:
     RENDER_SETTINGS*  m_renderSettings;
     COLOR_SETTINGS*   m_colors;
 
-    VECTOR2I          m_boardPos;           ///< Board center position in board internal units.
-    VECTOR2I          m_boardSize;          ///< Board size in board internal units.
-    SFVEC3F           m_boardCenter;        ///< 3D center position of the board in 3D units.
-    BBOX_3D           m_boardBoundingBox;   ///< 3D bounding box of the board in 3D units.
+    VECTOR2I          m_boardPos;             ///< Board center position in board internal units.
+    VECTOR2I          m_boardSize;            ///< Board size in board internal units.
+    SFVEC3F           m_boardCenter;          ///< 3D center position of the board in 3D units.
+    BBOX_3D           m_boardBoundingBox;     ///< 3D bounding box of the board in 3D units.
 
-    MAP_POLY          m_layers_poly;        ///< Amalgamated polygon contours for various types of
-                                            ///<   items
+    MAP_POLY          m_layers_poly;          ///< Amalgamated polygon contours for various types
+                                              ///<   of items
 
     SHAPE_POLY_SET*   m_frontPlatedPadPolys;
     SHAPE_POLY_SET*   m_backPlatedPadPolys;
 
-    MAP_POLY          m_layerHoleOdPolys;            ///< Hole outer diameters (per layer)
-    MAP_POLY          m_layerHoleIdPolys;            ///< Hole inner diameters (per layer)
+    MAP_POLY          m_layerHoleOdPolys;     ///< Hole outer diameters (per layer)
+    MAP_POLY          m_layerHoleIdPolys;     ///< Hole inner diameters (per layer)
 
-    SHAPE_POLY_SET    m_NPTH_ODPolys;                ///< NPTH outer diameters
-    SHAPE_POLY_SET    m_TH_ODPolys;                  ///< PTH outer diameters
-    SHAPE_POLY_SET    m_viaTH_ODPolys;               ///< Via hole outer diameters
-    SHAPE_POLY_SET    m_THAnnularRingPolys;          ///< Via annular ring outer diameters
+    SHAPE_POLY_SET    m_NPTH_ODPolys;         ///< NPTH outer diameters
+    SHAPE_POLY_SET    m_TH_ODPolys;           ///< PTH outer diameters
+    SHAPE_POLY_SET    m_viaTH_ODPolys;        ///< Via hole outer diameters
+    SHAPE_POLY_SET    m_THAnnularRingPolys;   ///< Via annular ring outer diameters
 
-    SHAPE_POLY_SET    m_board_poly;                   ///< Board outline polygon.
+    SHAPE_POLY_SET    m_board_poly;           ///< Board outline polygon.
 
-    MAP_CONTAINER_2D_BASE  m_layerMap;                ///< 2D elements for each layer.
-    MAP_CONTAINER_2D_BASE  m_layerHoleMap;            ///< Holes for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerMap;        ///< 2D elements for each layer.
+    MAP_CONTAINER_2D_BASE  m_layerHoleMap;    ///< Holes for each layer.
 
     BVH_CONTAINER_2D* m_platedPadsFront;
     BVH_CONTAINER_2D* m_platedPadsBack;
 
-    BVH_CONTAINER_2D  m_TH_ODs;                       ///< List of PTH outer diameters
-    BVH_CONTAINER_2D  m_TH_IDs;                       ///< List of PTH inner diameters
-    BVH_CONTAINER_2D  m_THAnnularRings;               ///< List of via annular rings
-    BVH_CONTAINER_2D  m_viaTH_ODs;                    ///< List of via hole outer diameters
-    BVH_CONTAINER_2D  m_throughHoleViaIds;            ///< List of via hole inner diameters
+    BVH_CONTAINER_2D  m_TH_ODs;               ///< List of PTH outer diameters
+    BVH_CONTAINER_2D  m_TH_IDs;               ///< List of PTH inner diameters
+    BVH_CONTAINER_2D  m_THAnnularRings;       ///< List of via annular rings
+    BVH_CONTAINER_2D  m_viaTH_ODs;            ///< List of via hole outer diameters
 
     unsigned int      m_copperLayersCount;
 
-    double            m_biuTo3Dunits;       ///< Scale factor to convert board internal units to
-                                            ///< 3D units normalized between -1.0 and 1.0.
+    double            m_biuTo3Dunits;         ///< Scale factor to convert board internal units
+                                              ///<  to 3D units normalized between -1.0 and 1.0.
 
     std::array<float, PCB_LAYER_ID_COUNT> m_layerZcoordTop;    ///< Top (End) Z position of each
                                                                ///< layer in 3D units.

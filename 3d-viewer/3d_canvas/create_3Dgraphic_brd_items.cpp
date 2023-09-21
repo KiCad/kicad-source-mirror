@@ -27,8 +27,6 @@
  * @file  create_3Dgraphic_brd_items.cpp
  * @brief This file implements the creation of 2D graphic primitives of pcb items:
  *  pads, tracks, drawsegments, texts....
- * It is based on the function found in the files:
- *  board_items_to_polygon_shape_transform.cpp
  */
 
 #include "../3d_rendering/raytracing/shapes2D/ring_2d.h"
@@ -60,8 +58,6 @@
 #define TO_3DU( x ) ( ( x ) * m_biuTo3Dunits )
 
 #define TO_SFVEC2F( vec ) SFVEC2F( TO_3DU( vec.x ), TO_3DU( -vec.y ) )
-
-
 
 
 void addFILLED_CIRCLE_2D( CONTAINER_2D_BASE* aContainer, const SFVEC2F& aCenter, float aRadius,
@@ -273,10 +269,9 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 void BOARD_ADAPTER::createViaWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
                                          int aMargin )
 {
-    SFVEC2F start3DU = TO_SFVEC2F( aTrack->GetStart() );
-    SFVEC2F end3DU = TO_SFVEC2F( aTrack->GetEnd() );
-
-    const float radius3DU = TO_3DU( ( aTrack->GetWidth() / 2 ) + aMargin );
+    SFVEC2F     start3DU = TO_SFVEC2F( aTrack->GetStart() );
+    SFVEC2F     end3DU = TO_SFVEC2F( aTrack->GetEnd() );
+    const float radius3DU = TO_3DU( ( aTrack->GetWidth() / 2.0 ) + aMargin );
 
     addFILLED_CIRCLE_2D( aDstContainer, start3DU, radius3DU, *aTrack );
 }
@@ -290,7 +285,7 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
     switch( aTrack->Type() )
     {
     case PCB_VIA_T:
-        addFILLED_CIRCLE_2D( aDstContainer, start3DU, TO_3DU( aTrack->GetWidth() / 2 ), *aTrack );
+        addFILLED_CIRCLE_2D( aDstContainer, start3DU, TO_3DU( aTrack->GetWidth() / 2.0 ), *aTrack );
         break;
 
     case PCB_ARC_T:
@@ -310,10 +305,10 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
             return;
         }
 
-        VECTOR2D  center( arc->GetCenter() );
+        VECTOR2I  center( arc->GetCenter() );
         EDA_ANGLE arc_angle = arc->GetAngle();
         double    radius = arc->GetRadius();
-        int       arcsegcount = GetArcToSegmentCount( radius, ARC_HIGH_DEF, arc_angle );
+        int       arcsegcount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, arc_angle );
         int       circlesegcount;
 
         // Avoid arcs that cannot be drawn
@@ -332,8 +327,8 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
             circlesegcount = alg::clamp( 1, circlesegcount, 128 );
         }
 
-        createArcSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,
-                           circlesegcount, arc->GetWidth(), aDstContainer, *arc );
+        createArcSegments( center, arc->GetStart(), arc_angle, circlesegcount, arc->GetWidth(),
+                           aDstContainer, *arc );
         break;
     }
 
@@ -394,7 +389,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
                 addROUND_SEGMENT_2D( aContainer,
                                      TO_SFVEC2F( seg->GetSeg().A ),
                                      TO_SFVEC2F( seg->GetSeg().B ),
-                                     TO_3DU(  seg->GetWidth() + clearance.x * 2 ),
+                                     TO_3DU( seg->GetWidth() + clearance.x * 2 ),
                                      *aPad );
                 break;
             }
@@ -734,23 +729,23 @@ void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BAS
     {
         const SFVEC2F center3DU = TO_SFVEC2F( aPad->ShapePos() );
         const int     radius = aPad->GetSize().x / 2;
-        const float   inner_radius3DU = TO_3DU( radius - aWidth / 2 );
-        const float   outer_radius3DU = TO_3DU( radius + aWidth / 2 );
+        const float   inner_radius3DU = TO_3DU( radius - aWidth / 2.0 );
+        const float   outer_radius3DU = TO_3DU( radius + aWidth / 2.0 );
 
         addRING_2D( aContainer, center3DU, inner_radius3DU, outer_radius3DU, *aPad );
-
-        return;
     }
-
-    // For other shapes, add outlines as thick segments in polygon buffer
-    const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon();
-    const SHAPE_LINE_CHAIN&                path = corners->COutline( 0 );
-
-    for( int j = 0; j < path.PointCount(); j++ )
+    else
     {
-        SFVEC2F start3DU = TO_SFVEC2F( path.CPoint( j ) );
-        SFVEC2F end3DU = TO_SFVEC2F( path.CPoint( j + 1 ) );
+        // For other shapes, add outlines as thick segments in polygon buffer
+        const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon();
+        const SHAPE_LINE_CHAIN&                path = corners->COutline( 0 );
 
-        addROUND_SEGMENT_2D( aContainer, start3DU, end3DU, TO_3DU( aWidth ), *aPad );
+        for( int j = 0; j < path.PointCount(); j++ )
+        {
+            SFVEC2F start3DU = TO_SFVEC2F( path.CPoint( j ) );
+            SFVEC2F end3DU = TO_SFVEC2F( path.CPoint( j + 1 ) );
+
+            addROUND_SEGMENT_2D( aContainer, start3DU, end3DU, TO_3DU( aWidth ), *aPad );
+        }
     }
 }

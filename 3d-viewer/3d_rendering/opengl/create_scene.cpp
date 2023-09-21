@@ -35,12 +35,12 @@
 #include <eda_3d_viewer_frame.h>
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D* aFilledCircle,
+void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D* aCircle,
                                            TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop,
                                            float aZbot )
 {
-    const SFVEC2F& center = aFilledCircle->GetCenter();
-    const float radius = aFilledCircle->GetRadius() * 2.0f; // Double because the render triangle
+    const SFVEC2F& center = aCircle->GetCenter();
+    const float radius = aCircle->GetRadius() * 2.0f; // Double because the render triangle
 
     // This is a small adjustment to the circle texture
     const float texture_factor = ( 8.0f / (float) SIZE_OF_CIRCLE_TEXTURE ) + 1.0f;

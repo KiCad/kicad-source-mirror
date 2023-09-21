@@ -253,7 +253,7 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     auto showBBoxes =
             [this]( const SELECTION& aSel )
             {
-                return m_boardAdapter.m_Cfg->m_Render.opengl_show_model_bbox;
+                return m_boardAdapter.m_Cfg->m_Render.show_model_bbox;
             };
     auto showAxes =
             [this]( const SELECTION& aSel )

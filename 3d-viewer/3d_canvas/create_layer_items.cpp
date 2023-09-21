@@ -55,70 +55,88 @@
 #endif
 
 
+
+
+/*
+ * This is used to draw pad outlines on silk layers.
+ */
+void buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aBuffer, int aWidth, int aMaxError,
+                               ERROR_LOC aErrorLoc )
+{
+    if( aPad->GetShape() == PAD_SHAPE::CIRCLE )    // Draw a ring
+    {
+        TransformRingToPolygon( aBuffer, aPad->ShapePos(), aPad->GetSize().x / 2, aWidth,
+                                aMaxError, aErrorLoc );
+    }
+    else
+    {
+        // For other shapes, add outlines as thick segments in polygon buffer
+        const SHAPE_LINE_CHAIN& path = aPad->GetEffectivePolygon()->COutline( 0 );
+
+        for( int ii = 0; ii < path.PointCount(); ++ii )
+        {
+            const VECTOR2I& a = path.CPoint( ii );
+            const VECTOR2I& b = path.CPoint( ii + 1 );
+
+            TransformOvalToPolygon( aBuffer, a, b, aWidth, aMaxError, aErrorLoc );
+        }
+    }
+}
+
+
+void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
+                                 SHAPE_POLY_SET& aBuffer, int aMaxError, ERROR_LOC aErrorLoc )
+{
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    {
+        if( item->Type() == PCB_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
+        {
+            if( item->GetLayer() == aLayer )
+                item->TransformShapeToPolygon( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+        }
+    }
+}
+
+
 void BOARD_ADAPTER::destroyLayers()
 {
-    if( !m_layers_poly.empty() )
-    {
-        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& poly : m_layers_poly )
-            delete poly.second;
+#define DELETE_AND_FREE( ptr ) \
+    {                          \
+        delete ptr;            \
+        ptr = nullptr;         \
+    }                          \
 
-        m_layers_poly.clear();
+#define DELETE_AND_FREE_MAP( map )         \
+    {                                      \
+        for( auto& [ layer, poly ] : map ) \
+            delete poly;                   \
+                                           \
+        map.clear();                       \
     }
 
-    delete m_frontPlatedPadPolys;
-    m_frontPlatedPadPolys = nullptr;
+    DELETE_AND_FREE_MAP( m_layers_poly );
 
-    delete m_backPlatedPadPolys;
-    m_backPlatedPadPolys = nullptr;
+    DELETE_AND_FREE( m_frontPlatedPadPolys )
+    DELETE_AND_FREE( m_backPlatedPadPolys )
 
-    if( !m_layerHoleIdPolys.empty() )
-    {
-        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& poly : m_layerHoleIdPolys )
-            delete poly.second;
+    DELETE_AND_FREE_MAP( m_layerHoleOdPolys )
+    DELETE_AND_FREE_MAP( m_layerHoleIdPolys )
 
-        m_layerHoleIdPolys.clear();
-    }
-
-    if( !m_layerHoleOdPolys.empty() )
-    {
-        for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& poly : m_layerHoleOdPolys )
-            delete poly.second;
-
-        m_layerHoleOdPolys.clear();
-    }
-
-    if( !m_layerMap.empty() )
-    {
-        for( std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& poly : m_layerMap )
-            delete poly.second;
-
-        m_layerMap.clear();
-    }
-
-    delete m_platedPadsFront;
-    m_platedPadsFront = nullptr;
-
-    delete m_platedPadsBack;
-    m_platedPadsBack = nullptr;
-
-    if( !m_layerHoleMap.empty() )
-    {
-        for( std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& poly : m_layerHoleMap )
-            delete poly.second;
-
-        m_layerHoleMap.clear();
-    }
-
-    m_TH_IDs.Clear();
-    m_TH_ODs.Clear();
-    m_THAnnularRings.Clear();
-    m_viaTH_ODs.Clear();
-    m_throughHoleViaIds.Clear();
     m_NPTH_ODPolys.RemoveAllContours();
     m_TH_ODPolys.RemoveAllContours();
-
     m_viaTH_ODPolys.RemoveAllContours();
     m_THAnnularRingPolys.RemoveAllContours();
+
+    DELETE_AND_FREE_MAP( m_layerMap )
+    DELETE_AND_FREE_MAP( m_layerHoleMap )
+
+    DELETE_AND_FREE( m_platedPadsFront )
+    DELETE_AND_FREE( m_platedPadsBack )
+
+    m_TH_ODs.Clear();
+    m_TH_IDs.Clear();
+    m_THAnnularRings.Clear();
+    m_viaTH_ODs.Clear();
 }
 
 
@@ -551,7 +569,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                    true, m_Cfg->m_Render.renderPlatedPadsAsPlated,
                                                    false );
 
-                transformFPShapesToPolySet( footprint, layer, *layerPoly );
+                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
             }
         }
 
@@ -1027,10 +1045,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
                     for( PAD* pad : footprint->Pads() )
                     {
-                        if( !pad->IsOnLayer( layer ) )
-                            continue;
-
-                        buildPadOutlineAsPolygon( pad, *layerPoly, linewidth );
+                        if( pad->IsOnLayer( layer ) )
+                        {
+                            buildPadOutlineAsPolygon( pad, *layerPoly, linewidth, maxError,
+                                                      ERROR_INSIDE );
+                        }
                     }
                 }
                 else
@@ -1042,7 +1061,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 footprint->TransformFPTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
 
                 // Add the remaining things with dynamic seg count for circles
-                transformFPShapesToPolySet( footprint, layer, *layerPoly );
+                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
             }
         }
 
@@ -1059,7 +1078,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 for( ZONE* zone : m_board->Zones() )
                 {
-
                     if( zone->IsOnLayer( layer ) )
                         zone->TransformSolidAreasShapesToPolygon( layer, *layerPoly );
                 }
@@ -1075,7 +1093,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // A somewhat experimental feature: if we're rendering off-board silk, turn any pads of
     // footprints which are entirely outside the board outline into silk.  This makes off-board
     // footprints more visually recognizable.
-    if( m_Cfg->m_Render.opengl_show_off_board_silk )
+    if( m_Cfg->m_Render.show_off_board_silk )
     {
         BOX2I boardBBox = m_board_poly.BBox();
 

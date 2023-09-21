@@ -726,8 +726,8 @@ void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
     m_Cfg->m_Render.show_fp_values                 = aLayers.test( LAYER_FP_VALUES );
     m_Cfg->m_Render.show_fp_text                   = aLayers.test( LAYER_FP_TEXT );
 
-    m_Cfg->m_Render.opengl_show_model_bbox         = aLayers.test( LAYER_3D_BOUNDING_BOXES );
-    m_Cfg->m_Render.opengl_show_off_board_silk     = aLayers.test( LAYER_3D_OFF_BOARD_SILK );
+    m_Cfg->m_Render.show_model_bbox                = aLayers.test( LAYER_3D_BOUNDING_BOXES );
+    m_Cfg->m_Render.show_off_board_silk            = aLayers.test( LAYER_3D_OFF_BOARD_SILK );
     m_Cfg->m_Render.show_axis                      = aLayers.test( LAYER_3D_AXES );
 }
 
@@ -760,8 +760,8 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
     ret.set( LAYER_3D_MODELS_NOT_IN_POS, m_Cfg->m_Render.show_footprints_not_in_posfile );
     ret.set( LAYER_3D_MODELS_MARKED_DNP, m_Cfg->m_Render.show_footprints_dnp );
 
-    ret.set( LAYER_3D_BOUNDING_BOXES,    m_Cfg->m_Render.opengl_show_model_bbox );
-    ret.set( LAYER_3D_OFF_BOARD_SILK,    m_Cfg->m_Render.opengl_show_off_board_silk );
+    ret.set( LAYER_3D_BOUNDING_BOXES,    m_Cfg->m_Render.show_model_bbox );
+    ret.set( LAYER_3D_OFF_BOARD_SILK,    m_Cfg->m_Render.show_off_board_silk );
     ret.set( LAYER_3D_AXES,              m_Cfg->m_Render.show_axis );
 
     if( m_Cfg->m_CurrentPreset == FOLLOW_PCB )

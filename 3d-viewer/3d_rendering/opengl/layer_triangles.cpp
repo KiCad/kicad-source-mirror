@@ -499,10 +499,10 @@ void OPENGL_RENDER_LIST::DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle
 
 
 void OPENGL_RENDER_LIST::DrawAllCameraCulled( bool aDrawMiddle,
-                                              const OPENGL_RENDER_LIST* aLayerToSubtractA,
-                                              const OPENGL_RENDER_LIST* aLayerToSubtractB,
-                                              const OPENGL_RENDER_LIST* aLayerToSubtractC,
-                                              const OPENGL_RENDER_LIST* aLayerToSubtractD ) const
+                                              const OPENGL_RENDER_LIST* aSubtractList,
+                                              const OPENGL_RENDER_LIST* bSubtractList,
+                                              const OPENGL_RENDER_LIST* cSubtractList,
+                                              const OPENGL_RENDER_LIST* dSubtractList ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
@@ -517,17 +517,17 @@ void OPENGL_RENDER_LIST::DrawAllCameraCulled( bool aDrawMiddle,
     glStencilFunc( GL_ALWAYS, 1, 0 );
     glStencilOp( GL_KEEP, GL_KEEP, GL_REPLACE );
 
-    if( aLayerToSubtractA )
-        aLayerToSubtractA->DrawBot();
+    if( aSubtractList )
+        aSubtractList->DrawBot();
 
-    if( aLayerToSubtractB )
-        aLayerToSubtractB->DrawBot();
+    if( bSubtractList )
+        bSubtractList->DrawBot();
 
-    if( aLayerToSubtractC )
-        aLayerToSubtractC->DrawBot();
+    if( cSubtractList )
+        cSubtractList->DrawBot();
 
-    if( aLayerToSubtractD )
-        aLayerToSubtractD->DrawBot();
+    if( dSubtractList )
+        dSubtractList->DrawBot();
 
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
@@ -544,17 +544,17 @@ void OPENGL_RENDER_LIST::DrawAllCameraCulled( bool aDrawMiddle,
     glStencilFunc( GL_ALWAYS, 2, 0 );
     glStencilOp( GL_KEEP, GL_KEEP, GL_REPLACE );
 
-    if( aLayerToSubtractA )
-        aLayerToSubtractA->DrawTop();
+    if( aSubtractList )
+        aSubtractList->DrawTop();
 
-    if( aLayerToSubtractB )
-        aLayerToSubtractB->DrawTop();
+    if( bSubtractList )
+        bSubtractList->DrawTop();
 
-    if( aLayerToSubtractC )
-        aLayerToSubtractC->DrawTop();
+    if( cSubtractList )
+        cSubtractList->DrawTop();
 
-    if( aLayerToSubtractD )
-        aLayerToSubtractD->DrawTop();
+    if( dSubtractList )
+        dSubtractList->DrawTop();
 
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
@@ -575,8 +575,8 @@ void OPENGL_RENDER_LIST::DrawAllCameraCulled( bool aDrawMiddle,
 
     if( aDrawMiddle )
     {
-        if( aLayerToSubtractA )
-            aLayerToSubtractA->DrawMiddle();
+        if( aSubtractList )
+            aSubtractList->DrawMiddle();
     }
 
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE );
@@ -593,6 +593,12 @@ void OPENGL_RENDER_LIST::ApplyScalePosition( float aZposition, float aZscale )
     m_zPositionTransformation = aZposition;
     m_zScaleTransformation = aZscale;
     m_haveTransformation = true;
+}
+
+
+void OPENGL_RENDER_LIST::ApplyScalePosition( OPENGL_RENDER_LIST* aOtherList )
+{
+    ApplyScalePosition( aOtherList->GetZBot(), aOtherList->GetZTop() - aOtherList->GetZBot() );
 }
 
 
