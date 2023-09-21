@@ -1,12 +1,8 @@
-/**
- * @file dialog_config_equfiles.h
- */
-
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2010-2015 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,20 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_CONFIG_EQUFILES_H_
-#define _DIALOG_CONFIG_EQUFILES_H_
+#ifndef DIALOG_CONFIG_EQUFILES_H
+#define DIALOG_CONFIG_EQUFILES_H
 
 #include <dialog_config_equfiles_base.h>
 
 class DIALOG_CONFIG_EQUFILES : public DIALOG_CONFIG_EQUFILES_BASE
 {
 public:
-    DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* parent );
+    DIALOG_CONFIG_EQUFILES( wxWindow* parent );
     ~DIALOG_CONFIG_EQUFILES() {};
 
 private:
-    void Init();
-
     // Virtual event handlers
     void OnCloseWindow( wxCloseEvent& event ) override;
     void OnOkClick( wxCommandEvent& event ) override;
@@ -48,21 +42,6 @@ private:
     void OnRemoveFiles( wxCommandEvent& event ) override;
     void OnButtonMoveUp( wxCommandEvent& event ) override;
     void OnButtonMoveDown( wxCommandEvent& event ) override;
-
-    int getEnvVarCount()                // Get the number of rows in env var table
-    {
-        return m_gridEnvVars->GetTable()->GetRowsCount();
-    }
-
-    bool isPathRelativeAllowed()
-    {
-        return m_rbPathOptionChoice->GetSelection() == 1;
-    }
-
-    CVPCB_MAINFRAME* m_Parent;
-    wxString         m_UserLibDirBufferImg;
-
-    bool m_ListChanged;
 };
 
-#endif      // _DIALOG_CONFIG_EQUFILES_H_
+#endif      // DIALOG_CONFIG_EQUFILES_H

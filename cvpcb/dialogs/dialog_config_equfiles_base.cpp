@@ -5,6 +5,9 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
+#include "widgets/wx_grid.h"
+
 #include "dialog_config_equfiles_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -16,55 +19,61 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxStaticBoxSizer* sbEquivChoiceSizer;
-	sbEquivChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol Footprint Association Files (.equ)") ), wxHORIZONTAL );
+	wxBoxSizer* bUpperSizer;
+	bUpperSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* bSizerFlist;
-	bSizerFlist = new wxBoxSizer( wxVERTICAL );
+	wxStaticText* listLabel;
+	listLabel = new wxStaticText( this, wxID_ANY, _("Footprint association files:"), wxDefaultPosition, wxDefaultSize, 0 );
+	listLabel->Wrap( -1 );
+	bUpperSizer->Add( listLabel, 0, wxBOTTOM, 2 );
 
-	m_ListEquiv = new wxListBox( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE );
-	m_ListEquiv->SetMinSize( wxSize( 350,-1 ) );
+	m_filesListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE );
+	m_filesListBox->SetMinSize( wxSize( 500,100 ) );
 
-	bSizerFlist->Add( m_ListEquiv, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bUpperSizer->Add( m_filesListBox, 2, wxEXPAND|wxBOTTOM, 3 );
 
+	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	sbEquivChoiceSizer->Add( bSizerFlist, 1, wxEXPAND, 5 );
+	m_bpAdd = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd->SetToolTip( _("Add association file") );
 
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxVERTICAL );
+	bButtonsSizer->Add( m_bpAdd, 0, wxRIGHT, 5 );
 
-	m_buttonAddEqu = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_ADD_EQU, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonAddEqu, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_bpMoveUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveUp->SetToolTip( _("Move up") );
 
-	m_buttonRemoveEqu = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_REMOVE_EQU, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonRemoveEqu, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_bpMoveUp, 0, wxRIGHT, 5 );
 
-	m_buttonMoveUp = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_UP, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonMoveUp, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_bpMoveDown = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpMoveDown->SetToolTip( _("Move down") );
 
-	m_buttonMoveDown = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_DOWN, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonMoveDown, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bButtonsSizer->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
 
-	m_buttonEdit = new wxButton( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, _("Edit File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonEdit, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_bpEdit = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpEdit->SetToolTip( _("Edit association file") );
 
-
-	sbEquivChoiceSizer->Add( bSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bButtonsSizer->Add( m_bpEdit, 0, wxRIGHT, 5 );
 
 
-	bMainSizer->Add( sbEquivChoiceSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bButtonsSizer->Add( 20, 0, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerLower;
-	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
+	m_bpDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete->SetToolTip( _("Remove association file") );
 
-	wxBoxSizer* bSizerEnvVar;
-	bSizerEnvVar = new wxBoxSizer( wxVERTICAL );
+	bButtonsSizer->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 10 );
 
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Available environment variables for relative paths:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	bSizerEnvVar->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_gridEnvVars = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bUpperSizer->Add( bButtonsSizer, 0, wxEXPAND, 5 );
+
+
+	bUpperSizer->Add( 0, 25, 0, wxEXPAND, 5 );
+
+	wxStaticText* envVarsLabel;
+	envVarsLabel = new wxStaticText( this, wxID_ANY, _("Available path substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
+	envVarsLabel->Wrap( -1 );
+	bUpperSizer->Add( envVarsLabel, 0, wxBOTTOM, 2 );
+
+	m_gridEnvVars = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_gridEnvVars->CreateGrid( 2, 2 );
@@ -78,32 +87,23 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	m_gridEnvVars->EnableDragColSize( true );
 	m_gridEnvVars->SetColLabelValue( 0, _("Name") );
 	m_gridEnvVars->SetColLabelValue( 1, _("Value") );
-	m_gridEnvVars->SetColLabelSize( 25 );
+	m_gridEnvVars->SetColLabelSize( 0 );
 	m_gridEnvVars->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_gridEnvVars->AutoSizeRows();
 	m_gridEnvVars->EnableDragRowSize( true );
-	m_gridEnvVars->SetRowLabelSize( 30 );
+	m_gridEnvVars->SetRowLabelSize( 0 );
 	m_gridEnvVars->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
 	m_gridEnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bSizerEnvVar->Add( m_gridEnvVars, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bUpperSizer->Add( m_gridEnvVars, 1, wxEXPAND, 5 );
 
 
-	bSizerLower->Add( bSizerEnvVar, 1, wxEXPAND, 5 );
-
-	wxString m_rbPathOptionChoiceChoices[] = { _("Absolute"), _("Relative") };
-	int m_rbPathOptionChoiceNChoices = sizeof( m_rbPathOptionChoiceChoices ) / sizeof( wxString );
-	m_rbPathOptionChoice = new wxRadioBox( this, wxID_ANY, _("Path Type"), wxDefaultPosition, wxDefaultSize, m_rbPathOptionChoiceNChoices, m_rbPathOptionChoiceChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbPathOptionChoice->SetSelection( 1 );
-	bSizerLower->Add( m_rbPathOptionChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bMainSizer->Add( bSizerLower, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -123,11 +123,11 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnCloseWindow ) );
-	m_buttonAddEqu->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnAddFiles ), NULL, this );
-	m_buttonRemoveEqu->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnRemoveFiles ), NULL, this );
-	m_buttonMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveUp ), NULL, this );
-	m_buttonMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveDown ), NULL, this );
-	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnEditEquFile ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnAddFiles ), NULL, this );
+	m_bpMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveUp ), NULL, this );
+	m_bpMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveDown ), NULL, this );
+	m_bpEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnEditEquFile ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnRemoveFiles ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnOkClick ), NULL, this );
 }
 
@@ -135,11 +135,11 @@ DIALOG_CONFIG_EQUFILES_BASE::~DIALOG_CONFIG_EQUFILES_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnCloseWindow ) );
-	m_buttonAddEqu->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnAddFiles ), NULL, this );
-	m_buttonRemoveEqu->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnRemoveFiles ), NULL, this );
-	m_buttonMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveUp ), NULL, this );
-	m_buttonMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveDown ), NULL, this );
-	m_buttonEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnEditEquFile ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnAddFiles ), NULL, this );
+	m_bpMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveUp ), NULL, this );
+	m_bpMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveDown ), NULL, this );
+	m_bpEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnEditEquFile ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnRemoveFiles ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnOkClick ), NULL, this );
 
 }

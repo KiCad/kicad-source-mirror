@@ -68,10 +68,8 @@ void CVPCB_MAINFRAME::doReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
-    prefsMenu->Add( ACTIONS::openPreferences);
-
-    prefsMenu->AppendSeparator();
     prefsMenu->Add( CVPCB_ACTIONS::showEquFileTable);
+    prefsMenu->Add( ACTIONS::openPreferences);
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, tool );

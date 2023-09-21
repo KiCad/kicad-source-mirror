@@ -60,9 +60,9 @@ TOOL_ACTION CVPCB_ACTIONS::showFootprintViewer( TOOL_ACTION_ARGS()
 TOOL_ACTION CVPCB_ACTIONS::showEquFileTable( TOOL_ACTION_ARGS()
         .Name( "cvpcb.Control.ShowEquFileTable" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Manage Footprint Association Files" ) )
-        .Tooltip( _( "Configure footprint association file (.equ) list.  These files are "
-           "used to automatically assign footprint names from symbol values." ) ) );
+        .MenuText( _( "Manage Footprint Association Files..." ) )
+        .Tooltip( _( "Edit the footprint association files list.  These files are used to "
+                     "automatically assign footprint names from symbol values." ) ) );
 
 TOOL_ACTION CVPCB_ACTIONS::saveAssociationsToSchematic( TOOL_ACTION_ARGS()
         .Name( "cvpcb.Control.SaveAssociationsToSchematic" )
