@@ -132,6 +132,7 @@ protected:
     DRC_ENGINE* m_drcEngine;
     std::unordered_map<const DRC_RULE*, int> m_stats;
     bool        m_isRuleDriven = true;
+    std::mutex  m_statsMutex;
 };
 
 #endif // DRC_TEST_PROVIDER__H

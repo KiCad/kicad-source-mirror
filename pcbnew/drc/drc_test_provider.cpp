@@ -75,6 +75,7 @@ const wxString DRC_TEST_PROVIDER::GetDescription() const { return wxEmptyString;
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
                                          const VECTOR2I& aMarkerPos, int aMarkerLayer )
 {
+    std::lock_guard<std::mutex> lock( m_statsMutex );
     if( item->GetViolatingRule() )
         accountCheck( item->GetViolatingRule() );
 

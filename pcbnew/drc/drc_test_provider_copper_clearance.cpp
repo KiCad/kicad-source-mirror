@@ -559,108 +559,132 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
     // This is the number of tests between 2 calls to the progress bar
     const int progressDelta = 100;
-    int       ii = 0;
 
     reportAux( wxT( "Testing %d tracks & vias..." ), m_board->Tracks().size() );
 
     std::map<BOARD_ITEM*, int>                            freePadsUsageMap;
     std::unordered_map<PTR_PTR_CACHE_KEY, layers_checked> checkedPairs;
+    std::mutex                                            checkedPairsMutex;
+    std::mutex                                            freePadsUsageMapMutex;
+    std::atomic<int>                                      tracks_checked( 0 );
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
-    for( PCB_TRACK* track : m_board->Tracks() )
+    auto testTrack = [&]( const int start_idx, const int end_idx )
     {
-        if( !reportProgress( ii++, m_board->Tracks().size(), progressDelta ) )
-            break;
-
-        for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & boardCopperLayers ).Seq() )
+        for( int trackIdx = start_idx; trackIdx < end_idx; ++trackIdx )
         {
-            std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
+            PCB_TRACK* track = m_board->Tracks()[trackIdx];
 
-            m_board->m_CopperItemRTreeCache->QueryColliding( track, layer, layer,
-                    // Filter:
-                    [&]( BOARD_ITEM* other ) -> bool
-                    {
-                        auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+            for( PCB_LAYER_ID layer : LSET( track->GetLayerSet() & boardCopperLayers ).Seq() )
+            {
+                std::shared_ptr<SHAPE> trackShape = track->GetEffectiveShape( layer );
 
-                        if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )
-                            return false;
-
-                        BOARD_ITEM* a = track;
-                        BOARD_ITEM* b = other;
-
-                        // store canonical order so we don't collide in both directions
-                        // (a:b and b:a)
-                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                            std::swap( a, b );
-
-                        auto it = checkedPairs.find( { a, b } );
-
-                        if( it != checkedPairs.end() && ( it->second.layers.test( layer )
-                                || ( it->second.has_error && !m_drcEngine->GetReportAllTrackErrors() ) ) )
+                m_board->m_CopperItemRTreeCache->QueryColliding( track, layer, layer,
+                        // Filter:
+                        [&]( BOARD_ITEM* other ) -> bool
                         {
-                            return false;
-                        }
-                        else
-                        {
-                            checkedPairs[ { a, b } ].layers.set( layer );
-                            return true;
-                        }
-                    },
-                    // Visitor:
-                    [&]( BOARD_ITEM* other ) -> bool
-                    {
-                        if( other->Type() == PCB_PAD_T && static_cast<PAD*>( other )->IsFreePad() )
-                        {
-                            if( other->GetEffectiveShape( layer )->Collide( trackShape.get() ) )
+                            auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+
+                            if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )
+                                return false;
+
+                            BOARD_ITEM* a = track;
+                            BOARD_ITEM* b = other;
+
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
+
+                            std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                            auto it = checkedPairs.find( { a, b } );
+
+                            if( it != checkedPairs.end() && ( it->second.layers.test( layer )
+                                    || ( it->second.has_error && !m_drcEngine->GetReportAllTrackErrors() ) ) )
                             {
-                                auto it = freePadsUsageMap.find( other );
+                                return false;
+                            }
+                            else
+                            {
+                                checkedPairs[ { a, b } ].layers.set( layer );
+                                return true;
+                            }
+                        },
+                        // Visitor:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            if( other->Type() == PCB_PAD_T && static_cast<PAD*>( other )->IsFreePad() )
+                            {
+                                if( other->GetEffectiveShape( layer )->Collide( trackShape.get() ) )
+                                {
+                                    std::lock_guard<std::mutex> lock( freePadsUsageMapMutex );
+                                    auto it = freePadsUsageMap.find( other );
 
-                                if( it == freePadsUsageMap.end() )
-                                {
-                                    freePadsUsageMap[ other ] = track->GetNetCode();
-                                    return false;
-                                }
-                                else if( it->second == track->GetNetCode() )
-                                {
-                                    return false;
+                                    if( it == freePadsUsageMap.end() )
+                                    {
+                                        freePadsUsageMap[ other ] = track->GetNetCode();
+                                        return false;
+                                    }
+                                    else if( it->second == track->GetNetCode() )
+                                    {
+                                        return false;
+                                    }
                                 }
                             }
-                        }
 
-                        BOARD_ITEM* a = track;
-                        BOARD_ITEM* b = other;
+                            BOARD_ITEM* a = track;
+                            BOARD_ITEM* b = other;
 
-                        // store canonical order so we don't collide in both directions
-                        // (a:b and b:a)
-                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                            std::swap( a, b );
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
 
-                        auto it = checkedPairs.find( { a, b } );
+                            // If we get an error, mark the pair as having a clearance error already
+                            // Only continue if we are reporting all track errors
+                            if( !testSingleLayerItemAgainstItem( track, trackShape.get(), layer,
+                                                                other ) )
+                            {
+                                std::lock_guard<std::mutex> lock( checkedPairsMutex );
+                                auto it = checkedPairs.find( { a, b } );
 
-                        // If we get an error, mark the pair as having a clearance error already
-                        // Only continue if we are reporting all track errors
-                        if( !testSingleLayerItemAgainstItem( track, trackShape.get(), layer,
-                                                             other ) )
-                        {
-                            if( it != checkedPairs.end() )
-                                it->second.has_error = true;
+                                if( it != checkedPairs.end() )
+                                    it->second.has_error = true;
 
-                            return m_drcEngine->GetReportAllTrackErrors() && !m_drcEngine->IsCancelled();
-                        }
+                                return m_drcEngine->GetReportAllTrackErrors() && !m_drcEngine->IsCancelled();
+                            }
 
-                        return !m_drcEngine->IsCancelled();
-                    },
-                    m_board->m_DRCMaxClearance );
+                            return !m_drcEngine->IsCancelled();
+                        },
+                        m_board->m_DRCMaxClearance );
 
-            for( ZONE* zone : m_board->m_DRCCopperZones )
-            {
-                testItemAgainstZone( track, zone, layer );
+                for( ZONE* zone : m_board->m_DRCCopperZones )
+                {
+                    testItemAgainstZone( track, zone, layer );
 
-                if( m_drcEngine->IsCancelled() )
-                    break;
+                    if( m_drcEngine->IsCancelled() )
+                        break;
+                }
             }
+
+            ++tracks_checked;
         }
+    };
+
+    thread_pool& tp = GetKiCadThreadPool();
+
+    tp.push_loop( m_board->Tracks().size(), testTrack );
+
+    while( tracks_checked < static_cast<int>( m_board->Tracks().size() ) )
+    {
+        if( !reportProgress( tracks_checked, m_board->Tracks().size(), progressDelta ) )
+        {
+            tp.wait_for_tasks();
+            break;
+        }
+
+        std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
     }
 }
 
