@@ -79,7 +79,7 @@ VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) co
 void SCH_TEXT::FlipHJustify()
 {
     if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     else if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
         SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 }
@@ -124,7 +124,7 @@ void SCH_TEXT::Rotate( const VECTOR2I& aCenter )
 void SCH_TEXT::Rotate90( bool aClockwise )
 {
     if( ( GetTextAngle() == ANGLE_HORIZONTAL && aClockwise )
-     || ( GetTextAngle() == ANGLE_HORIZONTAL && !aClockwise ) )
+     || ( GetTextAngle() == ANGLE_VERTICAL && !aClockwise ) )
     {
         FlipHJustify();
     }
