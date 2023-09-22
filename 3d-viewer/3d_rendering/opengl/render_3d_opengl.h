@@ -78,10 +78,10 @@ private:
                                        const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
     OPENGL_RENDER_LIST* generateLayerList( const BVH_CONTAINER_2D* aContainer,
-                                           const SHAPE_POLY_SET* aPolyList, PCB_LAYER_ID aLayerId,
+                                           const SHAPE_POLY_SET* aPolyList, PCB_LAYER_ID aLayer,
                                            const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    OPENGL_RENDER_LIST* generateEmptyLayerList( PCB_LAYER_ID aLayerId );
+    OPENGL_RENDER_LIST* generateEmptyLayerList( PCB_LAYER_ID aLayer );
 
     void addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, const SFVEC2F& v0,
                                    const SFVEC2F& v1, const SFVEC2F& v2, float top, float bot );

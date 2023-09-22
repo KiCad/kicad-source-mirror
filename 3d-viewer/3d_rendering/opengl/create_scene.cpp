@@ -302,7 +302,7 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D& aListH
 
 OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D* aContainer,
                                                          const SHAPE_POLY_SET* aPolyList,
-                                                         PCB_LAYER_ID aLayerId,
+                                                         PCB_LAYER_ID aLayer,
                                                          const BVH_CONTAINER_2D* aThroughHoles )
 {
     if( aContainer == nullptr )
@@ -316,7 +316,7 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
     float layer_z_bot = 0.0f;
     float layer_z_top = 0.0f;
 
-    getLayerZPos( aLayerId, layer_z_top, layer_z_bot );
+    getLayerZPos( aLayer, layer_z_top, layer_z_bot );
 
     // Calculate an estimation for the nr of triangles based on the nr of objects
     unsigned int nrTrianglesEstimation = listObject2d.size() * 8;
@@ -375,12 +375,12 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateEmptyLayerList( PCB_LAYER_ID aLayerId )
+OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateEmptyLayerList( PCB_LAYER_ID aLayer )
 {
     float layer_z_bot = 0.0f;
     float layer_z_top = 0.0f;
 
-    getLayerZPos( aLayerId, layer_z_top, layer_z_bot );
+    getLayerZPos( aLayer, layer_z_top, layer_z_bot );
 
     TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( 1 );
 
@@ -521,28 +521,20 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         float layer_z_bot = 0.0f;
         float layer_z_top = 0.0f;
 
-        for( const std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& ii : outerMapHoles )
+        for( const auto& [ layer, poly ] : outerMapHoles )
         {
-            const PCB_LAYER_ID      layer_id  = ii.first;
-            const SHAPE_POLY_SET*   poly      = ii.second;
-            const BVH_CONTAINER_2D* container = map_holes.at( layer_id );
+            getLayerZPos( layer, layer_z_top, layer_z_bot );
 
-            getLayerZPos( layer_id, layer_z_top, layer_z_bot );
-
-            m_outerLayerHoles[layer_id] = generateHoles( container->GetList(), *poly,
-                                                         layer_z_top, layer_z_bot, false );
+            m_outerLayerHoles[layer] = generateHoles( map_holes.at( layer )->GetList(), *poly,
+                                                      layer_z_top, layer_z_bot, false );
         }
 
-        for( const std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET*>& ii : innerMapHoles )
+        for( const auto& [ layer, poly ] : innerMapHoles )
         {
-            const PCB_LAYER_ID      layer_id  = ii.first;
-            const SHAPE_POLY_SET*   poly      = ii.second;
-            const BVH_CONTAINER_2D* container = map_holes.at( layer_id );
+            getLayerZPos( layer, layer_z_top, layer_z_bot );
 
-            getLayerZPos( layer_id, layer_z_top, layer_z_bot );
-
-            m_innerLayerHoles[layer_id] = generateHoles( container->GetList(), *poly,
-                                                         layer_z_top, layer_z_bot, false );
+            m_innerLayerHoles[layer] = generateHoles( map_holes.at( layer )->GetList(), *poly,
+                                                      layer_z_top, layer_z_bot, false );
         }
     }
 
@@ -555,38 +547,35 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     std::bitset<LAYER_3D_END> visibilityFlags = m_boardAdapter.GetVisibleLayers();
     const MAP_POLY&           map_poly = m_boardAdapter.GetPolyMap();
+    wxString                  msg;
 
-    for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& ii : m_boardAdapter.GetLayerMap() )
+    for( const auto& [ layer, container2d ] : m_boardAdapter.GetLayerMap() )
     {
-        const PCB_LAYER_ID layer_id = ii.first;
-
-        if( !m_boardAdapter.Is3dLayerEnabled( layer_id, visibilityFlags ) )
+        if( !m_boardAdapter.Is3dLayerEnabled( layer, visibilityFlags ) )
             continue;
 
         if( aStatusReporter )
         {
-            aStatusReporter->Report( wxString::Format( _( "Load OpenGL layer %d" ),
-                                                       (int) layer_id ) );
+            msg = m_boardAdapter.GetBoard()->GetLayerName( layer );
+            aStatusReporter->Report( wxString::Format( _( "Load OpenGL layer %s" ), msg ) );
         }
-
-        const BVH_CONTAINER_2D* container2d = ii.second;
 
         SHAPE_POLY_SET polyListSubtracted;
         SHAPE_POLY_SET* polyList = nullptr;
 
         // Load the vertical (Z axis) component of shapes
 
-        if( map_poly.find( layer_id ) != map_poly.end() )
+        if( map_poly.find( layer ) != map_poly.end() )
         {
-            polyListSubtracted = *map_poly.at( layer_id );;
+            polyListSubtracted = *map_poly.at( layer );;
 
-            if( LSET::PhysicalLayersMask().test( layer_id ) )
+            if( LSET::PhysicalLayersMask().test( layer ) )
             {
                 polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
                                                         SHAPE_POLY_SET::PM_FAST );
             }
 
-            if( layer_id != B_Mask && layer_id != F_Mask )
+            if( layer != B_Mask && layer != F_Mask )
             {
                 polyListSubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(),
                                                     SHAPE_POLY_SET::PM_FAST );
@@ -596,12 +585,12 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
             if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
             {
-                if( layer_id == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
+                if( layer == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
                 {
                     polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ),
                                                         SHAPE_POLY_SET::PM_FAST );
                 }
-                else if( layer_id == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
+                else if( layer == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
                 {
                     polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ),
                                                         SHAPE_POLY_SET::PM_FAST );
@@ -611,11 +600,11 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             polyList = &polyListSubtracted;
         }
 
-        OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, polyList, layer_id,
+        OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, polyList, layer,
                                                          &m_boardAdapter.GetTH_IDs() );
 
         if( oglList != nullptr )
-            m_layers[layer_id] = oglList;
+            m_layers[layer] = oglList;
 
     }
 
