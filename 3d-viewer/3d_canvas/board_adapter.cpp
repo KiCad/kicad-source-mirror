@@ -89,7 +89,6 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         m_IsPreviewer( false ),
         m_board( nullptr ),
         m_3dModelManager( nullptr ),
-        m_renderSettings( nullptr ),
         m_colors( nullptr ),
         m_layerZcoordTop(),
         m_layerZcoordBottom()
@@ -140,6 +139,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_platedPadsFront = nullptr;
     m_platedPadsBack = nullptr;
+    m_offboardPadsFront = nullptr;
+    m_offboardPadsBack = nullptr;
 
     m_frontPlatedPadPolys = nullptr;
     m_backPlatedPadPolys = nullptr;

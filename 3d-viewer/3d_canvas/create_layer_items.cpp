@@ -135,6 +135,8 @@ void BOARD_ADAPTER::destroyLayers()
 
     DELETE_AND_FREE( m_platedPadsFront )
     DELETE_AND_FREE( m_platedPadsBack )
+    DELETE_AND_FREE( m_offboardPadsFront )
+    DELETE_AND_FREE( m_offboardPadsBack )
 
     m_TH_ODs.Clear();
     m_TH_IDs.Clear();
@@ -246,6 +248,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         m_platedPadsFront = new BVH_CONTAINER_2D;
         m_platedPadsBack = new BVH_CONTAINER_2D;
+    }
+
+    if( cfg.show_off_board_silk )
+    {
+        m_offboardPadsFront = new BVH_CONTAINER_2D;
+        m_offboardPadsBack = new BVH_CONTAINER_2D;
     }
 
     if( aStatusReporter )
@@ -992,10 +1000,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
     // End Build Tech layers
 
-#if 1
-    // A somewhat experimental feature: if we're rendering off-board silk, turn any pads of
-    // footprints which are entirely outside the board outline into silk.  This makes off-board
-    // footprints more visually recognizable.
+    // If we're rendering off-board silk, also render pads of footprints which are entirely
+    // outside the board outline.  This makes off-board footprints more visually recognizable.
     if( cfg.show_off_board_silk )
     {
         BOX2I boardBBox = m_board_poly.BBox();
@@ -1005,19 +1011,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( !footprint->GetBoundingBox().Intersects( boardBBox ) )
             {
                 if( footprint->IsFlipped() )
-                {
-                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ B_SilkS ];
-                    addPads( footprint, layerContainer, B_Cu, false, false );
-                }
+                    addPads( footprint, m_offboardPadsBack, B_Cu, false, false );
                 else
-                {
-                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ F_SilkS ];
-                    addPads( footprint, layerContainer, F_Cu, false, false );
-                }
+                    addPads( footprint, m_offboardPadsFront, F_Cu, false, false );
             }
         }
+
+        m_offboardPadsFront->BuildBVH();
+        m_offboardPadsBack->BuildBVH();
     }
-#endif
 
     // Simplify layer polygons
 

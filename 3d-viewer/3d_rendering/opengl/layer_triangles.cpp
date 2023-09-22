@@ -471,38 +471,11 @@ void OPENGL_RENDER_LIST::DrawAll( bool aDrawMiddle ) const
 }
 
 
-void OPENGL_RENDER_LIST::DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle ) const
-{
-    zCameraPos = m_haveTransformation
-            ? ( ( zCameraPos - m_zPositionTransformation ) / m_zScaleTransformation )
-            : zCameraPos;
-
-    if( aDrawMiddle )
-        DrawMiddle();
-
-    if( zCameraPos > m_zTop )
-    {
-        DrawTop();
-    }
-    else
-    {
-        if( zCameraPos < m_zBot )
-        {
-            DrawBot();
-        }
-        else
-        {
-            // If camera is in the middle dont draw it.
-        }
-    }
-}
-
-
-void OPENGL_RENDER_LIST::DrawAllCameraCulled( bool aDrawMiddle,
-                                              const OPENGL_RENDER_LIST* aSubtractList,
-                                              const OPENGL_RENDER_LIST* bSubtractList,
-                                              const OPENGL_RENDER_LIST* cSubtractList,
-                                              const OPENGL_RENDER_LIST* dSubtractList ) const
+void OPENGL_RENDER_LIST::DrawCulled( bool aDrawMiddle,
+                                        const OPENGL_RENDER_LIST* aSubtractList,
+                                        const OPENGL_RENDER_LIST* bSubtractList,
+                                        const OPENGL_RENDER_LIST* cSubtractList,
+                                        const OPENGL_RENDER_LIST* dSubtractList ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );

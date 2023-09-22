@@ -644,6 +644,15 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         }
     }
 
+    if( m_boardAdapter.m_Cfg->m_Render.show_off_board_silk )
+    {
+        if( const BVH_CONTAINER_2D* padsFront = m_boardAdapter.GetOffboardPadsFront() )
+            m_offboardPadsFront = generateLayerList( padsFront, nullptr, F_Cu );
+
+        if( const BVH_CONTAINER_2D* padsBack = m_boardAdapter.GetOffboardPadsBack() )
+            m_offboardPadsBack = generateLayerList( padsBack, nullptr, B_Cu );
+    }
+
     // Load 3D models
     if( aStatusReporter )
         aStatusReporter->Report( _( "Loading 3D models..." ) );

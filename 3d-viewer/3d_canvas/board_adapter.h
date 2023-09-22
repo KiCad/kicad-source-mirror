@@ -245,6 +245,8 @@ public:
     const MAP_CONTAINER_2D_BASE& GetLayerMap() const noexcept { return m_layerMap; }
     const BVH_CONTAINER_2D* GetPlatedPadsFront() const noexcept { return m_platedPadsFront; }
     const BVH_CONTAINER_2D* GetPlatedPadsBack() const noexcept { return m_platedPadsBack; }
+    const BVH_CONTAINER_2D* GetOffboardPadsFront() const noexcept { return m_offboardPadsFront; }
+    const BVH_CONTAINER_2D* GetOffboardPadsBack() const noexcept { return m_offboardPadsBack; }
 
     const MAP_CONTAINER_2D_BASE& GetLayerHoleMap() const noexcept { return m_layerHoleMap; }
     const BVH_CONTAINER_2D& GetTH_IDs() const noexcept { return m_TH_IDs; }
@@ -421,7 +423,6 @@ public:
 private:
     BOARD*            m_board;
     S3D_CACHE*        m_3dModelManager;
-    RENDER_SETTINGS*  m_renderSettings;
     COLOR_SETTINGS*   m_colors;
 
     VECTOR2I          m_boardPos;             ///< Board center position in board internal units.
@@ -452,6 +453,8 @@ private:
 
     BVH_CONTAINER_2D* m_platedPadsFront;
     BVH_CONTAINER_2D* m_platedPadsBack;
+    BVH_CONTAINER_2D* m_offboardPadsFront;
+    BVH_CONTAINER_2D* m_offboardPadsBack;
 
     BVH_CONTAINER_2D  m_TH_ODs;               ///< List of PTH outer diameters
     BVH_CONTAINER_2D  m_TH_IDs;               ///< List of PTH inner diameters

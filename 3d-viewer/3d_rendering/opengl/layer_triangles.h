@@ -194,13 +194,11 @@ public:
      *
      * @param zCameraPos is the camera z axis position.
      */
-    void DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle = true ) const;
-
-    void DrawAllCameraCulled( bool aDrawMiddle,
-                              const OPENGL_RENDER_LIST* aSubtractList = nullptr,
-                              const OPENGL_RENDER_LIST* bSubtractList = nullptr,
-                              const OPENGL_RENDER_LIST* cSubtractList = nullptr,
-                              const OPENGL_RENDER_LIST* dSubtractList = nullptr ) const;
+    void DrawCulled( bool aDrawMiddle,
+                        const OPENGL_RENDER_LIST* aSubtractList = nullptr,
+                        const OPENGL_RENDER_LIST* bSubtractList = nullptr,
+                        const OPENGL_RENDER_LIST* cSubtractList = nullptr,
+                        const OPENGL_RENDER_LIST* dSubtractList = nullptr ) const;
 
     void ApplyScalePosition( float aZposition, float aZscale );
     void ApplyScalePosition( OPENGL_RENDER_LIST* aOtherList );

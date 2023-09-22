@@ -366,8 +366,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
 
     UpdateLayerCtls();
 
-    if( doFastRefresh
-        && m_frame->GetAdapter().m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
+    if( doFastRefresh && m_frame->GetAdapter().m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
         RENDER_3D_OPENGL* renderer =
             static_cast<RENDER_3D_OPENGL*>( m_frame->GetCanvas()->GetCurrentRender() );
@@ -375,7 +374,9 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
         m_frame->GetCanvas()->Request_refresh();
     }
     else
+    {
         m_frame->NewDisplay( true );
+    }
 }
 
 

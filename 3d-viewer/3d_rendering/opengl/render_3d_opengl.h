@@ -101,7 +101,7 @@ private:
     void addObjectTriangles( const ROUND_SEGMENT_2D* aSeg, TRIANGLE_DISPLAY_LIST* aDstLayer,
                              float aZtop, float aZbot );
 
-    void renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos, bool aDrawMiddleSegments,
+    void renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos, bool aShowThickness,
                                 bool aSkipRenderHoles );
 
     void renderBoardBody( bool aSkipRenderHoles );
@@ -211,6 +211,8 @@ private:
     MAP_OGL_DISP_LISTS  m_layers;
     OPENGL_RENDER_LIST* m_platedPadsFront;
     OPENGL_RENDER_LIST* m_platedPadsBack;
+    OPENGL_RENDER_LIST* m_offboardPadsFront;
+    OPENGL_RENDER_LIST* m_offboardPadsBack;
     MAP_OGL_DISP_LISTS  m_outerLayerHoles;
     MAP_OGL_DISP_LISTS  m_innerLayerHoles;
     OPENGL_RENDER_LIST* m_board;
