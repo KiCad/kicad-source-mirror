@@ -40,6 +40,8 @@
 #include <wx/sizer.h>
 #include <wx/textdlg.h>
 
+#include <../3d_rendering/opengl/render_3d_opengl.h>
+
 
 #define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D   // Render Row abbreviation to reduce source width
 
@@ -294,6 +296,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
     std::bitset<LAYER_3D_END>     visibleLayers = m_frame->GetAdapter().GetVisibleLayers();
     const std::map<int, COLOR4D>& colors = m_frame->GetAdapter().GetLayerColors();
     bool                          killFollow = false;
+    bool                          doFastRefresh = false;    // true to just refresh the display
 
     // Special-case controls
     switch( aLayer )
@@ -339,6 +342,15 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
         killFollow = true;
         break;
 
+    case LAYER_3D_TH_MODELS:
+    case LAYER_3D_SMD_MODELS:
+    case LAYER_3D_VIRTUAL_MODELS:
+    case LAYER_3D_MODELS_NOT_IN_POS:
+    case LAYER_3D_MODELS_MARKED_DNP:
+        doFastRefresh = true;
+        visibleLayers.set( aLayer, isVisible );
+        break;
+
     default:
         visibleLayers.set( aLayer, isVisible );
         break;
@@ -353,7 +365,17 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
         syncLayerPresetSelection();
 
     UpdateLayerCtls();
-    m_frame->NewDisplay( true );
+
+    if( doFastRefresh
+        && m_frame->GetAdapter().m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
+    {
+        RENDER_3D_OPENGL* renderer =
+            static_cast<RENDER_3D_OPENGL*>( m_frame->GetCanvas()->GetCurrentRender() );
+        renderer->Load3dModelsIfNeeded();
+        m_frame->GetCanvas()->Request_refresh();
+    }
+    else
+        m_frame->NewDisplay( true );
 }
 
 
