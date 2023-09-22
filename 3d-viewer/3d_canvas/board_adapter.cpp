@@ -143,6 +143,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_frontPlatedPadPolys = nullptr;
     m_backPlatedPadPolys = nullptr;
+    m_frontPlatedCopperPolys = nullptr;
+    m_backPlatedCopperPolys = nullptr;
 
     if( !g_ColorsLoaded )
     {

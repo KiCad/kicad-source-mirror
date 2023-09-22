@@ -120,7 +120,6 @@ public:
         std::vector<int> raytrace_lightElevation;   // -90 .. 90
         std::vector<int> raytrace_lightAzimuth;     // 0 .. 359
 
-        bool realistic;
         bool show_adhesive;
         bool show_axis;
         bool show_board_body;
@@ -146,7 +145,7 @@ public:
         bool show_fp_text;
         bool subtract_mask_from_silk;
         bool clip_silk_on_via_annuli;
-        bool renderPlatedPadsAsPlated;
+        bool differentiate_plated_copper;
     };
 
     struct CAMERA_SETTINGS

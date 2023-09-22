@@ -584,7 +584,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( isCopperLayer )
         {
-            if( cfg.renderPlatedPadsAsPlated )
+            if( cfg.differentiate_plated_copper )
                 setCopperMaterial();
             else
                 setLayerMaterial( layer_id );

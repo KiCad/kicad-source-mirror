@@ -34,6 +34,7 @@
 
 #include "board_adapter.h"
 #include "../3d_rendering/raytracing/shapes2D/filled_circle_2d.h"
+#include "raytracing/shapes2D/triangle_2d.h"
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
@@ -118,6 +119,8 @@ void BOARD_ADAPTER::destroyLayers()
 
     DELETE_AND_FREE( m_frontPlatedPadPolys )
     DELETE_AND_FREE( m_backPlatedPadPolys )
+    DELETE_AND_FREE( m_frontPlatedCopperPolys )
+    DELETE_AND_FREE( m_backPlatedCopperPolys )
 
     DELETE_AND_FREE_MAP( m_layerHoleOdPolys )
     DELETE_AND_FREE_MAP( m_layerHoleIdPolys )
@@ -234,10 +237,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    if( cfg.renderPlatedPadsAsPlated )
+    if( cfg.differentiate_plated_copper )
     {
         m_frontPlatedPadPolys = new SHAPE_POLY_SET;
         m_backPlatedPadPolys = new SHAPE_POLY_SET;
+        m_frontPlatedCopperPolys = new SHAPE_POLY_SET;
+        m_backPlatedCopperPolys = new SHAPE_POLY_SET;
 
         m_platedPadsFront = new BVH_CONTAINER_2D;
         m_platedPadsBack = new BVH_CONTAINER_2D;
@@ -338,6 +343,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     if( hole_inner_radius > 0.0 )
                         m_TH_IDs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius, *track ) );
                 }
+            }
+
+            if( cfg.differentiate_plated_copper && layer == F_Cu )
+            {
+                track->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
+                                                ERROR_INSIDE );
+            }
+            else if( cfg.differentiate_plated_copper && layer == B_Cu )
+            {
+                track->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
+                                                ERROR_INSIDE );
             }
         }
     }
@@ -529,24 +545,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            addPads( footprint, layerContainer, layer, cfg.renderPlatedPadsAsPlated, false );
+            addPads( footprint, layerContainer, layer, cfg.differentiate_plated_copper, false );
 
             // Micro-wave footprints may have items on copper layers
             addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
         }
-    }
-
-    if( cfg.renderPlatedPadsAsPlated )
-    {
-        // ADD PLATED PADS
-        for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            addPads( footprint, m_platedPadsFront, F_Cu, false, true );
-            addPads( footprint, m_platedPadsBack, B_Cu, false, true );
-        }
-
-        m_platedPadsFront->BuildBVH();
-        m_platedPadsBack->BuildBVH();
     }
 
     // Add footprints PADs poly contours (vertical outlines)
@@ -564,13 +567,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // Note: NPTH pads are not drawn on copper layers when the pad has same shape as
                 // its hole
                 footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE,
-                                                   true, cfg.renderPlatedPadsAsPlated, false );
+                                                   true, cfg.differentiate_plated_copper, false );
 
                 transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
             }
         }
 
-        if( cfg.renderPlatedPadsAsPlated )
+        if( cfg.differentiate_plated_copper )
         {
             // ADD PLATED PADS contours
             for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -688,6 +691,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 zones.emplace_back( std::make_pair( zone, layer ) );
                 layer_lock.emplace( layer, std::make_unique<std::mutex>() );
+
+                if( cfg.differentiate_plated_copper && layer == F_Cu )
+                {
+                    zone->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu, 0, maxError,
+                                                   ERROR_INSIDE );
+                }
+                else if( cfg.differentiate_plated_copper && layer == B_Cu )
+                {
+                    zone->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu, 0, maxError,
+                                                   ERROR_INSIDE );
+                }
             }
         }
 
@@ -737,45 +751,339 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         while( threadsFinished < parallelThreadCount )
             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-
     }
+    // End Build Copper layers
+
+    // This will make a union of all added contours
+    m_TH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_NPTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_viaTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+    m_viaAnnuliPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+    // Build Tech layers
+    // Based on:
+    //    https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L1059
+    if( aStatusReporter )
+        aStatusReporter->Report( _( "Build Tech layers" ) );
+
+    // draw graphic items, on technical layers
+
+    static const PCB_LAYER_ID techLayerList[] = {
+            B_Adhes,
+            F_Adhes,
+            B_Paste,
+            F_Paste,
+            B_SilkS,
+            F_SilkS,
+            B_Mask,
+            F_Mask,
+
+            // Aux Layers
+            Dwgs_User,
+            Cmts_User,
+            Eco1_User,
+            Eco2_User
+        };
+
+    std::bitset<LAYER_3D_END> enabledFlags = visibilityFlags;
+
+    if( cfg.subtract_mask_from_silk || cfg.differentiate_plated_copper )
+    {
+        enabledFlags.set( LAYER_3D_SOLDERMASK_TOP );
+        enabledFlags.set( LAYER_3D_SOLDERMASK_BOTTOM );
+    }
+
+    for( PCB_LAYER_ID layer : LSET::AllNonCuMask().Seq( techLayerList, arrayDim( techLayerList ) ) )
+    {
+        if( aStatusReporter )
+            aStatusReporter->Report( wxString::Format( _( "Build Tech layer %d" ), (int) layer ) );
+
+        if( !Is3dLayerEnabled( layer, enabledFlags ) )
+            continue;
+
+        BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
+        m_layerMap[layer] = layerContainer;
+
+        SHAPE_POLY_SET *layerPoly = new SHAPE_POLY_SET;
+        m_layers_poly[layer] = layerPoly;
+
+        if( Is3dLayerEnabled( layer, visibilityFlags ) )
+        {
+            // Add drawing objects
+            for( BOARD_ITEM* item : m_board->Drawings() )
+            {
+                if( !item->IsOnLayer( layer ) )
+                    continue;
+
+                switch( item->Type() )
+                {
+                case PCB_SHAPE_T:
+                    addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
+                    break;
+
+                case PCB_TEXT_T:
+                    addText( static_cast<PCB_TEXT*>( item ), layerContainer, item );
+                    break;
+
+                case PCB_TEXTBOX_T:
+                    addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+
+                    if( static_cast<PCB_TEXTBOX*>( item )->IsBorderEnabled() )
+                        addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+
+                    break;
+
+                case PCB_DIM_ALIGNED_T:
+                case PCB_DIM_CENTER_T:
+                case PCB_DIM_RADIAL_T:
+                case PCB_DIM_ORTHOGONAL_T:
+                case PCB_DIM_LEADER_T:
+                    addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer, item );
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            // Add via tech layers
+            if( ( layer == F_Mask || layer == B_Mask ) && !m_board->GetTentVias() )
+            {
+                int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
+
+                for( PCB_TRACK* track : m_board->Tracks() )
+                {
+                    if( track->Type() == PCB_VIA_T
+                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                    {
+                        createViaWithMargin( track, layerContainer, maskExpansion );
+                    }
+                }
+            }
+
+            // Add footprints tech layers - objects
+            for( FOOTPRINT* footprint : m_board->Footprints() )
+            {
+                if( layer == F_SilkS || layer == B_SilkS )
+                {
+                    int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
+
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( !pad->IsOnLayer( layer ) )
+                            continue;
+
+                        buildPadOutlineAsSegments( pad, layerContainer, linewidth );
+                    }
+                }
+                else
+                {
+                    addPads( footprint, layerContainer, layer, false, false );
+                }
+
+                addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
+            }
+
+            // Draw non copper zones
+            if( cfg.show_zones )
+            {
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( zone->IsOnLayer( layer ) )
+                        addSolidAreasShapes( zone, layerContainer, layer );
+                }
+            }
+        }
+
+        // Add item contours.  We need these if we're building vertical walls or if this is a
+        // mask layer and we're differentiating copper from plated copper.
+        if( ( cfg.engine == RENDER_ENGINE::OPENGL && cfg.opengl_copper_thickness )
+                || ( cfg.differentiate_plated_copper && ( layer == F_Mask || layer == B_Mask ) ) )
+        {
+            // DRAWINGS
+            for( BOARD_ITEM* item : m_board->Drawings() )
+            {
+                if( !item->IsOnLayer( layer ) )
+                    continue;
+
+                switch( item->Type() )
+                {
+                case PCB_SHAPE_T:
+                    item->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    break;
+
+                case PCB_TEXT_T:
+                {
+                    PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+                    text->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    break;
+                }
+
+                case PCB_TEXTBOX_T:
+                {
+                    PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
+
+                    textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
+                    break;
+                }
+
+                default:
+                    break;
+                }
+            }
+
+            // NON-TENTED VIAS
+            if( ( layer == F_Mask || layer == B_Mask ) && !m_board->GetTentVias() )
+            {
+                int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
+
+                for( PCB_TRACK* track : m_board->Tracks() )
+                {
+                    if( track->Type() == PCB_VIA_T
+                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                    {
+                        track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
+                                                        ERROR_INSIDE );
+                    }
+                }
+            }
+
+            // FOOTPRINT CHILDREN
+            for( FOOTPRINT* footprint : m_board->Footprints() )
+            {
+                if( layer == F_SilkS || layer == B_SilkS )
+                {
+                    int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
+
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( pad->IsOnLayer( layer ) )
+                        {
+                            buildPadOutlineAsPolygon( pad, *layerPoly, linewidth, maxError,
+                                                      ERROR_INSIDE );
+                        }
+                    }
+                }
+                else
+                {
+                    footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                }
+
+                // On tech layers, use a poor circle approximation, only for texts (stroke font)
+                footprint->TransformFPTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+
+                // Add the remaining things with dynamic seg count for circles
+                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
+            }
+
+            if( cfg.show_zones || layer == F_Mask || layer == B_Mask )
+            {
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( zone->IsOnLayer( layer ) )
+                        zone->TransformSolidAreasShapesToPolygon( layer, *layerPoly );
+                }
+            }
+
+            // This will make a union of all added contours
+            layerPoly->Simplify( SHAPE_POLY_SET::PM_FAST );
+        }
+    }
+    // End Build Tech layers
+
+#if 1
+    // A somewhat experimental feature: if we're rendering off-board silk, turn any pads of
+    // footprints which are entirely outside the board outline into silk.  This makes off-board
+    // footprints more visually recognizable.
+    if( cfg.show_off_board_silk )
+    {
+        BOX2I boardBBox = m_board_poly.BBox();
+
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+        {
+            if( !footprint->GetBoundingBox().Intersects( boardBBox ) )
+            {
+                if( footprint->IsFlipped() )
+                {
+                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ B_SilkS ];
+                    addPads( footprint, layerContainer, B_Cu, false, false );
+                }
+                else
+                {
+                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ F_SilkS ];
+                    addPads( footprint, layerContainer, F_Cu, false, false );
+                }
+            }
+        }
+    }
+#endif
 
     // Simplify layer polygons
 
     if( aStatusReporter )
-        aStatusReporter->Report( _( "Simplifying copper layers polygons" ) );
+        aStatusReporter->Report( _( "Simplifying copper layer polygons" ) );
+
+    if( cfg.differentiate_plated_copper )
+    {
+        if( aStatusReporter )
+            aStatusReporter->Report( _( "Calculating plated copper" ) );
+
+        // TRIM PLATED COPPER TO SOLDERMASK
+        if( m_layers_poly.find( F_Mask ) != m_layers_poly.end() )
+        {
+            m_frontPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( F_Mask ),
+                                                           SHAPE_POLY_SET::PM_FAST );
+        }
+
+        if( m_layers_poly.find( B_Mask ) != m_layers_poly.end() )
+        {
+            m_backPlatedCopperPolys->BooleanIntersection( *m_layers_poly.at( B_Mask ),
+                                                          SHAPE_POLY_SET::PM_FAST );
+        }
+
+        // SUBTRACT PLATED COPPER FROM (UNPLATED) COPPER
+        if( m_layers_poly.find( F_Cu ) != m_layers_poly.end() )
+        {
+            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
+            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedCopperPolys, SHAPE_POLY_SET::PM_FAST );
+        }
+
+        if( m_layers_poly.find( B_Cu ) != m_layers_poly.end() )
+        {
+            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
+            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedCopperPolys, SHAPE_POLY_SET::PM_FAST );
+        }
+
+        m_frontPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+        m_backPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+        m_frontPlatedCopperPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+        m_backPlatedCopperPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+
+        // ADD PLATED PADS
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+        {
+            addPads( footprint, m_platedPadsFront, F_Cu, false, true );
+            addPads( footprint, m_platedPadsBack, B_Cu, false, true );
+        }
+
+        // ADD PLATED COPPER
+        ConvertPolygonToTriangles( *m_frontPlatedCopperPolys, *m_platedPadsFront, m_biuTo3Dunits,
+                                   *m_board->GetItem( niluuid ) );
+
+        ConvertPolygonToTriangles( *m_backPlatedCopperPolys, *m_platedPadsBack, m_biuTo3Dunits,
+                                   *m_board->GetItem( niluuid ) );
+
+        m_platedPadsFront->BuildBVH();
+        m_platedPadsBack->BuildBVH();
+    }
 
     if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL )
     {
-        if( cfg.renderPlatedPadsAsPlated )
-        {
-            if( m_frontPlatedPadPolys && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
-            {
-                if( aStatusReporter )
-                    aStatusReporter->Report( _( "Simplifying polygons on F_Cu" ) );
-
-                SHAPE_POLY_SET *layerPoly_F_Cu = m_layers_poly[F_Cu];
-                layerPoly_F_Cu->BooleanSubtract( *m_frontPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
-
-                 m_frontPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
-            }
-
-            if( m_backPlatedPadPolys && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
-            {
-                if( aStatusReporter )
-                    aStatusReporter->Report( _( "Simplifying polygons on B_Cu" ) );
-
-                SHAPE_POLY_SET *layerPoly_B_Cu = m_layers_poly[B_Cu];
-                layerPoly_B_Cu->BooleanSubtract( *m_backPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
-
-                m_backPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
-            }
-        }
-
         std::vector<PCB_LAYER_ID> &selected_layer_id = layer_ids;
         std::vector<PCB_LAYER_ID> layer_id_without_F_and_B;
 
-        if( cfg.renderPlatedPadsAsPlated )
+        if( cfg.differentiate_plated_copper )
         {
             layer_id_without_F_and_B.clear();
             layer_id_without_F_and_B.reserve( layer_ids.size() );
@@ -816,8 +1124,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                 auto layerPoly = m_layers_poly.find( selected_layer_id[i] );
 
                                 if( layerPoly != m_layers_poly.end() )
+                                {
                                     // This will make a union of all added contours
                                     layerPoly->second->Simplify( SHAPE_POLY_SET::PM_FAST );
+                                }
                             }
 
                             threadsFinished++;
@@ -849,268 +1159,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             polyLayer->Simplify( SHAPE_POLY_SET::PM_FAST );
         }
     }
-
-    // End Build Copper layers
-
-    // This will make a union of all added contours
-    m_TH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_NPTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_viaTH_ODPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-    m_viaAnnuliPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-    // Build Tech layers
-    // Based on:
-    //    https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L1059
-    if( aStatusReporter )
-        aStatusReporter->Report( _( "Build Tech layers" ) );
-
-    // draw graphic items, on technical layers
-
-    // Vertical walls (layer thickness) around shapes is really time consumming
-    // They are built on request
-    bool buildVerticalWallsForTechLayers = cfg.opengl_copper_thickness
-                                              && cfg.engine == RENDER_ENGINE::OPENGL;
-
-    static const PCB_LAYER_ID techLayerList[] = {
-            B_Adhes,
-            F_Adhes,
-            B_Paste,
-            F_Paste,
-            B_SilkS,
-            F_SilkS,
-            B_Mask,
-            F_Mask,
-
-            // Aux Layers
-            Dwgs_User,
-            Cmts_User,
-            Eco1_User,
-            Eco2_User
-        };
-
-    for( LSEQ seq = LSET::AllNonCuMask().Seq( techLayerList, arrayDim( techLayerList ) );
-         seq;
-         ++seq )
-    {
-        const PCB_LAYER_ID layer = *seq;
-
-        if( !Is3dLayerEnabled( layer, visibilityFlags ) )
-            continue;
-
-        if( aStatusReporter )
-            aStatusReporter->Report( wxString::Format( _( "Build Tech layer %d" ), (int) layer ) );
-
-        BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
-        m_layerMap[layer] = layerContainer;
-
-        SHAPE_POLY_SET *layerPoly = new SHAPE_POLY_SET;
-        m_layers_poly[layer] = layerPoly;
-
-        // Add drawing objects
-        for( BOARD_ITEM* item : m_board->Drawings() )
-        {
-            if( !item->IsOnLayer( layer ) )
-                continue;
-
-            switch( item->Type() )
-            {
-            case PCB_SHAPE_T:
-                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
-                break;
-
-            case PCB_TEXT_T:
-                addText( static_cast<PCB_TEXT*>( item ), layerContainer, item );
-                break;
-
-            case PCB_TEXTBOX_T:
-                addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
-                if( static_cast<PCB_TEXTBOX*>( item )->IsBorderEnabled() )
-                    addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
-                break;
-
-            case PCB_DIM_ALIGNED_T:
-            case PCB_DIM_CENTER_T:
-            case PCB_DIM_RADIAL_T:
-            case PCB_DIM_ORTHOGONAL_T:
-            case PCB_DIM_LEADER_T:
-                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer, item );
-                break;
-
-            default:
-                break;
-            }
-        }
-
-        // Add drawing contours (vertical walls)
-        if( buildVerticalWallsForTechLayers )
-        {
-            for( BOARD_ITEM* item : m_board->Drawings() )
-            {
-                if( !item->IsOnLayer( layer ) )
-                    continue;
-
-                switch( item->Type() )
-                {
-                case PCB_SHAPE_T:
-                    item->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
-                    break;
-
-                case PCB_TEXT_T:
-                {
-                    PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-
-                    text->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
-                    break;
-                }
-
-                case PCB_TEXTBOX_T:
-                {
-                    PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
-
-                    textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
-                    break;
-                }
-
-                default:
-                    break;
-                }
-            }
-        }
-
-        // Add via tech layers
-        if( ( layer == F_Mask || layer == B_Mask ) && !m_board->GetTentVias() )
-        {
-            int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
-
-            for( PCB_TRACK* track : m_board->Tracks() )
-            {
-                if( track->Type() == PCB_VIA_T
-                        && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
-                {
-                    createViaWithMargin( track, layerContainer, maskExpansion );
-                }
-            }
-
-            // Add via tech layers - contours (vertical walls)
-            if( buildVerticalWallsForTechLayers )
-            {
-                for( PCB_TRACK* track : m_board->Tracks() )
-                {
-                    if( track->Type() == PCB_VIA_T
-                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
-                    {
-                        track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
-                                                        ERROR_INSIDE );
-                    }
-                }
-            }
-        }
-
-        // Add footprints tech layers - objects
-        for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            if( layer == F_SilkS || layer == B_SilkS )
-            {
-                int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
-
-                for( PAD* pad : footprint->Pads() )
-                {
-                    if( !pad->IsOnLayer( layer ) )
-                        continue;
-
-                    buildPadOutlineAsSegments( pad, layerContainer, linewidth );
-                }
-            }
-            else
-            {
-                addPads( footprint, layerContainer, layer, false, false );
-            }
-
-            addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
-        }
-
-
-        // Add footprints tech layers - contours (vertical walls)
-        if( buildVerticalWallsForTechLayers )
-        {
-            for( FOOTPRINT* footprint : m_board->Footprints() )
-            {
-                if( layer == F_SilkS || layer == B_SilkS )
-                {
-                    int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
-
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        if( pad->IsOnLayer( layer ) )
-                        {
-                            buildPadOutlineAsPolygon( pad, *layerPoly, linewidth, maxError,
-                                                      ERROR_INSIDE );
-                        }
-                    }
-                }
-                else
-                {
-                    footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
-                }
-
-                // On tech layers, use a poor circle approximation, only for texts (stroke font)
-                footprint->TransformFPTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
-
-                // Add the remaining things with dynamic seg count for circles
-                transformFPShapesToPolySet( footprint, layer, *layerPoly, maxError, ERROR_INSIDE );
-            }
-        }
-
-        // Draw non copper zones
-        if( cfg.show_zones )
-        {
-            for( ZONE* zone : m_board->Zones() )
-            {
-                if( zone->IsOnLayer( layer ) )
-                    addSolidAreasShapes( zone, layerContainer, layer );
-            }
-
-            if( buildVerticalWallsForTechLayers )
-            {
-                for( ZONE* zone : m_board->Zones() )
-                {
-                    if( zone->IsOnLayer( layer ) )
-                        zone->TransformSolidAreasShapesToPolygon( layer, *layerPoly );
-                }
-            }
-        }
-
-        // This will make a union of all added contours
-        layerPoly->Simplify( SHAPE_POLY_SET::PM_FAST );
-    }
-    // End Build Tech layers
-
-#if 1
-    // A somewhat experimental feature: if we're rendering off-board silk, turn any pads of
-    // footprints which are entirely outside the board outline into silk.  This makes off-board
-    // footprints more visually recognizable.
-    if( cfg.show_off_board_silk )
-    {
-        BOX2I boardBBox = m_board_poly.BBox();
-
-        for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            if( !footprint->GetBoundingBox().Intersects( boardBBox ) )
-            {
-                if( footprint->IsFlipped() )
-                {
-                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ B_SilkS ];
-                    addPads( footprint, layerContainer, B_Cu, false, false );
-                }
-                else
-                {
-                    BVH_CONTAINER_2D *layerContainer = m_layerMap[ F_SilkS ];
-                    addPads( footprint, layerContainer, F_Cu, false, false );
-                }
-            }
-        }
-    }
-#endif
 
     // Build BVH (Bounding volume hierarchy) for holes and vias
 

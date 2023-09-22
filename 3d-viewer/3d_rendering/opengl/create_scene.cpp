@@ -565,39 +565,42 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
         // Load the vertical (Z axis) component of shapes
 
-        if( map_poly.find( layer ) != map_poly.end() )
+        if( m_boardAdapter.m_Cfg->m_Render.opengl_copper_thickness )
         {
-            polyListSubtracted = *map_poly.at( layer );
-
-            if( LSET::PhysicalLayersMask().test( layer ) )
+            if( map_poly.find( layer ) != map_poly.end() )
             {
-                polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
-                                                        SHAPE_POLY_SET::PM_FAST );
-            }
+                polyListSubtracted = *map_poly.at( layer );
 
-            if( layer != B_Mask && layer != F_Mask )
-            {
-                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(),
-                                                    SHAPE_POLY_SET::PM_FAST );
-                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(),
-                                                    SHAPE_POLY_SET::PM_FAST );
-            }
-
-            if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
-            {
-                if( layer == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
+                if( LSET::PhysicalLayersMask().test( layer ) )
                 {
-                    polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ),
+                    polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
+                                                            SHAPE_POLY_SET::PM_FAST );
+                }
+
+                if( layer != B_Mask && layer != F_Mask )
+                {
+                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(),
+                                                        SHAPE_POLY_SET::PM_FAST );
+                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(),
                                                         SHAPE_POLY_SET::PM_FAST );
                 }
-                else if( layer == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
-                {
-                    polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ),
-                                                        SHAPE_POLY_SET::PM_FAST );
-                }
-            }
 
-            polyList = &polyListSubtracted;
+                if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
+                {
+                    if( layer == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
+                    {
+                        polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ),
+                                                            SHAPE_POLY_SET::PM_FAST );
+                    }
+                    else if( layer == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
+                    {
+                        polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ),
+                                                            SHAPE_POLY_SET::PM_FAST );
+                    }
+                }
+
+                polyList = &polyListSubtracted;
+            }
         }
 
         OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, polyList, layer,
@@ -607,20 +610,19 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             m_layers[layer] = oglList;
     }
 
-    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
+    if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper )
     {
         const SHAPE_POLY_SET* frontPlatedPadPolys = m_boardAdapter.GetFrontPlatedPadPolys();
         const SHAPE_POLY_SET* backPlatedPadPolys = m_boardAdapter.GetBackPlatedPadPolys();
 
         if( frontPlatedPadPolys )
         {
-            SHAPE_POLY_SET polySubtracted = frontPlatedPadPolys->CloneDropTriangulation();
-            polySubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+            SHAPE_POLY_SET poly = frontPlatedPadPolys->CloneDropTriangulation();
+            poly.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+            poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+            poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
 
-            m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(),
-                                                   &polySubtracted, F_Cu );
+            m_platedPadsFront = generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly, F_Cu );
 
             // An entry for F_Cu must exist in m_layers or we'll never look at m_platedPadsFront
             if( m_layers.count( F_Cu ) == 0 )
@@ -629,13 +631,12 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
         if( backPlatedPadPolys )
         {
-            SHAPE_POLY_SET polySubtracted = backPlatedPadPolys->CloneDropTriangulation();
-            polySubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
-            polySubtracted.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+            SHAPE_POLY_SET poly = backPlatedPadPolys->CloneDropTriangulation();
+            poly.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+            poly.BooleanSubtract( m_boardAdapter.GetTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
+            poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys(), SHAPE_POLY_SET::PM_FAST );
 
-            m_platedPadsBack = generateLayerList( m_boardAdapter.GetPlatedPadsBack(),
-                                                  &polySubtracted, B_Cu );
+            m_platedPadsBack = generateLayerList( m_boardAdapter.GetPlatedPadsBack(), &poly, B_Cu );
 
             // An entry for B_Cu must exist in m_layers or we'll never look at m_platedPadsBack
             if( m_layers.count( B_Cu ) == 0 )

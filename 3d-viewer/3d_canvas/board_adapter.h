@@ -434,6 +434,8 @@ private:
 
     SHAPE_POLY_SET*   m_frontPlatedPadPolys;
     SHAPE_POLY_SET*   m_backPlatedPadPolys;
+    SHAPE_POLY_SET*   m_frontPlatedCopperPolys;
+    SHAPE_POLY_SET*   m_backPlatedCopperPolys;
 
     MAP_POLY          m_layerHoleOdPolys;     ///< Hole outer diameters (per layer)
     MAP_POLY          m_layerHoleIdPolys;     ///< Hole inner diameters (per layer)

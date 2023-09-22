@@ -625,7 +625,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             break;
 
         default:
-            if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
+            if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper )
             {
                 layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f, 50.0f / 255.0f );
                 materialLayer = &m_materials.m_NonPlatedCopper;
@@ -643,7 +643,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     } // for each layer on map
 
     // Create plated copper
-    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
+    if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper )
     {
         createItemsFromContainer( m_boardAdapter.GetPlatedPadsFront(), F_Cu, &m_materials.m_Copper,
                                   m_boardAdapter.m_CopperColor,

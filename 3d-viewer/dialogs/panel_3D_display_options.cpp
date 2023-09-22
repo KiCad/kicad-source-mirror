@@ -49,7 +49,7 @@ void PANEL_3D_DISPLAY_OPTIONS::loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 
     m_checkBoxSubtractMaskFromSilk->SetValue( aCfg->m_Render.subtract_mask_from_silk );
     m_checkBoxClipSilkOnViaAnnulus->SetValue( aCfg->m_Render.clip_silk_on_via_annuli );
-    m_checkBoxRenderPlatedPadsAsPlated->SetValue( aCfg->m_Render.renderPlatedPadsAsPlated );
+    m_checkBoxRenderPlatedPadsAsPlated->SetValue( aCfg->m_Render.differentiate_plated_copper );
 
     m_materialProperties->SetSelection( static_cast<int>( aCfg->m_Render.material_mode ) );
 
@@ -80,7 +80,7 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.show_zones = m_checkBoxAreas->GetValue();
     cfg->m_Render.subtract_mask_from_silk = m_checkBoxSubtractMaskFromSilk->GetValue();
     cfg->m_Render.clip_silk_on_via_annuli = m_checkBoxClipSilkOnViaAnnulus->GetValue();
-    cfg->m_Render.renderPlatedPadsAsPlated = m_checkBoxRenderPlatedPadsAsPlated->GetValue();
+    cfg->m_Render.differentiate_plated_copper = m_checkBoxRenderPlatedPadsAsPlated->GetValue();
 
     cfg->m_Render.material_mode = static_cast<MATERIAL_MODE>( m_materialProperties->GetSelection() );
 
