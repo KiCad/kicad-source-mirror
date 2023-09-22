@@ -110,6 +110,8 @@ public:
 
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
+    void SetLibPin( LIB_PIN* aLibPin ) { m_libPin = aLibPin; }
+
     /**
      * @param aPin Comparison Pin
      * @return True if aPin is stacked with this pin
