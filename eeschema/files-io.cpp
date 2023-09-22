@@ -618,6 +618,15 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( !AskToSaveChanges() )
         return;
 
+    if( Schematic().RootScreen() && !Schematic().RootScreen()->Items().empty() )
+    {
+        wxString msg = _( "This operation replaces the contents of the current project.\n\n"
+                          "Do you want to proceed?" );
+
+        if( !IsOK( this, msg ) )
+            return;
+    }
+
     // Set the project location if none is set or if we are running in standalone mode
     bool     setProject = Prj().GetProjectFullName().IsEmpty() || Kiface().IsSingle();
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
