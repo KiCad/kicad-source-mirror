@@ -502,10 +502,10 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     m_outerViaThroughHoles = generateHoles( m_boardAdapter.GetViaTH_ODs().GetList(),
                                             m_boardAdapter.GetViaTH_ODPolys(), 1.0f, 0.0f, false );
 
-    if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus )
+    if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annuli )
     {
-        m_outerThroughHoleRings = generateHoles( m_boardAdapter.GetTHAnnularRings().GetList(),
-                                                 m_boardAdapter.GetTHAnnularRingPolys(),
+        m_outerThroughHoleRings = generateHoles( m_boardAdapter.GetViaAnnuli().GetList(),
+                                                 m_boardAdapter.GetViaAnnuliPolys(),
                                                  1.0f, 0.0f, false );
     }
 
@@ -567,7 +567,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
         if( map_poly.find( layer ) != map_poly.end() )
         {
-            polyListSubtracted = *map_poly.at( layer );;
+            polyListSubtracted = *map_poly.at( layer );
 
             if( LSET::PhysicalLayersMask().test( layer ) )
             {
@@ -605,7 +605,6 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
         if( oglList != nullptr )
             m_layers[layer] = oglList;
-
     }
 
     if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )

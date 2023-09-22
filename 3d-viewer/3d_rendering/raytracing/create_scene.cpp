@@ -235,7 +235,9 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
     if( aContainer2d == nullptr )
         return;
 
-    const LIST_OBJECT2D& listObject2d = aContainer2d->GetList();
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+    bool                                     isSilk = aLayer_id == B_SilkS || aLayer_id == F_SilkS;
+    const LIST_OBJECT2D&                     listObject2d = aContainer2d->GetList();
 
     if( listObject2d.size() == 0 )
         return;
@@ -274,10 +276,8 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
             // layer and the flag is set, then clip the silk at the outer edge of the annular ring,
             // rather than the at the outer edge of the copper plating.
             const BVH_CONTAINER_2D& throughHoleOuter =
-                    m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
-                        && ( aLayer_id == B_SilkS || aLayer_id == F_SilkS ) ?
-                                                            m_boardAdapter.GetTHAnnularRings() :
-                                                            m_boardAdapter.GetTH_ODs();
+                        cfg.clip_silk_on_via_annuli && isSilk ? m_boardAdapter.GetViaAnnuli()
+                                                              : m_boardAdapter.GetTH_ODs();
 
             if( !throughHoleOuter.GetList().empty() )
             {
@@ -303,13 +303,13 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
 
         const MAP_CONTAINER_2D_BASE& mapLayers = m_boardAdapter.GetLayerMap();
 
-        if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
+        if( cfg.subtract_mask_from_silk
             && (    ( aLayer_id == B_SilkS && mapLayers.find( B_Mask ) != mapLayers.end() )
                  || ( aLayer_id == F_SilkS && mapLayers.find( F_Mask ) != mapLayers.end() ) ) )
         {
-            const PCB_LAYER_ID layerMask_id = ( aLayer_id == B_SilkS ) ? B_Mask : F_Mask;
+            const PCB_LAYER_ID maskLayer = ( aLayer_id == B_SilkS ) ? B_Mask : F_Mask;
 
-            const BVH_CONTAINER_2D* containerMaskLayer2d = mapLayers.at( layerMask_id );
+            const BVH_CONTAINER_2D* containerMaskLayer2d = mapLayers.at( maskLayer );
 
             CONST_LIST_OBJECT2D intersecting;
 
@@ -329,8 +329,8 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
         if( ( object2d_B == CSGITEM_EMPTY ) && ( object2d_C == CSGITEM_FULL ) )
         {
             LAYER_ITEM* objPtr = new LAYER_ITEM( object2d_A,
-                    m_boardAdapter.GetLayerBottomZPos( aLayer_id ) - aLayerZOffset,
-                    m_boardAdapter.GetLayerTopZPos( aLayer_id ) + aLayerZOffset );
+                                    m_boardAdapter.GetLayerBottomZPos( aLayer_id ) - aLayerZOffset,
+                                    m_boardAdapter.GetLayerTopZPos( aLayer_id ) + aLayerZOffset );
             objPtr->SetMaterial( aMaterialLayer );
             objPtr->SetColor( ConvertSRGBToLinear( aLayerColor ) );
             m_objectContainer.Add( objPtr );
@@ -342,8 +342,8 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
             m_containerWithObjectsToDelete.Add( itemCSG2d );
 
             LAYER_ITEM* objPtr = new LAYER_ITEM( itemCSG2d,
-                    m_boardAdapter.GetLayerBottomZPos( aLayer_id ) - aLayerZOffset,
-                    m_boardAdapter.GetLayerTopZPos( aLayer_id ) + aLayerZOffset );
+                                    m_boardAdapter.GetLayerBottomZPos( aLayer_id ) - aLayerZOffset,
+                                    m_boardAdapter.GetLayerTopZPos( aLayer_id ) + aLayerZOffset );
 
             objPtr->SetMaterial( aMaterialLayer );
             objPtr->SetColor( ConvertSRGBToLinear( aLayerColor ) );

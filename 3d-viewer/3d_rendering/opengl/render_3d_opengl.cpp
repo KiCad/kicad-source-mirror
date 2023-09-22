@@ -452,6 +452,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             return false;
     }
 
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+
     if( m_reloadRequested )
     {
         std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
@@ -462,16 +464,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         reload( aStatusReporter, aWarningReporter );
 
         // generate a new 3D grid as the size of the board may had changed
-        m_lastGridType = static_cast<GRID3D_TYPE>( m_boardAdapter.m_Cfg->m_Render.grid_type );
+        m_lastGridType = static_cast<GRID3D_TYPE>( cfg.grid_type );
         generate3dGrid( m_lastGridType );
     }
     else
     {
         // Check if grid was changed
-        if( m_boardAdapter.m_Cfg->m_Render.grid_type != m_lastGridType )
+        if( cfg.grid_type != m_lastGridType )
         {
             // and generate a new one
-            m_lastGridType = static_cast<GRID3D_TYPE>( m_boardAdapter.m_Cfg->m_Render.grid_type );
+            m_lastGridType = static_cast<GRID3D_TYPE>( cfg.grid_type );
             generate3dGrid( m_lastGridType );
         }
     }
@@ -485,7 +487,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glEnable( GL_NORMALIZE ); // This allow OpenGL to normalize the normals after transformations
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
-    if( aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_AA_disableOnMove )
+    if( aIsMoving && cfg.opengl_AA_disableOnMove )
         glDisable( GL_MULTISAMPLE );
     else
         glEnable( GL_MULTISAMPLE );
@@ -536,9 +538,9 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glLightfv( GL_LIGHT0, GL_POSITION, headlight_pos );
     }
 
-    bool skipThickness = aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_thickness_disableOnMove;
-    bool skipRenderHoles = aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_holes_disableOnMove;
-    bool skipRenderVias = aIsMoving && m_boardAdapter.m_Cfg->m_Render.opengl_vias_disableOnMove;
+    bool skipThickness = aIsMoving && cfg.opengl_thickness_disableOnMove;
+    bool skipRenderHoles = aIsMoving && cfg.opengl_holes_disableOnMove;
+    bool skipRenderVias = aIsMoving && cfg.opengl_vias_disableOnMove;
 
     bool drawMiddleSegments = !skipThickness;
 
@@ -582,7 +584,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( isCopperLayer )
         {
-            if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
+            if( cfg.renderPlatedPadsAsPlated )
                 setCopperMaterial();
             else
                 setLayerMaterial( layer_id );
@@ -647,21 +649,18 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             OPENGL_RENDER_LIST* anti_board = nullptr;
             OPENGL_RENDER_LIST* solder_mask = nullptr;
 
-            if( isSilkLayer && m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus )
+            if( isSilkLayer && cfg.clip_silk_on_via_annuli )
                 throughHolesOuter = m_outerThroughHoleRings;
             else
                 throughHolesOuter = m_outerThroughHoles;
 
-            if( isSilkLayer && m_boardAdapter.m_Cfg->m_Render.show_off_board_silk )
+            if( isSilkLayer && cfg.show_off_board_silk )
                 anti_board = nullptr;
             else if( LSET::PhysicalLayersMask().test( layer_id ) )
                 anti_board = m_antiBoard;
 
-            if( isSilkLayer && m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
-                    && !m_boardAdapter.m_Cfg->m_Render.show_off_board_silk )
-            {
+            if( isSilkLayer && cfg.subtract_mask_from_silk && !cfg.show_off_board_silk )
                 solder_mask = m_layers[ (layer_id == B_SilkS) ? B_Mask : F_Mask ];
-            }
 
             if( throughHolesOuter )
                 throughHolesOuter->ApplyScalePosition( pLayerDispList );
@@ -766,7 +765,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glDepthMask( GL_TRUE );
 
     // Render Grid
-    if( m_boardAdapter.m_Cfg->m_Render.grid_type != GRID3D_TYPE::NONE )
+    if( cfg.grid_type != GRID3D_TYPE::NONE )
     {
         glDisable( GL_LIGHTING );
 
@@ -777,7 +776,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     }
 
     // Render 3D arrows
-    if( m_boardAdapter.m_Cfg->m_Render.show_axis )
+    if( cfg.show_axis )
         render3dArrows();
 
     // Return back to the original viewport (this is important if we want
@@ -947,6 +946,8 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
     if( !m_boardAdapter.GetBoard() )
         return;
 
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
@@ -957,7 +958,7 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
             if( fp->IsSelected() )
                 highlight = true;
 
-            if( m_boardAdapter.m_Cfg->m_Render.highlight_on_rollover && fp == m_currentRollOverItem )
+            if( cfg.highlight_on_rollover && fp == m_currentRollOverItem )
                 highlight = true;
 
             if( aRenderSelectedOnly != highlight )
@@ -1071,7 +1072,9 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
 
 void RENDER_3D_OPENGL::renderOpaqueModels( const glm::mat4 &aCameraViewMatrix )
 {
-    const SFVEC3F selColor = m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.opengl_selection_color );
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+
+    const SFVEC3F selColor = m_boardAdapter.GetColor( cfg.opengl_selection_color );
 
     glPushMatrix();
 
@@ -1113,7 +1116,9 @@ void RENDER_3D_OPENGL::renderOpaqueModels( const glm::mat4 &aCameraViewMatrix )
 
 void RENDER_3D_OPENGL::renderTransparentModels( const glm::mat4 &aCameraViewMatrix )
 {
-    const SFVEC3F selColor = m_boardAdapter.GetColor( m_boardAdapter.m_Cfg->m_Render.opengl_selection_color );
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+
+    const SFVEC3F selColor = m_boardAdapter.GetColor( cfg.opengl_selection_color );
 
     std::list<MODELTORENDER> renderListModels; // do not clear it until this function returns
 
@@ -1201,6 +1206,8 @@ void RENDER_3D_OPENGL::renderModel( const glm::mat4 &aCameraViewMatrix,
                                     const MODELTORENDER &aModelToRender,
                                     const SFVEC3F &aSelColor, const SFVEC3F *aCameraWorldPos )
 {
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+
     const glm::mat4 modelviewMatrix = aCameraViewMatrix * aModelToRender.m_modelWorldMat;
 
     glLoadMatrixf( glm::value_ptr( modelviewMatrix ) );
@@ -1209,7 +1216,7 @@ void RENDER_3D_OPENGL::renderModel( const glm::mat4 &aCameraViewMatrix,
                                   aModelToRender.m_isSelected, aSelColor,
                                   &aModelToRender.m_modelWorldMat, aCameraWorldPos );
 
-    if( m_boardAdapter.m_Cfg->m_Render.show_model_bbox )
+    if( cfg.show_model_bbox )
     {
         const bool wasBlendEnabled = glIsEnabled( GL_BLEND );
 

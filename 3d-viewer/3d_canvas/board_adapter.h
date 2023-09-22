@@ -262,14 +262,14 @@ public:
         return m_TH_ODPolys;
     }
 
-    const BVH_CONTAINER_2D& GetTHAnnularRings() const noexcept
+    const BVH_CONTAINER_2D& GetViaAnnuli() const noexcept
     {
-        return m_THAnnularRings;
+        return m_viaAnnuli;
     }
 
-    const SHAPE_POLY_SET& GetTHAnnularRingPolys() const noexcept
+    const SHAPE_POLY_SET& GetViaAnnuliPolys() const noexcept
     {
-        return m_THAnnularRingPolys;
+        return m_viaAnnuliPolys;
     }
 
     const SHAPE_POLY_SET& GetNPTH_ODPolys() const noexcept
@@ -441,7 +441,7 @@ private:
     SHAPE_POLY_SET    m_NPTH_ODPolys;         ///< NPTH outer diameters
     SHAPE_POLY_SET    m_TH_ODPolys;           ///< PTH outer diameters
     SHAPE_POLY_SET    m_viaTH_ODPolys;        ///< Via hole outer diameters
-    SHAPE_POLY_SET    m_THAnnularRingPolys;   ///< Via annular ring outer diameters
+    SHAPE_POLY_SET    m_viaAnnuliPolys;       ///< Via annular ring outer diameters
 
     SHAPE_POLY_SET    m_board_poly;           ///< Board outline polygon.
 
@@ -453,7 +453,7 @@ private:
 
     BVH_CONTAINER_2D  m_TH_ODs;               ///< List of PTH outer diameters
     BVH_CONTAINER_2D  m_TH_IDs;               ///< List of PTH inner diameters
-    BVH_CONTAINER_2D  m_THAnnularRings;       ///< List of via annular rings
+    BVH_CONTAINER_2D  m_viaAnnuli;            ///< List of via annular rings
     BVH_CONTAINER_2D  m_viaTH_ODs;            ///< List of via hole outer diameters
 
     unsigned int      m_copperLayersCount;

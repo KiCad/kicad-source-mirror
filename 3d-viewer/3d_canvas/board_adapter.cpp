@@ -106,7 +106,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 
     m_TH_IDs.Clear();
     m_TH_ODs.Clear();
-    m_THAnnularRings.Clear();
+    m_viaAnnuli.Clear();
 
     m_copperLayersCount = 2;
 

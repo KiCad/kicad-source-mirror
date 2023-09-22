@@ -145,7 +145,7 @@ public:
         bool show_fp_values;
         bool show_fp_text;
         bool subtract_mask_from_silk;
-        bool clip_silk_on_via_annulus;
+        bool clip_silk_on_via_annuli;
         bool renderPlatedPadsAsPlated;
     };
 
