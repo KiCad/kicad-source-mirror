@@ -35,6 +35,13 @@
 wxString r_calculator_help =
 #include "r_calculator_help.h"
 
+/* RES_EQUIV_CALC class considers resistor values from a limited range
+ * and only combinations of up to 4 resistors, so target values less than 
+ * parallel combination of minimum resistors or greater than serial combination
+ * of maximum resistors cannot be reasonably looked for
+ */
+static const double min_target_value = static_cast<double>(RES_EQUIV_CALC_FIRST_VALUE) / 4;
+static const double max_target_value = static_cast<double>(RES_EQUIV_CALC_LAST_VALUE) * 4;
 
 extern double DoubleFromString( const wxString& TextValue );
 
@@ -94,22 +101,25 @@ void PANEL_R_CALCULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
 void PANEL_R_CALCULATOR::OnCalculateESeries( wxCommandEvent& event )
 {
-    double   reqr;   // required resistor stored in local copy
-    double   error, err3 = 0;
-    wxString es, fs; // error and formula strings
+    double reqr = 1000 * DoubleFromString( m_ResRequired->GetValue() );
 
-    wxBusyCursor dummy;
+    if( std::isnan( reqr ) || reqr < min_target_value || reqr > max_target_value )
+    {
+        wxMessageBox( wxString::Format( _( "Incorrect required resistance value: %s" ),
+                                        m_ResRequired->GetValue() ) );
+        return;
+    }
+    
+    wxBusyCursor busyCursor; // As long as this variable exists, the cursor will be 'busy'
 
-    reqr = ( 1000 * DoubleFromString( m_ResRequired->GetValue() ) );
-    m_eSeries.SetRequiredValue( reqr ); // keep a local copy of required resistor value
-    m_eSeries.NewCalc();                // assume all values available
+    m_eSeries.NewCalc( reqr ); // assume all values available
     /*
      * Exclude itself. For the case, a value from the available series is found as required value,
      * the calculator assumes this value needs a replacement for the reason of being not available.
      * Two further exclude values can be entered to exclude and are skipped as not being available.
      * All values entered in KiloOhms are converted to Ohm for internal calculation
      */
-    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResRequired->GetValue() ) );
+    m_eSeries.Exclude( reqr );
     m_eSeries.Exclude( 1000 * DoubleFromString( m_ResExclude1->GetValue() ) );
     m_eSeries.Exclude( 1000 * DoubleFromString( m_ResExclude2->GetValue() ) );
 
@@ -117,88 +127,43 @@ void PANEL_R_CALCULATOR::OnCalculateESeries( wxCommandEvent& event )
     {
         m_eSeries.Calculate();
     }
-    catch( std::out_of_range const& exc )
+    catch( const std::exception& exc )
     {
-        wxString msg;
-        msg << "Internal error: " << exc.what();
-
-        wxMessageBox( msg );
+        wxMessageBox( wxString::Format( "Internal error: %s", exc.what() ) );
         return;
     }
 
-    fs = m_eSeries.GetResults()[RES_EQUIV_CALC::S2R].e_name; // show 2R solution formula string
-    m_ESeries_Sol2R->SetValue( fs );
-    error = reqr
-            + m_eSeries.GetResults()[RES_EQUIV_CALC::S2R].e_value; // absolute value of solution
-    error = ( reqr / error - 1 ) * 100;                 // error in percent
-
-    if( error )
+    auto showResult = [reqr]( const std::optional<RESISTANCE>& aResult, wxTextCtrl* aFormulaField,
+                              wxTextCtrl* aErrorField )
     {
-        if( std::abs( error ) < 0.01 )
-            es.Printf( "<%.2f", 0.01 );
-        else
-            es.Printf( "%+.2f", error );
-    }
-    else
-    {
-        es = _( "Exact" );
-    }
+        wxString fs, es; // formula and error string
 
-    m_ESeriesError2R->SetValue( es );                      // anyway show 2R error string
-
-    if( m_eSeries.GetResults()[RES_EQUIV_CALC::S3R].e_use ) // if 3R solution available
-    {
-        err3 = reqr + m_eSeries.GetResults()[RES_EQUIV_CALC::S3R].e_value; // calculate the 3R
-        err3 = ( reqr / err3 - 1 ) * 100;                  // error in percent
-
-        if( err3 )
+        if( aResult ) // if value is present
         {
-            if( std::abs( err3 ) < 0.01 )
+            fs = aResult->name;
+            double sol = aResult->value;
+            double error = ( sol / reqr - 1 ) * 100; // relative error in percent
+
+            if( std::abs( error ) < epsilon )
+                es = _( "Exact" );
+            else if( std::abs( error ) < 0.01 )
                 es.Printf( "<%.2f", 0.01 );
             else
-                es.Printf( "%+.2f", err3 );
+                es.Printf( "%+.2f", error );
         }
         else
         {
-            es = _( "Exact" );
+            fs = _( "Not worth using" );
+            es = wxEmptyString;
         }
 
-        m_ESeriesError3R->SetValue( es ); // show 3R error string
-        fs = m_eSeries.GetResults()[RES_EQUIV_CALC::S3R].e_name;
-        m_ESeries_Sol3R->SetValue( fs );  // show 3R formula string
-    }
-    else                                  // nothing better than 2R found
-    {
-        fs = _( "Not worth using" );
-        m_ESeries_Sol3R->SetValue( fs );
-        m_ESeriesError3R->SetValue( wxEmptyString );
-    }
+        aFormulaField->SetValue( fs );
+        aErrorField->SetValue( es );
+    };
 
-    fs = wxEmptyString;
-
-    if( m_eSeries.GetResults()[RES_EQUIV_CALC::S4R].e_use ) // show 4R solution if available
-    {
-        fs = m_eSeries.GetResults()[RES_EQUIV_CALC::S4R].e_name;
-
-        error = reqr
-                + m_eSeries.GetResults()[RES_EQUIV_CALC::S4R].e_value; // absolute value of solution
-        error = ( reqr / error - 1 ) * 100;                 // error in percent
-
-        if( error )
-            es.Printf( "%+.2f", error );
-        else
-            es = _( "Exact" );
-
-        m_ESeriesError4R->SetValue( es );
-    }
-    else // no 4R solution
-    {
-        fs = _( "Not worth using" );
-        es = wxEmptyString;
-        m_ESeriesError4R->SetValue( es );
-    }
-
-    m_ESeries_Sol4R->SetValue( fs );
+    showResult( m_eSeries.GetResults()[RES_EQUIV_CALC::S2R], m_ESeries_Sol2R, m_ESeriesError2R );
+    showResult( m_eSeries.GetResults()[RES_EQUIV_CALC::S3R], m_ESeries_Sol3R, m_ESeriesError3R );
+    showResult( m_eSeries.GetResults()[RES_EQUIV_CALC::S4R], m_ESeries_Sol4R, m_ESeriesError4R );
 }
 
 

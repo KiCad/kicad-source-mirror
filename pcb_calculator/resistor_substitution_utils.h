@@ -20,168 +20,142 @@
 
 #pragma once
 
-#include <string>
-#include <cstdint>
-#include <vector>
-#include <array>
 #include "eseries.h"
+#include <array>
+#include <optional>
+#include <string>
+#include <utility>
+#include <vector>
 
-// First value of resistor in ohm
+const double epsilon = 1e-12; // machine epsilon for floating-point equality testing
+
+// First value of resistor in Ohm
+// It should be first value of the decade, i.e. power of 10
 // This value is only pertinent to the resistor calculator.
 // It is used to reduce the computational complexity of its calculations.
 // There are valid resistor values using E-series numbers below this
 // value and above the below LAST_VALUE.
-#define FIRST_VALUE 10
+#define RES_EQUIV_CALC_FIRST_VALUE 10
 
-// last value of resistor in ohm
+// Last value of resistor in Ohm
 // This value is only pertinent to the resistor calculator. See above.
-#define LAST_VALUE 1e6
+#define RES_EQUIV_CALC_LAST_VALUE 1e6
 
-// R_DATA handles a resistor: string value, value and allowed to use
-struct R_DATA
+// Struct representing resistance value together with its composition, e.g. {20.0, "10R + 10R"}
+struct RESISTANCE
 {
-    R_DATA() : e_use( true ), e_value( 0.0 ) {}
+    double      value;
+    std::string name;
 
-    R_DATA( const std::string& aName, double aValue )
+    RESISTANCE( double aValue = 0.0, std::string aName = "" ) :
+            value( aValue ), name( std::move( aName ) )
     {
-        e_use = true;
-        e_name = aName;
-        e_value = aValue;
     }
-
-    bool        e_use;
-    std::string e_name;
-    double      e_value;
 };
 
+
 class RES_EQUIV_CALC
-/*! \brief Performs calculations on E-series values primarily to find target values.
+/*! \brief Performs calculations on E-series values primarily to find target values
+ * as combinations (serial, parallel) of them.
  *
- * E_SERIES class stores and performs calcuations on E-series values. It currently
+ * RES_EQUIV_CALC class stores and performs calcuations on E-series values. It currently
  * is targeted toward the resistor calculator and hard codes some limitations
  * to optimize its use in the resistor calculator.
  *
- * At this time these limitations are that this class ignores all E-series larger
- * than E24 and it does not consider resistor values below 10 Ohm or above 1M Ohm.
+ * At this time these limitations are that this class handles only E-series up to
+ * E24 and it does not consider resistor values below 10 Ohm or above 1M Ohm.
  */
 {
 public:
     RES_EQUIV_CALC();
 
-    /**
-     * This calculator suggests solutions for 2R, 3R and 4R replacement combinations
-     */
     enum
     {
         S2R,
         S3R,
-        S4R
+        S4R,
+        NUMBER_OF_LEVELS
     };
+
+    /**
+     * Set E-series to be used in calculations.
+     * Correct values are from 0 to 4 inclusive,
+     * representing series (consecutively) E1, E3, E6, E12, E24.
+     * After changing the series, NewCalc must be called before running calculations.
+     */
+    void SetSeries( uint32_t aSeries );
+
+    /**
+     * Initialize next calculation, clear exclusion mask
+     * and erase results from previous calculation.
+     * 
+     * @param aTargetValue is the value (in Ohms) to be looked for
+     */
+    void NewCalc( double aTargetValue );
 
     /**
      * If any value of the selected E-series not available, it can be entered as an exclude value.
      *
-     * @param aValue is the value to exclude from calculation
-     * Values to exclude are set to false in the selected E-series source lookup table
+     * @param aValue is the value (in Ohms) to exclude from calculation
+     * Values to exclude are set to true in the current exclusion mask and will not be
+     * considered during calculations.
      */
     void Exclude( double aValue );
 
     /**
-     *  initialize next calculation and erase results from previous calculation
-     */
-    void NewCalc();
-
-    /**
-     * called on calculate button to execute all the 2R, 3R and 4R calculations
+     * Executes all the calculations.
+     * Results are to be retrieved using GetResults (below).
      */
     void Calculate();
 
     /**
-     * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
+     * Accessor to calculation results.
+     * Empty std::optional means that the exact value can be achieved using fewer resistors.
      */
-    void SetSeries( uint32_t aSeries ) { m_series = aSeries; }
-    void SetRequiredValue( double aValue ) { m_required_value = aValue; }
-
-    // Accessor:
-    const std::array<R_DATA, S4R + 1>& GetResults() { return m_results; }
+    const std::array<std::optional<RESISTANCE>, NUMBER_OF_LEVELS>& GetResults()
+    {
+        return m_results;
+    }
 
 private:
     /**
-     * Add values from aList to m_tables.  Covers all decades between FIRST_VALUE and LAST_VALUE.
-     * @return the count of items added to m_tables.
+     * Add values from aList to m_e_series tables.
+     * Covers all decades between FIRST_VALUE and LAST_VALUE.
      */
-    int buildSeriesData( const ESERIES::ESERIES_VALUES );
+    std::vector<RESISTANCE> buildSeriesData( const ESERIES::ESERIES_VALUES& aList );
 
     /**
-     * Build all 2R combinations from the selected E-series values
-     *
-     * Pre-calculated value combinations are saved in intermediate look up table m_combined_table
-     * @return is the number of found combinations what also depends from exclude values
-    */
-    uint32_t combine2();
+     * Build 1R buffer, which is selected E-series table with excluded values removed.
+     */
+    void prepare1RBuffer();
 
     /**
-     * Search for closest two component solution
-     *
-     * @param aSize is the number of valid 2R combinations in m_combined_table on where to search
-     * The 2R result with smallest deviation will be saved in results
-    */
-    void simple_solution( uint32_t aSize );
+     * Build 2R buffer, which consists of all possible combinations of two resistors
+     * from 1R buffer (serial and parallel), sorted by value.
+     */
+    void prepare2RBuffer();
 
     /**
-     * Check if there is a better 3 R solution than previous one using only two components.
-     *
-     * @param aSize gives the number of available combinations to be checked inside
-     *              m_combined_table.  Therefore m_combined_table is combined with the primary
-     *              E-series look up table.  The 3R result with smallest deviation will be saved
-     *              in results if better than 2R
+     * Find in 2R buffer two values nearest to the given value (one smaller and one larger).
+     * It always returns two valid values, even for input out of range or Nan.
      */
-    void combine3( uint32_t aSize );
+    std::pair<RESISTANCE&, RESISTANCE&> findIn2RBuffer( double aTargetValue );
 
     /**
-     * Check if there is a better four component solution.
-     *
-     * @param aSsize gives the number of 2R combinations to be checked inside m_combined_table
-     * Occupied calculation time depends from number of available E-series values with the power
-     * of 4 why execution for E12 is conditional with 4R check box for the case the previously
-     * found 3R solution is already exact
+     * Calculate the best combination consisting of exactly 2, 3 or 4 resistors.
      */
-    void combine4( uint32_t aSize );
-
-    /*
-     * Strip redundant braces from three component result
-     *
-     * Example: R1+(R2+R3) become R1+R2+R3
-     * and      R1|(R2|R3) become R1|R2|R3
-     * while    R1+(R2|R3) or (R1+R2)|R3) remains untouched
-     */
-    void strip3();
-
-    /*
-     * Strip redundant braces from four component result
-     *
-     * Example: (R1+R2)+(R3+R4) become R1+R2+R3+R4
-     * and      (R1|R2)|(R2|R3) become R1|R2|R3|R4
-     * while    (R1+R2)|(R3+R4) remains untouched
-     */
-    void strip4();
+    RESISTANCE calculate2RSolution();
+    RESISTANCE calculate3RSolution();
+    RESISTANCE calculate4RSolution();
 
 private:
-    std::vector<std::vector<R_DATA>> m_tables;
+    std::vector<std::vector<RESISTANCE>> m_e_series;
+    std::vector<bool>                    m_exclude_mask;
+    std::vector<RESISTANCE>              m_buffer_1R;
+    std::vector<RESISTANCE>              m_buffer_2R;
 
-    /* Note: intermediate calculations use m_combined_table
-     * if the biggest list is En, reserved array size should be 2*En*En of std::vector primary list.
-     * 2 component combinations including redundant swappable terms are for the moment
-     * ( using values between 10 ohms and 1Mohm )
-     * 72 combinations for E1
-     * 512 combinations for E3
-     * 1922 combinations for E6
-     * 7442 combinations for E12
-     * 29282 combinations for E24
-     */
-    std::vector<R_DATA> m_combined_table;               // intermediate 2R combinations
+    uint32_t m_series = ESERIES::E6;
+    double   m_target = 0;
 
-    std::array<R_DATA, S4R + 1> m_results;              // 2R, 3R and 4R results
-    uint32_t                    m_series = ESERIES::E6; // Radio Button State
-    double                      m_required_value = 0.0; // required Resistor
+    std::array<std::optional<RESISTANCE>, NUMBER_OF_LEVELS> m_results;
 };
