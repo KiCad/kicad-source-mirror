@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"PO-Revision-Date: 2023-09-27 16:00+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -13319,9 +13319,8 @@ msgstr ""
 "de um fio, barramento ou pino"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Margem global do rótulo:"
+msgstr "Índice da margem da etiqueta global:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -13685,13 +13684,12 @@ msgid "Add Anyway"
 msgstr "Adicione mesmo assim"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:843
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"Selecione uma ou mais linhas contendo as bibliotecas no formato legado (*."
-"lib) para que possa ser salvo com o formato KiCad atual (*.kicad_sym)."
+"Selecione uma ou mais linhas contendo bibliotecas para salvar no formato "
+"KiCad atual (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:851
 #, c-format
@@ -13703,13 +13701,13 @@ msgstr ""
 "a entrada legada na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"Deseja salvar as bibliotecas com formato legado %d no formato atual do KiCad "
-"(*.kicad_sym) e substituir as entradas legadas na tabela?"
+"Salvar %d bibliotecas como formato KiCad atual (*.kicad_sym) e substituir "
+"entradas herdadas na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:885
 #: pcbnew/dialogs/dialog_export_step.cpp:379
@@ -13973,24 +13971,23 @@ msgid "Symbol library was not updated\n"
 msgstr "O símbolo da biblioteca não foi atualizada\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:788
-#, fuzzy
 msgid "Running ERC...\n"
-msgstr "Executa DRC..."
+msgstr "Executando ERC...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:796 pcbnew/pcbnew_jobs_handler.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Permite violações do DRC"
+msgstr "Foram encontradas %d violações\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:810
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Não foi possível analisar o repositório: %s"
+msgstr "Não foi possível salvar o relatório ERC em %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Salvar Arquivo de Relatório DRC"
+msgstr "O relatório ERC foi salve em %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 msgid "Net Navigator"
@@ -14089,9 +14086,8 @@ msgstr ""
 "O símbolo %s tem pinos bidirecionais em unidades %s que não foram inseridas."
 
 #: eeschema/erc.cpp:605
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
-msgstr "Pinos tipo 'sem conexão' estão conectados"
+msgstr "O pino com o tipo \"sem conexão\" está conectado"
 
 #: eeschema/erc.cpp:731
 #, c-format
@@ -14521,7 +14517,7 @@ msgstr "Importe o esquema"
 #: eeschema/files-io.cpp:700
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "Nenhum carregador pode ler o arquivo especificado: '%s'."
 
 #: eeschema/files-io.cpp:768
 #, c-format
@@ -14920,9 +14916,8 @@ msgid "Show pin numbers settings differ."
 msgstr "As configurações da exibição do número do pino diferem."
 
 #: eeschema/lib_symbol.cpp:492
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "As configurações de exclusão da placa diferem."
+msgstr "As configurações de exclusão da simulação são diferentes."
 
 #: eeschema/lib_symbol.cpp:501
 msgid "Exclude from bill of materials settings differ."
@@ -15185,9 +15180,8 @@ msgid "Convert Symbol"
 msgstr "Converter o símbolo"
 
 #: eeschema/picksymbol.cpp:326
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "Definir configurações do pino"
+msgstr "Definir a função do pino"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
@@ -15768,24 +15762,21 @@ msgid "File not found %s."
 msgstr "Arquivo não encontrado %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3947
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr ""
-"Foi encontrado um ID de registro %d que é desconhecido ou inesperado dentro "
-"da seção \"FileHeader\"."
+msgstr "ID de registro desconhecido ou inesperado %d foi encontrado em %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4046
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "Esperado arquivo Altium Schematic Library versão 5.0"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:64
 msgid "Altium schematic files"
 msgstr "Arquivos do esquemático do Altium"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:69
-#, fuzzy
 msgid "Altium schematic library files"
-msgstr "Arquivos do esquemático do Altium"
+msgstr "Arquivos da biblioteca esquemática do Altium"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
@@ -16045,9 +16036,8 @@ msgid "CADSTAR Schematic Archive files"
 msgstr "Arquivos dos documento esquemáticos do CADSTAR"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:69
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "Arquivos dos documentos CADSTAR"
+msgstr "Arquivos da biblioteca de partes do CADSTAR"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:84
 #, c-format
@@ -16110,42 +16100,42 @@ msgstr "Arquivos do esquemático XML do Eagle"
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:420
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:464
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "Não foi possível ler o arquivo de dados '%s'."
+msgstr "Não foi possível encontrar um arquivo esquemático válido em '%s'"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:273
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:278
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:472
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "Houve um erro ao carregar o símbolo %s da biblioteca '%s'. (%s)"
+msgstr "Houve um erro ao carregar o símbolo '%s' da biblioteca '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:398
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:403
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:440
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Houve um erro ao criar os símbolos da biblioteca '%s'."
+msgstr "Houve um erro ao enumerar a biblioteca de símbolos '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:536
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Houve um erro ao carregar o esquema '%s'."
+msgstr "Houve um erro ao carregar o esquema '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.h:59
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.h:42
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "Arquivos padrão EasyEDA (JLCEDA)"
 
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_parser.cpp:69
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_parser.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "Houve uma falha ao arquivar o arquivo '%s'."
+msgstr "Houve uma falha ao analisar o valor: '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:54
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:71
@@ -16362,9 +16352,8 @@ msgid "expected unquoted string"
 msgstr "era esperado uma string sem aspas"
 
 #: eeschema/sch_plugins/ltspice/ltspice_sch_plugin.h:58
-#, fuzzy
 msgid "LTspice schematic files"
-msgstr "Arquivos esquemáticos do Ltspice"
+msgstr "Arquivos esquemáticos do LTspice"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:210
 #, c-format
@@ -16633,9 +16622,8 @@ msgid "Graphic Text"
 msgstr "Texto gráfico"
 
 #: eeschema/sch_text.cpp:434
-#, fuzzy
 msgid "Align center"
-msgstr "Alinhar ao centro"
+msgstr "Alinhar o centro"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -17942,14 +17930,12 @@ msgid "Measure Peak-to-peak"
 msgstr "Medida pico a pico"
 
 #: eeschema/sim/simulator_frame_ui.cpp:152
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "Medir o tempo de Min"
+msgstr "Medida mínima da frequência"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "Medir o tempo de Max"
+msgstr "Medida máxima da frequência"
 
 #: eeschema/sim/simulator_frame_ui.cpp:157
 msgid "Measure Time of Min"
@@ -18442,10 +18428,11 @@ msgstr ""
 "dos símbolos da bibliotecas para migrar para o formato atual."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:822
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
 msgstr ""
-"O símbolo %s deriva de %s.  Os gráficos do símbolo não serão editáveis."
+"O símbolo %s é um símbolo derivado.  Os gráficos do símbolo não serão "
+"editáveis."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:900
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:951
@@ -18542,14 +18529,13 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "O símbolo atual foi modificado.  Deseja salvar as alterações?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Derive do símbolo:"
+msgstr "Derivando do símbolo '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
-#, fuzzy
 msgid "Symbol must have a newName."
-msgstr "O campo deve ter um nome."
+msgstr "O símbolo deve ter um newName."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:384
 #: eeschema/symbol_editor/symbol_editor.cpp:689
@@ -18598,15 +18584,13 @@ msgstr "Salve na biblioteca:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:677
 #: pcbnew/footprint_libraries_utils.cpp:1066
-#, fuzzy
 msgid "A library must be specified."
-msgstr "Nenhuma biblioteca foi definida."
+msgstr "Uma biblioteca deve ser definida."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:683
 #: eeschema/tools/symbol_editor_control.cpp:369
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "O campo deve ter um nome."
+msgstr "O símbolo deve ter um nome."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:704
 msgid ""
@@ -18718,9 +18702,9 @@ msgstr "Importe o símbolo"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:101
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Não foi possível encontrar um visualizador de PDF para '%s'."
+msgstr "Não foi possível encontrar um leitor para '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:115
 #, c-format
@@ -20498,19 +20482,16 @@ msgid "symbol is not multi-unit"
 msgstr "o símbolo não é multi-unidade"
 
 #: eeschema/tools/sch_edit_tool.cpp:138
-#, fuzzy
 msgid "Pin Function"
-msgstr "Funcional"
+msgstr "Função do pino"
 
 #: eeschema/tools/sch_edit_tool.cpp:158
-#, fuzzy
 msgid "no pin selected"
-msgstr "<nada selecionado>"
+msgstr "nenhum pino foi selecionado"
 
 #: eeschema/tools/sch_edit_tool.cpp:165
-#, fuzzy
 msgid "no alternate pin functions defined"
-msgstr "Definições alternativas do pino"
+msgstr "nenhuma função alternativa do pino foi definida"
 
 #: eeschema/tools/sch_edit_tool.cpp:425 eeschema/tools/sch_edit_tool.cpp:517
 #: eeschema/tools/sch_edit_tool.cpp:602
@@ -20849,29 +20830,24 @@ msgid "Clear layer %d?"
 msgstr "Deseja limpar a camada %d?"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
-#, fuzzy
 msgid "Active layer name:"
-msgstr "Camadas inativas:"
+msgstr "Nome das camadas ativas:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
-#, fuzzy
 msgid "Offset X"
-msgstr "Deslocamento X:"
+msgstr "Deslocamento X"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:49
-#, fuzzy
 msgid "Offset Y"
-msgstr "Deslocamento Y:"
+msgstr "Deslocamento Y"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotation CCW"
-msgstr "Rotação"
+msgstr "Rotação anti-horária"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "Active layer"
-msgstr "Camadas inativas:"
+msgstr "Camada ativa"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -20879,14 +20855,12 @@ msgid "All layers"
 msgstr "Todas as camadas"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "All visible layers"
-msgstr "Camadas visíveis"
+msgstr "Todas as camadas visíveis"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
-msgstr "Configurações da página"
+msgstr "Configurações da camada"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:144
 #, c-format
@@ -22009,7 +21983,7 @@ msgstr "Ordene as camadas pela extensão do arquivo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:185
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "Parâmetros de exibição das camadas: Deslocamento e rotação"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:190
 msgid "Move Current Layer Up"
@@ -22090,9 +22064,8 @@ msgid "Input file"
 msgstr "Arquivo de entrada"
 
 #: kicad/cli/command.cpp:134
-#, fuzzy
 msgid "Output directory"
-msgstr "Pasta de destino:"
+msgstr "Pasta de destino"
 
 #: kicad/cli/command.cpp:141
 msgid "Output file name"
@@ -22103,6 +22076,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
+"Caminho para o esquema, quando usado, isso substitui qualquer esquema "
+"predefinido pelo projeto já existente"
 
 #: kicad/cli/command.cpp:166
 msgid ""
@@ -22110,26 +22085,25 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"Substitui ou adiciona variáveis no projeto; pode ser usado várias vezes para "
+"declarar várias variáveis.\n"
+"Use no formato '--define-var key=valor' ou '-D key=valor'"
 
 #: kicad/cli/command.h:32
-#, fuzzy
 msgid "Shows help message and exits"
-msgstr "mostra mensagem de ajuda e encerra"
+msgstr "Mostra uma mensagem de ajuda e encerra"
 
 #: kicad/cli/command_fp.h:31
-#, fuzzy
 msgid "Footprint and Footprint Libraries"
-msgstr "Carregando as bibliotecas de footprint"
+msgstr "Footprint e bibliotecas do footprint"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
-#, fuzzy
 msgid "Export utilities (svg)"
-msgstr "Exportar arquivos"
+msgstr "Utilitários de exportação (svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
-#, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr "Atualiza o footprint a partir da biblioteca"
+msgstr "Exporta o footprint ou toda a biblioteca do footprint para SVG"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #: kicad/cli/command_pcb_export_svg.cpp:55
@@ -22139,9 +22113,8 @@ msgstr ""
 "Tema das cores que será usado (o padrão será as configurações do pcbnew)"
 
 #: kicad/cli/command_fp_export_svg.cpp:48
-#, fuzzy
 msgid "Specific footprint to export within the library"
-msgstr "Símbolo específico para exportar dentro da biblioteca"
+msgstr "Footprint específico para exportar dentro da biblioteca"
 
 #: kicad/cli/command_fp_export_svg.cpp:74
 msgid "Footprint library does not exist or is not accessible\n"
@@ -22149,11 +22122,9 @@ msgstr ""
 "O caminho da biblioteca do footprint não existe ou não está acessível\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:35
-#, fuzzy
 msgid "Upgrades the footprint library to the current kicad version format"
 msgstr ""
-"Imponha que o espaço ocupado pela biblioteca possa ser salva novamente, "
-"independente de versão"
+"Atualiza a biblioteca do footprint para o formato da versão atual do KiCad"
 
 #: kicad/cli/command_fp_upgrade.cpp:39
 msgid "Forces the footprint library to be resaved regardless of versioning"
@@ -22162,10 +22133,8 @@ msgstr ""
 "independente de versão"
 
 #: kicad/cli/command_fp_upgrade.cpp:55
-#, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr ""
-"O caminho da biblioteca do footprint não existe ou não está acessível\n"
+msgstr "O caminho da biblioteca do footprint não existe ou não está acessível\n"
 
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1024
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
@@ -22175,47 +22144,57 @@ msgstr "PCI"
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr ""
+"Executa a verificação das regras do projeto (DRC) na PCI e cria um relatório"
 
 #: kicad/cli/command_pcb_drc.cpp:50 kicad/cli/command_sch_erc.cpp:49
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "Formato de geração do arquivo, opções: json, relatório"
 
 #: kicad/cli/command_pcb_drc.cpp:54 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
 msgstr "Reporta todos os erros para cada faixa"
 
 #: kicad/cli/command_pcb_drc.cpp:60 kicad/cli/command_sch_erc.cpp:54
-#, fuzzy
 msgid "Report units; valid options: in, mm, mils"
-msgstr "Unidades de saída, opções válidas: mm, pol"
+msgstr "Unidades do relatório; opções válidas: pol, mm, mils"
 
 #: kicad/cli/command_pcb_drc.cpp:64
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Relatar todas as violações do DRC, o que equivale a incluir todos os outros "
+"argumentos de gravidade"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Relatar todas as violações do nível de erro do DRC, que podem ser combinadas "
+"com os outros argumentos de gravidade"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Relatar todas as violações do nível de advertência do DRC; isso pode ser "
+"combinado com os outros argumentos de gravidade"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Relate todas as violações excluídas do DRC, isso pode ser combinado com os "
+"outros argumentos de gravidade"
 
 #: kicad/cli/command_pcb_drc.cpp:84 kicad/cli/command_sch_erc.cpp:77
 msgid "Return a exit code depending on whether or not violations exist"
 msgstr ""
+"Retorna um código de encerramento, dependendo da existência ou não de "
+"violações"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:200
 #: kicad/cli/command_pcb_export_drill.cpp:149
@@ -22225,17 +22204,17 @@ msgid "Invalid units specified\n"
 msgstr "Unidades inválidas foram definidas\n"
 
 #: kicad/cli/command_pcb_drc.cpp:153 kicad/cli/command_sch_erc.cpp:142
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "Formato inválido\n"
+msgstr "Formato inválido do relatório\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (gerbers, drill, position files, etc)"
 msgstr ""
+"Utilitários de exportação (gerbers, drill, arquivos de posicionamento, etc)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:65
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "Formato de geração do arquivo, opções: step, glb (glTF binário)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:69
 msgid "Overwrite output file"
@@ -22275,9 +22254,8 @@ msgid "Export tracks (extremely time consuming)"
 msgstr "Exportar as faixas (extremamente demorado)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:114
-#, fuzzy
 msgid "Export zones (extremely time consuming)"
-msgstr "Exportar as faixas (extremamente demorado)"
+msgstr "Exportar as regiões (extremamente demorado)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:121
 msgid "Minimum distance between points to treat them as separate ones"
@@ -22292,26 +22270,28 @@ msgstr ""
 "(unidade padrão em mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:134
-#, fuzzy
 msgid ""
 "Output units; ascii or csv format only; valid options: mm, m, in, tenths"
 msgstr ""
-"Unidades de saída; somente o formato ascii ou csv; opções válidas: pol, mm"
+"Unidades; somente no formato ascii ou csv; opções válidas: mm, m, in, décimos"
 
 #: kicad/cli/command_pcb_export_3d.cpp:139
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported vrml file"
 msgstr ""
+"Nome da pasta para criar e armazenar os modelos 3D; se não for especificado "
+"ou estiver vazio, os modelos serão incorporados durante a exportação no "
+"arquivo vrml principal"
 
 #: kicad/cli/command_pcb_export_3d.cpp:143
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
+"Usado com --models-dir para gerar caminhos relativos no arquivo resultante"
 
 #: kicad/cli/command_pcb_export_3d.cpp:181
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "Foi definido um formato inválido do mapa\n"
+msgstr "Um formato inválido foi definido\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:101
 #, c-format
@@ -22411,7 +22391,7 @@ msgstr "A precisão das coordenadas do Gerber deve ser 5 ou 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Gerar um DXF a partir de uma lista de camadas"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -22449,9 +22429,8 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "O arquivo da placa não existe ou não está acessível\n"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:41
-#, fuzzy
 msgid "Plot given layers to a single gerber file"
-msgstr "Todas as camadas num único ficheiro"
+msgstr "Plotar determinadas camadas num único arquivo gerber"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:59
 msgid "Do not use the extended X2 format"
@@ -22489,6 +22468,8 @@ msgid ""
 "Plot multiple gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
+"Plotar vários gerbers para uma PCI, incluindo a capacidade de usar "
+"configurações de plotagem das placas armazenadas"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:51
 msgid ""
@@ -22504,9 +22485,8 @@ msgstr ""
 "Use as configurações já definidas do gráfico do Gerber no arquivo de placa"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:39
-#, fuzzy
 msgid "Generate PDF from a list of layers"
-msgstr "Gera um arquivo netlist IPC-D-356"
+msgstr "Gerar um PDF a partir de uma lista de camadas"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:46
 #: kicad/cli/command_pcb_export_svg.cpp:49
@@ -22571,9 +22551,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
-#, fuzzy
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "Exclui todos os footprint nas ilhas com furo passante"
+msgstr "Excluir todos os footprints sinalizados como não popular definido"
 
 #: kicad/cli/command_pcb_export_pos.cpp:93
 msgid "Include board edge layer (gerber only)"
@@ -22594,7 +22573,7 @@ msgstr "Foi definido um lado inválido\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "Gerar arquivos SVG de uma determinada lista de camadas"
 
 #: kicad/cli/command_pcb_export_svg.cpp:69
 msgid ""
@@ -22610,47 +22589,55 @@ msgid "No drawing sheet"
 msgstr "Nenhuma folha de desenho"
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
-msgstr "Esquema"
+msgstr "Esquemas"
 
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
+"Executa a verificação das regras elétricas (ERC) no esquema e gera um "
+"relatório"
 
 #: kicad/cli/command_sch_erc.cpp:57
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Relatar todas as violações do ERC, o que equivale a incluir todos os outros "
+"argumentos de gravidade"
 
 #: kicad/cli/command_sch_erc.cpp:62
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Relatar todos os níveis de violações de erro do ERC; isso pode ser combinado "
+"com os outros argumentos de gravidade"
 
 #: kicad/cli/command_sch_erc.cpp:67
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Relatar todos os níveis de violações de advertência do ERC; isso pode ser "
+"combinado com os outros argumentos de gravidade"
 
 #: kicad/cli/command_sch_erc.cpp:72
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Relatar todas as violações excluídas do ERC; isso pode ser combinado com os "
+"outros argumentos de gravidade"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "Utilitário de exportação (netlist, pdf, bom, etc)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Material (BOM)"
-msgstr "Gerar Lista de &Materiais…"
+msgstr "Gerar uma lista de materiais (BOM)"
 
 #: kicad/cli/command_sch_export_bom.cpp:155
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -22660,9 +22647,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "O arquivo esquemático não existe ou não está acessível\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a Netlist"
-msgstr "Exporte a Netlist"
+msgstr "Exportar uma Netlist"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
 msgid ""
@@ -22686,6 +22672,8 @@ msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
+"Listar os números da página separados por vírgula para impressão, em branco "
+"ou não especificado, equivale a todas as páginas"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
 msgid "Pen size [mm]"
@@ -22706,16 +22694,16 @@ msgid ""
 "Export the legacy bom xml format used in the schematic editor with python "
 "scripts"
 msgstr ""
+"Exportar o formato bom xml legado usado no editor de esquemas com scripts "
+"python"
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Carregando a biblioteca dos símbolos"
+msgstr "Símbolo e as bibliotecas dos símbolos"
 
 #: kicad/cli/command_sym_export_svg.cpp:41
-#, fuzzy
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Exporta um símbolo para um novo arquivo de biblioteca"
+msgstr "Exporta o símbolo ou toda a biblioteca do símbolo para SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:50
 msgid "Specific symbol to export within the library"
@@ -22734,11 +22722,9 @@ msgid "Symbol file does not exist or is not accessible\n"
 msgstr "O arquivo do símbolo não existe ou não está acessível\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
-#, fuzzy
 msgid "Upgrades the symbol library to the current kicad version format"
 msgstr ""
-"Imponha que os símbolos da biblioteca possa ser salva novamente, "
-"independente da versão"
+"Atualiza a biblioteca de símbolos para o formato da versão atual do kicad"
 
 #: kicad/cli/command_sym_upgrade.cpp:41
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -22747,14 +22733,12 @@ msgstr ""
 "independente da versão"
 
 #: kicad/cli/command_sym_upgrade.cpp:57
-#, fuzzy
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "O arquivo do símbolo não existe ou não está acessível\n"
+msgstr "A biblioteca dos símbolos não existe ou não está acessível\n"
 
 #: kicad/cli/command_version.cpp:33
-#, fuzzy
 msgid "Reports the version info in various formats"
-msgstr "imprime as informações sobre a versão e encerra"
+msgstr "Relatar as informações da versão em vários formatos"
 
 #: kicad/cli/command_version.cpp:37
 msgid "version info format (plain, commit, about)"
@@ -22900,12 +22884,11 @@ msgstr "Importe os arquivos do projeto Eagle"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Importar o backup do EasyEDA Std"
 
 #: kicad/import_project.cpp:149
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "Importe os arquivos do projeto Eagle"
+msgstr "Importar o projeto do EasyEDA Pro"
 
 #: kicad/kicad.cpp:312
 #, c-format
@@ -22918,41 +22901,35 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "Exportar GLB (GLTF binário)"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
 msgstr "Exporta STEP"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export VRML"
-msgstr "Exporta"
+msgstr "Exportar VRML"
 
 #: kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "Exportar IDFv3"
+msgstr "Exportar DXF"
 
 #: kicad/kicad_cli.cpp:148
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Exporta STEP"
+msgstr "Exportar HPGL"
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export PDF"
-msgstr "Exportar IDFv3"
+msgstr "Exportar PDF"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export PS"
-msgstr "Exporta STEP"
+msgstr "Exportar PS"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export SVG"
-msgstr "Exporta o arquivo SVG"
+msgstr "Exportar SVG"
 
 #: kicad/kicad_cli.cpp:317
 msgid "prints version information and exits"
@@ -22967,14 +22944,13 @@ msgid "Editors"
 msgstr "Editores"
 
 #: kicad/kicad_manager_frame.cpp:286
-#, fuzzy
 msgid "PCM Updates Available"
-msgstr "Há atualizações disponíveis dos pacotes"
+msgstr "Há atualizações PCM disponíveis"
 
 #: kicad/kicad_manager_frame.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "Não há nenhuma atualização disponível dos pacotes"
+msgstr "Há Atualização(ões) do(s) pacote(s) %d disponível(is)"
 
 #: kicad/kicad_manager_frame.cpp:737
 msgid "Load File to Edit"
@@ -23034,22 +23010,19 @@ msgstr "Importe o esquema eletrônico e placa no formato XML EAGLE CAD"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "Backup do EasyEDA (JLCEDA) Std..."
 
 #: kicad/menubar.cpp:117
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "Importe o esquema eletrônico e placa no formato XML EAGLE CAD"
+msgstr "Importar o esquema e a placa padrão do EasyEDA (JLCEDA)"
 
 #: kicad/menubar.cpp:121
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "Projeto EAGLE..."
+msgstr "Projeto do EasyEDA (JLCEDA) Pro..."
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "Importe o esquema eletrônico e placa no formato XML EAGLE CAD"
+msgstr "Importar os esquemas e as placas do EasyEDA (JLCEDA) Professional"
 
 #: kicad/menubar.cpp:128
 msgid "&Archive Project..."
@@ -23502,24 +23475,20 @@ msgid "Local file"
 msgstr "Arquivo local"
 
 #: kicad/pcm/pcm.cpp:1104
-#, fuzzy
 msgid "PCM Update"
-msgstr "Atualize"
+msgstr "Atualização PCM"
 
 #: kicad/pcm/pcm.cpp:1114
-#, fuzzy
 msgid "Preparing to fetch repositories"
-msgstr "Gerir os repositórios"
+msgstr "Preparando para obter os repositórios"
 
 #: kicad/pcm/pcm.cpp:1132
-#, fuzzy
 msgid "Fetching repository..."
-msgstr "Buscando o repositório"
+msgstr "Obtendo o repositório..."
 
 #: kicad/pcm/pcm.cpp:1145
-#, fuzzy
 msgid "Reviewing packages..."
-msgstr "Removendo as trilhas nas ilhas..."
+msgstr "Revisando os pacotes..."
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
 #, c-format
@@ -28755,62 +28724,60 @@ msgid "Grid Array"
 msgstr "Matriz de grade"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:215
-#, fuzzy
 msgid "Items to duplicate"
-msgstr "Itens para excluir"
+msgstr "Itens para duplicar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:217
 msgid ""
 "This is the position of the selected item,\n"
 "or the position of the group to duplicate"
 msgstr ""
+"Essa é a posição do item selecionado,\n"
+"ou a posição do grupo que será duplicado"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
-#, fuzzy
 msgid "Ref point pos X:"
-msgstr "Ponto bezier C2 X:"
+msgstr "Ponto de ref. pos. X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:238
-#, fuzzy
 msgid "Ref point pos Y:"
-msgstr "Ponto bezier C1 Y:"
+msgstr "Ponto de ref. pos. Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:256
-#, fuzzy
 msgid "Circular array params"
-msgstr "Matriz circular"
+msgstr "Parâmetros da matriz circular"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
 msgid ""
 "This is the position of the center of the circle\n"
 "defining the circular area to create"
 msgstr ""
+"Essa é a posição do centro do círculo\n"
+"definindo a área circular que será criada"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
-#, fuzzy
 msgid "Center pos X:"
-msgstr "Centro Y:"
+msgstr "Pos. central X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
-#, fuzzy
 msgid "Center pos Y:"
-msgstr "Centro Y:"
+msgstr "Pos. central Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:296
 msgid ""
 "Array radius,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"Raio da matriz,\n"
+"da posição do ponto de referência e do centro da matriz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:304
-#, fuzzy
 msgid "Distance between Ref point and Center pos."
-msgstr "A distância entre a tira e o metal superior"
+msgstr "Distância entre o ponto de referência e a posição central."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:322
-#, fuzzy
 msgid "Duplicate parameters"
-msgstr "Duplica primitiva"
+msgstr "Duplicar os parâmetros"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:335
 msgid ""
@@ -28822,18 +28789,16 @@ msgstr ""
 "\"contagem\"."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:343
-#, fuzzy
 msgid "Item count:"
-msgstr "Contagem dos pinos:"
+msgstr "Contagem do item:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
 msgid "How many items in the array."
 msgstr "Quantos itens na matriz."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Rotate items:"
-msgstr "Girar Item"
+msgstr "Rotacionar Items:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:361
 msgid ""
@@ -29488,7 +29453,7 @@ msgstr "Arquivos STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:156
 msgid "Binary GTLF files"
-msgstr ""
+msgstr "Arquivos binários GTLF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:160
 msgid "Select a STEP export filename"
@@ -29524,9 +29489,8 @@ msgstr ""
 "Execute o DRC para realizar uma análise completa."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:382
-#, fuzzy
 msgid "STEP/GLTF Export"
-msgstr "Exporta o STEP"
+msgstr "Exportar STEP/GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
@@ -29606,17 +29570,15 @@ msgstr ""
 "Aviso: isso é *extremamente* demorado."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid "Export zones (time consuming)"
-msgstr "Exportar as trilhas (consome tempo)"
+msgstr "Exportar as regiões (consome tempo)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
-#, fuzzy
 msgid ""
 "Export zones on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
-"Exporte as trilhas e as vias em camadas externas de cobre.\n"
+"Exportar as regiões em camadas externas de cobre.\n"
 "Aviso: isso é *extremamente* demorado."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
@@ -29644,18 +29606,16 @@ msgstr ""
 "ao construir os contornos da placa."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:80
-#, fuzzy
 msgid "Export STEP / GLTF"
-msgstr "Exporta STEP"
+msgstr "Exportar STEP / GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:218
 msgid "Command line:\n"
 msgstr "Linha de comando:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
-#, fuzzy
 msgid "3D Export"
-msgstr "Exporta"
+msgstr "Exportar 3D"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:231
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:215
@@ -29706,9 +29666,8 @@ msgid "Export as black elements on a white background"
 msgstr "Exporte como elementos pretos num fundo branco"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
-#, fuzzy
 msgid "Use current board theme"
-msgstr "Salvar placa atual"
+msgstr "Use o tema da placa atual"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:114
 msgid "Page with frame and title block"
@@ -32149,9 +32108,8 @@ msgstr "Ilha castelada (apenas através do furo passante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:352
-#, fuzzy
 msgid "Board contains legacy teardrops."
-msgstr "A placa contém reforços de junção que foram herdadas. "
+msgstr "A placa contém reforços de junção que foram herdadas."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:356
@@ -32367,9 +32325,8 @@ msgid "Plot reference designators"
 msgstr "PLota os designadores de referência"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
-#, fuzzy
 msgid "Plot footprint text"
-msgstr "Plota os valores dos footprints"
+msgstr "Plota o texto dos footprints"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Force plotting of invisible values / refs"
@@ -32407,6 +32364,9 @@ msgid ""
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
 msgstr ""
+"Vias cobertas: não são plotadas na camada de máscara de solda\n"
+"Não cobertas: as vias são plotadas na camada da máscara de solda\n"
+"(A máscara de solda é uma camada negativa)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -33662,9 +33622,9 @@ msgid "Default properties for new graphic items:"
 msgstr "Propriedades padrão para os novos itens gráficos:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Polilinha com %d pontos"
+msgstr "pasta com %s arquivos"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:521
 #, c-format
@@ -33672,37 +33632,36 @@ msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Caractere ilegal '%c' no apelido '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:762
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
-"Selecione uma ou mais linhas contendo as bibliotecas no formato legado (*."
-"lib) para que possa ser salvo com o formato KiCad atual (*.kicad_sym)."
+"Selecione uma ou mais linhas contendo bibliotecas para salvar no formato "
+"atual do KiCad."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:770
-#, fuzzy, c-format
+#, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr ""
-"Deseja Salvar o '%s' como um formato KiCad atual (*.kicad_sym) e substituir "
-"a entrada legada na tabela?"
+msgstr "Salvar '%s' no formato atual do KiCad e substituir a entrada na tabela?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:776
-#, fuzzy, c-format
+#, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
-"Deseja salvar as bibliotecas com formato legado %d no formato atual do KiCad "
-"(*.kicad_sym) e substituir as entradas legadas na tabela?"
+"Salvar %d bibliotecas no formato atual do KiCad e substituir as entradas na "
+"tabela?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "O arquivo '%s' já existe. Deseja sobrescrever este arquivo?"
+msgstr ""
+"A pasta '%s' já existe. Deseja substituir alguns dos footprints já "
+"existentes?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save footprint library file '%s'."
-msgstr "Houve uma falha ao salvar o arquivo dos símbolos na biblioteca '%s'."
+msgstr "Houve uma falha ao salvar a biblioteca do footprint no arquivo '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:911
 #, c-format
@@ -33743,9 +33702,8 @@ msgid "3D Model(s)"
 msgstr "Modelo(s) 3D"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:49
-#, fuzzy
 msgid "Net names:"
-msgstr "Os nomes da rede"
+msgstr "Nomes Net:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
@@ -33760,9 +33718,8 @@ msgid "Show on tracks"
 msgstr "Exiba nas trilhas"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on pads & tracks"
-msgstr "Exiba nas ilhas e nas trilhas"
+msgstr "Mostrar nas ilhas & trilhas"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:59
 #: pcbnew/tools/pcb_actions.cpp:1339 pcbnew/tools/pcb_actions.cpp:1340
@@ -33779,9 +33736,8 @@ msgid "Tracks:"
 msgstr "Trilhas:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
-#, fuzzy
 msgid "Do not show clearances"
-msgstr "Não mostre novamente"
+msgstr "Não mostrar as folgas"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -33804,9 +33760,9 @@ msgid "Show pad clearance"
 msgstr "Exibe isolamento da ilha"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
-#, fuzzy
 msgid "Show all fields when parent footprint is selected"
-msgstr "Destaque os símbolos quando os footprints forem selecionados"
+msgstr ""
+"Mostrar todos os campos quando os footprints relacionados forem selecionados"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
 msgid "Select/highlight objects corresponding to schematic selection"
@@ -37154,9 +37110,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s diâmetro máx %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(camada %s; %s quantidade de raio mín %d; atual %d)"
+msgstr "(camada %s; %d raios conectados à ilha isolada)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:206
 #, c-format
@@ -37249,9 +37205,9 @@ msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "Espessura da placa do empilhamento: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Build %s data\n"
-msgstr "Criar dados STEP\n"
+msgstr "Construindo dado %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:517
 msgid ""
@@ -37262,86 +37218,82 @@ msgstr ""
 "** Erro ao construir o modelo STEP da placa. A exportação foi cancelada. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Writing %s file\n"
-msgstr "Gravando o arquivo STEP\n"
+msgstr "Gravando no arquivo %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
 "\n"
-"** Houve um erro ao gravar o arquivo STEP. **\n"
+"** Houve um erro ao gravar o arquivo %s. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"O arquivo STEP '%s' foi criado.\n"
+msgstr "%s arquivo '%s' foi criado.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:544
 #: pcbnew/exporters/step/exporter_step.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** Houve um erro ao exportar o arquivo STEP. A exportação foi cancelada. **\n"
+"** Houve um erro ao exportar o arquivo %s. A exportação foi cancelada. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"Não foi possível criar o arquivo STEP.\n"
+"Não foi possível criar o arquivo %s.\n"
 "Verifique se a placa tem modelos e contornos válidos."
 
 #: pcbnew/exporters/step/exporter_step.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "%s file has been created, but there are warnings."
-msgstr "O arquivo STEP foi criado, porém com advertências."
+msgstr "O arquivo %s foi criado, porém, com advertências."
 
 #: pcbnew/exporters/step/exporter_step.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Tempo do carregamento %.3f s"
+msgstr ""
+"\n"
+"Tempo de exportação %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
-#, fuzzy, c-format
+#, c-format
 msgid "Build holes for %s\n"
-msgstr "Monte a camada técnica %d"
+msgstr "Construindo furos para %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:953
 #, c-format
 msgid "Cutting %d/%d %s\n"
-msgstr ""
+msgstr "Cortando %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:972
-#, fuzzy
 msgid "pads"
-msgstr "Sem ilhas"
+msgstr "ilhas"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:973
-#, fuzzy
 msgid "shapes"
-msgstr "Forma"
+msgstr "formas"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:974
-#, fuzzy
 msgid "tracks"
-msgstr "Trilhas"
+msgstr "trilhas"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:975
-#, fuzzy
 msgid "zones"
-msgstr "zona"
+msgstr "regiões"
 
 #: pcbnew/files.cpp:137
 msgid "All KiCad Board Files"
@@ -37417,9 +37369,8 @@ msgid "Creating PCB"
 msgstr "Criando a PCI"
 
 #: pcbnew/files.cpp:618
-#, fuzzy
 msgid "File format is not supported"
-msgstr "(diversos contornos da placa não são suportados)"
+msgstr "O formato do arquivo não é compatível"
 
 #: pcbnew/files.cpp:654 pcbnew/files.cpp:664
 #, c-format
@@ -37850,9 +37801,9 @@ msgstr "Novo footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:1233
 #: pcbnew/tools/footprint_editor_control.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' already exists in library '%s'."
-msgstr "O nome do footprint '%s' já está em uso na biblioteca '%s'."
+msgstr "O footprint '%s' já existe na biblioteca '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:131
 msgid "KiCad Footprint Library Viewer"
@@ -37871,18 +37822,22 @@ msgstr ""
 "Um termo que é um número também corresponderá à contagem das ilhas."
 
 #: pcbnew/footprint_viewer_frame.cpp:1083
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint library not found. The current configuration does not include "
 "library '%s'."
-msgstr "A biblioteca '%s' não está inclusa na configuração atual."
+msgstr ""
+"A biblioteca do footprint não foi encontrada. A configuração atual não "
+"inclui a biblioteca '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:1095
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint library not enabled. Library '%s' is not enabled in the current "
 "configuration."
-msgstr "A biblioteca '%s' não está ativada na configuração atual."
+msgstr ""
+"A biblioteca do footprint não foi ativada. A biblioteca '%s' não está ativa "
+"na configuração atual."
 
 #: pcbnew/footprint_wizard_frame.cpp:83
 #: pcbnew/footprint_wizard_frame_functions.cpp:81
@@ -38051,9 +38006,9 @@ msgid "Footprints [%u items]"
 msgstr "Footprints [%u itens]"
 
 #: pcbnew/load_select_footprint.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a writer for '%s'."
-msgstr "Não foi possível encontrar um visualizador de PDF para '%s'."
+msgstr "Não foi possível encontrar um gerador para '%s'."
 
 #: pcbnew/load_select_footprint.cpp:462
 #, c-format
@@ -39115,9 +39070,9 @@ msgid "Drawing"
 msgstr "Desenho"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
-msgstr "%s no %s"
+msgstr "%s %s no %s"
 
 #: pcbnew/pcb_shape.cpp:491
 #, c-format
@@ -39125,9 +39080,8 @@ msgid "%s on %s"
 msgstr "%s no %s"
 
 #: pcbnew/pcb_shape.cpp:676
-#, fuzzy
 msgid "Pad Primitives"
-msgstr "Adiciona um primitivo"
+msgstr "Primitivos da ilha"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -39157,14 +39111,12 @@ msgid "PCB Text Box on %s"
 msgstr "Caixa de texto da PCI no %s"
 
 #: pcbnew/pcb_textbox.cpp:606
-#, fuzzy
 msgid "Border Properties"
-msgstr "Propriedades da curva"
+msgstr "Propriedades da borda"
 
 #: pcbnew/pcb_textbox.cpp:616
-#, fuzzy
 msgid "Border Style"
-msgstr "Estilo da borda:"
+msgstr "Estilo da borda"
 
 #: pcbnew/pcb_track.cpp:141
 #, c-format
@@ -39302,9 +39254,9 @@ msgid "Missing group name argument to %s."
 msgstr "Falta o argumento do nome do grupo para %s."
 
 #: pcbnew/pcbexpr_functions.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Falta o argumento do nome da camada para %s."
+msgstr "Falta o argumento do nome da página para %s."
 
 #: pcbnew/pcbexpr_functions.cpp:873
 #, c-format
@@ -39339,14 +39291,13 @@ msgid "Loading board\n"
 msgstr "Carregando a placa\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "O arquivo svg foi criado com sucesso"
+msgstr "A exportação do VRML foi bem-sucedida para %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "Houve um erro na extração do arquivo!"
+msgstr "Houve um erro ao exportar o VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:210
 msgid "Successfully created svg file"
@@ -39387,33 +39338,32 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Plotando o footprint '%s' para '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:962
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "Executa DRC..."
+msgstr "Executando o DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:974 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Itens desconectados (%s)"
+msgstr "Foram encontrados %d Itens desconectados\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:995
 #, c-format
 msgid "Found %d schematic parity issues\n"
-msgstr ""
+msgstr "Foram encontradas %d problemas de paridade no esquema\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Não foi possível analisar o repositório: %s"
+msgstr "Não foi possível salvar o o relatório para %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Salvar Arquivo de Relatório DRC"
+msgstr "O relatório DRC foi salvo em %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -39424,13 +39374,12 @@ msgid "Library Description"
 msgstr "Descrição da biblioteca"
 
 #: pcbnew/plugin.cpp:193
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported."
 msgstr ""
-"Foi encontrada mais de uma netclass Altium com o nome '%s'. Apenas o "
-"primeiro será importado."
+"O arquivo selecionado contém diversos footprints. Apenas o primeiro será "
+"importado."
 
 #: pcbnew/plugin.cpp:269
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -39551,6 +39500,9 @@ msgid ""
 "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
+"Esse arquivo não parece estar num formato válido do PCB Binary Version 6.0. "
+"No Altium Designer, certifique-se de salvar como \"PCB Binary Files (*."
+"PcbDoc)\"."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:503
 #, c-format
@@ -40312,56 +40264,54 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Ver. do Eagle Arquivos da biblioteca XML PCB 6.x"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Model_type desconhecido "
+msgstr "SVGNODE nodeType %d desconhecido"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid board in '%s'"
-msgstr "Não foi possível encontrar um visualizador de PDF para '%s'."
+msgstr "Não foi possível encontrar uma placa válida em '%s'"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:266
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"Houve um erro ao carregar placa.\n"
-"%s"
+msgstr "Houve um erro ao carregar placa '%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find valid footprints in '%s'"
-msgstr "Não foi possível encontrar o índice do bloco '%d' no footprint '%s'."
+msgstr "Não foi possível encontrar footprints válidos em '%s'"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:362
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr "Houve um erro ao carregar o footprint %s da biblioteca '%s'."
+msgstr "houve um erro ao enumerar os footprints na biblioteca '%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
-msgstr "Houve um erro ao carregar o footprint %s da biblioteca '%s'."
+msgstr "Houve um erro ao carregar o footprint '%s' da biblioteca '%s': %s"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:325
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s'"
-msgstr "Não é possível carregar o footprint '%s' de '%s'"
+msgstr "Não foi possível carregar o footprint '%s' de '%s'"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "O footprint '%s' não foi encontrado na biblioteca '%s'."
+msgstr "O footprint '%s' não foi encontrado no projeto '%s'"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:42
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:47
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "Projeto EasyEDA (JLCEDA) Pro"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:56
 msgid "Fabmaster PCB files"
@@ -40562,14 +40512,12 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "A biblioteca do footprint '%s' não pode ser excluído."
 
 #: pcbnew/plugins/geda/gpcb_plugin.h:56
-#, fuzzy
 msgid "gEDA PCB footprint file"
-msgstr "Adicione o filtro do footprint"
+msgstr "Arquivo de footprint do gEDA PCB"
 
 #: pcbnew/plugins/geda/gpcb_plugin.h:61
-#, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Arquivos da biblioteca de footprint para PCB da Altium"
+msgstr "Diretório da biblioteca de footprint do gEDA PCB"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:242
 #, c-format
@@ -40821,9 +40769,8 @@ msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Arquivo inesperado '%s' foi encontrado no caminho da biblioteca '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.h:289
-#, fuzzy
 msgid "KiCad footprint file"
-msgstr "Arquivos do footprint do KiCad"
+msgstr "Arquivo de footprint do KiCad"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:650
 #, c-format
@@ -42693,31 +42640,29 @@ msgid "Switch the arc posture"
 msgstr "Alterna a postura do arco"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Snap to objects on the active layer only"
-msgstr "Nenhum arquivo foi carregado na camada %d ativa."
+msgstr "Encaixe nos objetos apenas na camada ativa"
 
 #: pcbnew/tools/pcb_actions.cpp:337
 msgid "Enables snapping to objects on the active layer only"
-msgstr ""
+msgstr "Permite o encaixe nos objetos apenas na camada ativa"
 
 #: pcbnew/tools/pcb_actions.cpp:342
-#, fuzzy
 msgid "Snap to objects on all layers"
-msgstr "Plota o Edge.Cuts em todas as camadas"
+msgstr "Encaixe nos objetos em todas as camadas"
 
 #: pcbnew/tools/pcb_actions.cpp:343
-#, fuzzy
 msgid "Enables snapping to objects on all visible layers"
-msgstr "Mostra as linhas ratnest para os itens nas camadas visíveis"
+msgstr "Permite o encaixe nos objetos em todas as camadas visíveis"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid "Toggle snapping between active and all layers"
-msgstr ""
+msgstr "Alternar o encaixe entre as camadas ativas e todas as camadas"
 
 #: pcbnew/tools/pcb_actions.cpp:350
 msgid "Toggles between snapping on all visible layers and only the active area"
 msgstr ""
+"Alterna entre o encaixe em todas as camadas visíveis e apenas na área ativa"
 
 #: pcbnew/tools/pcb_actions.cpp:356
 msgid "Delete Last Point"
@@ -42799,24 +42744,20 @@ msgid "Moves the selected item(s) by an exact amount"
 msgstr "Move o(s) item(s) selecionado(s) através de uma quantidade exata"
 
 #: pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Move Corner To..."
-msgstr "Mover Canto"
+msgstr "Mover o canto para..."
 
 #: pcbnew/tools/pcb_actions.cpp:463
-#, fuzzy
 msgid "Move the active corner to an exact location"
-msgstr "Move o(s) item(s) selecionado(s) através de uma quantidade exata"
+msgstr "Mover o canto ativo para um local exato"
 
 #: pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Move Midpoint To..."
-msgstr "Mover o ponto"
+msgstr "Mover o ponto médio para..."
 
 #: pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Move the active midpoint to an exact location"
-msgstr "Move o(s) item(s) selecionado(s) através de uma quantidade exata"
+msgstr "Mover o ponto médio ativo para um local exato"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Create Array..."
@@ -44277,9 +44218,8 @@ msgid "Append Board"
 msgstr "Adicionar placa"
 
 #: pcbnew/tools/pcb_control.cpp:1369
-#, fuzzy
 msgid "Active Layer"
-msgstr "Camadas inativas:"
+msgstr "Camadas ativa"
 
 #: pcbnew/tools/pcb_control.cpp:1370 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
@@ -44288,7 +44228,7 @@ msgstr "Todas as camadas"
 
 #: pcbnew/tools/pcb_control.cpp:1379
 msgid "Object Snapping"
-msgstr ""
+msgstr "Encaixe do objeto"
 
 #: pcbnew/tools/pcb_control.cpp:1457
 msgid "Resolved clearance"
@@ -44319,48 +44259,40 @@ msgid "Selected Items"
 msgstr "Itens selecionados"
 
 #: pcbnew/tools/pcb_point_editor.cpp:626
-#, fuzzy
 msgid "Drag Corner"
-msgstr "Arrasta um canto"
+msgstr "Arrastar canto"
 
 #: pcbnew/tools/pcb_point_editor.cpp:682
-#, fuzzy
 msgid "Move Midpoint to Location"
-msgstr "localização do footprint"
+msgstr "Mover o ponto médio para o local"
 
 #: pcbnew/tools/pcb_point_editor.cpp:683
-#, fuzzy
 msgid "Move Midpoint"
-msgstr "Mover o ponto"
+msgstr "Mover o ponto médio"
 
 #: pcbnew/tools/pcb_point_editor.cpp:687
-#, fuzzy
 msgid "Move Corner to Location"
-msgstr "Mover Canto"
+msgstr "Mover o canto para o local"
 
 #: pcbnew/tools/pcb_point_editor.cpp:688
 msgid "Move Corner"
 msgstr "Mover Canto"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2280
-#, fuzzy
 msgid "Add Zone Corner"
-msgstr "Adiciona uma zona no canto"
+msgstr "Adicionar um canto na região"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2300
-#, fuzzy
 msgid "Split Segment"
-msgstr "Divide um segmento"
+msgstr "Dividir o segmento"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2372
-#, fuzzy
 msgid "Remove Zone Corner"
-msgstr "Remova canto"
+msgstr "Remover o canto da região"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2374
-#, fuzzy
 msgid "Remove Polygon Corner"
-msgstr "Remove uma zona/polígono do canto"
+msgstr "Remover o canto polígono"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1236
 msgid "Select/Expand Connection..."
@@ -44557,9 +44489,8 @@ msgid "Hidden Text"
 msgstr "Texto oculto"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show text marked as hidden"
-msgstr "Exibe o texto dos footprints marcados como invisíveis"
+msgstr "Mostra o texto que foi marcado como invisível"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show unconnected nets as a ratsnest"
@@ -44602,14 +44533,12 @@ msgid "Show a shadow marker on locked items"
 msgstr "Mostre um marcador em forma de sombra nos itens bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Conflict Fp Shadow"
-msgstr "Sombras dos itens conflitantes"
+msgstr "Sombra Fp conflitante"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Show a shadow marker on conflicting footprints"
-msgstr "Mostre um marcador em forma de sombra nos itens bloqueados"
+msgstr "Mostrar um marcador sombra nos footprints conflitantes"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show drawing sheet borders and title block"
@@ -45200,9 +45129,9 @@ msgid "on %s, %s and %s"
 msgstr "no %s, %s e %s"
 
 #: pcbnew/zone.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %zu more"
-msgstr "no %s, %s e %d mais"
+msgstr "em %s, %s e %zu mais"
 
 #: pcbnew/zone.cpp:859
 #, c-format
