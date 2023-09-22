@@ -250,11 +250,12 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 #endif
 
 
-void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
+bool KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 {
     if( !wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
     {
         aWindow->WarpPointer( aX, aY );
+        return true;
     }
     else
     {
@@ -277,7 +278,13 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 
                 wxLogTrace( traceWayland, wxS( "Set warped from %d %d to %d %d" ), s_warped_from.x,
                             s_warped_from.y, s_warped_to.x, s_warped_to.y );
+
+                return true;
             }
+
+            wxLogTrace( traceWayland, wxS( "*** Warp to %d %d failed ***" ), aX, aY );
+            
+            return false;
         }
 #endif
 #ifdef GDK_WINDOWING_X11
@@ -293,9 +300,13 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
             gdk_window_set_cursor( win, blank_cursor );
             aWindow->WarpPointer( aX, aY );
             gdk_window_set_cursor( win, cur_cursor );
+
+            return true;
         }
 #endif
     }
+
+    return false;
 }
 
 

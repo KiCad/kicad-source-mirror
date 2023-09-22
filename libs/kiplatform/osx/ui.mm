@@ -172,9 +172,10 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 }
 
 
-void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
+bool KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 {
     aWindow->WarpPointer( aX, aY );
+    return true;
 }
 
 

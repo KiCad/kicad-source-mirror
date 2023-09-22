@@ -149,8 +149,9 @@ namespace KIPLATFORM
          * @param aWindow Window in which to position to mouse cursor
          * @param aX destination x position
          * @param aY destination y position
+         * @return true if the warp was successful
          */
-        void WarpPointer( wxWindow* aWindow, int aX, int aY );
+        bool WarpPointer( wxWindow* aWindow, int aX, int aY );
 
         /**
          * Configures the IME mode of a given control handle

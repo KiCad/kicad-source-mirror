@@ -276,9 +276,11 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             {
                 if( !justWarped )
                 {
-                    KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY );
-                    m_dragStartPoint += VECTOR2D( warpX, warpY );
-                    justWarped = true;
+                    if( KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY ) )
+                    {
+                        m_dragStartPoint += VECTOR2D( warpX, warpY );
+                        justWarped = true;
+                    }
                 }
                 else
                     justWarped = false;
@@ -837,9 +839,13 @@ void WX_VIEW_CONTROLS::CenterOnCursor()
 
     if( GetMousePosition( false ) != screenCenter )
     {
-        m_view->SetCenter( GetCursorPosition() );
-        m_dragStartPoint = screenCenter;
-        KIPLATFORM::UI::WarpPointer( m_parentPanel, screenCenter.x, screenCenter.y );
+        VECTOR2D newCenter = GetCursorPosition();
+
+        if( KIPLATFORM::UI::WarpPointer( m_parentPanel, screenCenter.x, screenCenter.y ) )
+        {
+            m_view->SetCenter( newCenter );
+            m_dragStartPoint = screenCenter;
+        }
     }
 }
 
