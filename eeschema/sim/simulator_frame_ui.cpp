@@ -1057,6 +1057,8 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
         else
             plotTab->DeleteTrace( vectorName, traceType );
 
+        plotTab->GetPlotWin()->UpdateAll();
+
         // Update enabled/visible states of other controls
         updateSignalsGrid();
         updatePlotCursors();
@@ -1529,6 +1531,8 @@ void SIMULATOR_FRAME_UI::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         updateTrace( aName, aType, plotTab );
     }
 
+    plotTab->GetPlotWin()->UpdateAll();
+
     updateSignalsGrid();
     m_simulatorFrame->OnModify();
 }
@@ -1606,7 +1610,7 @@ void SIMULATOR_FRAME_UI::SetUserDefinedSignals( const std::map<int, wxString>& a
 
 
 void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceType,
-                                      SIM_PLOT_TAB* aPlotTab )
+                                      SIM_PLOT_TAB* aPlotTab, std::vector<double>* aDataX )
 {
     SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aPlotTab->GetSimCommand() );
 
@@ -1626,50 +1630,59 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
         return;
     }
 
-    // First, handle the x axis
-    wxString xAxisName( simulator()->GetXAxis( simType ) );
-
-    if( xAxisName.IsEmpty() )
-        return;
-
     std::vector<double> data_x;
     std::vector<double> data_y;
 
-    data_x = simulator()->GetGainVector( (const char*) xAxisName.c_str() );
+    if( !aDataX )
+        aDataX = &data_x;
+
+    // First, handle the x axis
+    if( aDataX->empty() )
+    {
+        wxString xAxisName( simulator()->GetXAxis( simType ) );
+
+        if( xAxisName.IsEmpty() )
+            return;
+
+        *aDataX = simulator()->GetGainVector( (const char*) xAxisName.c_str() );
+    }
+
+    unsigned int size = aDataX->size();
 
     switch( simType )
     {
     case ST_AC:
         if( aTraceType & SPT_AC_GAIN )
-            data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), size );
         else if( aTraceType & SPT_AC_PHASE )
-            data_y = simulator()->GetPhaseVector( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetPhaseVector( (const char*) simVectorName.c_str(), size );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
 
         break;
     case ST_SP:
         if( aTraceType & SPT_SP_AMP )
-            data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), size );
         else if( aTraceType & SPT_AC_PHASE )
-            data_y = simulator()->GetPhaseVector( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetPhaseVector( (const char*) simVectorName.c_str(), size );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or SPT_SP_AMP bit" ) );
 
         break;
 
-    case ST_NOISE:
     case ST_DC:
+        data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), -1 );
+        break;
+
+    case ST_NOISE:
     case ST_TRAN:
     case ST_FFT:
-        data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str() );
+        data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str(), size );
         break;
 
     default:
         wxFAIL_MSG( wxT( "Unhandled plot type" ) );
     }
-
-    unsigned int size = data_x.size();
 
     // If we did a two-source DC analysis, we need to split the resulting vector and add traces
     // for each input step
@@ -1684,9 +1697,9 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 
         size_t offset = 0;
         size_t outer = ( size_t )( ( source2.m_vend - v ) / source2.m_vincrement ).ToDouble();
-        size_t inner = data_x.size() / ( outer + 1 );
+        size_t inner = aDataX->size() / ( outer + 1 );
 
-        wxASSERT( data_x.size() % ( outer + 1 ) == 0 );
+        wxASSERT( aDataX->size() % ( outer + 1 ) == 0 );
 
         for( size_t idx = 0; idx <= outer; idx++ )
         {
@@ -1694,8 +1707,8 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
             {
                 if( data_y.size() >= size )
                 {
-                    std::vector<double> sub_x( data_x.begin() + offset,
-                                               data_x.begin() + offset + inner );
+                    std::vector<double> sub_x( aDataX->begin() + offset,
+                                               aDataX->begin() + offset + inner );
                     std::vector<double> sub_y( data_y.begin() + offset,
                                                data_y.begin() + offset + inner );
 
@@ -1710,7 +1723,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
     else if( TRACE* trace = aPlotTab->AddTrace( aVectorName, aTraceType ) )
     {
         if( data_y.size() >= size )
-            aPlotTab->SetTraceData( trace, data_x, data_y );
+            aPlotTab->SetTraceData( trace, *aDataX, data_y );
     }
 }
 
@@ -2676,8 +2689,10 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 
         for( const auto& [ trace, traceInfo ] : traceMap )
         {
+            std::vector<double> data_x;
+
             if( !traceInfo.first.IsEmpty() )
-                updateTrace( traceInfo.first, traceInfo.second, plotTab );
+                updateTrace( traceInfo.first, traceInfo.second, plotTab, &data_x );
         }
 
         plotTab->GetPlotWin()->UpdateAll();

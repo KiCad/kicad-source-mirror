@@ -913,8 +913,6 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
         if( cursor )
             cursor->SetCoordX( cursor->GetCoords().x );
     }
-
-    m_plotWin->UpdateAll();
 }
 
 
