@@ -337,49 +337,105 @@ wxString SCH_SYMBOL::GetDatasheet() const
 
 void SCH_SYMBOL::UpdatePins()
 {
-    std::map<wxString, wxString> altPinMap;
-    std::map<wxString, KIID>     pinUuidMap;
+    std::map<wxString, wxString>            altPinMap;
+    std::map<wxString, std::set<SCH_PIN*>>  pinUuidMap;
+    std::set<SCH_PIN*>                      unassignedSchPins;
+    std::set<LIB_PIN*>                      unassignedLibPins;
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        pinUuidMap[ pin->GetNumber() ] = pin->m_Uuid;
+        pinUuidMap[ pin->GetNumber() ].insert( pin.get() );
+
+        unassignedSchPins.insert( pin.get() );
 
         if( !pin->GetAlt().IsEmpty() )
             altPinMap[ pin->GetNumber() ] = pin->GetAlt();
     }
 
-    m_pins.clear();
     m_pinMap.clear();
 
     if( !m_part )
         return;
-
-    unsigned i = 0;
 
     std::vector<LIB_PIN*> pins = m_part->GetAllLibPins();
 
     for( LIB_PIN* libPin : pins )
     {
         // NW: Don't filter by unit: this data-structure is used for all instances,
-        // some if which might have different units.
+        // some of which might have different units.
         if( libPin->GetConvert() && m_convert && m_convert != libPin->GetConvert() )
             continue;
 
-        m_pins.push_back( std::make_unique<SCH_PIN>( libPin, this ) );
+        SCH_PIN* pin = nullptr;
 
         auto ii = pinUuidMap.find( libPin->GetNumber() );
 
-        if( ii != pinUuidMap.end() )
-            const_cast<KIID&>( m_pins.back()->m_Uuid ) = ii->second;
+        if( ii == pinUuidMap.end() || ii->second.empty() )
+        {
+            unassignedLibPins.insert( libPin );
+            continue;
+        }
+
+        auto it = ii->second.begin();
+        pin = *it;
+        ii->second.erase( it );
+        pin->SetLibPin( libPin );
+        pin->SetPosition( libPin->GetPosition() );
+
+        unassignedSchPins.erase( pin );
 
         auto iii = altPinMap.find( libPin->GetNumber() );
 
         if( iii != altPinMap.end() )
-            m_pins.back()->SetAlt( iii->second );
+            pin->SetAlt( iii->second );
 
-        m_pinMap[ libPin ] = i;
+        m_pinMap[ libPin ] = pin;
+    }
 
-        ++i;
+    // Add any pins that were not found in the symbol
+    for( LIB_PIN* libPin : unassignedLibPins )
+    {
+        SCH_PIN* pin = nullptr;
+
+        // First try to re-use an existing pin
+        if( !unassignedSchPins.empty() )
+        {
+            auto it = unassignedSchPins.begin();
+            pin = *it;
+            unassignedSchPins.erase( it );
+        }
+        else
+        {
+            // This is a pin that was not found in the symbol, so create a new one.
+            pin = new SCH_PIN( libPin, this );
+            m_pins.emplace_back( pin );
+        }
+
+        m_pinMap[ libPin ] = pin;
+        pin->SetLibPin( libPin );
+        pin->SetPosition( libPin->GetPosition() );
+        pin->SetNumber( libPin->GetNumber() );
+
+        auto iii = altPinMap.find( libPin->GetNumber() );
+
+        if( iii != altPinMap.end() )
+            pin->SetAlt( iii->second );
+    }
+
+    // If we have any pins left in the symbol that were not found in the library, remove them.
+    for( auto it1 = m_pins.begin(); it1 != m_pins.end() && !unassignedSchPins.empty(); )
+    {
+        auto it2 = unassignedSchPins.find( it1->get() );
+
+        if( it2 != unassignedSchPins.end() )
+        {
+            it1 = m_pins.erase( it1 );
+            unassignedSchPins.erase( it2 );
+        }
+        else
+        {
+            ++it1;
+        }
     }
 }
 
@@ -1086,8 +1142,13 @@ std::vector<LIB_PIN*> SCH_SYMBOL::GetAllLibPins() const
 
 SCH_PIN* SCH_SYMBOL::GetPin( LIB_PIN* aLibPin ) const
 {
-    wxASSERT( m_pinMap.count( aLibPin ) );
-    return m_pins[ m_pinMap.at( aLibPin ) ].get();
+    auto it = m_pinMap.find( aLibPin );
+
+    if( it != m_pinMap.end() )
+        return it->second;
+
+    wxFAIL_MSG_AT( "Pin not found", __FILE__, __LINE__, __FUNCTION__ );
+    return nullptr;
 }
 
 

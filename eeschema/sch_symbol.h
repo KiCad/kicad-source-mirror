@@ -791,7 +791,7 @@ private:
     std::unique_ptr< LIB_SYMBOL >          m_part;      ///< a flattened copy of the LIB_SYMBOL
                                                         ///<   from the PROJECT's libraries.
     std::vector<std::unique_ptr<SCH_PIN>>  m_pins;      ///< a SCH_PIN for every LIB_PIN (all units)
-    std::unordered_map<LIB_PIN*, unsigned> m_pinMap;    ///< library pin pointer : SCH_PIN's index
+    std::unordered_map<LIB_PIN*, SCH_PIN*> m_pinMap;    ///< library pin pointer : SCH_PIN's index
 
     bool        m_isInNetlist;            ///< True if the symbol should appear in the netlist
     bool        m_excludedFromSim;        ///< True to exclude from simulation.
