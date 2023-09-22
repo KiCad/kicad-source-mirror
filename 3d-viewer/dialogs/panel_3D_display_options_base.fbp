@@ -209,7 +209,7 @@
                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                         <property name="permission">none</property>
                                         <property name="rows">0</property>
-                                        <property name="vgap">4</property>
+                                        <property name="vgap">5</property>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxLEFT</property>
@@ -435,7 +435,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Use bare copper color for unplated copper</property>
+                                                <property name="label">Use bare copper color for unplated copper (slow)</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -734,11 +734,11 @@
                                         <property name="window_style"></property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="0">
+                                <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
+                                    <property name="flag">wxTOP|wxLEFT</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizerRotAngle</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -937,12 +937,12 @@
                                     <property name="proportion">0</property>
                                     <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
-                                        <property name="name">bSizer9</property>
-                                        <property name="orient">wxVERTICAL</property>
+                                        <property name="name">bSizerSlider</property>
+                                        <property name="orient">wxHORIZONTAL</property>
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
@@ -973,7 +973,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Enable animation</property>
+                                                <property name="label">Redraw while moving</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1005,19 +1005,8 @@
                                                 <event name="OnCheckBox">OnCheckEnableAnimation</event>
                                             </object>
                                         </object>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxLEFT</property>
-                                    <property name="proportion">0</property>
-                                    <object class="wxBoxSizer" expanded="1">
-                                        <property name="minimum_size"></property>
-                                        <property name="name">bSizerSlider</property>
-                                        <property name="orient">wxHORIZONTAL</property>
-                                        <property name="permission">none</property>
                                         <object class="sizeritem" expanded="0">
-                                            <property name="border">5</property>
+                                            <property name="border">15</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="0">
@@ -1048,7 +1037,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Animation speed:</property>
+                                                <property name="label">Redraw speed:</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -1078,9 +1067,9 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="0">
-                                            <property name="border">15</property>
-                                            <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
-                                            <property name="proportion">1</property>
+                                            <property name="border">5</property>
+                                            <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                            <property name="proportion">0</property>
                                             <object class="wxSlider" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
@@ -1116,7 +1105,7 @@
                                                 <property name="minValue">1</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">100,-1</property>
+                                                <property name="minimum_size">-1,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_sliderAnimationSpeed</property>
                                                 <property name="pane_border">1</property>

@@ -28,7 +28,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizeLeft->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 1, 4, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 1, 5, 0 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -41,7 +41,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	m_checkBoxAreas = new wxCheckBox( this, wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_checkBoxAreas, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( this, wxID_ANY, _("Use bare copper color for unplated copper"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( this, wxID_ANY, _("Use bare copper color for unplated copper (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRenderPlatedPadsAsPlated->SetToolTip( _("Use different colors for plated and unplated copper. (Slow)") );
 
 	fgSizer2->Add( m_checkBoxRenderPlatedPadsAsPlated, 0, wxRIGHT|wxLEFT, 5 );
@@ -94,29 +94,21 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerRotAngle->Add( m_staticTextRotAngleUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerRight->Add( bSizerRotAngle, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
-
-	m_checkBoxEnableAnimation = new wxCheckBox( this, wxID_ANY, _("Enable animation"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxEnableAnimation->SetValue(true);
-	bSizer9->Add( m_checkBoxEnableAnimation, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerRight->Add( bSizer9, 0, wxEXPAND|wxLEFT, 5 );
+	bSizerRight->Add( bSizerRotAngle, 0, wxTOP|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerSlider;
 	bSizerSlider = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticAnimationSpeed = new wxStaticText( this, wxID_ANY, _("Animation speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxEnableAnimation = new wxCheckBox( this, wxID_ANY, _("Redraw while moving"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxEnableAnimation->SetValue(true);
+	bSizerSlider->Add( m_checkBoxEnableAnimation, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_staticAnimationSpeed = new wxStaticText( this, wxID_ANY, _("Redraw speed:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticAnimationSpeed->Wrap( -1 );
-	bSizerSlider->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerSlider->Add( m_staticAnimationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
 	m_sliderAnimationSpeed = new wxSlider( this, wxID_ANY, 3, 1, 5, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	m_sliderAnimationSpeed->SetMinSize( wxSize( 100,-1 ) );
-
-	bSizerSlider->Add( m_sliderAnimationSpeed, 1, wxEXPAND|wxLEFT|wxRIGHT, 15 );
+	bSizerSlider->Add( m_sliderAnimationSpeed, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerRight->Add( bSizerSlider, 0, wxEXPAND|wxLEFT, 5 );
