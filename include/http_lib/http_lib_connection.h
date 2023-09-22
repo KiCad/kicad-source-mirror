@@ -90,8 +90,6 @@ private:
 
     std::string m_token;
     std::string m_rootURL;
-    std::string m_user_name;
-    std::string m_user_pass;
 
     HTTP_LIB_SOURCE_TYPE m_sourceType;
 
