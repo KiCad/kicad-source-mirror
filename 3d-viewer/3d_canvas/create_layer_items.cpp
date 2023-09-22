@@ -189,14 +189,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         {
             const PCB_VIA *via = static_cast< const PCB_VIA*>( track );
             m_viaCount++;
-            m_averageViaHoleDiameter += via->GetDrillValue() * m_biuTo3Dunits;
+            m_averageViaHoleDiameter += static_cast<float>( via->GetDrillValue() * m_biuTo3Dunits );
         }
         else
         {
             m_trackCount++;
         }
 
-        m_averageTrackWidth += track->GetWidth() * m_biuTo3Dunits;
+        m_averageTrackWidth += static_cast<float>( track->GetWidth() * m_biuTo3Dunits );
     }
 
     if( m_trackCount )
@@ -289,12 +289,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 const PCB_VIA* via               = static_cast<const PCB_VIA*>( track );
                 const VIATYPE  viatype           = via->GetViaType();
-                const float    holediameter      = via->GetDrillValue() * BiuTo3dUnits();
+                const double   holediameter      = via->GetDrillValue() * BiuTo3dUnits();
+                const double   viasize           = via->GetWidth() * BiuTo3dUnits();
+                const double   plating           = GetHolePlatingThickness() * BiuTo3dUnits();
 
                 // holes and layer copper extend half info cylinder wall to hide transition
-                const float    thickness         = GetHolePlatingThickness() * BiuTo3dUnits() / 2.0f;
-                const float    hole_inner_radius = holediameter / 2.0f;
-                const float    ring_radius       = via->GetWidth() * BiuTo3dUnits() / 2.0f;
+                const float    thickness         = static_cast<float>( plating / 2.0f );
+                const float    hole_inner_radius = static_cast<float>( holediameter / 2.0f );
+                const float    ring_radius       = static_cast<float>( viasize / 2.0f );
 
                 const SFVEC2F via_center( via->GetStart().x * m_biuTo3Dunits,
                                           -via->GetStart().y * m_biuTo3Dunits );
@@ -407,7 +409,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     const int holediameter = via->GetDrillValue();
                     const int hole_outer_radius = (holediameter / 2) + GetHolePlatingThickness();
-                    const int hole_outer_ring_radius = via->GetWidth() / 2.0f;
+                    const int hole_outer_ring_radius = KiROUND( via->GetWidth() / 2.0 );
 
                     // Add through hole contours
                     TransformCircleToPolygon( m_TH_ODPolys, via->GetStart(), hole_outer_radius,
@@ -470,12 +472,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // The hole in the body is inflated by copper thickness, if not plated, no copper
-            const int inflate = ( pad->GetAttribute () != PAD_ATTRIB::NPTH ) ?
-                                GetHolePlatingThickness() / 2 : 0;
+            int inflate = 0;
+
+            if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
+                inflate = KiROUND( GetHolePlatingThickness() / 2.0 );
 
             m_holeCount++;
-            m_averageHoleDiameter += ( ( pad->GetDrillSize().x +
-                                             pad->GetDrillSize().y ) / 2.0f ) * m_biuTo3Dunits;
+            double holeDiameter = ( pad->GetDrillSize().x + pad->GetDrillSize().y ) / 2.0;
+            m_averageHoleDiameter += static_cast<float>( holeDiameter * m_biuTo3Dunits );
 
             createPadWithHole( pad, &m_TH_ODs, inflate );
 
