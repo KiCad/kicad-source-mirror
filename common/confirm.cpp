@@ -28,10 +28,8 @@
 #include <wx/choicdlg.h>
 #include <wx/crt.h>
 #include <confirm.h>
-#include <dialogs/html_message_box.h>
 #include <functional>
 #include <unordered_map>
-#include <pgm_base.h>
 
 // Set of dialogs that have been chosen not to be shown again
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
@@ -287,7 +285,7 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
         return;
     }
 
-    if( !Pgm().IsGUI() )
+    if( !wxTheApp->IsGUI() )
     {
         wxFprintf( stderr, aText );
         return;
@@ -312,7 +310,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
         return;
     }
 
-    if( !Pgm().IsGUI() )
+    if( !wxTheApp->IsGUI() )
     {
         wxFprintf( stderr, aText );
         return;
@@ -339,7 +337,7 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
         return;
     }
 
-    if( !Pgm().IsGUI() )
+    if( !wxTheApp->IsGUI() )
     {
         wxFprintf( stdout, "%s %s", aMessage, aExtraInfo );
         return;
