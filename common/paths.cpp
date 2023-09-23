@@ -25,8 +25,9 @@
 #include <kiplatform/environment.h>
 #include <paths.h>
 #include <pgm_base.h>
-#include <settings/settings_manager.h>
 #include <config.h>
+#include <build_version.h>
+#include <macros.h>
 
 // lowercase or pretty case depending on platform
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
@@ -46,7 +47,7 @@ void PATHS::getUserDocumentPath( wxFileName& aPath )
         aPath.AssignDir( KIPLATFORM::ENV::GetDocumentsPath() );
 
     aPath.AppendDir( KICAD_PATH_STR );
-    aPath.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
+    aPath.AppendDir( GetMajorMinorVersion().ToStdString() );
 }
 
 
@@ -333,7 +334,7 @@ wxString PATHS::GetUserCachePath()
     }
 
     tmp.AppendDir( KICAD_PATH_STR );
-    tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
+    tmp.AppendDir( GetMajorMinorVersion().ToStdString() );
 
     return tmp.GetPathWithSep();
 }
@@ -462,3 +463,40 @@ wxString PATHS::getWindowsKiCadRoot()
     return root.GetPathWithSep();
 }
 #endif
+
+
+wxString PATHS::GetUserSettingsPath()
+{
+    static wxString user_settings_path;
+
+    if( user_settings_path.empty() )
+        user_settings_path = CalculateUserSettingsPath();
+
+    return user_settings_path;
+}
+
+
+wxString PATHS::CalculateUserSettingsPath( bool aIncludeVer, bool aUseEnv )
+{
+    wxFileName cfgpath;
+
+    // http://docs.wxwidgets.org/3.0/classwx_standard_paths.html#a7c7cf595d94d29147360d031647476b0
+
+    wxString envstr;
+    if( aUseEnv && wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )
+    {
+        // Override the assignment above with KICAD_CONFIG_HOME
+        cfgpath.AssignDir( envstr );
+    }
+    else
+    {
+        cfgpath.AssignDir( KIPLATFORM::ENV::GetUserConfigPath() );
+
+        cfgpath.AppendDir( TO_STR( KICAD_CONFIG_DIR ) );
+    }
+
+    if( aIncludeVer )
+        cfgpath.AppendDir( GetMajorMinorVersion().ToStdString() );
+
+    return cfgpath.GetPath();
+}

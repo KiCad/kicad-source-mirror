@@ -736,7 +736,7 @@ S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
         cache = new S3D_CACHE();
 
         wxFileName cfgpath;
-        cfgpath.AssignDir( SETTINGS_MANAGER::GetUserSettingsPath() );
+        cfgpath.AssignDir( PATHS::GetUserSettingsPath() );
         cfgpath.AppendDir( wxT( "3d" ) );
 
         cache->SetProgramBase( &Pgm() );

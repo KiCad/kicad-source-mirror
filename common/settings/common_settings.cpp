@@ -424,7 +424,7 @@ bool COMMON_SETTINGS::migrateSchema1to2()
 bool COMMON_SETTINGS::migrateSchema2to3()
 {
     wxFileName cfgpath;
-    cfgpath.AssignDir( SETTINGS_MANAGER::GetUserSettingsPath() );
+    cfgpath.AssignDir( PATHS::GetUserSettingsPath() );
     cfgpath.AppendDir( wxT( "3d" ) );
     cfgpath.SetFullName( wxS( "3Dresolver.cfg" ) );
     cfgpath.MakeAbsolute();

@@ -94,7 +94,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
     }
 
     // Load currently installed packages
-    wxFileName f( SETTINGS_MANAGER::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
+    wxFileName f( PATHS::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
 
     if( f.FileExists() )
     {
@@ -885,7 +885,7 @@ void PLUGIN_CONTENT_MANAGER::SaveInstalledPackages()
             js["packages"].emplace_back( pair.second );
         }
 
-        wxFileName    f( SETTINGS_MANAGER::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
+        wxFileName    f( PATHS::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
         std::ofstream stream( f.GetFullPath().fn_str() );
 
         stream << std::setw( 4 ) << js << std::endl;

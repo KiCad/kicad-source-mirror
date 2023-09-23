@@ -172,10 +172,37 @@ public:
 
 #ifdef __WXWINDOWS__
     /**
-     * @return The macOS specific bundle data directory for KiCad
+     * @return The directory the font config support files can be found
      */
     static wxString GetWindowsFontConfigDir();
 #endif
+
+    /**
+     * Return the user configuration path used to store KiCad's configuration files.
+     *
+     * @see calculateUserSettingsPath
+     *
+     * NOTE: The path is cached at startup, it will never change during program lifetime!
+     *
+     * @return A string containing the config path for Kicad
+     */
+    static wxString GetUserSettingsPath();
+
+    /**
+     * Determines the base path for user settings files.
+     *
+     * The configuration path order of precedence is determined by the following criteria:
+     *
+     * - The value of the KICAD_CONFIG_HOME environment variable
+     * - The value of the XDG_CONFIG_HOME environment variable.
+     * - The result of the call to wxStandardPaths::GetUserConfigDir() with ".config" appended
+     *   as required on Linux builds.
+     *
+     * @param aIncludeVer will append the current KiCad version if true (default)
+     * @param aUseEnv will prefer the base path found in the KICAD_CONFIG_DIR if found (default)
+     * @return A string containing the config path for Kicad
+     */
+    static wxString CalculateUserSettingsPath( bool aIncludeVer = true, bool aUseEnv = true );
 
 private:
     // we are a static helper

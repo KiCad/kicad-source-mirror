@@ -26,6 +26,7 @@
 
 #include <lib_id.h>
 #include <lib_table_lexer.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <search_stack.h>
 #include <settings/kicad_settings.h>
@@ -727,7 +728,7 @@ wxString SYMBOL_LIB_TABLE::GetGlobalTableFileName()
 {
     wxFileName fn;
 
-    fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
+    fn.SetPath( PATHS::GetUserSettingsPath() );
     fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();

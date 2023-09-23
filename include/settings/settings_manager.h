@@ -329,17 +329,6 @@ public:
     static wxString GetColorSettingsPath();
 
     /**
-     * Return the user configuration path used to store KiCad's configuration files.
-     *
-     * @see calculateUserSettingsPath
-     *
-     * NOTE: The path is cached at startup, it will never change during program lifetime!
-     *
-     * @return A string containing the config path for Kicad
-     */
-    static wxString GetUserSettingsPath();
-
-    /**
      * Parses the current KiCad build version and extracts the major and minor revision to use
      * as the name of the settings directory for this KiCad version.
      *
@@ -349,23 +338,6 @@ public:
 
 private:
     JSON_SETTINGS* registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow = true );
-
-
-    /**
-     * Determines the base path for user settings files.
-     *
-     * The configuration path order of precedence is determined by the following criteria:
-     *
-     * - The value of the KICAD_CONFIG_HOME environment variable
-     * - The value of the XDG_CONFIG_HOME environment variable.
-     * - The result of the call to wxStandardPaths::GetUserConfigDir() with ".config" appended
-     *   as required on Linux builds.
-     *
-     * @param aIncludeVer will append the current KiCad version if true (default)
-     * @param aUseEnv will prefer the base path found in the KICAD_CONFIG_DIR if found (default)
-     * @return A string containing the config path for Kicad
-     */
-    static wxString calculateUserSettingsPath( bool aIncludeVer = true, bool aUseEnv = true );
 
     /**
      * Compares two settings versions, like "5.99" and "6.0"

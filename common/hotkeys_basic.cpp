@@ -30,7 +30,7 @@
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <settings/settings_manager.h>
+#include <paths.h>
 
 #include <tool/tool_manager.h>
 #include "dialogs/dialog_hotkey_list.h"
@@ -357,7 +357,7 @@ void ReadHotKeyConfig( const wxString&                             aFileName,
     {
         wxFileName fn( wxS( "user" ) );
         fn.SetExt( HotkeyFileExtension );
-        fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
+        fn.SetPath( PATHS::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
     }
 
@@ -412,7 +412,7 @@ int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
     wxFileName fn( "user" );
 
     fn.SetExt( HotkeyFileExtension );
-    fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
+    fn.SetPath( PATHS::GetUserSettingsPath() );
 
     // Read the existing config (all hotkeys)
     ReadHotKeyConfig( fn.GetFullPath(), hotkeys );
@@ -459,7 +459,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
     wxFileName fn( aFilename );
 
     fn.SetExt( HotkeyFileExtension );
-    fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
+    fn.SetPath( PATHS::GetUserSettingsPath() );
 
     if( !wxFile::Exists( fn.GetFullPath() ) )
         return 0;

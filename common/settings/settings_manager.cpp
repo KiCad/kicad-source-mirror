@@ -423,7 +423,7 @@ wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
     switch( aSettings->GetLocation() )
     {
     case SETTINGS_LOC::USER:
-        return GetUserSettingsPath();
+        return PATHS::GetUserSettingsPath();
 
     case SETTINGS_LOC::PROJECT:
         // TODO: MDI support
@@ -521,7 +521,7 @@ public:
 
 bool SETTINGS_MANAGER::MigrateIfNeeded()
 {
-    wxFileName path( GetUserSettingsPath(), wxS( "" ) );
+    wxFileName path( PATHS::GetUserSettingsPath(), wxS( "" ) );
     wxLogTrace( traceSettings, wxT( "Using settings path %s" ), path.GetFullPath() );
 
     if( m_headless )
@@ -626,11 +626,11 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
     wxDir dir;
     std::vector<wxFileName> base_paths;
 
-    base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false ), wxS( "" ) ) );
+    base_paths.emplace_back( wxFileName( PATHS::CalculateUserSettingsPath( false ), wxS( "" ) ) );
 
     // If the env override is set, also check the default paths
     if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )
-        base_paths.emplace_back( wxFileName( calculateUserSettingsPath( false, false ), wxS( "" ) ) );
+        base_paths.emplace_back( wxFileName( PATHS::CalculateUserSettingsPath( false, false ), wxS( "" ) ) );
 
 #ifdef __WXGTK__
     // When running inside FlatPak, KIPLATFORM::ENV::GetUserConfigPath() will return a sandboxed
@@ -745,7 +745,7 @@ wxString SETTINGS_MANAGER::GetColorSettingsPath()
 {
     wxFileName path;
 
-    path.AssignDir( GetUserSettingsPath() );
+    path.AssignDir( PATHS::GetUserSettingsPath() );
     path.AppendDir( wxS( "colors" ) );
 
     if( !path.DirExists() )
@@ -760,45 +760,6 @@ wxString SETTINGS_MANAGER::GetColorSettingsPath()
 
     return path.GetPath();
 }
-
-
-wxString SETTINGS_MANAGER::GetUserSettingsPath()
-{
-    static wxString user_settings_path;
-
-    if( user_settings_path.empty() )
-        user_settings_path = calculateUserSettingsPath();
-
-    return user_settings_path;
-}
-
-
-wxString SETTINGS_MANAGER::calculateUserSettingsPath( bool aIncludeVer, bool aUseEnv )
-{
-    wxFileName cfgpath;
-
-    // http://docs.wxwidgets.org/3.0/classwx_standard_paths.html#a7c7cf595d94d29147360d031647476b0
-
-    wxString envstr;
-    if( aUseEnv && wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )
-    {
-        // Override the assignment above with KICAD_CONFIG_HOME
-        cfgpath.AssignDir( envstr );
-    }
-    else
-    {
-        cfgpath.AssignDir( KIPLATFORM::ENV::GetUserConfigPath() );
-
-        cfgpath.AppendDir( TO_STR( KICAD_CONFIG_DIR ) );
-    }
-
-    if( aIncludeVer )
-        cfgpath.AppendDir( GetSettingsVersion() );
-
-    return cfgpath.GetPath();
-}
-
-
 std::string SETTINGS_MANAGER::GetSettingsVersion()
 {
     // CMake computes the major.minor string for us.

@@ -32,7 +32,7 @@
 #include <wx/listctrl.h>
 #include <wx/stc/stc.h>
 
-#include <settings/settings_manager.h>
+#include <paths.h>
 
 #include <launch_ext.h>
 
@@ -477,6 +477,6 @@ void PAGED_DIALOG::onResetButton( wxCommandEvent& aEvent )
 
 void PAGED_DIALOG::onOpenPreferencesButton( wxCommandEvent& aEvent )
 {
-    wxString dir( SETTINGS_MANAGER::GetUserSettingsPath() );
+    wxString dir( PATHS::GetUserSettingsPath() );
     LaunchExternal( dir );
 }
