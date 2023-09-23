@@ -38,6 +38,7 @@
 #include <gestfich.h>
 #include <string_utils.h>
 #include <launch_ext.h>
+#include "wx/tokenzr.h"
 
 void QuoteString( wxString& string )
 {
@@ -114,22 +115,78 @@ wxString FindKicadFile( const wxString& shortname )
 
 int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProcess *aCallback )
 {
-    wxString fullEditorName;
-    wxString param;
+    wxString              fullEditorName;
+    std::vector<wxString> params;
 
 #ifdef __UNIX__
-    int space = aEditorName.Find( ' ' );
+    wxString param;
+    bool     inSingleQuotes = false;
+    bool     inDoubleQuotes = false;
 
-    if( space > 0 && !aEditorName.Contains( "\"" ) && !aEditorName.Contains( "\'" ) )
+    auto pushParam =
+            [&]()
+            {
+                if( !param.IsEmpty() )
+                {
+                    params.push_back( param );
+                    param.clear();
+                }
+            };
+
+    for( wxUniChar ch : aEditorName )
     {
-        fullEditorName = FindKicadFile( aEditorName.Mid( 0, space ) );
-        param = aEditorName.Mid( space + 1 );
+        if( inSingleQuotes )
+        {
+            if( ch == '\'' )
+            {
+                pushParam();
+                inSingleQuotes = false;
+                continue;
+            }
+            else
+            {
+                param += ch;
+            }
+        }
+        else if( inDoubleQuotes )
+        {
+            if( ch == '"' )
+            {
+                pushParam();
+                inDoubleQuotes = false;
+            }
+            else
+            {
+                param += ch;
+            }
+        }
+        else if( ch == '\'' )
+        {
+            pushParam();
+            inSingleQuotes = true;
+        }
+        else if( ch == '"' )
+        {
+            pushParam();
+            inDoubleQuotes = true;
+        }
+        else if( ch == ' ' )
+        {
+            pushParam();
+        }
+        else
+        {
+            param += ch;
+        }
     }
-    else
+
+    pushParam();
+
+    fullEditorName = FindKicadFile( params[0] );
+    params.erase( params.begin() );
+#else
+    fullEditorName = FindKicadFile( aEditorName );
 #endif
-    {
-        fullEditorName = FindKicadFile( aEditorName );
-    }
 
     if( wxFileExists( fullEditorName ) )
     {
@@ -138,8 +195,11 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 
         args[i++] = fullEditorName.wc_str();
 
-        if( !param.IsEmpty() )
-            args[i++] = param.wc_str();
+        if( !params.empty() )
+        {
+            for( const wxString& p : params )
+                args[i++] = p.wc_str();
+        }
 
         if( !aFileName.IsEmpty() )
             args[i++] = aFileName.wc_str();
