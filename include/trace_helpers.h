@@ -30,6 +30,7 @@
 #ifndef _TRACE_HELPERS_H_
 #define _TRACE_HELPERS_H_
 
+#include <kicommon.h>
 #include <wx/arrstr.h>
 #include <wx/event.h>
 #include <wx/string.h>
@@ -55,126 +56,126 @@
  *
  * Use "KICAD_FIND_ITEM" to enable.
  */
-extern const wxChar* const traceFindItem;
+extern KICOMMON_API const wxChar* const traceFindItem;
 
 /**
  * Flag to enable find and replace debug tracing.
  *
  * Use "KICAD_FIND_REPLACE" to enable.
  */
-extern const wxChar* const traceFindReplace;
+extern KICOMMON_API const wxChar* const traceFindReplace;
 
 /**
  * Flag to enable draw panel coordinate debug tracing.
  *
  * Use "KICAD_COORDS" to enable.
  */
-extern const wxChar* const kicadTraceCoords;
+extern KICOMMON_API const wxChar* const kicadTraceCoords;
 
 /**
  * Flag to enable wxKeyEvent debug tracing.
  *
  * Use "KICAD_KEY_EVENTS" to enable.
  */
-extern const wxChar* const kicadTraceKeyEvent;
+extern KICOMMON_API const wxChar* const kicadTraceKeyEvent;
 
 /**
  * Flag to enable tracing of the tool handling stack.
  *
  * Use "KICAD_TOOL_STACK" to enable.
  */
-extern const wxChar* const kicadTraceToolStack;
+extern KICOMMON_API const wxChar* const kicadTraceToolStack;
 
 /**
  * Flag to enable tracing of the coroutine call stack.
  *
  * Use "KICAD_COROUTINE_STACK" to enable.
  */
-extern const wxChar* const kicadTraceCoroutineStack;
+extern KICOMMON_API const wxChar* const kicadTraceCoroutineStack;
 
 /**
  * Flag to enable auto save feature debug tracing.
  *
  * Use "KICAD_AUTOSAVE" to enable.
  */
-extern const wxChar* const traceAutoSave;
+extern KICOMMON_API const wxChar* const traceAutoSave;
 
 /**
  * Flag to enable schematic library memory deletion debug output.
  *
  * Use "KICAD_SCH_LIB_MEM" to enable.
  */
-extern const wxChar* const traceSchLibMem;
+extern KICOMMON_API const wxChar* const traceSchLibMem;
 
 /**
  * Flag to enable legacy schematic plugin debug output.
  *
  * Use "KICAD_SCH_PLUGIN" to enable.
  */
-extern const wxChar* const traceSchPlugin;
+extern KICOMMON_API const wxChar* const traceSchPlugin;
 
 /**
  * Flag to enable legacy schematic plugin debug output.
  *
  * Use "KICAD_SCH_LEGACY_PLUGIN" to enable.
  */
-extern const wxChar* const traceSchLegacyPlugin;
+extern KICOMMON_API const wxChar* const traceSchLegacyPlugin;
 
 /**
  * Flag to enable GEDA PCB plugin debug output.
  *
  * Use "KICAD_PCB_PLUGIN" to enable.
  */
-extern const wxChar* const traceKicadPcbPlugin;
+extern KICOMMON_API const wxChar* const traceKicadPcbPlugin;
 
 /**
  * Flag to enable GEDA PCB plugin debug output.
  *
  * Use "KICAD_GEDA_PLUGIN" to enable.
  */
-extern const wxChar* const traceGedaPcbPlugin;
+extern KICOMMON_API const wxChar* const traceGedaPcbPlugin;
 
 /**
  * Flag to enable print controller debug output.
  *
  * Use "KICAD_PRINT" to enable.
  */
-extern const wxChar* const tracePrinting;
+extern KICOMMON_API const wxChar* const tracePrinting;
 
 /**
  * Flag to enable path and file name debug output.
  *
  * Use "KICAD_PATHS_AND_FILES" to enable.
  */
-extern const wxChar* const tracePathsAndFiles;
+extern KICOMMON_API const wxChar* const tracePathsAndFiles;
 
 /**
  * Flag to enable locale debug output.
  *
  * Use "KICAD_LOCALE" to enable.
  */
-extern const wxChar* const traceLocale;
+extern KICOMMON_API const wxChar* const traceLocale;
 
 /**
  * Flag to enable locale debug output.
  *
  * Use "KICAD_FONTS" to enable.
  */
-extern const wxChar* const traceFonts;
+extern KICOMMON_API const wxChar* const traceFonts;
 
 /**
  * Flag to enable debug output of #BASE_SCREEN and it's derivatives.
  *
  * Use "KICAD_SCREEN" to enable.
  */
-extern const wxChar* const traceScreen;
+extern KICOMMON_API const wxChar* const traceScreen;
 
 /**
  * Flag to enable debug output of display positioning logic.
  *
  * Use "KICAD_DISPLAY_LOCATION" to enable.
  */
-extern const wxChar* const traceDisplayLocation;
+extern KICOMMON_API const wxChar* const traceDisplayLocation;
 
 /**
  * Flag to enable debug output of zoom-scrolling calculations in
@@ -182,42 +183,42 @@ extern const wxChar* const traceDisplayLocation;
  *
  * Use "KICAD_ZOOM_SCROLL" to enable.
  */
-extern const wxChar* const traceZoomScroll;
+extern KICOMMON_API const wxChar* const traceZoomScroll;
 
 /**
  * Flag to enable debug output of symbol library resolver results
  *
  * Use "KICAD_SYM_RESOLVE" to enable.
  */
-extern const wxChar* const traceSymbolResolver;
+extern KICOMMON_API const wxChar* const traceSymbolResolver;
 
 /**
  * Flag to enable debug output of schematic symbol sheet path manipulation code.
  *
  * Use "KICAD_SCH_SHEET_PATHS" to enable.
  */
-extern const wxChar* const traceSchSheetPaths;
+extern KICOMMON_API const wxChar* const traceSchSheetPaths;
 
 /**
  * Flag to enable debug output of environment variable operations.
  *
  * Use "KICAD_ENV_VARS" to enable.
  */
-extern const wxChar* const traceEnvVars;
+extern KICOMMON_API const wxChar* const traceEnvVars;
 
 /**
  * Flag to enable debug output of GAL performance profiling.
  *
  * Use "KICAD_GAL_PROFILE" to enable.
  */
-extern const wxChar* const traceGalProfile;
+extern KICOMMON_API const wxChar* const traceGalProfile;
 
 /**
  * Flag to enable KiCad2Step debug tracing.
  *
  * Use "KICAD2STEP" to enable.
  */
-extern const wxChar* const traceKiCad2Step;
+extern KICOMMON_API const wxChar* const traceKiCad2Step;
 
 ///@}
 
@@ -227,7 +228,7 @@ extern const wxChar* const traceKiCad2Step;
  * @param aEvent is the wxKeyEvent to generate the print string from.
  * @return the wxKeyEvent information.
  */
-extern wxString dump( const wxKeyEvent& aEvent );
+extern KICOMMON_API wxString dump( const wxKeyEvent& aEvent );
 
 /**
  * Debug helper for printing wxArrayString contents.
@@ -235,9 +236,9 @@ extern wxString dump( const wxKeyEvent& aEvent );
  * @param aArray is the string array to output.
  * @return the wxArrayString contents in a formatted string for debugging output.
  */
-extern wxString dump( const wxArrayString& aArray );
+extern KICOMMON_API wxString dump( const wxArrayString& aArray );
 
-class TRACE_MANAGER
+class KICOMMON_API TRACE_MANAGER
 {
 public:
     TRACE_MANAGER() :

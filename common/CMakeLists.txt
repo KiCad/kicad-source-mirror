@@ -105,6 +105,7 @@ set( KICOMMON_SRCS
     markup_parser.cpp
     richio.cpp
     string_utils.cpp
+    trace_helpers.cpp
     wx_filename.cpp
     )
 
@@ -478,7 +479,6 @@ set( COMMON_SRCS
     template_fieldnames.cpp
     textentry_tricks.cpp
     title_block.cpp
-    trace_helpers.cpp
     undo_redo_container.cpp
     validators.cpp
     wildcards_and_files_ext.cpp
