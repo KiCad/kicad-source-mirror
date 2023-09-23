@@ -124,14 +124,20 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
         }
         else
         {
-            LIB_ID libId = GetCurSymbol()->GetLibId();
-            const wxString& libName = libId.GetLibNickname();
-            const wxString& symbolName = libId.GetLibItemName();
+            const wxString& libName = GetCurSymbol()->GetLibId().GetLibNickname();
 
-            if( m_libMgr->FlushSymbol( symbolName, libName ) )
+            if( m_libMgr->IsLibraryReadOnly( libName ) )
             {
-                m_libMgr->ClearSymbolModified( symbolName, libName );
-                return true;
+                wxString msg = wxString::Format( _( "Symbol library '%s' is not writable." ),
+                                                 libName );
+                wxString msg2 = _( "You must save to a different location." );
+
+                if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
+                    return saveLibrary( libName, true );
+            }
+            else
+            {
+                return saveLibrary( libName, false );
             }
         }
     }
@@ -1183,12 +1189,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
             {
                 // If saving under existing name fails then do a Save As..., and if that
                 // fails then cancel close action.
-                if( !m_libMgr->IsLibraryReadOnly( libNickname ) )
-                {
-                    if( saveLibrary( libNickname, false ) )
-                        continue;
-                }
-                else
+                if( m_libMgr->IsLibraryReadOnly( libNickname ) )
                 {
                     msg.Printf( _( "Symbol library '%s' is not writable." ), libNickname );
                     msg2 = _( "You must save to a different location." );
@@ -1213,6 +1214,10 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                         retv = false;
                         continue;
                     }
+                }
+                else if( saveLibrary( libNickname, false ) )
+                {
+                    continue;
                 }
 
                 if( !saveLibrary( libNickname, true ) )
