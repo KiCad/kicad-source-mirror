@@ -1,5 +1,5 @@
 cmake_policy(PUSH)
-cmake_policy(VERSION 3.1)
+#cmake_policy(VERSION 3.1)
 
 # Default to honoring the visibility settings for static libraries
 cmake_policy(SET CMP0063 NEW)
