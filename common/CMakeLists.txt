@@ -54,7 +54,6 @@ add_custom_target(
 # statically bound into it. Otherwise you will have DSO loading probs. After it
 # sets the LIB PATHS however, we want the *.kiface modules to use shared linking.
 add_library( singletop STATIC EXCLUDE_FROM_ALL
-    confirm.cpp
     eda_doc.cpp
     kiway.cpp
     kiway_holder.cpp
@@ -95,6 +94,7 @@ set( KICOMMON_SRCS
     array_axis.cpp
     array_options.cpp
     bitmap_info.cpp
+    confirm.cpp
     eda_units.cpp
     exceptions.cpp
     kiid.cpp
@@ -413,7 +413,6 @@ set( COMMON_SRCS
     commit.cpp
     common.cpp
     config_params.cpp
-    confirm.cpp
     dialog_shim.cpp
     dpi_scaling_common.cpp
     draw_panel_gal.cpp

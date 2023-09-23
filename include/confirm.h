@@ -32,6 +32,7 @@
 #ifndef __INCLUDE__CONFIRM_H__
 #define __INCLUDE__CONFIRM_H__
 
+#include <kicommon.h>
 #include <wx/richmsgdlg.h>
 #include <vector>
 #include <functional>
@@ -42,7 +43,7 @@ class wxStaticBitmap;
 /**
  * Helper class to create more flexible dialogs, including 'do not show again' checkbox handling.
  */
-class KIDIALOG : public wxRichMessageDialog
+class KICOMMON_API KIDIALOG : public wxRichMessageDialog
 {
 public:
     ///< Dialog type. Selects appropriate icon and default dialog title
@@ -86,7 +87,7 @@ protected:
  * Display a dialog indicating the file is already open, with an option to reset the lock.
  * @return true if the lock was reset.
  */
-bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage  );
+KICOMMON_API bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage );
 
 
 /**
@@ -99,8 +100,8 @@ bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage  );
  *                        in HandleUnsavedChanges() returning wxID_CANCEL).
  * @return wxID_YES, wxID_CANCEL, wxID_NO.
  */
-bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
-                           const std::function<bool()>& aSaveFunction );
+KICOMMON_API bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
+                                        const std::function<bool()>& aSaveFunction );
 
 
 /**
@@ -112,15 +113,16 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
  *                      written back to the bool.
  * @return wxID_YES, wxID_CANCEL, wxID_NO.
  */
-int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll );
+KICOMMON_API int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage,
+                                       bool* aApplyToAll );
 
-int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage );
+KICOMMON_API int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage );
 
 
 /**
  * Display a confirmation dialog for a revert action.
  */
-bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage );
+KICOMMON_API bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage );
 
 
 /**
@@ -128,7 +130,7 @@ bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage );
  *
  * @warning Setting \a displaytime does not work.  Do not use it.
  */
-void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime = 0 );
+KICOMMON_API void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime = 0 );
 
 /**
  * Display an error message with \a aMessage
@@ -137,8 +139,8 @@ void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime = 
  * @param aMessage is the message text to display
  * @param aExtraInfo is extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage,
-                          const wxString& aExtraInfo = wxEmptyString );
+KICOMMON_API void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage,
+                                       const wxString& aExtraInfo = wxEmptyString );
 
 
 /**
@@ -148,8 +150,8 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage,
  * @param aMessage is the message text to display
  * @param aExtraInfo is the extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage,
-                         const wxString& aExtraInfo = wxEmptyString );
+KICOMMON_API void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage,
+                                      const wxString& aExtraInfo = wxEmptyString );
 
 /**
  * Display a yes/no dialog with \a aMessage and returns the user response.
@@ -159,7 +161,7 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage,
  *
  * @return True if user selected the yes button, otherwise false.
  */
-bool IsOK( wxWindow* aParent, const wxString& aMessage );
+KICOMMON_API bool IsOK( wxWindow* aParent, const wxString& aMessage );
 
 /**
  * Display a warning dialog with \a aMessage and returns the user response.
@@ -175,10 +177,11 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage );
  *
  * @return wxID_OK or wxID_CANCEL depending on the button the user selected.
  */
-int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                      const wxString& aDetailedMessage = wxEmptyString,
-                      const wxString& aOKLabel = wxEmptyString,
-                      const wxString& aCancelLabel = wxEmptyString, bool* aApplyToAll = nullptr );
+KICOMMON_API int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning,
+                                   const wxString& aMessage,
+                                   const wxString& aDetailedMessage = wxEmptyString,
+                                   const wxString& aOKLabel = wxEmptyString,
+                                   const wxString& aCancelLabel = wxEmptyString, bool* aApplyToAll = nullptr );
 
 
 
@@ -191,7 +194,8 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
  * @param aOptions is a vector of possible options.
  * @return Index of the selected option or -1 when the dialog has been canceled.
  */
-int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
-                        const wxArrayString& aOptions );
+KICOMMON_API int SelectSingleOption( wxWindow* aParent, const wxString& aTitle,
+                                     const wxString& aMessage,
+                                     const wxArrayString& aOptions );
 
 #endif /* __INCLUDE__CONFIRM_H__ */
