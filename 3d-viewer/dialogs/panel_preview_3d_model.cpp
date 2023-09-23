@@ -35,7 +35,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <common_ogl/ogl_attr_list.h>
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -210,7 +210,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    const DPI_SCALING dpi{ settings, this };
+    const DPI_SCALING_COMMON dpi{ settings, this };
     m_previewPane->SetScaleFactor( dpi.GetScaleFactor() );
 
     // TODO(JE) use all control options

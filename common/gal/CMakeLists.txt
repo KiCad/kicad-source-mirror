@@ -12,7 +12,6 @@ set( GAL_SRCS
 
     ../view/view_controls.cpp
     ../view/view_overlay.cpp
-    ../view/wx_view_controls.cpp
     ../view/zoom_controller.cpp
 
     # OpenGL GAL

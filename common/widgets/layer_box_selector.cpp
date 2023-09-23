@@ -28,7 +28,7 @@
 #include <wx/menuitem.h>
 #include <wx/settings.h>
 
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <layer_ids.h>
 #include <widgets/layer_box_selector.h>
 #include "kiplatform/ui.h"
@@ -134,7 +134,7 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
 
 void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
-    DPI_SCALING dpi( nullptr, this );
+    DPI_SCALING_COMMON dpi( nullptr, this );
     int size = static_cast<int>( dpi.GetScaleFactor() * 14 );
 
     for( int i = 0; i < (int) GetCount(); ++i )

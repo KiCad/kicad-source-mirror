@@ -32,6 +32,7 @@
 #include <board.h>
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_actions.h>
+#include <dpi_scaling_common.h>
 
 
 // class to display a layer list in a wxBitmapComboBox.
@@ -43,7 +44,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     Clear();
 
 #ifdef __WXMSW__
-    DPI_SCALING dpi( nullptr, this );
+    DPI_SCALING_COMMON dpi( nullptr, this );
     int size = static_cast<int>( 14 / dpi.GetContentScaleFactor() );
 #else
     const int size = 14;

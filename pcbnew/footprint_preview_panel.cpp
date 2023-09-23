@@ -28,6 +28,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <pcb_dimension.h>
+#include <dpi_scaling_common.h>
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
@@ -254,9 +255,9 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
             cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
-    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> gal_opts;
+    std::unique_ptr<GAL_DISPLAY_OPTIONS_IMPL> gal_opts;
 
-    gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
+    gal_opts = std::make_unique<GAL_DISPLAY_OPTIONS_IMPL>();
     gal_opts->ReadConfig( *Pgm().GetCommonSettings(), cfg->m_Window, aParent );
 
     auto galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );

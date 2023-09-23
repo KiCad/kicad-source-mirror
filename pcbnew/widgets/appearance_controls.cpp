@@ -25,6 +25,7 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <dpi_scaling_common.h>
 #include <eda_list_dialog.h>
 #include <string_utils.h>
 #include <footprint_edit_frame.h>
@@ -406,7 +407,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_lastSelectedUserPreset( nullptr ),
         m_layerContextMenu( nullptr )
 {
-    DPI_SCALING dpi( nullptr, m_frame );
+    DPI_SCALING_COMMON dpi( nullptr, m_frame );
 
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x / dpi.GetContentScaleFactor();
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
@@ -804,7 +805,7 @@ void APPEARANCE_CONTROLS::createControls()
 
 wxSize APPEARANCE_CONTROLS::GetBestSize() const
 {
-    DPI_SCALING dpi( nullptr, m_frame );
+    DPI_SCALING_COMMON dpi( nullptr, m_frame );
     wxSize      size( 220 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
     return size;
 }

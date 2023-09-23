@@ -21,17 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DPI_SCALING__H
-#define DPI_SCALING__H
+#ifndef DPI_SCALING_COMMON__H
+#define DPI_SCALING_COMMON__H
 
-#include <wx/window.h>
+#include <gal/dpi_scaling.h>
+
+class COMMON_SETTINGS;
+class wxWindow;
 
 /**
  * Class to handle configuration and automatic determination of the DPI
  * scale to use for canvases. This has several sources and the availability of
  * some of them are platform dependent.
  */
-class DPI_SCALING
+class DPI_SCALING_COMMON : public DPI_SCALING
 {
 public:
     /**
@@ -42,9 +45,7 @@ public:
      * @param aWindow a WX window to use for automatic DPI determination
      * @return the scaling factor (1.0 = no scaling)
      */
-    DPI_SCALING(){};
-
-    virtual ~DPI_SCALING() {}
+    DPI_SCALING_COMMON( COMMON_SETTINGS* aConfig, const wxWindow* aWindow );
 
     /**
      * Get the DPI scale from all known sources in order:
@@ -53,7 +54,7 @@ public:
      * * user's environment variables, if set and according to platform
      * * WX's internal determination of the DPI scaling (WX > 3.1)
      */
-    virtual double GetScaleFactor() const = 0;
+    double GetScaleFactor() const override;
 
     /**
      * Get the content scale factor, which may be different from the scale
@@ -61,12 +62,12 @@ public:
      * user interface elements (fonts, icons, etc) whereas the scale
      * factor should be used for scaling canvases.
      */
-    virtual double GetContentScaleFactor() const = 0;
+    double GetContentScaleFactor() const override;
 
     /**
      * Is the current value auto scaled, or is it user-set in the config
      */
-    virtual bool GetCanvasIsAutoScaled() const = 0;
+    bool GetCanvasIsAutoScaled() const override;
 
     /**
      * Set the common DPI config in a given config object
@@ -76,24 +77,19 @@ public:
      * @param aAuto   store a value meaning "no user-set scale"
      * @param aValue  the value to store (ignored if aAuto set)
      */
-    virtual void SetDpiConfig( bool aAuto, double aValue ) = 0;
+    void SetDpiConfig( bool aAuto, double aValue ) override;
 
-    /*
-     * Get the maximum scaling factor that should be presented to the user.
-     * This is only advisory, it has no real technical use other than for validation.
+private:
+    /**
+     * The configuration object to use to get/set user setting. nullptr
+     * if only automatic options are wanted
      */
-    static double GetMaxScaleFactor();
-
-    /*
-     * Get the minimum scaling factor that should be presented to the user.
-     * This is only advisory, it has no real technical use other than for validation.
-     */
-    static double GetMinScaleFactor();
+    COMMON_SETTINGS* m_config;
 
     /**
-     * Get the "default" scaling factor to use if not other config is available
+     * The WX window to use for WX's automatic DPI checking
      */
-    static double GetDefaultScaleFactor();
+    const wxWindow* m_window;
 };
 
 #endif // DPI_SCALING__H

@@ -24,6 +24,7 @@
 
 #include <dialogs/panel_color_settings.h>
 #include <class_draw_panel_gal.h>
+#include <gal_display_options_common.h>
 
 class PAGE_INFO;
 class EDA_ITEM;
@@ -71,7 +72,7 @@ private:
     DS_PROXY_VIEW_ITEM*          m_drawingSheet;
     std::vector<EDA_ITEM*>       m_previewItems;
 
-    KIGFX::GAL_DISPLAY_OPTIONS   m_galDisplayOptions;
+    GAL_DISPLAY_OPTIONS_IMPL     m_galDisplayOptions;
     EDA_DRAW_PANEL_GAL::GAL_TYPE m_galType;
 };
 

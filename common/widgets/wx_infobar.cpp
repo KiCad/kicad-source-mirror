@@ -32,7 +32,7 @@
 #include <eda_base_frame.h>
 
 #ifdef __WXMSW__
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #endif
 
 
@@ -85,7 +85,7 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
     wxSize   iconSize = wxArtProvider::GetSizeHint( wxART_BUTTON );
 
 #ifdef __WXMSW__
-    DPI_SCALING dpi( nullptr, aParent );
+    DPI_SCALING_COMMON dpi( nullptr, aParent );
     iconSize.x *= dpi.GetContentScaleFactor();
     sx *= dpi.GetContentScaleFactor();
     sy *= dpi.GetContentScaleFactor();

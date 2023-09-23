@@ -35,7 +35,7 @@
 #include <layer_ids.h>
 
 #include <gal/graphics_abstraction_layer.h>
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <class_draw_panel_gal.h>
 #include <pcb_draw_panel_gal.h>
 #include <view/wx_view_controls.h>
@@ -129,7 +129,7 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
     // SUPERSAMPLING_X4;
     m_displayOptions.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
 
-    DPI_SCALING dpi( Pgm().GetCommonSettings(), aParent );
+    DPI_SCALING_COMMON dpi( Pgm().GetCommonSettings(), aParent );
     m_displayOptions.m_scaleFactor = dpi.GetScaleFactor();
 
     m_galPanel = std::make_shared<PCB_DRAW_PANEL_GAL>( aParent, -1, wxPoint( 0, 0 ),

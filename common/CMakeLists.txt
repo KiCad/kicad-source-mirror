@@ -414,7 +414,9 @@ set( COMMON_SRCS
     config_params.cpp
     confirm.cpp
     dialog_shim.cpp
+    dpi_scaling_common.cpp
     draw_panel_gal.cpp
+    gal_display_options_common.cpp
     gr_text.cpp
     dsnlexer.cpp
     eda_base_frame.cpp
@@ -482,6 +484,7 @@ set( COMMON_SRCS
     wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp
     xnode.cpp
+    view/wx_view_controls.cpp
     )
 
 if( TRUE OR NOT USE_KIWAY_DLLS )

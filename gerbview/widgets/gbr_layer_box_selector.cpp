@@ -27,7 +27,7 @@
 #include <gerber_file_image_list.h>
 
 #ifdef __WXMSW__
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #endif
 
 #include "gbr_layer_box_selector.h"
@@ -38,7 +38,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
     Clear();
 
 #ifdef __WXMSW__
-    DPI_SCALING dpi( nullptr, this );
+    DPI_SCALING_COMMON dpi( nullptr, this );
     int size = static_cast<int>( 14 / dpi.GetContentScaleFactor() );
 #else
     const int size = 14;

@@ -22,6 +22,7 @@
 
 #include <bitmaps.h>
 #include <pgm_base.h>
+#include <dpi_scaling_common.h>
 #include <eda_list_dialog.h>
 #include <pcb_display_options.h>
 #include <eda_3d_viewer_frame.h>
@@ -88,7 +89,7 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
         m_focusOwner( aFocusOwner ),
         m_lastSelectedViewport( nullptr )
 {
-    DPI_SCALING dpi( nullptr, m_frame );
+    DPI_SCALING_COMMON dpi( nullptr, m_frame );
 
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x / dpi.GetContentScaleFactor();
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
@@ -142,7 +143,7 @@ APPEARANCE_CONTROLS_3D::~APPEARANCE_CONTROLS_3D()
 
 wxSize APPEARANCE_CONTROLS_3D::GetBestSize() const
 {
-    DPI_SCALING dpi( nullptr, m_frame );
+    DPI_SCALING_COMMON dpi( nullptr, m_frame );
     wxSize      size( 220 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
     return size;
 }

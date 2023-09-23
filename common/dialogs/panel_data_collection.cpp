@@ -26,7 +26,6 @@
 #include <advanced_config.h>
 #include <bitmaps.h>
 #include <dialog_shim.h>
-#include <gal/dpi_scaling.h>
 #include <kiface_base.h>
 #include <kiplatform/policy.h>
 #include <kiplatform/ui.h>

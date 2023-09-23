@@ -24,7 +24,7 @@
 #include <widgets/color_swatch.h>
 #include <wx/dcmemory.h>
 
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <dialogs/dialog_color_picker.h>
 #include <memory>
 
@@ -149,7 +149,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
     // These need additional scaling on Windows because of some discrepancy between pixel and
     // content scaling that only affects certain widgets on Windows HiDPI.  On other platforms, the
     // value returned by ConvertDialogToPixels appears to be correct.
-    DPI_SCALING dpi( nullptr, aParent );
+    DPI_SCALING_COMMON dpi( nullptr, aParent );
 
     m_size /= dpi.GetContentScaleFactor();
     m_checkerboardSize /= dpi.GetContentScaleFactor();

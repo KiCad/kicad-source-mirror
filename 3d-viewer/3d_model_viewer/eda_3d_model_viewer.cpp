@@ -38,7 +38,7 @@
 #include <gal/opengl/gl_context_mgr.h>
 #include <settings/common_settings.h>
 #include <pgm_base.h>
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <class_draw_panel_gal.h>
 #include <macros.h>
 
@@ -105,7 +105,7 @@ EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribL
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    const DPI_SCALING dpi{ settings, this };
+    const DPI_SCALING_COMMON dpi{ settings, this };
     SetScaleFactor( dpi.GetScaleFactor() );
 }
 

@@ -335,7 +335,7 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
-    KIGFX::GAL_DISPLAY_OPTIONS opts = m_parent->GetGalDisplayOptions();
+    GAL_DISPLAY_OPTIONS_IMPL opts = m_parent->GetGalDisplayOptions();
     COLOR_SETTINGS*            colorSettings = m_parent->GetColorSettings();
 
     opts.m_forceDisplayCursor = false;

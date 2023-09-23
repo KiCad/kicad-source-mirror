@@ -22,7 +22,7 @@
 
 #include <wx/panel.h>
 #include <kiway.h>
-#include <gal/gal_display_options.h>
+#include <gal_display_options_common.h>
 #include <class_draw_panel_gal.h>
 
 
@@ -67,7 +67,7 @@ protected:
 
     KIWAY*                     m_kiway;
 
-    KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
+    GAL_DISPLAY_OPTIONS_IMPL   m_galDisplayOptions;
     EDA_DRAW_PANEL_GAL*        m_preview;
 
     wxStaticText*              m_status;

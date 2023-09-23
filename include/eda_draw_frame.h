@@ -29,6 +29,7 @@
 #include <eda_base_frame.h>
 #include <kiway_player.h>
 #include <gal/gal_display_options.h>
+#include <gal_display_options_common.h>
 #include <gal/color4d.h>
 #include <class_draw_panel_gal.h>
 #include <kiid.h>
@@ -432,7 +433,7 @@ public:
     /**
      * Return a reference to the gal rendering options used by GAL for rendering.
      */
-    KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
+    GAL_DISPLAY_OPTIONS_IMPL& GetGalDisplayOptions() { return m_galDisplayOptions; }
 
     void RefreshCanvas() override
     {
@@ -548,7 +549,7 @@ private:
     EDA_DRAW_PANEL_GAL*         m_canvas;
 
     ///< This the frame's interface to setting GAL display options.
-    KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
+    GAL_DISPLAY_OPTIONS_IMPL  m_galDisplayOptions;
 };
 
 #endif  // DRAW_FRAME_H_

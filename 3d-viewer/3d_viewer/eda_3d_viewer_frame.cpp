@@ -42,7 +42,7 @@
 #include <bitmaps.h>
 #include <board_design_settings.h>
 #include <core/arraydim.h>
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -810,7 +810,7 @@ void EDA_3D_VIEWER_FRAME::loadCommonSettings()
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-    const DPI_SCALING dpi{ settings, this };
+    const DPI_SCALING_COMMON dpi{ settings, this };
     m_canvas->SetScaleFactor( dpi.GetScaleFactor() );
 
     // TODO(JE) use all control options

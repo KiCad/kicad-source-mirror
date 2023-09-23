@@ -26,7 +26,7 @@
 #include <advanced_config.h>
 #include <bitmaps.h>
 #include <dialog_shim.h>
-#include <gal/dpi_scaling.h>
+#include <dpi_scaling_common.h>
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 #include <pgm_base.h>
@@ -270,7 +270,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     if( m_canvasScaleCtrl )
     {
-        DPI_SCALING dpi( commonSettings, this );
+        DPI_SCALING_COMMON dpi( commonSettings, this );
         dpi.SetDpiConfig( m_canvasScaleAuto->GetValue(), m_canvasScaleCtrl->GetValue() );
     }
 
@@ -366,7 +366,7 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     if( m_canvasScaleCtrl )
     {
-        const DPI_SCALING dpi( &aSettings, this );
+        const DPI_SCALING_COMMON dpi( &aSettings, this );
         m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
         m_canvasScaleAuto->SetValue( dpi.GetCanvasIsAutoScaled() );
     }
@@ -440,7 +440,7 @@ void PANEL_COMMON_SETTINGS::OnCanvasScaleAuto( wxCommandEvent& aEvent )
     if( automatic && m_canvasScaleCtrl )
     {
         // set the scale to the auto value, without consulting the config
-        DPI_SCALING dpi( nullptr, this );
+        DPI_SCALING_COMMON dpi( nullptr, this );
 
         // update the field (no events sent)
         m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
