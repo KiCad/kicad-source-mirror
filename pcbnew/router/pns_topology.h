@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -96,7 +96,7 @@ private:
     const int DP_PARALLELITY_THRESHOLD = 5;
 
     bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited,
-                            const JOINT** aTerminalJoint = nullptr );
+                            const JOINT** aTerminalJoint = nullptr, bool aFollowLockedSegments = false );
 
     NODE *m_world;
 };

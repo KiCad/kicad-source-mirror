@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -63,7 +63,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_originLine = m_world->AssembleLine( m_initialSegment );
 
     TOPOLOGY topo( m_world );
-    m_tunedPath = topo.AssembleTrivialPath( m_initialSegment );
+    m_tunedPath = topo.AssembleTrivialPath( m_initialSegment, nullptr, true );
 
     if( !topo.AssembleDiffPair ( m_initialSegment, m_originPair ) )
     {

@@ -198,7 +198,8 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( const JOINT* aStart, int* aAnchor, int a
 
 
 bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
-                                  std::set<ITEM*>& aVisited, const JOINT** aTerminalJoint )
+                                  std::set<ITEM*>& aVisited, const JOINT** aTerminalJoint,
+                                  bool aFollowLockedSegments )
 {
     assert( aLine->IsLinked() );
 
@@ -233,7 +234,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
             return false;
         }
 
-        LINE l = m_world->AssembleLine( next_seg );
+        LINE l = m_world->AssembleLine( next_seg, nullptr, false, aFollowLockedSegments );
 
         VECTOR2I nextAnchor = ( aLeft ? l.CLine().CPoint( -1 ) : l.CLine().CPoint( 0 ) );
 
@@ -257,7 +258,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
             aSet.Add( l );
         }
 
-        return followTrivialPath( &l, aLeft, aSet, aVisited, aTerminalJoint );
+        return followTrivialPath( &l, aLeft, aSet, aVisited, aTerminalJoint, aFollowLockedSegments );
     }
 
     if( aTerminalJoint )
@@ -304,15 +305,15 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 
     // Assemble a line following through locked segments
     // TODO: consider if we want to allow tuning lines with different widths in the future
-    LINE l = m_world->AssembleLine( seg, nullptr, false, true );
+    LINE l = m_world->AssembleLine( seg, nullptr, false, aFollowLockedSegments );
 
     path.Add( l );
 
     const JOINT* jointA = nullptr;
     const JOINT* jointB = nullptr;
 
-    followTrivialPath( &l, false, path, visited, &jointB );
-    followTrivialPath( &l, true, path, visited, &jointA );
+    followTrivialPath( &l, false, path, visited, &jointB, aFollowLockedSegments );
+    followTrivialPath( &l, true, path, visited, &jointA, aFollowLockedSegments );
 
     if( aTerminalJoints )
     {
