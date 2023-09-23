@@ -26,7 +26,7 @@
 #define HIDPI_GL_3D_CANVAS_H
 
 #include <atomic>
-#include "3d_rendering/camera.h"
+#include <gal/3d/camera.h>
 #include <gal/hidpi_gl_canvas.h>
 #include <wx/image.h>
 #include <wx/timer.h>

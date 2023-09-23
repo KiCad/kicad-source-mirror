@@ -26,7 +26,7 @@
  * @file camera.cpp
  */
 
-#include "camera.h"
+#include <gal/3d/camera.h>
 #include <wx/log.h>
 #include <algorithm>
 

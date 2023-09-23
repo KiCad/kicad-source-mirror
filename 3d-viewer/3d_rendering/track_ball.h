@@ -30,7 +30,7 @@
 #ifndef TRACK_BALL_H
 #define TRACK_BALL_H
 
-#include "camera.h"
+#include <gal/3d/camera.h>
 
 
 class TRACK_BALL : public CAMERA

@@ -71,7 +71,6 @@ set(3D-VIEWER_SRCS
     ${DIR_RAY_3D}/triangle_3d.cpp
     3d_rendering/buffers_debug.cpp
     3d_rendering/render_3d_base.cpp
-    3d_rendering/camera.cpp
     3d_rendering/color_rgb.cpp
     3d_rendering/image.cpp
     3d_rendering/post_shader.cpp

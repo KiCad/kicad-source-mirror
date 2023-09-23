@@ -27,7 +27,7 @@
 
 #include "ray.h"
 #include "frustum.h"
-#include "../camera.h"
+#include <gal/3d/camera.h>
 
 #define RAYPACKET_DIM (1 << 3)
 #define RAYPACKET_MASK (unsigned int) ( ( RAYPACKET_DIM - 1 ) )

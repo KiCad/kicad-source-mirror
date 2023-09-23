@@ -14,6 +14,8 @@ set( GAL_SRCS
     ../view/view_overlay.cpp
     ../view/zoom_controller.cpp
 
+    3d/camera.cpp
+
     # OpenGL GAL
     opengl/opengl_gal.cpp
     opengl/gl_resources.cpp

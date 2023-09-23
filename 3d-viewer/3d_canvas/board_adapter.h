@@ -31,7 +31,7 @@
 #include "../3d_rendering/raytracing/accelerators/container_2d.h"
 #include "../3d_rendering/raytracing/accelerators/container_3d.h"
 #include "../3d_rendering/raytracing/shapes3D/bbox_3d.h"
-#include "../3d_rendering/camera.h"
+#include <gal/3d/camera.h>
 #include "../3d_enums.h"
 #include "../3d_cache/3d_cache.h"
 #include "../common_ogl/ogl_attr_list.h"

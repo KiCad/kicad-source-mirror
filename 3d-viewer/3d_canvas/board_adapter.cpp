@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "../3d_rendering/camera.h"
+#include <gal/3d/camera.h>
 #include "board_adapter.h"
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>

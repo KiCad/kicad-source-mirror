@@ -30,7 +30,7 @@
 #ifndef POST_SHADER_H
 #define POST_SHADER_H
 
-#include "camera.h"
+#include <gal/3d/camera.h>
 
 class POST_SHADER
 {
