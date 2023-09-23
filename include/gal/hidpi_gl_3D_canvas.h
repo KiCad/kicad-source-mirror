@@ -26,16 +26,10 @@
 #define HIDPI_GL_3D_CANVAS_H
 
 #include <atomic>
-#include "3d_rendering/raytracing/accelerators/accelerator_3d.h"
-#include "3d_cache/3d_cache.h"
+#include "3d_rendering/camera.h"
 #include <gal/hidpi_gl_canvas.h>
 #include <wx/image.h>
 #include <wx/timer.h>
-
-
-class RENDER_3D_RAYTRACE;
-class RENDER_3D_OPENGL;
-
 
 /**
  *  Provides basic 3D controls ( zoom, rotate, translate, ... )
