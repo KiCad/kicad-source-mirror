@@ -130,7 +130,7 @@ public:
                     {
                         via = static_cast<const VIA*>( item );
 
-                        hasNonVirtualVia = !via->IsVirtual();
+                        hasNonVirtualVia |= !via->IsVirtual();
                     }
                     else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
                     {
@@ -155,11 +155,28 @@ public:
 
     bool IsNonFanoutVia() const
     {
-        int vias = m_linkedItems.Count( VIA_T );
-        int segs = m_linkedItems.Count( SEGMENT_T );
-        segs += m_linkedItems.Count( ARC_T );
+        int vias = 0;
+        int segs = 0;
+        int realItems = 0;
 
-        return ( m_linkedItems.Size() == 3 && vias == 1 && segs == 2 );
+        for( const ITEM* item : m_linkedItems.CItems() )
+        {
+            if( item->Kind() == VIA_T )
+            {
+                if( static_cast<const VIA*>( item )->IsVirtual() )
+                    continue;
+
+                vias++;
+            }
+            else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
+            {
+                segs++;
+            }
+
+            realItems++;
+        }
+
+        return ( realItems == 3 && vias == 1 && segs == 2 );
     }
 
     bool IsStitchingVia() const
