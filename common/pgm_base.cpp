@@ -348,6 +348,9 @@ void PGM_BASE::sentryInit()
 
         sentry_options_set_release( options, GetCommitHash().ToStdString().c_str() );
 
+        // This just gives us more filtering within sentry, issues still get grouped across environments
+        sentry_options_set_environment( options, GetMajorMinorVersion().c_str() );
+
         sentry_init( options );
 
         sentry_value_t user = sentry_value_new_object();
