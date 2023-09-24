@@ -1282,6 +1282,9 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
         cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
         cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
+
+        if( m_appearancePanel )
+            m_appearancePanel->SaveSettings( cfg );
     }
 }
 
