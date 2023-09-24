@@ -46,7 +46,6 @@ public:
     {
         m_origin = aOrigin;
         m_originSet = true;
-        setGeometryChanged();
     }
 
     VECTOR2I GetOrigin() const
@@ -63,8 +62,6 @@ public:
             m_end = GetVectorSnapped45( aEnd - m_origin ) + m_origin;
         else
             m_end = aEnd;
-
-        setGeometryChanged();
     }
 
     VECTOR2I GetEnd() const
@@ -96,41 +93,19 @@ public:
     void Reset()
     {
         m_originSet = false;
-        setGeometryChanged();
     }
 
-    /**
-     * @return true if the geometry has changed, eg such that a client should redraw.
-     */
-    bool HasGeometryChanged() const
+    bool IsEmpty() const
     {
-        return m_changed;
-    }
-
-    /**
-     * Clear the geometry changed flag, call after the client code has updated everything as
-     * needed.
-     */
-    void ClearGeometryChanged()
-    {
-        m_changed = false;
-    }
-
-protected:
-    ///< Mark the geometry as changed for clients to notice
-    void setGeometryChanged()
-    {
-        m_changed = true;
+        return !m_originSet || m_origin == m_end;
     }
 
 private:
 
-    VECTOR2I m_origin, m_end;
-    bool m_angleSnap = false;
-
-    ///< Has the geometry changed such that a client should redraw?
-    bool m_changed   = false;
-    bool m_originSet = false;
+    VECTOR2I m_origin;
+    VECTOR2I m_end;
+    bool     m_angleSnap = false;
+    bool     m_originSet = false;
 };
 
 } // PREVIEW

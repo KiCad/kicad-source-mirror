@@ -1985,27 +1985,21 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             {
                 PCB_SHAPE* snapItem = dynamic_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
-                if( shape == SHAPE_T::SEGMENT && ( twoPointMgr.GetOrigin() == twoPointMgr.GetEnd()
-                                                     || evt->IsDblClick( BUT_LEFT )
-                                                     || snapItem ) )
+                if( shape == SHAPE_T::SEGMENT && snapItem && graphic->GetLength() > 0 )
                 {
-                    // User has clicked twice in the same spot
-                    //  or clicked on the end of an existing segment (closing a path)
+                    // User has clicked on the end of an existing segment, closing a path
                     BOARD_COMMIT commit( m_frame );
 
-                    // If the user clicks on an existing snap point from a drawsegment
-                    //  we finish the segment as they are likely closing a path
-                    if( snapItem && graphic->GetLength() > 0.0 )
-                    {
-                        commit.Add( graphic );
-                        commit.Push( _( "Draw Line" ) );
-                        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, graphic );
-                    }
-                    else
-                    {
-                        delete graphic;
-                    }
+                    commit.Add( graphic );
+                    commit.Push( _( "Draw Line" ) );
+                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, graphic );
 
+                    graphic = nullptr;
+                }
+                else if( twoPointMgr.IsEmpty() || evt->IsDblClick( BUT_LEFT ) )
+                {
+                    // User has clicked twice in the same spot, meaning we're finished
+                    delete graphic;
                     graphic = nullptr;
                 }
 
