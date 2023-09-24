@@ -774,12 +774,19 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( otherPad && pad->SameLogicalPadAs( otherPad ) )
     {
         // If pads are equivalent (ie: from the same footprint with the same pad number)...
-        // ... and have nets...
+        // ... and have "real" nets...
         // then they must be the same net
-        if( pad->GetNetCode() && otherPad->GetNetCode()
-                && pad->GetNetCode() != otherPad->GetNetCode()
-                && testShorting )
+        if( testShorting )
         {
+            if( pad->GetNetCode() == 0 || pad->GetNetCode() == otherPad->GetNetCode() )
+                return !m_drcEngine->IsCancelled();
+
+            if( pad->GetShortNetname().StartsWith( wxS( "unconnected-(" ) )
+                    && otherPad->GetShortNetname().StartsWith( wxS( "unconnected-(" ) ) )
+            {
+                return !m_drcEngine->IsCancelled();
+            }
+
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
             wxString msg;
 
