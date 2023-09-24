@@ -119,7 +119,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
             wxLogTrace( traceKicadPcbPlugin, wxT( "Creating temporary library file '%s'." ),
                     tempFileName );
 
-            FILE_OUTPUTFORMATTER formatter( tempFileName );
+            PRETTIFIED_FILE_OUTPUTFORMATTER formatter( tempFileName );
 
             m_owner->SetOutputFormatter( &formatter );
             m_owner->Format( (BOARD_ITEM*) it->second->GetFootprint() );
@@ -319,7 +319,7 @@ void PCB_PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     // Prepare net mapping that assures that net codes saved in a file are consecutive integers
     m_mapping->SetBoard( aBoard );
 
-    FILE_OUTPUTFORMATTER    formatter( aFileName );
+    PRETTIFIED_FILE_OUTPUTFORMATTER formatter( aFileName );
 
     m_out = &formatter;     // no ownership
 
@@ -328,6 +328,7 @@ void PCB_PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     Format( aBoard, 1 );
 
     m_out->Print( 0, ")\n" );
+    m_out->Finish();
 
     m_out = nullptr;
 }

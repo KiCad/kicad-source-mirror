@@ -31,6 +31,7 @@
 
 class BOARD;
 class BOARD_ITEM;
+class FOOTPRINT;
 
 /**
  * @file board_file_utils.h
@@ -99,6 +100,9 @@ template <typename ITEM> std::unique_ptr<ITEM> ReadItemFromStream( std::istream&
  */
 std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
                                                   std::istream& aFallback = std::cin );
+
+std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
+                                                          std::istream& aFallback = std::cin );
 
 } // namespace KI_TEST
 

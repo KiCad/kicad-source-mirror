@@ -38,6 +38,7 @@ set( QA_PCBNEW_SRCS
     test_lset.cpp
     test_pns_basics.cpp
     test_pad_numbering.cpp
+    test_prettifier.cpp
     test_libeval_compiler.cpp
     test_save_load.cpp
     test_tracks_cleaner.cpp

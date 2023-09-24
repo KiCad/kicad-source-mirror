@@ -408,6 +408,12 @@ public:
 
      std::string Quotew( const wxString& aWrapee ) const;
 
+    /**
+     * Performs any cleanup needed at the end of a write.
+     * @return true if all is well
+     */
+    virtual bool Finish() { return true; }
+
 private:
     std::vector<char>   m_buffer;
     char                quoteChar[2];
@@ -490,28 +496,27 @@ protected:
 };
 
 
-/**
- * Implement an #OUTPUTFORMATTER to a wxWidgets wxOutputStream.
- *
- * The stream is neither opened nor closed by this class.
- */
-class KICOMMON_API STREAM_OUTPUTFORMATTER : public OUTPUTFORMATTER
+class KICOMMON_API PRETTIFIED_FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
-    wxOutputStream& m_os;
-
 public:
+    PRETTIFIED_FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode = wxT( "wt" ),
+                                     char aQuoteChar = '"' );
+
+    ~PRETTIFIED_FILE_OUTPUTFORMATTER();
+
     /**
-     * This can take any number of wxOutputStream derivations, so it can write to a file,
-     * socket, or zip file.
+     * Performs prettification and writes the stored buffer to the file.
+     * @return true if the write succeeded.
      */
-    STREAM_OUTPUTFORMATTER( wxOutputStream& aStream, char aQuoteChar = '"' ) :
-        OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar ),
-        m_os( aStream )
-    {
-    }
+    bool Finish() override;
 
 protected:
     void write( const char* aOutBuf, int aCount ) override;
+
+private:
+    FILE* m_fp;
+    std::string m_buf;
 };
+
 
 #endif // RICHIO_H_

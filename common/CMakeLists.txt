@@ -117,6 +117,8 @@ set( KICOMMON_SRCS
     string_utils.cpp
     trace_helpers.cpp
     wx_filename.cpp
+
+    plugins/kicad/kicad_plugin_utils.cpp    # needed by richio
     )
 
 add_library( kicommon SHARED
@@ -492,7 +494,6 @@ set( COMMON_SRCS
     page_info.cpp
     plugin_file_desc.cpp
     plugins/plugin_utils.cpp
-    plugins/kicad/kicad_plugin_utils.cpp
     printout.cpp
     project.cpp
     ptree.cpp

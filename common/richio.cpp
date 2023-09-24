@@ -30,6 +30,7 @@
 #include <core/ignore.h>
 #include <richio.h>
 #include <errno.h>
+#include <plugins/kicad/kicad_plugin_utils.h>
 
 #include <wx/file.h>
 #include <wx/translation.h>
@@ -582,20 +583,47 @@ void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
 }
 
 
-void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
+PRETTIFIED_FILE_OUTPUTFORMATTER::PRETTIFIED_FILE_OUTPUTFORMATTER( const wxString& aFileName,
+                                                                  const wxChar* aMode,
+                                                                  char aQuoteChar ) :
+        OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar )
 {
-    int lastWrite;
+    m_fp = wxFopen( aFileName, aMode );
 
-    // This might delay awhile if you were writing to say a socket, but for
-    // a file it should only go through the loop once.
-    for( int total = 0;  total<aCount;  total += lastWrite )
-    {
-        lastWrite = m_os.Write( aOutBuf, aCount ).LastWrite();
-
-        if( !m_os.IsOk() )
-        {
-            THROW_IO_ERROR( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
-        }
-    }
+    if( !m_fp )
+        THROW_IO_ERROR( strerror( errno ) );
 }
 
+
+PRETTIFIED_FILE_OUTPUTFORMATTER::~PRETTIFIED_FILE_OUTPUTFORMATTER()
+{
+    try
+    {
+        PRETTIFIED_FILE_OUTPUTFORMATTER::Finish();
+    }
+    catch( ... )
+    {}
+}
+
+
+bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
+{
+    if( !m_fp )
+        return false;
+
+    KICAD_FORMAT::Prettify( m_buf );
+
+    if( fwrite( m_buf.c_str(), m_buf.length(), 1, m_fp ) != 1 )
+        THROW_IO_ERROR( strerror( errno ) );
+
+    fclose( m_fp );
+    m_fp = nullptr;
+
+    return true;
+}
+
+
+void PRETTIFIED_FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
+{
+    m_buf.append( aOutBuf, aCount );
+}

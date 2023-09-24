@@ -346,7 +346,7 @@ void SCH_SEXPR_PLUGIN::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* 
     // works properly.
     wxASSERT( fn.IsAbsolute() );
 
-    FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
+    PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
 
     m_out = &formatter;     // no ownership
 

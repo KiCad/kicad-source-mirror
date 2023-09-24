@@ -29,6 +29,7 @@
 #include <richio.h>
 
 #include <board.h>
+#include <footprint.h>
 
 #include <qa_utils/stdstream_line_reader.h>
 
@@ -82,8 +83,9 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
     {
         board.reset( parser.Parse() );
     }
-    catch( const IO_ERROR& )
+    catch( const IO_ERROR& e )
     {
+        throw e;
     }
 
     return board;
@@ -91,7 +93,7 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
 
 
 std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
-                                                  std::istream& aFallback )
+                                                          std::istream& aFallback )
 {
     std::istream* in_stream = nullptr;
     std::ifstream file_stream;
@@ -108,6 +110,27 @@ std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
     }
 
     return ReadItemFromStream<BOARD>( *in_stream );
+}
+
+
+std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
+                                                          std::istream& aFallback )
+{
+    std::istream* in_stream = nullptr;
+    std::ifstream file_stream;
+
+    if( aFilename.empty() )
+    {
+        // no file, read stdin
+        in_stream = &aFallback;
+    }
+    else
+    {
+        file_stream.open( aFilename );
+        in_stream = &file_stream;
+    }
+
+    return ReadItemFromStream<FOOTPRINT>( *in_stream );
 }
 
 
