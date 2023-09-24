@@ -648,14 +648,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
             if( pad->IsNoConnectPad() )
             {
-                netName = wxString::Format( wxT( "unconnected-(%s-Pad%s)" ),
-                                            aFootprint->GetReference(), pad->GetNumber() );
-
                 for( int jj = 0; !padNetnames.insert( netName ).second; jj++ )
-                {
-                    netName = wxString::Format( wxT( "unconnected-(%s-Pad%s_%d)" ),
-                                                aFootprint->GetReference(), pad->GetNumber(), jj );
-                }
+                    netName = wxString::Format( wxS( "%s_%d" ), net.GetNetName(), jj );
             }
 
             NETINFO_ITEM* netinfo = m_board->FindNet( netName );
