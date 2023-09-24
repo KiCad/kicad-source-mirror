@@ -239,7 +239,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( view.GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
+        VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : controls.GetMousePosition();
+        cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
         controls.ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
