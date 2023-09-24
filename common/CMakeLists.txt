@@ -94,6 +94,7 @@ set( KICOMMON_SRCS
     array_axis.cpp
     array_options.cpp
     bitmap_info.cpp
+    config_params.cpp
     confirm.cpp
     eda_units.cpp
     exceptions.cpp
@@ -412,7 +413,6 @@ set( COMMON_SRCS
     cli_progress_reporter.cpp
     commit.cpp
     common.cpp
-    config_params.cpp
     dialog_shim.cpp
     dpi_scaling_common.cpp
     draw_panel_gal.cpp

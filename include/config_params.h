@@ -26,6 +26,7 @@
 #ifndef CONFIG_PARAMS_H_
 #define CONFIG_PARAMS_H_
 
+#include <kicommon.h>
 #include <set>
 #include <limits>
 
@@ -44,7 +45,7 @@
  * @note Everything in this file is deprecated, it only remains because advanced_config depends on
  * it for the moment.
  */
-void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double aValue );
+KICOMMON_API void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double aValue );
 
 
 /** Type of parameter in the configuration file */
@@ -75,7 +76,7 @@ enum paramcfg_id {
  * See kicad.odt or kicad.pdf, chapter 2 :
  * "Installation and configuration/Initialization of the default config".
  */
-class PARAM_CFG
+class KICOMMON_API PARAM_CFG
 {
 public:
     PARAM_CFG( const wxString& ident, const paramcfg_id type, const wxChar* group = nullptr,
@@ -110,7 +111,7 @@ public:
 /**
  * Configuration object for integers.
  */
-class PARAM_CFG_INT : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_INT : public PARAM_CFG
 {
 public:
     PARAM_CFG_INT( const wxString& ident, int* ptparam, int default_val = 0,
@@ -138,7 +139,7 @@ public:
  * Mainly used to store an integer value in millimeters (or inches) and retrieve it in
  * internal units.  The stored value is a floating number.
  */
-class PARAM_CFG_INT_WITH_SCALE : public PARAM_CFG_INT
+class KICOMMON_API PARAM_CFG_INT_WITH_SCALE : public PARAM_CFG_INT
 {
 public:
     PARAM_CFG_INT_WITH_SCALE( const wxString& ident, int* ptparam, int default_val = 0,
@@ -164,7 +165,7 @@ public:
 /**
  * Configuration object for double precision floating point numbers.
  */
-class PARAM_CFG_DOUBLE : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_DOUBLE : public PARAM_CFG
 {
 public:
     PARAM_CFG_DOUBLE( const wxString& ident, double* ptparam,
@@ -186,7 +187,7 @@ public:
 /**
  * Configuration object for booleans.
  */
-class PARAM_CFG_BOOL : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_BOOL : public PARAM_CFG
 {
 public:
     PARAM_CFG_BOOL( const wxString& ident, bool* ptparam,
@@ -207,7 +208,7 @@ public:
 /**
  * Configuration object for wxString objects.
  */
-class PARAM_CFG_WXSTRING : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_WXSTRING : public PARAM_CFG
 {
 public:
     PARAM_CFG_WXSTRING( const wxString& ident, wxString* ptparam, const wxChar* group = nullptr );
@@ -230,7 +231,7 @@ public:
  * Configuration object for a set of wxString objects.
  *
  */
-class PARAM_CFG_WXSTRING_SET : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_WXSTRING_SET : public PARAM_CFG
 {
 public:
     PARAM_CFG_WXSTRING_SET( const wxString& ident, std::set<wxString>* ptparam,
@@ -253,7 +254,7 @@ public:
  *
  * Same as #PARAM_CFG_WXSTRING but stores "\" as "/" and replace "/" by "\" under Windows.
  */
-class PARAM_CFG_FILENAME : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_FILENAME : public PARAM_CFG
 {
 public:
     PARAM_CFG_FILENAME( const wxString& ident, wxString* ptparam,
@@ -265,7 +266,7 @@ public:
 };
 
 
-class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG
+class KICOMMON_API PARAM_CFG_LIBNAME_LIST : public PARAM_CFG
 {
 public:
     wxArrayString* m_Pt_param;     ///<  Pointer to the parameter value
@@ -287,7 +288,7 @@ public:
  * @param aCfg where to save.
  * @param aList holds some configuration parameters, not all of which will necessarily be saved.
  */
-void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
+KICOMMON_API void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
 
 /**
  * Write @a aList of #PARAM_CFG objects @a aCfg.
@@ -299,8 +300,8 @@ void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
  * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
  *               its own group, in which case it will take precedence.  aGroup may be empty.
  */
-void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
-                         const wxString& aGroup );
+KICOMMON_API void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+                                      const wxString& aGroup );
 
 /**
  * Use @a aList of #PARAM_CFG object to load configuration values from @a aCfg.
@@ -310,7 +311,7 @@ void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
  * @param aCfg where to load from.
  * @param aList holds some configuration parameters, not all of which will necessarily be loaded.
  */
-void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
+KICOMMON_API void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
 
 /**
  * Use @a aList of #PARAM_CFG objects to load configuration values from @a aCfg.
@@ -321,8 +322,8 @@ void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
  * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
  *               its own group, in which case it will take precedence.  aGroup may be empty.
  */
-void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
-                         const wxString& aGroup );
+KICOMMON_API void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList,
+                                      const wxString& aGroup );
 
 
 #endif  // CONFIG_PARAMS_H_
