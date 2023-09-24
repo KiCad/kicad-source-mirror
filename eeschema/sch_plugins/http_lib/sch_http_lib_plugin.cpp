@@ -382,6 +382,10 @@ LIB_SYMBOL* SCH_HTTP_LIB_PLUGIN::loadSymbolFromPart( const wxString&          aS
         symbol->LibId().SetSubLibraryName( aCategory.name );
     }
 
+    symbol->SetExcludedFromBOM( aPart.exclude_from_bom );
+    symbol->SetExcludedFromBoard( aPart.exclude_from_board );
+    symbol->SetExcludedFromSim( aPart.exclude_from_sim );
+
     LIB_FIELD* field;
 
     for( auto& _field : aPart.fields )

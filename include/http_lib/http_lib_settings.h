@@ -51,6 +51,10 @@ struct HTTP_LIB_PART
     std::string name;
     std::string symbolIdStr;
 
+    bool exclude_from_bom = false;
+    bool exclude_from_board = false;
+    bool exclude_from_sim = false;
+
     std::map<std::string, std::tuple<std::string, bool>> fields; ///< additional generic fields
 };
 

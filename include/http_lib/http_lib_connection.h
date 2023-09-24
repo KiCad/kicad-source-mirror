@@ -84,7 +84,7 @@ private:
 
     bool checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl );
 
-    bool boolFromString( const std::any& aVal );
+    bool boolFromString( const std::any& aVal, bool aDefaultValue = false );
 
     wxString httpErrorCodeDescription( uint16_t aHttpCode );
 

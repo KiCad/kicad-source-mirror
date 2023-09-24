@@ -220,6 +220,32 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
 
         aFetchedPart.symbolIdStr = response.at( "symbolIdStr" );
 
+        // initially assume no exclusion
+        std::string exclude;
+
+        if( response.contains( "exclude_from_bom" ) )
+        {
+            // if key value doesn't exists default to false
+            exclude = response.at( "exclude_from_bom" );
+            aFetchedPart.exclude_from_bom = boolFromString( exclude, false );
+        }
+
+        // initially assume no exclusion
+        if( response.contains( "exclude_from_board" ) )
+        {
+            // if key value doesn't exists default to false
+            exclude = response.at( "exclude_from_board" );
+            aFetchedPart.exclude_from_board = boolFromString( exclude, false );
+        }
+
+        // initially assume no exclusion
+        if( response.contains( "exclude_from_sim" ) )
+        {
+            // if key value doesn't exists default to false
+            exclude = response.at( "exclude_from_sim" );
+            aFetchedPart.exclude_from_sim = boolFromString( exclude, false );
+        }
+
         // Extract available fields
         for( const auto& field : response.at( "fields" ).items() )
         {
@@ -236,8 +262,8 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             // check if user wants to display field in schematic
             if( properties.contains( "visible" ) )
             {
-                std::string buf = properties.at( "visible" );
-                visible = boolFromString( buf );
+                std::string vis = properties.at( "visible" );
+                visible = boolFromString( vis, true );
             }
 
             // Add field to fields list
@@ -352,14 +378,14 @@ bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>&
 }
 
 
-bool HTTP_LIB_CONNECTION::boolFromString( const std::any& aVal )
+bool HTTP_LIB_CONNECTION::boolFromString( const std::any& aVal, bool aDefaultValue )
 {
     try
     {
         wxString strval( std::any_cast<std::string>( aVal ).c_str(), wxConvUTF8 );
 
         if( strval.IsEmpty() )
-            return true;
+            return aDefaultValue;
 
         strval.MakeLower();
 
@@ -379,7 +405,7 @@ bool HTTP_LIB_CONNECTION::boolFromString( const std::any& aVal )
     {
     }
 
-    return true;
+    return aDefaultValue;
 }
 
 /*
