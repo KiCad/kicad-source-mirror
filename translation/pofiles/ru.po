@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-09-19 21:35+0000\n"
+"PO-Revision-Date: 2023-09-26 05:00+0000\n"
 "Last-Translator: xXx <xxx_xxx_xxxxxxxxx@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -218,11 +218,11 @@ msgstr "Визуализация: шейдеры пост-обработки"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr "Экспорт в PNG-файл..."
+msgstr "Экспорт текущего вида в формате PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr "Экспорт в JPEG-файл..."
+msgstr "Экспорт текущего вида в формате JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61 common/eda_base_frame.cpp:1123
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:590
@@ -504,19 +504,19 @@ msgstr "Без 3D сетки"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr "3D сетка 10 мм"
+msgstr "3D сетка 10мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr "3D сетка 5 мм"
+msgstr "3D сетка 5мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "3D сетка 2.5 мм"
+msgstr "3D сетка 2.5мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr "3D сетка 1 мм"
+msgstr "3D сетка 1мм"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
@@ -572,7 +572,7 @@ msgstr "Переключить отображение 3D-моделей отсу
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
-msgstr "Показать ограничивающий параллелепипед модели"
+msgstr "Показать ограничительные рамки модели"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 msgid "Toggle realistic mode"
@@ -807,7 +807,7 @@ msgstr "Инкремент вращения:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:776
 #: pcbnew/dialogs/panel_edit_options_base.cpp:61
 msgid "deg"
-msgstr "°"
+msgstr "градус"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:160
 msgid "Enable animation"
@@ -6484,7 +6484,7 @@ msgstr "Принять участие"
 
 #: common/tool/actions.cpp:668
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Откройте «Добавить в KiCad» в веб-браузере."
+msgstr "Откройте раздел \"Внести вклад в KiCad\" в веб-браузере"
 
 #: common/tool/actions.cpp:674
 msgid "Open \"Donate to KiCad\" in a web browser"
@@ -14554,7 +14554,7 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2175
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "Библиотека '%s' уже существует."
+msgstr "Библиотека символов '%s' уже существует."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1571
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2201
@@ -18937,7 +18937,7 @@ msgstr "Нижний слой"
 
 #: gerbview/files.cpp:207
 msgid "Bottom solder resist"
-msgstr "Паяльная маска снизу"
+msgstr "Нижнее паяльное сопротивление"
 
 #: gerbview/files.cpp:208
 msgid "Top solder resist"
@@ -23736,7 +23736,7 @@ msgstr "Паяльная маска сверху"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:594
 msgid "Bottom Solder Mask"
-msgstr "Паяльная маска снизу"
+msgstr "Нижняя Паяльная Маска"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
 msgid "Bottom Solder Paste"
@@ -27632,7 +27632,7 @@ msgstr "Ширина текста"
 #: pcbnew/fp_textbox.cpp:339 pcbnew/pcb_dimension.cpp:335
 #: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:287
 msgid "Text Height"
-msgstr "Высота текста"
+msgstr "Высота Текста"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:282
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
@@ -34648,12 +34648,12 @@ msgstr "Переподключено %s вывод %s от %s к %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:568
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Подключено %s вывод %s к %s."
+msgstr "Подключите%s вывод %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:575
 #, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Подключено %s вывод %s к %s."
+msgstr "Подключил %s вывод %s к %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:656
 #, c-format
@@ -36167,8 +36167,7 @@ msgstr ""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
 #, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Пропуск многоугольника на слое «%s» (%d): количество контуров не равно 1."
+msgstr "Пропуск полигона на слое '%s' (%d): количество контуров не равно 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36546,7 +36545,6 @@ msgid ""
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Устаревшая стратегия заполнения зон больше не поддерживается.\n"
-"\n"
 "Заливки зон будут преобразованы в максимально возможном порядке."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
@@ -36556,7 +36554,6 @@ msgid ""
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "Режим заполнения зоны устаревшего сегмента больше не поддерживается.\n"
-"\n"
 "Заливки зон будут преобразованы в максимально возможном объеме."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
@@ -39640,7 +39637,7 @@ msgstr "Выровнять выбранные элементы по нижнем
 
 #: pcbnew/tools/pcb_actions.cpp:1208
 msgid "Align to Left"
-msgstr "Выровнять слева"
+msgstr "Выровнять по левому краю"
 
 #: pcbnew/tools/pcb_actions.cpp:1208
 msgid "Aligns selected items to the left edge"
@@ -39672,7 +39669,7 @@ msgstr "Выровнять выбранные элементы по горизо
 
 #: pcbnew/tools/pcb_actions.cpp:1228
 msgid "Distribute Horizontally"
-msgstr "Распределить гориз."
+msgstr "Горизонтальное распределение"
 
 #: pcbnew/tools/pcb_actions.cpp:1228
 msgid "Distributes selected items along the horizontal axis"
