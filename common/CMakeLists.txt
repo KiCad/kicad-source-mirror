@@ -492,6 +492,7 @@ set( COMMON_SRCS
     page_info.cpp
     plugin_file_desc.cpp
     plugins/plugin_utils.cpp
+    plugins/kicad/kicad_plugin_utils.cpp
     printout.cpp
     project.cpp
     ptree.cpp

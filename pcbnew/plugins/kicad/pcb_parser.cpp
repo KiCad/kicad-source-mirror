@@ -228,6 +228,40 @@ bool PCB_PARSER::parseBool()
 }
 
 
+/*
+ * e.g. "hide", "hide)", "(hide yes)"
+ */
+bool PCB_PARSER::parseMaybeAbsentBool( bool aDefaultValue )
+{
+    bool ret = aDefaultValue;
+
+    if( PrevTok() == T_LEFT )
+    {
+        T token = NextTok();
+
+        // "hide)"
+        if( static_cast<int>( token ) == DSN_RIGHT )
+            return aDefaultValue;
+
+        if( token == T_yes || token == T_true )
+            ret = true;
+        else if( token == T_no || token == T_false )
+            ret = false;
+        else
+            Expecting( "yes or no" );
+
+        NeedRIGHT();
+    }
+    else
+    {
+        // "hide"
+        return aDefaultValue;
+    }
+
+    return ret;
+}
+
+
 wxString PCB_PARSER::GetRequiredVersion()
 {
     int year, month, day;
@@ -569,7 +603,10 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
             break;
 
         case T_hide:
-            aText->SetVisible( false );
+            if( NextTok() == T_yes || NextTok() == T_no )
+                aText->SetVisible( !parseBool() );
+            else
+                aText->SetVisible( false );
             break;
 
         default:
@@ -678,8 +715,11 @@ FP_3DMODEL* PCB_PARSER::parse3DModel()
             break;
 
         case T_hide:
-            n3D->m_Show = false;
+        {
+            bool hide = parseMaybeAbsentBool( true );
+            n3D->m_Show = !hide;
             break;
+        }
 
         case T_opacity:
             n3D->m_Opacity = parseDouble( "opacity value" );
@@ -1245,8 +1285,7 @@ void PCB_PARSER::parseGeneralSection()
             break;
 
         case T_legacy_teardrops:
-            m_board->SetLegacyTeardrops( true );
-            NeedRIGHT();
+            m_board->SetLegacyTeardrops( parseMaybeAbsentBool( true ) );
             break;
 
         default:              // Skip everything else.
@@ -2900,11 +2939,13 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
-        // Continue to process "(locked)" format which was output during 5.99 development
+        // Handle (locked) from 5.99 development, and (locked yes) from modern times
         case T_locked:
-            shape->SetLocked( true );
-            NeedRIGHT();
+        {
+            bool locked = parseMaybeAbsentBool( true );
+            shape->SetLocked( locked );
             break;
+        }
 
         case T_net:
             if( !shape->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
@@ -3064,6 +3105,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
         text = std::make_unique<PCB_TEXT>( aParent );
     }
 
+    // Legacy bare locked token
     if( token == T_locked )
     {
         text->SetLocked( true );
@@ -3119,6 +3161,7 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
                 token = NextTok();
             }
 
+            // Legacy location of this token; presence implies true
             if( parentFP && CurTok() == T_unlocked )
             {
                 aText->SetKeepUpright( false );
@@ -3154,11 +3197,33 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
             break;
 
         case T_hide:
+        {
+            // In older files, the hide token appears bare, and indicates hide==true.
+            // In newer files, it will be an explicit bool in a list like (hide yes)
+            bool hide = parseMaybeAbsentBool( true );
+
             if( parentFP )
-                aText->SetVisible( false );
+                aText->SetVisible( !hide );
             else
                 Expecting( "layer, effects, locked, render_cache or tstamp" );
 
+            break;
+        }
+
+        case T_locked:
+            // Newer list-enclosed locked
+            aText->SetLocked( parseBool() );
+            NeedRIGHT();
+            break;
+
+        // Confusingly, "unlocked" is not the opposite of "locked", but refers to "keep upright"
+        case T_unlocked:
+            if( parentFP )
+                aText->SetKeepUpright( !parseBool() );
+            else
+                Expecting( "layer, effects, locked, render_cache or tstamp" );
+
+            NeedRIGHT();
             break;
 
         case T_effects:
@@ -3332,6 +3397,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
 
     token = NextTok();
 
+    // Free 'locked' token from 6.0/7.0 formats
     if( token == T_locked )
     {
         locked = true;
@@ -3726,6 +3792,15 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
             NeedRIGHT();
             NeedRIGHT();
             break;
+
+        // Handle (locked yes) from modern times
+        case T_locked:
+        {
+            // Unsure if we ever wrote out (locked) for dimensions, so use maybeAbsent just in case
+            bool isLocked = parseMaybeAbsentBool( true );
+            dim->SetLocked( isLocked );
+            break;
+        }
 
         default:
             Expecting( "layer, tstamp, gr_text, feature1, feature2, crossbar, arrow1a, "
@@ -4654,14 +4729,18 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_remove_unused_layers:
-            pad->SetRemoveUnconnected( true );
-            NeedRIGHT();
+        {
+            bool remove = parseMaybeAbsentBool( true );
+            pad->SetRemoveUnconnected( remove );
             break;
+        }
 
         case T_keep_end_layers:
-            pad->SetKeepTopBottom( true );
-            NeedRIGHT();
+        {
+            bool keep = parseMaybeAbsentBool( true );
+            pad->SetKeepTopBottom( keep );
             break;
+        }
 
         case T_zone_layer_connections:
         {
@@ -4686,7 +4765,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
             // Pad locking is now a session preference
-            NeedRIGHT();
+            parseMaybeAbsentBool( true );
             break;
 
         case T_tstamp:
@@ -4864,24 +4943,36 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
             Expecting( "group name or locked" );
     }
 
-    token = NextTok();
+    for( ; token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
 
-    if( token != T_id )
-        Expecting( T_id );
+        token = NextTok();
 
-    NextTok();
-    groupInfo.uuid = CurStrToKIID();
-    NeedRIGHT();
+        switch( token )
+        {
+        case T_id:
+            NextTok();
+            groupInfo.uuid = CurStrToKIID();
+            NeedRIGHT();
+            break;
 
-    NeedLEFT();
-    token = NextTok();
+        case T_locked:
+            groupInfo.locked = parseBool();
+            NeedRIGHT();
+            break;
 
-    if( token != T_members )
-        Expecting( T_members );
+        case T_members:
+        {
+            parseGROUP_members( groupInfo );
+            break;
+        }
 
-    parseGROUP_members( groupInfo );
-
-    NeedRIGHT();
+        default:
+            Expecting( "id, locked, or members" );
+        }
+    }
 }
 
 
@@ -5035,6 +5126,7 @@ PCB_ARC* PCB_PARSER::parseARC()
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
+        // Legacy locked
         if( token == T_locked )
         {
             arc->SetLocked( true );
@@ -5052,26 +5144,31 @@ PCB_ARC* PCB_PARSER::parseARC()
             pt.x = parseBoardUnits( "start x" );
             pt.y = parseBoardUnits( "start y" );
             arc->SetStart( pt );
+            NeedRIGHT();
             break;
 
         case T_mid:
             pt.x = parseBoardUnits( "mid x" );
             pt.y = parseBoardUnits( "mid y" );
             arc->SetMid( pt );
+            NeedRIGHT();
             break;
 
         case T_end:
             pt.x = parseBoardUnits( "end x" );
             pt.y = parseBoardUnits( "end y" );
             arc->SetEnd( pt );
+            NeedRIGHT();
             break;
 
         case T_width:
             arc->SetWidth( parseBoardUnits( "width" ) );
+            NeedRIGHT();
             break;
 
         case T_layer:
             arc->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
             break;
 
         case T_net:
@@ -5080,28 +5177,28 @@ PCB_ARC* PCB_PARSER::parseARC()
                 wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d\noffset: %d." ),
                             CurSource(), CurLineNumber(), CurOffset() );
             }
+            NeedRIGHT();
             break;
 
         case T_tstamp:
             NextTok();
             const_cast<KIID&>( arc->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
             break;
 
         // We continue to parse the status field but it is no longer written
         case T_status:
             parseHex();
+            NeedRIGHT();
             break;
 
-        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
-            arc->SetLocked( true );
+            arc->SetLocked( parseMaybeAbsentBool( true ) );
             break;
 
         default:
             Expecting( "start, mid, end, width, layer, net, tstamp, or status" );
         }
-
-        NeedRIGHT();
     }
 
     return arc.release();
@@ -5120,6 +5217,7 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        // Legacy locked flag
         if( token == T_locked )
         {
             track->SetLocked( true );
@@ -5137,20 +5235,24 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
             pt.x = parseBoardUnits( "start x" );
             pt.y = parseBoardUnits( "start y" );
             track->SetStart( pt );
+            NeedRIGHT();
             break;
 
         case T_end:
             pt.x = parseBoardUnits( "end x" );
             pt.y = parseBoardUnits( "end y" );
             track->SetEnd( pt );
+            NeedRIGHT();
             break;
 
         case T_width:
             track->SetWidth( parseBoardUnits( "width" ) );
+            NeedRIGHT();
             break;
 
         case T_layer:
             track->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
             break;
 
         case T_net:
@@ -5159,28 +5261,28 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
                 wxLogError( _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ),
                             CurSource(), CurLineNumber(), CurOffset() );
             }
+            NeedRIGHT();
             break;
 
         case T_tstamp:
             NextTok();
             const_cast<KIID&>( track->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
             break;
 
         // We continue to parse the status field but it is no longer written
         case T_status:
             parseHex();
+            NeedRIGHT();
             break;
 
-        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
-            track->SetLocked( true );
+            track->SetLocked( parseMaybeAbsentBool( true ) );
             break;
 
         default:
             Expecting( "start, end, width, layer, net, tstamp, or locked" );
         }
-
-        NeedRIGHT();
     }
 
     return track.release();
@@ -5203,6 +5305,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        // Legacy locked
         if( token == T_locked )
         {
             via->SetLocked( true );
@@ -5263,14 +5366,18 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         case T_remove_unused_layers:
-            via->SetRemoveUnconnected( true );
-            NeedRIGHT();
+        {
+            bool remove = parseMaybeAbsentBool( true );
+            via->SetRemoveUnconnected( remove );
             break;
+        }
 
         case T_keep_end_layers:
-            via->SetKeepStartEnd( true );
-            NeedRIGHT();
+        {
+            bool keep = parseMaybeAbsentBool( true );
+            via->SetKeepStartEnd( keep );
             break;
+        }
 
         case T_zone_layer_connections:
         {
@@ -5310,15 +5417,12 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             NeedRIGHT();
             break;
 
-        // Continue to process "(locked)" format which was output during 5.99 development
         case T_locked:
-            via->SetLocked( true );
-            NeedRIGHT();
+            via->SetLocked( parseMaybeAbsentBool( true ) );
             break;
 
         case T_free:
-            via->SetIsFree();
-            NeedRIGHT();
+            via->SetIsFree( parseMaybeAbsentBool( true ) );
             break;
 
         default:
@@ -5360,6 +5464,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
+        // legacy locked
         if( token == T_locked )
         {
             zone->SetLocked( true );
@@ -5855,9 +5960,14 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             }
             break;
 
+        case T_locked:
+            zone->SetLocked( parseBool() );
+            NeedRIGHT();
+            break;
+
         default:
             Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
-                       "fill, polygon, filled_polygon, fill_segments, attr, or name" );
+                       "fill, polygon, filled_polygon, fill_segments, attr, locked, or name" );
         }
     }
 

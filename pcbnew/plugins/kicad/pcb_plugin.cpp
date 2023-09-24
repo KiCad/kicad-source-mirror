@@ -47,6 +47,7 @@
 #include <zone.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
+#include <plugins/kicad/kicad_plugin_utils.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
@@ -575,10 +576,8 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
                       FormatDouble2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
     }
 
-    if( dsnSettings.m_AllowSoldermaskBridgesInFPs )
-    {
-        m_out->Print( aNestLevel+1, "(allow_soldermask_bridges_in_footprints yes)\n" );
-    }
+    KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "allow_soldermask_bridges_in_footprints",
+                              dsnSettings.m_AllowSoldermaskBridgesInFPs );
 
     VECTOR2I origin = dsnSettings.GetAuxOrigin();
 
@@ -614,8 +613,8 @@ void PCB_PLUGIN::formatGeneral( const BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   formatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
 
-    if( aBoard->LegacyTeardrops() )
-        m_out->Print( aNestLevel+1, "(legacy_teardrops)\n" );
+    KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "legacy_teardrops",
+                              aBoard->LegacyTeardrops() );
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -839,9 +838,6 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
 
     m_out->Print( aNestLevel, "(dimension" );
 
-    if( aDimension->IsLocked() )
-        m_out->Print( 0, " locked" );
-
     if( ortho ) // must be tested before aligned, because ortho is derived from aligned
                 // and aligned is not null
         m_out->Print( 0, " (type orthogonal)" );
@@ -855,6 +851,9 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
         m_out->Print( 0, " (type radial)" );
     else
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
+
+    if( aDimension->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aDimension->IsLocked() );
 
     formatLayer( aDimension->GetLayer() );
 
@@ -939,38 +938,33 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 {
     FOOTPRINT*  parentFP = aShape->GetParentFootprint();
     std::string prefix = parentFP ? "fp" : "gr";
-    std::string locked = aShape->IsLocked() ? " locked" : "";
 
     switch( aShape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-        m_out->Print( aNestLevel, "(%s_line%s (start %s) (end %s)\n",
+        m_out->Print( aNestLevel, "(%s_line (start %s) (end %s)\n",
                       prefix.c_str(),
-                      locked.c_str(),
                       formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
         break;
 
     case SHAPE_T::RECTANGLE:
-        m_out->Print( aNestLevel, "(%s_rect%s (start %s) (end %s)\n",
+        m_out->Print( aNestLevel, "(%s_rect (start %s) (end %s)\n",
                       prefix.c_str(),
-                      locked.c_str(),
                       formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
         break;
 
     case SHAPE_T::CIRCLE:
-        m_out->Print( aNestLevel, "(%s_circle%s (center %s) (end %s)\n",
+        m_out->Print( aNestLevel, "(%s_circle (center %s) (end %s)\n",
                       prefix.c_str(),
-                      locked.c_str(),
                       formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
         break;
 
     case SHAPE_T::ARC:
-        m_out->Print( aNestLevel, "(%s_arc%s (start %s) (mid %s) (end %s)\n",
+        m_out->Print( aNestLevel, "(%s_arc (start %s) (mid %s) (end %s)\n",
                       prefix.c_str(),
-                      locked.c_str(),
                       formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetArcMid(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
@@ -982,9 +976,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             const SHAPE_POLY_SET& poly = aShape->GetPolyShape();
             const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
 
-            m_out->Print( aNestLevel, "(%s_poly%s\n",
-                          prefix.c_str(),
-                          locked.c_str() );
+            m_out->Print( aNestLevel, "(%s_poly\n", prefix.c_str() );
             formatPolyPts( outline, aNestLevel, ADVANCED_CFG::GetCfg().m_CompactSave, parentFP );
         }
         else
@@ -996,9 +988,8 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         break;
 
     case SHAPE_T::BEZIER:
-        m_out->Print( aNestLevel, "(%s_curve%s (pts (xy %s) (xy %s) (xy %s) (xy %s))\n",
+        m_out->Print( aNestLevel, "(%s_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))\n",
                       prefix.c_str(),
-                      locked.c_str(),
                       formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetBezierC1(), parentFP ).c_str(),
                       formatInternalUnits( aShape->GetBezierC2(), parentFP ).c_str(),
@@ -1009,6 +1000,9 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
         return;
     };
+
+    if( aShape->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aShape->IsLocked() );
 
     aShape->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
@@ -1313,9 +1307,11 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     {
         if( !bs3D->m_Filename.IsEmpty() )
         {
-            m_out->Print( aNestLevel+1, "(model %s%s\n",
-                          m_out->Quotew( bs3D->m_Filename ).c_str(),
-                          bs3D->m_Show ? "" : " hide" );
+            m_out->Print( aNestLevel+1, "(model %s\n",
+                          m_out->Quotew( bs3D->m_Filename ).c_str() );
+
+            if( !bs3D->m_Show )
+                KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "hide", !bs3D->m_Show );
 
             if( bs3D->m_Opacity != 1.0 )
                 m_out->Print( aNestLevel+2, "(opacity %0.4f)", bs3D->m_Opacity );
@@ -1486,9 +1482,6 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                   type,
                   shape );
 
-    if( aPad->IsLocked() )
-        m_out->Print( 0, " locked" );
-
     m_out->Print( 0, " (at %s", formatInternalUnits( aPad->GetFPRelativePosition() ).c_str() );
 
     if( !aPad->GetOrientation().IsZero() )
@@ -1532,12 +1525,11 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
     if( aPad->GetAttribute() == PAD_ATTRIB::PTH )
     {
+        KICAD_FORMAT::FormatBool( m_out, 0, "remove_unused_layers", aPad->GetRemoveUnconnected() );
+
         if( aPad->GetRemoveUnconnected() )
         {
-            m_out->Print( 0, " (remove_unused_layers)" );
-
-            if( aPad->GetKeepTopBottom() )
-                m_out->Print( 0, " (keep_end_layers)" );
+            KICAD_FORMAT::FormatBool( m_out, 0, "keep_end_layers", aPad->GetKeepTopBottom() );
 
             if( board )     // Will be nullptr in footprint library
             {
@@ -1793,7 +1785,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                 || ( primitive->GetShape() == SHAPE_T::RECTANGLE )
                 || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
             {
-                m_out->Print( 0, primitive->IsFilled() ? " (fill yes)" : " (fill none)" );
+                KICAD_FORMAT::FormatBool( m_out, 0, "fill", primitive->IsFilled() );
             }
 
             m_out->Print( 0, ")" );
@@ -1843,9 +1835,11 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 
     if( !isField )
     {
-        m_out->Print( aNestLevel, "(%s_text%s%s %s", prefix.c_str(), type.c_str(),
-                      aText->IsLocked() ? " locked" : "",
+        m_out->Print( aNestLevel, "(%s_text%s %s", prefix.c_str(), type.c_str(),
                       m_out->Quotew( aText->GetText() ).c_str() );
+
+        if( aText->IsLocked() )
+            KICAD_FORMAT::FormatBool( m_out, 0, "locked", aText->IsLocked() );
     }
 
     m_out->Print( 0, " (at %s", formatInternalUnits( pos ).c_str() );
@@ -1854,15 +1848,15 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     // To avoid issues in the future, always save the angle, even if it is 0
     m_out->Print( 0, " %s", EDA_UNIT_UTILS::FormatAngle( aText->GetTextAngle() ).c_str() );
 
-    if( parentFP && !aText->IsKeepUpright() )
-        m_out->Print( 0, " unlocked" );
-
     m_out->Print( 0, ")" );
+
+    if( parentFP && !aText->IsKeepUpright() )
+        KICAD_FORMAT::FormatBool( m_out, 0, "unlocked", !aText->IsKeepUpright() );
 
     formatLayer( aText->GetLayer(), aText->IsKnockout() );
 
     if( parentFP && !aText->IsVisible() )
-        m_out->Print( 0, " hide" );
+        KICAD_FORMAT::FormatBool( m_out, 0, "hide", !aText->IsVisible() );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aText->m_Uuid.AsString() ) );
 
@@ -1882,10 +1876,12 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
 {
     FOOTPRINT*  parentFP = aTextBox->GetParentFootprint();
 
-    m_out->Print( aNestLevel, "(%s%s %s\n",
+    m_out->Print( aNestLevel, "(%s %s\n",
                   parentFP ? "fp_text_box" : "gr_text_box",
-                  aTextBox->IsLocked() ? " locked" : "",
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
+
+    if( aTextBox->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel, "locked", aTextBox->IsLocked() );
 
     if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
     {
@@ -1926,12 +1922,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
-    m_out->Print( aNestLevel + 1, "(border" );
-
-    if( aTextBox->IsBorderEnabled() )
-        m_out->Print( 0, " yes)" );
-    else
-        m_out->Print( 0, " no)" );
+    KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "border", aTextBox->IsBorderEnabled() );
 
     aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
@@ -1948,10 +1939,12 @@ void PCB_PLUGIN::format( const PCB_GROUP* aGroup, int aNestLevel ) const
     if( aGroup->GetItems().empty() )
         return;
 
-    m_out->Print( aNestLevel, "(group %s%s (id %s)\n",
+    m_out->Print( aNestLevel, "(group %s (id %s)\n",
                               m_out->Quotew( aGroup->GetName() ).c_str(),
-                              aGroup->IsLocked() ? " locked" : "",
                               TO_UTF8( aGroup->m_Uuid.AsString() ) );
+
+    if( aGroup->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aGroup->IsLocked() );
 
     m_out->Print( aNestLevel + 1, "(members\n" );
 
@@ -2098,9 +2091,6 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
             THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), via->GetViaType() ) );
         }
 
-        if( via->IsLocked() )
-            m_out->Print( 0, " locked" );
-
         m_out->Print( 0, " (at %s) (size %s)",
                       formatInternalUnits( aTrack->GetStart() ).c_str(),
                       formatInternalUnits( aTrack->GetWidth() ).c_str() );
@@ -2121,14 +2111,17 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
         if( via->GetRemoveUnconnected() )
         {
-            m_out->Print( 0, " (remove_unused_layers)" );
+            KICAD_FORMAT::FormatBool( m_out, 0, "remove_unused_layers",
+                                      via->GetRemoveUnconnected() );
 
-            if( via->GetKeepStartEnd() )
-                m_out->Print( 0, " (keep_end_layers)" );
+            KICAD_FORMAT::FormatBool( m_out, 0, "keep_end_layers", via->GetKeepStartEnd() );
         }
 
+        if( via->IsLocked() )
+            KICAD_FORMAT::FormatBool( m_out, 0, "locked", via->IsLocked() );
+
         if( via->GetIsFree() )
-            m_out->Print( 0, " (free)" );
+            KICAD_FORMAT::FormatBool( m_out, 0, "free", via->GetIsFree() );
 
         if( via->GetRemoveUnconnected() )
         {
@@ -2153,22 +2146,26 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
     {
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
 
-        m_out->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s) (width %s)",
-                      arc->IsLocked() ? " locked" : "",
+        m_out->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s) (width %s)",
                       formatInternalUnits( arc->GetStart() ).c_str(),
                       formatInternalUnits( arc->GetMid() ).c_str(),
                       formatInternalUnits( arc->GetEnd() ).c_str(),
                       formatInternalUnits( arc->GetWidth() ).c_str() );
 
+        if( arc->IsLocked() )
+            KICAD_FORMAT::FormatBool( m_out, 0, "locked", arc->IsLocked() );
+
         m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( arc->GetLayer() ) ).c_str() );
     }
     else
     {
-        m_out->Print( aNestLevel, "(segment%s (start %s) (end %s) (width %s)",
-                      aTrack->IsLocked() ? " locked" : "",
+        m_out->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
                       formatInternalUnits( aTrack->GetStart() ).c_str(),
                       formatInternalUnits( aTrack->GetEnd() ).c_str(),
                       formatInternalUnits( aTrack->GetWidth() ).c_str() );
+
+        if( aTrack->IsLocked() )
+            KICAD_FORMAT::FormatBool( m_out, 0, "locked", aTrack->IsLocked() );
 
         m_out->Print( 0, " (layer %s)", m_out->Quotew( LSET::Name( aTrack->GetLayer() ) ).c_str() );
     }
@@ -2189,10 +2186,12 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
     // (perhaps netcode and netname should be not stored)
     bool has_no_net = aZone->GetIsRuleArea() || !aZone->IsOnCopperLayer();
 
-    m_out->Print( aNestLevel, "(zone%s (net %d) (net_name %s)",
-                  aZone->IsLocked() ? " locked" : "",
+    m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
                   has_no_net ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
                   m_out->Quotew( has_no_net ? wxString( wxT("") ) : aZone->GetNetname() ).c_str() );
+
+    if( aZone->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", aZone->IsLocked() );
 
     // If a zone exists on multiple layers, format accordingly
     if( aZone->GetLayerSet().count() > 1 )

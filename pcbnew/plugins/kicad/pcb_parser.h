@@ -343,6 +343,18 @@ private:
 
     bool parseBool();
 
+    /**
+     * Parses a boolean flag inside a list that existed before boolean normalization.
+     *
+     * For example, this will handle both (legacy_teardrops) and (legacy_teardrops yes).
+     * Call this after parsing the T_legacy_teardrops, and aDefaultValue will be returned for the
+     * first case, or true will be returned for the second case.
+     *
+     * @param aDefaultValue will be returned if the end of the list is encountered as the next token
+     * @return the parsed boolean
+     */
+    bool parseMaybeAbsentBool( bool aDefaultValue );
+
     /*
      * @return if m_appendToExisting, returns new KIID(), otherwise returns CurStr() as KIID.
      */

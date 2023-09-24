@@ -111,6 +111,7 @@ extension_offset
 fab_layers_line_width
 fab_layers_text_dims
 face
+false
 feature1
 feature2
 fill
@@ -319,6 +320,7 @@ trapezoid
 thru
 thru_hole
 thru_hole_only
+true
 tstamp
 type
 units

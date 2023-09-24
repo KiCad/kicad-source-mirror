@@ -142,12 +142,14 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20230825  // Textbox explicit border flag
 //#define SEXPR_BOARD_FILE_VERSION    20230906  // Multiple image type support in files
 //#define SEXPR_BOARD_FILE_VERSION    20230913  // Custom-shaped-pad spoke templates
-#define SEXPR_BOARD_FILE_VERSION      20231007  // Generative objects
+//#define SEXPR_BOARD_FILE_VERSION    20231007  // Generative objects
+#define SEXPR_BOARD_FILE_VERSION      20231014  // V8 file format normalization
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
 #define LEGACY_NET_TIES               20220815  ///< These were the last to use the keywords field
                                                 ///<   to indicate a net-tie.
+#define FIRST_NORMALIZED_VERISON      20230924  ///< Earlier files did not have normalized bools
 
 #define CTL_OMIT_PAD_NETS           (1 << 1)    ///< Omit pads net names (useless in library)
 #define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)
