@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,6 +34,7 @@ class BITMAP_TOGGLE;
 class COLOR_SWATCH;
 class INDICATOR_ICON;
 class PCB_BASE_FRAME;
+class PCBNEW_SETTINGS;
 class ROW_ICON_PROVIDER;
 class GRID_BITMAP_TOGGLE_RENDERER;
 class WX_COLLAPSIBLE_PANE;
@@ -198,6 +199,8 @@ public:
     ~APPEARANCE_CONTROLS();
 
     wxSize GetBestSize() const;
+
+    void SaveSettings( PCBNEW_SETTINGS* aCfg );
 
     void OnLanguageChanged();
 
