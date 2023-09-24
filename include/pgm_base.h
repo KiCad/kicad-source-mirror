@@ -171,7 +171,7 @@ public:
 
     virtual const wxString& GetKicadEnvVariable() const          { return m_kicad_env; }
 
-    virtual const wxString& GetExecutablePath() const            { return m_bin_dir; }
+    virtual const wxString& GetExecutablePath() const;
 
     virtual wxLocale* GetLocale()                                { return m_locale; }
 
@@ -387,13 +387,6 @@ protected:
     /// Trap all changes in here, simplifies debugging
     void setLanguageId( int aId )       { m_language_id = aId; }
 
-    /**
-     * Find the path to the executable and stores it in PGM_BASE::m_bin_dir.
-     *
-     * @return true if success, else false.
-     */
-    bool setExecutablePath();
-
 #ifdef KICAD_USE_SENTRY
     void     sentryInit();
     void     sentryPrompt();
@@ -411,7 +404,6 @@ protected:
     std::unique_ptr<wxSingleInstanceChecker> m_pgm_checker;
 
 
-    wxString        m_bin_dir;                /// full path to this program
     wxString        m_kicad_env;              /// The KICAD system environment variable.
 
     wxLocale*       m_locale;

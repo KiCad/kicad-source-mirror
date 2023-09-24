@@ -514,7 +514,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 
     // Analyze the command line & initialize the binary path
     wxString tmp;
-    setExecutablePath();
     SetLanguagePath();
     SetDefaultLanguage( tmp );
 
@@ -589,48 +588,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     // Now the application can safely start, show the splash screen
     if( !aHeadless )
         ShowSplash();
-
-    return true;
-}
-
-
-bool PGM_BASE::setExecutablePath()
-{
-    m_bin_dir = wxStandardPaths::Get().GetExecutablePath();
-
-#ifdef __WXMAC__
-    // On OSX Pgm().GetExecutablePath() will always point to main
-    // bundle directory, e.g., /Applications/kicad.app/
-
-    wxFileName fn( m_bin_dir );
-
-    if( fn.GetName() == wxT( "kicad" ) || fn.GetName() == wxT( "kicad-cli" ) )
-    {
-        // kicad launcher, so just remove the Contents/MacOS part
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-    }
-    else
-    {
-        // standalone binaries live in Contents/Applications/<standalone>.app/Contents/MacOS
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-        fn.RemoveLastDir();
-    }
-
-    m_bin_dir = fn.GetPath() + wxT( "/" );
-#else
-    // Use unix notation for paths. I am not sure this is a good idea,
-    // but it simplifies compatibility between Windows and Unices.
-    // However it is a potential problem in path handling under Windows.
-    m_bin_dir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-
-    // Remove file name form command line:
-    while( m_bin_dir.Last() != '/' && !m_bin_dir.IsEmpty() )
-        m_bin_dir.RemoveLast();
-#endif
 
     return true;
 }
@@ -990,4 +947,10 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
         sentry_capture_event( sentryEvent );
     }
 #endif
+}
+
+
+const wxString& PGM_BASE::GetExecutablePath() const
+{
+    return PATHS::GetExecutablePath();
 }

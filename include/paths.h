@@ -24,6 +24,12 @@
 #include <wx/string.h>
 
 /**
+ * @note Do we really need these defined?
+ */
+#define UNIX_STRING_DIR_SEP wxT( "/" )
+#define WIN_STRING_DIR_SEP wxT( "\\" )
+
+/**
  * Helper class to centralize the paths used throughout kicad
  */
 class PATHS
@@ -204,6 +210,7 @@ public:
      */
     static wxString CalculateUserSettingsPath( bool aIncludeVer = true, bool aUseEnv = true );
 
+    static const wxString& GetExecutablePath();
 private:
     // we are a static helper
     PATHS() {}

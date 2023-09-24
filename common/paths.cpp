@@ -24,7 +24,6 @@
 
 #include <kiplatform/environment.h>
 #include <paths.h>
-#include <pgm_base.h>
 #include <config.h>
 #include <build_version.h>
 #include <macros.h>
@@ -166,7 +165,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 #elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot();
 #else
-        path = Pgm().GetExecutablePath() + wxT( ".." );
+        path = GetExecutablePath() + wxT( ".." );
 #endif
     }
     else
@@ -265,7 +264,7 @@ wxString PATHS::GetStockPluginsPath()
     wxFileName fn;
 
 #if defined( __WXMSW__ )
-    fn.AssignDir( Pgm().GetExecutablePath() );
+    fn.AssignDir( GetExecutablePath() );
     fn.AppendDir( wxT( "scripting" ) );
 #else
     fn.AssignDir( PATHS::GetStockDataPath( false ) );
@@ -296,7 +295,7 @@ wxString PATHS::GetStockPlugins3DPath()
     }
     else
     {
-        fn.AssignDir( Pgm().GetExecutablePath() );
+        fn.AssignDir( GetExecutablePath() );
     }
 
     fn.AppendDir( wxT( "plugins" ) );
@@ -457,7 +456,7 @@ wxString PATHS::GetWindowsFontConfigDir()
 
 wxString PATHS::getWindowsKiCadRoot()
 {
-    wxFileName root( Pgm().GetExecutablePath() +  wxT( "/../" ) );
+    wxFileName root( GetExecutablePath() +  wxT( "/../" ) );
     root.MakeAbsolute();
 
     return root.GetPathWithSep();
@@ -499,4 +498,52 @@ wxString PATHS::CalculateUserSettingsPath( bool aIncludeVer, bool aUseEnv )
         cfgpath.AppendDir( GetMajorMinorVersion().ToStdString() );
 
     return cfgpath.GetPath();
+}
+
+
+const wxString& PATHS::GetExecutablePath()
+{
+    static wxString exe_path;
+
+    if( exe_path.empty() )
+    {
+        wxString bin_dir = wxStandardPaths::Get().GetExecutablePath();
+
+#ifdef __WXMAC__
+        // On OSX GetExecutablePath() will always point to main
+        // bundle directory, e.g., /Applications/kicad.app/
+
+        wxFileName fn( bin_dir );
+
+        if( fn.GetName() == wxT( "kicad" ) || fn.GetName() == wxT( "kicad-cli" ) )
+        {
+            // kicad launcher, so just remove the Contents/MacOS part
+            fn.RemoveLastDir();
+            fn.RemoveLastDir();
+        }
+        else
+        {
+            // standalone binaries live in Contents/Applications/<standalone>.app/Contents/MacOS
+            fn.RemoveLastDir();
+            fn.RemoveLastDir();
+            fn.RemoveLastDir();
+            fn.RemoveLastDir();
+            fn.RemoveLastDir();
+        }
+
+        bin_dir = fn.GetPath() + wxT( "/" );
+#else
+        // Use unix notation for paths. I am not sure this is a good idea,
+        // but it simplifies compatibility between Windows and Unices.
+        // However it is a potential problem in path handling under Windows.
+        bin_dir.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
+        // Remove file name form command line:
+        while( bin_dir.Last() != '/' && !bin_dir.IsEmpty() )
+            bin_dir.RemoveLast();
+#endif
+        exe_path = bin_dir;
+    }
+
+    return exe_path;
 }
