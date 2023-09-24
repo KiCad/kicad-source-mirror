@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
+#include <advanced_config.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
@@ -97,7 +97,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
-                m_disambiguateTimer.StartOnce( 500 );
+                m_disambiguateTimer.StartOnce( ADVANCED_CFG::GetCfg().m_DisambiguationMenuDelay );
             }
         }
         // Single click? Select single object

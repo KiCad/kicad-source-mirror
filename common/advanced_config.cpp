@@ -212,6 +212,11 @@ static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
 
 static const wxChar UseClipper2[] = wxT( "UseClipper2" );
+
+/**
+ * The time in milliseconds to wait before displaying a disambiguation menu.
+ */
+static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
 } // namespace KEYS
 
 
@@ -346,6 +351,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_Use3DConnexionDriver      = true;
 
     m_IncrementalConnectivity   = false;
+
+    m_DisambiguationMenuDelay   = 500;
 
     loadFromConfigFile();
 }
@@ -500,6 +507,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::IncrementalConnectivity,
                                                 &m_IncrementalConnectivity, m_IncrementalConnectivity ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::DisambiguationTime,
+                                                  &m_DisambiguationMenuDelay, m_DisambiguationMenuDelay,
+                                                  50, 10000 ) );
 
 
 

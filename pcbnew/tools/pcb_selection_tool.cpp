@@ -29,6 +29,8 @@
 #include <functional>
 #include <stack>
 using namespace std::placeholders;
+
+#include <advanced_config.h>
 #include <macros.h>
 #include <core/kicad_algo.h>
 #include <board.h>
@@ -285,7 +287,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
-                m_disambiguateTimer.StartOnce( 500 );
+                m_disambiguateTimer.StartOnce( ADVANCED_CFG::GetCfg().m_DisambiguationMenuDelay );
             }
         }
         else if( evt->IsClick( BUT_LEFT ) )

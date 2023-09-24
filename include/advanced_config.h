@@ -267,6 +267,11 @@ public:
      */
     bool m_IncrementalConnectivity;
 
+    /**
+     * The number of milliseconds to wait in a click before showing a disambiguation menu.
+     */
+    int m_DisambiguationMenuDelay;
+
 ///@}
 
 
