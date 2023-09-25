@@ -36,6 +36,8 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     bool            showActivate = false;
     bool            showDeactivate = false;
+    bool            showSetVisible = false;
+    bool            showUnsetVisible = false;
     LIB_TABLE_GRID* tbl = static_cast<LIB_TABLE_GRID*>( m_grid->GetTable() );
 
     // Ensure selection parameters are up to date
@@ -48,7 +50,12 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         else
             showActivate = true;
 
-        if( showActivate && showDeactivate )
+        if( tbl->GetValueAsBool( row, 1 ) )
+            showUnsetVisible = true;
+        else
+            showSetVisible = true;
+
+        if( showActivate && showDeactivate && showSetVisible && showUnsetVisible )
             break;
     }
 
@@ -57,6 +64,12 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     if( showDeactivate )
         menu.Append( LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED, _( "Deactivate selected" ) );
+
+    if( showSetVisible )
+        menu.Append( LIB_TABLE_GRID_TRICKS_SET_VISIBLE, _( "Set visible flag" ) );
+
+    if( showUnsetVisible )
+        menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset visible flag" ) );
 
     bool showSettings = false;
 
@@ -68,7 +81,7 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                                        tbl->GetValue( m_sel_row_start, 2 ) ) );
     }
 
-    if( showActivate || showDeactivate || showSettings )
+    if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showSettings )
         menu.AppendSeparator();
 
     GRID_TRICKS::showPopupMenu( menu, aEvent );
@@ -91,6 +104,17 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
             tbl->SetValueAsBool( row, 0, selected_state );
+
+        // Ensure the new state (on/off) of the widgets is immediately shown:
+        m_grid->Refresh();
+    }
+    else if( menu_id == LIB_TABLE_GRID_TRICKS_SET_VISIBLE
+            || menu_id == LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE )
+    {
+        bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_SET_VISIBLE;
+
+        for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
+            tbl->SetValueAsBool( row, 1, selected_state );
 
         // Ensure the new state (on/off) of the widgets is immediately shown:
         m_grid->Refresh();
