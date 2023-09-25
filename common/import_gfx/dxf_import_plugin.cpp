@@ -91,21 +91,21 @@
 
 DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
 {
-    m_xOffset   = 0.0;          // X coord offset for conversion (in mm)
-    m_yOffset   = 0.0;          // Y coord offset for conversion (in mm)
-    m_version   = 0;            // the dxf version, not yet used
-    m_defaultThickness = 0.2;   // default thickness (in mm)
-    m_brdLayer = Dwgs_User;     // The default import layer
+    m_xOffset          = 0.0;          // X coord offset for conversion (in mm)
+    m_yOffset          = 0.0;          // Y coord offset for conversion (in mm)
+    m_version          = 0;            // the dxf version, not yet used
+    m_defaultThickness = 0.2;          // default thickness (in mm)
+    m_brdLayer         = Dwgs_User;    // The default import layer
     m_importAsFPShapes = true;
-    m_minX = m_minY = std::numeric_limits<double>::max();
-    m_maxX = m_maxY = std::numeric_limits<double>::min();
-    m_currentUnit = DXF_IMPORT_UNITS::DEFAULT;
+    m_minX             = m_minY = std::numeric_limits<double>::max();
+    m_maxX             = m_maxY = std::numeric_limits<double>::min();
+    m_currentUnit      = DXF_IMPORT_UNITS::DEFAULT;
+
     m_importCoordinatePrecision = 4;    // initial value per dxf spec
-    m_importAnglePrecision = 0;         // initial value per dxf spec
+    m_importAnglePrecision      = 0;    // initial value per dxf spec
 
     // placeholder layer so we can fallback to something later
-    std::unique_ptr<DXF_IMPORT_LAYER> layer0 =
-            std::make_unique<DXF_IMPORT_LAYER>( "", DXF_IMPORT_LINEWEIGHT_BY_LW_DEFAULT );
+    auto layer0 = std::make_unique<DXF_IMPORT_LAYER>( "", DXF_IMPORT_LINEWEIGHT_BY_LW_DEFAULT );
     m_layers.push_back( std::move( layer0 ) );
 
     m_currentBlock = nullptr;
@@ -276,8 +276,7 @@ void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
 void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
 {
     // Called for every spline control point, when reading a spline entity
-    m_curr_entity.m_SplineControlPointList.emplace_back( aData.x , aData.y,
-                                                                         aData.w );
+    m_curr_entity.m_SplineControlPointList.emplace_back( aData.x , aData.y, aData.w );
 }
 
 
@@ -303,9 +302,7 @@ void DXF_IMPORT_PLUGIN::addLayer( const DL_LayerData& aData )
     int lw = attributes.getWidth();
 
     if( lw == DXF_IMPORT_LINEWEIGHT_BY_LAYER )
-    {
         lw = DXF_IMPORT_LINEWEIGHT_BY_LW_DEFAULT;
-    }
 
     std::unique_ptr<DXF_IMPORT_LAYER> layer = std::make_unique<DXF_IMPORT_LAYER>( name, lw );
 
@@ -325,17 +322,13 @@ void DXF_IMPORT_PLUGIN::addLinetype( const DL_LinetypeData& data )
 double DXF_IMPORT_PLUGIN::lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer )
 {
     if( lw == DXF_IMPORT_LINEWEIGHT_BY_LAYER && aLayer != nullptr )
-    {
         lw = aLayer->m_lineWeight;
-    }
 
     // All lineweights >= 0 are always in 100ths of mm
     double mm = m_defaultThickness;
 
     if( lw >= 0 )
-    {
         mm = lw / 100.0;
-    }
 
     return SCALE_FACTOR( mm );
 }
@@ -349,10 +342,10 @@ DXF_IMPORT_LAYER* DXF_IMPORT_PLUGIN::getImportLayer( const std::string& aLayerNa
     if( !layerName.IsEmpty() )
     {
         auto resultIt = std::find_if( m_layers.begin(), m_layers.end(),
-                                        [layerName]( const auto& it )
-                                        {
-                                            return it->m_layerName == layerName;
-                                        } );
+                [layerName]( const auto& it )
+                {
+                    return it->m_layerName == layerName;
+                } );
 
         if( resultIt != m_layers.end() )
             layer = resultIt->get();
@@ -370,10 +363,10 @@ DXF_IMPORT_BLOCK* DXF_IMPORT_PLUGIN::getImportBlock( const std::string& aBlockNa
     if( !blockName.IsEmpty() )
     {
         auto resultIt = std::find_if( m_blocks.begin(), m_blocks.end(),
-                                        [blockName]( const auto& it )
-                                        {
-                                            return it->m_name == blockName;
-                                        } );
+                [blockName]( const auto& it )
+                {
+                    return it->m_name == blockName;
+                } );
 
         if( resultIt != m_blocks.end() )
             block = resultIt->get();
@@ -391,7 +384,10 @@ DXF_IMPORT_STYLE* DXF_IMPORT_PLUGIN::getImportStyle( const std::string& aStyleNa
     if( !styleName.IsEmpty() )
     {
         auto resultIt = std::find_if( m_styles.begin(), m_styles.end(),
-                [styleName]( const auto& it ) { return it->m_name == styleName; } );
+                [styleName]( const auto& it )
+                {
+                    return it->m_name == styleName;
+                } );
 
         if( resultIt != m_styles.end() )
             style = resultIt->get();
@@ -409,8 +405,8 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
     VECTOR2D start( mapX( aData.x1 ), mapY( aData.y1 ) );
     VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddLine( start, end, lineWidth );
 
     updateImageLimits( start );
@@ -451,7 +447,7 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
     const DL_VertexData* vertex = &aData;
 
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
-    VECTOR3D vertexCoords      = ocsToWcs( arbAxis, VECTOR3D( vertex->x, vertex->y, vertex->z ) );
+    VECTOR3D vertexCoords = ocsToWcs( arbAxis, VECTOR3D( vertex->x, vertex->y, vertex->z ) );
 
     if( m_curr_entity.m_EntityParseStatus == 1 )    // This is the first vertex of an entity
     {
@@ -468,8 +464,7 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
     if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
         insertLine( m_curr_entity.m_LastCoordinate, seg_end, lineWidth );
     else
-        insertArc( m_curr_entity.m_LastCoordinate, seg_end, m_curr_entity.m_BulgeVertex,
-                   lineWidth );
+        insertArc( m_curr_entity.m_LastCoordinate, seg_end, m_curr_entity.m_BulgeVertex, lineWidth );
 
     m_curr_entity.m_LastCoordinate = seg_end;
     m_curr_entity.m_BulgeVertex = vertex->bulge;
@@ -488,18 +483,20 @@ void DXF_IMPORT_PLUGIN::endEntity()
         if( m_curr_entity.m_EntityFlag & 1 )
         {
             if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
+            {
                 insertLine( m_curr_entity.m_LastCoordinate, m_curr_entity.m_PolylineStart,
                             lineWidth );
+            }
             else
+            {
                 insertArc( m_curr_entity.m_LastCoordinate, m_curr_entity.m_PolylineStart,
                            m_curr_entity.m_BulgeVertex, lineWidth );
+            }
         }
     }
 
     if( m_curr_entity.m_EntityType == DL_ENTITY_SPLINE )
-    {
         insertSpline( lineWidth );
-    }
 
     m_curr_entity.Clear();
 }
@@ -509,8 +506,8 @@ void DXF_IMPORT_PLUGIN::addBlock( const DL_BlockData& aData )
 {
     wxString name = wxString::FromUTF8( aData.name.c_str() );
 
-    std::unique_ptr<DXF_IMPORT_BLOCK> block =
-            std::make_unique<DXF_IMPORT_BLOCK>( name, aData.bpx, aData.bpy );
+    std::unique_ptr<DXF_IMPORT_BLOCK> block = std::make_unique<DXF_IMPORT_BLOCK>( name, aData.bpx,
+                                                                                  aData.bpy );
 
     m_blocks.push_back( std::move( block ) );
 
@@ -539,12 +536,12 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     scale.SetScale( VECTOR2D( aData.sx, aData.sy ) );
 
     MATRIX3x3D trans = ( arbAxis * rot ) * scale;
-    VECTOR3D insertCoords      = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
+    VECTOR3D insertCoords = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
 
     VECTOR2D translation( mapX( insertCoords.x ), mapY( insertCoords.y ) );
     translation -= VECTOR2D( mapX( block->m_baseX ), mapY( block->m_baseY ) );
 
-    for( auto& shape : block->m_buffer.GetShapes() )
+    for( const std::unique_ptr<IMPORTED_SHAPE>& shape : block->m_buffer.GetShapes() )
     {
         std::unique_ptr<IMPORTED_SHAPE> newShape = shape->clone();
 
@@ -558,14 +555,14 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
 void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 {
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
-    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
+    VECTOR3D   centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
 
     VECTOR2D          center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddCircle( center, mapDim( aData.radius ), lineWidth, false );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -661,8 +658,8 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
         }
         else
         {
-            DL_ArcData arc( aData.cx, aData.cy, aData.cz, radius,
-                            startAngle.AsDegrees(), endAngle.AsDegrees() );
+            DL_ArcData arc( aData.cx, aData.cy, aData.cz, radius, startAngle.AsDegrees(),
+                            endAngle.AsDegrees() );
             addArc( arc );
             return;
         }
@@ -813,8 +810,8 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddText( refPoint, text, textHeight, charWidth, textThickness, angle_degree,
                           hJustify, vJustify );
 
@@ -840,21 +837,19 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     updateImageLimits( bottomRight );
     updateImageLimits( topLeft );
     updateImageLimits( topRight );
-
 }
 
 
 void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 {
-    wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
-    wxString    attrib, tmp;
-
-    DXF_IMPORT_STYLE* style      = getImportStyle( aData.style.c_str() );
-
-    double textHeight = mapDim( aData.height );
+    wxString          text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
+    wxString          attrib;
+    DXF_IMPORT_STYLE* style = getImportStyle( aData.style.c_str() );
+    double            textHeight = mapDim( aData.height );
 
     // The 0.9 factor gives a better height/width base ratio with our font
     double charWidth = textHeight * 0.9;
+
     if( style != nullptr )
         charWidth *= style->m_widthFactor;
 
@@ -887,14 +882,12 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     while( text.StartsWith( wxT( "\\" ) ) )
     {
         attrib << text.BeforeFirst( ';' );
-        tmp     = text.AfterFirst( ';' );
-        text    = tmp;
+        text = text.AfterFirst( ';' );
     }
 
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D   textposCoords = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
-
-    VECTOR2D textpos( mapX( textposCoords.x ), mapY( textposCoords.y ) );
+    VECTOR2D   textpos( mapX( textposCoords.x ), mapY( textposCoords.y ) );
 
     // Initialize text justifications:
     GR_TEXT_H_ALIGN_T hJustify = GR_TEXT_H_ALIGN_LEFT;
@@ -982,10 +975,10 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     double sine = sin(angleInRads);
 
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
-    bufferToUse->AddText( textpos, text, textHeight, charWidth,
-                          textThickness, angle_degree, hJustify, vJustify );
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
+    bufferToUse->AddText( textpos, text, textHeight, charWidth, textThickness, angle_degree,
+                          hJustify, vJustify );
 
     bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
     bottomLeft.y = bottomLeft.x * sine + bottomLeft.y * cosine;
@@ -1008,62 +1001,27 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     updateImageLimits( bottomRight );
     updateImageLimits( topLeft );
     updateImageLimits( topRight );
-
 }
 
 
 double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
 {
     double scale = 1.0;
+
     switch( m_currentUnit )
     {
-    case DXF_IMPORT_UNITS::INCHES:
-        scale = 25.4;
-        break;
-
-    case DXF_IMPORT_UNITS::FEET:
-        scale = 304.8;
-        break;
-
-    case DXF_IMPORT_UNITS::MILLIMETERS:
-        scale = 1.0;
-        break;
-
-    case DXF_IMPORT_UNITS::CENTIMETERS:
-        scale = 10.0;
-        break;
-
-    case DXF_IMPORT_UNITS::METERS:
-        scale = 1000.0;
-        break;
-
-    case DXF_IMPORT_UNITS::MICROINCHES:
-        scale = 2.54e-5;
-        break;
-
-    case DXF_IMPORT_UNITS::MILS:
-        scale = 0.0254;
-        break;
-
-    case DXF_IMPORT_UNITS::YARDS:
-        scale = 914.4;
-        break;
-
-    case DXF_IMPORT_UNITS::ANGSTROMS:
-        scale = 1.0e-7;
-        break;
-
-    case DXF_IMPORT_UNITS::NANOMETERS:
-        scale = 1.0e-6;
-        break;
-
-    case DXF_IMPORT_UNITS::MICRONS:
-        scale = 1.0e-3;
-        break;
-
-    case DXF_IMPORT_UNITS::DECIMETERS:
-        scale = 100.0;
-        break;
+    case DXF_IMPORT_UNITS::INCHES:      scale = 25.4;    break;
+    case DXF_IMPORT_UNITS::FEET:        scale = 304.8;   break;
+    case DXF_IMPORT_UNITS::MILLIMETERS: scale = 1.0;     break;
+    case DXF_IMPORT_UNITS::CENTIMETERS: scale = 10.0;    break;
+    case DXF_IMPORT_UNITS::METERS:      scale = 1000.0;  break;
+    case DXF_IMPORT_UNITS::MICROINCHES: scale = 2.54e-5; break;
+    case DXF_IMPORT_UNITS::MILS:        scale = 0.0254;  break;
+    case DXF_IMPORT_UNITS::YARDS:       scale = 914.4;   break;
+    case DXF_IMPORT_UNITS::ANGSTROMS:   scale = 1.0e-7;  break;
+    case DXF_IMPORT_UNITS::NANOMETERS:  scale = 1.0e-6;  break;
+    case DXF_IMPORT_UNITS::MICRONS:     scale = 1.0e-3;  break;
+    case DXF_IMPORT_UNITS::DECIMETERS:  scale = 100.0;   break;
 
     default:
         // use the default of 1.0 for:
@@ -1076,7 +1034,6 @@ double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
         // 18: AU
         // 19: lightyears
         // 20: parsecs
-        scale = 1.0;
         break;
     }
 
@@ -1109,58 +1066,25 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
 
     if( key == "$INSUNITS" )    // Drawing units
     {
+        m_currentUnit = DXF_IMPORT_UNITS::DEFAULT;
+
         switch( value )
         {
-        case 1:     // inches
-            m_currentUnit = DXF_IMPORT_UNITS::INCHES;
-            break;
-
-        case 2:     // feet
-            m_currentUnit = DXF_IMPORT_UNITS::FEET;
-            break;
-
-        case 4:     // mm
-            m_currentUnit = DXF_IMPORT_UNITS::MILLIMETERS;
-            break;
-
-        case 5:     // centimeters
-            m_currentUnit = DXF_IMPORT_UNITS::CENTIMETERS;
-            break;
-
-        case 6:     // meters
-            m_currentUnit = DXF_IMPORT_UNITS::METERS;
-            break;
-
-        case 8:     // microinches
-            m_currentUnit = DXF_IMPORT_UNITS::MICROINCHES;
-            break;
-
-        case 9:     // mils
-            m_currentUnit = DXF_IMPORT_UNITS::MILS;
-            break;
-
-        case 10:    // yards
-            m_currentUnit = DXF_IMPORT_UNITS::YARDS;
-            break;
-
-        case 11:    // Angstroms
-            m_currentUnit = DXF_IMPORT_UNITS::ANGSTROMS;
-            break;
-
-        case 12:    // nanometers
-            m_currentUnit = DXF_IMPORT_UNITS::NANOMETERS;
-            break;
-
-        case 13:    // micrometers
-            m_currentUnit = DXF_IMPORT_UNITS::MICRONS;
-            break;
-
-        case 14:    // decimeters
-            m_currentUnit = DXF_IMPORT_UNITS::DECIMETERS;
-            break;
+        case 1:  m_currentUnit = DXF_IMPORT_UNITS::INCHES;      break;
+        case 2:  m_currentUnit = DXF_IMPORT_UNITS::FEET;        break;
+        case 4:  m_currentUnit = DXF_IMPORT_UNITS::MILLIMETERS; break;
+        case 5:  m_currentUnit = DXF_IMPORT_UNITS::CENTIMETERS; break;
+        case 6:  m_currentUnit = DXF_IMPORT_UNITS::METERS;      break;
+        case 8:  m_currentUnit = DXF_IMPORT_UNITS::MICROINCHES; break;
+        case 9:  m_currentUnit = DXF_IMPORT_UNITS::MILS;        break;
+        case 10: m_currentUnit = DXF_IMPORT_UNITS::YARDS;       break;
+        case 11: m_currentUnit = DXF_IMPORT_UNITS::ANGSTROMS;   break;
+        case 12: m_currentUnit = DXF_IMPORT_UNITS::NANOMETERS;  break;
+        case 13: m_currentUnit = DXF_IMPORT_UNITS::MICRONS;     break;
+        case 14: m_currentUnit = DXF_IMPORT_UNITS::DECIMETERS;  break;
 
         default:
-            // use the default of 1.0 for:
+            // use the default for:
             // 0: Unspecified Units
             // 3: miles
             // 7: kilometers
@@ -1170,7 +1094,6 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
             // 18: AU
             // 19: lightyears
             // 20: parsecs
-            m_currentUnit = DXF_IMPORT_UNITS::DEFAULT;
             break;
         }
 
@@ -1180,7 +1103,7 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
 
 
 void DXF_IMPORT_PLUGIN::setVariableString( const std::string& key, const std::string& value,
-        int code )
+                                           int code )
 {
     // Called for every string variable in the DXF file (e.g. "$ACADVER").
 }
@@ -1318,8 +1241,8 @@ void DXF_IMPORT_PLUGIN::addTextStyle( const DL_StyleData& aData )
 {
     wxString name = wxString::FromUTF8( aData.name.c_str() );
 
-    std::unique_ptr<DXF_IMPORT_STYLE> style =
-            std::make_unique<DXF_IMPORT_STYLE>( name, aData.fixedTextHeight, aData.widthFactor, aData.bold, aData.italic );
+    auto style = std::make_unique<DXF_IMPORT_STYLE>( name, aData.fixedTextHeight, aData.widthFactor,
+                                                     aData.bold, aData.italic );
 
     m_styles.push_back( std::move( style ) );
 }
@@ -1329,8 +1252,7 @@ void DXF_IMPORT_PLUGIN::addPoint( const DL_PointData& aData )
 {
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D   centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.x, aData.y, aData.z ) );
-
-    VECTOR2D center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
+    VECTOR2D   center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
 
     // we emulate points with filled circles
     // set the linewidth to something that even small circles look good with
@@ -1339,8 +1261,8 @@ void DXF_IMPORT_PLUGIN::addPoint( const DL_PointData& aData )
     double lineWidth = 0.0001;
     double thickness = mapDim( std::max( aData.thickness, 0.01 ) );
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddCircle( center, thickness, lineWidth, true );
 
     VECTOR2D radiusDelta( SCALE_FACTOR( thickness ), SCALE_FACTOR( thickness ) );
@@ -1356,8 +1278,8 @@ void DXF_IMPORT_PLUGIN::insertLine( const VECTOR2D& aSegStart,
     VECTOR2D origin( SCALE_FACTOR( aSegStart.x ), SCALE_FACTOR( aSegStart.y ) );
     VECTOR2D end( SCALE_FACTOR( aSegEnd.x ), SCALE_FACTOR( aSegEnd.y ) );
 
-    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                           : &m_internalImporter;
     bufferToUse->AddLine( origin, end, aWidth );
 
     updateImageLimits( origin );
@@ -1441,7 +1363,6 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
 
     updateImageLimits( center + radiusDelta );
     updateImageLimits( center - radiusDelta );
-    return;
 }
 
 
@@ -1449,13 +1370,13 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
 
 void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 {
-    #if 0   // Debug only
+#if 0   // Debug only
     wxLogMessage("spl deg %d kn %d ctr %d fit %d",
          m_curr_entity.m_SplineDegree,
          m_curr_entity.m_SplineKnotsList.size(),
          m_curr_entity.m_SplineControlPointList.size(),
          m_curr_entity.m_SplineFitPointList.size() );
-    #endif
+#endif
 
     unsigned imax = m_curr_entity.m_SplineControlPointList.size();
 
@@ -1492,6 +1413,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 
     std::vector<double> coords;
     tinyspline::BSpline beziers;
+
     try
     {
 	    tinyspline::BSpline dxfspline( m_curr_entity.m_SplineControlPointList.size(),
@@ -1503,7 +1425,8 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 
         coords = beziers.controlPoints();
     }
-    catch( const std::runtime_error& )  //tinyspline throws everything including data validation as runtime errors
+    catch( const std::runtime_error& )  // tinyspline throws everything including data validation
+                                        // as runtime errors
     {
         // invalid spline definition, drop this block
         reportMsg( _( "Invalid spline definition encountered" ) );
@@ -1518,32 +1441,25 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
     {
         size_t ii = i * dim * order;
         VECTOR2D start( mapX( coords[ ii ] ), mapY( coords[ ii + 1 ] ) );
-
         VECTOR2D bezierControl1( mapX( coords[ii + 2] ), mapY( coords[ii + 3] ) );
 
         // not sure why this happens, but it seems to sometimes slip degree on the final bezier
         VECTOR2D bezierControl2;
+
         if( ii + 4 >= coords.size() )
-        {
             bezierControl2 = bezierControl1;
-        }
         else
-        {
             bezierControl2 = VECTOR2D( mapX( coords[ii + 4] ), mapY( coords[ii + 5] ) );
-        }
 
         VECTOR2D end;
-        if( ii + 6 >= coords.size() )
-        {
-            end = bezierControl2;
-        }
-        else
-        {
-            end = VECTOR2D( mapX( coords[ii + 6] ), mapY( coords[ii + 7] ) );
-        }
 
-        GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-                ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
+        if( ii + 6 >= coords.size() )
+            end = bezierControl2;
+        else
+            end = VECTOR2D( mapX( coords[ii + 6] ), mapY( coords[ii + 7] ) );
+
+        GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
+                                                               : &m_internalImporter;
         bufferToUse->AddSpline( start, bezierControl1, bezierControl2, end, aWidth );
     }
 #endif
@@ -1570,13 +1486,9 @@ MATRIX3x3D DXF_IMPORT_PLUGIN::getArbitraryAxis( DL_Extrusion* aData )
     arbZ = VECTOR3D( direction[0], direction[1], direction[2] ).Normalize();
 
     if( ( abs( arbZ.x ) < ( 1.0 / 64.0 ) ) && ( abs( arbZ.y ) < ( 1.0 / 64.0 ) ) )
-    {
         arbX = VECTOR3D( 0, 1, 0 ).Cross( arbZ ).Normalize();
-    }
     else
-    {
         arbX = VECTOR3D( 0, 0, 1 ).Cross( arbZ ).Normalize();
-    }
 
     arbY = arbZ.Cross( arbX ).Normalize();
 
