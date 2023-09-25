@@ -27,6 +27,7 @@
 #include <eda_item.h>
 #include "graphics_importer.h"
 #include "graphics_import_plugin.h"
+#include <wx/log.h>
 
 GRAPHICS_IMPORTER::GRAPHICS_IMPORTER()
 {

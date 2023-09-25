@@ -627,7 +627,7 @@ bool DL_Dxf::processDXFGroup( DL_CreationInterface* creationInterface,
             break;
 
         case DL_ENTITY_HATCH:
-            // addHatch(creationInterface);
+            addHatch(creationInterface);
             handleHatchData( creationInterface );
             break;
 
