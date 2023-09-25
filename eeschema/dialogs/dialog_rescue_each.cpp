@@ -296,7 +296,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
     wxMessageDialog dlg( GetParent(),
                          _(  "Stop showing this tool?\n"
                              "No changes will be made.\n\n"
-                             "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
+                             "This setting can be changed from the \"Preferences\" dialog,\n"
                              "and the tool can be activated manually from the \"Tools\" menu." ),
                          _( "Rescue Symbols" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
     int resp = dlg.ShowModal ();

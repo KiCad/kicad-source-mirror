@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -346,6 +346,9 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_footprintPreview = new wxCheckBox( this, wxID_ANY, _("Show footprint previews in Symbol Chooser"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer14->Add( m_footprintPreview, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_neverShowRescue = new wxCheckBox( this, wxID_ANY, _("Never show Rescue Symbols tool"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer14->Add( m_neverShowRescue, 0, wxALL, 5 );
 
 
 	bRightColumn->Add( bSizer14, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
