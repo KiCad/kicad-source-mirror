@@ -21,6 +21,7 @@
 #include <dialogs/appearance_controls_3D.h>
 
 #include <bitmaps.h>
+#include <confirm.h>
 #include <pgm_base.h>
 #include <dpi_scaling_common.h>
 #include <eda_list_dialog.h>
@@ -616,6 +617,12 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
     int                       index = m_cbLayerPresets->GetSelection();
     wxString                  name;
 
+    auto resetSelection =
+            [&]()
+            {
+                updateLayerPresetWidget( cfg->m_CurrentPreset );
+            };
+
     if( index == 0 )
     {
         name = FOLLOW_PCB;
@@ -633,7 +640,7 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
     else if( index == count - 3 )
     {
         // Separator: reject the selection
-        updateLayerPresetWidget( cfg->m_CurrentPreset );
+        resetSelection();
         return;
     }
     else if( index == count - 2 )
@@ -642,30 +649,37 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
 
         if( dlg.ShowModal() != wxID_OK )
         {
-            updateLayerPresetWidget( cfg->m_CurrentPreset );
+            resetSelection();
             return;
+        }
+
+        std::bitset<LAYER_3D_END> visibleLayers = m_frame->GetAdapter().GetVisibleLayers();
+        std::map<int, COLOR4D>    colors = m_frame->GetAdapter().GetLayerColors();
+
+        name = dlg.GetValue();
+
+        if( LAYER_PRESET_3D* preset = cfg->FindPreset( name ) )
+        {
+            if( !IsOK( this, _( "Overwrite existing preset?" ) ) )
+            {
+                resetSelection();
+                return;
+            }
+
+            preset->layers = visibleLayers;
+            preset->colors = colors;
+            m_cbLayerPresets->SetSelection( m_cbLayerPresets->FindString( name ) );
         }
         else
         {
-            std::bitset<LAYER_3D_END> visibleLayers = m_frame->GetAdapter().GetVisibleLayers();
-            std::map<int, COLOR4D>    colors = m_frame->GetAdapter().GetLayerColors();
-
-            name = dlg.GetValue();
-
-            if( LAYER_PRESET_3D* preset = cfg->FindPreset( name ) )
-            {
-                preset->layers = visibleLayers;
-                preset->colors = colors;
-                m_cbLayerPresets->SetSelection( m_cbLayerPresets->FindString( name ) );
-            }
-            else
-            {
-                cfg->m_LayerPresets.emplace_back( name, visibleLayers, colors );
-                m_cbLayerPresets->SetSelection( m_cbLayerPresets->Insert( name, index - 1 ) );
-            }
-
-            cfg->m_CurrentPreset = name;
+            cfg->m_LayerPresets.emplace_back( name, visibleLayers, colors );
+            m_cbLayerPresets->SetSelection( m_cbLayerPresets->Insert( name, index - 1 ) );
         }
+
+        cfg->m_CurrentPreset = name;
+        m_presetMRU.Insert( name, 0 );
+
+        return;
     }
     else if( index == count - 1 )
     {
@@ -703,7 +717,7 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
             m_presetMRU.Remove( name );
         }
 
-        updateLayerPresetWidget( cfg->m_CurrentPreset );
+        resetSelection();
         return;
     }
     else if( LAYER_PRESET_3D* preset = cfg->FindPreset( m_cbLayerPresets->GetStringSelection() ) )

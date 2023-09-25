@@ -25,11 +25,11 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <dpi_scaling_common.h>
 #include <eda_list_dialog.h>
 #include <string_utils.h>
 #include <footprint_edit_frame.h>
 #include <menus_helpers.h>
+#include <confirm.h>
 #include <pcb_display_options.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
@@ -51,7 +51,6 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_grid.h>
 #include <dialogs/eda_view_switcher.h>
-#include <wx/bmpbuttn.h>
 #include <wx/checkbox.h>
 #include <wx/hyperlink.h>
 #include <wx/radiobut.h>
@@ -2639,20 +2638,33 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
         if( !exists )
         {
-            m_layerPresets[name] = LAYER_PRESET( name, getVisibleLayers(),
-                                                 getVisibleObjects(), UNSELECTED_LAYER );
+            m_layerPresets[name] = LAYER_PRESET( name, getVisibleLayers(), getVisibleObjects(),
+                                                 UNSELECTED_LAYER );
         }
 
         LAYER_PRESET* preset = &m_layerPresets[name];
-        m_currentPreset      = preset;
 
         if( !exists )
         {
             index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
             preset->flipBoard = m_cbFlipBoard->GetValue();
         }
+        else if( preset->readOnly )
+        {
+            wxMessageBox( _( "Default presets cannot be modified.\nPlease use a different name." ),
+                          _( "Error" ), wxOK | wxICON_ERROR, this );
+            resetSelection();
+            return;
+        }
         else
         {
+            // Ask the user if they want to overwrite the existing preset
+            if( !IsOK( this, _( "Overwrite existing preset?" ) ) )
+            {
+                resetSelection();
+                return;
+            }
+
             preset->layers       = getVisibleLayers();
             preset->renderLayers = getVisibleObjects();
             preset->flipBoard    = m_cbFlipBoard->GetValue();
@@ -2661,6 +2673,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
             m_presetMRU.Remove( name );
         }
 
+        m_currentPreset      = preset;
         m_cbLayerPresets->SetSelection( index );
         m_presetMRU.Insert( name, 0 );
 

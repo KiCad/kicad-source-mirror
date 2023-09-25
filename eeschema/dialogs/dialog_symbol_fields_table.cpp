@@ -1573,16 +1573,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         }
         else if( preset->readOnly )
         {
-            wxMessageBox( _( "Cannot modify default presets." ), _( "Error" ), wxOK | wxICON_ERROR,
-                          this );
+            wxMessageBox( _( "Default presets cannot be modified.\nPlease use a different name." ),
+                          _( "Error" ), wxOK | wxICON_ERROR, this );
+            resetSelection();
             return;
         }
         else
         {
             // Ask the user if they want to overwrite the existing preset
-            if( wxMessageBox( _( "Overwrite existing preset?" ), _( "Save BOM Preset" ),
-                              wxYES_NO | wxICON_QUESTION, this )
-                != wxYES )
+            if( !IsOK( this, _( "Overwrite existing preset?" ) ) )
             {
                 resetSelection();
                 return;
@@ -1975,16 +1974,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         }
         else if( preset->readOnly )
         {
-            wxMessageBox( _( "Cannot modify default presets." ), _( "Error" ), wxOK | wxICON_ERROR,
-                          this );
+            wxMessageBox( _( "Default presets cannot be modified.\nPlease use a different name." ),
+                          _( "Error" ), wxOK | wxICON_ERROR, this );
+            resetSelection();
             return;
         }
         else
         {
             // Ask the user if they want to overwrite the existing preset
-            if( wxMessageBox( _( "Overwrite existing preset?" ), _( "Save BOM Preset" ),
-                              wxYES_NO | wxICON_QUESTION, this )
-                != wxYES )
+            if( !IsOK( this, _( "Overwrite existing preset?" ) ) )
             {
                 resetSelection();
                 return;
