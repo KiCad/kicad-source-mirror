@@ -68,6 +68,8 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 set( KICOMMON_SRCS
     # Fonts
     newstroke_font.cpp
+    font/fontconfig.cpp
+    font/version_info.cpp
     # Gal
     gal/color4d.cpp
     # Jobs
@@ -124,6 +126,11 @@ target_link_libraries( kicommon
 
     # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
     ${EXTRA_LIBS}
+
+    # outline font support
+   	${FREETYPE_LIBRARIES}
+   	${HarfBuzz_LIBRARIES}
+	${Fontconfig_LIBRARIES}
     )
 
 include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
@@ -373,7 +380,6 @@ set( FONT_SRCS
     font/stroke_font.cpp
 	font/outline_font.cpp
 	font/outline_decomposer.cpp
-	font/fontconfig.cpp
     font/text_attributes.cpp
 	)
 

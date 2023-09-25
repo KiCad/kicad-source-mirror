@@ -52,14 +52,6 @@ class OUTLINE_FONT : public FONT
 public:
     OUTLINE_FONT();
 
-    static wxString FontConfigVersion();
-
-    static wxString FreeTypeVersion();
-
-    static wxString HarfBuzzVersion();
-
-    static wxString FontLibraryVersion();
-
     bool IsOutline() const override { return true; }
 
     bool IsBold() const override

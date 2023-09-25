@@ -23,6 +23,7 @@
 
 #include <fontconfig/fontconfig.h>
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include <vector>
 #include <map>
@@ -34,7 +35,7 @@ namespace fontconfig
 
 struct FONTCONFIG_PAT;
 
-class FONTCONFIG
+class KICOMMON_API FONTCONFIG
 {
 public:
     FONTCONFIG();
@@ -114,7 +115,7 @@ private:
 } // namespace fontconfig
 
 
-fontconfig::FONTCONFIG* Fontconfig();
+KICOMMON_API fontconfig::FONTCONFIG* Fontconfig();
 
 
 #endif //KICAD_FONTCONFIG_H

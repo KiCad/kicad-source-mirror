@@ -27,7 +27,7 @@
 #include <config.h>
 #include <boost/version.hpp>
 #include <kiplatform/app.h>
-#include <font/outline_font.h>
+#include <font/version_info.h>
 
 #include <tuple>
 
@@ -147,9 +147,9 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
 
-    aMsg << indent4 << "FreeType " << KIFONT::OUTLINE_FONT::FreeTypeVersion() << eol;
-    aMsg << indent4 << "HarfBuzz " << KIFONT::OUTLINE_FONT::HarfBuzzVersion() << eol;
-    aMsg << indent4 << "FontConfig " << KIFONT::OUTLINE_FONT::FontConfigVersion() << eol;
+    aMsg << indent4 << "FreeType " << KIFONT::VERSION_INFO::FreeType() << eol;
+    aMsg << indent4 << "HarfBuzz " << KIFONT::VERSION_INFO::HarfBuzz() << eol;
+    aMsg << indent4 << "FontConfig " << KIFONT::VERSION_INFO::FontConfig() << eol;
 
     if( !aBrief )
         aMsg << indent4 << GetKicadCurlVersion() << eol;
@@ -178,7 +178,7 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     if( wxTheApp && wxTheApp->IsGUI() )
     {
         aMsg << ", ";
-        
+
         switch( wxGetDisplayInfo().type )
         {
         case wxDisplayX11:     aMsg << "X11"; break;

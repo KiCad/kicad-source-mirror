@@ -55,40 +55,6 @@ OUTLINE_FONT::OUTLINE_FONT() :
 }
 
 
-wxString OUTLINE_FONT::FreeTypeVersion()
-{
-    std::lock_guard<std::mutex> guard( m_freeTypeMutex );
-
-    if( !m_freeType )
-        FT_Init_FreeType( &m_freeType );
-
-    FT_Int major = 0;
-    FT_Int minor = 0;
-    FT_Int patch = 0;
-    FT_Library_Version( m_freeType, &major, &minor, &patch );
-
-    return wxString::Format( "%d.%d.%d", major, minor, patch );
-}
-
-
-wxString OUTLINE_FONT::HarfBuzzVersion()
-{
-    return wxString::FromUTF8( HB_VERSION_STRING );
-}
-
-
-wxString OUTLINE_FONT::FontConfigVersion()
-{
-    return fontconfig::FONTCONFIG::Version();
-}
-
-
-wxString OUTLINE_FONT::FontLibraryVersion()
-{
-    return wxString::Format( "FreeType %s HarfBuzz %s", FreeTypeVersion(), HarfBuzzVersion() );
-}
-
-
 OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, bool aItalic )
 {
     std::unique_ptr<OUTLINE_FONT> font = std::make_unique<OUTLINE_FONT>();
