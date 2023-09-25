@@ -336,6 +336,10 @@ public:
      */
     static std::string GetSettingsVersion();
 
+    /**
+     * A proxy for PATHS::GetUserSettingsPath rather than fighting swig
+     */
+    static wxString GetUserSettingsPath();
 private:
     JSON_SETTINGS* registerSettings( JSON_SETTINGS* aSettings, bool aLoadNow = true );
 

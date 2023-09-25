@@ -1348,3 +1348,9 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
 
     return BackupProject( aReporter );
 }
+
+
+wxString SETTINGS_MANAGER::GetUserSettingsPath()
+{
+    return PATHS::GetUserSettingsPath();
+}
