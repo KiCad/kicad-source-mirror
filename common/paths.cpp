@@ -288,6 +288,24 @@ wxString PATHS::GetStockPlugins3DPath()
     fn.AppendDir( wxT( "plugins" ) );
 #elif defined( __WXMAC__ )
     fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
+
+    // This must be mapped to main bundle for everything but kicad.app
+    const wxArrayString dirs = fn.GetDirs();
+
+    // Check if we are the main kicad binary.  in this case, the path will be
+    //     /path/to/bundlename.app/Contents/PlugIns
+    // If we are an aux binary, the path will be something like
+    //     /path/to/bundlename.app/Contents/Applications/<standalone>.app/Contents/PlugIns
+    if( dirs.GetCount() >= 6 &&
+        dirs[dirs.GetCount() - 4] == wxT( "Applications" ) &&
+        dirs[dirs.GetCount() - 6].Lower().EndsWith( wxT( "app" ) ) )
+    {
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.RemoveLastDir();
+        fn.AppendDir( wxT( "PlugIns" ) );
+    }
 #else
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
