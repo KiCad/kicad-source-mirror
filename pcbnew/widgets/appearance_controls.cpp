@@ -595,13 +595,6 @@ APPEARANCE_CONTROLS::~APPEARANCE_CONTROLS()
 }
 
 
-void APPEARANCE_CONTROLS::SaveSettings( PCBNEW_SETTINGS* aCfg )
-{
-    aCfg->m_AuiPanels.appearance_expand_layer_display = m_paneLayerDisplayOptions->IsExpanded();
-    aCfg->m_AuiPanels.appearance_expand_net_display   = m_paneNetDisplayOptions->IsExpanded();
-}
-
-
 void APPEARANCE_CONTROLS::createControls()
 {
     int      hotkey;
@@ -809,6 +802,18 @@ wxSize APPEARANCE_CONTROLS::GetBestSize() const
     DPI_SCALING_COMMON dpi( nullptr, m_frame );
     wxSize      size( 220 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
     return size;
+}
+
+
+bool APPEARANCE_CONTROLS::IsLayerOptionsExpanded()
+{
+    return m_paneLayerDisplayOptions->IsExpanded();
+}
+
+
+bool APPEARANCE_CONTROLS::IsNetOptionsExpanded()
+{
+    return m_paneNetDisplayOptions->IsExpanded();
 }
 
 

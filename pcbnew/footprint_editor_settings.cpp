@@ -75,7 +75,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
             &m_AuiPanels.properties_panel_width, -1 ) );
 
     m_params.emplace_back( new PARAM<float>( "aui.properties_splitter_proportion",
-            &m_AuiPanels.properties_splitter_proportion, 0.5f ) );
+            &m_AuiPanels.properties_splitter, 0.5f ) );
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
             &m_AuiPanels.show_properties, false ) );

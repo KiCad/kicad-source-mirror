@@ -97,7 +97,7 @@ public:
         bool float_net_nav_panel;
         bool show_net_nav_panel;
         int  properties_panel_width;
-        float properties_splitter_proportion;
+        float properties_splitter;
         bool show_properties;
     };
 

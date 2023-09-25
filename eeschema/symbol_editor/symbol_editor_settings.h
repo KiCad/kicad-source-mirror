@@ -34,7 +34,7 @@ public:
     struct AUI_PANELS
     {
         int  properties_panel_width;
-        float properties_splitter_proportion;
+        float properties_splitter;
         bool show_properties;
     };
 

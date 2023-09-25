@@ -257,7 +257,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
 
-    float proportion = GetPcbNewSettings()->m_AuiPanels.properties_splitter_proportion;
+    float proportion = GetPcbNewSettings()->m_AuiPanels.properties_splitter;
     m_propertiesPanel->SetSplitterProportion( proportion );
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
@@ -1315,17 +1315,13 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
-        cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
-        cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+        cfg->m_AuiPanels.show_layer_manager = m_show_layer_manager_tools;
 
         if( m_propertiesPanel )
         {
             cfg->m_AuiPanels.show_properties        = m_propertiesPanel->IsShownOnScreen();
             cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
-
-            cfg->m_AuiPanels.properties_splitter_proportion =
-                    m_propertiesPanel->SplitterProportion();
+            cfg->m_AuiPanels.properties_splitter    = m_propertiesPanel->SplitterProportion();
         }
 
         // ensure m_show_search is up to date (the pane can be closed)
@@ -1337,7 +1333,12 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
 
         if( m_appearancePanel )
-            m_appearancePanel->SaveSettings( cfg );
+        {
+            cfg->m_AuiPanels.right_panel_width               = m_appearancePanel->GetSize().x;
+            cfg->m_AuiPanels.appearance_panel_tab            = m_appearancePanel->GetTabIndex();
+            cfg->m_AuiPanels.appearance_expand_layer_display = m_appearancePanel->IsLayerOptionsExpanded();
+            cfg->m_AuiPanels.appearance_expand_net_display   = m_appearancePanel->IsNetOptionsExpanded();
+        }
     }
 }
 

@@ -140,7 +140,7 @@ public:
         bool appearance_expand_net_display;
         int  right_panel_width;
         int  properties_panel_width;
-        float properties_splitter_proportion;
+        float properties_splitter;
         int  search_panel_height;
         int  search_panel_width;
         int  search_panel_dock_direction;

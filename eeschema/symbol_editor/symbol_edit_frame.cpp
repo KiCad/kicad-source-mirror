@@ -177,7 +177,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     RebuildSymbolUnitsList();
 
     m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
-    m_propertiesPanel->SetSplitterProportion( m_settings->m_AuiPanels.properties_splitter_proportion );
+    m_propertiesPanel->SetSplitterProportion( m_settings->m_AuiPanels.properties_splitter );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -307,7 +307,7 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     m_settings->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
 
-    m_settings->m_AuiPanels.properties_splitter_proportion = m_propertiesPanel->SplitterProportion();
+    m_settings->m_AuiPanels.properties_splitter = m_propertiesPanel->SplitterProportion();
     bool prop_shown = m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
     m_settings->m_AuiPanels.show_properties = prop_shown;
 }

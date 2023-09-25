@@ -186,7 +186,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
     LoadSettings( GetSettings() );
 
-    float proportion = GetFootprintEditorSettings()->m_AuiPanels.properties_splitter_proportion;
+    float proportion = GetFootprintEditorSettings()->m_AuiPanels.properties_splitter;
     m_propertiesPanel->SetSplitterProportion( proportion );
 
     // Must be set after calling LoadSettings() to be sure these parameters are not dependent
@@ -643,24 +643,29 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         PCB_BASE_FRAME::SaveSettings( cfg );
 
-        cfg->m_DesignSettings    = GetDesignSettings();
-        cfg->m_Display           = m_displayOptions;
-        cfg->m_LibWidth          = m_treePane->GetSize().x;
-        cfg->m_SelectionFilter   = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
-        cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();
-        cfg->m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
+        cfg->m_DesignSettings  = GetDesignSettings();
+        cfg->m_Display         = m_displayOptions;
+        cfg->m_LibWidth        = m_treePane->GetSize().x;
+        cfg->m_SelectionFilter = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
 
-        cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
-        cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
-        cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+        cfg->m_AuiPanels.show_layer_manager = m_show_layer_manager_tools;
 
-        cfg->m_AuiPanels.show_properties        = m_propertiesPanel->IsShownOnScreen();
-        cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
-
-        cfg->m_AuiPanels.properties_splitter_proportion =
-                m_propertiesPanel->SplitterProportion();
+        if( m_propertiesPanel )
+        {
+            cfg->m_AuiPanels.show_properties        = m_propertiesPanel->IsShownOnScreen();
+            cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+            cfg->m_AuiPanels.properties_splitter    = m_propertiesPanel->SplitterProportion();
+        }
 
         cfg->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
+
+        if( m_appearancePanel )
+        {
+            cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
+            cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
+            cfg->m_LayerPresets                   = m_appearancePanel->GetUserLayerPresets();
+            cfg->m_ActiveLayerPreset              = m_appearancePanel->GetActiveLayerPreset();
+        }
     }
 }
 

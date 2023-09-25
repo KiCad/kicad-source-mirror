@@ -200,8 +200,6 @@ public:
 
     wxSize GetBestSize() const;
 
-    void SaveSettings( PCBNEW_SETTINGS* aCfg );
-
     void OnLanguageChanged();
 
     ///< Update the panel contents from the application and board models.
@@ -280,6 +278,9 @@ public:
      * Function to force a redraw of the collapsible panes in this control.
      */
     void RefreshCollapsiblePanes();
+
+    bool IsLayerOptionsExpanded();
+    bool IsNetOptionsExpanded();
 
 protected:
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;

@@ -179,7 +179,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_searchPane = new SCH_SEARCH_PANE( this );
     m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
 
-    m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter_proportion );
+    m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter );
 
     m_auimgr.SetManagedWindow( this );
 

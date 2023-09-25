@@ -53,7 +53,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
             &m_AuiPanels.properties_panel_width, -1 ) );
 
     m_params.emplace_back( new PARAM<float>( "aui.properties_splitter_proportion",
-            &m_AuiPanels.properties_splitter_proportion, 0.5f ) );
+            &m_AuiPanels.properties_splitter, 0.5f ) );
 
     m_params.emplace_back( new PARAM<int>( "defaults.line_width",
                                            &m_Defaults.line_width, 0 ) );

@@ -101,7 +101,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_AuiPanels.properties_panel_width, -1 ) );
 
     m_params.emplace_back( new PARAM<float>( "aui.properties_splitter_proportion",
-            &m_AuiPanels.properties_splitter_proportion, 0.5f ) );
+            &m_AuiPanels.properties_splitter, 0.5f ) );
 
     m_params.emplace_back( new PARAM<int>( "aui.search_panel_height",
             &m_AuiPanels.search_panel_height, -1 ) );

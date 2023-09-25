@@ -238,7 +238,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
         wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
         cfg->m_AuiPanels.show_properties = propertiesPane.IsShown();
-        cfg->m_AuiPanels.properties_splitter_proportion = m_propertiesPanel->SplitterProportion();
+        cfg->m_AuiPanels.properties_splitter = m_propertiesPanel->SplitterProportion();
     }
 }
 
