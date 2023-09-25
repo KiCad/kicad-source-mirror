@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@ SCH_BITMAP::SCH_BITMAP( const VECTOR2I& pos ) :
     m_layer = LAYER_NOTES;              // used only to draw/plot a rectangle,
                                         // when a bitmap cannot be drawn or plotted
     m_bitmapBase = new BITMAP_BASE();
+    m_bitmapBase->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
 }
 
 
@@ -84,7 +85,7 @@ bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 {
     if( m_bitmapBase->ReadImageFile( aFullFilename ) )
     {
-        m_bitmapBase->SetPixelSizeIu( 254000.0 / m_bitmapBase->GetPPI() );
+        m_bitmapBase->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
         return true;
     }
 
@@ -96,7 +97,7 @@ bool SCH_BITMAP::ReadImageFile( wxMemoryBuffer& aBuffer )
 {
     if( m_bitmapBase->ReadImageFile( aBuffer ) )
     {
-        m_bitmapBase->SetPixelSizeIu( 254000.0 / m_bitmapBase->GetPPI() );
+        m_bitmapBase->SetPixelSizeIu( (double) schIUScale.MilsToIU( 1000 ) / m_bitmapBase->GetPPI() );
         return true;
     }
 
@@ -127,7 +128,6 @@ void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
 const BOX2I SCH_BITMAP::GetBoundingBox() const
 {
     BOX2I bbox = m_bitmapBase->GetBoundingBox();
-
     bbox.Move( m_pos );
 
     return bbox;
