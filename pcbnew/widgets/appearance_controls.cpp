@@ -58,6 +58,7 @@
 #include <wx/slider.h>
 #include <wx/statline.h>
 #include <wx/textdlg.h>
+#include <wx/bmpbuttn.h>        // needed on wxMSW for OnSetFocus()
 
 
 NET_GRID_TABLE::NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor ) :
