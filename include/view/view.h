@@ -38,8 +38,6 @@
 #include <view/view_overlay.h>
 #include <view/view.h>
 
-class EDA_ITEM;
-
 namespace KIGFX
 {
 class PAINTER;
@@ -712,7 +710,7 @@ public:
     void InitPreview();
 
     void ClearPreview();
-    void AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership = true );
+    void AddToPreview( VIEW_ITEM* aItem, bool aTakeOwnership = true );
 
     void ShowPreview( bool aShow = true );
 
@@ -832,7 +830,7 @@ protected:
     struct UPDATE_DEPTH_VISITOR;
 
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
-    std::vector<EDA_ITEM *>            m_ownedItems;
+    std::vector<VIEW_ITEM *>            m_ownedItems;
 
     ///< Whether to use rendering order modifier or not.
     bool                               m_enableOrderModifier;

@@ -26,7 +26,6 @@
  */
 
 
-#include <eda_item.h>
 #include <layer_ids.h>
 #include <trace_helpers.h>
 
@@ -1315,7 +1314,7 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
     group = m_gal->BeginGroup();
     viewData->setGroup( aLayer, group );
 
-    if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) )
+    if( !m_painter->Draw( aItem, aLayer ) )
         aItem->ViewDraw( aLayer, this ); // Alternative drawing method
 
     m_gal->EndGroup();
@@ -1634,7 +1633,7 @@ void VIEW::ClearPreview()
 
     m_preview->Clear();
 
-    for( EDA_ITEM *item : m_ownedItems )
+    for( VIEW_ITEM* item : m_ownedItems )
         delete item;
 
     m_ownedItems.clear();
@@ -1649,7 +1648,7 @@ void VIEW::InitPreview()
 }
 
 
-void VIEW::AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership )
+void VIEW::AddToPreview( VIEW_ITEM* aItem, bool aTakeOwnership )
 {
    Hide( aItem, false );
    m_preview->Add( aItem );
