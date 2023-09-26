@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-08-10 19:50+0000\n"
-"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
+"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"Last-Translator: Marcel Hecko <maco@blava.net>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v7/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -100,9 +100,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Vytvárajte BVH pre diery a priechody"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Rozlíšenie Keepout pre:"
+msgstr "Chyba vytvorenia kontextu OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:421
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -119,19 +118,19 @@ msgid "Net %s\tNet class %s"
 msgstr "Sieť %s\tTrieda spojov %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:686
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s a %s"
+msgstr "Ploska %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Oblasť pravidla dňa %s"
+msgstr "Rozsah pravidla %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zóny"
+msgstr "Zona %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:465
 msgid "Load OpenGL: board"
@@ -2481,7 +2480,7 @@ msgstr "Strana"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Title Block"
-msgstr "Rohový blok"
+msgstr "Blok pre Nazov"
 
 #: common/dialogs/dialog_page_settings.cpp:473
 #, fuzzy, c-format
@@ -13718,7 +13717,7 @@ msgstr "Priradenia stôp"
 #: pcbnew/dialogs/dialog_export_svg.cpp:93
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:127
 msgid "Export"
-msgstr "Exportovať"
+msgstr "Export"
 
 #: eeschema/menubar.cpp:122
 #, fuzzy
@@ -17153,7 +17152,7 @@ msgstr "Telo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1257
 msgid "Power Symbol"
-msgstr "Symbol napájania"
+msgstr "Symbol Napajania"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 msgid "Import Symbol"
@@ -24688,7 +24687,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr "Impedancia riadená"
+msgstr "Kontrolovana impedancia"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -33310,9 +33309,8 @@ msgid "Assertion failure"
 msgstr "Plocha prierezu:"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Medené vrstvy:"
+msgstr "Medeny pruzok"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -38754,9 +38752,8 @@ msgid "Thickness (mils)"
 msgstr "Hrúbka"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Strata Tg"
+msgstr "Stratový Tangens"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
@@ -41967,9 +41964,8 @@ msgstr "Gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Skončí KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
