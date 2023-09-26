@@ -1217,7 +1217,7 @@ TOOL_ACTION PCB_ACTIONS::showEeschema( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.showEeschema" )
         .Scope( AS_GLOBAL )
         .MenuText( _( "Switch to Schematic Editor" ) )
-        .Tooltip( _( "Open in schematic editor" ) )
+        .Tooltip( _( "Open schematic in schematic editor" ) )
         .Icon( BITMAPS::icon_eeschema_24 ) );
 
 

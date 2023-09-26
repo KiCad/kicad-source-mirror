@@ -166,6 +166,7 @@ public:
     static TOOL_ACTION pickerSubTool;
 
     // Misc
+    static TOOL_ACTION showProjectManager;
     static TOOL_ACTION show3DViewer;
     static TOOL_ACTION showSymbolBrowser;
     static TOOL_ACTION showSymbolEditor;

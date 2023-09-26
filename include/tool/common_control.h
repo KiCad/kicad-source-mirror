@@ -50,6 +50,7 @@ public:
     int ShowLibraryTable( const TOOL_EVENT& aEvent );
 
     int ShowPlayer( const TOOL_EVENT& aEvent );
+    int ShowProjectManager( const TOOL_EVENT& aEvent );
 
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ListHotKeys( const TOOL_EVENT& aEvent );

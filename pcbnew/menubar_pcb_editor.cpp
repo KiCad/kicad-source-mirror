@@ -390,6 +390,9 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     toolsMenu->Add( PCB_ACTIONS::showEeschema );
 
+    if( !Kiface().IsSingle() )
+        toolsMenu->Add( ACTIONS::showProjectManager );
+
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );

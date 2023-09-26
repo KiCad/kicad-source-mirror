@@ -271,6 +271,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     toolsMenu->Add( EE_ACTIONS::showPcbNew );
 
+    if( !Kiface().IsSingle() )
+        toolsMenu->Add( ACTIONS::showProjectManager );
+
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showSymbolEditor );
     toolsMenu->Add( EE_ACTIONS::updateSymbols );

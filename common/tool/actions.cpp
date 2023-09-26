@@ -841,6 +841,13 @@ TOOL_ACTION ACTIONS::pickerSubTool( TOOL_ACTION_ARGS()
         .Name( "common.InteractivePicker.pickerSubTool" )
         .Scope( AS_GLOBAL ) );
 
+TOOL_ACTION ACTIONS::showProjectManager( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showProjectManager" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to Project Manager" ) )
+        .Tooltip( _( "Show project window" ) )
+        .Icon( BITMAPS::icon_kicad_24 ) );
+
 TOOL_ACTION ACTIONS::show3DViewer( TOOL_ACTION_ARGS()
         .Name( "common.Control.show3DViewer" )
         .Scope( AS_GLOBAL )

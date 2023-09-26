@@ -143,6 +143,28 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 }
 
 
+void showFrame( EDA_BASE_FRAME* aFrame )
+{
+    // Needed on Windows, other platforms do not use it, but it creates no issue
+    if( aFrame->IsIconized() )
+        aFrame->Iconize( false );
+
+    aFrame->Raise();
+
+    // Raising the window does not set the focus on Linux.  This should work on
+    // any platform.
+    if( wxWindow::FindFocus() != aFrame )
+        aFrame->SetFocus();
+
+    // If the player is currently blocked, focus the user attention on the correct window
+    if( wxWindow* blocking_win = aFrame->Kiway().GetBlockingDialog() )
+    {
+        blocking_win->Raise();
+        blocking_win->SetFocus();
+    }
+}
+
+
 int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 {
     FRAME_T       playerType = aEvent.Parameter<FRAME_T>();
@@ -151,22 +173,25 @@ int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     // editor can be null if Player() fails:
     wxCHECK_MSG( editor != nullptr, 0, wxT( "Cannot open/create the editor frame" ) );
 
-    // Needed on Windows, other platforms do not use it, but it creates no issue
-    if( editor->IsIconized() )
-        editor->Iconize( false );
+    showFrame( editor );
 
-    editor->Raise();
+    return 0;
+}
 
-    // Raising the window does not set the focus on Linux.  This should work on
-    // any platform.
-    if( wxWindow::FindFocus() != editor )
-        editor->SetFocus();
 
-    // If the player is currently blocked, focus the user attention on the correct window
-    if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
+int COMMON_CONTROL::ShowProjectManager( const TOOL_EVENT& aEvent )
+{
+    // Note: dynamic_cast doesn't work over the Kiway() on MacOS.  We have to use static_cast
+    // here.
+    EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_frame->Kiway().GetTop() );
+
+    if( top && top->GetFrameType() == KICAD_MAIN_FRAME_T )
     {
-        blocking_win->Raise();
-        blocking_win->SetFocus();
+        showFrame( top );
+    }
+    else
+    {
+        wxMessageDialog( m_frame, _( "Can not switch to project manager in stand-alone mode." ) );
     }
 
     return 0;
@@ -313,6 +338,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );
     Go( &COMMON_CONTROL::ShowPlayer,         ACTIONS::showFootprintEditor.MakeEvent() );
+    Go( &COMMON_CONTROL::ShowProjectManager, ACTIONS::showProjectManager.MakeEvent() );
 
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::gettingStarted.MakeEvent() );
     Go( &COMMON_CONTROL::ShowHelp,           ACTIONS::help.MakeEvent() );
