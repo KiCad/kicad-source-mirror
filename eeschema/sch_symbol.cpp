@@ -177,9 +177,6 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_onBoard     = aSymbol.m_onBoard;
     m_DNP         = aSymbol.m_DNP;
 
-    if( aSymbol.m_part )
-        SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part.get() ) );
-
     const_cast<KIID&>( m_Uuid ) = aSymbol.m_Uuid;
 
     m_transform = aSymbol.m_transform;
@@ -190,6 +187,18 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     // Re-parent the fields, which before this had aSymbol as parent
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
+
+    m_pins.clear();
+
+    // Copy (and re-parent) the pins
+    for( const std::unique_ptr<SCH_PIN>& pin : aSymbol.m_pins )
+    {
+        m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
+        m_pins.back()->SetParent( this );
+    }
+
+    if( aSymbol.m_part )
+        SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part ) );
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;
@@ -403,8 +412,7 @@ void SCH_SYMBOL::UpdatePins()
         else
         {
             // This is a pin that was not found in the symbol, so create a new one.
-            pin = new SCH_PIN( libPin, this );
-            m_pins.emplace_back( pin );
+            pin = m_pins.emplace_back( std::make_unique<SCH_PIN>( SCH_PIN( libPin, this ) ) ).get();
         }
 
         m_pinMap[ libPin ] = pin;
