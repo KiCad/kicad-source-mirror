@@ -386,9 +386,9 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const char* 
         for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
             currpoint = aPolygon.CPoint( ii );
-            strbuf = fmt::format( " (xy {.3f} {.3f})",
-                      ( currpoint.x - offsetX ) / PL_IU_PER_MM,
-                      ( currpoint.y - offsetY ) / PL_IU_PER_MM );
+            strbuf = fmt::format( " (xy {:.3f} {:.3f})",
+                      currpoint.x - offsetX / PL_IU_PER_MM,
+                      currpoint.y - offsetY / PL_IU_PER_MM );
             m_Data += strbuf;
 
             if( jj++ > 4 )
@@ -400,8 +400,8 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const char* 
 
         // Close polygon
         strbuf = fmt::format( " (xy {:.3f} {:.3f}) )\n",
-                  ( startpoint.x - offsetX ) / PL_IU_PER_MM,
-                  ( startpoint.y - offsetY ) / PL_IU_PER_MM );
+                  startpoint.x - offsetX / PL_IU_PER_MM,
+                  startpoint.y - offsetY / PL_IU_PER_MM );
         m_Data += strbuf;
         break;
 
