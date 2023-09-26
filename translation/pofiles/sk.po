@@ -1,23 +1,23 @@
 # Slavko <linux@slavino.sk>, 2010, 2011, 2012, 2014.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # Jakub Janek <shaman.janek@gmail.com>, 2020, 2022, 2023.
-# Marcel Hecko <maco@blava.net>, 2022.
+# Marcel Hecko <maco@blava.net>, 2022, 2023.
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-08-10 19:50+0000\n"
-"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"Last-Translator: Marcel Hecko <maco@blava.net>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -102,9 +102,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Vytvárajte BVH pre diery a priechody"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:389
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Rozlíšenie Keepout pre:"
+msgstr "Chyba vytvorenia kontextu OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:420
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -121,19 +120,19 @@ msgid "Net %s\tNet class %s"
 msgstr "Sieť %s\tTrieda spojov %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:682
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s\t"
-msgstr "%s a %s"
+msgstr "Ploska %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area %s\t"
-msgstr "Oblasť pravidla dňa %s"
+msgstr "Rozsah pravidla %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
-msgstr "Zóny"
+msgstr "Zona %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:464
 msgid "Load OpenGL: board"
@@ -302,21 +301,18 @@ msgstr "Vzhľad"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:518
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Prepnite na editor PCB"
+msgstr "Prepnite do editoru DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:519
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Nastavenia filtra"
+msgstr "Pouzi nastavenia DPS zobrazenia"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:586
-#, fuzzy
 msgid "legacy colors"
-msgstr "Použiť farby:"
+msgstr "povodne farby"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:725
 msgid "3D Image File Name"
@@ -537,9 +533,8 @@ msgid "Show 3D models for 'Through hole' type footprints"
 msgstr "Prepnúť 3D modely pre typ komponentov 'drôtovej technológie (THT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Zobraziť 3D modely SMD"
+msgstr "Zobraziť 3D modely suciastok SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
 #, fuzzy
@@ -547,9 +542,8 @@ msgid "Show 3D models for 'Surface mount' type footprints"
 msgstr "Prepnúť 3D modely pre typ komponentov 'povrchovej technológie (SMT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Načítanie 3D modelov"
+msgstr "Zobrazit Neurcite 3D Modely"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
 #, fuzzy
@@ -557,19 +551,16 @@ msgid "Show 3D models for 'unspecified' type footprints"
 msgstr "Prepínajte 3D modely s atribútom „Surface mount“"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Prepínajte 3D modely s atribútom „Virtual“"
+msgstr "Zobrazit 3D modely ktore nie su v POS subore"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Prepínajte 3D modely s atribútom „Virtual“"
+msgstr "Zobrazit 3D modely aj ked nie su najdene v .pos subore"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Načítanie 3D modelov"
+msgstr "Zobrazit 3D modely oznacene ako DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:346
 #, fuzzy
@@ -601,9 +592,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Zobraziť / skryť správcu vzhľadu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
-#, fuzzy
 msgid "Board Body"
-msgstr "Telo dosky:"
+msgstr "Telo dosky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
 msgid "Show board body"
@@ -628,19 +618,16 @@ msgid "Show back copper / surface finish color"
 msgstr "Farba medenej / povrchovej úpravy ..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Adhesive"
-msgstr "B. Lepidlo"
+msgstr "Lepidlo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Show adhesive"
 msgstr "Zobraziť vrstvy lepidla"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Spájkovacia pasta:"
+msgstr "Spájkovacia pasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 #, fuzzy
@@ -652,36 +639,32 @@ msgid "F.Silkscreen"
 msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Predná hodvábna obrazovka"
+msgstr "Zobrazit prednu sietotlac"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Silkscreen"
 msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Zadná hodvábna obrazovka"
+msgstr "Zobrazit zadnu sietotlac"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Predná spájkovacia maska"
+msgstr "Zobraz prednu spájkovaciu masku"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Zadná spájkovacia maska"
+msgstr "Zobraz zadnu spajkovaciu pastu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 #, fuzzy
@@ -707,18 +690,16 @@ msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Zobraziť vrstvy ECO"
+msgstr "Zobraziť vrstvu ECO1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Zobraziť vrstvy ECO"
+msgstr "Zobraziť vrstvu ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 #, fuzzy
@@ -2670,7 +2651,7 @@ msgstr "Strana"
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Title Block"
-msgstr "Rohový blok"
+msgstr "Blok pre Nazov"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, fuzzy, c-format
@@ -12730,7 +12711,7 @@ msgstr "Výstupný priečinok:"
 #: pcbnew/dialogs/dialog_export_svg.cpp:90
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:127
 msgid "Export"
-msgstr "Exportovať"
+msgstr "Export"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:139
 #, fuzzy
@@ -16914,9 +16895,8 @@ msgid "Simulation"
 msgstr "Simulácia"
 
 #: eeschema/sch_symbol.cpp:1736
-#, fuzzy
 msgid "BOM"
-msgstr "Kusovník ..."
+msgstr "Rozpiska"
 
 #: eeschema/sch_symbol.cpp:1748 eeschema/sch_text.cpp:421
 #: eeschema/sch_textbox.cpp:449
@@ -19126,7 +19106,7 @@ msgstr "Telo"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1278
 msgid "Power Symbol"
-msgstr "Symbol napájania"
+msgstr "Symbol Napajania"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1285
 msgid "Datasheet"
@@ -27901,7 +27881,7 @@ msgstr "32"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:39
 msgid "Impedance controlled"
-msgstr "Impedancia riadená"
+msgstr "Kontrolovana impedancia"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid ""
@@ -36778,9 +36758,8 @@ msgid "Assertion failure"
 msgstr "Plocha prierezu:"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Medené vrstvy:"
+msgstr "Medeny pruzok"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -42806,9 +42785,8 @@ msgid "Thickness (mils)"
 msgstr "Hrúbka"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
-#, fuzzy
 msgid "Loss Tangent"
-msgstr "Strata Tg"
+msgstr "Stratový Tangens"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
@@ -46130,9 +46108,8 @@ msgstr "Manažér projektu"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Skončí KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
