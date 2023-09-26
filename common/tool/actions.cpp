@@ -469,6 +469,20 @@ TOOL_ACTION ACTIONS::zoomTool( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::zoom_area )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION ACTIONS::zoomUndo( TOOL_ACTION_ARGS()
+        .Name( "common.Control.undoZoom" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Undo Last Zoom" ) )
+        .Tooltip( _( "Return zoom to level prior to last zoom action" ) )
+        .Icon( BITMAPS::undo ) );
+
+TOOL_ACTION ACTIONS::zoomRedo( TOOL_ACTION_ARGS()
+        .Name( "common.Control.redoZoom" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Redo Last Zoom" ) )
+        .Tooltip( _( "Return zoom to level prior to last zoom undo" ) )
+        .Icon( BITMAPS::redo ) );
+
 TOOL_ACTION ACTIONS::zoomPreset( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomPreset" )
         .Scope( AS_GLOBAL )

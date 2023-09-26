@@ -246,13 +246,38 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        if(      aEvent.IsAction( &ACTIONS::zoomInCenter ) )
+        if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
+        {
             plotTab->GetPlotWin()->ZoomIn();
+        }
         else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
+        {
             plotTab->GetPlotWin()->ZoomOut();
+        }
         else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
-            plotTab->GetPlotWin()->Fit();
+        {
+            wxCommandEvent dummy;
+            plotTab->GetPlotWin()->OnFit( dummy );
+        }
     }
+
+    return 0;
+}
+
+
+int SIMULATOR_CONTROL::UndoZoom( const TOOL_EVENT& aEvent )
+{
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
+        plotTab->GetPlotWin()->ZoomUndo();
+
+    return 0;
+}
+
+
+int SIMULATOR_CONTROL::RedoZoom( const TOOL_EVENT& aEvent )
+{
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
+        plotTab->GetPlotWin()->ZoomRedo();
 
     return 0;
 }
@@ -492,6 +517,8 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInCenter.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomOutCenter.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomFitScreen.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::UndoZoom,               ACTIONS::zoomUndo.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::RedoZoom,               ACTIONS::zoomRedo.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleGrid,             ACTIONS::toggleGrid.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleLegend,           EE_ACTIONS::toggleLegend.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleDottedSecondary,  EE_ACTIONS::toggleDottedSecondary.MakeEvent() );

@@ -663,6 +663,20 @@ void SIMULATOR_FRAME::setupUIConditions()
                 return dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) != nullptr;
             };
 
+    auto haveZoomUndo =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetPlotWin()->UndoZoomStackSize() > 0;
+            };
+
+    auto haveZoomRedo =
+    [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetPlotWin()->RedoZoomStackSize() > 0;
+            };
+
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
@@ -673,6 +687,8 @@ void SIMULATOR_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::exportPlotAsPNG,       ENABLE( havePlot ) );
     mgr->SetConditions( EE_ACTIONS::exportPlotAsCSV,       ENABLE( havePlot ) );
 
+    mgr->SetConditions( ACTIONS::zoomUndo,                 ENABLE( haveZoomUndo ) );
+    mgr->SetConditions( ACTIONS::zoomRedo,                 ENABLE( haveZoomRedo ) );
     mgr->SetConditions( EE_ACTIONS::toggleGrid,            CHECK( showGridCondition ) );
     mgr->SetConditions( EE_ACTIONS::toggleLegend,          CHECK( showLegendCondition ) );
     mgr->SetConditions( EE_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );

@@ -7,6 +7,7 @@
 // Created:         21/07/2003
 // Last edit:       05/08/2016
 // Copyright:       (c) David Schalig, Davide Rondini
+// Copyright        (c) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -50,10 +51,6 @@
  *  Jose Luis Blanco, Val Greene.<br>
  */
 
- /**
-  * @file mathplot.h
-  */
-
 
 // this definition uses windows dll to export function.
 // WXDLLIMPEXP_MATHPLOT definition definition changed to WXDLLIMPEXP_MATHPLOT
@@ -66,7 +63,6 @@
 #define WXDLLIMPEXP_DATA_MATHPLOT( type ) type
 #endif
 
-#include <vector>
 
 #include <wx/defs.h>
 #include <wx/menu.h>
@@ -79,9 +75,10 @@
 #include <wx/print.h>
 #include <wx/image.h>
 
-
+#include <vector>
 #include <deque>
-
+#include <stack>
+#include <array>
 #include <algorithm>
 
 // For memory leak debug
@@ -116,6 +113,8 @@ class WXDLLIMPEXP_MATHPLOT mpPrintout;
 enum
 {
     mpID_FIT = 2000,    // !< Fit view to match bounding box of all layers
+    mpID_ZOOM_UNDO,
+    mpID_ZOOM_REDO,
     mpID_ZOOM_IN,       // !< Zoom into view at clickposition / window center
     mpID_ZOOM_OUT,      // !< Zoom out
     mpID_CENTER,        // !< Center view on click position
@@ -1229,25 +1228,35 @@ public:
     void LockY( bool aLock ) { m_yLocked = aLock; }
     bool GetYLocked() const { return m_yLocked; }
 
+    void ZoomUndo();
+    void ZoomRedo();
+    int UndoZoomStackSize() const { return m_undoZoomStack.size(); }
+    int RedoZoomStackSize() const { return m_redoZoomStack.size(); }
+
     void AdjustLimitedView();
 
-protected:
-    void    OnPaint( wxPaintEvent& event );             // !< Paint handler, will plot all attached layers
-    void    OnSize( wxSizeEvent& event );               // !< Size handler, will update scroll bar sizes
+    void OnFit( wxCommandEvent& event );
+    void OnCenter( wxCommandEvent& event );
 
-    void    OnShowPopupMenu( wxMouseEvent& event );     // !< Mouse handler, will show context menu
-    void    OnMouseMiddleDown( wxMouseEvent& event );   // !< Mouse handler, for detecting when the user
+protected:
+    void pushZoomUndo( const std::array<double, 4>& aZoom );
+
+    void OnPaint( wxPaintEvent& event );             // !< Paint handler, will plot all attached layers
+    void OnSize( wxSizeEvent& event );               // !< Size handler, will update scroll bar sizes
+
+    void OnShowPopupMenu( wxMouseEvent& event );     // !< Mouse handler, will show context menu
+    void OnMouseMiddleDown( wxMouseEvent& event );   // !< Mouse handler, for detecting when the user
 
     // !< drags with the middle button or just "clicks" for the menu
-    void    OnCenter( wxCommandEvent& event );              // !< Context menu handler
-    void    OnFit( wxCommandEvent& event );                 // !< Context menu handler
-    void    OnZoomIn( wxCommandEvent& event );              // !< Context menu handler
-    void    OnZoomOut( wxCommandEvent& event );             // !< Context menu handler
-    void    OnMouseWheel( wxMouseEvent& event );            // !< Mouse handler for the wheel
-    void    OnMagnify( wxMouseEvent& event );               // !< Pinch zoom handler
-    void    OnMouseMove( wxMouseEvent& event );             // !< Mouse handler for mouse motion (for pan)
-    void    OnMouseLeftDown( wxMouseEvent& event );         // !< Mouse left click (for rect zoom)
-    void    OnMouseLeftRelease( wxMouseEvent& event );      // !< Mouse left click (for rect zoom)
+    void onZoomIn( wxCommandEvent& event );          // !< Context menu handler
+    void onZoomOut( wxCommandEvent& event );         // !< Context menu handler
+    void onZoomUndo( wxCommandEvent& event );        // !< Context menu handler
+    void onZoomRedo( wxCommandEvent& event );        // !< Context menu handler
+    void onMouseWheel( wxMouseEvent& event );        // !< Mouse handler for the wheel
+    void onMagnify( wxMouseEvent& event );           // !< Pinch zoom handler
+    void onMouseMove( wxMouseEvent& event );         // !< Mouse handler for mouse motion (for pan)
+    void onMouseLeftDown( wxMouseEvent& event );     // !< Mouse left click (for rect zoom)
+    void onMouseLeftRelease( wxMouseEvent& event );  // !< Mouse left click (for rect zoom)
 
     bool CheckXLimits( double& desiredMax, double& desiredMin ) const
     {
@@ -1319,6 +1328,9 @@ protected:
     mpInfoLayer* m_movingInfoLayer;          // !< For moving info layers over the window area
     bool m_zooming;
     wxRect m_zoomRect;
+    std::stack<std::array<double, 4>> m_undoZoomStack;
+    std::stack<std::array<double, 4>> m_redoZoomStack;
+
     DECLARE_DYNAMIC_CLASS( mpWindow )
     DECLARE_EVENT_TABLE()
 };

@@ -112,6 +112,10 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, tool );
 
+    viewMenu->Add( ACTIONS::zoomUndo );
+    viewMenu->Add( ACTIONS::zoomRedo );
+
+    viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
     viewMenu->Add( ACTIONS::zoomOutCenter );
     viewMenu->Add( ACTIONS::zoomFitScreen );

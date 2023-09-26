@@ -7,6 +7,7 @@
 // Created:         21/07/2003
 // Last edit:       2023
 // Copyright:       (c) David Schalig, Davide Rondini
+// Copyright        (c) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1317,16 +1318,18 @@ EVT_SIZE( mpWindow::OnSize )
 
 EVT_MIDDLE_DOWN( mpWindow::OnMouseMiddleDown )  // JLB
 EVT_RIGHT_UP( mpWindow::OnShowPopupMenu )
-EVT_MOUSEWHEEL( mpWindow::OnMouseWheel )        // JLB
-EVT_MAGNIFY( mpWindow::OnMagnify )
-EVT_MOTION( mpWindow::OnMouseMove )             // JLB
-EVT_LEFT_DOWN( mpWindow::OnMouseLeftDown )
-EVT_LEFT_UP( mpWindow::OnMouseLeftRelease )
+EVT_MOUSEWHEEL( mpWindow::onMouseWheel )        // JLB
+EVT_MAGNIFY( mpWindow::onMagnify )
+EVT_MOTION( mpWindow::onMouseMove )             // JLB
+EVT_LEFT_DOWN( mpWindow::onMouseLeftDown )
+EVT_LEFT_UP( mpWindow::onMouseLeftRelease )
 
 EVT_MENU( mpID_CENTER, mpWindow::OnCenter )
 EVT_MENU( mpID_FIT, mpWindow::OnFit )
-EVT_MENU( mpID_ZOOM_IN, mpWindow::OnZoomIn )
-EVT_MENU( mpID_ZOOM_OUT, mpWindow::OnZoomOut )
+EVT_MENU( mpID_ZOOM_IN, mpWindow::onZoomIn )
+EVT_MENU( mpID_ZOOM_OUT, mpWindow::onZoomOut )
+EVT_MENU( mpID_ZOOM_UNDO, mpWindow::onZoomUndo )
+EVT_MENU( mpID_ZOOM_REDO, mpWindow::onZoomRedo )
 END_EVENT_TABLE()
 
 mpWindow::mpWindow() :
@@ -1394,10 +1397,13 @@ mpWindow::mpWindow( wxWindow* parent, wxWindowID id ) :
     // Set margins to 0
     m_marginTop = 0; m_marginRight = 0; m_marginBottom = 0; m_marginLeft = 0;
 
-    m_popmenu.Append( mpID_CENTER, _( "Center on Cursor" ), _( "Center plot view to this position" ) );
-    m_popmenu.Append( mpID_FIT, _( "Fit on Screen" ), _( "Set plot view to show all items" ) );
+    m_popmenu.Append( mpID_ZOOM_UNDO, _( "Undo Last Zoom" ), _( "Return zoom to level prior to last zoom action" ) );
+    m_popmenu.Append( mpID_ZOOM_REDO, _( "Redo Last Zoom" ), _( "Return zoom to level prior to last zoom undo" ) );
+    m_popmenu.AppendSeparator();
     m_popmenu.Append( mpID_ZOOM_IN, _( "Zoom In" ), _( "Zoom in plot view." ) );
     m_popmenu.Append( mpID_ZOOM_OUT, _( "Zoom Out" ), _( "Zoom out plot view." ) );
+    m_popmenu.Append( mpID_CENTER, _( "Center on Cursor" ), _( "Center plot view to this position" ) );
+    m_popmenu.Append( mpID_FIT, _( "Fit on Screen" ), _( "Set plot view to show all items" ) );
 
     m_layers.clear();
     SetBackgroundColour( *wxWHITE );
@@ -1443,7 +1449,7 @@ void mpWindow::OnMouseMiddleDown( wxMouseEvent& event )
 }
 
 
-void mpWindow::OnMagnify( wxMouseEvent& event )
+void mpWindow::onMagnify( wxMouseEvent& event )
 {
     if( !m_enableMouseNavigation )
     {
@@ -1463,7 +1469,7 @@ void mpWindow::OnMagnify( wxMouseEvent& event )
 
 // Process mouse wheel events
 // JLB
-void mpWindow::OnMouseWheel( wxMouseEvent& event )
+void mpWindow::onMouseWheel( wxMouseEvent& event )
 {
     if( !m_enableMouseNavigation )
     {
@@ -1526,7 +1532,7 @@ void mpWindow::OnMouseWheel( wxMouseEvent& event )
 
 // If the user "drags" with the right button pressed, do "pan"
 // JLB
-void mpWindow::OnMouseMove( wxMouseEvent& event )
+void mpWindow::onMouseMove( wxMouseEvent& event )
 {
     if( !m_enableMouseNavigation )
     {
@@ -1614,7 +1620,7 @@ void mpWindow::OnMouseMove( wxMouseEvent& event )
 }
 
 
-void mpWindow::OnMouseLeftDown( wxMouseEvent& event )
+void mpWindow::onMouseLeftDown( wxMouseEvent& event )
 {
     m_mouseLClick.x = event.GetX();
     m_mouseLClick.y = event.GetY();
@@ -1626,7 +1632,7 @@ void mpWindow::OnMouseLeftDown( wxMouseEvent& event )
 }
 
 
-void mpWindow::OnMouseLeftRelease( wxMouseEvent& event )
+void mpWindow::onMouseLeftRelease( wxMouseEvent& event )
 {
     wxPoint release( event.GetX(), event.GetY() );
     wxPoint press( m_mouseLClick.x, m_mouseLClick.y );
@@ -1782,6 +1788,8 @@ void mpWindow::ZoomIn( const wxPoint& centerPoint )
 
 void mpWindow::ZoomIn( const wxPoint& centerPoint, double zoomFactor )
 {
+    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+
     wxPoint c( centerPoint );
 
     if( c == wxDefaultPosition )
@@ -1843,6 +1851,8 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint )
 
 void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
 {
+    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+
     wxPoint c( centerPoint );
 
     if( c == wxDefaultPosition )
@@ -1887,6 +1897,8 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
 
 void mpWindow::ZoomRect( wxPoint p0, wxPoint p1 )
 {
+    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+
     // Compute the 2 corners in graph coordinates:
     double  p0x = p2x( p0.x );
     double  p0y = p2y( p0.y );
@@ -1910,16 +1922,61 @@ void mpWindow::ZoomRect( wxPoint p0, wxPoint p1 )
 }
 
 
+void mpWindow::pushZoomUndo( const std::array<double, 4>& aZoom )
+{
+    m_undoZoomStack.push( aZoom );
+
+    while( !m_redoZoomStack.empty() )
+        m_redoZoomStack.pop();
+}
+
+
+void mpWindow::ZoomUndo()
+{
+    if( m_undoZoomStack.size() )
+    {
+        m_redoZoomStack.push( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+
+        std::array<double, 4> zoom = m_undoZoomStack.top();
+        m_undoZoomStack.pop();
+
+        Fit( zoom[0], zoom[1], zoom[2], zoom[3] );
+        AdjustLimitedView();
+    }
+}
+
+
+void mpWindow::ZoomRedo()
+{
+    if( m_redoZoomStack.size() )
+    {
+        m_undoZoomStack.push( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+
+        std::array<double, 4> zoom = m_redoZoomStack.top();
+        m_redoZoomStack.pop();
+
+        Fit( zoom[0], zoom[1], zoom[2], zoom[3] );
+        AdjustLimitedView();
+    }
+}
+
+
 void mpWindow::OnShowPopupMenu( wxMouseEvent& event )
 {
     m_clickedX  = event.GetX();
     m_clickedY  = event.GetY();
+
+    m_popmenu.Enable( mpID_ZOOM_UNDO, !m_undoZoomStack.empty() );
+    m_popmenu.Enable( mpID_ZOOM_REDO, !m_redoZoomStack.empty() );
+
     PopupMenu( &m_popmenu, event.GetX(), event.GetY() );
 }
 
 
 void mpWindow::OnFit( wxCommandEvent& WXUNUSED( event ) )
 {
+    pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
+
     Fit();
 }
 
@@ -1933,15 +1990,27 @@ void mpWindow::OnCenter( wxCommandEvent& WXUNUSED( event ) )
 }
 
 
-void mpWindow::OnZoomIn( wxCommandEvent& WXUNUSED( event ) )
+void mpWindow::onZoomIn( wxCommandEvent& WXUNUSED( event ) )
 {
     ZoomIn( wxPoint( m_mouseMClick.x, m_mouseMClick.y ) );
 }
 
 
-void mpWindow::OnZoomOut( wxCommandEvent& WXUNUSED( event ) )
+void mpWindow::onZoomOut( wxCommandEvent& WXUNUSED( event ) )
 {
     ZoomOut();
+}
+
+
+void mpWindow::onZoomUndo( wxCommandEvent& WXUNUSED( event ) )
+{
+    ZoomUndo();
+}
+
+
+void mpWindow::onZoomRedo( wxCommandEvent& WXUNUSED( event ) )
+{
+    ZoomRedo();
 }
 
 

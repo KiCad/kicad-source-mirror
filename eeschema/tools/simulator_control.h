@@ -61,6 +61,8 @@ public:
     int Close( const TOOL_EVENT& aEvent );
 
     int Zoom( const TOOL_EVENT& aEvent );
+    int UndoZoom( const TOOL_EVENT& aEvent );
+    int RedoZoom( const TOOL_EVENT& aEvent );
     int ToggleGrid( const TOOL_EVENT& aEvent );
     int ToggleLegend( const TOOL_EVENT& aEvent );
     int ToggleDottedSecondary( const TOOL_EVENT& aEvent );
