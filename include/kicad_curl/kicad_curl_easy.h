@@ -33,6 +33,7 @@
  * and including kicad_curl.h could be needed in a few sources
  */
 
+#include <kicommon.h>
 #include <functional>
 #include <memory>
 #include <ostream>
@@ -63,7 +64,7 @@ typedef std::function<int( size_t, size_t, size_t, size_t )> TRANSFER_CALLBACK;
 struct CURL_PROGRESS;
 
 
-class KICAD_CURL_EASY
+class KICOMMON_API KICAD_CURL_EASY
 {
 public:
     KICAD_CURL_EASY();

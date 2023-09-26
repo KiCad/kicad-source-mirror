@@ -20,6 +20,7 @@
 #ifndef PATHS_H
 #define PATHS_H
 
+#include <kicommon.h>
 #include <wx/filename.h>
 #include <wx/string.h>
 
@@ -32,7 +33,7 @@
 /**
  * Helper class to centralize the paths used throughout kicad
  */
-class PATHS
+class KICOMMON_API PATHS
 {
 public:
 

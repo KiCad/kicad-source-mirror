@@ -39,7 +39,6 @@
 #include <ki_exception.h>   // THROW_IO_ERROR
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
-#include <pgm_base.h>
 
 #include <kiplatform/policy.h>
 #include <policy_keys.h>
@@ -156,7 +155,7 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     }
 
     wxPlatformInfo platformInfo;
-    wxString application( Pgm().App().GetAppName() );
+    wxString application( wxS( "KiCad" ) );
     wxString version( GetBuildVersion() );
     wxString platform = wxS( "(" ) + wxGetOsDescription() + wxS( ";" ) + GetPlatformGetBitnessName();
 

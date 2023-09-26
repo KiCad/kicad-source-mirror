@@ -24,6 +24,8 @@
 #ifndef ADVANCED_CFG__H
 #define ADVANCED_CFG__H
 
+#include <kicommon.h>
+
 class wxConfigBase;
 
 /**
@@ -58,7 +60,7 @@ class wxConfigBase;
  *
  */
 
-class ADVANCED_CFG
+class KICOMMON_API ADVANCED_CFG
 {
 public:
     /**

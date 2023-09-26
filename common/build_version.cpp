@@ -28,6 +28,7 @@
 #include <boost/version.hpp>
 #include <kiplatform/app.h>
 #include <font/version_info.h>
+#include <build_version.h>
 
 #include <tuple>
 

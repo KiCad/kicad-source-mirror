@@ -27,6 +27,7 @@
 #ifndef KICAD_BUILD_VERSION_H
 #define KICAD_BUILD_VERSION_H
 
+#include <kicommon.h>
 #include <tuple>
 
 class wxString;
@@ -37,12 +38,12 @@ class wxString;
  *
  * @return the full version string
  */
-wxString GetBuildVersion();
+KICOMMON_API wxString GetBuildVersion();
 
 /**
  * @return the bitness name string (like "Little endian")
  */
-wxString GetPlatformGetBitnessName();
+KICOMMON_API wxString GetPlatformGetBitnessName();
 
 /**
  * Get the semantic version string for KiCad defined inside the KiCadVersion.cmake file in
@@ -50,7 +51,7 @@ wxString GetPlatformGetBitnessName();
  *
  * @return the semantic version string
  */
-wxString GetSemanticVersion();
+KICOMMON_API wxString GetSemanticVersion();
 
 /**
  * Get only the major and minor version in a string major.minor.
@@ -58,7 +59,7 @@ wxString GetSemanticVersion();
  *
  * @return the major and minor version as a string
  */
-wxString GetMajorMinorVersion();
+KICOMMON_API wxString GetMajorMinorVersion();
 
 /**
  * Get the major, minor and patch version in a string major.minor.patch
@@ -66,34 +67,34 @@ wxString GetMajorMinorVersion();
  *
  * @return the major.minor.patch version as a string
  */
-wxString GetMajorMinorPatchVersion();
+KICOMMON_API wxString GetMajorMinorPatchVersion();
 
 /**
  * Get the build date as a string.
  *
  * @return the build date string
  */
-wxString GetBuildDate();
+KICOMMON_API wxString GetBuildDate();
 
 /**
  * Get the commit hash as a string.
  *
  * @return the commit hash string
  */
-wxString GetCommitHash();
+KICOMMON_API wxString GetCommitHash();
 
 /**
  * Get the build version numbers as a tuple
  *
  * @return A tuple with three ints for major/minor/patch revisions
  */
-const std::tuple<int,int,int>& GetMajorMinorPatchTuple();
+KICOMMON_API const std::tuple<int, int, int>& GetMajorMinorPatchTuple();
 
 /**
  * Check if the build is meant to be nightly
  * @return true if running nightly build
  */
-bool IsNightlyVersion();
+KICOMMON_API bool IsNightlyVersion();
 
 /**
  * Create a version info string for bug reports and the about dialog
@@ -102,6 +103,7 @@ bool IsNightlyVersion();
  * @param aHtml = true to use a minimal HTML format, false for plan text
  * @return the version info string
  */
-wxString GetVersionInfoData( const wxString& aTitle, bool aHtml = false, bool aBrief = false );
+KICOMMON_API wxString GetVersionInfoData( const wxString& aTitle, bool aHtml = false,
+                                          bool aBrief = false );
 
 #endif  // KICAD_BUILD_VERSION_H

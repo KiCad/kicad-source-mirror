@@ -41,6 +41,7 @@
     #endif
 #endif
 
+#include <kicommon.h>
 #include <curl/curl.h>
 #include <string>
 
@@ -56,7 +57,7 @@
 /**
  * Simple wrapper class to call curl_global_init and curl_global_cleanup for KiCad.
  */
-class KICAD_CURL
+class KICOMMON_API KICAD_CURL
 {
 public:
     /**

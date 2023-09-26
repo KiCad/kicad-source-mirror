@@ -92,10 +92,15 @@ set( KICOMMON_SRCS
     jobs/job_sym_export_svg.cpp
     jobs/job_sym_upgrade.cpp
 
+    kicad_curl/kicad_curl.cpp
+    kicad_curl/kicad_curl_easy.cpp
+
+    advanced_config.cpp
     asset_archive.cpp
     array_axis.cpp
     array_options.cpp
     bitmap_info.cpp
+    build_version.cpp
     config_params.cpp
     confirm.cpp
     eda_units.cpp
@@ -106,6 +111,7 @@ set( KICOMMON_SRCS
     locale_io.cpp
     lset.cpp
     markup_parser.cpp
+    paths.cpp
     richio.cpp
     string_utils.cpp
     trace_helpers.cpp
@@ -122,6 +128,7 @@ target_link_libraries( kicommon
     kiplatform
     nlohmann_json
     fmt::fmt
+    CURL::libcurl
     ${wxWidgets_LIBRARIES}
 
     # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
@@ -407,7 +414,6 @@ set( COMMON_SRCS
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
     jobs/job_dispatcher.cpp
-    advanced_config.cpp
     background_jobs_monitor.cpp
     base_screen.cpp
     bin_mod.cpp
@@ -415,7 +421,6 @@ set( COMMON_SRCS
     bitmap_base.cpp
     bitmap_store.cpp
     board_printout.cpp
-    build_version.cpp
     cli_progress_reporter.cpp
     commit.cpp
     common.cpp
@@ -465,7 +470,6 @@ set( COMMON_SRCS
     notifications_manager.cpp
     origin_transforms.cpp
     page_info.cpp
-    paths.cpp
     plugin_file_desc.cpp
     printout.cpp
     project.cpp
@@ -501,11 +505,6 @@ if( TRUE OR NOT USE_KIWAY_DLLS )
         set_property(SOURCE pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
     endif()
 endif()
-
-list( APPEND COMMON_SRCS
-    kicad_curl/kicad_curl.cpp
-    kicad_curl/kicad_curl_easy.cpp
-)
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
@@ -605,7 +604,6 @@ target_link_libraries( common
     # Database support needs these two
     nanodbc # for now; maybe hoist out of common
     Boost::locale
-    CURL::libcurl
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}
     # outline font support
