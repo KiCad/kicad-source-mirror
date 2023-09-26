@@ -33,6 +33,7 @@
 
 #include <math/matrix3x3.h>
 
+#include <gal/gal.h>
 #include <gal/color4d.h>
 #include <gal/cursors.h>
 #include <gal/definitions.h>
@@ -56,7 +57,7 @@ namespace KIGFX
  * this layer. So zooming is handled here as well.
  *
  */
-class GAL : GAL_DISPLAY_OPTIONS_OBSERVER
+class GAL_API GAL : GAL_DISPLAY_OPTIONS_OBSERVER
 {
     // These friend declarations allow us to hide routines that should not be called.  The
     // corresponding RAII objects must be used instead.

@@ -27,6 +27,7 @@
 #ifndef __VIEW_OVERLAY_H
 #define __VIEW_OVERLAY_H
 
+#include <gal/gal.h>
 #include <view/view_item.h>
 
 #include <vector>
@@ -40,7 +41,7 @@ namespace KIGFX
 {
 class VIEW;
 
-class VIEW_OVERLAY : public VIEW_ITEM
+class GAL_API VIEW_OVERLAY : public VIEW_ITEM
 {
 public:
 

@@ -27,11 +27,12 @@
 #ifndef GL_CONTEXT_MANAGER_H
 #define GL_CONTEXT_MANAGER_H
 
+#include <gal/gal.h>
 #include <wx/glcanvas.h>
 #include <mutex>
 #include <map>
 
-class GL_CONTEXT_MANAGER
+class GAL_API GL_CONTEXT_MANAGER
 {
 public:
     /**

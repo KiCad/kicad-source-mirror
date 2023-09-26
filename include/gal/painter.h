@@ -34,6 +34,7 @@
 
 #include <wx/dc.h>
 
+#include <gal/gal.h>
 #include <gal/color4d.h>
 #include <render_settings.h>
 #include <layer_ids.h>
@@ -54,7 +55,7 @@ class VIEW_ITEM;
  * of the objects as simple container objects in DLL/DSOs.  PAINTER is an abstract layer
  * because every module (pcbnew, eeschema, etc.) has to draw different kinds of objects.
  */
-class PAINTER
+class GAL_API PAINTER
 {
 public:
     /**

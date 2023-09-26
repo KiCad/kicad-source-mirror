@@ -27,6 +27,7 @@
 #ifndef __VIEW_H
 #define __VIEW_H
 
+#include <gal/gal.h>
 #include <vector>
 #include <set>
 #include <unordered_map>
@@ -63,7 +64,7 @@ class VIEW_RTREE;
  * final stage by the GAL.  The VIEW class also provides fast methods for finding all visible
  * objects that are within a given rectangular area, useful for object selection/hit testing.
  */
-class VIEW
+class GAL_API VIEW
 {
 public:
     friend class VIEW_ITEM;

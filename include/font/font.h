@@ -27,6 +27,7 @@
 #ifndef FONT_H_
 #define FONT_H_
 
+#include <gal/gal.h>
 #include <iostream>
 #include <map>
 #include <algorithm>
@@ -89,7 +90,7 @@ inline bool IsSubscript( TEXT_STYLE_FLAGS aFlags )
 
 namespace KIFONT
 {
-class METRICS
+class GAL_API METRICS
 {
 public:
     /**
@@ -126,7 +127,7 @@ public:
 /**
  * FONT is an abstract base class for both outline and stroke fonts
  */
-class FONT
+class GAL_API FONT
 {
 public:
     explicit FONT();

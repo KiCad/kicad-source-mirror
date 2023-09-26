@@ -30,6 +30,7 @@
 #ifndef __ZOOM_CONTROLLER_H
 #define __ZOOM_CONTROLLER_H
 
+#include <gal/gal.h>
 #include <chrono>
 #include <memory>
 
@@ -39,7 +40,7 @@ namespace KIGFX
 /**
  * Handle the response of the zoom scale to external inputs.
  */
-class ZOOM_CONTROLLER
+class GAL_API ZOOM_CONTROLLER
 {
 public:
     virtual ~ZOOM_CONTROLLER() = default;
@@ -58,7 +59,7 @@ public:
 /**
  * Class that zooms faster if scroll events happen very close together.
  */
-class ACCELERATING_ZOOM_CONTROLLER : public ZOOM_CONTROLLER
+class GAL_API ACCELERATING_ZOOM_CONTROLLER : public ZOOM_CONTROLLER
 {
 public:
     ///< The type of the acceleration timeout.
@@ -138,7 +139,7 @@ private:
  * A CONSTANT_ZOOM_CONTROLLER that zooms by a fixed factor based only on the magnitude of the scroll
  * wheel rotation.
  */
-class CONSTANT_ZOOM_CONTROLLER : public ZOOM_CONTROLLER
+class GAL_API CONSTANT_ZOOM_CONTROLLER : public ZOOM_CONTROLLER
 {
 public:
     /**

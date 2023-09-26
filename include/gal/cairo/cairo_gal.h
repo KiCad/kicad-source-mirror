@@ -34,6 +34,7 @@
 
 #include <cairo.h>
 
+#include <gal/gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <wx/dcbuffer.h>
 
@@ -54,7 +55,7 @@ namespace KIGFX
 {
 class CAIRO_COMPOSITOR;
 
-class CAIRO_GAL_BASE : public GAL
+class GAL_API CAIRO_GAL_BASE : public GAL
 {
 public:
     CAIRO_GAL_BASE( GAL_DISPLAY_OPTIONS& aDisplayOptions );
@@ -372,7 +373,7 @@ protected:
 };
 
 
-class CAIRO_GAL : public CAIRO_GAL_BASE, public wxWindow
+class GAL_API CAIRO_GAL : public CAIRO_GAL_BASE, public wxWindow
 {
 public:
     /**

@@ -24,9 +24,10 @@
 #ifndef CALLBACK_GAL_H
 #define CALLBACK_GAL_H
 
+#include <gal/gal.h>
 #include <gal/graphics_abstraction_layer.h>
 
-class CALLBACK_GAL : public KIGFX::GAL
+class GAL_API CALLBACK_GAL : public KIGFX::GAL
 {
 public:
     CALLBACK_GAL( KIGFX::GAL_DISPLAY_OPTIONS& aDisplayOptions,

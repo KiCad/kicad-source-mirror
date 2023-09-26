@@ -30,6 +30,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <gal/gal.h>
 #include <plugins/3dapi/xv3d_types.h>
 #include <wx/gdicmn.h>  // for wxSize
 #include <vector>
@@ -74,7 +75,7 @@ enum class CAMERA_INTERPOLATION
  *
  *  It must be derived by other classes to implement a real camera object.
  */
-class CAMERA
+class GAL_API CAMERA
 {
 public:
     static const float DEFAULT_MIN_ZOOM;

@@ -19,6 +19,8 @@
 #ifndef GAL_PRINT_H
 #define GAL_PRINT_H
 
+#include <gal/gal.h>
+
 class wxDC;
 
 namespace KIGFX {
@@ -26,7 +28,7 @@ class GAL;
 class GAL_DISPLAY_OPTIONS;
 
 
-class PRINT_CONTEXT
+class GAL_API PRINT_CONTEXT
 {
 public:
     virtual ~PRINT_CONTEXT() {}
@@ -38,7 +40,7 @@ public:
 /**
  * @brief Wrapper around GAL to provide information needed for printing.
  */
-class GAL_PRINT
+class GAL_API GAL_PRINT
 {
 public:
     static std::unique_ptr<GAL_PRINT> Create( GAL_DISPLAY_OPTIONS& aOptions, wxDC* aDC );

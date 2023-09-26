@@ -32,6 +32,7 @@
 #ifndef VIEW_GROUP_H_
 #define VIEW_GROUP_H_
 
+#include <gal/gal.h>
 #include <view/view_item.h>
 #include <deque>
 
@@ -43,7 +44,7 @@ namespace KIGFX
  * VIEW_GROUP does not take over ownership of the held items. The main purpose of this class is
  * to group items and draw them on a single layer (in particular the overlay).
  */
-class VIEW_GROUP : public VIEW_ITEM
+class GAL_API VIEW_GROUP : public VIEW_ITEM
 {
 public:
     VIEW_GROUP( VIEW* aView = nullptr );

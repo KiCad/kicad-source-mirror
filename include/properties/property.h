@@ -121,6 +121,8 @@ private:
     FuncType m_func;
 };
 
+#pragma warning( push )
+#pragma warning( disable : 5266 ) // 'const' qualifier on return type has no effect
 
 template<typename Owner, typename T, typename Base = Owner>
 class METHOD
@@ -174,6 +176,7 @@ public:
     METHOD() = delete;
 };
 
+#pragma warning( pop )
 
 class PROPERTY_BASE
 {

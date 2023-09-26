@@ -29,6 +29,7 @@
 
 #include <view/view_controls.h>
 #include <wx/glcanvas.h>
+#include <gal/gal.h>
 
 
 /**
@@ -36,7 +37,7 @@
  *
  * This is a small wrapper class to enable HiDPI/Retina support for wxGLCanvas.
  */
-class HIDPI_GL_CANVAS : public wxGLCanvas
+class GAL_API HIDPI_GL_CANVAS : public wxGLCanvas
 {
 public:
     // wxGLCanvas constructor

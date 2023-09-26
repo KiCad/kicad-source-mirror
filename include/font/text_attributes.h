@@ -24,6 +24,7 @@
 #include <math/vector2d.h>
 #include <gal/color4d.h>
 #include <geometry/eda_angle.h>
+#include <gal/gal.h>
 
 
 namespace KIFONT
@@ -56,7 +57,7 @@ enum GR_TEXT_V_ALIGN_T
 #define TO_VJUSTIFY( x ) static_cast<GR_TEXT_V_ALIGN_T>( x )
 
 
-class TEXT_ATTRIBUTES
+class GAL_API TEXT_ATTRIBUTES
 {
 public:
     TEXT_ATTRIBUTES( KIFONT::FONT* aFont = nullptr );
@@ -87,7 +88,7 @@ public:
 };
 
 
-extern std::ostream& operator<<( std::ostream& aStream, const TEXT_ATTRIBUTES& aAttributes );
+extern GAL_API std::ostream& operator<<( std::ostream& aStream, const TEXT_ATTRIBUTES& aAttributes );
 
 
 template<>

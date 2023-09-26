@@ -27,11 +27,14 @@
 #ifndef __VIEW_ITEM_H
 #define __VIEW_ITEM_H
 
+#include <gal/gal.h>
 #include <vector>
 #include <bitset>
 #include <math/box2.h>
 #include <inspectable.h>
 
+#pragma warning( push )
+#pragma warning( disable : 4275 )
 
 namespace KIGFX
 {
@@ -73,7 +76,7 @@ enum VIEW_VISIBILITY_FLAGS {
  * VIEW_ITEM objects are never owned by a #VIEW. A single VIEW_ITEM can belong to any number of
  * static VIEWs, but only one dynamic VIEW due to storage of only one VIEW reference.
  */
-class VIEW_ITEM : public INSPECTABLE
+class GAL_API VIEW_ITEM : public INSPECTABLE
 {
 public:
     VIEW_ITEM() :
@@ -160,5 +163,7 @@ private:
 };
 
 } // namespace KIGFX
+
+#pragma warning( pop )
 
 #endif

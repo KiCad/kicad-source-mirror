@@ -30,6 +30,7 @@
 #define OPENGLGAL_H_
 
 // GAL imports
+#include <gal/gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/gal_display_options.h>
 #include <gal/opengl/shader.h>
@@ -66,7 +67,7 @@ class GL_BITMAP_CACHE;
  * and quads. The purpose is to provide a fast graphics interface, that takes advantage of modern
  * graphics card GPUs. All methods here benefit thus from the hardware acceleration.
  */
-class OPENGL_GAL : public GAL, public HIDPI_GL_CANVAS
+class GAL_API OPENGL_GAL : public GAL, public HIDPI_GL_CANVAS
 {
 public:
     /**

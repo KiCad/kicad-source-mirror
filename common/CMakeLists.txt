@@ -381,15 +381,6 @@ set( PLUGINS_EASYEDAPRO_SRCS
     plugins/easyedapro/easyedapro_import_utils.cpp
     )
 
-set( FONT_SRCS
-    font/font.cpp
-    font/glyph.cpp
-    font/stroke_font.cpp
-	font/outline_font.cpp
-	font/outline_decomposer.cpp
-    font/text_attributes.cpp
-	)
-
 set( COMMON_IMPORT_GFX_SRCS
     import_gfx/graphics_import_mgr.cpp
     import_gfx/graphics_importer.cpp
@@ -510,10 +501,6 @@ set( COMMON_SRCS
     ${COMMON_SRCS}
 
     origin_viewitem.cpp
-
-    view/view.cpp
-    view/view_item.cpp
-    view/view_group.cpp
 
     tool/action_manager.cpp
     tool/action_menu.cpp

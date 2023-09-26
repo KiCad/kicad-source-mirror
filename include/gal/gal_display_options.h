@@ -24,6 +24,7 @@
 #ifndef GAL_DISPLAY_OPTIONS_H__
 #define GAL_DISPLAY_OPTIONS_H__
 
+#include <gal/gal.h>
 #include <gal/dpi_scaling.h>
 #include <core/observable.h>
 
@@ -32,6 +33,8 @@ struct WINDOW_SETTINGS;
 class wxString;
 class wxWindow;
 
+#pragma warning( push )
+#pragma warning( disable : 4275 )
 
 namespace KIGFX
 {
@@ -68,7 +71,7 @@ namespace KIGFX
 
     class GAL_DISPLAY_OPTIONS;
 
-    class GAL_DISPLAY_OPTIONS_OBSERVER
+    class GAL_API GAL_DISPLAY_OPTIONS_OBSERVER
     {
     public:
         virtual void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) = 0;
@@ -77,7 +80,7 @@ namespace KIGFX
         virtual ~GAL_DISPLAY_OPTIONS_OBSERVER() {}
     };
 
-    class GAL_DISPLAY_OPTIONS : public UTIL::OBSERVABLE<GAL_DISPLAY_OPTIONS_OBSERVER>
+    class GAL_API GAL_DISPLAY_OPTIONS : public UTIL::OBSERVABLE<GAL_DISPLAY_OPTIONS_OBSERVER>
     {
     public:
         GAL_DISPLAY_OPTIONS();
@@ -112,7 +115,10 @@ namespace KIGFX
 
         void NotifyChanged();
     };
-}
+
+} // namespace KIGFX
+
+#pragma warning( pop )
 
 #endif
 

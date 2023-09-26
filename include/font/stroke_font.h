@@ -30,6 +30,7 @@
 #ifndef STROKE_FONT_H
 #define STROKE_FONT_H
 
+#include <gal/gal.h>
 #include <map>
 #include <deque>
 #include <algorithm>
@@ -49,7 +50,7 @@ namespace KIFONT
  *
  * A stroke font is composed of lines.
  */
-class STROKE_FONT : public FONT
+class GAL_API STROKE_FONT : public FONT
 {
 public:
     STROKE_FONT();

@@ -1,4 +1,14 @@
 
+
+set( FONT_SRCS
+    ../font/font.cpp
+    ../font/glyph.cpp
+    ../font/stroke_font.cpp
+	../font/outline_font.cpp
+	../font/outline_decomposer.cpp
+    ../font/text_attributes.cpp
+	)
+
 set( GAL_SRCS
     # Common part
     ../callback_gal.cpp
@@ -10,9 +20,14 @@ set( GAL_SRCS
     hidpi_gl_canvas.cpp
     hidpi_gl_3D_canvas.cpp
 
+    ../view/view.cpp
     ../view/view_controls.cpp
+    ../view/view_group.cpp
     ../view/view_overlay.cpp
     ../view/zoom_controller.cpp
+    ../view/view_item.cpp
+
+    ${FONT_SRCS}
 
     3d/camera.cpp
 
@@ -40,7 +55,7 @@ set( GAL_SRCS
     cairo/cairo_print.cpp
     )
 
-add_library( gal STATIC ${GAL_SRCS} )
+add_library( gal SHARED ${GAL_SRCS} )
 
 if( WIN32 )
     # we need the gdiplus library for cairo printing on windows
@@ -49,7 +64,6 @@ endif()
 
 target_link_libraries( gal
     kicommon
-    common
     kimath
     kiplatform
     nlohmann_json
@@ -63,6 +77,42 @@ target_link_libraries( gal
     ${HarfBuzz_LIBRARIES}
     ${Fontconfig_LIBRARIES}
 )
+
+target_compile_definitions( gal PRIVATE GAL_DLL=1 )
+
+install( TARGETS gal
+    RUNTIME DESTINATION ${KICAD_LIB}
+    LIBRARY DESTINATION ${KICAD_LIB}
+    COMPONENT binary
+    )
+
+include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+include( ${KICAD_CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
+create_git_version_header(${CMAKE_SOURCE_DIR})
+
+# Extract the major and minor build version as a string
+string( REGEX MATCH
+        "([0-9]+)\\.([0-9]+)\\.([0-9]+)"
+        KICAD_MAJOR_MINOR_PATCH_VERSION
+        "${KICAD_VERSION}"
+    )
+
+set_target_properties( gal PROPERTIES
+    OUTPUT_NAME     gal
+    SOVERSION      ${KICAD_MAJOR_MINOR_PATCH_VERSION}
+    )
+
+if( APPLE )
+    # puts library into the main kicad.app bundle in build tree
+    set_target_properties( gal PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_LIB_DIR}"
+        INSTALL_NAME_DIR "${OSX_BUNDLE_BUILD_LIB_DIR}"
+    )
+    set_target_properties( gal PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks" )
+    set_target_properties( gal PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
+endif()
+
 function( add_shader outTarget inFile shaderName )
     set(outCppName "${shaderName}.cpp")
     set(outHeaderName "${shaderName}.h")

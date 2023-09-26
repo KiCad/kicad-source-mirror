@@ -119,6 +119,7 @@ principle should be easily implemented by adapting the current STL containers.
 // TODO: wrapper of BASE_SET (see std::bitset<PCB_LAYER_ID_COUNT> BASE_SET;)
 
 #define KICOMMON_API
+#define GAL_API
 
 
 // header files that must be wrapped

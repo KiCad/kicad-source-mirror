@@ -25,12 +25,15 @@
 #ifndef GLYPH_H
 #define GLYPH_H
 
+#include <gal/gal.h>
 #include <memory>
 #include <math/box2.h>
 #include <geometry/shape_poly_set.h>
 #include <wx/debug.h>
 #include "../../libs/kimath/include/geometry/eda_angle.h"
 
+#pragma warning( push )
+#pragma warning( disable : 4275 )
 
 namespace KIFONT
 {
@@ -42,7 +45,7 @@ constexpr int GLYPH_RESOLUTION  = 288;
 constexpr double GLYPH_SIZE_SCALER = GLYPH_DEFAULT_DPI / (double) GLYPH_RESOLUTION;
 
 
-class GLYPH
+class GAL_API GLYPH
 {
 public:
     virtual ~GLYPH()
@@ -55,7 +58,7 @@ public:
 };
 
 
-class OUTLINE_GLYPH : public GLYPH, public SHAPE_POLY_SET
+class GAL_API OUTLINE_GLYPH : public GLYPH, public SHAPE_POLY_SET
 {
 public:
     OUTLINE_GLYPH() :
@@ -80,7 +83,7 @@ public:
 };
 
 
-class STROKE_GLYPH : public GLYPH, public std::vector<std::vector<VECTOR2D>>
+class GAL_API STROKE_GLYPH : public GLYPH, public std::vector<std::vector<VECTOR2D>>
 {
 public:
     STROKE_GLYPH()
@@ -113,5 +116,7 @@ typedef std::vector<BOX2D>        GLYPH_BOUNDING_BOX_LIST;
 
 
 } // namespace KIFONT
+
+#pragma warning( pop )
 
 #endif  // GLYPH_H

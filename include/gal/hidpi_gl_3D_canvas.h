@@ -25,6 +25,7 @@
 #ifndef HIDPI_GL_3D_CANVAS_H
 #define HIDPI_GL_3D_CANVAS_H
 
+#include <gal/gal.h>
 #include <atomic>
 #include <gal/3d/camera.h>
 #include <gal/hidpi_gl_canvas.h>
@@ -35,7 +36,7 @@
  *  Provides basic 3D controls ( zoom, rotate, translate, ... )
  *
  */
-class HIDPI_GL_3D_CANVAS : public HIDPI_GL_CANVAS
+class GAL_API HIDPI_GL_3D_CANVAS : public HIDPI_GL_CANVAS
 {
 public:
     // wxGLCanvas constructor

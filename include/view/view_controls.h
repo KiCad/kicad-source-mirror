@@ -31,6 +31,7 @@
 
 #include <math/box2.h>
 #include <settings/common_settings.h>
+#include <gal/gal.h>
 
 namespace KIGFX
 {
@@ -38,7 +39,7 @@ class VIEW;
 
 
 ///< Structure to keep VIEW_CONTROLS settings for easy store/restore operations
-struct VC_SETTINGS
+struct GAL_API VC_SETTINGS
 {
     VC_SETTINGS()
     {
@@ -130,7 +131,7 @@ struct VC_SETTINGS
  * An interface for classes handling user events controlling the view behavior such as
  * zooming, panning, mouse grab, etc.
  */
-class VIEW_CONTROLS
+class GAL_API VIEW_CONTROLS
 {
 public:
     VIEW_CONTROLS( VIEW* aView ) :
