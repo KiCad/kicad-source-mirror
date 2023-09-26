@@ -42,6 +42,7 @@
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
+#include <footprint_chooser_frame.h>
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
@@ -112,8 +113,10 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
 
         case FRAME_FOOTPRINT_VIEWER:
-        case FRAME_FOOTPRINT_VIEWER_MODAL:
-            return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
+            return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent );
+
+        case FRAME_FOOTPRINT_CHOOSER:
+            return new FOOTPRINT_CHOOSER_FRAME( aKiway, aParent );
 
         case FRAME_FOOTPRINT_WIZARD:
             return new FOOTPRINT_WIZARD_FRAME( aKiway, aParent, FRAME_T( aClassId ) );

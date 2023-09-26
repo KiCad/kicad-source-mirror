@@ -1244,7 +1244,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
                         UnescapeString( Value().GetText() ) );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
-        || aFrame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
+        || aFrame->IsType( FRAME_FOOTPRINT_CHOOSER )
         || aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
     {
         size_t     padCount = GetPadCount( DO_NOT_INCLUDE_NPTH );

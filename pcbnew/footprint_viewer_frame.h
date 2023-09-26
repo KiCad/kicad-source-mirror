@@ -94,7 +94,7 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
 protected:
-    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     MAGNETIC_SETTINGS m_magneticItems;
 

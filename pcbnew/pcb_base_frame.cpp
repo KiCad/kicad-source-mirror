@@ -92,7 +92,8 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     m_spaceMouse = nullptr;
 
     // Ensure m_canvasType is up to date, to save it in config
-    m_canvasType = GetCanvas()->GetBackend();
+    if( GetCanvas() )
+        m_canvasType = GetCanvas()->GetBackend();
 
     delete m_pcb;
     m_pcb = nullptr;
@@ -992,7 +993,7 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
         return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     case FRAME_FOOTPRINT_VIEWER:
-    case FRAME_FOOTPRINT_VIEWER_MODAL:
+    case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:

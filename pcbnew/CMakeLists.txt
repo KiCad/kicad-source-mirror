@@ -37,7 +37,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_board_statistics_base.cpp
     dialogs/dialog_board_reannotate.cpp
     dialogs/dialog_board_reannotate_base.cpp
-    dialogs/dialog_choose_footprint.cpp
     dialogs/dialog_cleanup_graphics.cpp
     dialogs/dialog_cleanup_graphics_base.cpp
     dialogs/dialog_cleanup_tracks_and_vias.cpp
@@ -50,10 +49,11 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_dimension_properties_base.cpp
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
-    dialogs/dialog_footprint_checker.cpp
-    dialogs/dialog_footprint_checker_base.cpp
     dialogs/dialog_footprint_associations.cpp
     dialogs/dialog_footprint_associations_base.cpp
+    dialogs/dialog_footprint_checker.cpp
+    dialogs/dialog_footprint_checker_base.cpp
+    dialogs/dialog_footprint_chooser.cpp
     dialogs/dialog_footprint_properties.cpp
     dialogs/dialog_footprint_properties_base.cpp
     dialogs/dialog_footprint_properties_fp_editor.cpp
@@ -287,6 +287,7 @@ set( PCBNEW_CLASS_SRCS
     footprint_editor_utils.cpp
     footprint_editor_settings.cpp
     fp_tree_synchronizing_adapter.cpp
+    footprint_chooser_frame.cpp
     footprint_edit_frame.cpp
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
@@ -356,6 +357,7 @@ set( PCBNEW_CLASS_SRCS
 
     widgets/appearance_controls.cpp
     widgets/appearance_controls_base.cpp
+    widgets/panel_footprint_chooser.cpp
     widgets/panel_selection_filter.cpp
     widgets/panel_selection_filter_base.cpp
     widgets/pcb_properties_panel.cpp

@@ -30,15 +30,13 @@ using namespace std::placeholders;
 #include <footprint.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
-#include <dialog_choose_footprint.h>
+#include <dialog_footprint_chooser.h>
 #include <dialog_get_footprint_by_name.h>
 #include <eda_list_dialog.h>
 #include <footprint_edit_frame.h>
-#include <footprint_info_impl.h>
 #include <footprint_tree_pane.h>
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
-#include <core/ignore.h>
 #include <io_mgr.h>
 #include <string_utils.h>
 #include <kiway.h>
@@ -51,8 +49,6 @@ using namespace std::placeholders;
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialog_pad_properties.h>
-
-#include "fp_tree_model_adapter.h"
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -181,120 +177,25 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 }
 
 
-wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
+FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibrary( LIB_ID aPreselect )
 {
-    // Close the current non-modal Lib browser if opened, and open a new one, in "modal" mode:
-    FOOTPRINT_VIEWER_FRAME* viewer;
-    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
-
-    if( viewer )
-    {
-        viewer->Destroy();
-        // Destroy() does not immediately delete the viewer, if some events are pending.
-        // (for this reason delete operator cannot be used blindly with "top level" windows)
-        // so gives a slice of time to delete the viewer frame.
-        // This is especially important in OpenGL mode to avoid recreating context before
-        // the old one is deleted.
-        wxSafeYield();
-    }
-
-    SetFocus();
-
-    // Creates the modal Lib browser:
-    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, this );
-
-    wxString    fpid;
-    ignore_unused( viewer->ShowModal( &fpid, this ) );
-
-    viewer->Destroy();
-
-    return fpid;
-}
-
-
-FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
-{
-    FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
     wxString        footprintName;
     LIB_ID          fpid;
     FOOTPRINT*      footprint = nullptr;
 
     static wxString lastComponentName;
 
-    // Load footprint files:
-    WX_PROGRESS_REPORTER* progressReporter = new WX_PROGRESS_REPORTER( this,
-                                                    _( "Loading Footprint Libraries" ), 3 );
-    GFootprintList.ReadFootprintFiles( fpTable, nullptr, progressReporter );
-    bool cancel = progressReporter->WasCancelled();
-
-    // Force immediate deletion of the WX_PROGRESS_REPORTER.  Do not use Destroy(), or use
-    // Destroy() followed by wxSafeYield() because on Windows, APP_PROGRESS_DIALOG and
-    // WX_PROGRESS_REPORTER have some side effects on the event loop manager.  For instance, a
-    // subsequent call to ShowModal() or ShowQuasiModal() for a dialog following the use of a
-    // WX_PROGRESS_REPORTER results in incorrect modal or quasi modal behavior.
-    delete progressReporter;
-
-    if( cancel )
-        return nullptr;
-
-    if( GFootprintList.GetErrorCount() )
-        GFootprintList.DisplayErrors( this );
-
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> ptr = FP_TREE_MODEL_ADAPTER::Create( this, fpTable );
-    FP_TREE_MODEL_ADAPTER* adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( ptr.get() );
-
-    std::vector<LIB_TREE_ITEM*> historyInfos;
-
-    for( const wxString& item : s_FootprintHistoryList )
-    {
-        LIB_TREE_ITEM* fp_info = GFootprintList.GetFootprintInfo( item );
-
-        // this can be null, for example, if the footprint has been deleted from a library.
-        if( fp_info != nullptr )
-            historyInfos.push_back( fp_info );
-    }
-
-    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                           historyInfos, false, true );
-
-    if( aPreselect.IsValid() )
-        adapter->SetPreselectNode( aPreselect, 0 );
-    else if( historyInfos.size() )
-        adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
-
-    adapter->AddLibraries( this );
-
-    wxString title;
-    title.Printf( _( "Choose Footprint (%d items loaded)" ), adapter->GetItemCount() );
-
-    DIALOG_CHOOSE_FOOTPRINT dialog( this, title, ptr );
+    DIALOG_FOOTPRINT_CHOOSER dialog( this, aPreselect, s_FootprintHistoryList );
 
     if( dialog.ShowQuasiModal() == wxID_CANCEL )
         return nullptr;
 
-    // Save any changes to column widths, etc.
-    adapter->SaveSettings();
+    fpid = dialog.GetSelectedLibId();
 
-    if( dialog.IsExternalBrowserSelected() )
-    {
-        // SelectFootprintFromLibBrowser() returns the "full" footprint name, i.e.
-        // <lib_name>/<footprint name> or LIB_ID format "lib_name:fp_name:rev#"
-        footprintName = SelectFootprintFromLibBrowser();
-
-        if( footprintName.IsEmpty() )  // Cancel command
-            return nullptr;
-        else
-            fpid.Parse( footprintName );
-    }
+    if( !fpid.IsValid() )
+        return nullptr;
     else
-    {
-        fpid = dialog.GetSelectedLibId();
-
-        if( !fpid.IsValid() )
-            return nullptr;
-        else
-            footprintName = fpid.Format().wx_str();
-    }
+        footprintName = fpid.Format().wx_str();
 
     try
     {

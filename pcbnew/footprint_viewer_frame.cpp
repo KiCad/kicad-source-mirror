@@ -106,29 +106,12 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, PCB_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-/*
- * Note: FOOTPRINT_VIEWER_FRAME can be created in "modal mode", or as a usual frame.
- */
-#define PARENT_STYLE   ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT )
-#define MODAL_STYLE    ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP )
-#define NONMODAL_STYLE ( KICAD_DEFAULT_DRAWFRAME_STYLE )
-
-
-FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                                                FRAME_T aFrameType ) :
-    PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize,
-                    aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? ( aParent ? PARENT_STYLE : MODAL_STYLE )
-                                                               : NONMODAL_STYLE,
-                    aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? FOOTPRINT_VIEWER_FRAME_NAME_MODAL
-                                                               : FOOTPRINT_VIEWER_FRAME_NAME ),
+FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+    PCB_BASE_FRAME( aKiway, aParent, FRAME_FOOTPRINT_VIEWER, _( "Footprint Library Browser" ),
+                    wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
+                    FOOTPRINT_VIEWER_FRAME_NAME ),
    m_comp( LIB_ID(), wxEmptyString, wxEmptyString, KIID_PATH(), {} )
 {
-    wxASSERT( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL || aFrameType == FRAME_FOOTPRINT_VIEWER );
-
-    if( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL )
-        SetModal( true );
-
     m_aboutTitle = _HKI( "KiCad Footprint Library Viewer" );
 
     // Force the items to always snap
@@ -1067,13 +1050,13 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
                 if( WX_INFOBAR* infobar = GetInfoBar() )
                 {
                     button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                                    _( "Manage symbol libraries" ),
-                                                                    wxEmptyString );
-                    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent & aEvent )>(
-                            [=]( wxHyperlinkEvent& aEvent )
-                            {
-                                InvokePcbLibTableEditor( &Kiway(), this );
-                            } ) );
+                                                  _( "Manage footprint libraries" ),
+                                                  wxEmptyString );
+                    button->Bind( wxEVT_COMMAND_HYPERLINK,
+                                  [=]( wxHyperlinkEvent& aEvent )
+                                  {
+                                      InvokePcbLibTableEditor( &Kiway(), this );
+                                  } );
                 }
             }
 

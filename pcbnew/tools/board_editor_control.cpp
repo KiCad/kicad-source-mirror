@@ -1086,7 +1086,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             if( !fp )
             {
                 // Pick the footprint to be placed
-                fp = m_frame->SelectFootprintFromLibTree();
+                fp = m_frame->SelectFootprintFromLibrary();
 
                 if( fp == nullptr )
                     continue;

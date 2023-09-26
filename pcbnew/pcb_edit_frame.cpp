@@ -1054,7 +1054,7 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( fpViewer && !fpViewer->Close() )   // Can close footprint viewer?
             return false;
 
-        fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, false );
+        fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
 
         if( fpViewer && !fpViewer->Close() )   // Can close modal footprint viewer?
             return false;

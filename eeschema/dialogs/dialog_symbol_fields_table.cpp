@@ -110,8 +110,7 @@ protected:
             // pick a footprint using the footprint picker.
             wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
                                                        FOOTPRINT_FIELD );
-            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true,
-                                                         m_dlg );
+            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg );
 
             if( frame->ShowModal( &fpid, m_dlg ) )
                 m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );

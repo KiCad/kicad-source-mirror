@@ -290,7 +290,7 @@ public:
      *
      * @param aPreslect if valid, the #LIB_ID to select (otherwise the global history is used).
      */
-    FOOTPRINT* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID() );
+    FOOTPRINT* SelectFootprintFromLibrary( LIB_ID aPreselect = LIB_ID() );
 
     /**
      * Add the given footprint to the board.
@@ -298,13 +298,6 @@ public:
      * @param aDC is the current Device Context, to draw the new footprint (can be NULL ).
      */
     virtual void AddFootprintToBoard( FOOTPRINT* aFootprint );
-
-    /**
-     * Launch the footprint viewer to select the name of a footprint to load.
-     *
-     * @return the selected footprint name or an empty string if no selection was made.
-     */
-    wxString SelectFootprintFromLibBrowser();
 
     /**
      * Create the entire board ratsnest.

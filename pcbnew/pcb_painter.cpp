@@ -88,7 +88,7 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_PAINTER::viewer_settings()
         return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     case FRAME_FOOTPRINT_VIEWER:
-    case FRAME_FOOTPRINT_VIEWER_MODAL:
+    case FRAME_FOOTPRINT_CHOOSER:
     case FRAME_FOOTPRINT_PREVIEW:
     case FRAME_CVPCB:
     case FRAME_CVPCB_DISPLAY:

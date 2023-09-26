@@ -267,7 +267,7 @@ protected:
         if( fpid.IsEmpty() )
             fpid = m_preselect;
 
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, m_dlg );
+        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg );
 
         if( !m_symbolNetlist.empty() )
         {

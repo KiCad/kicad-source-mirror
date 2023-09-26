@@ -150,8 +150,7 @@ bool PCB_SELECTION_TOOL::Init()
 {
     PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
 
-    if( frame && ( frame->IsType( FRAME_FOOTPRINT_VIEWER )
-                   || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL ) ) )
+    if( frame && frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
     {
         frame->AddStandardSubMenus( m_menu );
         return true;

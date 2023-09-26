@@ -67,7 +67,6 @@ int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
     EDA_3D_VIEWER_FRAME* draw3DFrame = frame()->CreateAndShow3D_Frame();
 
     if( frame()->IsType( FRAME_FOOTPRINT_VIEWER )
-     || frame()->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
      || frame()->IsType( FRAME_FOOTPRINT_WIZARD ) )
     {
         // A stronger version of Raise() which promotes the window to its parent's level.

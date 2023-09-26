@@ -220,7 +220,7 @@ void DIALOG_FIELD_PROPERTIES::OnTextValueSelectButtonClick( wxCommandEvent& aEve
     else
         fpid = m_TextCtrl->GetValue();
 
-    if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true ) )
+    if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true ) )
     {
         if( frame->ShowModal( &fpid, this ) )
         {

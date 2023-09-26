@@ -122,45 +122,51 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.SetFlags( wxAUI_MGR_DEFAULT );
 
-    CreateStatusBar( 8 )->SetDoubleBuffered( true );
+    if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
+    {
+        CreateStatusBar( 8 )->SetDoubleBuffered( true );
 
     // set the size of the status bar subwindows:
 
-    wxWindow* stsbar = GetStatusBar();
-    int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+        wxWindow* stsbar = GetStatusBar();
+        int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
 
-    int dims[] = {
+        int dims[] =
+        {
+            // remainder of status bar on far left is set to a default or whatever is left over.
+            -1,
 
-        // remainder of status bar on far left is set to a default or whatever is left over.
-        -1,
+            // When using GetTextSize() remember the width of character '1' is not the same
+            // as the width of '0' unless the font is fixed width, and it usually won't be.
 
-        // When using GetTextSize() remember the width of character '1' is not the same
-        // as the width of '0' unless the font is fixed width, and it usually won't be.
+            // zoom:
+            KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x,
 
-        // zoom:
-        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + spacer,
+            // cursor coords
+            KIUI::GetTextSize( wxT( "X 1234.1234  Y 1234.1234" ), stsbar ).x,
 
-        // cursor coords
-        KIUI::GetTextSize( wxT( "X 1234.1234  Y 1234.1234" ), stsbar ).x + spacer,
+            // delta distances
+            KIUI::GetTextSize( wxT( "dx 1234.1234  dy 1234.1234  dist 1234.1234" ), stsbar ).x,
 
-        // delta distances
-        KIUI::GetTextSize( wxT( "dx 1234.1234  dy 1234.1234  dist 1234.1234" ), stsbar ).x + spacer,
+            // grid size
+            KIUI::GetTextSize( wxT( "grid X 1234.1234  Y 1234.1234" ), stsbar ).x,
 
-        // grid size
-        KIUI::GetTextSize( wxT( "grid X 1234.1234  Y 1234.1234" ), stsbar ).x + spacer,
+            // units display, Inches is bigger than mm
+            KIUI::GetTextSize( _( "Inches" ), stsbar ).x,
 
-        // units display, Inches is bigger than mm
-        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + spacer,
+            // Size for the "Current Tool" panel; longest string from SetTool()
+            KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x,
 
-        // Size for the "Current Tool" panel; longest string from SetTool()
-        KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + spacer,
+            // constraint mode
+            KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x
+        };
 
-        // constraint mode
-        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x + spacer
-    };
+        for( size_t ii = 1; ii < arrayDim( dims ); ii++ )
+            dims[ii] += spacer;
 
-    SetStatusWidths( arrayDim( dims ), dims );
-    stsbar->SetFont( KIUI::GetStatusFont( this ) );
+        SetStatusWidths( arrayDim( dims ), dims );
+        stsbar->SetFont( KIUI::GetStatusFont( this ) );
+    }
 
     // Create child subwindows.
     GetClientSize( &m_frameSize.x, &m_frameSize.y );

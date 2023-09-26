@@ -394,8 +394,6 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
         msg += _( ": OK" );
         m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
     }
-
-    return;
 }
 
 
@@ -403,7 +401,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname = m_newID->GetValue();
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true );
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true );
 
     if( frame->ShowModal( &newname, this ) )
     {

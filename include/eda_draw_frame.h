@@ -56,14 +56,14 @@ namespace KIGFX
 using KIGFX::COLOR4D;
 using KIGFX::RENDER_SETTINGS;
 
-#define LIB_EDIT_FRAME_NAME                 wxT( "LibeditFrame" )
-#define SCH_EDIT_FRAME_NAME                 wxT( "SchematicFrame" )
-#define PL_EDITOR_FRAME_NAME                wxT( "PlEditorFrame" )
-#define FOOTPRINT_WIZARD_FRAME_NAME         wxT( "FootprintWizard" )
-#define FOOTPRINT_EDIT_FRAME_NAME           wxT( "ModEditFrame" )
-#define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
-#define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
-#define PCB_EDIT_FRAME_NAME                 wxT( "PcbFrame" )
+#define LIB_EDIT_FRAME_NAME           wxT( "LibeditFrame" )
+#define SCH_EDIT_FRAME_NAME           wxT( "SchematicFrame" )
+#define PL_EDITOR_FRAME_NAME          wxT( "PlEditorFrame" )
+#define FOOTPRINT_WIZARD_FRAME_NAME   wxT( "FootprintWizard" )
+#define FOOTPRINT_CHOOSER_FRAME_NAME  wxT( "FootprintChooserFrame" )
+#define FOOTPRINT_EDIT_FRAME_NAME     wxT( "ModEditFrame" )
+#define FOOTPRINT_VIEWER_FRAME_NAME   wxT( "ModViewFrame" )
+#define PCB_EDIT_FRAME_NAME           wxT( "PcbFrame" )
 
 
 /**
