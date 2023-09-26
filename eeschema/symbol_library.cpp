@@ -30,7 +30,6 @@
 #include <string_utils.h>
 #include <macros.h>
 #include <richio.h>
-#include <config_params.h>
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
 #include <project_rescue.h>

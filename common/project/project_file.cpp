@@ -19,7 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config_params.h>
 #include <project.h>
 #include <project/net_settings.h>
 #include <settings/json_settings_internals.h>

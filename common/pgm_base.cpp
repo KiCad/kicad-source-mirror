@@ -46,7 +46,6 @@
 #include <background_jobs_monitor.h>
 #include <bitmaps.h>
 #include <common.h>
-#include <config_params.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <eda_base_frame.h>

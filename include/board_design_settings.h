@@ -29,7 +29,6 @@
 
 #include <netclass.h>
 #include <project/net_settings.h>
-#include <config_params.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <drc/drc_engine.h>
 #include <settings/nested_settings.h>

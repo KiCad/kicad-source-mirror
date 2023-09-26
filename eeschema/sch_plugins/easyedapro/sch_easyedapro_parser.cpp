@@ -41,6 +41,7 @@
 #include <sch_bus_entry.h>
 #include <string_utils.h>
 #include <bezier_curves.h>
+#include <wx/base64.h>
 #include <wx/url.h>
 #include <wx/mstream.h>
 #include <gfx_import_utils.h>

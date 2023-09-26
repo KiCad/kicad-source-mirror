@@ -23,7 +23,6 @@
 #include <pcb_base_frame.h>
 #include <pcb_base_edit_frame.h>
 #include <io_mgr.h>
-#include <config_params.h>
 #include <fp_tree_synchronizing_adapter.h>
 
 class PCB_LAYER_BOX_SELECTOR;

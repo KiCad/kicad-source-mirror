@@ -35,7 +35,6 @@
 #include <wx/treectrl.h>
 #include <wx/utils.h>
 
-#include <config_params.h>
 #include <core/typeinfo.h>
 #include <eda_base_frame.h>
 #include <eeschema_settings.h>

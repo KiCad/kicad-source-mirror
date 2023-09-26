@@ -25,7 +25,6 @@
 #ifndef _CVPCB_MAINFRAME_H_
 #define _CVPCB_MAINFRAME_H_
 
-#include <config_params.h>
 #include <kiway_player.h>
 #include <netlist_reader/pcb_netlist.h>
 
