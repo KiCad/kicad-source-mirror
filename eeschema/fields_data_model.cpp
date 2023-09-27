@@ -853,7 +853,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
                                settings.stringDelimiter + settings.stringDelimiter );
 
             return settings.stringDelimiter + field + settings.stringDelimiter
-                   + ( last ? wxString( wxS( "\r\n" ) ) : settings.fieldDelimiter );
+                   + ( last ? wxString( wxS( "\n" ) ) : settings.fieldDelimiter );
         };
 
     // Column names
