@@ -579,14 +579,23 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
         {
             wxString   filename;
             wxFileName fn;
+            size_t     forbidden_char;
 
             fn.SetPath( aSvgJob->m_outputDirectory );
             fn.SetExt( SVGFileExtension );
 
+            filename = symbol->GetName().Lower();
+            while( wxString::npos
+                   != ( forbidden_char = filename.find_first_of(
+                                wxFileName::GetForbiddenChars( wxPATH_DOS ) ) ) )
+            {
+                filename = filename.replace( forbidden_char, 1, wxS( '_' ) );
+            }
+
             //simplify the name if its single unit
             if( symbol->IsMulti() )
             {
-                filename = wxString::Format( "%s_%d", symbol->GetName().Lower(), unit );
+                filename += wxString::Format( "_%d", unit );
 
                 if( convert == 2 )
                     filename += wxS( "_demorgan" );
@@ -598,8 +607,6 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             }
             else
             {
-                filename = symbol->GetName().Lower();
-
                 if( convert == 2 )
                     filename += wxS( "_demorgan" );
 
