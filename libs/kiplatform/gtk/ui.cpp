@@ -330,25 +330,29 @@ static bool                               s_wl_locked_flag = false;
 static void handle_global( void* data, struct wl_registry* registry, uint32_t name,
                            const char* interface, uint32_t version )
 {
+    wxLogTrace( traceWayland, "handle_global received %s name %u version %u", interface,
+                (unsigned int) name, (unsigned int) version );
+
     if( strcmp( interface, wl_compositor_interface.name ) == 0 )
     {
-        wxLogTrace( traceWayland, "handle_global received %s", interface );
-
         s_wl_compositor = static_cast<wl_compositor*>(
                 wl_registry_bind( registry, name, &wl_compositor_interface, version ) );
     }
     else if( strcmp( interface, zwp_pointer_constraints_v1_interface.name ) == 0 )
     {
-        wxLogTrace( traceWayland, "handle_global received %s", interface );
-        
         s_wl_pointer_constraints = static_cast<zwp_pointer_constraints_v1*>( wl_registry_bind(
                 registry, name, &zwp_pointer_constraints_v1_interface, version ) );
     }
 }
 
+static void handle_global_remove( void*, struct wl_registry*, uint32_t name )
+{
+    wxLogTrace( traceWayland, "handle_global_remove name %u", (unsigned int) name );
+}
+
 static const struct wl_registry_listener registry_listener = {
     .global = handle_global,
-    .global_remove = NULL,
+    .global_remove = handle_global_remove,
 };
 
 static void confined_handler( void* data, struct zwp_confined_pointer_v1* zwp_confined_pointer_v1 )
