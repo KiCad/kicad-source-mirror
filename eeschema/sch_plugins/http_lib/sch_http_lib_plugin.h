@@ -117,13 +117,13 @@ private:
 
     wxString m_lastError;
 
-    std::string symbol_field = "symbol";
-    std::string footprint_field = "footprint";
-    std::string description_field = "description";
-    std::string keywords_field = "keywords";
-    std::string value_field = "value";
-    std::string datasheet_field = "datasheet";
-    std::string reference_field = "reference";
+    wxString symbol_field = "symbol";
+    wxString footprint_field = "footprint";
+    wxString description_field = "description";
+    wxString keywords_field = "keywords";
+    wxString value_field = "value";
+    wxString datasheet_field = "datasheet";
+    wxString reference_field = "reference";
 
 };
 

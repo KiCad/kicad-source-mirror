@@ -390,40 +390,40 @@ LIB_SYMBOL* SCH_HTTP_LIB_PLUGIN::loadSymbolFromPart( const wxString&          aS
 
     for( auto& _field : aPart.fields )
     {
-        std::string fieldName = _field.first;
-        std::tuple  fieldProperties = _field.second;
+        wxString   fieldName = wxString( _field.first );
+        std::tuple fieldProperties = _field.second;
 
-        if( fieldName == footprint_field )
+        if( fieldName.Lower() == footprint_field )
         {
             field = &symbol->GetFootprintField();
             field->SetText( std::get<0>( fieldProperties ) );
             field->SetVisible( std::get<1>( fieldProperties ) );
         }
-        else if( fieldName == description_field )
+        else if( fieldName.Lower() == description_field )
         {
             field = &symbol->GetDescriptionField();
             field->SetText( std::get<0>( fieldProperties ) );
             field->SetVisible( std::get<1>( fieldProperties ) );
         }
-        else if( fieldName == value_field )
+        else if( fieldName.Lower() == value_field )
         {
             field = &symbol->GetValueField();
             field->SetText( std::get<0>( fieldProperties ) );
             field->SetVisible( std::get<1>( fieldProperties ) );
         }
-        else if( fieldName == datasheet_field )
+        else if( fieldName.Lower() == datasheet_field )
         {
             field = &symbol->GetDatasheetField();
             field->SetText( std::get<0>( fieldProperties ) );
             field->SetVisible( std::get<1>( fieldProperties ) );
         }
-        else if( fieldName == reference_field )
+        else if( fieldName.Lower() == reference_field )
         {
             field = &symbol->GetReferenceField();
             field->SetText( std::get<0>( fieldProperties ) );
             field->SetVisible( std::get<1>( fieldProperties ) );
         }
-        else if( fieldName == keywords_field )
+        else if( fieldName.Lower() == keywords_field )
         {
             symbol->SetKeyWords( std::get<0>( fieldProperties ) );
         }
@@ -443,7 +443,6 @@ LIB_SYMBOL* SCH_HTTP_LIB_PLUGIN::loadSymbolFromPart( const wxString&          aS
 
     return symbol;
 }
-
 
 void SCH_HTTP_LIB_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                                    const STRING_UTF8_MAP* aProperties )
