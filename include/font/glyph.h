@@ -32,8 +32,10 @@
 #include <wx/debug.h>
 #include "../../libs/kimath/include/geometry/eda_angle.h"
 
+#if defined( _MSC_VER )
 #pragma warning( push )
 #pragma warning( disable : 4275 )
+#endif
 
 namespace KIFONT
 {
@@ -117,6 +119,8 @@ typedef std::vector<BOX2D>        GLYPH_BOUNDING_BOX_LIST;
 
 } // namespace KIFONT
 
+#if defined( _MSC_VER )
 #pragma warning( pop )
+#endif
 
 #endif  // GLYPH_H

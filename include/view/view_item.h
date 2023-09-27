@@ -33,8 +33,10 @@
 #include <math/box2.h>
 #include <inspectable.h>
 
+#if defined( _MSC_VER )
 #pragma warning( push )
 #pragma warning( disable : 4275 )
+#endif
 
 namespace KIGFX
 {
@@ -164,6 +166,8 @@ private:
 
 } // namespace KIGFX
 
+#if defined( _MSC_VER )
 #pragma warning( pop )
+#endif
 
 #endif

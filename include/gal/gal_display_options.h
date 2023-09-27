@@ -33,8 +33,10 @@ struct WINDOW_SETTINGS;
 class wxString;
 class wxWindow;
 
+#if defined( _MSC_VER )
 #pragma warning( push )
 #pragma warning( disable : 4275 )
+#endif
 
 namespace KIGFX
 {
@@ -118,7 +120,9 @@ namespace KIGFX
 
 } // namespace KIGFX
 
+#if defined( _MSC_VER )
 #pragma warning( pop )
+#endif
 
 #endif
 
