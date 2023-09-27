@@ -86,6 +86,7 @@ private:
     void OnSaveAndContinue( wxCommandEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
     void OnClose( wxCloseEvent& aEvent ) override;
+    void OnOk( wxCommandEvent& aEvent ) override;
     void OnFilterText( wxCommandEvent& aEvent ) override;
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) override;

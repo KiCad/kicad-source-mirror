@@ -1153,6 +1153,12 @@ BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::GetCurrentBomFmtSettings()
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::ShowEditTab()
+{
+    m_nbPages->SetSelection( 0 );
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::ShowExportTab()
 {
     m_nbPages->SetSelection( 1 );
@@ -1260,13 +1266,20 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
 {
     Close();
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
+{
+    TransferDataFromWindow();
+    Close();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 {
     // This is a cancel, so commit quietly as we're going to throw the results away anyway.
     m_grid->CommitPendingChanges( true );
@@ -1279,7 +1292,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& event )
                                        return TransferDataFromWindow();
                                    } ) )
         {
-            event.Veto();
+            aEvent.Veto();
             return;
         }
     }

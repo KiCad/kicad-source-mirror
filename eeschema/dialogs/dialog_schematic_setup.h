@@ -51,6 +51,7 @@ protected:
 
     size_t                    m_formattingPage;
     size_t                    m_fieldNameTemplatesPage;
+    size_t                    m_bomPresetsPage;
     size_t                    m_pinMapPage;
     size_t                    m_busesPage;
     size_t                    m_severitiesPage;

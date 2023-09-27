@@ -132,6 +132,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOk( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

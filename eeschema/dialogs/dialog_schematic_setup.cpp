@@ -29,6 +29,7 @@
 #include <panel_setup_pinmap.h>
 #include <erc_item.h>
 #include <panel_text_variables.h>
+#include <panel_bom_presets.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
@@ -65,6 +66,15 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
                 SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
                 return new PANEL_TEMPLATE_FIELDNAMES( aParent, &settings.m_TemplateFieldNames );
             }, _( "Field Name Templates" ) );
+
+    m_bomPresetsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
+                return new PANEL_BOM_PRESETS( aParent, settings );
+            }, _( "BOM Presets" ) );
+
 
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Electrical Rules" ) );
 
@@ -206,6 +216,18 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     {
         static_cast<PANEL_SETUP_NETCLASSES*>( m_treebook->ResolvePage( m_netclassesPage ) )
                 ->ImportSettingsFrom( file.m_NetSettings );
+    }
+
+    if( importDlg.m_BomPresetsOpt->GetValue() )
+    {
+        static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
+                ->ImportBomPresetsFrom( *file.m_SchematicSettings );
+    }
+
+    if( importDlg.m_BomFmtPresetsOpt->GetValue() )
+    {
+        static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
+                ->ImportBomFmtPresetsFrom( *file.m_SchematicSettings );
     }
 
     if( !alreadyLoaded )

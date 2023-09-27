@@ -149,6 +149,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_update_symbol_fields_base.cpp
     dialogs/dialog_wire_bus_properties.cpp
     dialogs/dialog_wire_bus_properties_base.cpp
+    dialogs/panel_bom_presets.cpp
+    dialogs/panel_bom_presets_base.cpp
     dialogs/panel_eeschema_color_settings.cpp
     dialogs/panel_eeschema_display_options.cpp
     dialogs/panel_eeschema_display_options_base.cpp

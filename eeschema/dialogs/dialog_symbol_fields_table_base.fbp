@@ -3600,6 +3600,7 @@
                                 <property name="name">m_sdbSizer</property>
                                 <property name="permission">protected</property>
                                 <event name="OnCancelButtonClick">OnCancel</event>
+                                <event name="OnOKButtonClick">OnOk</event>
                             </object>
                         </object>
                     </object>

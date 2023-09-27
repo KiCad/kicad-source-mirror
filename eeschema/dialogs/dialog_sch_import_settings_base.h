@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -59,6 +59,8 @@ class DIALOG_SCH_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_PinMapOpt;
 		wxCheckBox* m_SeveritiesOpt;
 		wxCheckBox* m_NetClassesOpt;
+		wxCheckBox* m_BomPresetsOpt;
+		wxCheckBox* m_BomFmtPresetsOpt;
 
 		DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
