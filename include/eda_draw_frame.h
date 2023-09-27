@@ -200,9 +200,9 @@ public:
 
     void EraseMsgBox();
 
-    virtual void ReCreateHToolbar() = 0;
-    virtual void ReCreateVToolbar() = 0;
-    virtual void ReCreateOptToolbar() = 0;
+    virtual void ReCreateHToolbar() { };
+    virtual void ReCreateVToolbar() { };
+    virtual void ReCreateOptToolbar() { };
     virtual void ReCreateAuxiliaryToolbar() { }
 
     /**
@@ -476,8 +476,6 @@ protected:
     void unitsChangeRefresh() override;
 
     void setupUnits( APP_SETTINGS_BASE* aCfg );
-
-    void doReCreateMenuBar() override { }
 
     std::vector<wxWindow*> findDialogs();
 

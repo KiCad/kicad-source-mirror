@@ -54,8 +54,6 @@ public:
 protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
-    void doReCreateMenuBar() override {}
-
 private:
     void OnPaint( wxPaintEvent& aEvent );
     void OnOK( wxCommandEvent& aEvent );
@@ -65,13 +63,6 @@ private:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh ) const override;
-
-    // Required pure-virtual methods
-    void ReCreateHToolbar() override {};
-    void ReCreateVToolbar() override {};
-    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
-    void AppendCopyToUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
 
     DECLARE_EVENT_TABLE()
 

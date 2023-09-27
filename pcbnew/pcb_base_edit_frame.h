@@ -83,7 +83,7 @@ public:
      * @param aDC the current device context.
      * @param aItem a pointer to the BOARD_ITEM to edit.
      */
-    virtual void OnEditItemRequest( BOARD_ITEM* aItem ) = 0;
+    virtual void OnEditItemRequest( BOARD_ITEM* aItem ) {};
 
     /**
      * Create a new entry in undo list of commands.

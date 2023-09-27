@@ -87,10 +87,6 @@ public:
 
     FOOTPRINT* GetFootprint( const wxString& aFootprintName, REPORTER& aReporter );
 
-    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
-    void AppendCopyToUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
-
     SELECTION& GetCurrentSelection() override;
 
     void ReloadFootprint( FOOTPRINT* aFootprint ) override;

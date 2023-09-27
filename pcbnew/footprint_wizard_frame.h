@@ -175,13 +175,6 @@ private:
     /// @copydoc PCB_BASE_FRAME::Update3DView
     void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;
 
-    /*
-     * Not used here but needed by PCB_BASE_EDIT_FRAME.
-     */
-    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
-    void OnEditItemRequest( BOARD_ITEM* aItem ) override {}
-
     DECLARE_EVENT_TABLE()
 
 protected:

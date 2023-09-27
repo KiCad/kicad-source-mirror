@@ -92,7 +92,6 @@ public:
     void CloseLibraryViewer( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
-    void ReCreateOptToolbar() override {}
 
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnSymbolList( wxCommandEvent& event );

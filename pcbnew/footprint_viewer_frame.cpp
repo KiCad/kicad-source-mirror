@@ -113,7 +113,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
                     FOOTPRINT_VIEWER_FRAME_NAME ),
    m_comp( LIB_ID(), wxEmptyString, wxEmptyString, KIID_PATH(), {} )
 {
-    m_aboutTitle = _HKI( "KiCad Footprint Library Viewer" );
+    m_aboutTitle = _HKI( "KiCad Footprint Library Browser" );
 
     // Force the items to always snap
     m_magneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
@@ -170,7 +170,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_fpList = new WX_LISTBOX( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
                                0, nullptr, wxLB_HSCROLL | wxNO_BORDER );
 
-    m_fpList->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ), nullptr, this );
+    m_fpList->Connect( wxEVT_LEFT_DCLICK,
+                       wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ),
+                       nullptr, this );
     fpSizer->Add( m_fpList, 1, wxEXPAND, 5 );
 
     fpPanel->SetSizer( fpSizer );
@@ -301,12 +303,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     updateView();
     setupUnits( config() );
 
-    if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
-    {
-        ReCreateFootprintList();
-        Raise();            // On some window managers, this is needed
-        Show( true );
-    }
+    ReCreateFootprintList();
+    Raise();            // On some window managers, this is needed
+    Show( true );
 }
 
 
@@ -320,7 +319,9 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
     GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:
     GetCanvas()->SetEvtHandlerEnabled( false );
-    m_fpList->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ), nullptr, this );
+    m_fpList->Disconnect( wxEVT_LEFT_DCLICK,
+                          wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ),
+                          nullptr, this );
     setFPWatcher( nullptr );
 }
 
@@ -335,9 +336,7 @@ void FOOTPRINT_VIEWER_FRAME::UpdateMsgPanel()
 {
     EDA_DRAW_FRAME::UpdateMsgPanel();
 
-    FOOTPRINT* fp = static_cast<FOOTPRINT*>( GetModel() );
-
-    if( fp )
+    if( FOOTPRINT* fp = static_cast<FOOTPRINT*>( GetModel() ) )
     {
         std::vector<MSG_PANEL_ITEM> msgItems;
         fp->GetMsgPanelInfo( this, msgItems );
@@ -392,19 +391,7 @@ void FOOTPRINT_VIEWER_FRAME::doCloseWindow()
 
     GetCanvas()->StopDrawing();
 
-    if( IsModal() )
-    {
-        // Only dismiss a modal frame once, so that the return values set by
-        // the prior DismissModal() are not bashed for ShowModal().
-        if( !IsDismissed() )
-            DismissModal( false );
-
-        // window to be destroyed by the caller of KIWAY_PLAYER::ShowModal()
-    }
-    else
-    {
-        Destroy();
-    }
+    Destroy();
 }
 
 
@@ -747,19 +734,7 @@ void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxMouseEvent& aEvent )
 
 void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
 {
-    if( IsModal() )
-    {
-        if( m_fpList->GetSelection() >= 0 )
-        {
-            LIB_ID fpid( getCurNickname(), m_fpList->GetStringSelection() );
-            DismissModal( true, fpid.Format() );
-        }
-        else
-        {
-            DismissModal( false );
-        }
-    }
-    else if( GetBoard()->GetFirstFootprint() )
+    if( GetBoard()->GetFirstFootprint() )
     {
         PCB_EDIT_FRAME*  pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
         PCBNEW_SETTINGS* cfg = pcbframe->GetPcbNewSettings();
@@ -1025,85 +1000,6 @@ void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     default:
         ;
     }
-}
-
-
-bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent )
-{
-    if( aFootprint && !aFootprint->IsEmpty() )
-    {
-        wxString msg;
-        LIB_TABLE* fpTable = PROJECT_PCB::PcbFootprintLibs( &Prj() );
-        LIB_ID fpid;
-
-        fpid.Parse( *aFootprint, true );
-
-        if( fpid.IsValid() )
-        {
-            wxString         libraryName = fpid.GetLibNickname();
-            wxHyperlinkCtrl* button = nullptr;
-
-            if( !fpTable->HasLibrary( fpid.GetLibNickname(), false )
-                || !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
-            {
-                CreateInfoBar();
-
-                if( WX_INFOBAR* infobar = GetInfoBar() )
-                {
-                    button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                  _( "Manage footprint libraries" ),
-                                                  wxEmptyString );
-                    button->Bind( wxEVT_COMMAND_HYPERLINK,
-                                  [=]( wxHyperlinkEvent& aEvent )
-                                  {
-                                      InvokePcbLibTableEditor( &Kiway(), this );
-                                  } );
-                }
-            }
-
-            if( !fpTable->HasLibrary( fpid.GetLibNickname(), false ) )
-            {
-                if( WX_INFOBAR* infobar = GetInfoBar() )
-                {
-                    msg.Printf( _( "Footprint library not found. The current configuration does "
-                                   "not include library '%s'." ), libraryName );
-                    infobar->RemoveAllButtons();
-                    infobar->AddButton( button );
-                    infobar->AddCloseButton();
-                    infobar->ShowMessage( msg, wxICON_INFORMATION );
-                }
-            }
-            else if ( !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
-            {
-                if( WX_INFOBAR* infobar = GetInfoBar() )
-                {
-                    msg.Printf( _( "Footprint library not enabled. Library '%s' is not enabled "
-                                   "in the current configuration." ), libraryName );
-                    infobar->RemoveAllButtons();
-                    infobar->AddButton( button );
-                    infobar->AddCloseButton();
-                    infobar->ShowMessage( msg, wxICON_INFORMATION );
-                }
-            }
-            else
-            {
-                // Update last selection:
-                setCurNickname( libraryName );
-                setCurFootprintName( fpid.GetLibItemName() );
-                m_libList->SetStringSelection( libraryName );
-            }
-        }
-    }
-
-    // Rebuild the fp list from the last selected library,
-    // and show the last selected footprint
-    ReCreateFootprintList();
-    SelectAndViewFootprint( NEW_PART );
-
-    bool retval = KIWAY_PLAYER::ShowModal( aFootprint, aParent );
-
-    m_libFilter->SetFocus();
-    return retval;
 }
 
 

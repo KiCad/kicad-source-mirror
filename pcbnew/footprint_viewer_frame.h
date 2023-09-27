@@ -81,14 +81,6 @@ public:
     ///< @copydoc EDADRAW_FRAME::UpdateMsgPanel
     void UpdateMsgPanel() override;
 
-    /**
-     * Run the footprint viewer as a modal dialog.
-     *
-     * @param aFootprint an optional FPID string to initialize the viewer with and to
-     *                   return a selected footprint through.
-     */
-    bool ShowModal( wxString* aFootprint, wxWindow* aParent ) override;
-
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override;
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
@@ -169,10 +161,6 @@ private:
 
     /// @copydoc PCB_BASE_FRAME::Update3DView
     void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;
-
-    void SaveCopyInUndoList( EDA_ITEM*, UNDO_REDO ) override {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
-    void AppendCopyToUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO ) override {}
 
     void updateView();
 

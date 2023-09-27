@@ -219,7 +219,6 @@ public:
     void ShowSolderMask();
 
     // General
-    virtual void ReCreateOptToolbar() override { }
     virtual void ShowChangedLanguage() override;
     virtual void UpdateStatusBar() override;
 
@@ -315,7 +314,7 @@ public:
      * @param aItemToCopy is the board item modified by the command to undo.
      * @param aTypeCommand is the command type (see enum #UNDO_REDO).
      */
-    virtual void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand ) = 0;
+    virtual void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand ) {};
 
     /**
      * Creates a new entry in undo list of commands.
@@ -324,13 +323,13 @@ public:
      * @param aTypeCommand is the command type (see enum #UNDO_REDO)
      */
     virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                     UNDO_REDO aTypeCommand ) = 0;
+                                     UNDO_REDO aTypeCommand ) {};
 
     /**
      * As SaveCopyInUndoList, but appends the changes to the last undo item on the stack.
      */
     virtual void AppendCopyToUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                       UNDO_REDO aTypeCommand ) = 0;
+                                       UNDO_REDO aTypeCommand ) {};
 
 
     /**
@@ -344,7 +343,7 @@ public:
      * @return the selected layer id.
      */
     PCB_LAYER_ID SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
-                              wxPoint aDlgPosition = wxDefaultPosition );
+                                 wxPoint aDlgPosition = wxDefaultPosition );
 
     /**
      * Change the active layer in the frame
