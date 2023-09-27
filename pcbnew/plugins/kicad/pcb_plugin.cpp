@@ -857,9 +857,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
 
     formatLayer( aDimension->GetLayer() );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aDimension->m_Uuid.AsString() ) );
-
-    m_out->Print( 0, "\n" );
+    KICAD_FORMAT::FormatUuid( m_out, aDimension->m_Uuid );
 
     m_out->Print( aNestLevel+1, "(pts (xy %s %s) (xy %s %s))\n",
                   formatInternalUnits( aDimension->GetStart().x ).c_str(),
@@ -1019,7 +1017,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
     if( aShape->GetNetCode() > 0 )
         m_out->Print( 0, " (net %d)", m_mapping->Translate( aShape->GetNetCode() ) );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
+    KICAD_FORMAT::FormatUuid( m_out, aShape->m_Uuid, 0 );
 
     m_out->Print( 0, ")\n" );
 }
@@ -1079,7 +1077,7 @@ void PCB_PLUGIN::format( const PCB_TARGET* aTarget, int aNestLevel ) const
 
     formatLayer( aTarget->GetLayer() );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTarget->m_Uuid.AsString() ) );
+    KICAD_FORMAT::FormatUuid( m_out, aTarget->m_Uuid, 0 );
 
     m_out->Print( 0, ")\n" );
 }
@@ -1124,8 +1122,8 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
-        m_out->Print( aNestLevel+1, "(tstamp %s)\n", TO_UTF8( aFootprint->m_Uuid.AsString() ) );
+    if( !( m_ctl & CTL_OMIT_UUIDS ) )
+        KICAD_FORMAT::FormatUuid( m_out, aFootprint->m_Uuid );
 
     if( !( m_ctl & CTL_OMIT_AT ) )
     {
@@ -1802,8 +1800,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     }
 
     m_out->Print( 0, "\n" );
-    m_out->Print( aNestLevel + 1, "(tstamp %s)", TO_UTF8( aPad->m_Uuid.AsString() ) );
-    m_out->Print( 0, "\n" );
+    KICAD_FORMAT::FormatUuid( m_out, aPad->m_Uuid );
     m_out->Print( aNestLevel, ")\n" );
 }
 
@@ -1858,9 +1855,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     if( parentFP && !aText->IsVisible() )
         KICAD_FORMAT::FormatBool( m_out, 0, "hide", !aText->IsVisible() );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aText->m_Uuid.AsString() ) );
-
-    m_out->Print( 0, "\n" );
+    KICAD_FORMAT::FormatUuid( m_out, aText->m_Uuid );
 
     aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
@@ -1915,9 +1910,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     formatLayer( aTextBox->GetLayer() );
     m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel + 1, "(tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
-
-    m_out->Print( 0, "\n" );
+    KICAD_FORMAT::FormatUuid( m_out, aTextBox->m_Uuid );
 
     // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
@@ -1939,7 +1932,7 @@ void PCB_PLUGIN::format( const PCB_GROUP* aGroup, int aNestLevel ) const
     if( aGroup->GetItems().empty() )
         return;
 
-    m_out->Print( aNestLevel, "(group %s (id %s)\n",
+    m_out->Print( aNestLevel, "(group %s (id \"%s\")\n",
                               m_out->Quotew( aGroup->GetName() ).c_str(),
                               TO_UTF8( aGroup->m_Uuid.AsString() ) );
 
@@ -1956,7 +1949,7 @@ void PCB_PLUGIN::format( const PCB_GROUP* aGroup, int aNestLevel ) const
     memberIds.Sort();
 
     for( const wxString& memberId : memberIds )
-        m_out->Print( aNestLevel + 2, "%s\n", TO_UTF8( memberId ) );
+        m_out->Print( aNestLevel + 2, "\"%s\"\n", TO_UTF8( memberId ) );
 
     m_out->Print( aNestLevel + 1, ")\n" );  // Close `members` token.
     m_out->Print( aNestLevel, ")\n" );      // Close `group` token.
@@ -2172,7 +2165,7 @@ void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTrack->m_Uuid.AsString() ) );
+    KICAD_FORMAT::FormatUuid( m_out, aTrack->m_Uuid );
 
     m_out->Print( 0, ")\n" );
 }
@@ -2203,7 +2196,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
         formatLayer( aZone->GetFirstLayer() );
     }
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aZone->m_Uuid.AsString() ) );
+    KICAD_FORMAT::FormatUuid( m_out, aZone->m_Uuid );
 
     if( !aZone->GetZoneName().empty() )
         m_out->Print( 0, " (name %s)", m_out->Quotew( aZone->GetZoneName() ).c_str() );

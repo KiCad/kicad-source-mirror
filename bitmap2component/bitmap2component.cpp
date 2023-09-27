@@ -226,14 +226,14 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         strbuf = fmt::format(
                   "  (fp_text reference \"G***\" (at 0 0) (layer \"{}\")\n"
                   "      (effects (font (size 1.5 1.5) (thickness 0.3)))\n"
-                  "    (tstamp {})\n  )\n",
+                  "    (uuid {})\n  )\n",
                   aBrdLayerName, KIID().AsString().ToStdString().c_str() );
 
         m_Data += strbuf;
         strbuf = fmt::format(
                   "  (fp_text value \"{}\" (at 0.75 0) (layer \"{}\") hide\n"
                   "      (effects (font (size 1.5 1.5) (thickness 0.3)))\n"
-                  "    (tstamp {})\n  )\n",
+                  "    (uuid {})\n  )\n",
                   m_CmpName.c_str(), aBrdLayerName, KIID().AsString().ToStdString().c_str() );
 
         m_Data += strbuf;
@@ -370,7 +370,7 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const char* 
 
         m_Data += "    )\n\n";
         strbuf = fmt::format(
-                "    (stroke (width {:f}) (type solid)) (fill solid) (layer \"{}\") (tstamp {}))\n",
+                "    (stroke (width {:f}) (type solid)) (fill solid) (layer \"{}\") (uuid {}))\n",
                 width, aBrdLayerName, KIID().AsString().ToStdString().c_str() );
 
         m_Data += strbuf;

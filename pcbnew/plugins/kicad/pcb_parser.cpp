@@ -2900,6 +2900,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
         }
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -2957,7 +2958,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             break;
 
         default:
-            Expecting( "layer, width, fill, tstamp, locked, net or status" );
+            Expecting( "layer, width, fill, tstamp, uuid, locked, net or status" );
         }
     }
 
@@ -3191,6 +3192,7 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( aText->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -3205,7 +3207,7 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
             if( parentFP )
                 aText->SetVisible( !hide );
             else
-                Expecting( "layer, effects, locked, render_cache or tstamp" );
+                Expecting( "layer, effects, locked, render_cache, uuid or tstamp" );
 
             break;
         }
@@ -3352,6 +3354,7 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( textbox->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -3366,7 +3369,7 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
             break;
 
         default:
-            Expecting( "angle, width, layer, effects, render_cache or tstamp" );
+            Expecting( "angle, width, layer, effects, render_cache, uuid or tstamp" );
         }
     }
 
@@ -3454,6 +3457,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( dim->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -3803,7 +3807,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
         }
 
         default:
-            Expecting( "layer, tstamp, gr_text, feature1, feature2, crossbar, arrow1a, "
+            Expecting( "layer, tstamp, uuid, gr_text, feature1, feature2, crossbar, arrow1a, "
                        "arrow1b, arrow2a, or arrow2b" );
         }
     }
@@ -3914,6 +3918,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( footprint->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -4254,7 +4259,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
 
         default:
-            Expecting( "locked, placed, tedit, tstamp, at, descr, tags, path, "
+            Expecting( "locked, placed, tedit, tstamp, uuid, at, descr, tags, path, "
                        "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
                        "solder_paste_margin, solder_paste_ratio, clearance, "
                        "zone_connect, thermal_gap, attr, fp_text, "
@@ -4769,6 +4774,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( pad->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -4776,7 +4782,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         default:
             Expecting( "at, locked, drill, layers, net, die_length, roundrect_rratio, "
-                       "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, "
+                       "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, uuid, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
                        "pinfunction, pintype, zone_connect, thermal_width, thermal_gap or "
                        "teardrops" );
@@ -5181,6 +5187,7 @@ PCB_ARC* PCB_PARSER::parseARC()
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( arc->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -5197,7 +5204,7 @@ PCB_ARC* PCB_PARSER::parseARC()
             break;
 
         default:
-            Expecting( "start, mid, end, width, layer, net, tstamp, or status" );
+            Expecting( "start, mid, end, width, layer, net, tstamp, uuid, or status" );
         }
     }
 
@@ -5265,6 +5272,7 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( track->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -5281,7 +5289,7 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
             break;
 
         default:
-            Expecting( "start, end, width, layer, net, tstamp, or locked" );
+            Expecting( "start, end, width, layer, net, tstamp, uuid, or locked" );
         }
     }
 
@@ -5406,6 +5414,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( via->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -5426,7 +5435,7 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
             break;
 
         default:
-            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, status or "
+            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, uuid, status or "
                        "teardrops" );
         }
     }
@@ -5510,6 +5519,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( zone->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
@@ -5967,7 +5977,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         default:
             Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
-                       "fill, polygon, filled_polygon, fill_segments, attr, locked, or name" );
+                       "fill, polygon, filled_polygon, fill_segments, attr, locked, uuid, or name" );
         }
     }
 
@@ -6143,13 +6153,14 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
             break;
 
         case T_tstamp:
+        case T_uuid:
             NextTok();
             const_cast<KIID&>( target->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
         default:
-            Expecting( "x, plus, at, size, width, layer or tstamp" );
+            Expecting( "x, plus, at, size, width, layer, uuid, or tstamp" );
         }
     }
 
@@ -6160,15 +6171,20 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
 KIID PCB_PARSER::CurStrToKIID()
 {
     KIID aId;
+    std::string idStr( CurStr() );
+
+    // Older files did not quote UUIDs
+    if( *idStr.begin() == '"' && *idStr.rbegin() == '"' )
+        idStr = idStr.substr( 1, idStr.length() - 1 );
 
     if( m_appendToExisting )
     {
         aId = KIID();
-        m_resetKIIDMap.insert( std::make_pair( CurStr(), aId ) );
+        m_resetKIIDMap.insert( std::make_pair( idStr, aId ) );
     }
     else
     {
-        aId = KIID( CurStr() );
+        aId = KIID( idStr );
     }
 
     return aId;

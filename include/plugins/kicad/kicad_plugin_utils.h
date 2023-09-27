@@ -23,6 +23,7 @@
 #include <wx/string.h>
 
 class OUTPUTFORMATTER;
+class KIID;
 
 namespace KICAD_FORMAT {
 
@@ -37,6 +38,8 @@ namespace KICAD_FORMAT {
  */
 void FormatBool( OUTPUTFORMATTER* aOut, int aNestLevel, const wxString& aKey, bool aValue,
                  char aSuffix = '\n' );
+
+void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid, char aSuffix = '\n' );
 
 } // namespace KICAD_FORMAT
 

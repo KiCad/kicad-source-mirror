@@ -17,8 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <richio.h>
+#include <kiid.h>
 #include <plugins/kicad/kicad_plugin_utils.h>
+#include <richio.h>
+#include <string_utils.h>
 
 namespace KICAD_FORMAT {
 
@@ -26,6 +28,15 @@ void FormatBool( OUTPUTFORMATTER* aOut, int aNestLevel, const wxString& aKey, bo
                  char aSuffix )
 {
     aOut->Print( aNestLevel, "(%ls %s)%c", aKey.wc_str(), aValue ? "yes" : "no", aSuffix );
+}
+
+
+void FormatUuid( OUTPUTFORMATTER* aOut, const KIID& aUuid, char aSuffix )
+{
+    if( aSuffix )
+        aOut->Print( 0, "(uuid \"%s\")%c", TO_UTF8( aUuid.AsString() ), aSuffix );
+    else
+        aOut->Print( 0, "(uuid \"%s\")", TO_UTF8( aUuid.AsString() ) );
 }
 
 } // namespace KICAD_FORMAT
