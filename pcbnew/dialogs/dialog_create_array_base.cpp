@@ -67,7 +67,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelDx = new wxStaticText( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Horizontal spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelDx->Wrap( -1 );
-	m_labelDx->SetToolTip( _("Distance betyween rows") );
+	m_labelDx->SetToolTip( _("Distance between rows") );
 
 	fgSizerItemSpacing->Add( m_labelDx, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -80,7 +80,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelDy = new wxStaticText( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Vertical spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelDy->Wrap( -1 );
-	m_labelDy->SetToolTip( _("Distance betyween columns") );
+	m_labelDy->SetToolTip( _("Distance between columns") );
 
 	fgSizerItemSpacing->Add( m_labelDy, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -95,7 +95,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	sbSizerItemsSpacing->Add( fgSizerItemSpacing, 1, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizerGridShape;
-	sbSizerGridShape = new wxStaticBoxSizer( new wxStaticBox( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Gris Spacing Modifiers") ), wxVERTICAL );
+	sbSizerGridShape = new wxStaticBoxSizer( new wxStaticBox( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Grid Spacing Modifiers") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerModifier;
 	fgSizerModifier = new wxFlexGridSizer( 0, 3, 0, 0 );
