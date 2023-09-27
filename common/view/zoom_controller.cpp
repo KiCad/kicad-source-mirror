@@ -108,6 +108,12 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     return zoomScale;
 }
 
+#ifdef __MINGW32__
+// For some reason, this is needed to avoid a link issue
+// (undefined reference to ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT not found)
+constexpr ACCELERATING_ZOOM_CONTROLLER::TIMEOUT ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT;
+#endif
+
 
 CONSTANT_ZOOM_CONTROLLER::CONSTANT_ZOOM_CONTROLLER( double aScale ) : m_scale( aScale )
 {
