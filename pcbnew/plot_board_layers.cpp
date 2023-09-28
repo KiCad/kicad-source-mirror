@@ -1234,7 +1234,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
         {
             PlotDrawingSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
                               aBoard->GetPageSettings(), &aBoard->GetProperties(), wxT( "1" ), 1,
-                              aSheetName, aSheetPath, aBoard->GetFileName() );
+                              aSheetName, aSheetPath, aBoard->GetFileName(),
+                              renderSettings->GetLayerColor( LAYER_DRAWINGSHEET ) );
 
             if( aPlotOpts->GetMirror() )
                 initializePlotter( plotter, aBoard, aPlotOpts );
