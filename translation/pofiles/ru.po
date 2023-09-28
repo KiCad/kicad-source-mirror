@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-09-19 21:35+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: xXx <xxx_xxx_xxxxxxxxx@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -35064,35 +35064,35 @@ msgstr "Размер '%s' на %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
 msgid "1234.0"
-msgstr "1234.0"
+msgstr "1234,0"
 
 #: pcbnew/pcb_dimension.cpp:1320
 msgid "1234.0 mm"
-msgstr "1234.0 мм"
+msgstr "1234,0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
 msgid "1234.0 (mm)"
-msgstr "1234.0 (мм)"
+msgstr "1234,0 (мм)"
 
 #: pcbnew/pcb_dimension.cpp:1374
 msgid "Units Format"
-msgstr "Формат единиц измерения"
+msgstr "Формат ед.изм."
 
 #: pcbnew/pcb_dimension.cpp:1382
 msgid "Suppress Trailing Zeroes"
-msgstr "Подавлять конечные нули"
+msgstr "Подавлять заверш. нули"
 
 #: pcbnew/pcb_dimension.cpp:1411
 msgid "Crossbar Height"
-msgstr "Высота перекладины"
+msgstr "Высота линии"
 
 #: pcbnew/pcb_dimension.cpp:1415
 msgid "Extension Line Overshoot"
-msgstr "Перерегулирование выносной линии"
+msgstr "Удлинение выносной линии"
 
 #: pcbnew/pcb_dimension.cpp:1498
 msgid "Leader Length"
-msgstr "Длина выноски"
+msgstr "Длина линии выноски"
 
 #: pcbnew/pcb_dimension.cpp:1547
 msgid "Text Frame"
