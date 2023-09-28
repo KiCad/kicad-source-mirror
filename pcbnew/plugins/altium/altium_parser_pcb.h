@@ -377,6 +377,7 @@ struct ABOARD6
 
     int                                layercount;
     std::vector<ABOARD6_LAYER_STACKUP> stackup;
+    std::set<wxString>                 layerNames;
 
     std::vector<ALTIUM_VERTICE> board_vertices;
 
