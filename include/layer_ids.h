@@ -524,6 +524,10 @@ public:
         BASE_SEQ( aStart, aEnd ), m_index( 0 )
     {}
 
+    LSEQ( std::initializer_list<PCB_LAYER_ID> aLayers ) :
+            BASE_SEQ( aLayers )
+    {}
+
     void Rewind()           { m_index = 0; }
 
     void operator ++ ()     { ++m_index; }  // returns nothing, used in simple statements only.
@@ -612,6 +616,8 @@ public:
      *  Parameter is 'int' to avoid va_start undefined behavior.
      */
     LSET( unsigned aIdCount, int aFirst, ... ); // args chosen to prevent LSET( int ) from compiling
+
+    LSET( const LSEQ& aSeq );
 
     /**
      * See if the layer set contains a PCB layer.

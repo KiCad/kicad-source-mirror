@@ -35,7 +35,7 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     plot_opts.SetPlotFrameRef( aSvgPlotOptions.m_plotFrame );
 
     // Adding drill marks, for copper layers
-    if( ( aSvgPlotOptions.m_printMaskLayer & LSET::AllCuMask() ).any() )
+    if( ( LSET( aSvgPlotOptions.m_printMaskLayer ) & LSET::AllCuMask() ).any() )
     {
         switch( aSvgPlotOptions.m_drillShapeOption )
         {
@@ -97,7 +97,7 @@ bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOption
     if( plotter )
     {
         plotter->SetColorMode( !aSvgPlotOptions.m_blackAndWhite );
-        PlotBoardLayers( aBoard, plotter, aSvgPlotOptions.m_printMaskLayer.SeqStackupBottom2Top(),
+        PlotBoardLayers( aBoard, plotter, aSvgPlotOptions.m_printMaskLayer,
                          plot_opts );
         plotter->EndPlot();
     }

@@ -39,7 +39,7 @@ public:
     wxString m_colorTheme;
 
     bool m_blackAndWhite;
-    LSET m_printMaskLayer;
+    LSEQ m_printMaskLayer;
 };
 
 #endif

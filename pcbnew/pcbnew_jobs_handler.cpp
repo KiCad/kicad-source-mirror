@@ -263,7 +263,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     if( plotter )
     {
-        PlotBoardLayers( brd, plotter, aDxfJob->m_printMaskLayer.SeqStackupBottom2Top(), plotOpts );
+        PlotBoardLayers( brd, plotter, aDxfJob->m_printMaskLayer, plotOpts );
         plotter->EndPlot();
     }
 
@@ -332,7 +332,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     if( plotter )
     {
-        PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer.SeqStackupBottom2Top(), plotOpts );
+        PlotBoardLayers( brd, plotter, aPdfJob->m_printMaskLayer, plotOpts );
         PlotInteractiveLayer( brd, plotter, plotOpts );
         plotter->EndPlot();
     }
@@ -365,20 +365,20 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
     if( aGerberJob->m_useBoardPlotParams )
     {
-        aGerberJob->m_printMaskLayer = boardPlotOptions.GetLayerSelection();
+        aGerberJob->m_printMaskLayer = boardPlotOptions.GetLayerSelection().SeqStackupBottom2Top();
         aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection();
     }
     else
     {
         // default to the board enabled layers
         if( aGerberJob->m_printMaskLayer == 0 )
-            aGerberJob->m_printMaskLayer = brd->GetEnabledLayers();
+            aGerberJob->m_printMaskLayer = brd->GetEnabledLayers().SeqStackupBottom2Top();
 
         if( aGerberJob->m_layersIncludeOnAllSet )
             aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;
     }
 
-    for( LSEQ seq = aGerberJob->m_printMaskLayer.UIOrder(); seq; ++seq )
+    for( LSEQ seq = LSET( aGerberJob->m_printMaskLayer ).UIOrder(); seq; ++seq )
     {
         LSEQ plotSequence;
 
@@ -499,13 +499,12 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     // We are feeding it one layer at the start here to silence a logic check
     GERBER_PLOTTER* plotter = (GERBER_PLOTTER*) StartPlotBoard(
-            brd, &plotOpts, aGerberJob->m_printMaskLayer.Seq().front(), aGerberJob->m_outputFile,
+            brd, &plotOpts, aGerberJob->m_printMaskLayer.front(), aGerberJob->m_outputFile,
             wxEmptyString, wxEmptyString );
 
     if( plotter )
     {
-        PlotBoardLayers( brd, plotter, aGerberJob->m_printMaskLayer.SeqStackupBottom2Top(),
-                         plotOpts );
+        PlotBoardLayers( brd, plotter, aGerberJob->m_printMaskLayer, plotOpts );
         plotter->EndPlot();
     }
     else

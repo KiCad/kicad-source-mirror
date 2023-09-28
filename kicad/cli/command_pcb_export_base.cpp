@@ -72,13 +72,12 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
 }
 
 
-LSET CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const
+LSEQ CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const
 {
-    LSET layerMask;
+    LSEQ layerMask;
 
     if( !aLayerString.IsEmpty() )
     {
-        layerMask.reset();
         wxStringTokenizer layerTokens( aLayerString, "," );
 
         while( layerTokens.HasMoreTokens() )
@@ -88,13 +87,17 @@ LSET CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerStrin
             // Search for a layer name in canonical layer name used in .kicad_pcb files:
             if( m_layerMasks.count( token ) )
             {
-                layerMask |= m_layerMasks.at(token);
+                for( PCB_LAYER_ID layer : m_layerMasks.at( token ).Seq() )
+                    layerMask.push_back( layer );
+
                 aLayerArgSet = true;
             }
             // Search for a layer name in canonical layer name used in GUI (not translated):
             else if( m_layerGuiMasks.count( token ) )
             {
-                layerMask |= m_layerGuiMasks.at(token);
+                for( PCB_LAYER_ID layer : m_layerGuiMasks.at( token ).Seq() )
+                    layerMask.push_back( layer );
+
                 aLayerArgSet = true;
             }
             else
@@ -128,8 +131,9 @@ int CLI::PCB_EXPORT_BASE_COMMAND::doPerform( KIWAY& aKiway )
     {
         wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
 
-        LSET layerMask = convertLayerStringList( layers, m_selectedLayersSet );
-        if( m_requireLayers && layerMask.Seq().size() < 1 )
+        LSEQ layerMask = convertLayerStringList( layers, m_selectedLayersSet );
+
+        if( m_requireLayers && layerMask.size() < 1 )
         {
             wxFprintf( stderr, _( "At least one layer must be specified\n" ) );
             return EXIT_CODES::ERR_ARGS;

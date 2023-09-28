@@ -44,7 +44,7 @@ public:
     bool m_plotRefDes;
     bool m_plotBorderTitleBlocks;
 
-    LSET m_printMaskLayer;
+    LSEQ m_printMaskLayer;
 
     // How holes in pads/vias are plotted:
     // 0 = no hole, 1 = small shape, 2 = actual shape

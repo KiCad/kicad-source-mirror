@@ -49,7 +49,7 @@ public:
     int m_precision;
 
 
-    LSET m_printMaskLayer;
+    LSEQ m_printMaskLayer;
 };
 
 #endif

@@ -74,6 +74,13 @@ LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
 }
 
 
+LSET::LSET( const LSEQ& aSeq )
+{
+    for( PCB_LAYER_ID layer : aSeq )
+        set( layer );
+}
+
+
 /**
  * NOTE: These names must not be translated or changed.  They are used as tokens in the board
  * file format because the ordinal value of the PCB_LAYER_ID enum was not stable over time.
@@ -475,23 +482,16 @@ LSEQ LSET::Seq() const
 LSEQ LSET::SeqStackupBottom2Top() const
 {
     // bottom-to-top stack-up layers
+    // Note that the bottom technical layers are flipped so that when plotting a bottom-side view,
+    // they appear in the correct sequence.
     static const PCB_LAYER_ID sequence[] = {
-        User_9,
-        User_8,
-        User_7,
-        User_6,
-        User_5,
-        User_4,
-        User_3,
-        User_2,
-        User_1,
-        B_Fab,
-        B_CrtYd,
-        B_Adhes,
-        B_SilkS,
-        B_Paste,
-        B_Mask,
         B_Cu,
+        B_Mask,
+        B_Paste,
+        B_SilkS,
+        B_Adhes,
+        B_CrtYd,
+        B_Fab,
         In30_Cu,
         In29_Cu,
         In28_Cu,
@@ -533,6 +533,15 @@ LSEQ LSET::SeqStackupBottom2Top() const
         Cmts_User,
         Eco1_User,
         Eco2_User,
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9,
         Margin,
         Edge_Cuts,
     };

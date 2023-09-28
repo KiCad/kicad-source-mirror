@@ -46,7 +46,7 @@ struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 
 protected:
     int  doPerform( KIWAY& aKiway ) override;
-    LSET convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const;
+    LSEQ convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const;
     void addLayerArg( bool aRequire );
 
     // The list of canonical layer names used in .kicad_pcb files:
@@ -55,7 +55,7 @@ protected:
     // The list of canonical layer names used in GUI (not translated):
     std::map<std::string, LSET> m_layerGuiMasks;
 
-    LSET                        m_selectedLayers;
+    LSEQ                        m_selectedLayers;
     bool                        m_selectedLayersSet;
 
     bool                        m_hasLayerArg;

@@ -47,7 +47,7 @@ public:
     bool m_plotBorderTitleBlocks;
     DXF_UNITS m_dxfUnits;
 
-    LSET m_printMaskLayer;
+    LSEQ m_printMaskLayer;
 };
 
 #endif

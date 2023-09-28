@@ -50,7 +50,7 @@ public:
 private:
     BOARD*            m_board;
     PCB_EDIT_FRAME*   m_parent;
-    LSET              m_printMaskLayer;
+    LSEQ              m_printMaskLayer;
     // the list of existing board layers in wxCheckListBox, with the
     // board layers id:
     std::pair<wxCheckListBox*, int> m_boxSelectLayer[PCB_LAYER_ID_COUNT];
@@ -326,10 +326,10 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
         BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
         wxString svgPath = fn.GetFullPath();
 
-        m_printMaskLayer = aOnlyOneFile ? all_selected : LSET( layer );
+        m_printMaskLayer = aOnlyOneFile ? all_selected.SeqStackupBottom2Top() : LSEQ( { layer } );
 
         if( m_checkboxEdgesOnAllPages->GetValue() )
-            m_printMaskLayer.set( Edge_Cuts );
+            m_printMaskLayer.push_back( Edge_Cuts );
 
         svgPlotOptions.m_outputFile = svgPath;
         svgPlotOptions.m_printMaskLayer = m_printMaskLayer;
