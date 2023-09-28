@@ -618,7 +618,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_PIN_TRICKS_START
                      && *evt->GetCommandId() <= ID_POPUP_SCH_PIN_TRICKS_END )
             {
-                if( !m_selection.OnlyContains( { SCH_PIN_T } ) )
+                if( !m_selection.OnlyContains( { SCH_PIN_T } ) || m_selection.Empty() )
                     return 0;
 
                 // Keep track of new items so we make them the new selection at the end
@@ -637,6 +637,53 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     commit.Push( wxS( "No Connect Pins" ) );
                     ClearSelection();
+                }
+                else if( *evt->GetCommandId() == ID_POPUP_SCH_PIN_TRICKS_WIRE )
+                {
+                    VECTOR2I wireGrid = grid.GetGridSize( GRID_HELPER_GRIDS::GRID_WIRES );
+
+                    for( EDA_ITEM* item : m_selection )
+                    {
+                        SCH_PIN*  pin = static_cast<SCH_PIN*>( item );
+                        SCH_LINE* wire = new SCH_LINE( pin->GetPosition(), LAYER_WIRE );
+
+                        // Add some length to the wire as nothing in our code base handles
+                        // 0 length wires very well, least of all the ortho drag algorithm
+                        VECTOR2I stub;
+
+                        switch( pin->GetOrientation() )
+                        {
+                        case PIN_ORIENTATION::PIN_LEFT:  stub = VECTOR2I( 1 * wireGrid.x, 0 ); break;
+                        case PIN_ORIENTATION::PIN_RIGHT: stub = VECTOR2I( -1 * wireGrid.x, 0 ); break;
+                        case PIN_ORIENTATION::PIN_UP:    stub = VECTOR2I( 0, 1 * wireGrid.y ); break;
+                        case PIN_ORIENTATION::PIN_DOWN:  stub = VECTOR2I( 0, -1 * wireGrid.y ); break;
+                        }
+
+                        wire->SetEndPoint( pin->GetPosition() + stub );
+
+                        m_frame->AddToScreen( wire, m_frame->GetScreen() );
+                        commit.Added( wire, m_frame->GetScreen() );
+                        newItems.push_back( wire );
+                    }
+
+                    ClearSelection();
+                    AddItemsToSel( &newItems );
+
+                    // Select only the ends so we can immediately start dragging them
+                    for( EDA_ITEM* item : newItems )
+                        static_cast<SCH_LINE*>( item )->SetFlags( ENDPOINT );
+
+                    // Put the mouse on the nearest point of the first wire
+                    SCH_LINE* first = static_cast<SCH_LINE*>( newItems[0] );
+                    getViewControls()->SetCrossHairCursorPosition( first->GetEndPoint(), false );
+                    getViewControls()->WarpMouseCursor( getViewControls()->GetCursorPosition(),
+                                                        true );
+
+                    // Start the drag tool, canceling will remove the wires
+                    if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, &commit, false ) )
+                        commit.Push( wxS( "Wire Pins" ) );
+                    else
+                        commit.Revert();
                 }
                 else
                 {

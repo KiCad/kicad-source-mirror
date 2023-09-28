@@ -215,6 +215,7 @@ private:
         if( !pin )
             return;
 
+        Add( wxS( "Wire" ), ID_POPUP_SCH_PIN_TRICKS_WIRE, BITMAPS::add_line );
         Add( wxS( "No Connect" ), ID_POPUP_SCH_PIN_TRICKS_NO_CONNECT, BITMAPS::noconn );
         Add( wxS( "Net Label" ), ID_POPUP_SCH_PIN_TRICKS_NET_LABEL, BITMAPS::add_label );
         Add( wxS( "Hierarchical Label" ), ID_POPUP_SCH_PIN_TRICKS_HIER_LABEL,
