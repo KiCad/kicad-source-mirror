@@ -695,7 +695,7 @@ void SHAPE_POLY_SET::RebuildHolesFromContours()
         else
         {
             wxASSERT( parentOutlineId != -1 );
-            int holeId = result.AddHole( contours[myId], parentOutlineId );
+            result.AddHole( contours[myId], parentOutlineId );
         }
 
         auto it = parentToChildren.find( myId );
