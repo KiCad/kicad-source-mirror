@@ -43,7 +43,7 @@ HOTKEY_CYCLE_POPUP::HOTKEY_CYCLE_POPUP( EDA_DRAW_FRAME* aParent ) :
         m_drawFrame( aParent )
 {
     m_showTimer = new wxTimer( this );
-    Bind( wxEVT_TIMER, [&]( wxTimerEvent& ) { Show( false ); },
+    Bind( wxEVT_TIMER, [&]( wxTimerEvent& ) { Show( false ); m_drawFrame->GetCanvas()->SetFocus(); },
           m_showTimer->GetId() );
 
     // On macOS, we can't change focus to the canvas before sending the event, so the key events
