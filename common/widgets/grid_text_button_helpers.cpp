@@ -214,7 +214,7 @@ protected:
             rawValue = m_preselect;
 
         wxString      symbolId = escapeLibId( rawValue );
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, m_dlg );
+        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SYMBOL_CHOOSER, true, m_dlg );
 
         if( frame->ShowModal( &symbolId, m_dlg ) )
             SetValue( UnescapeString( symbolId ) );

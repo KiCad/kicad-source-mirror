@@ -404,7 +404,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
         datasheet = symbol->GetDatasheetField().GetText();
     }
-    else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
+    else if( m_frame->IsType( FRAME_SCH_VIEWER ) )
     {
         LIB_SYMBOL* entry = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame )->GetSelectedSymbol();
 

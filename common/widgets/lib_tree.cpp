@@ -149,9 +149,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl = new WX_DATAVIEWCTRL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
     m_adapter->AttachTo( m_tree_ctrl );
 
-    if( aFlags & DETAILS )
-        sizer->AddSpacer( 5 );
-
     sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 1 );
 
     // Description panel
@@ -162,8 +159,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
             wxPoint html_size = ConvertDialogToPixels( wxPoint( 80, 80 ) );
 
             m_details_ctrl = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition,
-                                              wxSize( html_size.x, html_size.y ),
-                                              wxHW_SCROLLBAR_AUTO );
+                                              wxSize( html_size.x, html_size.y ) );
 
             sizer->Add( m_details_ctrl, 2, wxTOP | wxEXPAND, 5 );
         }

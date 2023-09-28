@@ -60,7 +60,6 @@ enum id_eeschema_frm
     ID_LIBEDIT_SELECT_UNIT_NUMBER,
 
     /* Library viewer horizontal toolbar IDs */
-    ID_LIBVIEW_SELECT_PART,
     ID_LIBVIEW_NEXT,
     ID_LIBVIEW_PREVIOUS,
     ID_LIBVIEW_SELECT_UNIT_NUMBER,

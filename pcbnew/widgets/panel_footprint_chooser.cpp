@@ -89,25 +89,29 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     adapter->AddLibraries( aFrame );
 
+    // -------------------------------------------------------------------------------------
+    // Construct the actual dialog
+    //
+
     wxBoxSizer*   sizer = new wxBoxSizer( wxVERTICAL );
     HTML_WINDOW*  details = nullptr;
 
     m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                        wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
     m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxSP_LIVE_UPDATE | wxSP_3DSASH );
+                                        wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
     //Avoid the splitter window being assigned as the Parent to additional windows
+    m_vsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
     m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
     auto detailsPanel = new wxPanel( m_vsplitter );
     auto detailsSizer = new wxBoxSizer( wxVERTICAL );
     detailsPanel->SetSizer( detailsSizer );
 
-    details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                               wxHW_SCROLLBAR_AUTO );
-    detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+    details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+    detailsSizer->Add( details, 1, wxEXPAND, 5 );
     detailsPanel->Layout();
     detailsSizer->Fit( detailsPanel );
 
@@ -115,7 +119,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_vsplitter->SetMinimumPaneSize( 20 );
     m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
 
-    sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+    sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
 
     m_tree = new LIB_TREE( m_hsplitter, wxT( "footprints" ), fpTable, m_adapter,
                            LIB_TREE::FLAGS::ALL_WIDGETS, details );
@@ -128,7 +132,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( rightPanel, m_frame->Kiway() );
     m_preview_ctrl->SetUserUnits( m_frame->GetUserUnits() );
-    rightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
+    rightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND, 5 );
 
     rightPanel->SetSizer( rightPanelSizer );
     rightPanel->Layout();
@@ -190,8 +194,8 @@ void PANEL_FOOTPRINT_CHOOSER::FinishSetup()
 
         PCBNEW_SETTINGS::FOOTPRINT_CHOOSER& cfg = settings->m_FootprintChooser;
 
-        int w = cfg.width < 0 ? horizPixelsFromDU( 440 ) : cfg.width;
-        int h = cfg.height < 0 ? horizPixelsFromDU( 340 ) : cfg.height;
+        int w = cfg.width < 40 ? horizPixelsFromDU( 440 ) : cfg.width;
+        int h = cfg.height < 40 ? horizPixelsFromDU( 340 ) : cfg.height;
 
         GetParent()->SetSize( wxSize( w, h ) );
         GetParent()->Layout();

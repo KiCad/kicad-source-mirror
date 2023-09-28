@@ -35,7 +35,7 @@
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
-#include <transform.h>
+#include <symbol_chooser_frame.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_grid_settings.h>
@@ -178,10 +178,14 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case FRAME_SCH_VIEWER:
-        case FRAME_SCH_VIEWER_MODAL:
         {
-            SYMBOL_VIEWER_FRAME* frame = new SYMBOL_VIEWER_FRAME( aKiway, aParent,
-                                                                  FRAME_T( aClassId ) );
+            SYMBOL_VIEWER_FRAME* frame = new SYMBOL_VIEWER_FRAME( aKiway, aParent );
+            return frame;
+        }
+
+        case FRAME_SYMBOL_CHOOSER:
+        {
+            SYMBOL_CHOOSER_FRAME* frame = new SYMBOL_CHOOSER_FRAME( aKiway, aParent );
             return frame;
         }
 

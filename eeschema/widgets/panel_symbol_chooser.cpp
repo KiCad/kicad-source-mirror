@@ -23,7 +23,7 @@
  */
 
 #include <symbol_library.h>
-#include <dialog_choose_symbol.h>
+#include <panel_symbol_chooser.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <sch_base_frame.h>
@@ -34,10 +34,11 @@
 #include <widgets/footprint_select_widget.h>
 #include <widgets/lib_tree.h>
 #include <widgets/symbol_preview_widget.h>
+#include <settings/settings_manager.h>
+#include <project/project_file.h>
+#include <symbol_editor_settings.h>
 #include <wx/button.h>
-#include <wx/checkbox.h>
 #include <wx/clipbrd.h>
-#include <wx/dataview.h>
 #include <wx/log.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -45,40 +46,118 @@
 #include <wx/timer.h>
 #include <wx/utils.h>
 #include <wx/wxhtml.h>
-
-std::mutex DIALOG_CHOOSE_SYMBOL::g_Mutex;
-
-wxString DIALOG_CHOOSE_SYMBOL::g_symbolSearchString;
-wxString DIALOG_CHOOSE_SYMBOL::g_powerSearchString;
+#include "pgm_base.h"
 
 
-DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                            wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
-                                            int aDeMorganConvert, bool aAllowFieldEdits,
-                                            bool aShowFootprints, bool aAllowBrowser )
-        : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
-                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
-          m_symbol_preview( nullptr ),
-          m_browser_button( nullptr ),
-          m_hsplitter( nullptr ),
-          m_vsplitter( nullptr ),
-          m_fp_sel_ctrl( nullptr ),
-          m_fp_preview( nullptr ),
-          m_keepSymbol( nullptr ),
-          m_useUnits( nullptr ),
-          m_tree( nullptr ),
-          m_details( nullptr ),
-          m_parent( aParent ),
-          m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
-          m_allow_field_edits( aAllowFieldEdits ),
-          m_show_footprints( aShowFootprints ),
-          m_external_browser_requested( false )
+wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;
+wxString PANEL_SYMBOL_CHOOSER::g_powerSearchString;
+
+
+PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
+                                            const SYMBOL_LIBRARY_FILTER* aFilter,
+                                            std::vector<PICKED_SYMBOL>& aHistoryList,
+                                            bool aAllowFieldEdits, bool aShowFootprints,
+                                            std::function<void()> aCloseHandler ) :
+        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
+        m_symbol_preview( nullptr ),
+        m_hsplitter( nullptr ),
+        m_vsplitter( nullptr ),
+        m_fp_sel_ctrl( nullptr ),
+        m_fp_preview( nullptr ),
+        m_tree( nullptr ),
+        m_details( nullptr ),
+        m_frame( aFrame ),
+        m_closeHandler( std::move( aCloseHandler ) ),
+        m_showPower( false ),
+        m_allow_field_edits( aAllowFieldEdits ),
+        m_show_footprints( aShowFootprints )
 {
-    m_showPower = aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER;
+    SYMBOL_LIB_TABLE*         libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
+    COMMON_SETTINGS::SESSION& session = Pgm().GetCommonSettings()->m_Session;
+    PROJECT_FILE&             project = m_frame->Prj().GetProjectFile();
 
-    // Never show footprints in power symbol mode
-    if( m_showPower )
-        m_show_footprints = false;
+    // Make sure settings are loaded before we start running multi-threaded symbol loaders
+    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+
+    m_adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( m_frame, libs );
+    SYMBOL_TREE_MODEL_ADAPTER* adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( m_adapter.get() );
+    bool loaded = false;
+
+    if( aFilter )
+    {
+        const wxArrayString& liblist = aFilter->GetAllowedLibList();
+
+        for( const wxString& nickname : liblist )
+        {
+            if( libs->HasLibrary( nickname, true ) )
+            {
+                loaded = true;
+
+                bool pinned = alg::contains( session.pinned_symbol_libs, nickname )
+                                || alg::contains( project.m_PinnedSymbolLibs, nickname );
+
+                if( libs->FindRow( nickname )->GetIsVisible() )
+                    adapter->AddLibrary( nickname, pinned );
+            }
+        }
+
+        adapter->AssignIntrinsicRanks();
+
+        if( aFilter->GetFilterPowerSymbols() )
+        {
+            adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
+            m_showPower = true;
+            m_show_footprints = false;
+        }
+    }
+
+    std::vector<LIB_SYMBOL>     history_list_storage;
+    std::vector<LIB_TREE_ITEM*> history_list;
+
+    history_list_storage.reserve( aHistoryList.size() );
+
+    for( const PICKED_SYMBOL& i : aHistoryList )
+    {
+        LIB_SYMBOL* symbol = m_frame->GetLibSymbol( i.LibId );
+
+        // This can be null, for example when a symbol has been deleted from a library
+        if( symbol )
+        {
+            history_list_storage.emplace_back( *symbol );
+
+            for( const std::pair<int, wxString>& fieldDef : i.Fields )
+            {
+                LIB_FIELD* field = history_list_storage.back().GetFieldById( fieldDef.first );
+
+                if( field )
+                    field->SetText( fieldDef.second );
+            }
+
+            history_list.push_back( &history_list_storage.back() );
+        }
+    }
+
+    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
+                           history_list, false, true );
+
+    if( !aHistoryList.empty() )
+        adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
+
+    const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
+
+    if( !loaded )
+    {
+        if( !adapter->AddLibraries( libNicknames, m_frame ) )
+        {
+            // loading cancelled by user
+            m_closeHandler();
+        }
+    }
+
+    // -------------------------------------------------------------------------------------
+    // Construct the actual dialog
+    //
 
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -92,7 +171,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         //Avoid the splitter window being assigned as the Parent to additional windows
         m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
-        sizer->Add( m_hsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+        sizer->Add( m_hsplitter, 1, wxEXPAND, 5 );
     }
     else
     {
@@ -110,9 +189,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         wxBoxSizer* detailsSizer = new wxBoxSizer( wxVERTICAL );
         detailsPanel->SetSizer( detailsSizer );
 
-        m_details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                     wxHW_SCROLLBAR_AUTO );
-        detailsSizer->Add( m_details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+        m_details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize  );
+        detailsSizer->Add( m_details, 1, wxEXPAND, 5 );
         detailsPanel->Layout();
         detailsSizer->Fit( detailsPanel );
 
@@ -120,7 +198,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         m_vsplitter->SetMinimumPaneSize( 20 );
         m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
 
-        sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+        sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
     }
 
     wxPanel*    treePanel = new wxPanel( m_hsplitter );
@@ -128,15 +206,13 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     treePanel->SetSizer( treeSizer );
 
     m_tree = new LIB_TREE( treePanel, m_showPower ? wxT( "power" ) : wxT( "symbols" ),
-                           PROJECT_SCH::SchSymbolLibTable( &Prj() ), aAdapter,
-                           LIB_TREE::FLAGS::ALL_WIDGETS,
-                           m_details );
+                           libs, m_adapter, LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
 
-    treeSizer->Add( m_tree, 1, wxEXPAND | wxALL, 5 );
+    treeSizer->Add( m_tree, 1, wxEXPAND, 5 );
     treePanel->Layout();
     treeSizer->Fit( treePanel );
 
-    aAdapter->FinishTreeInitialization();
+    m_adapter->FinishTreeInitialization();
 
     if( m_showPower )
         m_tree->SetSearchString( g_powerSearchString );
@@ -149,100 +225,33 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
 
     m_dbl_click_timer = new wxTimer( this );
 
-    wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    if( aAllowBrowser )
-    {
-        m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
-        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
-    }
-
-    m_keepSymbol = new wxCheckBox( this, wxID_ANY, _( "Place repeated copies" ) );
-    m_keepSymbol->SetToolTip( _( "Keep the symbol selected for subsequent clicks." ) );
-
-    m_useUnits = new wxCheckBox( this, wxID_ANY, _( "Place all units" ) );
-    m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
-
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_keepSymbol->SetValue( cfg->m_SymChooserPanel.keep_symbol );
-        m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
-    }
-
-    buttonsSizer->Add( m_keepSymbol, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 30 );
-    buttonsSizer->Add( m_useUnits, 0, wxLEFT | wxALIGN_CENTER_VERTICAL, 30 );
-
-    wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
-    wxButton*               okButton = new wxButton( this, wxID_OK );
-    wxButton*               cancelButton = new wxButton( this, wxID_CANCEL );
-
-    sdbSizer->AddButton( okButton );
-    sdbSizer->AddButton( cancelButton );
-    sdbSizer->Realize();
-
-    buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
-
-    sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
     SetSizer( sizer );
 
     Layout();
 
-    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        EESCHEMA_SETTINGS::PANEL_SYM_CHOOSER& panelCfg = cfg->m_SymChooserPanel;
-
-        // We specify the width of the right window (m_symbol_view_panel), because specify
-        // the width of the left window does not work as expected when SetSashGravity() is called
-        m_hsplitter->SetSashPosition( panelCfg.sash_pos_h > 0 ? panelCfg.sash_pos_h
-                                                              : horizPixelsFromDU( 220 ) );
-
-        if( m_vsplitter )
-        {
-            m_vsplitter->SetSashPosition( panelCfg.sash_pos_v > 0 ? panelCfg.sash_pos_v
-                                                                  : vertPixelsFromDU( 230 ) );
-        }
-
-        wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 390 ),
-                        panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
-        SetSize( dlgSize );
-
-        aAdapter->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_SymChooserPanel.sort_mode );
-    }
-
-    SetInitialFocus( m_tree->GetFocusTarget() );
-    SetupStandardButtons();
-
-    Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
-    Bind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
-    Bind( SYMBOL_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
-
-    if( m_browser_button )
-    {
-        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_SYMBOL::OnUseBrowser,
-                                this );
-    }
+    Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::OnCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( SYMBOL_PRESELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentPreselected, this );
+    Bind( SYMBOL_SELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentSelected, this );
 
     if( m_fp_sel_ctrl )
     {
-        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnFootprintSelected,
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::OnFootprintSelected,
                              this );
     }
 
     if( m_details )
     {
-        m_details->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ),
+        m_details->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnCharHook ),
                             nullptr, this );
     }
 }
 
 
-DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
+PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 {
-    Unbind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
-    Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this );
-    Unbind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
-    Unbind( SYMBOL_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
+    Unbind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::OnCloseTimer, this );
+    Unbind( SYMBOL_PRESELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentPreselected, this );
+    Unbind( SYMBOL_SELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentSelected, this );
 
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_dbl_click_timer->Stop();
@@ -253,22 +262,16 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     else
         g_symbolSearchString = m_tree->GetSearchString();
 
-    if( m_browser_button )
-    {
-        m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
-                                  &DIALOG_CHOOSE_SYMBOL::OnUseBrowser, this );
-    }
-
     if( m_fp_sel_ctrl )
     {
-        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnFootprintSelected,
+        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::OnFootprintSelected,
                                this );
     }
 
     if( m_details )
     {
         m_details->Disconnect( wxEVT_CHAR_HOOK,
-                               wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ), nullptr,
+                               wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnCharHook ), nullptr,
                                this );
     }
 
@@ -276,9 +279,6 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     {
         cfg->m_SymChooserPanel.width = GetSize().x;
         cfg->m_SymChooserPanel.height = GetSize().y;
-
-        cfg->m_SymChooserPanel.keep_symbol = m_keepSymbol->GetValue();
-        cfg->m_SymChooserPanel.place_all_units = m_useUnits->GetValue();
 
         cfg->m_SymChooserPanel.sash_pos_h = m_hsplitter->GetSashPosition();
 
@@ -290,39 +290,50 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
 }
 
 
-wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
+wxPanel* PANEL_SYMBOL_CHOOSER::ConstructRightPanel( wxWindow* aParent )
 {
-    wxPanel*                     panel = new wxPanel( aParent );
-    wxBoxSizer*                  sizer = new wxBoxSizer( wxVERTICAL );
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_parent->GetCanvas()->GetBackend();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend;
 
-    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, &Kiway(), true, backend );
+    if( m_frame->GetCanvas() )
+    {
+        backend = m_frame->GetCanvas()->GetBackend();
+    }
+    else
+    {
+        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        backend = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->m_Graphics.canvas_type;
+    }
+
+    wxPanel*    panel = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, &m_frame->Kiway(), true, backend );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
     {
-        FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
+        FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( m_frame->Kiway() );
 
-        sizer->Add( m_symbol_preview, 11, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_symbol_preview, 11, wxEXPAND | wxBOTTOM, 5 );
 
         if ( fp_list )
         {
             if( m_allow_field_edits )
-                m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_parent, panel, fp_list, true );
+                m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_frame, panel, fp_list, true );
 
-            m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
-            m_fp_preview->SetUserUnits( GetUserUnits() );
+            m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, m_frame->Kiway() );
+            m_fp_preview->SetUserUnits( m_frame->GetUserUnits() );
         }
 
         if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxALL, 4 );
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxBOTTOM, 4 );
 
         if( m_fp_preview )
-            sizer->Add( m_fp_preview, 10, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+            sizer->Add( m_fp_preview, 10, wxEXPAND, 5 );
     }
     else
     {
-        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxALL, 5 );
+        sizer->Add( m_symbol_preview, 1, wxEXPAND, 5 );
     }
 
     panel->SetSizer( sizer );
@@ -333,8 +344,42 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::OnInitDialog( wxInitDialogEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::FinishSetup()
 {
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        auto horizPixelsFromDU =
+                [&]( int x ) -> int
+                {
+                    wxSize sz( x, 0 );
+                    return GetParent()->ConvertDialogToPixels( sz ).x;
+                };
+
+        EESCHEMA_SETTINGS::PANEL_SYM_CHOOSER& panelCfg = cfg->m_SymChooserPanel;
+
+        int w = panelCfg.width > 40 ? panelCfg.width : horizPixelsFromDU( 440 );
+        int h = panelCfg.height > 40 ? panelCfg.height : horizPixelsFromDU( 340 );
+
+        GetParent()->SetSize( wxSize( w, h ) );
+        GetParent()->Layout();
+
+        // We specify the width of the right window (m_symbol_view_panel), because specify
+        // the width of the left window does not work as expected when SetSashGravity() is called
+
+        if( panelCfg.sash_pos_h < 0 )
+            panelCfg.sash_pos_h = horizPixelsFromDU( 220 );
+
+        if( panelCfg.sash_pos_v < 0 )
+            panelCfg.sash_pos_v = horizPixelsFromDU( 230 );
+
+        m_hsplitter->SetSashPosition( panelCfg.sash_pos_h );
+
+        if( m_vsplitter )
+            m_vsplitter->SetSashPosition( panelCfg.sash_pos_v );
+
+        m_adapter->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) panelCfg.sort_mode );
+    }
+
     if( m_fp_preview && m_fp_preview->IsInitialized() )
     {
         // This hides the GAL panel and shows the status label
@@ -342,11 +387,11 @@ void DIALOG_CHOOSE_SYMBOL::OnInitDialog( wxInitDialogEvent& aEvent )
     }
 
     if( m_fp_sel_ctrl )
-        m_fp_sel_ctrl->Load( Kiway(), Prj() );
+        m_fp_sel_ctrl->Load( m_frame->Kiway(), m_frame->Prj() );
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::OnCharHook( wxKeyEvent& e )
+void PANEL_SYMBOL_CHOOSER::OnCharHook( wxKeyEvent& e )
 {
     if( m_details && e.GetKeyCode() == 'C' && e.ControlDown() &&
         !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
@@ -368,42 +413,39 @@ void DIALOG_CHOOSE_SYMBOL::OnCharHook( wxKeyEvent& e )
 }
 
 
-LIB_ID DIALOG_CHOOSE_SYMBOL::GetSelectedLibId( int* aUnit ) const
+void PANEL_SYMBOL_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
+{
+    m_adapter->SetPreselectNode( aPreselect, 0 );
+}
+
+
+LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
 {
     return m_tree->GetSelectedLibId( aUnit );
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::OnUseBrowser( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::OnCloseTimer( wxTimerEvent& aEvent )
 {
-    m_external_browser_requested = true;
+    // Hack because of eaten MouseUp event. See PANEL_SYMBOL_CHOOSER::OnComponentSelected
+    // for the beginning of this spaghetti noodle.
 
-    wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
-}
-
-
-void DIALOG_CHOOSE_SYMBOL::OnCloseTimer( wxTimerEvent& aEvent )
-{
-    // Hack handler because of eaten MouseUp event. See
-    // DIALOG_CHOOSE_SYMBOL::OnComponentSelected for the beginning
-    // of this spaghetti noodle.
-
-    auto state = wxGetMouseState();
+    wxMouseState state = wxGetMouseState();
 
     if( state.LeftIsDown() )
     {
         // Mouse hasn't been raised yet, so fire the timer again. Otherwise the
         // purpose of this timer is defeated.
-        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_SYMBOL::DblClickDelay );
+        m_dbl_click_timer->StartOnce( PANEL_SYMBOL_CHOOSER::DblClickDelay );
     }
     else
     {
-        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+        m_closeHandler();
     }
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
+void PANEL_SYMBOL_CHOOSER::ShowFootprintFor( LIB_ID const& aLibId )
 {
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
@@ -412,7 +454,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
 
     try
     {
-        symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( aLibId );
+        symbol = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->LoadSymbol( aLibId );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -432,7 +474,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::ShowFootprint( wxString const& aName )
+void PANEL_SYMBOL_CHOOSER::ShowFootprint( wxString const& aName )
 {
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
@@ -458,7 +500,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprint( wxString const& aName )
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
+void PANEL_SYMBOL_CHOOSER::PopulateFootprintSelector( LIB_ID const& aLibId )
 {
     if( !m_fp_sel_ctrl )
         return;
@@ -471,7 +513,7 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
     {
         try
         {
-            symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( aLibId );
+            symbol = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->LoadSymbol( aLibId );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -508,7 +550,7 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::OnFootprintSelected( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::OnFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
@@ -523,7 +565,7 @@ void DIALOG_CHOOSE_SYMBOL::OnFootprintSelected( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::OnComponentPreselected( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::OnComponentPreselected( wxCommandEvent& aEvent )
 {
     LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
 
@@ -550,7 +592,7 @@ void DIALOG_CHOOSE_SYMBOL::OnComponentPreselected( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_SYMBOL::OnComponentSelected( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::OnComponentSelected( wxCommandEvent& aEvent )
 {
     if( m_tree->GetSelectedLibId().IsValid() )
     {
@@ -564,20 +606,8 @@ void DIALOG_CHOOSE_SYMBOL::OnComponentSelected( wxCommandEvent& aEvent )
         // possible (docs are vague). To get around this, we use a one-shot
         // timer to schedule the dialog close.
         //
-        // See DIALOG_CHOOSE_SYMBOL::OnCloseTimer for the other end of this
+        // See PANEL_SYMBOL_CHOOSER::OnCloseTimer for the other end of this
         // spaghetti noodle.
-        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_SYMBOL::DblClickDelay );
+        m_dbl_click_timer->StartOnce( PANEL_SYMBOL_CHOOSER::DblClickDelay );
     }
-}
-
-
-bool DIALOG_CHOOSE_SYMBOL::GetUseAllUnits() const
-{
-    return m_useUnits->GetValue();
-}
-
-
-bool DIALOG_CHOOSE_SYMBOL::GetKeepSymbol() const
-{
-    return m_keepSymbol->GetValue();
 }

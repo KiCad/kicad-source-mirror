@@ -94,7 +94,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                         aFrameName, schIUScale ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" ), m_spaceMouse( nullptr )
 {
-    createCanvas();
+    if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
+        createCanvas();
 
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )

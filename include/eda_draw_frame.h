@@ -57,7 +57,9 @@ using KIGFX::COLOR4D;
 using KIGFX::RENDER_SETTINGS;
 
 #define LIB_EDIT_FRAME_NAME           wxT( "LibeditFrame" )
+#define LIB_VIEW_FRAME_NAME           wxT( "ViewlibFrame" )
 #define SCH_EDIT_FRAME_NAME           wxT( "SchematicFrame" )
+#define SYMBOL_CHOOSER_FRAME_NAME     wxT( "SymbolChooserFrame" )
 #define PL_EDITOR_FRAME_NAME          wxT( "PlEditorFrame" )
 #define FOOTPRINT_WIZARD_FRAME_NAME   wxT( "FootprintWizard" )
 #define FOOTPRINT_CHOOSER_FRAME_NAME  wxT( "FootprintChooserFrame" )

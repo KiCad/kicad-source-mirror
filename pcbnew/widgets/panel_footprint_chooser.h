@@ -23,7 +23,6 @@
 #ifndef PANEL_FOOTPRINT_CHOOSER_H
 #define PANEL_FOOTPRINT_CHOOSER_H
 
-#include "dialog_shim.h"
 #include <widgets/lib_tree.h>
 #include <fp_tree_model_adapter.h>
 #include <footprint_info.h>
@@ -41,8 +40,8 @@ public:
     /**
      * Create dialog to choose component.
      *
-     * @param aFrame  the parent frame (FRAME_PCB_EDIT_FRAME or FOOTPRINT_CHOOSER_FRAME)
-     * @param aParent the parent window (DIALOG_SHIM or FOOTPRINT_CHOOSER_FRAME)
+     * @param aFrame  the parent frame (usually a PCB_EDIT_FRAME or FOOTPRINT_CHOOSER_FRAME)
+     * @param aParent the parent window (usually a DIALOG_SHIM or FOOTPRINT_CHOOSER_FRAME)
      * @param aCloseHandler a handler to be called on double-click of a footprint
      */
     PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
@@ -65,7 +64,6 @@ public:
     int GetItemCount() const { return m_adapter->GetItemCount(); }
 
     wxWindow* GetFocusTarget() const { return m_tree->GetFocusTarget(); }
-
 
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds

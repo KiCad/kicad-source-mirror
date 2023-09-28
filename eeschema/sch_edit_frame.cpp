@@ -50,6 +50,7 @@
 #include <project/net_settings.h>
 #include <python_scripting.h>
 #include <sch_edit_frame.h>
+#include <symbol_chooser_frame.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
 #include <sch_marker.h>
@@ -903,9 +904,11 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( symbolViewer && !symbolViewer->Close() )   // Can close symbol viewer?
             return false;
 
-        symbolViewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
+        // SYMBOL_CHOOSER_FRAME is always modal so this shouldn't come up, but better safe than
+        // sorry.
+        auto* chooser = (SYMBOL_CHOOSER_FRAME*) Kiway().Player( FRAME_SYMBOL_CHOOSER, false );
 
-        if( symbolViewer && !symbolViewer->Close() )   // Can close modal symbol viewer?
+        if( chooser && !chooser->Close() )   // Can close symbol chooser?
             return false;
     }
     else

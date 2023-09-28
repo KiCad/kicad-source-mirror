@@ -447,7 +447,7 @@ int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
         m_toolMgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
         symbolEditor->RebuildView();
     }
-    else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
+    else if( m_frame->IsType( FRAME_SCH_VIEWER ) )
     {
         SYMBOL_VIEWER_FRAME* symbolViewer = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
         symbolViewer->SetUnitAndConvert( symbolViewer->GetUnit(), convert );

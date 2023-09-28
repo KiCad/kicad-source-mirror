@@ -51,8 +51,7 @@ public:
      * @param aFrameType must be either #FRAME_SCH_LIB_VIEWER or #FRAME_SCH_LIB_VIEWER_MODAL.
      * @param aLibrary is the library to open when starting (default = NULL).
      */
-    SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-                         const wxString& aLibraryName = wxEmptyString );
+    SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     ~SYMBOL_VIEWER_FRAME();
 
@@ -95,7 +94,6 @@ public:
 
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnSymbolList( wxCommandEvent& event );
-    void OnSelectSymbol( wxCommandEvent& aEvent );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

@@ -41,7 +41,7 @@ static void AddFootprintToHistory( const wxString& aName )
     for( int ii = s_FootprintHistoryList.GetCount() - 1; ii >= 0; --ii )
     {
         if( s_FootprintHistoryList[ ii ] == aName )
-            s_FootprintHistoryList.RemoveAt((size_t) ii );
+            s_FootprintHistoryList.RemoveAt( (size_t) ii );
     }
 
     // Add the new name at the beginning of the history list

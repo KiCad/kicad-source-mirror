@@ -146,9 +146,6 @@ public:
      * @param aFilter is an optional #SYMBOL_LIBRARY_FILTER filter to pass the allowed library names
      *                and/or the library name to load the symbol from and/or some other filter
      * @param aHistoryList is the list of previously loaded symbols - will be edited
-     * @param aUseLibBrowser is the flag to call the library viewer to select the symbol
-     * @param aUnit is the preselected unit.
-     * @param aConvert is the preselected De Morgan shape.
      * @param aHighlight is the name of symbol to highlight in the list.
      *                   highlights none if there isn't one by that name.
      * @param aShowFootprints is the whether to show footprints in the dialog.
@@ -156,13 +153,9 @@ public:
      *
      * @return the selected symbol
      */
-    PICKED_SYMBOL PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER* aFilter,
+    PICKED_SYMBOL PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER* aFilter,
                                          std::vector<PICKED_SYMBOL>& aHistoryList,
-                                         bool aUseLibBrowser,
-                                         int aUnit,
-                                         int aConvert,
-                                         bool aShowFootprints,
-                                         const LIB_ID* aHighlight = nullptr,
+                                         bool aShowFootprints, const LIB_ID* aHighlight = nullptr,
                                          bool aAllowFields = true );
 
     /**
@@ -176,23 +169,6 @@ public:
      */
     LIB_SYMBOL* GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib = false,
                               bool aShowErrorMsg = false );
-
-    /**
-     * Call the library viewer to select symbol to import into schematic.
-     * If the library viewer is currently running, it is closed and reopened in modal mode.
-     *
-     * @param aParent is the caller.
-     * @param aFilter is a filter to pass the allowed library names
-     *          and/or some other filter.
-     * @param aPreselectedLibId is the preselected symbol's #LIB_ID. Not valid if none selected.
-     * @param aUnit is the preselected unit.
-     * @param aConvert is the preselected deMorgan conversion.
-     * @return the selected symbol.
-     */
-    PICKED_SYMBOL PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
-                                            const SYMBOL_LIBRARY_FILTER* aFilter,
-                                            const LIB_ID& aPreselectedLibId,
-                                            int aUnit, int aConvert );
 
     /**
      * Display a list of loaded libraries and allows the user to select a library.

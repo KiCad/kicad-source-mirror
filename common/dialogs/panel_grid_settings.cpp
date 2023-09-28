@@ -60,7 +60,6 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
         if( m_frameType != FRAME_SCH
             && m_frameType != FRAME_SCH_SYMBOL_EDITOR
             && m_frameType != FRAME_SCH_VIEWER
-            && m_frameType != FRAME_SCH_VIEWER_MODAL
             && m_frameType != FRAME_SIMULATOR )
         {
             m_checkGridOverrideConnected->Show( false );

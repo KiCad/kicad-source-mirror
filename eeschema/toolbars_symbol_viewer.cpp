@@ -46,10 +46,6 @@ void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
-    m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::library_browser, this ),
-                            _( "Choose symbol" ) );
-
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
                             KiScaledBitmap( BITMAPS::lib_previous, this ),
                             _( "Display previous symbol" ) );

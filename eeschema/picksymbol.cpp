@@ -43,180 +43,29 @@
 #include <tools/ee_actions.h>
 #include <project_sch.h>
 
-#include <dialog_choose_symbol.h>
+#include <dialog_symbol_chooser.h>
 
-PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
-                                                        const SYMBOL_LIBRARY_FILTER* aFilter,
-                                                        const LIB_ID& aPreselectedLibId,
-                                                        int aUnit, int aConvert )
-{
-    // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
-    SYMBOL_VIEWER_FRAME* viewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
-
-    if( viewer )
-        viewer->Destroy();
-
-    viewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, aParent );
-
-    if( aFilter )
-        viewer->SetFilter( aFilter );
-
-    if( aPreselectedLibId.IsValid() )
-    {
-        viewer->SetSelectedLibrary( aPreselectedLibId.GetLibNickname() );
-        viewer->SetSelectedSymbol( aPreselectedLibId.GetLibItemName());
-    }
-
-    viewer->SetUnitAndConvert( aUnit, aConvert );
-
-    viewer->Refresh();
-
-    PICKED_SYMBOL sel;
-    wxString      symbol;
-
-    if( viewer->ShowModal( &symbol, aParent ) )
-    {
-        LIB_ID id;
-
-        if( id.Parse( symbol ) == -1 )
-            sel.LibId = id;
-
-        sel.Unit = viewer->GetUnit();
-        sel.Convert = viewer->GetConvert();
-    }
-
-    viewer->Destroy();
-
-    return sel;
-}
-
-
-PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER* aFilter,
+PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER* aFilter,
                                                      std::vector<PICKED_SYMBOL>& aHistoryList,
-                                                     bool aUseLibBrowser, int aUnit, int aConvert,
                                                      bool aShowFootprints, const LIB_ID* aHighlight,
                                                      bool aAllowFields )
 {
-    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
-    SYMBOL_LIB_TABLE*            libs = PROJECT_SCH::SchSymbolLibTable( &Prj() );
-    COMMON_SETTINGS*             cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&                project = Prj().GetProjectFile();
+    std::unique_lock<std::mutex> dialogLock( DIALOG_SYMBOL_CHOOSER::g_Mutex, std::defer_lock );
 
-    // One DIALOG_CHOOSE_SYMBOL dialog at a time.  User probably can't handle more anyway.
+    // One DIALOG_SYMBOL_CHOOSER dialog at a time.  User probably can't handle more anyway.
     if( !dialogLock.try_lock() )
         return PICKED_SYMBOL();
 
-    // Make sure settings are loaded before we start running multi-threaded symbol loaders
-    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-    Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    DIALOG_SYMBOL_CHOOSER dlg( this, aHighlight, aFilter, aHistoryList, aAllowFields,
+                               aShowFootprints );
 
-
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> dataPtr
-                                    = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
-    SYMBOL_TREE_MODEL_ADAPTER* modelAdapter
-                                    = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( dataPtr.get() );
-    bool loaded = false;
-
-    if( aFilter )
-    {
-        const wxArrayString& liblist = aFilter->GetAllowedLibList();
-
-        for( const wxString& nickname : liblist )
-        {
-            if( libs->HasLibrary( nickname, true ) )
-            {
-                loaded = true;
-
-                bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, nickname )
-                                || alg::contains( project.m_PinnedSymbolLibs, nickname );
-
-                if( libs->FindRow( nickname )->GetIsVisible() )
-                    modelAdapter->AddLibrary( nickname, pinned );
-            }
-        }
-
-        modelAdapter->AssignIntrinsicRanks();
-
-        if( aFilter->GetFilterPowerSymbols() )
-            modelAdapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
-    }
-
-    std::vector<LIB_SYMBOL>     history_list_storage;
-    std::vector<LIB_TREE_ITEM*> history_list;
-
-    history_list_storage.reserve( aHistoryList.size() );
-
-    for( const PICKED_SYMBOL& i : aHistoryList )
-    {
-        LIB_SYMBOL* symbol = GetLibSymbol( i.LibId );
-
-        // This can be null, for example when a symbol has been deleted from a library
-        if( symbol )
-        {
-            history_list_storage.emplace_back( *symbol );
-
-            for( const std::pair<int, wxString>& fieldDef : i.Fields )
-            {
-                LIB_FIELD* field = history_list_storage.back().GetFieldById( fieldDef.first );
-
-                if( field )
-                    field->SetText( fieldDef.second );
-            }
-
-            history_list.push_back( &history_list_storage.back() );
-        }
-    }
-
-    modelAdapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                                history_list, false, true );
-
-    if( !aHistoryList.empty() )
-        modelAdapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
-
-    const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
-
-    if( !loaded )
-    {
-        if( !modelAdapter->AddLibraries( libNicknames, this ) )
-        {
-            // loading cancelled by user
-            return PICKED_SYMBOL();
-        }
-    }
-
-    if( aHighlight && aHighlight->IsValid() )
-        modelAdapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
-
-    wxString dialogTitle;
-
-    if( modelAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER )
-        dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), dataPtr->GetItemCount() );
-    else
-        dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), dataPtr->GetItemCount() );
-
-    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, dataPtr, aConvert, aAllowFields, aShowFootprints,
-                              aUseLibBrowser );
-
-    int ret = dlg.ShowModal();
-
-    // Save any changes to column widths, etc.
-    modelAdapter->SaveSettings();
-
-    if( ret == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return PICKED_SYMBOL();
 
     PICKED_SYMBOL sel;
     LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
 
-    if( dlg.IsExternalBrowserSelected() )   // User requested symbol browser.
-    {
-        sel = PickSymbolFromLibBrowser( this, aFilter, id, sel.Unit, sel.Convert );
-        id = sel.LibId;
-    }
-
-    if( !id.IsValid() )     // Dialog closed by OK button,
-                            // or the selection by lib browser was requested,
-                            // but no symbol selected
+    if( !id.IsValid() )
         return PICKED_SYMBOL();
 
     if( sel.Unit == 0 )

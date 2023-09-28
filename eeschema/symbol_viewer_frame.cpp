@@ -26,7 +26,6 @@
 #include <bitmaps.h>
 #include <symbol_library_common.h>
 #include <confirm.h>
-#include <dialog_choose_symbol.h>
 #include <dialogs/html_message_box.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
@@ -81,7 +80,6 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, SCH_BASE_FRAME )
     EVT_ACTIVATE( SYMBOL_VIEWER_FRAME::OnActivate )
 
     // Toolbar events
-    EVT_TOOL( ID_LIBVIEW_SELECT_PART, SYMBOL_VIEWER_FRAME::OnSelectSymbol )
     EVT_TOOL( ID_LIBVIEW_NEXT, SYMBOL_VIEWER_FRAME::onSelectNextSymbol )
     EVT_TOOL( ID_LIBVIEW_PREVIOUS, SYMBOL_VIEWER_FRAME::onSelectPreviousSymbol )
     EVT_CHOICE( ID_LIBVIEW_SELECT_UNIT_NUMBER, SYMBOL_VIEWER_FRAME::onSelectSymbolUnit )
@@ -101,34 +99,20 @@ BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, SCH_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-#define LIB_VIEW_NAME "ViewlibFrame"
-#define LIB_VIEW_NAME_MODAL "ViewlibFrameModal"
-
-#define LIB_VIEW_STYLE ( KICAD_DEFAULT_DRAWFRAME_STYLE )
-#define LIB_VIEW_STYLE_MODAL ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT )
-
-
-SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-                                          const wxString& aLibraryName ) :
-    SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Symbol Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize,
-                    aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
-                    aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),
+SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
+        SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_VIEWER, _( "Symbol Library Browser" ),
+                        wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
+                        LIB_VIEW_FRAME_NAME ),
         m_unitChoice( nullptr ),
         m_libList( nullptr ),
         m_symbolList( nullptr )
 {
-    wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
-
-    if( aFrameType == FRAME_SCH_VIEWER_MODAL )
-        SetModal( true );
-
-    m_aboutTitle = _HKI( "KiCad Symbol Library Viewer" );
+    m_aboutTitle = _HKI( "KiCad Symbol Library Browser" );
 
     // Force the frame name used in config. the lib viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
-    m_configName = LIB_VIEW_NAME;
+    m_configName = LIB_VIEW_FRAME_NAME;
 
     // Give an icon
     wxIcon  icon;
@@ -204,18 +188,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
 
     // Preload libraries
     loadAllLibraries();
-
-    if( aLibraryName.empty() )
-    {
-        ReCreateLibList();
-    }
-    else
-    {
-        m_currentSymbol.SetLibNickname( aLibraryName );
-        m_currentSymbol.SetLibItemName( "" );
-        m_unit = 1;
-        m_convert = 1;
-    }
+    ReCreateLibList();
 
     m_selection_changed = false;
 
@@ -235,8 +208,6 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
                       .CaptionVisible( false ).MinSize( 100, -1 ).BestSize( 300, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
-
-    m_auimgr.GetPane( libPanel ).Show( aLibraryName.empty() );
 
     m_auimgr.Update();
 
@@ -1069,59 +1040,6 @@ void SYMBOL_VIEWER_FRAME::FinishModal()
     }
 
     Close( true );
-}
-
-
-void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
-{
-    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
-
-    // One CHOOSE_SYMBOL dialog at a time.  User probably can't handle more anyway.
-    if( !dialogLock.try_lock() )
-        return;
-
-    // Container doing search-as-you-type.
-    SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Prj() );
-    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> dataPtr
-                                    = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
-    SYMBOL_TREE_MODEL_ADAPTER* modelAdapter
-                                    = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( dataPtr.get() );
-
-    if( !modelAdapter->AddLibraries( libs->GetLogicalLibs(), this ) )
-    {
-        // loading cancelled by user
-        return;
-    }
-
-    LIB_SYMBOL* current = GetSelectedSymbol();
-    LIB_ID id;
-    int unit = 0;
-
-    if( current )
-    {
-        id = current->GetLibId();
-        modelAdapter->SetPreselectNode( id, unit );
-    }
-
-    wxString dialogTitle;
-    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), modelAdapter->GetItemCount() );
-
-    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, dataPtr, m_convert, false, false, false );
-
-    if( dlg.ShowQuasiModal() == wxID_CANCEL )
-        return;
-
-    // Save any changes to column widths, etc.
-    modelAdapter->SaveSettings();
-
-    id = dlg.GetSelectedLibId( &unit );
-
-    if( !id.IsValid() )
-        return;
-
-    SetSelectedLibrary( id.GetLibNickname(), id.GetSubLibraryName() );
-    SetSelectedSymbol( id.GetLibItemName() );
-    SetUnitAndConvert( unit, 1 );
 }
 
 

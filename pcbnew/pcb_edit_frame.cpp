@@ -107,6 +107,7 @@
 #include <core/profile.h>
 #include <view/wx_view_controls.h>
 #include <footprint_viewer_frame.h>
+#include <footprint_chooser_frame.h>
 
 #include <action_plugin.h>
 #include <pcbnew_scripting_helpers.h>
@@ -1054,9 +1055,11 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( fpViewer && !fpViewer->Close() )   // Can close footprint viewer?
             return false;
 
-        fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
+        // FOOTPRINT_CHOOSER_FRAME is always modal so this shouldn't come up, but better safe than
+        // sorry.
+        auto* chooser = (FOOTPRINT_CHOOSER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
 
-        if( fpViewer && !fpViewer->Close() )   // Can close modal footprint viewer?
+        if( chooser && !chooser->Close() )   // Can close footprint chooser?
             return false;
     }
     else

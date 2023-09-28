@@ -666,8 +666,7 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
 
             if( m_parent->IsType( FRAME_SCH )
                 || m_parent->IsType( FRAME_SCH_SYMBOL_EDITOR )
-                || m_parent->IsType( FRAME_SCH_VIEWER )
-                || m_parent->IsType( FRAME_SCH_VIEWER_MODAL ) )
+                || m_parent->IsType( FRAME_SCH_VIEWER ) )
             {
                 COLOR4D color = renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
                 renderSettings.SetLayerColor( LAYER_DRAWINGSHEET, color );

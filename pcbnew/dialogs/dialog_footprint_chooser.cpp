@@ -38,7 +38,7 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( aParent, this, aFootprintHistoryList,
                                                   [this]()
                                                   {
-                                                      EndQuasiModal( wxID_OK );
+                                                      EndModal( wxID_OK );
                                                   } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );

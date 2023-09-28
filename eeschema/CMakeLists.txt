@@ -77,7 +77,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_bom_base.cpp
     dialogs/dialog_change_symbols.cpp
     dialogs/dialog_change_symbols_base.cpp
-    dialogs/dialog_choose_symbol.cpp
     dialogs/dialog_database_lib_settings_base.cpp
     dialogs/dialog_database_lib_settings.cpp
     dialogs/dialog_edit_symbols_libid.cpp
@@ -135,6 +134,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_sheet_pin_properties_base.cpp
     dialogs/dialog_sheet_properties.cpp
     dialogs/dialog_sheet_properties_base.cpp
+    dialogs/dialog_symbol_chooser.cpp
     dialogs/dialog_symbol_fields_table.cpp
     dialogs/dialog_symbol_fields_table_base.cpp
     dialogs/dialog_symbol_properties.cpp
@@ -256,6 +256,7 @@ set( EESCHEMA_SIM_SRCS
 
 set( EESCHEMA_WIDGETS
     widgets/hierarchy_pane.cpp
+    widgets/panel_symbol_chooser.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
     widgets/symbol_diff_widget.cpp
@@ -368,6 +369,7 @@ set( EESCHEMA_SRCS
     sheet.cpp
     symbol_async_loader.cpp
     symbol_checker.cpp
+    symbol_chooser_frame.cpp
     symbol_lib_table.cpp
     symbol_library.cpp
     symbol_library_manager.cpp

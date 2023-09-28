@@ -188,7 +188,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibrary( LIB_ID aPreselect )
 
     DIALOG_FOOTPRINT_CHOOSER dialog( this, aPreselect, s_FootprintHistoryList );
 
-    if( dialog.ShowQuasiModal() == wxID_CANCEL )
+    if( dialog.ShowModal() == wxID_CANCEL )
         return nullptr;
 
     fpid = dialog.GetSelectedLibId();

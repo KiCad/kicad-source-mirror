@@ -347,8 +347,8 @@ private:
 };
 
 
-DIALOG_EDIT_SYMBOLS_LIBID::DIALOG_EDIT_SYMBOLS_LIBID( SCH_EDIT_FRAME* aParent )
-    :DIALOG_EDIT_SYMBOLS_LIBID_BASE( aParent )
+DIALOG_EDIT_SYMBOLS_LIBID::DIALOG_EDIT_SYMBOLS_LIBID( SCH_EDIT_FRAME* aParent ) :
+        DIALOG_EDIT_SYMBOLS_LIBID_BASE( aParent )
 {
     m_autoWrapRenderer = new GRIDCELL_AUTOWRAP_STRINGRENDERER;
 
@@ -668,15 +668,10 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 
 bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
 {
-#if 0
-    // Use dialog symbol selector to choose a symbol
-    SCH_BASE_FRAME::HISTORY_LIST dummy;
-    SCH_BASE_FRAME::PICKED_SYMBOL sel = m_frame->SelectComponentFromLibrary( nullptr, dummy, true,
-                                                                             0, 0, false );
-#else
     // Use library viewer to choose a symbol
-    LIB_ID preselected;
-    wxString current = getLibIdValue( m_grid, aRow, COL_NEW_LIBID );
+    std::vector<PICKED_SYMBOL> dummyHistory;
+    LIB_ID                     preselected;
+    wxString                   current = getLibIdValue( m_grid, aRow, COL_NEW_LIBID );
 
     if( current.IsEmpty() )
         current = getLibIdValue( m_grid, aRow, COL_CURR_LIBID );
@@ -684,8 +679,8 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
     if( !current.IsEmpty() )
         preselected.Parse( current, true );
 
-    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibBrowser( this, nullptr, preselected, 0, 0 );
-#endif
+    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibrary( nullptr, dummyHistory, false,
+                                                            &preselected, false );
 
     if( sel.LibId.empty() )     // command aborted
         return false;
