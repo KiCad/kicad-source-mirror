@@ -28,7 +28,7 @@
 #include <kiface_base.h>
 #include <fp_lib_table.h>
 #include <footprint.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 
 
 DIALOG_FOOTPRINT_ASSOCIATIONS::DIALOG_FOOTPRINT_ASSOCIATIONS( PCB_BASE_FRAME* aFrame,
@@ -58,7 +58,7 @@ bool DIALOG_FOOTPRINT_ASSOCIATIONS::TransferDataToWindow()
     wxString fpDesc;
 
     PROJECT*             project = m_footprint->GetBoard()->GetProject();
-    FP_LIB_TABLE* libTable = PROJECT_PCBNEW::PcbFootprintLibs( project );
+    FP_LIB_TABLE* libTable = PROJECT_PCB::PcbFootprintLibs( project );
     const LIB_TABLE_ROW* libTableRow = nullptr;
 
     try

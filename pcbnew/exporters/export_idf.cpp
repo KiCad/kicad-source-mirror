@@ -35,7 +35,7 @@
 #include <pad.h>
 #include <pcb_shape.h>
 #include <build_version.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <wx/msgdlg.h>
 #include "project.h"
 #include "kiway.h"
@@ -283,7 +283,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
         try
         {
-            fpRow = PROJECT_PCBNEW::PcbFootprintLibs( aPcb->GetProject() )->FindRow( libraryName, false );
+            fpRow = PROJECT_PCB::PcbFootprintLibs( aPcb->GetProject() )->FindRow( libraryName, false );
         }
         catch( ... )
         {
@@ -606,7 +606,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
 
-    resolver = PROJECT_PCBNEW::Get3DCacheManager( &Prj() )->GetResolver();
+    resolver = PROJECT_PCB::Get3DCacheManager( &Prj() )->GetResolver();
 
     bool ok = true;
     double scale = pcbIUScale.MM_PER_IU;   // we must scale internal units to mm for IDF

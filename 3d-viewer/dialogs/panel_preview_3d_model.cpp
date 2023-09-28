@@ -37,7 +37,7 @@
 #include <common_ogl/ogl_attr_list.h>
 #include <dpi_scaling_common.h>
 #include <pgm_base.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/wx_infobar.h>
@@ -123,7 +123,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     // Create the 3D canvas
     m_previewPane = new EDA_3D_CANVAS( this,
                                        OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
-                                       m_boardAdapter, m_currentCamera, PROJECT_PCBNEW::Get3DCacheManager( &aFrame->Prj() ) );
+                                       m_boardAdapter, m_currentCamera, PROJECT_PCB::Get3DCacheManager( &aFrame->Prj() ) );
 
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;

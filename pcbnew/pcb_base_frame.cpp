@@ -51,7 +51,7 @@
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
 #include <pgm_base.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <wildcards_and_files_ext.h>
 #include <zoom_defines.h>
 
@@ -112,7 +112,7 @@ bool PCB_BASE_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
     // Similarly, wxConvBrokenFileNames uses some statically allocated variables that make it
     // crash when run later from a d'tor.
-    PROJECT_PCBNEW::Cleanup3DCache( &Prj() );
+    PROJECT_PCB::Cleanup3DCache( &Prj() );
 
     return true;
 }
@@ -1153,7 +1153,7 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     }
 
     wxString libfullname;
-    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
     if( !aFootprint || !tbl )
         return;
@@ -1229,7 +1229,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     m_watcherLastModified = lastModified;
 
     FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
-    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
     // When loading a footprint from a library in the footprint editor
     // the items UUIDs must be keep and not reinitialized

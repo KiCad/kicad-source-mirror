@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 
 
 bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist,
@@ -148,7 +148,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
     FOOTPRINT* footprint = nullptr;
     FOOTPRINT* fpOnBoard = nullptr;
 
-    if( aNetlist.IsEmpty() || PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->IsEmpty() )
+    if( aNetlist.IsEmpty() || PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsEmpty() )
         return;
 
     aNetlist.SortByFPID();

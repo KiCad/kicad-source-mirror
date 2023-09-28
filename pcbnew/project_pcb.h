@@ -28,7 +28,7 @@ class PROJECT;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
 
-class PROJECT_PCBNEW
+class PROJECT_PCB
 {
 public:
     /**
@@ -51,5 +51,5 @@ public:
     static FILENAME_RESOLVER* Get3DFilenameResolver( PROJECT* aProject );
 
 private:
-    PROJECT_PCBNEW() {}
+    PROJECT_PCB() {}
 };

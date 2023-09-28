@@ -38,7 +38,7 @@
 #include <base_units.h>
 #include <filename_resolver.h>
 #include <trace_helpers.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 
 #include <Message.hxx>                // OpenCascade messenger
 #include <Message_PrinterOStream.hxx> // OpenCascade output messenger
@@ -220,7 +220,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         {
             // FindRow() can throw an exception
             const FP_LIB_TABLE_ROW* fpRow =
-                    PROJECT_PCBNEW::PcbFootprintLibs( m_board->GetProject() )->FindRow( libraryName, false );
+                    PROJECT_PCB::PcbFootprintLibs( m_board->GetProject() )->FindRow( libraryName, false );
 
             if( fpRow )
                 footprintBasePath = fpRow->GetFullURI( true );

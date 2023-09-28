@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "project_pcbnew.h"
+#include "project_pcb.h"
 #include <fp_lib_table.h>
 #include <project.h>
 #include <confirm.h>
@@ -34,7 +34,7 @@
 
 static std::mutex mutex3D_cacheManager;
 
-FP_LIB_TABLE* PROJECT_PCBNEW::PcbFootprintLibs( PROJECT* aProject )
+FP_LIB_TABLE* PROJECT_PCB::PcbFootprintLibs( PROJECT* aProject )
 {
     // This is a lazy loading function, it loads the project specific table when
     // that table is asked for, not before.
@@ -74,7 +74,7 @@ FP_LIB_TABLE* PROJECT_PCBNEW::PcbFootprintLibs( PROJECT* aProject )
 }
 
 
-S3D_CACHE* PROJECT_PCBNEW::Get3DCacheManager( PROJECT* aProject, bool aUpdateProjDir )
+S3D_CACHE* PROJECT_PCB::Get3DCacheManager( PROJECT* aProject, bool aUpdateProjDir )
 {
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 
@@ -104,13 +104,13 @@ S3D_CACHE* PROJECT_PCBNEW::Get3DCacheManager( PROJECT* aProject, bool aUpdatePro
 }
 
 
-FILENAME_RESOLVER* PROJECT_PCBNEW::Get3DFilenameResolver( PROJECT* aProject )
+FILENAME_RESOLVER* PROJECT_PCB::Get3DFilenameResolver( PROJECT* aProject )
 {
     return Get3DCacheManager( aProject )->GetResolver();
 }
 
 
-void PROJECT_PCBNEW::Cleanup3DCache( PROJECT* aProject )
+void PROJECT_PCB::Cleanup3DCache( PROJECT* aProject )
 {
     std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
 

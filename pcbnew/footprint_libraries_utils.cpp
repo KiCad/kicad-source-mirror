@@ -46,7 +46,7 @@
 #include <env_paths.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <project/project_file.h>
 #include <footprint_editor_settings.h>
 #include "footprint_viewer_frame.h"
@@ -286,7 +286,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 wxString PCB_BASE_EDIT_FRAME::CreateNewProjectLibrary( const wxString& aLibName,
                                                        const wxString& aProposedName )
 {
-    return createNewLibrary( aLibName, aProposedName, PROJECT_PCBNEW::PcbFootprintLibs( &Prj() ) );
+    return createNewLibrary( aLibName, aProposedName, PROJECT_PCB::PcbFootprintLibs( &Prj() ) );
 }
 
 
@@ -435,7 +435,7 @@ FP_LIB_TABLE* PCB_BASE_EDIT_FRAME::selectLibTable( bool aOptional )
     switch( dlg.GetSelection() )
     {
     case 0: return &GFootprintTable;
-    case 1: return PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    case 1: return PROJECT_PCB::PcbFootprintLibs( &Prj() );
     default: return nullptr;
     }
 }
@@ -492,7 +492,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
         if( isGlobal )
             GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
         else
-            PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->Save( Prj().FootprintLibTblName() );
+            PROJECT_PCB::PcbFootprintLibs( &Prj() )->Save( Prj().FootprintLibTblName() );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -528,7 +528,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to delete a footprint from a legacy lib
-    wxString libfullname = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FindRow( nickname )->GetFullURI();
+    wxString libfullname = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( nickname )->GetFullURI();
 
     if( IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == IO_MGR::LEGACY )
     {
@@ -536,7 +536,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
         return false;
     }
 
-    if( !PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( nickname ) )
+    if( !PROJECT_PCB::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( nickname ) )
     {
         wxString msg = wxString::Format( _( "Library '%s' is read only." ), nickname );
         ShowInfoBarError( msg );
@@ -553,7 +553,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
 
     try
     {
-        PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FootprintDelete( nickname, fpname );
+        PROJECT_PCB::PcbFootprintLibs( &Prj() )->FootprintDelete( nickname, fpname );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -607,7 +607,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         {
             try
             {
-                FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &prj );
+                FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &prj );
 
                 if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
                 {
@@ -649,7 +649,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
         if( map )
         {
-            const LIB_TABLE_ROW* row = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FindRowByURI( libPath );
+            const LIB_TABLE_ROW* row = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRowByURI( libPath );
 
             if( row )
                 libNickname = row->GetNickName();
@@ -731,7 +731,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
         }
     }
 
-    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
@@ -780,7 +780,7 @@ bool FOOTPRINT_EDIT_FRAME::DuplicateFootprint( FOOTPRINT* aFootprint )
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
-    wxString libFullName = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FindRow( libraryName )->GetFullURI();
+    wxString libFullName = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( libraryName )->GetFullURI();
 
     if( IO_MGR::GuessPluginTypeFromLibPath( libFullName ) == IO_MGR::LEGACY )
     {
@@ -788,7 +788,7 @@ bool FOOTPRINT_EDIT_FRAME::DuplicateFootprint( FOOTPRINT* aFootprint )
         return false;
     }
 
-    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
     int           i = 1;
     wxString      newName = footprintName;
 
@@ -812,7 +812,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
     {
         aFootprint->SetFPID( LIB_ID( wxEmptyString, aFootprint->GetFPID().GetLibItemName() ) );
 
-        PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FootprintSave( aLibraryName, aFootprint );
+        PROJECT_PCB::PcbFootprintLibs( &Prj() )->FootprintSave( aLibraryName, aFootprint );
 
         aFootprint->SetFPID( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) );
         return true;
@@ -946,7 +946,7 @@ public:
     {
         COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
         PROJECT_FILE&              project = aParent->Prj().GetProjectFile();
-        FP_LIB_TABLE*              tbl = PROJECT_PCBNEW::PcbFootprintLibs( &aParent->Prj() );
+        FP_LIB_TABLE*              tbl = PROJECT_PCB::PcbFootprintLibs( &aParent->Prj() );
         std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
         wxArrayString              headers;
         std::vector<wxArrayString> itemsToDisplay;
@@ -1047,7 +1047,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
     if( aFootprint == nullptr )
         return false;
 
-    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
     SetMsgPanel( aFootprint );
 
@@ -1076,7 +1076,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
                     // Legacy libraries are readable, but modifying legacy format is not allowed
                     // So prompt the user if he try to add/replace a footprint in a legacy lib
-                    const FP_LIB_TABLE_ROW* row = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FindRow( newLib );
+                    const FP_LIB_TABLE_ROW* row = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( newLib );
                     wxString                libPath = row->GetFullURI();
                     IO_MGR::PCB_FILE_T      piType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
@@ -1209,7 +1209,7 @@ private:
 FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName,
                                                const wxString& aLibName, bool aQuiet )
 {
-    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
     wxString      footprintName = aFootprintName;
     wxString      msg;
 
@@ -1336,7 +1336,7 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
     COMMON_SETTINGS*             cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&                project = Kiway().Prj().GetProjectFile();
-    FP_LIB_TABLE*                fptbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE*                fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
     std::vector< wxArrayString > itemsToDisplay;
     std::vector< wxString >      nicknames = fptbl->GetLogicalLibs();
 

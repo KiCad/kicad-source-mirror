@@ -54,7 +54,7 @@
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 
 #include <wx/statline.h>
 #include <wx/stattext.h>
@@ -863,7 +863,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     // Extract the library information
-    FP_LIB_TABLE* fptbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
     if( fptbl->HasLibrary( lib ) )
         msg = wxString::Format( _( "Library location: %s" ), fptbl->GetFullURI( lib ) );
@@ -876,7 +876,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
-    FP_LIB_TABLE* fptbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE* fptbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
 
     // Check if there are footprint libraries in the footprint library table.
     if( !fptbl || !fptbl->GetLogicalLibs().size() )
@@ -983,7 +983,7 @@ void CVPCB_MAINFRAME::BuildLibrariesList()
 {
     COMMON_SETTINGS*   cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&      project = Kiway().Prj().GetProjectFile();
-    FP_LIB_TABLE*      tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
+    FP_LIB_TABLE*      tbl = PROJECT_PCB::PcbFootprintLibs( &Prj() );
     std::set<wxString> pinnedMatches;
     std::set<wxString> otherMatches;
     m_librariesListBox->ClearList();

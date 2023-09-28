@@ -33,7 +33,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 
 /*
     Library parity test.
@@ -754,7 +754,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
 
     std::map<LIB_ID, std::shared_ptr<FOOTPRINT>> libFootprintCache;
 
-    FP_LIB_TABLE* libTable = PROJECT_PCBNEW::PcbFootprintLibs( project );
+    FP_LIB_TABLE* libTable = PROJECT_PCB::PcbFootprintLibs( project );
     wxString      msg;
     int           ii = 0;
     const int     progressDelta = 250;

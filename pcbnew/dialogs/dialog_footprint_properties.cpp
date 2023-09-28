@@ -35,7 +35,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/text_ctrl_eval.h>
@@ -187,7 +187,7 @@ DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 
     // free the memory used by all models, otherwise models which were
     // browsed but not used would consume memory
-    PROJECT_PCBNEW::Get3DCacheManager( &Prj() )->FlushCache( false );
+    PROJECT_PCB::Get3DCacheManager( &Prj() )->FlushCache( false );
 
     // the GL canvas has to be visible before it is destroyed
     m_page = m_NoteBook->GetSelection();

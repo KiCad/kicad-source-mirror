@@ -38,7 +38,7 @@
 #include "pad.h"
 #include "pcb_text.h"
 #include "pcb_track.h"
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <core/arraydim.h>
 #include <filename_resolver.h>
 #include "plugins/3dapi/ifsg_all.h"
@@ -1004,7 +1004,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
         try
         {
-            fpRow = PROJECT_PCBNEW::PcbFootprintLibs( m_board->GetProject() )->FindRow( libraryName, false );
+            fpRow = PROJECT_PCB::PcbFootprintLibs( m_board->GetProject() )->FindRow( libraryName, false );
         }
         catch( ... )
         {
@@ -1251,7 +1251,7 @@ bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
     m_Subdir3DFpModels = subdir.GetAbsolutePath( wxFileName( aFullFileName ).GetPath() );
 
     m_UseRelPathIn3DModelFilename = aUseRelativePaths;
-    m_Cache3Dmodels = PROJECT_PCBNEW::Get3DCacheManager( aProject );
+    m_Cache3Dmodels = PROJECT_PCB::Get3DCacheManager( aProject );
 
     // When 3D models are separate files, for historical reasons the VRML unit
     // is expected to be 0.1 inch (2.54mm) instead of 1mm, so we adjust the m_BoardToVrmlScale

@@ -47,7 +47,7 @@
 #include <macros.h>
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
-#include <project_pcbnew.h>
+#include <project_pcb.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
@@ -307,7 +307,7 @@ FP_LIB_TABLE* GetFootprintLibraryTable()
     if( !project )
         return nullptr;
 
-    return PROJECT_PCBNEW::PcbFootprintLibs( project );
+    return PROJECT_PCB::PcbFootprintLibs( project );
 }
 
 
