@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
-"Last-Translator: xXx <xxx_xxx_xxxxxxxxx@mail.ru>\n"
+"PO-Revision-Date: 2023-08-27 09:55+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2743,7 +2743,7 @@ msgstr "Вставить как..."
 #: eeschema/dialogs/dialog_print_using_printer.cpp:144
 #: eeschema/dialogs/dialog_print_using_printer_base.h:61
 msgid "Print"
-msgstr "Распечатать"
+msgstr "Печать"
 
 #: common/dialogs/dialog_print_generic.cpp:96
 #: common/dialogs/dialog_print_generic.cpp:247
@@ -6484,11 +6484,11 @@ msgstr "Принять участие"
 
 #: common/tool/actions.cpp:668
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr "Откройте «Добавить в KiCad» в веб-браузере."
+msgstr "Открыть в вэб-браузере страницу с информацией о том как помочь KiCad"
 
 #: common/tool/actions.cpp:674
 msgid "Open \"Donate to KiCad\" in a web browser"
-msgstr "Откройте «Пожертвовать в KiCad» в веб-браузере"
+msgstr "Открыть в вэб-браузере страницу с информацией о том как помочь KiCad"
 
 #: common/tool/actions.cpp:678
 msgid "Report Bug"
@@ -6677,6 +6677,7 @@ msgid "Min grid spacing:"
 msgstr "Мин. шаг сетки:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
+#, fuzzy
 msgid "Snap to grid:"
 msgstr "Привязка к сетке:"
 
@@ -16158,7 +16159,7 @@ msgstr "Настройки..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Simulation"
-msgstr "Моделирование"
+msgstr "Симуляция"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
@@ -19711,8 +19712,9 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Возможные варианты: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
+#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Допустимыми вариантами являются: маршрут, альтернативный вариант."
+msgstr "Возможные варианты: absolute,plot"
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19763,8 +19765,9 @@ msgid "Invalid zeros format specified\n"
 msgstr "Указан недопустимый формат нулей\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
+#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Указан неверный формат сверления овала\n"
+msgstr "Указан недопустимый формат карты\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -19862,10 +19865,9 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Зеркально отразить плату (полезно для просмотра нижних слоев)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
+#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr ""
-"Используемая цветовая тема (по умолчанию будут установлены настройки "
-"редактора печатных плат)"
+msgstr "Цветовая тема (по умолчанию берется из редактора плат)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -19873,8 +19875,6 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
-"Настройка формы площадки/с помощью опции сверления (0 = нет формы, 1 = "
-"маленькая форма, 2 = фактическая форма)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -26358,8 +26358,9 @@ msgid "Export STEP"
 msgstr "Экспорт в STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
+#, fuzzy
 msgid "Command line:\n"
-msgstr "Командная строка:\n"
+msgstr "Команда:"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -35505,9 +35506,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' разобран не полностью."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, c-format
+#, fuzzy, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Каталог посадочных мест не найден: «%s»."
+msgstr "Библиотека посад.мест не найдена."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
@@ -36165,10 +36166,10 @@ msgstr ""
 "Пропускается полигон, так как слой Eagle '%s' (%d) не связан со слоем KiCad."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, c-format
+#, fuzzy, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
 msgstr ""
-"Пропуск многоугольника на слое «%s» (%d): количество контуров не равно 1."
+"Пропускается полигон, так как слой Eagle '%s' (%d) не связан со слоем KiCad."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36541,23 +36542,23 @@ msgstr ""
 "позиция: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
+#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"Устаревшая стратегия заполнения зон больше не поддерживается.\n"
-"\n"
-"Заливки зон будут преобразованы в максимально возможном порядке."
+"Устаревший режим заливки зон более не поддерживается.\n"
+"Преобразовать зоны в сглаженные залитые полигоны?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
+#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Режим заполнения зоны устаревшего сегмента больше не поддерживается.\n"
-"\n"
-"Заливки зон будут преобразованы в максимально возможном объеме."
+"Устаревший режим заполнения отрезками более не поддерживается.\n"
+"Преобразовать зоны в сглаженные залитые полигоны?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
