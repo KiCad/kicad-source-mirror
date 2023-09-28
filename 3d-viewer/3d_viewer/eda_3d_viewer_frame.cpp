@@ -56,6 +56,7 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_aui_utils.h>
 #include <wildcards_and_files_ext.h>
+#include <project_pcbnew.h>
 
 #include <3d_navlib/nl_3d_viewer_plugin.h>
 
@@ -116,7 +117,8 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     ANTIALIASING_MODE       aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
 
     m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode ), m_boardAdapter,
-                                  m_currentCamera, Prj().Get3DCacheManager() );
+                                  m_currentCamera,
+                                  PROJECT_PCBNEW::Get3DCacheManager( &Prj() ) );
 
     m_appearancePanel = new APPEARANCE_CONTROLS_3D( this, GetCanvas() );
 
@@ -391,14 +393,14 @@ void EDA_3D_VIEWER_FRAME::ReloadRequest()
 
     // This will schedule a request to load later
     if( m_canvas )
-        m_canvas->ReloadRequest( GetBoard(), Prj().Get3DCacheManager() );
+        m_canvas->ReloadRequest( GetBoard(), PROJECT_PCBNEW::Get3DCacheManager( &Prj() ) );
 }
 
 
 void EDA_3D_VIEWER_FRAME::NewDisplay( bool aForceImmediateRedraw )
 {
     if( m_canvas )
-        m_canvas->ReloadRequest( GetBoard(), Prj().Get3DCacheManager() );
+        m_canvas->ReloadRequest( GetBoard(), PROJECT_PCBNEW::Get3DCacheManager( &Prj() ) );
 
     // After the ReloadRequest call, the refresh often takes a bit of time,
     // and it is made here only on request.

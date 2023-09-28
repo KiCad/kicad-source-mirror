@@ -52,6 +52,7 @@
 #include <pcbnew_id.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <project_pcbnew.h>
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -934,7 +935,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
     {
         try
         {
-            writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( fpid.GetLibNickname() );
+            writable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->IsFootprintLibWritable( fpid.GetLibNickname() );
         }
         catch( const IO_ERROR& )
         {
@@ -987,7 +988,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateView()
 
 void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 {
-    FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE*   fpTable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
 
     WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 2 );
 
@@ -1009,7 +1010,7 @@ void FOOTPRINT_EDIT_FRAME::initLibraryTree()
 
 void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
 {
-    FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* fpTable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     LIB_ID        target = GetTargetFPID();
     bool          targetSelected = ( target == m_treePane->GetLibTree()->GetSelectedLibId() );

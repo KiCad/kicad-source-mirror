@@ -51,6 +51,7 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
+#include <project_pcbnew.h>
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
@@ -790,7 +791,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     }
                 }
 
-                FP_LIB_TABLE*   prjlibtable = Prj().PcbFootprintLibs();
+                FP_LIB_TABLE*   prjlibtable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
                 const wxString& project_env = PROJECT_VAR_NAME;
                 wxString        rel_path, env_path;
 
@@ -810,7 +811,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                 try
                 {
-                    Prj().PcbFootprintLibs()->Save( tblName );
+                    PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->Save( tblName );
                 }
                 catch( const IO_ERROR& ioe )
                 {

@@ -44,6 +44,7 @@
 #include "dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
 #include <wx/defs.h>
+#include <project_pcbnew.h>
 
 enum MODELS_TABLE_COLUMNS
 {
@@ -97,7 +98,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
     m_modelsGrid->SetColAttr( COL_SHOWN, attr );
     m_modelsGrid->SetWindowStyleFlag( m_modelsGrid->GetWindowStyle() & ~wxHSCROLL );
 
-    m_frame->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
+    PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() )->GetResolver()->SetProgramBase( &Pgm() );
 
     m_previewPane = new PANEL_PREVIEW_3D_MODEL( this, m_frame, m_footprint, &m_shapes3D_list );
 
@@ -117,7 +118,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
 
     // free the memory used by all models, otherwise models which were
     // browsed but not used would consume memory
-    m_frame->Prj().Get3DCacheManager()->FlushCache( false );
+    PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() )->FlushCache( false );
 
     delete m_previewPane;
 }
@@ -154,7 +155,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
     m_modelsGrid->ClearRows();
 
     wxString origPath, alias, shortPath;
-    FILENAME_RESOLVER* res = m_frame->Prj().Get3DCacheManager()->GetResolver();
+    FILENAME_RESOLVER* res = PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
 
     for( const FP_3DMODEL& model : m_footprint->Models() )
     {
@@ -213,7 +214,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
     if( aEvent.GetCol() == COL_FILENAME )
     {
         bool               hasAlias = false;
-        FILENAME_RESOLVER* res = m_frame->Prj().Get3DCacheManager()->GetResolver();
+        FILENAME_RESOLVER* res = PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
         wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), COL_FILENAME );
 
         // Perform cleanup and validation on the filename if it isn't empty
@@ -308,7 +309,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
             filter = (int) tmp;
     }
 
-    if( !S3D::Select3DModel( m_parentDialog, m_frame->Prj().Get3DCacheManager(), initialpath, filter, &model )
+    if( !S3D::Select3DModel( m_parentDialog, PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() ), initialpath, filter, &model )
         || model.m_Filename.empty() )
     {
         if( selected >= 0 )
@@ -323,7 +324,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
     sidx = wxString::Format( wxT( "%i" ), filter );
     prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
-    FILENAME_RESOLVER* res = m_frame->Prj().Get3DCacheManager()->GetResolver();
+    FILENAME_RESOLVER* res = PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
     wxString alias;
     wxString shortPath;
     wxString filename = model.m_Filename;
@@ -429,7 +430,7 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
         return MODEL_VALIDATE_ERRORS::NO_FILENAME;
 
     bool               hasAlias = false;
-    FILENAME_RESOLVER* resolv = m_frame->Prj().Get3DFilenameResolver();
+    FILENAME_RESOLVER* resolv = PROJECT_PCBNEW::Get3DFilenameResolver( &m_frame->Prj() );
 
     if( !resolv )
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;
@@ -441,7 +442,7 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
     const FP_LIB_TABLE_ROW* fpRow = nullptr;
     try
     {
-        fpRow = m_frame->Prj().PcbFootprintLibs()->FindRow( libraryName, false );
+        fpRow = PROJECT_PCBNEW::PcbFootprintLibs( &m_frame->Prj() )->FindRow( libraryName, false );
     }
     catch( ... )
     {
@@ -467,7 +468,7 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
 
 void PANEL_FP_PROPERTIES_3D_MODEL::Cfg3DPath( wxCommandEvent& event )
 {
-    if( S3D::Configure3DPaths( this, m_frame->Prj().Get3DCacheManager()->GetResolver() ) )
+    if( S3D::Configure3DPaths( this, PROJECT_PCBNEW::Get3DCacheManager( &m_frame->Prj() )->GetResolver() ) )
         m_previewPane->UpdateDummyFootprint();
 }
 

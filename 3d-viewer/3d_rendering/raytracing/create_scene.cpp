@@ -42,6 +42,7 @@
 #include <footprint.h>
 #include <fp_lib_table.h>
 #include <eda_3d_viewer_frame.h>
+#include <project_pcbnew.h>
 
 #include <base_units.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
@@ -1258,8 +1259,8 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
                 {
                     // FindRow() can throw an exception
                     const FP_LIB_TABLE_ROW* fpRow =
-                            m_boardAdapter.GetBoard()->GetProject()->PcbFootprintLibs()->FindRow(
-                                    libraryName, false );
+                        PROJECT_PCBNEW::PcbFootprintLibs( m_boardAdapter.GetBoard()->GetProject() )
+                                ->FindRow( libraryName, false );
 
                     if( fpRow )
                         footprintBasePath = fpRow->GetFullURI( true );

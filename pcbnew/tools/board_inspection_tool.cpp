@@ -45,6 +45,7 @@
 #include <widgets/footprint_diff_widget.h>
 #include <drc/drc_item.h>
 #include <pad.h>
+#include <project_pcbnew.h>
 
 
 BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :
@@ -1489,7 +1490,7 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint )
     r->Report( "" );
 
     PROJECT*             project = aFootprint->GetBoard()->GetProject();
-    FP_LIB_TABLE*        libTable = project->PcbFootprintLibs();
+    FP_LIB_TABLE*        libTable = PROJECT_PCBNEW::PcbFootprintLibs( project );
     const LIB_TABLE_ROW* libTableRow = nullptr;
 
     try

@@ -276,27 +276,6 @@ public:
     // non-virtuals resident in PCBNEW link image(s).  By being non-virtual, these
     // functions can get linked into the KIFACE that needs them, and only there.
     // In fact, the other KIFACEs don't even know they exist.
-#if defined( PCBNEW ) || defined( CVPCB )
-    /**
-     * Return the table of footprint libraries without Kiway, only from within Pcbnew.
-     */
-    FP_LIB_TABLE* PcbFootprintLibs();
-
-    /**
-     * Return a pointer to an instance of the 3D cache manager.
-     *
-     * An instance is created and initialized if appropriate.
-     *
-     * @return a pointer to an instance of the 3D cache manager or NULL on failure.
-     */
-    S3D_CACHE* Get3DCacheManager( bool updateProjDir = false );
-
-    void Cleanup3DCache();
-
-    /// Accessor for 3D path resolver
-    FILENAME_RESOLVER* Get3DFilenameResolver();
-#endif
-
 
 #if defined( EESCHEMA )
     // These are all prefaced with "Sch"

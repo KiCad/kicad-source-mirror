@@ -32,6 +32,7 @@
 
 #include <cvpcb_mainframe.h>
 #include <fp_conflict_assignment_selector.h>
+#include <project_pcbnew.h>
 
 
 /**
@@ -134,7 +135,7 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
                     if( component->GetFPID().IsLegacy() )
                     {
                         // get this first here, it's possibly obsoleted if we get it too soon.
-                        FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs();
+                        FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
 
                         int guess = guessNickname( tbl, (LIB_ID*) &component->GetFPID() );
 

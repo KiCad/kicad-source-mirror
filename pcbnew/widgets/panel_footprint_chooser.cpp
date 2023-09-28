@@ -38,6 +38,7 @@
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/wx_progress_reporters.h>
 #include <footprint_info_impl.h>
+#include <project_pcbnew.h>
 
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
@@ -49,7 +50,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
         m_frame( aFrame ),
         m_closeHandler( std::move( aCloseHandler ) )
 {
-    FP_LIB_TABLE*   fpTable = aFrame->Prj().PcbFootprintLibs();
+    FP_LIB_TABLE*   fpTable = PROJECT_PCBNEW::PcbFootprintLibs( &aFrame->Prj() );
 
     // Load footprint files:
     WX_PROGRESS_REPORTER* progressReporter = new WX_PROGRESS_REPORTER( aParent,

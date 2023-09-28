@@ -45,6 +45,7 @@
 #include <pcbnew_id.h>
 #include <footprint_editor_settings.h>
 #include <pgm_base.h>
+#include <project_pcbnew.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <tool/action_toolbar.h>
@@ -422,7 +423,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
-    std::vector<wxString> nicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
+    std::vector<wxString> nicknames = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->GetLogicalLibs();
     std::vector<wxString> pinnedMatches;
     std::vector<wxString> otherMatches;
 
@@ -507,7 +508,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
     wxString nickname = getCurNickname();
 
-    fp_info_list->ReadFootprintFiles( Prj().PcbFootprintLibs(), !nickname ? nullptr : &nickname );
+    fp_info_list->ReadFootprintFiles( PROJECT_PCBNEW::PcbFootprintLibs( &Prj() ), !nickname ? nullptr : &nickname );
 
     if( fp_info_list->GetErrorCount() )
     {
@@ -934,7 +935,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     if( event.GetActive() )
     {
         // Ensure we have the right library list:
-        std::vector< wxString > libNicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
+        std::vector< wxString > libNicknames = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->GetLogicalLibs();
         bool                    stale = false;
 
         if( libNicknames.size() != m_libList->GetCount() )
@@ -1032,7 +1033,7 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
     if( aFootprint && !aFootprint->IsEmpty() )
     {
         wxString msg;
-        LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
+        LIB_TABLE* fpTable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
         LIB_ID fpid;
 
         fpid.Parse( *aFootprint, true );
@@ -1146,7 +1147,7 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     {
         try
         {
-            FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
+            FP_LIB_TABLE* libtable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
             const LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );
 
             title = getCurNickname() + wxT( " \u2014 " ) + row->GetFullURI( true );
@@ -1200,7 +1201,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         GetBoard()->DeleteAllFootprints();
         GetBoard()->GetNetInfo().RemoveUnusedNets();
 
-        FOOTPRINT* footprint = Prj().PcbFootprintLibs()->FootprintLoad( getCurNickname(),
+        FOOTPRINT* footprint = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() )->FootprintLoad( getCurNickname(),
                                                                         getCurFootprintName() );
 
         if( footprint )

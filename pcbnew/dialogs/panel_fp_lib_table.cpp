@@ -67,6 +67,7 @@
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <macros.h>
+#include <project_pcbnew.h>
 
 // clang-format off
 
@@ -1146,7 +1147,7 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
 {
     FP_LIB_TABLE* globalTable = &GFootprintTable;
     wxString      globalTablePath = FP_LIB_TABLE::GetGlobalTableFileName();
-    FP_LIB_TABLE* projectTable = aKiway->Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* projectTable = PROJECT_PCBNEW::PcbFootprintLibs( &aKiway->Prj() );
     wxString      projectTablePath = aKiway->Prj().FootprintLibTblName();
     wxString      msg;
 

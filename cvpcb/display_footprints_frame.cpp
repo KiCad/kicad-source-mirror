@@ -57,7 +57,7 @@
 #include <wx/choice.h>
 #include <wx/debug.h>
 #include <cvpcb_id.h>
-
+#include <project_pcbnew.h>
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
@@ -412,7 +412,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     wxString libNickname = From_UTF8( fpid.GetLibNickname().c_str() );
     wxString fpName      = From_UTF8( fpid.GetLibItemName().c_str() );
 
-    FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* fpTable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
     wxASSERT( fpTable );
 
     // See if the library requested is in the library table

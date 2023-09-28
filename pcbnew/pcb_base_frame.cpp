@@ -51,6 +51,7 @@
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
 #include <pgm_base.h>
+#include <project_pcbnew.h>
 #include <wildcards_and_files_ext.h>
 #include <zoom_defines.h>
 
@@ -111,7 +112,7 @@ bool PCB_BASE_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
     // Similarly, wxConvBrokenFileNames uses some statically allocated variables that make it
     // crash when run later from a d'tor.
-    Prj().Cleanup3DCache();
+    PROJECT_PCBNEW::Cleanup3DCache( &Prj() );
 
     return true;
 }
@@ -157,46 +158,6 @@ void PCB_BASE_FRAME::Update3DView( bool aMarkDirty, bool aRefresh, const wxStrin
         if( aRefresh )
             draw3DFrame->Redraw();
     }
-}
-
-
-FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
-{
-    // This is a lazy loading function, it loads the project specific table when
-    // that table is asked for, not before.
-
-    FP_LIB_TABLE*   tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
-
-    // its gotta be NULL or a FP_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->Type() == FP_LIB_TABLE_T );
-
-    if( !tbl )
-    {
-        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
-        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        tbl = new FP_LIB_TABLE( &GFootprintTable );
-
-        SetElem( ELEM_FPTBL, tbl );
-
-        wxString projectFpLibTableFileName = FootprintLibTblName();
-
-        try
-        {
-            tbl->Load( projectFpLibTableFileName );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project footprint libraries." ),
-                                 ioe.What() );
-        }
-        catch( ... )
-        {
-            DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ) );
-        }
-    }
-
-    return tbl;
 }
 
 
@@ -1192,7 +1153,7 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     }
 
     wxString libfullname;
-    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
 
     if( !aFootprint || !tbl )
         return;
@@ -1268,7 +1229,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     m_watcherLastModified = lastModified;
 
     FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
-    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
 
     // When loading a footprint from a library in the footprint editor
     // the items UUIDs must be keep and not reinitialized

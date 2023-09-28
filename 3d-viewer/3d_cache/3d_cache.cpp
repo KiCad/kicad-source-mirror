@@ -61,7 +61,6 @@
 #define MASK_3D_CACHE "3D_CACHE"
 
 static std::mutex mutex3D_cache;
-static std::mutex mutex3D_cacheManager;
 
 
 static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB ) noexcept
@@ -697,63 +696,4 @@ void S3D_CACHE::CleanCacheDir( int aNumDaysOld )
             }
         }
     }
-}
-
-
-void PROJECT::Cleanup3DCache()
-{
-    std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
-
-    // Get the existing cache from the project
-    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( GetElem( ELEM_3DCACHE ) );
-
-    if( cache )
-    {
-        // We'll delete ".3dc" cache files older than this many days
-        int clearCacheInterval = 0;
-
-        if( Pgm().GetCommonSettings() )
-            clearCacheInterval = Pgm().GetCommonSettings()->m_System.clear_3d_cache_interval;
-
-        // An interval of zero means the user doesn't want to ever clear the cache
-
-        if( clearCacheInterval > 0 )
-            cache->CleanCacheDir( clearCacheInterval );
-    }
-}
-
-
-S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
-{
-    std::lock_guard<std::mutex> lock( mutex3D_cacheManager );
-
-    // Get the existing cache from the project
-    S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( GetElem( ELEM_3DCACHE ) );
-
-    if( !cache )
-    {
-        // Create a cache if there is not one already
-        cache = new S3D_CACHE();
-
-        wxFileName cfgpath;
-        cfgpath.AssignDir( PATHS::GetUserSettingsPath() );
-        cfgpath.AppendDir( wxT( "3d" ) );
-
-        cache->SetProgramBase( &Pgm() );
-        cache->Set3DConfigDir( cfgpath.GetFullPath() );
-
-        SetElem( ELEM_3DCACHE, cache );
-        aUpdateProjDir = true;
-    }
-
-    if( aUpdateProjDir )
-        cache->SetProject( this );
-
-    return cache;
-}
-
-
-FILENAME_RESOLVER* PROJECT::Get3DFilenameResolver()
-{
-    return Get3DCacheManager()->GetResolver();
 }

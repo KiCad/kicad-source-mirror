@@ -49,6 +49,7 @@ using namespace std::placeholders;
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialog_pad_properties.h>
+#include <project_pcbnew.h>
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -233,7 +234,7 @@ FOOTPRINT* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 
 FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 {
-    FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE*   fptbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
 
     wxCHECK_MSG( fptbl, nullptr, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 

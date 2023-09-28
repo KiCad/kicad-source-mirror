@@ -44,6 +44,7 @@
 #include <wx/stattext.h>
 #include <zoom_defines.h>
 #include <dialog_shim.h>
+#include <project_pcbnew.h>
 
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
                                                   UNITS_PROVIDER* aUnitsProvider,
@@ -162,7 +163,7 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
         m_currentFootprint->SetParent( nullptr );
     }
 
-    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* fptbl = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
 
     try
     {

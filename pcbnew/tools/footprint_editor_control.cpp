@@ -43,6 +43,7 @@
 #include <footprint_wizard_frame.h>
 #include <kiway.h>
 #include <drc/drc_item.h>
+#include <project_pcbnew.h>
 
 #include <memory>
 
@@ -284,7 +285,7 @@ int FOOTPRINT_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
     {
         // Save Library As
         const wxString& src_libNickname = m_frame->GetTargetFPID().GetLibNickname();
-        wxString src_libFullName = m_frame->Prj().PcbFootprintLibs()->GetFullURI( src_libNickname );
+        wxString src_libFullName = PROJECT_PCBNEW::PcbFootprintLibs( &m_frame->Prj() )->GetFullURI( src_libNickname );
 
         if( m_frame->SaveLibraryAs( src_libFullName ) )
             m_frame->SyncLibraryTree( true );
@@ -359,7 +360,7 @@ int FOOTPRINT_EDITOR_CONTROL::PasteFootprint( const TOOL_EVENT& aEvent )
         wxString newLib = m_frame->GetTreeFPID().GetLibNickname();
         wxString newName = m_copiedFootprint->GetFPID().GetLibItemName();
 
-        while( m_frame->Prj().PcbFootprintLibs()->FootprintExists( newLib, newName ) )
+        while( PROJECT_PCBNEW::PcbFootprintLibs( &m_frame->Prj() )->FootprintExists( newLib, newName ) )
             newName += _( "_copy" );
 
         m_copiedFootprint->SetFPID( LIB_ID( newLib, newName ) );
@@ -426,7 +427,7 @@ private:
 
 int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
 {
-    FP_LIB_TABLE* tbl = m_frame->Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* tbl = PROJECT_PCBNEW::PcbFootprintLibs( &m_frame->Prj() );
     LIB_ID        fpID = m_frame->GetTreeFPID();
     wxString      libraryName = fpID.GetLibNickname();
     wxString      oldName = fpID.GetLibItemName();
@@ -492,7 +493,7 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
 
                 m_frame->SaveFootprintInLibrary( footprint, libraryName );
 
-                m_frame->Prj().PcbFootprintLibs()->FootprintDelete( libraryName, oldName );
+                PROJECT_PCBNEW::PcbFootprintLibs( &m_frame->Prj() )->FootprintDelete( libraryName, oldName );
             }
             catch( const IO_ERROR& ioe )
             {

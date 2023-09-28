@@ -43,6 +43,7 @@
 #include <widgets/lib_tree.h>
 #include <pcb_layer_box_selector.h>
 #include <pcb_dimension.h>
+#include <project_pcbnew.h>
 #include <dialogs/dialog_dimension_properties.h>
 
 using namespace std::placeholders;
@@ -318,7 +319,7 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxString   libNickname;
             wxString   msg;
 
-            FP_LIB_TABLE*        libTable = Prj().PcbFootprintLibs();
+            FP_LIB_TABLE*        libTable = PROJECT_PCBNEW::PcbFootprintLibs( &Prj() );
             const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( fpFileName.GetPath() );
 
             if( !libTableRow )
