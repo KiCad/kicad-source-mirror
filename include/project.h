@@ -91,10 +91,10 @@ public:
      */
     virtual void ApplyTextVars( const std::map<wxString, wxString>& aVarsMap );
 
-    bool GetTextVarsTicker() const { return m_textVarsTicker; }
+    int  GetTextVarsTicker() const { return m_textVarsTicker; }
     void IncrementTextVarsTicker() { m_textVarsTicker++; }
 
-    bool GetNetclassesTicker() const { return m_netclassesTicker; }
+    int  GetNetclassesTicker() const { return m_netclassesTicker; }
     void IncrementNetclassesTicker() { m_netclassesTicker++; }
 
     /**
