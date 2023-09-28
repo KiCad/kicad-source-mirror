@@ -186,7 +186,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     // Process hotkeys when the tree control has focus:
     m_tree_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
 
-    Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
+    Bind( EVT_LIBITEM_SELECTED, &LIB_TREE::onPreselect, this );
 
     if( m_query_ctrl )
     {
@@ -465,14 +465,14 @@ void LIB_TREE::expandIfValid( const wxDataViewItem& aTreeId )
 
 void LIB_TREE::postPreselectEvent()
 {
-    wxCommandEvent event( SYMBOL_PRESELECTED );
+    wxCommandEvent event( EVT_LIBITEM_SELECTED );
     wxPostEvent( this, event );
 }
 
 
 void LIB_TREE::postSelectEvent()
 {
-    wxCommandEvent event( SYMBOL_SELECTED );
+    wxCommandEvent event( EVT_LIBITEM_CHOSEN );
     wxPostEvent( this, event );
 }
 
@@ -898,5 +898,5 @@ void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
 }
 
 
-wxDEFINE_EVENT( SYMBOL_PRESELECTED, wxCommandEvent );
-wxDEFINE_EVENT( SYMBOL_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( EVT_LIBITEM_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( EVT_LIBITEM_CHOSEN, wxCommandEvent );

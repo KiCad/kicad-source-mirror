@@ -55,19 +55,6 @@ public:
 
     ~SYMBOL_VIEWER_FRAME();
 
-    /**
-     * Runs the symbol viewer as a modal dialog.
-     *
-     * @param aSymbol an optional FPID string to initialize the viewer with and to
-     *                return a selected footprint through.
-     */
-    bool ShowModal( wxString* aSymbol, wxWindow* aParent ) override;
-
-    /**
-     * Send the selected symbol back to the caller.
-     */
-    void FinishModal();
-
     void OnSize( wxSizeEvent& event ) override;
 
     /**
@@ -101,15 +88,6 @@ public:
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
-
-    /**
-     * Set a filter to display only libraries and/or symbols which match the filter.
-     *
-     * @param aFilter is a filter to pass the allowed library name list and/or some other filter
-     *                see SCH_BASE_FRAME::SelectSymbolFromLibrary() for details.
-     *                if aFilter == NULL, remove all filtering.
-     */
-    void SetFilter( const SYMBOL_LIBRARY_FILTER* aFilter );
 
     /**
      * Set the selected library in the library window.

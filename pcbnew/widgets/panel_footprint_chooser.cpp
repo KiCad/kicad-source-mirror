@@ -90,7 +90,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     adapter->AddLibraries( aFrame );
 
     // -------------------------------------------------------------------------------------
-    // Construct the actual dialog
+    // Construct the actual panel
     //
 
     wxBoxSizer*   sizer = new wxBoxSizer( wxVERTICAL );
@@ -147,8 +147,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_adapter->FinishTreeInitialization();
 
     Bind( wxEVT_TIMER, &PANEL_FOOTPRINT_CHOOSER::onCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( SYMBOL_PRESELECTED, &PANEL_FOOTPRINT_CHOOSER::onComponentPreselected, this );
-    Bind( SYMBOL_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onComponentSelected, this );
+    Bind( EVT_LIBITEM_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onFootprintSelected, this );
+    Bind( EVT_LIBITEM_CHOSEN, &PANEL_FOOTPRINT_CHOOSER::onFootprintChosen, this );
 
     Layout();
 }
@@ -157,8 +157,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
 {
     Unbind( wxEVT_TIMER, &PANEL_FOOTPRINT_CHOOSER::onCloseTimer, this );
-    Unbind( SYMBOL_PRESELECTED, &PANEL_FOOTPRINT_CHOOSER::onComponentPreselected, this );
-    Unbind( SYMBOL_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onComponentSelected, this );
+    Unbind( EVT_LIBITEM_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onFootprintSelected, this );
+    Unbind( EVT_LIBITEM_CHOSEN, &PANEL_FOOTPRINT_CHOOSER::onFootprintChosen, this );
 
     // I am not sure the following two lines are necessary, but they will not hurt anyone
     m_dbl_click_timer->Stop();
@@ -232,7 +232,7 @@ LIB_ID PANEL_FOOTPRINT_CHOOSER::GetSelectedLibId() const
 
 void PANEL_FOOTPRINT_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 {
-    // Hack because of eaten MouseUp event. See PANEL_FOOTPRINT_CHOOSER::onComponentSelected
+    // Hack because of eaten MouseUp event. See PANEL_FOOTPRINT_CHOOSER::onFootprintChosen
     // for the beginning of this spaghetti noodle.
 
     auto state = wxGetMouseState();
@@ -250,7 +250,7 @@ void PANEL_FOOTPRINT_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 }
 
 
-void PANEL_FOOTPRINT_CHOOSER::onComponentPreselected( wxCommandEvent& aEvent )
+void PANEL_FOOTPRINT_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 {
     if( !m_preview_ctrl || !m_preview_ctrl->IsInitialized() )
         return;
@@ -269,7 +269,7 @@ void PANEL_FOOTPRINT_CHOOSER::onComponentPreselected( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_FOOTPRINT_CHOOSER::onComponentSelected( wxCommandEvent& aEvent )
+void PANEL_FOOTPRINT_CHOOSER::onFootprintChosen( wxCommandEvent& aEvent )
 {
     if( m_tree->GetSelectedLibId().IsValid() )
     {

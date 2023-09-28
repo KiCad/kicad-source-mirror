@@ -219,11 +219,8 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     FinishAUIInitialization();
 
-    if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
-    {
-        Raise();
-        Show( true );
-    }
+    Raise();
+    Show( true );
 
     SyncView();
     GetCanvas()->SetCanFocus( false );
@@ -469,62 +466,10 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 }
 
 
-bool SYMBOL_VIEWER_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
-{
-    if( aSymbol && !aSymbol->IsEmpty() )
-    {
-        wxString msg;
-        LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
-        LIB_ID libid;
-
-        libid.Parse( *aSymbol, true );
-
-        if( libid.IsValid() )
-        {
-            wxString libName = libid.GetLibNickname();
-
-            if( !libTable->HasLibrary( libid.GetLibNickname(), false ) )
-            {
-                msg.Printf( _( "The current configuration does not include the library '%s'.\n"
-                               "Use Manage Symbol Libraries to edit the configuration." ),
-                             UnescapeString( libName ) );
-                DisplayErrorMessage( this, _( "Library not found in symbol library table." ), msg );
-            }
-            else if ( !libTable->HasLibrary( libid.GetLibNickname(), true ) )
-            {
-                msg.Printf( _( "The library '%s' is not enabled in the current configuration.\n"
-                               "Use Manage Symbol Libraries to edit the configuration." ),
-                             UnescapeString( libName ) );
-                DisplayErrorMessage( aParent, _( "Symbol library not enabled." ), msg );
-            }
-            else
-            {
-                SetSelectedLibrary( libid.GetLibNickname(), libid.GetSubLibraryName() );
-                SetSelectedSymbol( libid.GetLibItemName() );
-            }
-        }
-    }
-
-    m_libFilter->SetFocus();
-    return KIWAY_PLAYER::ShowModal( aSymbol, aParent );
-}
-
-
 void SYMBOL_VIEWER_FRAME::doCloseWindow()
 {
     GetCanvas()->StopDrawing();
-
-    if( !IsModal() )
-    {
-        Destroy();
-    }
-    else if( !IsDismissed() )
-    {
-        // only dismiss modal frame if not already dismissed.
-        DismissModal( false );
-
-        // Modal frame will be destroyed by the calling function.
-    }
+    Destroy();
 }
 
 
@@ -947,7 +892,7 @@ void SYMBOL_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 
 WINDOW_SETTINGS* SYMBOL_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
     return &cfg->m_LibViewPanel.window;
 }
@@ -957,7 +902,7 @@ void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
 
     GetCanvas()->GetGAL()->SetAxesColor( m_colorSettings->GetColor( LAYER_SCHEMATIC_GRID_AXES ) );
@@ -993,21 +938,6 @@ void SYMBOL_VIEWER_FRAME::CloseLibraryViewer( wxCommandEvent& event )
 }
 
 
-void SYMBOL_VIEWER_FRAME::SetFilter( const SYMBOL_LIBRARY_FILTER* aFilter )
-{
-    m_listPowerOnly = false;
-    m_allowedLibs.Clear();
-
-    if( aFilter )
-    {
-        m_allowedLibs = aFilter->GetAllowedLibList();
-        m_listPowerOnly = aFilter->GetFilterPowerSymbols();
-    }
-
-    ReCreateLibList();
-}
-
-
 const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     LIB_SYMBOL* symbol = GetSelectedSymbol();
@@ -1025,21 +955,6 @@ const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) c
 
         return tmp->GetUnitBoundingBox( m_unit, m_convert );
     }
-}
-
-
-void SYMBOL_VIEWER_FRAME::FinishModal()
-{
-    if( m_symbolList->GetSelection() >= 0 )
-    {
-        DismissModal( true, m_currentSymbol.Format() );
-    }
-    else
-    {
-        DismissModal( false );
-    }
-
-    Close( true );
 }
 
 

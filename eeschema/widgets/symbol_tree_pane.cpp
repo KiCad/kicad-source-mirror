@@ -51,7 +51,7 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent,
     m_libMgr->GetAdapter()->FinishTreeInitialization();
 
     // Event handlers
-    Bind( SYMBOL_SELECTED, &SYMBOL_TREE_PANE::onSymbolSelected, this );
+    Bind( EVT_LIBITEM_CHOSEN, &SYMBOL_TREE_PANE::onSymbolSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &SYMBOL_TREE_PANE::onUpdateUI, this );
 }
 

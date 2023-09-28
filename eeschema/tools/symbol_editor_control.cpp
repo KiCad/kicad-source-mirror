@@ -664,22 +664,12 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
     {
         SYMBOL_VIEWER_FRAME* viewerFrame = getEditFrame<SYMBOL_VIEWER_FRAME>();
 
-        if( viewerFrame->IsModal() )
-        {
-            // if we're modal then we just need to return the symbol selection; the caller is
-            // already in a EE_ACTIONS::placeSymbol coroutine.
-            viewerFrame->FinishModal();
-            return 0;
-        }
-        else
-        {
-            libSymbol = viewerFrame->GetSelectedSymbol();
-            unit      = viewerFrame->GetUnit();
-            convert   = viewerFrame->GetConvert();
+        libSymbol = viewerFrame->GetSelectedSymbol();
+        unit      = viewerFrame->GetUnit();
+        convert   = viewerFrame->GetConvert();
 
-            if( libSymbol )
-                libId = libSymbol->GetLibId();
-        }
+        if( libSymbol )
+            libId = libSymbol->GetLibId();
     }
 
     if( libSymbol )

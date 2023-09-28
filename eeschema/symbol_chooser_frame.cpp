@@ -162,7 +162,7 @@ void SYMBOL_CHOOSER_FRAME::OnOK( wxCommandEvent& aEvent )
 
 WINDOW_SETTINGS* SYMBOL_CHOOSER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
+    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
     return &cfg->m_LibViewPanel.window;
 }

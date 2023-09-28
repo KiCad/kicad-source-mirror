@@ -251,10 +251,10 @@ protected:
     bool               m_previewDisabled;
 };
 
-///< Custom event sent when a new symbol is preselected
-wxDECLARE_EVENT( SYMBOL_PRESELECTED, wxCommandEvent );
+///< Custom event sent when an item is selected in the list
+wxDECLARE_EVENT( EVT_LIBITEM_SELECTED, wxCommandEvent );
 
-///< Custom event sent when a symbol is selected
-wxDECLARE_EVENT( SYMBOL_SELECTED, wxCommandEvent );
+///< Custom event sent when an item is chosen (double-clicked)
+wxDECLARE_EVENT( EVT_LIBITEM_CHOSEN, wxCommandEvent );
 
 #endif /* LIB_TREE_H */

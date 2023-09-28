@@ -70,7 +70,7 @@ protected:
 
     void onCloseTimer( wxTimerEvent& aEvent );
 
-    void onComponentPreselected( wxCommandEvent& aEvent );
+    void onFootprintSelected( wxCommandEvent& aEvent );
 
     /**
      * Handle the selection of an item. This is called when either the search
@@ -78,7 +78,7 @@ protected:
      * If the item selected is a category, it is expanded or collapsed; if it
      * is a component, the component is picked.
      */
-    void onComponentSelected( wxCommandEvent& aEvent );
+    void onFootprintChosen( wxCommandEvent& aEvent );
 
 protected:
     wxTimer*                  m_dbl_click_timer;

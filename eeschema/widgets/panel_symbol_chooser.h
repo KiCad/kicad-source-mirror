@@ -94,15 +94,15 @@ public:
     }
 
 protected:
-    static constexpr int DblClickDelay = 100; // milliseconds
+    static constexpr int DBLCLICK_DELAY = 100; // milliseconds
 
-    wxPanel* ConstructRightPanel( wxWindow* aParent );
+    wxPanel* constructRightPanel( wxWindow* aParent );
 
     void OnCharHook( wxKeyEvent& aEvt );
-    void OnCloseTimer( wxTimerEvent& aEvent );
+    void onCloseTimer( wxTimerEvent& aEvent );
 
-    void OnFootprintSelected( wxCommandEvent& aEvent );
-    void OnComponentPreselected( wxCommandEvent& aEvent );
+    void onFootprintSelected( wxCommandEvent& aEvent );
+    void onSymbolSelected( wxCommandEvent& aEvent );
 
     /**
      * Handle the selection of an item. This is called when either the search box or the tree
@@ -110,24 +110,24 @@ protected:
      * If the item selected is a category, it is expanded or collapsed; if it is a symbol, the
      * symbol is picked.
      */
-    void OnComponentSelected( wxCommandEvent& aEvent );
+    void onSymbolChosen( wxCommandEvent& aEvent );
 
     /**
      * Look up the footprint for a given symbol specified in the #LIB_ID and display it.
      */
-    void ShowFootprintFor( const LIB_ID& aLibId );
+    void showFootprintFor( const LIB_ID& aLibId );
 
     /**
      * Display the given footprint by name.
      */
-    void ShowFootprint( const wxString& aFootprint );
+    void showFootprint( const wxString& aFootprint );
 
     /**
      * Populate the footprint selector for a given alias.
      *
      * @param aLibId the #LIB_ID of the selection or invalid to clear.
      */
-    void PopulateFootprintSelector( const LIB_ID& aLibId );
+    void populateFootprintSelector( const LIB_ID& aLibId );
 
 public:
     static std::mutex g_Mutex;

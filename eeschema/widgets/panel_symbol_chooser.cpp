@@ -22,31 +22,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <symbol_library.h>
+#include <pgm_base.h>
+#include <symbol_library.h>         // For SYMBOL_LIBRARY_FILTER
 #include <panel_symbol_chooser.h>
-#include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <sch_base_frame.h>
-#include <core/kicad_algo.h>
-#include <template_fieldnames.h>
 #include <project_sch.h>
-#include <widgets/footprint_preview_widget.h>
-#include <widgets/footprint_select_widget.h>
 #include <widgets/lib_tree.h>
 #include <widgets/symbol_preview_widget.h>
+#include <widgets/footprint_preview_widget.h>
+#include <widgets/footprint_select_widget.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
+#include <eeschema_settings.h>
 #include <symbol_editor_settings.h>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
-#include <wx/log.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/timer.h>
-#include <wx/utils.h>
 #include <wx/wxhtml.h>
-#include "pgm_base.h"
 
 
 wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;
@@ -156,7 +152,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     }
 
     // -------------------------------------------------------------------------------------
-    // Construct the actual dialog
+    // Construct the actual panel
     //
 
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
@@ -221,7 +217,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
-    m_hsplitter->SplitVertically( treePanel,  ConstructRightPanel( m_hsplitter ) );
+    m_hsplitter->SplitVertically( treePanel, constructRightPanel( m_hsplitter ) );
 
     m_dbl_click_timer = new wxTimer( this );
 
@@ -229,13 +225,13 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     Layout();
 
-    Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( SYMBOL_PRESELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentPreselected, this );
-    Bind( SYMBOL_SELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentSelected, this );
+    Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( EVT_LIBITEM_SELECTED, &PANEL_SYMBOL_CHOOSER::onSymbolSelected, this );
+    Bind( EVT_LIBITEM_CHOSEN, &PANEL_SYMBOL_CHOOSER::onSymbolChosen, this );
 
     if( m_fp_sel_ctrl )
     {
-        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::OnFootprintSelected,
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected,
                              this );
     }
 
@@ -249,9 +245,9 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
 PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 {
-    Unbind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::OnCloseTimer, this );
-    Unbind( SYMBOL_PRESELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentPreselected, this );
-    Unbind( SYMBOL_SELECTED, &PANEL_SYMBOL_CHOOSER::OnComponentSelected, this );
+    Unbind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onCloseTimer, this );
+    Unbind( EVT_LIBITEM_SELECTED, &PANEL_SYMBOL_CHOOSER::onSymbolSelected, this );
+    Unbind( EVT_LIBITEM_CHOSEN, &PANEL_SYMBOL_CHOOSER::onSymbolChosen, this );
 
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_dbl_click_timer->Stop();
@@ -264,7 +260,7 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 
     if( m_fp_sel_ctrl )
     {
-        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::OnFootprintSelected,
+        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &PANEL_SYMBOL_CHOOSER::onFootprintSelected,
                                this );
     }
 
@@ -277,8 +273,8 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        cfg->m_SymChooserPanel.width = GetSize().x;
-        cfg->m_SymChooserPanel.height = GetSize().y;
+        cfg->m_SymChooserPanel.width = GetParent()->GetSize().x;
+        cfg->m_SymChooserPanel.height = GetParent()->GetSize().y;
 
         cfg->m_SymChooserPanel.sash_pos_h = m_hsplitter->GetSashPosition();
 
@@ -290,7 +286,7 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 }
 
 
-wxPanel* PANEL_SYMBOL_CHOOSER::ConstructRightPanel( wxWindow* aParent )
+wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
 {
     EDA_DRAW_PANEL_GAL::GAL_TYPE backend;
 
@@ -425,9 +421,9 @@ LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
 }
 
 
-void PANEL_SYMBOL_CHOOSER::OnCloseTimer( wxTimerEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 {
-    // Hack because of eaten MouseUp event. See PANEL_SYMBOL_CHOOSER::OnComponentSelected
+    // Hack because of eaten MouseUp event. See PANEL_SYMBOL_CHOOSER::onSymbolChosen
     // for the beginning of this spaghetti noodle.
 
     wxMouseState state = wxGetMouseState();
@@ -436,7 +432,7 @@ void PANEL_SYMBOL_CHOOSER::OnCloseTimer( wxTimerEvent& aEvent )
     {
         // Mouse hasn't been raised yet, so fire the timer again. Otherwise the
         // purpose of this timer is defeated.
-        m_dbl_click_timer->StartOnce( PANEL_SYMBOL_CHOOSER::DblClickDelay );
+        m_dbl_click_timer->StartOnce( PANEL_SYMBOL_CHOOSER::DBLCLICK_DELAY );
     }
     else
     {
@@ -445,7 +441,7 @@ void PANEL_SYMBOL_CHOOSER::OnCloseTimer( wxTimerEvent& aEvent )
 }
 
 
-void PANEL_SYMBOL_CHOOSER::ShowFootprintFor( LIB_ID const& aLibId )
+void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
 {
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
@@ -470,16 +466,16 @@ void PANEL_SYMBOL_CHOOSER::ShowFootprintFor( LIB_ID const& aLibId )
     LIB_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
-    ShowFootprint( fp_name );
+    showFootprint( fp_name );
 }
 
 
-void PANEL_SYMBOL_CHOOSER::ShowFootprint( wxString const& aName )
+void PANEL_SYMBOL_CHOOSER::showFootprint( wxString const& aFootprint )
 {
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
 
-    if( aName == wxEmptyString )
+    if( aFootprint == wxEmptyString )
     {
         m_fp_preview->SetStatusText( _( "No footprint specified" ) );
     }
@@ -487,7 +483,7 @@ void PANEL_SYMBOL_CHOOSER::ShowFootprint( wxString const& aName )
     {
         LIB_ID lib_id;
 
-        if( lib_id.Parse( aName ) == -1 && lib_id.IsValid() )
+        if( lib_id.Parse( aFootprint ) == -1 && lib_id.IsValid() )
         {
             m_fp_preview->ClearStatus();
             m_fp_preview->DisplayFootprint( lib_id );
@@ -500,7 +496,7 @@ void PANEL_SYMBOL_CHOOSER::ShowFootprint( wxString const& aName )
 }
 
 
-void PANEL_SYMBOL_CHOOSER::PopulateFootprintSelector( LIB_ID const& aLibId )
+void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
 {
     if( !m_fp_sel_ctrl )
         return;
@@ -550,7 +546,7 @@ void PANEL_SYMBOL_CHOOSER::PopulateFootprintSelector( LIB_ID const& aLibId )
 }
 
 
-void PANEL_SYMBOL_CHOOSER::OnFootprintSelected( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
@@ -561,11 +557,11 @@ void PANEL_SYMBOL_CHOOSER::OnFootprintSelected( wxCommandEvent& aEvent )
 
     m_field_edits.emplace_back( std::make_pair( FOOTPRINT_FIELD, m_fp_override ) );
 
-    ShowFootprint( m_fp_override );
+    showFootprint( m_fp_override );
 }
 
 
-void PANEL_SYMBOL_CHOOSER::OnComponentPreselected( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 {
     LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
 
@@ -574,11 +570,11 @@ void PANEL_SYMBOL_CHOOSER::OnComponentPreselected( wxCommandEvent& aEvent )
         m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit );
 
         if( !node->m_Footprint.IsEmpty() )
-            ShowFootprint( node->m_Footprint );
+            showFootprint( node->m_Footprint );
         else
-            ShowFootprintFor( node->m_LibId );
+            showFootprintFor( node->m_LibId );
 
-        PopulateFootprintSelector( node->m_LibId );
+        populateFootprintSelector( node->m_LibId );
     }
     else
     {
@@ -587,27 +583,24 @@ void PANEL_SYMBOL_CHOOSER::OnComponentPreselected( wxCommandEvent& aEvent )
         if( m_fp_preview && m_fp_preview->IsInitialized() )
             m_fp_preview->SetStatusText( wxEmptyString );
 
-        PopulateFootprintSelector( LIB_ID() );
+        populateFootprintSelector( LIB_ID() );
     }
 }
 
 
-void PANEL_SYMBOL_CHOOSER::OnComponentSelected( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_CHOOSER::onSymbolChosen( wxCommandEvent& aEvent )
 {
     if( m_tree->GetSelectedLibId().IsValid() )
     {
-        // Got a selection. We can't just end the modal dialog here, because
-        // wx leaks some events back to the parent window (in particular, the
-        // MouseUp following a double click).
+        // Got a selection. We can't just end the modal dialog here, because wx leaks some events
+        // back to the parent window (in particular, the MouseUp following a double click).
         //
-        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
-        // This isn't really feasible to bypass without a fully custom
-        // wxDataViewCtrl implementation, and even then might not be fully
-        // possible (docs are vague). To get around this, we use a one-shot
+        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.  This isn't really
+        // feasible to bypass without a fully custom wxDataViewCtrl implementation, and even then
+        // might not be fully possible (docs are vague). To get around this, we use a one-shot
         // timer to schedule the dialog close.
         //
-        // See PANEL_SYMBOL_CHOOSER::OnCloseTimer for the other end of this
-        // spaghetti noodle.
-        m_dbl_click_timer->StartOnce( PANEL_SYMBOL_CHOOSER::DblClickDelay );
+        // See PANEL_SYMBOL_CHOOSER::onCloseTimer for the other end of this spaghetti noodle.
+        m_dbl_click_timer->StartOnce( PANEL_SYMBOL_CHOOSER::DBLCLICK_DELAY );
     }
 }
