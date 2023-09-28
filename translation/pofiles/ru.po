@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-09-28 18:58+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"Last-Translator: xXx <xxx_xxx_xxxxxxxxx@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -447,7 +447,7 @@ msgstr "Перевернуть плату"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:169
 msgid "Flip the board view"
-msgstr "Перевернуть (отразить) вид платы"
+msgstr "Переверните вид платы"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:177
 msgid "Toggle orthographic projection"
