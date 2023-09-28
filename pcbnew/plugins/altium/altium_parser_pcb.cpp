@@ -273,7 +273,14 @@ ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
 
         ABOARD6_LAYER_STACKUP l;
 
-        l.name   = ALTIUM_PARSER::ReadString( props, layername, wxT( "" ) );
+        l.name = ALTIUM_PARSER::ReadString( props, layername, wxT( "" ) );
+        wxString originalName = l.name;
+        int ii = 2;
+
+        // Ensure that layer names are unique in KiCad
+        while( !layerNames.insert( l.name ).second )
+            l.name = wxString::Format( wxT( "%s %d" ), originalName, ii++ );
+
         l.nextId = ALTIUM_PARSER::ReadInt( props, layeri + wxT( "NEXT" ), 0 );
         l.prevId = ALTIUM_PARSER::ReadInt( props, layeri + wxT( "PREV" ), 0 );
         l.copperthick = ALTIUM_PARSER::ReadKicadUnit( props, layeri + wxT( "COPTHICK" ), wxT( "1.4mil" ) );
