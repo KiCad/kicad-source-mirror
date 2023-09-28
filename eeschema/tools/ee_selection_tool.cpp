@@ -40,6 +40,7 @@
 #include <sch_painter.h>
 #include <preview_items/selection_area.h>
 #include <sch_base_frame.h>
+#include <sch_commit.h>
 #include <sch_symbol.h>
 #include <sch_field.h>
 #include <sch_edit_frame.h>
@@ -48,6 +49,7 @@
 #include <sch_bus_entry.h>
 #include <sch_junction.h>
 #include <sch_marker.h>
+#include <sch_no_connect.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <lib_shape.h>
@@ -138,6 +140,12 @@ SELECTION_CONDITION EE_CONDITIONS::SingleNonExcludedMarker = []( const SELECTION
 SELECTION_CONDITION EE_CONDITIONS::MultipleSymbolsOrPower = []( const SELECTION& aSel )
 {
     return aSel.GetSize() > 1 && aSel.OnlyContains( { SCH_SYMBOL_T } );
+};
+
+
+SELECTION_CONDITION EE_CONDITIONS::AllPins = []( const SELECTION& aSel )
+{
+    return aSel.GetSize() >= 1 && aSel.OnlyContains( { SCH_PIN_T } );
 };
 
 
@@ -606,6 +614,100 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( pin )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SetAltPinFunction( pin, alt );
+            }
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_PIN_TRICKS_START
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_PIN_TRICKS_END )
+            {
+                if( !m_selection.OnlyContains( { SCH_PIN_T } ) )
+                    return 0;
+
+                // Keep track of new items so we make them the new selection at the end
+                EDA_ITEMS  newItems;
+                SCH_COMMIT commit( static_cast<SCH_EDIT_FRAME*>( m_frame ) );
+
+                if( *evt->GetCommandId() == ID_POPUP_SCH_PIN_TRICKS_NO_CONNECT )
+                {
+                    for( EDA_ITEM* item : m_selection )
+                    {
+                        SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
+                        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( pin->GetPosition() );
+                        commit.Add( nc, m_frame->GetScreen() );
+                        newItems.push_back( nc );
+                    }
+
+                    commit.Push( wxS( "No Connect Pins" ) );
+                    ClearSelection();
+                }
+                else
+                {
+                    // For every pin in the selection, add a label according to menu item
+                    // selected by the user
+                    for( EDA_ITEM* item : m_selection )
+                    {
+                        SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
+                        SCH_LABEL_BASE* label = nullptr;
+
+                        switch( *evt->GetCommandId() )
+                        {
+                        case ID_POPUP_SCH_PIN_TRICKS_NET_LABEL:
+                            label = new SCH_LABEL( pin->GetPosition(), pin->GetShownName() );
+                            break;
+                        case ID_POPUP_SCH_PIN_TRICKS_HIER_LABEL:
+                            label = new SCH_HIERLABEL( pin->GetPosition(), pin->GetShownName() );
+                            break;
+                        case ID_POPUP_SCH_PIN_TRICKS_GLOBAL_LABEL:
+                            label = new SCH_GLOBALLABEL( pin->GetPosition(), pin->GetShownName() );
+                            break;
+                        default: continue;
+                        }
+
+                        switch( pin->GetOrientation() )
+                        {
+                        case PIN_ORIENTATION::PIN_LEFT:
+                            label->SetSpinStyle( SPIN_STYLE::SPIN::RIGHT );
+                            break;
+                        case PIN_ORIENTATION::PIN_RIGHT:
+                            label->SetSpinStyle( SPIN_STYLE::SPIN::LEFT );
+                            break;
+                        case PIN_ORIENTATION::PIN_UP:
+                            label->SetSpinStyle( SPIN_STYLE::SPIN::BOTTOM );
+                            break;
+                        case PIN_ORIENTATION::PIN_DOWN:
+                            label->SetSpinStyle( SPIN_STYLE::SPIN::UP );
+                            break;
+                        }
+
+                        switch( pin->GetType() )
+                        {
+                        case ELECTRICAL_PINTYPE::PT_BIDI:
+                            label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+                            break;
+                        case ELECTRICAL_PINTYPE::PT_INPUT:
+                            label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+                            break;
+                        case ELECTRICAL_PINTYPE::PT_OUTPUT:
+                            label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+                            break;
+                        case ELECTRICAL_PINTYPE::PT_TRISTATE:
+                            label->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
+                            break;
+                        case ELECTRICAL_PINTYPE::PT_UNSPECIFIED:
+                            label->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+                            break;
+                        default:
+                            label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+                        }
+
+                        commit.Add( label, m_frame->GetScreen() );
+                        newItems.push_back( label );
+                    }
+
+                    commit.Push( wxS( "Label Pins" ) );
+
+                    // Many users will want to drag these items to wire off of the pins, so pre-select them
+                    ClearSelection();
+                    AddItemsToSel( &newItems );
+                }
             }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_UNFOLD_BUS
                      && *evt->GetCommandId() <= ID_POPUP_SCH_UNFOLD_BUS_END )

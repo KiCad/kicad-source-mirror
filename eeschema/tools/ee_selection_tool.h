@@ -53,6 +53,7 @@ public:
     static SELECTION_CONDITION SingleMultiFunctionPin;
     static SELECTION_CONDITION SingleNonExcludedMarker;
     static SELECTION_CONDITION MultipleSymbolsOrPower;
+    static SELECTION_CONDITION AllPins;
 };
 
 

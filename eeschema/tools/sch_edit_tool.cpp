@@ -191,6 +191,39 @@ private:
 };
 
 
+class PIN_TRICKS_MENU : public ACTION_MENU
+{
+public:
+    PIN_TRICKS_MENU() : ACTION_MENU( true )
+    {
+        SetIcon( BITMAPS::pin );
+        SetTitle( _( "Pin Helpers" ) );
+    }
+
+protected:
+    ACTION_MENU* create() const override { return new PIN_TRICKS_MENU(); }
+
+private:
+    void update() override
+    {
+        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selTool->GetSelection();
+        SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
+
+        Clear();
+
+        if( !pin )
+            return;
+
+        Add( wxS( "No Connect" ), ID_POPUP_SCH_PIN_TRICKS_NO_CONNECT, BITMAPS::noconn );
+        Add( wxS( "Net Label" ), ID_POPUP_SCH_PIN_TRICKS_NET_LABEL, BITMAPS::add_label );
+        Add( wxS( "Hierarchical Label" ), ID_POPUP_SCH_PIN_TRICKS_HIER_LABEL,
+             BITMAPS::add_hierarchical_label );
+        Add( wxS( "Global Label" ), ID_POPUP_SCH_PIN_TRICKS_GLOBAL_LABEL, BITMAPS::add_glabel );
+    }
+};
+
+
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveEdit" )
 {
@@ -674,6 +707,11 @@ bool SCH_EDIT_TOOL::Init()
     altPinMenu->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().RegisterSubMenu( altPinMenu );
     selToolMenu.AddMenu( altPinMenu.get(), E_C::SingleMultiFunctionPin, 1 );
+
+    std::shared_ptr<PIN_TRICKS_MENU> pinTricksMenu = std::make_shared<PIN_TRICKS_MENU>();
+    pinTricksMenu->SetTool( m_selectionTool );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( pinTricksMenu );
+    selToolMenu.AddMenu( pinTricksMenu.get(), E_C::AllPins, 1 );
 
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
