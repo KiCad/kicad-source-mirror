@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"PO-Revision-Date: 2023-09-26 05:00+0000\n"
 "Last-Translator: xXx <xxx_xxx_xxxxxxxxx@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr "Создание дорожек и межслойных соединений"
+msgstr "Создание дорожек и перех.отв."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:677
 msgid "Create zones"
@@ -113,7 +113,7 @@ msgstr "Построение технического слоя %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1062
 msgid "Build BVH for holes and vias"
-msgstr "Построение BVH для отверстий и проходов"
+msgstr "Построение глухих/внутр. перех.отв."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
 msgid "OpenGL context creation error"
@@ -154,7 +154,7 @@ msgstr "Загрузка OpenGL: плата"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:498
 msgid "Load OpenGL: holes and vias"
-msgstr "Загрузка OpenGL: отверстия и проходы"
+msgstr "Загрузка OpenGL: отверстия и перех.отв."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:566
 msgid "Load OpenGL: layers"
@@ -290,12 +290,12 @@ msgstr "Правка"
 #: pcbnew/menubar_footprint_editor.cpp:254 pcbnew/menubar_pcb_editor.cpp:472
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr "&Вид"
+msgstr "Вид"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:149 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:240 kicad/menubar.cpp:217
 msgid "&Preferences"
-msgstr "&Предпочтения"
+msgstr "Настройки"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2769
@@ -411,27 +411,27 @@ msgstr "Переместить позицию курсора в центр вр�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr "Повернуть X по часовой стрелке"
+msgstr "Повернуть X по ч.ст."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr "Повернуть X против часовой стрелки"
+msgstr "Повернуть X против ч.ст."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr "Поворот по оси Y по часовой стрелке"
+msgstr "Повернуть Y по ч.ст."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr "Поворот Y против часовой стрелки"
+msgstr "Повернуть Y против ч.ст."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr "Поворот Z по часовой стрелке"
+msgstr "Повернуть Z по ч.ст."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr "Повернуть Z против часовой стрелки"
+msgstr "Повернуть Z против ч.ст."
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
@@ -463,7 +463,7 @@ msgstr "Перевернуть плату"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr "Переверните вид платы"
+msgstr "Перевернуть (отразить) вид платы"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
@@ -722,7 +722,7 @@ msgstr "Обрезать шёлкографию по краям паяльной
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Clip silkscreen at via annuli"
-msgstr "Шелкография на клипе над переходными отверстиями"
+msgstr "Убирать шёлкографию над перех.отв."
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show solder mask layers"
@@ -876,11 +876,11 @@ msgstr "Отключить толщину меди"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
-msgstr "Отключить межслойные соединения"
+msgstr "Отключить перех.отв."
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
-msgstr "Отключить отверстия"
+msgstr "Отключить отв."
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -2070,14 +2070,10 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad был запущен в первый раз с использованием новой таблицы библиотек %s "
-"для доступа к библиотекам.  Для того чтобы KiCad мог обращаться к "
-"библиотекам %s,\n"
-"необходимо настроить глобальную таблицу библиотек %s.  Пожалуйста, выберите "
-"один из\n"
-"предложенных ниже вариантов.  Если вы не уверены, какую опцию выбрать, "
-"пожалуйста\n"
-"воспользуйтесь вариантом по умолчанию."
+"KiCad был запущен впервые, используя новую таблицу библиотек %s для\n"
+"управления библиотеками. Чтобы KiCad получил доступ к библиотекам %s, нужно\n"
+"настроить глобальную таблицу библиотек %s. Выберите одну из опций снизу.\n"
+"Если не уверены что выбрать, используйте вариант по умолчанию."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:50
 #, c-format
@@ -2664,27 +2660,39 @@ msgstr "Организация:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:264
 msgid "Comment1:"
-msgstr "Комментарий1:"
+msgstr ""
+"Комментарий 1:\n"
+"(Децимальный номер)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:276
 msgid "Comment2:"
-msgstr "Комментарий2:"
+msgstr ""
+"Комментарий 2:\n"
+"(Разработал)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:288
 msgid "Comment3:"
-msgstr "Комментарий3:"
+msgstr ""
+"Комментарий 3:\n"
+"(Проверил)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:300
 msgid "Comment4:"
-msgstr "Комментарий4:"
+msgstr ""
+"Комментарий 4:\n"
+"(Утвердил)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:312
 msgid "Comment5:"
-msgstr "Комментарий5:"
+msgstr ""
+"Комментарий 5:\n"
+"(Т. контр.)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:324
 msgid "Comment6:"
-msgstr "Комментарий6:"
+msgstr ""
+"Комментарий 6:\n"
+"(Н. контр.)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:336
 msgid "Comment7:"
@@ -2727,7 +2735,7 @@ msgstr "Параметры вставки"
 
 #: common/dialogs/dialog_paste_special_base.h:46
 msgid "Paste Special"
-msgstr "Специальная вставка"
+msgstr "Вставить как..."
 
 #: common/dialogs/dialog_print_generic.cpp:95
 #: common/dialogs/dialog_print_generic.cpp:301
@@ -2884,7 +2892,7 @@ msgstr "Парам. страницы..."
 #: common/dialogs/dialog_unit_entry_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:429
 msgid "MyLabel"
-msgstr "Моя метка"
+msgstr "MyLabel"
 
 #: common/dialogs/eda_list_dialog.cpp:47 common/widgets/lib_tree.cpp:154
 #: common/widgets/lib_tree.cpp:191
@@ -3246,9 +3254,9 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Задержка после первого изменения для создания файла резервной копии платы на "
+"Задержка времени от первого изменения до создания файла резервной копии на "
 "диске.\n"
-"Если установлено значение 0, автоматическое резервное копирование отключено"
+"Если установить 0, резервное копирование будет отключено."
 
 #: common/dialogs/panel_common_settings_base.cpp:300
 #: common/dialogs/panel_common_settings_base.cpp:387
@@ -3701,19 +3709,19 @@ msgstr "Минимальная ширина дорожки"
 
 #: common/dialogs/panel_setup_netclasses.cpp:500
 msgid "Via pad diameter"
-msgstr "Диаметр контактной площадки"
+msgstr "Диаметр конт.пл. перех.отв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:501
 msgid "Via plated hole diameter"
-msgstr "Диаметр отверстий под сквозное покрытие"
+msgstr "Сверло перех.отв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:502
 msgid "Microvia pad diameter"
-msgstr "Диаметр прокладки микровинта"
+msgstr "Диаметр конт.пл. перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:503
 msgid "Microvia plated hole diameter"
-msgstr "Диаметр отверстия с микропокрытием"
+msgstr "Сверло перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses.cpp:504
 msgid "Differential pair track width"
@@ -3771,16 +3779,16 @@ msgstr "Ширина дорожки"
 #: pcb_calculator/pcb_calculator_frame.cpp:78
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 msgid "Via Size"
-msgstr "Через размер"
+msgstr "Размер перех.отв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:230
 msgid "Via Hole"
-msgstr "Через дыру"
+msgstr "Сверло перех.отв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "uЧерез размер"
+msgstr "Размер перех.микроотв."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:232
@@ -4531,7 +4539,7 @@ msgstr "Кривая"
 
 #: common/eda_shape.cpp:619
 msgid "Pad Number Box"
-msgstr "Коробка с номером колодки"
+msgstr "Блок номера конт.пл."
 
 #: common/eda_shape.cpp:620 common/eda_shape.cpp:1674
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:79
@@ -4814,13 +4822,13 @@ msgstr "Видимый"
 
 #: common/eda_text.cpp:1083
 msgid "Horizontal Justification"
-msgstr "Горизонтальное обоснование"
+msgstr "Выравнивание по гориз."
 
 #: common/eda_text.cpp:1088 pcbnew/pcb_dimension.cpp:1427
 #: pcbnew/pcb_dimension.cpp:1466 pcbnew/pcb_dimension.cpp:1510
 #: pcbnew/pcb_dimension.cpp:1558 pcbnew/pcb_dimension.cpp:1598
 msgid "Vertical Justification"
-msgstr "Вертикальное обоснование"
+msgstr "Выравнивание по верт."
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -5416,7 +5424,7 @@ msgstr "SMD конт.пл. снизу"
 
 #: common/layer_id.cpp:164
 msgid "Through-hole pads"
-msgstr "Прокладки со сквозными отверстиями"
+msgstr "Конт.пл. с отверст."
 
 #: common/layer_id.cpp:165
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -5430,35 +5438,35 @@ msgstr "Дорожки"
 
 #: common/layer_id.cpp:166
 msgid "Through vias"
-msgstr "Сквозные переходы"
+msgstr "Сквозные перех.отв."
 
 #: common/layer_id.cpp:167
 msgid "Blind/Buried vias"
-msgstr "Слепые/заглубленные отверстия"
+msgstr "Глухие/внутр. перех.отв."
 
 #: common/layer_id.cpp:168
 msgid "Micro-vias"
-msgstr "Микровибрация"
+msgstr "Перех.микроотв."
 
 #: common/layer_id.cpp:169
 msgid "Via holes"
-msgstr "Сквозные отверстия"
+msgstr "Перех.отв."
 
 #: common/layer_id.cpp:170
 msgid "Via hole walls"
-msgstr "Стенки с отверстиями"
+msgstr "Стенки перех.отв."
 
 #: common/layer_id.cpp:171
 msgid "Plated holes"
-msgstr "Плакированные отверстия"
+msgstr "Метал. отв."
 
 #: common/layer_id.cpp:172
 msgid "Plated hole walls"
-msgstr "Стенки отверстий с покрытием"
+msgstr "Стенки метал. отв."
 
 #: common/layer_id.cpp:173
 msgid "Non-plated holes"
-msgstr "Отверстия без покрытия"
+msgstr "Неметал. отв."
 
 #: common/layer_id.cpp:174 pcbnew/dialogs/panel_edit_options_base.cpp:339
 #: pcbnew/widgets/appearance_controls.cpp:348
@@ -6303,7 +6311,7 @@ msgstr "Выбор столбцов"
 
 #: common/tool/actions.cpp:523
 msgid "Switch units"
-msgstr "Коммутационные аппараты"
+msgstr "Переключить ед.изм."
 
 #: common/tool/actions.cpp:523
 msgid "Switch between imperial and metric units"
@@ -8874,7 +8882,7 @@ msgstr "Шрифт KiCad"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
 #: eeschema/sch_label.cpp:979 eeschema/sch_text.cpp:509
 msgid "Align left"
-msgstr "Выровнять по левому краю"
+msgstr "Выровнять слева"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:157
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:122
