@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:57-0700\n"
+"POT-Creation-Date: 2023-09-28 12:05-0700\n"
 "PO-Revision-Date: 2023-05-18 16:52+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
@@ -1656,7 +1656,7 @@ msgstr "No"
 #: common/widgets/widget_hotkey_list.cpp:474
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:1741 eeschema/sch_symbol.cpp:2224
+#: eeschema/sch_symbol.cpp:1749 eeschema/sch_symbol.cpp:2232
 #: eeschema/symbol_editor/symbol_editor.cpp:534
 #: eeschema/symbol_editor/symbol_editor.cpp:1262
 #: eeschema/symbol_viewer_frame.cpp:524 include/lib_table_grid.h:192
@@ -2030,8 +2030,8 @@ msgstr "Variables de entorno"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:339 eeschema/lib_pin.cpp:1168
-#: eeschema/sch_pin.cpp:217 eeschema/sch_symbol.cpp:1703
-#: eeschema/sch_symbol.cpp:1751 eeschema/symbol_editor/symbol_editor.cpp:1234
+#: eeschema/sch_pin.cpp:217 eeschema/sch_symbol.cpp:1711
+#: eeschema/sch_symbol.cpp:1759 eeschema/symbol_editor/symbol_editor.cpp:1234
 #: eeschema/symbol_viewer_frame.cpp:522
 #: eeschema/widgets/tuner_slider_base.cpp:26
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:39
@@ -3650,8 +3650,9 @@ msgid "Reset to Trackpad Defaults"
 msgstr "Restablecer los valores predeterminados del trackpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1682
+#: common/stroke_params.cpp:36
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#: include/stroke_params.h:72 pcbnew/dialogs/dialog_copper_zones_base.cpp:232
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:358
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:329
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716 pcbnew/footprint.cpp:2921
@@ -3660,26 +3661,26 @@ msgid "Solid"
 msgstr "Sólida"
 
 #: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1683
+#: common/stroke_params.cpp:37
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#: include/stroke_params.h:73
 msgid "Dashed"
 msgstr "Discontinua"
 
 #: common/dialogs/panel_setup_netclasses.cpp:93 common/eda_shape.cpp:1684
+#: common/stroke_params.cpp:38
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#: include/stroke_params.h:74
 msgid "Dotted"
 msgstr "Punteada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1685
+#: common/stroke_params.cpp:39
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#: include/stroke_params.h:75
 msgid "Dash-Dot"
 msgstr "Raya-punto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1686
+#: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#: include/stroke_params.h:76
 msgid "Dash-Dot-Dot"
 msgstr "Guión-Punto-Punto"
 
@@ -3804,12 +3805,12 @@ msgid "Bus Thickness"
 msgstr "Grosor de bus"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:63
-#: common/stroke_params.cpp:210 eeschema/sch_line.cpp:909
+#: common/stroke_params.cpp:219 eeschema/sch_line.cpp:909
 msgid "Line Style"
 msgstr "Estilo de línea"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:69 common/eda_shape.cpp:1681
-#: common/pgm_base.cpp:89 common/stroke_params.cpp:199
+#: common/pgm_base.cpp:89 common/stroke_params.cpp:208
 #: common/widgets/footprint_select_widget.cpp:149
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:70
 #: eeschema/dialogs/dialog_junction_props.cpp:46
@@ -3820,7 +3821,7 @@ msgstr "Estilo de línea"
 #: eeschema/lib_field.cpp:551 eeschema/lib_text.cpp:427
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_field.cpp:776
 #: eeschema/sch_label.cpp:967 eeschema/sch_text.cpp:497
-#: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
+#: eeschema/sch_textbox.cpp:440 include/stroke_params.h:73
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
 #: pcbnew/pcb_textbox.cpp:297
@@ -4339,7 +4340,7 @@ msgid "Screen"
 msgstr "Pantalla"
 
 #: common/eda_item.cpp:337 eeschema/dialogs/dialog_symbol_fields_table.cpp:1031
-#: eeschema/sch_symbol.cpp:1738 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1746 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
 #: pcbnew/pad.cpp:993 pcbnew/plot_board_layers.cpp:96
@@ -4630,7 +4631,7 @@ msgstr "Final X"
 msgid "End Y"
 msgstr "Final Y"
 
-#: common/eda_shape.cpp:1721 common/stroke_params.cpp:214
+#: common/eda_shape.cpp:1721 common/stroke_params.cpp:223
 #: pcbnew/pcb_textbox.cpp:536
 msgid "Line Width"
 msgstr "Ancho de línea"
@@ -5511,7 +5512,7 @@ msgstr "Activar la selección"
 msgid "Deactivate selected"
 msgstr "Desactivar seleccionado"
 
-#: common/lib_tree_model.cpp:146
+#: common/lib_tree_model.cpp:157
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
 #: eeschema/dialogs/dialog_sim_model.cpp:493 eeschema/lib_item.cpp:58
@@ -7299,7 +7300,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' no es una huella válida."
 
 #: cvpcb/cvpcb_mainframe.cpp:793 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1742 eeschema/sch_symbol.cpp:2228
+#: eeschema/sch_symbol.cpp:1750 eeschema/sch_symbol.cpp:2236
 #: eeschema/symbol_editor/symbol_editor.cpp:1263
 #: eeschema/symbol_viewer_frame.cpp:525 pcbnew/footprint.cpp:2970
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:104
@@ -7311,8 +7312,8 @@ msgid "Pin Count"
 msgstr "Número de pines"
 
 #: cvpcb/cvpcb_mainframe.cpp:822 eeschema/sch_base_frame.cpp:560
-#: eeschema/sch_symbol.cpp:1724 eeschema/sch_symbol.cpp:1728
-#: eeschema/sch_symbol.cpp:1761 pcbnew/footprint.cpp:1046
+#: eeschema/sch_symbol.cpp:1732 eeschema/sch_symbol.cpp:1736
+#: eeschema/sch_symbol.cpp:1769 pcbnew/footprint.cpp:1046
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -7421,8 +7422,8 @@ msgstr "Variables de entorno disponibles para rutas relativas:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1030
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:311
-#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1701
-#: eeschema/sch_symbol.cpp:1749
+#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1709
+#: eeschema/sch_symbol.cpp:1757
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
@@ -7736,7 +7737,7 @@ msgstr ""
 "%s\n"
 "Script no disponible."
 
-#: eeschema/connection_graph.cpp:2862 eeschema/connection_graph.cpp:2895
+#: eeschema/connection_graph.cpp:2896
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -8421,7 +8422,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:103
-#: eeschema/sch_symbol.cpp:2238
+#: eeschema/sch_symbol.cpp:2246
 msgid "Symbols"
 msgstr "Símbolos"
 
@@ -10527,7 +10528,7 @@ msgstr "Acción tomada"
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1029
-#: eeschema/sch_symbol.cpp:1697 eeschema/sch_symbol.cpp:1747
+#: eeschema/sch_symbol.cpp:1705 eeschema/sch_symbol.cpp:1755
 #: pcbnew/footprint.cpp:2957 pcbnew/fp_text.cpp:279
 msgid "Reference"
 msgstr "Referencia"
@@ -13389,7 +13390,7 @@ msgstr ""
 "automático\n"
 "se mostrará cada vez que el editor de esquemas inicialice."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1720
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1728
 msgid "Derived from"
 msgstr "Derivado de"
 
@@ -13875,7 +13876,7 @@ msgstr "Miembros de alias %s de bus"
 msgid "KiCad Schematic Editor"
 msgstr "Editor de esquemas de KiCad"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1705
+#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1712
 msgid "Schematic Hierarchy"
 msgstr "Jerarquía esquemática"
 
@@ -13944,7 +13945,7 @@ msgstr "[No Guardado]"
 msgid "[no schematic loaded]"
 msgstr "[no hay un esquema cargado]"
 
-#: eeschema/sch_edit_frame.cpp:1728
+#: eeschema/sch_edit_frame.cpp:1735
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Red resaltada: %s"
@@ -14839,48 +14840,48 @@ msgstr "(Eliminar elemento)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Pin de hoja jerárquica %s"
 
-#: eeschema/sch_symbol.cpp:1269
+#: eeschema/sch_symbol.cpp:1277
 msgid "Excluded from BOM"
 msgstr "Excluido del BOM"
 
-#: eeschema/sch_symbol.cpp:1274
+#: eeschema/sch_symbol.cpp:1282
 msgid "Excluded from board"
 msgstr "Excluido de la placa"
 
-#: eeschema/sch_symbol.cpp:1279
+#: eeschema/sch_symbol.cpp:1287
 msgid "DNP"
 msgstr "DNP"
 
-#: eeschema/sch_symbol.cpp:1692
+#: eeschema/sch_symbol.cpp:1700
 msgid "Power symbol"
 msgstr "Símbolo de alimentación"
 
-#: eeschema/sch_symbol.cpp:1708
+#: eeschema/sch_symbol.cpp:1716
 msgid "flags"
 msgstr "banderas"
 
-#: eeschema/sch_symbol.cpp:1713
+#: eeschema/sch_symbol.cpp:1721
 msgid "Missing parent"
 msgstr "No se encuentra el elemento principal"
 
-#: eeschema/sch_symbol.cpp:1728
+#: eeschema/sch_symbol.cpp:1736
 msgid "Undefined!!!"
 msgstr "¡No definido!"
 
-#: eeschema/sch_symbol.cpp:1736
+#: eeschema/sch_symbol.cpp:1744
 msgid "<Unknown>"
 msgstr "<Desconocido>"
 
-#: eeschema/sch_symbol.cpp:1757
+#: eeschema/sch_symbol.cpp:1765
 msgid "No library defined!"
 msgstr "¡No se ha definido una biblioteca!"
 
-#: eeschema/sch_symbol.cpp:1759
+#: eeschema/sch_symbol.cpp:1767
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "¡No se ha encontrado el símbolo en %s!"
 
-#: eeschema/sch_symbol.cpp:1948
+#: eeschema/sch_symbol.cpp:1956
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Símbolo %s [%s]"
@@ -19832,7 +19833,7 @@ msgstr ""
 "Restablecer todas las teclas de acceso directo a los valores predeterminados "
 "de KiCad"
 
-#: include/stroke_params.h:81
+#: include/stroke_params.h:74
 msgid "Leave unchanged"
 msgstr "Mantener sin cambios"
 
@@ -24105,7 +24106,7 @@ msgstr ""
 msgid "A layer thickness is < 0. Fix it"
 msgstr "El grosor de una capa es <0. Arréglalo"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1641
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1647
 msgid "Custom..."
 msgstr "Personalizado..."
 
