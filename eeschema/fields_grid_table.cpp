@@ -47,6 +47,7 @@
 #include <string_utils.h>
 #include <widgets/grid_combobox.h>
 #include <pgm_base.h>
+#include <project_sch.h>
 
 
 enum
@@ -215,8 +216,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_footprintAttr->SetEditor( fpIdEditor );
 
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog,
-                                                                m_frame->Prj().SchSearchS() );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog, PROJECT_SCH::SchSearchS( &m_frame->Prj() ) );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -906,7 +906,8 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
         wxString datasheet_uri = m_grid->GetCellValue( DATASHEET_FIELD, FDC_VALUE );
-        GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), m_dlg->Prj().SchSearchS() );
+        GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
+                               PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
     }
     else
     {

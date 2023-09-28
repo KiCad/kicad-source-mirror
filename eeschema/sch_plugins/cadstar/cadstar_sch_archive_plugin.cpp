@@ -29,6 +29,7 @@
 
 #include <lib_symbol.h>
 #include <progress_reporter.h>
+#include <project_sch.h>
 #include <string_utf8_map.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -83,7 +84,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSchematicFile( const wxString&       
     csaLoader.Load( aSchematic, rootSheet );
 
     // SAVE SYMBOLS TO PROJECT LIBRARY:
-    SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
@@ -129,7 +130,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSchematicFile( const wxString&       
 
         // Relaod the symbol library table.
         aSchematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-        aSchematic->Prj().SchSymbolLibTable();
+        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
     }
 
     // set properties to prevent save file on every symbol save

@@ -42,6 +42,7 @@
 #include <symbol_editor_settings.h>
 #include <paths.h>
 #include <pgm_base.h>
+#include <project_sch.h>
 #include <sch_painter.h>
 #include <sch_view.h>
 #include <settings/settings_manager.h>
@@ -717,7 +718,7 @@ wxString SYMBOL_EDIT_FRAME::GetCurLib() const
 
     if( !libNickname.empty() )
     {
-        if( !Prj().SchSymbolLibTable()->HasLibrary( libNickname ) )
+        if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( libNickname ) )
         {
             Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
             libNickname = wxEmptyString;
@@ -732,7 +733,7 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 {
     wxString old = GetCurLib();
 
-    if( aLibNickname.empty() || !Prj().SchSymbolLibTable()->HasLibrary( aLibNickname ) )
+    if( aLibNickname.empty() || !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( aLibNickname ) )
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
     else
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
@@ -1374,7 +1375,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             wxString libNickname;
             wxString msg;
 
-            SYMBOL_LIB_TABLE*    libTable = Prj().SchSymbolLibTable();
+            SYMBOL_LIB_TABLE*    libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
             const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( libFileName );
 
             if( !libTableRow )
@@ -1413,7 +1414,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_RELOAD_LIB:
     {
         wxString          currentLib = GetCurLib();
-        SYMBOL_LIB_TABLE* libTable = Prj().SchSymbolLibTable();
+        SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
         FreezeLibraryTree();
 
@@ -1433,7 +1434,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_REFRESH_SYMBOL:
     {
-        SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+        SYMBOL_LIB_TABLE* tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         LIB_SYMBOL* symbol = GetCurSymbol();
 
         wxLogTrace( "KICAD_LIB_WATCH", "Received refresh symbol request for %s",
@@ -1658,7 +1659,7 @@ bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE 
     wxFileName libTableFileName( Prj().GetProjectPath(),
                                  SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     wxString libNickname = fn.GetName();
-    SYMBOL_LIB_TABLE* libTable = Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
     const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
 
     if( libTable->HasLibrary( libNickname ) )
@@ -1727,7 +1728,7 @@ bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
     {
         libTableFileName.SetPath( Prj().GetProjectPath() );
         libTableFileName.SetName( SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-        libTable = Prj().SchSymbolLibTable();
+        libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         isGlobalTable = false;
         row = libTable->FindRow( aLibNickname );
     }

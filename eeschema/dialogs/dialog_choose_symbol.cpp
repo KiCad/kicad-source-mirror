@@ -29,6 +29,7 @@
 #include <sch_base_frame.h>
 #include <core/kicad_algo.h>
 #include <template_fieldnames.h>
+#include <project_sch.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
 #include <widgets/lib_tree.h>
@@ -127,7 +128,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     treePanel->SetSizer( treeSizer );
 
     m_tree = new LIB_TREE( treePanel, m_showPower ? wxT( "power" ) : wxT( "symbols" ),
-                           Prj().SchSymbolLibTable(), aAdapter, LIB_TREE::FLAGS::ALL_WIDGETS,
+                           PROJECT_SCH::SchSymbolLibTable( &Prj() ), aAdapter,
+                           LIB_TREE::FLAGS::ALL_WIDGETS,
                            m_details );
 
     treeSizer->Add( m_tree, 1, wxEXPAND | wxALL, 5 );
@@ -410,7 +412,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
 
     try
     {
-        symbol = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+        symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( aLibId );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -469,7 +471,7 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
     {
         try
         {
-            symbol = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+            symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( aLibId );
         }
         catch( const IO_ERROR& ioe )
         {

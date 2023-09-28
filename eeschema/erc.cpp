@@ -34,6 +34,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <string_utils.h>
 #include <lib_pin.h>
+#include <project_sch.h>
 #include <sch_edit_frame.h>
 #include <sch_marker.h>
 #include <sch_reference_list.h>
@@ -885,7 +886,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
-    SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     wxString          msg;
     int               err_count = 0;
 

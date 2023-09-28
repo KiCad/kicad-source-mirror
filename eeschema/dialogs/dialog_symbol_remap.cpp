@@ -44,6 +44,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
 #include <env_paths.h>
+#include <project_sch.h>
 
 #include <dialog_symbol_remap.h>
 
@@ -123,7 +124,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     createProjectSymbolLibTable( m_messagePanel->Reporter() );
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
-    Prj().SchSymbolLibTable();
+    PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
 
@@ -135,7 +136,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     // Reload the cache symbol library.
     Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
-    Prj().SchLibs();
+    PROJECT_SCH::SchLibs( &Prj() );
 
     Raise();
     m_remapped = true;
@@ -144,7 +145,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
 size_t DIALOG_SYMBOL_REMAP::getLibsNotInGlobalSymbolLibTable( std::vector< SYMBOL_LIB* >& aLibs )
 {
-    SYMBOL_LIBS* libs = Prj().SchLibs();
+    SYMBOL_LIBS* libs = PROJECT_SCH::SchLibs( &Prj() );
 
     for( SYMBOL_LIBS_BASE::iterator it = libs->begin(); it != libs->end(); ++it )
     {
@@ -288,7 +289,7 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
     wxCHECK_MSG( !aSymbol->GetLibId().GetLibItemName().empty(), false,
                  "The symbol LIB_ID name is empty." );
 
-    SYMBOL_LIBS* libs = Prj().SchLibs();
+    SYMBOL_LIBS* libs = PROJECT_SCH::SchLibs( &Prj() );
 
     for( SYMBOL_LIBS_BASE::iterator it = libs->begin(); it != libs->end(); ++it )
     {
@@ -306,7 +307,7 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_SYMBOL* aSymbol )
             // Find the same library in the symbol library table using the full path and file name.
             wxString libFileName = it->GetFullFileName();
 
-            const LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRowByURI( libFileName );
+            const LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRowByURI( libFileName );
 
             if( row )
             {

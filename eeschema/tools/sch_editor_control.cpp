@@ -43,6 +43,7 @@
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <project_sch.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <sch_line.h>
@@ -452,7 +453,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
     SYMBOL_LIB_TABLE* projectTable = nullptr;
 
     if( !m_frame->Prj().IsNullProject() )
-        projectTable = m_frame->Prj().SchSymbolLibTable();
+        projectTable = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
 
     if( globalTable->FindRow( targetLib ) )
     {

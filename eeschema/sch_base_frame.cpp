@@ -38,6 +38,7 @@
 #include <settings/settings_manager.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
+#include <project_sch.h>
 #include <symbol_library.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
@@ -203,9 +204,10 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib,
                                           bool aShowErrorMsg )
 {
-    SYMBOL_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : nullptr;
+    SYMBOL_LIB* cache =
+            ( aUseCacheLib ) ? PROJECT_SCH::SchLibs( &Prj() )->GetCacheLibrary() : nullptr;
 
-    return SchGetLibSymbol( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
+    return SchGetLibSymbol( aLibId, PROJECT_SCH::SchSymbolLibTable( &Prj() ), cache, this, aShowErrorMsg );
 }
 
 
@@ -234,7 +236,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
 
         try
         {
-            Prj().SchSymbolLibTable()->Save( fn.GetFullPath() );
+            PROJECT_SCH::SchSymbolLibTable( &Prj() )->Save( fn.GetFullPath() );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -287,7 +289,7 @@ SYMBOL_LIB_TABLE* SCH_BASE_FRAME::SelectSymLibTable( bool aOptional )
     switch( dlg.GetSelection() )
     {
     case 0:  return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
-    case 1:  return Prj().SchSymbolLibTable();
+    case 1:  return PROJECT_SCH::SchSymbolLibTable( &Prj() );
     default: return nullptr;
     }
 }
@@ -554,7 +556,7 @@ wxString SCH_BASE_FRAME::SelectLibraryFromList()
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT&         prj = Prj();
 
-    if( prj.SchSymbolLibTable()->IsEmpty() )
+    if( PROJECT_SCH::SchSymbolLibTable( &prj )->IsEmpty() )
     {
         ShowInfoBarError( _( "No symbol libraries are loaded." ) );
         return wxEmptyString;
@@ -565,12 +567,12 @@ wxString SCH_BASE_FRAME::SelectLibraryFromList()
     headers.Add( _( "Library" ) );
 
     std::vector< wxArrayString > itemsToDisplay;
-    std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
+    std::vector< wxString > libNicknames = PROJECT_SCH::SchSymbolLibTable( &prj )->GetLogicalLibs();
 
     for( const wxString& name : libNicknames )
     {
         // Exclude read only libraries.
-        if( !prj.SchSymbolLibTable()->IsSymbolLibWritable( name ) )
+        if( !PROJECT_SCH::SchSymbolLibTable( &prj )->IsSymbolLibWritable( name ) )
             continue;
 
         if( alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
@@ -586,7 +588,7 @@ wxString SCH_BASE_FRAME::SelectLibraryFromList()
     for( const wxString& name : libNicknames )
     {
         // Exclude read only libraries.
-        if( !prj.SchSymbolLibTable()->IsSymbolLibWritable( name ) )
+        if( !PROJECT_SCH::SchSymbolLibTable( &prj )->IsSymbolLibWritable( name ) )
             continue;
 
         if( !alg::contains( prj.GetProjectFile().m_PinnedSymbolLibs, name )
@@ -611,7 +613,7 @@ wxString SCH_BASE_FRAME::SelectLibraryFromList()
 
     if( !libName.empty() )
     {
-        if( prj.SchSymbolLibTable()->HasLibrary( libName ) )
+        if( PROJECT_SCH::SchSymbolLibTable( &prj )->HasLibrary( libName ) )
             prj.SetRString( PROJECT::SCH_LIB_SELECT, libName );
         else
             libName = wxEmptyString;
@@ -634,7 +636,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     }
 
     wxString libfullname;
-    SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     if( !aID || !tbl )
         return;
@@ -683,7 +685,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
 
 void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
 {
-    SYMBOL_LIBS* libs = Prj().SchLibs();
+    SYMBOL_LIBS* libs = PROJECT_SCH::SchLibs( &Prj() );
 
     wxLogTrace( "KICAD_LIB_WATCH", "OnSymChange: %s, watcher file: %s",
                 aEvent.GetPath().GetFullPath(), m_watcherFileName.GetFullPath() );

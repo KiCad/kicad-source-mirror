@@ -34,6 +34,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 #include <string_utils.h>
+#include <project_sch.h>
 
 #include <dialog_sim_model.h>
 
@@ -75,7 +76,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_grid->ShowHideColumns( cfg->m_EditSymbolVisibleColumns );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) ) );
     m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
 
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );

@@ -33,6 +33,7 @@
 #include <kiway.h>
 #include <plotters/plotter.h>
 #include <project.h>
+#include <project_sch.h>
 #include <reporter.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
@@ -885,10 +886,10 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     wxString msg;
     std::unique_ptr< LIB_SYMBOL > libSymbol;
     std::vector<SCH_SYMBOL*> symbols;
-    SYMBOL_LIB_TABLE* libs = Schematic()->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Schematic()->Prj() );
 
     // This will be a nullptr if an s-expression schematic is loaded.
-    SYMBOL_LIBS* legacyLibs = Schematic()->Prj().SchLibs();
+    SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic()->Prj() );
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );

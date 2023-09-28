@@ -45,6 +45,7 @@
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <project.h>
+#include <project_sch.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
 #include <project/net_settings.h>
@@ -469,7 +470,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEM
         const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
 
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
@@ -501,7 +502,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEM
 
         // Reload the symbol library table.
         m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
-        m_schematic->Prj().SchSymbolLibTable();
+        PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     }
 
     // Retrieve the root as current node
@@ -1826,7 +1827,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     symbol->AddHierarchicalReference( m_sheetPath.Path(), reference, unit );
 
     // Save the pin positions
-    SYMBOL_LIB_TABLE& schLibTable = *m_schematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE& schLibTable = *PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     LIB_SYMBOL* libSymbol = schLibTable.LoadSymbol( symbol->GetLibId() );
 
     wxCHECK( libSymbol, /*void*/ );

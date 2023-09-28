@@ -46,6 +46,7 @@
 #include <symbol_tree_model_adapter.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
+#include <project_sch.h>
 #include <settings/settings_manager.h>
 #include <symbol_async_loader.h>
 #include <tool/action_toolbar.h>
@@ -296,7 +297,7 @@ SYMBOL_VIEWER_FRAME::~SYMBOL_VIEWER_FRAME()
 void SYMBOL_VIEWER_FRAME::loadAllLibraries()
 {
     // TODO: deduplicate with SYMBOL_TREE_MODEL_ADAPTER::AddLibraries
-    std::vector<wxString> libraryNames = Prj().SchSymbolLibTable()->GetLogicalLibs();
+    std::vector<wxString> libraryNames = PROJECT_SCH::SchSymbolLibTable( &Prj() )->GetLogicalLibs();
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter = nullptr;
 
     if( m_show_progress )
@@ -311,7 +312,7 @@ void SYMBOL_VIEWER_FRAME::loadAllLibraries()
 
     std::unordered_map<wxString, std::vector<LIB_SYMBOL*>> loadedSymbols;
 
-    SYMBOL_ASYNC_LOADER loader( libraryNames, Prj().SchSymbolLibTable(), false, nullptr,
+    SYMBOL_ASYNC_LOADER loader( libraryNames, PROJECT_SCH::SchSymbolLibTable( &Prj() ), false, nullptr,
                                 progressReporter.get() );
 
     LOCALE_IO toggle;
@@ -453,7 +454,7 @@ LIB_SYMBOL* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
     LIB_SYMBOL* symbol = nullptr;
 
     if( m_currentSymbol.IsValid() )
-        symbol = Prj().SchSymbolLibTable()->LoadSymbol( m_currentSymbol );
+        symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( m_currentSymbol );
 
     return symbol;
 }
@@ -502,7 +503,7 @@ bool SYMBOL_VIEWER_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
     if( aSymbol && !aSymbol->IsEmpty() )
     {
         wxString msg;
-        LIB_TABLE* libTable = Prj().SchSymbolLibTable();
+        LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         LIB_ID libid;
 
         libid.Parse( *aSymbol, true );
@@ -610,7 +611,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 
     COMMON_SETTINGS*      cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&         project = Kiway().Prj().GetProjectFile();
-    SYMBOL_LIB_TABLE*     libTable = Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE*     libTable = PROJECT_SCH::SchSymbolLibTable( &Prj() );
     std::vector<wxString> libs = libTable->GetLogicalLibs();
     std::vector<wxString> pinnedMatches;
     std::vector<wxString> otherMatches;
@@ -644,7 +645,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                 {
                     wxArrayString aliasNames;
 
-                    Prj().SchSymbolLibTable()->EnumerateSymbolLib( aLib, aliasNames, true );
+                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->EnumerateSymbolLib( aLib, aliasNames, true );
 
                     if( aliasNames.IsEmpty() )
                         return;
@@ -747,12 +748,12 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         return false;
 
     std::vector<LIB_SYMBOL*> symbols;
-    SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( libName );
+    SYMBOL_LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( libName );
 
     try
     {
         if( row )
-            Prj().SchSymbolLibTable()->LoadSymbolLib( symbols, libName, m_listPowerOnly );
+            PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbolLib( symbols, libName, m_listPowerOnly );
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -834,7 +835,7 @@ void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     wxString selection = EscapeString( m_libList->GetBaseString( ii ), CTX_LIBID );
 
-    if( !Prj().SchSymbolLibTable()->FindRow( selection )
+    if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( selection )
         && selection.Find( '-' ) != wxNOT_FOUND )
     {
         // Probably a sub-library
@@ -1080,7 +1081,7 @@ void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
         return;
 
     // Container doing search-as-you-type.
-    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &Prj() );
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> dataPtr
                                     = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
     SYMBOL_TREE_MODEL_ADAPTER* modelAdapter
@@ -1263,7 +1264,7 @@ void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
     if( m_libList && !m_libList->IsEmpty() && !libName.IsEmpty() )
     {
         const SYMBOL_LIB_TABLE_ROW* row =
-                Prj().SchSymbolLibTable()->FindRow( libName, true );
+                PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( libName, true );
 
         wxString title = row ? row->GetFullURI( true ) : _( "[no library selected]" );
 
@@ -1291,7 +1292,7 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
     case MAIL_REFRESH_SYMBOL:
     {
-        SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+        SYMBOL_LIB_TABLE* tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         LIB_SYMBOL* symbol = GetSelectedSymbol();
 
         wxCHECK2( tbl && symbol, break );

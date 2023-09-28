@@ -37,7 +37,6 @@
 #include <widgets/properties_panel.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
-#include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <zoom_defines.h>
@@ -282,53 +281,4 @@ void SCH_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK_RET( aCfg, wxS( "Call to SCH_BASE_FRAME::SaveSettings with null settings" ) );
 
     EDA_DRAW_FRAME::SaveSettings( aCfg );
-}
-
-
-static std::mutex s_symbolTableMutex;
-
-
-SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
-{
-    std::lock_guard<std::mutex> lock( s_symbolTableMutex );
-
-    // This is a lazy loading function, it loads the project specific table when
-    // that table is asked for, not before.
-    SYMBOL_LIB_TABLE* tbl = (SYMBOL_LIB_TABLE*) GetElem( ELEM_SYMBOL_LIB_TABLE );
-
-    // its gotta be NULL or a SYMBOL_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || tbl->Type() == SYMBOL_LIB_TABLE_T );
-
-    if( !tbl )
-    {
-        // Stack the project specific SYMBOL_LIB_TABLE overlay on top of the global table.
-        // ~SYMBOL_LIB_TABLE() will not touch the fallback table, so multiple projects may
-        // stack this way, all using the same global fallback table.
-        tbl = new SYMBOL_LIB_TABLE( &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
-
-        SetElem( ELEM_SYMBOL_LIB_TABLE, tbl );
-
-        wxString prjPath;
-
-        wxGetEnv( PROJECT_VAR_NAME, &prjPath );
-
-        if( !prjPath.IsEmpty() )
-        {
-            wxFileName fn( prjPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-
-            try
-            {
-                tbl->Load( fn.GetFullPath() );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                wxString msg;
-                msg.Printf( _( "Error loading the symbol library table '%s'." ),
-                            fn.GetFullPath() );
-                DisplayErrorMessage( nullptr, msg, ioe.What() );
-            }
-        }
-    }
-
-    return tbl;
 }

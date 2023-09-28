@@ -54,6 +54,7 @@
 #include "dialog_symbol_fields_table.h"
 #include <fields_data_model.h>
 #include <eda_list_dialog.h>
+#include <project_sch.h>
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
@@ -121,7 +122,8 @@ protected:
         {
             wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
                                                            DATASHEET_FIELD );
-            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), m_dlg->Prj().SchSearchS() );
+            GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(),
+                                   PROJECT_SCH::SchSearchS( &m_dlg->Prj() ) );
         }
         else
         {
@@ -338,7 +340,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
              == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) )
     {
         // set datasheet column viewer button
-        attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
+        attr->SetEditor(
+                new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ) ) );
         m_grid->SetColAttr( aCol, attr );
     }
     else if( m_dataModel->ColIsQuantity( aCol ) || m_dataModel->ColIsItemNumber( aCol ) )

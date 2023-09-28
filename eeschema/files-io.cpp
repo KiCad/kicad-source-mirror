@@ -39,6 +39,7 @@
 #include <core/profile.h>
 #include <project/project_file.h>
 #include <project_rescue.h>
+#include <project_sch.h>
 #include <dialog_HTML_reporter_base.h>
 #include <reporter.h>
 #include <richio.h>
@@ -185,7 +186,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // And when a schematic file is loaded, we need these libs to initialize
             // some parameters (links to PART LIB, dangling ends ...)
             Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
-            Prj().SchLibs();
+            PROJECT_SCH::SchLibs( &Prj() );
         }
     }
     else
@@ -196,7 +197,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     // Load the symbol library table, this will be used forever more.
     Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
-    Prj().SchSymbolLibTable();
+    PROJECT_SCH::SchSymbolLibTable( &Prj() );
 
     // Load project settings after schematic has been set up with the project link, since this will
     // update some of the needed schematic settings such as drawing defaults
@@ -392,7 +393,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             // Ensure there is only one legacy library loaded and that it is the cache library.
-            SYMBOL_LIBS* legacyLibs = Schematic().Prj().SchLibs();
+            SYMBOL_LIBS* legacyLibs = PROJECT_SCH::SchLibs( &Schematic().Prj() );
 
             if( legacyLibs->GetLibraryCount() == 0 )
             {

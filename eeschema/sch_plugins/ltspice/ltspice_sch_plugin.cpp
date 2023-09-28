@@ -23,6 +23,7 @@
 #include <sch_plugins/ltspice/ltspice_sch_plugin.h>
 #include <sch_plugins/ltspice/ltspice_sch_parser.h>
 
+#include <project_sch.h>
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
@@ -72,10 +73,10 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCH
         rootSheet->SetScreen( screen );
     }
 
-    SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
-    
+
     // Windows path: C:\Users\USERNAME\AppData\Local\LTspice\lib
     wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserLocalDataPath(), wxEmptyString );
     ltspiceDataDir.AppendDir( wxS( "LTspice" ) );

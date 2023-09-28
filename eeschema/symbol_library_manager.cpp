@@ -29,6 +29,7 @@
 #include <symbol_edit_frame.h>
 #include <env_paths.h>
 #include <pgm_base.h>
+#include <project_sch.h>
 #include <kiway.h>
 #include <core/profile.h>
 #include <wx_filename.h>
@@ -767,7 +768,7 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
 
 SYMBOL_LIB_TABLE* SYMBOL_LIBRARY_MANAGER::symTable() const
 {
-    return m_frame.Prj().SchSymbolLibTable();
+    return PROJECT_SCH::SchSymbolLibTable( &m_frame.Prj() );
 }
 
 

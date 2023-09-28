@@ -45,6 +45,7 @@
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
+#include <project_sch.h>
 #include <string_utils.h>
 #include "symbol_saveas_type.h"
 
@@ -153,7 +154,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
         {
             try
             {
-                LIB_SYMBOL* readOnlySym = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+                LIB_SYMBOL* readOnlySym = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( aLibId );
 
                 if( readOnlySym && readOnlySym->GetSourceLibId().IsValid() )
                     libId = readOnlySym->GetSourceLibId();
@@ -222,7 +223,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, in
 
     try
     {
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( GetCurLib(), aAliasName );
+        alias = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( GetCurLib(), aAliasName );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -567,7 +568,7 @@ public:
     {
         COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
         PROJECT_FILE&              project = aParent->Prj().GetProjectFile();
-        SYMBOL_LIB_TABLE*          tbl = aParent->Prj().SchSymbolLibTable();
+        SYMBOL_LIB_TABLE*          tbl = PROJECT_SCH::SchSymbolLibTable( &Prj() );
         std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
         wxArrayString              headers;
         std::vector<wxArrayString> itemsToDisplay;
@@ -1059,7 +1060,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    if( !aNewFile && ( aLibrary.empty() || !prj.SchSymbolLibTable()->HasLibrary( aLibrary ) ) )
+    if( !aNewFile && ( aLibrary.empty() || !PROJECT_SCH::SchSymbolLibTable( &prj )->HasLibrary( aLibrary ) ) )
     {
         ShowInfoBarError( _( "No library specified." ) );
         return false;
@@ -1067,7 +1068,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     if( aNewFile )
     {
-        SEARCH_STACK* search = prj.SchSearchS();
+        SEARCH_STACK* search = PROJECT_SCH::SchSearchS( &prj );
 
         // Get a new name for the library
         wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
@@ -1101,7 +1102,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     }
     else
     {
-        fn = prj.SchSymbolLibTable()->GetFullURI( aLibrary );
+        fn = PROJECT_SCH::SchSymbolLibTable( &prj )->GetFullURI( aLibrary );
         fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
 
         if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )

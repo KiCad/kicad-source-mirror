@@ -41,6 +41,7 @@
 #include <eda_doc.h>
 #include <sch_marker.h>
 #include <project.h>
+#include <project_sch.h>
 #include <dialogs/html_message_box.h>
 #include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_book_reporter.h>
@@ -283,7 +284,7 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 
     r->Report( "" );
 
-    SYMBOL_LIB_TABLE*    libTable = m_frame->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE*    libTable = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
     const LIB_TABLE_ROW* libTableRow = libTable->FindRow( libName );
 
     if( !libTableRow )
@@ -432,7 +433,8 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else
     {
-        GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj(), m_frame->Prj().SchSearchS() );
+        GetAssociatedDocument( m_frame, datasheet, &m_frame->Prj(),
+                               PROJECT_SCH::SchSearchS( &m_frame->Prj() ) );
     }
 
     return 0;

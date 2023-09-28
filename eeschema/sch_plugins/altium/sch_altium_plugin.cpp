@@ -31,6 +31,7 @@
 #include <sch_plugins/altium/sch_altium_plugin.h>
 
 #include <schematic.h>
+#include <project_sch.h>
 
 #include <lib_shape.h>
 #include <lib_id.h>
@@ -328,7 +329,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHE
         const_cast<KIID&>( m_rootSheet->m_Uuid ) = screen->GetUuid();
     }
 
-    SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
@@ -358,7 +359,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHE
 
         // Reload the symbol library table.
         m_schematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, nullptr );
-        m_schematic->Prj().SchSymbolLibTable();
+        PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     }
 
     m_sheetPath.push_back( m_rootSheet );

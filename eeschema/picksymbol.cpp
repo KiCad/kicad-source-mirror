@@ -41,6 +41,7 @@
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
+#include <project_sch.h>
 
 #include <dialog_choose_symbol.h>
 
@@ -97,7 +98,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
                                                      bool aAllowFields )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
-    SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE*            libs = PROJECT_SCH::SchSymbolLibTable( &Prj() );
     COMMON_SETTINGS*             cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&                project = Prj().GetProjectFile();
 

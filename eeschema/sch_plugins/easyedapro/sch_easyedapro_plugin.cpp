@@ -44,6 +44,7 @@
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <plugins/easyedapro/easyedapro_import_utils.h>
 #include <core/map_helpers.h>
+#include <project_sch.h>
 
 
 struct SCH_EASYEDAPRO_PLUGIN::PRJ_DATA
@@ -400,7 +401,7 @@ SCH_SHEET* SCH_EASYEDAPRO_PLUGIN::LoadSchematicFile( const wxString& aFileName,
         rootSheet->SetScreen( screen );
     }
 
-    SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
     wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
 
     SCH_EASYEDAPRO_PARSER parser( nullptr, nullptr );
@@ -546,7 +547,7 @@ SCH_SHEET* SCH_EASYEDAPRO_PLUGIN::LoadSchematicFile( const wxString& aFileName,
 
         // Relaod the symbol library table.
         aSchematic->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-        aSchematic->Prj().SchSymbolLibTable();
+        PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
     }
 
     // set properties to prevent save file on every symbol save

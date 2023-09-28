@@ -146,6 +146,12 @@ const wxString PROJECT::GetProjectPath() const
 }
 
 
+const wxString PROJECT::GetProjectDirectory() const
+{
+    return m_project_name.GetPath();
+}
+
+
 const wxString PROJECT::GetProjectName() const
 {
     return m_project_name.GetName();

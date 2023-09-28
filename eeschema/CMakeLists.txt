@@ -329,8 +329,8 @@ set( EESCHEMA_SRCS
     net_navigator.cpp
     pin_numbers.cpp
     pin_type.cpp
+    project_sch.cpp
     project_rescue.cpp
-    project_sch_specific.cpp
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp

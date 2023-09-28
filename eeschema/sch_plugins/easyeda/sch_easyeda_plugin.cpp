@@ -29,6 +29,7 @@
 #include <sch_sheet.h>
 #include <sch_screen.h>
 #include <kiplatform/environment.h>
+#include <project_sch.h>
 
 #include <wx/log.h>
 #include <wx/stdstream.h>
@@ -573,7 +574,7 @@ SCH_SHEET* SCH_EASYEDA_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCH
         rootSheet->SetScreen( screen );
     }
 
-    SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &aSchematic->Prj() );
 
     wxCHECK_MSG( libTable, nullptr, wxS( "Could not load symbol lib table." ) );
     LoadSchematic( aSchematic, rootSheet, aFileName );

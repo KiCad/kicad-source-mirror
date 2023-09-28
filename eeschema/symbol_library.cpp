@@ -33,6 +33,7 @@
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
 #include <project_rescue.h>
+#include <project_sch.h>
 #include <string_utf8_map.h>
 #include <widgets/app_progress_dialog.h>
 
@@ -500,7 +501,7 @@ void SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 {
     wxString        filename;
     wxString        libs_not_found;
-    SEARCH_STACK*   lib_search = aProject->SchSearchS();
+    SEARCH_STACK*   lib_search = PROJECT_SCH::SchSearchS( aProject );
 
 #if defined(DEBUG) && 0
     lib_search->Show( __func__ );

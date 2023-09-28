@@ -27,6 +27,7 @@
 #include <pgm_base.h>
 #include <sch_painter.h>
 #include <eda_draw_frame.h>
+#include <project_sch.h>
 #include <eeschema_settings.h>
 #include <settings/settings_manager.h>
 #include <wx/log.h>
@@ -190,7 +191,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 
     try
     {
-        LIB_SYMBOL* tmp = m_kiway->Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
+        LIB_SYMBOL* tmp = PROJECT_SCH::SchSymbolLibTable( &m_kiway->Prj() )->LoadSymbol( aSymbolID );
 
         if( tmp )
             symbol = tmp->Flatten();

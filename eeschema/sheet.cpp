@@ -29,6 +29,7 @@
 #include <math/vector2wx.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
+#include <project_sch.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_sheet.h>
@@ -269,7 +270,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
             // library links are valid but it's better than nothing.
             for( const wxString& name : names )
             {
-                if( !Prj().SchSymbolLibTable()->HasLibrary( name ) )
+                if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( name ) )
                     newLibNames.Add( name );
             }
 
@@ -300,7 +301,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
             for( const wxString& name : names )
             {
-                if( !Prj().SchSymbolLibTable()->HasLibrary( name ) )
+                if( !PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( name ) )
                     newLibNames.Add( name );
                 else
                     duplicateLibNames.Add( name );
@@ -391,8 +392,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                     const SYMBOL_LIB_TABLE_ROW* thisRow = nullptr;
                     const SYMBOL_LIB_TABLE_ROW* otherRow = nullptr;
 
-                    if( Prj().SchSymbolLibTable()->HasLibrary( duplicateLibName ) )
-                        thisRow = Prj().SchSymbolLibTable()->FindRow( duplicateLibName );
+                    if( PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( duplicateLibName ) )
+                        thisRow = PROJECT_SCH::SchSymbolLibTable( &Prj() )->FindRow( duplicateLibName );
 
                     if( table.HasLibrary( duplicateLibName ) )
                         otherRow = table.FindRow( duplicateLibName );
@@ -448,7 +449,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 for( const wxString& libName : newLibNames )
                 {
                     if( !table.HasLibrary( libName )
-                      || Prj().SchSymbolLibTable()->HasLibrary( libName ) )
+                      || PROJECT_SCH::SchSymbolLibTable( &Prj() )->HasLibrary( libName ) )
                     {
                         continue;
                     }
@@ -482,7 +483,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                                                                              row->GetOptions(),
                                                                              row->GetDescr() );
 
-                    Prj().SchSymbolLibTable()->InsertRow( newRow );
+                    PROJECT_SCH::SchSymbolLibTable( &Prj() )->InsertRow( newRow );
                     libTableChanged = true;
                 }
             }
@@ -494,7 +495,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
 
     if( libTableChanged )
     {
-        Prj().SchSymbolLibTable()->Save( Prj().GetProjectPath() +
+        PROJECT_SCH::SchSymbolLibTable( &Prj() )->Save( Prj().GetProjectPath() +
                                          SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     }
 

@@ -49,6 +49,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <sch_file_versions.h>
 #include <wx/filedlg.h>
+#include <project_sch.h>
 
 
 
@@ -1134,7 +1135,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     // Don't allow editing project tables if no project is open
     if( !aKiway->Prj().IsNullProject() )
-        projectTable = aKiway->Prj().SchSymbolLibTable();
+        projectTable = PROJECT_SCH::SchSymbolLibTable( &aKiway->Prj() );
 
     if( symbolEditor )
     {

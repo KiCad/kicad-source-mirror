@@ -114,6 +114,14 @@ public:
     virtual const wxString GetProjectPath() const;
 
     /**
+     * Return the full path of the project DIRECTORY
+     *
+     * This is the path of the project file and will always be an absolute path, ending with
+     * a path separator.
+     */
+    virtual const wxString GetProjectDirectory() const;
+
+    /**
      * Return the short name of the project.
      *
      * This is the file name without extension or path.
@@ -266,30 +274,6 @@ public:
      * from Pcbnew.
      */
     virtual FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
-
-    // These are the non-virtual DATA LOAD ON DEMAND members. They load project related
-    // data on demand, and do so typically into m_elems[] at a particular index using
-    // SetElem() & GetElem().  That is, they wrap SetElem() and GetElem().
-    // To get the data to reload on demand, first SetProjectFullName(),
-    // then call SetElem( ELEM_T, NULL ) from client code.
-
-    // non-virtuals resident in PCBNEW link image(s).  By being non-virtual, these
-    // functions can get linked into the KIFACE that needs them, and only there.
-    // In fact, the other KIFACEs don't even know they exist.
-
-#if defined( EESCHEMA )
-    // These are all prefaced with "Sch"
-    SYMBOL_LIBS*  SchLibs();
-
-    /// Accessor for Eeschema search stack.
-    SEARCH_STACK*  SchSearchS();
-
-    /// Accessor for project symbol library table.
-    SYMBOL_LIB_TABLE* SchSymbolLibTable();
-
-    /// Accessor for 3D path resolver
-    FILENAME_RESOLVER* Get3DFilenameResolver() { return nullptr; }
-#endif
 
 private:
     friend class SETTINGS_MANAGER; // so that SM can set project path

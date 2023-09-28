@@ -35,6 +35,7 @@
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <nlohmann/json.hpp>
+#include <project_sch.h>
 
 #include <symbol_lib_table.h>
 
@@ -541,7 +542,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
 XNODE* NETLIST_EXPORTER_XML::makeLibraries()
 {
     XNODE*            xlibs = node( wxT( "libraries" ) );     // auto_ptr
-    SYMBOL_LIB_TABLE* symbolLibTable = m_schematic->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* symbolLibTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
 
     for( std::set<wxString>::iterator it = m_libraries.begin(); it!=m_libraries.end();  ++it )
     {

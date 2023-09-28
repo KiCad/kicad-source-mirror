@@ -45,6 +45,7 @@
 #include <widgets/grid_text_button_helpers.h>
 #include <kiplatform/ui.h>
 #include <string_utils.h>
+#include <project_sch.h>
 
 
 #define COL_REFS 0
@@ -572,7 +573,7 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onCellBrowseLib( wxGridEvent& event )
 
 void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 {
-    std::vector<wxString> libs = Prj().SchSymbolLibTable()->GetLogicalLibs();
+    std::vector<wxString> libs = PROJECT_SCH::SchSymbolLibTable( &Prj() )->GetLogicalLibs();
     wxArrayString aliasNames;
     wxArrayString candidateSymbNames;
 
@@ -601,7 +602,7 @@ void DIALOG_EDIT_SYMBOLS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 
             try
             {
-                Prj().SchSymbolLibTable()->EnumerateSymbolLib( lib, aliasNames );
+                PROJECT_SCH::SchSymbolLibTable( &Prj() )->EnumerateSymbolLib( lib, aliasNames );
             }
             catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
@@ -736,7 +737,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
 
             try
             {
-                symbol = Prj().SchSymbolLibTable()->LoadSymbol( id );
+                symbol = PROJECT_SCH::SchSymbolLibTable( &Prj() )->LoadSymbol( id );
             }
             catch( const IO_ERROR& ioe )
             {

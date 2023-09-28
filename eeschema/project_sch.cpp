@@ -24,7 +24,10 @@
 #include <pgm_base.h>
 #include <wx/app.h>
 #include <core/utf8.h>
+#include <symbol_lib_table.h>
+#include <project_sch.h>
 
+static std::mutex s_symbolTableMutex;
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -35,28 +38,28 @@ static void add_search_paths( SEARCH_STACK* aDst, const SEARCH_STACK& aSrc, int 
 }
 
 
-SEARCH_STACK* PROJECT::SchSearchS()
+SEARCH_STACK* PROJECT_SCH::SchSearchS( PROJECT* aProject )
 {
-    SEARCH_STACK* ss = (SEARCH_STACK*) GetElem( PROJECT::ELEM_SCH_SEARCH_STACK );
+    SEARCH_STACK* ss = (SEARCH_STACK*) aProject->GetElem( PROJECT::ELEM_SCH_SEARCH_STACK );
 
-    wxASSERT( !ss || dynamic_cast<SEARCH_STACK*>( GetElem( PROJECT::ELEM_SCH_SEARCH_STACK ) ) );
+    wxASSERT( !ss || dynamic_cast<SEARCH_STACK*>( aProject->GetElem( PROJECT::ELEM_SCH_SEARCH_STACK ) ) );
 
     if( !ss )
     {
         ss = new SEARCH_STACK();
 
         // Make PROJECT the new SEARCH_STACK owner.
-        SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, ss );
+        aProject->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, ss );
 
         // to the empty SEARCH_STACK for SchSearchS(), add project dir as first
-        ss->AddPaths( m_project_name.GetPath() );
+        ss->AddPaths( aProject->GetProjectDirectory() );
 
         // next add the paths found in *.pro, variable "LibDir"
         wxString        libDir;
 
         try
         {
-            SYMBOL_LIBS::GetLibNamesAndPaths( this, &libDir );
+            SYMBOL_LIBS::GetLibNamesAndPaths( aProject, &libDir );
         }
         catch( const IO_ERROR& )
         {
@@ -70,7 +73,7 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
             for( unsigned i =0; i<paths.GetCount();  ++i )
             {
-                wxString path = AbsolutePath( paths[i] );
+                wxString path = aProject->AbsolutePath( paths[i] );
 
                 ss->AddPaths( path );     // at the end
             }
@@ -84,9 +87,9 @@ SEARCH_STACK* PROJECT::SchSearchS()
 }
 
 
-SYMBOL_LIBS* PROJECT::SchLibs()
+SYMBOL_LIBS* PROJECT_SCH::SchLibs( PROJECT* aProject )
 {
-    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS );
+    SYMBOL_LIBS* libs = (SYMBOL_LIBS*) aProject->GetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS );
 
     wxASSERT( !libs || libs->Type() == SYMBOL_LIBS_T );
 
@@ -95,11 +98,11 @@ SYMBOL_LIBS* PROJECT::SchLibs()
         libs = new SYMBOL_LIBS();
 
         // Make PROJECT the new SYMBOL_LIBS owner.
-        SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
+        aProject->SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, libs );
 
         try
         {
-            libs->LoadAllLibraries( this );
+            libs->LoadAllLibraries( aProject );
         }
         catch( const PARSE_ERROR& pe )
         {
@@ -124,4 +127,49 @@ SYMBOL_LIBS* PROJECT::SchLibs()
     }
 
     return libs;
+}
+
+
+SYMBOL_LIB_TABLE* PROJECT_SCH::SchSymbolLibTable( PROJECT* aProject )
+{
+    std::lock_guard<std::mutex> lock( s_symbolTableMutex );
+
+    // This is a lazy loading function, it loads the project specific table when
+    // that table is asked for, not before.
+    SYMBOL_LIB_TABLE* tbl = (SYMBOL_LIB_TABLE*) aProject->GetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE );
+
+    // its gotta be NULL or a SYMBOL_LIB_TABLE, or a bug.
+    wxASSERT( !tbl || tbl->Type() == SYMBOL_LIB_TABLE_T );
+
+    if( !tbl )
+    {
+        // Stack the project specific SYMBOL_LIB_TABLE overlay on top of the global table.
+        // ~SYMBOL_LIB_TABLE() will not touch the fallback table, so multiple projects may
+        // stack this way, all using the same global fallback table.
+        tbl = new SYMBOL_LIB_TABLE( &SYMBOL_LIB_TABLE::GetGlobalLibTable() );
+
+        aProject->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, tbl );
+
+        wxString prjPath;
+
+        wxGetEnv( PROJECT_VAR_NAME, &prjPath );
+
+        if( !prjPath.IsEmpty() )
+        {
+            wxFileName fn( prjPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+
+            try
+            {
+                tbl->Load( fn.GetFullPath() );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg;
+                msg.Printf( _( "Error loading the symbol library table '%s'." ), fn.GetFullPath() );
+                DisplayErrorMessage( nullptr, msg, ioe.What() );
+            }
+        }
+    }
+
+    return tbl;
 }

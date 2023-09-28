@@ -29,6 +29,7 @@
 #include <lib_symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
+#include <project_sch.h>
 #include <string_utils.h>
 #include <symbol_preview_widget.h>
 #include <widgets/wx_panel.h>
@@ -91,9 +92,9 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
         // modified libraries before the symbol library table which prevents the library from
         // being removed from the tree control.
         if( !m_libMgr->LibraryExists( name, true )
-              || !m_frame->Prj().SchSymbolLibTable()->HasLibrary( name, true )
-              || m_frame->Prj().SchSymbolLibTable()->FindRow( name, true ) !=
-                                    m_frame->Prj().SchSymbolLibTable()->FindRow( name, false )
+              || !PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->HasLibrary( name, true )
+              || PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, true ) !=
+                                    PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() )->FindRow( name, false )
               || name == aForceRefresh )
         {
             it = deleteLibrary( it );

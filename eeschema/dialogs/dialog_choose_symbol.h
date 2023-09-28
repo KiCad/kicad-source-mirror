@@ -61,7 +61,7 @@ class SCH_DRAW_PANEL;
  * for thorough documentation. A simple example usage follows:
  *
  *     // Create the adapter class
- *     auto adapter( SYMBOL_TREE_MODEL_ADAPTER::Create( Prj().SchSymbolLibTable() ) );
+ *     auto adapter( SYMBOL_TREE_MODEL_ADAPTER::Create( PROJECT_SCH::SchSymbolLibTable( &Prj() ) );
  *
  *     // Perform any configuration of adapter properties here
  *     adapter->SetPreselectNode( "LIB_NICKNAME", "SYMBO_NAME", 2 );
