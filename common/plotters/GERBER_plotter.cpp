@@ -251,7 +251,7 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
     // Create a temp file in system temp to avoid potential network share buffer issues for
     // the final read and save.
     m_workFilename = wxFileName::CreateTempFileName( "" );
-    workFile   = wxFopen( m_workFilename, wxT( "wt" ));
+    workFile = wxFopen( m_workFilename, wxT( "wt" ) );
     m_outputFile = workFile;
     wxASSERT( m_outputFile );
 
