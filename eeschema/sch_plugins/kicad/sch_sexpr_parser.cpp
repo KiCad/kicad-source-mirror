@@ -192,6 +192,11 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
 
     name = FromUTF8();
 
+    // Some symbol LIB_IDs have the '/' character escaped which can break derived symbol links.
+    // The '/' character is no longer an illegal LIB_ID character so it doesn't need to be
+    // escaped.
+    name.Replace( wxS( "{slash}" ), wxT( "/" ) );
+
     LIB_ID id;
     int bad_pos = id.Parse( name );
 
@@ -268,6 +273,12 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
             }
 
             name = FromUTF8();
+
+            // Some symbol LIB_IDs have the '/' character escaped which can break derived
+            // symbol links.  The '/' character is no longer an illegal LIB_ID character so
+            // it doesn't need to be escaped.
+            name.Replace( wxS( "{slash}" ), wxT( "/" ) );
+
             auto it = aSymbolLibMap.find( name );
 
             if( it == aSymbolLibMap.end() )
@@ -292,6 +303,11 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
             }
 
             name = FromUTF8();
+
+            // Some symbol LIB_IDs have the '/' character escaped which can break derived
+            // symbol links.  The '/' character is no longer an illegal LIB_ID character so
+            // it doesn't need to be escaped.
+            name.Replace( wxS( "{slash}" ), wxT( "/" ) );
 
             if( !name.StartsWith( m_symbolName ) )
             {
