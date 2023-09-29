@@ -209,7 +209,7 @@ void PCB_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, const 
     VECTOR3D kmodelOffset;
     VECTOR3D kmodelRotation;
 
-    if( !modelUuid.IsEmpty() )
+    if( !modelUuid.IsEmpty() && !footprint->GetFieldByName( QUERY_MODEL_UUID_KEY ) )
     {
         PCB_FIELD field( footprint, footprint->GetFieldCount(), QUERY_MODEL_UUID_KEY );
         field.SetLayer( Cmts_User );
@@ -218,7 +218,7 @@ void PCB_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, const 
         footprint->AddField( field );
     }
 
-    if( !modelTransform.IsEmpty() )
+    if( !modelTransform.IsEmpty() && !footprint->GetFieldByName( MODEL_SIZE_KEY ) )
     {
         wxArrayString arr = wxSplit( modelTransform, ',', '\0' );
 
@@ -243,7 +243,7 @@ void PCB_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint, const 
         kmodelOffset.z = pcbIUScale.IUTomm( ScaleSize( Convert( arr[8] ) ) );
     }
 
-    if( !modelTitle.IsEmpty() )
+    if( !modelTitle.IsEmpty() && footprint->Models().empty() )
     {
         FP_3DMODEL model;
         model.m_Filename = kicadModelPrefix
