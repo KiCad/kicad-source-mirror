@@ -1243,7 +1243,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             msg.Printf( _( "Schematic '%s' is already open by '%s' at '%s'." ), aFileName,
                     m_file_checker->GetUsername(), m_file_checker->GetHostname() );
 
-            if( !OverrideLock( this, msg ) )
+            if( !AskOverrideLock( this, msg ) )
                 return false;
 
             m_file_checker->OverrideLock();
