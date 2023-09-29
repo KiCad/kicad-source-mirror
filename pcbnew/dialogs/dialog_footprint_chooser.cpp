@@ -36,10 +36,16 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( aParent, this, aFootprintHistoryList,
-                                                  [this]()
-                                                  {
-                                                      EndModal( wxID_OK );
-                                                  } );
+            // Filter
+            []( LIB_TREE_NODE& aNode ) -> bool
+            {
+                return true;
+            },
+            // Close handler
+            [this]()
+            {
+                EndModal( wxID_OK );
+            } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
 

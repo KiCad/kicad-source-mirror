@@ -31,6 +31,7 @@
 #include <netlist_reader/pcb_netlist.h>
 
 class PANEL_FOOTPRINT_CHOOSER;
+class wxCheckBox;
 
 namespace PCB { struct IFACE; }
 
@@ -38,7 +39,7 @@ namespace PCB { struct IFACE; }
 class FOOTPRINT_CHOOSER_FRAME : public PCB_BASE_FRAME
 {
 public:
-    ~FOOTPRINT_CHOOSER_FRAME() {};
+    ~FOOTPRINT_CHOOSER_FRAME();
 
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override { return nullptr; }
@@ -55,11 +56,13 @@ protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
 private:
+    bool filterFootprint( LIB_TREE_NODE& aNode );
+
     void OnPaint( wxPaintEvent& aEvent );
     void OnOK( wxCommandEvent& aEvent );
 
     void doCloseWindow() override;
-    void CloseFootprintChooser( wxCommandEvent& aEvent );
+    void closeFootprintChooser( wxCommandEvent& aEvent );
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh ) const override;
@@ -70,7 +73,11 @@ private:
 
 private:
     PANEL_FOOTPRINT_CHOOSER* m_chooserPanel;
-    COMPONENT                m_comp;
+    wxCheckBox*              m_filterByPinCount;
+    wxCheckBox*              m_filterByFPFilters;
+
+    int                                             m_pinCount;
+    std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_fpFilters;
 
     // On MacOS (at least) SetFocus() calls made in the constructor will fail because a
     // window that isn't yet visible will return false to AcceptsFocus().  So we must delay

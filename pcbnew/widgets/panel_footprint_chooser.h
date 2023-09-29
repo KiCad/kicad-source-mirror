@@ -46,6 +46,7 @@ public:
      */
     PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                              const wxArrayString& aFootprintHistoryList,
+                             std::function<bool( LIB_TREE_NODE& )> aFilter,
                              std::function<void()> aCloseHandler );
 
     ~PANEL_FOOTPRINT_CHOOSER();
@@ -64,6 +65,8 @@ public:
     int GetItemCount() const { return m_adapter->GetItemCount(); }
 
     wxWindow* GetFocusTarget() const { return m_tree->GetFocusTarget(); }
+
+    void Regenerate() { m_tree->Regenerate( true ); }
 
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds
@@ -87,11 +90,12 @@ protected:
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    FOOTPRINT_PREVIEW_WIDGET* m_preview_ctrl;
-    LIB_TREE*                 m_tree;
+    FOOTPRINT_PREVIEW_WIDGET*               m_preview_ctrl;
+    LIB_TREE*                               m_tree;
 
-    PCB_BASE_FRAME*           m_frame;
-    std::function<void()>     m_closeHandler;
+    PCB_BASE_FRAME*                         m_frame;
+    std::function<bool( LIB_TREE_NODE& )>   m_filter;
+    std::function<void()>                   m_closeHandler;
 };
 
 #endif /* PANEL_FOOTPRINT_CHOOSER_H */

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,7 +271,7 @@ protected:
 
         if( !m_symbolNetlist.empty() )
         {
-            KIWAY_EXPRESS event( FRAME_FOOTPRINT_VIEWER, MAIL_SYMBOL_NETLIST, m_symbolNetlist );
+            KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, m_symbolNetlist );
             frame->KiwayMailIn( event );
         }
 
@@ -281,17 +281,14 @@ protected:
         frame->Destroy();
     }
 
+protected:
     DIALOG_SHIM* m_dlg;
     wxString     m_preselect;
 
     /*
      * Symbol netlist format:
-     *   library:footprint
-     *   reference
-     *   value
-     *   pinName,netName,pinFunction,pinType
-     *   pinName,netName,pinFunction,pinType
-     *   ...
+     *   pinCount
+     *   fpFilters
      */
     std::string  m_symbolNetlist;
 };

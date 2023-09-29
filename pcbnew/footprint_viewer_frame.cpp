@@ -954,51 +954,14 @@ void FOOTPRINT_VIEWER_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 
 void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
-    const std::string& payload = mail.GetPayload();
-
     switch( mail.Command() )
     {
-    case MAIL_SYMBOL_NETLIST:
-    {
-        /*
-         * Symbol netlist format:
-         *   library:footprint
-         *   reference
-         *   value
-         *   pinName,netName,pinFunction,pinType
-         *   pinName,netName,pinFunction,pinType
-         *   ...
-         */
-        std::vector<std::string> strings = split( payload, "\r" );
-        LIB_ID libid;
-
-        if( strings.size() >= 3 )
-        {
-            libid.Parse( strings[0] );
-
-            m_comp.SetFPID( libid );
-            m_comp.SetReference( strings[1] );
-            m_comp.SetValue( strings[2] );
-
-            m_comp.ClearNets();
-
-            for( size_t ii = 3; ii < strings.size(); ++ii )
-            {
-                std::vector<std::string> pinData = split( strings[ii], "," );
-                m_comp.AddNet( pinData[0], pinData[1], pinData[2], pinData[3] );
-            }
-        }
-
-        break;
-    }
     case MAIL_RELOAD_LIB:
-    {
         ReCreateLibraryList();
         break;
-    }
 
     default:
-        ;
+        break;
     }
 }
 

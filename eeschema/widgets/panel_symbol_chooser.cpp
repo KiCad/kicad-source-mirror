@@ -102,7 +102,17 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
         if( aFilter->GetFilterPowerSymbols() )
         {
-            adapter->SetFilter( SYMBOL_TREE_MODEL_ADAPTER::SYM_FILTER_POWER );
+            // Note: there is only a single filter ever used for symbols (the power filter),
+            // so the code simply sets a flag based on the filter being non-null.  The filter
+            // is not (at present) actually called.
+            static std::function<bool( LIB_TREE_NODE& )> powerFilter =
+                    []( LIB_TREE_NODE& ) -> bool
+                    {
+                        return true;
+                    };
+
+            adapter->SetFilter( &powerFilter );
+
             m_showPower = true;
             m_show_footprints = false;
         }

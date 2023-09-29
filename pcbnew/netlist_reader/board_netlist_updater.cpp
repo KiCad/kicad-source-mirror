@@ -413,6 +413,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     wxString sheetname;
     wxString sheetfile;
+    wxString fpFilters;
 
     if( aNetlistComponent->GetProperties().count( wxT( "Sheetname" ) ) > 0 )
         sheetname = aNetlistComponent->GetProperties().at( wxT( "Sheetname" ) );
@@ -420,15 +421,22 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     if( aNetlistComponent->GetProperties().count( wxT( "Sheetfile" ) ) > 0 )
         sheetfile = aNetlistComponent->GetProperties().at( wxT( "Sheetfile" ) );
 
+    if( aNetlistComponent->GetProperties().count( wxT( "ki_fp_filters" ) ) > 0 )
+        fpFilters = aNetlistComponent->GetProperties().at( wxT( "ki_fp_filters" ) );
+
     if( sheetname != aPcbFootprint->GetSheetname() )
     {
         if( m_isDryRun )
-            msg.Printf( _( "Update %s sheetname to '%s'." ), aPcbFootprint->GetReference(),
+        {
+            msg.Printf( _( "Update %s sheetname to '%s'." ),
+                        aPcbFootprint->GetReference(),
                         sheetname );
+        }
         else
         {
             aPcbFootprint->SetSheetname( sheetname );
-            msg.Printf( _( "Updated %s sheetname to '%s'." ), aPcbFootprint->GetReference(),
+            msg.Printf( _( "Updated %s sheetname to '%s'." ),
+                        aPcbFootprint->GetReference(),
                         sheetname );
         }
 
@@ -438,13 +446,36 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     if( sheetfile != aPcbFootprint->GetSheetfile() )
     {
         if( m_isDryRun )
-            msg.Printf( _( "Update %s sheetfile to '%s'." ), aPcbFootprint->GetReference(),
+        {
+            msg.Printf( _( "Update %s sheetfile to '%s'." ),
+                        aPcbFootprint->GetReference(),
                         sheetfile );
+        }
         else
         {
             aPcbFootprint->SetSheetfile( sheetfile );
-            msg.Printf( _( "Updated %s sheetfile to '%s'." ), aPcbFootprint->GetReference(),
+            msg.Printf( _( "Updated %s sheetfile to '%s'." ),
+                        aPcbFootprint->GetReference(),
                         sheetfile );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    if( fpFilters != aPcbFootprint->GetFilters() )
+    {
+        if( m_isDryRun )
+        {
+            msg.Printf( _( "Update %s footprint filters to '%s'." ),
+                        aPcbFootprint->GetReference(),
+                        fpFilters );
+        }
+        else
+        {
+            aPcbFootprint->SetFilters( fpFilters );
+            msg.Printf( _( "Updated %s footprint filters to '%s'." ),
+                        aPcbFootprint->GetReference(),
+                        fpFilters );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );

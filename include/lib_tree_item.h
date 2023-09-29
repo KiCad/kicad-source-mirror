@@ -69,6 +69,11 @@ public:
     virtual wxString GetFootprint() { return wxEmptyString; }
 
     /**
+     * The pin count for symbols or the unique pad count for footprints.
+     */
+    virtual int GetPinCount() { return 0; }
+
+    /**
      * For items with units, return the number of units.
      */
     virtual int GetUnitCount() const { return 0; }

@@ -1154,6 +1154,12 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( aNestLevel + 1, ")\n" );
     }
 
+    if( !aFootprint->GetFilters().empty() )
+    {
+        m_out->Print( aNestLevel + 1, "(property ki_fp_filters %s)\n",
+                      m_out->Quotew( aFootprint->GetFilters() ).c_str() );
+    }
+
     if( !( m_ctl & CTL_OMIT_PATH ) && !aFootprint->GetPath().empty() )
     {
         m_out->Print( aNestLevel+1, "(path %s)\n",

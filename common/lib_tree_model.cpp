@@ -34,10 +34,10 @@
 static const unsigned kLowestDefaultScore = 1;
 
 
-void LIB_TREE_NODE::ResetScore()
+void LIB_TREE_NODE::ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->ResetScore();
+        child->ResetScore( aFilter );
 
     m_Score = kLowestDefaultScore;
 }
@@ -175,6 +175,7 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
     m_Name = aItem->GetName();
     m_Desc = aItem->GetDescription();
     m_Footprint = aItem->GetFootprint();
+    m_PinCount = aItem->GetPinCount();
 
     aItem->GetChooserFields( m_Fields );
 
@@ -218,7 +219,21 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
+void LIB_TREE_NODE_LIB_ID::ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+{
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+        child->ResetScore( aFilter );
+
+    if( !aFilter )
+        m_Score = kLowestDefaultScore;
+    else if( (*aFilter)(*this) )
+        m_Score = kLowestDefaultScore + 1;
+    else
+        m_Score = 0;
+}
+
+
+void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
 {
     if( m_Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
@@ -229,7 +244,8 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wx
         return;
     }
 
-    m_Score = aMatcher.ScoreTerms( m_SearchTerms );
+    if( aMatcher )
+        m_Score = aMatcher->ScoreTerms( m_SearchTerms );
 }
 
 
@@ -252,7 +268,7 @@ LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
+void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
 {
     m_Score = 0;
 
@@ -266,11 +282,11 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxStr
             m_Score = std::max( m_Score, child->m_Score );
         }
     }
-    else
+    else if( aMatcher )
     {
         // No children; we are a leaf.
 
-        m_Score = aMatcher.ScoreTerms( m_SearchTerms );
+        m_Score = aMatcher->ScoreTerms( m_SearchTerms );
     }
 }
 
@@ -289,7 +305,7 @@ LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString c
 }
 
 
-void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
+void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         child->UpdateScore( aMatcher, aLib );

@@ -248,6 +248,9 @@ public:
     wxString GetSheetfile() const { return m_sheetfile; }
     void SetSheetfile( const wxString& aSheetfile ) { m_sheetfile = aSheetfile; }
 
+    wxString GetFilters() const { return m_filters; }
+    void SetFilters( const wxString& aFilters ) { m_filters = aFilters; }
+
     int GetLocalSolderMaskMargin() const { return m_localSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
 
@@ -983,6 +986,7 @@ private:
     KIID_PATH       m_path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
     wxString        m_sheetname;         // Name of the sheet containing the symbol for this footprint
     wxString        m_sheetfile;         // File of the sheet containing the symbol for this footprint
+    wxString        m_filters;           // Footprint filters from symbol
     timestamp_t     m_lastEditTime;
     int             m_arflag;            // Use to trace ratsnest and auto routing.
     KIID            m_link;              // Temporary logical link used during editing

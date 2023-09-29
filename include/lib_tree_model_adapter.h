@@ -115,15 +115,6 @@ public:
     ~LIB_TREE_MODEL_ADAPTER();
 
     /**
-     * This enum allows a selective filtering of symbols to list
-     */
-    enum SYM_FILTER_TYPE
-    {
-        SYM_FILTER_NONE,        ///< no filtering
-        SYM_FILTER_POWER,       ///< list symbols flagged PWR
-    };
-
-    /**
      * This enum defines the order of the default columns in the tree view
      */
     enum TREE_COLS
@@ -150,12 +141,12 @@ public:
      *
      * @param aFilter   if SYM_FILTER_POWER, only power parts are loaded
      */
-    void SetFilter( SYM_FILTER_TYPE aFilter );
+    void SetFilter( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) { m_filter = aFilter; }
 
     /**
      * Return the active filter.
      */
-    SYM_FILTER_TYPE GetFilter() const { return m_filter; }
+    std::function<bool( LIB_TREE_NODE& aNode )>* GetFilter() const { return m_filter; }
 
     void SetSortMode( SORT_MODE aMode ) { m_sort_mode = aMode; }
     SORT_MODE GetSortMode() const { return m_sort_mode; }
@@ -398,11 +389,6 @@ protected:
 
 private:
     /**
-     * Find any results worth highlighting and expand them.
-     */
-    void Find( LIB_TREE_NODE& aNode, std::function<bool( const LIB_TREE_NODE* )> aFunc );
-
-    /**
      * Find and expand successful search results.  Return the best match (if any).
      */
     const LIB_TREE_NODE* ShowResults();
@@ -419,21 +405,22 @@ protected:
     std::vector<wxString>        m_availableColumns;
 
 private:
-    EDA_BASE_FRAME*         m_parent;
+    EDA_BASE_FRAME*              m_parent;
 
-    SYM_FILTER_TYPE         m_filter;
-    SORT_MODE               m_sort_mode;
-    bool                    m_show_units;
-    LIB_ID                  m_preselect_lib_id;
-    int                     m_preselect_unit;
-    int                     m_freeze;
+    SORT_MODE                    m_sort_mode;
+    bool                         m_show_units;
+    LIB_ID                       m_preselect_lib_id;
+    int                          m_preselect_unit;
+    int                          m_freeze;
 
-    wxDataViewCtrl*         m_widget;
+    wxDataViewCtrl*              m_widget;
 
-    std::vector<wxDataViewColumn*>        m_columns;
-    std::map<wxString, wxDataViewColumn*> m_colNameMap;
-    std::map<wxString, int>               m_colWidths;
-    std::vector<wxString>                 m_shownColumns;   // Stored in display order
+    std::function<bool( LIB_TREE_NODE& aNode )>* m_filter;
+
+    std::vector<wxDataViewColumn*>               m_columns;
+    std::map<wxString, wxDataViewColumn*>        m_colNameMap;
+    std::map<wxString, int>                      m_colWidths;
+    std::vector<wxString>                        m_shownColumns;   // Stored in display order
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

@@ -80,12 +80,12 @@ public:
      *
      * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search term
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) = 0;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) = 0;
 
     /**
      * Initialize score to kLowestDefaultScore, recursively.
      */
-    void ResetScore();
+    virtual void ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter );
 
     /**
      * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
@@ -135,6 +135,7 @@ public:
     wxString    m_Name;        // Actual name of the part
     wxString    m_Desc;        // Description to be displayed
     wxString    m_Footprint;   // Footprint ID as a string (ie: the footprint field text)
+    int         m_PinCount;    // Pin count from symbol, or unique pad count from footprint
 
     std::vector<SEARCH_TERM>     m_SearchTerms;    /// List of weighted search terms
     std::map<wxString, wxString> m_Fields;         /// @see LIB_TREE_ITEMS::GetChooserFields
@@ -174,7 +175,7 @@ public:
     /**
      * Do nothing, units just take the parent's score
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override {}
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override {}
 };
 
 
@@ -210,10 +211,12 @@ public:
      */
     void Update( LIB_TREE_ITEM* aItem );
 
+    void ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
+
     /**
      * Perform the actual search.
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override;
 
 protected:
     /**
@@ -254,7 +257,7 @@ public:
      */
     LIB_TREE_NODE_LIB_ID& AddItem( LIB_TREE_ITEM* aItem );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override;
 };
 
 
@@ -281,7 +284,7 @@ public:
      */
     LIB_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override;
 };
 
 

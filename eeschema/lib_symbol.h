@@ -456,7 +456,7 @@ public:
     /**
      * @return a count of pins for all units / converts.
      */
-    size_t GetFullPinCount() { return GetAllLibPins().size(); }
+    int GetPinCount() override { return GetAllLibPins().size(); }
 
     /**
      * Return pin object with the requested pin \a aNumber.

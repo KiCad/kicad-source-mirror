@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <dialog_exchange_footprints.h>
 #include <string_utils.h>
 #include <kiway.h>
+#include <kiway_express.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -402,6 +403,23 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
     wxString newname = m_newID->GetValue();
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true );
+
+    if( m_currentFootprint )
+    {
+        /*
+         * Symbol netlist format:
+         *   pinCount
+         *   fpFilters
+         */
+        wxString netlist;
+
+        netlist << wxString::Format( wxS( "%ld\r" ), m_currentFootprint->Pads().size() );
+        netlist << EscapeString( m_currentFootprint->GetFilters(), CTX_LINE ) << wxS( "\r" );
+
+        std::string payload( netlist.ToStdString() );
+        KIWAY_EXPRESS mail( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, payload );
+        frame->KiwayMailIn( mail );
+    }
 
     if( frame->ShowModal( &newname, this ) )
     {

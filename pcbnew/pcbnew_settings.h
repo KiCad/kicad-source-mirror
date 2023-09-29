@@ -298,11 +298,13 @@ public:
 
     struct FOOTPRINT_CHOOSER
     {
-        int width;
-        int height;
-        int sash_h;
-        int sash_v;
-        int sort_mode;
+        int  width;
+        int  height;
+        int  sash_h;
+        int  sash_v;
+        int  sort_mode;
+        bool use_fp_filters;
+        bool filter_on_pin_count;
     };
 
     struct ZONES

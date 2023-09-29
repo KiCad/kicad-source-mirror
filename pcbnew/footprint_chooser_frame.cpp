@@ -22,9 +22,11 @@
  */
 
 #include <pgm_base.h>
+#include <kiface_base.h>
 #include <kiway.h>
 #include <kiway_express.h>
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <kiplatform/ui.h>
 #include <widgets/panel_footprint_chooser.h>
 #include <settings/settings_manager.h>
@@ -38,7 +40,7 @@ static unsigned      s_FootprintHistoryMaxCount = 8;
 static void AddFootprintToHistory( const wxString& aName )
 {
     // Remove duplicates
-    for( int ii = s_FootprintHistoryList.GetCount() - 1; ii >= 0; --ii )
+    for( int ii = (int) s_FootprintHistoryList.GetCount() - 1; ii >= 0; --ii )
     {
         if( s_FootprintHistoryList[ ii ] == aName )
             s_FootprintHistoryList.RemoveAt( (size_t) ii );
@@ -54,9 +56,9 @@ static void AddFootprintToHistory( const wxString& aName )
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_CHOOSER_FRAME, PCB_BASE_FRAME )
-    EVT_MENU( wxID_CLOSE, FOOTPRINT_CHOOSER_FRAME::CloseFootprintChooser )
+    EVT_MENU( wxID_CLOSE, FOOTPRINT_CHOOSER_FRAME::closeFootprintChooser )
     EVT_BUTTON( wxID_OK, FOOTPRINT_CHOOSER_FRAME::OnOK )
-    EVT_BUTTON( wxID_CANCEL, FOOTPRINT_CHOOSER_FRAME::CloseFootprintChooser )
+    EVT_BUTTON( wxID_CANCEL, FOOTPRINT_CHOOSER_FRAME::closeFootprintChooser )
     EVT_PAINT( FOOTPRINT_CHOOSER_FRAME::OnPaint )
 END_EVENT_TABLE()
 
@@ -68,31 +70,62 @@ END_EVENT_TABLE()
 
 
 FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_BASE_FRAME( aKiway, aParent, FRAME_FOOTPRINT_CHOOSER, _( "Footprint Chooser" ),
-                    wxDefaultPosition, wxDefaultSize, aParent ? PARENT_STYLE : MODAL_STYLE,
-                    FOOTPRINT_CHOOSER_FRAME_NAME ),
-    m_comp( LIB_ID(), wxEmptyString, wxEmptyString, KIID_PATH(), {} )
+        PCB_BASE_FRAME( aKiway, aParent, FRAME_FOOTPRINT_CHOOSER, _( "Footprint Chooser" ),
+                        wxDefaultPosition, wxDefaultSize, aParent ? PARENT_STYLE : MODAL_STYLE,
+                        FOOTPRINT_CHOOSER_FRAME_NAME ),
+        m_filterByPinCount( nullptr ),
+        m_filterByFPFilters( nullptr ),
+        m_pinCount( 0 )
 {
     SetModal( true );
 
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( this, this, s_FootprintHistoryList,
-                                                  [this]()
-                                                  {
-                                                      wxCommandEvent dummy;
-                                                      OnOK( dummy );
-                                                  } );
+            // Filter
+            [this]( LIB_TREE_NODE& aNode ) -> bool
+            {
+                return filterFootprint( aNode );
+            },
+            // Close handler
+            [this]()
+            {
+                wxCommandEvent dummy;
+                OnOK( dummy );
+            } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
+
+    wxBoxSizer* fpFilterSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_filterByFPFilters = new wxCheckBox( this, wxID_ANY, _( "Apply footprint filters" ) );
+    fpFilterSizer->Add( m_filterByFPFilters, 0, wxTOP | wxEXPAND, 8 );
+    m_filterByFPFilters->Show( false );
+
+    sizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
+
+    wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_filterByPinCount = new wxCheckBox( this, wxID_ANY, _( "Filter by pin count" ) );
+    buttonsSizer->Add( m_filterByPinCount, 0, wxLEFT | wxTOP | wxALIGN_TOP, 5 );
+    m_filterByPinCount->Show( false );
+
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
+        m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
+    }
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( this, wxID_OK );
     wxButton*               cancelButton = new wxButton( this, wxID_CANCEL );
+
     sdbSizer->AddButton( okButton );
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
-    sizer->Add( sdbSizer, 0, wxEXPAND | wxALL, 5 );
+    buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
+
+    sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
     SetSizer( sizer );
 
     SetTitle( GetTitle() + wxString::Format( _( " (%d items loaded)" ),
@@ -100,6 +133,61 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     Layout();
     m_chooserPanel->FinishSetup();
+
+    m_filterByPinCount->Bind( wxEVT_CHECKBOX,
+            [&]( wxCommandEvent& evt )
+            {
+                m_chooserPanel->Regenerate();
+            } );
+
+    m_filterByFPFilters->Bind( wxEVT_CHECKBOX,
+            [&]( wxCommandEvent& evt )
+            {
+                m_chooserPanel->Regenerate();
+            } );
+}
+
+
+FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
+{
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        cfg->m_FootprintChooser.use_fp_filters = m_filterByFPFilters->GetValue();
+        cfg->m_FootprintChooser.filter_on_pin_count = m_filterByPinCount->GetValue();
+    }
+}
+
+bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
+{
+    if( m_pinCount > 0 && m_filterByPinCount->GetValue() )
+    {
+        if( aNode.m_PinCount != m_pinCount )
+            return false;
+    }
+
+    if( !m_fpFilters.empty() && m_filterByFPFilters->GetValue() )
+    {
+        // The matching is case insensitive
+        wxString name;
+
+        for( const std::unique_ptr<EDA_PATTERN_MATCH>& each_filter : m_fpFilters )
+        {
+            name.Empty();
+
+            // If the filter contains a ':' character, include the library name in the pattern
+            if( each_filter->GetPattern().Contains( wxS( ":" ) ) )
+                name = aNode.m_LibId.GetUniStringLibNickname().Lower() + wxS( ":" );
+
+            name += aNode.m_LibId.GetUniStringLibItemName().Lower();
+
+            if( each_filter->Find( name ) )
+                return true;
+        }
+
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -136,42 +224,46 @@ COLOR_SETTINGS* FOOTPRINT_CHOOSER_FRAME::GetColorSettings( bool aForceRefresh ) 
 
 void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
-    // JEY TODO: don't delete this just yet.  We can use it to pass in symbol info so that we
-    // can filter on footprint filters, symbol pin count, etc.
-
     const std::string& payload = mail.GetPayload();
 
     switch( mail.Command() )
     {
     case MAIL_SYMBOL_NETLIST:
     {
+        m_pinCount = 0;
+        m_fpFilters.clear();
+
         /*
          * Symbol netlist format:
-         *   library:footprint
-         *   reference
-         *   value
-         *   pinName,netName,pinFunction,pinType
-         *   pinName,netName,pinFunction,pinType
-         *   ...
+         *   pinCount
+         *   fpFilters
          */
         std::vector<std::string> strings = split( payload, "\r" );
-        LIB_ID libid;
 
-        if( strings.size() >= 3 )
+        if( strings.size() >= 1 )
         {
-            libid.Parse( strings[0] );
+            wxString pinCountStr( strings[0] );
+            pinCountStr.ToInt( &m_pinCount );
 
-            m_comp.SetFPID( libid );
-            m_comp.SetReference( strings[1] );
-            m_comp.SetValue( strings[2] );
-
-            m_comp.ClearNets();
-
-            for( size_t ii = 3; ii < strings.size(); ++ii )
+            if( m_pinCount > 0 )
             {
-                std::vector<std::string> pinData = split( strings[ii], "," );
-                m_comp.AddNet( pinData[0], pinData[1], pinData[2], pinData[3] );
+                m_filterByPinCount->SetLabel( m_filterByPinCount->GetLabel()
+                                                + wxString::Format( wxS( " (%d)" ), m_pinCount ) );
+                m_filterByPinCount->Show( true );
             }
+        }
+
+        if( strings.size() >= 2 && !strings[1].empty() )
+        {
+            for( const wxString& filter : wxSplit( strings[1], ' ' ) )
+            {
+                m_fpFilters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>() );
+                m_fpFilters.back()->SetPattern( filter.Lower() );
+            }
+
+            m_filterByFPFilters->SetLabel( m_filterByFPFilters->GetLabel()
+                                            + wxString::Format( wxS( " (%s)" ), strings[1] ) );
+            m_filterByFPFilters->Show( true );
         }
 
         break;
@@ -231,7 +323,7 @@ void FOOTPRINT_CHOOSER_FRAME::OnOK( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_CHOOSER_FRAME::CloseFootprintChooser( wxCommandEvent& aEvent )
+void FOOTPRINT_CHOOSER_FRAME::closeFootprintChooser( wxCommandEvent& aEvent )
 {
     Close( false );
 }

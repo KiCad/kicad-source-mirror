@@ -64,27 +64,19 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 {
     /*
      * Symbol netlist format:
-     *   library:footprint
-     *   reference
-     *   value
-     *   pinName,netName,pinFunction,pinType
-     *   pinName,netName,pinFunction,pinType
-     *   ...
+     *   pinCount
+     *   fpFilters
      */
     wxString netlist;
 
-    netlist << EscapeString( aSymbol->GetFootprintFieldText( true, &aSheetPath, false ), CTX_LINE ) << wxS( "\r" );
-    netlist << EscapeString( aSymbol->GetRef( &aSheetPath ), CTX_LINE ) << wxS( "\r" );
-    netlist << EscapeString( aSymbol->GetValueFieldText( true, &aSheetPath, false ), CTX_LINE );
+    netlist << wxString::Format( wxS( "%d\r" ), aSymbol->GetPins().size() );
 
-    for( SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
-    {
-        netlist << wxS( "\r" );
-        netlist << EscapeString( pin->GetNumber(), CTX_CSV ) << wxS( "," );
-        netlist << EscapeString( pin->GetDefaultNetName( aSheetPath ), CTX_CSV ) << wxS( "," );
-        netlist << EscapeString( pin->GetName(), CTX_CSV ) << wxS( "," );
-        netlist << EscapeString( pin->GetCanonicalElectricalTypeName(), CTX_CSV );
-    }
+    wxArrayString fpFilters = aSymbol->GetLibSymbolRef()->GetFPFilters();
+
+    if( !fpFilters.IsEmpty() )
+        netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+    netlist << wxS( "\r" );
 
     return netlist;
 }

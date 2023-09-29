@@ -49,12 +49,12 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                 const wxString& aPinnedKey ) :
         m_parent( aParent ),
-        m_filter( SYM_FILTER_NONE ),
         m_sort_mode( BEST_MATCH ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
         m_freeze( 0 ),
-        m_widget( nullptr )
+        m_widget( nullptr ),
+        m_filter( nullptr )
 {
     // Default column widths.  Do not translate these names.
     m_colWidths[ _HKI( "Item" ) ] = 300;
@@ -93,12 +93,6 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
             cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
     }
-}
-
-
-void LIB_TREE_MODEL_ADAPTER::SetFilter( SYM_FILTER_TYPE aFilter )
-{
-    m_filter = aFilter;
 }
 
 
@@ -171,24 +165,31 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         Freeze();
         BeforeReset();
 
-        m_tree.ResetScore();
+        m_tree.ResetScore( m_filter );
 
         wxStringTokenizer tokenizer( aSearch );
 
-        while( tokenizer.HasMoreTokens() )
+        if( tokenizer.HasMoreTokens() )
         {
-            wxString lib;
-            wxString term = tokenizer.GetNextToken().Lower();
-
-            if( term.Contains( ":" ) )
+            while( tokenizer.HasMoreTokens() )
             {
-                lib = term.BeforeFirst( ':' );
-                term = term.AfterFirst( ':' );
+                wxString lib;
+                wxString term = tokenizer.GetNextToken().Lower();
+
+                if( term.Contains( ":" ) )
+                {
+                    lib = term.BeforeFirst( ':' );
+                    term = term.AfterFirst( ':' );
+                }
+
+                EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
+
+                m_tree.UpdateScore( &matcher, lib );
             }
-
-            EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
-
-            m_tree.UpdateScore( matcher, lib );
+        }
+        else
+        {
+            m_tree.UpdateScore( nullptr, wxEmptyString );
         }
 
         m_tree.SortNodes( m_sort_mode == BEST_MATCH );

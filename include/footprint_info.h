@@ -72,6 +72,8 @@ public:
 
     wxString GetName() const override { return m_fpname; }
 
+    int GetPinCount() override { return GetUniquePadCount(); }
+
     LIB_ID GetLibId() const override
     {
         return LIB_ID( m_nickname, m_fpname );

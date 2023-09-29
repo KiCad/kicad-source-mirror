@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ enum MAIL_T
     MAIL_ASSIGN_FOOTPRINTS,        // CVPCB->SCH footprint stuffing
     MAIL_SCH_SAVE,                 // CVPCB->SCH save the schematic
     MAIL_EESCHEMA_NETLIST,         // SCH->CVPCB netlist immediately after launching CVPCB
-    MAIL_SYMBOL_NETLIST,           // SCH->FP_VIEWER symbol pin information
+    MAIL_SYMBOL_NETLIST,           // SCH->FP_CHOOSER symbol pin & fp_filter information
     MAIL_PCB_UPDATE,               // SCH->PCB forward update
     MAIL_SCH_UPDATE,               // PCB->SCH forward update
     MAIL_IMPORT_FILE,              // Import a different format file

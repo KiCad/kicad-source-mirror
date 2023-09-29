@@ -80,9 +80,8 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     std::unordered_map<wxString, std::vector<LIB_SYMBOL*>> loadedSymbols;
 
-    SYMBOL_ASYNC_LOADER loader( aNicknames, m_libs,
-                                GetFilter() == LIB_TREE_MODEL_ADAPTER::SYM_FILTER_POWER,
-                                &loadedSymbols, progressReporter.get() );
+    SYMBOL_ASYNC_LOADER loader( aNicknames, m_libs, GetFilter() != nullptr, &loadedSymbols,
+                                progressReporter.get() );
 
     LOCALE_IO toggle;
 
@@ -204,7 +203,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool pinned )
 {
-    bool                        onlyPowerSymbols = ( GetFilter() == SYM_FILTER_POWER );
+    bool                        onlyPowerSymbols = ( GetFilter() != nullptr );
     std::vector<LIB_SYMBOL*>    symbols;
     std::vector<LIB_TREE_ITEM*> comp_list;
 

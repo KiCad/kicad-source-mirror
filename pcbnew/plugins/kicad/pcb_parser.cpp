@@ -3853,7 +3853,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
             // Skip legacy non-field properties sent from symbols that should not be kept
             // in footprints.
-            if( pName == "ki_keywords" || pName == "ki_fp_filters" || pName == "ki_locked" )
+            if( pName == "ki_keywords" || pName == "ki_locked" )
             {
                 NeedRIGHT();
                 break;
@@ -3864,6 +3864,13 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             if( pName == "ki_description" )
             {
                 footprint->GetFieldById( DESCRIPTION_FIELD )->SetText( pValue );
+                NeedRIGHT();
+                break;
+            }
+
+            if( pName == "ki_fp_filters" )
+            {
+                footprint->SetFilters( pValue );
                 NeedRIGHT();
                 break;
             }
@@ -3892,8 +3899,8 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             }
             else
             {
-                field = footprint->AddField(
-                        PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName ) );
+                field = footprint->AddField( PCB_FIELD( footprint.get(), footprint->GetFieldCount(),
+                                                        pName ) );
 
                 field->SetText( pValue );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );

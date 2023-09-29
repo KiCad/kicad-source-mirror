@@ -43,11 +43,13 @@
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                                                   const wxArrayString& aFootprintHistoryList,
+                                                  std::function<bool( LIB_TREE_NODE& )> aFilter,
                                                   std::function<void()> aCloseHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_hsplitter( nullptr ),
         m_vsplitter( nullptr ),
         m_frame( aFrame ),
+        m_filter( std::move( aFilter ) ),
         m_closeHandler( std::move( aCloseHandler ) )
 {
     FP_LIB_TABLE*   fpTable = PROJECT_PCB::PcbFootprintLibs( &aFrame->Prj() );
@@ -87,7 +89,8 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     if( historyInfos.size() )
         adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
 
-    adapter->AddLibraries( aFrame );
+    adapter->SetFilter( &m_filter );
+    adapter->AddLibraries( m_frame );
 
     // -------------------------------------------------------------------------------------
     // Construct the actual panel

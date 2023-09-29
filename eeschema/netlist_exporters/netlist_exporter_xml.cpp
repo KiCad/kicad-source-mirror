@@ -399,6 +399,18 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "name" ), wxT( "ki_keywords" ) );
                     xproperty->AddAttribute( wxT( "value" ), part->GetKeyWords() );
                 }
+
+                if( !part->GetFPFilters().IsEmpty() )
+                {
+                    wxString filters;
+
+                    for( const wxString& filter : part->GetFPFilters() )
+                        filters += ' ' + filter;
+
+                    xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
+                    xproperty->AddAttribute( wxT( "name" ), wxT( "ki_fp_filters" ) );
+                    xproperty->AddAttribute( wxT( "value" ), filters.Trim( false ) );
+                }
             }
 
             XNODE* xsheetpath;

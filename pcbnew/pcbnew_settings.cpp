@@ -142,6 +142,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.sort_mode",
             &m_FootprintChooser.sort_mode, 0 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "footprint_chooser.filter_on_pin_count",
+            &m_FootprintChooser.filter_on_pin_count, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "footprint_chooser.use_fp_filters",
+            &m_FootprintChooser.use_fp_filters, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right",
             &m_FlipLeftRight, true ) );
 
