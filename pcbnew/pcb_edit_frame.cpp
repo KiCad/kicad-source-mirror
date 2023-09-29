@@ -1859,7 +1859,9 @@ int PCB_EDIT_FRAME::TestStandalone()
 bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
                                                 const wxString& aAnnotateMessage )
 {
-    if( TestStandalone() == 0 )
+    int standalone = TestStandalone();
+
+    if( standalone == 0 )
     {
         DisplayErrorMessage( this, _( "Cannot update the PCB because PCB editor is opened in "
                                       "stand-alone mode. In order to create or update PCBs from "
@@ -1868,7 +1870,7 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
         return false;       // Not in standalone mode
     }
 
-    if( TestStandalone() < 0 )      // Problem with Eeschema or the schematic
+    if( standalone < 0 )      // Problem with Eeschema or the schematic
         return false;
 
     Raise();                // Show

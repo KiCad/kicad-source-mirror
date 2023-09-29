@@ -1144,70 +1144,73 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
     poly_segments.resize( m_board->m_DRCCopperZones.size() );
 
-    // Contains the index for zoneA, zoneB, the conflict point, the actual clearance, the required clearance, and the layer
+    // Contains the index for zoneA, zoneB, the conflict point, the actual clearance, the
+    // required clearance, and the layer
     using report_data = std::tuple<int, int, VECTOR2I, int, int, PCB_LAYER_ID>;
     const int invalid_zone = -1;
 
     std::vector<std::future<report_data>> futures;
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto checkZones = [testClearance, testIntersects, &poly_segments, &cancelled, invalid_zone]
-                        ( int zoneA, int zoneB,
-                          int zone2zoneClearance, PCB_LAYER_ID layer ) -> report_data
-    {
-        // Iterate through all the segments of refSmoothedPoly
-        std::map<VECTOR2I, int> conflictPoints;
-
-        std::vector<SEG>& refSegments = poly_segments[zoneA][layer];
-        std::vector<SEG>& testSegments = poly_segments[zoneB][layer];
-        bool reported = false;
-        auto invalid_result = std::make_tuple( invalid_zone, invalid_zone, VECTOR2I(), 0, 0, F_Cu );
-
-        for( SEG& refSegment : refSegments )
-        {
-            int ax1 = refSegment.A.x;
-            int ay1 = refSegment.A.y;
-            int ax2 = refSegment.B.x;
-            int ay2 = refSegment.B.y;
-
-            // Iterate through all the segments in smoothed_polys[ia2]
-            for( SEG& testSegment : testSegments )
+    auto checkZones =
+            [testClearance, testIntersects, &poly_segments, &cancelled, invalid_zone]
+            ( int zoneA, int zoneB, int clearance, PCB_LAYER_ID layer ) -> report_data
             {
-                // Build test segment
-                VECTOR2I pt;
+                // Iterate through all the segments of refSmoothedPoly
+                std::map<VECTOR2I, int> conflictPoints;
 
-                int bx1 = testSegment.A.x;
-                int by1 = testSegment.A.y;
-                int bx2 = testSegment.B.x;
-                int by2 = testSegment.B.y;
+                std::vector<SEG>& refSegments = poly_segments[zoneA][layer];
+                std::vector<SEG>& testSegments = poly_segments[zoneB][layer];
+                bool reported = false;
+                auto invalid_result = std::make_tuple( invalid_zone, invalid_zone, VECTOR2I(),
+                                                       0, 0, F_Cu );
 
-                // We have ensured that the A segment starts before the B segment, so if the
-                // A segment ends before the B segment starts, we can skip to the next A
-                if( ax2 < bx1 )
-                    break;
-
-                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
-                                                     ax1, ay1, ax2, ay2, 0,
-                                                     zone2zoneClearance, &pt.x, &pt.y );
-
-                if( d < zone2zoneClearance )
+                for( SEG& refSegment : refSegments )
                 {
-                    if( d == 0 && testIntersects )
-                        reported = true;
-                    else if( testClearance )
-                        reported = true;
+                    int ax1 = refSegment.A.x;
+                    int ay1 = refSegment.A.y;
+                    int ax2 = refSegment.B.x;
+                    int ay2 = refSegment.B.y;
 
-                    if( reported )
-                        return std::make_tuple( zoneA, zoneB, pt, d, zone2zoneClearance, layer );
+                    // Iterate through all the segments in smoothed_polys[ia2]
+                    for( SEG& testSegment : testSegments )
+                    {
+                        // Build test segment
+                        VECTOR2I pt;
+
+                        int bx1 = testSegment.A.x;
+                        int by1 = testSegment.A.y;
+                        int bx2 = testSegment.B.x;
+                        int by2 = testSegment.B.y;
+
+                        // We have ensured that the 'A' segment starts before the 'B' segment,
+                        // so if the 'A' segment ends before the 'B' segment starts, we can skip
+                        // to the next 'A'
+                        if( ax2 < bx1 )
+                            break;
+
+                        int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
+                                                             ax1, ay1, ax2, ay2, 0,
+                                                             clearance, &pt.x, &pt.y );
+
+                        if( d < clearance )
+                        {
+                            if( d == 0 && testIntersects )
+                                reported = true;
+                            else if( testClearance )
+                                reported = true;
+
+                            if( reported )
+                                return std::make_tuple( zoneA, zoneB, pt, d, clearance, layer );
+                        }
+
+                        if( cancelled )
+                            return invalid_result;
+                    }
                 }
 
-                if( cancelled )
-                    return invalid_result;
-            }
-        }
-
-        return invalid_result;
-    };
+                return invalid_result;
+            };
 
     for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
     {
@@ -1222,11 +1225,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
         {
             if( m_board->m_DRCCopperZones[ii]->IsOnLayer( layer ) )
             {
-                SHAPE_POLY_SET poly =
-                        *m_board->m_DRCCopperZones[ii]->GetFilledPolysList( layer );
+                SHAPE_POLY_SET poly = *m_board->m_DRCCopperZones[ii]->GetFilledPolysList( layer );
                 std::vector<SEG>& poly_segs = poly_segments[ii][layer];
 
-                poly.Fracture( SHAPE_POLY_SET::PM_FAST );
                 poly.BuildBBoxCaches();
                 poly_segs.reserve( poly.FullPointCount() );
 

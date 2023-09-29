@@ -85,7 +85,7 @@ SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader, PROGRESS_REPORTER*
 
 void SCH_SEXPR_PARSER::checkpoint()
 {
-    const unsigned PROGRESS_DELTA = 250;
+    const unsigned PROGRESS_DELTA = 500;
 
     if( m_progressReporter )
     {

@@ -81,8 +81,9 @@ bool DRC_CACHE_GENERATOR::Run()
         }
     }
 
-    // This is the number of tests between 2 calls to the progress bar
-    size_t progressDelta = 200;
+    // This is the number of tests between 2 calls to the progress bar.
+    // Note that zones are -not- done here, so it's reasonably fast.
+    size_t progressDelta = 500;
     size_t count = 0;
     size_t ii = 0;
 
