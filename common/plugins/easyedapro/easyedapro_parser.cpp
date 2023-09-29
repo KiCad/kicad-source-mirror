@@ -68,7 +68,11 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PCB_ATTR& d )
         d.position = VECTOR2D( j.at( 5 ), j.at( 6 ) );
 
     d.key = j.at( 7 ).get<wxString>();
-    d.value = j.at( 8 ).get<wxString>();
+
+    if( j.at( 8 ).is_string() )
+        d.value = j.at( 8 ).get<wxString>();
+    else if( j.at( 8 ).is_number_integer() )
+        d.value << ( j.at( 8 ).get<int>() );
 
     if( j.at( 9 ).is_number() )
         d.keyVisible = j.at( 9 ).get<int>();

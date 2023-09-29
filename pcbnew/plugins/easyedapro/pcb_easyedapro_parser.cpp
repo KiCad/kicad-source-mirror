@@ -1542,6 +1542,9 @@ void PCB_EASYEDAPRO_PARSER::ParseBoard(
             }
         }
 
+        if( deviceId.empty() )
+            continue;
+
         nlohmann::json compAttrs = aProject.at( "devices" ).at( deviceId ).at( "attributes" );
 
         wxString fpId;
