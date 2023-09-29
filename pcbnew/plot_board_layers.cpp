@@ -1229,29 +1229,30 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
             AddGerberX2Attribute( plotter, aBoard, aLayer, not useX2mode );
         }
 
-        plotter->StartPlot( wxT( "1" ) );
-
-        // Plot the frame reference if requested
-        if( aPlotOpts->GetPlotFrameRef() )
+        if( plotter->StartPlot( wxT( "1" ) ) )
         {
-            PlotDrawingSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
-                              aBoard->GetPageSettings(), &aBoard->GetProperties(), wxT( "1" ), 1,
-                              aSheetName, aSheetPath, aBoard->GetFileName() );
+            // Plot the frame reference if requested
+            if( aPlotOpts->GetPlotFrameRef() )
+            {
+                PlotDrawingSheet( plotter, aBoard->GetProject(), aBoard->GetTitleBlock(),
+                                aBoard->GetPageSettings(), &aBoard->GetProperties(), wxT( "1" ), 1,
+                                aSheetName, aSheetPath, aBoard->GetFileName() );
 
-            if( aPlotOpts->GetMirror() )
-                initializePlotter( plotter, aBoard, aPlotOpts );
+                if( aPlotOpts->GetMirror() )
+                    initializePlotter( plotter, aBoard, aPlotOpts );
+            }
+
+            // When plotting a negative board: draw a black rectangle (background for plot board
+            // in white) and switch the current color to WHITE; note the color inversion is actually
+            // done in the driver (if supported)
+            if( aPlotOpts->GetNegative() )
+            {
+                BOX2I bbox = aBoard->ComputeBoundingBox();
+                FillNegativeKnockout( plotter, bbox );
+            }
+
+            return plotter;
         }
-
-        // When plotting a negative board: draw a black rectangle (background for plot board
-        // in white) and switch the current color to WHITE; note the color inversion is actually
-        // done in the driver (if supported)
-        if( aPlotOpts->GetNegative() )
-        {
-            BOX2I bbox = aBoard->ComputeBoundingBox();
-            FillNegativeKnockout( plotter, bbox );
-        }
-
-        return plotter;
     }
 
     delete plotter->RenderSettings();
