@@ -91,6 +91,9 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
     m_hitlist.clear();
     BOARD* board = m_frame->GetBoard();
 
+    if( board == nullptr )
+        return 0;
+
     EDA_SEARCH_DATA frp;
     frp.findString = aQuery;
 
