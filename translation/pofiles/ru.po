@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-28 12:05-0700\n"
-"PO-Revision-Date: 2023-08-27 09:55+0000\n"
+"PO-Revision-Date: 2023-09-29 15:57+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6678,7 +6678,6 @@ msgid "Min grid spacing:"
 msgstr "Мин. шаг сетки:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Привязка к сетке:"
 
@@ -19713,9 +19712,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Возможные варианты: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Возможные варианты: absolute,plot"
+msgstr "Возможные варианты: route,alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19766,9 +19764,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Указан недопустимый формат нулей\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Указан недопустимый формат карты\n"
+msgstr "Указан недопустимый формат овальной сверловки\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -19866,7 +19863,6 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Зеркально отразить плату (полезно для просмотра нижних слоев)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Цветовая тема (по умолчанию берется из редактора плат)"
 
@@ -19876,6 +19872,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Задать форму метки отверстия конт.пл./перех.отв. (0 = нет метки, 1 = малая, "
+"2 = истинная)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -26359,9 +26357,8 @@ msgid "Export STEP"
 msgstr "Экспорт в STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Команда:"
+msgstr "Командная строка:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -35507,9 +35504,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' разобран не полностью."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Библиотека посад.мест не найдена."
+msgstr "Директория посад.места '%s' не найдена."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
@@ -36167,10 +36164,9 @@ msgstr ""
 "Пропускается полигон, так как слой Eagle '%s' (%d) не связан со слоем KiCad."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Пропускается полигон, так как слой Eagle '%s' (%d) не связан со слоем KiCad."
+msgstr "Пропускается полигон на слое '%s' (%d): кол-во контуров не равно 1."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36543,23 +36539,21 @@ msgstr ""
 "позиция: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Устаревший режим заливки зон более не поддерживается.\n"
-"Преобразовать зоны в сглаженные залитые полигоны?"
+"Заливка зон будет преобразована, но может незначительно отличаться."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Устаревший режим заполнения отрезками более не поддерживается.\n"
-"Преобразовать зоны в сглаженные залитые полигоны?"
+"Устаревший режим заливки зон отрезками более не поддерживается.\n"
+"Заливка зон будет преобразована, но может незначительно отличаться."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
