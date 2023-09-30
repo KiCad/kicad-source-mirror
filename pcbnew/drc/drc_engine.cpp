@@ -229,13 +229,21 @@ void DRC_ENGINE::loadImplicitRules()
     auto makeNetclassRules =
             [&]( const std::shared_ptr<NETCLASS>& nc, bool isDefault )
             {
-                wxString ncName = nc->GetName();
-                wxString expr;
+                wxString  ncName = nc->GetName();
+                wxString  friendlyName;
+                wxString* shownName = &ncName;
+                wxString  expr;
+
+                if( ncName.Replace( "'", "\\'" ) )
+                {
+                    friendlyName = nc->GetName();
+                    shownName = &friendlyName;
+                }
 
                 if( nc->GetClearance() || nc->GetTrackWidth() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), *shownName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
@@ -262,7 +270,7 @@ void DRC_ENGINE::loadImplicitRules()
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
-                                                             ncName );
+                                                             *shownName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( wxT( "A.NetClass == '%s' && A.inDiffPair('*')" ),
@@ -280,7 +288,7 @@ void DRC_ENGINE::loadImplicitRules()
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
-                                                             ncName );
+                                                             *shownName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( wxT( "A.NetClass == '%s'" ), ncName );
@@ -297,7 +305,7 @@ void DRC_ENGINE::loadImplicitRules()
                     {
                         netclassRule = std::make_shared<DRC_RULE>();
                         netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
-                                                                 ncName );
+                                                                 *shownName );
                         netclassRule->m_Implicit = true;
 
                         expr = wxString::Format( wxT( "A.NetClass == '%s' && AB.isCoupledDiffPair()" ),
@@ -314,7 +322,7 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->GetViaDiameter() || nc->GetViaDrill() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), *shownName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type != 'Micro'" ),
@@ -342,7 +350,8 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->GetuViaDiameter() || nc->GetuViaDrill() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ), ncName );
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ),
+                                                             *shownName );
                     netclassRule->m_Implicit = true;
 
                     expr = wxString::Format( wxT( "A.NetClass == '%s' && A.Via_Type == 'Micro'" ),

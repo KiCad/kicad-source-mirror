@@ -474,6 +474,8 @@ public:
         return m_pos;
     }
 
+    wxString GetString();
+
     wxString GetChars( const std::function<bool( wxUniChar )>& cond ) const;
 
     bool MatchAhead( const wxString& match,

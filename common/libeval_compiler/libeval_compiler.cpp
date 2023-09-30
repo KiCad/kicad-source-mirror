@@ -201,6 +201,24 @@ wxString UCODE::Dump() const
 };
 
 
+wxString TOKENIZER::GetString()
+{
+    wxString rv;
+
+    while( m_pos < m_str.length() && m_str[ m_pos ] != '\'' )
+    {
+        if( m_str[ m_pos ] == '\\' && m_pos + 1 < m_str.length() && m_str[ m_pos + 1 ] == '\'' )
+            m_pos++;
+
+        rv.append( 1, m_str[ m_pos++ ] );
+    }
+
+    m_pos++;
+
+    return rv;
+}
+
+
 wxString TOKENIZER::GetChars( const std::function<bool( wxUniChar )>& cond ) const
 {
     wxString rv;
@@ -383,12 +401,9 @@ T_TOKEN COMPILER::getToken()
 
 bool COMPILER::lexString( T_TOKEN& aToken )
 {
-    wxString str = m_tokenizer.GetChars( []( int c ) -> bool { return c != '\''; } );
-
     aToken.token = G_STRING;
-    aToken.value.str = new wxString( str );
+    aToken.value.str = new wxString( m_tokenizer.GetString() );
 
-    m_tokenizer.NextChar( str.length() + 1 );
     m_lexerState = LS_DEFAULT;
     return true;
 }
