@@ -164,8 +164,12 @@ public:
 
     virtual wxString GetCommitDescription() const = 0;
 
-    virtual wxString GetCompleteFailureMessage() const = 0;
-    virtual wxString GetSomeFailuresMessage() const = 0;
+    /**
+     * @brief Get a status message to show when the routine is complete
+     *
+     * Usually this will be an error or nothing.
+     */
+    virtual std::optional<wxString> GetStatusMessage() const = 0;
 
 protected:
     /**
@@ -246,8 +250,7 @@ public:
     }
 
     wxString GetCommitDescription() const override;
-    wxString GetCompleteFailureMessage() const override;
-    wxString GetSomeFailuresMessage() const override;
+    std::optional<wxString> GetStatusMessage() const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
@@ -269,8 +272,7 @@ public:
     }
 
     wxString GetCommitDescription() const override;
-    wxString GetCompleteFailureMessage() const override;
-    wxString GetSomeFailuresMessage() const override;
+    std::optional<wxString> GetStatusMessage() const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 
@@ -290,8 +292,7 @@ public:
     }
 
     wxString GetCommitDescription() const override;
-    wxString GetCompleteFailureMessage() const override;
-    wxString GetSomeFailuresMessage() const override;
+    std::optional<wxString> GetStatusMessage() const override;
 
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 };

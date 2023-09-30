@@ -63,15 +63,20 @@ wxString LINE_FILLET_ROUTINE::GetCommitDescription() const
     return _( "Fillet Lines" );
 }
 
-wxString LINE_FILLET_ROUTINE::GetCompleteFailureMessage() const
+
+std::optional<wxString> LINE_FILLET_ROUTINE::GetStatusMessage() const
 {
-    return _( "Unable to fillet the selected lines." );
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to fillet the selected lines." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the lines could not be filleted." );
+    }
+    return std::nullopt;
 }
 
-wxString LINE_FILLET_ROUTINE::GetSomeFailuresMessage() const
-{
-    return _( "Some of the lines could not be filleted." );
-}
 
 void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB )
 {
@@ -168,15 +173,20 @@ wxString LINE_CHAMFER_ROUTINE::GetCommitDescription() const
     return _( "Chamfer Lines" );
 }
 
-wxString LINE_CHAMFER_ROUTINE::GetCompleteFailureMessage() const
+
+std::optional<wxString> LINE_CHAMFER_ROUTINE::GetStatusMessage() const
 {
-    return _( "Unable to chamfer the selected lines." );
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to chamfer the selected lines." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the lines could not be chamfered." );
+    }
+    return std::nullopt;
 }
 
-wxString LINE_CHAMFER_ROUTINE::GetSomeFailuresMessage() const
-{
-    return _( "Some of the lines could not be chamfered." );
-}
 
 void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB )
 {
@@ -230,15 +240,20 @@ wxString LINE_EXTENSION_ROUTINE::GetCommitDescription() const
     return _( "Extend Lines to Meet" );
 }
 
-wxString LINE_EXTENSION_ROUTINE::GetCompleteFailureMessage() const
+
+std::optional<wxString> LINE_EXTENSION_ROUTINE::GetStatusMessage() const
 {
-    return _( "Unable to extend the selected lines to meet." );
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to extend the selected lines to meet." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the lines could not be extended to meet." );
+    }
+    return std::nullopt;
 }
 
-wxString LINE_EXTENSION_ROUTINE::GetSomeFailuresMessage() const
-{
-    return _( "Some of the lines could not be extended to meet." );
-}
 
 void LINE_EXTENSION_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB )
 {

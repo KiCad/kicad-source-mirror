@@ -1386,10 +1386,9 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     commit.Push( pairwise_line_routine->GetCommitDescription() );
 
-    if( pairwise_line_routine->GetSuccesses() == 0 )
-        frame()->ShowInfoBarMsg( pairwise_line_routine->GetCompleteFailureMessage() );
-    else if( pairwise_line_routine->GetFailures() > 0 )
-        frame()->ShowInfoBarMsg( pairwise_line_routine->GetSomeFailuresMessage() );
+    if (const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage()) {
+        frame()->ShowInfoBarMsg( *msg );
+    }
 
     return 0;
 }
