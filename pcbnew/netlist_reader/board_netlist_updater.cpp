@@ -345,6 +345,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     }
 
     nlohmann::ordered_map<wxString, wxString> fpFieldsAsMap;
+
     for( PCB_FIELD* field : aPcbFootprint->GetFields() )
     {
         // These fields are individually checked above, and are not currently present in (fields) anyway.
@@ -367,16 +368,19 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             changed = true;
 
             // Add or change field value
-            for( auto pair : aNetlistComponent->GetFields() )
+            for( auto& [ name, value ] : aNetlistComponent->GetFields() )
             {
-                if( aPcbFootprint->HasFieldByName( pair.first ) )
-                    aPcbFootprint->GetFieldByName( pair.first )->SetText( pair.second );
+                if( aPcbFootprint->HasFieldByName( name ) )
+                {
+                    aPcbFootprint->GetFieldByName( name )->SetText( value );
+                }
                 else
                 {
-                    PCB_FIELD* newField = aPcbFootprint->AddField( PCB_FIELD(
-                            aPcbFootprint, aPcbFootprint->GetFieldCount(), pair.first ) );
+                    int        idx = aPcbFootprint->GetFieldCount();
+                    PCB_FIELD* newField = aPcbFootprint->AddField( PCB_FIELD( aPcbFootprint, idx ) );
 
-                    newField->SetText( pair.second );
+                    newField->SetName( name );
+                    newField->SetText( value );
                     newField->SetVisible( false );
                     newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
 
