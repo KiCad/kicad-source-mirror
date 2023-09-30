@@ -104,14 +104,22 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 
     buildDrawList( aView, m_properties, &drawList );
 
+    BOX2I viewport( aView->GetViewport().GetOrigin(), aView->GetViewport().GetSize() );
+
     // Draw the title block normally even if the view is flipped
     bool flipped = gal->IsFlippedX();
 
     if( flipped )
     {
+        int pageWidth = m_iuScale.MilsToIU( m_pageInfo->GetWidthMils() );
+
         gal->Save();
-        gal->Translate( VECTOR2D( m_iuScale.MilsToIU( m_pageInfo->GetWidthMils() ), 0 ) );
+        gal->Translate( VECTOR2D( pageWidth, 0 ) );
         gal->Scale( VECTOR2D( -1.0, 1.0 ) );
+
+        int right = pageWidth - viewport.GetLeft();
+        int left = right - viewport.GetWidth();
+        viewport.SetOrigin( left, viewport.GetTop() );
     }
 
     DS_PAINTER ws_painter( gal );
@@ -124,8 +132,6 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     ws_settings->SetDefaultFont( settings->GetDefaultFont() );
 
     // Draw all the components that make the drawing sheet
-    BOX2I viewport( aView->GetViewport().GetOrigin(), aView->GetViewport().GetSize() );
-
     for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
     {
         if( viewport.Intersects( item->GetApproxBBox() ) )
