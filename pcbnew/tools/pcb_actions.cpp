@@ -2209,7 +2209,8 @@ TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( TOOL_ACTION_ARGS()
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.InlineDrag" )
-        .Scope( AS_CONTEXT ) );
+        .Scope( AS_CONTEXT )
+        .Parameter<int>( PNS::DM_ANY ) );
 
 TOOL_ACTION PCB_ACTIONS::routerUndoLastSegment( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.UndoLastSegment" )
