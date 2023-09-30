@@ -80,7 +80,7 @@ DS_DATA_ITEM::~DS_DATA_ITEM()
 
 void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
-    int pensize = GetPenSizeUi();
+    int pensize = GetPenSizeIU();
 
     if( pensize == 0 )
         pensize = aCollector ? aCollector->GetDefaultPenSize() : 0;
@@ -131,7 +131,7 @@ void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 }
 
 
-int DS_DATA_ITEM::GetPenSizeUi()
+int DS_DATA_ITEM::GetPenSizeIU()
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
@@ -142,7 +142,7 @@ int DS_DATA_ITEM::GetPenSizeUi()
 }
 
 
-void DS_DATA_ITEM::MoveToUi( const VECTOR2I& aPosition )
+void DS_DATA_ITEM::MoveToIU( const VECTOR2I& aPosition )
 {
     VECTOR2D pos_mm;
     pos_mm.x = aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
@@ -201,7 +201,7 @@ void DS_DATA_ITEM::MoveStartPointTo( const VECTOR2D& aPosition )
 }
 
 
-void DS_DATA_ITEM::MoveStartPointToUi( const VECTOR2I& aPosition )
+void DS_DATA_ITEM::MoveStartPointToIU( const VECTOR2I& aPosition )
 {
     VECTOR2D pos_mm( aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu,
                      aPosition.y / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
@@ -253,7 +253,7 @@ void DS_DATA_ITEM::MoveEndPointTo( const VECTOR2D& aPosition )
 }
 
 
-void DS_DATA_ITEM::MoveEndPointToUi( const VECTOR2I& aPosition )
+void DS_DATA_ITEM::MoveEndPointToIU( const VECTOR2I& aPosition )
 {
     VECTOR2D pos_mm;
     pos_mm.x = aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
@@ -405,7 +405,7 @@ void DS_DATA_ITEM_POLYGONS::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX:
         if( j > 0 && !IsInsidePage( j ) )
             continue;
 
-        int pensize = GetPenSizeUi();
+        int pensize = GetPenSizeIU();
         auto poly_shape = new DS_DRAW_ITEM_POLYPOLYGONS( this, j, GetStartPosIU( j ), pensize );
         poly_shape->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( poly_shape );
@@ -422,7 +422,7 @@ void DS_DATA_ITEM_POLYGONS::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX:
             polygons.NewOutline();
 
             while( ist <= iend )
-                polygons.Append( GetCornerPositionUi( ist++, j ) );
+                polygons.Append( GetCornerPositionIU( ist++, j ) );
         }
 
         if( aCollector )
@@ -434,7 +434,7 @@ void DS_DATA_ITEM_POLYGONS::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX:
 }
 
 
-int DS_DATA_ITEM_POLYGONS::GetPenSizeUi()
+int DS_DATA_ITEM_POLYGONS::GetPenSizeIU()
 {
     return KiROUND( m_LineWidth * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
 }
@@ -505,7 +505,7 @@ bool DS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
 }
 
 
-const VECTOR2I DS_DATA_ITEM_POLYGONS::GetCornerPositionUi( unsigned aIdx, int aRepeat ) const
+const VECTOR2I DS_DATA_ITEM_POLYGONS::GetCornerPositionIU( unsigned aIdx, int aRepeat ) const
 {
     VECTOR2D pos = GetCornerPosition( aIdx, aRepeat );
     pos = pos * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
@@ -531,7 +531,7 @@ DS_DATA_ITEM_TEXT::DS_DATA_ITEM_TEXT( const wxString& aTextBase ) :
 
 void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
-    int   pensize = GetPenSizeUi();
+    int   pensize = GetPenSizeIU();
     bool  multilines = false;
 
     if( DS_DATA_MODEL::GetTheInstance().m_EditMode )
@@ -583,9 +583,8 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         EDA_IU_SCALE iuscale = aCollector ? aCollector->GetIuScale()
                                           : DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
 
-        text = new DS_DRAW_ITEM_TEXT( iuscale, this, j, m_FullText,
-                                      GetStartPosIU( j ), textsize, pensize, m_Font, m_Italic,
-                                      m_Bold, m_TextColor );
+        text = new DS_DRAW_ITEM_TEXT( iuscale, this, j, m_FullText, GetStartPosIU( j ), textsize,
+                                      pensize, m_Font, m_Italic, m_Bold, m_TextColor );
 
         text->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( text );
@@ -608,7 +607,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 }
 
 
-int DS_DATA_ITEM_TEXT::GetPenSizeUi()
+int DS_DATA_ITEM_TEXT::GetPenSizeIU()
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 

@@ -168,7 +168,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             // ... and second click places:
             else
             {
-                item->GetPeer()->MoveStartPointToUi( cursorPos );
+                item->GetPeer()->MoveStartPointToIU( cursorPos );
                 item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
                 item->ClearEditFlags();
                 getView()->Update( item );
@@ -193,7 +193,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->GetPeer()->MoveStartPointToUi( cursorPos );
+            item->GetPeer()->MoveStartPointToIU( cursorPos );
             item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
             getView()->Update( item );
         }
@@ -276,7 +276,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
 
                 DS_DATA_ITEM* dataItem = m_frame->AddDrawingSheetItem( type );
-                dataItem->MoveToUi( cursorPos );
+                dataItem->MoveToIU( cursorPos );
 
                 item = dataItem->GetDrawItems()[0];
                 item->SetFlags( IS_NEW );
@@ -305,7 +305,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         {
             if( item )
             {
-                item->GetPeer()->MoveEndPointToUi( cursorPos );
+                item->GetPeer()->MoveEndPointToIU( cursorPos );
                 item->SetEnd( item->GetPeer()->GetEndPosIU( 0 ) );
                 getView()->Update( item );
             }

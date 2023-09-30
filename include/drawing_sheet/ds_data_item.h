@@ -139,7 +139,7 @@ public:
     const VECTOR2D GetStartPos( int ii = 0 ) const;
     const VECTOR2D GetEndPos( int ii = 0 ) const;
 
-    virtual int GetPenSizeUi();
+    virtual int GetPenSizeIU();
 
     /**
      * Move item to a new position.
@@ -153,7 +153,7 @@ public:
      *
      * @param aPosition the new position of the starting point in graphic units.
      */
-    void MoveToUi( const VECTOR2I& aPosition );
+    void MoveToIU( const VECTOR2I& aPosition );
 
     /**
      * Move the starting point of the item to a new position.
@@ -167,7 +167,7 @@ public:
      *
      * @param aPosition is the new position of item in graphic units.
      */
-    void MoveStartPointToUi( const VECTOR2I& aPosition );
+    void MoveStartPointToIU( const VECTOR2I& aPosition );
 
 
     /**
@@ -186,7 +186,7 @@ public:
      *
      * @param aPosition is the new position of the ending point in graphic units
      */
-    void MoveEndPointToUi( const VECTOR2I& aPosition );
+    void MoveEndPointToIU( const VECTOR2I& aPosition );
 
     /**
      * @return true if the item is inside the rectangle defined by the 4 corners, false otherwise.
@@ -219,7 +219,7 @@ public:
 
     void SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
-    virtual int GetPenSizeUi() override;
+    virtual int GetPenSizeIU() override;
 
     /**
      * Add a corner in corner list.
@@ -275,7 +275,7 @@ public:
      * @return the coordinate (in draw/plot units) of the corner \a aIdx and the repeated
      *         item \a aRepeat
      */
-    const VECTOR2I GetCornerPositionUi( unsigned aIdx, int aRepeat = 0 ) const;
+    const VECTOR2I GetCornerPositionIU( unsigned aIdx, int aRepeat = 0 ) const;
 
     /**
      * Calculate the bounding box of the set polygons.
@@ -301,7 +301,7 @@ public:
 
     void SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
-    virtual int GetPenSizeUi() override;
+    virtual int GetPenSizeIU() override;
 
     /**
      * Try to build text which is an increment of m_TextBase
