@@ -126,10 +126,10 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
         // Load the graphical symbol for this gate
         std::unique_ptr<LIB_SYMBOL> kiSymDef( loadSymdef( symbolID )->Duplicate() );
 
-        if( sym.m_Pins.size() != kiSymDef->GetPinCount() )
+        if( (int)sym.m_Pins.size() != kiSymDef->GetPinCount() )
         {
             m_reporter->Report(
-                    wxString::Format( _( "Inconsitent pin numbers in symbol %s compared to the one "
+                    wxString::Format( _( "Inconsistent pin numbers in symbol %s compared to the one "
                                          "defined in part %s. The part was not loaded." ),
                                       generateLibName( sym.m_SymbolName, alternateName ),
                                       aPart.m_Name ),

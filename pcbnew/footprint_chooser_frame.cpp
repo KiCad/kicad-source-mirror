@@ -75,7 +75,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
                         FOOTPRINT_CHOOSER_FRAME_NAME ),
         m_filterByPinCount( nullptr ),
         m_filterByFPFilters( nullptr ),
-        m_pinCount( 0 )
+        m_pinCount( 0 ),
+        m_firstPaintEvent( true )
 {
     SetModal( true );
 
