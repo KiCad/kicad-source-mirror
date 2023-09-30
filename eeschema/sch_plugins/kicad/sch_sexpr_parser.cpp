@@ -2622,6 +2622,10 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
             LIB_ID libId;
             wxString name = FromUTF8();
+            // Some symbol LIB_IDs have the '/' character escaped which can break
+            // symbol links.  The '/' character is no longer an illegal LIB_ID character so
+            // it doesn't need to be escaped.
+            name.Replace( "{slash}", "/" );
             int bad_pos = libId.Parse( name );
 
             if( bad_pos >= 0 )
