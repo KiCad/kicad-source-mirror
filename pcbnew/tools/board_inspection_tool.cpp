@@ -250,6 +250,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
                     nullptr, this );
     }
 
+    m_inspectClearanceDialog->DeleteAllPages();
+
     WX_HTML_REPORT_BOX* r = nullptr;
     bool                compileError = false;
     DRC_ENGINE          drcEngine = makeDRCEngine( &compileError );
@@ -503,7 +505,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         }
         else
         {
-            constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, a, layer, r );
+            constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
             clearanceStr = m_frame->StringFromValue( clearance, true );
 
