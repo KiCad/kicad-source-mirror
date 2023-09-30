@@ -69,7 +69,7 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
      */
     wxString netlist;
 
-    netlist << wxString::Format( wxS( "%ld\r" ), aSymbol->GetPins().size() );
+    netlist << wxString::Format( wxS( "%zu\r" ), aSymbol->GetPins().size() );
 
     wxArrayString fpFilters = aSymbol->GetLibSymbolRef()->GetFPFilters();
 
