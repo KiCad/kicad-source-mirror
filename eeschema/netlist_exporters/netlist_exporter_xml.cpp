@@ -100,7 +100,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     wxString                     datasheet;
     wxString                     description;
     wxString                     candidate;
-    nlohmann::ordered_map<wxString, wxString> userFields;
+    nlohmann::ordered_map<wxString, wxString> fields;
 
     if( aSymbol->GetUnitCount() > 1 )
     {
@@ -164,12 +164,12 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 {
                     const SCH_FIELD& f = symbol2->GetFields()[ ii ];
 
-                    if( unit < minUnit || userFields.count( f.GetName() ) == 0 )
+                    if( unit < minUnit || fields.count( f.GetName() ) == 0 )
                     {
                         if( m_resolveTextVars )
-                            userFields[f.GetName()] = f.GetShownText( aSheet, false );
+                            fields[f.GetName()] = f.GetShownText( aSheet, false );
                         else
-                            userFields[f.GetName()] = f.GetText();
+                            fields[f.GetName()] = f.GetText();
                     }
                 }
 
@@ -182,26 +182,32 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         value = aSymbol->GetValueFieldText( m_resolveTextVars, aSheet, false );
         footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, aSheet, false );
 
+        SCH_FIELD* datasheetField = aSymbol->GetField( DATASHEET_FIELD );
+        SCH_FIELD* descriptionField = aSymbol->GetField( DESCRIPTION_FIELD );
+
         // Datasheet
         if( m_resolveTextVars )
-            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText( aSheet, false );
+            datasheet = datasheetField->GetShownText( aSheet, false );
         else
-            datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
+            datasheet = datasheetField->GetText();
 
         // Description
         if( m_resolveTextVars )
-            description = aSymbol->GetField( DESCRIPTION_FIELD )->GetShownText( aSheet, false );
+            description = descriptionField->GetShownText( aSheet, false );
         else
-            description = aSymbol->GetField( DESCRIPTION_FIELD )->GetText();
+            description = descriptionField->GetText();
+
+        fields[ datasheetField->GetName() ] = datasheet;
+        fields[ descriptionField->GetName() ] = description;
 
         for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
         {
             const SCH_FIELD& f = aSymbol->GetFields()[ ii ];
 
             if( m_resolveTextVars )
-                userFields[f.GetName()] = f.GetShownText( aSheet, false );
+                fields[f.GetName()] = f.GetShownText( aSheet, false );
             else
-                userFields[f.GetName()] = f.GetText();
+                fields[f.GetName()] = f.GetText();
         }
     }
 
@@ -220,29 +226,14 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     if( datasheet.size() )
         aNode->AddChild( node( wxT( "description" ), UnescapeString( description ) ) );
 
-    if( userFields.size() )
+    XNODE* xfields;
+    aNode->AddChild( xfields = node( wxT( "fields" ) ) );
+
+    for( const auto& [ fieldName, fieldValue ] : fields )
     {
-        XNODE* xfields;
-        aNode->AddChild( xfields = node( wxT( "fields" ) ) );
-
-        XNODE* datasheetField = node( wxT( "field" ), UnescapeString( datasheet ) );
-        datasheetField->AddAttribute(
-                wxT( "name" ),
-                UnescapeString( TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) ) );
-        xfields->AddChild( datasheetField );
-
-        XNODE* descriptionField = node( wxT( "field" ), UnescapeString( description ) );
-        descriptionField->AddAttribute(
-                wxT( "name" ),
-                UnescapeString( TEMPLATE_FIELDNAME::GetDefaultFieldName( DESCRIPTION_FIELD ) ) );
-        xfields->AddChild( descriptionField );
-
-        for( const std::pair<const wxString, wxString>& f : userFields )
-        {
-            XNODE* xfield = node( wxT( "field" ), UnescapeString( f.second ) );
-            xfield->AddAttribute( wxT( "name" ), UnescapeString( f.first ) );
-            xfields->AddChild( xfield );
-        }
+        XNODE* xfield = node( wxT( "field" ), UnescapeString( fieldValue ) );
+        xfield->AddAttribute( wxT( "name" ), UnescapeString( fieldName ) );
+        xfields->AddChild( xfield );
     }
 }
 
