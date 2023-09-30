@@ -653,7 +653,7 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     bool    mouseOverWindow = false;
     wxPoint screenPos = wxGetMousePosition();
 
-    if( m_tree_ctrl && m_tree_ctrl->IsShown() )
+    if( m_tree_ctrl->IsShown() )
         mouseOverWindow |= m_tree_ctrl->GetScreenRect().Contains( screenPos );
 
     if( m_previewWindow && m_previewWindow->IsShown() )
