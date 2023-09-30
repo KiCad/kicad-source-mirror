@@ -401,10 +401,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                     continue;
 
                 if( aNetlistComponent->GetFields().count( field->GetName() ) == 0 )
+                {
                     aPcbFootprint->RemoveField( field->GetCanonicalName() );
 
-                if( m_frame )
-                    m_frame->GetCanvas()->GetView()->Remove( field );
+                    if( m_frame )
+                        m_frame->GetCanvas()->GetView()->Remove( field );
+                }
             }
         }
 
