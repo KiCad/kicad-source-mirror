@@ -411,7 +411,8 @@ TOOL_ACTION PCB_ACTIONS::move( TOOL_ACTION_ARGS()
         .MenuText( _( "Move" ) )
         .Tooltip( _( "Moves the selected item(s)" ) )
         .Icon( BITMAPS::move )
-        .Flags( AF_ACTIVATE ) );
+        .Flags( AF_ACTIVATE )
+        .Parameter( ACTIONS::CURSOR_EVENT_TYPE::CURSOR_NONE ) );
 
 TOOL_ACTION PCB_ACTIONS::moveIndividually( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveMove.moveIndividually" )
@@ -420,7 +421,8 @@ TOOL_ACTION PCB_ACTIONS::moveIndividually( TOOL_ACTION_ARGS()
         .MenuText( _( "Move Individually" ) )
         .Tooltip( _( "Moves the selected items one-by-one" ) )
         .Icon( BITMAPS::move )
-        .Flags( AF_ACTIVATE ) );
+        .Flags( AF_ACTIVATE )
+        .Parameter( ACTIONS::CURSOR_EVENT_TYPE::CURSOR_NONE ) );
 
 TOOL_ACTION PCB_ACTIONS::moveWithReference( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveMove.moveWithReference" )
@@ -428,7 +430,8 @@ TOOL_ACTION PCB_ACTIONS::moveWithReference( TOOL_ACTION_ARGS()
         .MenuText( _( "Move with Reference" ) )
         .Tooltip( _( "Moves the selected item(s) with a specified starting point" ) )
         .Icon( BITMAPS::move )
-        .Flags( AF_ACTIVATE ) );
+        .Flags( AF_ACTIVATE )
+        .Parameter( ACTIONS::CURSOR_EVENT_TYPE::CURSOR_NONE ) );
 
 TOOL_ACTION PCB_ACTIONS::copyWithReference( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveMove.copyWithReference" )
