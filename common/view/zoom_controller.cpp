@@ -110,8 +110,10 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
 
 #ifdef __MINGW32__
 // For some reason, this is needed to avoid a link issue
-// (undefined reference to ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT not found)
+// (undefined reference to ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT
+// and GAL_API CONSTANT_ZOOM_CONTROLLER::MSW_SCALE)
 constexpr ACCELERATING_ZOOM_CONTROLLER::TIMEOUT ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT;
+constexpr double GAL_API CONSTANT_ZOOM_CONTROLLER::MSW_SCALE;
 #endif
 
 
