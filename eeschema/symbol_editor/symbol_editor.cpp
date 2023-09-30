@@ -150,7 +150,9 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
     if( SYMBOL_LIB_TABLE_ROW* lib = m_libMgr->GetLibrary( aLibId.GetLibNickname() ) )
     {
         if( lib->SchLibType() == SCH_IO_MGR::SCH_DATABASE
-            || lib->SchLibType() == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE )
+            || lib->SchLibType() == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE
+            || lib->SchLibType() == SCH_IO_MGR::SCH_HTTP )
+
         {
             try
             {
