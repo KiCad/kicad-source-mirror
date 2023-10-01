@@ -2682,6 +2682,11 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             }
 
             libName = FromUTF8();
+            // Some symbol LIB_IDs or lib_name have the '/' character escaped which can break
+            // symbol links.  The '/' character is no longer an illegal LIB_ID character so
+            // it doesn't need to be escaped.
+            libName.Replace( "{slash}", "/" );
+
             NeedRIGHT();
             break;
         }
@@ -2699,6 +2704,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // symbol links.  The '/' character is no longer an illegal LIB_ID character so
             // it doesn't need to be escaped.
             name.Replace( "{slash}", "/" );
+
             int bad_pos = libId.Parse( name );
 
             if( bad_pos >= 0 )
