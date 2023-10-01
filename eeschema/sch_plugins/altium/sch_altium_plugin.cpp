@@ -26,6 +26,7 @@
 
 #include "altium_parser_sch.h"
 #include "sch_shape.h"
+#include <plugins/plugin_utils.h>
 #include <plugins/altium/altium_parser.h>
 #include <plugins/altium/altium_parser_utils.h>
 #include <sch_plugins/altium/sch_altium_plugin.h>
@@ -254,6 +255,31 @@ const wxString SCH_ALTIUM_PLUGIN::GetName() const
 int SCH_ALTIUM_PLUGIN::GetModifyHash() const
 {
     return 0;
+}
+
+
+bool SCH_ALTIUM_PLUGIN::checkFileHeader( const wxString& aFileName )
+{
+    // Compound File Binary Format header
+    return PLUGIN_UTILS::fileStartsWithBinaryHeader( aFileName, PLUGIN_UTILS::COMPOUND_FILE_HEADER );
+}
+
+
+bool SCH_ALTIUM_PLUGIN::CanReadSchematicFile( const wxString& aFileName ) const
+{
+    if( !SCH_PLUGIN::CanReadSchematicFile( aFileName ) )
+        return false;
+
+    return checkFileHeader( aFileName );
+}
+
+
+bool SCH_ALTIUM_PLUGIN::CanReadLibrary( const wxString& aFileName ) const
+{
+    if( !SCH_PLUGIN::CanReadLibrary( aFileName ) )
+        return false;
+
+    return checkFileHeader( aFileName );
 }
 
 

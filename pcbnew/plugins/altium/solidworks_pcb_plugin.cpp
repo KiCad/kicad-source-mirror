@@ -22,7 +22,7 @@
 #include <solidworks_pcb_plugin.h>
 #include <altium_designer_plugin.h>
 #include <altium_pcb.h>
-#include "plugins/altium/altium_parser.h"
+#include <plugins/altium/altium_parser.h>
 
 #include <board.h>
 

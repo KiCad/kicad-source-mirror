@@ -30,10 +30,7 @@
 #include <wx/log.h>
 #include <wx/filename.h>
 #include <wx/translation.h>
-#include <wx/filename.h>
 #include <wx/dir.h>
-#include <wx/wfstream.h>
-#include <wx/txtstrm.h>
 
 
 #define FMT_UNIMPLEMENTED wxT( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -292,50 +289,3 @@ void PLUGIN::FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
                                                              "functions." ) );
 #endif
 }
-
-
-bool PLUGIN::fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
-                                   bool aIgnoreWhitespace )
-{
-    wxFileInputStream input( aFilePath );
-
-    if( input.IsOk() && !input.Eof() )
-    {
-        // Find first non-empty line
-        wxTextInputStream text( input );
-        wxString          line = text.ReadLine();
-
-        if( aIgnoreWhitespace )
-        {
-            while( line.IsEmpty() )
-                line = text.ReadLine().Trim( false /*trim from left*/ );
-        }
-
-        if( line.StartsWith( aPrefix ) )
-            return true;
-    }
-
-    return false;
-}
-
-
-bool PLUGIN::fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader )
-{
-    wxFileInputStream input( aFilePath );
-
-    if( input.IsOk() && !input.Eof() )
-    {
-        if( input.GetLength() < aHeader.size() )
-            return false;
-
-        std::vector<uint8_t> parsedHeader(aHeader.size());
-
-        if (!input.ReadAll(parsedHeader.data(), parsedHeader.size()))
-            return false;
-
-        return parsedHeader == aHeader;
-    }
-
-    return false;
-}
-

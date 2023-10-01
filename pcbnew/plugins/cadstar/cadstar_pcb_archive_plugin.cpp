@@ -29,6 +29,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <string_utf8_map.h>
+#include <plugins/plugin_utils.h>
 
 
 std::map<wxString, PCB_LAYER_ID> CADSTAR_PCB_ARCHIVE_PLUGIN::DefaultLayerMappingCallback(
@@ -139,7 +140,7 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* 
 
 bool CADSTAR_PCB_ARCHIVE_PLUGIN::checkBoardHeader( const wxString& aFileName ) const
 {
-    return fileStartsWithPrefix( aFileName, wxT( "(CADSTARPCB" ), true );
+    return PLUGIN_UTILS::fileStartsWithPrefix( aFileName, wxT( "(CADSTARPCB" ), true );
 }
 
 

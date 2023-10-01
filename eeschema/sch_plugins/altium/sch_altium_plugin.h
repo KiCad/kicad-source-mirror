@@ -69,6 +69,9 @@ public:
         return PLUGIN_FILE_DESC( _HKI( "Altium schematic library files" ), { "SchLib" } );
     }
 
+    bool CanReadSchematicFile( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
+
     int GetModifyHash() const override;
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
@@ -217,6 +220,8 @@ private:
     // Symbol caching
     void ensureLoadedLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties );
     long long getLibraryTimestamp( const wxString& aLibraryPath ) const;
+
+    static bool checkFileHeader( const wxString& aFileName );
 
     std::map<wxString, long long> m_timestamps;
     std::map<wxString, std::map<wxString, LIB_SYMBOL*>> m_libCache;

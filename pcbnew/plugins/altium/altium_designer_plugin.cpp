@@ -31,7 +31,8 @@
 
 #include <altium_designer_plugin.h>
 #include <altium_pcb.h>
-#include "plugins/altium/altium_parser.h"
+#include <plugins/plugin_utils.h>
+#include <plugins/altium/altium_parser.h>
 
 #include <board.h>
 
@@ -53,7 +54,7 @@ ALTIUM_DESIGNER_PLUGIN::~ALTIUM_DESIGNER_PLUGIN()
 bool ALTIUM_DESIGNER_PLUGIN::checkFileHeader( const wxString& aFileName )
 {
     // Compound File Binary Format header
-    return fileStartsWithBinaryHeader( aFileName, { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1} );
+    return PLUGIN_UTILS::fileStartsWithBinaryHeader( aFileName, PLUGIN_UTILS::COMPOUND_FILE_HEADER );
 }
 
 

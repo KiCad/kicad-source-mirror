@@ -30,6 +30,7 @@
 #include <pcad/pcad_plugin.h>
 #include <pcad/pcad_pcb.h>
 #include <pcad/s_expr_loader.h>
+#include <plugins/plugin_utils.h>
 
 #include <board.h>
 #include <locale_io.h>
@@ -59,7 +60,7 @@ bool PCAD_PLUGIN::CanReadBoard( const wxString& aFileName ) const
     if( !PLUGIN::CanReadBoard( aFileName ) )
         return false;
 
-    return fileStartsWithPrefix( aFileName, wxT( "ACCEL_ASCII" ), false );
+    return PLUGIN_UTILS::fileStartsWithPrefix( aFileName, wxT( "ACCEL_ASCII" ), false );
 }
 
 

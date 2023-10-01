@@ -53,6 +53,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <bus_alias.h>
+#include <plugins/plugin_utils.h>
 #include <sch_plugins/legacy/sch_legacy_lib_plugin_cache.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_plugins/legacy/sch_legacy_plugin_helpers.h>
@@ -2243,7 +2244,7 @@ bool SCH_LEGACY_PLUGIN::CanReadSchematicFile( const wxString& aFileName ) const
     if( !SCH_PLUGIN::CanReadSchematicFile( aFileName ) )
         return false;
 
-    return fileStartsWithPrefix( aFileName, wxT( "EESchema" ), true );
+    return PLUGIN_UTILS::fileStartsWithPrefix( aFileName, wxT( "EESchema" ), true );
 }
 
 
@@ -2252,7 +2253,7 @@ bool SCH_LEGACY_PLUGIN::CanReadLibrary( const wxString& aFileName ) const
     if( !SCH_PLUGIN::CanReadLibrary( aFileName ) )
         return false;
 
-    return fileStartsWithPrefix( aFileName, wxT( "EESchema" ), true );
+    return PLUGIN_UTILS::fileStartsWithPrefix( aFileName, wxT( "EESchema" ), true );
 }
 
 
