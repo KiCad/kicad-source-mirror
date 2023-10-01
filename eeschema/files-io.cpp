@@ -214,11 +214,18 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         KIPLATFORM::APP::RegisterApplicationRestart( fullFileName );
     }
 
-    if( is_new )
+    if( is_new || schFileType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
     {
         // mark new, unsaved file as modified.
         GetScreen()->SetContentModified();
         GetScreen()->SetFileName( fullFileName );
+
+        if( schFileType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
+        {
+            msg.Printf( _( "Unsupported schematic file '%s'." ), fullFileName );
+            progressReporter.Hide();
+            DisplayErrorMessage( this, msg );
+        }
     }
     else
     {
