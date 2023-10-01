@@ -910,11 +910,13 @@ int FOOTPRINT::GetLikelyAttribute() const
         }
     }
 
-    if( smd_count > 0 )
-        return FP_SMD;
-
+    // Footprints with plated through-hole pads should usually be marked through hole even if they
+    // also have SMD because they might not be auto-placed.  Exceptions to this might be shielded
     if( tht_count > 0 )
         return FP_THROUGH_HOLE;
+
+    if( smd_count > 0 )
+        return FP_SMD;
 
     return 0;
 }
