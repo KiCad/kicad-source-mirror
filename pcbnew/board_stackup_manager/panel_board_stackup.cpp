@@ -132,6 +132,7 @@ void PANEL_SETUP_BOARD_STACKUP::onCopperLayersSelCount( wxCommandEvent& event )
     int oldBoardWidth = static_cast<int>( m_frame->ValueFromString( m_tcCTValue->GetValue() ) );
     updateCopperLayerCount();
     showOnlyActiveLayers();
+    updateIconColor();
     setDefaultLayerWidths( oldBoardWidth );
     computeBoardThickness();
     Layout();
@@ -701,6 +702,7 @@ void PANEL_SETUP_BOARD_STACKUP::showOnlyActiveLayers()
     // (for instance after modifying the layer count from the panel layers in dialog)
     LSET copperMask = m_enabledLayers & ( LSET::ExternalCuMask() | LSET::InternalCuMask() );
     int copperLayersCount = copperMask.count();
+    int  pos = 0;
 
     for( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item: m_rowUiItemsList )
     {
@@ -717,8 +719,14 @@ void PANEL_SETUP_BOARD_STACKUP::showOnlyActiveLayers()
 
         ui_row_item.m_isEnabled = show_item;
 
+        if( show_item )
+        {
+            // pre-increment (ie: before calling lazyBuildRowUI) to account for header row
+            pos += 9;
+        }
+
         if( show_item && !ui_row_item.m_Icon )
-            lazyBuildRowUI( ui_row_item );
+            lazyBuildRowUI( ui_row_item, pos );
 
         if( ui_row_item.m_Icon )
         {
@@ -741,47 +749,16 @@ void PANEL_SETUP_BOARD_STACKUP::showOnlyActiveLayers()
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::addMaterialChooser( wxWindowID aId, const wxString* aMaterialName,
-                                                    BOARD_STACKUP_ROW_UI_ITEM& aUiRowItem )
-{
-	wxBoxSizer* bSizerMat = new wxBoxSizer( wxHORIZONTAL );
-	m_fgGridSizer->Add( bSizerMat, 1, wxRIGHT|wxEXPAND, 4 );
-    wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY );
-
-    if( aMaterialName )
-    {
-        if( IsPrmSpecified( *aMaterialName ) )
-            textCtrl->ChangeValue( *aMaterialName );
-        else
-            textCtrl->ChangeValue( wxGetTranslation( NotSpecifiedPrm() ) );
-    }
-
-    textCtrl->SetMinSize( m_numericTextCtrlSize );
-	bSizerMat->Add( textCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	wxButton* m_buttonMat = new wxButton( m_scGridWin, aId, _( "..." ), wxDefaultPosition,
-                                          wxDefaultSize, wxBU_EXACTFIT );
-	bSizerMat->Add( m_buttonMat, 0, wxALIGN_CENTER_VERTICAL, 2 );
-
-    m_buttonMat->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                          wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ),
-                          nullptr, this );
-    m_controlItemsList.push_back( m_buttonMat );
-
-    aUiRowItem.m_MaterialCtrl = textCtrl;
-    aUiRowItem.m_MaterialButt = m_buttonMat;
-}
-
-
-wxControl* PANEL_SETUP_BOARD_STACKUP::addSpacer()
+wxControl* PANEL_SETUP_BOARD_STACKUP::addSpacer( int aPos )
 {
     wxStaticText* emptyText = new wxStaticText( m_scGridWin, wxID_ANY, wxEmptyString );
-    m_fgGridSizer->Add( emptyText, 0, wxALIGN_CENTER_VERTICAL );
+    m_fgGridSizer->Insert( aPos, emptyText, 0, wxALIGN_CENTER_VERTICAL );
     return emptyText;
 }
 
 
-void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item )
+void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item,
+                                                int aPos )
 {
     BOARD_STACKUP_ITEM* item = ui_row_item.m_Item;
     int                 sublayerIdx = ui_row_item.m_SubItem;
@@ -790,7 +767,7 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
     // Add color swatch icon. The color will be updated later,
     // when all widgets are initialized
     wxStaticBitmap* bitmap = new wxStaticBitmap( m_scGridWin, wxID_ANY, wxNullBitmap );
-    m_fgGridSizer->Add( bitmap, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 4 );
+    m_fgGridSizer->Insert( aPos++, bitmap, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 4 );
     ui_row_item.m_Icon = bitmap;
 
     if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
@@ -804,7 +781,7 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
         }
 
         wxStaticText* st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
-        m_fgGridSizer->Add( st_text, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
+        m_fgGridSizer->Insert( aPos++, st_text, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         ui_row_item.m_LayerName = st_text;
 
         // For a dielectric layer, the layer type choice is not for each sublayer,
@@ -814,20 +791,20 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
             wxChoice* choice = new wxChoice( m_scGridWin, wxID_ANY, wxDefaultPosition,
                                              wxDefaultSize, m_core_prepreg_choice );
             choice->SetSelection( item->GetTypeName() == KEY_CORE ? 0 : 1 );
-            m_fgGridSizer->Add( choice, 1, wxEXPAND|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
+            m_fgGridSizer->Insert( aPos++, choice, 1, wxEXPAND|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
 
             ui_row_item.m_LayerTypeCtrl = choice;
         }
         else
         {
-            ui_row_item.m_LayerTypeCtrl = addSpacer();
+            ui_row_item.m_LayerTypeCtrl = addSpacer( aPos++ );
         }
     }
     else
     {
         item->SetLayerName( m_board->GetLayerName( item->GetBrdLayerId() ) );
         wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, item->GetLayerName() );
-        m_fgGridSizer->Add( st_text, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 1 );
+        m_fgGridSizer->Insert( aPos++, st_text, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 1 );
         st_text->Show( true );
         ui_row_item.m_LayerName = st_text;
 
@@ -839,18 +816,42 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
             lname = wxGetTranslation( item->GetTypeName() );
 
         st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
-        m_fgGridSizer->Add( st_text, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
+        m_fgGridSizer->Insert( aPos++, st_text, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         ui_row_item.m_LayerTypeCtrl = st_text;
     }
 
     if( item->IsMaterialEditable() )
     {
         wxString matName = item->GetMaterial( sublayerIdx );
-        addMaterialChooser( ID_ITEM_MATERIAL+row, &matName, ui_row_item );
+
+        wxBoxSizer* bSizerMat = new wxBoxSizer( wxHORIZONTAL );
+       	m_fgGridSizer->Insert( aPos++, bSizerMat, 1, wxRIGHT|wxEXPAND, 4 );
+        wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY );
+
+        if( IsPrmSpecified( matName ) )
+            textCtrl->ChangeValue( matName );
+        else
+            textCtrl->ChangeValue( wxGetTranslation( NotSpecifiedPrm() ) );
+
+        textCtrl->SetMinSize( m_numericTextCtrlSize );
+       	bSizerMat->Add( textCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+       	wxButton* m_buttonMat = new wxButton( m_scGridWin, ID_ITEM_MATERIAL+row, _( "..." ),
+                                              wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+       	bSizerMat->Add( m_buttonMat, 0, wxALIGN_CENTER_VERTICAL, 2 );
+
+        m_buttonMat->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                              wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ),
+                              nullptr, this );
+        m_controlItemsList.push_back( m_buttonMat );
+
+        ui_row_item.m_MaterialCtrl = textCtrl;
+        ui_row_item.m_MaterialButt = m_buttonMat;
+
     }
     else
     {
-        ui_row_item.m_MaterialCtrl = addSpacer();
+        ui_row_item.m_MaterialCtrl = addSpacer( aPos++ );
     }
 
     if( item->IsThicknessEditable() )
@@ -858,7 +859,7 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, ID_ITEM_THICKNESS+row );
         textCtrl->SetMinSize( m_numericTextCtrlSize );
         textCtrl->ChangeValue( m_frame->StringFromValue( item->GetThickness( sublayerIdx ), true ) );
-        m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
+        m_fgGridSizer->Insert( aPos++, textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         m_controlItemsList.push_back( textCtrl );
         textCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
                            wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onThicknessChange ),
@@ -870,18 +871,18 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
             wxCheckBox* cb_box = new wxCheckBox( m_scGridWin, ID_ITEM_THICKNESS_LOCKED+row,
                                                  wxEmptyString );
             cb_box->SetValue( item->IsThicknessLocked( sublayerIdx ) );
-            m_fgGridSizer->Add( cb_box, 0, wxALIGN_CENTER_VERTICAL, 2 );
+            m_fgGridSizer->Insert( aPos++, cb_box, 0, wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_ThicknessLockCtrl = cb_box;
         }
         else
         {
-            ui_row_item.m_ThicknessLockCtrl = addSpacer();
+            ui_row_item.m_ThicknessLockCtrl = addSpacer( aPos++);
         }
     }
     else
     {
-        ui_row_item.m_ThicknessCtrl = addSpacer();
-        ui_row_item.m_ThicknessLockCtrl = addSpacer();
+        ui_row_item.m_ThicknessCtrl = addSpacer( aPos++ );
+        ui_row_item.m_ThicknessLockCtrl = addSpacer( aPos++ );
     }
 
     if( item->IsColorEditable() )
@@ -896,7 +897,7 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
         wxBitmapComboBox* bm_combo = createColorBox( item, row );
         int               selected = 0;     // The "not specified" item
 
-        m_fgGridSizer->Add( bm_combo, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
+        m_fgGridSizer->Insert( aPos++, bm_combo, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
         if( item->GetColor( sublayerIdx ).StartsWith( wxT( "#" ) ) )
         {
@@ -921,7 +922,7 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
     }
     else
     {
-        ui_row_item.m_ColorCtrl = addSpacer();
+        ui_row_item.m_ColorCtrl = addSpacer( aPos++ );
     }
 
     if( item->HasEpsilonRValue() )
@@ -930,12 +931,12 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->ChangeValue( txt );
-        m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
+        m_fgGridSizer->Insert( aPos++, textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         ui_row_item.m_EpsilonCtrl = textCtrl;
     }
     else
     {
-        ui_row_item.m_EpsilonCtrl = addSpacer();
+        ui_row_item.m_EpsilonCtrl = addSpacer( aPos++ );
     }
 
     if( item->HasLossTangentValue() )
@@ -944,12 +945,12 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
         textCtrl->ChangeValue( txt );
-        m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
+        m_fgGridSizer->Insert( aPos++, textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         ui_row_item.m_LossTgCtrl = textCtrl;
     }
     else
     {
-        ui_row_item.m_LossTgCtrl = addSpacer();
+        ui_row_item.m_LossTgCtrl = addSpacer( aPos++ );
     }
 }
 

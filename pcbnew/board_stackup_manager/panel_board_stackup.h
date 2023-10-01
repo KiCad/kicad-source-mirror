@@ -127,20 +127,11 @@ private:
      * this is the index of the sublayer to used inside aStackupItem
      * (from 0 to sub layer count - 1)
      */
-    void lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item );
+    void lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_row_item, int aPos );
 
     /** add a Spacer in m_fgGridSizer when a empty cell is needed
      */
-    wxControl* addSpacer();
-
-    /** add a control (a wxTextCtrl + a button) in m_fgGridSizer to select a material
-     * @param aId is the wxControl id, used to know the event source
-     * @param aMaterialName is the name of the currently selected material (can be null)
-     * @param aUiRowItem is the BOARD_STACKUP_ROW_UI_ITEM to store the controls
-     * created
-     */
-    void addMaterialChooser( wxWindowID aId, const wxString * aMaterialName,
-                             BOARD_STACKUP_ROW_UI_ITEM& aUiRowItem );
+    wxControl* addSpacer( int aPos );
 
     /** Populate m_fgGridSizer with items to handle stackup parameters
      * This is a full list:
