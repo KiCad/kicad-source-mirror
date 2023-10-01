@@ -706,7 +706,7 @@ int BOARD_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 // Track & via size control
 int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 {
-    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty()
@@ -720,10 +720,12 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-                // Note: skip first entry which is the current netclass value
-                for( int i = 1; i < (int) designSettings.m_TrackWidthList.size(); ++i )
+                for( int i = 0; i < (int) bds.m_TrackWidthList.size(); ++i )
                 {
-                    int candidate = designSettings.m_TrackWidthList[ i ];
+                    int candidate = bds.m_NetSettings->m_DefaultNetClass->GetTrackWidth();
+
+                    if( i > 0 )
+                        candidate = bds.m_TrackWidthList[ i ];
 
                     if( candidate > track->GetWidth() )
                     {
@@ -744,26 +746,26 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->IsToolActive()
         && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        int widthIndex = designSettings.GetDiffPairIndex() + 1;
+        int widthIndex = (int) bds.GetDiffPairIndex() + 1;
 
         // If we go past the last track width entry in the list, start over at the beginning
-        if( widthIndex >= (int) designSettings.m_DiffPairDimensionsList.size() )
+        if( widthIndex >= (int) bds.m_DiffPairDimensionsList.size() )
             widthIndex = 0;
 
-        designSettings.SetDiffPairIndex( widthIndex );
-        designSettings.UseCustomDiffPairDimensions( false );
+        bds.SetDiffPairIndex( widthIndex );
+        bds.UseCustomDiffPairDimensions( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
     else
     {
-        int widthIndex = designSettings.GetTrackWidthIndex();
+        int widthIndex = (int) bds.GetTrackWidthIndex();
 
         if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
-            && designSettings.m_UseConnectedTrackWidth && !designSettings.m_TempOverrideTrackWidth )
+            && bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth )
         {
-            designSettings.m_TempOverrideTrackWidth = true;
+            bds.m_TempOverrideTrackWidth = true;
         }
         else
         {
@@ -771,11 +773,11 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
         }
 
         // If we go past the last track width entry in the list, start over at the beginning
-        if( widthIndex >= (int) designSettings.m_TrackWidthList.size() )
+        if( widthIndex >= (int) bds.m_TrackWidthList.size() )
             widthIndex = 0;
 
-        designSettings.SetTrackWidthIndex( widthIndex );
-        designSettings.UseCustomTrackViaSize( false );
+        bds.SetTrackWidthIndex( widthIndex );
+        bds.UseCustomTrackViaSize( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
@@ -786,7 +788,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 {
-    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty()
@@ -800,10 +802,12 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-                // Note: skip first entry which is the current netclass value
-                for( int i = designSettings.m_TrackWidthList.size() - 1; i >= 1; --i )
+                for( int i = (int) bds.m_TrackWidthList.size() - 1; i >= 0; --i )
                 {
-                    int candidate = designSettings.m_TrackWidthList[ i ];
+                    int candidate = bds.m_NetSettings->m_DefaultNetClass->GetTrackWidth();
+
+                    if( i > 0 )
+                        candidate = bds.m_TrackWidthList[ i ];
 
                     if( candidate < track->GetWidth() )
                     {
@@ -824,26 +828,26 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        int widthIndex = designSettings.GetDiffPairIndex() - 1;
+        int widthIndex = (int) bds.GetDiffPairIndex() - 1;
 
         // If we get to the lowest entry start over at the highest
         if( widthIndex < 0 )
-            widthIndex = designSettings.m_DiffPairDimensionsList.size() - 1;
+            widthIndex = (int) bds.m_DiffPairDimensionsList.size() - 1;
 
-        designSettings.SetDiffPairIndex( widthIndex );
-        designSettings.UseCustomDiffPairDimensions( false );
+        bds.SetDiffPairIndex( widthIndex );
+        bds.UseCustomDiffPairDimensions( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
     else
     {
-        int widthIndex = designSettings.GetTrackWidthIndex();
+        int widthIndex = (int) bds.GetTrackWidthIndex();
 
         if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
-            && designSettings.m_UseConnectedTrackWidth && !designSettings.m_TempOverrideTrackWidth )
+            && bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth )
         {
-            designSettings.m_TempOverrideTrackWidth = true;
+            bds.m_TempOverrideTrackWidth = true;
         }
         else
         {
@@ -852,10 +856,10 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 
         // If we get to the lowest entry start over at the highest
         if( widthIndex < 0 )
-            widthIndex = designSettings.m_TrackWidthList.size() - 1;
+            widthIndex = (int) bds.m_TrackWidthList.size() - 1;
 
-        designSettings.SetTrackWidthIndex( widthIndex );
-        designSettings.UseCustomTrackViaSize( false );
+        bds.SetTrackWidthIndex( widthIndex );
+        bds.UseCustomTrackViaSize( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
@@ -866,7 +870,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 {
-    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty()
@@ -880,13 +884,19 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-                for( VIA_DIMENSION candidate : designSettings.m_ViasDimensionsList )
+                for( int i = 0; i < (int) bds.m_ViasDimensionsList.size(); ++i )
                 {
-                    if( candidate.m_Diameter > via->GetWidth() )
+                    VIA_DIMENSION dims( bds.m_NetSettings->m_DefaultNetClass->GetViaDiameter(),
+                                        bds.m_NetSettings->m_DefaultNetClass->GetViaDrill() );
+
+                    if( i> 0 )
+                        dims = bds.m_ViasDimensionsList[ i ];
+
+                    if( dims.m_Diameter > via->GetWidth() )
                     {
                         commit.Modify( via );
-                        via->SetWidth( candidate.m_Diameter );
-                        via->SetDrill( candidate.m_Drill );
+                        via->SetWidth( dims.m_Diameter );
+                        via->SetDrill( dims.m_Drill );
                         break;
                     }
                 }
@@ -897,14 +907,14 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int sizeIndex = designSettings.GetViaSizeIndex() + 1;
+        int sizeIndex = (int) bds.GetViaSizeIndex() + 1;
 
         // If we go past the last via entry in the list, start over at the beginning
-        if( sizeIndex >= (int) designSettings.m_ViasDimensionsList.size() )
+        if( sizeIndex >= (int) bds.m_ViasDimensionsList.size() )
             sizeIndex = 0;
 
-        designSettings.SetViaSizeIndex( sizeIndex );
-        designSettings.UseCustomTrackViaSize( false );
+        bds.SetViaSizeIndex( sizeIndex );
+        bds.UseCustomTrackViaSize( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
@@ -915,7 +925,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 {
-    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = getModel<BOARD>()->GetDesignSettings();
     PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty()
@@ -929,15 +939,19 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-                for( int i = designSettings.m_ViasDimensionsList.size() - 1; i >= 0; --i )
+                for( int i = (int) bds.m_ViasDimensionsList.size() - 1; i >= 0; --i )
                 {
-                    VIA_DIMENSION candidate = designSettings.m_ViasDimensionsList[ i ];
+                    VIA_DIMENSION dims( bds.m_NetSettings->m_DefaultNetClass->GetViaDiameter(),
+                                        bds.m_NetSettings->m_DefaultNetClass->GetViaDrill() );
 
-                    if( candidate.m_Diameter < via->GetWidth() )
+                    if( i > 0 )
+                        dims = bds.m_ViasDimensionsList[ i ];
+
+                    if( dims.m_Diameter < via->GetWidth() )
                     {
                         commit.Modify( via );
-                        via->SetWidth( candidate.m_Diameter );
-                        via->SetDrill( candidate.m_Drill );
+                        via->SetWidth( dims.m_Diameter );
+                        via->SetDrill( dims.m_Drill );
                         break;
                     }
                 }
@@ -951,17 +965,17 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
         int sizeIndex = 0; // Assume we only have a single via size entry
 
         // If there are more, cycle through them backwards
-        if( designSettings.m_ViasDimensionsList.size() > 0 )
+        if( bds.m_ViasDimensionsList.size() > 0 )
         {
-            sizeIndex = designSettings.GetViaSizeIndex() - 1;
+            sizeIndex = (int) bds.GetViaSizeIndex() - 1;
 
             // If we get to the lowest entry start over at the highest
             if( sizeIndex < 0 )
-                sizeIndex = designSettings.m_ViasDimensionsList.size() - 1;
+                sizeIndex = (int) bds.m_ViasDimensionsList.size() - 1;
         }
 
-        designSettings.SetViaSizeIndex( sizeIndex );
-        designSettings.UseCustomTrackViaSize( false );
+        bds.SetViaSizeIndex( sizeIndex );
+        bds.UseCustomTrackViaSize( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
