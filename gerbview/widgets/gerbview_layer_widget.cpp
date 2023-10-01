@@ -318,7 +318,9 @@ void GERBER_LAYER_WIDGET::ReFill()
             SetLayerVisible( layer, visible );
         }
         else
+        {
             AppendLayerRow( LAYER_WIDGET::ROW( msg, layer, color, wxEmptyString, visible, true ) );
+        }
     }
 
     UpdateLayouts();

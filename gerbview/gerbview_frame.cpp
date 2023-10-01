@@ -492,7 +492,7 @@ void GERBVIEW_FRAME::ApplyDisplaySettingsToGAL()
 
 int GERBVIEW_FRAME::getNextAvailableLayer() const
 {
-    for( unsigned i = 0; i < ImagesMaxCount(); ++i )
+    for( int i = 0; i < (int) ImagesMaxCount(); ++i )
     {
         const GERBER_FILE_IMAGE* gerber = GetGbrImage( i );
 
@@ -544,10 +544,23 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
 }
 
 
-void GERBVIEW_FRAME::RemapLayers( std::unordered_map<int, int> remapping )
+void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping )
 {
-    ReFillLayerWidget();
-    syncLayerBox( true );
+    std::unordered_map<int, COLOR4D> oldColors;
+    std::unordered_map<int, bool>    oldVisibility;
+    LSET                             newVisibility;
+
+    for( const std::pair<const int, int>& entry : remapping )
+    {
+        oldColors[ entry.second ] = GetLayerColor( GERBER_DRAW_LAYER( entry.second ) );
+        oldVisibility[ entry.second ] = IsLayerVisible( entry.second );
+    }
+
+    for( const std::pair<const int, int>& entry : remapping )
+    {
+        SetLayerColor( GERBER_DRAW_LAYER( entry.first ), oldColors[ entry.second ] );
+        newVisibility.set( entry.first, oldVisibility[ entry.second ] );
+    }
 
     std::unordered_map<int, int> view_remapping;
 
@@ -558,6 +571,10 @@ void GERBVIEW_FRAME::RemapLayers( std::unordered_map<int, int> remapping )
     }
 
     GetCanvas()->GetView()->ReorderLayerData( view_remapping );
+
+    SetVisibleLayers( newVisibility );
+    ReFillLayerWidget();
+    syncLayerBox( true );
     GetCanvas()->Refresh();
 }
 

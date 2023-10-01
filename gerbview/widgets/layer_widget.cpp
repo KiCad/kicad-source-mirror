@@ -339,7 +339,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
     bmb->SetToolTip( _( "Left double click or middle click for color change, right click for "
                         "menu" ) );
-    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags | wxRIGHT, 2 );
 
     // column 2 (COLUMN_COLOR_LYR_CB)
     col = COLUMN_COLOR_LYR_CB;
@@ -517,7 +517,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_LayerScrolledWindow = new wxScrolledWindow( m_LayerPanel, wxID_ANY, wxDefaultPosition,
                                                   wxDefaultSize, wxNO_BORDER );
     m_LayerScrolledWindow->SetScrollRate( 5, 5 );
-    m_LayersFlexGridSizer = new wxFlexGridSizer( 0, LYR_COLUMN_COUNT, 0, 1 );
+    m_LayersFlexGridSizer = new wxFlexGridSizer( 0, LYR_COLUMN_COUNT, 3, 4 );
     m_LayersFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
     m_LayersFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
@@ -542,7 +542,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, wxWindowID
     m_RenderScrolledWindow = new wxScrolledWindow( m_RenderingPanel, wxID_ANY, wxDefaultPosition,
                                                    wxDefaultSize, wxNO_BORDER );
     m_RenderScrolledWindow->SetScrollRate( 5, 5 );
-    m_RenderFlexGridSizer = new wxFlexGridSizer( 0, RND_COLUMN_COUNT, 0, 1 );
+    m_RenderFlexGridSizer = new wxFlexGridSizer( 0, RND_COLUMN_COUNT, 3, 4 );
     m_RenderFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
     m_RenderFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
@@ -583,13 +583,8 @@ wxSize LAYER_WIDGET::GetBestSize() const
     wxArrayInt widths = m_LayersFlexGridSizer->GetColWidths();
     int totWidth = 0;
 
-    if( widths.GetCount() )
-    {
-        for( int i = 0; i < LYR_COLUMN_COUNT; ++i )
-        {
-            totWidth += widths[i] + m_LayersFlexGridSizer->GetHGap();
-        }
-    }
+    for( int i = 0; i < LYR_COLUMN_COUNT && i < widths.GetCount(); ++i )
+        totWidth += widths[i];
 
     // Account for the parent's frame:
     totWidth += 15;
@@ -607,13 +602,8 @@ wxSize LAYER_WIDGET::GetBestSize() const
     widths = m_RenderFlexGridSizer->GetColWidths();
     totWidth = 0;
 
-    if( widths.GetCount() )
-    {
-        for( int i = 0; i < RND_COLUMN_COUNT; ++i )
-        {
-            totWidth += widths[i] + m_RenderFlexGridSizer->GetHGap();
-        }
-    }
+    for( int i = 0; i < RND_COLUMN_COUNT && i < widths.GetCount(); ++i )
+        totWidth += widths[i];
 
     // account for the parent's frame, this one has void space of 10 PLUS a border:
     totWidth += 15;

@@ -359,7 +359,7 @@ public:
      * @param remapping A map of old layer number -> new layer number mapping.
      *                  Generally sourced from the SortImagesBy* functions.
      */
-    void RemapLayers( std::unordered_map<int, int> remapping );
+    void RemapLayers( const std::unordered_map<int, int>& remapping );
 
     /**
      * Update each layers' differential option. Needed when xor mode changes or the active layer
