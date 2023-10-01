@@ -36,6 +36,7 @@
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
+#include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <string_utils.h>
 #include <bezier_curves.h>
@@ -1385,6 +1386,55 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             /*else
             {
             }*/
+        }
+        else if( rootType == wxS( "I" ) )
+        {
+            VECTOR2D start( Convert( arr[1] ), Convert( arr[2] ) );
+            VECTOR2D size( Convert( arr[3] ), Convert( arr[4] ) );
+            double   angle = Convert( arr[5] );
+            wxString imageUrl = arr[6];
+
+            if( imageUrl.BeforeFirst( ':' ) == wxS( "data" ) )
+            {
+                wxArrayString paramsArr =
+                        wxSplit( imageUrl.AfterFirst( ':' ).BeforeFirst( ',' ), ';', '\0' );
+
+                wxString data = imageUrl.AfterFirst( ',' );
+
+                if( paramsArr.size() > 0 )
+                {
+                    wxString       mimeType = paramsArr[0];
+                    wxMemoryBuffer buf = wxBase64Decode( data );
+
+                    if( mimeType == wxS( "image/svg+xml" ) )
+                    {
+                        // TODO: Not supported yet
+                    }
+                    else
+                    {
+                        std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>();
+
+                        wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags()
+                                                      & ~wxImage::Load_Verbose );
+
+                        if( bitmap->ReadImageFile( buf ) )
+                        {
+                            VECTOR2D kstart = RelPos( start );
+                            VECTOR2D ksize = ScalePos( size );
+                            VECTOR2D kcenter = kstart + ksize / 2;
+
+                            double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
+                            bitmap->SetImageScale( scaleFactor );
+                            bitmap->SetPosition( kcenter );
+
+                            for( double i = angle; i > 0; i -= 90 )
+                                bitmap->Rotate( kcenter );
+
+                            createdItems.push_back( std::move( bitmap ) );
+                        }
+                    }
+                }
+            }
         }
     }
 
