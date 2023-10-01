@@ -133,12 +133,41 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         Pgm().App().SetTopWindow( (EDA_BASE_FRAME*) kiwayHolder );
 #endif
 
-    Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_SHIM::OnPaint ) );
+    Bind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
 }
 
 
 DIALOG_SHIM::~DIALOG_SHIM()
 {
+    Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
+    Unbind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
+    Unbind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
+
+    std::function<void( wxWindowList& )> disconnectFocusHandlers = [&]( wxWindowList& children )
+    {
+        for( wxWindow* child : children )
+        {
+            if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+            {
+                textCtrl->Disconnect( wxEVT_SET_FOCUS,
+                                      wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ), nullptr,
+                                      this );
+            }
+            else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
+            {
+                scintilla->Disconnect( wxEVT_SET_FOCUS,
+                                       wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ), nullptr,
+                                       this );
+            }
+            else
+            {
+                disconnectFocusHandlers( child->GetChildren() );
+            }
+        }
+    };
+
+    disconnectFocusHandlers( GetChildren() );
+
     // if the dialog is quasi-modal, this will end its event loop
     if( IsQuasiModal() )
         EndQuasiModal( wxID_CANCEL );
