@@ -3292,15 +3292,14 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
 {
     PCB_TEXT* pcbText = new PCB_TEXT( m_board );
 
-    // TODO: improve parsing of variables
-    wxString trimmedText = aElem.text;
-    trimmedText.Trim();
+    static const std::map<wxString, wxString> variableMap = {
+        { "LAYER_NAME", "LAYER" },
+        { "PRINT_DATE", "CURRENT_DATE"},
+    };
 
-    if( trimmedText.CmpNoCase( wxT( ".Layer_Name" ) ) == 0 )
-        pcbText->SetText( wxT( "${LAYER}" ) );
-    else
-        pcbText->SetText( aElem.text );
+    wxString  kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
 
+    pcbText->SetText(kicadText);
     pcbText->SetLayer( aLayer );
     pcbText->SetPosition( aElem.position );
     pcbText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
@@ -3330,19 +3329,17 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         aFootprint->Add( fpText, ADD_MODE::APPEND );
     }
 
-    // TODO: improve parsing of variables
-    wxString trimmedText = aElem.text;
-    trimmedText.Trim();
+    static const std::map<wxString, wxString> variableMap = {
+        { "DESIGNATOR", "REFERENCE" },
+        { "COMMENT",    "VALUE" },
+        { "VALUE",      "ALTIUM_VALUE" },
+        { "LAYER_NAME", "LAYER" },
+        { "PRINT_DATE", "CURRENT_DATE"},
+    };
 
-    if( !aElem.isDesignator && trimmedText.CmpNoCase( wxT( ".Designator" ) ) == 0 )
-        fpText->SetText( wxT( "${REFERENCE}" ) );
-    else if( !aElem.isComment && trimmedText.CmpNoCase( wxT( ".Comment" ) ) == 0 )
-        fpText->SetText( wxT( "${VALUE}" ) );
-    else if( trimmedText.CmpNoCase( wxT( ".Layer_Name" ) ) == 0 )
-        fpText->SetText( wxT( "${LAYER}" ) );
-    else
-        fpText->SetText( aElem.text );
+    wxString  kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
 
+    fpText->SetText(kicadText);
     fpText->SetKeepUpright( false );
     fpText->SetLayer( aLayer );
     fpText->SetPosition( aElem.position );

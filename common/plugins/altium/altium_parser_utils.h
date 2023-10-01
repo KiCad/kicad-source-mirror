@@ -37,8 +37,11 @@ LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReferen
 
 wxString AltiumPropertyToKiCadString( const wxString& aString );
 
-wxString AltiumSpecialStringsToKiCadVariables( const wxString&                     aString,
-                                               const std::map<wxString, wxString>& aOverrides );
+wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&                     aString,
+                                                  const std::map<wxString, wxString>& aOverrides );
+
+wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                     aString,
+                                                const std::map<wxString, wxString>& aOverrides );
 
 wxString AltiumPinNamesToKiCad( wxString& aString );
 VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadians );

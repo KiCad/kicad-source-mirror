@@ -83,8 +83,8 @@ wxString AltiumPropertyToKiCadString( const wxString& aString )
 
 
 // https://www.altium.com/documentation/altium-designer/sch-obj-textstringtext-string-ad#!special-strings
-wxString AltiumSpecialStringsToKiCadVariables( const wxString&                     aString,
-                                               const std::map<wxString, wxString>& aOverrides )
+wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&                     aString,
+                                                  const std::map<wxString, wxString>& aOverrides )
 {
     if( aString.IsEmpty() || aString.at( 0 ) != '=' )
     {
@@ -141,6 +141,35 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&                  
     } while( delimiter != wxString::npos );
 
     return result;
+}
+
+// https://www.altium.com/documentation/altium-designer/text-objects-pcb
+wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                     aString,
+                                                const std::map<wxString, wxString>& aOverrides )
+{
+    if( aString.IsEmpty() )
+    {
+        return aString;
+    }
+
+    // special case: string starts with dot -> whole string is special string
+    if( aString.at( 0 ) == '.' )
+    {
+        wxString specialString = aString.substr( 1 );
+
+        specialString.UpperCase(); // matching is implemented using upper case strings
+
+        auto overrideIt = aOverrides.find( specialString );
+
+        if( overrideIt != aOverrides.end() )
+            specialString = overrideIt->second;
+
+        return wxString::Format( wxT( "${%s}" ), specialString );
+    }
+
+    // TODO: implement Concatenated special strings using apostrophe "'".
+
+    return aString;
 }
 
 wxString AltiumPinNamesToKiCad( wxString& aString )

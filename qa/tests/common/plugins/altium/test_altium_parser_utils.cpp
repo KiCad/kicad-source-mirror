@@ -52,7 +52,7 @@ struct SPECIAL_STRINGS_TO_KICAD
 /**
  * A list of valid test strings and the expected results
  */
-static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_property = {
+static const std::vector<SPECIAL_STRINGS_TO_KICAD> sch_special_string_to_kicad_property = {
     // Empty
     { "", "", {} },
     // No Special Strings
@@ -84,7 +84,7 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
     { "=A+B", "${A}${B}", {} },
     { "=A+B", "${C}${B}", { { "A", "C" } } },
     { "=A+B", "${C}${D}", { { "A", "C" }, { "B", "D" } } },
-    // Case insensitive special strings
+    // Case-insensitive special strings
     { "=A", "${C}", { { "A", "C" } } },
     { "=a", "${C}", { { "A", "C" } } },
     { "=AB", "${C}", { { "AB", "C" } } },
@@ -132,15 +132,83 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> special_string_to_kicad_prope
 
 
 /**
- * Test conversation from Altium Special String to a KiCad String with variables
+ * Test conversation from Altium Schematic Special String to a KiCad String with variables
  */
-BOOST_AUTO_TEST_CASE( AltiumSpecialStringsToKiCadVariablesProperties )
+BOOST_AUTO_TEST_CASE( AltiumSchSpecialStringsToKiCadVariablesProperties )
 {
-    for( const auto& c : special_string_to_kicad_property )
+    for( const auto& c : sch_special_string_to_kicad_property )
     {
         BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s' -> '%s'" ), c.input, c.exp_result ) )
         {
-            wxString result = AltiumSpecialStringsToKiCadVariables( c.input, c.override );
+            wxString result = AltiumSchSpecialStringsToKiCadVariables( c.input, c.override );
+
+            // These are all valid
+            BOOST_CHECK_EQUAL( result, c.exp_result );
+        }
+    }
+}
+
+/**
+ * A list of valid test strings and the expected results
+ */
+static const std::vector<SPECIAL_STRINGS_TO_KICAD> pcb_special_string_to_kicad_property = {
+    // Empty
+    { "", "", {} },
+    // No Special Strings
+    { "A", "A", {} },
+    { "  A", "  A", {} },
+    { "A  ", "A  ", {} },
+    { "A=B", "A=B", {} },
+    { "A=B+C", "A=B+C", {} },
+    { "A\nB", "A\nB", {} },
+    { "A\tB", "A\tB", {} },
+    { "This is a long text with spaces", "This is a long text with spaces", {} },
+    // Text format (underscore,...), TODO: add
+    // Escaping, TODO: add
+    { "'", "'", {} },
+    { "'A'", "'A'", {} },
+    { "$", "$", {} },
+    { "{", "{", {} },
+    { "}", "}", {} },
+    { "${A}", "${A}", {} }, // TODO: correct substitution
+    // Simple special strings starting with dot
+    { ".A", "${A}", {} },
+    { ".A", "${C}", { { "A", "C" } } },
+    { ".A_B", "${A_B}", {} },
+    // Concatenated special strings
+    /*{ "'.A'", "${A}", {} },
+    { "'.A''.B'", "${A}${B}", {} },
+    { "'.A''.B'", "${C}${B}", { { "A", "C" } } },
+    { "'.A''.B'", "${C}${D}", { { "A", "C" }, { "B", "D" } } },
+    { "A='.A', B='.B'", "A=${A}, B=${B}", {} },*/
+    // Case-insensitive special strings
+    { ".A", "${C}", { { "A", "C" } } },
+    { ".a", "${C}", { { "A", "C" } } },
+    { ".AB", "${C}", { { "AB", "C" } } },
+    { ".aB", "${C}", { { "AB", "C" } } },
+    { ".Ab", "${C}", { { "AB", "C" } } },
+    { ".ab", "${C}", { { "AB", "C" } } },
+    // Some special cases we do not know yet how to handle correctly. But we should not crash ;)
+    { "''", "''", {} },
+    { " .", " .", {} },
+    { ". ", "${ }", {} },
+    { ". A", "${ A}", {} },
+    { ".A ", "${A }", {} },
+    { " .A", " .A", {} },
+    { "...", "${..}", {} },
+};
+
+
+/**
+ * Test conversation from Altium Board Special String to a KiCad String with variables
+ */
+BOOST_AUTO_TEST_CASE( AltiumPcbSpecialStringsToKiCadStringsProperties )
+{
+    for( const auto& c : pcb_special_string_to_kicad_property )
+    {
+        BOOST_TEST_CONTEXT( wxString::Format( wxT( "'%s' -> '%s'" ), c.input, c.exp_result ) )
+        {
+            wxString result = AltiumPcbSpecialStringsToKiCadStrings( c.input, c.override );
 
             // These are all valid
             BOOST_CHECK_EQUAL( result, c.exp_result );

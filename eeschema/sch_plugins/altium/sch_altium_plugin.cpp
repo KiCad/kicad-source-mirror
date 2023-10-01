@@ -1238,7 +1238,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 
     if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        std::map<wxString, wxString> variableMap = {
+        static const std::map<wxString, wxString> variableMap = {
             { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
             { "SHEETNUMBER",  "#"            },
             { "SHEETTOTAL",   "##"           },
@@ -1251,7 +1251,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
             { "PROJECTNAME",  "PROJECTNAME"  },
         };
 
-        wxString  kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
+        wxString  kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
         SCH_TEXT* textItem = new SCH_TEXT( elem.location + m_sheetOffset, kicadText );
 
         SetTextPositioning( textItem, elem.justification, elem.orientation );
@@ -3571,7 +3571,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
     ASCH_PARAMETER elem( aProperties );
 
     // TODO: fill in replacements from variant, sheet and project
-    std::map<wxString, wxString> variableMap = {
+    static const std::map<wxString, wxString> variableMap = {
         { "COMMENT", "VALUE"        },
         { "VALUE",   "ALTIUM_VALUE" },
     };
@@ -3655,7 +3655,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
             field = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldIdx, symbol, fieldName ) );
         }
 
-        wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
+        wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
         field->SetPosition( elem.location + m_sheetOffset );
         field->SetVisible( !elem.isHidden );
@@ -3720,7 +3720,7 @@ void SCH_ALTIUM_PLUGIN::ParseLibParameter( const std::map<wxString, wxString>& a
             field = new_field;
         }
 
-        wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
+        wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
 
 
