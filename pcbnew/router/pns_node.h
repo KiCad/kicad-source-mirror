@@ -164,6 +164,7 @@ public:
 
     virtual void ClearCacheForItems( std::vector<const ITEM*>& aItems ) {}
     virtual void ClearCaches() {}
+    virtual void ClearTemporaryCaches() {}
 
     virtual int ClearanceEpsilon() const { return 0; }
 };

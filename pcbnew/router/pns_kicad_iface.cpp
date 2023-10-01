@@ -134,6 +134,7 @@ public:
 
     void ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems ) override;
     void ClearCaches() override;
+    void ClearTemporaryCaches() override;
 
 private:
     BOARD_ITEM* getBoardItem( const PNS::ITEM* aItem, int aLayer, int aIdx = 0 );
@@ -147,6 +148,7 @@ private:
     int                m_clearanceEpsilon;
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
+    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_tempClearanceCache;
 };
 
 
@@ -455,6 +457,13 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItems( std::vector<const PNS::ITEM*>
 void PNS_PCBNEW_RULE_RESOLVER::ClearCaches()
 {
     m_clearanceCache.clear();
+    m_tempClearanceCache.clear();
+}
+
+
+void PNS_PCBNEW_RULE_RESOLVER::ClearTemporaryCaches()
+{
+    m_tempClearanceCache.clear();
 }
 
 
@@ -462,9 +471,15 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                                          bool aUseClearanceEpsilon )
 {
     CLEARANCE_CACHE_KEY key = { aA, aB, aUseClearanceEpsilon };
-    auto it = m_clearanceCache.find( key );
 
+    // Search cache (used for actual board items)
+    auto it = m_clearanceCache.find( key );
     if( it != m_clearanceCache.end() )
+        return it->second;
+
+    // Search cache (used for temporary items within an algorithm)
+    it = m_tempClearanceCache.find( key );
+    if( it != m_tempClearanceCache.end() )
         return it->second;
 
     PNS::CONSTRAINT constraint;
@@ -533,10 +548,17 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
 /* It makes no sense to put items that have no owning NODE in the cache - they can be allocated on stack
    and we can't really invalidate them in the cache when they are destroyed. Probably a better idea would be
-   to use a static unique counter in PNS::ITEM constructor to generate the cache keys. */
-    if( aA && aB && aA->Owner() && aB->Owner() )
+   to use a static unique counter in PNS::ITEM constructor to generate the cache keys.  */
+/* However, algorithms DO greatly benefit from using the cache, so ownerless items need to be cached.
+   In order to easily clear those only, a temporary cache is created. If this doesn't seem nice, an alternative
+   is clearing the full cache once it reaches a certain size. Also not pretty, but VERY effective
+   to keep things interactive. */
+    if( aA && aB )
     {
-        m_clearanceCache[ key ] = rv;
+        if ( aA->Owner() && aB->Owner() )
+            m_clearanceCache[ key ] = rv;
+        else
+            m_tempClearanceCache[ key ] = rv;
     }
 
     return rv;
