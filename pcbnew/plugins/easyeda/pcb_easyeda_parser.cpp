@@ -977,6 +977,7 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
                 chain.SetClosed( true );
 
                 chain.Move( -center );
+                chain.Rotate( -pad->GetOrientation() );
                 pad->AddPrimitivePoly( chain, 0, true );
             }
 
