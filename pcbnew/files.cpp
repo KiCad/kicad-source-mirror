@@ -678,7 +678,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             failedLoad = true;
         }
 
-        if( failedLoad )
+        if( failedLoad || !loadedBoard )
         {
             // We didn't create a new blank board above, so do that now
             Clear_Pcb( false );
