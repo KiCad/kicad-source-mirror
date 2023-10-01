@@ -677,10 +677,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
     int           start = scintilla->WordStartPosition( pos, true );
     wxString      partial;
 
-    // Currently, '\n' is not allowed in fields. So remove it when entered
-    // TODO: see if we must close the dialog. However this is not obvious, as
-    // if a \n is typed (and removed) when a text is selected, this text is deleted
-    // (in fact replaced by \n, that is removed by the filter)
+    // Multi-line fields are not allowed. So remove '\n' if entered.
     if( key == '\n' )
     {
         wxString text = scintilla->GetText();

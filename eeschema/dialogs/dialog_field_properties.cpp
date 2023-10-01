@@ -160,15 +160,13 @@ void DIALOG_FIELD_PROPERTIES::init()
     m_CommonConvert->Show( false );
     m_CommonUnit->Show( false );
 
-    // Predefined fields cannot contain some chars, or cannot be empty,
-    // and need a SCH_FIELD_VALIDATOR (m_StyledTextCtrl cannot use a SCH_FIELD_VALIDATOR).
-    bool use_validator = m_fieldId == REFERENCE_FIELD
-                         || m_fieldId == FOOTPRINT_FIELD
-                         || m_fieldId == DATASHEET_FIELD
-                         || m_fieldId == SHEETNAME_V
-                         || m_fieldId == SHEETFILENAME_V;
-
-    if( use_validator )
+    // Predefined fields cannot contain some chars and cannot be empty, so they need a
+    // SCH_FIELD_VALIDATOR (m_StyledTextCtrl cannot use a SCH_FIELD_VALIDATOR).
+    if( m_fieldId == REFERENCE_FIELD
+            || m_fieldId == FOOTPRINT_FIELD
+            || m_fieldId == DATASHEET_FIELD
+            || m_fieldId == SHEETNAME_V
+            || m_fieldId == SHEETFILENAME_V )
     {
         m_TextCtrl->SetValidator( FIELD_VALIDATOR( m_fieldId, &m_text ) );
         SetInitialFocus( m_TextCtrl );
@@ -190,9 +188,8 @@ void DIALOG_FIELD_PROPERTIES::init()
 
     GetSizer()->SetSizeHints( this );
 
-    // Adjust the height of the scintilla text editor after the first layout
-    // To show only one line
-    // (multiline text are is supported in fields and will be removed)
+    // Adjust the height of the scintilla editor after the first layout to show a single line
+    // (multiline text is not supported in fields and will be removed)
     if( m_StyledTextCtrl->IsShown() )
     {
         wxSize maxSize = m_StyledTextCtrl->GetSize();

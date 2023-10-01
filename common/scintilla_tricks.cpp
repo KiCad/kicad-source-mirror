@@ -54,6 +54,12 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
     m_te->SetScrollWidth( 1 );
     m_te->SetScrollWidthTracking( true );
 
+    if( m_singleLine )
+    {
+        m_te->SetUseVerticalScrollBar( false );
+        m_te->SetUseHorizontalScrollBar( false );
+    }
+
     setupStyles();
 
     // Set up autocomplete
@@ -65,6 +71,7 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
 
     // Hook up events
     m_te->Bind( wxEVT_STC_UPDATEUI, &SCINTILLA_TRICKS::onScintillaUpdateUI, this );
+    m_te->Bind( wxEVT_STC_MODIFIED, &SCINTILLA_TRICKS::onModified, this );
 
     // Handle autocomplete
     m_te->Bind( wxEVT_STC_CHARADDED, &SCINTILLA_TRICKS::onChar, this );
@@ -170,6 +177,31 @@ void SCINTILLA_TRICKS::onChar( wxStyledTextEvent& aEvent )
 }
 
 
+void SCINTILLA_TRICKS::onModified( wxStyledTextEvent& aEvent )
+{
+    if( m_singleLine )
+    {
+        wxString text = m_te->GetText();
+
+        if( text.Contains( wxS( "\n" ) ) || text.Contains( wxS( "\r" ) ) )
+        {
+            // Scintilla won't allow us to call SetText() from within this event processor,
+            // so we have to delay the processing.
+            CallAfter( [this]()
+                       {
+                           wxString text = m_te->GetText();
+                           int currpos = m_te->GetCurrentPos();
+
+                           text.Replace( wxS( "\n" ), wxS( "" ) );
+                           text.Replace( wxS( "\r" ), wxS( "" ) );
+                           m_te->SetText( text );
+                           m_te->GotoPos( currpos-1 );
+                       } );
+        }
+    }
+}
+
+
 void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
     wxString c = aEvent.GetUnicodeKey();
@@ -267,6 +299,13 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
                 str = data.GetText();
 
                 ConvertSmartQuotesAndDashes( &str );
+
+                if( m_singleLine )
+                {
+                    str.Replace( wxS( "\n" ), wxEmptyString );
+                    str.Replace( wxS( "\r" ), wxEmptyString );
+                }
+
                 m_te->BeginUndoAction();
                 m_te->AddText( str );
                 m_te->EndUndoAction();
