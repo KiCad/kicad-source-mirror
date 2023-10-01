@@ -218,9 +218,6 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             item.modelName += fmt::format( "{} ", getParamValueString( "gain", "1.0" ) );
             emptyLine = false;
 
-            if( const SIM_MODEL::PARAM* ic = m_model.FindParam( "ic" ) )
-                item.modelName += fmt::format( "ic={}", SIM_VALUE::ToSpice( ic->value ) );
-
             break;
 
         case SIM_MODEL::TYPE::V_CCL:
@@ -781,13 +778,6 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeVcParamInfos( const st
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = aGainUnit;
     paramInfo.description = "Gain";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "ic";
-    paramInfo.id = 7;
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "V";
-    paramInfo.description = "Initial condition of controlling source (ic)";
     paramInfos.push_back( paramInfo );
 
     return paramInfos;
