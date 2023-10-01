@@ -22,6 +22,7 @@
 
 #include <widgets/search_pane_base.h>
 #include <vector>
+#include <wx/listbase.h>
 
 class EDA_DRAW_FRAME;
 class SEARCH_PANE_TAB;
@@ -35,7 +36,10 @@ public:
 
     wxString GetName() const { return m_name; }
 
-    std::vector<std::pair<wxString, int>> GetColumns() const { return m_columns; }
+    std::vector<std::tuple<wxString, int, wxListColumnFormat>> GetColumns() const
+    {
+        return m_columns;
+    }
 
     virtual int Search( const wxString& string ) = 0;
     virtual wxString GetResultCell( int row, int col ) = 0;
@@ -45,8 +49,8 @@ public:
     virtual void ActivateItem( long aItemRow ) {}
 
 protected:
-    wxString                              m_name;
-    std::vector<std::pair<wxString, int>> m_columns;
+    wxString                                                   m_name;
+    std::vector<std::tuple<wxString, int, wxListColumnFormat>> m_columns;
 };
 
 class SEARCH_PANE : public SEARCH_PANE_BASE

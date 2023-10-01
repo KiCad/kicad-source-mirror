@@ -122,12 +122,16 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
         SCH_SEARCH_HANDLER( wxT( "Symbols" ), aFrame )
 {
-    m_columns.emplace_back( wxT( "Reference" ), 1 );
-    m_columns.emplace_back( wxT( "Value" ), 3 );
-    m_columns.emplace_back( wxT( "Footprint" ), 3 );
-    m_columns.emplace_back( wxT( "Page" ), 1 );
-    m_columns.emplace_back( wxT( "X" ), 2 );
-    m_columns.emplace_back( wxT( "Y" ), 2 );
+    m_columns.emplace_back( wxT( "Reference" ),   2,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Value" ),       6,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Footprint" ),   10, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Page" ),        1,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),           3,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),           3,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "DNP" ),         2,  wxLIST_FORMAT_CENTER );
 }
 
 
@@ -188,7 +192,14 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
         return m_frame->MessageTextFromValue( sym->GetPosition().x );
     else if( aCol == 5 )
         return m_frame->MessageTextFromValue( sym->GetPosition().y );
-
+    else if( aCol == 6 )
+        return sym->GetExcludedFromSim() ? wxS( "X" ) : wxS( " " );
+    else if( aCol == 7 )
+        return sym->GetExcludedFromBOM() ? wxS( "X" ) : wxS( " " );
+    else if( aCol == 8 )
+        return sym->GetExcludedFromBoard() ? wxS( "X" ) : wxS( " " );
+    else if( aCol == 9 )
+        return sym->GetDNP() ? wxS( "X" ) : wxS( " " );
 
     return wxEmptyString;
 }
@@ -197,11 +208,11 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
         SCH_SEARCH_HANDLER( wxT( "Text" ), aFrame )
 {
-    m_columns.emplace_back( wxT( "Type" ), 1 );
-    m_columns.emplace_back( wxT( "Text" ), 5 );
-    m_columns.emplace_back( wxT( "Page" ), 1 );
-    m_columns.emplace_back( wxT( "X" ), 2 );
-    m_columns.emplace_back( wxT( "Y" ), 2 );
+    m_columns.emplace_back( wxT( "Type" ), 2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Text" ), 12, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Page" ), 1, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),    3, wxLIST_FORMAT_CENTER );
 }
 
 
@@ -281,11 +292,11 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
 LABEL_SEARCH_HANDLER::LABEL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
         SCH_SEARCH_HANDLER( wxT( "Labels" ), aFrame )
 {
-    m_columns.emplace_back( wxT( "Type" ), 1 );
-    m_columns.emplace_back( wxT( "Name" ), 4 );
-    m_columns.emplace_back( wxT( "Page" ), 1 );
-    m_columns.emplace_back( wxT( "X" ), 2 );
-    m_columns.emplace_back( wxT( "Y" ), 2 );
+    m_columns.emplace_back( wxT( "Type" ), 2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Name" ), 6, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( wxT( "Page" ), 2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),    3 , wxLIST_FORMAT_CENTER);
 }
 
 

@@ -20,11 +20,11 @@ SEARCH_PANE_BASE::SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 	m_searchCtrl1->ShowSearchButton( true );
 	#endif
 	m_searchCtrl1->ShowCancelButton( false );
-	m_sizerOuter->Add( m_searchCtrl1, 0, wxEXPAND|wxTOP, 5 );
+	m_sizerOuter->Add( m_searchCtrl1, 0, wxEXPAND, 5 );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-	m_sizerOuter->Add( m_notebook, 1, wxEXPAND|wxTOP, 5 );
+	m_sizerOuter->Add( m_notebook, 1, wxEXPAND|wxBOTTOM, 4 );
 
 
 	this->SetSizer( m_sizerOuter );

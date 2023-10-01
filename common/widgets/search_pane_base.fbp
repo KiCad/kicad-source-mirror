@@ -61,7 +61,7 @@
                 <property name="permission">protected</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxTOP</property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxSearchCtrl" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -126,8 +126,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxTOP</property>
+                    <property name="border">4</property>
+                    <property name="flag">wxEXPAND|wxBOTTOM</property>
                     <property name="proportion">1</property>
                     <object class="wxNotebook" expanded="1">
                         <property name="BottomDockable">1</property>

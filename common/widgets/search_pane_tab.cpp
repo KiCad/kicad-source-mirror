@@ -146,15 +146,15 @@ void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
     Freeze();
     DeleteAllColumns();
 
-    std::vector<std::pair<wxString, int>> columns = m_handler->GetColumns();
+    std::vector<std::tuple<wxString, int, wxListColumnFormat>> columns = m_handler->GetColumns();
 
-    for( auto& [ columnName, colProportion ] : columns )
-        AppendColumn( wxGetTranslation( columnName ) );
+    for( auto& [ columnName, colProportion, colAlign ] : columns )
+        AppendColumn( wxGetTranslation( columnName ), colAlign );
 
-    int widthUnit = GetClientSize().GetWidth() / 4;
+    int widthUnit = GetClientSize().GetWidth() / 10;
 
     for( int ii = 0; ii < (int) columns.size(); ++ii )
-        SetColumnWidth( ii, widthUnit * columns[ ii ].second );
+        SetColumnWidth( ii, widthUnit * std::get<1>( columns[ ii ] ) );
 
     Thaw();
 }
