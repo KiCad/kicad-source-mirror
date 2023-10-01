@@ -304,6 +304,9 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
             shape->SetCenter( center );
             shape->SetEnd( center + VECTOR2I( radius, 0 ) );
 
+            if( IsCopperLayer( layer ) )
+                shape->SetNet( getOrAddNetItem( arr[8] ) );
+
             aContainer->Add( shape.release(), ADD_MODE::APPEND );
         }
         else if( elType == wxS( "RECT" ) )
@@ -330,6 +333,9 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
 
             shape->SetStart( start );
             shape->SetEnd( start + size );
+
+            if( IsCopperLayer( layer ) )
+                shape->SetNet( getOrAddNetItem( arr[11] ) );
 
             aContainer->Add( shape.release(), ADD_MODE::APPEND );
         }
