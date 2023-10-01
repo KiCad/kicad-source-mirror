@@ -4010,7 +4010,7 @@ long long SCH_ALTIUM_PLUGIN::getLibraryTimestamp( const wxString& aLibraryPath )
 {
     wxFileName fn( aLibraryPath );
 
-    if( fn.IsFileReadable() )
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
         return fn.GetModificationTime().GetValue().GetValue();
     else
         return wxDateTime( 0.0 ).GetValue().GetValue();

@@ -140,7 +140,7 @@ long long ALTIUM_DESIGNER_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryP
 
     wxFileName fn( aLibraryPath );
 
-    if( fn.IsFileReadable() )
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
     {
         return fn.GetModificationTime().GetValue().GetValue();
     }

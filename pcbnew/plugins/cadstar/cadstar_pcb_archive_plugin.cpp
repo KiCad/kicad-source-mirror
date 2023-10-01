@@ -226,7 +226,7 @@ long long CADSTAR_PCB_ARCHIVE_PLUGIN::GetLibraryTimestamp( const wxString& aLibr
 {
     wxFileName fn( aLibraryPath );
 
-    if( fn.IsFileReadable() )
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
         return fn.GetModificationTime().GetValue().GetValue();
     else
         return wxDateTime( 0.0 ).GetValue().GetValue();
