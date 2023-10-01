@@ -819,77 +819,6 @@ static VIATYPE getViaTypeFromFlags( int aFlags )
 }
 
 
-static PCB_LAYER_ID getTargetLayerFromEvent( const TOOL_EVENT& aEvent )
-{
-    if( aEvent.IsAction( &PCB_ACTIONS::layerTop ) )
-        return F_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner1 ) )
-        return In1_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner2 ) )
-        return In2_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner3 ) )
-        return In3_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner4 ) )
-        return In4_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner5 ) )
-        return In5_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner6 ) )
-        return In6_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner7 ) )
-        return In7_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner8 ) )
-        return In8_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner9 ) )
-        return In9_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner10 ) )
-        return In10_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner11 ) )
-        return In11_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner12 ) )
-        return In12_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner13 ) )
-        return In13_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner14 ) )
-        return In14_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner15 ) )
-        return In15_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner16 ) )
-        return In16_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner17 ) )
-        return In17_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner18 ) )
-        return In18_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner19 ) )
-        return In19_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner20 ) )
-        return In20_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner21 ) )
-        return In21_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner22 ) )
-        return In22_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner23 ) )
-        return In23_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner24 ) )
-        return In24_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner25 ) )
-        return In25_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner26 ) )
-        return In26_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner27 ) )
-        return In27_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner28 ) )
-        return In28_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner29 ) )
-        return In29_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerInner30 ) )
-        return In30_Cu;
-    else if( aEvent.IsAction( &PCB_ACTIONS::layerBottom ) )
-        return B_Cu;
-    else
-        return UNDEFINED_LAYER;
-}
-
-
 int ROUTER_TOOL::onLayerCommand( const TOOL_EVENT& aEvent )
 {
     return handleLayerSwitch( aEvent, false );
@@ -922,10 +851,11 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         return 0;
 
     // First see if this is one of the switch layer commands
-    LSEQ         layers       = LSET( board()->GetEnabledLayers() & LSET::AllCuMask() ).Seq();
-    PCB_LAYER_ID currentLayer = (PCB_LAYER_ID) m_router->GetCurrentLayer();
-    PCB_LAYER_ID targetLayer  = UNDEFINED_LAYER;
-    BOARD*       brd          = board();
+    BOARD*       brd           = board();
+    LSET         enabledLayers = LSET::AllCuMask( brd->GetDesignSettings().GetCopperLayerCount() );
+    LSEQ         layers        = enabledLayers.Seq();
+    PCB_LAYER_ID currentLayer  = (PCB_LAYER_ID) m_router->GetCurrentLayer();
+    PCB_LAYER_ID targetLayer   = UNDEFINED_LAYER;
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
@@ -1009,7 +939,10 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     }
     else
     {
-        targetLayer = getTargetLayerFromEvent( aEvent );
+        targetLayer = aEvent.Parameter<PCB_LAYER_ID>();
+
+        if( !enabledLayers.test( targetLayer ) )
+            return 0;
     }
 
     if( targetLayer != UNDEFINED_LAYER )
