@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fieldsCtrl->SetMinSize( wxSize( -1,320 ) );
 
-	bLeftSizer->Add( m_fieldsCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bLeftSizer->Add( m_fieldsCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bFieldsButtons;
 	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -53,7 +53,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bFieldsButtons->Add( m_removeFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND|wxRIGHT, 5 );
+	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
@@ -72,7 +72,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxTOP|wxLEFT, 4 );
 
 
-	bLeftSizer->Add( bPresets, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+	bLeftSizer->Add( bPresets, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -124,7 +124,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bControls->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bRightSizer->Add( bControls, 0, wxEXPAND|wxLEFT, 5 );
+	bRightSizer->Add( bControls, 0, wxEXPAND, 5 );
 
 	m_grid = new WX_GRID( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -138,7 +138,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	// Columns
 	m_grid->EnableDragColMove( true );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 20 );
+	m_grid->SetColLabelSize( 24 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -152,7 +152,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_grid->SetMinSize( wxSize( 600,240 ) );
 
-	bRightSizer->Add( m_grid, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bRightSizer->Add( m_grid, 1, wxEXPAND|wxRIGHT, 5 );
 
 
 	bRightSizer->Add( 0, 4, 0, wxEXPAND, 5 );
@@ -192,7 +192,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bSizer12->Add( m_radioOff, 0, wxALIGN_CENTER_VERTICAL, 8 );
 
 
-	bRightSizer->Add( bSizer12, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bRightSizer->Add( bSizer12, 0, wxEXPAND|wxRIGHT, 5 );
 
 
 	m_rightPanel->SetSizer( bRightSizer );
@@ -205,7 +205,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_panelEdit->SetSizer( bEditSizer );
 	m_panelEdit->Layout();
 	bEditSizer->Fit( m_panelEdit );
-	m_nbPages->AddPage( m_panelEdit, _("Edit"), true );
+	m_nbPages->AddPage( m_panelEdit, _("Edit"), false );
 	m_panelExport = new wxPanel( m_nbPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxGridBagSizer* gbExport;
 	gbExport = new wxGridBagSizer( 0, 5 );
@@ -274,7 +274,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	gbExportOptions->Add( m_cbBomFmtPresets, wxGBPosition( 9, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 
-	gbExport->Add( gbExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND|wxALL, 5 );
+	gbExport->Add( gbExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bOutputDirectory;
 	bOutputDirectory = new wxBoxSizer( wxHORIZONTAL );
@@ -324,7 +324,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_panelExport->SetSizer( gbExport );
 	m_panelExport->Layout();
 	gbExport->Fit( m_panelExport );
-	m_nbPages->AddPage( m_panelExport, _("Export"), false );
+	m_nbPages->AddPage( m_panelExport, _("Export"), true );
 
 	bMainSizer->Add( m_nbPages, 1, wxEXPAND | wxALL, 5 );
 

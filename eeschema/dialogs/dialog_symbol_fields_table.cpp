@@ -226,15 +226,19 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_fieldNameColWidth = 0;
     m_labelColWidth = 0;
 
+    int colWidth = 0;
+
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
         const wxString& displayName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
-        m_fieldNameColWidth =
-                std::max( m_fieldNameColWidth, KIUI::GetTextSize( displayName, m_fieldsCtrl ).x );
+        colWidth = std::max( colWidth, KIUI::GetTextSize( displayName, m_fieldsCtrl ).x );
 
         const wxString& label = m_fieldsCtrl->GetTextValue( row, LABEL_COLUMN );
-        m_labelColWidth = std::max( m_labelColWidth, KIUI::GetTextSize( label, m_fieldsCtrl ).x );
+        colWidth = std::max( colWidth, KIUI::GetTextSize( label, m_fieldsCtrl ).x );
     }
+
+    m_fieldNameColWidth = colWidth + 20;
+    m_labelColWidth = colWidth + 20;
 
     int fieldsMinWidth = m_fieldNameColWidth + m_labelColWidth + m_groupByColWidth + m_showColWidth;
 
@@ -254,8 +258,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler(
-            new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl, m_dataModel ) );
+    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl,
+                                                             m_dataModel ) );
 
     // give a bit more room for comboboxes
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
@@ -1084,14 +1088,18 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
-    m_labelColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x;
-    m_labelColWidth -= m_fieldNameColWidth + m_showColWidth + m_groupByColWidth;
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x
+                    - m_showColWidth
+                    - m_groupByColWidth;
 #ifdef __WXMAC__
     // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
     // also be that the width of the column would get set too wide (to 30), but that's patched in
     // our local wxWidgets fork.)
-    m_labelColWidth -= 50;
+    width -= 50;
 #endif
+
+    m_fieldNameColWidth = width / 2;
+    m_labelColWidth = width = m_fieldNameColWidth;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
