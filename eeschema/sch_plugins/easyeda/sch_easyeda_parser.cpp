@@ -371,8 +371,10 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             SHAPE_LINE_CHAIN chain;
 
             for( size_t i = 1; i < ptArr.size(); i += 2 )
+            {
                 chain.Append(
                         RelPosSym( VECTOR2I( Convert( ptArr[i - 1] ), Convert( ptArr[i] ) ) ) );
+            }
 
             std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
 
@@ -1087,92 +1089,147 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             wxString valueFontname = valueParts[7];
             wxString valueFontsize = valueParts[8];
 
-            auto        pair = MakePowerSymbol( flagTypename, netnameValue );
-            LIB_SYMBOL* pwrLibSym = pair.first;
-            bool        flip = pair.second;
-
-            LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, netnameValue );
-
-            std::unique_ptr<SCH_SYMBOL> schSym = std::make_unique<SCH_SYMBOL>(
-                    *pwrLibSym, libId, &aSchematic->CurrentSheet(), 0 );
-
-            if( flip )
-                schSym->SetOrientation( SYM_MIRROR_X );
-
-            if( angle == 0 )
+            if( flagTypename == wxS( "part_netLabel_netPort" ) )
             {
-            }
-            else if( angle == 90 )
-            {
-                schSym->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-            }
-            if( angle == 180 )
-            {
-                schSym->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                schSym->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-            }
-            if( angle == 270 )
-            {
-                schSym->SetOrientation( SYM_ROTATE_CLOCKWISE );
-            }
+                std::unique_ptr<SCH_GLOBALLABEL> label =
+                        std::make_unique<SCH_GLOBALLABEL>( RelPos( pos ), netnameValue );
 
-            schSym->SetPosition( RelPos( pos ) );
+                SPIN_STYLE spin = SPIN_STYLE::LEFT;
 
-            SCH_FIELD* valField = schSym->GetField( VALUE_FIELD );
+                for( double i = angle; i > 0; i -= 90 )
+                    spin = spin.RotateCCW();
 
-            valField->SetPosition( RelPos( valuePos ) );
-            valField->SetTextAngleDegrees( textAngle - angle );
+                // If the shape was mirrored, we can't rely on angle value to determine direction.
+                if( segments.size() > 3 )
+                {
+                    wxArrayString shapeParts = wxSplit( segments[3], '~', '\0' );
+                    if( shapeParts[0] == wxS( "PL" ) )
+                    {
+                        wxArrayString ptArr = wxSplit( shapeParts[1], ' ', '\0' );
 
-            if( !flip )
-                valField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                        SHAPE_LINE_CHAIN chain;
+
+                        for( size_t i = 1; i < ptArr.size(); i += 2 )
+                        {
+                            chain.Append( RelPos(
+                                    VECTOR2I( Convert( ptArr[i - 1] ), Convert( ptArr[i] ) ) ) );
+                        }
+
+                        chain.Move( -RelPos( pos ) );
+
+                        VECTOR2I shapeCenter = chain.Centre();
+
+                        if( std::abs( shapeCenter.x ) >= std::abs( shapeCenter.y ) )
+                        {
+                            if( shapeCenter.x >= 0 )
+                                spin = SPIN_STYLE::RIGHT;
+                            else
+                                spin = SPIN_STYLE::LEFT;
+                        }
+                        else
+                        {
+                            if( shapeCenter.y >= 0 )
+                                spin = SPIN_STYLE::BOTTOM;
+                            else
+                                spin = SPIN_STYLE::UP;
+                        }
+                    }
+                }
+
+                label->SetSpinStyle( spin );
+                label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+
+                createdItems.push_back( std::move( label ) );
+            }
             else
-                valField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-
-            if( halignStr == wxS( "middle" ) )
-                valField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            else if( halignStr == wxS( "end" ) )
-                valField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            else
-                valField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-            if( flip && ( angle == 90 || angle == 270 ) )
             {
-                if( valField->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                auto        pair = MakePowerSymbol( flagTypename, netnameValue );
+                LIB_SYMBOL* pwrLibSym = pair.first;
+                bool        flip = pair.second;
+
+                LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, netnameValue );
+
+                std::unique_ptr<SCH_SYMBOL> schSym = std::make_unique<SCH_SYMBOL>(
+                        *pwrLibSym, libId, &aSchematic->CurrentSheet(), 0 );
+
+                if( flip )
+                    schSym->SetOrientation( SYM_MIRROR_X );
+
+                if( angle == 0 )
+                {
+                }
+                else if( angle == 90 )
+                {
+                    schSym->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                }
+                if( angle == 180 )
+                {
+                    schSym->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                    schSym->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+                }
+                if( angle == 270 )
+                {
+                    schSym->SetOrientation( SYM_ROTATE_CLOCKWISE );
+                }
+
+                schSym->SetPosition( RelPos( pos ) );
+
+                SCH_FIELD* valField = schSym->GetField( VALUE_FIELD );
+
+                valField->SetPosition( RelPos( valuePos ) );
+                valField->SetTextAngleDegrees( textAngle - angle );
+
+                if( !flip )
+                    valField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                else
                     valField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-                else if( valField->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+
+                if( halignStr == wxS( "middle" ) )
+                    valField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                else if( halignStr == wxS( "end" ) )
+                    valField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                else
+                    valField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+                if( flip && ( angle == 90 || angle == 270 ) )
+                {
+                    if( valField->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                        valField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                    else if( valField->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+                        valField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+                    if( valField->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                        valField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                    else if( valField->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                        valField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
+                    if( flagTypename == wxS( "part_netLabel_Bar" ) ) // "Circle"
+                        valField->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                }
+
+                if( angle == 0 && flagTypename == wxS( "part_netLabel_Bar" ) ) // "Circle"
                     valField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
-                if( valField->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-                    valField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-                else if( valField->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-                    valField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                valField->SetFont( KIFONT::FONT::GetFont( valueFontname ) );
 
-                if( flagTypename == wxS( "part_netLabel_Bar" ) ) // "Circle"
-                    valField->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                double ptSize = 7;
+
+                if( valueFontsize.EndsWith( wxS( "pt" ) ) )
+                    ptSize = Convert( valueFontsize.BeforeFirst( 'p' ) );
+
+                double ktextSize = ScaleSize( ptSize );
+
+                if( netnameValue.Contains( wxS( "\n" ) ) )
+                    ktextSize *= 0.8;
+                else
+                    ktextSize *= 0.95;
+
+                valField->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
+
+                //TransformToBaseline( valField, wxS( "" ), true );
+
+                createdItems.push_back( std::move( schSym ) );
             }
-
-            if( angle == 0 && flagTypename == wxS( "part_netLabel_Bar" ) ) // "Circle"
-                valField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-
-            valField->SetFont( KIFONT::FONT::GetFont( valueFontname ) );
-
-            double ptSize = 7;
-
-            if( valueFontsize.EndsWith( wxS( "pt" ) ) )
-                ptSize = Convert( valueFontsize.BeforeFirst( 'p' ) );
-
-            double ktextSize = ScaleSize( ptSize );
-
-            if( netnameValue.Contains( wxS( "\n" ) ) )
-                ktextSize *= 0.8;
-            else
-                ktextSize *= 0.95;
-
-            valField->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
-
-            //TransformToBaseline( valField, wxS( "" ), true );
-
-            createdItems.push_back( std::move( schSym ) );
         }
         else if( rootType == wxS( "W" ) )
         {
