@@ -494,6 +494,8 @@ bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
         break;
     }
 
+    GetRuleResolver()->ClearTemporaryCaches();
+
     return false;
 }
 
