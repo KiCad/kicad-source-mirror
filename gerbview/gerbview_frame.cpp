@@ -546,21 +546,14 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
 
 void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping )
 {
-    std::unordered_map<int, COLOR4D> oldColors;
-    std::unordered_map<int, bool>    oldVisibility;
-    LSET                             newVisibility;
+    std::unordered_map<int, bool> oldVisibility;
+    LSET                          newVisibility;
 
     for( const std::pair<const int, int>& entry : remapping )
-    {
-        oldColors[ entry.second ] = GetLayerColor( GERBER_DRAW_LAYER( entry.second ) );
         oldVisibility[ entry.second ] = IsLayerVisible( entry.second );
-    }
 
     for( const std::pair<const int, int>& entry : remapping )
-    {
-        SetLayerColor( GERBER_DRAW_LAYER( entry.first ), oldColors[ entry.second ] );
         newVisibility.set( entry.first, oldVisibility[ entry.second ] );
-    }
 
     std::unordered_map<int, int> view_remapping;
 
