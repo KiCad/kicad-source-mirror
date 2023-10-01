@@ -142,8 +142,8 @@ double KIPLATFORM::UI::GetPixelScaleFactor( const wxWindow* aWindow )
 
 double KIPLATFORM::UI::GetContentScaleFactor( const wxWindow* aWindow )
 {
-    // TODO: Check if this should be different on macOS
-    return GetPixelScaleFactor( aWindow );
+    // Native GUI resolution on Retina displays
+    return GetPixelScaleFactor( aWindow ) / 2.0;
 }
 
 
