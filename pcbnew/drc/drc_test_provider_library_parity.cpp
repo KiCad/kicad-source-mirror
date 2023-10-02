@@ -541,17 +541,17 @@ bool modelNeedsUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b, REPORTER* aRepo
 }
 
 
-bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* aReporter )
+bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReporter )
 {
     UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
 
-    wxASSERT( aLibFootprint );
+    wxASSERT( aLibFP );
     bool diff = false;
 
     // To avoid issues when comparing the footprint on board and the footprint in library
     // use a footprint not flipped, not rotated and at position 0,0.
     // Otherwise one can see differences when comparing coordinates of some items
-    if( IsFlipped() || GetPosition() != VECTOR2I( 0, 0 )  || GetOrientation() != ANGLE_0 )
+    if( IsFlipped() || GetPosition() != VECTOR2I( 0, 0 ) || GetOrientation() != ANGLE_0 )
     {
         std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( Clone() ) );
         temp->SetParentGroup( nullptr );
@@ -571,26 +571,24 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
                 static_cast<PCB_SHAPE*>( item )->NormalizeRect();
         }
 
-        diff = temp->FootprintNeedsUpdate( aLibFootprint, aReporter );
+        diff = temp->FootprintNeedsUpdate( aLibFP, aReporter );
 
-        // This temporary footprint must not have a parent when it goes out of scope because it must
-        // not trigger the IncrementTimestamp call in ~FOOTPRINT.
+        // This temporary footprint must not have a parent when it goes out of scope because it
+        // must not trigger the IncrementTimestamp call in ~FOOTPRINT.
         temp->SetParent( nullptr );
         return diff;
     }
 
-    TEST( GetLibDescription(), aLibFootprint->GetLibDescription(),
-          _( "Footprint descriptions differ." ) );
-    TEST( GetKeywords(), aLibFootprint->GetKeywords(),
-          _( "Footprint keywords differ." ) );
+    TEST( GetLibDescription(), aLibFP->GetLibDescription(), _( "Footprint descriptions differ." ) );
+    TEST( GetKeywords(), aLibFP->GetKeywords(), _( "Footprint keywords differ." ) );
 
 #define TEST_ATTR( a, b, attr, msg ) TEST( ( a & attr ), ( b & attr ), msg )
 
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
-              _( "Footprint types differ." ) );
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES,
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
+               _( "Footprint types differ." ) );
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES,
                _( "Allow bridged solder mask apertures between pads settings differ." ) );
-    TEST_ATTR( GetAttributes(), aLibFootprint->GetAttributes(), FP_ALLOW_MISSING_COURTYARD,
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_MISSING_COURTYARD,
                _( "Exempt from courtyard requirement settings differ." ) );
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
@@ -601,27 +599,29 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     //
     // On the other hand, if we report them then boards that override at the board level are
     // going to be VERY noisy.
+    //
+    // For now we report them if there's a reporter, but we DON'T generate DRC errors on them.
     if( aReporter )
     {
-        TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance(),
+        TEST( GetLocalClearance(), aLibFP->GetLocalClearance(),
               _( "Pad clearance overridden." ) );
-        TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin(),
+        TEST( GetLocalSolderMaskMargin(), aLibFP->GetLocalSolderMaskMargin(),
               _( "Solder mask expansion overridden." ) );
-        TEST( GetLocalSolderPasteMargin(), aLibFootprint->GetLocalSolderPasteMargin(),
+        TEST( GetLocalSolderPasteMargin(), aLibFP->GetLocalSolderPasteMargin(),
               _( "Solder paste absolute clearance overridden." ) );
-        TEST_D( GetLocalSolderPasteMarginRatio(), aLibFootprint->GetLocalSolderPasteMarginRatio(),
+        TEST_D( GetLocalSolderPasteMarginRatio(), aLibFP->GetLocalSolderPasteMarginRatio(),
                 _( "Solder paste relative clearance overridden." ) );
 
-        TEST( GetZoneConnection(), aLibFootprint->GetZoneConnection(),
+        TEST( GetZoneConnection(), aLibFP->GetZoneConnection(),
               _( "Zone connection overridden." ) );
     }
 
-    TEST( GetNetTiePadGroups().size(), aLibFootprint->GetNetTiePadGroups().size(),
+    TEST( GetNetTiePadGroups().size(), aLibFP->GetNetTiePadGroups().size(),
           _( "Net tie pad groups differ." ) );
 
     for( size_t ii = 0; ii < GetNetTiePadGroups().size(); ++ii )
     {
-        TEST( GetNetTiePadGroups()[ii], aLibFootprint->GetNetTiePadGroups()[ii],
+        TEST( GetNetTiePadGroups()[ii], aLibFP->GetNetTiePadGroups()[ii],
               _( "Net tie pad groups differ." ) );
     }
 
@@ -651,7 +651,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
                       return item->Type() == PCB_SHAPE_T;
                   } );
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> bShapes;
-    std::copy_if( aLibFootprint->GraphicalItems().begin(), aLibFootprint->GraphicalItems().end(),
+    std::copy_if( aLibFP->GraphicalItems().begin(), aLibFP->GraphicalItems().end(),
                   std::inserter( bShapes, bShapes.begin() ),
                   []( BOARD_ITEM* item )
                   {
@@ -667,13 +667,10 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     {
         for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
         {
-            if( ( *aIt )->Type() == PCB_SHAPE_T )
+            if( shapeNeedsUpdate( static_cast<PCB_SHAPE*>( *aIt ), static_cast<PCB_SHAPE*>( *bIt ) ) )
             {
-                if( shapeNeedsUpdate( static_cast<PCB_SHAPE*>( *aIt ), static_cast<PCB_SHAPE*>( *bIt ) ) )
-                {
-                    diff = true;
-                    REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
-                }
+                diff = true;
+                REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
             }
         }
     }
@@ -681,7 +678,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     CHECKPOINT;
 
     std::set<PAD*, FOOTPRINT::cmp_pads> aPads( Pads().begin(), Pads().end() );
-    std::set<PAD*, FOOTPRINT::cmp_pads> bPads( aLibFootprint->Pads().begin(), aLibFootprint->Pads().end() );
+    std::set<PAD*, FOOTPRINT::cmp_pads> bPads( aLibFP->Pads().begin(), aLibFP->Pads().end() );
 
     if( aPads.size() != bPads.size() )
     {
@@ -701,7 +698,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
 
     CHECKPOINT;
 
-    if( Models().size() != aLibFootprint->Models().size() )
+    if( Models().size() != aLibFP->Models().size() )
     {
         diff = true;
         REPORT( _( "3D model count differs." ) );
@@ -709,13 +706,13 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     else
     {
         for( size_t ii = 0; ii < Models().size(); ++ii )
-            diff |= modelNeedsUpdate( Models()[ii], aLibFootprint->Models()[ii], aReporter );
+            diff |= modelNeedsUpdate( Models()[ii], aLibFP->Models()[ii], aReporter );
     }
 
     CHECKPOINT;
 
     // Rotate/position a copy of libFootprint so that zones sort the same
-    std::unique_ptr<FOOTPRINT> libCopy( static_cast<FOOTPRINT*>( aLibFootprint->Clone() ) );
+    std::unique_ptr<FOOTPRINT> libCopy( static_cast<FOOTPRINT*>( aLibFP->Clone() ) );
 
     libCopy->SetOrientation( GetOrientation() );
     libCopy->Move( GetPosition() );
