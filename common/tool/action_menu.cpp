@@ -59,6 +59,10 @@ ACTION_MENU::ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
 
 ACTION_MENU::~ACTION_MENU()
 {
+    Disconnect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ),
+                nullptr, this );
+    Disconnect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), nullptr, this );
+
     // Set parent to NULL to prevent submenus from unregistering from a nonexistent object
     for( ACTION_MENU* menu : m_submenus )
         menu->SetParent( nullptr );
