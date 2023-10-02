@@ -174,13 +174,7 @@ void PGM_BASE::Destroy()
 
 wxApp& PGM_BASE::App()
 {
-    if( wxTheApp == nullptr )
-    {
-        // This should only happen with python scripts
-        wxApp dummy;
-        return dummy;
-    }
-
+    wxASSERT( wxTheApp );
     return *wxTheApp;
 }
 
