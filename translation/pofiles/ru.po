@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-09-29 15:57+0000\n"
+"PO-Revision-Date: 2023-10-03 21:13+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -1559,7 +1559,8 @@ msgstr "Предупреждение об открываемом файле"
 
 #: common/confirm.cpp:166 common/confirm.cpp:172
 msgid "Interleaved saves may produce very unexpected results."
-msgstr "Переплетённые сохранения могут приводить к неожиданным результатам."
+msgstr ""
+"Пересекающиеся сохранения могут привести к очень неожиданным результатам."
 
 #: common/confirm.cpp:168 common/confirm.cpp:173 common/confirm.cpp:237
 #: common/confirm.cpp:264 common/tool/actions.cpp:121
@@ -13247,9 +13248,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"При последнем редактировании файла или нескольких файлов схемы\n"
-"сохранение было выполнено некорректно.\n"
-"Желаете восстановить последние сохранённые изменения?"
+"При последнем редактировании, один или несколько\n"
+"файлов схемы не были сохранены должным образом!\n"
+"Восстановить последние изменения из резервной копии?"
 
 #: eeschema/files-io.cpp:1443
 #, c-format
