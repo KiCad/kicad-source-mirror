@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-09-19 08:56+0000\n"
+"PO-Revision-Date: 2023-10-02 18:02+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -19442,7 +19442,7 @@ msgstr "Dコード番号を表示"
 
 #: gerbview/tools/gerbview_actions.cpp:191
 msgid "Show in Differential Mode"
-msgstr "差動モードで表示"
+msgstr "差分モードで表示"
 
 #: gerbview/tools/gerbview_actions.cpp:191
 msgid "Show layers in differential compare mode"
