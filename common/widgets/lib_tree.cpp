@@ -219,8 +219,36 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
 LIB_TREE::~LIB_TREE()
 {
-    // Stop the timer during destruction early to avoid potential race conditions (that do happen)
-    m_debounceTimer->Stop();
+    Unbind( wxEVT_TIMER, &LIB_TREE::onHoverTimer, this, m_hoverTimer.GetId() );
+
+    m_tree_ctrl->Unbind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
+    m_tree_ctrl->Unbind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
+    m_tree_ctrl->Unbind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu, this );
+    m_tree_ctrl->Unbind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &LIB_TREE::onHeaderContextMenu,
+                         this );
+
+    Unbind( wxEVT_IDLE, &LIB_TREE::onIdle, this );
+    m_tree_ctrl->Unbind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
+    Unbind( EVT_LIBITEM_SELECTED, &LIB_TREE::onPreselect, this );
+
+    if( m_query_ctrl )
+    {
+        m_query_ctrl->Unbind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
+
+        m_query_ctrl->Unbind( wxEVT_SEARCH_CANCEL, &LIB_TREE::onQueryText, this );
+        m_query_ctrl->Unbind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
+        m_query_ctrl->Unbind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
+    }
+
+    // Stop the timer during destruction early to avoid potential race conditions (that do happen)]
+    if( m_debounceTimer )
+    {
+        m_debounceTimer->Stop();
+        Unbind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
+    }
+
+    if( m_details_ctrl )
+        m_details_ctrl->Unbind( wxEVT_HTML_LINK_CLICKED, &LIB_TREE::onDetailsLink, this );
 
     m_hoverTimer.Stop();
     hidePreview();
@@ -708,7 +736,7 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
 void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
 {
     hidePreview();
-    
+
     if( !m_tree_ctrl->IsShown() || m_previewDisabled )
         return;
 
@@ -874,7 +902,7 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
             }
         }
     }
-    
+
     m_previewDisabled = false;
 }
 
