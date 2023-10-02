@@ -451,6 +451,14 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
 PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
 {
+    wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
+    for( auto& [type, desc] : m_supportedFpFiles )
+    {
+        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED,
+                            &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this, type );
+    }
+    m_browseButton->Unbind( wxEVT_BUTTON, &PANEL_FP_LIB_TABLE::browseLibrariesHandler, this );
+
     // Delete the GRID_TRICKS.
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );

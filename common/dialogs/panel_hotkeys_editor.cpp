@@ -75,8 +75,8 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* bMargins = new wxBoxSizer( wxVERTICAL );
 
-    wxSearchCtrl* filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
-    bMargins->Add( filterSearch, 0,  wxEXPAND, 0 );
+    m_filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
+    bMargins->Add( m_filterSearch, 0, wxEXPAND, 0 );
 
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
     bMargins->Add( m_hotkeyListCtrl, 1, wxEXPAND, 0 );
@@ -88,15 +88,22 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
 
 #ifdef __WXGTK__
     // Work around a bug that clips the text vertically in the wxSearchCtrl on GTK
-    filterSearch->SetMinSize( wxSize( filterSearch->GetSize().x,
-                                      int( filterSearch->GetSize().y * 1.6 ) ) );
+    m_filterSearch->SetMinSize(
+            wxSize( m_filterSearch->GetSize().x, int( m_filterSearch->GetSize().y * 1.6 ) ) );
 #endif
 
     SetSizer( mainSizer );
     Layout();
 
     // Connect Events
-    filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
+    m_filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
+}
+
+
+PANEL_HOTKEYS_EDITOR::~PANEL_HOTKEYS_EDITOR()
+{
+    m_filterSearch->Unbind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch,
+                            this );
 }
 
 

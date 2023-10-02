@@ -88,6 +88,12 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aDat
 }
 
 
+DIALOG_SCH_FIND::~DIALOG_SCH_FIND()
+{
+    Disconnect( wxEVT_CHAR, wxKeyEventHandler( DIALOG_SCH_FIND::OnChar ), nullptr, this );
+}
+
+
 void DIALOG_SCH_FIND::OnClose( wxCloseEvent& aEvent )
 {
     // Notify the SCH_EDIT_FRAME

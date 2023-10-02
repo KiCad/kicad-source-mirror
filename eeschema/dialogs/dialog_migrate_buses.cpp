@@ -72,6 +72,16 @@ DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
 }
 
 
+DIALOG_MIGRATE_BUSES::~DIALOG_MIGRATE_BUSES()
+{
+    m_migration_list->Unbind( wxEVT_LIST_ITEM_SELECTED, &DIALOG_MIGRATE_BUSES::onItemSelected,
+                              this );
+
+    m_btn_accept->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MIGRATE_BUSES::onAcceptClicked,
+                          this );
+}
+
+
 void DIALOG_MIGRATE_BUSES::loadGraphData()
 {
     m_items.clear();

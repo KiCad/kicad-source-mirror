@@ -36,12 +36,14 @@
 class wxPanel;
 class wxSizer;
 class TOOL_MANAGER;
+class wxSearchCtrl;
 
 
 class PANEL_HOTKEYS_EDITOR : public RESETTABLE_PANEL
 {
 public:
     PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly );
+    ~PANEL_HOTKEYS_EDITOR();
 
     std::vector<TOOL_ACTION*>& ActionsList() { return m_actions; }
 
@@ -83,6 +85,8 @@ private:
      * This function is hidden behind an advanced config flag and not intended for users.
      */
     void dumpHotkeys();
+
+    wxSearchCtrl* m_filterSearch;
 
 protected:
     EDA_BASE_FRAME*            m_frame;

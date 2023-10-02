@@ -39,6 +39,7 @@ public:
     DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, SCH_SEARCH_DATA* aData,
                      const wxPoint& aPosition = wxDefaultPosition,
                      const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
+    ~DIALOG_SCH_FIND();
 
     void SetFindEntries( const wxArrayString& aEntries, const wxString& aFindString );
     wxArrayString GetFindEntries() const;
