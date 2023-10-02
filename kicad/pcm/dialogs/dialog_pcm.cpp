@@ -184,6 +184,10 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
 
 DIALOG_PCM::~DIALOG_PCM()
 {
+    Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_PCM::OnCloseWindow, this );
+    m_sdbSizer1Cancel->Unbind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
+    m_sdbSizer1Apply->Unbind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
+
     m_pcm->SaveInstalledPackages();
     m_pcm->SetDialogWindow( nullptr );
     m_pcm->RunBackgroundUpdate();
