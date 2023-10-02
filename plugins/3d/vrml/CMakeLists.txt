@@ -24,7 +24,6 @@ include_directories(
 #
 
 add_library( s3d_plugin_vrml MODULE
-        ${CMAKE_SOURCE_DIR}/common/exceptions.cpp
         vrml.cpp
         x3d.cpp
         wrlproc.cpp

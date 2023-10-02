@@ -432,7 +432,6 @@ set( COMMON_SRCS
     eda_tools.cpp
     env_paths.cpp
     env_vars.cpp
-    exceptions.cpp
     executable_names.cpp
     filename_resolver.cpp
     file_history.cpp
