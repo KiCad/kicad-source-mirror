@@ -549,7 +549,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
 
-    IO_MGR::PCB_FILE_T pluginType = IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
+    IO_MGR::PCB_FILE_T pluginType = IO_MGR::KICAD_SEXP;
+
+    if( !is_new )
+        pluginType = IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
 
     if( pluginType == IO_MGR::FILE_TYPE_NONE )
         return false;
