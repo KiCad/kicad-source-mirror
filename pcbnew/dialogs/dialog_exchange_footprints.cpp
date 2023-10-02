@@ -413,7 +413,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
          */
         wxString netlist;
 
-        netlist << wxString::Format( wxS( "%ld\r" ), m_currentFootprint->Pads().size() );
+        netlist << wxString::Format( wxS( "%u\r" ), m_currentFootprint->GetUniquePadCount() );
         netlist << EscapeString( m_currentFootprint->GetFilters(), CTX_LINE ) << wxS( "\r" );
 
         std::string payload( netlist.ToStdString() );

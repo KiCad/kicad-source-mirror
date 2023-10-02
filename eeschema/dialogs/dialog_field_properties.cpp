@@ -24,11 +24,13 @@
  */
 
 #include <widgets/bitmap_button.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>
 #include <settings/color_settings.h>
 #include <bitmaps.h>
 #include <kiway.h>
+#include <kiway_express.h>
 #include <confirm.h>
 #include <common.h>
 #include <string_utils.h>
@@ -184,6 +186,10 @@ void DIALOG_FIELD_PROPERTIES::init()
     m_TextValueSelectButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
 
+    if( m_fieldId == FOOTPRINT_FIELD )
+    {
+    }
+
     m_TextCtrl->Enable( true );
 
     GetSizer()->SetSizeHints( this );
@@ -219,6 +225,9 @@ void DIALOG_FIELD_PROPERTIES::OnTextValueSelectButtonClick( wxCommandEvent& aEve
 
     if( KIWAY_PLAYER* frame = Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true ) )
     {
+        KIWAY_EXPRESS event( FRAME_FOOTPRINT_CHOOSER, MAIL_SYMBOL_NETLIST, m_netlist );
+        frame->KiwayMailIn( event );
+
         if( frame->ShowModal( &fpid, this ) )
         {
             if( m_StyledTextCtrl->IsShown() )
@@ -418,6 +427,28 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     if( m_fieldId == VALUE_FIELD )
         m_text = UnescapeString( aField->GetText() );
 
+    if( m_fieldId == FOOTPRINT_FIELD )
+    {
+        LIB_SYMBOL* symbol = aField->GetParent();
+        wxString    netlist;
+
+        /*
+         * Symbol netlist format:
+         *   pinCount
+         *   fpFilters
+         */
+        netlist << wxString::Format( wxS( "%d\r" ), symbol->GetPinCount() );
+
+        wxArrayString fpFilters = symbol->GetFPFilters();
+
+        if( !fpFilters.IsEmpty() )
+            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        m_netlist = netlist;
+    }
+
     m_font = aField->GetFont();
 
     m_nameVisible->Show();
@@ -452,7 +483,26 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aField->GetParent() );
+        wxString    netlist;
+
         m_fieldId = aField->GetId();
+
+        /*
+         * Symbol netlist format:
+         *   pinCount
+         *   fpFilters
+         */
+        netlist << wxString::Format( wxS( "%zu\r" ), symbol->GetFullPinCount() );
+
+        wxArrayString fpFilters = symbol->GetLibSymbolRef()->GetFPFilters();
+
+        if( !fpFilters.IsEmpty() )
+            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        m_netlist = netlist;
     }
     else if( aField->GetParent() && aField->GetParent()->Type() == SCH_SHEET_T )
     {

@@ -1096,6 +1096,14 @@ std::vector<LIB_PIN*> LIB_SYMBOL::GetAllLibPins() const
 }
 
 
+int LIB_SYMBOL::GetPinCount()
+{
+    std::vector<LIB_PIN*> pinList;
+
+    GetPins( pinList, 0, 1 );   // All units, but a single convert
+    return pinList.size();
+}
+
 
 LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aConvert ) const
 {

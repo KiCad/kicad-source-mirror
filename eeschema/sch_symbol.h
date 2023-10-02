@@ -517,9 +517,9 @@ public:
     std::vector<LIB_PIN*> GetAllLibPins() const;
 
     /**
-     * @return a count of pins for all units / converts.
+     * @return a count of pins for all units.
      */
-    size_t GetFullPinCount() { return GetAllLibPins().size(); }
+    size_t GetFullPinCount() { return m_part ? m_part->GetPinCount() : 0; }
 
     /**
      * @return the SCH_PIN associated with a particular LIB_PIN.

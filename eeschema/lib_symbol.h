@@ -430,8 +430,6 @@ public:
 
     void RemoveField( LIB_FIELD* aField ) { RemoveDrawItem( aField ); }
 
-    size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
-
     size_t GetFieldCount() const { return m_drawings.size( LIB_FIELD_T ); }
 
     /**
@@ -456,7 +454,7 @@ public:
     /**
      * @return a count of pins for all units / converts.
      */
-    int GetPinCount() override { return GetAllLibPins().size(); }
+    int GetPinCount() override;
 
     /**
      * Return pin object with the requested pin \a aNumber.

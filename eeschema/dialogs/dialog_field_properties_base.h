@@ -13,6 +13,7 @@
 class BITMAP_BUTTON;
 class COLOR_SWATCH;
 class FONT_CHOICE;
+class STD_BITMAP_BUTTON;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -48,7 +49,7 @@ class DIALOG_FIELD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_textLabel;
 		wxTextCtrl* m_TextCtrl;
 		wxStyledTextCtrl* m_StyledTextCtrl;
-		wxBitmapButton* m_TextValueSelectButton;
+		STD_BITMAP_BUTTON* m_TextValueSelectButton;
 		wxStaticText* m_note;
 		wxCheckBox* m_visible;
 		wxCheckBox* m_nameVisible;

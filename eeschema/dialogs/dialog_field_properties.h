@@ -107,6 +107,7 @@ protected:
     bool              m_firstFocus;
 
     SCINTILLA_TRICKS* m_scintillaTricks;
+    std::string       m_netlist;
 };
 
 
