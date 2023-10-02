@@ -1168,12 +1168,14 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
         item->Plot( aPlotter, background );
     }
 
+    // Plot the background items
     for( const SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
         item->Plot( aPlotter, background );
     }
 
+    // Plot the foreground items
     for( const SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
@@ -1187,7 +1189,10 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
         aPlotter->SetCurrentLineWidth( std::max( sym->GetPenWidth(), defaultPenWidth ) );
 
         for( SCH_FIELD field : sym->GetFields() )
+        {
+            field.ClearRenderCache();
             field.Plot( aPlotter, false );
+        }
 
         sym->PlotPins( aPlotter );
 
