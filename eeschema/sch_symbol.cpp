@@ -2271,6 +2271,17 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
                 tempPin->SetFlags( IS_DANGLING );
         }
 
+        for( LIB_ITEM& item : tempSymbol.GetDrawItems() )
+        {
+            if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
+            {
+                // Use SCH_FIELD's text resolver
+                SCH_FIELD dummy( (SCH_ITEM*) this, -1 );
+                dummy.SetText( text->GetText() );
+                text->SetText( dummy.GetShownText( false ) );
+            }
+        }
+
         TRANSFORM temp = GetTransform();
         aPlotter->StartBlock( nullptr );
 
@@ -2279,8 +2290,11 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
             tempSymbol.Plot( aPlotter, GetUnit(), GetConvert(), local_background, m_pos, temp,
                              GetDNP() );
 
-            for( const SCH_FIELD& field : m_fields )
+            for( SCH_FIELD field : m_fields )
+            {
+                field.ClearRenderCache();
                 field.Plot( aPlotter, local_background );
+            }
         }
 
         if( m_DNP )
