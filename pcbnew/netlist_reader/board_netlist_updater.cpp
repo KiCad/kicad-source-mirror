@@ -315,6 +315,16 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
+    // Test for footprint change. This is controlled by a separate flag, that will output
+    // its own message if the footprint is changed, so we just set the field here.
+    if( ( m_replaceFootprints || ( aPcbFootprint->GetAttributes() & FP_JUST_ADDED ) )
+        && !m_isDryRun )
+    {
+        aPcbFootprint->Footprint().SetText(
+                aNetlistComponent
+                        ->GetFields()[TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD )] );
+    }
+
     // Test for time stamp change.
     KIID_PATH new_path = aNetlistComponent->GetPath();
 
@@ -348,14 +358,21 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     for( PCB_FIELD* field : aPcbFootprint->GetFields() )
     {
-        // These fields are individually checked above, and are not currently present in (fields) anyway.
+        // These fields are individually checked above
         if( field->IsReference() || field->IsValue() || field->IsFootprint() )
             continue;
 
         fpFieldsAsMap[field->GetName()] = field->GetText();
     }
 
-    if( fpFieldsAsMap != aNetlistComponent->GetFields() )
+    // Remove the ref/value/footprint fields that are individually handled
+    nlohmann::ordered_map<wxString, wxString> compFields = aNetlistComponent->GetFields();
+    compFields.erase( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
+    compFields.erase( TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE_FIELD ) );
+    compFields.erase( TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) );
+
+
+    if( fpFieldsAsMap != compFields )
     {
         if( m_isDryRun )
         {
@@ -368,7 +385,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             changed = true;
 
             // Add or change field value
-            for( auto& [ name, value ] : aNetlistComponent->GetFields() )
+            for( auto& [name, value] : compFields )
             {
                 if( aPcbFootprint->HasFieldByName( name ) )
                 {
@@ -404,7 +421,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                 if( field->IsMandatoryField() )
                     continue;
 
-                if( aNetlistComponent->GetFields().count( field->GetName() ) == 0 )
+                if( compFields.count( field->GetName() ) == 0 )
                 {
                     aPcbFootprint->RemoveField( field->GetCanonicalName() );
 
