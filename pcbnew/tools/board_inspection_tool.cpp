@@ -378,7 +378,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         constraint = drcEngine.EvalRules( CONNECTION_WIDTH_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved min connection width constraint: %s." ),
+        r->Report( wxString::Format( _( "Resolved min connection width: %s." ),
                                      reportMin( m_frame, constraint ) ) );
         break;
 
@@ -415,7 +415,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     case DRCE_DRILL_OUT_OF_RANGE:
     case DRCE_MICROVIA_DRILL_OUT_OF_RANGE:
         r = dialog->AddHTMLPage( _( "Hole Size" ) );
-        reportHeader( _( "Hole diameter resolution for:" ), a, r );
+        reportHeader( _( "Hole size resolution for:" ), a, r );
 
         if( compileError )
             reportCompileError( r );
@@ -423,7 +423,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         constraint = drcEngine.EvalRules( HOLE_SIZE_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved hole size constraints: min %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
         break;
@@ -447,7 +447,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
             clearanceStr = m_frame->StringFromValue( clearance, true );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ), clearanceStr ) );
         }
 
         r->Report( "" );
@@ -467,14 +467,14 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         else
         {
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ), clearanceStr ) );
         }
 
         break;
 
     case DRCE_DRILLED_HOLES_TOO_CLOSE:
         r = dialog->AddHTMLPage( _( "Hole to Hole" ) );
-        reportHeader( _( "Hole to hole clearance resolution for:" ), a, b, r );
+        reportHeader( _( "Hole-to-hole clearance resolution for:" ), a, b, r );
 
         if( compileError )
             reportCompileError( r );
@@ -484,7 +484,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        r->Report( wxString::Format( _( "Resolved min clearance: %s." ), clearanceStr ) );
         break;
 
     case DRCE_EDGE_CLEARANCE:
@@ -499,7 +499,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+        r->Report( wxString::Format( _( "Resolved min clearance: %s." ), clearanceStr ) );
         break;
 
     case DRCE_CLEARANCE:
@@ -550,7 +550,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
             clearanceStr = m_frame->StringFromValue( clearance, true );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ), clearanceStr ) );
         }
 
         r->Report( "" );
@@ -570,7 +570,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         else
         {
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ), clearanceStr ) );
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ), clearanceStr ) );
         }
 
         break;
@@ -729,7 +729,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         {
             r->Report( "" );
             r->Report( "" );
-            reportHeader( _( "Thermal relief gap resolution for:" ), a, b, layer, r );
+            reportHeader( _( "Thermal-relief gap resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
             int gap = constraint.m_Value.Min();
@@ -743,7 +743,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             r->Report( "" );
             r->Report( "" );
-            reportHeader( _( "Spoke width resolution for:" ), a, b, layer, r );
+            reportHeader( _( "Thermal-relief spoke width resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, zone, layer, r );
             int width = constraint.m_Value.Opt();
@@ -752,12 +752,12 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved thermal relief spoke width: %s." ),
+            r->Report( wxString::Format( _( "Resolved spoke width: %s." ),
                                          m_frame->StringFromValue( width, true ) ) );
 
             r->Report( "" );
             r->Report( "" );
-            reportHeader( _( "Spoke count resolution for:" ), a, b, layer, r );
+            reportHeader( _( "Thermal-relief min spoke count resolution for:" ), a, b, layer, r );
 
             constraint = drcEngine.EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, zone, layer, r );
             int minSpokes = constraint.m_Value.Min();
@@ -766,7 +766,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved min thermal relief spoke count: %d." ),
+            r->Report( wxString::Format( _( "Resolved min spoke count: %d." ),
                                          minSpokes ) );
 
             std::shared_ptr<CONNECTIVITY_DATA> connectivity = pad->GetBoard()->GetConnectivity();
@@ -816,7 +816,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
         }
         else
@@ -830,7 +830,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             // Report a 0 clearance for solid connections
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( 0, true ) ) );
         }
 
@@ -849,7 +849,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
         {
             // Same nets....
-            r->Report( _( "Items belong to the same net. Clearance is 0." ) );
+            r->Report( _( "Items belong to the same net. Min clearance is 0." ) );
         }
         else
         {
@@ -864,7 +864,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             if( constraint.IsNull() )
             {
-                r->Report( _( "Clearance is 0." ) );
+                r->Report( _( "Min clearance is 0." ) );
             }
             else if( clearance < 0 )
             {
@@ -874,7 +874,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             }
             else
             {
-                r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                              m_frame->StringFromValue( clearance, true ) ) );
             }
         }
@@ -892,7 +892,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 && bc->GetNetname() == coupledNet )
         {
             r = dialog->AddHTMLPage( _( "Diff Pair" ) );
-            reportHeader( _( "Diff pair gap resolution for:" ), ac, bc, active, r );
+            reportHeader( _( "Diff-pair gap resolution for:" ), ac, bc, active, r );
 
             constraint = drcEngine.EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, active, r );
 
@@ -905,7 +905,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             r->Report( "" );
             r->Report( "" );
-            reportHeader( _( "Diff pair max uncoupled length resolution for:" ), ac, bc,
+            reportHeader( _( "Diff-pair max uncoupled length resolution for:" ), ac, bc,
                           active, r );
 
             if( !drcEngine.HasRulesForConstraintType( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT ) )
@@ -973,7 +973,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             if( !warning.IsEmpty() )
                 r->Report( warning );
 
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
@@ -997,7 +997,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
@@ -1041,7 +1041,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
@@ -1061,7 +1061,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 r->Report( "" );
             }
 
-            reportHeader( _( "Hole to hole clearance resolution for:" ), a, b, r );
+            reportHeader( _( "Hole-to-hole clearance resolution for:" ), a, b, r );
 
             constraint = drcEngine.EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
             clearance = constraint.m_Value.Min();
@@ -1070,7 +1070,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
@@ -1109,7 +1109,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 reportCompileError( r );
 
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
 
             r->Flush();
@@ -1138,7 +1138,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 else
                 {
                     r->Report( "" );
-                    r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+                    r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                                  m_frame->StringFromValue( clearance, true ) ) );
                 }
 
@@ -1204,7 +1204,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else
         {
             r->Report( "" );
-            r->Report( wxString::Format( _( "Resolved clearance: %s." ),
+            r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
         }
     }
@@ -1262,7 +1262,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             reportCompileError( r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Width constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved width constraints: min %s; opt %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
@@ -1282,7 +1282,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             reportCompileError( r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; opt %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
@@ -1299,7 +1299,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             reportCompileError( r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Annular width constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved annular width constraints: min %s; opt %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
@@ -1311,7 +1311,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             || item->Type() == PCB_VIA_T )
     {
         r = dialog->AddHTMLPage( _( "Hole Size" ) );
-        reportHeader( _( "Hole diameter resolution for:" ), item, r );
+        reportHeader( _( "Hole size resolution for:" ), item, r );
 
         // PADSTACKS TODO: once we have padstacks we'll need to run this per-layer....
         constraint = EVAL_RULES( HOLE_SIZE_CONSTRAINT, item, nullptr, UNDEFINED_LAYER, r );
@@ -1320,7 +1320,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             reportCompileError( r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Diameter constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved hole size constraints: min %s; opt %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
@@ -1339,7 +1339,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             reportCompileError( r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Text height constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved height constraints: min %s; opt %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
@@ -1355,7 +1355,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             reportCompileError( r );
 
         r->Report( "" );
-        r->Report( wxString::Format( _( "Text thickness constraints: min %s; opt %s; max %s." ),
+        r->Report( wxString::Format( _( "Resolved thickness constraints: min %s; opt %s; max %s." ),
                                      reportMin( m_frame, constraint ),
                                      reportOpt( m_frame, constraint ),
                                      reportMax( m_frame, constraint ) ) );
