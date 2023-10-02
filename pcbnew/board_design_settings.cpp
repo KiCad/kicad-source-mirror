@@ -723,6 +723,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_DimensionExtensionOffset,
             pcbIUScale.mmToIU( DEFAULT_DIMENSION_EXTENSION_OFFSET ) ) );
 
+    m_params.emplace_back( new PARAM<bool>( "defaults.apply_defaults_to_fp_fields",
+            &m_StyleFPFields, false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.apply_defaults_to_fp_text",
+            &m_StyleFPText, false ) );
+    m_params.emplace_back( new PARAM<bool>( "defaults.apply_defaults_to_fp_shapes",
+            &m_StyleFPShapes, false ) );
+
     m_params.emplace_back( new PARAM_SCALED<int>( "defaults.zones.min_clearance",
             &m_defaultZoneSettings.m_ZoneClearance, pcbIUScale.mmToIU( ZONE_CLEARANCE_MM ),
             pcbIUScale.mmToIU( 0.0 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );

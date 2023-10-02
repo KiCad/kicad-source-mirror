@@ -72,8 +72,6 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_showPageLimits;
 		wxCheckBox* m_cbCourtyardCollisions;
 		wxCheckBox* m_autoRefillZones;
-		wxCheckBox* m_styleFields;
-		wxCheckBox* m_styleTextAndGraphics;
 
 	public:
 

@@ -404,37 +404,12 @@ bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
         UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
     }
 
-    TEST( a->GetStroke(), b->GetStroke(), "" );
+    if( a->IsOnCopperLayer() )
+        TEST( a->GetStroke(), b->GetStroke(), "" );
+
     TEST( a->IsFilled(), b->IsFilled(), "" );
 
     TEST( a->GetLayer(), b->GetLayer(), "" );
-
-    return diff;
-}
-
-
-bool textNeedsUpdate( const PCB_TEXT* a, const PCB_TEXT* b )
-{
-    REPORTER* aReporter = nullptr;
-    bool      diff = false;
-
-    TEST( a->GetLayer(), b->GetLayer(), "" );
-    TEST( a->IsKeepUpright(), b->IsKeepUpright(), "" );
-
-    TEST( a->GetText(), b->GetText(), "" );
-
-    TEST( a->GetTextThickness(), b->GetTextThickness(), "" );
-    TEST( a->GetTextAngle(), b->GetTextAngle(), "" );
-    TEST( a->IsItalic(), b->IsItalic(), "" );
-    TEST( a->IsBold(), b->IsBold(), "" );
-    TEST( a->IsVisible(), b->IsVisible(), "" );
-    TEST( a->IsMirrored(), b->IsMirrored(), "" );
-
-    TEST( a->GetHorizJustify(), b->GetHorizJustify(), "" );
-    TEST( a->GetVertJustify(), b->GetVertJustify(), "" );
-
-    TEST( a->GetTextSize(), b->GetTextSize(), "" );
-    TEST( a->GetFPRelativePosition(), b->GetFPRelativePosition(), "" );
 
     return diff;
 }
@@ -521,21 +496,6 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
 
     if( cornersDiffer && aReporter )
         aReporter->Report( wxString::Format( _( "%s corners differ." ), ITEM_DESC( a ) ) );
-
-    return diff;
-}
-
-
-bool modelNeedsUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b, REPORTER* aReporter )
-{
-    bool diff = false;
-
-    TEST_V3D( a.m_Scale, b.m_Scale, _( "3D model scale doesn't match: " ) + a.m_Filename );
-    TEST_V3D( a.m_Rotation, b.m_Rotation, _( "3D model rotation doesn't match: " ) + a.m_Filename );
-    TEST_V3D( a.m_Offset, b.m_Offset, _( "3D model offset doesn't match: " ) + a.m_Filename );
-    TEST( a.m_Opacity, b.m_Opacity, _( "3D model opacity doesn't match: " ) + a.m_Filename );
-    TEST( a.m_Filename, b.m_Filename, _( "3D model doesn't match: " ) + a.m_Filename );
-    TEST( a.m_Show, b.m_Show, _( "3D model visibility doesn't match: " ) + a.m_Filename );
 
     return diff;
 }
@@ -694,19 +654,6 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
             else if( aReporter && padHasOverrides( *aIt, *bIt, aReporter ) )
                 diff = true;
         }
-    }
-
-    CHECKPOINT;
-
-    if( Models().size() != aLibFP->Models().size() )
-    {
-        diff = true;
-        REPORT( _( "3D model count differs." ) );
-    }
-    else
-    {
-        for( size_t ii = 0; ii < Models().size(); ++ii )
-            diff |= modelNeedsUpdate( Models()[ii], aLibFP->Models()[ii], aReporter );
     }
 
     CHECKPOINT;

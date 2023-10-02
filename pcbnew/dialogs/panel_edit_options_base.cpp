@@ -388,18 +388,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	pcbOptionsSizer->Add( sbSizerMisc, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( pcbPage, wxID_ANY, _("When Adding Footprints to PCB") ), wxVERTICAL );
-
-	m_styleFields = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	m_styleTextAndGraphics = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint text && graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleTextAndGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	pcbOptionsSizer->Add( sbSizer2, 1, wxEXPAND|wxTOP, 5 );
-
 
 	pcbPage->SetSizer( pcbOptionsSizer );
 	pcbPage->Layout();

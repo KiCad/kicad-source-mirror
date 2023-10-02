@@ -78,8 +78,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_ShowCourtyardCollisions( true ),
           m_AutoRefillZones( false ),
           m_AllowFreePads( false ),
-          m_StyleFootprintFields( false ),
-          m_StyleFootprintTextAndGraphics( false ),
           m_PnsSettings( nullptr ),
           m_FootprintViewerZoom( 1.0 ),
           m_FootprintViewerAutoZoomOnSelect( true ),
@@ -193,11 +191,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
             &m_AllowFreePads, false ) );
-
-    m_params.emplace_back( new PARAM<bool>( "editing.style_footprint_fields",
-            &m_StyleFootprintFields, false ) );
-    m_params.emplace_back( new PARAM<bool>( "editing.style_footprint_text_and_graphics",
-            &m_StyleFootprintTextAndGraphics, false ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<int>( "editing.rotation_angle",
             [this] () -> int

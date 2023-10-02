@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,7 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_dashedLineHelp;
 		wxCheckBox* m_styleFields;
 		wxCheckBox* m_styleText;
-		wxCheckBox* m_styleGrahics;
+		wxCheckBox* m_styleShapes;
 
 	public:
 

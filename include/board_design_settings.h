@@ -712,6 +712,10 @@ public:
     int               m_DimensionArrowLength;
     int               m_DimensionExtensionOffset;
 
+    bool              m_StyleFPFields;
+    bool              m_StyleFPText;
+    bool              m_StyleFPShapes;
+
     // Miscellaneous
     std::unique_ptr<PAD> m_Pad_Master; // A dummy pad to store all default parameters
                                        // when importing values or creating a new pad

@@ -352,8 +352,8 @@ void FOOTPRINT::RemoveField( const wxString& aFieldName )
 }
 
 
-void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields,
-                                      bool aStyleTextAndGraphics )
+void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields, bool aStyleText,
+                                      bool aStyleShapes )
 {
     if( aStyleFields )
     {
@@ -361,10 +361,26 @@ void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields,
             field->StyleFromSettings( board.GetDesignSettings() );
     }
 
-    if( aStyleTextAndGraphics )
+    for( BOARD_ITEM* item : m_drawings )
     {
-        for( BOARD_ITEM* item : m_drawings )
-            item->StyleFromSettings( board.GetDesignSettings() );
+        switch( item->Type() )
+        {
+        case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
+            if( aStyleText )
+                item->StyleFromSettings( board.GetDesignSettings() );
+
+            break;
+
+        case PCB_SHAPE_T:
+            if( aStyleShapes && !item->IsOnCopperLayer() )
+                item->StyleFromSettings( board.GetDesignSettings() );
+
+            break;
+
+        default:
+            break;
+        }
     }
 }
 

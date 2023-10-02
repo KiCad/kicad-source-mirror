@@ -52,6 +52,12 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_gapLengthCtrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::UNSCALED,
                                                                     settings.GetDashedLineGapRatio() ) );
 
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+
+    m_styleFields->SetValue( bds.m_StyleFPFields );
+    m_styleText->SetValue( bds.m_StyleFPText );
+    m_styleShapes->SetValue( bds.m_StyleFPShapes );
+
     return true;
 }
 
@@ -64,6 +70,12 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     settings.SetDashedLineGapRatio( EDA_UNIT_UTILS::UI::DoubleValueFromString( m_gapLengthCtrl->GetValue() ) );
 
     m_frame->GetBoard()->SetPlotOptions( settings );
+
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+
+    bds.m_StyleFPFields = m_styleFields->GetValue();
+    bds.m_StyleFPText = m_styleText->GetValue();
+    bds.m_StyleFPShapes = m_styleShapes->GetValue();
 
     KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
 

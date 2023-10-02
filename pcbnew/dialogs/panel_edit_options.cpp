@@ -87,9 +87,6 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_escClearsNetHighlight->SetValue( aCfg->m_ESCClearsNetHighlight );
     m_showPageLimits->SetValue( aCfg->m_ShowPageLimits );
     m_cbCourtyardCollisions->SetValue( aCfg->m_ShowCourtyardCollisions );
-
-    m_styleFields->SetValue( aCfg->m_StyleFootprintFields );
-    m_styleTextAndGraphics->SetValue( aCfg->m_StyleFootprintTextAndGraphics );
 }
 
 
@@ -165,9 +162,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
         cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
         cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
-
-        cfg->m_StyleFootprintFields = m_styleFields->GetValue();
-        cfg->m_StyleFootprintTextAndGraphics = m_styleTextAndGraphics->GetValue();
 
 
 #ifdef __WXOSX_MAC__

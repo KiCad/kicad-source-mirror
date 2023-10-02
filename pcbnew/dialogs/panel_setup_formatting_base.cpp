@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,16 +53,16 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Format Footprints when Added to Board") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("When Adding Footprints to Board") ), wxVERTICAL );
 
 	m_styleFields = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleFields, 0, wxALL, 5 );
+	sbSizer2->Add( m_styleFields, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_styleText = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint text"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer2->Add( m_styleText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_styleGrahics = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to footprint graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_styleGrahics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_styleShapes = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Apply board defaults to non-copper footprint shapes"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer2->Add( m_styleShapes, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bMargins->Add( sbSizer2, 0, wxEXPAND|wxALL, 5 );

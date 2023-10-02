@@ -54,6 +54,18 @@ PCB_TEXTBOX::~PCB_TEXTBOX()
 }
 
 
+void PCB_TEXTBOX::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
+{
+    PCB_SHAPE::StyleFromSettings( settings );
+
+    SetTextSize( settings.GetTextSize( GetLayer() ) );
+    SetTextThickness( settings.GetTextThickness( GetLayer() ) );
+    SetItalic( settings.GetTextItalic( GetLayer() ) );
+    SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
+    SetMirrored( IsBackLayer( GetLayer() ) );
+}
+
+
 int PCB_TEXTBOX::GetTextMargin() const
 {
     return KiROUND( GetStroke().GetWidth() / 2.0 ) + KiROUND( GetTextSize().y * 0.75 );

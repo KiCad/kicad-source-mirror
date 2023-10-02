@@ -898,8 +898,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
                 fixUuid( const_cast<KIID&>( aChild->m_Uuid ) );
             } );
 
-    newFootprint->ApplyDefaultSettings( *m_pcb, GetPcbNewSettings()->m_StyleFootprintFields,
-                                        GetPcbNewSettings()->m_StyleFootprintTextAndGraphics );
+    BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+
+    newFootprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
+                                        bds.m_StyleFPShapes );
 
     if( sourceFootprint )         // this is an update command
     {

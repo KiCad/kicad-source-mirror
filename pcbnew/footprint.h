@@ -680,7 +680,8 @@ public:
      * being created in the footprint library cache, and we want these fields to have
      * the correct default text properties.
      */
-    void ApplyDefaultSettings( const BOARD& board, bool aStyleFields, bool aStyleTextAndGraphics );
+    void ApplyDefaultSettings( const BOARD& board, bool aStyleFields, bool aStyleText,
+                               bool aStyleShapes );
 
     bool IsBoardOnly() const { return m_attributes & FP_BOARD_ONLY; }
     void SetBoardOnly( bool aIsBoardOnly = true )
@@ -864,7 +865,7 @@ public:
     /**
      * Return true if a board footprint differs from the library version.
      */
-    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* aReporter = nullptr );
+    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReporter = nullptr );
 
     /**
      * Take ownership of caller's heap allocated aInitialComments block.

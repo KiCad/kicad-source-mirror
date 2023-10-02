@@ -260,8 +260,10 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 
         if( m_pcb && !m_pcb->IsFootprintHolder() )
         {
-            footprint->ApplyDefaultSettings( *m_pcb, GetPcbNewSettings()->m_StyleFootprintFields,
-                                             GetPcbNewSettings()->m_StyleFootprintTextAndGraphics );
+            BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
+
+            footprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
+                                             bds.m_StyleFPShapes );
         }
     }
 

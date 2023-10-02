@@ -72,6 +72,8 @@ public:
     void SetRight( int aVal ) override;
     void SetBottom( int aVal ) override;
 
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
+
     int GetTextMargin() const;
 
     VECTOR2I GetDrawPos() const override;
