@@ -105,6 +105,9 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 
 PANEL_PACKAGES_VIEW::~PANEL_PACKAGES_VIEW()
 {
+    m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
+                          NULL, this );
+
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     cfg->m_PackageManager.sash_pos = m_splitter1->GetSashPosition();
 
