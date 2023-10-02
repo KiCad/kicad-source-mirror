@@ -46,7 +46,7 @@ public:
      */
     PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                              const wxArrayString& aFootprintHistoryList,
-                             std::function<bool( LIB_TREE_NODE& )> aFilter,
+                             std::function<int( LIB_TREE_NODE& )> aFilter,
                              std::function<void()> aCloseHandler );
 
     ~PANEL_FOOTPRINT_CHOOSER();
@@ -94,7 +94,7 @@ protected:
     LIB_TREE*                               m_tree;
 
     PCB_BASE_FRAME*                         m_frame;
-    std::function<bool( LIB_TREE_NODE& )>   m_filter;
+    std::function<int( LIB_TREE_NODE& )>    m_filter;
     std::function<void()>                   m_closeHandler;
 };
 

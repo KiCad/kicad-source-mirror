@@ -43,7 +43,7 @@
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                                                   const wxArrayString& aFootprintHistoryList,
-                                                  std::function<bool( LIB_TREE_NODE& )> aFilter,
+                                                  std::function<int( LIB_TREE_NODE& )> aFilter,
                                                   std::function<void()> aCloseHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_hsplitter( nullptr ),

@@ -31,10 +31,10 @@
 // increase this score.  This way, an empty search string will result in all components being
 // displayed as they have the minimum score. However, in that case, we avoid expanding all the
 // nodes asd the result is very unspecific.
-static const unsigned kLowestDefaultScore = 1;
+static const int kLowestDefaultScore = 1;
 
 
-void LIB_TREE_NODE::ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE::ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         child->ResetScore( aFilter );
@@ -219,17 +219,15 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB_ID::ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE_LIB_ID::ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         child->ResetScore( aFilter );
 
-    if( !aFilter )
-        m_Score = kLowestDefaultScore;
-    else if( (*aFilter)(*this) )
-        m_Score = kLowestDefaultScore + 1;
+    if( aFilter )
+        m_Score = kLowestDefaultScore + (*aFilter)(*this);
     else
-        m_Score = 0;
+        m_Score = kLowestDefaultScore;
 }
 
 

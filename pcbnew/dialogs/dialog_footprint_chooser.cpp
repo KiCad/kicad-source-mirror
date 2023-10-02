@@ -37,9 +37,9 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( aParent, this, aFootprintHistoryList,
             // Filter
-            []( LIB_TREE_NODE& aNode ) -> bool
+            []( LIB_TREE_NODE& aNode ) -> int
             {
-                return true;
+                return 0;
             },
             // Close handler
             [this]()

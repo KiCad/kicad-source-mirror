@@ -102,13 +102,12 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
         if( aFilter->GetFilterPowerSymbols() )
         {
-            // Note: there is only a single filter ever used for symbols (the power filter),
-            // so the code simply sets a flag based on the filter being non-null.  The filter
-            // is not (at present) actually called.
-            static std::function<bool( LIB_TREE_NODE& )> powerFilter =
-                    []( LIB_TREE_NODE& ) -> bool
+            // HACK ALERT: the only filter ever used for symbols is the power filter, so we
+            // sometimes just look for the function pointer being non-null.
+            static std::function<int( LIB_TREE_NODE& )> powerFilter =
+                    []( LIB_TREE_NODE& ) -> int
                     {
-                        return true;
+                        return 0;
                     };
 
             adapter->SetFilter( &powerFilter );

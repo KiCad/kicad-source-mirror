@@ -85,7 +85,7 @@ public:
     /**
      * Initialize score to kLowestDefaultScore, recursively.
      */
-    virtual void ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter );
+    virtual void ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter );
 
     /**
      * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
@@ -211,7 +211,7 @@ public:
      */
     void Update( LIB_TREE_ITEM* aItem );
 
-    void ResetScore( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
+    void ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter ) override;
 
     /**
      * Perform the actual search.

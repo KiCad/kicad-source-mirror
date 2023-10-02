@@ -83,7 +83,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( this, this, s_FootprintHistoryList,
             // Filter
-            [this]( LIB_TREE_NODE& aNode ) -> bool
+            [this]( LIB_TREE_NODE& aNode ) -> int
             {
                 return filterFootprint( aNode );
             },
@@ -158,37 +158,53 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     }
 }
 
-bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
+int FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 {
+    bool filtering = false;
+
+    auto patternMatch =
+            []( LIB_ID& id, std::vector<std::unique_ptr<EDA_PATTERN_MATCH>>& filters ) -> bool
+            {
+                // The matching is case insensitive
+                wxString name;
+
+                for( const std::unique_ptr<EDA_PATTERN_MATCH>& filter : filters )
+                {
+                    name.Empty();
+
+                    // If the filter contains a ':' then include the library name in the pattern
+                    if( filter->GetPattern().Contains( wxS( ":" ) ) )
+                        name = id.GetUniStringLibNickname().Lower() + wxS( ":" );
+
+                    name += id.GetUniStringLibItemName().Lower();
+
+                    if( filter->Find( name ) )
+                        return true;
+                }
+
+                return false;
+            };
+
     if( m_pinCount > 0 && m_filterByPinCount->GetValue() )
     {
+        filtering = true;
+
         if( aNode.m_PinCount != m_pinCount )
-            return false;
+            return -1;
     }
 
     if( !m_fpFilters.empty() && m_filterByFPFilters->GetValue() )
     {
-        // The matching is case insensitive
-        wxString name;
+        filtering = true;
 
-        for( const std::unique_ptr<EDA_PATTERN_MATCH>& each_filter : m_fpFilters )
-        {
-            name.Empty();
-
-            // If the filter contains a ':' character, include the library name in the pattern
-            if( each_filter->GetPattern().Contains( wxS( ":" ) ) )
-                name = aNode.m_LibId.GetUniStringLibNickname().Lower() + wxS( ":" );
-
-            name += aNode.m_LibId.GetUniStringLibItemName().Lower();
-
-            if( each_filter->Find( name ) )
-                return true;
-        }
-
-        return false;
+        if( !patternMatch( aNode.m_LibId, m_fpFilters ) )
+            return -1;
     }
 
-    return true;
+    if( filtering )
+        return 1;
+    else
+        return 0;
 }
 
 

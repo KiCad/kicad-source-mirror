@@ -56,7 +56,7 @@ protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
 private:
-    bool filterFootprint( LIB_TREE_NODE& aNode );
+    int filterFootprint( LIB_TREE_NODE& aNode );
 
     void OnPaint( wxPaintEvent& aEvent );
     void OnOK( wxCommandEvent& aEvent );
