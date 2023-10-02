@@ -94,12 +94,12 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
                 OnOK( dummy );
             } );
 
-    sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
+    sizer->Add( m_chooserPanel, 1, wxEXPAND | wxBOTTOM, 2 );
 
     wxBoxSizer* fpFilterSizer = new wxBoxSizer( wxVERTICAL );
 
     m_filterByFPFilters = new wxCheckBox( this, wxID_ANY, _( "Apply footprint filters" ) );
-    fpFilterSizer->Add( m_filterByFPFilters, 0, wxTOP | wxEXPAND, 8 );
+    fpFilterSizer->Add( m_filterByFPFilters, 0, wxTOP | wxEXPAND, 5 );
     m_filterByFPFilters->Show( false );
 
     sizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
