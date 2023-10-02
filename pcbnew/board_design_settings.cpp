@@ -116,6 +116,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
+    m_StyleFPFields = false;
+    m_StyleFPText = false;
+    m_StyleFPShapes = false;
+
     m_DimensionPrecision       = DIM_PRECISION::X_XXXX;
     m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
     m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::BARE_SUFFIX;
