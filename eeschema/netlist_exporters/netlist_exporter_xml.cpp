@@ -182,6 +182,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         value = aSymbol->GetValueFieldText( m_resolveTextVars, aSheet, false );
         footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, aSheet, false );
 
+        SCH_FIELD* footprintField = aSymbol->GetField( FOOTPRINT_FIELD );
         SCH_FIELD* datasheetField = aSymbol->GetField( DATASHEET_FIELD );
         SCH_FIELD* descriptionField = aSymbol->GetField( DESCRIPTION_FIELD );
 
@@ -197,8 +198,9 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         else
             description = descriptionField->GetText();
 
-        fields[ datasheetField->GetName() ] = datasheet;
-        fields[ descriptionField->GetName() ] = description;
+        fields[footprintField->GetName()] = footprint;
+        fields[datasheetField->GetName()] = datasheet;
+        fields[descriptionField->GetName()] = description;
 
         for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
         {
