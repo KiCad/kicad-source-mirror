@@ -246,7 +246,8 @@ public:
      * false to build a list of shape for a not rotated text ("native" shapes).
      */
     std::shared_ptr<SHAPE_COMPOUND> GetEffectiveTextShape( bool aTriangulate = true,
-                                                           bool aUseTextRotation = true ) const;
+                                                           const BOX2I& aBBox = BOX2I(),
+                                                           const EDA_ANGLE& aAngle = ANGLE_0 ) const;
 
     /**
      * Test if \a aPoint is within the bounds of this object.

@@ -906,7 +906,8 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
 
 std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangulate,
-                                                                 bool aUseTextRotation ) const
+                                                                 const BOX2I& aBBox,
+                                                                 const EDA_ANGLE& aAngle ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
@@ -918,12 +919,12 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
-    if( aUseTextRotation )
+    if( aBBox.GetWidth() )
     {
-        attrs.m_Angle = GetDrawRotation();
-
-        if( font->IsOutline() )
-            cache = GetRenderCache( font, shownText, VECTOR2I() );
+        drawPos = aBBox.GetCenter();
+        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+        attrs.m_Angle = aAngle;
     }
     else
     {
