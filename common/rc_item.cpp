@@ -624,7 +624,7 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         // wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED doesn't get propogated from the Select()
         // call on (at least) MSW.
         wxDataViewEvent selectEvent( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, m_view, selItem );
-        m_view->ProcessCommand( selectEvent );
+        m_view->GetEventHandler()->ProcessEvent( selectEvent );
     }
 
     for( RC_TREE_NODE* item : to_delete )
