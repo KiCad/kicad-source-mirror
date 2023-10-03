@@ -181,9 +181,9 @@ void SCINTILLA_TRICKS::onModified( wxStyledTextEvent& aEvent )
 {
     if( m_singleLine )
     {
-        wxString text = m_te->GetText();
+        wxString curr_text = m_te->GetText();
 
-        if( text.Contains( wxS( "\n" ) ) || text.Contains( wxS( "\r" ) ) )
+        if( curr_text.Contains( wxS( "\n" ) ) || curr_text.Contains( wxS( "\r" ) ) )
         {
             // Scintilla won't allow us to call SetText() from within this event processor,
             // so we have to delay the processing.

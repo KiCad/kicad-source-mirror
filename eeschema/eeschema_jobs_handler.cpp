@@ -150,7 +150,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
 
-    PLOT_FORMAT format;
+    PLOT_FORMAT format = PLOT_FORMAT::PDF;
     switch( aPlotJob->m_plotFormat )
     {
     case SCH_PLOT_FORMAT::DXF: format = PLOT_FORMAT::DXF; break;
@@ -161,7 +161,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case SCH_PLOT_FORMAT::GERBER: format = PLOT_FORMAT::GERBER; break;
     }
 
-    HPGL_PAGE_SIZE hpglPageSize;
+    HPGL_PAGE_SIZE hpglPageSize = HPGL_PAGE_SIZE::DEFAULT;
     switch( aPlotJob->m_HPGLPaperSizeSelect )
     {
     case JOB_HPGL_PAGE_SIZE::DEFAULT: hpglPageSize = HPGL_PAGE_SIZE::DEFAULT; break;
@@ -175,9 +175,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_HPGL_PAGE_SIZE::SIZE_B: hpglPageSize = HPGL_PAGE_SIZE::SIZE_B; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_C: hpglPageSize = HPGL_PAGE_SIZE::SIZE_C; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_D: hpglPageSize = HPGL_PAGE_SIZE::SIZE_D; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_E: hpglPageSize = HPGL_PAGE_SIZE::SIZE_E; break;
     }
 
-    HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin;
+    HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
     switch( aPlotJob->m_HPGLPlotOrigin )
     {
     case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT; break;
@@ -186,7 +187,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE; break;
     }
 
-    int pageSizeSelect;
+    int pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO;
     switch( aPlotJob->m_pageSizeSelect )
     {
     case JOB_PAGE_SIZE::PAGE_SIZE_A: pageSizeSelect = PageFormatReq::PAGE_SIZE_A; break;
