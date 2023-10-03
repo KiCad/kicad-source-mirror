@@ -149,7 +149,7 @@ double PLOTTER::GetDashGapLenIU( int aLineWidth ) const
 void PLOTTER::Arc( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd, FILL_T aFill,
                    int aWidth )
 {
-    VECTOR2D aCenter = CalcArcCenter( aStart, aMid, aEnd );   
+    VECTOR2D aCenter = CalcArcCenter( aStart, aMid, aEnd );
 
     EDA_ANGLE startAngle( aStart - aCenter );
     EDA_ANGLE endAngle( aEnd - aCenter );
@@ -538,16 +538,16 @@ void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA
         corners[ii] += aPos;
     }
 
-    // Gen shape:
+    // Gen shape (2 lines and 2 180 deg arcs):
     MoveTo( corners[0] );
     FinishTo( corners[1] );
 
-    Arc( corners[2], orient + ANGLE_180, orient + ANGLE_360, radius, FILL_T::NO_FILL );
+    Arc( corners[2], -orient, ANGLE_180, radius, FILL_T::NO_FILL );
 
     MoveTo( corners[3] );
     FinishTo( corners[4] );
 
-    Arc( corners[5], orient, orient + ANGLE_180, radius, FILL_T::NO_FILL );
+    Arc( corners[5], -orient, -ANGLE_180, radius, FILL_T::NO_FILL );
 }
 
 
