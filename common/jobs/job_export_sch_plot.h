@@ -21,6 +21,7 @@
 #ifndef JOB_EXPORT_SCH_PLOT_H
 #define JOB_EXPORT_SCH_PLOT_H
 
+#include <vector>
 #include <kicommon.h>
 #include <wx/string.h>
 #include "job.h"
