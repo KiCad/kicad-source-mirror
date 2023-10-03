@@ -146,10 +146,69 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     std::unique_ptr<KIGFX::SCH_RENDER_SETTINGS> renderSettings =
             std::make_unique<KIGFX::SCH_RENDER_SETTINGS>();
-    InitRenderSettings( renderSettings.get(), aPlotJob->settings.m_theme, sch, aPlotJob->m_drawingSheet );
+    InitRenderSettings( renderSettings.get(), aPlotJob->m_theme, sch, aPlotJob->m_drawingSheet );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
-    schPlotter->Plot( aPlotJob->m_plotFormat, aPlotJob->settings, renderSettings.get(), m_reporter );
+
+    PLOT_FORMAT format;
+    switch( aPlotJob->m_plotFormat )
+    {
+    case SCH_PLOT_FORMAT::DXF: format = PLOT_FORMAT::DXF; break;
+    case SCH_PLOT_FORMAT::PDF: format = PLOT_FORMAT::PDF; break;
+    case SCH_PLOT_FORMAT::SVG: format = PLOT_FORMAT::SVG; break;
+    case SCH_PLOT_FORMAT::POST: format = PLOT_FORMAT::POST; break;
+    case SCH_PLOT_FORMAT::HPGL: format = PLOT_FORMAT::HPGL; break;
+    case SCH_PLOT_FORMAT::GERBER: format = PLOT_FORMAT::GERBER; break;
+    }
+
+    HPGL_PAGE_SIZE hpglPageSize;
+    switch( aPlotJob->m_HPGLPaperSizeSelect )
+    {
+    case JOB_HPGL_PAGE_SIZE::DEFAULT: hpglPageSize = HPGL_PAGE_SIZE::DEFAULT; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A0: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A0; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A1: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A1; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A2: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A2; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A3: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A3; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A4: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A4; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A5: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A5; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_B: hpglPageSize = HPGL_PAGE_SIZE::SIZE_B; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_C: hpglPageSize = HPGL_PAGE_SIZE::SIZE_C; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_D: hpglPageSize = HPGL_PAGE_SIZE::SIZE_D; break;
+    }
+
+    HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin;
+    switch( aPlotJob->m_HPGLPlotOrigin )
+    {
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT; break;
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER; break;
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT; break;
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE; break;
+    }
+
+    int pageSizeSelect;
+    switch( aPlotJob->m_pageSizeSelect )
+    {
+    case JOB_PAGE_SIZE::PAGE_SIZE_A: pageSizeSelect = PageFormatReq::PAGE_SIZE_A; break;
+    case JOB_PAGE_SIZE::PAGE_SIZE_A4: pageSizeSelect = PageFormatReq::PAGE_SIZE_A4; break;
+    case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
+    }
+
+    SCH_PLOT_SETTINGS settings;
+    settings.m_blackAndWhite = aPlotJob->m_blackAndWhite;
+    settings.m_HPGLPaperSizeSelect = hpglPageSize;
+    settings.m_HPGLPenSize = aPlotJob->m_HPGLPenSize;
+    settings.m_HPGLPlotOrigin = hpglOrigin;
+    settings.m_outputDirectory = aPlotJob->m_outputDirectory;
+    settings.m_outputFile = aPlotJob->m_outputFile;
+    settings.m_pageSizeSelect = pageSizeSelect;
+    settings.m_plotAll = aPlotJob->m_plotAll;
+    settings.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;
+    settings.m_plotPages = aPlotJob->m_plotPages;
+    settings.m_theme = aPlotJob->m_theme;
+    settings.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
+
+    schPlotter->Plot( format, settings, renderSettings.get(), m_reporter );
 
     return CLI::EXIT_CODES::OK;
 }

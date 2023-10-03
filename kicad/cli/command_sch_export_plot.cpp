@@ -36,14 +36,16 @@
 #define ARG_HPGL_ORIGIN "--origin"
 #define ARG_PAGES "--pages"
 
-const HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
-    HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT, HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER,
-    HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE, HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT
+const JOB_HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
+    JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT,
+    JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER,
+    JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE,
+    JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT
 };
 
 CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                                                        const std::string& aDescription,
-                                                       PLOT_FORMAT        aPlotFormat,
+                                                       SCH_PLOT_FORMAT        aPlotFormat,
                                                        bool               aOutputIsDir ) :
         COMMAND( aName ),
         m_plotFormat( aPlotFormat )
@@ -79,7 +81,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
             .help( UTF8STDSTR( _( "List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages" ) ) )
             .metavar( "PAGE_LIST" );
 
-    if( aPlotFormat == PLOT_FORMAT::HPGL )
+    if( aPlotFormat == SCH_PLOT_FORMAT::HPGL )
     {
         m_argParser.add_argument( "-p", ARG_HPGL_PEN_SIZE )
                 .help( UTF8STDSTR( _( "Pen size [mm]" ) ) )
@@ -117,27 +119,26 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob =
             std::make_unique<JOB_EXPORT_SCH_PLOT>( true, m_plotFormat, filename );
 
-    SCH_PLOT_SETTINGS& settings = plotJob->settings;
-    settings.m_plotPages = pages;
-    settings.m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
-    settings.m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
-    settings.m_pageSizeSelect = PAGE_SIZE_AUTO;
-    settings.m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
-    settings.m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    plotJob->m_plotPages = pages;
+    plotJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
+    plotJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
+    plotJob->m_pageSizeSelect = JOB_PAGE_SIZE::PAGE_SIZE_AUTO;
+    plotJob->m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
+    plotJob->m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     if( m_outputArgExpectsDir )
-        settings.m_outputDirectory = m_argOutput;
+        plotJob->m_outputDirectory = m_argOutput;
     else
-        settings.m_outputFile = m_argOutput;
+        plotJob->m_outputFile = m_argOutput;
 
-    settings.m_plotAll = settings.m_plotPages.size() == 0;
+    plotJob->m_plotAll = plotJob->m_plotPages.size() == 0;
 
     plotJob->m_drawingSheet = m_argDrawingSheet;
     plotJob->SetVarOverrides( m_argDefineVars );
 
     // HPGL local options
-    if( m_plotFormat == PLOT_FORMAT::HPGL )
+    if( m_plotFormat == SCH_PLOT_FORMAT::HPGL )
     {
-        settings.m_HPGLPenSize =
+        plotJob->m_HPGLPenSize =
                 m_argParser.get<double>( ARG_HPGL_PEN_SIZE ) * schIUScale.IU_PER_MM;
         int origin = m_argParser.get<int>( ARG_HPGL_ORIGIN );
         if( origin < 0 || origin > 3 )
@@ -145,7 +146,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
             wxFprintf( stderr, _( "HPGL origin option must be 0, 1, 2 or 3\n" ) );
             return EXIT_CODES::ERR_ARGS;
         }
-        settings.m_HPGLPlotOrigin = hpgl_origin_ops[origin];
+        plotJob->m_HPGLPlotOrigin = hpgl_origin_ops[origin];
     }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, plotJob.get() );

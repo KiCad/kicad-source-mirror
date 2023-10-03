@@ -22,7 +22,7 @@
 #define COMMAND_EXPORT_SCH_PLOT_H
 
 #include "command_pcb_export_base.h"
-#include <plotters/plotter.h>
+#include <jobs/job_export_sch_plot.h>
 
 namespace CLI
 {
@@ -31,10 +31,10 @@ class SCH_EXPORT_PLOT_COMMAND : public COMMAND
 public:
     SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                              const std::string& aDescription,
-                             PLOT_FORMAT aPlotFormat,
+                             SCH_PLOT_FORMAT aPlotFormat,
                              bool aOutputIsDir = true );
 
-    PLOT_FORMAT m_plotFormat;
+    SCH_PLOT_FORMAT m_plotFormat;
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

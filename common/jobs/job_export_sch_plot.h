@@ -21,26 +21,80 @@
 #ifndef JOB_EXPORT_SCH_PLOT_H
 #define JOB_EXPORT_SCH_PLOT_H
 
+#include <kicommon.h>
 #include <wx/string.h>
-#include <plotters/plotter.h>
 #include "job.h"
 
-class JOB_EXPORT_SCH_PLOT : public JOB
+
+enum class JOB_HPGL_PLOT_ORIGIN_AND_UNITS
+{
+    PLOTTER_BOT_LEFT,
+    PLOTTER_CENTER,
+    USER_FIT_PAGE,
+    USER_FIT_CONTENT,
+};
+
+
+enum class JOB_HPGL_PAGE_SIZE
+{
+    DEFAULT = 0,
+    SIZE_A5,
+    SIZE_A4,
+    SIZE_A3,
+    SIZE_A2,
+    SIZE_A1,
+    SIZE_A0,
+    SIZE_A,
+    SIZE_B,
+    SIZE_C,
+    SIZE_D,
+    SIZE_E,
+};
+
+
+enum class JOB_PAGE_SIZE
+{
+    PAGE_SIZE_AUTO,
+    PAGE_SIZE_A4,
+    PAGE_SIZE_A
+};
+
+
+enum class SCH_PLOT_FORMAT
+{
+    HPGL,
+    GERBER,
+    POST,
+    DXF,
+    PDF,
+    SVG
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT : public JOB
 {
 public:
-    JOB_EXPORT_SCH_PLOT( bool aIsCli, PLOT_FORMAT aPlotFormat, wxString aFilename ) :
-            JOB( "plot", aIsCli ),
-            m_plotFormat( aPlotFormat ),
-            m_filename( aFilename ),
-            settings(),
-            m_drawingSheet()
-    {
-    }
+    JOB_EXPORT_SCH_PLOT( bool aIsCli, SCH_PLOT_FORMAT aPlotFormat, wxString aFilename );
 
-    PLOT_FORMAT       m_plotFormat;
+    SCH_PLOT_FORMAT   m_plotFormat;
     wxString          m_filename;
-    SCH_PLOT_SETTINGS settings;
     wxString          m_drawingSheet;
+
+    bool                  m_plotAll;
+    bool                  m_plotDrawingSheet;
+    std::vector<wxString> m_plotPages;
+
+    bool           m_blackAndWhite;
+    JOB_PAGE_SIZE  m_pageSizeSelect;
+    bool           m_useBackgroundColor;
+    double         m_HPGLPenSize; // for HPGL format only: pen size
+    JOB_HPGL_PAGE_SIZE m_HPGLPaperSizeSelect;
+    wxString       m_theme;
+
+    wxString m_outputDirectory;
+    wxString m_outputFile;
+
+    JOB_HPGL_PLOT_ORIGIN_AND_UNITS m_HPGLPlotOrigin;
 };
 
 #endif
