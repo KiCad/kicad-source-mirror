@@ -62,12 +62,12 @@ BEGIN_EVENT_TABLE( SYMBOL_CHOOSER_FRAME, SCH_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-#define PARENT_STYLE ( wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN \
-                       | wxWANTS_CHARS | wxFRAME_NO_TASKBAR | wxFRAME_FLOAT_ON_PARENT )
+#define MODAL_FRAME ( wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN \
+                      | wxWANTS_CHARS | wxFRAME_NO_TASKBAR | wxSTAY_ON_TOP )
 
 SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SYMBOL_CHOOSER, _( "Symbol Chooser" ),
-                        wxDefaultPosition, wxDefaultSize, PARENT_STYLE, SYMBOL_CHOOSER_FRAME_NAME )
+                        wxDefaultPosition, wxDefaultSize, MODAL_FRAME, SYMBOL_CHOOSER_FRAME_NAME )
 {
     SetModal( true );
 
