@@ -122,9 +122,11 @@ std::vector<COMPLEX> NGSPICE::GetComplexVector( const std::string& aName, int aM
 {
     LOCALE_IO            c_locale;       // ngspice works correctly only with C locale
     std::vector<COMPLEX> data;
-    vector_info*         vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi )
+    if( aMaxLen == 0 )
+        return data;
+
+    if( vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() ) )
     {
         int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
         data.reserve( length );
@@ -149,9 +151,11 @@ std::vector<double> NGSPICE::GetRealVector( const std::string& aName, int aMaxLe
 {
     LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
-    vector_info*        vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi )
+    if( aMaxLen == 0 )
+        return data;
+
+    if( vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() ) )
     {
         int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
         data.reserve( length );
@@ -179,9 +183,11 @@ std::vector<double> NGSPICE::GetImaginaryVector( const std::string& aName, int a
 {
     LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
-    vector_info*        vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi )
+    if( aMaxLen == 0 )
+        return data;
+
+    if( vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() ) )
     {
         int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
         data.reserve( length );
@@ -201,9 +207,11 @@ std::vector<double> NGSPICE::GetGainVector( const std::string& aName, int aMaxLe
 {
     LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
-    vector_info*        vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi )
+    if( aMaxLen == 0 )
+        return data;
+
+    if( vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() ) )
     {
         int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
         data.reserve( length );
@@ -228,9 +236,11 @@ std::vector<double> NGSPICE::GetPhaseVector( const std::string& aName, int aMaxL
 {
     LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi )
+    if( aMaxLen == 0 )
+        return data;
+
+    if( vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() ) )
     {
         int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
         data.reserve( length );
