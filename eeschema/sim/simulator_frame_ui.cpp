@@ -670,6 +670,22 @@ void SIMULATOR_FRAME_UI::SetSubWindowsSashSize()
 }
 
 
+void sortSignals( std::vector<wxString>& signals )
+{
+    std::sort( signals.begin(), signals.end(),
+            []( const wxString& lhs, const wxString& rhs )
+            {
+                // Sort voltages first
+                if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
+                    return true;
+                else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
+                    return false;
+
+                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+            } );
+}
+
+
 void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
 {
     SUPPRESS_GRID_CELL_EVENTS raii( this );
@@ -695,7 +711,13 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
     }
     else
     {
-        signals.insert( signals.end(), m_signals.begin(), m_signals.end() );
+        for( const wxString& signal : m_signals )
+            signals.push_back( signal );
+
+        for( const auto& [ id, signal ] : m_userDefinedSignals )
+            signals.push_back( signal );
+
+        sortSignals( signals );
     }
 
     if( aFilter.IsEmpty() )
@@ -897,24 +919,6 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
                 addSignal( directiveParams.Trim( true ).Trim( false ) );
         }
     }
-
-    // JEY TODO: find and add SPICE "LET" commands
-
-    // Add user-defined signals
-    for( const auto& [ signalId, signalName ] : m_userDefinedSignals )
-        addSignal( signalName );
-
-    std::sort( m_signals.begin(), m_signals.end(),
-            []( const wxString& lhs, const wxString& rhs )
-            {
-                // Sort voltages first
-                if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
-                    return true;
-                else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
-                    return false;
-
-                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
-            } );
 }
 
 
@@ -1610,7 +1614,8 @@ void SIMULATOR_FRAME_UI::SetUserDefinedSignals( const std::map<int, wxString>& a
 
 
 void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceType,
-                                      SIM_PLOT_TAB* aPlotTab, std::vector<double>* aDataX )
+                                      SIM_PLOT_TAB* aPlotTab, std::vector<double>* aDataX,
+                                      bool aClearData )
 {
     SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aPlotTab->GetSimCommand() );
 
@@ -1633,11 +1638,11 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
     std::vector<double> data_x;
     std::vector<double> data_y;
 
-    if( !aDataX )
+    if( !aDataX || aClearData )
         aDataX = &data_x;
 
     // First, handle the x axis
-    if( aDataX->empty() )
+    if( aDataX->empty() && !aClearData )
     {
         wxString xAxisName( simulator()->GetXAxis( simType ) );
 
@@ -2554,6 +2559,9 @@ void SIMULATOR_FRAME_UI::onPlotCursorUpdate( wxCommandEvent& aEvent )
 
 void SIMULATOR_FRAME_UI::OnSimUpdate()
 {
+    if( SIM_TAB* simTab = GetCurrentSimTab() )
+        simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
+
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
         plotTab->ResetScales( true );
 
@@ -2594,24 +2602,27 @@ std::vector<wxString> SIMULATOR_FRAME_UI::Signals() const
     for( const auto& [ id, signal ] : m_userDefinedSignals )
         signals.emplace_back( signal );
 
+    sortSignals( signals );
+
     return signals;
 }
 
 
 void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 {
+    if( aFinal )
+        m_refreshTimer.Stop();
+
     SIM_TAB* simTab = GetCurrentSimTab();
 
     if( !simTab )
         return;
 
-    SIM_TYPE              simType = simTab->GetSimType();
-    std::vector<wxString> oldSignals = m_signals;
-    wxString              msg;
+    SIM_TYPE simType = simTab->GetSimType();
+    wxString msg;
 
-    simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
-    applyUserDefinedSignals();
-    rebuildSignalsList();
+    if( aFinal )
+        applyUserDefinedSignals();
 
     // If there are any signals plotted, update them
     if( SIM_TAB::IsPlottable( simType ) )
@@ -2645,63 +2656,73 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
         wxCHECK_RET( plotTab, wxT( "not a SIM_PLOT_TAB" ) );
 
-        // Map of TRACE* to { vectorName, traceType }
-        std::map<TRACE*, std::pair<wxString, int>> traceMap;
+        struct TRACE_INFO
+        {
+            wxString Vector;
+            int      TraceType;
+            bool     ClearData;
+        };
+
+        std::map<TRACE*, TRACE_INFO> traceMap;
 
         for( const auto& [ name, trace ] : plotTab->GetTraces() )
-            traceMap[ trace ] = { wxEmptyString, SPT_UNKNOWN };
+            traceMap[ trace ] = { wxEmptyString, SPT_UNKNOWN, false };
+
+        auto addSignalToTraceMap =
+                [&]( const wxString& signal, bool clearData )
+                {
+                    int      traceType = SPT_UNKNOWN;
+                    wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
+
+                    if( simType == ST_AC )
+                    {
+                        for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
+                        {
+                            if( TRACE* trace = plotTab->GetTrace( vectorName, traceType+subType ) )
+                                traceMap[ trace ] = { vectorName, traceType, clearData };
+                        }
+                    }
+                    else if( simType == ST_SP )
+                    {
+                        for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
+                        {
+                            if( TRACE* trace = plotTab->GetTrace( vectorName, traceType+subType ) )
+                                traceMap[trace] = { vectorName, traceType, clearData };
+                        }
+                    }
+                    else
+                    {
+                        if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
+                            traceMap[ trace ] = { vectorName, traceType, clearData };
+                    }
+                };
 
         for( const wxString& signal : m_signals )
-        {
-            int      traceType = SPT_UNKNOWN;
-            wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
+            addSignalToTraceMap( signal, false );
 
-            if( simType == ST_AC )
-            {
-                for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
-                {
-                    if( TRACE* trace = plotTab->GetTrace( vectorName, traceType | subType ) )
-                        traceMap[ trace ] = { vectorName, traceType };
-                }
-            }
-            else if( simType == ST_SP )
-            {
-                for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
-                {
-                    if( TRACE* trace = plotTab->GetTrace( vectorName, traceType | subType ) )
-                        traceMap[trace] = { vectorName, traceType };
-                }
-            }
-            else
-            {
-                if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
-                    traceMap[ trace ] = { vectorName, traceType };
-            }
-        }
+        for( const auto& [ id, signal ] : m_userDefinedSignals )
+            addSignalToTraceMap( signal, !aFinal );
 
         // Two passes so that DC-sweep sub-traces get deleted and re-created:
 
         for( const auto& [ trace, traceInfo ] : traceMap )
         {
-            if( traceInfo.first.IsEmpty() )
+            if( traceInfo.Vector.IsEmpty() )
                 plotTab->DeleteTrace( trace );
         }
 
-        for( const auto& [ trace, traceInfo ] : traceMap )
+        for( const auto& [ trace, info ] : traceMap )
         {
             std::vector<double> data_x;
 
-            if( !traceInfo.first.IsEmpty() )
-                updateTrace( traceInfo.first, traceInfo.second, plotTab, &data_x );
+            if( !info.Vector.IsEmpty() )
+                updateTrace( info.Vector, info.TraceType, plotTab, &data_x, info.ClearData );
         }
 
         plotTab->GetPlotWin()->UpdateAll();
 
         if( aFinal )
         {
-            rebuildSignalsGrid( m_filter->GetValue() );
-            updateSignalsGrid();
-
             for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
                 UpdateMeasurement( row );
 

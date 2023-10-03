@@ -239,7 +239,7 @@ private:
      * @param aPlotTab is the tab that should receive the update.
      */
     void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab,
-                      std::vector<double>* aDataX = nullptr );
+                      std::vector<double>* aDataX = nullptr, bool aClearData = false );
 
     /**
      * Rebuild the list of signals available from the netlist.
