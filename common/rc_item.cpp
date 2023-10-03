@@ -525,11 +525,23 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 
     /// Keep a vector of elements to free after wxWidgets is definitely done accessing them
     std::vector<RC_TREE_NODE*> to_delete;
+    std::vector<RC_TREE_NODE*> expanded;
 
     if( aCurrentOnly && !current_item )
     {
         wxBell();
         return;
+    }
+
+    // wxWidgets 3.1.x on MacOS (at least) loses the expanded state of the tree when deleting
+    // items.
+    if( m_view && aCurrentOnly )
+    {
+        for( RC_TREE_NODE* node : m_tree )
+        {
+            if( m_view->IsExpanded( ToItem( node ) ) )
+                expanded.push_back( node );
+        }
     }
 
     int  lastGood = -1;
@@ -597,7 +609,23 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
     }
 
     if( m_view && aCurrentOnly && lastGood >= 0 )
-        m_view->Select( ToItem( m_tree[ lastGood ] ) );
+    {
+        for( RC_TREE_NODE* node : expanded )
+        {
+            wxDataViewItem item = ToItem( node );
+
+            if( item.IsOk() )
+                m_view->Expand( item );
+        }
+
+        wxDataViewItem selItem = ToItem( m_tree[ lastGood ] );
+        m_view->Select( selItem );
+
+        // wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED doesn't get propogated from the Select()
+        // call on (at least) MSW.
+        wxDataViewEvent selectEvent( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, m_view, selItem );
+        m_view->ProcessCommand( selectEvent );
+    }
 
     for( RC_TREE_NODE* item : to_delete )
         delete( item );
