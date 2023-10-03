@@ -1703,7 +1703,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 
         for( size_t idx = 0; idx <= outer; idx++ )
         {
-            if( TRACE* trace = aPlotTab->AddTrace( aVectorName, aTraceType ) )
+            if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
             {
                 if( data_y.size() >= size )
                 {
@@ -1720,7 +1720,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
             offset += inner;
         }
     }
-    else if( TRACE* trace = aPlotTab->AddTrace( aVectorName, aTraceType ) )
+    else if( TRACE* trace = aPlotTab->GetOrAddTrace( aVectorName, aTraceType ) )
     {
         if( data_y.size() >= size )
             aPlotTab->SetTraceData( trace, *aDataX, data_y );
@@ -2023,7 +2023,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
             {
                 wxString signalName = trace_js[ "signal" ];
                 wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
-                TRACE*   trace = plotTab->AddTrace( vectorName, trace_js[ "trace_type" ] );
+                TRACE*   trace = plotTab->GetOrAddTrace( vectorName, trace_js[ "trace_type" ] );
 
                 if( trace )
                 {

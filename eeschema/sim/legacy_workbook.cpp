@@ -324,7 +324,7 @@ bool SIMULATOR_FRAME_UI::loadLegacyWorkbook( const wxString& aPath )
             else
             {
                 wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
-                TRACE*   trace = plotTab->AddTrace( vectorName, (int) traceType );
+                TRACE*   trace = plotTab->GetOrAddTrace( vectorName, (int) traceType );
 
                 if( version >= 4 && trace )
                     parseTraceParams( plotTab, trace, signalName, param );

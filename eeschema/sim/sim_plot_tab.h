@@ -344,7 +344,7 @@ public:
     ///< Getter for math plot window
     mpWindow* GetPlotWin() const { return m_plotWin; }
 
-    TRACE* AddTrace( const wxString& aVectorName, int aType );
+    TRACE* GetOrAddTrace( const wxString& aVectorName, int aType );
 
     void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY );
 

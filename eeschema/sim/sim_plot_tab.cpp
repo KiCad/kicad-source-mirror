@@ -826,7 +826,7 @@ void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
 }
 
 
-TRACE* SIM_PLOT_TAB::AddTrace( const wxString& aVectorName, int aType )
+TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType )
 {
     TRACE* trace = GetTrace( aVectorName, aType );
 
