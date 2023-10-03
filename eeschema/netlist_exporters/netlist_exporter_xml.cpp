@@ -225,7 +225,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     if( datasheet.size() )
         aNode->AddChild( node( wxT( "datasheet" ), UnescapeString( datasheet ) ) );
 
-    if( datasheet.size() )
+    if( description.size() )
         aNode->AddChild( node( wxT( "description" ), UnescapeString( description ) ) );
 
     XNODE* xfields;
