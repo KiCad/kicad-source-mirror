@@ -928,7 +928,10 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
     }
     else
     {
-        attrs.m_Angle = ANGLE_0;
+        attrs.m_Angle = GetDrawRotation();
+
+        if( font->IsOutline() )
+            cache = GetRenderCache( font, shownText, VECTOR2I() );
     }
 
     if( aTriangulate )
