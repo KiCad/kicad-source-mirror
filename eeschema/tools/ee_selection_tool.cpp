@@ -1127,6 +1127,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             }
 
             SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
+            SCH_FIELD*  field = dynamic_cast<SCH_FIELD*>( item );
             EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( item );
             SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
@@ -1134,36 +1135,32 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             {
                 dist = DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos );
             }
-            else if( text )
+            else if( field )
             {
-                if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( text ) )
+                BOX2I     box = field->GetBoundingBox();
+                EDA_ANGLE orient = field->GetTextAngle();
+
+                if( field->GetParent() && field->GetParent()->Type() == SCH_SYMBOL_T )
                 {
-                    if( field->GetParent() && field->GetParent()->Type() == SCH_SYMBOL_T )
+                    if( static_cast<SCH_SYMBOL*>( field->GetParent() )->GetTransform().y1 )
                     {
-                        symbol = static_cast<SCH_SYMBOL*>( field->GetParent() );
-
-                        VECTOR2I relPos = pos - symbol->GetPosition();
-                        relPos = symbol->GetTransform().InverseTransform().TransformCoordinate( relPos );
-                        pos = relPos + symbol->GetPosition();
-
-                        poss = SEG( pos, pos );
+                        if( orient.IsHorizontal() )
+                            orient = ANGLE_VERTICAL;
+                        else
+                            orient = ANGLE_HORIZONTAL;
                     }
                 }
 
+                field->GetEffectiveTextShape( false, box, orient )->Collide( poss, INT_MAX / 2,
+                                                                             &dist );
+            }
+            else if( text )
+            {
                 text->GetEffectiveTextShape( false )->Collide( poss, INT_MAX / 2, &dist );
             }
             else if( symbol )
             {
-                try
-                {
-                    bbox = symbol->GetBodyBoundingBox();
-                }
-                catch( const boost::bad_pointer& exc )
-                {
-                    // This may be overkill and could be an assertion but we are more likely to
-                    // find any boost pointer container errors this way.
-                    wxLogError( wxT( "Boost bad pointer exception '%s' occurred." ), exc.what() );
-                }
+                bbox = symbol->GetBodyBoundingBox();
 
                 SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
 
