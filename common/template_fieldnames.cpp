@@ -218,7 +218,7 @@ void TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool
     // Ensure that the template fieldname does not match a fixed fieldname.
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        if( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) == aFieldName.m_Name )
+        if( GetCanonicalFieldName( i ) == aFieldName.m_Name )
             return;
     }
 

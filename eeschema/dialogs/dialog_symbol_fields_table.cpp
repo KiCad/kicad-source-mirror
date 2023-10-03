@@ -334,14 +334,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
         attr->SetReadOnly();
         m_grid->SetColAttr( aCol, attr );
     }
-    else if( m_dataModel->GetColFieldName( aCol )
-             == TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) )
+    else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FOOTPRINT_FIELD ) )
     {
         attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
         m_grid->SetColAttr( aCol, attr );
     }
-    else if( m_dataModel->GetColFieldName( aCol )
-             == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) )
+    else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( DATASHEET_FIELD ) )
     {
         // set datasheet column viewer button
         attr->SetEditor(

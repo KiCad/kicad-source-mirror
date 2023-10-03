@@ -500,9 +500,9 @@ void BACK_ANNOTATE::applyChangelist()
                 SCH_FIELD*      symField = symbol->FindField( fpFieldName );
 
                 // Skip fields that are individually controlled
-                if( fpFieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD )
-                    || fpFieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE_FIELD )
-                    || fpFieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) )
+                if( fpFieldName == GetCanonicalFieldName( REFERENCE_FIELD )
+                    || fpFieldName == GetCanonicalFieldName( VALUE_FIELD )
+                    || fpFieldName == GetCanonicalFieldName( FOOTPRINT_FIELD ) )
                 {
                     continue;
                 }

@@ -498,7 +498,7 @@ wxString LIB_FIELD::GetName( bool aUseDefaultName ) const
 wxString LIB_FIELD::GetCanonicalName() const
 {
     if( m_id < MANDATORY_FIELDS )
-        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+        return GetCanonicalFieldName( m_id );
 
     return m_name;
 }

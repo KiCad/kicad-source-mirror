@@ -231,13 +231,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( REFERENCE_FIELD );
 }
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE_FIELD );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( VALUE_FIELD );
 }
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
@@ -347,7 +347,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
                                                 const SCH_REFERENCE& rhRef )
 
 {
-    int  refCol = GetFieldNameCol( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
+    int  refCol = GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD ) );
     bool matchFound = false;
 
     if( refCol == -1 )
@@ -790,8 +790,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
     if( sortCol != -1 )
         SetSorting( sortCol, aPreset.sortAsc );
     else
-        SetSorting( GetFieldNameCol( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) ),
-                    aPreset.sortAsc );
+        SetSorting( GetFieldNameCol( GetCanonicalFieldName( REFERENCE_FIELD ) ), aPreset.sortAsc );
 
     SetFilter( aPreset.filterString );
     SetExcludeDNP( aPreset.excludeDNP );

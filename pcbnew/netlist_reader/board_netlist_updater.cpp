@@ -321,8 +321,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         && !m_isDryRun )
     {
         aPcbFootprint->Footprint().SetText(
-                aNetlistComponent
-                        ->GetFields()[TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD )] );
+                aNetlistComponent->GetFields()[GetCanonicalFieldName( FOOTPRINT_FIELD )] );
     }
 
     // Test for time stamp change.
@@ -367,9 +366,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     // Remove the ref/value/footprint fields that are individually handled
     nlohmann::ordered_map<wxString, wxString> compFields = aNetlistComponent->GetFields();
-    compFields.erase( TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) );
-    compFields.erase( TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE_FIELD ) );
-    compFields.erase( TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) );
+    compFields.erase( GetCanonicalFieldName( REFERENCE_FIELD ) );
+    compFields.erase( GetCanonicalFieldName( VALUE_FIELD ) );
+    compFields.erase( GetCanonicalFieldName( FOOTPRINT_FIELD ) );
 
 
     if( fpFieldsAsMap != compFields )

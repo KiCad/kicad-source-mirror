@@ -120,6 +120,16 @@ struct TEMPLATE_FIELDNAME
 typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;
 
 
+inline wxString GetCanonicalFieldName( int idx )
+{
+    // While TEMPLATE_FIELDNAME::GetDefaultFieldName() still works for non-mandatory fields,
+    // it's confusing to call it through this function.
+    wxASSERT( idx < MANDATORY_FIELDS );
+
+    return TEMPLATE_FIELDNAME::GetDefaultFieldName( idx );
+}
+
+
 class TEMPLATES
 {
 public:

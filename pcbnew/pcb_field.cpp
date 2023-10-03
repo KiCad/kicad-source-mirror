@@ -49,7 +49,7 @@ wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
         if( m_id >= 0 && m_id < MANDATORY_FIELDS )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+            return GetCanonicalFieldName( m_id );
         else if( m_name.IsEmpty() && aUseDefaultName )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
         else
@@ -68,7 +68,7 @@ wxString PCB_FIELD::GetCanonicalName() const
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
         if( m_id < MANDATORY_FIELDS )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, false );
+            return GetCanonicalFieldName( m_id );
         else
             return m_name;
     }
@@ -88,7 +88,7 @@ wxString PCB_FIELD::GetCanonicalName() const
 wxString PCB_FIELD::GetTextTypeDescription() const
 {
     if( m_id < MANDATORY_FIELDS )
-        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, false );
+        return GetCanonicalFieldName( m_id );
     else
         return _( "User Field" );
 }

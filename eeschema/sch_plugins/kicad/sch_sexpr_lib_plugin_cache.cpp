@@ -391,7 +391,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
     wxString fieldName = aField->GetName();
 
     if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
-        fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );
+        fieldName = GetCanonicalFieldName( aField->GetId() );
 
     aFormatter.Print( aNestLevel, "(property %s %s (at %s %s %g)",
                       aFormatter.Quotew( fieldName ).c_str(),

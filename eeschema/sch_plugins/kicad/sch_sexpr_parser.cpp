@@ -833,7 +833,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
     // If ID is stored in the file (old versions), it will overwrite this
     for( int ii = 0; ii < MANDATORY_FIELDS; ++ii )
     {
-        if( !name.CmpNoCase( TEMPLATE_FIELDNAME::GetDefaultFieldName( ii ) ) )
+        if( !name.CmpNoCase( GetCanonicalFieldName( ii ) ) )
         {
             field->SetId( ii );
             break;
@@ -2025,7 +2025,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     {
         for( int ii = 0; ii < MANDATORY_FIELDS; ++ii )
         {
-            if( name == TEMPLATE_FIELDNAME::GetDefaultFieldName( ii, false ) )
+            if( name == GetCanonicalFieldName( ii ) )
             {
                 field->SetId( ii );
                 break;
