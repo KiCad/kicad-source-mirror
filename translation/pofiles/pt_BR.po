@@ -2479,7 +2479,7 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Insira o nome e o valor para cada variável de ambiente.  As entradas em "
+"Inserir o nome e o valor para cada variável de ambiente.  As entradas em "
 "cinza são os nomes que já foram definidos externamente no nível do sistema "
 "ou do usuário.  As variáveis de ambiente definidas no nível do sistema ou do "
 "usuário têm precedência sobre as definidas nesta tabela.  Significa que os "
@@ -8133,7 +8133,7 @@ msgstr "Origem da grade"
 
 #: common/tool/actions.cpp:670
 msgid "Place the grid origin point"
-msgstr "insira o ponto de origem da grade"
+msgstr "inserir o ponto de origem da grade"
 
 #: common/tool/actions.cpp:678
 msgid "Reset Grid Origin"
@@ -10724,7 +10724,7 @@ msgstr "Use a folha atual como raiz"
 #: eeschema/dialogs/dialog_export_netlist.cpp:300
 #: eeschema/dialogs/dialog_export_netlist.cpp:350
 msgid "Export netlist only for the current sheet"
-msgstr "Exporta a netlist apenas para a folha atual"
+msgstr "Exportar a netlist apenas para a folha atual"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_sim_command_base.cpp:640
@@ -14083,7 +14083,7 @@ msgstr "Arquivo gerado:"
 #: pcbnew/dialogs/dialog_export_svg.cpp:90
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:127
 msgid "Export"
-msgstr "Exporta"
+msgstr "Exportar"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:140
 msgid "Symbol Fields Table"
@@ -16255,7 +16255,7 @@ msgstr "O esquema é somente leitura."
 
 #: eeschema/files-io.cpp:581 eeschema/files-io.cpp:574
 msgid "Insert Schematic"
-msgstr "Insira um esquemático"
+msgstr "Inserir um esquemático"
 
 #: eeschema/files-io.cpp:613 eeschema/files-io.cpp:606
 msgid ""
@@ -16886,7 +16886,7 @@ msgstr "Ocorreram erros ao criar o símbolo da biblioteca %s."
 
 #: eeschema/menubar.cpp:97 eeschema/menubar.cpp:98
 msgid "Insert Schematic Sheet Content..."
-msgstr "Insira o conteúdo da folha do esquema..."
+msgstr "Inserir o conteúdo da folha do esquema..."
 
 #: eeschema/menubar.cpp:98 eeschema/menubar.cpp:99
 msgid ""
@@ -16947,7 +16947,7 @@ msgstr "Símbolos para nova biblioteca..."
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:236
 #: pcbnew/menubar_pcb_editor.cpp:449
 msgid "&Place"
-msgstr "&Insira"
+msgstr "&Posicionar"
 
 #: eeschema/menubar.cpp:323
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:173
@@ -16957,7 +16957,7 @@ msgstr "&Insira"
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:237
 #: pcbnew/menubar_pcb_editor.cpp:451
 msgid "&Inspect"
-msgstr "&Inspecione"
+msgstr "&Inspecionar"
 
 #: eeschema/menubar.cpp:324 gerbview/menubar.cpp:233 kicad/menubar.cpp:219
 #: pcbnew/menubar_footprint_editor.cpp:237 pcbnew/menubar_pcb_editor.cpp:459
@@ -21387,7 +21387,7 @@ msgstr "Exporte..."
 
 #: eeschema/tools/ee_actions.cpp:243
 msgid "Export a symbol to a new library file"
-msgstr "Exporta um símbolo para um novo arquivo de biblioteca"
+msgstr "Exportar um símbolo para um novo arquivo de biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:249
 msgid "Update Symbol Fields..."
@@ -21436,7 +21436,7 @@ msgstr "Esconda a árvore dos símbolos"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Export View as PNG..."
-msgstr "Exporta a visualização como um PNG..."
+msgstr "Exportar a visualização como um PNG..."
 
 #: eeschema/tools/ee_actions.cpp:296
 msgid "Create PNG file from the current view"
@@ -21444,7 +21444,7 @@ msgstr "Cria um arquivo PNG a partir da visualização atual"
 
 #: eeschema/tools/ee_actions.cpp:302
 msgid "Export Symbol as SVG..."
-msgstr "Exporta o símbolo como um SVG..."
+msgstr "Exportar o símbolo como um SVG..."
 
 #: eeschema/tools/ee_actions.cpp:303
 msgid "Create SVG file from the current symbol"
@@ -22190,11 +22190,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1045 eeschema/tools/ee_actions.cpp:1025
 msgid "Export Drawing to Clipboard"
-msgstr "Exporta o desenho para a área de transferência"
+msgstr "Exportar o desenho para a área de transferência"
 
 #: eeschema/tools/ee_actions.cpp:1046 eeschema/tools/ee_actions.cpp:1026
 msgid "Export drawing of current sheet to clipboard"
-msgstr "Exporta o desenho da folha atual para a área de transferência"
+msgstr "Exportar o desenho da folha atual para a área de transferência"
 
 #: eeschema/tools/ee_actions.cpp:1052 eeschema/tools/ee_actions.cpp:1032
 msgid "Switch to PCB Editor"
@@ -22206,11 +22206,11 @@ msgstr "Abrir a PCI no editor da placa"
 
 #: eeschema/tools/ee_actions.cpp:1059 eeschema/tools/ee_actions.cpp:1039
 msgid "Export Netlist..."
-msgstr "Exporta Netlist..."
+msgstr "Exportar Netlist..."
 
 #: eeschema/tools/ee_actions.cpp:1060 eeschema/tools/ee_actions.cpp:1040
 msgid "Export file containing netlist in one of several formats"
-msgstr "Exporta o arquivo que contem uma netlist num dos vários formatos"
+msgstr "Exportar o arquivo que contem uma netlist num dos vários formatos"
 
 #: eeschema/tools/ee_actions.cpp:1066 eeschema/tools/ee_actions.cpp:1046
 msgid "Generate BOM..."
@@ -22231,7 +22231,7 @@ msgstr "Gera uma lista de materiais para o esquema atual (gerador legado)"
 
 #: eeschema/tools/ee_actions.cpp:1080 eeschema/tools/ee_actions.cpp:1060
 msgid "Export Symbols to Library..."
-msgstr "Exporta os símbolos para a biblioteca..."
+msgstr "Exportar os símbolos para a biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:1081 eeschema/tools/ee_actions.cpp:1061
 msgid ""
@@ -22244,7 +22244,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1088 eeschema/tools/ee_actions.cpp:1068
 msgid "Export Symbols to New Library..."
-msgstr "Exporta os símbolos para a nova biblioteca..."
+msgstr "Exportar os símbolos para a nova biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:1089 eeschema/tools/ee_actions.cpp:1069
 msgid ""
@@ -22589,11 +22589,11 @@ msgstr "Salva a pasta de trabalho como..."
 
 #: eeschema/tools/ee_actions.cpp:1458 eeschema/tools/ee_actions.cpp:1438
 msgid "Export Current Plot as PNG..."
-msgstr "Exporta o gráfico atual como PNG..."
+msgstr "Exportar o gráfico atual como PNG..."
 
 #: eeschema/tools/ee_actions.cpp:1464 eeschema/tools/ee_actions.cpp:1444
 msgid "Export Current Plot as CSV..."
-msgstr "Exporta a visualização atual como CSV..."
+msgstr "Exportar a visualização atual como CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1470 eeschema/tools/ee_actions.cpp:1450
 msgid "Show Legend"
@@ -22927,7 +22927,7 @@ msgstr "Deseja escluir os pinos que não foram referenciados desta folha?"
 #: eeschema/tools/sch_edit_tool.cpp:2596 eeschema/tools/sch_edit_tool.cpp:2595
 #, c-format
 msgid "Enter page number for sheet path%s"
-msgstr "Insira o número da página para o caminho da folha %s"
+msgstr "Inserir o número da página para o caminho da folha %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:2599
 #: eeschema/widgets/hierarchy_pane.cpp:288
@@ -23129,7 +23129,7 @@ msgstr "O símbolo não é derivado de outro símbolo."
 #: eeschema/tools/symbol_editor_edit_tool.cpp:663
 #, c-format
 msgid "Enter display name for unit %s"
-msgstr "Insira o nome de exibição para a unidade %s"
+msgstr "Inserir o nome de exibição para a unidade %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:672
 msgid "Set Unit Display Name"
@@ -24554,7 +24554,7 @@ msgstr "Utilitários de exportação (svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr "Exporta o footprint ou toda a biblioteca do footprint para SVG"
+msgstr "Exportar o footprint ou toda a biblioteca do footprint para SVG"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 msgid "Color theme to use (will default to footprint editor settings)"
@@ -25176,7 +25176,7 @@ msgstr "Símbolo e as bibliotecas dos símbolos"
 
 #: kicad/cli/command_sym_export_svg.cpp:41
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Exporta o símbolo ou toda a biblioteca do símbolo para SVG"
+msgstr "Exportar o símbolo ou toda a biblioteca do símbolo para SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:45
 msgid "Color theme to use (will default to symbol editor settings)"
@@ -25384,7 +25384,7 @@ msgstr "Exportar GLB (GLTF binário)"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
-msgstr "Exporta STEP"
+msgstr "Exportar STEP"
 
 #: kicad/kicad_cli.cpp:134
 msgid "Export VRML"
@@ -28375,7 +28375,7 @@ msgstr "Adiciona um regulador"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
 msgstr ""
-"Insira um novo item à lista atual dos reguladores que estão disponíveis"
+"Inserir um novo item à lista atual dos reguladores que estão disponíveis"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
@@ -29817,13 +29817,13 @@ msgstr "PrePreg"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:176
 #, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Insira a espessura da placa em %s:"
+msgstr "Inserir a espessura da placa em %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:182
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:181
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Insira a espessura esperada da placa (valor mínimo %s):"
+msgstr "Inserir a espessura esperada da placa (valor mínimo %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
@@ -30671,7 +30671,7 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"O vazio continua na frente ou insira um número maior que a designação de "
+"O vazio continua na frente ou inserir um número maior que a designação de "
 "referência mais alta na frente."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:230
@@ -30679,7 +30679,7 @@ msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
-"Deixe em branco, com zero ou insira um número maior que a designação de "
+"Deixe em branco, com zero ou inserir um número maior que a designação de "
 "referência mais alta na frente."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:235
@@ -31479,7 +31479,7 @@ msgstr "As ilhas isoladas menores do que isso serão removidas"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:395
 msgid "Export Settings to Other Similar Zones"
-msgstr "Exporta as configurações para outras regiões similares"
+msgstr "Exportar as configurações para outras regiões similares"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
 msgid ""
@@ -32755,7 +32755,7 @@ msgstr "Imprima as bordas do cartão em todas as páginas"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:76
 msgid "Export SVG File"
-msgstr "Exporta o arquivo SVG"
+msgstr "Exportar o arquivo SVG"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:193
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
@@ -35656,7 +35656,7 @@ msgstr "Desmarque para gerar gráficos dos itens usando as suas linhas centrais"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:338
 msgid "Export units:"
-msgstr "Exporta unidades:"
+msgstr "Exportar unidades:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:346
 msgid "The units to use for the exported DXF file"
@@ -40207,7 +40207,7 @@ msgstr "Modifica as propriedades da zona"
 
 #: pcbnew/exporters/export_d356.cpp:380
 msgid "Export D-356 Test File"
-msgstr "Exporta o arquivo de teste D-356"
+msgstr "Exportar o arquivo de teste D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -40829,7 +40829,7 @@ msgstr "Não é possível carregar o footprint '%s' de '%s'"
 #: pcbnew/footprint_libraries_utils.cpp:239
 #: pcbnew/footprint_libraries_utils.cpp:238
 msgid "Export Footprint"
-msgstr "Exporta footprint"
+msgstr "Exportar footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:282
 #: pcbnew/footprint_libraries_utils.cpp:281
@@ -40997,7 +40997,7 @@ msgstr "Seleciona próxima página de parâmetros"
 
 #: pcbnew/footprint_wizard_frame.cpp:618
 msgid "Export footprint to editor"
-msgstr "Exporta o footprint para o editor"
+msgstr "Exportar o footprint para o editor"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:87
 msgid "no wizard selected"
@@ -41353,7 +41353,7 @@ msgstr "GenCAD…"
 
 #: pcbnew/menubar_pcb_editor.cpp:130 pcbnew/menubar_pcb_editor.cpp:131
 msgid "Export GenCAD board representation"
-msgstr "Exporta uma representação da placa em GenCAD"
+msgstr "Exportar uma representação da placa em GenCAD"
 
 #: pcbnew/menubar_pcb_editor.cpp:132 pcbnew/menubar_pcb_editor.cpp:133
 msgid "VRML..."
@@ -41361,7 +41361,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132 pcbnew/menubar_pcb_editor.cpp:133
 msgid "Export VRML 3D board representation"
-msgstr "Exporta uma representação 3D da placa em VRML"
+msgstr "Exportar uma representação 3D da placa em VRML"
 
 #: pcbnew/menubar_pcb_editor.cpp:134 pcbnew/menubar_pcb_editor.cpp:135
 msgid "IDFv3..."
@@ -41369,7 +41369,7 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134 pcbnew/menubar_pcb_editor.cpp:135
 msgid "Export IDF 3D board representation"
-msgstr "Exporta uma representação 3D da placa em IDF"
+msgstr "Exportar uma representação 3D da placa em IDF"
 
 #: pcbnew/menubar_pcb_editor.cpp:136 pcbnew/menubar_pcb_editor.cpp:137
 msgid "STEP..."
@@ -41377,7 +41377,7 @@ msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136 pcbnew/menubar_pcb_editor.cpp:137
 msgid "Export STEP 3D board representation"
-msgstr "Exporta uma representação 3D da placa em STEP"
+msgstr "Exportar uma representação 3D da placa em STEP"
 
 #: pcbnew/menubar_pcb_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -41385,7 +41385,7 @@ msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:139
 msgid "Export SVG board representation"
-msgstr "Exporta uma representação da placa em SVG"
+msgstr "Exportar uma representação da placa em SVG"
 
 #: pcbnew/menubar_pcb_editor.cpp:140 pcbnew/menubar_pcb_editor.cpp:141
 msgid "Footprint Association (.cmp) File..."
@@ -42231,7 +42231,7 @@ msgstr "Editor de PCI do KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:218 pcbnew/pcb_edit_frame.cpp:217
 msgid "Export netlist used to update schematics"
-msgstr "Exporta a netlist usada para atualizar os esquemas"
+msgstr "Exportar a netlist usada para atualizar os esquemas"
 
 #: pcbnew/pcb_edit_frame.cpp:409 pcbnew/pcb_edit_frame.cpp:408
 msgid "New PCB file is unsaved"
@@ -42290,7 +42290,7 @@ msgstr "Não foi possível compilar regras personalizadas do desenho."
 
 #: pcbnew/pcb_edit_frame.cpp:2439 pcbnew/pcb_edit_frame.cpp:2434
 msgid "Export Hyperlynx Layout"
-msgstr "Exporta layout Hyperlynx"
+msgstr "Exportar layout Hyperlynx"
 
 #: pcbnew/pcb_edit_frame.cpp:2491 pcbnew/pcb_edit_frame.cpp:2486
 msgid "Violation Report"
@@ -42735,7 +42735,8 @@ msgstr ""
 #: pcbnew/plugin.cpp:287 pcbnew/plugin.cpp:290
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
-msgstr "Insira o módulo python que implemente as funções PLUGIN::Footprint*()."
+msgstr ""
+"Inserir o módulo python que implemente as funções PLUGIN::Footprint*()."
 
 #: pcbnew/plugins/altium/altium_circuit_maker_plugin.cpp:62
 msgid "Altium Circuit Maker PCB files"
@@ -44871,7 +44872,7 @@ msgstr "Arquivo Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:434
 msgid "Export Board Netlist"
-msgstr "Exporta a lista da placa"
+msgstr "Exportar a lista da placa"
 
 #: pcbnew/tools/board_editor_control.cpp:435
 msgid "KiCad board netlist files"
@@ -45510,7 +45511,7 @@ msgstr "Dielétrico"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
 msgid "Insert board stackup table"
-msgstr "Insira a tabela do empilhamento da placa"
+msgstr "Inserir a tabela do empilhamento da placa"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:398
 msgid "BOARD CHARACTERISTICS"
@@ -45660,7 +45661,7 @@ msgstr "Trilhas do filé"
 #: pcbnew/tools/edit_tool.cpp:939 pcbnew/tools/edit_tool.cpp:1131
 #: pcbnew/tools/edit_tool.cpp:919 pcbnew/tools/edit_tool.cpp:1111
 msgid "Enter fillet radius:"
-msgstr "Insira o raio do filete:"
+msgstr "Inserir o raio do filete:"
 
 #: pcbnew/tools/edit_tool.cpp:949 pcbnew/tools/edit_tool.cpp:1141
 #: pcbnew/tools/edit_tool.cpp:929 pcbnew/tools/edit_tool.cpp:1121
@@ -45695,7 +45696,7 @@ msgstr "Linhas do chanfro"
 
 #: pcbnew/tools/edit_tool.cpp:1165 pcbnew/tools/edit_tool.cpp:1145
 msgid "Enter chamfer setback:"
-msgstr "Insira a distância do chanfro:"
+msgstr "Inserir a distância do chanfro:"
 
 #: pcbnew/tools/edit_tool.cpp:1179 pcbnew/tools/edit_tool.cpp:1159
 msgid ""
@@ -46516,11 +46517,11 @@ msgstr "Importa footprint do arquivo"
 
 #: pcbnew/tools/pcb_actions.cpp:766 pcbnew/tools/pcb_actions.cpp:697
 msgid "Export Current Footprint..."
-msgstr "Exporta o footprint atual..."
+msgstr "Exportar o footprint atual..."
 
 #: pcbnew/tools/pcb_actions.cpp:767 pcbnew/tools/pcb_actions.cpp:698
 msgid "Export edited footprint to file"
-msgstr "Exporta o footprint editado para o arquivo"
+msgstr "Exportar o footprint editado para o arquivo"
 
 #: pcbnew/tools/pcb_actions.cpp:773 pcbnew/tools/pcb_actions.cpp:704
 msgid "Footprint Properties..."
@@ -46785,11 +46786,11 @@ msgstr "Importa o arquivo da sessão roteada Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:1027 pcbnew/tools/pcb_actions.cpp:958
 msgid "Export Specctra DSN..."
-msgstr "Exporta Specctra DSN..."
+msgstr "Exportar Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:1028 pcbnew/tools/pcb_actions.cpp:959
 msgid "Export Specctra DSN routing info"
-msgstr "Exporta as informações de roteamento DSN Specctra"
+msgstr "Exportar as informações de roteamento DSN Specctra"
 
 #: pcbnew/tools/pcb_actions.cpp:1034 pcbnew/tools/pcb_actions.cpp:965
 msgid "Gerbers (.gbr)..."
@@ -50081,6 +50082,462 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://docs.kicad."
 "org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Cláusulas de primeiro nível\n"
+"\n"
+"    (version <número>)\n"
+"\n"
+"    (rule <nome_da_regra> <cláusula_da_regra> ...)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
+"### Cláusulas da regra\n"
+"\n"
+"    (constraint <tipo_da_restrição> ...)\n"
+"\n"
+"    (condition \"<expressão>\")\n"
+"\n"
+"    (layer \"<nome_da_camada>\")\n"
+"\n"
+"    (severity <nome_da_severidade>)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
+"### Restrições\n"
+"\n"
+"| Tipo da restrição           | Tipo do "
+"argumento                                                                                                          "
+"| "
+"Descrição                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Verifica a largura dos anéis anulares nas vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|                                                                                                                                                                                                                                                                                                                                        \n"
+"| `clearance`               | "
+"min                                                                                                                    "
+"| Especifica a folga **elétrica** entre objetos de cobre de redes "
+"diferentes.  (Consulte `physical_clearance` cao queira especificar a folga "
+"entre os objetos, independentemente da net.)<br><br>Para permitir que os "
+"objetos de cobre se sobreponham (colidam), crie uma restrição `clearance` "
+"com o valor `min` menor que zero (por exemplo, `-1`)."
+"<br>                                                                                                                      "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
+"| Verifica a distância entre os pedaços da área de cobertura e gera um erro "
+"se dois pedaços estiverem mais próximos do que a distância `min`.  Se a "
+"pegada não tiver a forma de um pedaço, não serão gerados erros a partir "
+"dessa restrição."
+"<br>                                                                                                                                                                                                               "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
+"| Verifica a folga entre as trilhas acopladas num par diferencial.  As "
+"trilhas acopladas são segmentos paralelos entre si.  A folga do par "
+"diferencial não é testada em partes não acoplados de um par diferencial (por "
+"exemplo, o fanout de um componente)."
+"<br>                                                                                                                                                                                           "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
+"| Verifica a distância onde uma trilha de par diferencial é roteada "
+"desacoplada da trilha de outra polaridade no par (por exemplo, quando o par "
+"se desprende de um componente ou se desacopla para passar ao redor de outro "
+"objeto, como uma via)."
+"<br>                                                                                                                                                                                                         "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Especifica um ou mais tipos de objetos a serem vetados, separados por "
+"espaços. Por exemplo, `(constraint disallow track)` ou `(constraint disallow "
+"track via pad)`. Se um objeto deste tipo corresponder à condição da regra, "
+"um erro DRC será gerado.<br><br>Esta restrição é essencialmente a mesma que "
+"uma regra de exclusão de área, mas pode ser usada para criar restrições de "
+"exclusão mais específicas."
+"<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Verifica a folga entre os objetos e a borda da placa.<br><br>Isso também "
+"pode ser considerado como a \"tolerância de fresagem\", pois a borda da "
+"placa incluirá todos os itens gráficos na camada `Edge.Cuts`, bem como todos "
+"os furos *ovais* do pad.  (Consulte `physical_hole_clearance` para obter a "
+"tolerância de "
+"perfuração.)<br>                                                                                                                                                    "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                                "
+"| Verifica o comprimento do roteamento total das nets que correspondem à "
+"condição da regra e gera um erro para cada net que estiver abaixo do valor "
+"`min` (se especificado) ou acima do valor `max` (se especificado) da "
+"restrição."
+"<br>                                                                                                                                                                                                                               "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                                "
+"| Verifica o tamanho (diâmetro) de um furo em um bloco ou via.  Para furos "
+"ovais, o diâmetro menor (menor) será testado em relação ao valor `min` (se "
+"especificado) e o diâmetro maior (maior) será testado em relação ao valor "
+"`max` (se "
+"especificado.)<br>                                                                                                                                                                                            "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                    "
+"| Verifica a folga entre um orifício perfurado num ilha, via e objetos de "
+"cobre numa rede diferente.  A folga é medida a partir do diâmetro do furo, "
+"não de seu centro."
+"<br>                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
+"| Verifica a folga entrefuros perfurados mecanicamente em almofadas e vias. "
+"A folga é medida entre os diâmetros dos furos e não entre seus centros."
+"<br><br>Esta restrição é apenas para proteção das brocas.  A folga entre "
+"**laser-drilled** (microvias) e outros furos não perfurados mecanicamente "
+"não é verificado, nem a folga entre os orifícios **fresados** (ovais) e "
+"outros orifícios não perfurados mecanicamente.<br> |  \n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
+"| Verifica a folga entre dois objetos numa determinada camada (incluindo as "
+"camadas que não sejam de cobre).<br><br>Embora possa realizar verificações "
+"de uso mais geral do que `clearance`, é muito mais lento.  Use `clearance` "
+"sempre que possível."
+"<br>                                                                                                                                                                                                                            "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
+"| Verifica a folga entre um orifício perfurado em uma almofada ou via e "
+"outro objeto, independentemente da rede. A folga é medida a partir do "
+"diâmetro do furo, não de seu centro.<br><br>Isso também pode ser considerado "
+"como a \"tolerância de perfuração\", pois inclui apenas furos "
+"**arredondados** (consulte `edge_clearance` para ver a tolerância de "
+"fresamento)."
+"<br>                                                                                                                    "
+"| \n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Verifica a folga entre objetos em camadas de serigrafia e outros objetos."
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                    "
+"| Verifica a inclinação total das nets que correspondem à condição da regra, "
+"ou seja, a diferença entre o comprimento de cada net e a média de todos os "
+"comprimentos de cada net que corresponda à regra. Se o valor absoluto da "
+"diferença entre essa média e o comprimento de qualquer rede estiver acima do "
+"valor `max` da restrição, será gerado um erro."
+"<br>                                                                                   "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
+"| Especifica a largura do espaço entre uma almofada e uma região com uma "
+"conexão de alívio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
+"| Especifica a largura dos raios que conectam um pad a uma região com uma "
+"conexão de alívio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
+"| Verifica a largura dos segmentos de trilha e arco.  Será gerado um erro "
+"para cada segmento que tiver uma largura abaixo do valor `min` (se "
+"especificado) ou acima do valor `max` (se especificado)."
+"<br>                                                                                                                                                                                                                                                             "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                    "
+"| Conta a quantidade de vias em cada net correspondente à condição da "
+"regra.  Se essa quantidade exceder o valor `max` da restrição em qualquer "
+"net correspondente, um erro será gerado para essa net."
+"<br>                                                                                                                                                                                                                                                               "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Especifica a conexão a ser feita entre uma região e um bloco."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"\n"
+"\n"
+"### Itens\n"
+"\n"
+" * `A` &nbsp;&nbsp; _o primeiro (ou único) item em teste_\n"
+" * `B` &nbsp;&nbsp; _o segundo item em teste (para testes binários)_\n"
+" * `L` &nbsp;&nbsp; _a camada que está sendo testada atualmente_\n"
+"\n"
+"<br>\n"
+"\n"
+"### Nomes das severidades\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
+"\n"
+"<br>\n"
+"\n"
+"### Examplos\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"<br><br>\n"
+"\n"
+"### Notas\n"
+"\n"
+"A cláusula \"version\" deve ser a primeira cláusula.  Ela indica a versão da "
+"sintaxe do arquivo para que \n"
+"futuros analisadores de regras possam realizar atualizações automáticas.  "
+"Ela deve ser\n"
+"definida como \"1\".\n"
+"\n"
+"As regras devem ser ordenadas por especificidade.  As regras posteriores "
+"têm\n"
+"precedência sobre as anteriores; quando uma regra correspondente é "
+"encontrada\n"
+"nenhuma outra regra será verificada.\n"
+"\n"
+"Use Ctrl+/ para comentar ou remover o comentário da(s) linha(s).\n"
+"<br><br><br>\n"
+"\n"
+"### Funções das espressões\n"
+"\n"
+"Todos os parâmetros da função aceitam curingas simples (`*` e `?`).\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsCourtyard('<footprint_refdes>')\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro da parte principal do "
+"pedaço informado do footprint.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro da parte da frente do "
+"pedaço informado do footprint.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsBackCourtyard('<footprint_refdes>')\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro da parte de trás do "
+"pedaço informado do footprint.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsArea('<zone_name>')\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro do contorno da região "
+"informada.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<zone_name>')\n"
+"Verdadeiro caso todo o `A` esteja dentro do contorno da região informada.  \n"
+"\n"
+"NB: essa é uma chamada potencialmente mais cara do que `intersectsArea()`.  "
+"Use `intersectsArea()` \n"
+"sempre que for possível.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"Verdadeiro caso `A` tenha um furo metalizado.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"Verdadeiro caso `A` tenha uma net que faça parte do par diferencial "
+"especificado.\n"
+"`<net_name>` é o nome base do par diferencial.  Por exemplo, `inDiffPair('/"
+"CLK')`\n"
+"corresponde a itens nas nets `/CLK_P` e `/CLK_N`.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"Verdadeiro caso `A` e `B` sejam membros do mesmo par diferencial.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfGroup('<group_name>')\n"
+"Verdadeiro caso `A` seja membro de um determinado grupo. \n"
+"True if `A` is a member of the given group. O nome pode conter caracteres "
+"curinga.\n"
+"Inclui associação agrupada.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfFootprint('<footprint_reference>')\n"
+"Verdadeiro caso `A` seja membro de um footprint que corresponda ao "
+"designador de referência fornecido.  A\n"
+"referência pode conter caracteres curinga.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"True caso `A` exista na camada fornecida.  O nome da camada pode ser\n"
+"o nome atribuído em Configuração da placa > Camadas do editor da placa ou\n"
+"o nome canônico (ou seja, `F.Cu`).\n"
+"\n"
+"NB: retorna verdadeiro caso `A` esteja na camada fornecida, "
+"independentemente\n"
+"da regra estar ou não sendo avaliada para essa camada.\n"
+"Para esse último caso, use uma cláusula `(layer \"layer_name\")` na regra.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.memberOf('<group_name>') !!!\n"
+"Descontinuado; em vez disso use `memberOfGroup()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
+"Descontinuado; em vez disso use `intersectsCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
+"Descontinuado; em vez disso use `intersectsFrontCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
+"Descontinuado; em vez disso use `intersectsBackCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<zone_name>') !!!\n"
+"Descontinuado; em vez disso use `intersectsArea()`.\n"
+"<br><br><br>\n"
+"\n"
+"### Mais exemplos\n"
+"\n"
+"    (rule \"sem cobre\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # evitar que a serigrafia se sobreponha sobre vias cobertas\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distância entre as vias de diferentes nets\"\n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
+"\n"
+"    (rule \"Folga entre as ilhas de diferentes nets\"\n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Monitorar a folga do furo da via\"\n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"\n"
+"    (rule \"Folga da ilha para a trilha\"\n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Tamanho máximo do furo mecânico\"\n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"\n"
+"    (rule \"Tamanho máximo do furo da perfuração PTH\"\n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('/CLK')\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Não utilizar alívios térmicos nas ilhas com dissipador de calor\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Exigir que todos os quatro raios de alívio térmico se conectem à zona "
+"principal\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Defina a folga do alívio térmico e a largura do raio para todas as "
+"regiões\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Substituir a folga do alívio térmico e a largura do raio para as "
+"regiões GND e PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"\n"
+"    # Evita a absorção de solda nas ilhas SMD\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Não permitir substituições na margem da máscara de solda\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Imponha uma folga mecânica entre os componentes e a borda da placa\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Verifique a capacidade de condução de corrente\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))\n"
+"\n"
+"### Documentação\n"
+"\n"
+"Consulte a documentação completa em [https://docs.kicad.org](https://docs."
+"kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Micro via drill out of range"
