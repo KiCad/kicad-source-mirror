@@ -51,7 +51,6 @@ public:
         BACKGROUND,
         FOREGROUND,
         AXIS,
-        CURSOR,
         TRACE // First index for trace colors list
     };
 

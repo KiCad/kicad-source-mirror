@@ -101,14 +101,12 @@ void SIM_PLOT_COLORS::FillDefaultColorList( bool aDarkMode )
         m_colorList.emplace_back( 0, 0, 0 );       // Bg color
         m_colorList.emplace_back( 255, 255, 255 ); // Fg color (texts)
         m_colorList.emplace_back( 130, 130, 130 ); // Axis color
-        m_colorList.emplace_back( 255, 255, 255 ); // cursors color
     }
     else
     {
         m_colorList.emplace_back( 255, 255, 255 ); // Bg color
         m_colorList.emplace_back( 0, 0, 0 );       // Fg color (texts)
         m_colorList.emplace_back( 130, 130, 130 ); // Axis color
-        m_colorList.emplace_back( 0, 0, 0 );       // cursors color
     }
 
     // Add a list of color for traces, starting at index SIM_TRACE_COLOR

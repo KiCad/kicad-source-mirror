@@ -795,16 +795,6 @@ void SIM_PLOT_TAB::UpdatePlotColors()
                                m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::FOREGROUND ),
                                m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
 
-    // Update color of all traces
-    for( const auto& [ name, trace ] : m_traces )
-    {
-        for( const auto& [ id, cursor ] : trace->GetCursors() )
-        {
-            if( cursor )
-                cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
-        }
-    }
-
     m_plotWin->UpdateAll();
 }
 
@@ -967,7 +957,6 @@ void SIM_PLOT_TAB::EnableCursor( const wxString& aVectorName, int aType, int aCu
 
         cursor->SetName( aSignalName );
         cursor->SetX( center );
-        cursor->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::CURSOR ) ) );
 
         t->SetCursor( aCursorId, cursor );
         m_plotWin->AddLayer( cursor );
