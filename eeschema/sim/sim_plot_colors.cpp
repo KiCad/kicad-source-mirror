@@ -129,17 +129,15 @@ void SIM_PLOT_COLORS::FillDefaultColorList( bool aDarkMode )
 }
 
 
-wxColour SIM_PLOT_COLORS::GenerateColor( std::map<wxString, TRACE*> aTraces )
+wxColour SIM_PLOT_COLORS::GenerateColor( std::map<wxString, wxColour> aTraceColors )
 {
     for( COLOR_SET i = COLOR_SET::TRACE; i < getPlotColorCount(); ++i )
     {
         bool hasColor = false;
 
-        for( auto& t : aTraces )
+        for( const auto& [ vectorName, traceColor ] : aTraceColors )
         {
-            TRACE* trace = t.second;
-
-            if( trace->GetTraceColour() == GetPlotColor( i ) )
+            if( traceColor == GetPlotColor( i ) )
             {
                 hasColor = true;
                 break;
@@ -151,6 +149,6 @@ wxColour SIM_PLOT_COLORS::GenerateColor( std::map<wxString, TRACE*> aTraces )
     }
 
     // If all colors are in use, choose a suitable color in list
-    COLOR_SET idx = aTraces.size() % ( getPlotColorCount() - COLOR_SET::TRACE );
+    COLOR_SET idx = aTraceColors.size() % ( getPlotColorCount() - COLOR_SET::TRACE );
     return GetPlotColor( COLOR_SET::TRACE + idx );
 }

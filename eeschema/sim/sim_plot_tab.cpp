@@ -813,6 +813,8 @@ void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
                                   ? wxPENSTYLE_DOT
                                   : wxPENSTYLE_SOLID;
     trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
+
+    m_sessionTraceColors[ trace->GetName() ] = trace->GetTraceColour();
 }
 
 
@@ -848,7 +850,12 @@ TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType )
         }
 
         trace = new TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
-        trace->SetTraceColour( m_colors.GenerateColor( m_traces ) );
+
+        if( m_sessionTraceColors.count( aVectorName ) )
+            trace->SetTraceColour( m_sessionTraceColors[ aVectorName ] );
+        else
+            trace->SetTraceColour( m_colors.GenerateColor( m_sessionTraceColors ) );
+
         UpdateTraceStyle( trace );
         m_traces[ getTraceId( aVectorName, aType ) ] = trace;
 

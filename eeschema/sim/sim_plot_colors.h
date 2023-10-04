@@ -64,7 +64,7 @@ public:
      * @return a new color from the palette
      * @param a collection of traces in the plot panel
      */
-    wxColour GenerateColor( std::map<wxString, TRACE*> aTraces );
+    wxColour GenerateColor( std::map<wxString, wxColour> aTraceColors );
 
     /**
      * @brief Fills m_colorList by a default set of colors.
@@ -74,13 +74,15 @@ public:
     static void FillDefaultColorList( bool aWhiteBg );
 
 private:
-    ///< The color list to draw traces, bg, fg, axis...
-    static std::vector<wxColour> m_colorList;
-
     /**
      * @return the count of colors in color list
      */
     enum COLOR_SET getPlotColorCount() { return static_cast<enum COLOR_SET>( m_colorList.size() ); }
+
+private:
+    ///< The color list to draw traces, bg, fg, axis...
+    static std::vector<wxColour> m_colorList;
+
 };
 
 inline bool operator<( SIM_PLOT_COLORS::COLOR_SET& x, SIM_PLOT_COLORS::COLOR_SET& y );

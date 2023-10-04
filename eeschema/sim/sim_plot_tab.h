@@ -369,22 +369,23 @@ private:
     void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
 private:
-    SIM_PLOT_COLORS            m_colors;
+    SIM_PLOT_COLORS              m_colors;
+    std::map<wxString, wxColour> m_sessionTraceColors;
 
     // Top-level plot window
-    mpWindow*                  m_plotWin;
-    wxBoxSizer*                m_sizer;
+    mpWindow*                    m_plotWin;
+    wxBoxSizer*                  m_sizer;
 
     // Traces to be plotted
-    std::map<wxString, TRACE*> m_traces;
+    std::map<wxString, TRACE*>   m_traces;
 
-    mpScaleXBase*              m_axis_x;
-    mpScaleY*                  m_axis_y1;
-    mpScaleY*                  m_axis_y2;
-    mpScaleY*                  m_axis_y3;
-    mpInfoLegend*              m_legend;
+    mpScaleXBase*                m_axis_x;
+    mpScaleY*                    m_axis_y1;
+    mpScaleY*                    m_axis_y2;
+    mpScaleY*                    m_axis_y3;
+    mpInfoLegend*                m_legend;
 
-    bool                       m_dotted_cp;
+    bool                         m_dotted_cp;
 
     // Measurements (and their format strings)
     std::vector<std::pair<wxString, wxString>> m_measurements;
