@@ -1058,7 +1058,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
             selectionTool->ClearSelection( true /* quiet mode */ );
 
         GetBoard()->DeleteAllFootprints();
-        GetBoard()->GetNetInfo().RemoveUnusedNets();
+        GetBoard()->RemoveUnusedNets( nullptr );
 
         FOOTPRINT* footprint = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FootprintLoad( getCurNickname(),
                                                                         getCurFootprintName() );

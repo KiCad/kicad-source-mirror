@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,26 +36,15 @@
 #include <string_utils.h>
 
 
-
-class wxDC;
-class LINE_READER;
 class EDA_DRAW_FRAME;
 class PAD;
 class PCB_TRACK;
 class BOARD;
 class BOARD_ITEM;
+class BOARD_COMMIT;
 class MSG_PANEL_ITEM;
 class PCB_BASE_FRAME;
 
-
-/*****************************/
-/* flags for a RATSNEST_ITEM */
-/*****************************/
-#define CH_VISIBLE          1        /* Visible */
-#define CH_UNROUTABLE       2        /* Don't use autorouter. */
-#define CH_ROUTE_REQ        4        /* Must be routed by the autorouter. */
-#define CH_ACTIF            8        /* Not routed. */
-#define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single footprint. */
 
 DECL_VEC_FOR_SWIG( PADS_VEC, PAD* )
 DECL_VEC_FOR_SWIG( TRACKS_VEC, PCB_TRACK* )
@@ -175,7 +164,7 @@ public:
      */
     void Clear();
 
-    BOARD* GetParent() const
+    BOARD* GetParent() const      // Replace EDA_ITEM::GetParent() with a more useful return-type
     {
         return m_parent;
     }
@@ -360,22 +349,6 @@ public:
      */
     unsigned GetNetCount() const { return m_netNames.size(); }
 
-    /**
-     * Add \a aNewElement to the end of the net list. Negative net code means it is going to be
-     * auto-assigned.
-     */
-    void AppendNet( NETINFO_ITEM* aNewElement );
-
-    /**
-     * Remove a net from the net list.
-     */
-    void RemoveNet( NETINFO_ITEM* aNet );
-    void RemoveUnusedNets();
-
-    /**
-     * @return the number of pads in board.
-     */
-
     /// Return the name map, at least for python.
     const NETNAMES_MAP& NetsByName() const      { return  m_netNames; }
 
@@ -470,6 +443,19 @@ public:
     {
         return m_parent;
     }
+
+protected:  // Access is through the BOARD, which is a friend class
+    /**
+     * Add \a aNewElement to the end of the net list. Negative net code means it is going to be
+     * auto-assigned.
+     */
+    void AppendNet( NETINFO_ITEM* aNewElement );
+
+    /**
+     * Remove a net from the net list.
+     */
+    void RemoveNet( NETINFO_ITEM* aNet );
+    void RemoveUnusedNets( BOARD_COMMIT* aCommit );
 
 private:
     /**

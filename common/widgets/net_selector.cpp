@@ -131,7 +131,7 @@ public:
         return NO_NET;
     }
 
-    void SetNetInfo( NETINFO_LIST* aNetInfoList )
+    void SetNetInfo( const NETINFO_LIST* aNetInfoList )
     {
         m_netinfoList = aNetInfoList;
         rebuildList();
@@ -233,12 +233,10 @@ public:
             BOARD*        board  = m_netinfoList->GetParent();
             NETINFO_ITEM *newnet = new NETINFO_ITEM( m_board, remainingName, 0 );
 
-            // add the new netinfo through the board's function so that
-            // board listeners get notified and things stay in sync.
-            if( board != nullptr )
+            wxASSERT( board );
+
+            if( board )
                 board->Add( newnet );
-            else
-                m_netinfoList->AppendNet( newnet );
 
             rebuildList();
 
@@ -249,12 +247,10 @@ public:
             }
             else
             {
-                // This indicates that the NETINFO_ITEM was not successfully appended
-                // to the list for unknown reasons
-                if( board != nullptr )
+                // This indicates that the NETINFO_ITEM was not successfully appended to the
+                // list for unknown reasons
+                if( board )
                     board->Remove( newnet );
-                else
-                    m_netinfoList->RemoveNet( newnet );
 
                 delete newnet;
             }
@@ -534,21 +530,21 @@ protected:
     }
 
 protected:
-    wxTextValidator* m_filterValidator;
-    wxTextCtrl*      m_filterCtrl;
-    wxListBox*       m_listBox;
-    int              m_minPopupWidth;
-    int              m_maxPopupHeight;
+    wxTextValidator*             m_filterValidator;
+    wxTextCtrl*                  m_filterCtrl;
+    wxListBox*                   m_listBox;
+    int                          m_minPopupWidth;
+    int                          m_maxPopupHeight;
 
-    NETINFO_LIST*    m_netinfoList;
-    wxString         m_indeterminateLabel;
-    BOARD*           m_board;
+    const NETINFO_LIST*          m_netinfoList;
+    wxString                     m_indeterminateLabel;
+    BOARD*                       m_board;
 
-    int              m_selectedNetcode;
+    int                          m_selectedNetcode;
 
     std::map<wxString, wxString> m_unescapedNetNameMap;
 
-    wxEvtHandler*    m_focusHandler;
+    wxEvtHandler*                m_focusHandler;
 };
 
 
@@ -609,7 +605,7 @@ void NET_SELECTOR::onKeyDown( wxKeyEvent& aEvt )
 }
 
 
-void NET_SELECTOR::SetNetInfo( NETINFO_LIST* aNetInfoList )
+void NET_SELECTOR::SetNetInfo( const NETINFO_LIST* aNetInfoList )
 {
     m_netSelectorPopup->SetNetInfo( aNetInfoList );
 }

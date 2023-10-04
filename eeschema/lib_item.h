@@ -199,7 +199,7 @@ public:
             return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
     }
 
-    LIB_SYMBOL* GetParent() const
+    LIB_SYMBOL* GetParent() const  // Replace EDA_ITEM::GetParent() with a more useful return-type
     {
         return (LIB_SYMBOL*) m_parent;
     }

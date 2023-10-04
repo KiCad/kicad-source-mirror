@@ -805,9 +805,9 @@ public:
         return m_NetInfo;
     }
 
-    NETINFO_LIST& GetNetInfo()
+    void RemoveUnusedNets( BOARD_COMMIT* aCommit )
     {
-        return m_NetInfo;
+        m_NetInfo.RemoveUnusedNets( aCommit );
     }
 
 #ifndef SWIG

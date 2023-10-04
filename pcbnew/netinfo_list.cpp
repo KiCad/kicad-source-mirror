@@ -22,6 +22,7 @@
  */
 
 #include <board.h>
+#include <board_commit.h>
 #include <footprint.h>
 #include <macros.h>
 #include <pad.h>
@@ -113,19 +114,24 @@ void NETINFO_LIST::RemoveNet( NETINFO_ITEM* aNet )
 }
 
 
-void NETINFO_LIST::RemoveUnusedNets()
+void NETINFO_LIST::RemoveUnusedNets( BOARD_COMMIT* aCommit )
 {
-    NETCODES_MAP existingNets = m_netCodes;
+    NETCODES_MAP               existingNets = m_netCodes;
+    std::vector<NETINFO_ITEM*> unusedNets;
 
     m_netCodes.clear();
     m_netNames.clear();
 
-    for( std::pair<const int, NETINFO_ITEM*> item : existingNets )
+    for( const auto& [ netCode, netInfo ] : existingNets )
     {
-        if( item.second->IsCurrent() )
+        if( netInfo->IsCurrent() )
         {
-            m_netNames.insert( std::make_pair( item.second->GetNetname(), item.second ) );
-            m_netCodes.insert( std::make_pair( item.first, item.second ) );
+            m_netNames.insert( std::make_pair( netInfo->GetNetname(), netInfo ) );
+            m_netCodes.insert( std::make_pair( netCode, netInfo ) );
+        }
+        else if( aCommit )
+        {
+            aCommit->Removed( netInfo );
         }
     }
 }

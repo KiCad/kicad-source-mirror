@@ -465,7 +465,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
         return;
 
     GetBoard()->DeleteAllFootprints();
-    GetBoard()->GetNetInfo().RemoveUnusedNets();
+    GetBoard()->RemoveUnusedNets( nullptr );
     GetCanvas()->GetView()->Clear();
 
 
@@ -504,7 +504,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         return;
 
     GetBoard()->DeleteAllFootprints();
-    GetBoard()->GetNetInfo().RemoveUnusedNets();
+    GetBoard()->RemoveUnusedNets( nullptr );
     GetCanvas()->GetView()->Clear();
 
     INFOBAR_REPORTER infoReporter( m_infoBar );

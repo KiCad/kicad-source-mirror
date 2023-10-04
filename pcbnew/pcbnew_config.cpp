@@ -60,7 +60,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
     KIGFX::PCB_RENDER_SETTINGS*    renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
-    NETINFO_LIST& nets = GetBoard()->GetNetInfo();
+    const NETINFO_LIST& nets = GetBoard()->GetNetInfo();
 
     std::set<int>& hiddenNets = renderSettings->GetHiddenNets();
     hiddenNets.clear();
@@ -154,9 +154,9 @@ void PCB_EDIT_FRAME::SaveProjectLocalSettings()
     // Save render settings that aren't stored in PCB_DISPLAY_OPTIONS
 
     std::shared_ptr<NET_SETTINGS>& netSettings = project.NetSettings();
-    NETINFO_LIST&                  nets = GetBoard()->GetNetInfo();
-    KIGFX::RENDER_SETTINGS*     rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
-    KIGFX::PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
+    const NETINFO_LIST&            nets = GetBoard()->GetNetInfo();
+    KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS*    renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
     netSettings->m_NetColorAssignments.clear();
 
@@ -224,7 +224,7 @@ void PCB_EDIT_FRAME::saveProjectSettings()
     localSettings.m_AutoTrackWidth   = bds.m_UseConnectedTrackWidth;
 
     // Net display settings
-    NETINFO_LIST&               nets = GetBoard()->GetNetInfo();
+    const NETINFO_LIST&         nets = GetBoard()->GetNetInfo();
     KIGFX::RENDER_SETTINGS*     rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 

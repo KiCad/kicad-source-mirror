@@ -2946,12 +2946,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         int selectPossibleNetsByPopMenu( std::list<int>& aNetcodeList )
         {
-            ACTION_MENU menu( true );
-            NETINFO_LIST& netInfo = m_board->GetNetInfo();
-            std::map<int, int> menuIDNetCodeMap;
-            int menuID = 1;
+            ACTION_MENU         menu( true );
+            const NETINFO_LIST& netInfo = m_board->GetNetInfo();
+            std::map<int, int>  menuIDNetCodeMap;
+            int                 menuID = 1;
 
-            for( auto& netcode : aNetcodeList )
+            for( int netcode : aNetcodeList )
             {   
                 wxString menuText;
                 if( menuID < 10 )

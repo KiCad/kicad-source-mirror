@@ -46,7 +46,7 @@ public:
 
     ~NET_SELECTOR() override;
 
-    void SetNetInfo( NETINFO_LIST* aNetInfoList );
+    void SetNetInfo( const NETINFO_LIST* aNetInfoList );
 
     // Set to wxEmptyString to disallow indeterminate settings
     void SetIndeterminateString( const wxString& aString );

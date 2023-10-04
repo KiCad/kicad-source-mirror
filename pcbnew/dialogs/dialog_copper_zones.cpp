@@ -370,7 +370,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
 
 void DIALOG_COPPER_ZONE::readNetInformation()
 {
-    NETINFO_LIST& netInfoList = m_Parent->GetBoard()->GetNetInfo();
+    const NETINFO_LIST& netInfoList = m_Parent->GetBoard()->GetNetInfo();
 
     m_netInfoItemList.clear();
     m_netInfoItemList.reserve( netInfoList.GetNetCount() );

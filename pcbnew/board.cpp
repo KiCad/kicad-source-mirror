@@ -1163,6 +1163,12 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             return group;
     }
 
+    for( NETINFO_ITEM* netInfo : m_NetInfo )
+    {
+        if( netInfo->m_Uuid == aID )
+            return netInfo;
+    }
+
     if( m_Uuid == aID )
         return const_cast<BOARD*>( this );
 

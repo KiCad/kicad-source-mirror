@@ -1446,10 +1446,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<build the images, components, and netlist>-----------------------
     {
-        PIN_REF       empty( m_pcb->m_network );
-        std::string   componentId;
-        int           highestNetCode = 0;
-        NETINFO_LIST& netInfo = aBoard->GetNetInfo();
+        PIN_REF             empty( m_pcb->m_network );
+        std::string         componentId;
+        int                 highestNetCode = 0;
+        const NETINFO_LIST& netInfo = aBoard->GetNetInfo();
 
         // find the highest numbered netCode within the board.
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )

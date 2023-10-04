@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
 
     BOARD brd;
 
-    NETINFO_LIST& netInfo = brd.GetNetInfo();
+    const NETINFO_LIST& netInfo = brd.GetNetInfo();
 
     std::shared_ptr<NETCLASS> netclass1( new NETCLASS( "HV" ) );
     std::shared_ptr<NETCLASS> netclass2( new NETCLASS( "otherClass" ) );

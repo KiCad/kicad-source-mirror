@@ -1239,7 +1239,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
         }
 
-        m_board->GetNetInfo().RemoveUnusedNets();
+        m_board->RemoveUnusedNets( &m_commit );
 
         // When new footprints are added, the automatic zone refill is disabled because:
         // * it creates crashes when calculating dynamic ratsnests if auto refill is enabled.
