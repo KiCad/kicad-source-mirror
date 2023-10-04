@@ -482,23 +482,21 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
 
         // Sort from back to front
         std::sort( materialsSorted.begin(), materialsSorted.end(),
-            [&]( std::pair<const MODEL_3D::MATERIAL*, float>& a,
-                 std::pair<const MODEL_3D::MATERIAL*, float>& b ) {
-                    // If A is inside B, then A is rendered first
-                    if( b.first->m_bbox.Inside( a.first->m_bbox ) )
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        if( a.first->m_bbox.Inside( b.first->m_bbox ) )
-                        {
-                            return false;
-                        }
-                    }
+                [&]( std::pair<const MODEL_3D::MATERIAL*, float>& a,
+                     std::pair<const MODEL_3D::MATERIAL*, float>& b )
+                {
+                    bool aInsideB = a.first->m_bbox.Inside( b.first->m_bbox );
+                    bool bInsideA = b.first->m_bbox.Inside( a.first->m_bbox );
 
-                    return a.second > b.second;
-            } );
+                    // If A is inside B, then A is rendered first
+                    if( aInsideB != bInsideA )
+                        return bInsideA;
+
+                    if( a.second != b.second )
+                        return a.second > b.second;
+
+                    return a.first > b.first;       // compare pointers as a last resort
+                } );
 
         for( const std::pair<const MODEL_3D::MATERIAL*, float>& mat : materialsSorted )
         {
