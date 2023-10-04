@@ -939,10 +939,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     }
     else
     {
-        targetLayer = aEvent.Parameter<PCB_LAYER_ID>();
-
-        if( !enabledLayers.test( targetLayer ) )
-            return 0;
+        targetLayer = UNDEFINED_LAYER;
     }
 
     if( targetLayer != UNDEFINED_LAYER )
