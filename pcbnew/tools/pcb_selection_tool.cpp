@@ -3203,6 +3203,49 @@ void PCB_SELECTION_TOOL::FilterCollectorForMarkers( GENERAL_COLLECTOR& aCollecto
 void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+    BOX2D viewport = getView()->GetViewport();
+    BOX2I extents( { KiROUND( viewport.GetPosition().x ), KiROUND( viewport.GetPosition().y ) },
+                    { KiROUND( viewport.GetSize().x ), KiROUND( viewport.GetSize().y ) } );
+
+    bool need_direct_hit = false;
+    FOOTPRINT* single_fp = nullptr;
+
+    // If the designer is not modifying the existing selection AND we already have
+    // a selection, then we only want to select items that are directly under the cursor.
+    // This prevents us from being unable to clear the selection when zoomed into a footprint
+    if( !m_additive && !m_subtractive && !m_exclusive_or && m_selection.GetSize() > 0 )
+    {
+        need_direct_hit = true;
+
+        for( EDA_ITEM* item : m_selection )
+        {
+            FOOTPRINT* fp = nullptr;
+
+            if( item->Type() != PCB_FOOTPRINT_T )
+                fp = static_cast<FOOTPRINT*>( static_cast<BOARD_ITEM*>( item )->GetParentFootprint() );
+            else
+                fp = static_cast<FOOTPRINT*>( item );
+
+            // If the selection contains items that are not footprints, then don't restrict
+            // whether we deselect the item or not.
+            if( !fp )
+            {
+                single_fp = nullptr;
+                break;
+            }
+            else if( !single_fp )
+            {
+                single_fp = fp;
+            }
+            // If the selection contains items from multiple footprints, then don't restrict
+            // whether we deselect the item or not.
+            else if( single_fp != fp )
+            {
+                single_fp = nullptr;
+                break;
+            }
+        }
+    }
 
     auto visibleLayers =
             [&]()
@@ -3240,24 +3283,58 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
     // Iterate from the back so we don't have to worry about removals.
     for( int i = aCollector.GetCount() - 1; i >= 0; --i )
     {
-        bool has_hit = false;
         BOARD_ITEM* item = aCollector[i];
         FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item );
 
         if( !fp )
             continue;
 
+        BOX2I bbox = fp->GetLayerBoundingBox( layers );
+
+        // If the point clicked is not inside the visible bounding box, we can also remove it.
+        if( !bbox.Contains( aWhere) )
+            aCollector.Remove( item );
+
+        bool has_hit = false;
+
         for( PCB_LAYER_ID layer : layers.Seq() )
         {
-            if( fp->HitTestOnLayer( aWhere, layer ) )
+            if( fp->HitTestOnLayer( extents, false, layer ) )
             {
                 has_hit = true;
                 break;
             }
         }
 
+        // If the point is outside of the visible bounding box, we can remove it.
         if( !has_hit )
+        {
             aCollector.Remove( item );
+        }
+        // Do not require a direct hit on this fp if the existing selection only contains
+        // this fp's items.  This allows you to have a selection of pads from a single
+        // footprint and still click in the center of the footprint to select it.
+        else if( single_fp )
+        {
+            if( fp == single_fp )
+                continue;
+        }
+        else if( need_direct_hit )
+        {
+            has_hit = false;
+
+            for( PCB_LAYER_ID layer : layers.Seq() )
+            {
+                if( fp->HitTestOnLayer( aWhere, layer ) )
+                {
+                    has_hit = true;
+                    break;
+                }
+            }
+
+            if( !has_hit )
+                aCollector.Remove( item );
+        }
     }
 }
 
