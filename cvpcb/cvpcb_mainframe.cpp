@@ -213,6 +213,13 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
+    Unbind( wxEVT_TEXT, &CVPCB_MAINFRAME::onTextFilterChanged, this );
+    Unbind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+    Unbind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+
+    Unbind( wxEVT_TIMER, &CVPCB_MAINFRAME::onTextFilterChangedTimer, this, m_filterTimer->GetId() );
+    Unbind( wxEVT_IDLE, &CVPCB_MAINFRAME::updateFootprintViewerOnIdle, this );
+
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_filterTimer->Stop();
 
