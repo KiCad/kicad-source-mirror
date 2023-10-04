@@ -114,7 +114,7 @@ void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     if( aTraceMode == FILLED )
         ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, nullptr );
     else
-        sketchOval( aPadPos, size, orient, -1 );
+        sketchOval( aPadPos, size, orient, USE_DEFAULT_LINE_WIDTH );
 }
 
 
