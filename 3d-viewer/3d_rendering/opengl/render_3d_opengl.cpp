@@ -1137,7 +1137,10 @@ void RENDER_3D_OPENGL::renderTransparentModels( const glm::mat4 &aCameraViewMatr
             [&]( std::pair<const MODELTORENDER *, float>& a,
                  std::pair<const MODELTORENDER *, float>& b )
             {
-                return a.second > b.second;
+                if( a.second != b.second )
+                    return a.second > b.second;
+
+                return a.first > b.first;   // use pointers as a last resort
             } );
 
     // Start rendering calls
