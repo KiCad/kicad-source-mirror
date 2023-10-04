@@ -1911,9 +1911,19 @@ void RENDER_3D_RAYTRACE::initializeBlockPositions()
 
     const SFVEC2UI center( m_realBufferSize.x / 2, m_realBufferSize.y / 2 );
     std::sort( m_blockPositions.begin(), m_blockPositions.end(),
-            [&]( const SFVEC2UI& a, const SFVEC2UI& b ) {
+            [&]( const SFVEC2UI& a, const SFVEC2UI& b )
+            {
                 // Sort order: inside out.
-                return distance( a, center ) < distance( b, center );
+                float distanceA = distance( a, center );
+                float distanceB = distance( b, center );
+
+                if( distanceA != distanceB )
+                    return distanceA < distanceB;
+
+                if( a[0] != b[0] )
+                    return a[0] < b[0];
+
+                return a[1] < b[1];
             } );
 
     // Create m_shader buffer

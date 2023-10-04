@@ -1388,10 +1388,14 @@ void RENDER_3D_OPENGL::renderTransparentModels( const glm::mat4 &aCameraViewMatr
 
     // Sort from back to front
     std::sort( transparentModelList.begin(), transparentModelList.end(),
-        [&]( std::pair<const MODELTORENDER *, float>& a,
-             std::pair<const MODELTORENDER *, float>& b ) {
-            return a.second > b.second;
-        } );
+            [&]( std::pair<const MODELTORENDER *, float>& a,
+                 std::pair<const MODELTORENDER *, float>& b )
+            {
+                if( a.second != b.second )
+                    return a.second > b.second;
+
+                return a.first > b.first;   // use pointers as a last resort
+            } );
 
     // Start rendering calls
     glPushMatrix();
