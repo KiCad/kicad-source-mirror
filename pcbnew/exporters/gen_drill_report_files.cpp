@@ -55,9 +55,31 @@ inline double diameter_in_mm( double ius )
 
 
 // return a pen size to plot markers and having a readable shape
-inline int getMarkerBestPenSize( int aMarkerDiameter )
+// clamped to be >= MIN_SIZE_MM to avoid too small line width
+static int getMarkerBestPenSize( int aMarkerDiameter )
 {
-    return aMarkerDiameter / 10;
+    int bestsize = aMarkerDiameter / 10;
+
+    const double MIN_SIZE_MM = 0.1;
+    bestsize = std::max( bestsize, pcbIUScale.mmToIU( MIN_SIZE_MM ) );
+
+    return bestsize;
+}
+
+
+// return a pen size to plot outlines for oval holes
+inline int getSketchOvalBestPenSize()
+{
+    const double SKETCH_LINE_WIDTH_MM = 0.1;
+    return pcbIUScale.mmToIU( SKETCH_LINE_WIDTH_MM );
+}
+
+
+// return a default pen size to plot items with no specific line thickness
+inline int getDefaultPenSize()
+{
+    const double DEFAULT_LINE_WIDTH_MM = 0.2;
+    return pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH_MM );
 }
 
 
@@ -171,7 +193,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     plotter->SetColorMode( false );
 
     KIGFX::PCB_RENDER_SETTINGS renderSettings;
-    renderSettings.SetDefaultPenWidth( pcbIUScale.mmToIU( 0.2 ) );
+    renderSettings.SetDefaultPenWidth( getDefaultPenSize() );
 
     plotter->SetRenderSettings( &renderSettings );
 
@@ -474,7 +496,16 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
         aPlotter->Marker( pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
 
         if( hole.m_Hole_Shape != 0 )
+        {
+            aPlotter->SetCurrentLineWidth( getSketchOvalBestPenSize() );
+            // FlashPadOval uses also the render settings default pen size, so we need
+            // to initialize it:
+            KIGFX::RENDER_SETTINGS* renderSettings = aPlotter->RenderSettings();
+            int curr_default_pensize = renderSettings->GetDefaultPenWidth();
+            renderSettings->SetDefaultPenWidth( getSketchOvalBestPenSize() );
             aPlotter->FlashPadOval( pos, hole.m_Hole_Size, hole.m_Hole_Orient, SKETCH, nullptr );
+            renderSettings->SetDefaultPenWidth( curr_default_pensize );
+        }
     }
 
     aPlotter->SetCurrentLineWidth( -1 );
