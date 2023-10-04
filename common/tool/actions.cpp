@@ -960,6 +960,14 @@ TOOL_ACTION ACTIONS::help( TOOL_ACTION_ARGS()
         .Tooltip( _( "Open product documentation in a web browser" ) )
         .Icon( BITMAPS::help_online ) );
 
+TOOL_ACTION ACTIONS::about( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.about" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "About KiCad" ) )
+        .Tooltip( _( "Open about dialog" ) )
+        .UIId( wxID_ABOUT )
+        .Icon( BITMAPS::about ) );
+
 TOOL_ACTION ACTIONS::listHotKeys( TOOL_ACTION_ARGS()
         .Name( "common.SuiteControl.listHotKeys" )
         .Scope( AS_GLOBAL )

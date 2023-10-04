@@ -190,6 +190,7 @@ public:
     static TOOL_ACTION showFootprintLibTable;
     static TOOL_ACTION gettingStarted;
     static TOOL_ACTION help;
+    static TOOL_ACTION about;
     static TOOL_ACTION listHotKeys;
     static TOOL_ACTION donate;
     static TOOL_ACTION getInvolved;

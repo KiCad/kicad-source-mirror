@@ -271,6 +271,14 @@ int COMMON_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_CONTROL::About( const TOOL_EVENT& aEvent )
+{
+    void ShowAboutDialog( EDA_BASE_FRAME * aParent ); // See AboutDialog_main.cpp
+    ShowAboutDialog( m_frame );
+    return 0;
+}
+
+
 int COMMON_CONTROL::ListHotKeys( const TOOL_EVENT& aEvent )
 {
     DisplayHotkeyList( m_frame );
@@ -346,6 +354,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::GetInvolved,        ACTIONS::getInvolved.MakeEvent() );
     Go( &COMMON_CONTROL::Donate,             ACTIONS::donate.MakeEvent() );
     Go( &COMMON_CONTROL::ReportBug,          ACTIONS::reportBug.MakeEvent() );
+    Go( &COMMON_CONTROL::About,              ACTIONS::about.MakeEvent() );
 }
 
 
