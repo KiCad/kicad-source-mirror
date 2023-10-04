@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-10-01 06:01+0000\n"
+"PO-Revision-Date: 2023-10-05 16:11+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -2011,7 +2011,7 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Insira o nome e o valor para cada variável de ambiente.  As entradas em "
+"Inserir o nome e o valor para cada variável de ambiente.  As entradas em "
 "cinza são os nomes que já foram definidos externamente no nível do sistema "
 "ou do usuário.  As variáveis de ambiente definidas no nível do sistema ou do "
 "usuário têm precedência sobre as definidas nesta tabela.  Significa que os "
@@ -8741,7 +8741,7 @@ msgstr "Use a folha atual como raiz"
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 #: eeschema/dialogs/dialog_export_netlist.cpp:396
 msgid "Export netlist only for the current sheet"
-msgstr "Exporta a netlist apenas para a folha atual"
+msgstr "Exportar a netlist apenas para a folha atual"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:354
 #: eeschema/dialogs/dialog_sim_command_base.cpp:435
@@ -13228,7 +13228,7 @@ msgstr "O esquema é somente leitura."
 
 #: eeschema/files-io.cpp:545
 msgid "Insert Schematic"
-msgstr "Insira um esquemático"
+msgstr "Inserir um esquemático"
 
 #: eeschema/files-io.cpp:577
 msgid ""
@@ -13559,7 +13559,7 @@ msgstr "Limpa os arquivos recentes"
 
 #: eeschema/menubar.cpp:98
 msgid "Insert Schematic Sheet Content..."
-msgstr "Insira o conteúdo da folha do esquema..."
+msgstr "Inserir o conteúdo da folha do esquema..."
 
 #: eeschema/menubar.cpp:99
 msgid ""
@@ -13591,7 +13591,7 @@ msgstr "Atribuições do footprint..."
 #: pcbnew/dialogs/dialog_export_svg.cpp:93
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:127
 msgid "Export"
-msgstr "Exporta"
+msgstr "Exportar"
 
 #: eeschema/menubar.cpp:122
 msgid "Drawing to Clipboard"
@@ -13622,14 +13622,14 @@ msgstr "&Unidades"
 #: pagelayout_editor/menubar.cpp:173 pcbnew/menubar_footprint_editor.cpp:255
 #: pcbnew/menubar_pcb_editor.cpp:473
 msgid "&Place"
-msgstr "&Insira"
+msgstr "&Posicionar"
 
 #: eeschema/menubar.cpp:319
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:174 pcbnew/menubar_footprint_editor.cpp:256
 #: pcbnew/menubar_pcb_editor.cpp:475
 msgid "&Inspect"
-msgstr "&Inspecione"
+msgstr "&Inspecionar"
 
 #: eeschema/menubar.cpp:320 gerbview/menubar.cpp:239 kicad/menubar.cpp:216
 #: pcbnew/menubar_footprint_editor.cpp:257 pcbnew/menubar_pcb_editor.cpp:476
@@ -16288,11 +16288,11 @@ msgstr "Salva a pasta de trabalho como..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Export Current Plot as PNG..."
-msgstr "Exporta o gráfico atual como PNG..."
+msgstr "Exportar o gráfico atual como PNG..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
 msgid "Export Current Plot as CSV..."
-msgstr "Exporta a visualização atual como CSV..."
+msgstr "Exportar a visualização atual como CSV..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17305,7 +17305,7 @@ msgstr "Exporte..."
 
 #: eeschema/tools/ee_actions.cpp:177
 msgid "Export a symbol to a new library file"
-msgstr "Exporta um símbolo para um novo arquivo de biblioteca"
+msgstr "Exportar um símbolo para um novo arquivo de biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:182
 msgid "Update Symbol Fields..."
@@ -17354,7 +17354,7 @@ msgstr "Esconda a árvore dos símbolos"
 
 #: eeschema/tools/ee_actions.cpp:216
 msgid "Export View as PNG..."
-msgstr "Exporta a visualização como um PNG..."
+msgstr "Exportar a visualização como um PNG..."
 
 #: eeschema/tools/ee_actions.cpp:216
 msgid "Create PNG file from the current view"
@@ -17362,7 +17362,7 @@ msgstr "Cria um arquivo PNG a partir da visualização atual"
 
 #: eeschema/tools/ee_actions.cpp:221
 msgid "Export Symbol as SVG..."
-msgstr "Exporta o símbolo como um SVG..."
+msgstr "Exportar o símbolo como um SVG..."
 
 #: eeschema/tools/ee_actions.cpp:221
 msgid "Create SVG file from the current symbol"
@@ -17963,11 +17963,11 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:655
 msgid "Export Drawing to Clipboard"
-msgstr "Exporta o desenho para a área de transferência"
+msgstr "Exportar o desenho para a área de transferência"
 
 #: eeschema/tools/ee_actions.cpp:655
 msgid "Export drawing of current sheet to clipboard"
-msgstr "Exporta o desenho da folha atual para a área de transferência"
+msgstr "Exportar o desenho da folha atual para a área de transferência"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Switch to PCB Editor"
@@ -17979,11 +17979,11 @@ msgstr "Abrir a PCI no editor da placa"
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Export Netlist..."
-msgstr "Exporta Netlist..."
+msgstr "Exportar Netlist..."
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Export file containing netlist in one of several formats"
-msgstr "Exporta o arquivo que contem uma netlist num dos vários formatos"
+msgstr "Exportar o arquivo que contem uma netlist num dos vários formatos"
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate BOM..."
@@ -17995,7 +17995,7 @@ msgstr "Gera uma lista de materiais a partir do esquema eletrônico atual"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Export Symbols to Library..."
-msgstr "Exporta os símbolos para a biblioteca..."
+msgstr "Exportar os símbolos para a biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:676
 msgid ""
@@ -18008,7 +18008,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:682
 msgid "Export Symbols to New Library..."
-msgstr "Exporta os símbolos para a nova biblioteca..."
+msgstr "Exportar os símbolos para a nova biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:683
 msgid ""
@@ -18399,7 +18399,7 @@ msgstr "Deseja escluir os pinos que não foram referenciados desta folha?"
 #: eeschema/tools/sch_edit_tool.cpp:2355
 #, c-format
 msgid "Enter page number for sheet path%s"
-msgstr "Insira o número da página para o caminho da folha %s"
+msgstr "Inserir o número da página para o caminho da folha %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:2358
 #: eeschema/widgets/hierarchy_pane.cpp:287
@@ -18550,7 +18550,7 @@ msgstr "O símbolo não é derivado de outro símbolo."
 #: eeschema/tools/symbol_editor_edit_tool.cpp:660
 #, c-format
 msgid "Enter display name for unit %s"
-msgstr "Insira o nome de exibição para a unidade %s"
+msgstr "Inserir o nome de exibição para a unidade %s"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:669
 msgid "Set Unit Display Name"
@@ -22750,7 +22750,7 @@ msgstr "Adiciona um regulador"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
 msgstr ""
-"Insira um novo item à lista atual dos reguladores que estão disponíveis"
+"Inserir um novo item à lista atual dos reguladores que estão disponíveis"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
@@ -24049,12 +24049,12 @@ msgstr "PrePreg"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:176
 #, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Insira a espessura da placa em %s:"
+msgstr "Inserir a espessura da placa em %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:181
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Insira a espessura esperada da placa (valor mínimo %s):"
+msgstr "Inserir a espessura esperada da placa (valor mínimo %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
 msgid "Adjust Unlocked Dielectric Layers"
@@ -24829,7 +24829,7 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"O vazio continua na frente ou insira um número maior que a designação de "
+"O vazio continua na frente ou inserir um número maior que a designação de "
 "referência mais alta na frente."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
@@ -24837,7 +24837,7 @@ msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
-"Deixe em branco, com zero ou insira um número maior que a designação de "
+"Deixe em branco, com zero ou inserir um número maior que a designação de "
 "referência mais alta na frente."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
@@ -25605,7 +25605,7 @@ msgstr "As ilhas isoladas menores do que isso serão removidas"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:395
 msgid "Export Settings to Other Similar Zones"
-msgstr "Exporta as configurações para outras regiões similares"
+msgstr "Exportar as configurações para outras regiões similares"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
 msgid ""
@@ -26577,7 +26577,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
-msgstr "Exporta STEP"
+msgstr "Exportar STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
 msgid "Command line:\n"
@@ -26663,7 +26663,7 @@ msgstr "Imprima as bordas do cartão em todas as páginas"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:72
 msgid "Export SVG File"
-msgstr "Exporta o arquivo SVG"
+msgstr "Exportar o arquivo SVG"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
 msgid "Are you sure you want to overwrite the existing file?"
@@ -29547,7 +29547,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:346
 msgid "Export units:"
-msgstr "Exporta unidades:"
+msgstr "Exportar unidades:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "The units to use for the exported DXF file"
@@ -33623,7 +33623,7 @@ msgstr "Modifica as propriedades da zona"
 
 #: pcbnew/exporters/export_d356.cpp:381
 msgid "Export D-356 Test File"
-msgstr "Exporta o arquivo de teste D-356"
+msgstr "Exportar o arquivo de teste D-356"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
@@ -34154,7 +34154,7 @@ msgstr "Não é possível carregar o footprint '%s' de '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:333
 msgid "Export Footprint"
-msgstr "Exporta footprint"
+msgstr "Exportar footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:376
 #, c-format
@@ -34339,7 +34339,7 @@ msgstr "Seleciona próxima página de parâmetros"
 
 #: pcbnew/footprint_wizard_frame.cpp:618
 msgid "Export footprint to editor"
-msgstr "Exporta o footprint para o editor"
+msgstr "Exportar o footprint para o editor"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:88
 msgid "no wizard selected"
@@ -34598,7 +34598,7 @@ msgstr "GenCAD…"
 
 #: pcbnew/menubar_pcb_editor.cpp:131
 msgid "Export GenCAD board representation"
-msgstr "Exporta uma representação da placa em GenCAD"
+msgstr "Exportar uma representação da placa em GenCAD"
 
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "VRML..."
@@ -34606,7 +34606,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "Export VRML 3D board representation"
-msgstr "Exporta uma representação 3D da placa em VRML"
+msgstr "Exportar uma representação 3D da placa em VRML"
 
 #: pcbnew/menubar_pcb_editor.cpp:135
 msgid "IDFv3..."
@@ -34614,7 +34614,7 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:135
 msgid "Export IDF 3D board representation"
-msgstr "Exporta uma representação 3D da placa em IDF"
+msgstr "Exportar uma representação 3D da placa em IDF"
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 msgid "STEP..."
@@ -34622,7 +34622,7 @@ msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 msgid "Export STEP 3D board representation"
-msgstr "Exporta uma representação 3D da placa em STEP"
+msgstr "Exportar uma representação 3D da placa em STEP"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -34630,7 +34630,7 @@ msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Export SVG board representation"
-msgstr "Exporta uma representação da placa em SVG"
+msgstr "Exportar uma representação da placa em SVG"
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Footprint Association (.cmp) File..."
@@ -35395,7 +35395,7 @@ msgstr "Editor de PCI do KiCad"
 
 #: pcbnew/pcb_edit_frame.cpp:210
 msgid "Export netlist used to update schematics"
-msgstr "Exporta a netlist usada para atualizar os esquemas"
+msgstr "Exportar a netlist usada para atualizar os esquemas"
 
 #: pcbnew/pcb_edit_frame.cpp:310
 msgid "Search"
@@ -35458,7 +35458,7 @@ msgstr "Não foi possível compilar regras personalizadas do desenho."
 
 #: pcbnew/pcb_edit_frame.cpp:2352
 msgid "Export Hyperlynx Layout"
-msgstr "Exporta layout Hyperlynx"
+msgstr "Exportar layout Hyperlynx"
 
 #: pcbnew/pcb_expr_evaluator.cpp:311
 msgid "must be mm, in, or mil"
@@ -35730,7 +35730,7 @@ msgstr "Filtro com expressão regular para <b>nome de footprint</b>."
 #: pcbnew/plugin.cpp:170
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
-msgstr "Insira o módulo python que implemente as funções PLUGIN::Footprint*()."
+msgstr "Inserir o módulo python que implemente as funções PLUGIN::Footprint*()."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
@@ -37862,7 +37862,7 @@ msgstr "Arquivo Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:433
 msgid "Export Board Netlist"
-msgstr "Exporta a lista da placa"
+msgstr "Exportar a lista da placa"
 
 #: pcbnew/tools/board_editor_control.cpp:434
 msgid "KiCad board netlist files"
@@ -38361,7 +38361,7 @@ msgstr "Dielétrico"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
-msgstr "Insira a tabela do empilhamento da placa"
+msgstr "Inserir a tabela do empilhamento da placa"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:397
 msgid "BOARD CHARACTERISTICS"
@@ -38499,7 +38499,7 @@ msgstr "Devem ser selecionados pelo menos dois segmentos de trilha retos."
 
 #: pcbnew/tools/edit_tool.cpp:895 pcbnew/tools/edit_tool.cpp:1176
 msgid "Enter fillet radius:"
-msgstr "Insira o raio do filete:"
+msgstr "Inserir o raio do filete:"
 
 #: pcbnew/tools/edit_tool.cpp:895 pcbnew/tools/edit_tool.cpp:1059
 #: pcbnew/tools/pcb_actions.cpp:364
@@ -39361,11 +39361,11 @@ msgstr "Importa o arquivo da sessão roteada Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:645
 msgid "Export Specctra DSN..."
-msgstr "Exporta Specctra DSN..."
+msgstr "Exportar Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:645
 msgid "Export Specctra DSN routing info"
-msgstr "Exporta as informações de roteamento DSN Specctra"
+msgstr "Exportar as informações de roteamento DSN Specctra"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Gerbers (.gbr)..."
