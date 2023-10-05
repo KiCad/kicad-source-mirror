@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -137,7 +137,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_TrackWidthUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackWidthUnit->Wrap( -1 );
-	fgTrackSizes->Add( m_TrackWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgTrackSizes->Add( m_TrackWidthUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgTrackSizes->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -172,7 +172,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	m_sbTrackSizer->Add( fgTrackRightSizer, 1, wxEXPAND|wxRIGHT, 3 );
+	m_sbTrackSizer->Add( fgTrackRightSizer, 1, wxEXPAND, 3 );
 
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -326,11 +326,11 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	wxString m_annularRingsCtrlChoices[] = { _("All copper layers"), _("Start, end, and connected layers"), _("Connected layers only") };
 	int m_annularRingsCtrlNChoices = sizeof( m_annularRingsCtrlChoices ) / sizeof( wxString );
 	m_annularRingsCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_annularRingsCtrlNChoices, m_annularRingsCtrlChoices, 0 );
-	m_annularRingsCtrl->SetSelection( 0 );
+	m_annularRingsCtrl->SetSelection( 1 );
 	fgSizer4->Add( m_annularRingsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	viaRightColumn->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 3 );
+	viaRightColumn->Add( fgSizer4, 0, wxEXPAND|wxBOTTOM, 3 );
 
 
 	bSizerViaCols->Add( viaRightColumn, 1, wxEXPAND, 5 );
@@ -436,7 +436,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	bSizerLeftCol = new wxBoxSizer( wxVERTICAL );
 
 	m_bitmapTeardrop = new wxStaticBitmap( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	bSizerShapeColumns->Add( bSizerLeftCol, 1, wxEXPAND|wxRIGHT, 10 );
@@ -473,7 +473,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_stMaxLenUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLenUnits->Wrap( -1 );
-	fgSizerRightCol->Add( m_stMaxLenUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	fgSizerRightCol->Add( m_stMaxLenUnits, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	fgSizerRightCol->Add( 0, 3, 1, wxEXPAND, 5 );
@@ -504,7 +504,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	m_stMaxHeightUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxHeightUnits->Wrap( -1 );
-	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	bSizer20->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
