@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,6 +121,32 @@ namespace EDA_UNIT_UTILS
     KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue );
     KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
                                                   const VECTOR2I&     aPoint );
+
+    /**
+     * Converts \a aInput string to internal units when reading from a file.
+     * 
+     * This should only be used for reading from files as it ignores locale
+     * 
+     * @param aInput is std::string to parse.
+     * @param aIuScale is the scale to use.
+     * @param aOut is the output reference.
+     * @return true if the parsing was successful.
+     */
+    KICOMMON_API bool ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
+                                          int& aOut );
+
+    /**
+     * Converts \a aInput string to internal units vector when reading from a file.
+     * 
+     * This should only be used for reading from files as it ignores locale
+     * 
+     * @param aInput is std::string to parse.
+     * @param aIuScale is the scale to use.
+     * @param aOut is the output reference vector.
+     * @return true if the parsing was successful.
+     */
+    KICOMMON_API bool ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
+                                          VECTOR2I& aOut );
 
     constexpr inline int Mils2IU( const EDA_IU_SCALE& aIuScale, int mils )
     {

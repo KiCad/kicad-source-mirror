@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <fmt/core.h>
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
+#include <charconv>
 
 bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )
 {
@@ -177,6 +178,44 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
 {
     return FormatInternalUnits( aIuScale, aPoint.x ) + " "
            + FormatInternalUnits( aIuScale, aPoint.y );
+}
+
+
+bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
+                                         int& aOut )
+{
+    double value;
+
+    if( std::from_chars( aInput.data(), aInput.data() + aInput.size(), value ).ec != std::errc() )
+        return false;
+
+    aOut = value * aIuScale.IU_PER_MM;
+    return true;
+}
+
+
+bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
+                                         VECTOR2I& aOut )
+{
+    size_t pos = aInput.find( ' ' );
+
+    if( pos == std::string::npos )
+        return false;
+
+    std::string first = aInput.substr( 0, pos );
+    std::string second = aInput.substr( pos + 1 );
+
+    VECTOR2I vec;
+
+    if( !ParseInternalUnits( first, aIuScale, vec.x ) )
+        return false;
+
+    if( !ParseInternalUnits( second, aIuScale, vec.y ) )
+        return false;
+
+    aOut = vec;
+
+    return true;
 }
 
 
