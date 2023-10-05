@@ -1128,7 +1128,7 @@ public:
      * @param aP is the point to check.
      * @return true if the point lies on the edge of any polygon.
      */
-    bool PointOnEdge( const VECTOR2I& aP ) const;
+    bool PointOnEdge( const VECTOR2I& aP, int aAccuracy = 0 ) const;
 
     /**
      * Check if the boundary of shape (this) lies closer to the shape \a aShape than \a aClearance,

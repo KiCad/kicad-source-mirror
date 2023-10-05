@@ -2031,7 +2031,7 @@ const BOX2I SHAPE_POLY_SET::BBoxFromCaches() const
 }
 
 
-bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
+bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP, int aAccuracy ) const
 {
     // Iterate through all the polygons in the set
     for( const POLYGON& polygon : m_polys )
@@ -2039,7 +2039,7 @@ bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
         // Iterate through all the line chains in the polygon
         for( const SHAPE_LINE_CHAIN& lineChain : polygon )
         {
-            if( lineChain.PointOnEdge( aP ) )
+            if( lineChain.PointOnEdge( aP, aAccuracy ) )
                 return true;
         }
     }
