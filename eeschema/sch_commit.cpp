@@ -302,9 +302,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             break;
         }
 
-        // Clear all flags but SELECTED, after edition
-        // (selected items must keep their selection flag).
-        const int selected_mask = ( SELECTED | SELECTED_BY_DRAG );
+        // Clear all flags but SELECTED and others used to move and rotate commands,
+        // after edition (selected items must keep their selection flag).
+        const int selected_mask = ( SELECTED | STARTPOINT | ENDPOINT );
         schItem->ClearFlags( EDA_ITEM_ALL_FLAGS - selected_mask );
     }
 
