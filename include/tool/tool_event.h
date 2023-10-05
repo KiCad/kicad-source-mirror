@@ -525,6 +525,13 @@ public:
         m_mousePos = aP;
     }
 
+    void SetActionGroup( const TOOL_ACTION_GROUP& aGroup )
+    {
+        m_actionGroup = aGroup;
+    }
+
+    bool IsActionInGroup( const TOOL_ACTION_GROUP& aGroup ) const;
+
 private:
     friend class TOOL_DISPATCHER;
     friend class TOOL_MANAGER;
@@ -574,6 +581,10 @@ private:
     bool m_passEvent;
     bool m_hasPosition;
     bool m_forceImmediate;
+
+
+    ///< Optional group that the parent action for the event belongs to
+    std::optional<TOOL_ACTION_GROUP> m_actionGroup;
 
     ///< True when the tool is being re-activated from the stack
     bool m_reactivate;

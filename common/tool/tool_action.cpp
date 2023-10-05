@@ -41,6 +41,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
                           BITMAPS aIcon, TOOL_ACTION_FLAGS aFlags ) :
         m_name( aName ),
         m_scope( aScope ),
+        m_group( std::nullopt ),
         m_defaultHotKey( aDefaultHotKey ),
         m_defaultHotKeyAlt( 0 ),
         m_legacyName( aLegacyHotKeyName ),
@@ -57,6 +58,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
 
 TOOL_ACTION::TOOL_ACTION() :
         m_scope( AS_GLOBAL ),
+        m_group( std::nullopt ),
         m_defaultHotKey( 0 ),
         m_defaultHotKeyAlt( 0 ),
         m_icon( BITMAPS::INVALID_BITMAP ),
@@ -94,6 +96,9 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
     if( aArgs.m_description.has_value() )
         m_description = TowxString( aArgs.m_description.value() );
 
+    if( aArgs.m_group.has_value() )
+        m_group = aArgs.m_group;
+
     ACTION_MANAGER::GetActionList().push_back( this );
 }
 
@@ -114,6 +119,9 @@ TOOL_EVENT TOOL_ACTION::MakeEvent() const
         evt = TOOL_EVENT( TC_MESSAGE, TA_NONE, m_name, m_scope );
     else
         evt = TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
+
+    if( m_group.has_value() )
+        evt.SetActionGroup( m_group.value() );
 
     if( m_param.has_value() )
         evt.SetParameter( m_param );

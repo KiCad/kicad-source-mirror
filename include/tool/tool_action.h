@@ -57,6 +57,41 @@ enum TOOL_ACTION_FLAGS
 };
 
 /**
+ * Define a group that can be used to group actions (and their events) of similar operations.
+ */
+class TOOL_ACTION_GROUP
+{
+public:
+    TOOL_ACTION_GROUP( std::string aName ) :
+        m_name( aName )
+    {
+        // Assign a unique group ID to each group
+        static int groupIDs = 0;
+        m_groupID = ++groupIDs;
+    };
+
+    TOOL_ACTION_GROUP( const TOOL_ACTION_GROUP& aOther )
+    {
+        // Ensure a copy of a group is exactly the same as this one to get
+        // proper comparisons
+        m_name    = aOther.GetName();
+        m_groupID = aOther.GetGroupID();
+    }
+
+    int                GetGroupID() const { return m_groupID; }
+    const std::string& GetName()    const { return m_name; }
+
+    bool operator==( const TOOL_ACTION_GROUP& aOther ) const
+    {
+        return m_groupID == aOther.m_groupID;
+    }
+
+private:
+    int         m_groupID;
+    std::string m_name;
+};
+
+/**
  * Build up the properties of a TOOL_ACTION in an incremental manner that is static-construction
  * safe.
  *
@@ -181,6 +216,12 @@ public:
         return *this;
     }
 
+    TOOL_ACTION_ARGS& Group( const TOOL_ACTION_GROUP& aGroup )
+    {
+        m_group = aGroup;
+        return *this;
+    }
+
 protected:
     // Let the TOOL_ACTION constructor have direct access to the members here
     friend class TOOL_ACTION;
@@ -200,6 +241,8 @@ protected:
     std::optional<std::string_view>     m_description;
 
     std::optional<BITMAPS>              m_icon;
+
+    std::optional<TOOL_ACTION_GROUP>    m_group;
 
     std::any                            m_param;
 };
@@ -333,6 +376,7 @@ public:
         return param;
     }
 
+    const std::optional<TOOL_ACTION_GROUP> GetActionGroup() const { return m_group; }
 
     /**
      * Return name of the tool associated with the action. It is basically the action name
@@ -378,6 +422,8 @@ protected:
     ///< Name of the action (convention is "app.tool.actionName")
     std::string          m_name;
     TOOL_ACTION_SCOPE    m_scope;
+    
+    std::optional<TOOL_ACTION_GROUP>    m_group;    // Optional group for the action to belong to
 
     const int            m_defaultHotKey;    // Default hot key
     const int            m_defaultHotKeyAlt; // Default hot key alternate

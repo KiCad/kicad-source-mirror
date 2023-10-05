@@ -84,6 +84,15 @@ bool TOOL_EVENT::IsAction( const TOOL_ACTION* aAction ) const
 }
 
 
+bool TOOL_EVENT::IsActionInGroup( const TOOL_ACTION_GROUP& aGroup ) const
+{
+    if( m_actionGroup.has_value() )
+        return m_actionGroup.value() == aGroup;
+
+    return false;
+}
+
+
 const std::string TOOL_EVENT::Format() const
 {
     std::string ev;
@@ -142,32 +151,31 @@ const std::string TOOL_EVENT::Format() const
         { 0,        ""      }
     };
 
-    ev = "category: ";
-    ev += flag2string( m_category, categories );
-    ev += " action: ";
-    ev += flag2string( m_actions, actions );
+    ev = "category: " + flag2string( m_category, categories ) + " ";
+    ev += "action: " + flag2string( m_actions, actions ) + " ";
+    ev += "action-group: ";
+
+    if( m_actionGroup.has_value() )
+    {
+        ev += m_actionGroup.value().GetName()
+              +  "(" + std::to_string( m_actionGroup.value().GetGroupID() ) + ")" + " ";
+    }
+    else
+    {
+        ev += "none";
+    }
 
     if( m_actions & TA_MOUSE )
-    {
-        ev += " btns: ";
-        ev += flag2string( m_mouseButtons, buttons );
-    }
+        ev += "btns: " + flag2string( m_mouseButtons, buttons ) + " ";
 
     if( m_actions & TA_KEYBOARD )
-    {
-        ev += "key: " + std::to_string( m_keyCode );
-    }
+        ev += "key: " + std::to_string( m_keyCode ) + " ";
 
     if( m_actions & ( TA_MOUSE | TA_KEYBOARD ) )
-    {
-        ev += " mods: ";
-        ev += flag2string( m_modifiers, modifiers );
-    }
+        ev += "mods: " + flag2string( m_modifiers, modifiers ) + " ";
 
     if( m_commandId )
-    {
-        ev += "cmd-id: " + std::to_string( *m_commandId );
-    }
+        ev += "cmd-id: " + std::to_string( *m_commandId ) + " ";
 
     ev += "cmd-str: " + m_commandStr;
 

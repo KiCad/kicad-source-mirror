@@ -355,6 +355,9 @@ public:
     static TOOL_ACTION layerAlphaDec;
     static TOOL_ACTION layerToggle;
 
+    // Group to link all actions that directly select layers
+    static TOOL_ACTION_GROUP layerDirectSwitchActions();
+
     static TOOL_ACTION layerChanged;        // notification
 
     static TOOL_ACTION flipBoard;

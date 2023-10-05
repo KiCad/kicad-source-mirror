@@ -44,9 +44,20 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
         if( action->m_id == -1 )
             action->m_id = MakeActionId( action->m_name );
 
+        int         groupID   = 0;
+        std::string groupName = "none";
+
+        std::optional<TOOL_ACTION_GROUP> group = action->GetActionGroup();
+        
+        if( group.has_value() )
+        {
+            groupID   = group.value().GetGroupID();
+            groupName = group.value().GetName();
+        }
+
         wxLogTrace( kicadTraceToolStack,
-                    "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d and UI ID %d",
-                    action->m_name, action->m_id, action->GetUIId() );
+                    "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d, UI ID %d, and group %s(%d)",
+                    action->m_name, action->m_id, action->GetUIId(), groupName, groupID );
 
         RegisterAction( action );
     }
