@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers
+ * Copyright (C) 2020-2023 KiCad Developers
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -134,8 +134,16 @@ bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual,
                 nearest = pn;
                 closest_dist = actual;
 
-                if( closest_dist == 0 || !aActual )
+                if( !aLocation && !aActual )
                     break;
+            }
+            else if( aLocation && actual == closest_dist )
+            {
+                if( ( pn - aSeg.A ).SquaredEuclideanNorm()
+                    < ( nearest - aSeg.A ).SquaredEuclideanNorm() )
+                {
+                    nearest = pn;
+                }
             }
         }
     }

@@ -76,6 +76,16 @@ bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2
 
             closest_dist_sq = dist_sq;
         }
+        else if( aLocation && dist_sq == closest_dist_sq )
+        {
+            VECTOR2I near = side.NearestPoint( aSeg );
+
+            if( ( near - aSeg.A ).SquaredEuclideanNorm()
+                < ( nearest - aSeg.A ).SquaredEuclideanNorm() )
+            {
+                nearest = near;
+            }
+        }
     }
 
     if( closest_dist_sq == 0 || closest_dist_sq < SEG::Square( aClearance ) )
