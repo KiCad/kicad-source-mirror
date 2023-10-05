@@ -114,7 +114,7 @@ void SCH_LEGACY_PLUGIN::checkpoint()
                                                             / std::max( 1U, m_lineCount ) );
 
             if( !m_progressReporter->KeepRefreshing() )
-                THROW_IO_ERROR( ( "Open cancelled by user." ) );
+                THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
             m_lastProgressLine = curLine;
         }
@@ -286,7 +286,7 @@ void SCH_LEGACY_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
         m_lineReader = &reader;
         m_lineCount = 0;

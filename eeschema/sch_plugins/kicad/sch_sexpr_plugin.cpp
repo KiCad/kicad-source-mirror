@@ -304,7 +304,7 @@ void SCH_SEXPR_PLUGIN::loadFile( const wxString& aFileName, SCH_SHEET* aSheet )
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( ( "Open cancelled by user." ) );
+            THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
         while( reader.ReadLine() )
             lineCount++;
