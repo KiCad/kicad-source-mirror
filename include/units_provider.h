@@ -78,13 +78,13 @@ public:
      * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
      */
     wxString StringFromValue( double aValue, bool aAddUnitLabel = false,
-                              EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
+                              EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
     {
         return EDA_UNIT_UTILS::UI::StringFromValue( GetIuScale(), GetUserUnits(), aValue,
                                                     aAddUnitLabel, aType );
     }
 
-    wxString StringFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = false )
+    wxString StringFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = false ) const
     {
         return EDA_UNIT_UTILS::UI::StringFromValue( unityScale, EDA_UNITS::DEGREES,
                                                     aValue.AsDegrees(), aAddUnitLabel,
@@ -98,13 +98,13 @@ public:
      * where the loss of precision matters.
      */
     wxString MessageTextFromValue( double aValue, bool aAddUnitLabel = true,
-                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
+                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE ) const
     {
         return EDA_UNIT_UTILS::UI::MessageTextFromValue( GetIuScale(), GetUserUnits(), aValue,
                                                          aAddUnitLabel, aType );
     }
 
-    wxString MessageTextFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = true )
+    wxString MessageTextFromValue( const EDA_ANGLE& aValue, bool aAddUnitLabel = true ) const
     {
         return EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::DEGREES,
                                                          aValue.AsDegrees(), aAddUnitLabel,
@@ -120,7 +120,8 @@ public:
      * @param aTextValue A reference to a wxString object containing the string to convert.
      * @return internal units value
      */
-    int ValueFromString( const wxString& aTextValue, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE )
+    int ValueFromString( const wxString& aTextValue,
+                         EDA_DATA_TYPE   aType = EDA_DATA_TYPE::DISTANCE ) const
     {
         double value = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), GetUserUnits(),
                                                                   aTextValue, aType );
@@ -128,7 +129,7 @@ public:
         return KiROUND<double, int>( value );
     }
 
-    EDA_ANGLE AngleValueFromString( const wxString& aTextValue )
+    EDA_ANGLE AngleValueFromString( const wxString& aTextValue ) const
     {
         double angle = EDA_UNIT_UTILS::UI::DoubleValueFromString( GetIuScale(), EDA_UNITS::DEGREES,
                                                                   aTextValue );
