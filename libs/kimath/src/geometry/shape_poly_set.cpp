@@ -1239,7 +1239,7 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 void SHAPE_POLY_SET::Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                               bool aSimplify )
 {
-    int segCount = GetArcToSegmentCount( aAmount, aMaxError, FULL_CIRCLE );
+    int segCount = GetArcToSegmentCount( std::abs( aAmount ), aMaxError, FULL_CIRCLE );
 
     if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
         inflate2( aAmount, segCount, aCornerStrategy, aSimplify );
