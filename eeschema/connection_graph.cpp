@@ -239,7 +239,11 @@ void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PAT
         sg = sg->m_absorbed_by;
     }
 
-    aSubgraphs.insert( sg );
+    // If we are unable to insert the subgraph into the set, then we have already
+    // visited it and don't need to add it again.
+    if( aSubgraphs.insert( sg ).second == false )
+        return;
+
     aSubgraphs.insert( sg->m_absorbed_subgraphs.begin(), sg->m_absorbed_subgraphs.end() );
 
     for( SCH_ITEM* item : sg->m_items )
