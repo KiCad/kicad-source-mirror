@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,24 @@ void DRAW_CONTEXT::DrawCircle( const VECTOR2I& aOrigin, double aRad, bool aDeEmp
 }
 
 
+void DRAW_CONTEXT::DrawCircleDashed( const VECTOR2I& aOrigin, double aRad, double aStepAngle,
+                                     double aFillAngle, bool aDeEmphasised )
+{
+    const COLOR4D& color = m_render_settings.GetLayerColor( m_currLayer );
+
+    m_gal.SetLineWidth( m_lineWidth );
+    m_gal.SetStrokeColor( deemphasise( color, aDeEmphasised ) );
+    m_gal.SetIsStroke( true );
+    m_gal.SetIsFill( false );
+
+    for( int i = 0; i < 360; i += aStepAngle )
+    {
+        m_gal.DrawArc( aOrigin, aRad, EDA_ANGLE( i, DEGREES_T ),
+                       EDA_ANGLE( i + aFillAngle, DEGREES_T ) );
+    }
+}
+
+
 void DRAW_CONTEXT::DrawLine( const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDeEmphasised )
 {
     COLOR4D strokeColor = m_render_settings.GetLayerColor( m_currLayer );
@@ -74,6 +92,28 @@ void DRAW_CONTEXT::DrawLine( const VECTOR2I& aStart, const VECTOR2I& aEnd, bool 
     m_gal.SetIsStroke( true );
     m_gal.SetStrokeColor( deemphasise( strokeColor, aDeEmphasised ) );
     m_gal.DrawLine( aStart, aEnd );
+}
+
+
+void DRAW_CONTEXT::DrawLineDashed( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aDashStep,
+                                   int aDashFill, bool aDeEmphasised )
+{
+    COLOR4D strokeColor = m_render_settings.GetLayerColor( m_currLayer );
+
+    m_gal.SetLineWidth( m_lineWidth );
+    m_gal.SetIsStroke( true );
+    m_gal.SetStrokeColor( deemphasise( strokeColor, aDeEmphasised ) );
+
+    VECTOR2I delta = aEnd - aStart;
+    int      vecLen = delta.EuclideanNorm();
+
+    for( int i = 0; i < vecLen; i += aDashStep )
+    {
+        VECTOR2I a = aStart + delta.Resize( i );
+        VECTOR2I b = aStart + delta.Resize( std::min( i + aDashFill, vecLen ) );
+
+        m_gal.DrawLine( a, b );
+    }
 }
 
 

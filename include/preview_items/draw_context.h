@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2023 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,17 @@ namespace PREVIEW
          */
         void DrawCircle( const VECTOR2I& aOrigin, double aRad, bool aDeEmphasised );
 
+        /**
+         * Draw a dashed preview circle on the current layer
+         *
+         * @param aOrigin       circle origin
+         * @param aRad          circle radius
+         * @param aStepAngle    dash step angle
+         * @param aFillAngle    dash fill angle
+         * @param aDeEmphasised draw the circle de-emphasised
+         */
+        void DrawCircleDashed( const VECTOR2I& aOrigin, double aRad, double aStepAngle,
+                               double aFillAngle, bool aDeEmphasised );
 
         /**
          * Draw a simple line on the current layer.
@@ -65,6 +76,17 @@ namespace PREVIEW
          */
         void DrawLine( const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDeEmphasised );
 
+        /**
+         * Draw a dashed line on the current layer.
+         *
+         * @param aStart        line start point
+         * @param aEnd          line end point
+         * @param aDashStep     dash step distance
+         * @param aDashFill     dash fill distance
+         * @param aDeEmphasised draw the line de-emphasised
+         */
+        void DrawLineDashed( const VECTOR2I& aStart, const VECTOR2I& aEn, int aDashStep,
+                             int aDashFill, bool aDeEmphasised );
 
         /**
          * Draw a straight line on the current layer, with a special highlight when
