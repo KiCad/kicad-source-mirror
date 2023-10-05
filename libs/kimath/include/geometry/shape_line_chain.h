@@ -586,10 +586,11 @@ public:
      * Insert the point aP belonging to one of the our segments, splitting the adjacent segment
      * in two.
      * @param aP is the point to be inserted.
+     * @param aExact set to skip the split logic when an exact point match exists.
      * @return index of the newly inserted point (or a negative value if aP does not lie on
      *         our line).
      */
-    int Split( const VECTOR2I& aP );
+    int Split( const VECTOR2I& aP, bool aExact = false );
 
     /**
      * Search for point \a aP.

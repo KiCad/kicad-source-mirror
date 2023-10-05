@@ -890,12 +890,15 @@ SEG::ecoord SHAPE_LINE_CHAIN_BASE::SquaredDistance( const VECTOR2I& aP, bool aOu
 }
 
 
-int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
+int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP, bool aExact )
 {
     int ii = -1;
     int min_dist = 2;
 
     int found_index = Find( aP );
+
+    if( found_index >= 0 && aExact )
+        return found_index;
 
     for( int s = 0; s < SegmentCount(); s++ )
     {
