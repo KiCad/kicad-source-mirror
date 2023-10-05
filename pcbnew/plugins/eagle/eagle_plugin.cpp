@@ -1526,7 +1526,7 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     // We trace the zone such that the copper is completely inside.
     if( p.width.ToPcbUnits() > 0 )
     {
-        polygon.Inflate( p.width.ToPcbUnits() / 2, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS,
+        polygon.Inflate( p.width.ToPcbUnits() / 2, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS,
                          ARC_HIGH_DEF, true );
     }
 
@@ -2283,7 +2283,7 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
         dwg->Move( aFootprint->GetPosition() );
         dwg->GetPolyShape().Inflate( p.width.ToPcbUnits() / 2,
-                                     SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, ARC_HIGH_DEF );
+                                     CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_HIGH_DEF );
     }
 }
 

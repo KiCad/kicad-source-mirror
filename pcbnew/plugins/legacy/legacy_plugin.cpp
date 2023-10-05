@@ -2617,7 +2617,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 SHAPE_POLY_SET inflatedFill = SHAPE_POLY_SET( *zc->GetFilledPolysList( layer ) );
 
                 inflatedFill.InflateWithLinkedHoles( zc->GetMinThickness() / 2,
-                                                     SHAPE_POLY_SET::ROUND_ALL_CORNERS,
+                                                     CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                                      ARC_HIGH_DEF / 2,
                                                      SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 

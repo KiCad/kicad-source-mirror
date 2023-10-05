@@ -429,7 +429,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
     SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
     areaOutline.ClearArcs();
     areaOutline.Deflate( board->GetDesignSettings().GetDRCEpsilon(),
-                         SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
+                         CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
 
     if( aItem->GetFlags() & HOLE_PROXY )
     {

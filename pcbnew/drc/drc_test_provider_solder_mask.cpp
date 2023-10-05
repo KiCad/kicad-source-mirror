@@ -225,9 +225,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
     solderMask->GetFill( F_Mask )->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     solderMask->GetFill( B_Mask )->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    solderMask->GetFill( F_Mask )->Deflate( m_webWidth / 2, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS,
+    solderMask->GetFill( F_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
                                             m_maxError );
-    solderMask->GetFill( B_Mask )->Deflate( m_webWidth / 2, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS,
+    solderMask->GetFill( B_Mask )->Deflate( m_webWidth / 2, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
                                             m_maxError );
 
     solderMask->SetFillFlag( F_Mask, true );

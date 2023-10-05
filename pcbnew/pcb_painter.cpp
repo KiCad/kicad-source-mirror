@@ -1574,7 +1574,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                         for( int ii = 0; ii < poly->PointCount(); ++ii )
                             outline.Append( poly->CPoint( ii ) );
 
-                        outline.Deflate( -margin.x, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS,
+                        outline.Deflate( -margin.x, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
                                          m_maxError );
 
                         m_gal->DrawPolygon( outline );

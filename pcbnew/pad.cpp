@@ -1654,7 +1654,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
             if( aErrorLoc == ERROR_OUTSIDE )
                 aClearance += aMaxError;
 
-            outline.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aMaxError );
+            outline.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aMaxError );
             outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
         else if( aClearance < 0 )
@@ -1663,7 +1663,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
             // worry ourselves overly about which side the error is on.
 
             // aClearance is negative so this is actually a deflate
-            outline.Inflate( aClearance, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, aMaxError );
+            outline.Inflate( aClearance, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, aMaxError );
             outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
 

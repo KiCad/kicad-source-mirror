@@ -39,6 +39,7 @@
 
 #include <clipper.hpp>                  // for ClipType, PolyTree (ptr only)
 #include <clipper2/clipper.h>
+#include <geometry/corner_strategy.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
@@ -1007,19 +1008,6 @@ public:
     * Essentially XOR'ing, but faster. Self-intersecting polygons are not supported.
     */
     void RebuildHolesFromContours();
-
-    /// define how inflate transform build inflated polygon
-    enum CORNER_STRATEGY
-    {
-        ALLOW_ACUTE_CORNERS,    ///< just inflate the polygon. Acute angles create spikes
-        CHAMFER_ACUTE_CORNERS,  ///< Acute angles are chamfered
-        ROUND_ACUTE_CORNERS,    ///< Acute angles are rounded
-        CHAMFER_ALL_CORNERS,    ///< All angles are chamfered.
-                                ///< The distance between new and old polygon edges is not
-                                ///< constant, but do not change a lot
-        ROUND_ALL_CORNERS       ///< All angles are rounded.
-                                ///< The distance between new and old polygon edges is constant
-    };
 
     /**
      * Perform outline inflation/deflation.

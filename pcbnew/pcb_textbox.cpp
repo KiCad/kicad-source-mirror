@@ -507,7 +507,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
         if( aErrorLoc == ERROR_OUTSIDE )
             aClearance += aMaxError;
 
-        buffer.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aMaxError, true );
+        buffer.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aMaxError, true );
     }
     else
     {

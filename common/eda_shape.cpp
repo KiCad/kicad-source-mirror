@@ -1664,7 +1664,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
                     tmp.Append( poly.GetPoint( jj ) );
 
                 if( width > 0 )
-                    tmp.Inflate( width/2, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aError, false);
+                    tmp.Inflate( width/2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aError, false);
 
                 aBuffer.Append( tmp );
             }

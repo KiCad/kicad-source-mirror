@@ -1031,8 +1031,7 @@ void SHAPE_POLY_SET::BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& 
 }
 
 
-void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor,
-                                             SHAPE_POLY_SET::CORNER_STRATEGY aCornerStrategy,
+void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, CORNER_STRATEGY aCornerStrategy,
                                              int aMaxError, POLYGON_MODE aFastMode )
 {
     Unfracture( aFastMode );
@@ -1061,28 +1060,28 @@ void SHAPE_POLY_SET::inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 
     switch( aCornerStrategy )
     {
-    case ALLOW_ACUTE_CORNERS:
+    case CORNER_STRATEGY::ALLOW_ACUTE_CORNERS:
         joinType = jtMiter;
         miterLimit = 10;        // Allows large spikes
         miterFallback = jtSquare;
         break;
 
-    case CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
+    case CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
         joinType = jtMiter;
         miterFallback = jtRound;
         break;
 
-    case ROUND_ACUTE_CORNERS:   // Acute angles are rounded
+    case CORNER_STRATEGY::ROUND_ACUTE_CORNERS: // Acute angles are rounded
         joinType = jtMiter;
         miterFallback = jtSquare;
         break;
 
-    case CHAMFER_ALL_CORNERS:   // All angles are chamfered.
+    case CORNER_STRATEGY::CHAMFER_ALL_CORNERS: // All angles are chamfered.
         joinType = jtSquare;
         miterFallback = jtSquare;
         break;
 
-    case ROUND_ALL_CORNERS:     // All angles are rounded.
+    case CORNER_STRATEGY::ROUND_ALL_CORNERS: // All angles are rounded.
         joinType = jtRound;
         miterFallback = jtSquare;
         break;
@@ -1152,24 +1151,24 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 
     switch( aCornerStrategy )
     {
-    case ALLOW_ACUTE_CORNERS:
+    case CORNER_STRATEGY::ALLOW_ACUTE_CORNERS:
         joinType = JoinType::Miter;
         miterLimit = 10;        // Allows large spikes
         break;
 
-    case CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
+    case CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
         joinType = JoinType::Miter;
         break;
 
-    case ROUND_ACUTE_CORNERS:   // Acute angles are rounded
+    case CORNER_STRATEGY::ROUND_ACUTE_CORNERS: // Acute angles are rounded
         joinType = JoinType::Miter;
         break;
 
-    case CHAMFER_ALL_CORNERS:   // All angles are chamfered.
+    case CORNER_STRATEGY::CHAMFER_ALL_CORNERS: // All angles are chamfered.
         joinType = JoinType::Square;
         break;
 
-    case ROUND_ALL_CORNERS:     // All angles are rounded.
+    case CORNER_STRATEGY::ROUND_ALL_CORNERS: // All angles are rounded.
         joinType = JoinType::Round;
         break;
     }

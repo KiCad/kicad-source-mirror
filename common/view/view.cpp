@@ -620,7 +620,7 @@ void VIEW::SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuri
     while( !unobscuredPoly.IsEmpty() )
     {
         unobscuredCenter = unobscuredPoly.BBox().Centre();
-        unobscuredPoly.Deflate( step, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
+        unobscuredPoly.Deflate( step, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
     }
 
     SetCenter( aCenter - ToWorld( unobscuredCenter - screenRect.Centre(), false ) );

@@ -2145,7 +2145,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             {
                 fill = getPolySetFromCadstarShape( csCopper.Shape, -1 );
                 fill.ClearArcs();
-                fill.Inflate( copperWidth / 2, SHAPE_POLY_SET::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                fill.Inflate( copperWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
             }
 
             if( pouredZone->HasFilledPolysForLayer( getKiCadLayer( csCopper.LayerID ) ) )
@@ -3039,7 +3039,7 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
     polySet.ClearArcs();
 
     if( aLineThickness > 0 )
-        polySet.Inflate( aLineThickness / 2, SHAPE_POLY_SET::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+        polySet.Inflate( aLineThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
 
 #ifdef DEBUG
     for( int i = 0; i < polySet.OutlineCount(); ++i )
@@ -3734,7 +3734,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
         {
             SHAPE_POLY_SET intersectShape( *aHigherZone->Outline() );
             intersectShape.Inflate( inflateValue( aLowerZone, aHigherZone ),
-                                    SHAPE_POLY_SET::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                                    CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
 
             SHAPE_POLY_SET lowerZoneFill( *aLowerZone->GetFilledPolysList( aLayer ) );
             SHAPE_POLY_SET lowerZoneOutline( *aLowerZone->Outline() );
@@ -3752,11 +3752,11 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
         [&]( ZONE* aZoneA, ZONE* aZoneB ) -> double
         {
             SHAPE_POLY_SET outLineA( *aZoneA->Outline() );
-            outLineA.Inflate( inflateValue( aZoneA, aZoneB ), SHAPE_POLY_SET::ROUND_ALL_CORNERS,
+            outLineA.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
                               ARC_HIGH_DEF );
 
             SHAPE_POLY_SET outLineB( *aZoneA->Outline() );
-            outLineB.Inflate( inflateValue( aZoneA, aZoneB ), SHAPE_POLY_SET::ROUND_ALL_CORNERS,
+            outLineB.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
                               ARC_HIGH_DEF );
 
             outLineA.BooleanIntersection( outLineB, SHAPE_POLY_SET::PM_FAST );

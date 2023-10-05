@@ -477,7 +477,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 
         try
         {
-            itemPoly.Deflate( step, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
+            itemPoly.Deflate( step, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
         }
         catch( const std::exception& exc )
         {

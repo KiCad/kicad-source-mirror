@@ -5708,7 +5708,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 for( auto& [layer, polyset] : pts )
                 {
                     polyset.InflateWithLinkedHoles(
-                            zone->GetMinThickness() / 2, SHAPE_POLY_SET::ROUND_ALL_CORNERS,
+                            zone->GetMinThickness() / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                             ARC_HIGH_DEF / 2, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
                 }
             }

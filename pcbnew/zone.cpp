@@ -1262,7 +1262,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     if( aSmoothedPolyWithApron )
     {
         SHAPE_POLY_SET poly = maxExtents->CloneDropTriangulation();
-        poly.Inflate( m_ZoneMinThickness, SHAPE_POLY_SET::ROUND_ALL_CORNERS, maxError );
+        poly.Inflate( m_ZoneMinThickness, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
         *aSmoothedPolyWithApron = aSmoothedPoly;
         aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );
     }
@@ -1326,7 +1326,7 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
         if( aErrorLoc == ERROR_OUTSIDE )
             aClearance += maxError;
 
-        polybuffer.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, maxError );
+        polybuffer.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, maxError );
     }
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
@@ -1365,7 +1365,7 @@ void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer
         if( aErrorLoc == ERROR_OUTSIDE )
             aClearance += aError;
 
-        temp_buf.InflateWithLinkedHoles( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aError,
+        temp_buf.InflateWithLinkedHoles( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aError,
                                          SHAPE_POLY_SET::PM_FAST );
     }
 

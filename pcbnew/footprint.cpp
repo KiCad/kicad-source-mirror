@@ -2487,7 +2487,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
                                  true, aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS, maxError );
+        m_courtyard_cache_front.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_front.CacheTriangulation( false );
     }
@@ -2500,7 +2500,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
                                  true, aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS, maxError );
+        m_courtyard_cache_back.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_back.CacheTriangulation( false );
     }

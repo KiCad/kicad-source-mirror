@@ -1396,8 +1396,8 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // as a "less-safe" option.
     // ROUND_ALL_CORNERS produces the uniformly nicest shapes, but also a lot of segments.
     // CHAMFER_ALL_CORNERS improves the segment count.
-    SHAPE_POLY_SET::CORNER_STRATEGY fastCornerStrategy = SHAPE_POLY_SET::CHAMFER_ALL_CORNERS;
-    SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy = SHAPE_POLY_SET::ROUND_ALL_CORNERS;
+    CORNER_STRATEGY fastCornerStrategy = CORNER_STRATEGY::CHAMFER_ALL_CORNERS;
+    CORNER_STRATEGY cornerStrategy = CORNER_STRATEGY::ROUND_ALL_CORNERS;
 
     std::vector<PAD*>            thermalConnectionPads;
     std::vector<PAD*>            noConnectionPads;
@@ -1664,7 +1664,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     int half_min_width = aZone->GetMinThickness() / 2;
     int epsilon = pcbIUScale.mmToIU( 0.001 );
 
-    aFillPolys.Deflate( half_min_width - epsilon, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, m_maxError );
+    aFillPolys.Deflate( half_min_width - epsilon, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
 
     // Remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
@@ -1675,7 +1675,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
     // Re-inflate after pruning of areas that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
-        aFillPolys.Inflate( half_min_width - epsilon, SHAPE_POLY_SET::ROUND_ALL_CORNERS, m_maxError );
+        aFillPolys.Inflate( half_min_width - epsilon, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
 
     aFillPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     return true;
@@ -2127,12 +2127,12 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // account for anything beyond that.
     SHAPE_POLY_SET deflatedFilledPolys = aFillPolys.CloneDropTriangulation();
     deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(),
-                                 SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, maxError );
+                                 CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedFilledPolys, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
     SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
-    deflatedOutline.Deflate( outline_margin, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, maxError );
+    deflatedOutline.Deflate( outline_margin, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedOutline, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );
 

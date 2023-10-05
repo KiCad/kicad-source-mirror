@@ -1257,7 +1257,7 @@ void PCB_EASYEDAPRO_PARSER::ParseBoard(
 
                         const int strokeWidth = pcbIUScale.MilsToIU( 8 ); // Seems to be 8 mils
 
-                        fillPolySet.Inflate( strokeWidth / 2, SHAPE_POLY_SET::ROUND_ALL_CORNERS,
+                        fillPolySet.Inflate( strokeWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                              ARC_HIGH_DEF, false );
 
                         fillPolySet.BooleanAdd( thermalSpokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

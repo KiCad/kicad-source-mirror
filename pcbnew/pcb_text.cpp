@@ -507,7 +507,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
             if( aErrorLoc == ERROR_OUTSIDE )
                 aClearance += aMaxError;
 
-            textShape.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aMaxError );
+            textShape.Inflate( aClearance, CORNER_STRATEGY::ROUND_ALL_CORNERS, aMaxError );
         }
 
         aBuffer.Append( textShape );

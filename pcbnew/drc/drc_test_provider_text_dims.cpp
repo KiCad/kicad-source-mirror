@@ -177,7 +177,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                         SHAPE_POLY_SET poly = outlineGlyph->CloneDropTriangulation();
                         poly.Deflate( constraint.Value().Min() / 2,
-                                      SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, ARC_LOW_DEF );
+                                      CORNER_STRATEGY::CHAMFER_ALL_CORNERS, ARC_LOW_DEF );
                         poly.Simplify( SHAPE_POLY_SET::PM_FAST );
 
                         int resultingOutlineCount = poly.OutlineCount();
@@ -199,7 +199,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                             continue;
 
                         poly.Inflate( constraint.Value().Min() / 2,
-                                      SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, ARC_LOW_DEF, true );
+                                      CORNER_STRATEGY::CHAMFER_ALL_CORNERS, ARC_LOW_DEF, true );
 
                         double resultingGlyphArea = poly.Area();
 
