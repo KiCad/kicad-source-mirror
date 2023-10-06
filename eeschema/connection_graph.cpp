@@ -1349,11 +1349,15 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
                 wxString name = conn->FullLocalName();
 
                 CONNECTION_SUBGRAPH* new_sg = new CONNECTION_SUBGRAPH( this );
+
+                // This connection cannot form a part of the item because the item is not, itself
+                // connected to this subgraph.  It exists as part of a virtual item that may be connected
+                // to other items but is not in the schematic.
                 SCH_CONNECTION* new_conn = new SCH_CONNECTION( item, subgraph->m_sheet );
                 new_conn->SetGraph( this );
-
                 new_conn->SetName( name );
                 new_conn->SetType( CONNECTION_TYPE::NET );
+                subgraph->StoreImplicitConnection( new_conn );
                 int code = assignNewNetCode( *new_conn );
 
                 wxLogTrace( ConnTrace, wxS( "SG(%ld), Adding full local name (%s) with sg (%d) on subsheet %s" ), subgraph->m_code,

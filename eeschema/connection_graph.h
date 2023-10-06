@@ -89,7 +89,11 @@ public:
               m_hier_parent( nullptr )
     {}
 
-    ~CONNECTION_SUBGRAPH() = default;
+    ~CONNECTION_SUBGRAPH()
+    {
+        for( SCH_CONNECTION* connection : m_bus_element_connections )
+            delete connection;
+    }
 
     /**
      * Determines which potential driver should drive the subgraph.
@@ -161,6 +165,13 @@ public:
     }
 
     void RemoveItem( SCH_ITEM* aItem );
+
+    // Use this to keep a connection pointer that is not owned by any item
+    // This will be destroyed with the subgraph
+    void StoreImplicitConnection( SCH_CONNECTION* aConnection )
+    {
+        m_bus_element_connections.insert( aConnection );
+    }
 
 private:
     wxString driverName( SCH_ITEM* aItem ) const;
@@ -250,6 +261,10 @@ public:
 
     /// A cache of escaped netnames from schematic items
     mutable std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
+
+    /// A cache of connections that are part of this subgraph but that don't have
+    /// an owning element (i.e. bus members)
+    std::set<SCH_CONNECTION*> m_bus_element_connections;
 
 };
 
