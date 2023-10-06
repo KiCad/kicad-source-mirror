@@ -88,10 +88,11 @@ public:
                 return diff;                                \
         } while (0)
 
-#define EPSILON 0.000001
-#define TEST_D( a, b, msg )                                 \
+#define EPSILON 1
+#define TEST_PT( a, b, msg )                                \
         do {                                                \
-            if( abs( a - b ) > EPSILON )                    \
+            if( abs( a.x - b.x ) > EPSILON                  \
+                    || abs( a.y - b.y ) > EPSILON )         \
             {                                               \
                 diff = true;                                \
                                                             \
@@ -103,11 +104,10 @@ public:
                 return diff;                                \
         } while (0)
 
-#define TEST_V3D( a, b, msg )                               \
+#define EPSILON_D 0.000001
+#define TEST_D( a, b, msg )                                 \
         do {                                                \
-            if( abs( a.x - b.x ) > EPSILON                  \
-                    || abs( a.y - b.y ) > EPSILON           \
-                    || abs( a.z - b.z ) > EPSILON )         \
+            if( abs( a - b ) > EPSILON_D )                  \
             {                                               \
                 diff = true;                                \
                                                             \
@@ -144,36 +144,40 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         aRect.Normalize();
         bRect.Normalize();
 
-        TEST( aRect.GetOrigin(), bRect.GetOrigin(), "" );
-        TEST( aRect.GetEnd(), bRect.GetEnd(), "" );
+        TEST_PT( aRect.GetOrigin(), bRect.GetOrigin(), "" );
+        TEST_PT( aRect.GetEnd(), bRect.GetEnd(), "" );
         break;
     }
 
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart(), b->GetStart(), "" );
-        TEST( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( a->GetStart(), b->GetStart(), "" );
+        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart(), b->GetStart(), "" );
-        TEST( a->GetEnd(), b->GetEnd(), "" );
-        TEST( a->GetCenter(), b->GetCenter(), "" );
-        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees(), "" );
+        TEST_PT( a->GetStart(), b->GetStart(), "" );
+        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
+
+        // Arc center is calculated and so may have round-off errors when parents are
+        // differentially rotated.
+        if( ( a->GetCenter() - b->GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
+            return true;
+
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart(), b->GetStart(), "" );
-        TEST( a->GetEnd(), b->GetEnd(), "" );
-        TEST( a->GetBezierC1(), b->GetBezierC1(), "" );
-        TEST( a->GetBezierC2(), b->GetBezierC2(), "" );
+        TEST_PT( a->GetStart(), b->GetStart(), "" );
+        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( a->GetBezierC1(), b->GetBezierC1(), "" );
+        TEST_PT( a->GetBezierC2(), b->GetBezierC2(), "" );
         break;
 
     case SHAPE_T::POLY:
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
+            TEST_PT( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
 
         break;
 
@@ -222,8 +226,8 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
 
     TEST( a->GetPadToDieLength(), b->GetPadToDieLength(),
           wxString::Format( _( "%s pad to die length differs." ), PAD_DESC( a ) ) );
-    TEST( a->GetFPRelativePosition(), b->GetFPRelativePosition(),
-          wxString::Format( _( "%s position differs." ), PAD_DESC( a ) ) );
+    TEST_PT( a->GetFPRelativePosition(), b->GetFPRelativePosition(),
+             wxString::Format( _( "%s position differs." ), PAD_DESC( a ) ) );
 
     TEST( a->GetNumber(), b->GetNumber(),
           wxString::Format( _( "%s has different numbers." ), PAD_DESC( a ) ) );
@@ -293,8 +297,8 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
             return true;
     }
 
-    TEST( a->GetOffset(), b->GetOffset(),
-          wxString::Format( _( "%s shape offset from hole differs." ), PAD_DESC( a ) ) );
+    TEST_PT( a->GetOffset(), b->GetOffset(),
+             wxString::Format( _( "%s shape offset from hole differs." ), PAD_DESC( a ) ) );
 
     TEST( a->GetDrillShape(), b->GetDrillShape(),
           wxString::Format( _( "%s drill shape differs." ), PAD_DESC( a ) ) );
@@ -363,40 +367,40 @@ bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
         aRect.Normalize();
         bRect.Normalize();
 
-        TEST( aRect.GetOrigin(), bRect.GetOrigin(), "" );
-        TEST( aRect.GetEnd(), bRect.GetEnd(), "" );
+        TEST_PT( aRect.GetOrigin(), bRect.GetOrigin(), "" );
+        TEST_PT( aRect.GetEnd(), bRect.GetEnd(), "" );
         break;
     }
 
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-        TEST( a->GetStart(), b->GetStart(), "" );
-        TEST( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( a->GetStart(), b->GetStart(), "" );
+        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST( a->GetStart(), b->GetStart(), "" );
-        TEST( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( a->GetStart(), b->GetStart(), "" );
+        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
-        if( ( a->GetCenter() - b->GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0001 ) )
+        if( ( a->GetCenter() - b->GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
             return true;
 
         break;
 
     case SHAPE_T::BEZIER:
-        TEST( a->GetStart(), b->GetStart(), "" );
-        TEST( a->GetEnd(), b->GetEnd(), "" );
-        TEST( a->GetBezierC1(), b->GetBezierC1(), "" );
-        TEST( a->GetBezierC2(), b->GetBezierC2(), "" );
+        TEST_PT( a->GetStart(), b->GetStart(), "" );
+        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( a->GetBezierC1(), b->GetBezierC1(), "" );
+        TEST_PT( a->GetBezierC2(), b->GetBezierC2(), "" );
         break;
 
     case SHAPE_T::POLY:
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
 
         for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
+            TEST_PT( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
 
         break;
 
