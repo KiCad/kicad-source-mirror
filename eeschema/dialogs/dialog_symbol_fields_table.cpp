@@ -1232,23 +1232,25 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     };
 
     wxString path = m_outputFileName->GetValue();
+
+    if( path.IsEmpty() )
+    {
+        DisplayError( this, _( "No filename specified in exporter" ) );
+        return;
+    }
+
     path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, nullptr );
 
     wxFileName outputFile = wxFileName::FileName( path );
-
-    auto displayErr = [&]()
-    {
-        wxString msg;
-        msg.Printf( _( "Could not write BOM output to '%s'." ), outputFile.GetPath() );
-        DisplayError( this, msg );
-    };
+    wxString msg;
 
     if( !EnsureFileDirectoryExists( &outputFile,
                                     Prj().AbsolutePath( m_parent->Schematic().GetFileName() ),
                                     &NULL_REPORTER::GetInstance() ) )
     {
-        displayErr();
+        msg.Printf( _( "Could not open/create path '%s'." ), outputFile.GetPath() );
+        DisplayError( this, msg );
         return;
     }
 
@@ -1256,7 +1258,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
     if( !out.IsOpened() )
     {
-        displayErr();
+        msg.Printf( _( "Could not create BOM output '%s'." ), outputFile.GetFullPath() );
+        DisplayError( this, msg );
         return;
     }
 
@@ -1264,11 +1267,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
     if( !out.Write( m_textOutput->GetValue() ) )
     {
-        displayErr();
+        msg.Printf( _( "Could not write BOM output '%s'." ), outputFile.GetFullPath() );
+        DisplayError( this, msg );
         return;
     }
 
-    wxString msg;
     msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
     DisplayInfoMessage( this, msg );
 }
