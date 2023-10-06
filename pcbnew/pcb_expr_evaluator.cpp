@@ -129,7 +129,9 @@ LIBEVAL::VALUE* PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
                 const wxAny& any = item->Get( it->second );
                 PCB_LAYER_ID layer;
 
-                if( it->second->Name() == wxT( "Layer" ) )
+                if( it->second->Name() == wxT( "Layer" )
+                        || it->second->Name() == wxT( "Layer Top" )
+                        || it->second->Name() == wxT( "Layer Bottom" ) )
                 {
                     if( any.GetAs<PCB_LAYER_ID>( &layer ) )
                         return new PCB_LAYER_VALUE( layer );
