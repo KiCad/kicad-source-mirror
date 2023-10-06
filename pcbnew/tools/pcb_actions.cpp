@@ -45,6 +45,7 @@ class PCB_BITMAP;
 #undef _
 #define _(s) s
 
+// clang-format off
 
 // CONVERT_TOOL
 //
@@ -2352,6 +2353,61 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( TOOL_ACTION_ARGS()
         .MenuText( _( "Drag (free angle)" ) )
         .Tooltip( _( "Drags the nearest joint in the track without restricting the track angle." ) )
         .Icon( BITMAPS::drag ) );
+
+
+// GENERATOR_TOOL
+//
+
+TOOL_ACTION PCB_ACTIONS::generatorProperties( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.generatorProperties" )
+        .Scope( AS_GLOBAL ) );
+
+
+TOOL_ACTION PCB_ACTIONS::regenerateOutdated( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.regenerateOutdated" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rebuild Outdated Generators" ) )
+        .Tooltip( _( "Rebuilds geometry of outdated generators" ) )
+        .Icon( BITMAPS::refresh ) );
+
+TOOL_ACTION PCB_ACTIONS::regenerateAll( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.regenerateAll" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rebuild All Generators" ) )
+        .Tooltip( _( "Rebuilds geometry of all generators" ) )
+        .Icon( BITMAPS::refresh ) );
+
+TOOL_ACTION PCB_ACTIONS::regenerateSelected( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.regenerateSelected" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rebuild Selected Generators" ) )
+        .Tooltip( _( "Rebuilds geometry of selected generator(s)" ) )
+        .Icon( BITMAPS::refresh ) );
+
+
+TOOL_ACTION PCB_ACTIONS::regenerateItem( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.regenerateItem" )
+        .Scope( AS_CONTEXT ) );
+
+TOOL_ACTION PCB_ACTIONS::genStartEdit( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genStartEdit" )
+        .Scope( AS_CONTEXT ) );
+
+TOOL_ACTION PCB_ACTIONS::genUpdateEdit( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genUpdateEdit" )
+        .Scope( AS_CONTEXT ) );
+
+TOOL_ACTION PCB_ACTIONS::genPushEdit( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genPushEdit" )
+        .Scope( AS_CONTEXT ) );
+
+TOOL_ACTION PCB_ACTIONS::genRevertEdit( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genRevertEdit" )
+        .Scope( AS_CONTEXT ) );
+
+TOOL_ACTION PCB_ACTIONS::genRemove( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.genRemove" )
+        .Scope( AS_CONTEXT ) );
 
 
 // LENGTH_TUNER_TOOL

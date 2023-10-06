@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Joshua Redstone redstone at gmail.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,12 @@ PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent ) :
 }
 
 
+PCB_GROUP::PCB_GROUP( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer ) :
+        BOARD_ITEM( aParent, idtype, aLayer )
+{
+}
+
+
 bool PCB_GROUP::IsGroupableType( KICAD_T aType )
 {
     switch ( aType )
@@ -52,6 +58,7 @@ bool PCB_GROUP::IsGroupableType( KICAD_T aType )
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_GROUP_T:
+    case PCB_GENERATOR_T:
     case PCB_TRACE_T:
     case PCB_VIA_T:
     case PCB_ARC_T:

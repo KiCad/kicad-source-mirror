@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Created on: 11 Mar 2016, author John Beard
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,7 @@ void ARRAY_CREATOR::Invoke()
                     case PCB_FOOTPRINT_T:
                     case PCB_SHAPE_T:
                     case PCB_BITMAP_T:
+                    case PCB_GENERATOR_T:
                     case PCB_TEXT_T:
                     case PCB_TEXTBOX_T:
                     case PCB_TRACE_T:

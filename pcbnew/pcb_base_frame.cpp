@@ -298,7 +298,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                             child->ClearBrightened();
                         } );
             }
-            else if( lastItem->Type() == PCB_GROUP_T )
+            else if( lastItem->Type() == PCB_GROUP_T || lastItem->Type() == PCB_GENERATOR_T )
             {
                 static_cast<PCB_GROUP*>( lastItem )->RunOnChildren(
                         [&]( BOARD_ITEM* child )
@@ -356,7 +356,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                             child->SetBrightened();
                         });
             }
-            else if( item->Type() == PCB_GROUP_T )
+            else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
             {
                 static_cast<PCB_GROUP*>( item )->RunOnChildren(
                         [&]( BOARD_ITEM* child )

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2023 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -103,7 +103,8 @@ void PCB_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
                     VIEW::Update( child, aUpdateFlags );
                 } );
     }
-    else if( boardItem && boardItem->Type() == PCB_GROUP_T )
+    else if( boardItem
+             && ( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T ) )
     {
         const PCB_GROUP* group = static_cast<const PCB_GROUP*>( boardItem );
         group->RunOnChildren(

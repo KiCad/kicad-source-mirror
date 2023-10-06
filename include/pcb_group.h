@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Joshua Redstone redstone at gmail.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,14 +80,14 @@ public:
      *
      * @return true if item was added (false if item belongs to a different group).
      */
-    bool AddItem( BOARD_ITEM* aItem );
+    virtual bool AddItem( BOARD_ITEM* aItem );
 
     /**
      * Remove item from group.
      *
      * @return true if item was removed (false if item was not in the group).
      */
-    bool RemoveItem( BOARD_ITEM* aItem );
+    virtual bool RemoveItem( BOARD_ITEM* aItem );
 
     void RemoveAll();
 
@@ -236,10 +236,11 @@ public:
     static bool IsGroupableType( KICAD_T aType );
 
 protected:
+    PCB_GROUP( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer = F_Cu );
+
     /// @copydoc BOARD_ITEM::swapData
     void swapData( BOARD_ITEM* aImage ) override;
 
-private:
     std::unordered_set<BOARD_ITEM*> m_items;     // Members of the group
     wxString                        m_name;      // Optional group name
 };

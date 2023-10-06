@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -75,7 +75,7 @@ private:
     std::shared_ptr<EDIT_POINTS> makePoints( EDA_ITEM* aItem );
 
     ///< Update item's points with edit points.
-    void updateItem() const;
+    void updateItem( BOARD_COMMIT* aCommit );
 
     /**
      * Validate a polygon and displays a popup warning if invalid.

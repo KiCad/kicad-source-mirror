@@ -2274,7 +2274,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         marker->ShapeToPolygon( markerShape );
         return markerShape.Area();
     }
-    else if( aItem->Type() == PCB_GROUP_T )
+    else if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
     {
         double combinedArea = 0.0;
 

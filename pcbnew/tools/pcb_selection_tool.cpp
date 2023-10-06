@@ -2374,6 +2374,12 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
 
         break;
 
+    case PCB_GENERATOR_T:
+        if( !m_filter.generators )
+            return false;
+
+        break;
+
     case PCB_ZONE_T:
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
@@ -2851,7 +2857,7 @@ void PCB_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, bool aUs
                     highlightInternal( aChild, aMode, aUsingOverlay );
                 } );
     }
-    else if( aItem->Type() == PCB_GROUP_T )
+    else if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
     {
         static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
@@ -2894,7 +2900,7 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
                     unhighlightInternal( aChild, aMode, aUsingOverlay );
                 } );
     }
-    else if( aItem->Type() == PCB_GROUP_T )
+    else if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
     {
         static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
@@ -2929,14 +2935,14 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
                         aGroup->RunOnChildren(
                                 [&]( BOARD_ITEM* aItem )
                                 {
-                                    if( aItem->Type() == PCB_GROUP_T )
+                                    if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
                                         checkGroup( static_cast<PCB_GROUP*>( aItem ) );
                                     else if( aItem->HitTest( aPoint, margin ) )
                                         found = true;
                                 } );
                     };
 
-            if( item->Type() == PCB_GROUP_T )
+            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
                 checkGroup( static_cast<PCB_GROUP*>( item ) );
 
             if( found )
@@ -3031,6 +3037,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     }
 
     case PCB_GROUP_T:
+    case PCB_GENERATOR_T:
     {
         PCB_GROUP* group = static_cast<PCB_GROUP*>( aItem );
 

@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
                                                   addItem( bitem );
                                               } );
                 }
-                else if( item->Type() == PCB_GROUP_T )
+                else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
                 {
                     PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
                     group->RunOnChildren( [&]( BOARD_ITEM* bitem )

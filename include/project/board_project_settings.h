@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,6 +51,7 @@ struct SELECTION_FILTER_OPTIONS
     bool zones;         ///< Copper zones
     bool keepouts;      ///< Keepout zones
     bool dimensions;    ///< Dimension items
+    bool generators;    ///< Generator items
     bool otherItems;    ///< Anything not fitting one of the above categories
 
     SELECTION_FILTER_OPTIONS()
@@ -65,6 +66,7 @@ struct SELECTION_FILTER_OPTIONS
         zones       = true;
         keepouts    = true;
         dimensions  = true;
+        generators  = true;
         otherItems  = true;
     }
 
@@ -74,7 +76,7 @@ struct SELECTION_FILTER_OPTIONS
     bool Any()
     {
         return ( footprints || text || tracks || vias || pads || graphics || zones
-                 || keepouts || dimensions || otherItems );
+                 || keepouts || dimensions || generators || otherItems );
     }
 
     /**
@@ -83,7 +85,7 @@ struct SELECTION_FILTER_OPTIONS
     bool All()
     {
         return ( footprints && text && tracks && vias && pads && graphics && zones
-                 && keepouts && dimensions && otherItems );
+                 && keepouts && dimensions && generators && otherItems );
     }
 };
 

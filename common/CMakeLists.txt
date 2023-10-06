@@ -656,6 +656,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/project_pcb.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_stackup_manager/board_stackup.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_track.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_generator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/collectors.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/connectivity/connectivity_algo.cpp

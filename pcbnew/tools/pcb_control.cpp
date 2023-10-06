@@ -810,7 +810,7 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
             if( fp->GraphicalItems().size() || fp->Pads().size() || fp->Zones().size() )
                 returnItems.push_back( fp );
         }
-        else if( item->Type() == PCB_GROUP_T )
+        else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
         {
             returnItems.push_back( item );
         }

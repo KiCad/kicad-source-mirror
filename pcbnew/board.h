@@ -51,6 +51,7 @@ class ZONE;
 class PCB_TRACK;
 class PAD;
 class PCB_GROUP;
+class PCB_GENERATOR;
 class PCB_MARKER;
 class MSG_PANEL_ITEM;
 class NETLIST;
@@ -318,6 +319,9 @@ public:
 
     ZONES& Zones() { return m_zones; }
     const ZONES& Zones() const { return m_zones; }
+
+    GENERATORS&       Generators() { return m_generators; }
+    const GENERATORS& Generators() const { return m_generators; }
 
     MARKERS& Markers() { return m_markers; }
     const MARKERS& Markers() const { return m_markers; }
@@ -1238,6 +1242,7 @@ private:
     TRACKS              m_tracks;
     GROUPS              m_groups;
     ZONES               m_zones;
+    GENERATORS          m_generators;
 
     LAYER               m_layers[PCB_LAYER_ID_COUNT];
 

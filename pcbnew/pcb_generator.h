@@ -1,0 +1,119 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef GENERATOR_H_
+#define GENERATOR_H_
+
+
+#include <unordered_set>
+#include <string_any_map.h>
+
+#include <pcb_group.h>
+
+class EDIT_POINTS;
+class BOARD;
+class BOARD_ITEM;
+class PCB_BASE_EDIT_FRAME;
+class GENERATOR_TOOL;
+
+
+class PCB_GENERATOR : public PCB_GROUP
+{
+public:
+
+    PCB_GENERATOR( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer );
+
+    virtual ~PCB_GENERATOR();
+
+    virtual void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                            BOARD_COMMIT* aCommit );
+
+    virtual void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                           BOARD_COMMIT* aCommit );
+
+    virtual void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                             BOARD_COMMIT* aCommit );
+
+    virtual void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                         BOARD_COMMIT* aCommit );
+
+    virtual bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                         BOARD_COMMIT* aCommit );
+
+    virtual bool NeedsUpdate();
+
+    virtual bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const;
+
+    virtual bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
+                                       BOARD_COMMIT*                aCommit );
+
+    virtual bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints );
+
+    const BOX2I GetBoundingBox() const override;
+
+    VECTOR2I GetPosition() const override;
+
+    void Move( const VECTOR2I& aMoveVector ) override;
+
+    bool AddItem( BOARD_ITEM* aItem ) override;
+
+    LSET GetLayerSet() const override;
+
+    virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
+
+    virtual wxString GetGeneratorType() const;
+
+    virtual const STRING_ANY_MAP GetProperties() const;
+
+    virtual void SetProperties( const STRING_ANY_MAP& aProps );
+
+    virtual std::vector<std::pair<wxString, wxVariant>> GetRowData();
+
+    virtual void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ){};
+
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+#endif
+
+    wxString GetClass() const override;
+
+    static inline bool ClassOf( const EDA_ITEM* aItem );
+
+    int  GetUpdateOrder() const { return m_updateOrder; }
+    void SetUpdateOrder( int aValue ) { m_updateOrder = aValue; }
+
+protected:
+    wxString m_generatorType;
+
+    VECTOR2I m_origin;
+    int m_updateOrder = 0;
+
+    friend class GENERATORS_MGR;
+    void setGeneratorType( const wxString& aGenType ) { m_generatorType = aGenType; }
+
+};
+
+#endif /* GENERATOR_H_ */

@@ -42,6 +42,7 @@
 #include <pcb_track.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_target.h>
 #include <pcb_shape.h>
 #include <pcb_bitmap.h>
@@ -133,6 +134,12 @@ BOARD::~BOARD()
             item->SetParentGroup( nullptr );
     }
 
+    for( PCB_GENERATOR* generator : m_generators )
+    {
+        for( BOARD_ITEM* item : generator->GetItems() )
+            item->SetParentGroup( nullptr );
+    }
+
     // Clean up the owned elements
     DeleteMARKERs();
 
@@ -162,6 +169,11 @@ BOARD::~BOARD()
         delete g;
 
     m_groups.clear();
+
+    for( PCB_GENERATOR* g : m_generators )
+        delete g;
+
+    m_generators.clear();
 }
 
 
@@ -842,6 +854,11 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         break;
 
     // this one uses a vector
+    case PCB_GENERATOR_T:
+        m_generators.push_back( (PCB_GENERATOR*) aBoardItem );
+        break;
+
+    // this one uses a vector
     case PCB_ZONE_T:
         m_zones.push_back( (ZONE*) aBoardItem );
         break;
@@ -974,6 +991,10 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     case PCB_ZONE_T:
         alg::delete_matching( m_zones, aBoardItem );
+        break;
+
+    case PCB_GENERATOR_T:
+        alg::delete_matching( m_generators, aBoardItem );
         break;
 
     case PCB_FOOTPRINT_T:
@@ -1163,6 +1184,13 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             return group;
     }
 
+    for( PCB_GENERATOR* generator : m_generators )
+    {
+        if( generator->m_Uuid == aID )
+            return generator;
+    }
+
+
     for( NETINFO_ITEM* netInfo : m_NetInfo )
     {
         if( netInfo->m_Uuid == aID )
@@ -1210,6 +1238,9 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
 
     for( PCB_GROUP* group : m_groups )
         aMap[ group->m_Uuid ] = group;
+
+    for( PCB_GENERATOR* generator : m_generators )
+        aMap[ generator->m_Uuid ] = generator;
 }
 
 
@@ -1543,6 +1574,26 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
             {
                 if( zone->Visit( inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                     return INSPECT_RESULT::QUIT;
+            }
+
+            break;
+
+        case PCB_GENERATOR_T:
+            if( !footprintsScanned )
+            {
+                if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes )
+                    == INSPECT_RESULT::QUIT )
+                {
+                    return INSPECT_RESULT::QUIT;
+                }
+
+                footprintsScanned = true;
+            }
+
+            if( IterateForward<PCB_GENERATOR*>( m_generators, inspector, testData, { scanType } )
+                == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
             }
 
             break;
@@ -2241,9 +2292,12 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
     // Groups we haven't checked yet.
     std::unordered_set<PCB_GROUP*> toCheckGroups;
 
-    // Initialize set of groups to check that could participate in a cycle.
+    // Initialize set of groups and generators to check that could participate in a cycle.
     for( PCB_GROUP* group : Groups() )
-        toCheckGroups.insert( group);
+        toCheckGroups.insert( group );
+
+    for( PCB_GENERATOR* gen : Generators() )
+        toCheckGroups.insert( gen );
 
     while( !toCheckGroups.empty() )
     {

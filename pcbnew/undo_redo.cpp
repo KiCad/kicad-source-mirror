@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2016 CERN
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_target.h>
 #include <footprint.h>
 #include <pad.h>
@@ -380,7 +381,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             item->SwapItemData( image );
 
-            if( item->Type() == PCB_GROUP_T )
+            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
             {
                 group = static_cast<PCB_GROUP*>( item );
 
@@ -413,7 +414,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Add( eda_item );
 
-            if( eda_item->Type() == PCB_GROUP_T )
+            if( eda_item->Type() == PCB_GROUP_T || eda_item->Type() == PCB_GENERATOR_T )
                 group = static_cast<PCB_GROUP*>( eda_item );
 
             break;

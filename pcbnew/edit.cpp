@@ -34,6 +34,7 @@
 #include <pad.h>
 #include <zone.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_target.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
@@ -169,6 +170,11 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_GROUP_T:
         m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties,
                                               static_cast<PCB_GROUP*>( aItem ) );
+        break;
+
+    case PCB_GENERATOR_T:
+        m_toolManager->RunAction<PCB_GENERATOR*>( PCB_ACTIONS::generatorProperties,
+                                                  static_cast<PCB_GENERATOR*>( aItem ) );
         break;
 
     case PCB_MARKER_T:

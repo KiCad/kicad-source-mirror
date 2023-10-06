@@ -32,6 +32,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_edit_frame.h>
 #include <spread_footprints.h>
 #include <tools/pcb_actions.h>
@@ -94,7 +95,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             commit->Modify( item );
 
             // If swapping a group, record position of all the descendants for undo
-            if( item->Type() == PCB_GROUP_T )
+            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
             {
                 PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
                 group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
@@ -555,6 +556,17 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 if( redraw3D && allowRedraw3D )
                     editFrame->Update3DView( false, true );
 
+                for( BOARD_ITEM* item : sel_items )
+                {
+                    if( item->Type() == PCB_GENERATOR_T )
+                    {
+                        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+
+                        m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genUpdateEdit,
+                                                                         aCommit, generator );
+                    }
+                }
+
                 if( showCourtyardConflicts && drc_on_move->m_FpInMove.size() )
                 {
                     drc_on_move->Run();
@@ -577,18 +589,29 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     if( !item->IsNew() && !item->IsMoving() )
                     {
-                        aCommit->Modify( item );
-                        item->SetFlags( IS_MOVING );
-
-                        // If moving a group, record position of all the descendants for undo
-                        if( item->Type() == PCB_GROUP_T )
+                        if( item->Type() == PCB_GENERATOR_T )
                         {
-                            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                            group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                     {
-                                                         aCommit->Modify( bItem );
-                                                         item->SetFlags( IS_MOVING );
-                                                     });
+                            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+
+                            m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
+                                    PCB_ACTIONS::genStartEdit, aCommit, generator );
+                        }
+                        else
+                        {
+                            aCommit->Modify( item );
+                            item->SetFlags( IS_MOVING );
+
+                            // If moving a group, record position of all the descendants for undo
+                            if( item->Type() == PCB_GROUP_T )
+                            {
+                                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                                group->RunOnDescendants(
+                                        [&]( BOARD_ITEM* bItem )
+                                        {
+                                            aCommit->Modify( bItem );
+                                            item->SetFlags( IS_MOVING );
+                                        } );
+                            }
                         }
                     }
                 }
@@ -784,6 +807,30 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     {
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
         m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &oItems );
+
+        for( BOARD_ITEM* item : sel_items )
+        {
+            if( item->Type() == PCB_GENERATOR_T )
+            {
+                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+
+                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genPushEdit, aCommit,
+                                                                 generator );
+            }
+        }
+    }
+    else
+    {
+        for( BOARD_ITEM* item : sel_items )
+        {
+            if( item->Type() == PCB_GENERATOR_T )
+            {
+                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+
+                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRevertEdit,
+                                                                 aCommit, generator );
+            }
+        }
     }
 
     // Remove the dynamic ratsnest from the screen

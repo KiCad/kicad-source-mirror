@@ -30,6 +30,7 @@
 class FOOTPRINT;
 class PCB_TRACK;
 class PCB_GROUP;
+class PCB_GENERATOR;
 class PCB_MARKER;
 class ZONE;
 
@@ -39,6 +40,7 @@ DECL_DEQ_FOR_SWIG( TRACKS, PCB_TRACK* )
 DECL_DEQ_FOR_SWIG( FOOTPRINTS, FOOTPRINT* )
 // Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
 DECL_DEQ_FOR_SWIG( GROUPS, PCB_GROUP* )
+DECL_DEQ_FOR_SWIG( GENERATORS, PCB_GENERATOR* )
 
 
 // Shared with board and footprint

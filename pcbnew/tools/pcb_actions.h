@@ -268,6 +268,18 @@ public:
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;
 
+    /// Generator tool
+    static TOOL_ACTION generatorProperties;
+    static TOOL_ACTION regenerateOutdated;
+    static TOOL_ACTION regenerateAll;
+    static TOOL_ACTION regenerateSelected;
+    static TOOL_ACTION regenerateItem;
+    static TOOL_ACTION genStartEdit;
+    static TOOL_ACTION genUpdateEdit;
+    static TOOL_ACTION genPushEdit;
+    static TOOL_ACTION genRevertEdit;
+    static TOOL_ACTION genRemove;
+
     // Point Editor
     static TOOL_ACTION pointEditorAddCorner;
     static TOOL_ACTION pointEditorRemoveCorner;

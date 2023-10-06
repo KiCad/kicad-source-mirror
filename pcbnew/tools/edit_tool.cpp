@@ -35,6 +35,7 @@
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_generator.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -2144,6 +2145,16 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
         }
 
+        case PCB_GENERATOR_T:
+        {
+            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
+
+            m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, &commit,
+                                                             generator );
+
+            break;
+        }
+
         default:
             wxASSERT_MSG( parentFP == nullptr, wxT( "Try to delete an item living in a footrprint" ) );
             commit.Remove( board_item );
@@ -2407,6 +2418,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
             case PCB_BITMAP_T:
+            case PCB_GENERATOR_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:

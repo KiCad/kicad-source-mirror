@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -88,6 +88,7 @@ enum KICAD_T
     PCB_SHAPE_T,             ///< class PCB_SHAPE, a segment not on copper layers
     PCB_BITMAP_T,            ///< class PCB_BITMAP, bitmap on a layer
     PCB_FIELD_T,             ///< class PCB_FIELD, text associated with a footprint property
+    PCB_GENERATOR_T,         ///< class PCB_GENERATOR, generator on a layer
     PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
     PCB_TEXTBOX_T,           ///< class PCB_TEXTBOX, wrapped text on a layer
     PCB_TRACE_T,             ///< class PCB_TRACK, a track segment (segment on a copper layer)
@@ -452,6 +453,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_ITEM_LIST_T:
     case PCB_NETINFO_T:
     case PCB_GROUP_T:
+    case PCB_GENERATOR_T:
 
     case PCB_FIELD_LOCATE_REFERENCE_T:
     case PCB_FIELD_LOCATE_VALUE_T:

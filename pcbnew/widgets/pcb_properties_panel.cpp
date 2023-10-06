@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <properties/property_mgr.h>
 #include <properties/pg_editors.h>
@@ -32,6 +33,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
+#include <pcb_generator.h>
 #include <pad.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
@@ -211,6 +213,16 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     }
 
     changes.Push( _( "Change property" ) );
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        if( edaItem->Type() == PCB_GENERATOR_T )
+        {
+            m_frame->GetToolManager()->RunAction<PCB_GENERATOR*>(
+                    PCB_ACTIONS::regenerateItem, static_cast<PCB_GENERATOR*>( edaItem ) );
+        }
+    }
+
     m_frame->Refresh();
 
     // Perform grid updates as necessary based on value change

@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
 #include <pcb_bitmap.h>
+#include <pcb_generator.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
 #include <pad.h>
@@ -316,6 +317,13 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         break;
     }
 
+    case PCB_GENERATOR_T:
+    {
+        const PCB_GENERATOR* generator = static_cast<const PCB_GENERATOR*>( aItem );
+        generator->MakeEditPoints( points );
+        break;
+    }
+
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
     {
@@ -528,7 +536,16 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 frame()->UndoRedoBlock( true );
 
-                commit.StageItems( selection, CHT_MODIFY );
+                if( item->Type() == PCB_GENERATOR_T )
+                {
+                    m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
+                            PCB_ACTIONS::genStartEdit, &commit,
+                            static_cast<PCB_GENERATOR*>( item ) );
+                }
+                else
+                {
+                    commit.StageItems( selection, CHT_MODIFY );
+                }
 
                 getViewControls()->ForceCursorPosition( false );
                 m_original = *m_editedPoint;    // Save the original position
@@ -601,7 +618,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                                              grid.GetItemGrid( item ), { item } ) );
             }
 
-            updateItem();
+            updateItem( &commit );
             getViewControls()->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updatePoints();
         }
@@ -630,17 +647,33 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
 
+            if( item->Type() == PCB_GENERATOR_T )
+            {
+                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
+                        PCB_ACTIONS::genPushEdit, &commit, static_cast<PCB_GENERATOR*>( item ) );
+            }
+
             commit.Push( _( "Drag Corner" ) );
+
             inDrag = false;
             frame()->UndoRedoBlock( false );
 
+            m_toolMgr->PostAction<EDA_ITEM*>( PCB_ACTIONS::reselectItem,
+                                              item ); // FIXME: Needed for generators
             m_refill = true;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
             {
+                if( item->Type() == PCB_GENERATOR_T )
+                {
+                    m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
+                            PCB_ACTIONS::genRevertEdit, &commit,
+                            static_cast<PCB_GENERATOR*>( item ) );
+                }
                 commit.Revert();
+                
                 inDrag = false;
                 frame()->UndoRedoBlock( false );
             }
@@ -700,7 +733,7 @@ int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_OK )
     {
         m_editedPoint->SetPosition( dlg.GetValue() );
-        updateItem();
+        updateItem( &commit );
         commit.Push( msg );
     }
 
@@ -1119,7 +1152,7 @@ void PCB_POINT_EDITOR::editArcMidKeepEndpoints( PCB_SHAPE* aArc, const VECTOR2I&
 }
 
 
-void PCB_POINT_EDITOR::updateItem() const
+void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -1455,6 +1488,16 @@ void PCB_POINT_EDITOR::updateItem() const
         zone->HatchBorder();
 
         // TODO Refill zone when KiCad supports auto re-fill
+        break;
+    }
+
+    case PCB_GENERATOR_T:
+    {
+        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+        generator->UpdateFromEditPoints( m_editPoints, aCommit );
+
+        m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genUpdateEdit, aCommit,
+                                                         generator );
         break;
     }
 
@@ -1919,6 +1962,13 @@ void PCB_POINT_EDITOR::updatePoints()
                 m_editPoints->Point( i ).SetPosition( outline->CVertex( i ) );
         }
 
+        break;
+    }
+
+    case PCB_GENERATOR_T:
+    {
+        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
+        generator->UpdateEditPoints( m_editPoints );
         break;
     }
 
