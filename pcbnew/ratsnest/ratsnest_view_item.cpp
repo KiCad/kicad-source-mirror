@@ -107,6 +107,15 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         }
     }
 
+    auto adjustColor =
+            [&]( COLOR4D& color, double brightnessDelta, double alpha )
+            {
+                if( rs->GetColor( nullptr, LAYER_PCB_BACKGROUND ).GetBrightness() < 0.5 )
+                    return color.Brightened( brightnessDelta ).WithAlpha( std::min( alpha, 1.0 ) );
+                else
+                    return color.Darkened( brightnessDelta ).WithAlpha( std::min( alpha, 1.0 ) );
+            };
+
     const bool curved_ratsnest = cfg->m_Display.m_DisplayRatsnestLinesCurved;
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
@@ -125,7 +134,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( color == COLOR4D::UNSPECIFIED )
             color = defaultColor;
 
-        gal->SetStrokeColor( color.Brightened( 0.5 ).WithAlpha( std::min( 1.0, color.a + 0.3 ) ) );
+        gal->SetStrokeColor( adjustColor( color, 0.5, color.a + 0.3 ) );
 
         if( l.a == l.b )
         {
@@ -172,12 +181,11 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             color = defaultColor;
 
         if( dimStatic )
-            color = color.WithAlpha( std::max( 0.0, color.a / 2 ) );
+            color = adjustColor( color, 0.0, color.a / 2 );
 
         // Draw the "static" ratsnest
         if( highlightedNets.count( i ) )
-            gal->SetStrokeColor(
-                    color.Brightened( 0.8 ).WithAlpha( std::min( 1.0, color.a + 0.4 ) ) );
+            gal->SetStrokeColor( adjustColor( color, 0.8, color.a + 0.4 ) );
         else
             gal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
