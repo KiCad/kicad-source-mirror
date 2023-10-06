@@ -1028,60 +1028,49 @@ int SHAPE_LINE_CHAIN::ShapeCount() const
 }
 
 
-int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
+int SHAPE_LINE_CHAIN::NextShape( int aPointIndex ) const
 {
     if( aPointIndex < 0 )
         aPointIndex += PointCount();
 
+    if( aPointIndex < 0 )
+        return -1;
+
     int lastIndex = PointCount() - 1;
 
-    // First or last point?
-    if( ( aForwards && aPointIndex == lastIndex ) ||
-        ( !aForwards && aPointIndex == 0 ) )
-    {
-            return -1; // we don't want to wrap around
-    }
-
-    int delta = aForwards ? 1 : -1;
+    // Last point?
+    if( aPointIndex >= lastIndex )
+        return -1; // we don't want to wrap around
 
     if( m_shapes[aPointIndex] == SHAPES_ARE_PT )
-        return aPointIndex + delta;
+        return aPointIndex + 1;
 
     int arcStart = aPointIndex;
 
     // The second element should only get populated when the point is shared between two shapes.
     // If not a shared point, then the index should always go on the first element.
-    assert( m_shapes[aPointIndex].first != SHAPE_IS_PT );
+    wxCHECK2_MSG( m_shapes[aPointIndex].first != SHAPE_IS_PT, return -1, "malformed chain!" );
 
-    // Start with the assumption the point is shared
-    auto arcIndex = [&]( int aIndex ) -> ssize_t
-                    {
-                        if( aForwards )
-                            return ArcIndex( aIndex );
-                        else
-                            return reversedArcIndex( aIndex );
-                    };
-
-    ssize_t currentArcIdx = arcIndex( aPointIndex );
+    ssize_t currentArcIdx = ArcIndex( aPointIndex );
 
     // Now skip the rest of the arc
-    while( aPointIndex < lastIndex && aPointIndex >= 0 && arcIndex( aPointIndex ) == currentArcIdx )
-        aPointIndex += delta;
-
-    if( aPointIndex == lastIndex )
-    {
-        if( !m_closed && arcIndex( aPointIndex ) == currentArcIdx )
-            return -1;
-        else
-            return lastIndex; // Segment between last point and the start
-    }
+    while( aPointIndex < lastIndex && ArcIndex( aPointIndex ) == currentArcIdx )
+        aPointIndex += 1;
 
     bool indexStillOnArc = alg::pair_contains( m_shapes[aPointIndex], currentArcIdx );
 
     // We want the last vertex of the arc if the initial point was the start of one
     // Well-formed arcs should generate more than one point to travel above
     if( aPointIndex - arcStart > 1 && !indexStillOnArc )
-        aPointIndex -= delta;
+        aPointIndex -= 1;
+
+    if( aPointIndex == lastIndex )
+    {
+        if( !m_closed || IsArcSegment( aPointIndex ) )
+            return -1; //no shape
+        else
+            return lastIndex; // Segment between last point and the start of the chain
+    }
 
     return aPointIndex;
 }

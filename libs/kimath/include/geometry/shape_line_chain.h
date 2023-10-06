@@ -368,16 +368,10 @@ public:
      * the arc, in other words, the last point of the arc.
      *
      * @param aPointIndex is a vertex in the chain.
-     * @param aForwards is true if the next shape is desired, false for previous shape.
      * @return the vertex index of the start of the next shape after aPoint's shape or -1 if
      * the end was reached.
      */
-    int NextShape( int aPointIndex, bool aForwards = true ) const;
-
-    int PrevShape( int aPointIndex ) const
-    {
-        return NextShape( aPointIndex, false );
-    }
+    int NextShape( int aPointIndex ) const;
 
     /**
      * Move a point to a specific location.
@@ -864,15 +858,14 @@ public:
 
         if( nextIdx > m_shapes.size() - 1 )
         {
-            if( nextIdx == m_shapes.size() && m_closed )
+            if( nextIdx == m_shapes.size() && m_closed && IsSharedPt( 0 ) )
                 nextIdx = 0; // segment between end point and first point
             else
                 return false;
         }
 
         return ( IsPtOnArc( aSegment )
-                 && ( IsSharedPt( aSegment )
-                      || m_shapes[aSegment].first == m_shapes[nextIdx].first ) );
+                 && ( ArcIndex( aSegment ) == m_shapes[nextIdx].first ) );
     }
 
 

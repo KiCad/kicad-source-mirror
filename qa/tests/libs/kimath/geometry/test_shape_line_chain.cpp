@@ -35,7 +35,78 @@
  * NOTE: Collision of SHAPE_LINE_CHAIN with arcs is tested in test_shape_arc.cpp
  */
 
-BOOST_AUTO_TEST_SUITE( ShapeLineChain )
+struct SLC_CASES
+{
+    SHAPE_LINE_CHAIN Circle1Arc;
+    SHAPE_LINE_CHAIN Circle2Arcs;
+    SHAPE_LINE_CHAIN ArcsCoincident;
+    SHAPE_LINE_CHAIN ArcsCoincidentClosed;
+    SHAPE_LINE_CHAIN ArcsIndependent;
+    SHAPE_LINE_CHAIN DuplicateArcs;
+    SHAPE_LINE_CHAIN ArcsAndSegMixed;
+    SHAPE_LINE_CHAIN ArcAndPoint;
+    SHAPE_LINE_CHAIN EmptyChain;
+    SHAPE_LINE_CHAIN OnePoint;
+
+    SHAPE_ARC ArcCircle; ///< Full Circle arc
+    SHAPE_ARC Arc0a; ///< First half of a circle
+    SHAPE_ARC Arc0b; ///< Second half of a circle
+    SHAPE_ARC Arc1; ///< start coincident with Arc0a end
+    SHAPE_ARC Arc2; ///< Independent arc
+
+    SLC_CASES()
+    {
+        ArcCircle = SHAPE_ARC( VECTOR2I( 183450000, 128360000 ),
+                               VECTOR2I( 183850000, 128360000 ),
+                               VECTOR2I( 183450000, 128360000 ), 0 );
+
+        Arc0a =     SHAPE_ARC( VECTOR2I( 183450000, 128360000 ),
+                               VECTOR2I( 183650000, 128560000 ),
+                               VECTOR2I( 183850000, 128360000 ), 0 );
+
+        Arc0b =     SHAPE_ARC( VECTOR2I( 183850000, 128360000 ),
+                               VECTOR2I( 183650000, 128160000 ),
+                               VECTOR2I( 183450000, 128360000 ), 0 );
+
+        Arc1 =      SHAPE_ARC( VECTOR2I( 183850000, 128360000 ),
+                               VECTOR2I( 183638550, 128640305 ),
+                               VECTOR2I( 183500000, 129204974 ), 0 );
+
+        Arc2 =      SHAPE_ARC( VECTOR2I( 283450000, 228360000 ),
+                               VECTOR2I( 283650000, 228560000 ),
+                               VECTOR2I( 283850000, 228360000 ), 0 );
+
+        Circle1Arc.Append( ArcCircle );
+        Circle1Arc.SetClosed( true );
+
+        Circle2Arcs.Append( Arc0a );
+        Circle2Arcs.Append( Arc0b );
+        Circle2Arcs.SetClosed( true );
+
+        ArcsCoincident.Append( Arc0a );
+        ArcsCoincident.Append( Arc1 );
+
+        ArcsCoincidentClosed=ArcsCoincident;
+        ArcsCoincidentClosed.SetClosed( true );
+
+        ArcsIndependent.Append( Arc0a );
+        ArcsIndependent.Append( Arc2 );
+
+        DuplicateArcs=ArcsCoincident;
+        DuplicateArcs.Append( Arc1 ); //should add a segment between end of the chain and new copy of the arc
+
+        ArcAndPoint.Append( Arc0a );
+        ArcAndPoint.Append( VECTOR2I( 233450000, 228360000 ) );
+
+        ArcsAndSegMixed = ArcAndPoint;
+        ArcsAndSegMixed.Append( Arc2 );
+
+        OnePoint.Append( VECTOR2I( 233450000, 228360000 ) );
+    }
+};
+
+
+BOOST_FIXTURE_TEST_SUITE( TestShapeLineChain, SLC_CASES )
 
 BOOST_AUTO_TEST_CASE( ArcToPolyline )
 {
@@ -153,6 +224,50 @@ BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )
     BOOST_CHECK_EQUAL( chain.CPoints().size(), chain.CShapes().size() );
     BOOST_CHECK_EQUAL( chain.PointCount(), 2 ); // (-1) should have removed coincident points
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+}
+
+
+
+
+BOOST_AUTO_TEST_CASE( NextShape )
+{
+    BOOST_CHECK_EQUAL( Circle1Arc.NextShape( 0 ), -1 ); //only one arc
+    
+    BOOST_CHECK_EQUAL( Circle2Arcs.NextShape( 0 ), 8 ); // next shape "Arc0b"
+    BOOST_CHECK_EQUAL( Circle2Arcs.NextShape( 8 ), -1 ); //no more shapes (last point joins with first, part of arc)
+
+    BOOST_CHECK_EQUAL( ArcsCoincident.NextShape( 0 ), 8 ); // next shape "Arc1"
+    BOOST_CHECK_EQUAL( ArcsCoincident.NextShape( 8 ), -1 ); //no more shapes
+
+    BOOST_CHECK_EQUAL( ArcsCoincidentClosed.NextShape( 0 ), 8 ); // next shape "Arc1"
+    BOOST_CHECK_EQUAL( ArcsCoincidentClosed.NextShape( 8 ), 13 ); //next shape is hidden segment joining last/first
+    BOOST_CHECK_EQUAL( ArcsCoincidentClosed.NextShape( 13 ), -1 ); //no more shapes
+
+    BOOST_CHECK_EQUAL( DuplicateArcs.NextShape( 0 ), 8 ); // next shape "Arc1"
+    BOOST_CHECK_EQUAL( DuplicateArcs.NextShape( 8 ), 13 ); // next shape hidden segment joining the 2 duplicate arcs
+    BOOST_CHECK_EQUAL( DuplicateArcs.NextShape( 13 ), 14 ); // next shape "Arc1" (duplicate)
+    BOOST_CHECK_EQUAL( DuplicateArcs.NextShape( 14 ), -1 ); //no more shapes
+
+    BOOST_CHECK_EQUAL( ArcAndPoint.NextShape( 0 ), 8 ); // next shape straight segment (end of arc->point)
+    BOOST_CHECK_EQUAL( ArcAndPoint.NextShape( 8 ), -1 ); //no more shapes
+
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.NextShape( 0 ), 8 ); // next shape straight segment (end of arc->point)
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.NextShape( 8 ), 9 ); // next shape straight segment (point->begining of arc)
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.NextShape( 9 ), 10 ); //next shape second arc
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.NextShape( 10 ), -1 ); //no more shapes
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.NextShape( 20 ), -1 ); //invalid indices should still work
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.NextShape( -50 ), -1 ); //invalid indices should still work
+
+    BOOST_CHECK_EQUAL( EmptyChain.NextShape( 0 ), -1 );
+    BOOST_CHECK_EQUAL( EmptyChain.NextShape( 1 ), -1 ); //invalid indices should still work
+    BOOST_CHECK_EQUAL( EmptyChain.NextShape( 2 ), -1 ); //invalid indices should still work
+    BOOST_CHECK_EQUAL( EmptyChain.NextShape( -2 ), -1 ); //invalid indices should still work
+
+    BOOST_CHECK_EQUAL( OnePoint.NextShape( 0 ), -1 );
+    BOOST_CHECK_EQUAL( OnePoint.NextShape( -1 ), -1 );
+    BOOST_CHECK_EQUAL( OnePoint.NextShape( 1 ), -1 );  //invalid indices should still work
+    BOOST_CHECK_EQUAL( OnePoint.NextShape( 2 ), -1 ); //invalid indices should still work
+    BOOST_CHECK_EQUAL( OnePoint.NextShape( -2 ), -1 ); //invalid indices should still work
 }
 
 

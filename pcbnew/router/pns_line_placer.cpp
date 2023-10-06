@@ -217,9 +217,7 @@ bool LINE_PLACER::handlePullback()
 
     if( pullback_1 || pullback_2 )
     {
-        lastSegIdx = tail.PrevShape( -1 );
-
-        if( !tail.IsPtOnArc( lastSegIdx ) )
+        if( !tail.IsArcSegment( lastSegIdx ) )
         {
             const SEG& seg = tail.CSegment( lastSegIdx );
             m_direction    = DIRECTION_45( seg );
