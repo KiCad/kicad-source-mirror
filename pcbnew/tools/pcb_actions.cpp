@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -2009,6 +2009,10 @@ TOOL_ACTION PCB_ACTIONS::unselectItem( TOOL_ACTION_ARGS()
 
 TOOL_ACTION PCB_ACTIONS::unselectItems( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveSelection.UnselectItems" )
+        .Scope( AS_GLOBAL ) );
+
+TOOL_ACTION PCB_ACTIONS::reselectItem( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveSelection.ReselectItem" )
         .Scope( AS_GLOBAL ) );
 
 TOOL_ACTION PCB_ACTIONS::selectionClear( TOOL_ACTION_ARGS()

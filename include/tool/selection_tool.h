@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,8 @@ public:
     void RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode = false );
     int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
     void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
+
+    int ReselectItem( const TOOL_EVENT& aEvent );
 
     /**
      * A safer version of RemoveItemsFromSel( EDA_ITEMS ) which doesn't require the items to

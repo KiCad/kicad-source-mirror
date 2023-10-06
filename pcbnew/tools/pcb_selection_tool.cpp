@@ -3509,6 +3509,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::AddItemsToSel,       PCB_ACTIONS::selectItems.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::RemoveItemFromSel,   PCB_ACTIONS::unselectItem.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::RemoveItemsFromSel,  PCB_ACTIONS::unselectItems.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::ReselectItem,        PCB_ACTIONS::reselectItem.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );

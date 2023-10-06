@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -70,6 +70,7 @@ public:
     /// Select an item (specified as the event parameter).
     static TOOL_ACTION selectItem;
     static TOOL_ACTION unselectItem;
+    static TOOL_ACTION reselectItem;
 
     /// Select a list of items (specified as the event parameter)
     static TOOL_ACTION selectItems;

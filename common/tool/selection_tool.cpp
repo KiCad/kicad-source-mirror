@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,18 @@ void SELECTION_TOOL::AddItemToSel( EDA_ITEM* aItem, bool aQuietMode )
         if( !aQuietMode )
             m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
+}
+
+
+int SELECTION_TOOL::ReselectItem( const TOOL_EVENT& aEvent )
+{
+    RemoveItemFromSel( aEvent.Parameter<EDA_ITEM*>() );
+    selection().SetIsHover( false );
+
+    AddItemToSel( aEvent.Parameter<EDA_ITEM*>() );
+    selection().SetIsHover( false );
+
+    return 0;
 }
 
 
