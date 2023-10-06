@@ -20,18 +20,19 @@
  */
 
 #include <class_draw_panel_gal.h>
-#include <dialogs/dialog_pns_length_tuning_settings.h>
+#include <dialogs/dialog_unit_entry.h>
 #include <kiplatform/ui.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/zone_filler_tool.h>
+#include <tools/tool_event_utils.h>
+#include <board_design_settings.h>
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
 #include "pns_tune_status_popup.h"
 
 #include "length_tuner_tool.h"
 #include <bitmaps.h>
-#include <tools/tool_event_utils.h>
 
 using namespace KIGFX;
 
@@ -100,6 +101,12 @@ bool LENGTH_TUNER_TOOL::Init()
 {
     m_inLengthTuner = false;
 
+    auto tuning =
+            [&]( const SELECTION& )
+            {
+                return m_router->RoutingInProgress();
+            };
+
     auto& menu = m_menu.GetMenu();
 
     menu.SetTitle( _( "Length Tuner" ) );
@@ -110,11 +117,10 @@ bool LENGTH_TUNER_TOOL::Init()
 
     menu.AddSeparator();
 
-    menu.AddItem( ACT_SpacingIncrease,                    SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SpacingDecrease,                    SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_AmplIncrease,                       SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_AmplDecrease,                       SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( PCB_ACTIONS::lengthTunerSettingsDialog, SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SpacingIncrease,                    tuning );
+    menu.AddItem( ACT_SpacingDecrease,                    tuning );
+    menu.AddItem( ACT_AmplIncrease,                       tuning );
+    menu.AddItem( ACT_AmplDecrease,                       tuning );
 
     return true;
 }
@@ -162,9 +168,53 @@ void LENGTH_TUNER_TOOL::performTuning()
         return;
     }
 
-    auto placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
+    BOARD_DESIGN_SETTINGS&    bds = board()->GetDesignSettings();
+    PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
+    PNS::MEANDER_SETTINGS*    settings = nullptr;
 
-    placer->UpdateSettings( m_savedMeanderSettings );
+    switch( m_lastTuneMode )
+    {
+    case PNS::PNS_MODE_TUNE_SINGLE:         settings = &bds.m_singleTrackMeanderSettings; break;
+    case PNS::PNS_MODE_TUNE_DIFF_PAIR:      settings = &bds.m_diffPairMeanderSettings;    break;
+    case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW: settings = &bds.m_skewMeanderSettings;        break;
+    default:
+        wxFAIL_MSG( wxT( "Unsupported tuning mode." ) );
+        m_router->StopRouting();
+        highlightNets( false );
+        return;
+    }
+
+    if( m_lastTuneMode == PNS::PNS_MODE_TUNE_SINGLE
+            || m_lastTuneMode == PNS::PNS_MODE_TUNE_DIFF_PAIR )
+    {
+        std::shared_ptr<DRC_ENGINE>& drcEngine = bds.m_DRCEngine;
+        DRC_CONSTRAINT               constraint;
+
+        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, m_startItem->Parent(), nullptr,
+                                           ToLAYER_ID( layer ) );
+
+        if( constraint.IsNull() )
+        {
+            WX_UNIT_ENTRY_DIALOG dlg( frame(), _( "Length Tuning" ), _( "Target length:" ),
+                                      100 * PCB_IU_PER_MM );
+
+            if( dlg.ShowModal() != wxID_OK )
+            {
+                m_router->StopRouting();
+                highlightNets( false );
+                return;
+            }
+
+            settings->m_targetLength = dlg.GetValue();
+        }
+        else
+        {
+            settings->m_targetLength = constraint.GetValue().Opt();
+        }
+    }
+
+    placer->UpdateSettings( *settings );
+
     frame()->UndoRedoBlock( true );
 
     VECTOR2I end = getViewControls()->GetMousePosition();
@@ -238,13 +288,6 @@ void LENGTH_TUNER_TOOL::performTuning()
             m_router->Move( end, nullptr );
             updateStatusPopup( statusPopup );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::lengthTunerSettingsDialog ) )
-        {
-            statusPopup.Hide();
-            TOOL_EVENT dummy;
-            meanderSettingsDialog( dummy );
-            statusPopup.Show();
-        }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
         // but we don't at present have that, so we just knock out some of the egregious ones.
         else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
@@ -270,14 +313,9 @@ void LENGTH_TUNER_TOOL::performTuning()
 
 void LENGTH_TUNER_TOOL::setTransitions()
 {
-    Go( &LENGTH_TUNER_TOOL::MainLoop,              PCB_ACTIONS::routerTuneSingleTrace.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::MainLoop,              PCB_ACTIONS::routerTuneDiffPair.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::MainLoop,
-        PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
-
-    // in case tool is inactive, otherwise the event is handled in the tool loop
-    Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog,
-        PCB_ACTIONS::lengthTunerSettingsDialog.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop,       PCB_ACTIONS::routerTuneSingleTrace.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop,       PCB_ACTIONS::routerTuneDiffPair.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop,       PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
 }
 
 
@@ -335,11 +373,6 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             updateStartItem( *evt );
             performTuning();
         }
-        else if( evt->IsAction( &PCB_ACTIONS::lengthTunerSettingsDialog ) )
-        {
-            TOOL_EVENT dummy;
-            meanderSettingsDialog( dummy );
-        }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
@@ -355,24 +388,5 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     frame()->PopTool( aEvent );
-    return 0;
-}
-
-
-int LENGTH_TUNER_TOOL::meanderSettingsDialog( const TOOL_EVENT& aEvent )
-{
-    PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
-
-    PNS::MEANDER_SETTINGS settings = placer ? placer->MeanderSettings() : m_savedMeanderSettings;
-    DIALOG_PNS_LENGTH_TUNING_SETTINGS settingsDlg( frame(), settings, m_lastTuneMode );
-
-    if( settingsDlg.ShowModal() == wxID_OK )
-    {
-        if( placer )
-            placer->UpdateSettings( settings );
-
-        m_savedMeanderSettings = settings;
-    }
-
     return 0;
 }

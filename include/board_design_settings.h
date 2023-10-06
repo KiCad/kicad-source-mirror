@@ -35,6 +35,7 @@
 #include <widgets/ui_common.h>
 #include <zone_settings.h>
 #include <teardrop/teardrop_parameters.h>
+#include <router/pns_meander.h>
 
 
 #define DEFAULT_SILK_LINE_WIDTH       0.1
@@ -643,6 +644,10 @@ public:
      *  3 set of parameters always exist: for round shapes, for rect shapes, for track ends
      */
     TEARDROP_PARAMETERS_LIST         m_TeardropParamsList;
+
+    PNS::MEANDER_SETTINGS            m_singleTrackMeanderSettings;
+    PNS::MEANDER_SETTINGS            m_diffPairMeanderSettings;
+    PNS::MEANDER_SETTINGS            m_skewMeanderSettings;
 
     VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
 

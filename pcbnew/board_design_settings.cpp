@@ -596,6 +596,74 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             },
             {} ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "meander_settings",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = {};
+
+                auto make_settings =
+                        []( const PNS::MEANDER_SETTINGS& aSettings )
+                        {
+                            nlohmann::json entry = {};
+
+                            entry["min_amplitude"] = pcbIUScale.IUTomm( aSettings.m_minAmplitude );
+                            entry["max_amplitude"] = pcbIUScale.IUTomm( aSettings.m_maxAmplitude );
+                            entry["spacing"] = pcbIUScale.IUTomm( aSettings.m_spacing );
+                            entry["corner_style"] = aSettings.m_cornerStyle == PNS::MEANDER_STYLE_CHAMFER ? 0 : 1;
+                            entry["corner_radius_percentage"] = aSettings.m_cornerRadiusPercentage;
+                            entry["single_sided"] = aSettings.m_singleSided;
+
+                            return entry;
+                        };
+
+                js["single_track_meander_defaults"] = make_settings( m_singleTrackMeanderSettings );
+                js["diff_pair_meander_defaults"] = make_settings( m_diffPairMeanderSettings );
+                js["skew_meander_defaults"] = make_settings( m_skewMeanderSettings );
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                auto read_settings =
+                        []( const nlohmann::json& entry ) -> PNS::MEANDER_SETTINGS
+                        {
+                            PNS::MEANDER_SETTINGS settings;
+
+                            if( entry.contains( "min_amplitude" ) )
+                                settings.m_minAmplitude = pcbIUScale.mmToIU( entry["min_amplitude"].get<double>() );
+
+                            if( entry.contains( "max_amplitude" ) )
+                                settings.m_maxAmplitude = pcbIUScale.mmToIU( entry["max_amplitude"].get<double>() );
+
+                            if( entry.contains( "spacing" ) )
+                                settings.m_spacing = pcbIUScale.mmToIU( entry["spacing"].get<double>() );
+
+                            if( entry.contains( "corner_style" ) )
+                            {
+                                settings.m_cornerStyle = entry["corner_style"] == 0 ? PNS::MEANDER_STYLE_CHAMFER
+                                                                                    : PNS::MEANDER_STYLE_ROUND;
+                            }
+
+                            if( entry.contains( "corner_radius_percentage" ) )
+                                settings.m_cornerRadiusPercentage = entry["corner_radius_percentage"].get<int>();
+
+                            if( entry.contains( "single_sided" ) )
+                                settings.m_singleSided = entry["single_sided"].get<bool>();
+
+                            return settings;
+                        };
+
+                if( aObj.contains( "single_track_meander_defaults" ) )
+                    m_singleTrackMeanderSettings = read_settings( aObj["single_track_meander_defaults"] );
+
+                if( aObj.contains( "diff_pair_meander_defaults" ) )
+                    m_diffPairMeanderSettings = read_settings( aObj["diff_pair_meander_defaults"] );
+
+                if( aObj.contains( "skew_meander_defaults" ) )
+                    m_skewMeanderSettings = read_settings( aObj["skew_meander_defaults"] );
+            },
+            {} ) );
+
     int minTextSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
     int maxTextSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
     int minStroke = 1;

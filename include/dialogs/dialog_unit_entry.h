@@ -35,7 +35,7 @@
 
 #include <widgets/unit_binder.h>
 
-#include "dialog_unit_entry_base.h"
+#include "../../common/dialogs/dialog_unit_entry_base.h"
 
 class WX_UNIT_ENTRY_DIALOG : public WX_UNIT_ENTRY_DIALOG_BASE
 {

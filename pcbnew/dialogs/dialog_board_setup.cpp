@@ -20,7 +20,6 @@
 #include <panel_setup_layers.h>
 #include <panel_setup_text_and_graphics.h>
 #include <panel_setup_constraints.h>
-#include <dialogs/panel_setup_netclasses.h>
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
@@ -32,6 +31,10 @@
 #include <dialog_import_settings.h>
 #include <io_mgr.h>
 #include <dialogs/panel_setup_severities.h>
+#include <dialogs/panel_setup_rules.h>
+#include <dialogs/panel_setup_teardrops.h>
+#include <dialogs/panel_setup_meanders.h>
+#include <dialogs/panel_setup_netclasses.h>
 #include <panel_text_variables.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -41,8 +44,6 @@
 #include <wildcards_and_files_ext.h>
 
 #include "dialog_board_setup.h"
-#include "panel_setup_rules.h"
-#include "panel_setup_teardrops.h"
 
 
 std::mutex DIALOG_BOARD_SETUP::g_Mutex;
@@ -66,6 +67,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_constraintsPage( 0 ),
         m_tracksAndViasPage( 0 ),
         m_teardropsPage( 0 ),
+        m_meandersPage( 0 ),
         m_netclassesPage( 0 ),
         m_severitiesPage( 0 )
 
@@ -157,6 +159,18 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
             {
                 return new PANEL_SETUP_TEARDROPS( aParent, m_frame );
             }, _( "Teardrops" ) );
+
+    m_meandersPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
+
+                return new PANEL_SETUP_MEANDERS( aParent, m_frame,
+                                                 bds.m_singleTrackMeanderSettings,
+                                                 bds.m_diffPairMeanderSettings,
+                                                 bds.m_skewMeanderSettings );
+            }, _( "Meanders" ) );
 
     m_netclassesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(

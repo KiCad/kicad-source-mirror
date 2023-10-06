@@ -108,13 +108,17 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     if ( m_originPair.NetP() == m_originLine.Net() )
     {
         m_coupledLength = m_padToDieN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
+        m_lastLength = m_padToDieP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
         m_tunedPath = m_tunedPathP;
     }
     else
     {
         m_coupledLength = m_padToDieP + lineLength( m_tunedPathP, m_startPad_p, m_endPad_p );
+        m_lastLength = m_padToDieN + lineLength( m_tunedPathN, m_startPad_n, m_endPad_n );
         m_tunedPath = m_tunedPathN;
     }
+
+    m_targetSkew = (int) currentSkew();
 
     return true;
 }
@@ -160,7 +164,7 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         }
     }
 
-    return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );
+    return doMove( aP, aEndItem, m_coupledLength + m_targetSkew );
 }
 
 
@@ -185,7 +189,7 @@ const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS aUnits ) const
 
     status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength - m_coupledLength );
     status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetSkew );
+    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_targetSkew );
 
     return status;
 }

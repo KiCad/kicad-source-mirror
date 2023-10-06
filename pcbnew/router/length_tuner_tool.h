@@ -47,9 +47,7 @@ private:
     void performTuning();
     void updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup );
 
-    int meanderSettingsDialog( const TOOL_EVENT& aEvent );
-
-    PNS::MEANDER_SETTINGS m_savedMeanderSettings;
+private:
     PNS::ROUTER_MODE      m_lastTuneMode;
     bool                  m_inLengthTuner;
 };

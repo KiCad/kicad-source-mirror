@@ -34,6 +34,7 @@ WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxStr
     m_label->SetLabel( aLabel );
     m_unit_binder.SetValue( aDefaultValue );
 
+    SetInitialFocus( m_textCtrl );
     SetupStandardButtons();
 }
 
@@ -56,9 +57,9 @@ WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString&
     m_unit_binder_x.SetValue( aDefaultValue.x );
     m_unit_binder_y.SetValue( aDefaultValue.y );
 
+    SetInitialFocus( m_textCtrlX );
     SetupStandardButtons();
 }
-
 
 VECTOR2I WX_PT_ENTRY_DIALOG::GetValue()
 {

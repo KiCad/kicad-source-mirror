@@ -106,6 +106,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_rule_area_properties.cpp
     dialogs/dialog_rule_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp
+    dialogs/dialog_meander_properties.cpp
+    dialogs/dialog_meander_properties_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp
     dialogs/dialog_net_inspector.cpp
@@ -143,8 +145,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_unused_pad_layers_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
-        dialogs/panel_pcb_display_options.cpp
-        dialogs/panel_pcb_display_options_base.cpp
+    dialogs/panel_pcb_display_options.cpp
+    dialogs/panel_pcb_display_options_base.cpp
     dialogs/panel_edit_options.cpp
     dialogs/panel_edit_options_base.cpp
     dialogs/panel_fp_lib_table.cpp
@@ -165,6 +167,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_setup_mask_and_paste.cpp
     dialogs/panel_setup_mask_and_paste_base.cpp
+    dialogs/panel_setup_meanders.cpp
+    dialogs/panel_setup_meanders_base.cpp
     dialogs/panel_setup_layers.cpp
     dialogs/panel_setup_layers_base.cpp
     dialogs/panel_setup_rules.cpp
