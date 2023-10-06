@@ -650,8 +650,6 @@ int ERC_TESTER::TestPinToPin()
             }
         }
 
-        std::set<std::pair<ERC_SCH_PIN_CONTEXT, ERC_SCH_PIN_CONTEXT>> tested;
-
         ERC_SCH_PIN_CONTEXT needsDriver;
         bool                hasDriver = false;
 
@@ -669,8 +667,9 @@ int ERC_TESTER::TestPinToPin()
             }
         }
 
-        for( ERC_SCH_PIN_CONTEXT& refPin : pins )
+        for( auto refIt = pins.begin(); refIt != pins.end(); ++refIt )
         {
+            ERC_SCH_PIN_CONTEXT& refPin = *refIt;
             ELECTRICAL_PINTYPE refType = refPin.Pin()->GetType();
 
             if( DrivenPinTypes.count( refType ) )
@@ -694,22 +693,9 @@ int ERC_TESTER::TestPinToPin()
             else
                 hasDriver |= ( DrivingPinTypes.count( refType ) != 0 );
 
-            for( ERC_SCH_PIN_CONTEXT& testPin : pins )
+            for( auto testIt = refIt + 1; testIt != pins.end(); ++testIt )
             {
-                if( testPin == refPin )
-                    continue;
-
-                ERC_SCH_PIN_CONTEXT first_pin = refPin;
-                ERC_SCH_PIN_CONTEXT second_pin = testPin;
-
-                if( second_pin < first_pin )
-                    std::swap( first_pin, second_pin );
-
-                std::pair<ERC_SCH_PIN_CONTEXT, ERC_SCH_PIN_CONTEXT> pair =
-                        std::make_pair( first_pin, second_pin );
-
-                if( auto [ins_pin, inserted ] = tested.insert( pair ); !inserted )
-                    continue;
+                ERC_SCH_PIN_CONTEXT& testPin = *testIt;
 
                 // Multiple pins in the same symbol that share a type,
                 // name and position are considered
