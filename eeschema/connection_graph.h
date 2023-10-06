@@ -89,7 +89,11 @@ public:
               m_driver_connection( nullptr )
     {}
 
-    ~CONNECTION_SUBGRAPH() = default;
+    ~CONNECTION_SUBGRAPH()
+    {
+        for( SCH_CONNECTION* connection : m_bus_element_connections )
+            delete connection;
+    }
 
     friend class CONNECTION_GRAPH;
 
@@ -195,6 +199,13 @@ public:
 
     void RemoveItem( SCH_ITEM* aItem );
 
+    // Use this to keep a connection pointer that is not owned by any item
+    // This will be destroyed with the subgraph
+    void StoreImplicitConnection( SCH_CONNECTION* aConnection )
+    {
+        m_bus_element_connections.insert( aConnection );
+    }
+
 private:
     wxString driverName( SCH_ITEM* aItem ) const;
 
@@ -286,6 +297,10 @@ private:
 
     /// Cache for driver connection.
     SCH_CONNECTION* m_driver_connection;
+
+    /// A cache of connections that are part of this subgraph but that don't have
+    /// an owning element (i.e. bus members)
+    std::set<SCH_CONNECTION*> m_bus_element_connections;
 };
 
 struct NET_NAME_CODE_CACHE_KEY
