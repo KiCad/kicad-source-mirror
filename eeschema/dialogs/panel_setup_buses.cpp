@@ -197,7 +197,7 @@ void PANEL_SETUP_BUSES::OnDeleteAlias( wxCommandEvent& aEvent )
     if( m_aliasesGrid->GetNumberRows() > 0 )
     {
         m_aliasesGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_aliasesGrid->SelectRow( curRow-1 );
+        m_aliasesGrid->SelectRow( std::max( 0, curRow-1 ) );
     }
 }
 
@@ -240,7 +240,7 @@ void PANEL_SETUP_BUSES::OnRemoveMember( wxCommandEvent& aEvent )
     if( m_membersGrid->GetNumberRows() > 0 )
     {
         m_membersGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_membersGrid->SelectRow( curRow-1 );
+        m_membersGrid->SelectRow( std::max( 0, curRow-1 ) );
     }
 }
 
