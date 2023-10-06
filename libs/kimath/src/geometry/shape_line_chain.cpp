@@ -2131,6 +2131,123 @@ double SHAPE_LINE_CHAIN::Area( bool aAbsolute ) const
 }
 
 
+bool SHAPE_LINE_CHAIN::OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
+                                   SHAPE_LINE_CHAIN& aLeft, SHAPE_LINE_CHAIN& aRight,
+                                   bool aSimplify ) const
+{
+    if( PointCount() < 2 )
+        return false;
+
+    SHAPE_POLY_SET poly;
+    poly.OffsetLineChain( *this, aAmount * 2, aCornerStrategy, aMaxError, aSimplify );
+
+    if( poly.OutlineCount() != 1 )
+        return false;
+
+    if( poly.COutline( 0 ).PointCount() < 3 )
+        return false;
+
+    if( poly.HasHoles() )
+        return false;
+
+    SHAPE_LINE_CHAIN outline = poly.COutline( 0 );
+
+    wxASSERT( outline.IsClosed() );
+
+    const VECTOR2I& start = CPoint( 0 );
+    const VECTOR2I& end = CPoint( -1 );
+
+    outline.Split( start, true );
+    outline.Split( end, true );
+
+    const int idA = outline.Find( start );
+    const int idB = outline.Find( end );
+
+    if( idA == -1 || idB == -1 )
+        return false;
+
+    aLeft.Clear();
+    aRight.Clear();
+
+    for( int i = idA;; )
+    {
+        aLeft.Append( outline.CPoint( i ) );
+
+        i = ( i + 1 ) % outline.PointCount();
+
+        if( i == idB )
+        {
+            aLeft.Append( outline.CPoint( i ) );
+            break;
+        }
+
+        if( i == idA )
+            return false;
+    }
+
+    if( aLeft.PointCount() < 2 )
+        return false;
+
+    for( int i = idB;; )
+    {
+        aRight.Append( outline.CPoint( i ) );
+
+        i = ( i + 1 ) % outline.PointCount();
+
+        if( i == idA )
+        {
+            aRight.Append( outline.CPoint( i ) );
+            break;
+        }
+
+        if( i == idB )
+            return false;
+    }
+
+    if( aRight.PointCount() < 2 )
+        return false;
+
+    if( aLeft.CPoint( 0 ) != start )
+    {
+        aLeft = aLeft.Reverse();
+        wxASSERT( aLeft.CPoint( 0 ) == start );
+    }
+
+    if( aRight.CPoint( 0 ) != start )
+    {
+        aRight = aRight.Reverse();
+        wxASSERT( aRight.CPoint( 0 ) == start );
+    }
+
+    SEG base( CPoint( 0 ), CPoint( 1 ) );
+    int sideLeft = base.Side( aLeft.CPoint( 1 ) );
+    int sideRight = base.Side( aRight.CPoint( 1 ) );
+
+    if( sideLeft == 0 || sideRight == 0 )
+        return false;
+
+    if( sideLeft == sideRight )
+        return false;
+
+    if( sideLeft > 0 && sideRight < 0 )
+        std::swap( aLeft, aRight );
+
+    if( aLeft.PointCount() < 4 )
+        return false;
+
+    if( aRight.PointCount() < 4 )
+        return false;
+
+    aLeft.Remove( 0 );
+    aLeft.Remove( aLeft.PointCount() - 1 );
+
+    aRight.Remove( 0 );
+    aRight.Remove( aRight.PointCount() - 1 );
+
+    return true;
+}
+
+
 void SHAPE_LINE_CHAIN::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
                                            ERROR_LOC aErrorLoc ) const
 {

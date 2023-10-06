@@ -32,6 +32,7 @@
 #include <geometry/seg.h>
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
+#include <geometry/corner_strategy.h>
 #include <math/vector2d.h>
 
 /**
@@ -785,6 +786,20 @@ public:
      * orientation of the chain
      */
     double Area( bool aAbsolute = true ) const;
+
+    /**
+     * Creates line chains \a aLeft and \a aRight offset to this line chain.
+     *
+     * @param aAmount is the amount to offset.
+     * @param aCornerStrategy is the corner rounding strategy.
+     * @param aMaxError is the max error used for rounding.
+     * @param aLeft left line chain output.
+     * @param aRight right line chain output.
+     * @param aSimplify set to run Simplify on the inflated polygon.
+     */
+    bool OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
+                     SHAPE_LINE_CHAIN& aLeft, SHAPE_LINE_CHAIN& aRight,
+                     bool aSimplify = false ) const;
 
     size_t ArcCount() const
     {

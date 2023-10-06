@@ -1235,6 +1235,103 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 }
 
 
+void SHAPE_POLY_SET::inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, int aCircleSegCount,
+                                   CORNER_STRATEGY aCornerStrategy, bool aSimplify )
+{
+    using namespace Clipper2Lib;
+    // A static table to avoid repetitive calculations of the coefficient
+    // 1.0 - cos( M_PI / aCircleSegCount )
+    // aCircleSegCount is most of time <= 64 and usually 8, 12, 16, 32
+    #define SEG_CNT_MAX 64
+    static double arc_tolerance_factor[SEG_CNT_MAX + 1];
+
+    ClipperOffset c;
+
+    // N.B. see the Clipper documentation for jtSquare/jtMiter/jtRound.  They are poorly named
+    // and are not what you'd think they are.
+    // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/JoinType.htm
+    JoinType joinType = JoinType::Round; // The way corners are offsetted
+    double   miterLimit = 2.0;           // Smaller value when using jtMiter for joinType
+
+    switch( aCornerStrategy )
+    {
+    case CORNER_STRATEGY::ALLOW_ACUTE_CORNERS:
+        joinType = JoinType::Miter;
+        miterLimit = 10; // Allows large spikes
+        break;
+
+    case CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
+        joinType = JoinType::Miter;
+        break;
+
+    case CORNER_STRATEGY::ROUND_ACUTE_CORNERS: // Acute angles are rounded
+        joinType = JoinType::Miter;
+        break;
+
+    case CORNER_STRATEGY::CHAMFER_ALL_CORNERS: // All angles are chamfered.
+        joinType = JoinType::Square;
+        break;
+
+    case CORNER_STRATEGY::ROUND_ALL_CORNERS: // All angles are rounded.
+        joinType = JoinType::Round;
+        break;
+    }
+
+    std::vector<CLIPPER_Z_VALUE> zValues;
+    std::vector<SHAPE_ARC>       arcBuffer;
+
+    Path64 path = aLine.convertToClipper2( true, zValues, arcBuffer );
+    c.AddPath( path, joinType, EndType::Butt );
+
+    // Calculate the arc tolerance (arc error) from the seg count by circle. The seg count is
+    // nn = M_PI / acos(1.0 - c.ArcTolerance / abs(aAmount))
+    // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Classes/ClipperOffset/Properties/ArcTolerance.htm
+
+    if( aCircleSegCount < 6 ) // avoid incorrect aCircleSegCount values
+        aCircleSegCount = 6;
+
+    double coeff;
+
+    if( aCircleSegCount > SEG_CNT_MAX || arc_tolerance_factor[aCircleSegCount] == 0 )
+    {
+        coeff = 1.0 - cos( M_PI / aCircleSegCount );
+
+        if( aCircleSegCount <= SEG_CNT_MAX )
+            arc_tolerance_factor[aCircleSegCount] = coeff;
+    }
+    else
+    {
+        coeff = arc_tolerance_factor[aCircleSegCount];
+    }
+
+    c.ArcTolerance( std::abs( aAmount ) * coeff );
+    c.MiterLimit( miterLimit );
+
+    PolyTree64 tree;
+
+    if( aSimplify )
+    {
+        Paths64 paths2;
+        c.Execute( aAmount, paths2 );
+
+        Clipper2Lib::SimplifyPaths( paths2, std::abs( aAmount ) * coeff, false );
+
+        Clipper64 c2;
+        c2.PreserveCollinear = false;
+        c2.ReverseSolution = false;
+        c2.AddSubject( paths2 );
+        c2.Execute( ClipType::Union, FillRule::Positive, tree );
+    }
+    else
+    {
+        c.Execute( aAmount, tree );
+    }
+
+    importTree( tree, zValues, arcBuffer );
+    tree.Clear();
+}
+
+
 void SHAPE_POLY_SET::Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                               bool aSimplify )
 {
@@ -1244,6 +1341,15 @@ void SHAPE_POLY_SET::Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int 
         inflate2( aAmount, segCount, aCornerStrategy, aSimplify );
     else
         inflate1( aAmount, segCount, aCornerStrategy );
+}
+
+
+void SHAPE_POLY_SET::OffsetLineChain( const SHAPE_LINE_CHAIN& aLine, int aAmount,
+                                  CORNER_STRATEGY aCornerStrategy, int aMaxError, bool aSimplify )
+{
+    int segCount = GetArcToSegmentCount( std::abs( aAmount ), aMaxError, FULL_CIRCLE );
+
+    inflateLine2( aLine, aAmount, segCount, aCornerStrategy, aSimplify );
 }
 
 

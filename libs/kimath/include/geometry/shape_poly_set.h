@@ -1033,6 +1033,22 @@ public:
     }
 
     /**
+     * Perform offsetting of a line chain. Replaces this polygon set with the result.
+     *
+     * @param aLine is the line to perform offsetting on.
+     * @param aAmount is the number of units to offset the line chain.
+     * @param aCornerStrategy #ALLOW_ACUTE_CORNERS to preserve all angles,
+     *                        #CHAMFER_ACUTE_CORNERS to chop angles less than 90°,
+     *                        #ROUND_ACUTE_CORNERS to round off angles less than 90°,
+     *                        #ROUND_ALL_CORNERS to round regardless of angles
+     * @param aMaxError is the allowable deviation when rounding corners with an approximated
+     *                  polygon
+     * @param aSimplify set to simplify the output polygon.
+     */
+    void OffsetLineChain( const SHAPE_LINE_CHAIN& aLine, int aAmount,
+                          CORNER_STRATEGY aCornerStrategy, int aMaxError, bool aSimplify );
+
+    /**
      * Perform outline inflation/deflation, using round corners.
      *
      * Polygons can have holes and/or linked holes with main outlines.  The resulting
@@ -1434,6 +1450,9 @@ private:
 
     void inflate1( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy );
     void inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy, bool aSimplify = false );
+
+    void inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, int aCircleSegCount,
+                       CORNER_STRATEGY aCornerStrategy, bool aSimplify = false );
 
     /**
      * This is the engine to execute all polygon boolean transforms (AND, OR, ... and polygon
