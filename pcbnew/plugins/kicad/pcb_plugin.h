@@ -45,6 +45,7 @@ class PCB_BITMAP;
 class PCB_TARGET;
 class PAD;
 class PCB_GROUP;
+class PCB_GENERATOR;
 class PCB_TRACK;
 class ZONE;
 class PCB_TEXT;
@@ -140,7 +141,8 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20230730  // Connectivity for graphic shapes
 //#define SEXPR_BOARD_FILE_VERSION    20230825  // Textbox explicit border flag
 //#define SEXPR_BOARD_FILE_VERSION    20230906  // Multiple image type support in files
-#define SEXPR_BOARD_FILE_VERSION      20230913  // Custom-shaped-pad spoke templates
+//#define SEXPR_BOARD_FILE_VERSION    20230913  // Custom-shaped-pad spoke templates
+#define SEXPR_BOARD_FILE_VERSION      20231007  // Generative objects
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -419,6 +421,8 @@ private:
 
     void format( const PCB_TEXT* aText, int aNestLevel = 0 ) const;
     void format( const PCB_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
+
+    void format( const PCB_GENERATOR* aGenerator, int aNestLevel = 0 ) const;
 
     void format( const PCB_TRACK* aTrack, int aNestLevel = 0 ) const;
 

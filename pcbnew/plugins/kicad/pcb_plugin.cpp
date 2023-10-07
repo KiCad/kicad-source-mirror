@@ -31,10 +31,12 @@
 #include <kiface_base.h>
 #include <locale_io.h>
 #include <macros.h>
+#include <fmt/core.h>
 #include <callback_gal.h>
 #include <pad.h>
 #include <footprint.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_shape.h>
 #include <pcb_dimension.h>
 #include <pcb_bitmap.h>
@@ -283,7 +285,6 @@ bool PCB_PLUGIN::CanReadBoard( const wxString& aFileName ) const
     }
     catch( const IO_ERROR& )
     {
-        return false;
     }
 
     return false;
@@ -403,6 +404,10 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 
     case PCB_GROUP_T:
         format( static_cast<const PCB_GROUP*>( aItem ), aNestLevel );
+        break;
+
+    case PCB_GENERATOR_T:
+        format( static_cast<const PCB_GENERATOR*>( aItem ), aNestLevel );
         break;
 
     case PCB_TRACE_T:
@@ -782,6 +787,8 @@ void PCB_PLUGIN::format( const BOARD* aBoard, int aNestLevel ) const
                                                              aBoard->Zones().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_groups( aBoard->Groups().begin(),
                                                               aBoard->Groups().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp>  sorted_generators( aBoard->Generators().begin(),
+                                                                   aBoard->Generators().end() );
     formatHeader( aBoard, aNestLevel );
 
     // Save the footprints.
@@ -814,6 +821,10 @@ void PCB_PLUGIN::format( const BOARD* aBoard, int aNestLevel ) const
     // Save the groups
     for( BOARD_ITEM* group : sorted_groups )
         Format( group, aNestLevel );
+
+    // Save the generators
+    for( BOARD_ITEM* gen : sorted_generators )
+        Format( gen, aNestLevel );
 }
 
 
@@ -1955,6 +1966,102 @@ void PCB_PLUGIN::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 
     m_out->Print( aNestLevel + 1, ")\n" );  // Close `members` token.
     m_out->Print( aNestLevel, ")\n" );      // Close `group` token.
+}
+
+
+void PCB_PLUGIN::format( const PCB_GENERATOR* aGenerator, int aNestLevel ) const
+{
+    m_out->Print( aNestLevel, "(generated (id %s)\n", TO_UTF8( aGenerator->m_Uuid.AsString() ) );
+
+    m_out->Print( aNestLevel + 1, "(type %s) (name %s)\n",
+                  TO_UTF8( aGenerator->GetGeneratorType() ),
+                  m_out->Quotew( aGenerator->GetName() ).c_str() );
+
+    m_out->Print( aNestLevel + 1, "(layer %s)",
+                  m_out->Quotew( LSET::Name( aGenerator->GetLayer() ) ).c_str() );
+
+    if( aGenerator->IsLocked() )
+        m_out->Print( 0, " (locked yes)" );
+
+    m_out->Print( 0, "\n" );
+
+    for( const auto& [key, value] : aGenerator->GetProperties() )
+    {
+        if( value.CheckType<double>() || value.CheckType<int>() || value.CheckType<long>()
+            || value.CheckType<long long>() )
+        {
+            double val;
+
+            if( !value.GetAs( &val ) )
+                continue;
+
+            std::string buf = fmt::format( "{:.10g}", val );
+
+            // Don't quote numbers
+            m_out->Print( aNestLevel + 1, "(%s %s)\n", key.c_str(), buf.c_str() );
+        }
+        else if( value.CheckType<bool>() )
+        {
+            bool val;
+            value.GetAs( &val );
+
+            m_out->Print( aNestLevel + 1, "(%s %s)\n", key.c_str(), val ? "yes" : "no" );
+        }
+        else if( value.CheckType<VECTOR2I>() )
+        {
+            VECTOR2I val;
+            value.GetAs( &val );
+
+            m_out->Print( aNestLevel + 1, "(%s (xy %s))\n", key.c_str(),
+                          formatInternalUnits( val ).c_str() );
+        }
+        else if( value.CheckType<SHAPE_LINE_CHAIN>() )
+        {
+            SHAPE_LINE_CHAIN val;
+            value.GetAs( &val );
+
+            m_out->Print( aNestLevel + 1, "(%s (pts\n", key.c_str() );
+
+            for( const VECTOR2I& pt : val.CPoints() )
+                m_out->Print( aNestLevel + 2, "(xy %s)\n", formatInternalUnits( pt ).c_str() );
+
+            m_out->Print( aNestLevel + 1, "))\n" );
+        }
+        else
+        {
+            wxString val;
+
+            if( value.CheckType<wxString>() )
+            {
+                value.GetAs( &val );
+            }
+            else if( value.CheckType<std::string>() )
+            {
+                std::string str;
+                value.GetAs( &str );
+
+                val = wxString::FromUTF8( str );
+            }
+
+            m_out->Print( aNestLevel + 1, "(%s %s)\n", key.c_str(), m_out->Quotew( val ).c_str() );
+        }
+    }
+
+    m_out->Print( aNestLevel + 1, "(members\n" );
+
+    wxArrayString memberIds;
+
+    for( BOARD_ITEM* member : aGenerator->GetItems() )
+        memberIds.Add( member->m_Uuid.AsString() );
+
+    memberIds.Sort();
+
+    for( const wxString& memberId : memberIds )
+        m_out->Print( aNestLevel + 2, "%s\n", TO_UTF8( memberId ) );
+
+    m_out->Print( aNestLevel + 1, ")\n" ); // Close `members` token.
+
+    m_out->Print( aNestLevel, ")\n" ); // Close `generator` token.
 }
 
 

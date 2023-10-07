@@ -36,6 +36,7 @@
 #include <pcb_lexer.h>
 #include <kiid.h>
 #include <math/box2.h>
+#include <string_any_map.h>
 
 #include <chrono>
 #include <unordered_map>
@@ -120,6 +121,29 @@ public:
     bool IsValidBoardHeader();
 
 private:
+
+    // Group membership info refers to other Uuids in the file.
+    // We don't want to rely on group declarations being last in the file, so
+    // we store info about the group declarations here during parsing and then resolve
+    // them into BOARD_ITEM* after we've parsed the rest of the file.
+    struct GROUP_INFO
+    {
+        virtual ~GROUP_INFO() = default; // Make polymorphic
+
+        BOARD_ITEM*       parent;
+        wxString          name;
+        bool              locked;
+        KIID              uuid;
+        std::vector<KIID> memberUuids;
+    };
+
+    struct GENERATOR_INFO : GROUP_INFO
+    {
+        PCB_LAYER_ID   layer;
+        wxString       genType;
+        STRING_ANY_MAP properties;
+    };
+
     ///< Convert net code using the mapping table if available,
     ///< otherwise returns unchanged net code if < 0 or if it's out of range
     inline int getNetCode( int aNetCode )
@@ -204,7 +228,9 @@ private:
     ZONE*               parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET*         parsePCB_TARGET();
     BOARD*              parseBOARD();
+    void                parseGROUP_members( GROUP_INFO& aGroupInfo );
     void                parseGROUP( BOARD_ITEM* aParent );
+    void                parseGENERATOR( BOARD_ITEM* aParent );
 
     // Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     BOARD*              parseBOARD_unchecked();
@@ -360,20 +386,8 @@ private:
     TIME_PT             m_lastProgressTime;  ///< for progress reporting
     unsigned            m_lineCount;         ///< for progress reporting
 
-    // Group membership info refers to other Uuids in the file.
-    // We don't want to rely on group declarations being last in the file, so
-    // we store info about the group declarations here during parsing and then resolve
-    // them into BOARD_ITEM* after we've parsed the rest of the file.
-    struct GROUP_INFO
-    {
-        BOARD_ITEM*       parent;
-        wxString          name;
-        bool              locked;
-        KIID              uuid;
-        std::vector<KIID> memberUuids;
-    };
-
-    std::vector<GROUP_INFO> m_groupInfos;
+    std::vector<GROUP_INFO>     m_groupInfos;
+    std::vector<GENERATOR_INFO> m_generatorInfos;
 
     std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )> m_queryUserCallback;
 };

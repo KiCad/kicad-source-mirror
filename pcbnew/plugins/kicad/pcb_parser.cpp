@@ -40,10 +40,12 @@
 #include <pcb_shape.h>
 #include <pcb_bitmap.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_target.h>
 #include <pcb_track.h>
 #include <pcb_textbox.h>
 #include <pad.h>
+#include <generators_mgr.h>
 #include <zone.h>
 #include <footprint.h>
 #include <geometry/shape_line_chain.h>
@@ -960,6 +962,10 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             parseGROUP( m_board );
             break;
 
+        case T_generated:
+            parseGENERATOR( m_board );
+            break;
+
         case T_via:
             item = parsePCB_VIA();
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
@@ -1109,29 +1115,58 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
     //
     // First add all group objects so subsequent GetItem() calls for nested groups work.
 
+    std::vector<const GROUP_INFO*> groupTypeObjects;
+
     for( const GROUP_INFO& groupInfo : m_groupInfos )
+        groupTypeObjects.emplace_back( &groupInfo );
+
+    for( const GENERATOR_INFO& genInfo : m_generatorInfos )
+        groupTypeObjects.emplace_back( &genInfo );
+
+    for( const GROUP_INFO* groupInfo : groupTypeObjects )
     {
-        PCB_GROUP* group = new PCB_GROUP( groupInfo.parent );
+        PCB_GROUP* group = nullptr;
 
-        group->SetName( groupInfo.name );
-        const_cast<KIID&>( group->m_Uuid ) = groupInfo.uuid;
+        if( const GENERATOR_INFO* genInfo = dynamic_cast<const GENERATOR_INFO*>( groupInfo ) )
+        {
+            GENERATORS_MGR& mgr = GENERATORS_MGR::Instance();
 
-        if( groupInfo.locked )
+            PCB_GENERATOR* gen;
+            group = gen = mgr.CreateFromType( genInfo->genType );
+
+            if( !gen )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Cannot create generated object of type '%s'" ), genInfo->genType ) );
+            }
+
+            gen->SetLayer( genInfo->layer );
+            gen->SetProperties( genInfo->properties );
+        }
+        else
+        {
+            group = new PCB_GROUP( groupInfo->parent );
+            group->SetName( groupInfo->name );
+        }
+
+        const_cast<KIID&>( group->m_Uuid ) = groupInfo->uuid;
+
+        if( groupInfo->locked )
             group->SetLocked( true );
 
-        if( groupInfo.parent->Type() == PCB_FOOTPRINT_T )
-            static_cast<FOOTPRINT*>( groupInfo.parent )->Add( group, ADD_MODE::INSERT, true );
+        if( groupInfo->parent->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( groupInfo->parent )->Add( group, ADD_MODE::INSERT, true );
         else
-            static_cast<BOARD*>( groupInfo.parent )->Add( group, ADD_MODE::INSERT, true );
+            static_cast<BOARD*>( groupInfo->parent )->Add( group, ADD_MODE::INSERT, true );
     }
 
     wxString error;
 
-    for( const GROUP_INFO& groupInfo : m_groupInfos )
+    for( const GROUP_INFO* groupInfo : groupTypeObjects )
     {
-        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( getItem( groupInfo.uuid ) ) )
+        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( getItem( groupInfo->uuid ) ) )
         {
-            for( const KIID& aUuid : groupInfo.memberUuids )
+            for( const KIID& aUuid : groupInfo->memberUuids )
             {
                 BOARD_ITEM* item;
 
@@ -4790,6 +4825,21 @@ bool PCB_PARSER::parsePAD_option( PAD* aPad )
 }
 
 
+void PCB_PARSER::parseGROUP_members( GROUP_INFO& aGroupInfo )
+{
+    T token;
+
+    while( ( token = NextTok() ) != T_RIGHT )
+    {
+        // This token is the Uuid of the item in the group.
+        // Since groups are serialized at the end of the file/footprint, the Uuid should already
+        // have been seen and exist in the board.
+        KIID uuid( CurStr() );
+        aGroupInfo.memberUuids.push_back( uuid );
+    }
+}
+
+
 void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
 {
     wxCHECK_RET( CurTok() == T_group,
@@ -4827,16 +4877,147 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
     if( token != T_members )
         Expecting( T_members );
 
-    while( ( token = NextTok() ) != T_RIGHT )
-    {
-        // This token is the Uuid of the item in the group.
-        // Since groups are serialized at the end of the file/footprint, the Uuid should already
-        // have been seen and exist in the board.
-        KIID uuid( CurStr() );
-        groupInfo.memberUuids.push_back( uuid );
-    }
+    parseGROUP_members( groupInfo );
 
     NeedRIGHT();
+}
+
+
+void PCB_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
+{
+    wxCHECK_RET( CurTok() == T_generated, wxT( "Cannot parse " ) + GetTokenString( CurTok() )
+                                                  + wxT( " as PCB_GENERATOR." ) );
+
+    T token;
+
+    m_generatorInfos.push_back( GENERATOR_INFO() );
+    GENERATOR_INFO& genInfo = m_generatorInfos.back();
+
+    genInfo.layer = F_Cu;
+    genInfo.parent = aParent;
+    genInfo.properties = STRING_ANY_MAP( pcbIUScale.IU_PER_MM );
+
+    NeedLEFT();
+    token = NextTok();
+
+    if( token != T_id )
+        Expecting( T_id );
+
+    NextTok();
+    genInfo.uuid = CurStrToKIID();
+    NeedRIGHT();
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_type:
+            NeedSYMBOL();
+            genInfo.genType = FromUTF8();
+            NeedRIGHT();
+            break;
+
+        case T_name:
+            NeedSYMBOL();
+            genInfo.name = FromUTF8();
+            NeedRIGHT();
+            break;
+
+        case T_locked:
+            token = NextTok();
+            genInfo.locked = token == T_yes;
+            NeedRIGHT();
+            break;
+
+        case T_layer:
+            genInfo.layer = parseBoardItemLayer();
+            NeedRIGHT();
+            break;
+
+        case T_members: parseGROUP_members( genInfo ); break;
+
+        default:
+        {
+            wxString pName = FromUTF8();
+            T        tok1 = NextTok();
+
+            switch( tok1 )
+            {
+            case T_yes:
+            {
+                genInfo.properties.emplace( pName, wxAny( true ) );
+                NeedRIGHT();
+                break;
+            }
+            case T_no:
+            {
+                genInfo.properties.emplace( pName, wxAny( false ) );
+                NeedRIGHT();
+                break;
+            }
+            case T_NUMBER:
+            {
+                double pValue = parseDouble();
+                genInfo.properties.emplace( pName, wxAny( pValue ) );
+                NeedRIGHT();
+                break;
+            }
+            case T_STRING: // Quoted string
+            {
+                wxString pValue = FromUTF8();
+                genInfo.properties.emplace( pName, pValue );
+                NeedRIGHT();
+                break;
+            }
+            case T_LEFT:
+            {
+                NeedSYMBOL();
+                T tok2 = CurTok();
+
+                switch( tok2 )
+                {
+                case T_xy:
+                {
+                    VECTOR2I pt;
+
+                    pt.x = parseBoardUnits( "X coordinate" );
+                    pt.y = parseBoardUnits( "Y coordinate" );
+
+                    genInfo.properties.emplace( pName, wxAny( pt ) );
+                    NeedRIGHT();
+                    NeedRIGHT();
+
+                    break;
+                }
+                case T_pts:
+                {
+                    SHAPE_LINE_CHAIN chain;
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                        parseOutlinePoints( chain );
+
+                    NeedRIGHT();
+
+                    genInfo.properties.emplace( pName, wxAny( chain ) );
+                    break;
+                }
+                default: Expecting( "xy or pts" );
+                }
+
+                break;
+            }
+            default: Expecting( "a number, symbol, string or (" );
+            }
+
+            break;
+        }
+        }
+    }
 }
 
 
