@@ -297,6 +297,10 @@ void MEANDER_SHAPE::start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, co
 
 void MEANDER_SHAPE::forward( int aLength )
 {
+    // Very small segments cause problems.
+    if( aLength < 5 )
+        return;
+
     m_currentPos += m_currentDir.Resize( aLength );
     m_currentTarget->Append( m_currentPos );
 }
