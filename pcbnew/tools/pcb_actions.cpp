@@ -2418,6 +2418,14 @@ TOOL_ACTION PCB_ACTIONS::genRemove( TOOL_ACTION_ARGS()
         .Scope( AS_CONTEXT ) );
 
 
+TOOL_ACTION PCB_ACTIONS::generatorsShowManager( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.showManager" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Generators Manager" ) )
+        .Tooltip( _( "Show a manager dialog for Generator objects" ) )
+        .Icon( BITMAPS::pin_table ) );
+
+
 // LENGTH_TUNER_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::ddAppendBoard( TOOL_ACTION_ARGS()

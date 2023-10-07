@@ -281,6 +281,8 @@ public:
     static TOOL_ACTION genRevertEdit;
     static TOOL_ACTION genRemove;
 
+    static TOOL_ACTION generatorsShowManager;
+
     // Point Editor
     static TOOL_ACTION pointEditorAddCorner;
     static TOOL_ACTION pointEditorRemoveCorner;
