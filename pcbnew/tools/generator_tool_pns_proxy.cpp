@@ -118,8 +118,8 @@ GENERATOR_TOOL_PNS_PROXY::~GENERATOR_TOOL_PNS_PROXY()
 void GENERATOR_TOOL_PNS_PROXY::Reset( RESET_REASON aReason )
 {
     delete m_gridHelper;
-    delete m_iface;
     delete m_router;
+    delete m_iface; // Delete after m_router because PNS::NODE dtor needs m_ruleResolver
 
     m_iface = new PNS_KICAD_IFACE_GENERATOR;
     m_iface->SetBoard( board() );
