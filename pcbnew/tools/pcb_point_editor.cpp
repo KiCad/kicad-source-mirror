@@ -111,7 +111,8 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     m_original( VECTOR2I( 0, 0 ) ),
     m_refill( false ),
     m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
-    m_altConstrainer( VECTOR2I( 0, 0 ) )
+    m_altConstrainer( VECTOR2I( 0, 0 ) ),
+    m_inPointEditorTool( false )
 {
 }
 
@@ -454,6 +455,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
     if( !m_selectionTool || aEvent.Matches( EVENTS::InhibitSelectionEditing ) )
         return 0;
+
+    if( m_inPointEditorTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inPointEditorTool );
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     const PCB_SELECTION& selection = m_selectionTool->GetSelection();

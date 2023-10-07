@@ -190,6 +190,8 @@ private:
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;
     EDIT_POINT                                   m_altConstrainer;
 
+    bool m_inPointEditorTool; // Re-entrancy guard
+
     static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };
 
