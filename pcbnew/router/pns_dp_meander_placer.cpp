@@ -163,7 +163,8 @@ bool DP_MEANDER_PLACER::pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPai
 
 bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
-//    return false;
+    if( m_currentStart == aP )
+        return false;
 
     DIFF_PAIR::COUPLED_SEGMENTS_VEC coupledSegments;
 

@@ -107,12 +107,15 @@ bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
 bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength )
 {
-    SHAPE_LINE_CHAIN pre, tuned, post;
+    if( m_currentStart == aP )
+        return false;
 
     if( m_currentNode )
         delete m_currentNode;
 
     m_currentNode = m_world->Branch();
+
+    SHAPE_LINE_CHAIN pre, tuned, post;
 
     m_originLine.CLine().Split( m_currentStart, aP, pre, tuned, post );
 
