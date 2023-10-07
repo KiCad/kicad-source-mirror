@@ -138,9 +138,16 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
             continue;
         }
 
+        bool      side = false;
         const SEG s = tuned.CSegment( i );
+
+        if( m_settings.m_segmentSide == 0 )
+            side = s.Side( aP ) < 0;
+        else
+            side = m_settings.m_segmentSide < 0;
+
         m_result.AddCorner( s.A );
-        m_result.MeanderSegment( s, s.Side( aP ) < 0 );
+        m_result.MeanderSegment( s, side );
         m_result.AddCorner( s.B );
     }
 

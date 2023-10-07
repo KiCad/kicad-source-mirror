@@ -71,6 +71,7 @@ public:
         m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
         m_singleSided = false;
+        m_segmentSide = 0;
         m_lengthTolerance = 100000;
     }
 
@@ -100,6 +101,9 @@ public:
 
     ///< Place meanders on one side.
     bool m_singleSided;
+
+    ///< Force initial side at segment (0: based on cursor, 1: right side, -1: left side)
+    int m_segmentSide;
 
     ///< Allowable tuning error.
     int m_lengthTolerance;
