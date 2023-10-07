@@ -87,52 +87,6 @@ void MEANDER_PLACER_BASE::UpdateSettings( const MEANDER_SETTINGS& aSettings )
 }
 
 
-void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aTuneStart,
-                                        const VECTOR2I& aCursorPos, SHAPE_LINE_CHAIN& aPre,
-                                        SHAPE_LINE_CHAIN& aTuned, SHAPE_LINE_CHAIN& aPost )
-{
-    VECTOR2I cp ( aCursorPos );
-
-    if( cp == aTuneStart ) // we don't like tuning segments with 0 length
-    {
-        int idx = aOrigin.FindSegment( cp );
-
-        if( idx >= 0 )
-        {
-            const SEG& s = aOrigin.CSegment( idx );
-            cp += ( s.B - s.A ).Resize( 2 );
-        }
-        else
-        {
-            cp += VECTOR2I( 2, 5 ); // some arbitrary value that is not 45 degrees oriented
-        }
-    }
-
-    VECTOR2I n = aOrigin.NearestPoint( cp, false );
-    VECTOR2I m = aOrigin.NearestPoint( aTuneStart, false );
-
-    SHAPE_LINE_CHAIN l( aOrigin );
-    l.Split( n );
-    l.Split( m );
-
-    int i_start = l.Find( m );
-    int i_end = l.Find( n );
-
-    if( i_start > i_end )
-    {
-        l = l.Reverse();
-        i_start = l.Find( m );
-        i_end = l.Find( n );
-    }
-
-    aPre = l.Slice( 0, i_start );
-    aPost = l.Slice( i_end, -1 );
-    aTuned = l.Slice( i_start, i_end );
-
-    aTuned.Simplify();
-}
-
-
 int findAmplitudeBinarySearch( MEANDER_SHAPE& aCopy, int targetLength, int minAmp, int maxAmp )
 {
     if( minAmp == maxAmp )

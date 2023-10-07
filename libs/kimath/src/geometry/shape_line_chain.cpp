@@ -2131,6 +2131,36 @@ double SHAPE_LINE_CHAIN::Area( bool aAbsolute ) const
 }
 
 
+void SHAPE_LINE_CHAIN::Split( const VECTOR2I& aStart, const VECTOR2I& aEnd, SHAPE_LINE_CHAIN& aPre,
+                              SHAPE_LINE_CHAIN& aMid, SHAPE_LINE_CHAIN& aPost ) const
+{
+    VECTOR2I cp( aEnd );
+
+    wxASSERT( cp != aStart );
+
+    VECTOR2I n = NearestPoint( cp, false );
+    VECTOR2I m = NearestPoint( aStart, false );
+
+    SHAPE_LINE_CHAIN l( *this );
+    l.Split( n, true );
+    l.Split( m, true );
+
+    int i_start = l.Find( m );
+    int i_end = l.Find( n );
+
+    if( i_start > i_end )
+    {
+        l = l.Reverse();
+        i_start = l.Find( m );
+        i_end = l.Find( n );
+    }
+
+    aPre = l.Slice( 0, i_start );
+    aPost = l.Slice( i_end, -1 );
+    aMid = l.Slice( i_start, i_end );
+}
+
+
 bool SHAPE_LINE_CHAIN::OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                                    SHAPE_LINE_CHAIN& aLeft, SHAPE_LINE_CHAIN& aRight,
                                    bool aSimplify ) const

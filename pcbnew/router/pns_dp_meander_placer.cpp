@@ -175,8 +175,8 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     SHAPE_LINE_CHAIN preP, tunedP, postP;
     SHAPE_LINE_CHAIN preN, tunedN, postN;
 
-    cutTunedLine( m_originPair.CP(), m_currentStart, aP, preP, tunedP, postP );
-    cutTunedLine( m_originPair.CN(), m_currentStart, aP, preN, tunedN, postN );
+    m_originPair.CP().Split( m_currentStart, aP, preP, tunedP, postP );
+    m_originPair.CN().Split( m_currentStart, aP, preN, tunedN, postN );
 
     auto updateStatus =
             [&]()

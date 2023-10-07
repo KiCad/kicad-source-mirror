@@ -114,7 +114,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
 
     m_currentNode = m_world->Branch();
 
-    cutTunedLine( m_originLine.CLine(), m_currentStart, aP, pre, tuned, post );
+    m_originLine.CLine().Split( m_currentStart, aP, pre, tuned, post );
 
     m_result = MEANDERED_LINE( this, false );
     m_result.SetWidth( m_originLine.Width() );

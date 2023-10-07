@@ -116,21 +116,6 @@ public:
 
 protected:
     /**
-     * Extract the part of a track to be meandered, depending on the starting point and the
-     * cursor position.
-     *
-     * @param aOrigin the original line.
-     * @param aTuneStart point where we start meandering (start click coordinates).
-     * @param aCursorPos current cursor position.
-     * @param aPre part before the beginning of meanders.
-     * @param aTuned part to be meandered.
-     * @param aPost part after the end of meanders.
-     */
-    void cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aTuneStart,
-                       const VECTOR2I& aCursorPos, SHAPE_LINE_CHAIN& aPre, SHAPE_LINE_CHAIN& aTuned,
-                       SHAPE_LINE_CHAIN& aPost );
-
-    /**
      * Take a set of meanders in \a aTuned and tunes their length to extend the original line
      * length by \a aElongation.
      */

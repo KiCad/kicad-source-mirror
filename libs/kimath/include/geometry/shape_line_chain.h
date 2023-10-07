@@ -788,6 +788,18 @@ public:
     double Area( bool aAbsolute = true ) const;
 
     /**
+     * Extract parts of this line chain, depending on the starting and ending points.
+     *
+     * @param aStart first split point.
+     * @param aEnd second split point.
+     * @param aPre part before the aStart point.
+     * @param aMid part between aStart and aEnd.
+     * @param aPost part after the aEnd point.
+     */
+    void Split( const VECTOR2I& aStart, const VECTOR2I& aEnd, SHAPE_LINE_CHAIN& aPre,
+                SHAPE_LINE_CHAIN& aMid, SHAPE_LINE_CHAIN& aPost ) const;
+
+    /**
      * Creates line chains \a aLeft and \a aRight offset to this line chain.
      *
      * @param aAmount is the amount to offset.
