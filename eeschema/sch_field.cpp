@@ -248,8 +248,8 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
-        if( m_id == SHEETFILENAME && aAllowExtraText )
-            text = _( "File:" ) + wxS( " " )+ text;
+        if( m_id == SHEETFILENAME && aAllowExtraText && !IsNameShown() )
+            text = _( "File:" ) + wxS( " " ) + text;
     }
 
     return text;
