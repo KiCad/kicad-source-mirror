@@ -312,8 +312,11 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::placeText );
     placeMenu->Add( PCB_ACTIONS::drawTextBox );
 
-    placeMenu->AppendSeparator();
-    placeMenu->Add( PCB_ACTIONS::placeMeanders );
+    if( ADVANCED_CFG::GetCfg().m_EnableGenerators )
+    {
+        placeMenu->AppendSeparator();
+        placeMenu->Add( PCB_ACTIONS::placeMeanders );
+    }
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drawAlignedDimension );
@@ -400,11 +403,14 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
 
-    toolsMenu->AppendSeparator();
-    toolsMenu->Add( PCB_ACTIONS::generatorsShowManager );
-    toolsMenu->Add( PCB_ACTIONS::regenerateAll );
-    toolsMenu->Add( PCB_ACTIONS::regenerateOutdated );
-    toolsMenu->Add( PCB_ACTIONS::regenerateSelected );
+    if( ADVANCED_CFG::GetCfg().m_EnableGenerators )
+    {
+        toolsMenu->AppendSeparator();
+        toolsMenu->Add( PCB_ACTIONS::generatorsShowManager );
+        toolsMenu->Add( PCB_ACTIONS::regenerateAll );
+        toolsMenu->Add( PCB_ACTIONS::regenerateOutdated );
+        toolsMenu->Add( PCB_ACTIONS::regenerateSelected );
+    }
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::cleanupTracksAndVias );

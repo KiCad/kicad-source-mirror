@@ -213,6 +213,8 @@ static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" )
 
 static const wxChar UseClipper2[] = wxT( "UseClipper2" );
 
+static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
+
 /**
  * The time in milliseconds to wait before displaying a disambiguation menu.
  */
@@ -342,6 +344,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_UpdateUIEventInterval     = 0;
     m_ShowRepairSchematic       = false;
     m_ShowPropertiesPanel       = false;
+    m_EnableGenerators          = false;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
@@ -511,6 +514,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::DisambiguationTime,
                                                   &m_DisambiguationMenuDelay, m_DisambiguationMenuDelay,
                                                   50, 10000 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
+                                                &m_EnableGenerators, m_EnableGenerators ) );
 
 
 

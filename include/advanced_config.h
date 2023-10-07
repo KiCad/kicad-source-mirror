@@ -274,6 +274,11 @@ public:
      */
     int m_DisambiguationMenuDelay;
 
+    /**
+     * When true, enable support for generators
+     */
+    bool m_EnableGenerators;
+
 ///@}
 
 
