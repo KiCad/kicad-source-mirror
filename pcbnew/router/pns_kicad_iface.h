@@ -117,7 +117,7 @@ public:
     PNS_KICAD_IFACE();
     ~PNS_KICAD_IFACE();
 
-    void SetHostTool( PCB_TOOL_BASE* aTool );
+    virtual void SetHostTool( PCB_TOOL_BASE* aTool );
 
     void SetView( KIGFX::VIEW* aView );
     void EraseView() override;
@@ -140,7 +140,10 @@ public:
 
     void SetCommitFlags( int aCommitFlags ) { m_commitFlags = aCommitFlags; }
 
-private:
+protected:
+    BOARD_CONNECTED_ITEM* createBoardItem( PNS::ITEM* aItem );
+    void                  modifyBoardItem( PNS::ITEM* aItem );
+
     struct OFFSET
     {
         VECTOR2I p_old, p_new;

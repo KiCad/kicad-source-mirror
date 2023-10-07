@@ -18,6 +18,7 @@ include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
     ./autorouter
+    ./generators
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/3d-viewer/dialogs
     ${CMAKE_SOURCE_DIR}/common
@@ -229,6 +230,9 @@ set( PCBNEW_MICROWAVE_SRCS
     microwave/microwave_tool.cpp
     )
 
+set( PCBNEW_GENERATORS_SRCS
+    )
+
 set( PCBNEW_DRC_SRCS
     drc/drc_interactive_courtyard_clearance.cpp
     drc/drc_report.cpp
@@ -266,6 +270,7 @@ set( PCBNEW_NETLIST_SRCS
 set( PCBNEW_CLASS_SRCS
     ${PCBNEW_DIALOGS}
     ${PCBNEW_EXPORTERS}
+    ${PCBNEW_GENERATORS_SRCS}
     ${PCBNEW_DRC_SRCS}
     ${PCBNEW_IMPORT_GFX}
     ${PCBNEW_NETLIST_SRCS}
@@ -355,6 +360,8 @@ set( PCBNEW_CLASS_SRCS
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
+    tools/generator_tool.cpp
+    tools/generator_tool_pns_proxy.cpp
 
     footprint_preview_panel.cpp
     footprint_tree_pane.cpp

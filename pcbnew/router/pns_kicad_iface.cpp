@@ -1813,11 +1813,9 @@ void PNS_KICAD_IFACE_BASE::UpdateItem( PNS::ITEM* aItem )
 }
 
 
-void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
+void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
 {
     BOARD_ITEM* board_item = aItem->Parent();
-
-    m_commit->Modify( board_item );
 
     switch( aItem->Kind() )
     {
@@ -1864,14 +1862,21 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
         PAD*     pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
-        m_fpOffsets[ pad ].p_old = pad->GetPosition();
-        m_fpOffsets[ pad ].p_new = pos;
+        m_fpOffsets[pad].p_old = pad->GetPosition();
+        m_fpOffsets[pad].p_new = pos;
         break;
     }
 
-    default:
-        break;
+    default: break;
     }
+}
+
+
+void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
+{
+    BOARD_ITEM* board_item = aItem->Parent();
+    m_commit->Modify( board_item );
+    modifyBoardItem( aItem );
 }
 
 
@@ -1880,7 +1885,7 @@ void PNS_KICAD_IFACE_BASE::AddItem( PNS::ITEM* aItem )
 }
 
 
-void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
+BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* newBI = nullptr;
 
@@ -1901,7 +1906,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
     {
         PNS::SEGMENT* seg = static_cast<PNS::SEGMENT*>( aItem );
         PCB_TRACK*    track = new PCB_TRACK( m_board );
-        const SEG& s = seg->Seg();
+        const SEG&    s = seg->Seg();
         track->SetStart( VECTOR2I( s.A.x, s.A.y ) );
         track->SetEnd( VECTOR2I( s.B.x, s.B.y ) );
         track->SetWidth( seg->Width() );
@@ -1929,16 +1934,23 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::SOLID_T:
     {
-        PAD*   pad = static_cast<PAD*>( aItem->Parent() );
+        PAD*     pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
-        m_fpOffsets[ pad ].p_new = pos;
-        return;
+        m_fpOffsets[pad].p_new = pos;
+        return nullptr;
     }
 
-    default:
-        break;
+    default: break;
     }
+
+    return newBI;
+}
+
+
+void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
+{
+    BOARD_CONNECTED_ITEM* newBI = createBoardItem( aItem );
 
     if( newBI )
     {

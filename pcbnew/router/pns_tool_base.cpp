@@ -419,6 +419,12 @@ ROUTER *TOOL_BASE::Router() const
 }
 
 
+PNS_KICAD_IFACE* TOOL_BASE::GetInterface() const
+{
+    return m_iface;
+}
+
+
 const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, const VECTOR2I& aP )
 {
     if( !aItem || !m_iface->IsItemVisible( aItem ) )

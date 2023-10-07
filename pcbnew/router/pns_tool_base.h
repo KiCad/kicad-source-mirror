@@ -51,6 +51,8 @@ public:
 
     ROUTER* Router() const;
 
+    PNS_KICAD_IFACE* GetInterface() const;
+
 protected:
     bool checkSnap( ITEM* aItem );
 
