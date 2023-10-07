@@ -322,6 +322,7 @@ void EXPORTER_STEP::determinePcbThickness()
                 break;
 
             case BS_ITEM_TYPE_COPPER:
+            case BS_ITEM_TYPE_SOLDERMASK:
                 if( item->IsEnabled() )
                     thickness += item->GetThickness();
 
