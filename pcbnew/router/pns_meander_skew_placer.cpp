@@ -118,8 +118,6 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         m_tunedPath = m_tunedPathN;
     }
 
-    m_targetSkew = (int) currentSkew();
-
     return true;
 }
 
@@ -164,7 +162,7 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         }
     }
 
-    return doMove( aP, aEndItem, m_coupledLength + m_targetSkew );
+    return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );
 }
 
 
@@ -189,7 +187,7 @@ const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS aUnits ) const
 
     status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength - m_coupledLength );
     status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_targetSkew );
+    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetSkew );
 
     return status;
 }

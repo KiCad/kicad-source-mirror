@@ -62,7 +62,6 @@ private:
     long long int m_coupledLength;
     int           m_padToDieP;
     int           m_padToDieN;
-    int           m_targetSkew;
 };
 
 }
