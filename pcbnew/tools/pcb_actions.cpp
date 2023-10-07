@@ -186,6 +186,14 @@ TOOL_ACTION PCB_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_textbox )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::placeMeanders( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeMeanders" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Meanders" ) )
+        .Tooltip( _( "Add meanders for length tuning" ) )
+        .Icon( BITMAPS::ps_tune_length )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::drawAlignedDimension( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.alignedDimension" )
         .Scope( AS_GLOBAL )

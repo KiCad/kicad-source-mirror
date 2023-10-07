@@ -231,6 +231,7 @@ set( PCBNEW_MICROWAVE_SRCS
     )
 
 set( PCBNEW_GENERATORS_SRCS
+    generators/pcb_generator_meanders.cpp
     )
 
 set( PCBNEW_DRC_SRCS

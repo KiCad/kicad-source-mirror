@@ -104,6 +104,10 @@ public:
     int PlaceStackup( const TOOL_EVENT& aEvent );
 
     /**
+     */
+    int PlaceMeander( const TOOL_EVENT& aEvent );
+
+    /**
      * Start interactively drawing a line.
      *
      * After invoking the function it expects the user to click at least two times to determine

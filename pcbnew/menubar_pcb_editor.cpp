@@ -313,6 +313,9 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawTextBox );
 
     placeMenu->AppendSeparator();
+    placeMenu->Add( PCB_ACTIONS::placeMeanders );
+
+    placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drawAlignedDimension );
     placeMenu->Add( PCB_ACTIONS::drawOrthogonalDimension );
     placeMenu->Add( PCB_ACTIONS::drawCenterDimension );

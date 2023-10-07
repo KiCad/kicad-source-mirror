@@ -52,6 +52,14 @@ enum MEANDER_STYLE {
     MEANDER_STYLE_CHAMFER             // chamfered (45 degree segment)
 };
 
+///< Initial side the meander is placed on.
+enum MEANDER_SIDE
+{
+    MEANDER_SIDE_LEFT = -1,
+    MEANDER_SIDE_DEFAULT = 0,
+    MEANDER_SIDE_RIGHT = 1
+};
+
 /**
  * Dimensions for the meandering algorithm.
  */
@@ -71,7 +79,7 @@ public:
         m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
         m_singleSided = false;
-        m_segmentSide = 0;
+        m_segmentSide = MEANDER_SIDE_DEFAULT;
         m_lengthTolerance = 100000;
     }
 
@@ -102,8 +110,8 @@ public:
     ///< Place meanders on one side.
     bool m_singleSided;
 
-    ///< Force initial side at segment (0: based on cursor, 1: right side, -1: left side)
-    int m_segmentSide;
+    ///< Initial side when placing meanders at segment
+    MEANDER_SIDE m_segmentSide;
 
     ///< Allowable tuning error.
     int m_lengthTolerance;
