@@ -401,6 +401,12 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
 
     toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::generatorsShowManager );
+    toolsMenu->Add( PCB_ACTIONS::regenerateAll );
+    toolsMenu->Add( PCB_ACTIONS::regenerateOutdated );
+    toolsMenu->Add( PCB_ACTIONS::regenerateSelected );
+
+    toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::cleanupTracksAndVias );
     toolsMenu->Add( PCB_ACTIONS::removeUnusedPads );
     toolsMenu->Add( PCB_ACTIONS::cleanupGraphics );
