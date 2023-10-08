@@ -39,6 +39,8 @@ endif()
 # avoid formatting this otherwise you will introduce whitespace into the PATH string
     set( QA_PATH_REPLACEMENT
 "PATH=${CMAKE_BINARY_DIR}/kicad/;\
+${CMAKE_BINARY_DIR}/common/;\
+${CMAKE_BINARY_DIR}/common/gal/;\
 ${CMAKE_BINARY_DIR}/pcbnew/;\
 ${CMAKE_BINARY_DIR}/eeschema/;\
 $ENV{PATH};" )
