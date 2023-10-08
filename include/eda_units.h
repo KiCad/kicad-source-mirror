@@ -122,6 +122,7 @@ namespace EDA_UNIT_UTILS
     KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
                                                   const VECTOR2I&     aPoint );
 
+#if 0   // No support for std::from_chars on MacOS yet
     /**
      * Converts \a aInput string to internal units when reading from a file.
      * 
@@ -147,6 +148,7 @@ namespace EDA_UNIT_UTILS
      */
     KICOMMON_API bool ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
                                           VECTOR2I& aOut );
+#endif
 
     constexpr inline int Mils2IU( const EDA_IU_SCALE& aIuScale, int mils )
     {

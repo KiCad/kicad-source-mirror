@@ -181,6 +181,8 @@ std::string EDA_UNIT_UTILS::FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
 }
 
 
+#if 0   // No support for std::from_chars on MacOS yet
+
 bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
                                          int& aOut )
 {
@@ -217,6 +219,8 @@ bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU
 
     return true;
 }
+
+#endif
 
 
 #define IU_TO_MM( x, scale ) ( x / scale.IU_PER_MM )
