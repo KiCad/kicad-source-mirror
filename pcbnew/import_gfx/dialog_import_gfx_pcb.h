@@ -22,23 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_IMPORT_GFX_H__
-#define __DIALOG_IMPORT_GFX_H__
+#ifndef __DIALOG_IMPORT_GFX_PCB_H__
+#define __DIALOG_IMPORT_GFX_PCB_H__
 
 #include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
-#include "dialog_import_gfx_base.h"
+#include "dialog_import_gfx_pcb_base.h"
 #include <import_gfx/graphics_importer_pcbnew.h>
 
 class GRAPHICS_IMPORT_MGR;
 
 
-class DIALOG_IMPORT_GFX : public DIALOG_IMPORT_GFX_BASE
+class DIALOG_IMPORT_GFX_PCB : public DIALOG_IMPORT_GFX_PCB_BASE
 {
 public:
-    DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aUseModuleItems = false );
-    ~DIALOG_IMPORT_GFX();
+    DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aUseModuleItems = false );
+    ~DIALOG_IMPORT_GFX_PCB();
 
     /**
      * @return a list of items imported from a vector graphics file.
@@ -98,4 +98,4 @@ private:
                                                 // items m_importScale =1.0 means keep original size
 };
 
-#endif    //  __DIALOG_IMPORT_GFX_H__
+#endif    //  __DIALOG_IMPORT_GFX_PCB_H__

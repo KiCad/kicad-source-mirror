@@ -35,7 +35,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
-#include <import_gfx/dialog_import_gfx.h>
+#include <import_gfx/dialog_import_gfx_pcb.h>
 #include <preview_items/two_point_assistant.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <ratsnest/ratsnest_data.h>
@@ -1471,7 +1471,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
     // items if needed
-    DIALOG_IMPORT_GFX dlg( m_frame, m_isFootprintEditor );
+    DIALOG_IMPORT_GFX_PCB dlg( m_frame, m_isFootprintEditor );
     int dlgResult = dlg.ShowModal();
 
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();

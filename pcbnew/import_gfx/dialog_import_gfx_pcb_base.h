@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,9 +40,9 @@ class STD_BITMAP_BUTTON;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_IMPORT_GFX_BASE
+/// Class DIALOG_IMPORT_GFX_PCB_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
+class DIALOG_IMPORT_GFX_PCB_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -83,9 +83,9 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Vector Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMPORT_GFX_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Vector Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_IMPORT_GFX_BASE();
+		~DIALOG_IMPORT_GFX_PCB_BASE();
 
 };
 

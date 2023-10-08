@@ -24,7 +24,7 @@
 
 #include <dialogs/html_message_box.h>
 
-#include "dialog_import_gfx.h"
+#include "dialog_import_gfx_pcb.h"
 #include <import_gfx/dxf_import_plugin.h>
 #include <base_units.h>
 #include <kiface_base.h>
@@ -39,10 +39,10 @@
 
 #include <memory>
 
-// Static members of DIALOG_IMPORT_GFX, to remember the user's choices during the session
-bool   DIALOG_IMPORT_GFX::m_placementInteractive = true;
-bool   DIALOG_IMPORT_GFX::m_shouldGroupItems     = true;
-double DIALOG_IMPORT_GFX::m_importScale          = 1.0;   // Do not change the imported items size
+// Static members of DIALOG_IMPORT_GFX_PCB, to remember the user's choices during the session
+bool   DIALOG_IMPORT_GFX_PCB::m_placementInteractive = true;
+bool   DIALOG_IMPORT_GFX_PCB::m_shouldGroupItems     = true;
+double DIALOG_IMPORT_GFX_PCB::m_importScale          = 1.0;   // Do not change the imported items size
 
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
@@ -54,8 +54,8 @@ const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
 };
 
 
-DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic ) :
-        DIALOG_IMPORT_GFX_BASE( aParent ),
+DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic ) :
+        DIALOG_IMPORT_GFX_PCB_BASE( aParent ),
         m_parent( aParent ),
         m_xOrigin( aParent, m_xLabel, m_xCtrl, m_xUnits ),
         m_yOrigin( aParent, m_yLabel, m_yCtrl, m_yUnits ),
@@ -123,12 +123,12 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     Centre();
 
     m_textCtrlFileName->Connect( wxEVT_COMMAND_TEXT_UPDATED,
-                                 wxCommandEventHandler( DIALOG_IMPORT_GFX::onFilename ),
+                                 wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB::onFilename ),
                                  nullptr, this );
 }
 
 
-DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
+DIALOG_IMPORT_GFX_PCB::~DIALOG_IMPORT_GFX_PCB()
 {
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
@@ -143,12 +143,12 @@ DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
     m_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
 
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-                                    wxCommandEventHandler( DIALOG_IMPORT_GFX::onFilename ),
+                                    wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB::onFilename ),
                                     nullptr, this );
 }
 
 
-void DIALOG_IMPORT_GFX::onFilename( wxCommandEvent& event )
+void DIALOG_IMPORT_GFX_PCB::onFilename( wxCommandEvent& event )
 {
     bool     enableDXFControls = true;
     wxString ext = wxFileName( m_textCtrlFileName->GetValue() ).GetExt();
@@ -163,7 +163,7 @@ void DIALOG_IMPORT_GFX::onFilename( wxCommandEvent& event )
 }
 
 
-void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
+void DIALOG_IMPORT_GFX_PCB::onBrowseFiles( wxCommandEvent& event )
 {
     wxString path;
     wxString filename = m_textCtrlFileName->GetValue();
@@ -198,7 +198,7 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
 }
 
 
-bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
+bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
@@ -284,7 +284,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
 }
 
 
-void DIALOG_IMPORT_GFX::originOptionOnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_IMPORT_GFX_PCB::originOptionOnUpdateUI( wxUpdateUIEvent& event )
 {
     if( m_rbInteractivePlacement->GetValue() != m_placementInteractive )
         m_rbInteractivePlacement->SetValue( m_placementInteractive );
