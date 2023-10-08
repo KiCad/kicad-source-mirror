@@ -132,10 +132,10 @@ DIALOG_MEANDER_PROPERTIES_BASE::DIALOG_MEANDER_PROPERTIES_BASE( wxWindow* parent
 	fgSizer31->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	singleTrackSizer->Add( fgSizer31, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	singleTrackSizer->Add( fgSizer31, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bMainSizer->Add( singleTrackSizer, 1, wxEXPAND|wxTOP, 5 );
+	bMainSizer->Add( singleTrackSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
