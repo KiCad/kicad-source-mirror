@@ -204,7 +204,7 @@ public:
     }
 
     bool baselineValid() { return m_baseLine && m_baseLine->PointCount() > 1; }
-    
+
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override
     {
@@ -335,7 +335,7 @@ public:
         snapToNearestTrackPoint( m_end, aBoard, netCode );
 
         VECTOR2I startSnapPoint, endSnapPoint;
-        
+
         PNS::LINKED_ITEM* startItem = PickSegment( router, m_origin, nullptr, layer, startSnapPoint );
         PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, nullptr, layer, endSnapPoint );
 
@@ -976,7 +976,7 @@ public:
             m_baseLine = *baseLine;
     }
 
-    void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
+    void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override
     {
         PNS::MEANDER_SETTINGS settings = ToMeanderSettings();
 

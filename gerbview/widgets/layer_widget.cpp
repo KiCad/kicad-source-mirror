@@ -583,7 +583,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
     wxArrayInt widths = m_LayersFlexGridSizer->GetColWidths();
     int totWidth = 0;
 
-    for( int i = 0; i < LYR_COLUMN_COUNT && i < widths.GetCount(); ++i )
+    for( int i = 0; i < LYR_COLUMN_COUNT && i < (int)widths.GetCount(); ++i )
         totWidth += widths[i];
 
     // Account for the parent's frame:
@@ -602,7 +602,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
     widths = m_RenderFlexGridSizer->GetColWidths();
     totWidth = 0;
 
-    for( int i = 0; i < RND_COLUMN_COUNT && i < widths.GetCount(); ++i )
+    for( int i = 0; i < RND_COLUMN_COUNT && i < (int)widths.GetCount(); ++i )
         totWidth += widths[i];
 
     // account for the parent's frame, this one has void space of 10 PLUS a border:

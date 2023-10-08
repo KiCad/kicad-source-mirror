@@ -110,12 +110,12 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
 
     auto adjustColor =
-            [&]( COLOR4D& color, double brightnessDelta, double alpha )
+            [&]( COLOR4D& color_base, double brightnessDelta, double alpha )
             {
                 if( rs->GetColor( nullptr, LAYER_PCB_BACKGROUND ).GetBrightness() < 0.5 )
-                    return color.Brightened( brightnessDelta ).WithAlpha( std::min( alpha, 1.0 ) );
+                    return color_base.Brightened( brightnessDelta ).WithAlpha( std::min( alpha, 1.0 ) );
                 else
-                    return color.Darkened( brightnessDelta ).WithAlpha( std::min( alpha, 1.0 ) );
+                    return color_base.Darkened( brightnessDelta ).WithAlpha( std::min( alpha, 1.0 ) );
             };
 
     const bool curved_ratsnest = cfg->m_Display.m_DisplayRatsnestLinesCurved;
