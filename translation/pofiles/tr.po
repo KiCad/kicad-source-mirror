@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-09-21 15:08+0000\n"
+"PO-Revision-Date: 2023-10-09 15:02+0000\n"
 "Last-Translator: Marine Biologist <fatihvolkanster@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
@@ -3362,7 +3362,6 @@ msgid "I agree to provide anonymous reports"
 msgstr "Anonim raporlar vermeyi kabul ediyorum"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
-#, fuzzy
 msgid "Reset Unique Id"
 msgstr "Görünümü Sıfırla"
 
@@ -4043,7 +4042,6 @@ msgstr ""
 "offset: %d"
 
 #: common/dsnlexer.cpp:874
-#, fuzzy
 msgid "Invalid floating point number"
 msgstr "Geçersiz sinyal adı"
 
@@ -4074,7 +4072,6 @@ msgid "Hotkeys"
 msgstr "Kısayol Tuşları"
 
 #: common/eda_base_frame.cpp:1056
-#, fuzzy
 msgid "Data Collection"
 msgstr "Bağlantı Yok"
 
@@ -4111,7 +4108,6 @@ msgid "Schematic Editor"
 msgstr "Şema Düzenleyici"
 
 #: common/eda_base_frame.cpp:1087
-#, fuzzy
 msgid "Annotation Options"
 msgstr "Ek açıklamalar"
 
@@ -5099,7 +5095,7 @@ msgid "Gestures"
 msgstr "Hareketler"
 
 #: common/kiway.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
 msgstr "'%s' kiface kitaplığı yüklenemedi."
 
@@ -5237,7 +5233,6 @@ msgid "Schematic text && graphics"
 msgstr "Şematik metin && grafikler"
 
 #: common/layer_id.cpp:128
-#, fuzzy
 msgid "Symbol private text && graphics"
 msgstr "Şematik metin && grafikler"
 
@@ -5343,7 +5338,6 @@ msgid "Drawing sheet"
 msgstr "Çizim sayfası"
 
 #: common/layer_id.cpp:152 common/layer_id.cpp:181
-#, fuzzy
 msgid "Page limits"
 msgstr "Sayfa Sınırları"
 
@@ -5406,7 +5400,6 @@ msgid "Through vias"
 msgstr "Tam geçiş"
 
 #: common/layer_id.cpp:167
-#, fuzzy
 msgid "Blind/Buried vias"
 msgstr "BL/Gömülü Geçiş"
 
@@ -5462,7 +5455,6 @@ msgid "Grid axes"
 msgstr "Kılavuz eksenleri"
 
 #: common/layer_id.cpp:188
-#, fuzzy
 msgid "Locked item shadow"
 msgstr "Kilitli Öğeler"
 
