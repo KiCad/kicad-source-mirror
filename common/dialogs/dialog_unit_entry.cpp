@@ -27,7 +27,7 @@
 
 
 WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
-                                            const wxString& aLabel, int aDefaultValue ) :
+                                            const wxString& aLabel, long long int aDefaultValue ) :
         WX_UNIT_ENTRY_DIALOG_BASE( ( wxWindow* ) aParent, wxID_ANY, aCaption ),
         m_unit_binder( aParent, m_label, m_textCtrl, m_unit_label, true )
 {

@@ -41,7 +41,7 @@ class WX_UNIT_ENTRY_DIALOG : public WX_UNIT_ENTRY_DIALOG_BASE
 {
 public:
     WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption, const wxString& aLabel,
-                          int aDefaultValue );
+                          long long int aDefaultValue );
 
     /**
      * Returns the value in internal units

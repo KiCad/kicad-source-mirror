@@ -51,9 +51,9 @@ public:
     /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
     const wxString TuningInfo( EDA_UNITS aUnits ) const override;
 
-private:
-    long long int currentSkew() const;
+    long long int CurrentSkew() const;
 
+private:
     long long int origPathLength() const override;
 
     DIFF_PAIR m_originPair;

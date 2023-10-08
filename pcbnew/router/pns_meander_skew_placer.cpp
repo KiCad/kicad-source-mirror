@@ -132,7 +132,7 @@ long long int MEANDER_SKEW_PLACER::origPathLength() const
 }
 
 
-long long int MEANDER_SKEW_PLACER::currentSkew() const
+long long int MEANDER_SKEW_PLACER::CurrentSkew() const
 {
     return m_lastLength - m_coupledLength;
 }

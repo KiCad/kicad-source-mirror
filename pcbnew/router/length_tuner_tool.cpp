@@ -29,6 +29,7 @@
 #include <board_design_settings.h>
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
+#include "pns_meander_skew_placer.h"
 #include "pns_tune_status_popup.h"
 
 #include "length_tuner_tool.h"
@@ -184,8 +185,22 @@ void LENGTH_TUNER_TOOL::performTuning()
         return;
     }
 
-    if( m_lastTuneMode == PNS::PNS_MODE_TUNE_SINGLE
-            || m_lastTuneMode == PNS::PNS_MODE_TUNE_DIFF_PAIR )
+    if( m_lastTuneMode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
+    {
+        PNS::MEANDER_SKEW_PLACER* skewPlacer = static_cast<PNS::MEANDER_SKEW_PLACER*>( placer );
+        WX_UNIT_ENTRY_DIALOG      dlg( frame(), _( "Skew Tuning" ), _( "Target skew:" ),
+                                       skewPlacer->CurrentSkew() );
+
+        if( dlg.ShowModal() != wxID_OK )
+        {
+            m_router->StopRouting();
+            highlightNets( false );
+            return;
+        }
+
+        settings->m_targetLength = dlg.GetValue();
+    }
+    else
     {
         std::shared_ptr<DRC_ENGINE>& drcEngine = bds.m_DRCEngine;
         DRC_CONSTRAINT               constraint;
