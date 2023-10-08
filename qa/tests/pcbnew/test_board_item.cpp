@@ -114,6 +114,7 @@ public:
         case PCB_T:
         case PCB_ITEM_LIST_T:
         case PCB_NETINFO_T:
+        case PCB_GENERATOR_T:
             return nullptr;
 
         default:
