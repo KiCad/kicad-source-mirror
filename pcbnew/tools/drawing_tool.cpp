@@ -40,6 +40,7 @@
 #include <preview_items/two_point_geom_manager.h>
 #include <ratsnest/ratsnest_data.h>
 #include <router/router_tool.h>
+#include <router/pns_tune_status_popup.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
@@ -163,15 +164,17 @@ protected:
 
 
 DRAWING_TOOL::DRAWING_TOOL() :
-    PCB_TOOL_BASE( "pcbnew.InteractiveDrawing" ),
-    m_view( nullptr ),
-    m_controls( nullptr ),
-    m_board( nullptr ),
-    m_frame( nullptr ),
-    m_mode( MODE::NONE ),
-    m_inDrawingTool( false ),
-    m_layer( UNDEFINED_LAYER ),
-    m_stroke( 1, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED )
+        PCB_TOOL_BASE( "pcbnew.InteractiveDrawing" ),
+        m_view( nullptr ),
+        m_controls( nullptr ),
+        m_board( nullptr ),
+        m_frame( nullptr ),
+        m_mode( MODE::NONE ),
+        m_inDrawingTool( false ),
+        m_layer( UNDEFINED_LAYER ),
+        m_stroke( 1, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_pickerItem( nullptr ),
+        m_meander( nullptr )
 {
 }
 
@@ -286,6 +289,8 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
     m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
     m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
+
+    m_statusPopup = std::make_unique<PNS_TUNE_STATUS_POPUP>( m_frame );
 
     UpdateStatusBar();
 }

@@ -44,6 +44,7 @@ class PCB_BASE_EDIT_FRAME;
 class PCB_SHAPE;
 class POLYGON_GEOM_MANAGER;
 class PCB_GENERATOR_MEANDERS;
+class PNS_TUNE_STATUS_POPUP;
 
 
 /**
@@ -354,6 +355,8 @@ private:
 
     BOARD_CONNECTED_ITEM*     m_pickerItem;
     PCB_GENERATOR_MEANDERS*   m_meander;
+
+    std::unique_ptr<PNS_TUNE_STATUS_POPUP>  m_statusPopup;
 
 
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press

@@ -31,8 +31,11 @@
 #include <wx/debug.h>
 #include <geometry/shape_circle.h>
 #include <kiplatform/ui.h>
+#include <dialogs/dialog_unit_entry.h>
 #include <collectors.h>
 
+#include <board_design_settings.h>
+#include <drc/drc_engine.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pcb_group.h>
@@ -52,6 +55,7 @@
 #include <router/pns_segment.h>
 #include <router/pns_arc.h>
 #include <router/pns_topology.h>
+#include <router/pns_tune_status_popup.h>
 
 #include <dialogs/dialog_meander_properties.h>
 
@@ -206,6 +210,38 @@ public:
     }
 
     bool baselineValid() { return m_baseLine && m_baseLine->PointCount() > 1; }
+
+    static PCB_GENERATOR_MEANDERS* CreateNew( PCB_BASE_EDIT_FRAME* aFrame, BOARD_ITEM* aStartItem )
+    {
+        BOARD*                  board = aStartItem->GetBoard();
+        PCB_LAYER_ID            layer = aStartItem->GetLayer();
+        PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer );
+
+        // TODO set mode to diff-pair if we find a matching net for aSourceItem
+
+        std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
+        DRC_CONSTRAINT               constraint;
+
+        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr,
+                                           ToLAYER_ID( layer ) );
+
+        if( constraint.IsNull() )
+        {
+            WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Place Meander" ), _( "Target length:" ),
+                                      100 * PCB_IU_PER_MM );
+
+            if( dlg.ShowModal() != wxID_OK )
+                return nullptr;
+
+            meander->m_targetLength = dlg.GetValue();
+        }
+        else
+        {
+            meander->m_targetLength = constraint.GetValue().Opt();
+        }
+
+        return meander;
+    }
 
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override
@@ -1083,8 +1119,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                         generatorTool->HighlightNet( nullptr );
 
                         m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-
-                        m_meander = new PCB_GENERATOR_MEANDERS( m_board, m_pickerItem->GetLayer() );
+                        m_meander = PCB_GENERATOR_MEANDERS::CreateNew( m_frame, m_pickerItem );
 
                         int      dummyDist;
                         int      dummyClearance = std::numeric_limits<int>::max() / 2;
@@ -1153,6 +1188,12 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                     {
                         m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
                         m_meander->Update( generatorTool, m_board, m_frame, nullptr );
+
+                        m_statusPopup->Popup();
+                        canvas()->SetStatusPopup( m_statusPopup.get() );
+
+                        m_statusPopup->UpdateStatus( generatorTool->Router() );
+                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                     }
                 }
             } );
@@ -1175,6 +1216,9 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             [this]( const int& aFinalState )
             {
                 GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+                canvas()->SetStatusPopup( nullptr );
+                m_statusPopup->Hide();
 
                 generatorTool->HighlightNet( nullptr );
 
