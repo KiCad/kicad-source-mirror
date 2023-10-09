@@ -113,7 +113,7 @@ int GENERATOR_TOOL::RegenerateAll( const TOOL_EVENT& aEvent )
     {
         gen->EditStart( this, board(), frame(), commit );
         gen->Update( this, board(), frame(), commit );
-        gen->EditPush( this, board(), frame(), commit );
+        gen->EditPush( this, board(), frame(), commit, _( "Regenerate" ), APPEND_UNDO );
     }
 
     return 0;
@@ -140,7 +140,7 @@ int GENERATOR_TOOL::RegenerateOutdated( const TOOL_EVENT& aEvent )
     {
         gen->EditStart( this, board(), frame(), commit );
         gen->Update( this, board(), frame(), commit );
-        gen->EditPush( this, board(), frame(), commit );
+        gen->EditPush( this, board(), frame(), commit, _( "Regenerate Outdated" ), APPEND_UNDO );
     }
 
     return 0;
@@ -188,7 +188,7 @@ int GENERATOR_TOOL::RegenerateSelected( const TOOL_EVENT& aEvent )
     {
         gen->EditStart( this, board(), frame(), commit );
         gen->Update( this, board(), frame(), commit );
-        gen->EditPush( this, board(), frame(), commit );
+        gen->EditPush( this, board(), frame(), commit, _( "Regenerate Selected" ), APPEND_UNDO );
     }
 
     return 0;
@@ -207,7 +207,7 @@ int GENERATOR_TOOL::RegenerateItem( const TOOL_EVENT& aEvent )
 
     gen->EditStart( this, board(), frame(), commit );
     gen->Update( this, board(), frame(), commit );
-    gen->EditPush( this, board(), frame(), commit );
+    gen->EditPush( this, board(), frame(), commit, _( "Regenerate Item" ) );
 
     return 0;
 }
@@ -231,7 +231,7 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genPushEdit ) )
     {
-        gen->EditPush( this, board(), frame(), commit );
+        gen->EditPush( this, board(), frame(), commit, wxEmptyString, APPEND_UNDO );
 
         wxASSERT( commit->Empty() );
     }

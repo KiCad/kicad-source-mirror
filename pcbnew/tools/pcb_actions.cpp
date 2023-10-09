@@ -189,8 +189,8 @@ TOOL_ACTION PCB_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::placeMeanders( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.placeMeanders" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Add Meanders" ) )
-        .Tooltip( _( "Add meanders for length tuning" ) )
+        .MenuText( _( "Add Meander" ) )
+        .Tooltip( _( "Add meander for length tuning" ) )
         .Icon( BITMAPS::ps_tune_length )
         .Flags( AF_ACTIVATE ) );
 

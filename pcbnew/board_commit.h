@@ -54,8 +54,7 @@ public:
 
     BOARD* GetBoard() const;
 
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ),
-                       int aCommitFlags = 0 ) override;
+    virtual void Push( const wxString& aMessage = wxEmptyString, int aCommitFlags = 0 ) override;
 
     virtual void Revert() override;
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,

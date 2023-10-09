@@ -47,15 +47,13 @@ void PCB_GENERATOR::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_ED
             {
                 aCommit->Modify( aItem );
             } );
-
-    aCommit->Push( "Generator edit start" );
 }
 
 
 void PCB_GENERATOR::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                              BOARD_COMMIT* aCommit )
+                              BOARD_COMMIT* aCommit, const wxString& aCommitMsg, int aCommitFlags )
 {
-    aCommit->Push( "Generator edit end", APPEND_UNDO );
+    aCommit->Push( aCommitMsg, aCommitFlags );
 }
 
 
@@ -117,12 +115,6 @@ const BOX2I PCB_GENERATOR::GetBoundingBox() const
 {
     BOX2I bbox;
     return bbox;
-}
-
-
-VECTOR2I PCB_GENERATOR::GetPosition() const
-{
-    return m_origin;
 }
 
 

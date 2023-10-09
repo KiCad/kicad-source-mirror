@@ -50,7 +50,8 @@ public:
                             BOARD_COMMIT* aCommit );
 
     virtual void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                           BOARD_COMMIT* aCommit );
+                           BOARD_COMMIT* aCommit, const wxString& aCommitMsg = wxEmptyString,
+                           int aCommitFlags = 0 );
 
     virtual void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                              BOARD_COMMIT* aCommit );
@@ -72,7 +73,8 @@ public:
 
     const BOX2I GetBoundingBox() const override;
 
-    VECTOR2I GetPosition() const override;
+    VECTOR2I GetPosition() const override { return m_origin; }
+    void SetPosition( const VECTOR2I& aPos ) override { m_origin = aPos; }
 
     void Move( const VECTOR2I& aMoveVector ) override;
 

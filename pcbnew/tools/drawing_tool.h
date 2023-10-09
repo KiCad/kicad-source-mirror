@@ -43,6 +43,8 @@ class BOARD;
 class PCB_BASE_EDIT_FRAME;
 class PCB_SHAPE;
 class POLYGON_GEOM_MANAGER;
+class PCB_GENERATOR_MEANDERS;
+
 
 /**
  * Tool responsible for drawing graphical elements like lines, arcs, circles, etc.
@@ -349,6 +351,10 @@ private:
     PCB_LAYER_ID              m_layer;             // The layer we last drew on
     STROKE_PARAMS             m_stroke;            // Current stroke for multi-segment drawing
     TEXT_ATTRIBUTES           m_textAttrs;
+
+    BOARD_ITEM*               m_pickerItem;
+    PCB_GENERATOR_MEANDERS*   m_meander;
+
 
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
     static const unsigned int COORDS_PADDING;      // Padding from coordinates limits for this tool

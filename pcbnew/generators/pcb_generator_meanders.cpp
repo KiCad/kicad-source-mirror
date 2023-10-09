@@ -25,12 +25,13 @@
 #include <pcb_generator.h>
 #include <generators_mgr.h>
 
-#include <array>
 #include <optional>
 #include <magic_enum.hpp>
 
 #include <wx/debug.h>
 #include <geometry/shape_circle.h>
+#include <kiplatform/ui.h>
+#include <collectors.h>
 
 #include <pcb_track.h>
 #include <pcb_shape.h>
@@ -39,9 +40,10 @@
 #include <tool/edit_points.h>
 #include <tools/drawing_tool.h>
 #include <tools/generator_tool.h>
+#include <tools/pcb_picker_tool.h>
+#include <tools/pcb_selection_tool.h>
 
 #include <preview_items/draw_context.h>
-#include <preview_items/preview_utils.h>
 #include <view/view.h>
 
 #include <router/pns_meander_placer_base.h>
@@ -208,7 +210,8 @@ public:
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override
     {
-        aCommit->Modify( this );
+        if( aCommit )
+            aCommit->Modify( this );
 
         int          layer = GetLayer();
         PNS::ROUTER* router = aTool->Router();
@@ -572,10 +575,8 @@ public:
             // LINE does not have a separate remover, as LINEs are never truly a member of the tree
             for( PNS::LINKED_ITEM* li : line->Links() )
             {
-                if( li->Parent() )
-                {
+                if( li->Parent() && aCommit )
                     aCommit->Remove( li->Parent() );
-                }
             }
 
             world->Remove( *line );
@@ -631,14 +632,12 @@ public:
         m_tuningInfo = placer->TuningInfo( aFrame->GetUserUnits() );
         m_tuningStatus = placer->TuningStatus();
 
-        if( !aCommit->Empty() )
-            aCommit->Push( "Update meander" );
-
         return true;
     }
 
     void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                   BOARD_COMMIT* aCommit ) override
+                   BOARD_COMMIT* aCommit, const wxString& aCommitMsg = wxEmptyString,
+                   int aCommitFlags = 0 ) override
     {
         PNS::ROUTER* router = aTool->Router();
 
@@ -663,7 +662,7 @@ public:
             }
         }
 
-        aCommit->Push( "Meander edit", APPEND_UNDO );
+        aCommit->Push( aCommitMsg, aCommitFlags );
     }
 
     bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override
@@ -1026,29 +1025,129 @@ const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Meanders" );
 const wxString PCB_GENERATOR_MEANDERS::GENERATOR_TYPE = wxS( "meanders" );
 
 
+#define HITTEST_THRESHOLD_PIXELS 5
+
+
 int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I tableSize;
+    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
-    m_frame->SetActiveLayer( Edge_Cuts );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-    std::vector<BOARD_ITEM*> preview;
-    std::vector<BOARD_ITEM*> items;
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
 
-    PCB_SHAPE* circle = new PCB_SHAPE( nullptr, SHAPE_T::CIRCLE );
-    circle->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 2 ), 0 ) );
-    circle->SetLayer( m_frame->GetActiveLayer() );
+    m_pickerItem = nullptr;
+    m_meander = nullptr;
 
-    preview.push_back( circle );
+    picker->SetCursor( KICURSOR::BULLSEYE );
 
-    PCB_GENERATOR_MEANDERS* generator = new PCB_GENERATOR_MEANDERS( m_board );
+    picker->SetClickHandler(
+            [this]( const VECTOR2D& aPosition ) -> bool
+            {
+                if( m_pickerItem )
+                {
+                    if( !m_meander )
+                    {
+                        // First click; create a meander generator
 
-    items.push_back( generator );
+                        m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+                        m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
 
-    if( InteractivePlaceWithPreview( aEvent, items, preview, nullptr ) != -1 )
-    {
-        m_toolMgr->RunAction<PCB_GENERATOR*>( PCB_ACTIONS::regenerateItem, generator );
-    }
+                        m_meander = new PCB_GENERATOR_MEANDERS( m_board, m_pickerItem->GetLayer() );
+
+                        int      dummyDist;
+                        int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                        VECTOR2I closestPt;
+
+                        m_pickerItem->GetEffectiveShape()->Collide( aPosition, dummyClearance,
+                                                                    &dummyDist, &closestPt );
+                        m_meander->SetPosition( closestPt );
+                    }
+                    else
+                    {
+                        // Second click; we're done
+                        BOARD_COMMIT    commit( m_frame );
+                        GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+                        m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
+                        m_meander->Update( generatorTool, m_board, m_frame, &commit );
+                        m_meander->EditPush( generatorTool, m_board, m_frame, &commit,
+                                             _( "Place Meander" ) );
+
+                        return false;   // exit picker tool
+                    }
+                }
+
+                return true;
+            } );
+
+    picker->SetMotionHandler(
+            [this]( const VECTOR2D& aPos )
+            {
+                BOARD*                   board = m_frame->GetBoard();
+                PCB_SELECTION_TOOL*      selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+                GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+                GENERAL_COLLECTOR        collector;
+
+                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+                collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, aPos, guide );
+
+                if( collector.GetCount() > 1 )
+                    selTool->GuessSelectionCandidates( collector, aPos );
+
+                BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+                if( !m_meander )
+                {
+                    // First click not yet made; we're in brighten-track-under-cursor mode
+
+                    if( m_pickerItem != item )
+                    {
+                        if( m_pickerItem )
+                            selTool->UnbrightenItem( m_pickerItem );
+
+                        m_pickerItem = item;
+
+                        if( m_pickerItem )
+                            selTool->BrightenItem( m_pickerItem );
+                    }
+                }
+                else
+                {
+                    // First click alread made; we're in preview-meander mode
+
+                    m_meander->SetEnd( aPos );
+
+                    if( m_meander->GetPosition() != m_meander->GetEnd() )
+                    {
+                        GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+                        m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
+                        m_meander->Update( generatorTool, m_board, m_frame, nullptr );
+                    }
+                }
+            } );
+
+    picker->SetCancelHandler(
+            [this]()
+            {
+                if( m_pickerItem )
+                    m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+                delete m_meander;
+                m_meander = nullptr;
+            } );
+
+    picker->SetFinalizeHandler(
+            [this]( const int& aFinalState )
+            {
+                // Ensure the cursor gets changed & updated
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+                m_frame->GetCanvas()->Refresh();
+            } );
+
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
