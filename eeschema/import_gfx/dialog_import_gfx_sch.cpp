@@ -27,6 +27,7 @@
 #include <map>
 
 #include <import_gfx/graphics_importer_lib_symbol.h>
+#include <import_gfx/graphics_importer_sch.h>
 #include <import_gfx/dxf_import_plugin.h>
 
 #include <base_units.h>
@@ -69,6 +70,8 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
         m_yOrigin( aParent, m_yLabel, m_yCtrl, m_yUnits ),
         m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits )
 {
+    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+
     auto initWidgetsFromSettings = [&]( const auto& aCfg )
     {
         m_placementInteractive = aCfg->m_ImportGraphics.interactive_placement;
@@ -87,8 +90,6 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
             m_choiceDxfUnits->Append( unitEntry.second );
 
         m_choiceDxfUnits->SetSelection( aCfg->m_ImportGraphics.dxf_units );
-
-        m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
     };
 
     if( SYMBOL_EDIT_FRAME* symFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( aParent ) )
@@ -101,10 +102,10 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
     }
     else if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( aParent ) )
     {
-        /*m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>( symFrame );
+        m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>( schFrame->GetScreen() );
 
         EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-        initWidgetsFromSettings( cfg );*/
+        initWidgetsFromSettings( cfg );
     }
 
     // construct an import manager with options from config
@@ -155,18 +156,13 @@ DIALOG_IMPORT_GFX_SCH::~DIALOG_IMPORT_GFX_SCH()
 
     if( SYMBOL_EDIT_FRAME* symFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_parent ) )
     {
-        m_importer = std::make_unique<GRAPHICS_IMPORTER_LIB_SYMBOL>( symFrame->GetCurSymbol(),
-                                                                     symFrame->GetUnit() );
-
         SYMBOL_EDITOR_SETTINGS* cfg = m_parent->libeditconfig();
         saveToSettings( cfg );
     }
     else if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parent ) )
     {
-        /*m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>( symFrame );
-
         EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-        saveToSettings( cfg );*/
+        saveToSettings( cfg );
     }
 
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,

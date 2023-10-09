@@ -42,6 +42,34 @@
 class EDA_ITEM;
 
 /**
+ * A clone of IMPORTED_STROKE, but with floating-point width.
+ */
+class IMPORTED_STROKE
+{
+public:
+    IMPORTED_STROKE( double aWidth = 0, PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
+                     const KIGFX::COLOR4D& aColor = KIGFX::COLOR4D::UNSPECIFIED ) :
+            m_width( aWidth ),
+            m_plotstyle( aPlotStyle ), m_color( aColor )
+    {
+    }
+
+    double GetWidth() const { return m_width; }
+    void   SetWidth( double aWidth ) { m_width = aWidth; }
+
+    PLOT_DASH_TYPE GetPlotStyle() const { return m_plotstyle; }
+    void           SetPlotStyle( PLOT_DASH_TYPE aPlotStyle ) { m_plotstyle = aPlotStyle; }
+
+    KIGFX::COLOR4D GetColor() const { return m_color; }
+    void           SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
+
+private:
+    double         m_width;
+    PLOT_DASH_TYPE m_plotstyle;
+    KIGFX::COLOR4D m_color;
+};
+
+/**
  * Interface that creates objects representing shapes for a given data model.
  */
 class GRAPHICS_IMPORTER
@@ -212,7 +240,7 @@ public:
      * @param aStroke is the shape stroke parameters.
      */
     virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
-                          const STROKE_PARAMS& aStroke ) = 0;
+                          const IMPORTED_STROKE& aStroke ) = 0;
 
     /**
      * Create an object representing a circle.
@@ -221,7 +249,7 @@ public:
      * @param aRadius is the circle radius expressed in mm.
      * @param aStroke is the shape stroke parameters.
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, const IMPORTED_STROKE& aStroke,
                             bool aFilled, const COLOR4D& aFillColor ) = 0;
 
     /**
@@ -234,7 +262,7 @@ public:
      * @param aStroke is the shape stroke parameters.
      */
     virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                         const STROKE_PARAMS& aStroke ) = 0;
+                         const IMPORTED_STROKE& aStroke ) = 0;
 
     /**
      * Create an object representing a polygon.
@@ -244,7 +272,7 @@ public:
      * @param aStroke is the shape stroke parameters.
      * @param aFillColor is the fill color.
      */
-    virtual void AddPolygon( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+    virtual void AddPolygon( const std::vector<VECTOR2D>& aVertices, const IMPORTED_STROKE& aStroke,
                              bool aFilled, const COLOR4D& aFillColor ) = 0;
 
     /**
@@ -276,7 +304,7 @@ public:
      */
     virtual void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                             const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                            const STROKE_PARAMS& aStroke ) = 0;
+                            const IMPORTED_STROKE& aStroke ) = 0;
 
 protected:
     ///< Add an item to the imported shapes list.

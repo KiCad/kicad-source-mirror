@@ -174,7 +174,7 @@ bool SVG_IMPORT_PLUGIN::Import()
                 dashType = PLOT_DASH_TYPE::DASHDOTDOT;
         }
 
-        STROKE_PARAMS stroke( lineWidth, dashType, strokeColor );
+        IMPORTED_STROKE stroke( lineWidth, dashType, strokeColor );
 
         GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
 
@@ -253,7 +253,7 @@ BOX2D SVG_IMPORT_PLUGIN::GetImageBBox() const
 
 
 void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath,
-                                  const STROKE_PARAMS& aStroke, bool aFilled,
+                                  const IMPORTED_STROKE& aStroke, bool aFilled,
                                   const COLOR4D& aFillColor )
 {
     std::vector<VECTOR2D> collectedPathPoints;
@@ -269,13 +269,13 @@ void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aCl
 
 
 void SVG_IMPORT_PLUGIN::DrawCubicBezierPath( const float* aPoints, int aNumPoints,
-                                             std::vector< VECTOR2D >& aGeneratedPoints )
+                                             std::vector<VECTOR2D>& aGeneratedPoints )
 {
-    const int pointsPerSegment = 4;
-    const int curveSpecificPointsPerSegment = 3;
-    const int curveSpecificCoordinatesPerSegment = 2 * curveSpecificPointsPerSegment;
+    const int    pointsPerSegment = 4;
+    const int    curveSpecificPointsPerSegment = 3;
+    const int    curveSpecificCoordinatesPerSegment = 2 * curveSpecificPointsPerSegment;
     const float* currentPoints = aPoints;
-    int remainingPoints = aNumPoints;
+    int          remainingPoints = aNumPoints;
 
     while( remainingPoints >= pointsPerSegment )
     {
@@ -286,8 +286,8 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierPath( const float* aPoints, int aNumPoint
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
-                                              std::vector< VECTOR2D >& aGeneratedPoints )
+void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float*           aPoints,
+                                              std::vector<VECTOR2D>& aGeneratedPoints )
 {
     auto start = getBezierPoint( aPoints, 0.0f );
     auto end = getBezierPoint( aPoints, 1.0f );
@@ -300,7 +300,7 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
 
 
 void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector<VECTOR2D>& aPoints,
-                                     const STROKE_PARAMS& aStroke, bool aFilled,
+                                     const IMPORTED_STROKE& aStroke, bool aFilled,
                                      const COLOR4D& aFillColor )
 {
     m_internalImporter.AddPolygon( aPoints, aStroke, aFilled, aFillColor );
@@ -308,7 +308,7 @@ void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector<VECTOR2D>& aPoints,
 
 
 void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector<VECTOR2D>& aPoints,
-                                          const STROKE_PARAMS&         aStroke )
+                                          const IMPORTED_STROKE&       aStroke )
 {
     unsigned int numLineStartPoints = aPoints.size() - 1;
 

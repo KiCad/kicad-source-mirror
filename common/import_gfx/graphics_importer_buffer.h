@@ -32,6 +32,7 @@
 #include <math/matrix3x3.h>
 #include <list>
 
+
 class IMPORTED_SHAPE
 {
 public:
@@ -43,7 +44,7 @@ public:
     virtual void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) = 0;
 
     void SetParentShapeIndex( int aIndex ) { m_parentShapeIndex = aIndex; }
-    int GetParentShapeIndex() const { return m_parentShapeIndex; }
+    int  GetParentShapeIndex() const { return m_parentShapeIndex; }
 
 protected:
     int m_parentShapeIndex = -1;
@@ -53,7 +54,7 @@ protected:
 class IMPORTED_LINE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, const STROKE_PARAMS& aStroke ) :
+    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, const IMPORTED_STROKE& aStroke ) :
             m_start( aStart ), m_end( aEnd ), m_stroke( aStroke )
     {
     }
@@ -75,16 +76,16 @@ public:
     }
 
 private:
-    VECTOR2D      m_start;
-    VECTOR2D      m_end;
-    STROKE_PARAMS m_stroke;
+    VECTOR2D        m_start;
+    VECTOR2D        m_end;
+    IMPORTED_STROKE m_stroke;
 };
 
 
 class IMPORTED_CIRCLE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, const IMPORTED_STROKE& aStroke,
                      bool aFilled, const COLOR4D& aFillColor ) :
             m_center( aCenter ),
             m_radius( aRadius ), m_stroke( aStroke ), m_filled( aFilled ), m_fillColor( aFillColor )
@@ -113,11 +114,11 @@ public:
     }
 
 private:
-    VECTOR2D      m_center;
-    double        m_radius;
-    STROKE_PARAMS m_stroke;
-    bool          m_filled;
-    COLOR4D       m_fillColor;
+    VECTOR2D        m_center;
+    double          m_radius;
+    IMPORTED_STROKE m_stroke;
+    bool            m_filled;
+    COLOR4D         m_fillColor;
 };
 
 
@@ -125,7 +126,7 @@ class IMPORTED_ARC : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                  const STROKE_PARAMS& aStroke ) :
+                  const IMPORTED_STROKE& aStroke ) :
             m_center( aCenter ),
             m_start( aStart ), m_angle( aAngle ), m_stroke( aStroke )
     {
@@ -148,17 +149,17 @@ public:
     }
 
 private:
-    VECTOR2D      m_center;
-    VECTOR2D      m_start;
-    EDA_ANGLE     m_angle;
-    STROKE_PARAMS m_stroke;
+    VECTOR2D        m_center;
+    VECTOR2D        m_start;
+    EDA_ANGLE       m_angle;
+    IMPORTED_STROKE m_stroke;
 };
 
 
 class IMPORTED_POLYGON : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_POLYGON( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+    IMPORTED_POLYGON( const std::vector<VECTOR2D>& aVertices, const IMPORTED_STROKE& aStroke,
                       bool aFilled, const COLOR4D& aFillColor ) :
             m_vertices( aVertices ),
             m_stroke( aStroke ), m_filled( aFilled ), m_fillColor( aFillColor )
@@ -185,15 +186,15 @@ public:
 
     std::vector<VECTOR2D>& Vertices() { return m_vertices; }
 
-    bool isFilled() const { return m_filled; }
+    bool IsFilled() const { return m_filled; }
 
     const COLOR4D& GetFillColor() const { return m_fillColor; }
 
-    const STROKE_PARAMS& GetStroke() const { return m_stroke; }
+    const IMPORTED_STROKE& GetStroke() const { return m_stroke; }
 
 private:
     std::vector<VECTOR2D> m_vertices;
-    STROKE_PARAMS         m_stroke;
+    IMPORTED_STROKE       m_stroke;
     bool                  m_filled;
     COLOR4D               m_fillColor;
 };
@@ -229,15 +230,15 @@ public:
     }
 
 private:
-    VECTOR2D            m_origin;
-    const wxString      m_text;
-    double              m_height;
-    double              m_width;
-    double              m_thickness;
-    double              m_orientation;
-    GR_TEXT_H_ALIGN_T   m_hJustify;
-    GR_TEXT_V_ALIGN_T   m_vJustify;
-    COLOR4D             m_color;
+    VECTOR2D          m_origin;
+    const wxString    m_text;
+    double            m_height;
+    double            m_width;
+    double            m_thickness;
+    double            m_orientation;
+    GR_TEXT_H_ALIGN_T m_hJustify;
+    GR_TEXT_V_ALIGN_T m_vJustify;
+    COLOR4D           m_color;
 };
 
 
@@ -246,7 +247,7 @@ class IMPORTED_SPLINE : public IMPORTED_SHAPE
 public:
     IMPORTED_SPLINE( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                      const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                     const STROKE_PARAMS& aStroke ) :
+                     const IMPORTED_STROKE& aStroke ) :
             m_start( aStart ),
             m_bezierControl1( aBezierControl1 ), m_bezierControl2( aBezierControl2 ), m_end( aEnd ),
             m_stroke( aStroke )
@@ -272,11 +273,11 @@ public:
     }
 
 private:
-    VECTOR2D      m_start;
-    VECTOR2D      m_bezierControl1;
-    VECTOR2D      m_bezierControl2;
-    VECTOR2D      m_end;
-    STROKE_PARAMS m_stroke;
+    VECTOR2D        m_start;
+    VECTOR2D        m_bezierControl1;
+    VECTOR2D        m_bezierControl2;
+    VECTOR2D        m_end;
+    IMPORTED_STROKE m_stroke;
 };
 
 
@@ -284,15 +285,15 @@ class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 {
 public:
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
-                  const STROKE_PARAMS& aStroke ) override;
+                  const IMPORTED_STROKE& aStroke ) override;
 
-    void AddCircle( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+    void AddCircle( const VECTOR2D& aCenter, double aRadius, const IMPORTED_STROKE& aStroke,
                     bool aFilled, const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                 const STROKE_PARAMS& aStroke ) override;
+                 const IMPORTED_STROKE& aStroke ) override;
 
-    void AddPolygon( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+    void AddPolygon( const std::vector<VECTOR2D>& aVertices, const IMPORTED_STROKE& aStroke,
                      bool aFilled, const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight, double aWidth,
@@ -302,26 +303,20 @@ public:
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                    const STROKE_PARAMS& aStroke ) override;
+                    const IMPORTED_STROKE& aStroke ) override;
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter );
     void AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape );
 
-    std::list<std::unique_ptr<IMPORTED_SHAPE>>& GetShapes()
-    {
-        return m_shapes;
-    }
+    std::list<std::unique_ptr<IMPORTED_SHAPE>>& GetShapes() { return m_shapes; }
 
-    void ClearShapes()
-    {
-        m_shapes.clear();
-    }
+    void ClearShapes() { m_shapes.clear(); }
 
     void PostprocessNestedPolygons();
 
 protected:
     ///< List of imported shapes
-    std::list< std::unique_ptr< IMPORTED_SHAPE > > m_shapes;
+    std::list<std::unique_ptr<IMPORTED_SHAPE>> m_shapes;
 };
 
 #endif /* GRAPHICS_IMPORTER_BUFFER */

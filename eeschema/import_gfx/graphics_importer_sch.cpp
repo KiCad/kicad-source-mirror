@@ -23,23 +23,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "graphics_importer_lib_symbol.h"
+#include "graphics_importer_sch.h"
 
-#include <lib_symbol.h>
-#include <lib_shape.h>
-#include <lib_text.h>
 #include <memory>
 #include <tuple>
 
+#include <sch_line.h>
+#include <sch_shape.h>
+#include <sch_text.h>
 
-GRAPHICS_IMPORTER_LIB_SYMBOL::GRAPHICS_IMPORTER_LIB_SYMBOL( LIB_SYMBOL* aSymbol, int aUnit ) :
-        m_symbol( aSymbol ), m_unit( aUnit )
+
+GRAPHICS_IMPORTER_SCH::GRAPHICS_IMPORTER_SCH( SCH_SCREEN* aScreen ) : m_screen( aScreen )
 {
     m_millimeterToIu = schIUScale.mmToIU( 1.0 );
 }
 
 
-VECTOR2I GRAPHICS_IMPORTER_LIB_SYMBOL::MapCoordinate( const VECTOR2D& aCoordinate )
+VECTOR2I GRAPHICS_IMPORTER_SCH::MapCoordinate( const VECTOR2D& aCoordinate )
 {
     VECTOR2D coord = aCoordinate;
     coord *= GetScale();
@@ -50,7 +50,7 @@ VECTOR2I GRAPHICS_IMPORTER_LIB_SYMBOL::MapCoordinate( const VECTOR2D& aCoordinat
 }
 
 
-int GRAPHICS_IMPORTER_LIB_SYMBOL::MapLineWidth( double aLineWidth )
+int GRAPHICS_IMPORTER_SCH::MapLineWidth( double aLineWidth )
 {
     VECTOR2D factor = ImportScalingFactor();
     double   scale = ( std::abs( factor.x ) + std::abs( factor.y ) ) * 0.5;
@@ -63,7 +63,7 @@ int GRAPHICS_IMPORTER_LIB_SYMBOL::MapLineWidth( double aLineWidth )
 }
 
 
-STROKE_PARAMS GRAPHICS_IMPORTER_LIB_SYMBOL::MapStrokeParams( const IMPORTED_STROKE& aStroke )
+STROKE_PARAMS GRAPHICS_IMPORTER_SCH::MapStrokeParams( const IMPORTED_STROKE& aStroke )
 {
     double width = aStroke.GetWidth();
 
@@ -72,8 +72,8 @@ STROKE_PARAMS GRAPHICS_IMPORTER_LIB_SYMBOL::MapStrokeParams( const IMPORTED_STRO
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
-                                            const IMPORTED_STROKE& aStroke )
+void GRAPHICS_IMPORTER_SCH::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                                     const IMPORTED_STROKE& aStroke )
 {
     VECTOR2I pt0 = MapCoordinate( aStart );
     VECTOR2I pt1 = MapCoordinate( aEnd );
@@ -82,23 +82,21 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aStart, const VECTOR
     if( pt0 == pt1 )
         return;
 
-    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
-    line->SetUnit( m_unit );
+    std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>();
     line->SetStroke( MapStrokeParams( aStroke ) );
 
-    line->AddPoint( pt0 );
-    line->AddPoint( pt1 );
+    line->SetStartPoint( pt0 );
+    line->SetEndPoint( pt1 );
 
     addItem( std::move( line ) );
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aRadius,
-                                              const IMPORTED_STROKE& aStroke, bool aFilled,
-                                              const COLOR4D& aFillColor )
+void GRAPHICS_IMPORTER_SCH::AddCircle( const VECTOR2D& aCenter, double aRadius,
+                                       const IMPORTED_STROKE& aStroke, bool aFilled,
+                                       const COLOR4D& aFillColor )
 {
-    std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::CIRCLE );
-    circle->SetUnit( m_unit );
+    std::unique_ptr<SCH_SHAPE> circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE );
     circle->SetFillColor( aFillColor );
     circle->SetFilled( aFilled );
     circle->SetStroke( MapStrokeParams( aStroke ) );
@@ -109,11 +107,10 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aR
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
+void GRAPHICS_IMPORTER_SCH::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                            const EDA_ANGLE& aAngle, const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::ARC );
-    arc->SetUnit( m_unit );
+    std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC );
 
     /**
      * We need to perform the rotation/conversion here while still using floating point values
@@ -148,7 +145,7 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddArc( const VECTOR2D& aCenter, const VECTOR
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVertices,
+void GRAPHICS_IMPORTER_SCH::AddPolygon( const std::vector<VECTOR2D>& aVertices,
                                                const IMPORTED_STROKE& aStroke, bool aFilled,
                                                const COLOR4D& aFillColor )
 {
@@ -161,8 +158,7 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVer
     if( convertedPoints.empty() )
         return;
 
-    std::unique_ptr<LIB_SHAPE> polygon = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
-    polygon->SetUnit( m_unit );
+    std::unique_ptr<SCH_SHAPE> polygon = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY );
 
     if( aFilled )
     {
@@ -180,13 +176,12 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVer
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddText( const VECTOR2D& aOrigin, const wxString& aText,
+void GRAPHICS_IMPORTER_SCH::AddText( const VECTOR2D& aOrigin, const wxString& aText,
                                             double aHeight, double aWidth, double aThickness,
                                             double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
                                             GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
-    std::unique_ptr<LIB_TEXT> textItem = std::make_unique<LIB_TEXT>( m_symbol );
-    textItem->SetUnit( m_unit );
+    std::unique_ptr<SCH_TEXT> textItem = std::make_unique<SCH_TEXT>();
     textItem->SetTextColor( aColor );
     textItem->SetTextThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
@@ -201,13 +196,12 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddText( const VECTOR2D& aOrigin, const wxStr
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddSpline( const VECTOR2D& aStart,
+void GRAPHICS_IMPORTER_SCH::AddSpline( const VECTOR2D& aStart,
                                               const VECTOR2D& aBezierControl1,
                                               const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
                                               const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<LIB_SHAPE> spline = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::BEZIER );
-    spline->SetUnit( m_unit );
+    std::unique_ptr<SCH_SHAPE> spline = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER );
     spline->SetStroke( MapStrokeParams( aStroke ) );
     spline->SetStart( MapCoordinate( aStart ) );
     spline->SetBezierC1( MapCoordinate( aBezierControl1 ) );

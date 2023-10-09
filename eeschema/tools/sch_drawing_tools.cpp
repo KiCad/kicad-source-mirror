@@ -56,6 +56,7 @@
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
+#include <import_gfx/dialog_import_gfx_sch.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
@@ -81,6 +82,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_inPlaceSymbol( false ),
         m_inDrawShape( false ),
         m_inPlaceImage( false ),
+        m_inImportGraphics( false ),
         m_inSingleClickPlace( false ),
         m_inTwoClickPlace( false ),
         m_inDrawSheet( false )
@@ -752,6 +754,159 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     getViewControls()->SetAutoPan( false );
     getViewControls()->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOLS::SchImportGraphics( const TOOL_EVENT& aEvent )
+{
+    if( m_inImportGraphics )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inImportGraphics );
+
+    // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
+    // items if needed
+    DIALOG_IMPORT_GFX_SCH dlg( m_frame );
+    int                   dlgResult = dlg.ShowModal();
+
+    std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
+
+    if( dlgResult != wxID_OK )
+        return 0;
+
+    // Ensure the list is not empty:
+    if( list.empty() )
+    {
+        wxMessageBox( _( "No graphic items found in file." ) );
+        return 0;
+    }
+
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+
+    KIGFX::VIEW_CONTROLS*  controls = getViewControls();
+    std::vector<SCH_ITEM*> newItems;      // all new items, including group
+    std::vector<SCH_ITEM*> selectedItems; // the group, or newItems if no group
+    EE_SELECTION           preview;
+    SCH_COMMIT             commit( m_toolMgr );
+
+    for( std::unique_ptr<EDA_ITEM>& ptr : list )
+    {
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( ptr.get() );
+        wxCHECK2( item, continue );
+
+        newItems.push_back( item );
+        selectedItems.push_back( item );
+        preview.Add( item );
+
+        ptr.release();
+    }
+
+    if( !dlg.IsPlacementInteractive() )
+    {
+        // Place the imported drawings
+        for( SCH_ITEM* item : newItems )
+            commit.Add(item, m_frame->GetScreen());
+
+        commit.Push( _( "Import Graphic" ) );
+        return 0;
+    }
+
+    m_view->Add( &preview );
+
+    // Clear the current selection then select the drawings so that edit tools work on them
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &selItems );
+
+    m_frame->PushTool( aEvent );
+
+    auto setCursor = [&]()
+    {
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+    };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    controls->ForceCursorPosition( false );
+    // Set initial cursor
+    setCursor();
+
+    //SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
+    EE_GRID_HELPER grid( m_toolMgr );
+
+    // Now move the new items to the current cursor position:
+    VECTOR2I cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    VECTOR2I delta = cursorPos;
+    VECTOR2I currentOffset;
+
+    for( SCH_ITEM* item : selectedItems )
+        item->Move( delta );
+
+    currentOffset += delta;
+
+    m_view->Update( &preview );
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
+
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+            for( SCH_ITEM* item : newItems )
+                delete item;
+
+            break;
+        }
+        else if( evt->IsMotion() )
+        {
+            delta = cursorPos - currentOffset;
+
+            for( SCH_ITEM* item : selectedItems )
+                item->Move( delta );
+
+            currentOffset += delta;
+
+            m_view->Update( &preview );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        {
+            // Place the imported drawings
+            for( SCH_ITEM* item : newItems )
+                commit.Add( item, m_frame->GetScreen() );
+
+            commit.Push( _( "Import Graphic" ) );
+            break; // This is a one-shot command, not a tool
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+    }
+
+    preview.Clear();
+    m_view->Remove( &preview );
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls->ForceCursorPosition( false );
+
+    m_frame->PopTool( aEvent );
 
     return 0;
 }
@@ -2021,4 +2176,5 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SchImportGraphics,   EE_ACTIONS::schImportGraphics.MakeEvent() );
 }

@@ -64,9 +64,9 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 }
 
 
-STROKE_PARAMS GRAPHICS_IMPORTER_PCBNEW::MapStrokeParams( const STROKE_PARAMS& aStroke )
+STROKE_PARAMS GRAPHICS_IMPORTER_PCBNEW::MapStrokeParams( const IMPORTED_STROKE& aStroke )
 {
-    int width = aStroke.GetWidth();
+    double width = aStroke.GetWidth();
 
     return STROKE_PARAMS( width != -1 ? MapLineWidth( width ) : -1, aStroke.GetPlotStyle(),
                           aStroke.GetColor() );
@@ -74,7 +74,7 @@ STROKE_PARAMS GRAPHICS_IMPORTER_PCBNEW::MapStrokeParams( const STROKE_PARAMS& aS
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
-                                        const STROKE_PARAMS& aStroke )
+                                        const IMPORTED_STROKE& aStroke )
 {
     std::unique_ptr<PCB_SHAPE> line( createDrawing() );
     line->SetShape( SHAPE_T::SEGMENT );
@@ -92,7 +92,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aStart, const VECTOR2D& 
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius,
-                                          const STROKE_PARAMS& aStroke, bool aFilled,
+                                          const IMPORTED_STROKE& aStroke, bool aFilled,
                                           const COLOR4D& aFillColor )
 {
     std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
@@ -108,7 +108,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       const EDA_ANGLE& aAngle, const STROKE_PARAMS& aStroke )
+                                       const EDA_ANGLE& aAngle, const IMPORTED_STROKE& aStroke )
 {
     std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
     arc->SetShape( SHAPE_T::ARC );
@@ -148,7 +148,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertices,
-                                           const STROKE_PARAMS& aStroke, bool aFilled,
+                                           const IMPORTED_STROKE& aStroke, bool aFilled,
                                            const COLOR4D& aFillColor )
 {
     std::vector<VECTOR2I> convertedPoints;
@@ -196,7 +196,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
 
 void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                                           const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                                          const STROKE_PARAMS& aStroke )
+                                          const IMPORTED_STROKE& aStroke )
 {
     std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
     spline->SetShape( SHAPE_T::BEZIER );

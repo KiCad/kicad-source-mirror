@@ -72,17 +72,17 @@ public:
 
 private:
     void DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath,
-                   const STROKE_PARAMS& aStroke, bool aFilled, const COLOR4D& aFillColor );
+                   const IMPORTED_STROKE& aStroke, bool aFilled, const COLOR4D& aFillColor );
 
     void DrawCubicBezierPath( const float* aPoints, int aNumPoints,
                               std::vector<VECTOR2D>& aGeneratedPoints );
 
     void DrawCubicBezierCurve( const float* aPoints, std::vector<VECTOR2D>& aGeneratedPoints );
 
-    void DrawPolygon( const std::vector<VECTOR2D>& aPoints, const STROKE_PARAMS& aStroke,
+    void DrawPolygon( const std::vector<VECTOR2D>& aPoints, const IMPORTED_STROKE& aStroke,
                       bool aFilled, const COLOR4D& aFillColor );
 
-    void DrawLineSegments( const std::vector<VECTOR2D>& aPoints, const STROKE_PARAMS& aStroke );
+    void DrawLineSegments( const std::vector<VECTOR2D>& aPoints, const IMPORTED_STROKE& aStroke );
 
     struct NSVGimage* m_parsedImage;
 

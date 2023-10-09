@@ -97,6 +97,7 @@ public:
     static TOOL_ACTION drawArc;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
+    static TOOL_ACTION schImportGraphics;
     static TOOL_ACTION undoLastSegment;
     static TOOL_ACTION switchSegmentPosture;
     static TOOL_ACTION finishLineWireOrBus;

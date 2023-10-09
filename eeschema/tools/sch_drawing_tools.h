@@ -55,6 +55,7 @@ public:
     int DrawShape( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
+    int SchImportGraphics( const TOOL_EVENT& aEvent );
 
 private:
     SCH_LINE* findWire( const VECTOR2I& aPosition );
@@ -95,6 +96,7 @@ private:
     bool                       m_inPlaceSymbol;
     bool                       m_inDrawShape;
     bool                       m_inPlaceImage;
+    bool                       m_inImportGraphics;
     bool                       m_inSingleClickPlace;
     bool                       m_inTwoClickPlace;
     bool                       m_inDrawSheet;

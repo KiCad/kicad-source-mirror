@@ -579,6 +579,16 @@ TOOL_ACTION EE_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<SCH_BITMAP*>( nullptr ) );
 
+TOOL_ACTION EE_ACTIONS::schImportGraphics( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.schImportGraphics" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'F' )
+        .LegacyHotkeyName( "Place DXF" )
+        .MenuText( _( "Import Graphics..." ) )
+        .Tooltip( _( "Import 2D drawing file" ) )
+        .Icon( BITMAPS::import_vector )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION EE_ACTIONS::finishSheet( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.finishSheet" )
         .Scope( AS_GLOBAL )

@@ -24,21 +24,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GRAPHICS_IMPORTER_EESCHEMA_H
-#define GRAPHICS_IMPORTER_EESCHEMA_H
+#ifndef GRAPHICS_IMPORTER_SCH_H_
+#define GRAPHICS_IMPORTER_SCH_H_
 
 #include <import_gfx/graphics_importer.h>
 
-#include <layer_ids.h>
+class SCH_SCREEN;
 
-class LIB_SYMBOL;
-class LIB_SHAPE;
-class LIB_TEXT;
 
-class GRAPHICS_IMPORTER_LIB_SYMBOL : public GRAPHICS_IMPORTER
+class GRAPHICS_IMPORTER_SCH : public GRAPHICS_IMPORTER
 {
 public:
-    GRAPHICS_IMPORTER_LIB_SYMBOL( LIB_SYMBOL* aSymbol, int aUnit );
+    GRAPHICS_IMPORTER_SCH( SCH_SCREEN* aScreen );
 
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                   const IMPORTED_STROKE& aStroke ) override;
@@ -79,8 +76,7 @@ public:
 
     STROKE_PARAMS MapStrokeParams( const IMPORTED_STROKE& aStroke );
 
-    LIB_SYMBOL* m_symbol;
-    int         m_unit;
+    SCH_SCREEN* m_screen;
 };
 
-#endif /* GRAPHICS_IMPORTER_EESCHEMA */
+#endif /* GRAPHICS_IMPORTER_SCH_H_ */
