@@ -250,6 +250,24 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
 }
 
 
+void GENERATOR_TOOL::HighlightNet( BOARD_CONNECTED_ITEM* aStartItem )
+{
+    if( aStartItem && aStartItem->GetNet() )
+        highlightNets( true, { aStartItem->GetNet() } );
+    else
+        highlightNets( false );
+}
+
+
+void GENERATOR_TOOL::UpdateHighlightedNet( BOARD_CONNECTED_ITEM* aStartItem )
+{
+    if( aStartItem && aStartItem->GetNet() )
+        updateHighlightedNets( { aStartItem->GetNet() } );
+    else
+        highlightNets( false );
+}
+
+
 void GENERATOR_TOOL::setTransitions()
 {
     // Generator actions

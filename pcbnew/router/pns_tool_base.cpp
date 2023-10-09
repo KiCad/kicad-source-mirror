@@ -278,6 +278,18 @@ void TOOL_BASE::highlightNets( bool aEnabled, std::set<NET_HANDLE> aNets )
 }
 
 
+void TOOL_BASE::updateHighlightedNets( std::set<NET_HANDLE> aNets )
+{
+    RENDER_SETTINGS* rs = getView()->GetPainter()->GetSettings();
+    std::set<int>    netcodes;
+
+    for( const NET_HANDLE& net : aNets )
+        netcodes.insert( m_router->GetInterface()->GetNetCode( net ) );
+
+    rs->SetHighlight( netcodes, true );
+}
+
+
 bool TOOL_BASE::checkSnap( ITEM *aItem )
 {
     // Sync PNS engine settings with the general PCB editor options.

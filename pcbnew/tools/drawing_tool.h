@@ -352,7 +352,7 @@ private:
     STROKE_PARAMS             m_stroke;            // Current stroke for multi-segment drawing
     TEXT_ATTRIBUTES           m_textAttrs;
 
-    BOARD_ITEM*               m_pickerItem;
+    BOARD_CONNECTED_ITEM*     m_pickerItem;
     PCB_GENERATOR_MEANDERS*   m_meander;
 
 

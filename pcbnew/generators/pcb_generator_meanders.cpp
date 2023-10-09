@@ -449,7 +449,7 @@ public:
             }
         }
 
-        aCommit->Push( "Remove meander", APPEND_UNDO );
+        aCommit->Push( "Remove Meander", APPEND_UNDO );
     }
 
     std::optional<PNS::LINE> getLineBetweenPoints( VECTOR2I origStart, VECTOR2I origEnd,
@@ -1047,11 +1047,14 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             {
                 if( m_pickerItem )
                 {
+                    GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
                     if( !m_meander )
                     {
-                        // First click; create a meander generator
+                        // First click; create a meander
 
-                        m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+                        generatorTool->HighlightNet( nullptr );
+
                         m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
 
                         m_meander = new PCB_GENERATOR_MEANDERS( m_board, m_pickerItem->GetLayer() );
@@ -1067,8 +1070,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                     else
                     {
                         // Second click; we're done
-                        BOARD_COMMIT    commit( m_frame );
-                        GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+                        BOARD_COMMIT commit( m_frame );
 
                         m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
                         m_meander->Update( generatorTool, m_board, m_frame, &commit );
@@ -1089,6 +1091,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                 PCB_SELECTION_TOOL*      selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
                 GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
                 GENERAL_COLLECTOR        collector;
+                GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
 
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
                 collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, aPos, guide );
@@ -1100,29 +1103,27 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
                 if( !m_meander )
                 {
-                    // First click not yet made; we're in brighten-track-under-cursor mode
+                    // First click not yet made; we're in highlight-net-under-cursor mode
 
-                    if( m_pickerItem != item )
+                    if( !m_pickerItem )
                     {
-                        if( m_pickerItem )
-                            selTool->UnbrightenItem( m_pickerItem );
-
-                        m_pickerItem = item;
-
-                        if( m_pickerItem )
-                            selTool->BrightenItem( m_pickerItem );
+                        m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                        generatorTool->HighlightNet( m_pickerItem );
+                    }
+                    else
+                    {
+                        m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                        generatorTool->UpdateHighlightedNet( m_pickerItem );
                     }
                 }
                 else
                 {
-                    // First click alread made; we're in preview-meander mode
+                    // First click already made; we're in preview-meander mode
 
                     m_meander->SetEnd( aPos );
 
                     if( m_meander->GetPosition() != m_meander->GetEnd() )
                     {
-                        GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
-
                         m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
                         m_meander->Update( generatorTool, m_board, m_frame, nullptr );
                     }
@@ -1142,6 +1143,10 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     picker->SetFinalizeHandler(
             [this]( const int& aFinalState )
             {
+                GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+                generatorTool->HighlightNet( nullptr );
+
                 // Ensure the cursor gets changed & updated
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
                 m_frame->GetCanvas()->Refresh();
