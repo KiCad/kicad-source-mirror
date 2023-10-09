@@ -263,9 +263,8 @@ public:
         }
     }
 
-    PNS::LINKED_ITEM* PickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere,
-                                   PNS::NET_HANDLE aNet, int aLayer, VECTOR2I& aPointOut,
-                                   const std::set<PNS::ITEM*> aAvoidItems = {} )
+    PNS::LINKED_ITEM* PickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere, int aLayer,
+                                   VECTOR2I& aPointOut )
     {
         static const int  candidateCount = 2;
         PNS::LINKED_ITEM* prioritized[candidateCount];
@@ -278,16 +277,17 @@ public:
             dist[i] = VECTOR2I::ECOORD_MAX;
         }
 
-        auto haveCandidates = [&]()
-        {
-            for( PNS::ITEM* item : prioritized )
-            {
-                if( item )
-                    return true;
-            }
+        auto haveCandidates =
+                [&]()
+                {
+                    for( PNS::ITEM* item : prioritized )
+                    {
+                        if( item )
+                            return true;
+                    }
 
-            return false;
-        };
+                    return false;
+                };
 
         for( bool useClearance : { false, true } )
         {
@@ -302,12 +302,6 @@ public:
                     continue;
 
                 if( !item->Layers().Overlaps( aLayer ) )
-                    continue;
-
-                if( aAvoidItems.find( item ) != aAvoidItems.end() )
-                    continue;
-
-                if( aNet && item->Net() != aNet )
                     continue;
 
                 PNS::LINKED_ITEM* linked = static_cast<PNS::LINKED_ITEM*>( item );
@@ -377,8 +371,8 @@ public:
 
         VECTOR2I startSnapPoint, endSnapPoint;
 
-        PNS::LINKED_ITEM* startItem = PickSegment( router, m_origin, nullptr, layer, startSnapPoint );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, nullptr, layer, endSnapPoint );
+        PNS::LINKED_ITEM* startItem = PickSegment( router, m_origin, layer, startSnapPoint );
+        PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, layer, endSnapPoint );
 
         wxASSERT( startItem );
         wxASSERT( endItem );
@@ -386,8 +380,8 @@ public:
         if( !startItem || !endItem || startSnapPoint == endSnapPoint )
             return false;
 
-        PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
-        SHAPE_LINE_CHAIN chain = line.CLine();
+        PNS::LINE               line = world->AssembleLine( startItem, nullptr, false, true );
+        const SHAPE_LINE_CHAIN& chain = line.CLine();
 
         wxASSERT( line.ContainsLink( endItem ) );
 
@@ -496,8 +490,8 @@ public:
     {
         PNS::NODE* world = router->GetWorld();
 
-        PNS::LINKED_ITEM* startItem = PickSegment( router, aStart, nullptr, layer, aStartOut );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, aEnd, nullptr, layer, aEndOut );
+        PNS::LINKED_ITEM* startItem = PickSegment( router, aStart, layer, aStartOut );
+        PNS::LINKED_ITEM* endItem = PickSegment( router, aEnd, layer, aEndOut );
 
         wxASSERT( startItem );
         wxASSERT( endItem );
@@ -646,9 +640,8 @@ public:
         // Snap points
         VECTOR2I startSnapPoint, endSnapPoint;
 
-        PNS::LINKED_ITEM* startItem =
-                PickSegment( router, m_origin, nullptr, layer, startSnapPoint );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, nullptr, layer, endSnapPoint );
+        PNS::LINKED_ITEM* startItem = PickSegment( router, m_origin, layer, startSnapPoint );
+        PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, layer, endSnapPoint );
 
         wxASSERT( startItem );
         wxASSERT( endItem );
@@ -744,7 +737,7 @@ public:
         points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
 
         VECTOR2I spacingHandleOffset =
-                widthHandleOffset + ( base.B - base.A ).Resize( m_spacing * 1.5 );
+                widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
 
         points->AddPoint( m_origin + spacingHandleOffset );
         points->Point( 3 ).SetGridConstraint( IGNORE_GRID );
@@ -781,7 +774,7 @@ public:
             VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
             VECTOR2I sHandle = aEditPoints->Point( 3 ).GetPosition();
 
-            int value = SEG( m_origin, wHandle ).LineDistance( sHandle ) / 1.5;
+            int value = KiROUND( SEG( m_origin, wHandle ).LineDistance( sHandle ) / 1.5 );
 
             SetSpacing( KiROUND( value / pcbIUScale.mmToIU( 0.01 ) ) * pcbIUScale.mmToIU( 0.01 ) );
         }
@@ -807,7 +800,7 @@ public:
         aEditPoints->Point( 2 ).SetPosition( m_origin + widthHandleOffset );
 
         VECTOR2I spacingHandleOffset =
-                widthHandleOffset + ( base.B - base.A ).Resize( m_spacing * 1.5 );
+                widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
 
         aEditPoints->Point( 3 ).SetPosition( m_origin + spacingHandleOffset );
 
@@ -845,8 +838,8 @@ public:
             {
                 SHAPE_POLY_SET poly;
 
-                poly.OffsetLineChain( *m_baseLine, m_maxAmplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                  ARC_LOW_DEF, false );
+                poly.OffsetLineChain( *m_baseLine, m_maxAmplitude * 2,
+                                      CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, false );
 
                 if( poly.OutlineCount() > 0 )
                 {
