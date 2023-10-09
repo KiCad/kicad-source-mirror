@@ -2669,16 +2669,28 @@ static void nsvg__parsePath( NSVGparser* p, const char** attr )
 
     for( i = 0; attr[i]; i += 2 )
     {
+        if( strcmp( attr[i], "class" ) == 0 )
+        {
+            tmp[0] = attr[i];
+            tmp[1] = attr[i + 1];
+            tmp[2] = 0;
+            tmp[3] = 0;
+            nsvg__parseAttribs( p, tmp );
+        }
+    }
+
+    for( i = 0; attr[i]; i += 2 )
+    {
         if( strcmp( attr[i], "d" ) == 0 )
         {
             s = attr[i + 1];
         }
-        else
+        else if( strcmp( attr[i], "class" ) != 0 )
         {
-            tmp[0]  = attr[i];
-            tmp[1]  = attr[i + 1];
-            tmp[2]  = 0;
-            tmp[3]  = 0;
+            tmp[0] = attr[i];
+            tmp[1] = attr[i + 1];
+            tmp[2] = 0;
+            tmp[3] = 0;
             nsvg__parseAttribs( p, tmp );
         }
     }
