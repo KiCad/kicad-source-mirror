@@ -240,6 +240,8 @@ public:
             meander->m_targetLength = constraint.GetValue().Opt();
         }
 
+        meander->SetFlags( IS_NEW );
+
         return meander;
     }
 
@@ -249,7 +251,12 @@ public:
         m_removedItems.clear();
 
         if( aCommit )
-            aCommit->Modify( this );
+        {
+            if( IsNew() )
+                aCommit->Add( this );
+            else
+                aCommit->Modify( this );
+        }
 
         int          layer = GetLayer();
         PNS::ROUTER* router = aTool->Router();
@@ -685,6 +692,7 @@ public:
             for( BOARD_ITEM* item : m_removedItems )
             {
                 item->ClearSelected();
+                aFrame->GetCanvas()->GetView()->Hide( item, false );
                 aCommit->Remove( item );
             }
 
