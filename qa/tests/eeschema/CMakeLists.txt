@@ -3,7 +3,7 @@
 #
 # Copyright (C) 2017 CERN
 # @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
-# Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+# Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -71,11 +71,13 @@ set( QA_EESCHEMA_SRCS
     test_sch_sheet_path.cpp
     test_sch_sheet_list.cpp
     test_sch_symbol.cpp
+    test_symbol_library_manager.cpp
 )
 
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
-    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
+    # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal
+    # kicad to UTF8 as well.
     if( MINGW )
         # QA_EESCHEMA_RESOURCES variable is set by the macro.
         mingw_resource_compiler( qa_eeschema )

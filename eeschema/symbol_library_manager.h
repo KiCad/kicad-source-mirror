@@ -54,6 +54,121 @@ enum class SYMBOL_NAME_FILTER
 };
 
 
+class SYMBOL_BUFFER
+{
+public:
+    SYMBOL_BUFFER( LIB_SYMBOL* aSymbol = nullptr, std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
+    ~SYMBOL_BUFFER();
+
+    LIB_SYMBOL* GetSymbol() const { return m_symbol; }
+    void        SetSymbol( LIB_SYMBOL* aSymbol );
+
+    LIB_SYMBOL* GetOriginal() const { return m_original; }
+    void        SetOriginal( LIB_SYMBOL* aSymbol );
+
+    bool        IsModified() const;
+    SCH_SCREEN* GetScreen() const { return m_screen.get(); }
+
+private:
+    std::unique_ptr<SCH_SCREEN> m_screen;
+
+    LIB_SYMBOL* m_symbol;   // Working copy
+    LIB_SYMBOL* m_original; // Initial state of the symbol
+};
+
+
+///< Store a working copy of a library.
+class LIB_BUFFER
+{
+public:
+    LIB_BUFFER( const wxString& aLibrary ) : m_libName( aLibrary ), m_hash( 1 ) {}
+
+    bool IsModified() const
+    {
+        if( !m_deleted.empty() )
+            return true;
+
+        for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : m_symbols )
+        {
+            if( symbolBuf->IsModified() )
+                return true;
+        }
+
+        return false;
+    }
+
+    int GetHash() const { return m_hash; }
+
+    ///< Return the working copy of a LIB_SYMBOL root object with specified alias.
+    LIB_SYMBOL* GetSymbol( const wxString& aAlias ) const;
+
+    ///< Create a new buffer to store a symbol. LIB_BUFFER takes ownership of aCopy.
+    bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
+
+    ///< Update the buffered symbol with the contents of \a aCopy.
+    bool UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SYMBOL* aCopy );
+
+    bool DeleteBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf );
+
+    void ClearDeletedBuffer() { m_deleted.clear(); }
+
+    ///< Save stored modifications using a plugin. aBuffer decides whether the changes
+    ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
+    bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, const wxString& aFileName,
+                     SCH_PLUGIN* aPlugin, bool aBuffer );
+
+    ///< Return a symbol buffer with LIB_SYMBOL holding a symbolicular alias
+    std::shared_ptr<SYMBOL_BUFFER> GetBuffer( const wxString& aAlias ) const;
+
+    ///< Return all buffered symbols
+    const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& GetBuffers() const { return m_symbols; }
+
+    /**
+     * Check to see any symbols in the buffer are derived from a parent named \a aParentName.
+     *
+     * @param aParentName is the name of the parent to test.
+     * @return true if any symbols are found derived from a symbol named \a aParent, otherwise
+     *         false.
+     */
+    bool HasDerivedSymbols( const wxString& aParentName ) const;
+
+    /**
+     * Fetch a list of root symbols names from the library buffer.
+     *
+     * @param aRootSymbolNames is a reference to a list to populate with root symbol names.
+     * @param aFilter is the symbol derivation type.
+     */
+    void GetSymbolNames( wxArrayString&     aSymbolNames,
+                         SYMBOL_NAME_FILTER aFilter = SYMBOL_NAME_FILTER::ALL );
+
+    /**
+     * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
+     *
+     * @param aSymbolName is the name of the symbol to search for derived symbols in this
+     *                    buffer.
+     * @param aList is the list of symbols names derived from \a aSymbolName.
+     * @return a size_t count of the number of symbols derived from \a aSymbolName.
+     */
+    size_t GetDerivedSymbolNames( const wxString& aSymbolName, wxArrayString& aList );
+
+private:
+    /**
+     * Remove all symbols derived from \a aParent from the library buffer.
+     *
+     * @param aParent is the #SYMBOL_BUFFER to check against.
+     * @return the count of #SYMBOL_BUFFER objects removed from the library.
+     */
+    int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf );
+
+    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_symbols;
+
+    ///< Buffer for deleted symbols until library is saved.
+    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_deleted;
+    const wxString                             m_libName; // Buffered library name
+    int                                        m_hash;
+};
+
+
 /**
  * Class to handle modifications to the symbol libraries.
  */
@@ -201,14 +316,6 @@ public:
     bool IsLibraryReadOnly( const wxString& aLibrary ) const;
 
     /**
-     * Save symbol changes to the library copy used by the schematic editor. Not it is not
-     * necessarily saved to the file.
-     *
-     * @return True on success, false otherwise.
-     */
-    bool FlushSymbol( const wxString& aAlias, const wxString& aLibrary );
-
-    /**
      * Save library to a file, including unsaved changes.
      *
      * @param aLibrary is the library name.
@@ -273,144 +380,6 @@ protected:
     SYMBOL_LIB_TABLE* symTable() const;
 
     ///< Class to store a working copy of a LIB_SYMBOL object and editor context.
-    class SYMBOL_BUFFER
-    {
-    public:
-        SYMBOL_BUFFER( LIB_SYMBOL* aSymbol = nullptr,
-                       std::unique_ptr<SCH_SCREEN> aScreen = nullptr );
-        ~SYMBOL_BUFFER();
-
-        LIB_SYMBOL* GetSymbol() const { return m_symbol; }
-        void SetSymbol( LIB_SYMBOL* aSymbol );
-
-        LIB_SYMBOL* GetOriginal() const { return m_original; }
-        void SetOriginal( LIB_SYMBOL* aSymbol );
-
-        bool IsModified() const;
-        SCH_SCREEN* GetScreen() const { return m_screen.get(); }
-
-        ///< Transfer the screen ownership
-        std::unique_ptr<SCH_SCREEN> RemoveScreen()
-        {
-            return std::move( m_screen );
-        }
-
-        bool SetScreen( std::unique_ptr<SCH_SCREEN> aScreen )
-        {
-            bool ret = !!m_screen;
-            m_screen = std::move( aScreen );
-            return ret;
-        }
-
-    private:
-        std::unique_ptr<SCH_SCREEN> m_screen;
-
-        LIB_SYMBOL* m_symbol;      // Working copy
-        LIB_SYMBOL* m_original;    // Initial state of the symbol
-    };
-
-
-    ///< Store a working copy of a library.
-    class LIB_BUFFER
-    {
-    public:
-        LIB_BUFFER( const wxString& aLibrary ) :
-                m_libName( aLibrary ),
-                m_hash( 1 )
-        { }
-
-        bool IsModified() const
-        {
-            if( !m_deleted.empty() )
-                return true;
-
-            for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : m_symbols )
-            {
-                if( symbolBuf->IsModified() )
-                    return true;
-            }
-
-            return false;
-        }
-
-        int GetHash() const { return m_hash; }
-
-        ///< Return the working copy of a LIB_SYMBOL root object with specified alias.
-        LIB_SYMBOL* GetSymbol( const wxString& aAlias ) const;
-
-        ///< Create a new buffer to store a symbol. LIB_BUFFER takes ownership of aCopy.
-        bool CreateBuffer( LIB_SYMBOL* aCopy, SCH_SCREEN* aScreen );
-
-        ///< Update the buffered symbol with the contents of \a aCopy.
-        bool UpdateBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, LIB_SYMBOL* aCopy );
-
-        bool DeleteBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf );
-
-        void ClearDeletedBuffer()
-        {
-            m_deleted.clear();
-        }
-
-        ///< Save stored modifications to Symbol Lib Table. It may result in saving the symbol
-        ///< to disk as well, depending on the row properties.
-        bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, SYMBOL_LIB_TABLE* aLibTable );
-
-        ///< Save stored modifications using a plugin. aBuffer decides whether the changes
-        ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
-        bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, const wxString& aFileName,
-                         SCH_PLUGIN* aPlugin, bool aBuffer );
-
-        ///< Return a symbol buffer with LIB_SYMBOL holding a symbolicular alias
-        std::shared_ptr<SYMBOL_BUFFER> GetBuffer( const wxString& aAlias ) const;
-
-        ///< Return all buffered symbols
-        const std::deque< std::shared_ptr<SYMBOL_BUFFER> >& GetBuffers() const { return m_symbols; }
-
-        /**
-         * Check to see any symbols in the buffer are derived from a parent named \a aParentName.
-         *
-         * @param aParentName is the name of the parent to test.
-         * @return true if any symbols are found derived from a symbol named \a aParent, otherwise
-         *         false.
-         */
-        bool HasDerivedSymbols( const wxString& aParentName ) const;
-
-        /**
-         * Fetch a list of root symbols names from the library buffer.
-         *
-         * @param aRootSymbolNames is a reference to a list to populate with root symbol names.
-         * @param aFilter is the symbol derivation type.
-         */
-        void GetSymbolNames( wxArrayString& aSymbolNames,
-                             SYMBOL_NAME_FILTER aFilter = SYMBOL_NAME_FILTER::ALL );
-
-        /**
-         * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
-         *
-         * @param aSymbolName is the name of the symbol to search for derived symbols in this
-         *                    buffer.
-         * @param aList is the list of symbols names derived from \a aSymbolName.
-         * @return a size_t count of the number of symbols derived from \a aSymbolName.
-         */
-        size_t GetDerivedSymbolNames( const wxString& aSymbolName, wxArrayString& aList );
-
-    private:
-        /**
-         * Remove all symbols derived from \a aParent from the library buffer.
-         *
-         * @param aParent is the #SYMBOL_BUFFER to check against.
-         * @return the count of #SYMBOL_BUFFER objects removed from the library.
-         */
-        int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf );
-
-        std::deque< std::shared_ptr<SYMBOL_BUFFER> > m_symbols;
-
-        ///< Buffer for deleted symbols until library is saved.
-        std::deque< std::shared_ptr<SYMBOL_BUFFER> > m_deleted;
-        const wxString                               m_libName;  // Buffered library name
-        int                                          m_hash;
-    };
-
     /**
      * Return a set of #LIB_SYMBOL objects belonging to the original library.
      */
