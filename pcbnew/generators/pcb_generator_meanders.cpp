@@ -405,9 +405,8 @@ public:
 
             VECTOR2I startSnapPoint, endSnapPoint;
 
-            std::optional<PNS::LINE> line =
-                    getLineBetweenPoints( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ), router,
-                                          layer, startSnapPoint, endSnapPoint );
+            std::optional<PNS::LINE> line = getLine( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ),
+                                                     router, layer, startSnapPoint, endSnapPoint );
 
             wxCHECK( line, /* void */ );
 
@@ -421,6 +420,7 @@ public:
             // LINE does not have a separate remover, as LINEs are never truly a member of the tree
             for( PNS::LINKED_ITEM* li : line->Links() )
                 iface->RemoveItem( li );
+
             world->Remove( *line );
 
             SHAPE_LINE_CHAIN straightChain;
@@ -454,14 +454,14 @@ public:
         aCommit->Push( "Remove Meander", APPEND_UNDO );
     }
 
-    std::optional<PNS::LINE> getLineBetweenPoints( VECTOR2I origStart, VECTOR2I origEnd,
-                                                   PNS::ROUTER* router, int layer,
-                                                   VECTOR2I& aStartOut, VECTOR2I& aEndOut )
+    std::optional<PNS::LINE> getLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                      PNS::ROUTER* router, int layer, VECTOR2I& aStartOut,
+                                      VECTOR2I& aEndOut )
     {
         PNS::NODE* world = router->GetWorld();
 
-        PNS::LINKED_ITEM* startItem = PickSegment( router, origStart, nullptr, layer, aStartOut );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, origEnd, nullptr, layer, aEndOut );
+        PNS::LINKED_ITEM* startItem = PickSegment( router, aStart, nullptr, layer, aStartOut );
+        PNS::LINKED_ITEM* endItem = PickSegment( router, aEnd, nullptr, layer, aEndOut );
 
         wxASSERT( startItem );
         wxASSERT( endItem );
@@ -551,9 +551,8 @@ public:
 
             VECTOR2I startSnapPoint, endSnapPoint;
 
-            std::optional<PNS::LINE> line =
-                    getLineBetweenPoints( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ), router,
-                                          layer, startSnapPoint, endSnapPoint );
+            std::optional<PNS::LINE> line = getLine( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ),
+                                                     router, layer, startSnapPoint, endSnapPoint );
 
             wxASSERT( line );
 
