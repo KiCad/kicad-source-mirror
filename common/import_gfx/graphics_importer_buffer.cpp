@@ -38,32 +38,35 @@ static std::unique_ptr<T> make_shape( const Args&... aArguments )
     return std::make_unique<T>( aArguments... );
 }
 
-void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth,
-                                        const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                                        const STROKE_PARAMS& aStroke )
 {
-    m_shapes.push_back( make_shape< IMPORTED_LINE >( aStart, aEnd, aWidth, aColor ) );
+    m_shapes.push_back( make_shape<IMPORTED_LINE>( aStart, aEnd, aStroke ) );
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
-                                          bool aFilled, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius,
+                                          const STROKE_PARAMS& aStroke, bool aFilled,
+                                          const COLOR4D& aFillColor )
 {
-    m_shapes.push_back( make_shape<IMPORTED_CIRCLE>( aCenter, aRadius, aWidth, aFilled, aColor ) );
+    m_shapes.push_back(
+            make_shape<IMPORTED_CIRCLE>( aCenter, aRadius, aStroke, aFilled, aFillColor ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       const EDA_ANGLE& aAngle, double aWidth,
-                                       const COLOR4D& aColor )
+                                       const EDA_ANGLE& aAngle, const STROKE_PARAMS& aStroke )
 {
-    m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aWidth, aColor ) );
+    m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aStroke ) );
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                                           const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector<VECTOR2D>& aVertices,
+                                           const STROKE_PARAMS& aStroke, bool aFilled,
+                                           const COLOR4D& aFillColor )
 {
-    m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aWidth, aColor ) );
+    m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aStroke, aFilled, aFillColor ) );
+
     m_shapes.back()->SetParentShapeIndex( m_shapeFillRules.size() - 1 );
 }
 
@@ -73,16 +76,17 @@ void GRAPHICS_IMPORTER_BUFFER::AddText( const VECTOR2D& aOrigin, const wxString&
                                         double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
                                         GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
-    m_shapes.push_back( make_shape< IMPORTED_TEXT >( aOrigin, aText, aHeight, aWidth,
-                        aThickness, aOrientation, aHJustify, aVJustify, aColor ) );
+    m_shapes.push_back( make_shape<IMPORTED_TEXT>( aOrigin, aText, aHeight, aWidth, aThickness,
+                                                   aOrientation, aHJustify, aVJustify, aColor ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                                           const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                                          double aWidth, const COLOR4D& aColor )
+                                          const STROKE_PARAMS& aStroke )
 {
-    m_shapes.push_back( make_shape<IMPORTED_SPLINE>( aStart, aBezierControl1, aBezierControl2, aEnd, aWidth, aColor ) );
+    m_shapes.push_back( make_shape<IMPORTED_SPLINE>( aStart, aBezierControl1, aBezierControl2, aEnd,
+                                                     aStroke ) );
 }
 
 
@@ -101,8 +105,8 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 // converts a single SVG-style polygon (multiple outlines, hole detection based on orientation, custom fill rule) to a format that can be digested by KiCad (single outline, fractured)
 static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
                             std::vector<IMPORTED_POLYGON*>&             aPaths,
-                            GRAPHICS_IMPORTER::POLY_FILL_RULE aFillRule, double aWidth,
-                            const COLOR4D& aColor )
+                            GRAPHICS_IMPORTER::POLY_FILL_RULE           aFillRule,
+                            const STROKE_PARAMS& aStroke, bool aFilled, const COLOR4D& aFillColor )
 {
     double minX = std::numeric_limits<double>::max();
     double minY = minX;
@@ -170,16 +174,18 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
             pts.emplace_back( VECTOR2D( xp, yp ) );
         }
 
-        aShapes.push_back( std::make_unique<IMPORTED_POLYGON>( pts, aWidth, aColor ) );
+        aShapes.push_back(
+                std::make_unique<IMPORTED_POLYGON>( pts, aStroke, aFilled, aFillColor ) );
     }
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
 {
-    int     curShapeIdx = -1;
-    double  lastWidth = 0;
-    COLOR4D lastColor = COLOR4D::UNSPECIFIED;
+    int           curShapeIdx = -1;
+    STROKE_PARAMS lastStroke;
+    bool          lastFilled = false;
+    COLOR4D       lastFillColor = COLOR4D::UNSPECIFIED;
 
     std::list<std::unique_ptr<IMPORTED_SHAPE>> newShapes;
     std::vector<IMPORTED_POLYGON*>             polypaths;
@@ -198,19 +204,24 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
 
         if( index != curShapeIdx && curShapeIdx >= 0 )
         {
-            convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth,
-                            lastColor );
+            convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastStroke,
+                            lastFilled, lastFillColor );
+
             polypaths.clear();
         }
 
         curShapeIdx = index;
-        lastWidth = poly->GetWidth();
-        lastColor = poly->GetColor();
+        lastStroke = poly->GetStroke();
+        lastFilled = poly->isFilled();
+        lastFillColor = poly->GetFillColor();
         polypaths.push_back( poly );
     }
 
     if( curShapeIdx >= 0 )
-        convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth, lastColor );
+    {
+        convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastStroke, lastFilled,
+                        lastFillColor );
+    }
 
     m_shapes.swap( newShapes );
 }

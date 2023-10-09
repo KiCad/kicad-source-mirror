@@ -369,6 +369,16 @@ TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::anchor  )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION EE_ACTIONS::symbolImportGraphics( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.symbolImportGraphics" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'F' )
+        .LegacyHotkeyName( "Place DXF" )
+        .MenuText( _( "Import Graphics..." ) )
+        .Tooltip( _( "Import 2D drawing file" ) )
+        .Icon( BITMAPS::import_vector )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION EE_ACTIONS::finishDrawing( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolDrawing.finishDrawing" )
         .Scope( AS_GLOBAL )

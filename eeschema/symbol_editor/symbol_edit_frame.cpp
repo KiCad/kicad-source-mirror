@@ -540,6 +540,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolPolygon,   EDIT_TOOL( EE_ACTIONS::drawSymbolPolygon ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
+    mgr->SetConditions( EE_ACTIONS::symbolImportGraphics, EDIT_TOOL( EE_ACTIONS::symbolImportGraphics ) );
 
 #undef CHECK
 #undef ENABLE

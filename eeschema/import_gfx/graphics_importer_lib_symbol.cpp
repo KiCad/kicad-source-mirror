@@ -53,7 +53,7 @@ VECTOR2I GRAPHICS_IMPORTER_LIB_SYMBOL::MapCoordinate( const VECTOR2D& aCoordinat
 int GRAPHICS_IMPORTER_LIB_SYMBOL::MapLineWidth( double aLineWidth )
 {
     VECTOR2D factor = ImportScalingFactor();
-    double   scale = ( factor.x + factor.y ) * 0.5;
+    double   scale = ( std::abs( factor.x ) + std::abs( factor.y ) ) * 0.5;
 
     if( aLineWidth <= 0.0 )
         return int( GetLineWidthMM() * scale );
@@ -63,33 +63,46 @@ int GRAPHICS_IMPORTER_LIB_SYMBOL::MapLineWidth( double aLineWidth )
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
-                                         double aWidth, const COLOR4D& aColor )
+STROKE_PARAMS GRAPHICS_IMPORTER_LIB_SYMBOL::MapStrokeParams( const STROKE_PARAMS& aStroke )
 {
-    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
-    line->SetUnit( m_unit );
-    line->SetFillColor( aColor );
-    line->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
-    line->AddPoint( MapCoordinate( aOrigin ) );
-    line->AddPoint( MapCoordinate( aEnd ) );
+    int width = aStroke.GetWidth();
+
+    return STROKE_PARAMS( width != -1 ? MapLineWidth( width ) : -1, aStroke.GetPlotStyle(),
+                          aStroke.GetColor() );
+}
+
+
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                                            const STROKE_PARAMS& aStroke )
+{
+    VECTOR2I pt0 = MapCoordinate( aStart );
+    VECTOR2I pt1 = MapCoordinate( aEnd );
 
     // Skip 0 len lines:
-    if( line->GetStart() == line->GetEnd() )
+    if( pt0 == pt1 )
         return;
+
+    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
+    line->SetUnit( m_unit );
+    line->SetStroke( MapStrokeParams( aStroke ) );
+
+    line->AddPoint( pt0 );
+    line->AddPoint( pt1 );
 
     addItem( std::move( line ) );
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
-                                           bool aFilled, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aRadius,
+                                              const STROKE_PARAMS& aStroke, bool aFilled,
+                                              const COLOR4D& aFillColor )
 {
     std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::CIRCLE );
     circle->SetUnit( m_unit );
-    circle->SetFillColor( aColor );
+    circle->SetFillColor( aFillColor );
     circle->SetFilled( aFilled );
-    circle->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
-    circle->SetStart( MapCoordinate( aCenter ));
+    circle->SetStroke( MapStrokeParams( aStroke ) );
+    circle->SetStart( MapCoordinate( aCenter ) );
     circle->SetEnd( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
 
     addItem( std::move( circle ) );
@@ -97,12 +110,10 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aR
 
 
 void GRAPHICS_IMPORTER_LIB_SYMBOL::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                        const EDA_ANGLE& aAngle, double aWidth,
-                                        const COLOR4D& aColor )
+                                           const EDA_ANGLE& aAngle, const STROKE_PARAMS& aStroke )
 {
     std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::ARC );
     arc->SetUnit( m_unit );
-    arc->SetFillColor( aColor );
 
     /**
      * We need to perform the rotation/conversion here while still using floating point values
@@ -120,25 +131,26 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddArc( const VECTOR2D& aCenter, const VECTOR
     // The criteria used here is radius < MAX_INT / 2.
     // this is not perfect, but we do not know the exact final position of the arc, so
     // we cannot test the coordinate values, because the arc can be moved before being placed.
-    VECTOR2D center = CalcArcCenter( arc->GetStart(), arc->GetEnd(), aAngle );
-    double radius = ( center - arc->GetStart() ).EuclideanNorm();
+    VECTOR2D         center = CalcArcCenter( arc->GetStart(), arc->GetEnd(), aAngle );
+    double           radius = ( center - arc->GetStart() ).EuclideanNorm();
     constexpr double rd_max_value = std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0;
 
     if( radius >= rd_max_value )
     {
         // Arc cannot be handled: convert it to a segment
-        AddLine( aStart, end, aWidth, aColor );
+        AddLine( aStart, end, aStroke );
         return;
     }
 
-    arc->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
+    arc->SetStroke( MapStrokeParams( aStroke ) );
 
     addItem( std::move( arc ) );
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                                            const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVertices,
+                                               const STROKE_PARAMS& aStroke, bool aFilled,
+                                               const COLOR4D& aFillColor )
 {
     std::vector<VECTOR2I> convertedPoints;
     convertedPoints.reserve( aVertices.size() );
@@ -151,24 +163,27 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVer
 
     std::unique_ptr<LIB_SHAPE> polygon = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
     polygon->SetUnit( m_unit );
-    polygon->SetFilled( true );
-    polygon->SetFillMode( aColor != COLOR4D::UNSPECIFIED ? FILL_T::FILLED_WITH_COLOR
-                                                         : FILL_T::FILLED_SHAPE );
-    polygon->SetFillColor( aColor );
+
+    if( aFilled )
+    {
+        polygon->SetFillMode( aFillColor != COLOR4D::UNSPECIFIED ? FILL_T::FILLED_WITH_COLOR
+                                                                 : FILL_T::FILLED_SHAPE );
+    }
+
+    polygon->SetFillColor( aFillColor );
     polygon->SetPolyPoints( convertedPoints );
     polygon->AddPoint( convertedPoints[0] ); // Need to close last point for libedit
 
-    polygon->SetStroke(
-            STROKE_PARAMS( aWidth != -1 ? MapLineWidth( aWidth ) : -1, PLOT_DASH_TYPE::SOLID ) );
+    polygon->SetStroke( MapStrokeParams( aStroke ) );
 
     addItem( std::move( polygon ) );
 }
 
 
 void GRAPHICS_IMPORTER_LIB_SYMBOL::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-                                        double aHeight, double aWidth, double aThickness,
-                                        double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
-                                         GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
+                                            double aHeight, double aWidth, double aThickness,
+                                            double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
+                                            GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
     std::unique_ptr<LIB_TEXT> textItem = std::make_unique<LIB_TEXT>( m_symbol );
     textItem->SetUnit( m_unit );
@@ -186,29 +201,29 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddText( const VECTOR2D& aOrigin, const wxStr
 }
 
 
-void GRAPHICS_IMPORTER_LIB_SYMBOL::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
-                                          const VECTOR2D& BezierControl2, const VECTOR2D& aEnd,
-                                           double aWidth, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddSpline( const VECTOR2D& aStart,
+                                              const VECTOR2D& aBezierControl1,
+                                              const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                                              const STROKE_PARAMS& aStroke )
 {
     std::unique_ptr<LIB_SHAPE> spline = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::BEZIER );
     spline->SetUnit( m_unit );
-    spline->SetFillColor( aColor );
-    spline->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
+    spline->SetStroke( MapStrokeParams( aStroke ) );
     spline->SetStart( MapCoordinate( aStart ) );
-    spline->SetBezierC1( MapCoordinate( BezierControl1 ));
-    spline->SetBezierC2( MapCoordinate( BezierControl2 ));
+    spline->SetBezierC1( MapCoordinate( aBezierControl1 ) );
+    spline->SetBezierC2( MapCoordinate( aBezierControl2 ) );
     spline->SetEnd( MapCoordinate( aEnd ) );
-    spline->RebuildBezierToSegmentsPointsList( aWidth );
+    spline->RebuildBezierToSegmentsPointsList( aStroke.GetWidth() );
 
     // If the spline is degenerated (i.e. a segment) add it as segment or discard it if
     // null (i.e. very small) length
     if( spline->GetBezierPoints().size() <= 2 )
     {
         spline->SetShape( SHAPE_T::SEGMENT );
-        int dist = VECTOR2I(spline->GetStart()- spline->GetEnd()).EuclideanNorm();
+        int dist = VECTOR2I( spline->GetStart() - spline->GetEnd() ).EuclideanNorm();
 
-        // segment smaller than MIN_SEG_LEN_ACCEPTABLE_NM nanometers are skipped.
-        #define MIN_SEG_LEN_ACCEPTABLE_NM 20
+// segment smaller than MIN_SEG_LEN_ACCEPTABLE_NM nanometers are skipped.
+#define MIN_SEG_LEN_ACCEPTABLE_NM 20
         if( dist < MIN_SEG_LEN_ACCEPTABLE_NM )
             return;
     }

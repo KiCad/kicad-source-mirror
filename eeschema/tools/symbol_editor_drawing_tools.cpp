@@ -38,6 +38,9 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>
+#include <geometry/geometry_utils.h>
+#include <wx/msgdlg.h>
+#include <import_gfx/dialog_import_gfx_sch.h>
 #include "dialog_lib_textbox_properties.h"
 
 static void* g_lastPinWeakPtr;
@@ -651,6 +654,173 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_DRAWING_TOOLS::SymbolImportGraphics( const TOOL_EVENT& aEvent )
+{
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+
+    if( !symbol )
+        return 0;
+
+    // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
+    // items if needed
+    DIALOG_IMPORT_GFX_SCH dlg( m_frame );
+    int                   dlgResult = dlg.ShowModal();
+
+    std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
+
+    if( dlgResult != wxID_OK )
+        return 0;
+
+    // Ensure the list is not empty:
+    if( list.empty() )
+    {
+        wxMessageBox( _( "No graphic items found in file." ) );
+        return 0;
+    }
+
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+
+    KIGFX::VIEW_CONTROLS*  controls = getViewControls();
+    std::vector<LIB_ITEM*> newItems;      // all new items, including group
+    std::vector<LIB_ITEM*> selectedItems; // the group, or newItems if no group
+    EE_SELECTION           preview;
+    SCH_COMMIT             commit( m_toolMgr );
+
+    for( std::unique_ptr<EDA_ITEM>& ptr : list )
+    {
+        LIB_ITEM* item = dynamic_cast<LIB_ITEM*>( ptr.get() );
+        wxCHECK2( item, continue );
+
+        newItems.push_back( item );
+        selectedItems.push_back( item );
+        preview.Add( item );
+
+        ptr.release();
+    }
+
+    if( !dlg.IsPlacementInteractive() )
+    {
+        commit.Modify( symbol, m_frame->GetScreen() );
+
+        // Place the imported drawings
+        for( LIB_ITEM* item : newItems )
+        {
+            symbol->AddDrawItem( item );
+            item->ClearEditFlags();
+        }
+
+        commit.Push( _( "Import Graphic" ) );
+        m_frame->RebuildView();
+
+        return 0;
+    }
+
+    m_view->Add( &preview );
+
+    // Clear the current selection then select the drawings so that edit tools work on them
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &selItems );
+
+    m_frame->PushTool( aEvent );
+
+    auto setCursor = [&]()
+    {
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+    };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    controls->ShowCursor( true );
+    controls->ForceCursorPosition( false );
+    // Set initial cursor
+    setCursor();
+
+    //SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
+    EE_GRID_HELPER grid( m_toolMgr );
+
+    // Now move the new items to the current cursor position:
+    VECTOR2I cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    VECTOR2I delta = cursorPos;
+    VECTOR2I currentOffset;
+
+    for( LIB_ITEM* item : selectedItems )
+        item->Offset( delta );
+
+    currentOffset += delta;
+
+    m_view->Update( &preview );
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
+
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+            for( LIB_ITEM* item : newItems )
+                delete item;
+
+            break;
+        }
+        else if( evt->IsMotion() )
+        {
+            delta = VECTOR2I( cursorPos.x, -cursorPos.y ) - currentOffset;
+
+            for( LIB_ITEM* item : selectedItems )
+                item->Offset( delta );
+
+            currentOffset += delta;
+
+            m_view->Update( &preview );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        {
+            commit.Modify( symbol, m_frame->GetScreen() );
+
+            // Place the imported drawings
+            for( LIB_ITEM* item : newItems )
+            {
+                symbol->AddDrawItem( item );
+                item->ClearEditFlags();
+            }
+
+            commit.Push( _( "Import Graphic" ) );
+            break; // This is a one-shot command, not a tool
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+    }
+
+    preview.Clear();
+    m_view->Remove( &preview );
+
+    m_frame->RebuildView();
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls->ForceCursorPosition( false );
+
+    m_frame->PopTool( aEvent );
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
@@ -698,5 +868,6 @@ void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::SymbolImportGraphics, EE_ACTIONS::symbolImportGraphics.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    EE_ACTIONS::repeatDrawItem.MakeEvent() );
 }

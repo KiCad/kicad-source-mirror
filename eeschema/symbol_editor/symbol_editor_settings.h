@@ -53,6 +53,18 @@ public:
         int pin_step;
     };
 
+    struct DIALOG_IMPORT_GRAPHICS
+    {
+        bool     interactive_placement;
+        wxString last_file;
+        double   dxf_line_width;
+        int      dxf_line_width_units;
+        int      origin_units;
+        double   origin_x;
+        double   origin_y;
+        int      dxf_units;
+    };
+
     SYMBOL_EDITOR_SETTINGS();
 
     virtual ~SYMBOL_EDITOR_SETTINGS() {}
@@ -64,6 +76,8 @@ public:
     DEFAULTS m_Defaults;
 
     REPEAT m_Repeat;
+
+    DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
 
     bool m_ShowPinElectricalType;
 

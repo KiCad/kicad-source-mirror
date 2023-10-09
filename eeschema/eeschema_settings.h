@@ -262,6 +262,18 @@ public:
         bool place_all_units;
     };
 
+    struct DIALOG_IMPORT_GRAPHICS
+    {
+        bool     interactive_placement;
+        wxString last_file;
+        double   dxf_line_width;
+        int      dxf_line_width_units;
+        int      origin_units;
+        double   origin_x;
+        double   origin_y;
+        int      dxf_units;
+    };
+
     struct SIMULATOR
     {
         int plot_panel_width;
@@ -333,6 +345,8 @@ public:
     PANEL_PLOT m_PlotPanel;
 
     PANEL_SYM_CHOOSER m_SymChooserPanel;
+
+    DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
 
     SELECTION m_Selection;
 

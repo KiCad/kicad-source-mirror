@@ -282,6 +282,8 @@ set ( EESCHEMA_LIBEDIT_SRCS
     )
 
 set( EESCHEMA_IMPORT_GFX
+    import_gfx/dialog_import_gfx_sch_base.cpp
+    import_gfx/dialog_import_gfx_sch.cpp
     import_gfx/graphics_importer_lib_symbol.cpp
     )
 

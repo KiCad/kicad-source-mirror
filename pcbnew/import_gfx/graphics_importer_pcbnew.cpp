@@ -64,14 +64,23 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
-                                        double aWidth, const COLOR4D& aColor )
+STROKE_PARAMS GRAPHICS_IMPORTER_PCBNEW::MapStrokeParams( const STROKE_PARAMS& aStroke )
+{
+    int width = aStroke.GetWidth();
+
+    return STROKE_PARAMS( width != -1 ? MapLineWidth( width ) : -1, aStroke.GetPlotStyle(),
+                          aStroke.GetColor() );
+}
+
+
+void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                                        const STROKE_PARAMS& aStroke )
 {
     std::unique_ptr<PCB_SHAPE> line( createDrawing() );
     line->SetShape( SHAPE_T::SEGMENT );
     line->SetLayer( GetLayer() );
-    line->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
-    line->SetStart( MapCoordinate( aOrigin ) );
+    line->SetStroke( MapStrokeParams( aStroke ) );
+    line->SetStart( MapCoordinate( aStart ) );
     line->SetEnd( MapCoordinate( aEnd ) );
 
     // Skip 0 len lines:
@@ -82,15 +91,16 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
-                                          bool aFilled, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius,
+                                          const STROKE_PARAMS& aStroke, bool aFilled,
+                                          const COLOR4D& aFillColor )
 {
     std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
     circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( aFilled );
     circle->SetLayer( GetLayer() );
-    circle->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
-    circle->SetStart( MapCoordinate( aCenter ));
+    circle->SetStroke( MapStrokeParams( aStroke ) );
+    circle->SetStart( MapCoordinate( aCenter ) );
     circle->SetEnd( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
 
     addItem( std::move( circle ) );
@@ -98,8 +108,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       const EDA_ANGLE& aAngle, double aWidth,
-                                       const COLOR4D& aColor )
+                                       const EDA_ANGLE& aAngle, const STROKE_PARAMS& aStroke )
 {
     std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
     arc->SetShape( SHAPE_T::ARC );
@@ -128,18 +137,19 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     if( radius >= rd_max_value )
     {
         // Arc cannot be handled: convert it to a segment
-        AddLine( aStart, end, aWidth, aColor );
+        AddLine( aStart, end, aStroke );
         return;
     }
 
-    arc->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
+    arc->SetStroke( MapStrokeParams( aStroke ) );
 
     addItem( std::move( arc ) );
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                                           const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertices,
+                                           const STROKE_PARAMS& aStroke, bool aFilled,
+                                           const COLOR4D& aFillColor )
 {
     std::vector<VECTOR2I> convertedPoints;
     convertedPoints.reserve( aVertices.size() );
@@ -159,7 +169,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertice
         polygon->Move( parentFP->GetPosition() );
     }
 
-    polygon->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
+    polygon->SetStroke( MapStrokeParams( aStroke ) );
     addItem( std::move( polygon ) );
 }
 
@@ -184,19 +194,19 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
-                                          const VECTOR2D& BezierControl2, const VECTOR2D& aEnd,
-                                          double aWidth, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                                          const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                                          const STROKE_PARAMS& aStroke )
 {
     std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
     spline->SetShape( SHAPE_T::BEZIER );
     spline->SetLayer( GetLayer() );
-    spline->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
+    spline->SetStroke( MapStrokeParams( aStroke ) );
     spline->SetStart( MapCoordinate( aStart ) );
-    spline->SetBezierC1( MapCoordinate( BezierControl1 ));
-    spline->SetBezierC2( MapCoordinate( BezierControl2 ));
+    spline->SetBezierC1( MapCoordinate( aBezierControl1 ));
+    spline->SetBezierC2( MapCoordinate( aBezierControl2 ));
     spline->SetEnd( MapCoordinate( aEnd ) );
-    spline->RebuildBezierToSegmentsPointsList( aWidth );
+    spline->RebuildBezierToSegmentsPointsList( aStroke.GetWidth() );
 
     // If the spline is degenerated (i.e. a segment) add it as segment or discard it if
     // null (i.e. very small) length

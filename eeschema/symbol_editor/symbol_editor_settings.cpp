@@ -36,6 +36,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
         APP_SETTINGS_BASE( "symbol_editor", libeditSchemaVersion ),
         m_Defaults(),
         m_Repeat(),
+        m_ImportGraphics(),
         m_ShowPinElectricalType( true ),
         m_LibWidth(),
         m_EditSymbolVisibleColumns()
@@ -75,6 +76,27 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "repeat.pin_step",
                                            &m_Repeat.pin_step, 100 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
+            &m_ImportGraphics.interactive_placement, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
+            &m_ImportGraphics.dxf_line_width_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.line_width",
+            &m_ImportGraphics.dxf_line_width, 0.2 ) );
+
+    m_params.emplace_back( new PARAM<int>( "import_graphics.origin_units",
+            &m_ImportGraphics.origin_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_x",
+            &m_ImportGraphics.origin_x, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_y",
+            &m_ImportGraphics.origin_y, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "import_graphics.dxf_units",
+            &m_ImportGraphics.dxf_units, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "show_pin_electrical_type",
                                             &m_ShowPinElectricalType, true ) );

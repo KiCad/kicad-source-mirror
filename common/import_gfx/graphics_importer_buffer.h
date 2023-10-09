@@ -53,16 +53,14 @@ protected:
 class IMPORTED_LINE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth,
-                   const COLOR4D& aColor ) :
-            m_start( aStart ),
-            m_end( aEnd ), m_width( aWidth ), m_color( aColor )
+    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, const STROKE_PARAMS& aStroke ) :
+            m_start( aStart ), m_end( aEnd ), m_stroke( aStroke )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddLine( m_start, m_end, m_width, m_color );
+        aImporter.AddLine( m_start, m_end, m_stroke );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -70,33 +68,32 @@ public:
         return std::make_unique<IMPORTED_LINE>( *this );
     }
 
-    void Transform(const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation) override
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
         m_start = aTransform * m_start + aTranslation;
         m_end = aTransform * m_end + aTranslation;
     }
 
 private:
-    VECTOR2D m_start;
-    VECTOR2D m_end;
-    double   m_width;
-    COLOR4D  m_color;
+    VECTOR2D      m_start;
+    VECTOR2D      m_end;
+    STROKE_PARAMS m_stroke;
 };
 
 
 class IMPORTED_CIRCLE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled,
-                     const COLOR4D& aColor ) :
+    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+                     bool aFilled, const COLOR4D& aFillColor ) :
             m_center( aCenter ),
-            m_radius( aRadius ), m_width( aWidth ), m_filled( aFilled ), m_color( aColor )
+            m_radius( aRadius ), m_stroke( aStroke ), m_filled( aFilled ), m_fillColor( aFillColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddCircle( m_center, m_radius, m_width, m_filled, m_color );
+        aImporter.AddCircle( m_center, m_radius, m_stroke, m_filled, m_fillColor );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -116,11 +113,11 @@ public:
     }
 
 private:
-    VECTOR2D m_center;
-    double   m_radius;
-    double   m_width;
-    bool     m_filled;
-    COLOR4D  m_color;
+    VECTOR2D      m_center;
+    double        m_radius;
+    STROKE_PARAMS m_stroke;
+    bool          m_filled;
+    COLOR4D       m_fillColor;
 };
 
 
@@ -128,15 +125,15 @@ class IMPORTED_ARC : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                  double aWidth, const COLOR4D& aColor ) :
+                  const STROKE_PARAMS& aStroke ) :
             m_center( aCenter ),
-            m_start( aStart ), m_angle( aAngle ), m_width( aWidth ), m_color( aColor )
+            m_start( aStart ), m_angle( aAngle ), m_stroke( aStroke )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddArc( m_center, m_start, m_angle, m_width, m_color );
+        aImporter.AddArc( m_center, m_start, m_angle, m_stroke );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -151,27 +148,26 @@ public:
     }
 
 private:
-    VECTOR2D  m_center;
-    VECTOR2D  m_start;
-    EDA_ANGLE m_angle;
-    double    m_width;
-    COLOR4D   m_color;
+    VECTOR2D      m_center;
+    VECTOR2D      m_start;
+    EDA_ANGLE     m_angle;
+    STROKE_PARAMS m_stroke;
 };
 
 
 class IMPORTED_POLYGON : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_POLYGON( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                      const COLOR4D& aColor ) :
+    IMPORTED_POLYGON( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+                      bool aFilled, const COLOR4D& aFillColor ) :
             m_vertices( aVertices ),
-            m_width( aWidth ), m_color( aColor )
+            m_stroke( aStroke ), m_filled( aFilled ), m_fillColor( aFillColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddPolygon( m_vertices, m_width, m_color );
+        aImporter.AddPolygon( m_vertices, m_stroke, m_filled, m_fillColor );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -181,7 +177,7 @@ public:
 
     void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
     {
-        for(VECTOR2D& vert : m_vertices )
+        for( VECTOR2D& vert : m_vertices )
         {
             vert = aTransform * vert + aTranslation;
         }
@@ -189,14 +185,17 @@ public:
 
     std::vector<VECTOR2D>& Vertices() { return m_vertices; }
 
-    double GetWidth() const { return m_width; }
+    bool isFilled() const { return m_filled; }
 
-    const COLOR4D& GetColor() const { return m_color; }
+    const COLOR4D& GetFillColor() const { return m_fillColor; }
+
+    const STROKE_PARAMS& GetStroke() const { return m_stroke; }
 
 private:
     std::vector<VECTOR2D> m_vertices;
-    double                m_width;
-    COLOR4D               m_color;
+    STROKE_PARAMS         m_stroke;
+    bool                  m_filled;
+    COLOR4D               m_fillColor;
 };
 
 
@@ -246,17 +245,17 @@ class IMPORTED_SPLINE : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_SPLINE( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth,
-                     const COLOR4D& aColor ) :
+                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                     const STROKE_PARAMS& aStroke ) :
             m_start( aStart ),
             m_bezierControl1( aBezierControl1 ), m_bezierControl2( aBezierControl2 ), m_end( aEnd ),
-            m_width( aWidth ), m_color( aColor )
+            m_stroke( aStroke )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddSpline( m_start, m_bezierControl1, m_bezierControl2, m_end, m_width, m_color );
+        aImporter.AddSpline( m_start, m_bezierControl1, m_bezierControl2, m_end, m_stroke );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -273,38 +272,37 @@ public:
     }
 
 private:
-    VECTOR2D m_start;
-    VECTOR2D m_bezierControl1;
-    VECTOR2D m_bezierControl2;
-    VECTOR2D m_end;
-    double   m_width;
-    COLOR4D  m_color;
+    VECTOR2D      m_start;
+    VECTOR2D      m_bezierControl1;
+    VECTOR2D      m_bezierControl2;
+    VECTOR2D      m_end;
+    STROKE_PARAMS m_stroke;
 };
 
 
 class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 {
 public:
-    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth,
-                  const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
+    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                  const STROKE_PARAMS& aStroke ) override;
 
-    void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled,
-                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
+    void AddCircle( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+                    bool aFilled, const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                 double aWidth, const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
+                 const STROKE_PARAMS& aStroke ) override;
 
-    void AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                     const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
+    void AddPolygon( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+                     bool aFilled, const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight, double aWidth,
                   double aThickness, double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
                   GR_TEXT_V_ALIGN_T aVJustify,
                   const COLOR4D&    aColor = COLOR4D::UNSPECIFIED ) override;
 
-    void AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
-                    const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth,
-                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
+    void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                    const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                    const STROKE_PARAMS& aStroke ) override;
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter );
     void AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape );

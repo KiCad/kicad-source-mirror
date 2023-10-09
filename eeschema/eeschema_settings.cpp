@@ -121,6 +121,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         m_NetlistPanel(),
         m_PlotPanel(),
         m_SymChooserPanel(),
+        m_ImportGraphics(),
         m_Selection(),
         m_Simulator(),
         m_RescueNeverShow( false )
@@ -550,6 +551,27 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "symbol_chooser.place_all_units",
             &m_SymChooserPanel.place_all_units, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
+            &m_ImportGraphics.interactive_placement, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
+            &m_ImportGraphics.dxf_line_width_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.line_width",
+            &m_ImportGraphics.dxf_line_width, 0.2 ) );
+
+    m_params.emplace_back( new PARAM<int>( "import_graphics.origin_units",
+            &m_ImportGraphics.origin_units, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_x",
+            &m_ImportGraphics.origin_x, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_y",
+            &m_ImportGraphics.origin_y, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "import_graphics.dxf_units",
+            &m_ImportGraphics.dxf_units, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "system.never_show_rescue_dialog",
             &m_RescueNeverShow, false ) );

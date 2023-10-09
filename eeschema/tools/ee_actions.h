@@ -112,6 +112,7 @@ public:
     static TOOL_ACTION drawSymbolLines;
     static TOOL_ACTION drawSymbolPolygon;
     static TOOL_ACTION placeSymbolAnchor;
+    static TOOL_ACTION symbolImportGraphics;
     static TOOL_ACTION finishDrawing;
 
     // Interactive Editing

@@ -61,7 +61,15 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( ACTIONS::revert );
 
     fileMenu->AppendSeparator();
-    fileMenu->Add( EE_ACTIONS::importSymbol );
+
+    ACTION_MENU* submenuImport = new ACTION_MENU( false, selTool );
+    submenuImport->SetTitle( _( "Import" ) );
+    submenuImport->SetIcon( BITMAPS::import );
+
+    submenuImport->Add( EE_ACTIONS::importSymbol, ACTION_MENU::NORMAL, _( "Symbol..." ) );
+    submenuImport->Add( EE_ACTIONS::symbolImportGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
+
+    fileMenu->Add( submenuImport );
 
     // Export submenu
     ACTION_MENU* submenuExport = new ACTION_MENU( false, selTool );

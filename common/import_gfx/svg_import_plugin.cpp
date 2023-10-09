@@ -113,20 +113,68 @@ bool SVG_IMPORT_PLUGIN::Import()
         double lineWidth = shape->stroke.type != NSVG_PAINT_NONE ? shape->strokeWidth : -1;
         bool   filled = shape->fill.type != NSVG_PAINT_NONE && alpha( shape->fill.color ) > 0;
 
-        COLOR4D color = COLOR4D::UNSPECIFIED;
+        COLOR4D fillColor = COLOR4D::UNSPECIFIED;
 
         if( shape->fill.type == NSVG_PAINT_COLOR )
         {
             unsigned int icolor = shape->fill.color;
 
-            color.r = std::clamp( ( icolor >> 0 ) & 0xFF, 0u, 255u ) / 255.0;
-            color.g = std::clamp( ( icolor >> 8 ) & 0xFF, 0u, 255u ) / 255.0;
-            color.b = std::clamp( ( icolor >> 16 ) & 0xFF, 0u, 255u ) / 255.0;
-            color.a = std::clamp( ( icolor >> 24 ) & 0xFF, 0u, 255u ) / 255.0;
+            fillColor.r = std::clamp( ( icolor >> 0 ) & 0xFF, 0u, 255u ) / 255.0;
+            fillColor.g = std::clamp( ( icolor >> 8 ) & 0xFF, 0u, 255u ) / 255.0;
+            fillColor.b = std::clamp( ( icolor >> 16 ) & 0xFF, 0u, 255u ) / 255.0;
+            fillColor.a = std::clamp( ( icolor >> 24 ) & 0xFF, 0u, 255u ) / 255.0;
 
-            if( color == COLOR4D::BLACK ) // nanosvg probably didn't read it properly, use default
-                color = COLOR4D::UNSPECIFIED;
+            // nanosvg probably didn't read it properly, use default
+            if( fillColor == COLOR4D::BLACK )
+                fillColor = COLOR4D::UNSPECIFIED;
         }
+
+        COLOR4D strokeColor = COLOR4D::UNSPECIFIED;
+
+        if( shape->stroke.type == NSVG_PAINT_COLOR )
+        {
+            unsigned int icolor = shape->stroke.color;
+
+            strokeColor.r = std::clamp( ( icolor >> 0 ) & 0xFF, 0u, 255u ) / 255.0;
+            strokeColor.g = std::clamp( ( icolor >> 8 ) & 0xFF, 0u, 255u ) / 255.0;
+            strokeColor.b = std::clamp( ( icolor >> 16 ) & 0xFF, 0u, 255u ) / 255.0;
+            strokeColor.a = std::clamp( ( icolor >> 24 ) & 0xFF, 0u, 255u ) / 255.0;
+
+            // nanosvg probably didn't read it properly, use default
+            if( strokeColor == COLOR4D::BLACK )
+                strokeColor = COLOR4D::UNSPECIFIED;
+        }
+
+        PLOT_DASH_TYPE dashType = PLOT_DASH_TYPE::SOLID;
+
+        if( shape->strokeDashCount > 0 )
+        {
+            float* dashArray = shape->strokeDashArray;
+
+            int dotCount = 0;
+            int dashCount = 0;
+
+            const float dashThreshold = shape->strokeWidth * 1.9f;
+
+            for( int i = 0; i < shape->strokeDashCount; i += 2 )
+            {
+                if( dashArray[i] < dashThreshold )
+                    dotCount++;
+                else
+                    dashCount++;
+            }
+
+            if( dotCount > 0 && dashCount == 0 )
+                dashType = PLOT_DASH_TYPE::DOT;
+            else if( dotCount == 0 && dashCount > 0 )
+                dashType = PLOT_DASH_TYPE::DASH;
+            else if( dotCount == 1 && dashCount == 1 )
+                dashType = PLOT_DASH_TYPE::DASHDOT;
+            else if( dotCount == 2 && dashCount == 1 )
+                dashType = PLOT_DASH_TYPE::DASHDOTDOT;
+        }
+
+        STROKE_PARAMS stroke( lineWidth, dashType, strokeColor );
 
         GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
 
@@ -143,7 +191,7 @@ bool SVG_IMPORT_PLUGIN::Import()
         {
             bool closed = path->closed || filled || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD;
 
-            DrawPath( path->pts, path->npts, closed, filled, lineWidth, color );
+            DrawPath( path->pts, path->npts, closed, stroke, filled, fillColor );
         }
     }
 
@@ -204,18 +252,19 @@ BOX2D SVG_IMPORT_PLUGIN::GetImageBBox() const
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aPoly, bool aFilled,
-                                  double aLineWidth, const COLOR4D& aColor )
+void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath,
+                                  const STROKE_PARAMS& aStroke, bool aFilled,
+                                  const COLOR4D& aFillColor )
 {
-    std::vector< VECTOR2D > collectedPathPoints;
+    std::vector<VECTOR2D> collectedPathPoints;
 
     if( aNumPoints > 0 )
         DrawCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 
-    if( aPoly && aFilled )
-        DrawPolygon( collectedPathPoints, aLineWidth, aColor );
+    if( aClosedPath )
+        DrawPolygon( collectedPathPoints, aStroke, aFilled, aFillColor );
     else
-        DrawLineSegments( collectedPathPoints, aLineWidth, aColor );
+        DrawLineSegments( collectedPathPoints, aStroke );
 }
 
 
@@ -250,20 +299,21 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector<VECTOR2D>& aPoints, double aWidth,
-                                     const COLOR4D& aColor )
+void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector<VECTOR2D>& aPoints,
+                                     const STROKE_PARAMS& aStroke, bool aFilled,
+                                     const COLOR4D& aFillColor )
 {
-    m_internalImporter.AddPolygon( aPoints, aWidth, aColor );
+    m_internalImporter.AddPolygon( aPoints, aStroke, aFilled, aFillColor );
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector<VECTOR2D>& aPoints, double aWidth,
-                                          const COLOR4D& aColor )
+void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector<VECTOR2D>& aPoints,
+                                          const STROKE_PARAMS&         aStroke )
 {
     unsigned int numLineStartPoints = aPoints.size() - 1;
 
     for( unsigned int pointIndex = 0; pointIndex < numLineStartPoints; ++pointIndex )
-        m_internalImporter.AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ], aWidth, aColor );
+        m_internalImporter.AddLine( aPoints[pointIndex], aPoints[pointIndex + 1], aStroke );
 }
 
 

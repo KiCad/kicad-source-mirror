@@ -40,25 +40,26 @@ class GRAPHICS_IMPORTER_LIB_SYMBOL : public GRAPHICS_IMPORTER
 public:
     GRAPHICS_IMPORTER_LIB_SYMBOL( LIB_SYMBOL* aSymbol, int aUnit );
 
-    void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth,
-                  const COLOR4D& aColor ) override;
+    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                  const STROKE_PARAMS& aStroke ) override;
 
-    void AddCircle( const VECTOR2D& aOrigin, double aRadius, double aWidth, bool aFilled,
-                    const COLOR4D& aColor ) override;
+    void AddCircle( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+                    bool aFilled, const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                 double aWidth, const COLOR4D& aColor ) override;
+                 const STROKE_PARAMS& aStroke ) override;
 
-    void AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                     const COLOR4D& aColor ) override;
+    void AddPolygon( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+                     bool aFilled, const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight, double aWidth,
                   double aThickness, double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
-                  GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor ) override;
+                  GR_TEXT_V_ALIGN_T aVJustify,
+                  const COLOR4D&    aColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                    const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth,
-                    const COLOR4D& aColor ) override;
+                    const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                    const STROKE_PARAMS& aStroke ) override;
 
     /**
      * Convert an imported coordinate to a board coordinate, according to the internal units,
@@ -75,6 +76,8 @@ public:
      * @return a line thickness in a board Iu value, according to the internal units.
      */
     int MapLineWidth( double aLineWidth );
+
+    STROKE_PARAMS MapStrokeParams( const STROKE_PARAMS& aStroke );
 
     LIB_SYMBOL* m_symbol;
     int         m_unit;

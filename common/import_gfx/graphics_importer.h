@@ -33,6 +33,7 @@
 #include <eda_text.h>
 #include <math/vector2d.h>
 #include <gal/color4d.h>
+#include <stroke_params.h>
 
 #include <list>
 #include <memory>
@@ -208,22 +209,20 @@ public:
      *
      * @param aOrigin is the segment origin point expressed in mm.
      * @param aEnd is the segment end point expressed in mm.
-     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
-     * @param aColor is the shape color
+     * @param aStroke is the shape stroke parameters.
      */
-    virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth,
-                          const COLOR4D& aColor ) = 0;
+    virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
+                          const STROKE_PARAMS& aStroke ) = 0;
 
     /**
      * Create an object representing a circle.
      *
      * @param aCenter is the circle center point expressed in mm.
      * @param aRadius is the circle radius expressed in mm.
-     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
-     * @param aColor is the shape color
+     * @param aStroke is the shape stroke parameters.
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled,
-                            const COLOR4D& aColor ) = 0;
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, const STROKE_PARAMS& aStroke,
+                            bool aFilled, const COLOR4D& aFillColor ) = 0;
 
     /**
      * Create an object representing an arc.
@@ -232,14 +231,21 @@ public:
      * @param aStart is the arc arm end point expressed in mm.
      * Its length is the arc radius.
      * @param aAngle is the arc angle.
-     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
-     * @param aColor is the shape color
+     * @param aStroke is the shape stroke parameters.
      */
     virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                         double aWidth, const COLOR4D& aColor ) = 0;
+                         const STROKE_PARAMS& aStroke ) = 0;
 
-    virtual void AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                             const COLOR4D& aColor ) = 0;
+    /**
+     * Create an object representing a polygon.
+     *
+     * @param aVertices is the array of vertices.
+     * @param aWidth is the stroke width.
+     * @param aStroke is the shape stroke parameters.
+     * @param aFillColor is the fill color.
+     */
+    virtual void AddPolygon( const std::vector<VECTOR2D>& aVertices, const STROKE_PARAMS& aStroke,
+                             bool aFilled, const COLOR4D& aFillColor ) = 0;
 
     /**
      * Create an object representing a text.
@@ -266,12 +272,11 @@ public:
      * @param aBezierControl1 is the first Bezier control point expressed in mm.
      * @param aBezierControl2 is the second Bezier control point expressed in mm.
      * @param aEnd is the curve end point expressed in mm.
-     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
-     * @param aColor is the shape color
+     * @param aStroke is the shape stroke parameters.
      */
     virtual void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth,
-                            const COLOR4D& aColor ) = 0;
+                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                            const STROKE_PARAMS& aStroke ) = 0;
 
 protected:
     ///< Add an item to the imported shapes list.
