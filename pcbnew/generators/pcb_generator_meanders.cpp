@@ -210,6 +210,8 @@ public:
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override
     {
+        m_removedItems.clear();
+
         if( aCommit )
             aCommit->Modify( this );
 
@@ -345,7 +347,7 @@ public:
         wxASSERT( startItem );
         wxASSERT( endItem );
 
-        if( !startItem || !endItem )
+        if( !startItem || !endItem || startSnapPoint == endSnapPoint )
             return false;
 
         PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
@@ -575,8 +577,11 @@ public:
             // LINE does not have a separate remover, as LINEs are never truly a member of the tree
             for( PNS::LINKED_ITEM* li : line->Links() )
             {
-                if( li->Parent() && aCommit )
-                    aCommit->Remove( li->Parent() );
+                if( li->Parent() )
+                {
+                    aFrame->GetCanvas()->GetView()->Hide( li->Parent(), true );
+                    m_removedItems.insert( li->Parent() );
+                }
             }
 
             world->Remove( *line );
@@ -649,6 +654,14 @@ public:
             std::set<BOARD_ITEM*> routerRemovedItems = aTool->GetRouterCommitRemovedItems();
             std::set<BOARD_ITEM*> routerAddedItems = aTool->GetRouterCommitAddedItems();
 
+            for( BOARD_ITEM* item : m_removedItems )
+            {
+                item->ClearSelected();
+                aCommit->Remove( item );
+            }
+
+            m_removedItems.clear();
+
             for( BOARD_ITEM* item : routerRemovedItems )
             {
                 item->ClearSelected();
@@ -663,6 +676,18 @@ public:
         }
 
         aCommit->Push( aCommitMsg, aCommitFlags );
+    }
+
+    void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                     BOARD_COMMIT* aCommit ) override
+    {
+        for( BOARD_ITEM* item : m_removedItems )
+            aFrame->GetCanvas()->GetView()->Hide( item, false );
+
+        m_removedItems.clear();
+
+        if( aCommit )
+            aCommit->Revert();
     }
 
     bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override
@@ -1019,6 +1044,9 @@ protected:
 
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus =
             PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED;
+
+    // Temp storage during editing
+    std::set<BOARD_ITEM*> m_removedItems;
 };
 
 const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Meanders" );
@@ -1133,11 +1161,15 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     picker->SetCancelHandler(
             [this]()
             {
-                if( m_pickerItem )
-                    m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+                GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
 
-                delete m_meander;
-                m_meander = nullptr;
+                if( m_meander )
+                {
+                    m_meander->EditRevert( generatorTool, m_board, m_frame, nullptr );
+
+                    delete m_meander;
+                    m_meander = nullptr;
+                }
             } );
 
     picker->SetFinalizeHandler(
