@@ -40,7 +40,7 @@
 #include <preview_items/two_point_geom_manager.h>
 #include <ratsnest/ratsnest_data.h>
 #include <router/router_tool.h>
-#include <router/pns_tune_status_popup.h>
+#include <status_popup.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_grid_helper.h>
@@ -290,7 +290,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
     m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
 
-    m_statusPopup = std::make_unique<PNS_TUNE_STATUS_POPUP>( m_frame );
+    m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
 
     UpdateStatusBar();
 }

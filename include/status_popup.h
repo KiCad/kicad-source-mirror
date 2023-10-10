@@ -45,7 +45,7 @@ class STATUS_POPUP: public wxPopupWindow
 {
 public:
     STATUS_POPUP( wxWindow* aParent );
-    virtual ~STATUS_POPUP() {}
+    virtual ~STATUS_POPUP() { Hide(); }
 
     virtual void Popup( wxWindow* aFocus = nullptr );
     virtual void PopupFor( int aMsecs );

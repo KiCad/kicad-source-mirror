@@ -28,6 +28,7 @@
 
 using namespace std::placeholders;
 #include <advanced_config.h>
+#include <kiplatform/ui.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -37,6 +38,7 @@ using namespace std::placeholders;
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_point_editor.h>
 #include <tools/pcb_grid_helper.h>
+#include <tools/generator_tool.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
@@ -124,6 +126,8 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
+
+    m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
 }
 
 
@@ -649,6 +653,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             if( item->Type() == PCB_GENERATOR_T )
             {
+                m_statusPopup->Hide();
+
                 m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
                         PCB_ACTIONS::genPushEdit, &commit, static_cast<PCB_GENERATOR*>( item ) );
             }
@@ -1493,11 +1499,16 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
     case PCB_GENERATOR_T:
     {
-        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
-        generator->UpdateFromEditPoints( m_editPoints, aCommit );
+        GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+        PCB_GENERATOR*  generatorItem = static_cast<PCB_GENERATOR*>( item );
+        generatorItem->UpdateFromEditPoints( m_editPoints, aCommit );
 
         m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genUpdateEdit, aCommit,
-                                                         generator );
+                                                         generatorItem );
+
+        m_statusPopup->Popup();
+        generatorItem->UpdateStatus( generatorTool, frame(), m_statusPopup.get() );
+        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
         break;
     }
 

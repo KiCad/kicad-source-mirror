@@ -1063,6 +1063,49 @@ public:
                                                                   this );
     }
 
+    void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
+                       STATUS_TEXT_POPUP* aPopup ) override
+    {
+        auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() );
+
+        if( !placer )
+            return;
+
+        aPopup->SetText( placer->TuningInfo( aFrame->GetUserUnits() ) );
+
+        // Determine the background color first and choose a contrasting value
+        COLOR4D bg( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+        double h, s, l;
+        bg.ToHSL( h, s, l );
+
+        switch( placer->TuningStatus() )
+        {
+        case PNS::MEANDER_PLACER_BASE::TUNED:
+            if( l < 0.5 )
+                aPopup->SetTextColor( wxColor( 127, 200, 127 ) );
+            else
+                aPopup->SetTextColor( wxColor( 0, 92, 0 ) );
+
+            break;
+
+        case PNS::MEANDER_PLACER_BASE::TOO_SHORT:
+            if( l < 0.5 )
+                aPopup->SetTextColor( wxColor( 242, 100, 126 ) );
+            else
+                aPopup->SetTextColor( wxColor( 122, 0, 0 ) );
+
+            break;
+
+        case PNS::MEANDER_PLACER_BASE::TOO_LONG:
+            if( l < 0.5 )
+                aPopup->SetTextColor( wxColor( 66, 184, 235 ) );
+            else
+                aPopup->SetTextColor( wxColor( 19, 19, 195 ) );
+
+            break;
+        }
+    }
+
 protected:
     VECTOR2I m_end;
 
@@ -1199,7 +1242,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                         m_statusPopup->Popup();
                         canvas()->SetStatusPopup( m_statusPopup.get() );
 
-                        m_statusPopup->UpdateStatus( generatorTool->Router() );
+                        m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
                         m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                     }
                 }

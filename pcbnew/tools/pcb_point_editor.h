@@ -173,18 +173,17 @@ private:
     ///< Change the edit method for arcs.
     int changeArcEditMode( const TOOL_EVENT& aEvent );
 
-    PCB_SELECTION_TOOL*                        m_selectionTool;
-    mutable std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
-    std::shared_ptr<EDIT_POINTS>               m_editPoints;
+private:
+    PCB_SELECTION_TOOL*                m_selectionTool;
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+    std::shared_ptr<EDIT_POINTS>       m_editPoints;
 
-    EDIT_POINT*         m_editedPoint;
-    EDIT_POINT*         m_hoveredPoint;
+    EDIT_POINT*                        m_editedPoint;
+    EDIT_POINT*                        m_hoveredPoint;
 
-    EDIT_POINT          m_original;        ///< Original position for the current drag point.
+    EDIT_POINT                         m_original;   ///< Original pos for the current drag point.
 
-    bool                m_refill;
-
-    ARC_EDIT_MODE       m_arcEditMode;
+    ARC_EDIT_MODE                      m_arcEditMode;
 
     // Alternative constraint, enabled while a modifier key is held
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;
