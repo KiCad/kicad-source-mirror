@@ -43,6 +43,7 @@ set( QA_COMMON_SRCS
     test_kiid.cpp
     test_property.cpp
     test_refdes_utils.cpp
+    test_richio.cpp
     test_text_attributes.cpp
     test_title_block.cpp
     test_types.cpp
