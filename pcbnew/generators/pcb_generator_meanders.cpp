@@ -622,7 +622,7 @@ public:
             {
                 if( li->Parent() )
                 {
-                    aFrame->GetCanvas()->GetView()->Hide( li->Parent(), true );
+                    li->Parent()->SetForcedTransparency( 1.0 );
                     m_removedItems.insert( li->Parent() );
                 }
             }
@@ -698,8 +698,7 @@ public:
 
             for( BOARD_ITEM* item : m_removedItems )
             {
-                item->ClearSelected();
-                aFrame->GetCanvas()->GetView()->Hide( item, false );
+                item->SetForcedTransparency( 0.0 );
                 aCommit->Remove( item );
             }
 
@@ -707,25 +706,28 @@ public:
 
             for( BOARD_ITEM* item : routerRemovedItems )
             {
-                item->ClearSelected();
                 aCommit->Remove( item );
             }
 
             for( BOARD_ITEM* item : routerAddedItems )
             {
+                item->SetSelected();
                 AddItem( item );
                 aCommit->Add( item );
             }
         }
 
-        aCommit->Push( aCommitMsg, aCommitFlags );
+        if( aCommitMsg.IsEmpty() )
+            aCommit->Push( _( "Edit Meander" ), aCommitFlags );
+        else
+            aCommit->Push( aCommitMsg, aCommitFlags );
     }
 
     void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                      BOARD_COMMIT* aCommit ) override
     {
         for( BOARD_ITEM* item : m_removedItems )
-            aFrame->GetCanvas()->GetView()->Hide( item, false );
+            item->SetForcedTransparency( 0.0 );
 
         m_removedItems.clear();
 
@@ -870,8 +872,6 @@ public:
     {
         m_origin += aMoveVector;
         m_end += aMoveVector;
-
-        PCB_GROUP::Move( aMoveVector );
     }
 
     const BOX2I GetBoundingBox() const override { return GetRectShape().BBox(); }
@@ -1056,7 +1056,7 @@ public:
 
             FromMeanderSettings( settings );
 
-            commit.Push( _( "Edit meander properties" ) );
+            commit.Push( _( "Edit Meander Properties" ) );
         }
 
         aEditFrame->GetToolManager()->PostAction<PCB_GENERATOR*>( PCB_ACTIONS::regenerateItem,
