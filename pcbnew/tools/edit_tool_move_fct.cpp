@@ -542,22 +542,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 // Drag items to the current cursor position
                 for( EDA_ITEM* item : sel_items )
                 {
-                    // Don't double move footprint pads, fields, etc.
-                    //
-                    // For PCB_GROUP_T, we make sure the selection includes only the top level
-                    // group and not its descendants.
+                    // Don't double move child items.
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
 
-                    if( !redraw3D && item->Type() == PCB_FOOTPRINT_T )
-                        redraw3D = true;
-                }
-
-                if( redraw3D && allowRedraw3D )
-                    editFrame->Update3DView( false, true );
-
-                for( BOARD_ITEM* item : sel_items )
-                {
                     if( item->Type() == PCB_GENERATOR_T )
                     {
                         PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
@@ -565,7 +553,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genUpdateEdit,
                                                                          aCommit, generator );
                     }
+                    else if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        redraw3D = true;
+                    }
                 }
+
+                if( redraw3D && allowRedraw3D )
+                    editFrame->Update3DView( false, true );
 
                 if( showCourtyardConflicts && drc_on_move->m_FpInMove.size() )
                 {
