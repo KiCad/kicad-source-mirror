@@ -48,35 +48,17 @@
 
 static int vprint( std::string* result, const char* format, va_list ap )
 {
-    char    msg[512];
-    // This function can call vsnprintf twice.
-    // But internally, vsnprintf retrieves arguments from the va_list identified by arg as if
-    // va_arg was used on it, and thus the state of the va_list is likely to be altered by the call.
-    // see: www.cplusplus.com/reference/cstdio/vsnprintf
-    // we make a copy of va_list ap for the second call, if happens
     va_list tmp;
     va_copy( tmp, ap );
+    size_t  len = vsnprintf( nullptr, 0, format, tmp );
+    va_end( tmp );
 
-    size_t  len = vsnprintf( msg, sizeof(msg), format, ap );
+    // Resize the output to hold the required data
+    size_t  size = result->size();
+    result->resize( size + len );
 
-    if( len < sizeof(msg) )     // the output fit into msg
-    {
-        result->append( msg, msg + len );
-    }
-    else
-    {
-        // output was too big, so now incur the expense of allocating
-        // a buf for holding suffient characters.
-
-        std::vector<char>   buf;
-        buf.reserve( len+1 );   // reserve(), not resize() which writes. +1 for trailing nul.
-
-        len = vsnprintf( &buf[0], len+1, format, tmp );
-
-        result->append( &buf[0], &buf[0] + len );
-    }
-
-    va_end( tmp );      // Release the temporary va_list, initialised from ap
+    // Now do the actual printing
+    len = vsnprintf( result->data() + size, len + 1, format, ap );
 
     return len;
 }
@@ -443,18 +425,18 @@ int OUTPUTFORMATTER::vprint( const char* fmt, va_list ap )
     // we make a copy of va_list ap for the second call, if happens
     va_list tmp;
     va_copy( tmp, ap );
-    int ret = vsnprintf( &m_buffer[0], m_buffer.size(), fmt, ap );
+    int ret = vsnprintf( m_buffer.data(), m_buffer.size(), fmt, ap );
 
     if( ret >= (int) m_buffer.size() )
     {
         m_buffer.resize( ret + 1000 );
-        ret = vsnprintf( &m_buffer[0], m_buffer.size(), fmt, tmp );
+        ret = vsnprintf( m_buffer.data(), m_buffer.size(), fmt, tmp );
     }
 
     va_end( tmp );      // Release the temporary va_list, initialised from ap
 
     if( ret > 0 )
-        write( &m_buffer[0], ret );
+        write( m_buffer.data(), ret );
 
     return ret;
 }
