@@ -1115,43 +1115,42 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
             [this]( const VECTOR2D& aPosition ) -> bool
             {
-                if( m_pickerItem )
+                if( !m_pickerItem )
+                    return true;    // keep going (ignore click with no target)
+
+                GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+                if( !m_meander )
                 {
-                    GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+                    // First click; create a meander
 
-                    if( !m_meander )
-                    {
-                        // First click; create a meander
+                    generatorTool->HighlightNet( nullptr );
 
-                        generatorTool->HighlightNet( nullptr );
+                    m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
+                    m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
+                                                                   m_pickerItem );
 
-                        m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                        m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
-                                                                       m_pickerItem );
+                    int      dummyDist;
+                    int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                    VECTOR2I closestPt;
 
-                        int      dummyDist;
-                        int      dummyClearance = std::numeric_limits<int>::max() / 2;
-                        VECTOR2I closestPt;
-
-                        m_pickerItem->GetEffectiveShape()->Collide( aPosition, dummyClearance,
-                                                                    &dummyDist, &closestPt );
-                        m_meander->SetPosition( closestPt );
-                    }
-                    else
-                    {
-                        // Second click; we're done
-                        BOARD_COMMIT commit( m_frame );
-
-                        m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
-                        m_meander->Update( generatorTool, m_board, m_frame, &commit );
-                        m_meander->EditPush( generatorTool, m_board, m_frame, &commit,
-                                             _( "Place Meander" ) );
-
-                        return false;   // exit picker tool
-                    }
+                    m_pickerItem->GetEffectiveShape()->Collide( aPosition, dummyClearance,
+                                                                &dummyDist, &closestPt );
+                    m_meander->SetPosition( closestPt );
+                    return true;    // keep going
                 }
+                else
+                {
+                    // Second click; we're done
+                    BOARD_COMMIT commit( m_frame );
 
-                return true;
+                    m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
+                    m_meander->Update( generatorTool, m_board, m_frame, &commit );
+                    m_meander->EditPush( generatorTool, m_board, m_frame, &commit,
+                                         _( "Place Meander" ) );
+
+                    return false;   // exit picker tool
+                }
             } );
 
     picker->SetMotionHandler(
@@ -1213,6 +1212,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
                 if( m_meander )
                 {
+                    // First click already made; clean up meander preview
                     m_meander->EditRevert( generatorTool, m_board, m_frame, nullptr );
 
                     delete m_meander;
