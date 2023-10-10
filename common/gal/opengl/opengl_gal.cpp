@@ -1111,13 +1111,21 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
         m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b,
                                  m_strokeColor.a );
 
-        std::deque<VECTOR2D> pointList;
-        pointList.push_back( aStartPoint );
-        pointList.push_back( diagonalPointA );
-        pointList.push_back( aEndPoint );
-        pointList.push_back( diagonalPointB );
-        pointList.push_back( aStartPoint );
-        DrawPolyline( pointList );
+        // DrawLine (and DrawPolyline )
+        // has problem with 0 length lines so enforce minimum
+        if( aStartPoint == aEndPoint )
+            DrawLine( aStartPoint + VECTOR2D( 1.0, 0.0 ), aEndPoint );
+        else
+        {
+            std::deque<VECTOR2D> pointList;
+
+            pointList.push_back( aStartPoint );
+            pointList.push_back( diagonalPointA );
+            pointList.push_back( aEndPoint );
+            pointList.push_back( diagonalPointB );
+            pointList.push_back( aStartPoint );
+            DrawPolyline( pointList );
+        }
     }
 }
 
