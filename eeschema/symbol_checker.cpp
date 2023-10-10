@@ -24,9 +24,14 @@
 #include <vector>
 #include <sch_symbol.h>
 #include <eda_draw_frame.h>
+#include <lib_shape.h>
+#include <macros.h>
 
 // helper function to sort pins by pin num
 static bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst );
+
+static void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                                     EDA_DRAW_FRAME* aUnitsProvider );
 
 /**
  * Check a lib symbol to find incorrect settings
@@ -330,9 +335,63 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 'A' + pin->GetUnit() - 1 );
                 }
             }
+        }
+    }
 
-            msg += wxT( "<br><br>" );
-            aMessages.push_back( msg );
+    CheckLibSymbolGraphics( aSymbol, aMessages,  aUnitsProvider );
+}
+
+
+void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
+                             EDA_DRAW_FRAME* aUnitsProvider )
+{
+    if( !aSymbol )
+        return;
+
+    wxString msg;
+
+    for( const LIB_ITEM& item : aSymbol->GetDrawItems() )
+    {
+        if( item.Type() != LIB_SHAPE_T )
+            continue;
+
+        const LIB_SHAPE* shape = static_cast<const LIB_SHAPE*>( &item );
+
+        switch( shape->GetShape() )
+        {
+        case SHAPE_T::ARC:
+            break;
+
+        case SHAPE_T::CIRCLE:
+            if( shape->GetRadius() <= 0 )
+            {
+                msg.Printf( _( "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>." ),
+                            aUnitsProvider->MessageTextFromValue(shape->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -shape->GetPosition().y ) );
+                msg += wxT( "<br>" );
+                aMessages.push_back( msg );
+            }
+            break;
+
+        case SHAPE_T::RECTANGLE:
+            if( shape->GetPosition() == shape->GetEnd() )
+            {
+                msg.Printf( _( "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>." ),
+                            aUnitsProvider->MessageTextFromValue(shape->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -shape->GetPosition().y ) );
+                msg += wxT( "<br>" );
+                aMessages.push_back( msg );
+            }
+            break;
+
+        case SHAPE_T::POLY:
+            break;
+
+        case SHAPE_T::BEZIER:
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }
     }
 }
