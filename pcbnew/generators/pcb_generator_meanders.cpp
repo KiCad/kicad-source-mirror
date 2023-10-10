@@ -158,8 +158,13 @@ public:
     static const wxString GENERATOR_TYPE;
     static const wxString DISPLAY_NAME;
 
-    PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu ) :
-            PCB_GENERATOR( aParent, aLayer )
+    PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
+                            LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE ) :
+            PCB_GENERATOR( aParent, aLayer ),
+            m_singleSide( false ),
+            m_rounded( true ),
+            m_tuningMode( aMode ),
+            m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED )
     {
         m_generatorType = GENERATOR_TYPE;
         m_name = DISPLAY_NAME;
@@ -211,19 +216,21 @@ public:
 
     bool baselineValid() { return m_baseLine && m_baseLine->PointCount() > 1; }
 
-    static PCB_GENERATOR_MEANDERS* CreateNew( PCB_BASE_EDIT_FRAME* aFrame, BOARD_ITEM* aStartItem )
+    static PCB_GENERATOR_MEANDERS* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
+                                              BOARD_CONNECTED_ITEM* aStartItem )
     {
-        BOARD*                  board = aStartItem->GetBoard();
-        PCB_LAYER_ID            layer = aStartItem->GetLayer();
-        PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer );
-
-        // TODO set mode to diff-pair if we find a matching net for aSourceItem
-
+        BOARD*                       board = aStartItem->GetBoard();
         std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
         DRC_CONSTRAINT               constraint;
 
-        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr,
-                                           ToLAYER_ID( layer ) );
+        PCB_LAYER_ID        layer = aStartItem->GetLayer();
+        PNS::RULE_RESOLVER* resolver = aTool->Router()->GetRuleResolver();
+        LENGTH_TUNING_MODE  mode = resolver->DpCoupledNet( aStartItem->GetNet() ) ? DIFF_PAIR
+                                                                                  : SINGLE;
+
+        PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, mode );
+
+        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
         if( constraint.IsNull() )
         {
@@ -1070,16 +1077,15 @@ protected:
 
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
 
-    bool m_singleSide = false;
-    bool m_rounded = true;
+    bool               m_singleSide;
+    bool               m_rounded;
 
-    LENGTH_TUNING_MODE m_tuningMode = LENGTH_TUNING_MODE::SINGLE;
+    LENGTH_TUNING_MODE m_tuningMode;
 
-    wxString m_lastNetName;
-    wxString m_tuningInfo;
+    wxString           m_lastNetName;
+    wxString           m_tuningInfo;
 
-    PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus =
-            PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED;
+    PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
 
     // Temp storage during editing
     std::set<BOARD_ITEM*> m_removedItems;
@@ -1120,7 +1126,8 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                         generatorTool->HighlightNet( nullptr );
 
                         m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                        m_meander = PCB_GENERATOR_MEANDERS::CreateNew( m_frame, m_pickerItem );
+                        m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
+                                                                       m_pickerItem );
 
                         int      dummyDist;
                         int      dummyClearance = std::numeric_limits<int>::max() / 2;
