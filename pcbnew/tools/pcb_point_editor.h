@@ -183,6 +183,8 @@ private:
 
     EDIT_POINT                         m_original;   ///< Original pos for the current drag point.
 
+    bool                               m_refill;
+
     ARC_EDIT_MODE                      m_arcEditMode;
 
     // Alternative constraint, enabled while a modifier key is held
