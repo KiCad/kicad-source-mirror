@@ -78,7 +78,7 @@ public:
     int DoDelete( const TOOL_EVENT& aEvent );
 
     ///< Run the deletion tool.
-    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+    int InteractiveDelete( const TOOL_EVENT& aEvent );
 
     /// Drag and drop
     int DdAppendFile( const TOOL_EVENT& aEvent );

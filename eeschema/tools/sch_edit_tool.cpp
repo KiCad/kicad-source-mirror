@@ -1565,7 +1565,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int SCH_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
@@ -2747,7 +2747,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Swap,               EE_ACTIONS::swap.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editReference.MakeEvent() );

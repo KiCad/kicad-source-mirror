@@ -62,7 +62,7 @@ public:
     int DoDelete( const TOOL_EVENT& aEvent );
 
     ///< Run the deletion tool.
-    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+    int InteractiveDelete( const TOOL_EVENT& aEvent );
 
 private:
     void editShapeProperties( LIB_SHAPE* aShape );

@@ -333,7 +333,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
@@ -891,7 +891,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorV.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorH.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
-    Go( &SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::InteractiveDelete,  ACTIONS::deleteTool.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );

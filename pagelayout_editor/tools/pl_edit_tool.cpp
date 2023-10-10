@@ -410,7 +410,7 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int PL_EDIT_TOOL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
@@ -583,5 +583,5 @@ void PL_EDIT_TOOL::setTransitions()
     Go( &PL_EDIT_TOOL::Paste,                     ACTIONS::paste.MakeEvent() );
     Go( &PL_EDIT_TOOL::DoDelete,                  ACTIONS::doDelete.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::DeleteItemCursor,          ACTIONS::deleteTool.MakeEvent() );
+    Go( &PL_EDIT_TOOL::InteractiveDelete,         ACTIONS::deleteTool.MakeEvent() );
 }

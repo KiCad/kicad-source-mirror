@@ -593,7 +593,7 @@ int PCB_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
 {
     if( m_isFootprintEditor && !m_frame->GetBoard()->GetFirstFootprint() )
         return 0;
@@ -1707,7 +1707,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::SnapModeFeedback,     PCB_EVENTS::SnappingModeChangedByKeyEvent );
 
     // Miscellaneous
-    Go( &PCB_CONTROL::DeleteItemCursor,     ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCB_CONTROL::InteractiveDelete,    ACTIONS::deleteTool.MakeEvent() );
 
     // Append control
     Go( &PCB_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );

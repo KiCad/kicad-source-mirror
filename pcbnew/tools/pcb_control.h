@@ -96,7 +96,7 @@ public:
     int SnapModeFeedback( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
-    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+    int InteractiveDelete( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PLUGIN& pi, wxString& fileName );
