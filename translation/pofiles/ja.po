@@ -20917,16 +20917,11 @@ msgstr "シンボル '%s' を ライブラリ '%s' からロードできませ�
 msgid "Cannot enumerate library '%s'."
 msgstr "ライブラリ '%s' を列挙できません。"
 
-#: eeschema/symbol_library_manager.cpp:842
-#: eeschema/symbol_library_manager.cpp:847
 #: eeschema/symbol_library_manager.cpp:858
 #: eeschema/symbol_library_manager.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"グローバル ライブラリ テーブル保存中のエラー:\n"
-"\n"
-"%s"
+msgstr "ライブラリバッファ更新中のエラー: %s"
 
 #: eeschema/symbol_library_manager.cpp:852
 #: eeschema/symbol_library_manager.cpp:868
@@ -22555,7 +22550,7 @@ msgstr "シンボル %s"
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1483
 msgid "Summary"
-msgstr ""
+msgstr "要約"
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
 #, fuzzy
@@ -41273,22 +41268,20 @@ msgstr "%s シンボルの関連付けを %s から %s へ変更します。"
 msgid "Updated %s symbol association from %s to %s."
 msgstr "%s シンボルの関連付けを %s から %s へ変更しました。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:391
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:361
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s fields."
-msgstr "フィールドを更新"
+msgstr "フィールド %s を更新."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:402
 #, fuzzy, c-format
 msgid "Remove %s footprint fields not in symbol."
 msgstr "新しいシンボルにないフィールドを削除"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:411
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s fields."
-msgstr "フィールドを更新"
+msgstr "フィールド %s を更新."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
 #, fuzzy, c-format
