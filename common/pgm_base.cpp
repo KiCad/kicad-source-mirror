@@ -48,14 +48,10 @@
 #include <common.h>
 #include <confirm.h>
 #include <core/arraydim.h>
-#include <eda_base_frame.h>
-#include <eda_draw_frame.h>
-#include <gestfich.h>
 #include <id.h>
 #include <kicad_curl/kicad_curl.h>
 #include <kiplatform/policy.h>
 #include <macros.h>
-#include <menus_helpers.h>
 #include <notifications_manager.h>
 #include <paths.h>
 #include <pgm_base.h>
