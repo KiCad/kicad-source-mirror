@@ -910,6 +910,7 @@ public:
             return;
 
         KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
+        int size = KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) * 0.8 );
 
         if( m_baseLine )
         {
@@ -929,9 +930,7 @@ public:
         for( int i = 0; i < chain.SegmentCount(); i++ )
         {
             SEG seg = chain.Segment( i );
-
-            ctx.DrawLineDashed( seg.A, seg.B, pcbIUScale.mmToIU( 0.2 ), pcbIUScale.mmToIU( 0.1 ),
-                                false );
+            ctx.DrawLineDashed( seg.A, seg.B, size, size / 2, false );
         }
     }
 
