@@ -25261,6 +25261,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Einstellen der Pad-/Via-Bohrform (0 = keine Form, 1 = kleine Form, 2 = "
+"tatsächliche Form)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
