@@ -33,6 +33,7 @@
 #include <kiplatform/ui.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <collectors.h>
+#include <scoped_set_reset.h>
 
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
@@ -1160,6 +1161,9 @@ const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Meanders" );
 const wxString PCB_GENERATOR_MEANDERS::GENERATOR_TYPE = wxS( "meanders" );
 
 
+using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
+
+
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
@@ -1181,6 +1185,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
     PNS::ROUTER*             router = generatorTool->Router();
+    SCOPED_DRAW_MODE         scopedDrawMode( m_mode, MODE::MEANDER );
 
     m_pickerItem = nullptr;
     m_meander = nullptr;

@@ -231,6 +231,12 @@ bool DRAWING_TOOL::Init()
                 return m_mode == MODE::VIA;
             };
 
+    auto meanderToolActive =
+            [this]( const SELECTION& aSel )
+            {
+                return m_mode == MODE::MEANDER;
+            };
+
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
@@ -244,8 +250,12 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,        canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,     canUndoPoint, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::arcPosture,          arcToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,     meanderToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,     meanderToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,        meanderToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::amplDecrease,        meanderToolActive, 200 );
 
-    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, SELECTION_CONDITIONS::ShowAlways, 250 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, !meanderToolActive, 250 );
     ctxMenu.AddSeparator( 500 );
 
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();

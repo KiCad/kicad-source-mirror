@@ -79,7 +79,8 @@ public:
         KEEPOUT,
         ZONE,
         GRAPHIC_POLYGON,
-        VIA
+        VIA,
+        MEANDER
     };
 
     /**
