@@ -76,6 +76,7 @@ public:
         m_spacing = 600000;
         m_targetLength = 100000000;
         m_targetSkew = 0;
+        m_overrideCustomRules = false;
         m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
         m_singleSided = false;
@@ -101,6 +102,11 @@ public:
     ///< Desired length of the tuned line/diff pair (this is in nm, so allow more than board width).
     long long int m_targetLength;
 
+    ///< Target skew value for diff pair de-skewing.
+    int           m_targetSkew;
+
+    bool          m_overrideCustomRules;
+
     ///< Type of corners for the meandered line.
     MEANDER_STYLE m_cornerStyle;
 
@@ -115,9 +121,6 @@ public:
 
     ///< Allowable tuning error.
     int m_lengthTolerance;
-
-    ///< Target skew value for diff pair de-skewing.
-    int m_targetSkew;
 };
 
 /**

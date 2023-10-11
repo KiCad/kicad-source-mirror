@@ -241,10 +241,12 @@ public:
                 return nullptr;
 
             meander->m_targetLength = dlg.GetValue();
+            meander->m_overrideCustomRules = true;
         }
         else
         {
             meander->m_targetLength = constraint.GetValue().Opt();
+            meander->m_overrideCustomRules = false;
         }
 
         meander->SetFlags( IS_NEW );
@@ -536,6 +538,7 @@ public:
         settings.m_spacing = m_spacing;
         settings.m_targetLength = m_targetLength;
         settings.m_targetSkew = m_targetSkew;
+        settings.m_overrideCustomRules = m_overrideCustomRules;
         settings.m_singleSided = m_singleSide;
         settings.m_segmentSide = m_initialSide;
         settings.m_cornerRadiusPercentage = m_cornerRadiusPercentage;
@@ -551,6 +554,7 @@ public:
         m_spacing = aSettings.m_spacing;
         m_targetLength = aSettings.m_targetLength;
         m_targetSkew = aSettings.m_targetSkew;
+        m_overrideCustomRules = aSettings.m_overrideCustomRules;
         m_singleSide = aSettings.m_singleSided;
         m_initialSide = aSettings.m_segmentSide;
         m_cornerRadiusPercentage = aSettings.m_cornerRadiusPercentage;
@@ -560,13 +564,10 @@ public:
     {
         switch( m_tuningMode )
         {
-        case LENGTH_TUNING_MODE::SINGLE: return PNS::PNS_MODE_TUNE_SINGLE;
-
-        case LENGTH_TUNING_MODE::DIFF_PAIR: return PNS::PNS_MODE_TUNE_DIFF_PAIR;
-
+        case LENGTH_TUNING_MODE::SINGLE:         return PNS::PNS_MODE_TUNE_SINGLE;
+        case LENGTH_TUNING_MODE::DIFF_PAIR:      return PNS::PNS_MODE_TUNE_DIFF_PAIR;
         case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW;
-
-        default: return PNS::PNS_MODE_TUNE_SINGLE;
+        default:                                 return PNS::PNS_MODE_TUNE_SINGLE;
         }
     }
 
@@ -965,6 +966,9 @@ public:
     int  GetTargetSkew() const { return m_targetSkew; }
     void SetTargetSkew( int aValue ) { m_targetSkew = aValue; }
 
+    bool GetOverrideCustomRules() const { return m_overrideCustomRules; }
+    void SetOverrideCustomRules( bool aOverride ) { m_overrideCustomRules = aOverride; }
+
     int  GetCornerRadiusPercentage() const { return m_cornerRadiusPercentage; }
     void SetCornerRadiusPercentage( int aValue ) { m_cornerRadiusPercentage = aValue; }
 
@@ -1002,6 +1006,7 @@ public:
 
         props.set( "last_netname", m_lastNetName );
         props.set( "last_tuning", m_tuningInfo );
+        props.set( "override_custom_rules", m_overrideCustomRules );
 
         if( m_baseLine )
             props.set( "base_line", wxAny( *m_baseLine ) );
@@ -1035,6 +1040,7 @@ public:
         aProps.get_to_iu( "min_spacing", m_spacing );
         aProps.get_to_iu( "target_length", m_targetLength );
         aProps.get_to_iu( "target_skew", m_targetSkew );
+        aProps.get_to( "override_custom_rules", m_overrideCustomRules );
 
         aProps.get_to( "last_netname", m_lastNetName );
         aProps.get_to( "last_tuning", m_tuningInfo );
@@ -1046,8 +1052,20 @@ public:
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override
     {
         PNS::MEANDER_SETTINGS settings = ToMeanderSettings();
+        DRC_CONSTRAINT        constraint;
 
-        DIALOG_MEANDER_PROPERTIES dlg( aEditFrame, settings, ToPNSMode() );
+        if( !m_items.empty() )
+        {
+            BOARD_ITEM*                  startItem = *m_items.begin();
+            std::shared_ptr<DRC_ENGINE>& drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+
+            constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
+
+            if( !constraint.IsNull() && !settings.m_overrideCustomRules )
+                settings.m_targetLength = constraint.GetValue().Opt();
+        }
+
+        DIALOG_MEANDER_PROPERTIES dlg( aEditFrame, settings, ToPNSMode(), constraint );
 
         if( dlg.ShowModal() == wxID_OK )
         {
@@ -1107,16 +1125,17 @@ public:
     }
 
 protected:
-    VECTOR2I m_end;
+    VECTOR2I           m_end;
 
-    int m_minAmplitude;
-    int m_maxAmplitude;
-    int m_spacing;
-    int m_targetLength;
-    int m_targetSkew;
-    int m_cornerRadiusPercentage;
+    int                m_minAmplitude;
+    int                m_maxAmplitude;
+    int                m_spacing;
+    int                m_targetLength;
+    int                m_targetSkew;
+    bool               m_overrideCustomRules;
+    int                m_cornerRadiusPercentage;
 
-    PNS::MEANDER_SIDE m_initialSide;
+    PNS::MEANDER_SIDE  m_initialSide;
 
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
 
@@ -1369,6 +1388,12 @@ static struct PCB_GENERATOR_MEANDERS_DESC
                                      _HKI( "Target skew" ), &PCB_GENERATOR_MEANDERS::SetTargetSkew,
                                      &PCB_GENERATOR_MEANDERS::GetTargetSkew,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                             groupTab );
+
+        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, bool>(
+                                     _HKI( "Override custom rules" ),
+                                     &PCB_GENERATOR_MEANDERS::SetOverrideCustomRules,
+                                     &PCB_GENERATOR_MEANDERS::GetOverrideCustomRules ),
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, bool>(

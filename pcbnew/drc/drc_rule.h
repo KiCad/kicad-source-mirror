@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DRC_RULE_PROTO_H
-#define DRC_RULE_PROTO_H
+#ifndef DRC_RULE_H
+#define DRC_RULE_H
 
 #include <kiid.h>
 #include <core/typeinfo.h>
@@ -153,7 +153,7 @@ class DRC_CONSTRAINT
             if( m_parentRule->m_Implicit )
                 return m_parentRule->m_Name;
             else
-                return wxString::Format( _( "rule %s" ), m_parentRule->m_Name );
+                return wxString::Format( _( "rule '%s'" ), m_parentRule->m_Name );
         }
 
         return m_name;

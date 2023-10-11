@@ -32,17 +32,27 @@ class MEANDER_SETTINGS;
 
 }
 
+class PCB_BASE_EDIT_FRAME;
+class DRC_CONSTRAINT;
+
+
 class DIALOG_MEANDER_PROPERTIES : public DIALOG_MEANDER_PROPERTIES_BASE
 {
 public:
-    DIALOG_MEANDER_PROPERTIES( EDA_DRAW_FRAME* aParent, PNS::MEANDER_SETTINGS& aSettings,
-                               PNS::ROUTER_MODE aMeanderType );
+    DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PNS::MEANDER_SETTINGS& aSettings,
+                               PNS::ROUTER_MODE aMeanderType, const DRC_CONSTRAINT& aConstraint );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void onOverrideCustomRules( wxCommandEvent& event ) override;
+
 private:
+    PCB_BASE_EDIT_FRAME*   m_frame;
+    const DRC_CONSTRAINT&  m_constraint;
+
+    UNIT_BINDER            m_targetLength;
     UNIT_BINDER            m_minA;
     UNIT_BINDER            m_maxA;
     UNIT_BINDER            m_spacing;

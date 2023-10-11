@@ -10,8 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class TEXT_CTRL_EVAL;
-
 #include "dialog_shim.h"
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -24,9 +22,10 @@ class TEXT_CTRL_EVAL;
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -42,6 +41,11 @@ class DIALOG_MEANDER_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticBitmap* m_legend;
+		wxStaticText* m_targetLengthLabel;
+		wxTextCtrl* m_targetLengthCtrl;
+		wxStaticText* m_targetLengthUnits;
+		wxCheckBox* m_overrideCustomRules;
+		wxStaticText* m_sourceInfo;
 		wxStaticText* m_track_minALabel;
 		wxTextCtrl* m_minACtrl;
 		wxStaticText* m_minAUnits;
@@ -54,12 +58,16 @@ class DIALOG_MEANDER_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_cornerLabel;
 		wxChoice* m_cornerCtrl;
 		wxStaticText* m_rLabel;
-		TEXT_CTRL_EVAL* m_rCtrl;
+		wxTextCtrl* m_rCtrl;
 		wxStaticText* m_rUnits;
 		wxCheckBox* m_singleSided;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void onOverrideCustomRules( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

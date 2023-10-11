@@ -18,15 +18,20 @@
  */
 
 #include "dialog_meander_properties.h"
-#include <router/pns_meander_placer.h>
-#include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
-#include <eda_draw_frame.h>
+#include <pcb_base_edit_frame.h>
+#include <board_design_settings.h>
+#include <drc/drc_engine.h>
 
-DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( EDA_DRAW_FRAME* aFrame,
+
+DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame,
                                                       PNS::MEANDER_SETTINGS& aSettings,
-                                                      PNS::ROUTER_MODE aMeanderType ) :
+                                                      PNS::ROUTER_MODE aMeanderType,
+                                                      const DRC_CONSTRAINT& aConstraint ) :
         DIALOG_MEANDER_PROPERTIES_BASE( aFrame ),
+        m_frame( aFrame ),
+        m_constraint( aConstraint ),
+        m_targetLength( aFrame, m_targetLengthLabel, m_targetLengthCtrl, m_targetLengthUnits ),
         m_minA( aFrame, m_track_minALabel, m_minACtrl, m_minAUnits ),
         m_maxA( aFrame, m_maxALabel, m_maxACtrl, m_maxAUnits ),
         m_spacing( aFrame, m_spacingLabel, m_spacingCtrl, m_spacingUnits ),
@@ -55,16 +60,26 @@ DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( EDA_DRAW_FRAME* aFrame,
     }
 
     // Bitmap has a new size, so recalculate sizes
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
     SetupStandardButtons();
 
-    GetSizer()->SetSizeHints(this);
+    GetSizer()->SetSizeHints( this );
     Centre();
 }
 
 
 bool DIALOG_MEANDER_PROPERTIES::TransferDataToWindow()
 {
+    m_targetLength.SetValue( m_settings.m_targetLength );
+    m_overrideCustomRules->SetValue( m_settings.m_overrideCustomRules );
+
+    m_targetLength.Enable( m_constraint.IsNull() || m_settings.m_overrideCustomRules );
+
+    if( !m_constraint.IsNull() )
+        m_sourceInfo->SetLabel( wxString::Format( _( "(from %s)" ), m_constraint.GetName() ) );
+
+    m_sourceInfo->Show( !m_constraint.IsNull() && !m_settings.m_overrideCustomRules );
+
     m_minA.SetValue( m_settings.m_minAmplitude );
     m_maxA.SetValue( m_settings.m_maxAmplitude );
     m_spacing.SetValue( m_settings.m_spacing );
@@ -78,13 +93,32 @@ bool DIALOG_MEANDER_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_MEANDER_PROPERTIES::TransferDataFromWindow()
 {
+    m_settings.m_targetLength = m_targetLength.GetValue();
+    m_settings.m_overrideCustomRules = m_overrideCustomRules->GetValue();
+
     m_settings.m_minAmplitude = m_minA.GetIntValue();
     m_settings.m_maxAmplitude = m_maxA.GetIntValue();
     m_settings.m_spacing = m_spacing.GetIntValue();
     m_settings.m_cornerStyle = m_cornerCtrl->GetSelection() ? PNS::MEANDER_STYLE_ROUND
                                                             : PNS::MEANDER_STYLE_CHAMFER;
-    m_settings.m_cornerRadiusPercentage = m_r.GetValue();
+    m_settings.m_cornerRadiusPercentage = m_r.GetIntValue();
     m_settings.m_singleSided = m_singleSided->GetValue();
 
     return true;
+}
+
+
+void DIALOG_MEANDER_PROPERTIES::onOverrideCustomRules( wxCommandEvent& event )
+{
+    m_targetLength.Enable( event.IsChecked() || m_constraint.IsNull() );
+
+    if( !event.IsChecked() && !m_constraint.IsNull() )
+    {
+        m_targetLength.SetValue( m_constraint.GetValue().Opt() );
+        m_sourceInfo->Show( true );
+    }
+    else
+    {
+        m_sourceInfo->Show( false );
+    }
 }
