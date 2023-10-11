@@ -734,6 +734,8 @@ public:
 
         m_removedItems.clear();
 
+        aTool->Router()->StopRouting();
+
         if( aCommit )
             aCommit->Revert();
     }
@@ -1178,6 +1180,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+    PNS::ROUTER*             router = generatorTool->Router();
 
     m_pickerItem = nullptr;
     m_meander = nullptr;
@@ -1191,6 +1194,24 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
                 controls->ShowCursor( true );
+            };
+
+    auto updateMeander =
+            [&]()
+            {
+                if( m_meander && m_meander->GetPosition() != m_meander->GetEnd() )
+                {
+                    m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
+                    m_meander->Update( generatorTool, m_board, m_frame, nullptr );
+
+                    m_statusPopup->Popup();
+                    canvas()->SetStatusPopup( m_statusPopup.get() );
+
+                    m_view->Update( &m_preview );
+
+                    m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
+                    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+                }
             };
 
     // Set initial cursor
@@ -1281,26 +1302,37 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                 // First click already made; we're in preview-meander mode
 
                 m_meander->SetEnd( cursorPos );
-
-                if( m_meander->GetPosition() != m_meander->GetEnd() )
-                {
-                    m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
-                    m_meander->Update( generatorTool, m_board, m_frame, nullptr );
-
-                    m_statusPopup->Popup();
-                    canvas()->SetStatusPopup( m_statusPopup.get() );
-
-                    m_view->Update( &m_preview );
-
-                    m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
-                    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
-                }
+                updateMeander();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             PCB_SELECTION dummy;
             m_menu.ShowContextMenu( dummy );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::spacingIncrease )
+                 || evt->IsAction( &PCB_ACTIONS::spacingDecrease ) )
+        {
+            if( m_meander )
+            {
+                auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
+
+                placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
+                m_meander->SetSpacing( placer->MeanderSettings().m_spacing );
+                updateMeander();
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::amplIncrease )
+                 || evt->IsAction( &PCB_ACTIONS::amplDecrease ) )
+        {
+            if( m_meander )
+            {
+                auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
+
+                placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
+                m_meander->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
+                updateMeander();
+            }
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
         // but we don't at present have that, so we just knock out some of the egregious ones.

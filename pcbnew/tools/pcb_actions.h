@@ -199,6 +199,10 @@ public:
     static TOOL_ACTION placeText;
     static TOOL_ACTION drawTextBox;
     static TOOL_ACTION placeMeanders;
+    static TOOL_ACTION spacingIncrease;
+    static TOOL_ACTION spacingDecrease;
+    static TOOL_ACTION amplIncrease;
+    static TOOL_ACTION amplDecrease;
     static TOOL_ACTION drawAlignedDimension;
     static TOOL_ACTION drawCenterDimension;
     static TOOL_ACTION drawRadialDimension;

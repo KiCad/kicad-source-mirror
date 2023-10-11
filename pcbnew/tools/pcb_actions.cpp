@@ -194,6 +194,43 @@ TOOL_ACTION PCB_ACTIONS::placeMeanders( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::ps_tune_length )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::spacingIncrease( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.lengthTuner.SpacingIncrease" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '1' )
+        .LegacyHotkeyName( "Increase meander spacing by one step." )
+        .MenuText( _( "Increase Spacing" ) )
+        .Tooltip( _( "Increase meander spacing by one step." ) )
+        .Icon( BITMAPS::router_len_tuner_dist_incr ) );
+
+TOOL_ACTION PCB_ACTIONS::spacingDecrease( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.lengthTuner.SpacingDecrease" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '2' )
+        .LegacyHotkeyName( "Decrease meander spacing by one step." )
+        .MenuText( _( "Decrease Spacing" ) )
+        .Tooltip( _( "Decrease meander spacing by one step." ) )
+        .Icon( BITMAPS::router_len_tuner_dist_decr ) );
+
+TOOL_ACTION PCB_ACTIONS::amplIncrease( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.lengthTuner.AmplIncrease" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '3' )
+        .LegacyHotkeyName( "Increase meander amplitude by one step." )
+        .MenuText( _( "Increase Amplitude" ) )
+        .Tooltip( _( "Increase meander amplitude by one step." ) )
+        .Icon( BITMAPS::router_len_tuner_amplitude_incr ) );
+
+TOOL_ACTION PCB_ACTIONS::amplDecrease( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.lengthTuner.AmplDecrease" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '4' )
+        .LegacyHotkeyName( "Decrease meander amplitude by one step." )
+        .MenuText( _( "Decrease Amplitude" ) )
+        .Tooltip( _( "Decrease meander amplitude by one step." ) )
+        .Icon( BITMAPS::router_len_tuner_amplitude_decr ) );
+
+
 TOOL_ACTION PCB_ACTIONS::drawAlignedDimension( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.alignedDimension" )
         .Scope( AS_GLOBAL )
