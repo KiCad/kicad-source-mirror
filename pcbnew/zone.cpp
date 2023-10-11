@@ -741,7 +741,20 @@ void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre, aFlipLeftRight );
 
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> fillsCopy;
+
+    for( auto& [oldLayer, shapePtr] : m_FilledPolysList )
+    {
+        fillsCopy[oldLayer] = *shapePtr;
+    }
+
     SetLayerSet( FlipLayerMask( GetLayerSet(), GetBoard()->GetCopperLayerCount() ) );
+
+    for( auto& [oldLayer, shape] : fillsCopy )
+    {
+        PCB_LAYER_ID newLayer = FlipLayer( oldLayer, GetBoard()->GetCopperLayerCount() );
+        SetFilledPolysList( newLayer, shape );
+    }
 }
 
 
