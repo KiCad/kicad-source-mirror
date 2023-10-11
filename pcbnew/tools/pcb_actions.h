@@ -198,7 +198,6 @@ public:
     static TOOL_ACTION placeImage;
     static TOOL_ACTION placeText;
     static TOOL_ACTION drawTextBox;
-    static TOOL_ACTION placeMeanders;
     static TOOL_ACTION spacingIncrease;
     static TOOL_ACTION spacingDecrease;
     static TOOL_ACTION amplIncrease;
@@ -243,14 +242,8 @@ public:
     /// Activation of the Push and Shove router (differential pair mode)
     static TOOL_ACTION routeDiffPair;
 
-    /// Activation of the Push and Shove router (tune single line mode)
-    static TOOL_ACTION routerTuneSingleTrace;
-
-    /// Activation of the Push and Shove router (diff pair tuning mode)
-    static TOOL_ACTION routerTuneDiffPair;
-
-    /// Activation of the Push and Shove router (skew tuning mode)
-    static TOOL_ACTION routerTuneDiffPairSkew;
+    static TOOL_ACTION tuneLength;
+    static TOOL_ACTION tuneSkew;
 
     static TOOL_ACTION routerUndoLastSegment;
 

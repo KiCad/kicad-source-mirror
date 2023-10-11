@@ -312,12 +312,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::placeText );
     placeMenu->Add( PCB_ACTIONS::drawTextBox );
 
-    if( ADVANCED_CFG::GetCfg().m_EnableGenerators )
-    {
-        placeMenu->AppendSeparator();
-        placeMenu->Add( PCB_ACTIONS::placeMeanders );
-    }
-
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drawAlignedDimension );
     placeMenu->Add( PCB_ACTIONS::drawOrthogonalDimension );
@@ -358,9 +352,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     routeMenu->Add( PCB_ACTIONS::routeDiffPair );
 
     routeMenu->AppendSeparator();
-    routeMenu->Add( PCB_ACTIONS::routerTuneSingleTrace );
-    routeMenu->Add( PCB_ACTIONS::routerTuneDiffPair );
-    routeMenu->Add( PCB_ACTIONS::routerTuneDiffPairSkew );
+    routeMenu->Add( PCB_ACTIONS::tuneLength );
+    routeMenu->Add( PCB_ACTIONS::tuneSkew );
 
     routeMenu->AppendSeparator();
     routeMenu->Add( PCB_ACTIONS::routerSettingsDialog );

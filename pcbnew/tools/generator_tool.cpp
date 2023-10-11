@@ -250,21 +250,41 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
 }
 
 
-void GENERATOR_TOOL::HighlightNet( BOARD_CONNECTED_ITEM* aStartItem )
+void GENERATOR_TOOL::HighlightNets( BOARD_CONNECTED_ITEM* aStartItem )
 {
     if( aStartItem && aStartItem->GetNet() )
-        highlightNets( true, { aStartItem->GetNet() } );
+    {
+        PNS::RULE_RESOLVER*       resolver = m_router->GetRuleResolver();
+        std::set<PNS::NET_HANDLE> nets = { aStartItem->GetNet() };
+
+        if( PNS::NET_HANDLE coupledNet = resolver->DpCoupledNet( aStartItem->GetNet() ) )
+            nets.insert( coupledNet );
+
+        highlightNets( true, nets );
+    }
     else
+    {
         highlightNets( false );
+    }
 }
 
 
-void GENERATOR_TOOL::UpdateHighlightedNet( BOARD_CONNECTED_ITEM* aStartItem )
+void GENERATOR_TOOL::UpdateHighlightedNets( BOARD_CONNECTED_ITEM* aStartItem )
 {
     if( aStartItem && aStartItem->GetNet() )
-        updateHighlightedNets( { aStartItem->GetNet() } );
+    {
+        PNS::RULE_RESOLVER*       resolver = m_router->GetRuleResolver();
+        std::set<PNS::NET_HANDLE> nets = { aStartItem->GetNet() };
+
+        if( PNS::NET_HANDLE coupledNet = resolver->DpCoupledNet( aStartItem->GetNet() ) )
+            nets.insert( coupledNet );
+
+        updateHighlightedNets( nets );
+    }
     else
+    {
         highlightNets( false );
+    }
 }
 
 

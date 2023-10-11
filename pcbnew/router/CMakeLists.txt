@@ -46,7 +46,6 @@ set( PCBNEW_PNS_SRCS
     pns_walkaround.cpp
     router_preview_item.cpp
     router_tool.cpp
-    length_tuner_tool.cpp
 )
 
 add_library( pnsrouter STATIC ${PCBNEW_PNS_SRCS} )

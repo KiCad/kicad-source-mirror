@@ -88,7 +88,6 @@
 #include <tools/zone_filler_tool.h>
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
-#include <router/length_tuner_tool.h>
 #include <autorouter/autoplace_tool.h>
 #include <python/scripting/pcb_scripting_tool.h>
 #include <gestfich.h>
@@ -637,7 +636,6 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
-    m_toolManager->RegisterTool( new LENGTH_TUNER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new GLOBAL_EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
@@ -943,9 +941,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeFootprint );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::routerTuneDiffPair );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::routerTuneDiffPairSkew );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::routerTuneSingleTrace );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneLength );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneSkew );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRuleArea );
@@ -957,7 +954,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeImage );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeText );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawTextBox );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeMeanders );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawAlignedDimension );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawOrthogonalDimension );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCenterDimension );

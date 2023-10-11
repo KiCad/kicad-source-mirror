@@ -98,6 +98,18 @@ static std::string TuningToString( const LENGTH_TUNING_MODE aTuning )
 }
 
 
+static LENGTH_TUNING_MODE FromPNSMode( PNS::ROUTER_MODE aRouterMode )
+{
+    switch( aRouterMode )
+    {
+    case PNS::PNS_MODE_TUNE_SINGLE:         return LENGTH_TUNING_MODE::SINGLE;
+    case PNS::PNS_MODE_TUNE_DIFF_PAIR:      return LENGTH_TUNING_MODE::DIFF_PAIR;
+    case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW: return LENGTH_TUNING_MODE::DIFF_PAIR_SKEW;
+    default:                                return LENGTH_TUNING_MODE::SINGLE;
+    }
+}
+
+
 static PNS::MEANDER_SIDE SideFromString( const std::string& aStr )
 {
     if( aStr == "default" )
@@ -219,36 +231,58 @@ public:
     bool baselineValid() { return m_baseLine && m_baseLine->PointCount() > 1; }
 
     static PCB_GENERATOR_MEANDERS* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                              BOARD_CONNECTED_ITEM* aStartItem )
+                                              BOARD_CONNECTED_ITEM* aStartItem,
+                                              LENGTH_TUNING_MODE aMode )
     {
         BOARD*                       board = aStartItem->GetBoard();
         std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
         DRC_CONSTRAINT               constraint;
+        PCB_LAYER_ID                 layer = aStartItem->GetLayer();
+        PNS::RULE_RESOLVER*          resolver = aTool->Router()->GetRuleResolver();
 
-        PCB_LAYER_ID        layer = aStartItem->GetLayer();
-        PNS::RULE_RESOLVER* resolver = aTool->Router()->GetRuleResolver();
-        LENGTH_TUNING_MODE  mode = resolver->DpCoupledNet( aStartItem->GetNet() ) ? DIFF_PAIR
-                                                                                  : SINGLE;
+        if( aMode == SINGLE && resolver->DpCoupledNet( aStartItem->GetNet() ) )
+            aMode = DIFF_PAIR;
 
-        PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, mode );
+        PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, aMode );
 
         constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
-        if( constraint.IsNull() )
+        if( aMode == DIFF_PAIR_SKEW )
         {
-            WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Place Meander" ), _( "Target length:" ),
-                                      100 * PCB_IU_PER_MM );
+            if( constraint.IsNull() )
+            {
+                WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Skew" ), _( "Target skew:" ), 0 );
 
-            if( dlg.ShowModal() != wxID_OK )
-                return nullptr;
+                if( dlg.ShowModal() != wxID_OK )
+                    return nullptr;
 
-            meander->m_targetLength = dlg.GetValue();
-            meander->m_overrideCustomRules = true;
+                meander->m_targetSkew = dlg.GetValue();
+                meander->m_overrideCustomRules = true;
+            }
+            else
+            {
+                meander->m_targetSkew = constraint.GetValue().Opt();
+                meander->m_overrideCustomRules = false;
+            }
         }
         else
         {
-            meander->m_targetLength = constraint.GetValue().Opt();
-            meander->m_overrideCustomRules = false;
+            if( constraint.IsNull() )
+            {
+                WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Length" ), _( "Target length:" ),
+                                          100 * PCB_IU_PER_MM );
+
+                if( dlg.ShowModal() != wxID_OK )
+                    return nullptr;
+
+                meander->m_targetLength = dlg.GetValue();
+                meander->m_overrideCustomRules = true;
+            }
+            else
+            {
+                meander->m_targetLength = constraint.GetValue().Opt();
+                meander->m_overrideCustomRules = false;
+            }
         }
 
         meander->SetFlags( IS_NEW );
@@ -1179,6 +1213,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
     Activate();
 
+    LENGTH_TUNING_MODE       mode = FromPNSMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
     KIGFX::VIEW_CONTROLS*    controls = getViewControls();
     BOARD*                   board = m_frame->GetBoard();
     PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -1242,40 +1277,6 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) && m_pickerItem )
-        {
-            if( !m_meander )
-            {
-                // First click; create a meander
-
-                generatorTool->HighlightNet( nullptr );
-
-                m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
-                                                               m_pickerItem );
-
-                int      dummyDist;
-                int      dummyClearance = std::numeric_limits<int>::max() / 2;
-                VECTOR2I closestPt;
-
-                m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
-                                                            &dummyDist, &closestPt );
-                m_meander->SetPosition( closestPt );
-
-                m_preview.Add( m_meander );
-            }
-            else
-            {
-                // Second click; we're done
-                BOARD_COMMIT commit( m_frame );
-
-                m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
-                m_meander->Update( generatorTool, m_board, m_frame, &commit );
-                m_meander->EditPush( generatorTool, m_board, m_frame, &commit, _( "Place Meander" ) );
-
-                break;
-            }
-        }
         else if( evt->IsMotion() )
         {
             if( !m_meander )
@@ -1294,12 +1295,12 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                 if( !m_pickerItem )
                 {
                     m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                    generatorTool->HighlightNet( m_pickerItem );
+                    generatorTool->HighlightNets( m_pickerItem );
                 }
                 else
                 {
                     m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                    generatorTool->UpdateHighlightedNet( m_pickerItem );
+                    generatorTool->UpdateHighlightedNets( m_pickerItem );
                 }
             }
             else
@@ -1308,6 +1309,41 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
                 m_meander->SetEnd( cursorPos );
                 updateMeander();
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( m_pickerItem && !m_meander )
+            {
+                // First click; create a meander
+
+                generatorTool->HighlightNets( nullptr );
+
+                m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
+                m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
+                                                               m_pickerItem, mode );
+
+                int      dummyDist;
+                int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                VECTOR2I closestPt;
+
+                m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
+                                                            &dummyDist, &closestPt );
+                m_meander->SetPosition( closestPt );
+                m_meander->SetEnd( closestPt );
+
+                m_preview.Add( m_meander );
+            }
+            else if( m_pickerItem && m_meander )
+            {
+                // Second click; we're done
+                BOARD_COMMIT commit( m_frame );
+
+                m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
+                m_meander->Update( generatorTool, m_board, m_frame, &commit );
+                m_meander->EditPush( generatorTool, m_board, m_frame, &commit, _( "Tune" ) );
+
+                break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1363,7 +1399,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     canvas()->SetStatusPopup( nullptr );
     m_statusPopup->Hide();
 
-    generatorTool->HighlightNet( nullptr );
+    generatorTool->HighlightNets( nullptr );
 
     m_preview.Clear();
     m_view->Remove( &m_preview );

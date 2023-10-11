@@ -186,14 +186,6 @@ TOOL_ACTION PCB_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_textbox )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PCB_ACTIONS::placeMeanders( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveDrawing.placeMeanders" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Add Meander" ) )
-        .Tooltip( _( "Add meander for length tuning" ) )
-        .Icon( BITMAPS::ps_tune_length )
-        .Flags( AF_ACTIVATE ) );
-
 TOOL_ACTION PCB_ACTIONS::spacingIncrease( TOOL_ACTION_ARGS()
         .Name( "pcbnew.lengthTuner.SpacingIncrease" )
         .Scope( AS_GLOBAL )
@@ -2284,37 +2276,26 @@ TOOL_ACTION PCB_ACTIONS::selectLayerPair( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::select_layer_pair )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( TOOL_ACTION_ARGS()
+TOOL_ACTION PCB_ACTIONS::tuneLength( TOOL_ACTION_ARGS()
         .Name( "pcbnew.LengthTuner.TuneSingleTrack" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '7' )
+        .DefaultHotkeyAlt( '8' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         .LegacyHotkeyName( "Tune Single Track (Modern Toolset only)" )
-        .MenuText( _( "Tune length of a single track" ) )
-        .Tooltip( _( "Tune length of a single track" ) )
+        .MenuText( _( "Tune Length" ) )
+        .Tooltip( _( "Tune length of a single track or differential pair" ) )
         .Icon( BITMAPS::ps_tune_length )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_SINGLE ) );
 
-TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.LengthTuner.TuneDiffPair" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( '8' )
-        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        .LegacyHotkeyName( "Tune Differential Pair Length (Modern Toolset only)" )
-        .MenuText( _( "Tune length of a differential pair" ) )
-        .Tooltip( _( "Tune length of a differential pair" ) )
-        .Icon( BITMAPS::ps_diff_pair_tune_length )
-        .Flags( AF_ACTIVATE )
-        .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR ) );
-
-TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( TOOL_ACTION_ARGS()
+TOOL_ACTION PCB_ACTIONS::tuneSkew( TOOL_ACTION_ARGS()
         .Name( "pcbnew.LengthTuner.TuneDiffPairSkew" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '9' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         .LegacyHotkeyName( "Tune Differential Pair Skew (Modern Toolset only)" )
-        .MenuText( _( "Tune skew of a differential pair" ) )
+        .MenuText( _( "Tune Skew of a Differential Pair" ) )
         .Tooltip( _( "Tune skew of a differential pair" ) )
         .Icon( BITMAPS::ps_diff_pair_tune_phase )
         .Flags( AF_ACTIVATE )

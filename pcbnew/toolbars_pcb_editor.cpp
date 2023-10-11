@@ -416,9 +416,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     if( !tuneGroup )
     {
         tuneGroup = new ACTION_GROUP( "group.pcbTune",
-                                      { &PCB_ACTIONS::routerTuneSingleTrace,
-                                        &PCB_ACTIONS::routerTuneDiffPair,
-                                        &PCB_ACTIONS::routerTuneDiffPairSkew } );
+                                      { &PCB_ACTIONS::tuneLength,
+                                        &PCB_ACTIONS::tuneSkew } );
     }
 
     m_drawToolBar->Add( ACTIONS::selectionTool,            ACTION_TOOLBAR::TOGGLE );
