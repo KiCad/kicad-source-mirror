@@ -44,15 +44,15 @@
   "overrides": [
     {
       "name": "python3",
-      "version": "3.11.2#1"
+      "version": "3.11.5#0"
     },
     {
       "name": "wxwidgets",
-      "version": "3.2.2#2"
+      "version": "3.2.3"
     },
     {
       "name": "wxpython",
-      "version": "4.2.0#11"
+      "version": "4.2.0#13"
     },
     {
       "name": "ngspice",
