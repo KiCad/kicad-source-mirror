@@ -52,7 +52,8 @@ public:
     };
 
     PICKER_TOOL_BASE() :
-            m_frame( nullptr )
+            m_frame( nullptr ),
+            m_snap( false )
     {
         reset();
     }

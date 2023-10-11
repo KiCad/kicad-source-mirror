@@ -45,6 +45,7 @@
 #include <tools/generator_tool.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/zone_filler_tool.h>
 
 #include <preview_items/draw_context.h>
 #include <view/view.h>
@@ -1162,12 +1163,21 @@ const wxString PCB_GENERATOR_MEANDERS::GENERATOR_TYPE = wxS( "meanders" );
 
 int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 {
-    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-    // Deactivate other tools; particularly important if another PICKER is currently running
+    m_frame->PushTool( aEvent );
     Activate();
+
+    KIGFX::VIEW_CONTROLS*    controls = getViewControls();
+    BOARD*                   board = m_frame->GetBoard();
+    PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+    GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
 
     m_pickerItem = nullptr;
     m_meander = nullptr;
@@ -1176,146 +1186,157 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     m_preview.Clear();
     m_view->Add( &m_preview );
 
-    picker->SetCursor( KICURSOR::BULLSEYE );
-
-    picker->SetClickHandler(
-            [this]( const VECTOR2D& aPosition ) -> bool
+    auto setCursor =
+            [&]()
             {
-                if( !m_pickerItem )
-                    return true;    // keep going (ignore click with no target)
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+                controls->ShowCursor( true );
+            };
 
-                GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+    // Set initial cursor
+    setCursor();
 
-                if( !m_meander )
-                {
-                    // First click; create a meander
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+        VECTOR2D cursorPos = controls->GetMousePosition();
 
-                    generatorTool->HighlightNet( nullptr );
-
-                    m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                    m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
-                                                                   m_pickerItem );
-
-                    int      dummyDist;
-                    int      dummyClearance = std::numeric_limits<int>::max() / 2;
-                    VECTOR2I closestPt;
-
-                    m_pickerItem->GetEffectiveShape()->Collide( aPosition, dummyClearance,
-                                                                &dummyDist, &closestPt );
-                    m_meander->SetPosition( closestPt );
-
-                    m_preview.Add( m_meander );
-                    return true;    // keep going
-                }
-                else
-                {
-                    // Second click; we're done
-                    BOARD_COMMIT commit( m_frame );
-
-                    m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
-                    m_meander->Update( generatorTool, m_board, m_frame, &commit );
-                    m_meander->EditPush( generatorTool, m_board, m_frame, &commit,
-                                         _( "Place Meander" ) );
-
-                    return false;   // exit picker tool
-                }
-            } );
-
-    picker->SetMotionHandler(
-            [this]( const VECTOR2D& aPos )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            if( m_meander )
             {
-                BOARD*                   board = m_frame->GetBoard();
-                PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-                GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-                GENERAL_COLLECTOR        collector;
-                GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+                // First click already made; clean up meander preview
+                m_meander->EditRevert( generatorTool, m_board, m_frame, nullptr );
 
-                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-                collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, aPos, guide );
+                m_preview.Clear();
 
-                if( collector.GetCount() > 1 )
-                    selectionTool->GuessSelectionCandidates( collector, aPos );
+                delete m_meander;
+                m_meander = nullptr;
+            }
 
-                BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-                if( !m_meander )
-                {
-                    // First click not yet made; we're in highlight-net-under-cursor mode
-
-                    if( !m_pickerItem )
-                    {
-                        m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                        generatorTool->HighlightNet( m_pickerItem );
-                    }
-                    else
-                    {
-                        m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                        generatorTool->UpdateHighlightedNet( m_pickerItem );
-                    }
-                }
-                else
-                {
-                    // First click already made; we're in preview-meander mode
-
-                    m_meander->SetEnd( aPos );
-
-                    if( m_meander->GetPosition() != m_meander->GetEnd() )
-                    {
-                        m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
-                        m_meander->Update( generatorTool, m_board, m_frame, nullptr );
-
-                        m_statusPopup->Popup();
-                        canvas()->SetStatusPopup( m_statusPopup.get() );
-
-                        m_view->Update( &m_preview );
-
-                        m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
-                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
-                    }
-                }
-            } );
-
-    picker->SetCancelHandler(
-            [this]()
+            break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) && m_pickerItem )
+        {
+            if( !m_meander )
             {
-                GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
-
-                if( m_meander )
-                {
-                    // First click already made; clean up meander preview
-                    m_meander->EditRevert( generatorTool, m_board, m_frame, nullptr );
-
-                    m_preview.Clear();
-
-                    delete m_meander;
-                    m_meander = nullptr;
-                }
-            } );
-
-    picker->SetFinalizeHandler(
-            [this]( const int& aFinalState )
-            {
-                PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-                GENERATOR_TOOL*     generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
-
-                canvas()->SetStatusPopup( nullptr );
-                m_statusPopup->Hide();
+                // First click; create a meander
 
                 generatorTool->HighlightNet( nullptr );
 
-                m_preview.Clear();
-                m_view->Remove( &m_preview );
+                m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
+                m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
+                                                               m_pickerItem );
 
-                if( m_meander )
-                    selectionTool->AddItemToSel( m_meander );
+                int      dummyDist;
+                int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                VECTOR2I closestPt;
 
-                // Ensure the cursor gets changed & updated
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-                m_frame->GetCanvas()->Refresh();
-            } );
+                m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
+                                                            &dummyDist, &closestPt );
+                m_meander->SetPosition( closestPt );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
+                m_preview.Add( m_meander );
+            }
+            else
+            {
+                // Second click; we're done
+                BOARD_COMMIT commit( m_frame );
 
+                m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
+                m_meander->Update( generatorTool, m_board, m_frame, &commit );
+                m_meander->EditPush( generatorTool, m_board, m_frame, &commit, _( "Place Meander" ) );
+
+                break;
+            }
+        }
+        else if( evt->IsMotion() )
+        {
+            if( !m_meander )
+            {
+                // First click not yet made; we're in highlight-net-under-cursor mode
+
+                GENERAL_COLLECTOR collector;
+                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+                collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, cursorPos, guide );
+
+                if( collector.GetCount() > 1 )
+                    selectionTool->GuessSelectionCandidates( collector, cursorPos );
+
+                BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+                if( !m_pickerItem )
+                {
+                    m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                    generatorTool->HighlightNet( m_pickerItem );
+                }
+                else
+                {
+                    m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                    generatorTool->UpdateHighlightedNet( m_pickerItem );
+                }
+            }
+            else
+            {
+                // First click already made; we're in preview-meander mode
+
+                m_meander->SetEnd( cursorPos );
+
+                if( m_meander->GetPosition() != m_meander->GetEnd() )
+                {
+                    m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
+                    m_meander->Update( generatorTool, m_board, m_frame, nullptr );
+
+                    m_statusPopup->Popup();
+                    canvas()->SetStatusPopup( m_statusPopup.get() );
+
+                    m_view->Update( &m_preview );
+
+                    m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
+                    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+                }
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            PCB_SELECTION dummy;
+            m_menu.ShowContextMenu( dummy );
+        }
+        // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
+        // but we don't at present have that, so we just knock out some of the egregious ones.
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+        controls->CaptureCursor( m_meander != nullptr );
+        controls->SetAutoPan( m_meander != nullptr );
+    }
+
+    controls->CaptureCursor( false );
+    controls->SetAutoPan( false );
+    controls->ForceCursorPosition( false );
+    controls->ShowCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    canvas()->SetStatusPopup( nullptr );
+    m_statusPopup->Hide();
+
+    generatorTool->HighlightNet( nullptr );
+
+    m_preview.Clear();
+    m_view->Remove( &m_preview );
+
+    m_frame->GetCanvas()->Refresh();
+
+    if( m_meander )
+        selectionTool->AddItemToSel( m_meander );
+
+    m_frame->PopTool( aEvent );
     return 0;
 }
 
