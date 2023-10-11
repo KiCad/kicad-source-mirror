@@ -1804,8 +1804,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointMgr, pcbIUScale, userUnits, geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    PCB_SELECTION preview;
-    m_view->Add( &preview );
+    m_preview.Clear();
+    m_view->Add( &m_preview );
     m_view->Add( &twoPointAsst );
 
     bool     started = false;
@@ -1822,8 +1822,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     auto cleanup =
             [&]()
             {
-                preview.Clear();
-                m_view->Update( &preview );
+                m_preview.Clear();
+                m_view->Update( &m_preview );
                 delete graphic;
                 graphic = nullptr;
 
@@ -1924,7 +1924,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 if( PCB_TEXTBOX* pcb_textbox = dynamic_cast<PCB_TEXTBOX*>( graphic ) )
                     pcb_textbox->SetAttributes( m_textAttrs );
 
-                m_view->Update( &preview );
+                m_view->Update( &m_preview );
                 frame()->SetMsgPanel( graphic );
             }
             else
@@ -1971,7 +1971,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 if( !isLocalOriginSet )
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
 
-                preview.Add( graphic );
+                m_preview.Add( graphic );
                 frame()->SetMsgPanel( graphic );
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
@@ -2008,7 +2008,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                     graphic = nullptr;
                 }
 
-                preview.Clear();
+                m_preview.Clear();
                 twoPointMgr.Reset();
                 break;
             }
@@ -2042,7 +2042,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             }
 
             updateSegmentFromGeometryMgr( twoPointMgr, graphic );
-            m_view->Update( &preview );
+            m_view->Update( &m_preview );
             m_view->Update( &twoPointAsst );
         }
         else if( started && (   evt->IsAction( &ACTIONS::undo )
@@ -2065,7 +2065,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 }
 
                 updateSegmentFromGeometryMgr( twoPointMgr, graphic );
-                m_view->Update( &preview );
+                m_view->Update( &m_preview );
                 m_view->Update( &twoPointAsst );
             }
             else
@@ -2077,7 +2077,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         {
             m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
             graphic->SetStroke( m_stroke );
-            m_view->Update( &preview );
+            m_view->Update( &m_preview );
             frame()->SetMsgPanel( graphic );
         }
         else if( graphic && evt->IsAction( &PCB_ACTIONS::decWidth ) )
@@ -2086,14 +2086,14 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             {
                 m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
                 graphic->SetStroke( m_stroke );
-                m_view->Update( &preview );
+                m_view->Update( &m_preview );
                 frame()->SetMsgPanel( graphic );
             }
         }
         else if( started && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
             frame()->OnEditItemRequest( graphic );
-            m_view->Update( &preview );
+            m_view->Update( &m_preview );
             frame()->SetMsgPanel( graphic );
             break;
         }
@@ -2127,7 +2127,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
 
     m_view->Remove( &twoPointAsst );
-    m_view->Remove( &preview );
+    m_view->Remove( &m_preview );
 
     if( selection().Empty() )
         m_frame->SetMsgPanel( board() );

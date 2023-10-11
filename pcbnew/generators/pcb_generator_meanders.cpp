@@ -624,6 +624,7 @@ public:
                 if( li->Parent() )
                 {
                     li->Parent()->SetForcedTransparency( 1.0 );
+                    aFrame->GetCanvas()->GetView()->Update( li->Parent() );
                     m_removedItems.insert( li->Parent() );
                 }
             }
@@ -906,7 +907,7 @@ public:
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final
     {
-        if( !IsSelected() )
+        if( !IsSelected() && !IsNew() )
             return;
 
         KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
@@ -959,8 +960,8 @@ public:
     int  GetSpacing() const { return m_spacing; }
     void SetSpacing( int aValue ) { m_spacing = aValue; }
 
-    int  GetTargetLength() const { return m_targetLength; }
-    void SetTargetLength( int aValue ) { m_targetLength = aValue; }
+    long long int GetTargetLength() const { return m_targetLength; }
+    void          SetTargetLength( long long int aValue ) { m_targetLength = aValue; }
 
     int  GetTargetSkew() const { return m_targetSkew; }
     void SetTargetSkew( int aValue ) { m_targetSkew = aValue; }
@@ -1129,7 +1130,7 @@ protected:
     int                m_minAmplitude;
     int                m_maxAmplitude;
     int                m_spacing;
-    int                m_targetLength;
+    long long int      m_targetLength;
     int                m_targetSkew;
     bool               m_overrideCustomRules;
     int                m_cornerRadiusPercentage;
@@ -1171,6 +1172,10 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     m_pickerItem = nullptr;
     m_meander = nullptr;
 
+    // Add a VIEW_GROUP that serves as a preview for the new item
+    m_preview.Clear();
+    m_view->Add( &m_preview );
+
     picker->SetCursor( KICURSOR::BULLSEYE );
 
     picker->SetClickHandler(
@@ -1198,6 +1203,8 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                     m_pickerItem->GetEffectiveShape()->Collide( aPosition, dummyClearance,
                                                                 &dummyDist, &closestPt );
                     m_meander->SetPosition( closestPt );
+
+                    m_preview.Add( m_meander );
                     return true;    // keep going
                 }
                 else
@@ -1218,7 +1225,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             [this]( const VECTOR2D& aPos )
             {
                 BOARD*                   board = m_frame->GetBoard();
-                PCB_SELECTION_TOOL*      selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+                PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
                 GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
                 GENERAL_COLLECTOR        collector;
                 GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
@@ -1227,7 +1234,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                 collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, aPos, guide );
 
                 if( collector.GetCount() > 1 )
-                    selTool->GuessSelectionCandidates( collector, aPos );
+                    selectionTool->GuessSelectionCandidates( collector, aPos );
 
                 BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
@@ -1260,6 +1267,8 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                         m_statusPopup->Popup();
                         canvas()->SetStatusPopup( m_statusPopup.get() );
 
+                        m_view->Update( &m_preview );
+
                         m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
                         m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                     }
@@ -1276,6 +1285,8 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                     // First click already made; clean up meander preview
                     m_meander->EditRevert( generatorTool, m_board, m_frame, nullptr );
 
+                    m_preview.Clear();
+
                     delete m_meander;
                     m_meander = nullptr;
                 }
@@ -1284,12 +1295,19 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     picker->SetFinalizeHandler(
             [this]( const int& aFinalState )
             {
-                GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+                PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+                GENERATOR_TOOL*     generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
 
                 canvas()->SetStatusPopup( nullptr );
                 m_statusPopup->Hide();
 
                 generatorTool->HighlightNet( nullptr );
+
+                m_preview.Clear();
+                m_view->Remove( &m_preview );
+
+                if( m_meander )
+                    selectionTool->AddItemToSel( m_meander );
 
                 // Ensure the cursor gets changed & updated
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
@@ -1376,7 +1394,7 @@ static struct PCB_GENERATOR_MEANDERS_DESC
                                      PROPERTY_DISPLAY::PT_DEFAULT, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
+        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, long long int>(
                                      _HKI( "Target length" ),
                                      &PCB_GENERATOR_MEANDERS::SetTargetLength,
                                      &PCB_GENERATOR_MEANDERS::GetTargetLength,
