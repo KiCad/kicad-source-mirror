@@ -303,6 +303,11 @@ public:
                 aCommit->Modify( this );
         }
 
+        // Remove ourselves from the selection so that we don't redraw our existing children as
+        // part of the selection VIEW_GROUP (which ignores the HIDDEN flags).
+        PCB_SELECTION_TOOL*selectionTool = aFrame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+        selectionTool->RemoveItemFromSel( this, true );
+
         int          layer = GetLayer();
         PNS::ROUTER* router = aTool->Router();
 
@@ -659,8 +664,7 @@ public:
             {
                 if( li->Parent() )
                 {
-                    li->Parent()->SetForcedTransparency( 1.0 );
-                    aFrame->GetCanvas()->GetView()->Update( li->Parent() );
+                    aFrame->GetCanvas()->GetView()->Hide( li->Parent() );
                     m_removedItems.insert( li->Parent() );
                 }
             }
@@ -736,7 +740,6 @@ public:
 
             for( BOARD_ITEM* item : m_removedItems )
             {
-                item->SetForcedTransparency( 0.0 );
                 aCommit->Remove( item );
             }
 
@@ -765,7 +768,7 @@ public:
                      BOARD_COMMIT* aCommit ) override
     {
         for( BOARD_ITEM* item : m_removedItems )
-            item->SetForcedTransparency( 0.0 );
+            aFrame->GetCanvas()->GetView()->Hide( item, false );
 
         m_removedItems.clear();
 
