@@ -815,6 +815,7 @@ public:
 
             for( BOARD_ITEM* item : m_removedItems )
             {
+                aFrame->GetCanvas()->GetView()->Hide( item, false );
                 aCommit->Remove( item );
             }
 
