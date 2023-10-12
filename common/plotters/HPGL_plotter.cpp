@@ -394,22 +394,16 @@ void HPGL_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T aFill, i
     VECTOR2D p1_device = userToDeviceCoordinates( p1 );
     VECTOR2D p2_device = userToDeviceCoordinates( p2 );
 
-    MoveTo( p1 );
+    // EA command seems to always fill the rectangle, so plot as a polygon instead
+    std::vector<VECTOR2I> cornerList;
 
-    if( aFill == FILL_T::FILLED_SHAPE )
-    {
-        startOrAppendItem( p1_device, wxString::Format( "RA %.0f,%.0f;",
-                                                        p2_device.x,
-                                                        p2_device.y ) );
-    }
+    cornerList.emplace_back( p1.x, p1.y );
+    cornerList.emplace_back( p2.x, p1.y );
+    cornerList.emplace_back( p2.x, p2.y );
+    cornerList.emplace_back( p1.x, p2.y );
+    cornerList.emplace_back( p1.x, p1.y );
 
-    startOrAppendItem( p1_device, wxString::Format( "EA %.0f,%.0f;",
-                                                    p2_device.x,
-                                                    p2_device.y ) );
-
-    m_current_item->loc_end = m_current_item->loc_start;
-    m_current_item->bbox.Merge( p2_device );
-    PenFinish();
+    PlotPoly( cornerList, aFill, aWidth, nullptr );
 }
 
 
