@@ -465,7 +465,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aF
     MoveTo( aCornerList[0] );
     startItem( userToDeviceCoordinates( aCornerList[0] ) );
 
-    if( aFill == FILL_T::FILLED_SHAPE )
+    if( aFill == FILL_T::FILLED_SHAPE || aFill == FILL_T::FILLED_WITH_COLOR )
     {
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );

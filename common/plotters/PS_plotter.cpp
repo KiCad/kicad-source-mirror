@@ -496,6 +496,9 @@ void PS_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 
 void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
+    if( fill == FILL_T::NO_FILL && width <= 0 )
+        return;
+
     VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
@@ -507,6 +510,9 @@ void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int 
 
 void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
+    if( fill == FILL_T::NO_FILL && width <= 0 )
+        return;
+
     wxASSERT( m_outputFile );
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );

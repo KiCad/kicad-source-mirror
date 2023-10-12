@@ -222,6 +222,9 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 {
     wxASSERT( m_workFile );
 
+    if( fill == FILL_T::NO_FILL && width <= 0 )
+        return;
+
     SetCurrentLineWidth( width );
 
     VECTOR2I size = p2 - p1;
@@ -229,8 +232,6 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     if( size.x == 0 && size.y == 0 )
     {
         // Can't draw zero-sized rectangles
-        SetCurrentLineWidth( width );
-
         MoveTo( VECTOR2I( p1.x, p1.y ) );
         FinishTo( VECTOR2I( p1.x, p1.y ) );
 
@@ -256,14 +257,25 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
+    char paintOp;
+
+    if( fill == FILL_T::NO_FILL )
+        paintOp = 'S';
+    else
+        paintOp = width > 0 ? 'B' : 'f';
+
     fprintf( m_workFile, "%g %g %g %g re %c\n", p1_dev.x, p1_dev.y, p2_dev.x - p1_dev.x,
-             p2_dev.y - p1_dev.y, fill == FILL_T::NO_FILL ? 'S' : 'B' );
+             p2_dev.y - p1_dev.y, paintOp );
 }
 
 
 void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int width )
 {
     wxASSERT( m_workFile );
+
+    if( aFill == FILL_T::NO_FILL && width <= 0 )
+        return;
+
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );
 

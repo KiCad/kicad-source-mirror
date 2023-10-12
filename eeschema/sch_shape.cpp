@@ -113,7 +113,10 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 
 void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
-    int pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
+    int pen_size = GetPenWidth();
+
+    if( pen_size > 0 )
+        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -185,15 +188,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             break;
 
         case SHAPE_T::RECTANGLE:
-        {
-            std::vector<VECTOR2I> pts = GetRectCorners();
-
-            aPlotter->MoveTo( pts[0] );
-            aPlotter->LineTo( pts[1] );
-            aPlotter->LineTo( pts[2] );
-            aPlotter->LineTo( pts[3] );
-            aPlotter->FinishTo( pts[0] );
-        }
+            aPlotter->Rect( GetStart(), GetEnd(), FILL_T::NO_FILL, pen_size );
             break;
 
         case SHAPE_T::POLY:

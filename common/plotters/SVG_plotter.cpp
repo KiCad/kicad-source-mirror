@@ -220,68 +220,77 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
     if( aIsGroup )
         fputs( "</g>\n<g ", m_outputFile );
 
-    // output the background fill color
-    fprintf( m_outputFile, "style=\"fill:#%6.6lX; ", m_brush_rgb_color );
+    fputs( "style=\"", m_outputFile );
 
-    switch( m_fillMode )
+    if( m_fillMode == FILL_T::NO_FILL )
     {
-    case FILL_T::NO_FILL:
-        fputs( "fill-opacity:0.0; ", m_outputFile );
-        break;
+        fputs( "fill:none; ", m_outputFile );
+    }
+    else
+    {
+        // output the background fill color
+        fprintf( m_outputFile, "fill:#%6.6lX; ", m_brush_rgb_color );
 
-    case FILL_T::FILLED_SHAPE:
-    case FILL_T::FILLED_WITH_BG_BODYCOLOR:
-    case FILL_T::FILLED_WITH_COLOR:
-        fprintf( m_outputFile, "fill-opacity:%.*f; ", m_precision, m_brush_alpha );
-        break;
+        switch( m_fillMode )
+        {
+        case FILL_T::FILLED_SHAPE:
+        case FILL_T::FILLED_WITH_BG_BODYCOLOR:
+        case FILL_T::FILLED_WITH_COLOR:
+            fprintf( m_outputFile, "fill-opacity:%.*f; ", m_precision, m_brush_alpha );
+            break;
+        default: break;
+        }
     }
 
     double pen_w = userToDeviceSize( aLineWidth );
 
-    if( pen_w < 0.0 )   // Ensure pen width validity
-        pen_w = 0.0;
-
-    // Fix a strange issue found in Inkscape: aWidth < 100 nm create issues on degrouping objects
-    // So we use only 4 digits in mantissa for stroke-width.
-    // TODO: perhaps used only 3 or 4 digits in mantissa for all values in mm, because some
-    // issues were previously reported reported when using nm as integer units
-
-    fprintf( m_outputFile, "\nstroke:#%6.6lX; stroke-width:%.*f; stroke-opacity:1; \n",
-             m_pen_rgb_color, m_precision, pen_w  );
-    fputs( "stroke-linecap:round; stroke-linejoin:round;", m_outputFile );
-
-    //set any extra attributes for non-solid lines
-    switch( m_dashed )
+    if( pen_w <= 0 )
     {
-    case PLOT_DASH_TYPE::DASH:
-        fprintf( m_outputFile, "stroke-dasharray:%.*f,%.*f;",
-                 m_precision, GetDashMarkLenIU( aLineWidth ),
-                 m_precision, GetDashGapLenIU( aLineWidth ) );
-        break;
+        fputs( "stroke:none;", m_outputFile );
+    }
+    else
+    {
+        // Fix a strange issue found in Inkscape: aWidth < 100 nm create issues on degrouping objects
+        // So we use only 4 digits in mantissa for stroke-width.
+        // TODO: perhaps used only 3 or 4 digits in mantissa for all values in mm, because some
+        // issues were previously reported reported when using nm as integer units
 
-    case PLOT_DASH_TYPE::DOT:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f;",
-                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
-        break;
+        fprintf( m_outputFile, "\nstroke:#%6.6lX; stroke-width:%.*f; stroke-opacity:1; \n",
+                 m_pen_rgb_color, m_precision, pen_w );
+        fputs( "stroke-linecap:round; stroke-linejoin:round;", m_outputFile );
 
-    case PLOT_DASH_TYPE::DASHDOT:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;",
-                 GetDashMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
-                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
-        break;
+        //set any extra attributes for non-solid lines
+        switch( m_dashed )
+        {
+        case PLOT_DASH_TYPE::DASH:
+            fprintf( m_outputFile, "stroke-dasharray:%.*f,%.*f;", m_precision,
+                     GetDashMarkLenIU( aLineWidth ), m_precision, GetDashGapLenIU( aLineWidth ) );
+            break;
 
-    case PLOT_DASH_TYPE::DASHDOTDOT:
-        fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f,%f,%f;",
-                 GetDashMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
-                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
-                 GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
-        break;
+        case PLOT_DASH_TYPE::DOT:
+            fprintf( m_outputFile, "stroke-dasharray:%f,%f;", GetDotMarkLenIU( aLineWidth ),
+                     GetDashGapLenIU( aLineWidth ) );
+            break;
 
-    case PLOT_DASH_TYPE::DEFAULT:
-    case PLOT_DASH_TYPE::SOLID:
-    default:
-        //do nothing
-        break;
+        case PLOT_DASH_TYPE::DASHDOT:
+            fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;", GetDashMarkLenIU( aLineWidth ),
+                     GetDashGapLenIU( aLineWidth ), GetDotMarkLenIU( aLineWidth ),
+                     GetDashGapLenIU( aLineWidth ) );
+            break;
+
+        case PLOT_DASH_TYPE::DASHDOTDOT:
+            fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f,%f,%f;",
+                     GetDashMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
+                     GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
+                     GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
+            break;
+
+        case PLOT_DASH_TYPE::DEFAULT:
+        case PLOT_DASH_TYPE::SOLID:
+        default:
+            //do nothing
+            break;
+        }
     }
 
     if( aExtraStyle.length() )
