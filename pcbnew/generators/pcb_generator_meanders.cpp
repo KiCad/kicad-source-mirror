@@ -228,7 +228,18 @@ public:
         return -1;
     }
 
-    bool baselineValid() { return m_baseLine && m_baseLine->PointCount() > 1; }
+    bool baselineValid()
+    {
+        if( m_tuningMode == DIFF_PAIR )
+        {
+            return( m_baseLine && m_baseLine->PointCount() > 1
+                        && m_baseLineCoupled && m_baseLineCoupled->PointCount() > 1 );
+        }
+        else
+        {
+            return( m_baseLine && m_baseLine->PointCount() > 1 );
+        }
+    }
 
     static PCB_GENERATOR_MEANDERS* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                               BOARD_CONNECTED_ITEM* aStartItem,
@@ -419,17 +430,18 @@ public:
         return rv;
     }
 
-    bool InitBaseLine( PNS::ROUTER* router, int layer, BOARD* aBoard )
+    bool initBaseLine( PNS::ROUTER* router, int layer, BOARD* aBoard, VECTOR2I& aStart,
+                       VECTOR2I& aEnd, int aNetCode, std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
     {
         PNS::NODE* world = router->GetWorld();
 
-        int netCode = snapToNearestTrackPoint( m_origin, aBoard, -1 );
-        snapToNearestTrackPoint( m_end, aBoard, netCode );
+        snapToNearestTrackPoint( aStart, aBoard, aNetCode );
+        snapToNearestTrackPoint( aEnd, aBoard, aNetCode );
 
         VECTOR2I startSnapPoint, endSnapPoint;
 
-        PNS::LINKED_ITEM* startItem = PickSegment( router, m_origin, layer, startSnapPoint );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, layer, endSnapPoint );
+        PNS::LINKED_ITEM* startItem = PickSegment( router, aStart, layer, startSnapPoint );
+        PNS::LINKED_ITEM* endItem = PickSegment( router, aEnd, layer, endSnapPoint );
 
         wxASSERT( startItem );
         wxASSERT( endItem );
@@ -451,9 +463,73 @@ public:
 
         chain.Split( startSnapPoint, endSnapPoint, pre, mid, post );
 
-        m_baseLine = mid;
+        aBaseLine = mid;
 
         return true;
+    }
+
+    bool InitBaseLine( PNS::ROUTER* router, int layer, BOARD* aBoard )
+    {
+        m_baseLineCoupled.reset();
+
+        int netCode = snapToNearestTrackPoint( m_origin, aBoard, -1 );
+
+        if( !initBaseLine( router, layer, aBoard, m_origin, m_end, netCode, m_baseLine ) )
+            return false;
+
+        if( m_tuningMode == DIFF_PAIR )
+        {
+            PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
+
+            if( PNS::NET_HANDLE handle = resolver->DpCoupledNet( aBoard->FindNet( netCode ) ) )
+            {
+                int      coupledNet = static_cast<NETINFO_ITEM*>( handle )->GetNetCode();
+                VECTOR2I coupledStart = m_origin;
+                VECTOR2I coupledEnd = m_end;
+
+                return initBaseLine( router, layer, aBoard, coupledStart, coupledEnd, coupledNet,
+                                     m_baseLineCoupled );
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    void removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& baseLine )
+    {
+        VECTOR2I startSnapPoint, endSnapPoint;
+
+        std::optional<PNS::LINE> line = getLine( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ),
+                                                 aRouter, aLayer, startSnapPoint, endSnapPoint );
+
+        wxCHECK( line, /* void */ );
+
+        SHAPE_LINE_CHAIN pre;
+        SHAPE_LINE_CHAIN mid;
+        SHAPE_LINE_CHAIN post;
+        line->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
+
+        // LINE does not have a separate remover, as LINEs are never truly a member of the tree
+        for( PNS::LINKED_ITEM* li : line->Links() )
+            aRouter->GetInterface()->RemoveItem( li );
+
+        aRouter->GetWorld()->Remove( *line );
+
+        SHAPE_LINE_CHAIN straightChain;
+        straightChain.Append( pre );
+        straightChain.Append( baseLine );
+        straightChain.Append( post );
+        straightChain.Simplify();
+
+        PNS::LINE straightLine( *line, straightChain );
+
+        // LINE does not have a separate remover, as LINEs are never truly a member of the tree
+        aRouter->GetWorld()->Add( straightLine, false );
+
+        for( PNS::LINKED_ITEM* li : straightLine.Links() )
+            aRouter->GetInterface()->AddItem( li );
     }
 
     void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
@@ -461,10 +537,8 @@ public:
     {
         aTool->Router()->SyncWorld();
 
-        PNS::ROUTER*     router = aTool->Router();
-        PNS::NODE*       world = router->GetWorld();
-        PNS_KICAD_IFACE* iface = aTool->GetInterface();
-        int              layer = GetLayer();
+        PNS::ROUTER* router = aTool->Router();
+        int          layer = GetLayer();
 
         // Ungroup first so that undo works
         if( !GetItems().empty() )
@@ -486,56 +560,26 @@ public:
 
         aCommit->Remove( this );
 
+        aTool->ClearRouterCommit();
+
         if( baselineValid() )
         {
-            const SHAPE_LINE_CHAIN& baseLine = *m_baseLine;
+            removeToBaseline( router, layer, *m_baseLine );
+            removeToBaseline( router, layer, *m_baseLineCoupled );
+        }
 
-            VECTOR2I startSnapPoint, endSnapPoint;
+        std::set<BOARD_ITEM*> clearRouterRemovedItems = aTool->GetRouterCommitRemovedItems();
+        std::set<BOARD_ITEM*> clearRouterAddedItems = aTool->GetRouterCommitAddedItems();
 
-            std::optional<PNS::LINE> line = getLine( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ),
-                                                     router, layer, startSnapPoint, endSnapPoint );
+        for( BOARD_ITEM* item : clearRouterRemovedItems )
+        {
+            item->ClearSelected();
+            aCommit->Remove( item );
+        }
 
-            wxCHECK( line, /* void */ );
-
-            SHAPE_LINE_CHAIN pre;
-            SHAPE_LINE_CHAIN mid;
-            SHAPE_LINE_CHAIN post;
-            line->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
-
-            aTool->ClearRouterCommit();
-
-            // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-            for( PNS::LINKED_ITEM* li : line->Links() )
-                iface->RemoveItem( li );
-
-            world->Remove( *line );
-
-            SHAPE_LINE_CHAIN straightChain;
-            straightChain.Append( pre );
-            straightChain.Append( baseLine );
-            straightChain.Append( post );
-            straightChain.Simplify();
-
-            PNS::LINE straightLine( *line, straightChain );
-
-            // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-            world->Add( straightLine, false );
-            for( PNS::LINKED_ITEM* li : straightLine.Links() )
-                iface->AddItem( li );
-
-            std::set<BOARD_ITEM*> clearRouterRemovedItems = aTool->GetRouterCommitRemovedItems();
-            std::set<BOARD_ITEM*> clearRouterAddedItems = aTool->GetRouterCommitAddedItems();
-
-            for( BOARD_ITEM* item : clearRouterRemovedItems )
-            {
-                item->ClearSelected();
-                aCommit->Remove( item );
-            }
-
-            for( BOARD_ITEM* item : clearRouterAddedItems )
-            {
-                aCommit->Add( item );
-            }
+        for( BOARD_ITEM* item : clearRouterAddedItems )
+        {
+            aCommit->Add( item );
         }
 
         aCommit->Push( "Remove Meander", APPEND_UNDO );
@@ -612,11 +656,83 @@ public:
         }
     }
 
+    bool resetToBaseline( PNS::ROUTER* aRouter, int aLayer, PCB_BASE_EDIT_FRAME* aFrame,
+                          SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
+    {
+        PNS::NODE* world = aRouter->GetWorld();
+        VECTOR2I   startSnapPoint, endSnapPoint;
+
+        std::optional<PNS::LINE> line = getLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
+                                                 aRouter, aLayer, startSnapPoint, endSnapPoint );
+
+        wxCHECK( line, false );
+
+        SHAPE_LINE_CHAIN straightChain;
+        {
+            SHAPE_LINE_CHAIN pre, mid, post;
+            line->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
+
+            straightChain.Append( pre );
+            straightChain.Append( aBaseLine );
+            straightChain.Append( post );
+            straightChain.Simplify();
+        }
+
+        // LINE does not have a separate remover, as LINEs are never truly a member of the tree
+        for( PNS::LINKED_ITEM* li : line->Links() )
+        {
+            if( li->Parent() )
+            {
+                aFrame->GetCanvas()->GetView()->Hide( li->Parent() );
+                m_removedItems.insert( li->Parent() );
+            }
+        }
+
+        world->Remove( *line );
+
+        PNS::LINE straightLine( *line, straightChain );
+
+        world->Add( straightLine, false );
+
+        if( aPrimary )
+        {
+            m_origin = straightChain.NearestPoint( m_origin );
+            m_end = straightChain.NearestPoint( m_end );
+
+            // Don't allow points too close
+            if( ( m_end - m_origin ).EuclideanNorm() < pcbIUScale.mmToIU( 0.1 ) )
+            {
+                m_origin = startSnapPoint;
+                m_end = endSnapPoint;
+            }
+
+            {
+                SHAPE_LINE_CHAIN pre, mid, post;
+                straightChain.Split( m_origin, m_end, pre, mid, post );
+
+                m_baseLine = mid;
+            }
+        }
+        else
+        {
+            VECTOR2I start = straightChain.NearestPoint( m_origin );
+            VECTOR2I end = straightChain.NearestPoint( m_end );
+
+            {
+                SHAPE_LINE_CHAIN pre, mid, post;
+                straightChain.Split( start, end, pre, mid, post );
+
+                m_baseLineCoupled = mid;
+            }
+        }
+
+        return true;
+    }
+
     bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                  BOARD_COMMIT* aCommit ) override
     {
         PNS::ROUTER*     router = aTool->Router();
-        PNS::NODE*       world = router->GetWorld();
         PNS_KICAD_IFACE* iface = aTool->GetInterface();
         int              layer = GetLayer();
 
@@ -633,63 +749,22 @@ public:
         }
         else
         {
-            const SHAPE_LINE_CHAIN& baseLine = *m_baseLine;
-
-            VECTOR2I startSnapPoint, endSnapPoint;
-
-            std::optional<PNS::LINE> line = getLine( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ),
-                                                     router, layer, startSnapPoint, endSnapPoint );
-
-            wxASSERT( line );
-
-            if( !line )
+            if( resetToBaseline( router, layer, aFrame, *m_baseLine, true ) )
+            {
+                m_origin = m_baseLine->CPoint( 0 );
+                m_end = m_baseLine->CPoint( -1 );
+            }
+            else
             {
                 InitBaseLine( router, layer, aBoard );
                 return false;
             }
 
-            SHAPE_LINE_CHAIN straightChain;
+            if( m_tuningMode == DIFF_PAIR
+                    && !resetToBaseline( router, layer, aFrame, *m_baseLineCoupled, false ) )
             {
-                SHAPE_LINE_CHAIN pre, mid, post;
-                line->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
-
-                straightChain.Append( pre );
-                straightChain.Append( baseLine );
-                straightChain.Append( post );
-                straightChain.Simplify();
-            }
-
-            // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-            for( PNS::LINKED_ITEM* li : line->Links() )
-            {
-                if( li->Parent() )
-                {
-                    aFrame->GetCanvas()->GetView()->Hide( li->Parent() );
-                    m_removedItems.insert( li->Parent() );
-                }
-            }
-
-            world->Remove( *line );
-
-            PNS::LINE straightLine( *line, straightChain );
-
-            world->Add( straightLine, false );
-
-            m_origin = straightChain.NearestPoint( m_origin );
-            m_end = straightChain.NearestPoint( m_end );
-
-            // Don't allow points too close
-            if( ( m_end - m_origin ).EuclideanNorm() < pcbIUScale.mmToIU( 0.1 ) )
-            {
-                m_origin = startSnapPoint;
-                m_end = endSnapPoint;
-            }
-
-            {
-                SHAPE_LINE_CHAIN pre, mid, post;
-                straightChain.Split( m_origin, m_end, pre, mid, post );
-
-                m_baseLine = mid;
+                InitBaseLine( router, layer, aBoard );
+                return false;
             }
         }
 
@@ -967,6 +1042,15 @@ public:
             ctx.DrawLine( m_origin, m_end, false );
         }
 
+        if( m_baseLineCoupled )
+        {
+            for( int i = 0; i < m_baseLineCoupled->SegmentCount(); i++ )
+            {
+                SEG seg = m_baseLineCoupled->CSegment( i );
+                ctx.DrawLine( seg.A, seg.B, false );
+            }
+        }
+
         SHAPE_LINE_CHAIN chain = GetRectShape();
 
         for( int i = 0; i < chain.SegmentCount(); i++ )
@@ -1052,6 +1136,9 @@ public:
         if( m_baseLine )
             props.set( "base_line", wxAny( *m_baseLine ) );
 
+        if( m_baseLineCoupled )
+            props.set( "base_line_coupled", wxAny( *m_baseLineCoupled ) );
+
         return props;
     }
 
@@ -1088,6 +1175,9 @@ public:
 
         if( auto baseLine = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line" ) )
             m_baseLine = *baseLine;
+
+        if( auto baseLineCoupled = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line_coupled" ) )
+            m_baseLineCoupled = *baseLineCoupled;
     }
 
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override
@@ -1179,6 +1269,7 @@ protected:
     PNS::MEANDER_SIDE  m_initialSide;
 
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
+    std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
 
     bool               m_singleSide;
     bool               m_rounded;
