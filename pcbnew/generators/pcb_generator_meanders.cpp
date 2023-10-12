@@ -563,7 +563,10 @@ public:
         if( baselineValid() )
         {
             removeToBaseline( router, layer, *m_baseLine );
-            removeToBaseline( router, layer, *m_baseLineCoupled );
+            if( m_tuningMode == DIFF_PAIR )
+            {
+                removeToBaseline( router, layer, *m_baseLineCoupled );
+            }
         }
 
         std::set<BOARD_ITEM*> clearRouterRemovedItems = aTool->GetRouterCommitRemovedItems();
