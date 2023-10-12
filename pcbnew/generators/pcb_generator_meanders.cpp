@@ -867,11 +867,19 @@ public:
 
     bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override
     {
-        points->AddPoint( m_origin );
-        points->AddPoint( m_end );
+        VECTOR2I centerlineOffset;
+
+        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+            centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+
+        points->AddPoint( m_origin + centerlineOffset );
+        points->AddPoint( m_end + centerlineOffset );
 
         SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                                 : SEG( m_origin, m_end );
+
+        base.A += centerlineOffset;
+        base.B += centerlineOffset;
 
         int offset = m_maxAmplitude;
 
@@ -880,13 +888,13 @@ public:
 
         VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
 
-        points->AddPoint( m_origin + widthHandleOffset );
+        points->AddPoint( base.A + widthHandleOffset );
         points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
 
         VECTOR2I spacingHandleOffset =
                 widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
 
-        points->AddPoint( m_origin + spacingHandleOffset );
+        points->AddPoint( base.A + spacingHandleOffset );
         points->Point( 3 ).SetGridConstraint( IGNORE_GRID );
 
         return true;
@@ -895,11 +903,19 @@ public:
     bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
                                BOARD_COMMIT*                aCommit ) override
     {
+        VECTOR2I centerlineOffset;
+
+        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+            centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+
         SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                                 : SEG( m_origin, m_end );
 
-        m_origin = aEditPoints->Point( 0 ).GetPosition();
-        m_end = aEditPoints->Point( 1 ).GetPosition();
+        base.A += centerlineOffset;
+        base.B += centerlineOffset;
+
+        m_origin = aEditPoints->Point( 0 ).GetPosition() - centerlineOffset;
+        m_end = aEditPoints->Point( 1 ).GetPosition() - centerlineOffset;
 
         if( aEditPoints->Point( 2 ).IsActive() )
         {
@@ -921,7 +937,7 @@ public:
             VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
             VECTOR2I sHandle = aEditPoints->Point( 3 ).GetPosition();
 
-            int value = KiROUND( SEG( m_origin, wHandle ).LineDistance( sHandle ) / 1.5 );
+            int value = KiROUND( SEG( base.A, wHandle ).LineDistance( sHandle ) / 1.5 );
 
             SetSpacing( KiROUND( value / pcbIUScale.mmToIU( 0.01 ) ) * pcbIUScale.mmToIU( 0.01 ) );
         }
@@ -931,8 +947,16 @@ public:
 
     bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) override
     {
+        VECTOR2I centerlineOffset;
+
+        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+            centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+
         SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                                 : SEG( m_origin, m_end );
+
+        base.A += centerlineOffset;
+        base.B += centerlineOffset;
 
         int offset = m_maxAmplitude;
 
@@ -941,15 +965,15 @@ public:
 
         VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
 
-        aEditPoints->Point( 0 ).SetPosition( m_origin );
-        aEditPoints->Point( 1 ).SetPosition( m_end );
+        aEditPoints->Point( 0 ).SetPosition( m_origin + centerlineOffset );
+        aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffset );
 
-        aEditPoints->Point( 2 ).SetPosition( m_origin + widthHandleOffset );
+        aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
 
         VECTOR2I spacingHandleOffset =
                 widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
 
-        aEditPoints->Point( 3 ).SetPosition( m_origin + spacingHandleOffset );
+        aEditPoints->Point( 3 ).SetPosition( base.A + spacingHandleOffset );
 
         return true;
     }
@@ -960,18 +984,26 @@ public:
 
         if( m_baseLine )
         {
-            bool singleSided = m_singleSide;
+            SHAPE_LINE_CHAIN cl = *m_baseLine;
+
+            if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+            {
+                for( int i = 0; i < cl.PointCount() && i < m_baseLineCoupled->PointCount(); ++i )
+                    cl.SetPoint( i, ( cl.CPoint( i ) + m_baseLineCoupled->CPoint( i ) ) / 2 );
+            }
+
+            bool singleSided = m_tuningMode != DIFF_PAIR && m_singleSide;
 
             if( singleSided )
             {
                 SHAPE_LINE_CHAIN left, right;
 
-                if( m_baseLine->OffsetLine( m_maxAmplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                            ARC_LOW_DEF, left, right, true ) )
+                if( cl.OffsetLine( m_maxAmplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
+                                   left, right, true ) )
                 {
-                    chain.Append( m_baseLine->CPoint( 0 ) );
+                    chain.Append( cl.CPoint( 0 ) );
                     chain.Append( m_initialSide >= 0 ? right : left );
-                    chain.Append( m_baseLine->CPoint( -1 ) );
+                    chain.Append( cl.CPoint( -1 ) );
 
                     return chain;
                 }
@@ -985,8 +1017,8 @@ public:
             {
                 SHAPE_POLY_SET poly;
 
-                poly.OffsetLineChain( *m_baseLine, m_maxAmplitude * 2,
-                                      CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, false );
+                poly.OffsetLineChain( cl, m_maxAmplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                      ARC_LOW_DEF, false );
 
                 if( poly.OutlineCount() > 0 )
                 {
