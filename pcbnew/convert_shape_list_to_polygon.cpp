@@ -661,7 +661,26 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
             }
 
         case SHAPE_T::ARC:
+        {
+            // Arc size can be evaluated from the distance between arc middle point and arc ends
+            // We do not need a precise value, just an idea of its size
+            VECTOR2I arcMiddle = graphic->GetArcMid();
+            VECTOR2I seg1 = arcMiddle - graphic->GetStart();
+            VECTOR2I seg2 = graphic->GetEnd() - arcMiddle;
+            int dim = seg1.EuclideanNorm() + seg2.EuclideanNorm();
+
+            if( dim <= min_dist )
+            {
+                success = false;
+
+                if( aErrorHandler )
+                {
+                    (*aErrorHandler)( wxString::Format( _( "(Arc has null or very small size: %d nm)" ), dim ),
+                                      graphic, nullptr, graphic->GetStart() );
+                }
+            }
             break;
+            }
 
         case SHAPE_T::POLY:
             break;
