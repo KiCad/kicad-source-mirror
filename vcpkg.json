@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "kicad",
-  "version": "6.99",
+  "version": "7.0",
   "license": "GPL-2.0+",
   "dependencies": [
     "boost",
@@ -35,7 +35,7 @@
     },
     {
       "name": "wxwidgets",
-      "version": "3.2.2#0"
+      "version": "3.2.3"
     },
     {
       "name": "wxpython",
@@ -44,6 +44,10 @@
     {
       "name": "ngspice",
       "version": "41"
+    },
+    {
+      "name": "libffi",
+      "version": "3.4.4#2"
     }
   ]
 }
