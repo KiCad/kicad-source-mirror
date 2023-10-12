@@ -438,11 +438,26 @@ void DXF_PLOTTER::SetColor( const COLOR4D& color )
 void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
-    MoveTo( p1 );
-    LineTo( VECTOR2I( p1.x, p2.y ) );
-    LineTo( VECTOR2I( p2.x, p2.y ) );
-    LineTo( VECTOR2I( p2.x, p1.y ) );
-    FinishTo( VECTOR2I( p1.x, p1.y ) );
+
+    if( p1 != p2 )
+    {
+        MoveTo( p1 );
+        LineTo( VECTOR2I( p1.x, p2.y ) );
+        LineTo( VECTOR2I( p2.x, p2.y ) );
+        LineTo( VECTOR2I( p2.x, p1.y ) );
+        FinishTo( VECTOR2I( p1.x, p1.y ) );
+    }
+    else
+    {
+        // Draw as a point
+        wxString cname = getDXFColorName( m_currentColor );
+        VECTOR2D point_dev = userToDeviceCoordinates( p1 );
+
+        fprintf( m_outputFile, "0\nPOINT\n8\n%s\n10\n%s\n20\n%s\n",
+                 TO_UTF8( cname ),
+                 formatCoord( point_dev.x ).c_str(),
+                 formatCoord( point_dev.y ).c_str() );
+    }
 }
 
 
@@ -452,10 +467,10 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
     double   radius = userToDeviceSize( diameter / 2 );
     VECTOR2D centre_dev = userToDeviceCoordinates( centre );
 
+    wxString cname = getDXFColorName( m_currentColor );
+
     if( radius > 0 )
     {
-        wxString cname = getDXFColorName( m_currentColor );
-
         if( fill == FILL_T::NO_FILL )
         {
             fprintf( m_outputFile, "0\nCIRCLE\n8\n%s\n10\n%s\n20\n%s\n40\n%s\n",
@@ -466,7 +481,7 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
         }
         else if( fill == FILL_T::FILLED_SHAPE )
         {
-            double r = radius*0.5;
+            double r = radius * 0.5;
             fprintf( m_outputFile, "0\nPOLYLINE\n" );
             fprintf( m_outputFile, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ) );
             fprintf( m_outputFile, "40\n%s\n41\n%s\n",
@@ -482,6 +497,14 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
                                     formatCoord( centre_dev.y ).c_str() );
             fprintf( m_outputFile, "0\nSEQEND\n");
         }
+    }
+    else
+    {
+        // Draw as a point
+        fprintf( m_outputFile, "0\nPOINT\n8\n%s\n10\n%s\n20\n%s\n",
+                 TO_UTF8( cname ),
+                 formatCoord( centre_dev.x ).c_str(),
+                 formatCoord( centre_dev.y ).c_str() );
     }
 }
 
