@@ -35,6 +35,8 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
 #include <convert_shape_list_to_polygon.h>
+#include <board.h>
+#include <collectors.h>
 
 #include <wx/log.h>
 
@@ -582,8 +584,116 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 }
 
 
-#include <board.h>
-#include <collectors.h>
+/* This function is used to test a board outlines graphic items for validity
+ * i.e. null or very small segments, rects and circles
+ */
+bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
+                                    OUTLINE_ERROR_HANDLER* aErrorHandler )
+{
+    bool                success = true;
+    PCB_TYPE_COLLECTOR  items;
+    int                 min_dist = std::max( 0, aMinDist );
+
+    // Get all the shapes into 'items', then keep only those on layer == Edge_Cuts.
+    items.Collect( aBoard, { PCB_SHAPE_T } );
+
+    std::vector<PCB_SHAPE*> segList;
+
+    for( int ii = 0; ii < items.GetCount(); ii++ )
+    {
+        PCB_SHAPE* seg = static_cast<PCB_SHAPE*>( items[ii] );
+
+        if( seg->GetLayer() == Edge_Cuts )
+            segList.push_back( seg );
+    }
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        PCB_TYPE_COLLECTOR fpItems;
+        fpItems.Collect( fp, { PCB_SHAPE_T } );
+
+        for( int ii = 0; ii < fpItems.GetCount(); ii++ )
+        {
+            PCB_SHAPE* fpSeg = static_cast<PCB_SHAPE*>( fpItems[ii] );
+
+            if( fpSeg->GetLayer() == Edge_Cuts )
+                segList.push_back( fpSeg );
+        }
+    }
+
+    // Now Test vailidty of collected items
+    for( PCB_SHAPE* graphic : segList )
+    {
+        switch( graphic->GetShape() )
+        {
+        case SHAPE_T::RECTANGLE:
+        {
+            VECTOR2I seg = graphic->GetEnd() - graphic->GetStart();
+            int dim = seg.EuclideanNorm();
+
+            if( dim <= min_dist )
+            {
+                success = false;
+
+                if( aErrorHandler )
+                {
+                    (*aErrorHandler)(  wxString::Format( _( "(Rectangle has null or very small size: %d nm)" ),
+                                            dim ),
+                                      graphic, nullptr, graphic->GetStart() );
+                }
+            }
+            break;
+        }
+
+        case SHAPE_T::CIRCLE:
+        {
+            if( graphic->GetRadius()  <= min_dist )
+            {
+                success = false;
+
+                if( aErrorHandler )
+                {
+                    (*aErrorHandler)( wxString::Format( _( "(Circle has null or very small radius: %d nm)" ),
+                                            (int)graphic->GetRadius() ),
+                                      graphic, nullptr, graphic->GetStart() );
+                }
+            }
+            break;
+        }
+
+        case SHAPE_T::SEGMENT:
+        {
+            VECTOR2I seg = graphic->GetEnd() - graphic->GetStart();
+            int dim = seg.EuclideanNorm();
+
+            if( dim <= min_dist )
+            {
+                success = false;
+
+                if( aErrorHandler )
+                {
+                    (*aErrorHandler)( wxString::Format( _( "(Segment has null or very small lenght: %d nm)" ), dim ),
+                                      graphic, nullptr, graphic->GetStart() );
+                }
+            }
+            break;
+            }
+
+        case SHAPE_T::ARC:
+            break;
+
+        case SHAPE_T::BEZIER:
+            break;
+
+        default:
+            UNIMPLEMENTED_FOR( graphic->SHAPE_T_asString() );
+            return false;
+        }
+    }
+
+    return success;
+}
+
 
 /* This function is used to extract a board outlines (3D view, automatic zones build ...)
  * Any closed outline inside the main outline is a hole

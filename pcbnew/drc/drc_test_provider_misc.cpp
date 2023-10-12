@@ -98,8 +98,29 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
             };
 
     // Use the standard chaining epsilon here so that we report errors that might affect
-    // other tools (such as STEP export).
+    // other tools (such as 3D viewer).
     int chainingEpsilon = m_board->GetOutlinesChainingEpsilon();
+
+    if( !TestBoardOutlinesGraphicItems(m_board, chainingEpsilon, &errorHandler ) )
+    {
+        if( errorHandled )
+        {
+            // if there are invalid items on Edge.Cuts, they are already reported
+        }
+        else
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+            wxString msg;
+
+            msg.Printf( _( "(Suspicious items found on Edge.Cuts layer)" ) );
+
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetItems( m_board );
+
+            reportViolation( drcItem, m_board->GetBoundingBox().Centre(), Edge_Cuts );
+        }
+    }
+
 
     if( !BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
                                     chainingEpsilon, &errorHandler ) )

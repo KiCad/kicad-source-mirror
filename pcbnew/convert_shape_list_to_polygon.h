@@ -33,6 +33,16 @@ const std::function<void( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* it
                           const VECTOR2I& pt )> OUTLINE_ERROR_HANDLER;
 
 /**
+ * This function is used to test a board graphic items on Edge cut layer for validity
+ * i.e. null segments, 0 size rects and circles
+ * @param aBoard is the board to test
+ * @param aMinDist is the min lenght of a segment (or radius, or diagonal size of a rect)
+ * to be valid
+ * @param aErrorHandler = an optional error handler
+ */
+bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
+                                    OUTLINE_ERROR_HANDLER* aErrorHandler );
+/**
  * Function ConvertOutlineToPolygon
  * build a polygon set (with holes) from a PCB_SHAPE list, which is expected to be one or more
  * top-level closed outlines, with zero or more holes in each.  Optionally, it can be limited to
