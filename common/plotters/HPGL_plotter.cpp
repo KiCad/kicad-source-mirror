@@ -424,7 +424,7 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
     double const target_chord_length = m_arcTargetChordLength;
     EDA_ANGLE    chord_angle         = ANGLE_360 * target_chord_length / circumf;
 
-    chord_angle = std::clamp( m_arcMinChordDegrees, chord_angle, ANGLE_45 );
+    chord_angle = std::clamp( chord_angle, m_arcMinChordDegrees, ANGLE_45 );
 
     if( aFill == FILL_T::FILLED_SHAPE )
     {
