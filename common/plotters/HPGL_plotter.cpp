@@ -429,7 +429,6 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
                                                          chord_angle.AsDegrees(),
                                                          hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
-        m_current_item->pen_returns = true;
         m_current_item->bbox.Merge( BOX2D( center_dev - radius,
                                            VECTOR2D( 2 * radius, 2 * radius ) ) );
         PenFinish();
@@ -442,7 +441,6 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
                                                          radius,
                                                          chord_angle.AsDegrees() ) );
         m_current_item->lift_before = true;
-        m_current_item->pen_returns = true;
         m_current_item->bbox.Merge( BOX2D( center_dev - radius,
                                            VECTOR2D( 2 * radius, 2 * radius ) ) );
         PenFinish();
