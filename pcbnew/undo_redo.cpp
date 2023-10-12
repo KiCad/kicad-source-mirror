@@ -295,6 +295,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         UNDO_REDO status = aList->GetPickedItemStatus( ii );
 
         if( status != UNDO_REDO::DELETED
+                && status != UNDO_REDO::UNGROUP
+                && status != UNDO_REDO::REGROUP
                 && status != UNDO_REDO::DRILLORIGIN     // origin markers never on board
                 && status != UNDO_REDO::GRIDORIGIN      // origin markers never on board
                 && status != UNDO_REDO::PAGESETTINGS )  // nor are page settings proxy items

@@ -539,6 +539,7 @@ public:
 
         PNS::ROUTER* router = aTool->Router();
         int          layer = GetLayer();
+        int          undoFlags = 0;
 
         // Ungroup first so that undo works
         if( !GetItems().empty() )
@@ -552,10 +553,7 @@ public:
             group->RemoveAll();
 
             aFrame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
-        }
-        else
-        {
-            aCommit->Push( "" );
+            undoFlags |= APPEND_UNDO;
         }
 
         aCommit->Remove( this );
@@ -582,7 +580,7 @@ public:
             aCommit->Add( item );
         }
 
-        aCommit->Push( "Remove Meander", APPEND_UNDO );
+        aCommit->Push( "Remove Meander", undoFlags );
     }
 
     std::optional<PNS::LINE> getLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,
@@ -834,10 +832,23 @@ public:
             }
         }
 
+        // Store isNew as BOARD_COMMIT::Push() is going to clear it.
+        bool isNew = IsNew();
+
         if( aCommitMsg.IsEmpty() )
             aCommit->Push( _( "Edit Meander" ), aCommitFlags );
         else
             aCommit->Push( aCommitMsg, aCommitFlags );
+
+        if( isNew && !GetItems().empty() )
+        {
+            PICKED_ITEMS_LIST undoList;
+
+            for( BOARD_ITEM* member : GetItems() )
+                undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::REGROUP ) );
+
+            aFrame->AppendCopyToUndoList( undoList, UNDO_REDO::REGROUP );
+        }
     }
 
     void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
