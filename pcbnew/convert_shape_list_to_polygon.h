@@ -33,49 +33,55 @@ const std::function<void( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* it
                           const VECTOR2I& pt )> OUTLINE_ERROR_HANDLER;
 
 /**
- * This function is used to test a board graphic items on Edge cut layer for validity
- * i.e. null segments, 0 size rects and circles
- * @param aBoard is the board to test
- * @param aMinDist is the min lenght of a segment (or radius, or diagonal size of a rect)
- * to be valid
- * @param aErrorHandler = an optional error handler
+ * Test a board graphic items on edge cut layer for validity.
+ *
+ * @param aBoard is the board to test.
+ * @param aMinDist is the min length of a segment (or radius, or diagonal size of a rect)
+ *        to be valid.
+ * @param aErrorHandler is an optional error handler.
  */
 bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
                                     OUTLINE_ERROR_HANDLER* aErrorHandler );
+
 /**
- * Function ConvertOutlineToPolygon
- * build a polygon set (with holes) from a PCB_SHAPE list, which is expected to be one or more
- * top-level closed outlines, with zero or more holes in each.  Optionally, it can be limited to
- * a single top-level closed outline.
+ * Build a polygon set with holes from a #PCB_SHAPE list.
+ *
+ * The shape list is expected to be one or more top-level closed outlines with zero or more
+ * holes in each.  Optionally, it can be limited to a single top-level closed outline.
+ *
  * @param aShapeList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
- * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
- * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
- * @param aAllowDisjoint indicates multiple top-level outlines are allowed
- * @param aErrorHandler = an optional error handler
- * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
- *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
- *  This is mainly for export to STEP files
- * @return true if success, false if a contour is not valid (self intersecting)
+ * @param aErrorMax is the max error distance when polygonizing a curve (internal units).
+ * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units).
+ * @param aAllowDisjoint indicates multiple top-level outlines are allowed.
+ * @param aErrorHandler is an optional error handler.
+ * @param aAllowUseArcsInPolygons is an option to allow adding arcs in #SHAPE_LINE_CHAIN
+ *                                polylines/polygons when building outlines from aShapeList
+ *                                This is mainly for export to STEP files.
+ * @return true if success, false if a contour is not valid (self intersecting).
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SET& aPolygons,
                               int aErrorMax, int aChainingEpsilon, bool aAllowDisjoint,
-                              OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons = false );
+                              OUTLINE_ERROR_HANDLER* aErrorHandler,
+                              bool aAllowUseArcsInPolygons = false );
 
 
 /**
- * Extracts the board outlines and build a closed polygon from lines, arcs and circle items on
- * edge cut layer.  Any closed outline inside the main outline is a hole.  All contours should be
- * closed, i.e. are valid vertices for a closed polygon.
- * @param aBoard is the board to build outlines
+ * Extract the board outlines and build a closed polygon from lines, arcs and circle items on
+ * edge cut layer.
+ *
+ * Any closed outline inside the main outline is a hole.  All contours should be closed, i.e. are
+ * valid vertices for a closed polygon.
+ *
+ * @param aBoard is the board to build outlines.
  * @param aOutlines will contain the outlines ( complex polygons ).
- * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
- * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
- * @param aErrorHandler = an optional error handler
- * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
- *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
- *  This is mainly for export to STEP files
- * @return true if success, false if a contour is not valid
+ * @param aErrorMax is the max error distance when polygonizing a curve (internal units).
+ * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units),
+ * @param aErrorHandler = an optional error handler.
+ * @param aAllowUseArcsInPolygons is an option to allow adding arcs in #SHAPE_LINE_CHAIN
+ *                                polylines/polygons when building outlines from aShapeList
+ *                                This is mainly for export to STEP files.
+ * @return true if success, false if a contour is not valid.
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
                                        int aErrorMax, int aChainingEpsilon,
@@ -84,9 +90,8 @@ extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
 
 
 /**
- * This function is used to extract a board outline for a footprint view.
+ * Extract a board outline for a footprint view.
  *
- * Notes:
  * * Incomplete outlines will be closed by joining the end of the outline onto the bounding box
  *   (by simply projecting the end points) and then take the area that contains the copper.
  * * If all copper lies inside a closed outline, than that outline will be treated as an external

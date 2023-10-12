@@ -50,28 +50,28 @@
  */
 const wxChar* traceBoardOutline = wxT( "KICAD_BOARD_OUTLINE" );
 
+
 /**
- * Function close_enough
- * is a local and tunable method of qualifying the proximity of two points.
+ * Local and tunable method of qualifying the proximity of two points.
  *
- * @param aLeft is the first point
- * @param aRight is the second point
+ * @param aLeft is the first point.
+ * @param aRight is the second point.
  * @param aLimit is a measure of proximity that the caller knows about.
- * @return bool - true if the two points are close enough, else false.
+ * @return true if the two points are close enough, else false.
  */
 static bool close_enough( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
 {
     return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
 }
 
+
 /**
- * Function closer_to_first
  * Local method which qualifies whether the start or end point of a segment is closest to a point.
  *
  * @param aRef is the reference point
  * @param aFirst is the first point
  * @param aSecond is the second point
- * @return bool - true if the first point is closest to the reference, otherwise false.
+ * @return true if the first point is closest to the reference, otherwise false.
  */
 static bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
 {
@@ -80,13 +80,13 @@ static bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
 
 
 /**
- * Searches for a PCB_SHAPE matching a given end point or start point in a list.
+ * Search for a #PCB_SHAPE matching a given end point or start point in a list.
+ *
  * @param aShape The starting shape.
  * @param aPoint The starting or ending point to search for.
  * @param aList The list to remove from.
  * @param aLimit is the distance from \a aPoint that still constitutes a valid find.
- * @return PCB_SHAPE* - The first PCB_SHAPE that has a start or end point matching
- *   aPoint, otherwise NULL if none.
+ * @return The first #PCB_SHAPE that has a start or end point matching aPoint, otherwise nullptr.
  */
 static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint,
                             const std::vector<PCB_SHAPE*>& aList, unsigned aLimit )
@@ -162,18 +162,6 @@ static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape
 }
 
 
-/* Build a polygon (with holes) from a PCB_SHAPE list, which is expected to be a closed main
- * outline with perhaps closed inner outlines.  These closed inner outlines are considered as
- * holes in the main outline.
- * @param aShapeList the initial list of SHAPEs (only lines, circles and arcs).
- * @param aPolygons will contain the complex polygon.
- * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
- * @param aChainingEpsilon is the max error distance when polygonizing a curve (internal units)
- * @param aAllowDisjoint indicates multiple top-level outlines are allowed
- * @param aErrorHandler = an optional error handler
- * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
- *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
- */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SET& aPolygons,
                               int aErrorMax, int aChainingEpsilon, bool aAllowDisjoint,
                               OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons )
@@ -282,7 +270,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
         {
             // Polygon start point. Arbitrarily chosen end of the segment and build the poly
             // from here.
-
             VECTOR2I startPt = graphic->GetEnd();
             prevPt = startPt;
             currContour.Append( prevPt );
@@ -296,11 +283,11 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 case SHAPE_T::CIRCLE:
                 {
                     // As a non-first item, closed shapes can't be anything but self-intersecting
-
                     if( aErrorHandler )
                     {
                         wxASSERT( prevGraphic );
-                        (*aErrorHandler)( _( "(self-intersecting)" ), prevGraphic, graphic, prevPt );
+                        (*aErrorHandler)( _( "(self-intersecting)" ), prevGraphic, graphic,
+                                          prevPt );
                     }
 
                     selfIntersecting = true;
@@ -310,113 +297,112 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 }
 
                 case SHAPE_T::SEGMENT:
-                    {
-                        VECTOR2I nextPt;
+                {
+                    VECTOR2I nextPt;
 
-                        // Use the line segment end point furthest away from prevPt as we assume
-                        // the other end to be ON prevPt or very close to it.
+                    // Use the line segment end point furthest away from prevPt as we assume
+                    // the other end to be ON prevPt or very close to it.
+                    if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
+                        nextPt = graphic->GetEnd();
+                    else
+                        nextPt = graphic->GetStart();
 
-                        if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
-                            nextPt = graphic->GetEnd();
-                        else
-                            nextPt = graphic->GetStart();
-
-                        currContour.Append( nextPt );
-                        shapeOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
-                        prevPt = nextPt;
-                    }
-                    break;
+                    currContour.Append( nextPt );
+                    shapeOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
+                    prevPt = nextPt;
+                }
+                break;
 
                 case SHAPE_T::ARC:
+                {
+                    VECTOR2I  pstart = graphic->GetStart();
+                    VECTOR2I  pmid = graphic->GetArcMid();
+                    VECTOR2I  pend = graphic->GetEnd();
+
+                    if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                     {
-                        VECTOR2I  pstart = graphic->GetStart();
-                        VECTOR2I  pmid = graphic->GetArcMid();
-                        VECTOR2I  pend = graphic->GetEnd();
+                        wxASSERT( close_enough( prevPt, graphic->GetEnd(), aChainingEpsilon ) );
 
-                        if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
-                        {
-                            wxASSERT( close_enough( prevPt, graphic->GetEnd(), aChainingEpsilon ) );
-
-                            std::swap( pstart, pend );
-                        }
-
-                        SHAPE_ARC sarc( pstart, pmid, pend, 0 );
-
-                        SHAPE_LINE_CHAIN arcChain;
-                        arcChain.Append( sarc, aErrorMax );
-
-                        if( !aAllowUseArcsInPolygons )
-                            arcChain.ClearArcs();
-
-                        // set shapeOwners for arcChain points created by appending the sarc:
-                        for( int ii = 1; ii < arcChain.PointCount(); ++ii )
-                        {
-                            shapeOwners[std::make_pair( arcChain.CPoint( ii - 1 ),
-                                                        arcChain.CPoint( ii ) )] = graphic;
-                        }
-
-                        currContour.Append( arcChain );
-
-                        prevPt = pend;
+                        std::swap( pstart, pend );
                     }
-                    break;
+
+                    SHAPE_ARC sarc( pstart, pmid, pend, 0 );
+
+                    SHAPE_LINE_CHAIN arcChain;
+                    arcChain.Append( sarc, aErrorMax );
+
+                    if( !aAllowUseArcsInPolygons )
+                        arcChain.ClearArcs();
+
+                    // set shapeOwners for arcChain points created by appending the sarc:
+                    for( int ii = 1; ii < arcChain.PointCount(); ++ii )
+                    {
+                        shapeOwners[std::make_pair( arcChain.CPoint( ii - 1 ),
+                                                    arcChain.CPoint( ii ) )] = graphic;
+                    }
+
+                    currContour.Append( arcChain );
+
+                    prevPt = pend;
+                }
+                break;
 
                 case SHAPE_T::BEZIER:
+                {
                     // We do not support Bezier curves in polygons, so approximate with a series
                     // of short lines and put those line segments into the !same! PATH.
+                    VECTOR2I nextPt;
+                    bool    reverse = false;
+
+                    // Use the end point furthest away from  prevPt as we assume the other
+                    // end to be ON prevPt or very close to it.
+                    if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                     {
-                        VECTOR2I nextPt;
-                        bool    reverse = false;
-
-                        // Use the end point furthest away from  prevPt as we assume the other
-                        // end to be ON prevPt or very close to it.
-
-                        if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
-                        {
-                            nextPt = graphic->GetEnd();
-                        }
-                        else
-                        {
-                            nextPt = graphic->GetStart();
-                            reverse = true;
-                        }
-
-                        // Ensure the approximated Bezier shape is built
-                        // a good value is between (Bezier curve width / 2) and (Bezier curve width)
-                        // ( and at least 0.05 mm to avoid very small segments)
-                        int min_segm_length = std::max( pcbIUScale.mmToIU( 0.05 ), graphic->GetWidth() );
-                        graphic->RebuildBezierToSegmentsPointsList( min_segm_length );
-
-                        if( reverse )
-                        {
-                            for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
-                            {
-                                const VECTOR2I& pt = graphic->GetBezierPoints()[jj];
-
-                                if( prevPt == pt )
-                                    continue;
-
-                                currContour.Append( pt );
-                                shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
-                                prevPt = pt;
-                            }
-                        }
-                        else
-                        {
-                            for( const VECTOR2I& pt : graphic->GetBezierPoints() )
-                            {
-                                if( prevPt == pt )
-                                    continue;
-
-                                currContour.Append( pt );
-                                shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
-                                prevPt = pt;
-                            }
-                        }
-
-                        prevPt = nextPt;
+                        nextPt = graphic->GetEnd();
                     }
-                    break;
+                    else
+                    {
+                        nextPt = graphic->GetStart();
+                        reverse = true;
+                    }
+
+                    // Ensure the approximated Bezier shape is built
+                    // a good value is between (Bezier curve width / 2) and (Bezier curve width)
+                    // ( and at least 0.05 mm to avoid very small segments)
+                    int min_segm_length = std::max( pcbIUScale.mmToIU( 0.05 ),
+                                                    graphic->GetWidth() );
+                    graphic->RebuildBezierToSegmentsPointsList( min_segm_length );
+
+                    if( reverse )
+                    {
+                        for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
+                        {
+                            const VECTOR2I& pt = graphic->GetBezierPoints()[jj];
+
+                            if( prevPt == pt )
+                                continue;
+
+                            currContour.Append( pt );
+                            shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+                            prevPt = pt;
+                        }
+                    }
+                    else
+                    {
+                        for( const VECTOR2I& pt : graphic->GetBezierPoints() )
+                        {
+                            if( prevPt == pt )
+                                continue;
+
+                            currContour.Append( pt );
+                            shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+                            prevPt = pt;
+                        }
+                    }
+
+                    prevPt = nextPt;
+                }
+                break;
 
                 default:
                     UNIMPLEMENTED_FOR( graphic->SHAPE_T_asString() );
@@ -424,7 +410,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 }
 
                 // Get next closest segment.
-
                 PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aShapeList, aChainingEpsilon );
 
                 if( nextGraphic && !( nextGraphic->GetFlags() & SKIP_STRUCT ) )
@@ -437,7 +422,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 }
 
                 // Finished, or ran into trouble...
-
                 if( close_enough( startPt, prevPt, aChainingEpsilon ) )
                 {
                     currContour.SetClosed( true );
@@ -446,7 +430,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 else if( nextGraphic )  // encountered already-used segment, but not at the start
                 {
                     if( aErrorHandler )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), graphic, nextGraphic, prevPt );
+                        (*aErrorHandler)( _( "(self-intersecting)" ), graphic, nextGraphic,
+                                          prevPt );
 
                     break;
                 }
@@ -468,7 +453,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
     }
 
     // First, collect the parents of each contour
-    //
     std::map<int, std::vector<int>> contourToParentIndexesMap;
 
     for( size_t ii = 0; ii < contours.size(); ++ii )
@@ -491,7 +475,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
     }
 
     // Next add those that are top-level outlines to the SHAPE_POLY_SET
-    //
     std::map<int, int> contourToOutlineIdxMap;
 
     for( const auto& [ contourIndex, parentIndexes ] : contourToParentIndexesMap )
@@ -522,7 +505,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
     }
 
     // And finally add the holes
-    //
     for( const auto& [ contourIndex, parentIndexes ] : contourToParentIndexesMap )
     {
         if( parentIndexes.size() %2 == 1 )
@@ -546,7 +528,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
     // All of the silliness that follows is to work around the segment iterator while checking
     // for collisions.
     // TODO: Implement proper segment and point iterators that follow std
-
     for( auto seg1 = aPolygons.IterateSegmentsWithHoles(); seg1; seg1++ )
     {
         auto seg2 = seg1;
@@ -584,9 +565,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 }
 
 
-/* This function is used to test a board outlines graphic items for validity
- * i.e. null or very small segments, rects and circles
- */
 bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
                                     OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
@@ -621,7 +599,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
         }
     }
 
-    // Now Test vailidty of collected items
+    // Now Test validity of collected items
     for( PCB_SHAPE* graphic : segList )
     {
         switch( graphic->GetShape() )
@@ -637,8 +615,9 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)(  wxString::Format( _( "(Rectangle has null or very small size: %d nm)" ),
-                                            dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(Rectangle has null or very small "
+                                                           "size: %d nm)" ),
+                                                        dim ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
             }
@@ -653,8 +632,9 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(Circle has null or very small radius: %d nm)" ),
-                                            (int)graphic->GetRadius() ),
+                    (*aErrorHandler)( wxString::Format( _( "(Circle has null or very small "
+                                                           "radius: %d nm)" ),
+                                                        (int)graphic->GetRadius() ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
             }
@@ -672,7 +652,8 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(Segment has null or very small lenght: %d nm)" ), dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(Segment has null or very small "
+                                                           "length: %d nm)" ), dim ),
                                       graphic, nullptr, graphic->GetStart() );
                 }
             }
@@ -698,10 +679,6 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 }
 
 
-/* This function is used to extract a board outlines (3D view, automatic zones build ...)
- * Any closed outline inside the main outline is a hole
- * All contours should be closed, i.e. valid closed polygon vertices
- */
 bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
                                 int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler,
                                 bool aAllowUseArcsInPolygons )
@@ -741,10 +718,11 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
                                                // gets an opportunity to use these segments
                                                nullptr, aAllowUseArcsInPolygons );
 
-            // Here, we test to see if we should make holes or outlines.  Holes are made if the footprint
-            // has copper outside of a single, closed outline.  If there are multiple outlines, we assume
-            // that the footprint edges represent holes as we do not support multiple boards.  Similarly, if
-            // any of the footprint pads are located outside of the edges, then the edges are holes
+            // Test to see if we should make holes or outlines.  Holes are made if the footprint
+            // has copper outside of a single, closed outline.  If there are multiple outlines,
+            // we assume that the footprint edges represent holes as we do not support multiple
+            // boards.  Similarly, if any of the footprint pads are located outside of the edges,
+            // then the edges are holes
             if( success && ( isCopperOutside( fp, fpOutlines ) || fpOutlines.OutlineCount() > 1 ) )
             {
                 fpHoles.Append( fpOutlines );
@@ -785,7 +763,6 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
         // Couldn't create a valid polygon outline.  Use the board edge cuts bounding box to
         // create a rectangular outline, or, failing that, the bounding box of the items on
         // the board.
-
         BOX2I bbbox = aBoard->GetBoardEdgesBoundingBox();
 
         // If null area, uses the global bounding box.
@@ -945,17 +922,6 @@ int findEndSegments( SHAPE_LINE_CHAIN& aChain, SEG& aStartSeg, SEG& aEndSeg )
 }
 
 
-/**
- * This function is used to extract a board outline for a footprint view.
- *
- * Notes:
- * * Incomplete outlines will be closed by joining the end of the outline onto the bounding box
- *   (by simply projecting the end points) and then take the area that contains the copper.
- * * If all copper lies inside a closed outline, than that outline will be treated as an external
- *   board outline.
- * * If copper is located outside a closed outline, then that outline will be treated as a hole,
- *   and the outer edge will be formed using the bounding box.
- */
 bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
                                     int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler )
 
