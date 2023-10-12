@@ -221,12 +221,43 @@ void PDF_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
 void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
     wxASSERT( m_workFile );
+
+    SetCurrentLineWidth( width );
+
+    VECTOR2I size = p2 - p1;
+
+    if( size.x == 0 && size.y == 0 )
+    {
+        // Can't draw zero-sized rectangles
+        SetCurrentLineWidth( width );
+
+        MoveTo( VECTOR2I( p1.x, p1.y ) );
+        FinishTo( VECTOR2I( p1.x, p1.y ) );
+
+        return;
+    }
+
+    if( std::min( std::abs( size.x ), std::abs( size.y ) ) < width )
+    {
+        // Too thick stroked rectangles are buggy, draw as polygon
+        std::vector<VECTOR2I> cornerList;
+
+        cornerList.emplace_back( p1.x, p1.y );
+        cornerList.emplace_back( p2.x, p1.y );
+        cornerList.emplace_back( p2.x, p2.y );
+        cornerList.emplace_back( p1.x, p2.y );
+        cornerList.emplace_back( p1.x, p1.y );
+
+        PlotPoly( cornerList, fill, width, nullptr );
+
+        return;
+    }
+
     VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
     VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
-    SetCurrentLineWidth( width );
-    fprintf( m_workFile, "%g %g %g %g re %c\n", p1_dev.x, p1_dev.y,
-             p2_dev.x - p1_dev.x, p2_dev.y - p1_dev.y, fill == FILL_T::NO_FILL ? 'S' : 'B' );
+    fprintf( m_workFile, "%g %g %g %g re %c\n", p1_dev.x, p1_dev.y, p2_dev.x - p1_dev.x,
+             p2_dev.y - p1_dev.y, fill == FILL_T::NO_FILL ? 'S' : 'B' );
 }
 
 
