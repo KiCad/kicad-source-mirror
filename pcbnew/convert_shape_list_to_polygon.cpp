@@ -682,6 +682,9 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
         case SHAPE_T::ARC:
             break;
 
+        case SHAPE_T::POLY:
+            break;
+
         case SHAPE_T::BEZIER:
             break;
 

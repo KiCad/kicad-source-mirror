@@ -97,11 +97,11 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 errorHandled = true;
             };
 
-    // Use the standard chaining epsilon here so that we report errors that might affect
-    // other tools (such as 3D viewer).
-    int chainingEpsilon = m_board->GetOutlinesChainingEpsilon();
+    // Test for very small graphic items (a few nm size) that can create issues
+    // when trying to build the board outlines, and they are not easy to locate onn screen.
+    const int minSizeForValideGraphics =  pcbIUScale.mmToIU( 0.001 );
 
-    if( !TestBoardOutlinesGraphicItems(m_board, chainingEpsilon, &errorHandler ) )
+    if( !TestBoardOutlinesGraphicItems(m_board, minSizeForValideGraphics, &errorHandler ) )
     {
         if( errorHandled )
         {
@@ -121,6 +121,10 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
         }
     }
 
+
+    // Use the standard chaining epsilon here so that we report errors that might affect
+    // other tools (such as 3D viewer).
+    int chainingEpsilon = m_board->GetOutlinesChainingEpsilon();
 
     if( !BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
                                     chainingEpsilon, &errorHandler ) )
