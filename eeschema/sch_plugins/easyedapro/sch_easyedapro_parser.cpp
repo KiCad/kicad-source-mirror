@@ -908,7 +908,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             if( mimeType == wxS( "image/svg+xml" ) )
             {
-                VECTOR2D offset = ScalePosSym( start );
+                // VECTOR2D offset = ScalePosSym( start );
 
                 //SVG_IMPORT_PLUGIN            svgImportPlugin;
                 //GRAPHICS_IMPORTER_LIB_SYMBOL libsymImporter( ksymbol, 0 );

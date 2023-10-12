@@ -391,9 +391,6 @@ void HPGL_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T aFill, i
 {
     wxASSERT( m_outputFile );
 
-    VECTOR2D p1_device = userToDeviceCoordinates( p1 );
-    VECTOR2D p2_device = userToDeviceCoordinates( p2 );
-
     // EA command seems to always fill the rectangle, so plot as a polygon instead
     std::vector<VECTOR2I> cornerList;
 
