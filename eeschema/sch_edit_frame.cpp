@@ -294,7 +294,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
     {
-        // If the net navigator is not show, let the heirarchy navigator take all of the vertical
+        // If the net navigator is not show, let the hierarchy navigator take all of the vertical
         // space.
         if( !cfg->m_AuiPanels.show_net_nav_panel )
         {
@@ -427,7 +427,7 @@ void SCH_EDIT_FRAME::OnResizeHierarchyNavigator( wxSizeEvent& aEvent )
     // Store the current pane size
     // It allows to retrieve the last defined pane size when switching between
     // docked and floating pane state
-    // Note: *DO NOT* call m_auimgr.Update() here: it crashes Kicad at least on Windows
+    // Note: *DO NOT* call m_auimgr.Update() here: it crashes KiCad at least on Windows
 
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
@@ -1496,7 +1496,8 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             }
             else
             {
-                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, devnull ).model;
+                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol,
+                                                          devnull ).model;
 
                 SPICE_ITEM spiceItem;
                 spiceItem.refName = ref;
@@ -1893,6 +1894,7 @@ void SCH_EDIT_FRAME::OnPageSettingsChange()
     // Store the current zoom level into the current screen before calling
     // DisplayCurrentSheet() that set the zoom to GetScreen()->m_LastZoomLevel
     GetScreen()->m_LastZoomLevel = GetCanvas()->GetView()->GetScale();
+
     // Rebuild the sheet view (draw area and any other items):
     DisplayCurrentSheet();
 }
@@ -2096,11 +2098,11 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
 
         unit->SetLibSymbol( aSymbol.Flatten().release() );
         unit->UpdateFields( &GetCurrentSheet(),
-                                 true, /* update style */
-                                 true, /* update ref */
-                                 true, /* update other fields */
-                                 false, /* reset ref */
-                                 false /* reset other fields */ );
+                            true, /* update style */
+                            true, /* update ref */
+                            true, /* update other fields */
+                            false, /* reset ref */
+                            false /* reset other fields */ );
 
         path.LastScreen()->Append( unit );
         GetCanvas()->GetView()->Update( unit );

@@ -1,12 +1,33 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2023 <author>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include <sch_reference_list.h>
 #include <wx/grid.h>
 
 // The field name in the data model (translated)
 #define DISPLAY_NAME_COLUMN   0
+
 // The field name's label for exporting (CSV, etc.)
 #define LABEL_COLUMN          1
 #define SHOW_FIELD_COLUMN     2
 #define GROUP_BY_COLUMN       3
+
 // The internal field name (untranslated)
 #define FIELD_NAME_COLUMN     4
 
@@ -73,6 +94,7 @@ public:
     void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser );
     void RemoveColumn( int aCol );
     void RenameColumn( int aCol, const wxString& newName );
+
     void MoveColumn( int aCol, int aNewPos )
     {
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
@@ -104,7 +126,7 @@ public:
     int      GetFieldNameCol( wxString aFieldName );
 
     const std::vector<BOM_FIELD> GetFieldsOrdered();
-    void                        SetFieldsOrder( const std::vector<wxString>& aNewOrder );
+    void                         SetFieldsOrder( const std::vector<wxString>& aNewOrder );
 
     bool IsEmptyCell( int aRow, int aCol ) override
     {
@@ -116,11 +138,13 @@ public:
                        const wxString& refDelimiter = wxT( ", " ),
                        const wxString& refRangDelimiter = wxT( "-" ),
                        bool resolveVars = false );
+
     wxString GetExportValue( int aRow, int aCol, const wxString& refDelimiter,
                              const wxString& refRangeDelimiter )
     {
         return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true );
     }
+
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
     GROUP_TYPE GetRowFlags( int aRow ) { return m_rows[aRow].m_Flag; }
@@ -143,6 +167,7 @@ public:
         m_sortColumn = aCol;
         m_sortAscending = ascending;
     }
+
     int  GetSortCol() { return m_sortColumn; }
     bool GetSortAsc() { return m_sortAscending; }
 
@@ -191,6 +216,7 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_group = group;
     }
+
     bool GetGroupColumn( int aCol )
     {
         wxCHECK_MSG( aCol >= 0 && aCol < (int) m_cols.size(), false, "Invalid Column Number" );
@@ -202,6 +228,7 @@ public:
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
         m_cols[aCol].m_show = show;
     }
+
     bool GetShowColumn( int aCol )
     {
         wxCHECK_MSG( aCol >= 0 && aCol < (int) m_cols.size(), false, "Invalid Column Number" );
@@ -242,7 +269,6 @@ private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
     void               storeReferenceFields( SCH_REFERENCE& aRef );
     void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
-
 
 protected:
     SCH_REFERENCE_LIST m_symbolsList;

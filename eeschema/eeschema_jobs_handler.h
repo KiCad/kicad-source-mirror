@@ -35,7 +35,7 @@ class LIB_SYMBOL;
 class DS_PROXY_VIEW_ITEM;
 
 /**
- * Handles eeschema job dispatches
+ * Handle Eeschema job dispatches.
  */
 class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER
 {
@@ -50,16 +50,19 @@ public:
     int JobSymExportSvg( JOB* aJob );
 
     /**
-     * Configures the SCH_RENDER_SETTINGS object with the correct data to be used with plotting
+     * Configure the SCH_RENDER_SETTINGS object with the correct data to be used with plotting.
      *
-     * It's sort of a kludge due to the plotter depending on this object normally managed by the frame and canvas
+     * It's sort of a kludge due to the plotter depending on this object normally managed by
+     *the frame and canvas
      *
-     * @param aRenderSettings The object to populate with working settings
-     * @param aTheme The theme to take color data from to stick into render settings, can be left blank for default
-     * @param aSch The schematic to further copy settings from to be put into aRenderSettings
+     * @param aRenderSettings The object to populate with working settings.
+     * @param aTheme The theme to take color data from to stick into render settings, can be
+     *        left blank for default.
+     * @param aSch The schematic to further copy settings from to be put into aRenderSettings.
      */
     void InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
-                             SCHEMATIC* aSch, const wxString& aDrawingSheetOverride = wxEmptyString );
+                             SCHEMATIC* aSch,
+                             const wxString& aDrawingSheetOverride = wxEmptyString );
 
 private:
 

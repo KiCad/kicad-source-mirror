@@ -795,7 +795,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         if( value == DEFAULT_FONT_NAME )
             field.SetFont( nullptr );
         else if( value == KICAD_FONT_NAME )
-            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(), field.IsItalic() ) );
+            field.SetFont( KIFONT::FONT::GetFont( wxEmptyString, field.IsBold(),
+                                                  field.IsItalic() ) );
         else
             field.SetFont( KIFONT::FONT::GetFont( aValue, field.IsBold(), field.IsItalic() ) );
 
@@ -871,7 +872,8 @@ void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                      _( "Browse for footprint" ) );
         menu.AppendSeparator();
     }
-    else if( m_grid->GetGridCursorRow() == DATASHEET_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE )
+    else if( m_grid->GetGridCursorRow() == DATASHEET_FIELD
+           && m_grid->GetGridCursorCol() == FDC_VALUE )
     {
         menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
                      _( "Show datasheet in browser" ) );

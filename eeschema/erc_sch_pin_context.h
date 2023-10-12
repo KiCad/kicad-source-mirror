@@ -34,16 +34,11 @@
 #include <boost/functional/hash.hpp>
 
 /**
- * A class used to associate a SCH_PIN with its owning SCH_SHEET_PATH, in order to handle ERC checks
- * across connected common hierarchical schematics
+ * A class used to associate a #SCH_PIN with its owning #SCH_SHEET_PATH, in order to handle ERC
+ * checks across connected common hierarchical schematics/
  */
 class ERC_SCH_PIN_CONTEXT
 {
-protected:
-    SCH_PIN*       m_pin;
-    SCH_SHEET_PATH m_sheet;
-    size_t         m_hash;
-
 public:
     ERC_SCH_PIN_CONTEXT() : m_pin( nullptr ), m_sheet(), m_hash( 0 ) {}
 
@@ -59,24 +54,34 @@ public:
     ~ERC_SCH_PIN_CONTEXT() = default;
 
     /**
-     * Gets the SCH_PIN for this context
+     * Get the SCH_PIN for this context.
      */
     SCH_PIN* Pin();
 
     /**
-     * Gets the SCH_SHEET_PATH context for the paired SCH_PIN
+     * Get the #SCH_SHEET_PATH context for the paired #SCH_PIN.
      */
     SCH_SHEET_PATH& Sheet();
 
+    /**
+     * Test two pin contexts for equality based on the deterministic hash.
+     */
     bool operator==( const ERC_SCH_PIN_CONTEXT& other ) const;
 
+    /**
+     * Provide a deterministic ordering for item contexts based on hash value.
+     */
     bool operator<( const ERC_SCH_PIN_CONTEXT& other ) const;
 
 protected:
     /**
-     * Calculates the deterministic hash for this context
+     * Calculate the deterministic hash for this context.
      */
     void rehash();
+
+    SCH_PIN*       m_pin;
+    SCH_SHEET_PATH m_sheet;
+    size_t         m_hash;
 };
 
 #endif //_ERC_ITEM_CONTEXT_H

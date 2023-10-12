@@ -56,7 +56,6 @@ class SCH_SHEET_PIN;
  *
  * For example, multiple bus wires can come together at a junction but have
  * different labels on each branch.  Each label+wire branch is its own subgraph.
- *
  */
 class CONNECTION_SUBGRAPH
 {
@@ -95,48 +94,48 @@ public:
     friend class CONNECTION_GRAPH;
 
     /**
-     * Determines which potential driver should drive the subgraph.
+     * Determine which potential driver should drive the subgraph.
      *
      * If multiple possible drivers exist, picks one according to the priority.
-     * If multiple "winners" exist, returns false and sets m_driver to nullptr.
+     * If multiple "winners" exist, returns false and sets #m_driver to nullptr.
      *
-     * @param aCheckMultipleDrivers controls whether the second driver should be captured for ERC
-     * @return true if m_driver was set, or false if a conflict occurred
+     * @param aCheckMultipleDrivers controls whether the second driver should be captured for ERC.
+     * @return true if m_driver was set, or false if a conflict occurred.
      */
     bool ResolveDrivers( bool aCheckMultipleDrivers = false );
 
     /**
-     * Returns the fully-qualified net name for this subgraph (if one exists)
+     * Return the fully-qualified net name for this subgraph (if one exists)
      */
     wxString GetNetName() const;
 
-    /// Returns all the vector-based bus labels attached to this subgraph (if any)
+    /// Return all the vector-based bus labels attached to this subgraph (if any).
     std::vector<SCH_ITEM*> GetVectorBusLabels() const;
 
-    /// Returns all the all bus labels attached to this subgraph (if any)
+    /// Return all the all bus labels attached to this subgraph (if any).
     std::vector<SCH_ITEM*> GetAllBusLabels() const;
 
-    /// Returns the candidate net name for a driver
+    /// Return the candidate net name for a driver.
     const wxString& GetNameForDriver( SCH_ITEM* aItem ) const;
 
     const wxString GetNetclassForDriver( SCH_ITEM* aItem ) const;
 
-    /// Combines another subgraph on the same sheet into this one.
+    /// Combine another subgraph on the same sheet into this one.
     void Absorb( CONNECTION_SUBGRAPH* aOther );
 
-    /// Adds a new item to the subgraph
+    /// Add a new item to the subgraph.
     void AddItem( SCH_ITEM* aItem );
 
-    /// Updates all items to match the driver connection
+    /// Update all items to match the driver connection.
     void UpdateItemConnections();
 
-    /// Provides a read-only reference to the items in the subgraph
+    /// Provide a read-only reference to the items in the subgraph.
     const std::set<SCH_ITEM*>& GetItems() const
     {
         return m_items;
     }
 
-    /// Finds all items in the subgraph as well as child subgraphs recursively
+    /// Find all items in the subgraph as well as child subgraphs recursively.
     void getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>>& aItems,
                                std::set<CONNECTION_SUBGRAPH*>& aSubgraphs );
 
@@ -166,7 +165,7 @@ public:
 
     /**
      * @return pointer to the SCH_ITEM whose name sets the subgraph netname.
-     *         N.B. This item may not be in the subgraph
+     *         N.B. This item may not be in the subgraph.
      */
     const SCH_ITEM* GetDriver() const
     {
@@ -174,7 +173,7 @@ public:
     }
 
     /**
-     * @return SCH_CONNECTION object for m_driver on m_sheet
+     * @return #SCH_CONNECTION object for m_driver on #m_sheet.
      */
     const SCH_CONNECTION* GetDriverConnection() const
     {
@@ -182,7 +181,7 @@ public:
     }
 
     /**
-     * @return pointer to the item causing a no-connect or nullptr if none
+     * @return pointer to the item causing a no-connect or nullptr if none.
      */
     const SCH_ITEM* GetNoConnect() const
     {
@@ -227,13 +226,13 @@ private:
      */
     bool m_multiple_drivers;
 
-    /// True if the driver is "strong": a label or power object
+    /// True if the driver is "strong": a label or power object.
     bool m_strong_driver;
 
-    /// True if the driver is a local (i.e. non-global) type
+    /// True if the driver is a local (i.e. non-global) type.
     bool m_local_driver;
 
-    /// Bus entry in graph, if any
+    /// Bus entry in graph, if any.
     SCH_ITEM* m_bus_entry;
 
     std::set<SCH_ITEM*> m_drivers;
@@ -257,34 +256,35 @@ private:
     std::unordered_map< std::shared_ptr<SCH_CONNECTION>,
                         std::unordered_set<CONNECTION_SUBGRAPH*> > m_bus_parents;
 
-    // Cache for lookup of any hierarchical (sheet) pins on this subgraph (for referring down)
+    /// Cache for lookup of any hierarchical (sheet) pins on this subgraph (for referring down).
     std::set<SCH_SHEET_PIN*> m_hier_pins;
 
-    // Cache for lookup of any hierarchical ports on this subgraph (for referring up)
+    /// Cache for lookup of any hierarchical ports on this subgraph (for referring up).
     std::set<SCH_HIERLABEL*> m_hier_ports;
 
-    // If not null, this indicates the subgraph on a higher level sheet that is linked to this one
+    /// If not null, this indicates the subgraph on a higher level sheet that is linked to this one.
     CONNECTION_SUBGRAPH* m_hier_parent;
 
-    // If not null, this indicates the subgraph(s) on a lower level sheet that are linked to this one
+    /// If not null, this indicates the subgraph(s) on a lower level sheet that are linked to
+    /// this one.
     std::unordered_set<CONNECTION_SUBGRAPH*> m_hier_children;
 
-    /// A cache of escaped netnames from schematic items
+    /// A cache of escaped netnames from schematic items.
     mutable std::unordered_map<SCH_ITEM*, wxString> m_driver_name_cache;
 
-    /// Fully-resolved driver for the subgraph (might not exist in this subgraph)
+    /// Fully-resolved driver for the subgraph (might not exist in this subgraph).
     SCH_ITEM* m_driver;
 
-    /// Contents of the subgraph
+    /// Contents of the subgraph.
     std::set<SCH_ITEM*> m_items;
 
-    /// No-connect item in graph, if any
+    /// No-connect item in graph, if any.
     SCH_ITEM* m_no_connect;
 
-    /// On which logical sheet is the subgraph contained
+    /// On which logical sheet is the subgraph contained.
     SCH_SHEET_PATH m_sheet;
 
-    /// Cache for driver connection
+    /// Cache for driver connection.
     SCH_CONNECTION* m_driver_connection;
 };
 
@@ -313,11 +313,11 @@ namespace std
     };
 }
 
-/// Associates a NET_CODE_NAME with all the subgraphs in that net
+/// Associate a #NET_CODE_NAME with all the subgraphs in that net.
 typedef std::unordered_map<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> NET_MAP;
 
 /**
- * Calculates the connectivity of a schematic and generates netlists
+ * Calculate the connectivity of a schematic and generates netlists.
  */
 class CONNECTION_GRAPH
 {
@@ -349,7 +349,7 @@ public:
     }
 
     /**
-     * Updates the connection graph for the given list of sheets.
+     * Update the connection graph for the given list of sheets.
      *
      * @param aSheetList is the list of possibly modified sheets
      * @param aUnconditional is true if an unconditional full recalculation should be done
@@ -359,7 +359,7 @@ public:
                       std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr );
 
     /**
-     * Returns a bus alias pointer for the given name if it exists (from cache)
+     * Return a bus alias pointer for the given name if it exists (from cache)
      *
      * CONNECTION_GRAPH caches these, they are owned by the SCH_SCREEN that
      * the alias was defined on.  The cache is only used to update the graph.
@@ -367,7 +367,7 @@ public:
     std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aName );
 
     /**
-     * Determines which subgraphs have more than one conflicting bus label.
+     * Determine which subgraphs have more than one conflicting bus label.
      *
      * @see DIALOG_MIGRATE_BUSES
      * @return a list of subgraphs that need migration
@@ -376,7 +376,7 @@ public:
     std::vector<const CONNECTION_SUBGRAPH*> GetBusesNeedingMigration();
 
     /**
-     * Runs electrical rule checks on the connectivity graph.
+     * Run electrical rule checks on the connectivity graph.
      *
      * Precondition: graph is up-to-date
      *
@@ -387,19 +387,22 @@ public:
     const NET_MAP& GetNetMap() const { return m_net_code_to_subgraphs_map; }
 
     /**
-     * Returns the subgraph for a given net name on a given sheet
-     * @param aNetName is the local net name to look for
-     * @param aPath is a sheet path to look on
-     * @return the subgraph matching the query, or nullptr if none is found
+     * Return the subgraph for a given net name on a given sheet.
+     *
+     * @param aNetName is the local net name to look for.
+     * @param aPath is a sheet path to look on.
+     * @return the subgraph matching the query, or nullptr if none is found.
      */
     CONNECTION_SUBGRAPH* FindSubgraphByName( const wxString& aNetName,
                                              const SCH_SHEET_PATH& aPath );
 
     /**
-     * Retrieves a subgraph for the given net name, if one exists.
-     * Searches every sheet
-     * @param aNetName is the full net name to search for
-     * @return the subgraph matching the query, or nullptr if none is found
+     * Retrieve a subgraph for the given net name, if one exists.
+     *
+     * Search every sheet.
+     *
+     * @param aNetName is the full net name to search for.
+     * @return the subgraph matching the query, or nullptr if none is found.
      */
     CONNECTION_SUBGRAPH* FindFirstSubgraphByName( const wxString& aNetName );
 
@@ -408,9 +411,10 @@ public:
     const std::vector<CONNECTION_SUBGRAPH*> GetAllSubgraphs( const wxString& aNetName ) const;
 
     /**
-     * Returns the fully-resolved netname for a given subgraph
-     * @param aSubGraph Reference to the subgraph
-     * @return Netname string usable with m_net_name_to_subgraphs_map
+     * Return the fully-resolved netname for a given subgraph.
+     *
+     * @param aSubGraph Reference to the subgraph.
+     * @return Netname string usable with m_net_name_to_subgraphs_map.
      */
     wxString GetResolvedSubgraphName( const CONNECTION_SUBGRAPH* aSubGraph ) const;
 
@@ -418,23 +422,24 @@ public:
      * For a set of items, this will remove the connected items and their
      * associated data including subgraphs and generated codes from the connection graph.
      *
-     * @param aItems A vector of items whose presence should be removed from the graph
-     * @return The full set of all items associated with the input items that were removed
+     * @param aItems A vector of items whose presence should be removed from the graph.
+     * @return The full set of all items associated with the input items that were removed.
      */
     std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> ExtractAffectedItems(
             const std::set<SCH_ITEM*> &aItems );
 
     /**
-     * Combines the input graph contents into the current graph.  After merging, the
-     * original graph is invalid.
+     * Combine the input graph contents into the current graph.
      *
-     * @param aGraph Input graph reference to add to the current graph
+     * @warning After merging, the original graph is invalid.
+     *
+     * @param aGraph Input graph reference to add to the current graph.
      */
     void Merge( CONNECTION_GRAPH& aGraph );
 
 private:
     /**
-     * Updates the graphical connectivity between items (i.e. where they touch)
+     * Update the graphical connectivity between items (i.e. where they touch)
      * The items passed in must be on the same sheet.
      *
      * In the first phase, all items in aItemList have their connections
@@ -455,16 +460,16 @@ private:
      * checks to ensure that the items should actually connect, the items are
      * linked together using ConnectedItems().
      *
-     * As a side effect, items are loaded into m_items for BuildConnectionGraph()
+     * As a side effect, items are loaded into m_items for BuildConnectionGraph().
      *
-     * @param aSheet is the path to the sheet of all items in the list
-     * @param aItemList is a list of items to consider
+     * @param aSheet is the path to the sheet of all items in the list.
+     * @param aItemList is a list of items to consider.
      */
     void updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                                  const std::vector<SCH_ITEM*>& aItemList );
 
     /**
-     * Generates the connection graph (after all item connectivity has been updated)
+     * Generate the connection graph (after all item connectivity has been updated).
      *
      * In the first phase, the algorithm iterates over all items, and then over
      * all items that are connected (graphically) to each item, placing them into
@@ -479,39 +484,37 @@ private:
     void buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler );
 
     /**
-     * Generates individual item subgraphs on a per-sheet basis
+     * Generate individual item subgraphs on a per-sheet basis.
      */
     void buildItemSubGraphs();
 
     /**
-     * Finds all subgraphs in the connection graph and calls ResolveDrivers() in
-     * parallel
+     * Find all subgraphs in the connection graph and calls ResolveDrivers() in parallel.
      */
     void resolveAllDrivers();
 
     /**
-     * Maps the driver values for each subgraph
+     * Map the driver values for each subgraph.
      */
     void collectAllDriverValues();
 
     /**
-     * Iterate through the global power pins to collect the global labels
-     * as drivers
+     * Iterate through the global power pins to collect the global labels as drivers.
      */
     void generateGlobalPowerPinSubGraphs();
 
     /**
-     * Iterate through labels to create placeholders for bus elements
+     * Iterate through labels to create placeholders for bus elements.
      */
     void generateBusAliasMembers();
 
     /**
-     * Process all subgraphs to assign netcodes and merge subgraphs based on labels
+     * Process all subgraphs to assign netcodes and merge subgraphs based on labels.
      */
     void processSubGraphs();
 
     /**
-     * Helper to assign a new net code to a connection
+     * Helper to assign a new net code to a connection.
      *
      * @return the assigned code
      */
@@ -525,50 +528,51 @@ private:
     int getOrCreateNetCode( const wxString& aNetName );
 
     /**
-     * Ensures all members of the bus connection have a valid net code assigned
-     * @param aConnection is a bus connection
+     * Ensure all members of the bus connection have a valid net code assigned.
+     *
+     * @param aConnection is a bus connection.
      */
     void assignNetCodesToBus( SCH_CONNECTION* aConnection );
 
     /**
-     * Updates all neighbors of a subgraph with this one's connectivity info
+     * Update all neighbors of a subgraph with this one's connectivity info.
      *
      * If this subgraph contains hierarchical links, this method will descent the
      * hierarchy and propagate the connectivity across all linked sheets.
      *
-     * @param aSubgraph is the subgraph being processed
-     * @param aForce prevents this routine from skipping subgraphs
+     * @param aSubgraph is the subgraph being processed.
+     * @param aForce prevents this routine from skipping subgraphs.
      */
     void propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, bool aForce );
 
     /**
-     * Removes references to the given subgraphs from all structures in the
-     * connection graph.
+     * Remove references to the given subgraphs from all structures in the connection graph.
      *
-     * @param aSubgraphs set of unique subgraphs to find/remove
+     * @param aSubgraphs set of unique subgraphs to find/remove.
      */
     void removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgraphs );
 
     /**
-     * Search for a matching bus member inside a bus connection
+     * Search for a matching bus member inside a bus connection.
      *
      * For bus groups, this returns a bus member that matches aSearch by name.
      * For bus vectors, this returns a bus member that matches by vector index.
      *
-     * @param aBusConnection is the bus connection to search
-     * @param aSearch is the net connection to search for
-     * @returns a member of aBusConnection that matches aSearch
+     * @param aBusConnection is the bus connection to search.
+     * @param aSearch is the net connection to search for.
+     * @returns a member of aBusConnection that matches aSearch.
      */
     static SCH_CONNECTION* matchBusMember( SCH_CONNECTION* aBusConnection,
                                            SCH_CONNECTION* aSearch );
 
     /**
-     * Builds a new default connection for the given item based on its properties.
-     * Handles strong drivers (power pins and labels) only
+     * Build a new default connection for the given item based on its properties.
      *
-     * @param aItem is an item that can generate a connection name
-     * @param aSubgraph is used to determine the sheet to use and retrieve the cached name
-     * @return a connection generated from the item, or nullptr if item is not valid
+     * Handles strong drivers (power pins and labels) only.
+     *
+     * @param aItem is an item that can generate a connection name.
+     * @param aSubgraph is used to determine the sheet to use and retrieve the cached name.
+     * @return a connection generated from the item, or nullptr if item is not valid.
      */
     std::shared_ptr<SCH_CONNECTION> getDefaultConnection( SCH_ITEM* aItem,
                                                           CONNECTION_SUBGRAPH* aSubgraph );
@@ -578,7 +582,8 @@ private:
     /**
      * If the subgraph has multiple drivers of equal priority that are graphically connected,
      * ResolveDrivers() will have stored the second driver for use by this function, which actually
-     * creates the markers
+     * creates the markers.
+     *
      * @param aSubgraph is the subgraph to examine
      * @return  true for no errors, false for errors
      */
@@ -587,84 +592,85 @@ private:
     bool ercCheckNetclassConflicts( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs );
 
     /**
-     * Checks one subgraph for conflicting connections between net and bus labels
+     * Check one subgraph for conflicting connections between net and bus labels.
      *
      * For example, a net wire connected to a bus port/pin, or vice versa
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @return                true for no errors, false for errors
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                true for no errors, false for errors.
      */
     bool ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
-     * Checks one subgraph for conflicting connections between two bus items
+     * Check one subgraph for conflicting connections between two bus items.
      *
      * For example, a labeled bus wire connected to a hierarchical sheet pin
      * where the labeled bus doesn't contain any of the same bus members as the
-     * sheet pin
+     * sheet pin.
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @return                true for no errors, false for errors
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                true for no errors, false for errors.
      */
     bool ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
-     * Checks one subgraph for conflicting bus entry to bus connections
+     * Check one subgraph for conflicting bus entry to bus connections.
      *
      * For example, a wire with label "A0" is connected to a bus labeled "D[8..0]"
      *
      * Will also check for mistakes related to bus group names, for example:
      * A bus group named "USB{DP DM}" should have bus entry connections like
-     * "USB.DP" but someone might accidentally just enter "DP"
+     * "USB.DP" but someone might accidentally just enter "DP".
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @return                true for no errors, false for errors
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                true for no errors, false for errors.
      */
     bool ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
-     * Checks one subgraph for proper presence or absence of no-connect symbols
+     * Check one subgraph for proper presence or absence of no-connect symbols.
      *
-     * A pin with a no-connect symbol should not have any connections
-     * A pin without a no-connect symbol should have at least one connection
+     * A pin with a no-connect symbol should not have any connections.
+     * A pin without a no-connect symbol should have at least one connection.
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @return                true for no errors, false for errors
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                true for no errors, false for errors.
      */
     bool ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
-     * Checks one subgraph for floating wires
+     * Check one subgraph for floating wires.
      *
-     * Will throw an error for any subgraph that consists of just wires with no driver
+     * Will throw an error for any subgraph that consists of just wires with no driver.
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @return                true for no errors, false for errors
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                true for no errors, false for errors.
      */
     bool ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
-     * Checks one subgraph for proper connection of labels
+     * Check one subgraph for proper connection of labels.
      *
-     * Labels should be connected to something
+     * Labels should be connected to something.
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @param  aCheckGlobalLabels is true if global labels should be checked for loneliness
-     * @return                true for no errors, false for errors
+     * @param  aSubgraph      is the subgraph to examine.
+     * @param  aCheckGlobalLabels is true if global labels should be checked for loneliness.
+     * @return                true for no errors, false for errors.
      */
     bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
-     * Checks that a hierarchical sheet has at least one matching label inside the sheet for each
-     * port on the parent sheet object
+     * Check that a hierarchical sheet has at least one matching label inside the sheet for each
+     * port on the parent sheet object.
      *
-     * @param  aSubgraph      is the subgraph to examine
-     * @return                the number of errors found
+     * @param  aSubgraph      is the subgraph to examine.
+     * @return                the number of errors found.
      */
     int ercCheckHierSheets();
 
     /**
-     * Get the number of pins in a given subgraph
+     * Get the number of pins in a given subgraph.
+     *
      * @param aLocSubgraph Subgraph to search
      * @return total number of pins in the subgraph
      */
@@ -672,19 +678,19 @@ private:
 
 
 private:
-    // All the sheets in the schematic (as long as we don't have partial updates)
+    /// All the sheets in the schematic (as long as we don't have partial updates).
     SCH_SHEET_LIST m_sheetList;
 
-    // All connectable items in the schematic
+    /// All connectable items in the schematic.
     std::vector<SCH_ITEM*> m_items;
 
-    // The owner of all CONNECTION_SUBGRAPH objects
+    /// The owner of all #CONNECTION_SUBGRAPH objects.
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
 
-    // Cache of a subset of m_subgraphs
+    /// Cache of a subset of #m_subgraphs.
     std::vector<CONNECTION_SUBGRAPH*> m_driver_subgraphs;
 
-    // Cache to lookup subgraphs in m_driver_subgraphs by sheet path
+    /// Cache to lookup subgraphs in #m_driver_subgraphs by sheet path.
     std::unordered_map<SCH_SHEET_PATH, std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
 
     std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_global_power_pins;
@@ -712,7 +718,7 @@ private:
 
     int m_last_subgraph_code;
 
-    SCHEMATIC* m_schematic;     ///< The schematic this graph represents
+    SCHEMATIC* m_schematic;     ///< The schematic this graph represents.
 };
 
 #endif

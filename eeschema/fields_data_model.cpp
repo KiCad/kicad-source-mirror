@@ -1,3 +1,22 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2023 <author>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include <wx/string.h>
 #include <wx/debug.h>
 #include <wx/grid.h>
@@ -9,8 +28,10 @@
 
 #include "fields_data_model.h"
 
+
 const wxString FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE = wxS( "${QUANTITY}" );
 const wxString FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "${ITEM_NUMBER}" );
+
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
                                                bool aAddedByUser )
@@ -34,6 +55,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL
         m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
     else if( isAttribute( aFieldName ) )
         m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
+
     // Handle fields with variables as names that are not present in the symbol
     // by giving them the correct value
     else if( IsTextVar( aFieldName ) )
@@ -234,11 +256,13 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( REFERENCE_FIELD );
 }
 
+
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( VALUE_FIELD );
 }
+
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
 {
@@ -246,11 +270,13 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
     return m_cols[aCol].m_fieldName == QUANTITY_VARIABLE;
 }
 
+
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemNumber( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
     return m_cols[aCol].m_fieldName == ITEM_NUMBER_VARIABLE;
 }
+
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
 {
@@ -342,6 +368,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef,
 
     return ( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() );
 }
+
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
                                                 const SCH_REFERENCE& rhRef )
@@ -552,6 +579,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     Sort();
 }
 
+
 void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
 {
     std::vector<DATA_MODEL_ROW> children;
@@ -592,6 +620,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
     wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
     GetView()->ProcessTableMessage( msg );
 }
+
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
 {
@@ -720,6 +749,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
 
     m_edited = false;
 }
+
 
 int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 {
@@ -943,7 +973,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
     for( const SCH_REFERENCE& ref : aRefs )
     {
         // Update the fields of every reference. Do this by iterating through the data model
-        // colums; we must have all fields in the symbol added to the data model at this point,
+        // columns; we must have all fields in the symbol added to the data model at this point,
         // and some of the data model columns may be variables that are not present in the symbol
         for( const DATA_MODEL_COL& col : m_cols )
             updateDataStoreSymbolField( *ref.GetSymbol(), col.m_fieldName );

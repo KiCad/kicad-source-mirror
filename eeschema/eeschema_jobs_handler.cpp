@@ -69,7 +69,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
     Register( "bom",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ) );
     Register( "pythonbom",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ) );
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this,
+                         std::placeholders::_1 ) );
     Register( "netlist",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ) );
     Register( "plot",
@@ -181,13 +182,23 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
     switch( aPlotJob->m_HPGLPlotOrigin )
     {
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT; break;
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER; break;
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT; break;
-    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE: hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE; break;
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
+        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
+        break;
+
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
+        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
+        break;
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
+        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT;
+        break;
+    case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
+        hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
+        break;
     }
 
     int pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO;
+
     switch( aPlotJob->m_pageSizeSelect )
     {
     case JOB_PAGE_SIZE::PAGE_SIZE_A: pageSizeSelect = PageFormatReq::PAGE_SIZE_A; break;
@@ -300,7 +311,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
-
     if( aNetJob->m_outputFile.IsEmpty() )
     {
         wxFileName fn = sch->GetFileName();
@@ -312,7 +322,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *m_reporter );
 
-    if(!res)
+    if( !res )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -368,7 +378,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     {
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
     }
-
 
     // Build our data model
     FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
@@ -436,6 +445,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     else
     {
         size_t i = 0;
+
         for( wxString fieldName : aBomJob->m_fieldsOrdered )
         {
             struct BOM_FIELD field;
@@ -473,6 +483,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     wxFile f;
+
     if( !f.Open( aBomJob->m_outputFile, wxFile::write ) )
     {
         m_reporter->Report(
@@ -645,6 +656,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             fn.SetExt( SVGFileExtension );
 
             filename = symbol->GetName().Lower();
+
             while( wxString::npos
                    != ( forbidden_char = filename.find_first_of(
                                 wxFileName::GetForbiddenChars( wxPATH_DOS ) ) ) )
@@ -690,7 +702,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             VECTOR2I     plot_offset;
             const double scale = 1.0;
 
-            // Currently, plot units are in decimil
+            // Currently, plot units are in decimal
             plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
 
             plotter->SetCreator( wxT( "Eeschema-SVG" ) );
@@ -901,6 +913,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     }
 
     EDA_UNITS units;
+
     switch( ercJob->m_units )
     {
     case JOB_SCH_ERC::UNITS::INCHES:
@@ -933,6 +946,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     ERC_REPORT reportWriter( sch, units );
 
     bool wroteReport = false;
+
     if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
         wroteReport = reportWriter.WriteJsonReport( ercJob->m_outputFile );
     else
@@ -949,7 +963,6 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), ercJob->m_outputFile ),
                         RPT_SEVERITY_INFO );
 
-
     if( ercJob->m_exitCodeViolations )
     {
         if( markersProvider->GetCount() > 0 )
@@ -965,8 +978,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 DS_PROXY_VIEW_ITEM* EESCHEMA_JOBS_HANDLER::getDrawingSheetProxyView( SCHEMATIC* aSch )
 {
     DS_PROXY_VIEW_ITEM* drawingSheet =
-            new DS_PROXY_VIEW_ITEM( schIUScale, &aSch->RootScreen()->GetPageSettings(), &aSch->Prj(),
-                                    &aSch->RootScreen()->GetTitleBlock(), aSch->GetProperties() );
+            new DS_PROXY_VIEW_ITEM( schIUScale, &aSch->RootScreen()->GetPageSettings(),
+                                    &aSch->Prj(), &aSch->RootScreen()->GetTitleBlock(),
+                                    aSch->GetProperties() );
 
     drawingSheet->SetPageNumber( TO_UTF8( aSch->RootScreen()->GetPageNumber() ) );
     drawingSheet->SetSheetCount( aSch->RootScreen()->GetPageCount() );

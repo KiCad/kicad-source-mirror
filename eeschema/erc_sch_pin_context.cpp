@@ -29,41 +29,31 @@
 
 #include <erc_sch_pin_context.h>
 
-/**
- * Gets the SCH_PIN for this context
- */
+
 SCH_PIN* ERC_SCH_PIN_CONTEXT::Pin()
 {
     return m_pin;
 }
 
-/**
- * Gets the SCH_SHEET_PATH context for the paired SCH_PIN
- */
+
 SCH_SHEET_PATH& ERC_SCH_PIN_CONTEXT::Sheet()
 {
     return m_sheet;
 }
 
-/**
- * Tests two pin contexts for equality based on the deterministic hash
-*/
+
 bool ERC_SCH_PIN_CONTEXT::operator==( const ERC_SCH_PIN_CONTEXT& other ) const
 {
     return m_hash == other.m_hash;
 }
 
-/**
- * Provides a deterministic ordering for item contexts based on hash value
- */
+
 bool ERC_SCH_PIN_CONTEXT::operator<( const ERC_SCH_PIN_CONTEXT& other ) const
 {
     return m_hash < other.m_hash;
 }
 
-/**
- * Calculates the deterministic hash for this pin / sheet context
- */
+
 void ERC_SCH_PIN_CONTEXT::rehash()
 {
     m_hash = 0;

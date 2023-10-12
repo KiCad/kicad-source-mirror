@@ -155,7 +155,8 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
                 {
                     if( aCreateMarker )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_NAME );
                         ercItem->SetItems( sheet, test_item );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, sheet->GetPosition() );
@@ -179,7 +180,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
     auto unresolved = [this]( wxString str )
     {
         str = ExpandEnvVarSubstitutions( str, &m_schematic->Prj() );
-        return str.Matches( wxT( "*${*}*" ) );
+        return str.Matches( wxS( "*${*}*" ) );
     };
 
     if( aDrawingSheet )
@@ -190,7 +191,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         wsItems.SetSheetName( wxS( "dummySheet" ) );
         wsItems.SetSheetLayer( wxS( "dummyLayer" ) );
         wsItems.SetProject( &m_schematic->Prj() );
-        wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock());
+        wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock() );
     }
 
     SCH_SHEET_PATH  savedCurrentSheet = m_schematic->CurrentSheet();
@@ -239,7 +240,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
                 {
-                    if( pin->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+                    if( pin->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem =
                                 ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -252,7 +253,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( item ) )
             {
-                if( text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+                if( text->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -264,7 +265,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXTBOX* textBox = dynamic_cast<SCH_TEXTBOX*>( item ) )
             {
-                if( textBox->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+                if( textBox->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
@@ -280,7 +281,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         {
             if( DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item ) )
             {
-                if( text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+                if( text->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
@@ -435,17 +436,18 @@ int ERC_TESTER::TestMissingUnits()
         std::set<int> instance_units;
         std::set<int> missing_units;
 
-        auto report_missing = [&]( std::set<int>& aMissingUnits, wxString aErrorMsg, int aErrorCode )
+        auto report_missing = [&]( std::set<int>& aMissingUnits, wxString aErrorMsg,
+                                   int aErrorCode )
         {
             wxString msg;
-            wxString missing_pin_units = wxT( "[ " );
+            wxString missing_pin_units = wxS( "[ " );
             int ii = 0;
 
             for( int missing_unit : aMissingUnits )
             {
                 if( ii++ == 3 )
                 {
-                    missing_pin_units += wxT( "....." );
+                    missing_pin_units += wxS( "....." );
                     break;
                 }
 
@@ -453,7 +455,7 @@ int ERC_TESTER::TestMissingUnits()
             }
 
             missing_pin_units.Truncate( missing_pin_units.length() - 2 );
-            missing_pin_units += wxT( " ]" );
+            missing_pin_units += wxS( " ]" );
 
             msg.Printf( aErrorMsg, symbol.first, missing_pin_units );
 
@@ -480,7 +482,7 @@ int ERC_TESTER::TestMissingUnits()
         if( !missing_units.empty() && settings.IsTestEnabled( ERCE_MISSING_UNIT ) )
         {
             report_missing( missing_units, _( "Symbol %s has unplaced units %s" ),
-                    ERCE_MISSING_UNIT );
+                            ERCE_MISSING_UNIT );
         }
 
         std::set<int> missing_power;
@@ -527,20 +529,24 @@ int ERC_TESTER::TestMissingUnits()
 
         if( !missing_power.empty() && settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN ) )
         {
-            report_missing( missing_power, _( "Symbol %s has input power pins in units %s that are not placed." ),
-                     ERCE_MISSING_POWER_INPUT_PIN );
+            report_missing( missing_power,
+                            _( "Symbol %s has input power pins in units %s that are not placed." ),
+                            ERCE_MISSING_POWER_INPUT_PIN );
         }
 
         if( !missing_input.empty() && settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN ) )
         {
-           report_missing( missing_input, _( "Symbol %s has input pins in units %s that are not placed." ),
-                   ERCE_MISSING_INPUT_PIN );
+           report_missing( missing_input,
+                           _( "Symbol %s has input pins in units %s that are not placed." ),
+                           ERCE_MISSING_INPUT_PIN );
         }
 
         if( !missing_bidi.empty() && settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
         {
-            report_missing( missing_bidi, _( "Symbol %s has bidirectional pins in units %s that are not placed." ),
-                    ERCE_MISSING_BIDI_PIN );
+            report_missing( missing_bidi,
+                            _( "Symbol %s has bidirectional pins in units %s that are not "
+                               "placed." ),
+                            ERCE_MISSING_BIDI_PIN );
         }
     }
 
@@ -1023,7 +1029,8 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
                     if( ( pinPos.x % clamped_grid_size ) != 0
                             || ( pinPos.y % clamped_grid_size) != 0 )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                         ercItem->SetItems( pin );
 
                         markers.emplace_back( new SCH_MARKER( ercItem, pinPos ) );
@@ -1106,6 +1113,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking sheet names..." ) );
+
         TestDuplicateSheetNames( true );
     }
 
@@ -1113,6 +1121,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking bus conflicts..." ) );
+
         TestConflictingBusAliases();
     }
 
@@ -1139,6 +1148,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking footprints..." ) );
+
         TestMultiunitFootprints();
     }
 
@@ -1170,6 +1180,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking labels..." ) );
+
         TestSimilarLabels();
     }
 
@@ -1177,6 +1188,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for unresolved variables..." ) );
+
         TestTextVars( aDrawingSheet );
     }
 
@@ -1184,6 +1196,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking SPICE models..." ) );
+
         TestSimModelIssues();
     }
 
@@ -1191,6 +1204,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking no connect pins for connections..." ) );
+
         TestNoConnectPins();
     }
 
@@ -1198,6 +1212,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for library symbol issues..." ) );
+
         TestLibSymbolIssues();
     }
 
@@ -1205,6 +1220,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for off grid pins and wires..." ) );
+
         if( aEditFrame )
             TestOffGridEndpoints( aEditFrame->GetCanvas()->GetView()->GetGAL()->GetGridSize().x );
     }

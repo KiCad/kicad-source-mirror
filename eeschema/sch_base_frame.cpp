@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,7 +208,8 @@ LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLi
     SYMBOL_LIB* cache =
             ( aUseCacheLib ) ? PROJECT_SCH::SchLibs( &Prj() )->GetCacheLibrary() : nullptr;
 
-    return SchGetLibSymbol( aLibId, PROJECT_SCH::SchSymbolLibTable( &Prj() ), cache, this, aShowErrorMsg );
+    return SchGetLibSymbol( aLibId, PROJECT_SCH::SchSymbolLibTable( &Prj() ), cache, this,
+                            aShowErrorMsg );
 }
 
 
@@ -384,8 +385,8 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
     }
 
     /**
-     * Be careful when calling this.  Update will invalidate RTree iterators, so you cannot call this
-     * while doing things like `for( SCH_ITEM* item : screen->Items() )`
+     * Be careful when calling this.  Update will invalidate RTree iterators, so you cannot
+     * call this while doing things like `for( SCH_ITEM* item : screen->Items() )`
      */
     if( aUpdateRtree && dynamic_cast<SCH_ITEM*>( aItem ) )
         GetScreen()->Update( static_cast<SCH_ITEM*>( aItem ) );
@@ -438,7 +439,7 @@ void SCH_BASE_FRAME::AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     // Null pointers will cause boost::ptr_vector to raise a boost::bad_pointer exception which
     // will be unhandled.  There is no valid reason to pass an invalid EDA_ITEM pointer to the
     // screen append function.
-    wxCHECK( aItem != nullptr, /* voide */ );
+    wxCHECK( aItem != nullptr, /* void */ );
 
     auto screen = aScreen;
 

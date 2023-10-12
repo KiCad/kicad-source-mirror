@@ -212,6 +212,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_System.units = static_cast<int>( GetUserUnits() );
         cfg->m_AuiPanels.show_schematic_hierarchy = hierarchy_pane.IsShown();
         cfg->m_AuiPanels.schematic_hierarchy_float = hierarchy_pane.IsFloating();
+
         // Other parameters (hierarchy_panel_float_width, hierarchy_panel_float_height,
         // and hierarchy_panel_docked_width should have been updated when resizing the
         // hierarchy panel
