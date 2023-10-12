@@ -63,7 +63,8 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 {
     m_ids.clear();
 
-    m_ids.push_back( aItem->m_Uuid );
+    if( aItem )
+        m_ids.push_back( aItem->m_Uuid );
 
     if( bItem )
         m_ids.push_back( bItem->m_Uuid );
