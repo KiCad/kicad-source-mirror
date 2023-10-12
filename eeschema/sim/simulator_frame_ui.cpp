@@ -1933,7 +1933,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 else if( cmd == ".probe allp" )
                     simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
                 else
-                    simCommand += wxString( cmd ).Trim();
+                    simCommand += wxString( cmd.get<wxString>() ).Trim();
             }
 
             SIM_TAB*      simTab = NewSimTab( simCommand );
@@ -1999,7 +1999,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
         if( js.contains( "user_defined_signals" ) )
         {
             for( const nlohmann::json& signal_js : js[ "user_defined_signals" ] )
-                m_userDefinedSignals[ii++] = wxString( signal_js );
+                m_userDefinedSignals[ii++] = wxString( signal_js.get<wxString>() );
         }
 
         auto addCursor =
@@ -2044,7 +2044,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                     if( trace_js.contains( "color" ) )
                     {
                         wxColour color;
-                        color.Set( wxString( trace_js[ "color" ] ) );
+                        color.Set( wxString( trace_js["color"].get<wxString>() ) );
                         trace->SetTraceColour( color );
                         plotTab->UpdateTraceStyle( trace );
                     }
