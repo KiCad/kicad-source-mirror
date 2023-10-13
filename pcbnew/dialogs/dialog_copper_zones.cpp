@@ -294,6 +294,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      m_OutlineDisplayCtrl->SetSelection( 0 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;
+    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER: break;    // Not used for standard zones
     }
 
     m_outlineHatchPitch.SetValue( m_settings.m_BorderHatchPitch );

@@ -101,6 +101,7 @@ BOARD::BOARD() :
     // Creates a zone to show sloder mask bridges created by a min web value
     // it it just to show them
     m_SolderMaskBridges = new ZONE( this );
+    m_SolderMaskBridges->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER );
     m_SolderMaskBridges->SetLayerSet( LSET().set( F_Mask ).set( B_Mask ) );
     int infinity = ( std::numeric_limits<int>::max() / 2 ) - pcbIUScale.mmToIU( 1 );
     m_SolderMaskBridges->Outline()->NewOutline();

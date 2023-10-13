@@ -2423,8 +2423,9 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     if( !IsZoneFillLayer( aLayer ) )
     {
         const SHAPE_POLY_SET* outline = aZone->Outline();
+        bool allowDrawOutline = aZone->GetHatchStyle() != ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
 
-        if( !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )
+        if( allowDrawOutline && !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )
         {
             m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
             m_gal->SetIsFill( false );
