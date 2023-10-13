@@ -29,6 +29,8 @@
 #include <core/kicad_algo.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include <board.h>
 #include <collectors.h>
 #include <footprint.h>
@@ -486,6 +488,8 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
     if( !removedLayers.empty() )
     {
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+
         PCB_LAYER_COLLECTOR collector;
 
         for( PCB_LAYER_ID layer_id : removedLayers )
