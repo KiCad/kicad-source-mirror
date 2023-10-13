@@ -784,7 +784,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                 || evt->IsDblClick( BUT_LEFT ) )
         {
             // Eat mouse-up/-click events that leaked through from the lock dialog
-            if( eatFirstMouseUp && evt->Parameter<ACTIONS::CURSOR_EVENT_TYPE>() != ACTIONS::CURSOR_CLICK )
+            if( eatFirstMouseUp && !evt->IsAction( &ACTIONS::cursorClick ) )
             {
                 eatFirstMouseUp = false;
                 continue;
