@@ -48,5 +48,5 @@ bool KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion()
         RegCloseKey( hKey );
     }
 
-    return !version.empty() && compareVersionStrings( MIN_WIN_VERSION, version ) <= 0;
+    return !version.empty() && compareVersionStrings( MIN_WIN_VERSION, version );
 }
