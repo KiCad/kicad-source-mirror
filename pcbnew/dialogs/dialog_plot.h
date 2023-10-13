@@ -97,10 +97,8 @@ private:
 
     wxRearrangeList*    m_plotAllLayersList;
 
-#if 0
     STD_BITMAP_BUTTON*  m_bpMoveUp;
     STD_BITMAP_BUTTON*  m_bpMoveDown;
-#endif
 
     /// The plot layer set that last time the dialog was opened.
     static LSET         m_lastLayerSet;
