@@ -1185,10 +1185,24 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     if( aPad->GetDrillSize().x > 0 )
         solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
 
-    std::shared_ptr<SHAPE_POLY_SET> shape = aPad->GetEffectivePolygon();
+    std::shared_ptr<SHAPE> shape = aPad->GetEffectiveShape( UNDEFINED_LAYER,
+                                                            FLASHING::ALWAYS_FLASHED );
+    std::shared_ptr<SHAPE_POLY_SET> polygon = aPad->GetEffectivePolygon();
 
-    if( shape->OutlineCount() )
-        solid->SetShape( new SHAPE_SIMPLE( shape->Outline( 0 ) ) );
+    if( shape->HasIndexableSubshapes() && polygon->OutlineCount() )
+    {
+        solid->SetShape( new SHAPE_SIMPLE( polygon->Outline( 0 ) ) );
+
+        // GetEffectivePolygon may produce an approximation of the shape, so we need to account for
+        // this when building hulls around this shape.
+        solid->SetExtraClearance( m_board->GetDesignSettings().m_MaxError );
+    }
+    else
+    {
+        // Prefer using the original shape if it's not a compound shape; the hulls for
+        // circular and rectangular pads can be exact.
+        solid->SetShape( shape->Clone() );
+    }
 
     return solid;
 }
