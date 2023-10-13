@@ -364,7 +364,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
     auto clipLineToPad =
             []( SHAPE_LINE_CHAIN& aLine, PAD* aPad, bool aForward = true )
             {
-                const std::shared_ptr<SHAPE_POLY_SET>& shape = aPad->GetEffectivePolygon();
+                const auto& shape = aPad->GetEffectivePolygon( ERROR_INSIDE );
 
                 int start = aForward ? 0 : aLine.PointCount() - 1;
                 int delta = aForward ? 1 : -1;
@@ -410,7 +410,7 @@ const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SO
     auto processPad =
             [&]( const JOINT* aJoint, PAD* aPad )
             {
-                const std::shared_ptr<SHAPE_POLY_SET>& shape = aPad->GetEffectivePolygon();
+                const auto& shape = aPad->GetEffectivePolygon( ERROR_INSIDE );
 
                 for( int idx = 0; idx < initialPath.Size(); idx++ )
                 {

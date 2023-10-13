@@ -38,8 +38,7 @@ public:
     SOLID() :
             ITEM( SOLID_T ),
             m_shape( nullptr ),
-            m_hole( nullptr ),
-            m_extraClearance( 0 )
+            m_hole( nullptr )
     {
         m_movable = false;
         m_padToDie = 0;
@@ -65,7 +64,6 @@ public:
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
         m_orientation = aSolid.m_orientation;
-        m_extraClearance = aSolid.m_extraClearance;
     }
 
     SOLID& operator=( const SOLID& aB )
@@ -79,7 +77,6 @@ public:
         m_pos = aB.m_pos;
         m_padToDie = aB.m_padToDie;
         m_orientation = aB.m_orientation;
-        m_extraClearance = aB.m_extraClearance;
         return *this;
     }
 
@@ -139,9 +136,6 @@ public:
     virtual bool HasHole() const override { return m_hole != nullptr; }
     virtual HOLE *Hole() const override { return m_hole; }
 
-    int ExtraClearance() const { return m_extraClearance; }
-    void SetExtraClearance( int aClearance ) { m_extraClearance = aClearance; }
-
 private:
     VECTOR2I    m_pos;
     SHAPE*      m_shape;
@@ -149,7 +143,6 @@ private:
     int         m_padToDie;
     EDA_ANGLE   m_orientation;
     HOLE*       m_hole;
-    int         m_extraClearance;
 };
 
 }

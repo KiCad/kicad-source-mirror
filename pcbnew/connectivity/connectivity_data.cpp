@@ -448,7 +448,7 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     if( zone->IsFilled() )
                     {
                         const SHAPE_POLY_SET*   zoneFill = zone->GetFill( ToLAYER_ID( aLayer ) );
-                        const SHAPE_LINE_CHAIN& padHull = pad->GetEffectivePolygon()->Outline( 0 );
+                        const SHAPE_LINE_CHAIN& padHull = pad->GetEffectivePolygon( ERROR_INSIDE )->Outline( 0 );
 
                         for( const VECTOR2I& pt : zoneFill->COutline( islandIdx ).CPoints() )
                         {

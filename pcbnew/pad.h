@@ -382,13 +382,14 @@ public:
 
     bool IsDirty() const
     {
-        return m_shapesDirty || m_polyDirty;
+        return m_shapesDirty || m_polyDirty[ERROR_INSIDE] || m_polyDirty[ERROR_OUTSIDE];
     }
 
     void SetDirty()
     {
         m_shapesDirty = true;
-        m_polyDirty = true;
+        m_polyDirty[ERROR_INSIDE] = true;
+        m_polyDirty[ERROR_OUTSIDE] = true;
     }
 
     void SetLayerSet( LSET aLayers ) override   { m_layerMask = aLayers; }
@@ -469,7 +470,7 @@ public:
     GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        FLASHING flashPTHPads = FLASHING::DEFAULT ) const override;
 
-    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon() const;
+    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( ERROR_LOC aErrorLoc ) const;
 
     /**
      * Return a SHAPE_SEGMENT object representing the pad's hole.
@@ -729,7 +730,7 @@ public:
      * the dirty bit.
      */
     void BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const;
-    void BuildEffectivePolygon() const;
+    void BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -787,9 +788,9 @@ private:
     mutable std::shared_ptr<SHAPE_COMPOUND>   m_effectiveShape;
     mutable std::shared_ptr<SHAPE_SEGMENT>    m_effectiveHoleShape;
 
-    mutable bool                              m_polyDirty;
+    mutable bool                              m_polyDirty[2];
     mutable std::mutex                        m_polyBuildingLock;
-    mutable std::shared_ptr<SHAPE_POLY_SET>   m_effectivePolygon;
+    mutable std::shared_ptr<SHAPE_POLY_SET>   m_effectivePolygon[2];
     mutable int                               m_effectiveBoundingRadius;
 
     /*

@@ -129,7 +129,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             if( pad->IsDirty() )
             {
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
-                pad->BuildEffectivePolygon();
+                pad->BuildEffectivePolygon( ERROR_OUTSIDE );
             }
         }
 

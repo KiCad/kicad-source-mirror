@@ -1155,23 +1155,26 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     if( aPad->GetDrillSize().x > 0 )
         solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
 
-    std::shared_ptr<SHAPE> shape = aPad->GetEffectiveShape( UNDEFINED_LAYER,
-                                                            FLASHING::ALWAYS_FLASHED );
-    std::shared_ptr<SHAPE_POLY_SET> polygon = aPad->GetEffectivePolygon();
+    // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
+    // perform layer-specific flashing tests internally.
+    const std::shared_ptr<SHAPE>& shape = aPad->GetEffectiveShape( UNDEFINED_LAYER,
+                                                                   FLASHING::ALWAYS_FLASHED );
 
-    if( shape->HasIndexableSubshapes() && polygon->OutlineCount() )
+    if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
     {
-        solid->SetShape( new SHAPE_SIMPLE( polygon->Outline( 0 ) ) );
+        std::vector<const SHAPE*> subshapes;
+        shape->GetIndexableSubshapes( subshapes );
 
-        // GetEffectivePolygon may produce an approximation of the shape, so we need to account for
-        // this when building hulls around this shape.
-        solid->SetExtraClearance( m_board->GetDesignSettings().m_MaxError );
+        solid->SetShape( subshapes[0]->Clone() );
     }
+    // For anything that's not a single shape we use a polygon.  Multiple shapes have a tendency
+    // to confuse the hull generator. https://gitlab.com/kicad/code/kicad/-/issues/15553
     else
     {
-        // Prefer using the original shape if it's not a compound shape; the hulls for
-        // circular and rectangular pads can be exact.
-        solid->SetShape( shape->Clone() );
+        const std::shared_ptr<SHAPE_POLY_SET>& poly = aPad->GetEffectivePolygon( ERROR_OUTSIDE );
+
+        if( poly->OutlineCount() )
+            solid->SetShape( new SHAPE_SIMPLE( poly->Outline( 0 ) ) );
     }
 
     return solid;
