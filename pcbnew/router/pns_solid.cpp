@@ -48,6 +48,8 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
     if( !m_shape )
         return SHAPE_LINE_CHAIN();
 
+    aClearance += ExtraClearance();
+
     if( m_shape->Type() == SH_COMPOUND )
     {
         SHAPE_COMPOUND* cmpnd = static_cast<SHAPE_COMPOUND*>( m_shape );
