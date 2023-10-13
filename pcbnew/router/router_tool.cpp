@@ -937,13 +937,21 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             return 0;
         }
     }
+    else if( aEvent.IsAction( &PCB_ACTIONS::layerToggle ) )
+    {
+        PCB_SCREEN* screen = frame()->GetScreen();
+
+        if( currentLayer == screen->m_Route_Layer_TOP )
+            targetLayer = screen->m_Route_Layer_BOTTOM;
+        else
+            targetLayer = screen->m_Route_Layer_TOP;
+    }
     else if( aEvent.IsActionInGroup( PCB_ACTIONS::layerDirectSwitchActions() ) )
     {
         targetLayer = aEvent.Parameter<PCB_LAYER_ID>();
 
         if( !enabledLayers.test( targetLayer ) )
             return 0;
-
     }
 
     if( targetLayer != UNDEFINED_LAYER )
@@ -2697,6 +2705,7 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerBottom.MakeEvent() );
     Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerNext.MakeEvent() );
     Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerPrev.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerToggle.MakeEvent() );
 
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
     Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
