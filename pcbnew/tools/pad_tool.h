@@ -71,10 +71,9 @@ public:
      * Recombine an exploded pad (or one produced with overlapping polygons in an older version).
      * @param aPad the pad to run the recombination algorithm on
      * @param aIsDryRun if true the list will be generated but no changes will be made
-     * @param aCommit the commit to add any changes to
      * @return a list of PCB_SHAPEs that will be combined
      */
-    std::vector<PCB_SHAPE*> RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit );
+    std::vector<PCB_SHAPE*> RecombinePad( PAD* aPad, bool aIsDryRun );
 
 private:
     ///< Bind handlers to corresponding TOOL_ACTIONs.
@@ -89,16 +88,16 @@ private:
     ///< Push pad settings from a pad to other pads on board or footprint.
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
-    PCB_LAYER_ID explodePad( PAD* aPad );
+    void explodePad( PAD* aPad, PCB_LAYER_ID* aLayer );
 
     void enterPadEditMode();
     void exitPadEditMode();
 
 private:
-    wxString       m_lastPadNumber;
+    wxString           m_lastPadNumber;
 
-    bool           m_wasHighContrast;
-    KIID           m_editPad;
+    HIGH_CONTRAST_MODE m_previousHighContrastMode;
+    KIID               m_editPad;
 };
 
 #endif // __PAD_TOOL_H

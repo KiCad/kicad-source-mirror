@@ -356,7 +356,10 @@ void GRAPHICS_CLEANER::mergePads()
         if( padToNetTieGroupMap[ pad->GetNumber() ] >= 0 )
             continue;
 
-        std::vector<PCB_SHAPE*> shapes = padTool->RecombinePad( pad, m_dryRun, m_commit );
+        if( m_commit.GetStatus( m_parentFootprint ) == 0 )
+            m_commit.Modify( m_parentFootprint );
+
+        std::vector<PCB_SHAPE*> shapes = padTool->RecombinePad( pad, m_dryRun );
 
         if( !shapes.empty() )
         {

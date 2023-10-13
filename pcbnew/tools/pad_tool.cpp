@@ -51,7 +51,7 @@ using KIGFX::PCB_RENDER_SETTINGS;
 
 PAD_TOOL::PAD_TOOL() :
         PCB_TOOL_BASE( "pcbnew.PadTool" ),
-        m_wasHighContrast( false ),
+        m_previousHighContrastMode( HIGH_CONTRAST_MODE::NORMAL ),
         m_editPad( niluuid )
 {}
 
@@ -68,10 +68,12 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
     if( board() && board()->GetItem( m_editPad ) == DELETED_BOARD_ITEM::GetInstance() )
     {
         PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
-        bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
-        if( m_wasHighContrast != highContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode );
+        if( m_previousHighContrastMode != opts.m_ContrastModeDisplay )
+        {
+            opts.m_ContrastModeDisplay = m_previousHighContrastMode;
+            frame()->SetDisplayOptions( opts );
+        }
 
         frame()->GetInfoBar()->Dismiss();
 
@@ -615,7 +617,6 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    PCB_DISPLAY_OPTIONS  opts = frame()->GetDisplayOptions();
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( view()->GetPainter() );
     PCB_RENDER_SETTINGS* settings = painter->GetSettings();
     PCB_SELECTION&       selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
@@ -627,20 +628,24 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         if( pad )
         {
             BOARD_COMMIT commit( frame() );
-            RecombinePad( pad, false, commit );
-            commit.Push( _( "Recombine pad" ) );
+            commit.Modify( pad->GetParentFootprint() );
+            RecombinePad( pad, false );
+            commit.Push( _( "Edit Pad" ) );
         }
 
         m_editPad = niluuid;
     }
     else if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
     {
+        PCB_LAYER_ID layer;
         PAD*         pad = static_cast<PAD*>( selection[0] );
-        PCB_LAYER_ID layer = explodePad( pad );
+        BOARD_COMMIT commit( frame() );
 
-        m_editPad = pad->m_Uuid;
+        commit.Modify( pad->GetParentFootprint() );
+        explodePad( pad, &layer );
+        commit.Push( _( "Edit Pad" ) );
 
-        m_wasHighContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
         frame()->SetActiveLayer( layer );
 
         settings->m_PadEditModePad = pad;
@@ -696,7 +701,6 @@ int PAD_TOOL::OnUndoRedo( const TOOL_EVENT& aEvent )
 void PAD_TOOL::enterPadEditMode()
 {
     PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
-    bool                highContrast = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
     WX_INFOBAR*         infoBar = frame()->GetInfoBar();
     wxString            msg;
 
@@ -706,8 +710,13 @@ void PAD_TOOL::enterPadEditMode()
                 return dynamic_cast<PAD*>( aItem ) != nullptr;
             } );
 
-    if( !highContrast )
-        m_toolMgr->RunAction( ACTIONS::highContrastMode );
+    m_previousHighContrastMode = opts.m_ContrastModeDisplay;
+
+    if( opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::NORMAL )
+    {
+        opts.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::DIMMED;
+        frame()->SetDisplayOptions( opts );
+    }
 
     if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
     {
@@ -728,10 +737,12 @@ void PAD_TOOL::enterPadEditMode()
 void PAD_TOOL::exitPadEditMode()
 {
     PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
-    bool                highContrast = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
 
-    if( m_wasHighContrast != highContrast )
-        m_toolMgr->RunAction( ACTIONS::highContrastMode );
+    if( m_previousHighContrastMode != opts.m_ContrastModeDisplay )
+    {
+        opts.m_ContrastModeDisplay = m_previousHighContrastMode;
+        frame()->SetDisplayOptions( opts );
+    }
 
     // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
     // they won't be found in the view layer's itemset for re-painting.
@@ -749,22 +760,17 @@ void PAD_TOOL::exitPadEditMode()
 }
 
 
-PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
+void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
 {
-    PCB_LAYER_ID layer;
-    BOARD_COMMIT commit( frame() );
-
     if( aPad->IsOnLayer( F_Cu ) )
-        layer = F_Cu;
+        *aLayer = F_Cu;
     else if( aPad->IsOnLayer( B_Cu ) )
-        layer = B_Cu;
+        *aLayer = B_Cu;
     else
-        layer = *aPad->GetLayerSet().UIOrder();
+        *aLayer = *aPad->GetLayerSet().UIOrder();
 
     if( aPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
-        commit.Modify( aPad );
-
         for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
         {
             PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( primitive->Duplicate() );
@@ -772,7 +778,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             shape->SetParent( board()->GetFirstFootprint() );
             shape->Rotate( VECTOR2I( 0, 0 ), aPad->GetOrientation() );
             shape->Move( aPad->ShapePos() );
-            shape->SetLayer( layer );
+            shape->SetLayer( *aLayer );
 
             if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::SEGMENT )
             {
@@ -782,7 +788,8 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
                     shape->SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
             }
 
-            commit.Add( shape );
+            board()->GetFirstFootprint()->Add( shape );
+            frame()->GetCanvas()->GetView()->Add( shape );
         }
 
         aPad->SetShape( aPad->GetAnchorPadShape() );
@@ -791,14 +798,10 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
     aPad->SetFlags( ENTERED );
     m_editPad = aPad->m_Uuid;
-
-    commit.Push( _("Edit pad shapes") );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-    return layer;
 }
 
 
-std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_COMMIT& aCommit )
+std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun )
 {
     int        maxError = board()->GetDesignSettings().m_MaxError;
     FOOTPRINT* footprint = aPad->GetParentFootprint();
@@ -875,8 +878,6 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
     // custom-shape pad.
     if( !aIsDryRun && findNext( layer ) && aPad->GetShape() != PAD_SHAPE::CUSTOM )
     {
-        aCommit.Modify( aPad );
-
         if( aPad->GetShape() == PAD_SHAPE::CIRCLE || aPad->GetShape() == PAD_SHAPE::RECTANGLE )
         {
             // Use the existing pad as an anchor
@@ -919,8 +920,6 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
             primitive->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
 
             aPad->AddPrimitive( primitive );
-
-            aCommit.Remove( fpShape );
         }
 
         // See if there are other shapes that match and mark them for delete.  (KiCad won't
@@ -929,9 +928,6 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
         {
             other->SetFlags( SKIP_STRUCT );
             mergedShapes.push_back( other );
-
-            if( !aIsDryRun )
-                aCommit.Remove( other );
         }
     }
 
