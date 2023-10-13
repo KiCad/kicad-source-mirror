@@ -497,8 +497,8 @@ void PCB_BASE_FRAME::HideSolderMask()
 {
     KIGFX::PCB_VIEW* view = GetCanvas()->GetView();
 
-    if( view && GetBoard()->m_SolderMask && view->HasItem( GetBoard()->m_SolderMask ) )
-        view->Remove( GetBoard()->m_SolderMask );
+    if( view && GetBoard()->m_SolderMaskBridges && view->HasItem( GetBoard()->m_SolderMaskBridges ) )
+        view->Remove( GetBoard()->m_SolderMaskBridges );
 }
 
 
@@ -506,12 +506,12 @@ void PCB_BASE_FRAME::ShowSolderMask()
 {
     KIGFX::PCB_VIEW* view = GetCanvas()->GetView();
 
-    if( view && GetBoard()->m_SolderMask )
+    if( view && GetBoard()->m_SolderMaskBridges )
     {
-        if( view->HasItem( GetBoard()->m_SolderMask ) )
-            view->Remove( GetBoard()->m_SolderMask );
+        if( view->HasItem( GetBoard()->m_SolderMaskBridges ) )
+            view->Remove( GetBoard()->m_SolderMaskBridges );
 
-        view->Add( GetBoard()->m_SolderMask );
+        view->Add( GetBoard()->m_SolderMaskBridges );
     }
 }
 

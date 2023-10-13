@@ -112,7 +112,7 @@ private:
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 {
-    ZONE* solderMask = m_board->m_SolderMask;
+    ZONE* solderMask = m_board->m_SolderMaskBridges;
 
     if( aItem->Type() == PCB_ZONE_T )
     {
@@ -192,7 +192,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
 {
-    ZONE*  solderMask = m_board->m_SolderMask;
+    ZONE*  solderMask = m_board->m_SolderMaskBridges;
     LSET   layers = { 4, F_Mask, B_Mask, F_Cu, B_Cu };
 
     const size_t progressDelta = 500;

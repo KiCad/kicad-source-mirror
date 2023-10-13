@@ -2390,6 +2390,12 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
             return false;
         }
 
+        // m_SolderMaskBridges zone is a special zone, only used to showsolder mask briges
+        // after running DRC. it is not really a board item.
+        // Never select it or delete by a Commit.
+        if( zone == m_frame->GetBoard()->m_SolderMaskBridges )
+            return false;
+
         break;
     }
 

@@ -98,15 +98,17 @@ BOARD::BOARD() :
             m_layers[layer].m_type = LT_UNDEFINED;
     }
 
-    m_SolderMask = new ZONE( this );
-    m_SolderMask->SetLayerSet( LSET().set( F_Mask ).set( B_Mask ) );
+    // Creates a zone to show sloder mask bridges created by a min web value
+    // it it just to show them
+    m_SolderMaskBridges = new ZONE( this );
+    m_SolderMaskBridges->SetLayerSet( LSET().set( F_Mask ).set( B_Mask ) );
     int infinity = ( std::numeric_limits<int>::max() / 2 ) - pcbIUScale.mmToIU( 1 );
-    m_SolderMask->Outline()->NewOutline();
-    m_SolderMask->Outline()->Append( VECTOR2I( -infinity, -infinity ) );
-    m_SolderMask->Outline()->Append( VECTOR2I( -infinity, +infinity ) );
-    m_SolderMask->Outline()->Append( VECTOR2I( +infinity, +infinity ) );
-    m_SolderMask->Outline()->Append( VECTOR2I( +infinity, -infinity ) );
-    m_SolderMask->SetMinThickness( 0 );
+    m_SolderMaskBridges->Outline()->NewOutline();
+    m_SolderMaskBridges->Outline()->Append( VECTOR2I( -infinity, -infinity ) );
+    m_SolderMaskBridges->Outline()->Append( VECTOR2I( -infinity, +infinity ) );
+    m_SolderMaskBridges->Outline()->Append( VECTOR2I( +infinity, +infinity ) );
+    m_SolderMaskBridges->Outline()->Append( VECTOR2I( +infinity, -infinity ) );
+    m_SolderMaskBridges->SetMinThickness( 0 );
 
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
@@ -148,7 +150,7 @@ BOARD::~BOARD()
 
     m_zones.clear();
 
-    delete m_SolderMask;
+    delete m_SolderMaskBridges;
 
     for( FOOTPRINT* footprint : m_footprints )
         delete footprint;
