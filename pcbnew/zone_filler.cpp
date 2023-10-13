@@ -125,7 +125,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             if( pad->IsDirty() )
             {
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
-                pad->BuildEffectivePolygon();
+                pad->BuildEffectivePolygon( ERROR_OUTSIDE );
             }
         }
 
@@ -1864,7 +1864,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     seg.B += pad->ShapePos();
 
                     // Make sure seg.A is the origin
-                    if( !pad->GetEffectivePolygon()->Contains( seg.A ) )
+                    if( !pad->GetEffectivePolygon( ERROR_OUTSIDE )->Contains( seg.A ) )
                         seg.Reverse();
 
                     // Trim seg.B to the thermal outline

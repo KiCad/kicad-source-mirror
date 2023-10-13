@@ -72,7 +72,7 @@ void buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aBuffer, int aWi
     else
     {
         // For other shapes, add outlines as thick segments in polygon buffer
-        const SHAPE_LINE_CHAIN& path = aPad->GetEffectivePolygon()->COutline( 0 );
+        const SHAPE_LINE_CHAIN& path = aPad->GetEffectivePolygon( ERROR_INSIDE )->COutline( 0 );
 
         for( int ii = 0; ii < path.PointCount(); ++ii )
         {

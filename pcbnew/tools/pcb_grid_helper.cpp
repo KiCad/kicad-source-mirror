@@ -642,7 +642,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
                 default:
                 {
-                    const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
+                    const auto& outline = aPad->GetEffectivePolygon( ERROR_INSIDE );
 
                     if( !outline->IsEmpty() )
                     {

@@ -356,12 +356,12 @@ void PAD::SetChamferRectRatio( double aChamferScale )
 }
 
 
-const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon() const
+const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon( ERROR_LOC aErrorLoc ) const
 {
-    if( m_polyDirty )
-        BuildEffectivePolygon();
+    if( m_polyDirty[ aErrorLoc ] )
+        BuildEffectivePolygon( aErrorLoc );
 
-    return m_effectivePolygon;
+    return m_effectivePolygon[ aErrorLoc ];
 }
 
 
@@ -414,7 +414,7 @@ std::shared_ptr<SHAPE_SEGMENT> PAD::GetEffectiveHoleShape() const
 int PAD::GetBoundingRadius() const
 {
     if( m_polyDirty )
-        BuildEffectivePolygon();
+        BuildEffectivePolygon( ERROR_OUTSIDE );
 
     return m_effectiveBoundingRadius;
 }
@@ -595,41 +595,46 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 }
 
 
-void PAD::BuildEffectivePolygon() const
+void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 {
     std::lock_guard<std::mutex> RAII_lock( m_polyBuildingLock );
 
     // If we had to wait for the lock then we were probably waiting for someone else to
     // finish rebuilding the shapes.  So check to see if they're clean now.
-    if( !m_polyDirty )
+    if( !m_polyDirty[ aErrorLoc ] )
         return;
 
     const BOARD* board = GetBoard();
     int          maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
 
     // Polygon
-    m_effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
-    TransformShapeToPolygon( *m_effectivePolygon, UNDEFINED_LAYER, 0, maxError, ERROR_INSIDE );
+    std::shared_ptr<SHAPE_POLY_SET>& effectivePolygon = m_effectivePolygon[ aErrorLoc ];
+
+    effectivePolygon = std::make_shared<SHAPE_POLY_SET>();
+    TransformShapeToPolygon( *effectivePolygon, UNDEFINED_LAYER, 0, maxError, aErrorLoc );
 
     // Bounding radius
     //
     // PADSTACKS TODO: these will both need to cycle through all layers to get the largest
     // values....
-    m_effectiveBoundingRadius = 0;
-
-    for( int cnt = 0; cnt < m_effectivePolygon->OutlineCount(); ++cnt )
+    if( aErrorLoc == ERROR_OUTSIDE )
     {
-        const SHAPE_LINE_CHAIN& poly = m_effectivePolygon->COutline( cnt );
+        m_effectiveBoundingRadius = 0;
 
-        for( int ii = 0; ii < poly.PointCount(); ++ii )
+        for( int cnt = 0; cnt < effectivePolygon->OutlineCount(); ++cnt )
         {
-            int dist = KiROUND( ( poly.CPoint( ii ) - m_pos ).EuclideanNorm() );
-            m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
+            const SHAPE_LINE_CHAIN& poly = effectivePolygon->COutline( cnt );
+
+            for( int ii = 0; ii < poly.PointCount(); ++ii )
+            {
+                int dist = KiROUND( ( poly.CPoint( ii ) - m_pos ).EuclideanNorm() );
+                m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
+            }
         }
     }
 
     // All done
-    m_polyDirty = false;
+    m_polyDirty[ aErrorLoc ] = false;
 }
 
 
@@ -1086,7 +1091,7 @@ bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     if( delta.SquaredEuclideanNorm() > SEG::Square( boundingRadius ) )
         return false;
 
-    return GetEffectivePolygon()->Contains( aPosition, -1, aAccuracy );
+    return GetEffectivePolygon( ERROR_INSIDE )->Contains( aPosition, -1, aAccuracy );
 }
 
 
@@ -1109,7 +1114,7 @@ bool PAD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
         if( !arect.Intersects( bbox ) )
             return false;
 
-        const std::shared_ptr<SHAPE_POLY_SET>& poly = GetEffectivePolygon();
+        const std::shared_ptr<SHAPE_POLY_SET>& poly = GetEffectivePolygon( ERROR_INSIDE );
 
         int count = poly->TotalVertices();
 

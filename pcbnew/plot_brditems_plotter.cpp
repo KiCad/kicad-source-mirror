@@ -260,7 +260,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
     default:
     case PAD_SHAPE::CUSTOM:
     {
-        const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon();
+        const std::shared_ptr<SHAPE_POLY_SET>& polygons = aPad->GetEffectivePolygon( ERROR_INSIDE );
 
         if( polygons->OutlineCount() )
         {

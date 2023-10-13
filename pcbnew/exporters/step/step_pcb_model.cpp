@@ -215,7 +215,7 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 
 bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 {
-    const std::shared_ptr<SHAPE_POLY_SET>& pad_shape = aPad->GetEffectivePolygon();
+    const std::shared_ptr<SHAPE_POLY_SET>& pad_shape = aPad->GetEffectivePolygon( ERROR_INSIDE );
     bool success = true;
     VECTOR2I pos = aPad->GetPosition();
 
