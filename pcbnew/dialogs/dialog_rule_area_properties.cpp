@@ -156,6 +156,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 
     switch( m_zonesettings.m_ZoneBorderDisplayStyle )
     {
+    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER:   // Not used for standard zones. Here use NO_HATCH
     case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:      m_OutlineDisplayCtrl->SetSelection( 0 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE: m_OutlineDisplayCtrl->SetSelection( 1 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL: m_OutlineDisplayCtrl->SetSelection( 2 ); break;

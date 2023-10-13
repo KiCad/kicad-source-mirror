@@ -49,7 +49,8 @@ enum class ZONE_BORDER_DISPLAY_STYLE
 {
     NO_HATCH,
     DIAGONAL_FULL,
-    DIAGONAL_EDGE
+    DIAGONAL_EDGE,
+    INVISIBLE_BORDER        // Disable outline drawing for very special cases
 };
 
 /// Whether or not to remove isolated islands from a zone

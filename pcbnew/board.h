@@ -1193,7 +1193,7 @@ public:
     std::vector<ZONE*>    m_DRCCopperZones;
     int                   m_DRCMaxClearance;
     int                   m_DRCMaxPhysicalClearance;
-    ZONE*                 m_SolderMask;
+    ZONE*                 m_SolderMaskBridges;  // A container to build bridges on solder mask layers
     std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>> m_ZoneIsolatedIslandsMap;
 
 private:
