@@ -99,29 +99,32 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
     {
         wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wnd_primary );
 
-        if( textEntry )
+        wxCHECK( textEntry, false );
+
+        wxString oldStr = m_eval.OriginalText();
+
+        if( oldStr.length() && oldStr != textEntry->GetValue() )
         {
-            wxString oldStr = m_eval.OriginalText();
-
-            if( oldStr.length() && oldStr != textEntry->GetValue() )
-            {
-                SetValueInEvent( oldStr );
-                textEntry->SetValue( oldStr );
-            }
-
-            m_needsEval = true;
-            return true;
+            SetValueInEvent( oldStr );
+            textEntry->SetValue( oldStr );
         }
+
+        m_needsEval = true;
+        return true;
     }
     else if( event.GetEventType() == wxEVT_KILL_FOCUS && allowEval() )
     {
         wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wnd_primary );
 
-        if( textEntry && m_eval.Process( textEntry->GetValue() ) )
+        wxCHECK( textEntry, false );
+
+        wxString strValue = textEntry->GetValue();
+
+        if( !strValue.IsEmpty() && m_eval.Process( strValue ) )
         {
             double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-            if( std::isnan( value ) || SIM_VALUE::Equal( value, textEntry->GetValue().ToStdString() ) )
+            if( std::isnan( value ) || SIM_VALUE::Equal( value, strValue.ToStdString() ) )
             {
                 // Don't mess up user formatting if eval'ing didn't actually change the value.
             }
@@ -129,10 +132,10 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
             {
                 SetValueInEvent( m_eval.Result() );
             }
-
-            m_needsEval = false;
-            return true;
         }
+
+        m_needsEval = false;
+        return true;
     }
     else if( event.GetEventType() == wxEVT_KEY_DOWN )
     {
