@@ -6,22 +6,21 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-03-29 06:03+0000\n"
-"Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/"
-">\n"
+"PO-Revision-Date: 2023-10-17 04:17+0000\n"
+"Last-Translator: rtyuionoop <lamrtyuio2007@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.1\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Tất cả Tập tin"
 
@@ -58,7 +57,6 @@ msgid "Create tracks and vias"
 msgstr "Tạo các đường mạch và via"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:677
-#, fuzzy
 msgid "Create zones"
 msgstr "Tạo các vùng bao phủ đồng"
 
@@ -87,7 +85,6 @@ msgid "Simplify holes contours"
 msgstr "Đơn giản hóa đường viền lỗ"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:863
-#, fuzzy
 msgid "Build Tech layers"
 msgstr "Xây dựng các lớp ghi chú kỹ thuật"
 
@@ -156,13 +153,13 @@ msgstr "Tải OpenGL: các lớp%d"
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
 #: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
-msgstr "Đang tải thư viện 3D"
+msgstr "Đang tải các mẫu 3D..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:687
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:972
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Thời gian tải lại %.3f s"
+msgstr "Thời gian tải lại: %.3f giây"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:981
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:426
@@ -174,7 +171,7 @@ msgstr "Thời gian tải lại %.3f s"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:440
 #, c-format
 msgid "Loading %s..."
-msgstr "Đang mở  %s"
+msgstr "Đang mở %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:566
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
@@ -273,7 +270,6 @@ msgstr "&Tập tin"
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181 kicad/menubar.cpp:214
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:253
 #: pcbnew/menubar_pcb_editor.cpp:471
-#, fuzzy
 msgid "&Edit"
 msgstr "&Sửa đổi"
 
@@ -12458,7 +12454,7 @@ msgstr "Bảng dữ liệu"
 #: pcbnew/pcb_edit_frame.cpp:290 pcbnew/pcb_edit_frame.cpp:1506
 #, fuzzy
 msgid "Appearance"
-msgstr "Clearance"
+msgstr "Diện mạo"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:40
 #, fuzzy
@@ -42649,22 +42645,22 @@ msgstr "Net name"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 #: pcbnew/widgets/legacyfiledlg_save_project.h:34
-#, fuzzy
 msgid "Create a new project for this board"
-msgstr "Tạo tài liệu mới trong trình soạn thảo"
+msgstr "Tạo dự án mới cho bo mạch này"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Thông tin Bitmap"
+msgstr "Bỏ thông tin thừa"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:36
+#, fuzzy
 msgid "Omit nets"
-msgstr ""
+msgstr "Bỏ qua các net"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:38
+#, fuzzy
 msgid "Do not prefix path with footprint UUID."
-msgstr ""
+msgstr "Không bắt đầu đường dẫn với UUID của footprint"
 
 #: pcbnew/widgets/legacyfiledlg_save_project.h:36
 msgid ""
@@ -42675,19 +42671,17 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "Chỉ có %s"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:184
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
-#, fuzzy
 msgid "Locked items"
-msgstr "Xóa các mục đã nhấp"
+msgstr "Những mục bị khóa"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:185
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
-#, fuzzy
 msgid "Allow selection of locked items"
-msgstr "Xóa các mục đã nhấp"
+msgstr "Cho phép chọn những mục bị khóa"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:193
 #: pcbnew/widgets/panel_selection_filter_base.cpp:57
@@ -42697,15 +42691,13 @@ msgstr "Vùng Rule %s\t"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
-#, fuzzy
 msgid "Dimensions"
-msgstr "Kích thước trung tâm"
+msgstr "Kích thước"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:195
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
-#, fuzzy
 msgid "Other items"
-msgstr "Khác"
+msgstr "Những mục khác"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:228
 #, fuzzy
@@ -42713,42 +42705,39 @@ msgid "Change property"
 msgstr "Thay đổi phương pháp chỉnh sửa"
 
 #: pcbnew/widgets/search_handlers.cpp:269
-#, fuzzy
 msgid "Textbox"
-msgstr "Văn bản"
+msgstr "Hộp văn bản"
 
 #: pcbnew/widgets/search_handlers.cpp:352
 msgid "No Net"
 msgstr ""
 
 #: pcbnew/zone.cpp:537
+#, fuzzy
 msgid "Cutout"
-msgstr ""
+msgstr "Vùng cắt bỏ"
 
 #: pcbnew/zone.cpp:546
-#, fuzzy
 msgid "No vias"
-msgstr "Via xuyên lỗ"
+msgstr "Không có via"
 
 #: pcbnew/zone.cpp:549
-#, fuzzy
 msgid "No tracks"
-msgstr "Trình theo dõi lỗi"
+msgstr "Không có dây nối"
 
 #: pcbnew/zone.cpp:552
 #, fuzzy
 msgid "No pads"
-msgstr "Pads Back"
+msgstr "Không có chân"
 
 #: pcbnew/zone.cpp:555
-#, fuzzy
 msgid "No copper zones"
-msgstr "Tệp footprint  KiCad"
+msgstr "Không có vùng phủ đồng"
 
 #: pcbnew/zone.cpp:558
 #, fuzzy
 msgid "No footprints"
-msgstr "Footprint"
+msgstr "Không có footprint"
 
 #: pcbnew/zone.cpp:561
 #, fuzzy
@@ -42757,7 +42746,7 @@ msgstr "Sự khúc xạ"
 
 #: pcbnew/zone.cpp:574 pcbnew/zone.cpp:1462
 msgid "Priority"
-msgstr ""
+msgstr "Độ ưu tiên"
 
 #: pcbnew/zone.cpp:596 pcbnew/zone.cpp:803
 #, c-format
@@ -42765,18 +42754,16 @@ msgid "%s and %d more"
 msgstr ""
 
 #: pcbnew/zone.cpp:610 pcbnew/zone.cpp:1472
-#, fuzzy
 msgid "Fill Mode"
-msgstr "Kiểu Tô"
+msgstr "Kiểu phủ đồng"
 
 #: pcbnew/zone.cpp:612
 msgid "Filled Area"
-msgstr ""
+msgstr "Vùng được phủ đồng"
 
 #: pcbnew/zone.cpp:633
-#, fuzzy
 msgid "Corner Count"
-msgstr "Kiểu cách Đường thẳng"
+msgstr "Số góc"
 
 #: pcbnew/zone.cpp:668
 #, fuzzy
