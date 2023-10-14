@@ -37,7 +37,8 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_frame( aFrame ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
-        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits )
+        m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits ),
+        m_connectionGridSize( aFrame, m_connectionGridLabel, m_connectionGridCtrl, m_connectionGridUnits )
 {
     wxSize minSize = m_dashLengthCtrl->GetMinSize();
     int    minWidth = m_dashLengthCtrl->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
@@ -84,11 +85,13 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_textSize.SetUnits( EDA_UNITS::MILS );
     m_lineWidth.SetUnits( EDA_UNITS::MILS );
     m_pinSymbolSize.SetUnits( EDA_UNITS::MILS );
+    m_connectionGridSize.SetUnits( EDA_UNITS::MILS );
 
     m_textSize.SetValue( settings.m_DefaultTextSize );
     m_lineWidth.SetValue( settings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( settings.m_PinSymbolSize );
     m_choiceJunctionDotSize->SetSelection( settings.m_JunctionSizeChoice );
+    m_connectionGridSize.SetValue( settings.m_ConnectionGridSize );
 
     m_showIntersheetsReferences->SetValue( settings.m_IntersheetRefsShow );
 
@@ -128,6 +131,9 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 
 bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 {
+    if( !m_connectionGridSize.Validate( MIN_CONNECTION_GRID_MILS, 10000, EDA_UNITS::MILS ) )
+        return false;
+
     SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
 
     // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
@@ -151,9 +157,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
         LIB_SYMBOL::SetSubpartIdNotation( refSeparator, firstRefId );
     }
 
-    settings.m_DefaultTextSize = (int) m_textSize.GetValue();
-    settings.m_DefaultLineWidth = (int) m_lineWidth.GetValue();
-    settings.m_PinSymbolSize = (int) m_pinSymbolSize.GetValue();
+    settings.m_DefaultTextSize = m_textSize.GetIntValue();
+    settings.m_DefaultLineWidth = m_lineWidth.GetIntValue();
+    settings.m_PinSymbolSize = m_pinSymbolSize.GetIntValue();
+    settings.m_ConnectionGridSize = m_connectionGridSize.GetIntValue();
 
     if( m_choiceJunctionDotSize->GetSelection() != wxNOT_FOUND )
         settings.m_JunctionSizeChoice = m_choiceJunctionDotSize->GetSelection();
@@ -197,6 +204,7 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_textSize.SetValue( aSettings.m_DefaultTextSize );
     m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );
+    m_connectionGridSize.SetValue( aSettings.m_ConnectionGridSize );
 
     m_showIntersheetsReferences->SetValue( aSettings.m_IntersheetRefsShow );
     m_radioFormatStandard->SetValue( aSettings.m_IntersheetRefsFormatShort );

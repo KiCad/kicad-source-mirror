@@ -28,6 +28,15 @@
 
 class NGSPICE_SETTINGS;
 
+
+// The minimal grid size allowed to place a pin is 25 mils.  Tthe best grid size is 50 mils,
+// but 25 mils is still usable.
+// This is because all symbols are using a 50 mils grid to place pins, and therefore the wires
+// must be on the 50 mils grid.
+#define MIN_CONNECTION_GRID_MILS 25
+#define DEFAULT_CONNECTION_GRID_MILS 50
+
+
 /**
  * These settings were stored in SCH_BASE_FRAME previously.
  * The backing store is currently the project file.
@@ -53,6 +62,8 @@ public:
 
     int       m_JunctionSizeChoice;     // none = 0, smallest = 1, small = 2, etc.
     int       m_JunctionSize;           // a runtime cache of the calculated size
+
+    int       m_ConnectionGridSize;     // usually 50mils (IU internally; mils in the JSON file)
 
     int       m_AnnotateStartNum;       // Starting value for annotation
 

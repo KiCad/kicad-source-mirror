@@ -150,21 +150,36 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Connections") ), wxVERTICAL );
 
-	wxBoxSizer* bSizer61;
-	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 5, 5 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText261 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Junction dot size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText261->Wrap( -1 );
-	bSizer61->Add( m_staticText261, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_staticText261, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_choiceJunctionDotSizeChoices[] = { _("None"), _("Smallest"), _("Small"), _("Default"), _("Large"), _("Largest") };
 	int m_choiceJunctionDotSizeNChoices = sizeof( m_choiceJunctionDotSizeChoices ) / sizeof( wxString );
 	m_choiceJunctionDotSize = new wxChoice( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceJunctionDotSizeNChoices, m_choiceJunctionDotSizeChoices, 0 );
 	m_choiceJunctionDotSize->SetSelection( 3 );
-	bSizer61->Add( m_choiceJunctionDotSize, 1, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_choiceJunctionDotSize, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_connectionGridLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Connection grid:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_connectionGridLabel->Wrap( -1 );
+	gbSizer1->Add( m_connectionGridLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_connectionGridCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_connectionGridCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_connectionGridUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_connectionGridUnits->Wrap( -1 );
+	gbSizer1->Add( m_connectionGridUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizer2->Add( bSizer61, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	gbSizer1->AddGrowableCol( 1 );
+
+	sbSizer2->Add( gbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bLeftColumn->Add( sbSizer2, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );

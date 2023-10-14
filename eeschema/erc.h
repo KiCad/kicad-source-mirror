@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2009-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file erc.h
  */
 
 #ifndef _ERC_H
@@ -134,7 +130,7 @@ public:
      * Test pins and wire ends for being off grid.
      * @return the error count
      */
-    int TestOffGridEndpoints( int aGridSize );
+    int TestOffGridEndpoints();
 
     /**
      * Test SPICE models for various issues.

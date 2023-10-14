@@ -20,6 +20,7 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/checkbox.h>
 #include <wx/radiobut.h>
 #include <wx/spinctrl.h>
@@ -62,6 +63,9 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_pinSymbolSizeUnits;
 		wxStaticText* m_staticText261;
 		wxChoice* m_choiceJunctionDotSize;
+		wxStaticText* m_connectionGridLabel;
+		wxTextCtrl* m_connectionGridCtrl;
+		wxStaticText* m_connectionGridUnits;
 		wxCheckBox* m_showIntersheetsReferences;
 		wxCheckBox* m_listOwnPage;
 		wxRadioButton* m_radioFormatStandard;

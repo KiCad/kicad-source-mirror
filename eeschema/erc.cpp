@@ -978,15 +978,9 @@ int ERC_TESTER::TestLibSymbolIssues()
 }
 
 
-int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
+int ERC_TESTER::TestOffGridEndpoints()
 {
-    // The minimal grid size allowed to place a pin is 25 mils
-    // the best grid size is 50 mils, but 25 mils is still usable
-    // this is because all symbols are using a 50 mils grid to place pins, and therefore
-    // the wires must be on the 50 mils grid
-    // So raise an error if a pin is not on a 25 mil (or bigger: 50 mil or 100 mil) grid
-    const int min_grid_size = schIUScale.MilsToIU( 25 );
-    const int clamped_grid_size = ( aGridSize < min_grid_size ) ? min_grid_size : aGridSize;
+    const int gridSize = m_schematic->Settings().m_ConnectionGridSize;
 
     SCH_SCREENS screens( m_schematic->Root() );
     int         err_count = 0;
@@ -1001,16 +995,16 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
             {
                 SCH_LINE* line = static_cast<SCH_LINE*>( item );
 
-                if( ( line->GetStartPoint().x % clamped_grid_size ) != 0
-                        || ( line->GetStartPoint().y % clamped_grid_size) != 0 )
+                if( ( line->GetStartPoint().x % gridSize ) != 0
+                        || ( line->GetStartPoint().y % gridSize ) != 0 )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                     ercItem->SetItems( line );
 
                     markers.emplace_back( new SCH_MARKER( ercItem, line->GetStartPoint() ) );
                 }
-                else if( ( line->GetEndPoint().x % clamped_grid_size ) != 0
-                            || ( line->GetEndPoint().y % clamped_grid_size) != 0 )
+                else if( ( line->GetEndPoint().x % gridSize ) != 0
+                            || ( line->GetEndPoint().y % gridSize ) != 0 )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                     ercItem->SetItems( line );
@@ -1026,11 +1020,9 @@ int ERC_TESTER::TestOffGridEndpoints( int aGridSize )
                 {
                     VECTOR2I pinPos = pin->GetTransformedPosition();
 
-                    if( ( pinPos.x % clamped_grid_size ) != 0
-                            || ( pinPos.y % clamped_grid_size) != 0 )
+                    if( ( pinPos.x % gridSize ) != 0 || ( pinPos.y % gridSize ) != 0 )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                        auto ercItem = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
                         ercItem->SetItems( pin );
 
                         markers.emplace_back( new SCH_MARKER( ercItem, pinPos ) );
@@ -1221,8 +1213,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for off grid pins and wires..." ) );
 
-        if( aEditFrame )
-            TestOffGridEndpoints( aEditFrame->GetCanvas()->GetView()->GetGAL()->GetGridSize().x );
+        TestOffGridEndpoints();
     }
 
     m_schematic->ResolveERCExclusionsPostUpdate();

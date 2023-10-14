@@ -45,6 +45,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * schIUScale.IU_PER_MILS / 2 ),
         m_JunctionSizeChoice( 3 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * schIUScale.IU_PER_MILS ),
+        m_ConnectionGridSize( DEFAULT_CONNECTION_GRID_MILS * schIUScale.IU_PER_MILS ),
         m_AnnotateStartNum( 0 ),
         m_IntersheetRefsShow( false ),
         m_IntersheetRefsListOwnPage( true ),
@@ -119,12 +120,12 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_OPO_IRange, wxS( "~A" ) ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
-            &m_DefaultLineWidth, schIUScale.MilsToIU( defaultLineThickness ), schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ),
-            1 / schIUScale.IU_PER_MILS ) );
+            &m_DefaultLineWidth, schIUScale.MilsToIU( defaultLineThickness ),
+            schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ), 1 / schIUScale.IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_text_size",
-            &m_DefaultTextSize, schIUScale.MilsToIU( defaultTextSize ), schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ),
-            1 / schIUScale.IU_PER_MILS ) );
+            &m_DefaultTextSize, schIUScale.MilsToIU( defaultTextSize ),
+            schIUScale.MilsToIU( 5 ), schIUScale.MilsToIU( 1000 ), 1 / schIUScale.IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM<double>( "drawing.text_offset_ratio",
             &m_TextOffsetRatio, DEFAULT_TEXT_OFFSET_RATIO, 0.0, 2.0 ) );
@@ -136,15 +137,19 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_FontMetrics.m_OverbarHeight, m_FontMetrics.m_OverbarHeight ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
-            &m_PinSymbolSize, schIUScale.MilsToIU( defaultPinSymbolSize ), schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 1000 ),
+            &m_PinSymbolSize, schIUScale.MilsToIU( defaultPinSymbolSize ),
+            schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 1000 ), 1 / schIUScale.IU_PER_MILS ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "connection_grid_size",
+            &m_ConnectionGridSize, schIUScale.MilsToIU( DEFAULT_CONNECTION_GRID_MILS ),
+            schIUScale.MilsToIU( MIN_CONNECTION_GRID_MILS ), schIUScale.MilsToIU( 10000 ),
             1 / schIUScale.IU_PER_MILS ) );
 
     // m_JunctionSize is only a run-time cache of the calculated size.  Do not save it.
 
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
-            &m_JunctionSizeChoice,
-            defaultJunctionSizeChoice ) );
+            &m_JunctionSizeChoice, defaultJunctionSizeChoice ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "drawing.field_names",
             [&]() -> nlohmann::json
