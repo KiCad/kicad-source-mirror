@@ -119,6 +119,9 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     // Build a list of layers used by the items in the group
     for( VIEW_ITEM* item : drawList )
     {
+        if( aView->IsHiddenOnOverlay( item ) )
+            continue;
+
         int item_layers[VIEW::VIEW_MAX_LAYERS], item_layers_count;
         item->ViewGetLayers( item_layers, item_layers_count );
 

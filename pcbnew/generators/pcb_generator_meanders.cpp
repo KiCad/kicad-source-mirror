@@ -166,6 +166,14 @@ static std::string SideToString( const PNS::MEANDER_SIDE aValue )
 }
 
 
+static NETINFO_ITEM* getCoupledNet( PNS::ROUTER* aRouter, NETINFO_ITEM* aNet )
+{
+    PNS::RULE_RESOLVER* resolver = aRouter->GetRuleResolver();
+
+    return static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( aNet ) );
+}
+
+
 class PCB_GENERATOR_MEANDERS : public PCB_GENERATOR
 {
 public:
@@ -195,15 +203,15 @@ public:
 
     wxString GetGeneratorType() const override { return wxS( "meanders" ); }
 
-    int snapToNearestTrackPoint( VECTOR2I& aP, BOARD* aBoard, int aNet )
+    NETINFO_ITEM* snapToNearestTrackPoint( VECTOR2I& aP, BOARD* aBoard, NETINFO_ITEM* aNet )
     {
-        SEG::ecoord minDistSq = VECTOR2I::ECOORD_MAX;
-        VECTOR2I    closestPt = aP;
-        int         closestNet = -1;
+        SEG::ecoord   minDistSq = VECTOR2I::ECOORD_MAX;
+        VECTOR2I      closestPt = aP;
+        NETINFO_ITEM* closestNet = nullptr;
 
         for( PCB_TRACK *track : aBoard->Tracks() )
         {
-            if( aNet >= 0 && track->GetNetCode() != aNet )
+            if( aNet && track->GetNet() != aNet )
                 continue;
 
             SEG seg ( track->GetStart(), track->GetEnd() );
@@ -215,7 +223,7 @@ public:
             {
                 minDistSq = distSq;
                 closestPt = nearest;
-                closestNet = track->GetNetCode();
+                closestNet = track->GetNet();
             }
         }
 
@@ -225,7 +233,7 @@ public:
             return closestNet;
         }
 
-        return -1;
+        return nullptr;
     }
 
     bool baselineValid()
@@ -249,9 +257,8 @@ public:
         std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
         DRC_CONSTRAINT               constraint;
         PCB_LAYER_ID                 layer = aStartItem->GetLayer();
-        PNS::RULE_RESOLVER*          resolver = aTool->Router()->GetRuleResolver();
 
-        if( aMode == SINGLE && resolver->DpCoupledNet( aStartItem->GetNet() ) )
+        if( aMode == SINGLE && getCoupledNet( aTool->Router(), aStartItem->GetNet() ) )
             aMode = DIFF_PAIR;
 
         PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, aMode );
@@ -314,11 +321,6 @@ public:
                 aCommit->Modify( this );
         }
 
-        // Remove ourselves from the selection so that we don't redraw our existing children as
-        // part of the selection VIEW_GROUP (which ignores the HIDDEN flags).
-        PCB_SELECTION_TOOL*selectionTool = aFrame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
-        selectionTool->RemoveItemFromSel( this, true );
-
         int          layer = GetLayer();
         PNS::ROUTER* router = aTool->Router();
 
@@ -326,8 +328,49 @@ public:
         router->SyncWorld();
 
         if( !baselineValid() )
-        {
             InitBaseLine( router, layer, aBoard );
+
+        if( baselineValid() && !m_overrideCustomRules )
+        {
+            PNS::CONSTRAINT     constraint;
+            PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
+
+            NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
+            PNS::SEGMENT  pnsItem( m_baseLine->CSegment( 0 ), net );
+
+            if( m_tuningMode == SINGLE )
+            {
+                if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
+                                               &pnsItem, nullptr, layer, &constraint ) )
+                {
+                    m_targetLength = constraint.m_Value.Opt();
+                    aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                }
+            }
+            else
+            {
+                NETINFO_ITEM* coupledNet = static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( net ) );
+                PNS::SEGMENT  coupledItem( m_baseLineCoupled->CSegment( 0 ), coupledNet );
+
+                if( m_tuningMode == DIFF_PAIR )
+                {
+                    if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
+                                                   &pnsItem, &coupledItem, layer, &constraint ) )
+                    {
+                        m_targetLength = constraint.m_Value.Opt();
+                        aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                    }
+                }
+                else
+                {
+                    if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW,
+                                                   &pnsItem, &coupledItem, layer, &constraint ) )
+                    {
+                        m_targetSkew = constraint.m_Value.Opt();
+                        aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                    }
+                }
+            }
         }
     }
 
@@ -431,12 +474,13 @@ public:
     }
 
     bool initBaseLine( PNS::ROUTER* router, int layer, BOARD* aBoard, VECTOR2I& aStart,
-                       VECTOR2I& aEnd, int aNetCode, std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
+                       VECTOR2I& aEnd, NETINFO_ITEM* aNet,
+                       std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
     {
         PNS::NODE* world = router->GetWorld();
 
-        snapToNearestTrackPoint( aStart, aBoard, aNetCode );
-        snapToNearestTrackPoint( aEnd, aBoard, aNetCode );
+        snapToNearestTrackPoint( aStart, aBoard, aNet );
+        snapToNearestTrackPoint( aEnd, aBoard, aNet );
 
         VECTOR2I startSnapPoint, endSnapPoint;
 
@@ -472,18 +516,15 @@ public:
     {
         m_baseLineCoupled.reset();
 
-        int netCode = snapToNearestTrackPoint( m_origin, aBoard, -1 );
+        NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
 
-        if( !initBaseLine( router, layer, aBoard, m_origin, m_end, netCode, m_baseLine ) )
+        if( !initBaseLine( router, layer, aBoard, m_origin, m_end, net, m_baseLine ) )
             return false;
 
-        if( m_tuningMode == DIFF_PAIR )
+        if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
         {
-            PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
-
-            if( PNS::NET_HANDLE handle = resolver->DpCoupledNet( aBoard->FindNet( netCode ) ) )
+            if( NETINFO_ITEM* coupledNet = getCoupledNet( router, net ) )
             {
-                int      coupledNet = static_cast<NETINFO_ITEM*>( handle )->GetNetCode();
                 VECTOR2I coupledStart = m_origin;
                 VECTOR2I coupledEnd = m_end;
 
@@ -680,12 +721,12 @@ public:
         }
 
         // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-        for( PNS::LINKED_ITEM* li : line->Links() )
+        for( PNS::LINKED_ITEM* pnsItem : line->Links() )
         {
-            if( li->Parent() )
+            if( BOARD_ITEM* item = pnsItem->Parent() )
             {
-                aFrame->GetCanvas()->GetView()->Hide( li->Parent() );
-                m_removedItems.insert( li->Parent() );
+                aFrame->GetCanvas()->GetView()->Hide( item, true, true );
+                m_removedItems.insert( item );
             }
         }
 
@@ -1070,7 +1111,7 @@ public:
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final
     {
-        if( !IsSelected() && !IsNew() )
+        if( !IsSelected() )
             return;
 
         KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
@@ -1561,7 +1602,7 @@ static struct PCB_GENERATOR_MEANDERS_DESC
     {
         ENUM_MAP<LENGTH_TUNING_MODE>::Instance()
                 .Map( LENGTH_TUNING_MODE::SINGLE, _HKI( "Single track" ) )
-                /*.Map( LENGTH_TUNING_MODE::DIFF_PAIR, _HKI( "Diff. pair" ) )*/ // Not supported
+                .Map( LENGTH_TUNING_MODE::DIFF_PAIR, _HKI( "Diff. pair" ) )
                 .Map( LENGTH_TUNING_MODE::DIFF_PAIR_SKEW, _HKI( "Diff. pair Skew" ) );
 
         ENUM_MAP<PNS::MEANDER_SIDE>::Instance()

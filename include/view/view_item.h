@@ -62,9 +62,11 @@ enum VIEW_UPDATE_FLAGS {
  * Define the visibility of the item (temporarily hidden, invisible, etc).
  */
 enum VIEW_VISIBILITY_FLAGS {
-    VISIBLE     = 0x01,     ///< Item is visible (in general)
-    HIDDEN      = 0x02      ///< Item is temporarily hidden (e.g. being used by a tool).
-                            ///< Overrides VISIBLE flag.
+    VISIBLE        = 0x01,  ///< Item is visible (in general)
+    HIDDEN         = 0x02,  ///< Item is temporarily hidden (usually in favor of a being drawn
+                            ///<   from an overlay, such as a SELECTION).
+                            ///<   Overrides VISIBLE flag.
+    OVERLAY_HIDDEN = 0x04   ///< Item is temporarily hidden from being drawn on an overlay.
 };
 
 /**

@@ -58,7 +58,8 @@ enum class CONSTRAINT_TYPE
     CT_VIA_HOLE = 6,
     CT_HOLE_CLEARANCE = 7,
     CT_EDGE_CLEARANCE = 8,
-    CT_HOLE_TO_HOLE = 9
+    CT_HOLE_TO_HOLE = 9,
+    CT_DIFF_PAIR_SKEW = 10
 };
 
 /**

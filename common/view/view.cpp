@@ -1563,7 +1563,7 @@ void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 }
 
 
-void VIEW::Hide( VIEW_ITEM* aItem, bool aHide )
+void VIEW::Hide( VIEW_ITEM* aItem, bool aHide, bool aHideOveraly )
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
@@ -1573,10 +1573,13 @@ void VIEW::Hide( VIEW_ITEM* aItem, bool aHide )
     if( !( viewData->m_flags & VISIBLE ) )
         return;
 
+    if( aHideOveraly )
+        viewData->m_flags |= OVERLAY_HIDDEN;
+
     if( aHide )
         viewData->m_flags |= HIDDEN;
     else
-        viewData->m_flags &= ~HIDDEN;
+        viewData->m_flags &= ~( HIDDEN | OVERLAY_HIDDEN );
 
     Update( aItem, APPEARANCE );
 }
@@ -1587,6 +1590,14 @@ bool VIEW::IsVisible( const VIEW_ITEM* aItem ) const
     const VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
     return viewData && ( viewData->m_flags & VISIBLE );
+}
+
+
+bool VIEW::IsHiddenOnOverlay( const VIEW_ITEM* aItem ) const
+{
+    const VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
+
+    return viewData && ( viewData->m_flags & OVERLAY_HIDDEN );
 }
 
 

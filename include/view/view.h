@@ -128,9 +128,10 @@ public:
      * Temporarily hide the item in the view (e.g. for overlaying).
      *
      * @param aItem: the item to modify.
-     * @param aHide: whether the item is hidden (on all layers), or not.
+     * @param aHide: whether the item is hidden, or not.
+     * @param aHideOveraly: whether the item should also be hidden on overlays.
      */
-    void Hide( VIEW_ITEM* aItem, bool aHide = true );
+    void Hide( VIEW_ITEM* aItem, bool aHide = true, bool aHideOveraly = false );
 
     /**
      * Return information if the item is visible (or not).
@@ -140,6 +141,8 @@ public:
      * *current* viewport)
      */
     bool IsVisible( const VIEW_ITEM* aItem ) const;
+
+    bool IsHiddenOnOverlay( const VIEW_ITEM* aItem ) const;
 
     /**
      * Indicates whether or not the given item has been added to the view.
