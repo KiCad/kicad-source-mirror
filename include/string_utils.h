@@ -130,6 +130,19 @@ KICOMMON_API wxString EscapeHTML( const wxString& aString );
 KICOMMON_API wxString UnescapeHTML( const wxString& aString );
 
 /**
+ * Removes HTML tags from a string.
+ *
+ * Do not use for filtering potentially malicious inputs and rendering as HTML
+ * without escaping.
+ */
+KICOMMON_API wxString RemoveHTMLTags( const wxString& aInput );
+
+/**
+ * Wraps links in HTML <a href=""></a> tags.
+ */
+KICOMMON_API wxString LinkifyHTML( wxString aStr );
+
+/**
  * Read one line line from \a aFile.
  *
  * @return a pointer the first useful line read by eliminating blank lines and comments.

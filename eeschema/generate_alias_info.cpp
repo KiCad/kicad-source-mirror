@@ -138,9 +138,15 @@ protected:
 
     void SetHtmlDesc()
     {
-        wxString raw_desc = m_symbol->GetDescription();
+        wxString esc_desc = EscapeHTML( UnescapeString( m_symbol->GetDescription() ) );
 
-        m_html.Replace( wxS( "__DESC__" ), wxString::Format( DescFormat, EscapeHTML( raw_desc ) ) );
+        // Add line breaks
+        esc_desc.Replace( wxS( "\n" ), wxS( "<br>" ) );
+
+        // Add links
+        esc_desc = LinkifyHTML( esc_desc );
+
+        m_html.Replace( wxS( "__DESC__" ), wxString::Format( DescFormat, esc_desc ) );
     }
 
 

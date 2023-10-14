@@ -198,6 +198,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
     switch( aCol )
     {
     case NAME_COL:
+    {
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
             // Do not use GetLoadedFPID(); it returns m_footprintNameWhenLoaded.
@@ -220,8 +221,10 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         }
 
         break;
+    }
 
     case DESC_COL:
+    {
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
             node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetLibDescription();
@@ -241,10 +244,14 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
             }
         }
 
-        aVariant = node->m_Desc;
-        break;
+        wxString descStr = UnescapeString( node->m_Desc );
+        descStr.Replace( wxS( "\n" ), wxS( " " ) ); // Clear line breaks
 
-    default:    // column == -1 is used for default Compare function
+        aVariant = descStr;
+        break;
+    }
+
+    default: // column == -1 is used for default Compare function
         aVariant = node->m_Name;
         break;
     }

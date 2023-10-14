@@ -302,11 +302,11 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 {
     if( m_TextCtrl->IsShown() )
     {
-        m_TextCtrl->SetValue( m_text );
+        m_TextCtrl->SetValue( EscapeString( m_text, CTX_LINE ) );
     }
     else if( m_StyledTextCtrl->IsShown() )
     {
-        m_StyledTextCtrl->SetValue( m_text );
+        m_StyledTextCtrl->SetValue( EscapeString( m_text, CTX_LINE ) );
         m_StyledTextCtrl->EmptyUndoBuffer();
     }
 
@@ -349,9 +349,9 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 {
     if( m_TextCtrl->IsShown() )
-        m_text = m_TextCtrl->GetValue();
+        m_text = UnescapeString( m_TextCtrl->GetValue() );
     else if( m_StyledTextCtrl->IsShown() )
-        m_text = m_StyledTextCtrl->GetValue();
+        m_text = UnescapeString( m_StyledTextCtrl->GetValue() );
 
     if( m_fieldId == REFERENCE_FIELD )
     {

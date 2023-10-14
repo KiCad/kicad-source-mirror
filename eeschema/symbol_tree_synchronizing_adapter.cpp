@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -279,12 +279,18 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
                 node->m_Desc = m_frame->GetCurSymbol()->GetDescription();
             }
 
+            wxString valueStr;
+
             if( node->m_Fields.count( key ) )
-                aVariant = node->m_Fields.at( key );
+                valueStr = node->m_Fields.at( key );
             else if( key == wxT( "Description" ) )
-                aVariant = node->m_Desc;
+                valueStr = node->m_Desc;
             else
-                aVariant = wxEmptyString;
+                valueStr = wxEmptyString;
+
+            valueStr.Replace( wxS( "\n" ), wxS( " " ) ); // Clear line breaks
+
+            aVariant = valueStr;
         }
         break;
     }

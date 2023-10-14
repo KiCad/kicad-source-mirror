@@ -433,7 +433,7 @@ void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
     for( ; idx < m_columns.size() - 1; idx++ )
     {
         wxASSERT( m_colIdxMap.count( idx ) );
-    
+
         col    = m_columns[idx];
         header = m_colIdxMap[idx];
 
@@ -537,14 +537,15 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
 
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, /* void */ );
+    wxString valueStr;
 
     switch( aCol )
     {
     case NAME_COL:
         if( node->m_Pinned )
-            aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );
+            valueStr = GetPinningSymbol() + UnescapeString( node->m_Name );
         else
-            aVariant = UnescapeString( node->m_Name );
+            valueStr = UnescapeString( node->m_Name );
 
         break;
 
@@ -554,15 +555,19 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
             const wxString& key = m_colIdxMap.at( aCol );
 
             if( node->m_Fields.count( key ) )
-                aVariant = node->m_Fields.at( key );
+                valueStr = UnescapeString( node->m_Fields.at( key ) );
             else if( key == wxT( "Description" ) )
-                aVariant = node->m_Desc;
+                valueStr = UnescapeString( node->m_Desc );
             else
-                aVariant = wxEmptyString;
+                valueStr = wxEmptyString;
         }
 
         break;
     }
+
+    valueStr.Replace( wxS( "\n" ), wxS( " " ) ); // Clear line breaks
+
+    aVariant = valueStr;
 }
 
 

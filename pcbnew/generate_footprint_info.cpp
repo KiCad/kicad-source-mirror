@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -118,12 +118,18 @@ public:
 
                     doc += ch;
                 }
-
-                    desc.Replace( doc, _( "doc url" ) );
             }
 
+            wxString esc_desc = EscapeHTML( UnescapeString( desc ) );
+
+            // Add line breaks
+            esc_desc.Replace( wxS( "\n" ), wxS( "<br>" ) );
+
+            // Add links
+            esc_desc = LinkifyHTML( esc_desc );
+
+            m_html.Replace( "__DESC__", esc_desc );
             m_html.Replace( "__NAME__", EscapeHTML( name ) );
-            m_html.Replace( "__DESC__", EscapeHTML( desc ) );
 
             wxString keywordsHtml = KeywordsFormat;
             keywordsHtml.Replace( "__KEYWORDS__", EscapeHTML( keywords ) );

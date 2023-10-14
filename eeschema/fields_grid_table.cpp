@@ -561,7 +561,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         }
 
     case FDC_VALUE:
-        return UnescapeString( field.GetText() );
+        return EscapeString( UnescapeString( field.GetText() ), CTX_LINE );
 
     case FDC_SHOWN:
         return StringFromBool( field.IsVisible() );
@@ -696,7 +696,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
             value = EscapeString( value, CTX_LIBID );
         }
 
-        field.SetText( value );
+        field.SetText( UnescapeString( value ) );
         break;
     }
 
