@@ -51,7 +51,7 @@ void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& a
     }
 
     // For other shapes, add outlines as thick segments in polygon buffer
-    const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon();
+    const std::shared_ptr<SHAPE_POLY_SET>& corners = aPad->GetEffectivePolygon( ERROR_INSIDE );
     const SHAPE_LINE_CHAIN&                path = corners->COutline( 0 );
 
     for( int ii = 0; ii < path.PointCount(); ++ii )
