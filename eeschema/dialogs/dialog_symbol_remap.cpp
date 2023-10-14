@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -54,10 +54,16 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
 {
     m_remapped = false;
 
-    if( !wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
+    wxString projectPath = Prj().GetProjectPath();
+
+    if( !wxFileName::IsDirWritable( projectPath ) )
     {
-        DisplayInfoMessage( this, _( "Remapping is not possible because you have insufficient "
-                                     "privileges to the project folder '%s'." ) );
+        wxString msg =
+                wxString::Format( _( "Remapping is not possible because you have insufficient "
+                                     "privileges to the project folder '%s'." ),
+                                  projectPath );
+
+        DisplayInfoMessage( this, msg );
 
         // Disable the remap button.
         m_remapped = true;
