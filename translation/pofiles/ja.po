@@ -9351,14 +9351,12 @@ msgid "Add association file"
 msgstr "フットプリント関連付けファイル"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
-#, fuzzy
 msgid "Edit association file"
-msgstr "フットプリント関連付けファイル"
+msgstr "関連付けファイルを編集"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
-#, fuzzy
 msgid "Remove association file"
-msgstr "関連付けを削除"
+msgstr "関連付けファイルを削除"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
@@ -9501,18 +9499,16 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "フットプリント ビューアーで選択したフットプリントを見る"
 
 #: cvpcb/tools/cvpcb_actions.cpp:63
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "フットプリント関連付けファイルを管理"
+msgstr "フットプリント関連付けファイルを管理..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"フットプリント関連付けファイル (.equ) リストを編集します。  これらのファイル"
-"はシンボルの値からフットプリント名を自動で割り当てるために使用されます。"
+"フットプリント関連付けファイル リストを編集します。  これらのファイルはシンボ"
+"ルの値からフットプリント名を自動で割り当てるために使用されます。"
 
 #: cvpcb/tools/cvpcb_actions.cpp:72
 msgid "Save to Schematic"
@@ -10517,10 +10513,9 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "すべての '%s' 違反のエラーの深刻度を変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:615 eeschema/dialogs/dialog_erc.cpp:621
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "違反の深刻度は、基板の設定... ダイアログで編集することができます"
+msgstr "違反の深刻度は、回路図の設定... ダイアログで編集することができます"
 
 #: eeschema/dialogs/dialog_erc.cpp:619 pcbnew/dialogs/dialog_drc.cpp:645
 #: pcbnew/dialogs/dialog_drc.cpp:632
