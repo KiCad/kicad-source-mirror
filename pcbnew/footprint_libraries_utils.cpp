@@ -38,6 +38,7 @@
 #include <tools/board_editor_control.h>
 #include <board.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -764,7 +765,8 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                     pi->FootprintSave( libPath, fpCopy );
 
                     // Remove reference to the group before deleting
-                    fpCopy->SetParentGroup( nullptr );
+                    if( PCB_GROUP* parentGroup = fpCopy->GetParentGroup() )
+                        parentGroup->RemoveItem( fpCopy );
 
                     delete fpCopy;
                 }
