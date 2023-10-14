@@ -62,16 +62,16 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
 TOOL_BASE::~TOOL_BASE()
 {
     delete m_gridHelper;
-    delete m_iface;
     delete m_router;
+    delete m_iface; // Delete after m_router because PNS::NODE dtor needs m_ruleResolver
 }
 
 
 void TOOL_BASE::Reset( RESET_REASON aReason )
 {
     delete m_gridHelper;
-    delete m_iface;
     delete m_router;
+    delete m_iface; // Delete after m_router because PNS::NODE dtor needs m_ruleResolver
 
     m_iface = new PNS_KICAD_IFACE;
     m_iface->SetBoard( board() );
