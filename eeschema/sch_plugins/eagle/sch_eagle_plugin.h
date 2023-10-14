@@ -100,10 +100,10 @@ public:
         return PLUGIN_FILE_DESC( _HKI( "Eagle XML schematic files" ), { "sch" } );
     }
 
-    /*const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Eagle XML library files" ), { "lbr" } );
-    }*/
+    }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
     bool CanReadLibrary( const wxString& aFileName ) const override;
@@ -114,10 +114,24 @@ public:
                                   SCH_SHEET*             aAppendToMe = nullptr,
                                   const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
+    void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
+                             const STRING_UTF8_MAP* aProperties ) override;
+
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
+                             const STRING_UTF8_MAP* aProperties ) override;
+
+    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                            const STRING_UTF8_MAP* aProperties ) override;
+
+    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override { return false; }
+
 private:
     void checkpoint();
 
-    bool checkHeader( const wxString& aFileName ) const;
+    bool          checkHeader( const wxString& aFileName ) const;
+    wxXmlDocument loadXmlDocument( const wxString& aFileName );
+    long long     getLibraryTimestamp( const wxString& aLibraryPath ) const;
+    void          ensureLoadedLibrary( const wxString& aLibraryPath );
 
     void loadDrawing( wxXmlNode* aDrawingNode );
     void loadLayerDefs( wxXmlNode* aLayers );
@@ -239,9 +253,10 @@ private:
     wxString    m_libName;        ///< Library name to save symbols
     SCHEMATIC*  m_schematic;      ///< Passed to Load(), the schematic object being loaded
 
-    EPART_MAP                         m_partlist;
-    std::map<wxString, EAGLE_LIBRARY> m_eagleLibs;
-    std::unordered_map<wxString, bool>   m_userValue;         ///< deviceset/@uservalue for device.
+    EPART_MAP                          m_partlist;
+    std::map<wxString, long long>      m_timestamps;
+    std::map<wxString, EAGLE_LIBRARY>  m_eagleLibs;
+    std::unordered_map<wxString, bool> m_userValue; ///< deviceset/@uservalue for device.
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER   m_pi;                ///< PI to create KiCad symbol library.
     std::unique_ptr<STRING_UTF8_MAP>     m_properties;        ///< Library plugin properties.

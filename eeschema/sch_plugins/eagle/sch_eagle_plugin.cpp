@@ -421,24 +421,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEM
     }
 
     // Load the document
-    wxXmlDocument xmlDocument;
-    wxFFileInputStream stream( m_filename.GetFullPath() );
-
-    // read first line to check for Eagle XML format file
-    wxTextInputStream text( stream );
-    wxString line = text.ReadLine();
-    if( !line.StartsWith( wxT( "<?xml" ) ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format schematic file; "
-                                             "only Eagle XML-format schematics can be imported." ),
-                                          m_filename.GetFullPath() ) );
-    }
-
-    if( !stream.IsOk() || !xmlDocument.Load( stream ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ),
-                                          m_filename.GetFullPath() ) );
-    }
+    wxXmlDocument xmlDocument = loadXmlDocument( m_filename.GetFullPath() );
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
     unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
@@ -527,6 +510,144 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEM
 }
 
 
+void SCH_EAGLE_PLUGIN::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
+                                           const wxString&        aLibraryPath,
+                                           const STRING_UTF8_MAP* aProperties )
+{
+    m_filename = aLibraryPath;
+    m_libName = m_filename.GetName();
+
+    ensureLoadedLibrary( aLibraryPath );
+
+    auto it = m_eagleLibs.find( m_libName );
+
+    if( it != m_eagleLibs.end() )
+    {
+        for( const auto& [symName, libSymbol] : it->second.KiCadSymbols )
+            aSymbolNameList.push_back( symName );
+    }
+}
+
+
+void SCH_EAGLE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
+                                           const wxString&           aLibraryPath,
+                                           const STRING_UTF8_MAP*    aProperties )
+{
+    m_filename = aLibraryPath;
+    m_libName = m_filename.GetName();
+
+    ensureLoadedLibrary( aLibraryPath );
+
+    auto it = m_eagleLibs.find( m_libName );
+
+    if( it != m_eagleLibs.end() )
+    {
+        for( const auto& [symName, libSymbol] : it->second.KiCadSymbols )
+            aSymbolList.push_back( libSymbol );
+    }
+}
+
+
+LIB_SYMBOL* SCH_EAGLE_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                          const STRING_UTF8_MAP* aProperties )
+{
+    m_filename = aLibraryPath;
+    m_libName = m_filename.GetName();
+
+    ensureLoadedLibrary( aLibraryPath );
+
+    auto it = m_eagleLibs.find( m_libName );
+
+    if( it != m_eagleLibs.end() )
+    {
+        auto it2 = it->second.KiCadSymbols.find( aAliasName );
+
+        if( it2 != it->second.KiCadSymbols.end() )
+            return it2->second;
+    }
+
+    return nullptr;
+}
+
+
+long long SCH_EAGLE_PLUGIN::getLibraryTimestamp( const wxString& aLibraryPath ) const
+{
+    wxFileName fn( aLibraryPath );
+
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
+        return fn.GetModificationTime().GetValue().GetValue();
+    else
+        return wxDateTime( 0.0 ).GetValue().GetValue();
+}
+
+
+void SCH_EAGLE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath )
+{
+    if( m_eagleLibs.find( m_libName ) != m_eagleLibs.end() )
+    {
+        wxCHECK( m_timestamps.count( m_libName ), /*void*/ );
+
+        if( m_timestamps.at( m_libName ) == getLibraryTimestamp( aLibraryPath ) )
+            return;
+    }
+
+    LOCALE_IO toggle; // toggles on, then off, the C locale.
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aLibraryPath ) );
+
+        if( !m_progressReporter->KeepRefreshing() )
+            THROW_IO_ERROR( ( "Open canceled by user." ) );
+    }
+
+    // Load the document
+    wxXmlDocument xmlDocument = loadXmlDocument( m_filename.GetFullPath() );
+
+    // Retrieve the root as current node
+    wxXmlNode* currentNode = xmlDocument.GetRoot();
+
+    // If the attribute is found, store the Eagle version;
+    // otherwise, store the dummy "0.0" version.
+    m_version = currentNode->GetAttribute( wxT( "version" ), wxT( "0.0" ) );
+
+    // Map all children into a readable dictionary
+    NODE_MAP children = MapChildren( currentNode );
+
+    // Load drawing
+    loadDrawing( children["drawing"] );
+
+    // Remember timestamp
+    m_timestamps[m_libName] = getLibraryTimestamp( aLibraryPath );
+}
+
+
+wxXmlDocument SCH_EAGLE_PLUGIN::loadXmlDocument( const wxString& aFileName )
+{
+    wxXmlDocument      xmlDocument;
+    wxFFileInputStream stream( m_filename.GetFullPath() );
+
+    // read first line to check for Eagle XML format file
+    wxTextInputStream text( stream );
+    wxString          line = text.ReadLine();
+
+    if( !line.StartsWith( wxT( "<?xml" ) ) && !line.StartsWith( wxT( "<!--" ) ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format file; "
+                                             "only Eagle XML-format files can be imported." ),
+                                          m_filename.GetFullPath() ) );
+    }
+
+    if( !stream.IsOk() || !xmlDocument.Load( stream ) )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+    }
+
+    return xmlDocument;
+}
+
+
 void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
 {
     // Map all children into a readable dictionary
@@ -542,7 +663,15 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
     if( layers )
         loadLayerDefs( layers );
 
-    // wxXmlNode* library = drawingChildren["library"]
+    wxXmlNode* libraryNode = drawingChildren["library"];
+
+    if( libraryNode )
+    {
+        EAGLE_LIBRARY& elib = m_eagleLibs[m_libName];
+        elib.name = m_libName;
+
+        loadLibrary( libraryNode, &elib );
+    }
 
     // wxXmlNode* settings = drawingChildren["settings"]
 
@@ -1873,9 +2002,14 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
         EDEVICE_SET edeviceset = EDEVICE_SET( devicesetNode );
 
         wxString prefix = edeviceset.prefix ? edeviceset.prefix.Get() : wxString( wxT( "" ) );
+        wxString deviceSetDescr;
 
         NODE_MAP   deviceSetChildren = MapChildren( devicesetNode );
-        wxXmlNode* deviceNode        = getChildrenNodes( deviceSetChildren, wxT( "devices" ) );
+        wxXmlNode* deviceNode = getChildrenNodes( deviceSetChildren, wxT( "devices" ) );
+        wxXmlNode* deviceSetDescrNode = getChildrenNodes( deviceSetChildren, wxT( "description" ) );
+
+        if( deviceSetDescrNode )
+            deviceSetDescr = convertDescription( UnescapeHTML( deviceSetDescrNode->GetContent() ) );
 
         // For each device in the device set:
         while( deviceNode )
@@ -1939,26 +2073,42 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             // Don't set the footprint field if no package is defined in the Eagle schematic.
             if( edevice.package )
             {
-                // assume that footprint library is identical to project name
-                wxString packageString = m_schematic->Prj().GetProjectName() + wxT( ":" ) +
-                                         aEagleLibrary->package[symbolName];
+                wxString libName;
+
+                if( m_schematic )
+                {
+                    // assume that footprint library is identical to project name
+                    libName = m_schematic->Prj().GetProjectName();
+                }
+                else
+                {
+                    libName = m_libName;
+                }
+
+                wxString packageString = libName + wxT( ":" ) + aEagleLibrary->package[symbolName];
+
                 libSymbol->GetFootprintField().SetText( packageString );
             }
 
             wxString libName = libSymbol->GetName();
             libSymbol->SetName( libName );
+            libSymbol->SetDescription( deviceSetDescr );
 
-            // If duplicate symbol names exist in multiple Eagle symbol libraries, prefix the
-            // Eagle symbol library name to the symbol which should ensure that it is unique.
-            if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), libName ) )
+            if( m_pi )
             {
-                libName = aEagleLibrary->name + wxT( "_" ) + libName;
-                libName = EscapeString( libName, CTX_LIBID );
-                libSymbol->SetName( libName );
+                // If duplicate symbol names exist in multiple Eagle symbol libraries, prefix the
+                // Eagle symbol library name to the symbol which should ensure that it is unique.
+                if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), libName ) )
+                {
+                    libName = aEagleLibrary->name + wxT( "_" ) + libName;
+                    libName = EscapeString( libName, CTX_LIBID );
+                    libSymbol->SetName( libName );
+                }
+
+                m_pi->SaveSymbol( getLibFileName().GetFullPath(),
+                                  new LIB_SYMBOL( *libSymbol.get() ), m_properties.get() );
             }
 
-            m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *libSymbol.get() ),
-                              m_properties.get() );
             aEagleLibrary->KiCadSymbols.insert( libName, libSymbol.release() );
 
             // Store information on whether the value of VALUE_FIELD for a part should be

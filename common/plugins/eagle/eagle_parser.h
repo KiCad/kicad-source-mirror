@@ -59,6 +59,9 @@ wxString interpretText( const wxString& aText );
 ///< Translates Eagle special text reference to a KiCad variable reference
 bool substituteVariable( wxString* aText );
 
+///< Converts Eagle's HTML description into KiCad description format
+wxString convertDescription( wxString aDescr );
+
 static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName )
 {
     auto it = aMap.find( aName );

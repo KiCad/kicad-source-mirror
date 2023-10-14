@@ -30,6 +30,7 @@
 #include <string_utils.h>
 #include <richio.h>
 #include <wx/log.h>
+#include <wx/regex.h>
 
 #include <functional>
 #include <cstdio>
@@ -142,6 +143,36 @@ bool substituteVariable( wxString* aText )
     }
 
     return false;
+}
+
+
+wxString convertDescription( wxString aDescr )
+{
+    aDescr.Replace( wxS( "\n" ), wxS( " " ) );
+    aDescr.Replace( wxS( "\r" ), wxEmptyString );
+
+    wxRegEx( wxS( "<a\\s+(?:[^>]*?\\s+)?href=\"([^\"]*)\"[^>]*>" ) )
+            .ReplaceAll( &aDescr, wxS( "\\1 " ) );
+
+    aDescr.Replace( wxS( "<p>" ), wxS( "\n\n" ) );
+    aDescr.Replace( wxS( "</p>" ), wxS( "\n\n" ) );
+
+    aDescr.Replace( wxS( "<br>" ), wxS( "\n" ) );
+    aDescr.Replace( wxS( "<ul>" ), wxS( "\n" ) );
+    aDescr.Replace( wxS( "</ul>" ), wxS( "\n\n" ) );
+    aDescr.Replace( wxS( "<li></li>" ), wxS( "\n" ) );
+    aDescr.Replace( wxS( "<li>" ), wxS( "\n \u2022 " ) ); // Bullet point
+
+    aDescr = RemoveHTMLTags( aDescr );
+
+    wxRegEx( wxS( "\n +" ) ).ReplaceAll( &aDescr, wxS( "\n" ) );
+    wxRegEx( wxS( " +\n" ) ).ReplaceAll( &aDescr, wxS( "\n" ) );
+
+    wxRegEx( wxS( "\n{3,}" ) ).ReplaceAll( &aDescr, wxS( "\n\n" ) );
+    wxRegEx( wxS( "^\n+" ) ).ReplaceAll( &aDescr, wxEmptyString );
+    wxRegEx( wxS( "\n+$" ) ).ReplaceAll( &aDescr, wxEmptyString );
+
+    return aDescr;
 }
 
 
