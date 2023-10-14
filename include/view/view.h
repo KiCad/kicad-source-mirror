@@ -129,9 +129,9 @@ public:
      *
      * @param aItem: the item to modify.
      * @param aHide: whether the item is hidden, or not.
-     * @param aHideOveraly: whether the item should also be hidden on overlays.
+     * @param aHideOverlay: whether the item should also be hidden on overlays.
      */
-    void Hide( VIEW_ITEM* aItem, bool aHide = true, bool aHideOveraly = false );
+    void Hide( VIEW_ITEM* aItem, bool aHide = true, bool aHideOverlay = false );
 
     /**
      * Return information if the item is visible (or not).

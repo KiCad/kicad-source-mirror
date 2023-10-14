@@ -1563,7 +1563,7 @@ void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 }
 
 
-void VIEW::Hide( VIEW_ITEM* aItem, bool aHide, bool aHideOveraly )
+void VIEW::Hide( VIEW_ITEM* aItem, bool aHide, bool aHideOverlay )
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
@@ -1573,7 +1573,7 @@ void VIEW::Hide( VIEW_ITEM* aItem, bool aHide, bool aHideOveraly )
     if( !( viewData->m_flags & VISIBLE ) )
         return;
 
-    if( aHideOveraly )
+    if( aHideOverlay )
         viewData->m_flags |= OVERLAY_HIDDEN;
 
     if( aHide )
