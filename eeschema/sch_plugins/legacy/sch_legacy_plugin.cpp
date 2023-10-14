@@ -355,6 +355,8 @@ void SCH_LEGACY_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, 
             aScreen->Append( loadText( aReader ) );
         else if( strCompare( "BusAlias", line ) )
             aScreen->AddBusAlias( loadBusAlias( aReader, aScreen ) );
+        else if( strCompare( "Kmarq", line ) )
+            continue; // Ignore legacy (until 2009) ERC marker entry
         else if( strCompare( "$EndSCHEMATC", line ) )
             return;
         else
