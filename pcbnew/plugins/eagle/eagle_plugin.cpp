@@ -278,12 +278,12 @@ bool EAGLE_PLUGIN::checkHeader(const wxString& aFileName) const
 
     wxTextInputStream text( input );
 
-    for( int i = 0; i < 3; i++ )
+    for( int i = 0; i < 4; i++ )
     {
         if( input.Eof() )
             return false;
 
-        if( text.ReadLine().Contains( wxS( "<!DOCTYPE eagle" ) ) )
+        if( text.ReadLine().Contains( wxS( "<eagle" ) ) )
             return true;
     }
 
