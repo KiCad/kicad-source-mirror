@@ -1093,13 +1093,13 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
     {
         BOARD_ITEM* aItem = nullptr;
 
-        if( dynamic_cast<BOARD*>( aParent ) )
+        if( BOARD* board = dynamic_cast<BOARD*>( aParent ) )
         {
-            aItem = static_cast<BOARD*>( aParent )->GetItem( aId );
+            aItem = board->GetItem( aId );
         }
-        else if( aParent->Type() == PCB_FOOTPRINT_T )
+        else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aParent ) )
         {
-            static_cast<FOOTPRINT*>( aParent )->RunOnChildren(
+            footprint->RunOnChildren(
                     [&]( BOARD_ITEM* child )
                     {
                         if( child->m_Uuid == aId )

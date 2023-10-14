@@ -179,6 +179,15 @@ public:
 
     virtual std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const;
 
+    /**
+     * Invoke a function on all children.
+     *
+     * @note This function should not add or remove items to the parent.
+     *
+     * @param aFunction is the function to be invoked.
+     */
+    virtual void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const { }
+
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
     FOOTPRINT* GetParentFootprint() const;

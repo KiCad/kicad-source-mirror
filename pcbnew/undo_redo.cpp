@@ -273,7 +273,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     auto view = GetCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
 
-    PCB_GROUP* group = nullptr;
+    PCB_GROUP* addedGroup = nullptr;
 
     GetBoard()->IncrementTimeStamp();   // clear caches
 
@@ -383,10 +383,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             item->SwapItemData( image );
 
-            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
             {
-                group = static_cast<PCB_GROUP*>( item );
-
                 group->RunOnChildren( [&]( BOARD_ITEM* child )
                                       {
                                           child->SetParentGroup( group );
@@ -416,8 +414,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Add( eda_item );
 
-            if( eda_item->Type() == PCB_GROUP_T || eda_item->Type() == PCB_GENERATOR_T )
-                group = static_cast<PCB_GROUP*>( eda_item );
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( eda_item ) )
+                addedGroup = group;
 
             break;
 
@@ -434,8 +432,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
             {
-                if( group )
-                    group->AddItem( boardItem );
+                if( addedGroup )
+                    addedGroup->AddItem( boardItem );
             }
 
             break;

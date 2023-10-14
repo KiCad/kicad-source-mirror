@@ -834,7 +834,7 @@ public:
      *
      * @param aFunction is the function to be invoked.
      */
-    void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const;
+    void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

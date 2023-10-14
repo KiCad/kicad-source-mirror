@@ -86,26 +86,17 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 
-    std::function<void ( EDA_ITEM* )> addItem;
-    addItem = [&]( EDA_ITEM* item )
+    std::function<void ( EDA_ITEM* )> addItem =
+            [&]( EDA_ITEM* item )
             {
                 items.push_back( item );
 
-                if( item->Type() == PCB_FOOTPRINT_T )
+                if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
                 {
-                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-                    footprint->RunOnChildren( [&]( BOARD_ITEM* bitem )
+                    boardItem->RunOnChildren( [&]( BOARD_ITEM* bitem )
                                               {
                                                   addItem( bitem );
                                               } );
-                }
-                else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-                {
-                    PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                    group->RunOnChildren( [&]( BOARD_ITEM* bitem )
-                                          {
-                                              addItem( bitem );
-                                          } );
                 }
             };
 

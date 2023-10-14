@@ -58,16 +58,8 @@ PCB_VIEW::~PCB_VIEW()
 
 void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 {
-    BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem );
-
-    if( boardItem && boardItem->Type() == PCB_FOOTPRINT_T )
-    {
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-        footprint->RunOnChildren( [this]( BOARD_ITEM* aChild )
-                                  {
-                                      VIEW::Add( aChild );
-                                  } );
-    }
+    if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aItem ) )
+        footprint->RunOnChildren( std::bind( &PCB_VIEW::Add, this, _1, aDrawPriority ) );
 
     VIEW::Add( aItem, aDrawPriority );
 }
@@ -75,16 +67,8 @@ void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 
 void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 {
-    BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem );
-
-    if( boardItem && boardItem->Type() == PCB_FOOTPRINT_T )
-    {
-        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-        footprint->RunOnChildren( [this]( BOARD_ITEM* aChild )
-                                  {
-                                      VIEW::Remove( aChild );
-                                  } );
-    }
+    if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aItem ) )
+        footprint->RunOnChildren( std::bind( &PCB_VIEW::Remove, this, _1 ) );
 
     VIEW::Remove( aItem );
 }
@@ -92,25 +76,12 @@ void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 
 void PCB_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
 {
-    const BOARD_ITEM* boardItem = dynamic_cast<const BOARD_ITEM*>( aItem );
-
-    if( boardItem && boardItem->Type() == PCB_FOOTPRINT_T )
+    if( const BOARD_ITEM* boardItem = dynamic_cast<const BOARD_ITEM*>( aItem ) )
     {
-        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( boardItem );
-        footprint->RunOnChildren(
+        boardItem->RunOnChildren(
                 [this, aUpdateFlags]( BOARD_ITEM* child )
                 {
                     VIEW::Update( child, aUpdateFlags );
-                } );
-    }
-    else if( boardItem
-             && ( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T ) )
-    {
-        const PCB_GROUP* group = static_cast<const PCB_GROUP*>( boardItem );
-        group->RunOnChildren(
-                [this, aUpdateFlags]( BOARD_ITEM* child )
-                {
-                    Update( child, aUpdateFlags );
                 } );
     }
 

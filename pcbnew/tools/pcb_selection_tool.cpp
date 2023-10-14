@@ -2855,21 +2855,10 @@ void PCB_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, bool aUs
     if( aUsingOverlay && aMode != BRIGHTENED )
         view()->Hide( aItem, true );    // Hide the original item, so it is shown only on overlay
 
-    if( aItem->Type() == PCB_FOOTPRINT_T )
+    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
     {
-        static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
-                [&]( BOARD_ITEM* aChild )
-                {
-                    highlightInternal( aChild, aMode, aUsingOverlay );
-                } );
-    }
-    else if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
-    {
-        static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
-                [&]( BOARD_ITEM* aChild )
-                {
-                    highlightInternal( aChild, aMode, aUsingOverlay );
-                } );
+        boardItem->RunOnChildren( std::bind( &PCB_SELECTION_TOOL::highlightInternal, this, _1,
+                                             aMode, aUsingOverlay ) );
     }
 }
 
@@ -2898,21 +2887,10 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
     if( aUsingOverlay && aMode != BRIGHTENED )
         view()->Hide( aItem, false );   // // Restore original item visibility
 
-    if( aItem->Type() == PCB_FOOTPRINT_T )
+    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
     {
-        static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
-                [&]( BOARD_ITEM* aChild )
-                {
-                    unhighlightInternal( aChild, aMode, aUsingOverlay );
-                } );
-    }
-    else if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
-    {
-        static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
-                [&]( BOARD_ITEM* aChild )
-                {
-                    unhighlightInternal( aChild, aMode, aUsingOverlay );
-                } );
+        boardItem->RunOnChildren( std::bind( &PCB_SELECTION_TOOL::unhighlightInternal, this, _1,
+                                             aMode, aUsingOverlay ) );
     }
 }
 
@@ -2935,21 +2913,15 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
             bool found = false;
 
-            std::function<void( PCB_GROUP* )> checkGroup =
-                    [&]( PCB_GROUP* aGroup )
-                    {
-                        aGroup->RunOnChildren(
-                                [&]( BOARD_ITEM* aItem )
-                                {
-                                    if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
-                                        checkGroup( static_cast<PCB_GROUP*>( aItem ) );
-                                    else if( aItem->HitTest( aPoint, margin ) )
-                                        found = true;
-                                } );
-                    };
-
-            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-                checkGroup( static_cast<PCB_GROUP*>( item ) );
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
+            {
+                group->RunOnDescendants(
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            if( aItem->HitTest( aPoint, margin ) )
+                                found = true;
+                        } );
+            }
 
             if( found )
                 return true;

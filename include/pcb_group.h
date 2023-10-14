@@ -211,14 +211,8 @@ public:
     /// @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    /**
-     * Invoke a function on all members of the group.
-     *
-     * @note This function should not add or remove items to the group.
-     *
-     * @param aFunction is the function to be invoked.
-     */
-    void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const;
+    ///< @copydoc BOARD_ITEM::RunOnChildren
+    void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const override;
 
     /**
      * Invoke a function on all descendants of the group.

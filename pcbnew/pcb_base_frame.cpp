@@ -290,22 +290,11 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             lastItem->ClearBrightened();
 
-            if( lastItem->Type() == PCB_FOOTPRINT_T )
-            {
-                static_cast<FOOTPRINT*>( lastItem )->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->ClearBrightened();
-                        } );
-            }
-            else if( lastItem->Type() == PCB_GROUP_T || lastItem->Type() == PCB_GENERATOR_T )
-            {
-                static_cast<PCB_GROUP*>( lastItem )->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->ClearBrightened();
-                        } );
-            }
+            lastItem->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->ClearBrightened();
+                    } );
 
             GetCanvas()->GetView()->Update( lastItem );
             lastBrightenedItemID = niluuid;
@@ -348,22 +337,11 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             item->SetBrightened();
 
-            if( item->Type() == PCB_FOOTPRINT_T )
-            {
-                static_cast<FOOTPRINT*>( item )->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->SetBrightened();
-                        });
-            }
-            else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-            {
-                static_cast<PCB_GROUP*>( item )->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->SetBrightened();
-                        });
-            }
+            item->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->SetBrightened();
+                    });
 
             GetCanvas()->GetView()->Update( item );
             lastBrightenedItemIDs.push_back( item->m_Uuid );

@@ -79,13 +79,9 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                     newItem->SetPosition( aPosition );
                     preview.Add( newItem.get() );
 
-                    if( newItem->Type() == PCB_FOOTPRINT_T )
-                    {
-                        FOOTPRINT* fp = static_cast<FOOTPRINT*>( newItem.get() );
-
-                        // footprints have more drawable parts
+                    // footprints have more drawable parts
+                    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( newItem.get() ) )
                         fp->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
-                    }
                 }
             };
 

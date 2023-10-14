@@ -114,37 +114,28 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
     if( item->Type() == PCB_ZONE_T )
         zoneFillerTool->DirtyZone( static_cast<ZONE*>( item ) );
 
-    if( item->Type() == PCB_GROUP_T )
-    {
-        static_cast<PCB_GROUP*>( item )->RunOnChildren(
-                [&]( BOARD_ITEM* child )
-                {
-                    dirtyIntersectingZones( child, aChangeType );
-                } );
-    }
+    item->RunOnChildren( std::bind( &BOARD_COMMIT::dirtyIntersectingZones, this, _1, aChangeType ) );
+
+    BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
+    BOX2I  bbox = item->GetBoundingBox();
+    LSET   layers = item->GetLayerSet();
+
+    if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
+        layers = LSET::PhysicalLayersMask();
     else
+        layers &= LSET::AllCuMask();
+
+    if( layers.any() )
     {
-        BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-        BOX2I  bbox = item->GetBoundingBox();
-        LSET   layers = item->GetLayerSet();
-
-        if( layers.test( Edge_Cuts ) || layers.test( Margin ) )
-            layers = LSET::PhysicalLayersMask();
-        else
-            layers &= LSET::AllCuMask();
-
-        if( layers.any() )
+        for( ZONE* zone : board->Zones() )
         {
-            for( ZONE* zone : board->Zones() )
-            {
-                if( zone->GetIsRuleArea() )
-                    continue;
+            if( zone->GetIsRuleArea() )
+                continue;
 
-                if( ( zone->GetLayerSet() & layers ).any()
-                        && zone->GetBoundingBox().Intersects( bbox ) )
-                {
-                    zoneFillerTool->DirtyZone( zone );
-                }
+            if( ( zone->GetLayerSet() & layers ).any()
+                    && zone->GetBoundingBox().Intersects( bbox ) )
+            {
+                zoneFillerTool->DirtyZone( zone );
             }
         }
     }
@@ -628,14 +619,13 @@ void BOARD_COMMIT::Revert()
             wxASSERT( boardItemCopy );
             boardItem->SwapItemData( boardItemCopy );
 
-            if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T)
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( boardItem ) )
             {
-                PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
-
-                group->RunOnChildren( [&]( BOARD_ITEM* child )
-                                      {
-                                          child->SetParentGroup( group );
-                                      } );
+                group->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->SetParentGroup( group );
+                        } );
             }
 
             view->Add( boardItem );
