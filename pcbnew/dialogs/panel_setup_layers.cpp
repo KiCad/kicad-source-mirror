@@ -548,11 +548,10 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
             }
         }
 
-        for( PCB_TRACK* via : m_pcb->Tracks() )
-        {
-            if( via->HasHole() )
-                via->SetLayerSet( via->GetLayerSet() | LSET::InternalCuMask() );
-        }
+        // Tracks do not change their layer
+        // Vias layers are defined by the starting layer and the ending layer, so
+        // they are not modified by adding a layer.
+        // So do nothing for tracks/vias
 
         modified = true;
     }
