@@ -849,16 +849,6 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
         {
             wxPoint pos = m_tree_ctrl->ScreenToClient( wxGetMousePosition() );
 
-            // What we actually want is the height of the column header, but wxWidgets gives us
-            // no way to get that, so we use the height of the search ctrl as a proxy.  And it's
-            // not even a very good proxy on Mac....
-            int headerHeight = m_tree_ctrl->GetPosition().y;
-#ifdef __WXMAC__
-            headerHeight += 5;
-#endif
-
-            pos.y -= headerHeight;
-
             wxDataViewItem    item;
             wxDataViewColumn* col;
             m_tree_ctrl->HitTest( pos, item, col );
