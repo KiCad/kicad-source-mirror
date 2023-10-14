@@ -4581,6 +4581,11 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     {
     case T_thru_hole:
         pad->SetAttribute( PAD_ATTRIB::PTH );
+
+        // The drill token is usually missing if 0 drill size is specified.
+        // Emulate it using 1 nm drill size to avoid errors.
+        // Drill size cannot be set to 0 in newer versions.
+        pad->SetDrillSize( VECTOR2I( 1, 1 ) );
         break;
 
     case T_smd:
