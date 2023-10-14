@@ -633,9 +633,8 @@ msgid "Show Model Bounding Boxes"
 msgstr "Показати обмежувальну рамку"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:354
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Показати обмежувальні рамки моделей"
+msgstr "Показати обмеження 3D рендеру моделі в реальному часі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:361
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:362
@@ -665,18 +664,16 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Покриття міді:"
+msgstr "Показати верхній шар міді / колір покриття"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Покриття міді:"
+msgstr "Показати нижній шар міді / колір покриття"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Adhesive"
@@ -699,36 +696,32 @@ msgid "F.Silkscreen"
 msgstr "F.Шовкографія"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Верхня шовкографія"
+msgstr "Показати верхній шар шовкографії"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
 msgstr "B.Шовкографія"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Нижня шовкографія"
+msgstr "Показати нижній шар шовкографії"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Верхня паяльна маска"
+msgstr "Показати верхню паяльну маску"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Нижня паяльна маска"
+msgstr "Показати нижню паяльну маску"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "User.Drawings"
@@ -743,9 +736,8 @@ msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Показати шари паяльної маски"
+msgstr "Показати шари коментарів користувача"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Eco1"
@@ -764,9 +756,8 @@ msgid "Show user ECO2 layer"
 msgstr "Показати ECO2 шар"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Контактні площадки з наскрізними отворами"
+msgstr "Моделі з наскрізним отвором"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "SMD Models"
@@ -785,9 +776,8 @@ msgid "Models marked DNP"
 msgstr "Моделі з маркуванням DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Показати обмежувальну рамку"
+msgstr "Обмежувальні рамки моделі"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -830,13 +820,12 @@ msgid "Show all footprint text"
 msgstr "Показати всі надписи посадкових місць"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Шовкографія"
+msgstr "Шовкографія поза платою"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Не притискайте шари шовкові до контуру дошки"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "3D Axis"
@@ -847,19 +836,16 @@ msgid "Background Start"
 msgstr "Запуски у фоні"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Початок градієнту фону:"
+msgstr "Початок кольору градієнту фону"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Фон"
+msgstr "Нижня частина фону"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Кінець градієнту фону:"
+msgstr "Кінець градієнту кольору фону"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, fuzzy, c-format
