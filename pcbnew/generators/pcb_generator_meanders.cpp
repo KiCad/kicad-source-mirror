@@ -70,110 +70,6 @@ enum LENGTH_TUNING_MODE
 };
 
 
-static LENGTH_TUNING_MODE TuningFromString( const std::string& aStr )
-{
-    if( aStr == "single" )
-        return LENGTH_TUNING_MODE::SINGLE;
-    else if( aStr == "diff_pair" )
-        return LENGTH_TUNING_MODE::DIFF_PAIR;
-    else if( aStr == "diff_pair_skew" )
-        return LENGTH_TUNING_MODE::DIFF_PAIR_SKEW;
-    else
-    {
-        wxFAIL_MSG( wxS( "Unknown length tuning token" ) );
-        return LENGTH_TUNING_MODE::SINGLE;
-    }
-}
-
-
-static std::string TuningToString( const LENGTH_TUNING_MODE aTuning )
-{
-    switch( aTuning )
-    {
-    case LENGTH_TUNING_MODE::SINGLE: return "single";
-    case LENGTH_TUNING_MODE::DIFF_PAIR: return "diff_pair";
-    case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return "diff_pair_skew";
-    default: wxFAIL; return "";
-    }
-}
-
-
-static LENGTH_TUNING_MODE FromPNSMode( PNS::ROUTER_MODE aRouterMode )
-{
-    switch( aRouterMode )
-    {
-    case PNS::PNS_MODE_TUNE_SINGLE:         return LENGTH_TUNING_MODE::SINGLE;
-    case PNS::PNS_MODE_TUNE_DIFF_PAIR:      return LENGTH_TUNING_MODE::DIFF_PAIR;
-    case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW: return LENGTH_TUNING_MODE::DIFF_PAIR_SKEW;
-    default:                                return LENGTH_TUNING_MODE::SINGLE;
-    }
-}
-
-
-static PNS::MEANDER_SIDE SideFromString( const std::string& aStr )
-{
-    if( aStr == "default" )
-        return PNS::MEANDER_SIDE_DEFAULT;
-    else if( aStr == "left" )
-        return PNS::MEANDER_SIDE_LEFT;
-    else if( aStr == "right" )
-        return PNS::MEANDER_SIDE_RIGHT;
-    else
-    {
-        wxFAIL_MSG( wxS( "Unknown meander side token" ) );
-        return PNS::MEANDER_SIDE_DEFAULT;
-    }
-}
-
-
-static std::string StatusToString( const PNS::MEANDER_PLACER_BASE::TUNING_STATUS aStatus )
-{
-    switch( aStatus )
-    {
-    case PNS::MEANDER_PLACER_BASE::TOO_LONG: return "too_long";
-    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: return "too_short";
-    case PNS::MEANDER_PLACER_BASE::TUNED: return "tuned";
-    default: wxFAIL; return "";
-    }
-}
-
-
-static PNS::MEANDER_PLACER_BASE::TUNING_STATUS StatusFromString( const std::string& aStr )
-{
-    if( aStr == "too_long" )
-        return PNS::MEANDER_PLACER_BASE::TOO_LONG;
-    else if( aStr == "too_short" )
-        return PNS::MEANDER_PLACER_BASE::TOO_SHORT;
-    else if( aStr == "tuned" )
-        return PNS::MEANDER_PLACER_BASE::TUNED;
-    else
-    {
-        wxFAIL_MSG( wxS( "Unknown tuning status token" ) );
-        return PNS::MEANDER_PLACER_BASE::TUNED;
-    }
-}
-
-
-static std::string SideToString( const PNS::MEANDER_SIDE aValue )
-{
-    switch( aValue )
-    {
-    case PNS::MEANDER_SIDE_DEFAULT: return "default";
-    case PNS::MEANDER_SIDE_LEFT: return "left";
-    case PNS::MEANDER_SIDE_RIGHT: return "right";
-    default: wxFAIL; return "";
-    }
-}
-
-
-static NETINFO_ITEM* getCoupledNet( PNS::ROUTER* aRouter, NETINFO_ITEM* aNet )
-{
-    PNS::RULE_RESOLVER* resolver = aRouter->GetRuleResolver();
-
-    return static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( aNet ) );
-}
-
-
 class PCB_GENERATOR_MEANDERS : public PCB_GENERATOR
 {
 public:
@@ -181,898 +77,36 @@ public:
     static const wxString DISPLAY_NAME;
 
     PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
-                            LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE ) :
-            PCB_GENERATOR( aParent, aLayer ),
-            m_singleSide( false ),
-            m_rounded( true ),
-            m_tuningMode( aMode ),
-            m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED )
-    {
-        m_generatorType = GENERATOR_TYPE;
-        m_name = DISPLAY_NAME;
-
-        m_minAmplitude = pcbIUScale.mmToIU( 0.1 );
-        m_maxAmplitude = pcbIUScale.mmToIU( 2.0 );
-        m_spacing = pcbIUScale.mmToIU( 0.6 );
-        m_targetLength = pcbIUScale.mmToIU( 100 );
-        m_targetSkew = pcbIUScale.mmToIU( 0 );
-        m_end = VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 );
-        m_cornerRadiusPercentage = 100;
-        m_initialSide = PNS::MEANDER_SIDE_DEFAULT;
-    }
+                            LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE );
 
     wxString GetGeneratorType() const override { return wxS( "meanders" ); }
 
-    NETINFO_ITEM* snapToNearestTrackPoint( VECTOR2I& aP, BOARD* aBoard, NETINFO_ITEM* aNet )
-    {
-        SEG::ecoord   minDistSq = VECTOR2I::ECOORD_MAX;
-        VECTOR2I      closestPt = aP;
-        NETINFO_ITEM* closestNet = nullptr;
-
-        for( PCB_TRACK *track : aBoard->Tracks() )
-        {
-            if( aNet && track->GetNet() != aNet )
-                continue;
-
-            SEG seg ( track->GetStart(), track->GetEnd() );
-
-            VECTOR2I    nearest = seg.NearestPoint( aP );
-            SEG::ecoord distSq = ( nearest - aP ).SquaredEuclideanNorm();
-
-            if( distSq < minDistSq )
-            {
-                minDistSq = distSq;
-                closestPt = nearest;
-                closestNet = track->GetNet();
-            }
-        }
-
-        if( minDistSq != VECTOR2I::ECOORD_MAX )
-        {
-            aP = closestPt;
-            return closestNet;
-        }
-
-        return nullptr;
-    }
-
-    bool baselineValid()
-    {
-        if( m_tuningMode == DIFF_PAIR )
-        {
-            return( m_baseLine && m_baseLine->PointCount() > 1
-                        && m_baseLineCoupled && m_baseLineCoupled->PointCount() > 1 );
-        }
-        else
-        {
-            return( m_baseLine && m_baseLine->PointCount() > 1 );
-        }
-    }
-
     static PCB_GENERATOR_MEANDERS* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                               BOARD_CONNECTED_ITEM* aStartItem,
-                                              LENGTH_TUNING_MODE aMode )
-    {
-        BOARD*                       board = aStartItem->GetBoard();
-        std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
-        DRC_CONSTRAINT               constraint;
-        PCB_LAYER_ID                 layer = aStartItem->GetLayer();
-
-        if( aMode == SINGLE && getCoupledNet( aTool->Router(), aStartItem->GetNet() ) )
-            aMode = DIFF_PAIR;
-
-        PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, aMode );
-
-        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
-
-        if( aMode == DIFF_PAIR_SKEW )
-        {
-            if( constraint.IsNull() )
-            {
-                WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Skew" ), _( "Target skew:" ), 0 );
-
-                if( dlg.ShowModal() != wxID_OK )
-                    return nullptr;
-
-                meander->m_targetSkew = dlg.GetValue();
-                meander->m_overrideCustomRules = true;
-            }
-            else
-            {
-                meander->m_targetSkew = constraint.GetValue().Opt();
-                meander->m_overrideCustomRules = false;
-            }
-        }
-        else
-        {
-            if( constraint.IsNull() )
-            {
-                WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Length" ), _( "Target length:" ),
-                                          100 * PCB_IU_PER_MM );
-
-                if( dlg.ShowModal() != wxID_OK )
-                    return nullptr;
-
-                meander->m_targetLength = dlg.GetValue();
-                meander->m_overrideCustomRules = true;
-            }
-            else
-            {
-                meander->m_targetLength = constraint.GetValue().Opt();
-                meander->m_overrideCustomRules = false;
-            }
-        }
-
-        meander->SetFlags( IS_NEW );
-
-        return meander;
-    }
+                                              LENGTH_TUNING_MODE aMode );
 
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                    BOARD_COMMIT* aCommit ) override
-    {
-        m_removedItems.clear();
-
-        if( aCommit )
-        {
-            if( IsNew() )
-                aCommit->Add( this );
-            else
-                aCommit->Modify( this );
-        }
-
-        int          layer = GetLayer();
-        PNS::ROUTER* router = aTool->Router();
-
-        aTool->ClearRouterCommit();
-        router->SyncWorld();
-
-        if( !baselineValid() )
-            InitBaseLine( router, layer, aBoard );
-
-        if( baselineValid() && !m_overrideCustomRules )
-        {
-            PNS::CONSTRAINT     constraint;
-            PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
-
-            NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
-            PNS::SEGMENT  pnsItem( m_baseLine->CSegment( 0 ), net );
-
-            if( m_tuningMode == SINGLE )
-            {
-                if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
-                                               &pnsItem, nullptr, layer, &constraint ) )
-                {
-                    m_targetLength = constraint.m_Value.Opt();
-                    aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
-                }
-            }
-            else
-            {
-                NETINFO_ITEM* coupledNet = static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( net ) );
-                PNS::SEGMENT  coupledItem( m_baseLineCoupled->CSegment( 0 ), coupledNet );
-
-                if( m_tuningMode == DIFF_PAIR )
-                {
-                    if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
-                                                   &pnsItem, &coupledItem, layer, &constraint ) )
-                    {
-                        m_targetLength = constraint.m_Value.Opt();
-                        aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
-                    }
-                }
-                else
-                {
-                    if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW,
-                                                   &pnsItem, &coupledItem, layer, &constraint ) )
-                    {
-                        m_targetSkew = constraint.m_Value.Opt();
-                        aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
-                    }
-                }
-            }
-        }
-    }
-
-    PNS::LINKED_ITEM* PickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere, int aLayer,
-                                   VECTOR2I& aPointOut )
-    {
-        static const int  candidateCount = 2;
-        PNS::LINKED_ITEM* prioritized[candidateCount];
-        SEG::ecoord       dist[candidateCount];
-        VECTOR2I          point[candidateCount];
-
-        for( int i = 0; i < candidateCount; i++ )
-        {
-            prioritized[i] = nullptr;
-            dist[i] = VECTOR2I::ECOORD_MAX;
-        }
-
-        auto haveCandidates =
-                [&]()
-                {
-                    for( PNS::ITEM* item : prioritized )
-                    {
-                        if( item )
-                            return true;
-                    }
-
-                    return false;
-                };
-
-        for( bool useClearance : { false, true } )
-        {
-            PNS::ITEM_SET candidates = aRouter->QueryHoverItems( aWhere, useClearance );
-
-            for( PNS::ITEM* item : candidates.Items() )
-            {
-                if( !item->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
-                    continue;
-
-                if( !item->IsRoutable() )
-                    continue;
-
-                if( !item->Layers().Overlaps( aLayer ) )
-                    continue;
-
-                PNS::LINKED_ITEM* linked = static_cast<PNS::LINKED_ITEM*>( item );
-
-                if( item->Kind() & PNS::ITEM::ARC_T )
-                {
-                    SEG::ecoord d0 = ( item->Anchor( 0 ) - aWhere ).SquaredEuclideanNorm();
-                    SEG::ecoord d1 = ( item->Anchor( 1 ) - aWhere ).SquaredEuclideanNorm();
-
-                    if( d0 <= dist[1] )
-                    {
-                        prioritized[1] = linked;
-                        dist[1] = d0;
-                        point[1] = item->Anchor( 0 );
-                    }
-
-                    if( d1 <= dist[1] )
-                    {
-                        prioritized[1] = linked;
-                        dist[1] = d1;
-                        point[1] = item->Anchor( 1 );
-                    }
-                }
-                else if( item->Kind() & PNS::ITEM::SEGMENT_T )
-                {
-                    PNS::SEGMENT* segm = static_cast<PNS::SEGMENT*>( item );
-
-                    VECTOR2I    nearest = segm->CLine().NearestPoint( aWhere, false );
-                    SEG::ecoord dd = ( aWhere - nearest ).SquaredEuclideanNorm();
-
-                    if( dd <= dist[1] )
-                    {
-                        prioritized[1] = segm;
-                        dist[1] = dd;
-                        point[1] = nearest;
-                    }
-                }
-            }
-
-            if( haveCandidates() )
-                break;
-        }
-
-        PNS::LINKED_ITEM* rv = nullptr;
-
-        for( int i = 0; i < candidateCount; i++ )
-        {
-            PNS::LINKED_ITEM* item = prioritized[i];
-
-            if( item && ( aLayer < 0 || item->Layers().Overlaps( aLayer ) ) )
-            {
-                rv = item;
-                aPointOut = point[i];
-                break;
-            }
-        }
-
-        return rv;
-    }
-
-    bool initBaseLine( PNS::ROUTER* router, int layer, BOARD* aBoard, VECTOR2I& aStart,
-                       VECTOR2I& aEnd, NETINFO_ITEM* aNet,
-                       std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
-    {
-        PNS::NODE* world = router->GetWorld();
-
-        snapToNearestTrackPoint( aStart, aBoard, aNet );
-        snapToNearestTrackPoint( aEnd, aBoard, aNet );
-
-        VECTOR2I startSnapPoint, endSnapPoint;
-
-        PNS::LINKED_ITEM* startItem = PickSegment( router, aStart, layer, startSnapPoint );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, aEnd, layer, endSnapPoint );
-
-        wxASSERT( startItem );
-        wxASSERT( endItem );
-
-        if( !startItem || !endItem || startSnapPoint == endSnapPoint )
-            return false;
-
-        PNS::LINE               line = world->AssembleLine( startItem, nullptr, false, true );
-        const SHAPE_LINE_CHAIN& chain = line.CLine();
-
-        wxASSERT( line.ContainsLink( endItem ) );
-
-        wxASSERT( chain.PointOnEdge( startSnapPoint, 1 ) );
-        wxASSERT( chain.PointOnEdge( endSnapPoint, 1 ) );
-
-        SHAPE_LINE_CHAIN pre;
-        SHAPE_LINE_CHAIN mid;
-        SHAPE_LINE_CHAIN post;
-
-        chain.Split( startSnapPoint, endSnapPoint, pre, mid, post );
-
-        aBaseLine = mid;
-
-        return true;
-    }
-
-    bool InitBaseLine( PNS::ROUTER* router, int layer, BOARD* aBoard )
-    {
-        m_baseLineCoupled.reset();
-
-        NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
-
-        if( !initBaseLine( router, layer, aBoard, m_origin, m_end, net, m_baseLine ) )
-            return false;
-
-        if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
-        {
-            if( NETINFO_ITEM* coupledNet = getCoupledNet( router, net ) )
-            {
-                VECTOR2I coupledStart = m_origin;
-                VECTOR2I coupledEnd = m_end;
-
-                return initBaseLine( router, layer, aBoard, coupledStart, coupledEnd, coupledNet,
-                                     m_baseLineCoupled );
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
-    void removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& baseLine )
-    {
-        VECTOR2I startSnapPoint, endSnapPoint;
-
-        std::optional<PNS::LINE> line = getLine( baseLine.CPoint( 0 ), baseLine.CPoint( -1 ),
-                                                 aRouter, aLayer, startSnapPoint, endSnapPoint );
-
-        wxCHECK( line, /* void */ );
-
-        SHAPE_LINE_CHAIN pre;
-        SHAPE_LINE_CHAIN mid;
-        SHAPE_LINE_CHAIN post;
-        line->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
-
-        // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-        for( PNS::LINKED_ITEM* li : line->Links() )
-            aRouter->GetInterface()->RemoveItem( li );
-
-        aRouter->GetWorld()->Remove( *line );
-
-        SHAPE_LINE_CHAIN straightChain;
-        straightChain.Append( pre );
-        straightChain.Append( baseLine );
-        straightChain.Append( post );
-        straightChain.Simplify();
-
-        PNS::LINE straightLine( *line, straightChain );
-
-        // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-        aRouter->GetWorld()->Add( straightLine, false );
-
-        for( PNS::LINKED_ITEM* li : straightLine.Links() )
-            aRouter->GetInterface()->AddItem( li );
-    }
-
-    void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                 BOARD_COMMIT* aCommit ) override
-    {
-        aTool->Router()->SyncWorld();
-
-        PNS::ROUTER* router = aTool->Router();
-        int          layer = GetLayer();
-        int          undoFlags = 0;
-
-        // Ungroup first so that undo works
-        if( !GetItems().empty() )
-        {
-            PCB_GENERATOR*    group = this;
-            PICKED_ITEMS_LIST undoList;
-
-            for( BOARD_ITEM* member : group->GetItems() )
-                undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
-
-            group->RemoveAll();
-
-            aFrame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
-            undoFlags |= APPEND_UNDO;
-        }
-
-        aCommit->Remove( this );
-
-        aTool->ClearRouterCommit();
-
-        if( baselineValid() )
-        {
-            removeToBaseline( router, layer, *m_baseLine );
-            if( m_tuningMode == DIFF_PAIR )
-            {
-                removeToBaseline( router, layer, *m_baseLineCoupled );
-            }
-        }
-
-        std::set<BOARD_ITEM*> clearRouterRemovedItems = aTool->GetRouterCommitRemovedItems();
-        std::set<BOARD_ITEM*> clearRouterAddedItems = aTool->GetRouterCommitAddedItems();
-
-        for( BOARD_ITEM* item : clearRouterRemovedItems )
-        {
-            item->ClearSelected();
-            aCommit->Remove( item );
-        }
-
-        for( BOARD_ITEM* item : clearRouterAddedItems )
-        {
-            aCommit->Add( item );
-        }
-
-        aCommit->Push( "Remove Meander", undoFlags );
-    }
-
-    std::optional<PNS::LINE> getLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                      PNS::ROUTER* router, int layer, VECTOR2I& aStartOut,
-                                      VECTOR2I& aEndOut )
-    {
-        PNS::NODE* world = router->GetWorld();
-
-        PNS::LINKED_ITEM* startItem = PickSegment( router, aStart, layer, aStartOut );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, aEnd, layer, aEndOut );
-
-        wxASSERT( startItem );
-        wxASSERT( endItem );
-
-        if( !startItem || !endItem )
-            return std::nullopt;
-
-        PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
-        SHAPE_LINE_CHAIN oldChain = line.CLine();
-
-        wxCHECK( line.ContainsLink( endItem ), std::nullopt );
-
-        wxASSERT( oldChain.PointOnEdge( aStartOut, 1 ) );
-        wxASSERT( oldChain.PointOnEdge( aEndOut, 1 ) );
-
-        return line;
-    }
-
-    PNS::MEANDER_SETTINGS ToMeanderSettings()
-    {
-        PNS::MEANDER_SETTINGS settings;
-
-        settings.m_cornerStyle = m_rounded ? PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND
-                                           : PNS::MEANDER_STYLE::MEANDER_STYLE_CHAMFER;
-
-        settings.m_minAmplitude = m_minAmplitude;
-        settings.m_maxAmplitude = m_maxAmplitude;
-        settings.m_spacing = m_spacing;
-        settings.m_targetLength = m_targetLength;
-        settings.m_targetSkew = m_targetSkew;
-        settings.m_overrideCustomRules = m_overrideCustomRules;
-        settings.m_singleSided = m_singleSide;
-        settings.m_segmentSide = m_initialSide;
-        settings.m_cornerRadiusPercentage = m_cornerRadiusPercentage;
-
-        return settings;
-    }
-
-    void FromMeanderSettings( const PNS::MEANDER_SETTINGS& aSettings )
-    {
-        m_rounded = aSettings.m_cornerStyle == PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND;
-        m_minAmplitude = aSettings.m_minAmplitude;
-        m_maxAmplitude = aSettings.m_maxAmplitude;
-        m_spacing = aSettings.m_spacing;
-        m_targetLength = aSettings.m_targetLength;
-        m_targetSkew = aSettings.m_targetSkew;
-        m_overrideCustomRules = aSettings.m_overrideCustomRules;
-        m_singleSide = aSettings.m_singleSided;
-        m_initialSide = aSettings.m_segmentSide;
-        m_cornerRadiusPercentage = aSettings.m_cornerRadiusPercentage;
-    }
-
-    PNS::ROUTER_MODE ToPNSMode()
-    {
-        switch( m_tuningMode )
-        {
-        case LENGTH_TUNING_MODE::SINGLE:         return PNS::PNS_MODE_TUNE_SINGLE;
-        case LENGTH_TUNING_MODE::DIFF_PAIR:      return PNS::PNS_MODE_TUNE_DIFF_PAIR;
-        case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW;
-        default:                                 return PNS::PNS_MODE_TUNE_SINGLE;
-        }
-    }
-
-    bool resetToBaseline( PNS::ROUTER* aRouter, int aLayer, PCB_BASE_EDIT_FRAME* aFrame,
-                          SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
-    {
-        PNS::NODE* world = aRouter->GetWorld();
-        VECTOR2I   startSnapPoint, endSnapPoint;
-
-        std::optional<PNS::LINE> line = getLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
-                                                 aRouter, aLayer, startSnapPoint, endSnapPoint );
-
-        wxCHECK( line, false );
-
-        SHAPE_LINE_CHAIN straightChain;
-        {
-            SHAPE_LINE_CHAIN pre, mid, post;
-            line->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
-
-            straightChain.Append( pre );
-            straightChain.Append( aBaseLine );
-            straightChain.Append( post );
-            straightChain.Simplify();
-        }
-
-        // LINE does not have a separate remover, as LINEs are never truly a member of the tree
-        for( PNS::LINKED_ITEM* pnsItem : line->Links() )
-        {
-            if( BOARD_ITEM* item = pnsItem->Parent() )
-            {
-                aFrame->GetCanvas()->GetView()->Hide( item, true, true );
-                m_removedItems.insert( item );
-            }
-        }
-
-        world->Remove( *line );
-
-        PNS::LINE straightLine( *line, straightChain );
-
-        world->Add( straightLine, false );
-
-        if( aPrimary )
-        {
-            m_origin = straightChain.NearestPoint( m_origin );
-            m_end = straightChain.NearestPoint( m_end );
-
-            // Don't allow points too close
-            if( ( m_end - m_origin ).EuclideanNorm() < pcbIUScale.mmToIU( 0.1 ) )
-            {
-                m_origin = startSnapPoint;
-                m_end = endSnapPoint;
-            }
-
-            {
-                SHAPE_LINE_CHAIN pre, mid, post;
-                straightChain.Split( m_origin, m_end, pre, mid, post );
-
-                m_baseLine = mid;
-            }
-        }
-        else
-        {
-            VECTOR2I start = straightChain.NearestPoint( m_origin );
-            VECTOR2I end = straightChain.NearestPoint( m_end );
-
-            {
-                SHAPE_LINE_CHAIN pre, mid, post;
-                straightChain.Split( start, end, pre, mid, post );
-
-                m_baseLineCoupled = mid;
-            }
-        }
-
-        return true;
-    }
+                    BOARD_COMMIT* aCommit ) override;
 
     bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                 BOARD_COMMIT* aCommit ) override
-    {
-        PNS::ROUTER*     router = aTool->Router();
-        PNS_KICAD_IFACE* iface = aTool->GetInterface();
-        int              layer = GetLayer();
-
-        iface->SetStartLayer( layer );
-
-        if( router->RoutingInProgress() )
-        {
-            router->StopRouting();
-        }
-
-        if( !baselineValid() )
-        {
-            InitBaseLine( router, layer, aBoard );
-        }
-        else
-        {
-            if( resetToBaseline( router, layer, aFrame, *m_baseLine, true ) )
-            {
-                m_origin = m_baseLine->CPoint( 0 );
-                m_end = m_baseLine->CPoint( -1 );
-            }
-            else
-            {
-                InitBaseLine( router, layer, aBoard );
-                return false;
-            }
-
-            if( m_tuningMode == DIFF_PAIR
-                    && !resetToBaseline( router, layer, aFrame, *m_baseLineCoupled, false ) )
-            {
-                InitBaseLine( router, layer, aBoard );
-                return false;
-            }
-        }
-
-        // Snap points
-        VECTOR2I startSnapPoint, endSnapPoint;
-
-        PNS::LINKED_ITEM* startItem = PickSegment( router, m_origin, layer, startSnapPoint );
-        PNS::LINKED_ITEM* endItem = PickSegment( router, m_end, layer, endSnapPoint );
-
-        wxASSERT( startItem );
-        wxASSERT( endItem );
-
-        if( !startItem || !endItem )
-            return false;
-
-        router->SetMode( ToPNSMode() );
-
-        if( !router->StartRouting( startSnapPoint, startItem, layer ) )
-            return false;
-
-        auto placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
-
-        PNS::MEANDER_SETTINGS settings = ToMeanderSettings();
-
-        placer->UpdateSettings( settings );
-        router->Move( m_end, nullptr );
-
-        m_lastNetName = iface->GetNetName( startItem->Net() );
-        m_tuningInfo = placer->TuningInfo( aFrame->GetUserUnits() );
-        m_tuningStatus = placer->TuningStatus();
-
-        return true;
-    }
+                 BOARD_COMMIT* aCommit ) override;
 
     void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                    BOARD_COMMIT* aCommit, const wxString& aCommitMsg = wxEmptyString,
-                   int aCommitFlags = 0 ) override
-    {
-        PNS::ROUTER* router = aTool->Router();
-
-        if( router->RoutingInProgress() )
-        {
-            router->FixRoute( m_end, nullptr, true );
-            router->StopRouting();
-
-            std::set<BOARD_ITEM*> routerRemovedItems = aTool->GetRouterCommitRemovedItems();
-            std::set<BOARD_ITEM*> routerAddedItems = aTool->GetRouterCommitAddedItems();
-
-            for( BOARD_ITEM* item : m_removedItems )
-            {
-                aFrame->GetCanvas()->GetView()->Hide( item, false );
-                aCommit->Remove( item );
-            }
-
-            m_removedItems.clear();
-
-            for( BOARD_ITEM* item : routerRemovedItems )
-            {
-                aCommit->Remove( item );
-            }
-
-            for( BOARD_ITEM* item : routerAddedItems )
-            {
-                item->SetSelected();
-                AddItem( item );
-                aCommit->Add( item );
-            }
-        }
-
-        // Store isNew as BOARD_COMMIT::Push() is going to clear it.
-        bool isNew = IsNew();
-
-        if( aCommitMsg.IsEmpty() )
-            aCommit->Push( _( "Edit Meander" ), aCommitFlags );
-        else
-            aCommit->Push( aCommitMsg, aCommitFlags );
-
-        if( isNew && !GetItems().empty() )
-        {
-            PICKED_ITEMS_LIST undoList;
-
-            for( BOARD_ITEM* member : GetItems() )
-                undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::REGROUP ) );
-
-            aFrame->AppendCopyToUndoList( undoList, UNDO_REDO::REGROUP );
-        }
-    }
+                   int aCommitFlags = 0 ) override;
 
     void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                     BOARD_COMMIT* aCommit ) override
-    {
-        for( BOARD_ITEM* item : m_removedItems )
-            aFrame->GetCanvas()->GetView()->Hide( item, false );
+                     BOARD_COMMIT* aCommit ) override;
 
-        m_removedItems.clear();
+    void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                 BOARD_COMMIT* aCommit ) override;
 
-        aTool->Router()->StopRouting();
-
-        if( aCommit )
-            aCommit->Revert();
-    }
-
-    bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override
-    {
-        VECTOR2I centerlineOffset;
-
-        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
-            centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
-
-        points->AddPoint( m_origin + centerlineOffset );
-        points->AddPoint( m_end + centerlineOffset );
-
-        SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
-                                                                : SEG( m_origin, m_end );
-
-        base.A += centerlineOffset;
-        base.B += centerlineOffset;
-
-        int offset = m_maxAmplitude;
-
-        if( m_initialSide == -1 )
-            offset *= -1;
-
-        VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
-
-        points->AddPoint( base.A + widthHandleOffset );
-        points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
-
-        VECTOR2I spacingHandleOffset =
-                widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
-
-        points->AddPoint( base.A + spacingHandleOffset );
-        points->Point( 3 ).SetGridConstraint( IGNORE_GRID );
-
-        return true;
-    }
+    bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override;
 
     bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                               BOARD_COMMIT*                aCommit ) override
-    {
-        VECTOR2I centerlineOffset;
+                               BOARD_COMMIT* aCommit ) override;
 
-        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
-            centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
-
-        SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
-                                                                : SEG( m_origin, m_end );
-
-        base.A += centerlineOffset;
-        base.B += centerlineOffset;
-
-        m_origin = aEditPoints->Point( 0 ).GetPosition() - centerlineOffset;
-        m_end = aEditPoints->Point( 1 ).GetPosition() - centerlineOffset;
-
-        if( aEditPoints->Point( 2 ).IsActive() )
-        {
-            VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
-
-            int value = base.LineDistance( wHandle );
-            SetMaxAmplitude( KiROUND( value / pcbIUScale.mmToIU( 0.1 ) ) * pcbIUScale.mmToIU( 0.1 ) );
-
-            int side = base.Side( wHandle );
-
-            if( side < 0 )
-                m_initialSide = PNS::MEANDER_SIDE_LEFT;
-            else
-                m_initialSide = PNS::MEANDER_SIDE_RIGHT;
-        }
-
-        if( aEditPoints->Point( 3 ).IsActive() )
-        {
-            VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
-            VECTOR2I sHandle = aEditPoints->Point( 3 ).GetPosition();
-
-            int value = KiROUND( SEG( base.A, wHandle ).LineDistance( sHandle ) / 1.5 );
-
-            SetSpacing( KiROUND( value / pcbIUScale.mmToIU( 0.01 ) ) * pcbIUScale.mmToIU( 0.01 ) );
-        }
-
-        return true;
-    }
-
-    bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) override
-    {
-        VECTOR2I centerlineOffset;
-
-        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
-            centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
-
-        SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
-                                                                : SEG( m_origin, m_end );
-
-        base.A += centerlineOffset;
-        base.B += centerlineOffset;
-
-        int offset = m_maxAmplitude;
-
-        if( m_initialSide == -1 )
-            offset *= -1;
-
-        VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
-
-        aEditPoints->Point( 0 ).SetPosition( m_origin + centerlineOffset );
-        aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffset );
-
-        aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
-
-        VECTOR2I spacingHandleOffset =
-                widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
-
-        aEditPoints->Point( 3 ).SetPosition( base.A + spacingHandleOffset );
-
-        return true;
-    }
-
-    SHAPE_LINE_CHAIN GetRectShape() const
-    {
-        SHAPE_LINE_CHAIN chain;
-
-        if( m_baseLine )
-        {
-            SHAPE_LINE_CHAIN cl = *m_baseLine;
-
-            if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
-            {
-                for( int i = 0; i < cl.PointCount() && i < m_baseLineCoupled->PointCount(); ++i )
-                    cl.SetPoint( i, ( cl.CPoint( i ) + m_baseLineCoupled->CPoint( i ) ) / 2 );
-            }
-
-            bool singleSided = m_tuningMode != DIFF_PAIR && m_singleSide;
-
-            if( singleSided )
-            {
-                SHAPE_LINE_CHAIN left, right;
-
-                if( cl.OffsetLine( m_maxAmplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
-                                   left, right, true ) )
-                {
-                    chain.Append( cl.CPoint( 0 ) );
-                    chain.Append( m_initialSide >= 0 ? right : left );
-                    chain.Append( cl.CPoint( -1 ) );
-
-                    return chain;
-                }
-                else
-                {
-                    singleSided = false;
-                }
-            }
-
-            if( !singleSided )
-            {
-                SHAPE_POLY_SET poly;
-
-                poly.OffsetLineChain( cl, m_maxAmplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                      ARC_LOW_DEF, false );
-
-                if( poly.OutlineCount() > 0 )
-                {
-                    chain = poly.Outline( 0 );
-                }
-            }
-        }
-
-        return chain;
-    }
+    bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) override;
 
     void Move( const VECTOR2I& aMoveVector ) override
     {
@@ -1080,7 +114,7 @@ public:
         m_end += aMoveVector;
     }
 
-    const BOX2I GetBoundingBox() const override { return GetRectShape().BBox(); }
+    const BOX2I GetBoundingBox() const override { return getRectShape().BBox(); }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
@@ -1090,7 +124,7 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
-        return GetRectShape().Collide( aPosition, aAccuracy );
+        return getRectShape().Collide( aPosition, aAccuracy );
     }
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const override
@@ -1102,52 +136,7 @@ public:
 
     EDA_ITEM* Clone() const override { return new PCB_GENERATOR_MEANDERS( *this ); }
 
-    void swapData( BOARD_ITEM* aImage ) override
-    {
-        wxASSERT( aImage->Type() == PCB_GENERATOR_T );
-
-        std::swap( *this, *static_cast<PCB_GENERATOR_MEANDERS*>( aImage ) );
-    }
-
-    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final
-    {
-        if( !IsSelected() )
-            return;
-
-        KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
-        int size = KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) * 0.8 );
-
-        if( m_baseLine )
-        {
-            for( int i = 0; i < m_baseLine->SegmentCount(); i++ )
-            {
-                SEG seg = m_baseLine->CSegment( i );
-                ctx.DrawLine( seg.A, seg.B, false );
-            }
-        }
-        else
-        {
-            ctx.DrawLine( m_origin, m_end, false );
-        }
-
-        if( m_baseLineCoupled )
-        {
-            for( int i = 0; i < m_baseLineCoupled->SegmentCount(); i++ )
-            {
-                SEG seg = m_baseLineCoupled->CSegment( i );
-                ctx.DrawLine( seg.A, seg.B, false );
-            }
-        }
-
-        SHAPE_LINE_CHAIN chain = GetRectShape();
-
-        for( int i = 0; i < chain.SegmentCount(); i++ )
-        {
-            SEG seg = chain.Segment( i );
-            ctx.DrawLineDashed( seg.A, seg.B, size, size / 2, false );
-        }
-    }
-
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
     const VECTOR2I& GetEnd() const { return m_end; }
     void            SetEnd( const VECTOR2I& aValue ) { m_end = aValue; }
@@ -1199,149 +188,41 @@ public:
         return data;
     }
 
-    const STRING_ANY_MAP GetProperties() const override
-    {
-        STRING_ANY_MAP props = PCB_GENERATOR::GetProperties();
+    const STRING_ANY_MAP GetProperties() const override;
+    void SetProperties( const STRING_ANY_MAP& aProps ) override;
 
-        props.set( "tuning_mode", TuningToString( m_tuningMode ) );
-        props.set( "initial_side", SideToString( m_initialSide ) );
-        props.set( "last_status", StatusToString( m_tuningStatus ) );
-
-        props.set( "end", m_end );
-        props.set( "corner_radius_percent", m_cornerRadiusPercentage );
-        props.set( "single_sided", m_singleSide );
-        props.set( "rounded", m_rounded );
-
-        props.set_iu( "max_amplitude", m_maxAmplitude );
-        props.set_iu( "min_spacing", m_spacing );
-        props.set_iu( "target_length", m_targetLength );
-        props.set_iu( "target_skew", m_targetSkew );
-
-        props.set( "last_netname", m_lastNetName );
-        props.set( "last_tuning", m_tuningInfo );
-        props.set( "override_custom_rules", m_overrideCustomRules );
-
-        if( m_baseLine )
-            props.set( "base_line", wxAny( *m_baseLine ) );
-
-        if( m_baseLineCoupled )
-            props.set( "base_line_coupled", wxAny( *m_baseLineCoupled ) );
-
-        return props;
-    }
-
-    void SetProperties( const STRING_ANY_MAP& aProps ) override
-    {
-        PCB_GENERATOR::SetProperties( aProps );
-
-        wxString tuningMode;
-        aProps.get_to( "tuning_mode", tuningMode );
-        m_tuningMode = TuningFromString( tuningMode.utf8_string() );
-
-        wxString side;
-        aProps.get_to( "initial_side", side );
-        m_initialSide = SideFromString( side.utf8_string() );
-
-        wxString status;
-        aProps.get_to( "last_status", status );
-        m_tuningStatus = StatusFromString( status.utf8_string() );
-
-        aProps.get_to( "end", m_end );
-        aProps.get_to( "corner_radius_percent", m_cornerRadiusPercentage );
-        aProps.get_to( "single_sided", m_singleSide );
-        aProps.get_to( "side", m_initialSide );
-        aProps.get_to( "rounded", m_rounded );
-
-        aProps.get_to_iu( "max_amplitude", m_maxAmplitude );
-        aProps.get_to_iu( "min_spacing", m_spacing );
-        aProps.get_to_iu( "target_length", m_targetLength );
-        aProps.get_to_iu( "target_skew", m_targetSkew );
-        aProps.get_to( "override_custom_rules", m_overrideCustomRules );
-
-        aProps.get_to( "last_netname", m_lastNetName );
-        aProps.get_to( "last_tuning", m_tuningInfo );
-
-        if( auto baseLine = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line" ) )
-            m_baseLine = *baseLine;
-
-        if( auto baseLineCoupled = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line_coupled" ) )
-            m_baseLineCoupled = *baseLineCoupled;
-    }
-
-    void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override
-    {
-        PNS::MEANDER_SETTINGS settings = ToMeanderSettings();
-        DRC_CONSTRAINT        constraint;
-
-        if( !m_items.empty() )
-        {
-            BOARD_ITEM*                  startItem = *m_items.begin();
-            std::shared_ptr<DRC_ENGINE>& drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
-
-            constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
-
-            if( !constraint.IsNull() && !settings.m_overrideCustomRules )
-                settings.m_targetLength = constraint.GetValue().Opt();
-        }
-
-        DIALOG_MEANDER_PROPERTIES dlg( aEditFrame, settings, ToPNSMode(), constraint );
-
-        if( dlg.ShowModal() == wxID_OK )
-        {
-            BOARD_COMMIT commit( aEditFrame );
-            commit.Modify( this );
-
-            FromMeanderSettings( settings );
-
-            commit.Push( _( "Edit Meander Properties" ) );
-        }
-
-        aEditFrame->GetToolManager()->PostAction<PCB_GENERATOR*>( PCB_ACTIONS::regenerateItem,
-                                                                  this );
-    }
+    void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
 
     void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                       STATUS_TEXT_POPUP* aPopup ) override
+                       STATUS_TEXT_POPUP* aPopup ) override;
+
+protected:
+    void swapData( BOARD_ITEM* aImage ) override
     {
-        auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() );
+        wxASSERT( aImage->Type() == PCB_GENERATOR_T );
 
-        if( !placer )
-            return;
-
-        aPopup->SetText( placer->TuningInfo( aFrame->GetUserUnits() ) );
-
-        // Determine the background color first and choose a contrasting value
-        COLOR4D bg( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-        double h, s, l;
-        bg.ToHSL( h, s, l );
-
-        switch( placer->TuningStatus() )
-        {
-        case PNS::MEANDER_PLACER_BASE::TUNED:
-            if( l < 0.5 )
-                aPopup->SetTextColor( wxColor( 127, 200, 127 ) );
-            else
-                aPopup->SetTextColor( wxColor( 0, 92, 0 ) );
-
-            break;
-
-        case PNS::MEANDER_PLACER_BASE::TOO_SHORT:
-            if( l < 0.5 )
-                aPopup->SetTextColor( wxColor( 242, 100, 126 ) );
-            else
-                aPopup->SetTextColor( wxColor( 122, 0, 0 ) );
-
-            break;
-
-        case PNS::MEANDER_PLACER_BASE::TOO_LONG:
-            if( l < 0.5 )
-                aPopup->SetTextColor( wxColor( 66, 184, 235 ) );
-            else
-                aPopup->SetTextColor( wxColor( 19, 19, 195 ) );
-
-            break;
-        }
+        std::swap( *this, *static_cast<PCB_GENERATOR_MEANDERS*>( aImage ) );
     }
+
+    PNS::MEANDER_SETTINGS toMeanderSettings();
+    void                  fromMeanderSettings( const PNS::MEANDER_SETTINGS& aSettings );
+
+    PNS::ROUTER_MODE toPNSMode();
+
+    bool baselineValid();
+
+    bool initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard, VECTOR2I& aStart,
+                       VECTOR2I& aEnd, NETINFO_ITEM* aNet,
+                       std::optional<SHAPE_LINE_CHAIN>& aBaseLine );
+
+    bool initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard );
+
+    void removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& aBaseLine );
+
+    bool resetToBaseline( PNS::ROUTER* aRouter, int aLayer, PCB_BASE_EDIT_FRAME* aFrame,
+                          SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary );
+
+    SHAPE_LINE_CHAIN getRectShape() const;
 
 protected:
     VECTOR2I           m_end;
@@ -1373,6 +254,1212 @@ protected:
     std::set<BOARD_ITEM*> m_removedItems;
 };
 
+
+static LENGTH_TUNING_MODE tuningFromString( const std::string& aStr )
+{
+    if( aStr == "single" )
+        return LENGTH_TUNING_MODE::SINGLE;
+    else if( aStr == "diff_pair" )
+        return LENGTH_TUNING_MODE::DIFF_PAIR;
+    else if( aStr == "diff_pair_skew" )
+        return LENGTH_TUNING_MODE::DIFF_PAIR_SKEW;
+    else
+    {
+        wxFAIL_MSG( wxS( "Unknown length tuning token" ) );
+        return LENGTH_TUNING_MODE::SINGLE;
+    }
+}
+
+
+static std::string tuningToString( const LENGTH_TUNING_MODE aTuning )
+{
+    switch( aTuning )
+    {
+    case LENGTH_TUNING_MODE::SINGLE:         return "single";
+    case LENGTH_TUNING_MODE::DIFF_PAIR:      return "diff_pair";
+    case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return "diff_pair_skew";
+    default:            wxFAIL;              return "";
+    }
+}
+
+
+static LENGTH_TUNING_MODE fromPNSMode( PNS::ROUTER_MODE aRouterMode )
+{
+    switch( aRouterMode )
+    {
+    case PNS::PNS_MODE_TUNE_SINGLE:         return LENGTH_TUNING_MODE::SINGLE;
+    case PNS::PNS_MODE_TUNE_DIFF_PAIR:      return LENGTH_TUNING_MODE::DIFF_PAIR;
+    case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW: return LENGTH_TUNING_MODE::DIFF_PAIR_SKEW;
+    default:                                return LENGTH_TUNING_MODE::SINGLE;
+    }
+}
+
+
+static PNS::MEANDER_SIDE sideFromString( const std::string& aStr )
+{
+    if( aStr == "default" )
+        return PNS::MEANDER_SIDE_DEFAULT;
+    else if( aStr == "left" )
+        return PNS::MEANDER_SIDE_LEFT;
+    else if( aStr == "right" )
+        return PNS::MEANDER_SIDE_RIGHT;
+    else
+    {
+        wxFAIL_MSG( wxS( "Unknown meander side token" ) );
+        return PNS::MEANDER_SIDE_DEFAULT;
+    }
+}
+
+
+static std::string statusToString( const PNS::MEANDER_PLACER_BASE::TUNING_STATUS aStatus )
+{
+    switch( aStatus )
+    {
+    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  return "too_long";
+    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: return "too_short";
+    case PNS::MEANDER_PLACER_BASE::TUNED:     return "tuned";
+    default:           wxFAIL;                return "";
+    }
+}
+
+
+static PNS::MEANDER_PLACER_BASE::TUNING_STATUS statusFromString( const std::string& aStr )
+{
+    if( aStr == "too_long" )
+        return PNS::MEANDER_PLACER_BASE::TOO_LONG;
+    else if( aStr == "too_short" )
+        return PNS::MEANDER_PLACER_BASE::TOO_SHORT;
+    else if( aStr == "tuned" )
+        return PNS::MEANDER_PLACER_BASE::TUNED;
+    else
+    {
+        wxFAIL_MSG( wxS( "Unknown tuning status token" ) );
+        return PNS::MEANDER_PLACER_BASE::TUNED;
+    }
+}
+
+
+static std::string sideToString( const PNS::MEANDER_SIDE aValue )
+{
+    switch( aValue )
+    {
+    case PNS::MEANDER_SIDE_DEFAULT: return "default";
+    case PNS::MEANDER_SIDE_LEFT:    return "left";
+    case PNS::MEANDER_SIDE_RIGHT:   return "right";
+    default:        wxFAIL;         return "";
+    }
+}
+
+
+static NETINFO_ITEM* getCoupledNet( PNS::ROUTER* aRouter, NETINFO_ITEM* aNet )
+{
+    PNS::RULE_RESOLVER* resolver = aRouter->GetRuleResolver();
+
+    return static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( aNet ) );
+}
+
+
+PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
+                                                LENGTH_TUNING_MODE aMode ) :
+        PCB_GENERATOR( aParent, aLayer ),
+        m_singleSide( false ),
+        m_rounded( true ),
+        m_tuningMode( aMode ),
+        m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED )
+{
+    m_generatorType = GENERATOR_TYPE;
+    m_name = DISPLAY_NAME;
+
+    m_minAmplitude = pcbIUScale.mmToIU( 0.1 );
+    m_maxAmplitude = pcbIUScale.mmToIU( 2.0 );
+    m_spacing = pcbIUScale.mmToIU( 0.6 );
+    m_targetLength = pcbIUScale.mmToIU( 100 );
+    m_targetSkew = pcbIUScale.mmToIU( 0 );
+    m_end = VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 );
+    m_cornerRadiusPercentage = 100;
+    m_initialSide = PNS::MEANDER_SIDE_DEFAULT;
+}
+
+
+static NETINFO_ITEM* snapToNearestTrackPoint( VECTOR2I& aP, BOARD* aBoard, NETINFO_ITEM* aNet )
+{
+    SEG::ecoord   minDistSq = VECTOR2I::ECOORD_MAX;
+    VECTOR2I      closestPt = aP;
+    NETINFO_ITEM* closestNet = nullptr;
+
+    for( PCB_TRACK *track : aBoard->Tracks() )
+    {
+        if( aNet && track->GetNet() != aNet )
+            continue;
+
+        SEG seg( track->GetStart(), track->GetEnd() );
+
+        VECTOR2I    nearest = seg.NearestPoint( aP );
+        SEG::ecoord distSq = ( nearest - aP ).SquaredEuclideanNorm();
+
+        if( distSq < minDistSq )
+        {
+            minDistSq = distSq;
+            closestPt = nearest;
+            closestNet = track->GetNet();
+        }
+    }
+
+    if( minDistSq != VECTOR2I::ECOORD_MAX )
+    {
+        aP = closestPt;
+        return closestNet;
+    }
+
+    return nullptr;
+}
+
+
+bool PCB_GENERATOR_MEANDERS::baselineValid()
+{
+    if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
+    {
+        return( m_baseLine && m_baseLine->PointCount() > 1
+                    && m_baseLineCoupled && m_baseLineCoupled->PointCount() > 1 );
+    }
+    else
+    {
+        return( m_baseLine && m_baseLine->PointCount() > 1 );
+    }
+}
+
+
+PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool,
+                                                           PCB_BASE_EDIT_FRAME* aFrame,
+                                                           BOARD_CONNECTED_ITEM* aStartItem,
+                                                           LENGTH_TUNING_MODE aMode )
+{
+    BOARD*                       board = aStartItem->GetBoard();
+    std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
+    DRC_CONSTRAINT               constraint;
+    PCB_LAYER_ID                 layer = aStartItem->GetLayer();
+
+    if( aMode == SINGLE && getCoupledNet( aTool->Router(), aStartItem->GetNet() ) )
+        aMode = DIFF_PAIR;
+
+    PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, aMode );
+
+    constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
+
+    if( aMode == DIFF_PAIR_SKEW )
+    {
+        if( constraint.IsNull() )
+        {
+            WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Skew" ), _( "Target skew:" ), 0 );
+
+            if( dlg.ShowModal() != wxID_OK )
+                return nullptr;
+
+            meander->m_targetSkew = dlg.GetValue();
+            meander->m_overrideCustomRules = true;
+        }
+        else
+        {
+            meander->m_targetSkew = constraint.GetValue().Opt();
+            meander->m_overrideCustomRules = false;
+        }
+    }
+    else
+    {
+        if( constraint.IsNull() )
+        {
+            WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Length" ), _( "Target length:" ),
+                                      100 * PCB_IU_PER_MM );
+
+            if( dlg.ShowModal() != wxID_OK )
+                return nullptr;
+
+            meander->m_targetLength = dlg.GetValue();
+            meander->m_overrideCustomRules = true;
+        }
+        else
+        {
+            meander->m_targetLength = constraint.GetValue().Opt();
+            meander->m_overrideCustomRules = false;
+        }
+    }
+
+    meander->SetFlags( IS_NEW );
+
+    return meander;
+}
+
+void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                        PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+{
+    m_removedItems.clear();
+
+    if( aCommit )
+    {
+        if( IsNew() )
+            aCommit->Add( this );
+        else
+            aCommit->Modify( this );
+    }
+
+    int          layer = GetLayer();
+    PNS::ROUTER* router = aTool->Router();
+
+    aTool->ClearRouterCommit();
+    router->SyncWorld();
+
+    if( !baselineValid() )
+        initBaseLines( router, layer, aBoard );
+
+    if( baselineValid() && !m_overrideCustomRules )
+    {
+        PNS::CONSTRAINT     constraint;
+        PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
+
+        NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
+        PNS::SEGMENT  pnsItem( m_baseLine->CSegment( 0 ), net );
+
+        if( m_tuningMode == SINGLE )
+        {
+            if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
+                                           &pnsItem, nullptr, layer, &constraint ) )
+            {
+                m_targetLength = constraint.m_Value.Opt();
+                aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+            }
+        }
+        else
+        {
+            NETINFO_ITEM* coupledNet = static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( net ) );
+            PNS::SEGMENT  coupledItem( m_baseLineCoupled->CSegment( 0 ), coupledNet );
+
+            if( m_tuningMode == DIFF_PAIR )
+            {
+                if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
+                                               &pnsItem, &coupledItem, layer, &constraint ) )
+                {
+                    m_targetLength = constraint.m_Value.Opt();
+                    aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                }
+            }
+            else
+            {
+                if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW,
+                                               &pnsItem, &coupledItem, layer, &constraint ) )
+                {
+                    m_targetSkew = constraint.m_Value.Opt();
+                    aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                }
+            }
+        }
+    }
+}
+
+
+static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere, int aLayer,
+                                      VECTOR2I& aPointOut )
+{
+    static const int  candidateCount = 2;
+    PNS::LINKED_ITEM* prioritized[candidateCount];
+    SEG::ecoord       dist[candidateCount];
+    VECTOR2I          point[candidateCount];
+
+    for( int i = 0; i < candidateCount; i++ )
+    {
+        prioritized[i] = nullptr;
+        dist[i] = VECTOR2I::ECOORD_MAX;
+    }
+
+    auto haveCandidates =
+            [&]()
+            {
+                for( PNS::ITEM* item : prioritized )
+                {
+                    if( item )
+                        return true;
+                }
+
+                return false;
+            };
+
+    for( bool useClearance : { false, true } )
+    {
+        PNS::ITEM_SET candidates = aRouter->QueryHoverItems( aWhere, useClearance );
+
+        for( PNS::ITEM* item : candidates.Items() )
+        {
+            if( !item->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
+                continue;
+
+            if( !item->IsRoutable() )
+                continue;
+
+            if( !item->Layers().Overlaps( aLayer ) )
+                continue;
+
+            PNS::LINKED_ITEM* linked = static_cast<PNS::LINKED_ITEM*>( item );
+
+            if( item->Kind() & PNS::ITEM::ARC_T )
+            {
+                SEG::ecoord d0 = ( item->Anchor( 0 ) - aWhere ).SquaredEuclideanNorm();
+                SEG::ecoord d1 = ( item->Anchor( 1 ) - aWhere ).SquaredEuclideanNorm();
+
+                if( d0 <= dist[1] )
+                {
+                    prioritized[1] = linked;
+                    dist[1] = d0;
+                    point[1] = item->Anchor( 0 );
+                }
+
+                if( d1 <= dist[1] )
+                {
+                    prioritized[1] = linked;
+                    dist[1] = d1;
+                    point[1] = item->Anchor( 1 );
+                }
+            }
+            else if( item->Kind() & PNS::ITEM::SEGMENT_T )
+            {
+                PNS::SEGMENT* segm = static_cast<PNS::SEGMENT*>( item );
+
+                VECTOR2I    nearest = segm->CLine().NearestPoint( aWhere, false );
+                SEG::ecoord dd = ( aWhere - nearest ).SquaredEuclideanNorm();
+
+                if( dd <= dist[1] )
+                {
+                    prioritized[1] = segm;
+                    dist[1] = dd;
+                    point[1] = nearest;
+                }
+            }
+        }
+
+        if( haveCandidates() )
+            break;
+    }
+
+    PNS::LINKED_ITEM* rv = nullptr;
+
+    for( int i = 0; i < candidateCount; i++ )
+    {
+        PNS::LINKED_ITEM* item = prioritized[i];
+
+        if( item && ( aLayer < 0 || item->Layers().Overlaps( aLayer ) ) )
+        {
+            rv = item;
+            aPointOut = point[i];
+            break;
+        }
+    }
+
+    return rv;
+}
+
+
+static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                            PNS::ROUTER* router, int layer, VECTOR2I& aStartOut,
+                                            VECTOR2I& aEndOut )
+{
+    PNS::NODE* world = router->GetWorld();
+
+    PNS::LINKED_ITEM* startItem = pickSegment( router, aStart, layer, aStartOut );
+    PNS::LINKED_ITEM* endItem = pickSegment( router, aEnd, layer, aEndOut );
+
+    wxASSERT( startItem );
+    wxASSERT( endItem );
+
+    if( !startItem || !endItem )
+        return std::nullopt;
+
+    PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
+    SHAPE_LINE_CHAIN oldChain = line.CLine();
+
+    wxCHECK( line.ContainsLink( endItem ), std::nullopt );
+
+    wxASSERT( oldChain.PointOnEdge( aStartOut, 1 ) );
+    wxASSERT( oldChain.PointOnEdge( aEndOut, 1 ) );
+
+    return line;
+}
+
+
+bool PCB_GENERATOR_MEANDERS::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard,
+                                           VECTOR2I& aStart, VECTOR2I& aEnd, NETINFO_ITEM* aNet,
+                                           std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
+{
+    PNS::NODE* world = aRouter->GetWorld();
+
+    snapToNearestTrackPoint( aStart, aBoard, aNet );
+    snapToNearestTrackPoint( aEnd, aBoard, aNet );
+
+    VECTOR2I startSnapPoint, endSnapPoint;
+
+    PNS::LINKED_ITEM* startItem = pickSegment( aRouter, aStart, aLayer, startSnapPoint );
+    PNS::LINKED_ITEM* endItem = pickSegment( aRouter, aEnd, aLayer, endSnapPoint );
+
+    wxASSERT( startItem );
+    wxASSERT( endItem );
+
+    if( !startItem || !endItem || startSnapPoint == endSnapPoint )
+        return false;
+
+    PNS::LINE               line = world->AssembleLine( startItem, nullptr, false, true );
+    const SHAPE_LINE_CHAIN& chain = line.CLine();
+
+    wxASSERT( line.ContainsLink( endItem ) );
+
+    wxASSERT( chain.PointOnEdge( startSnapPoint, 1 ) );
+    wxASSERT( chain.PointOnEdge( endSnapPoint, 1 ) );
+
+    SHAPE_LINE_CHAIN pre;
+    SHAPE_LINE_CHAIN mid;
+    SHAPE_LINE_CHAIN post;
+
+    chain.Split( startSnapPoint, endSnapPoint, pre, mid, post );
+
+    aBaseLine = mid;
+
+    return true;
+}
+
+
+bool PCB_GENERATOR_MEANDERS::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard )
+{
+    m_baseLineCoupled.reset();
+
+    NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
+
+    if( !initBaseLine( aRouter, aLayer, aBoard, m_origin, m_end, net, m_baseLine ) )
+        return false;
+
+    // Generate both baselines even if we're skewing.  We need the coupled baseline to run the
+    // DRC rules against.
+    if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
+    {
+        if( NETINFO_ITEM* coupledNet = getCoupledNet( aRouter, net ) )
+        {
+            VECTOR2I coupledStart = m_origin;
+            VECTOR2I coupledEnd = m_end;
+
+            return initBaseLine( aRouter, aLayer, aBoard, coupledStart, coupledEnd, coupledNet,
+                                 m_baseLineCoupled );
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
+void PCB_GENERATOR_MEANDERS::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
+                                               SHAPE_LINE_CHAIN& aBaseLine )
+{
+    VECTOR2I startSnapPoint, endSnapPoint;
+
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
+                                                   aRouter, aLayer, startSnapPoint, endSnapPoint );
+
+    wxCHECK( pnsLine, /* void */ );
+
+    SHAPE_LINE_CHAIN pre;
+    SHAPE_LINE_CHAIN mid;
+    SHAPE_LINE_CHAIN post;
+    pnsLine->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
+
+    for( PNS::LINKED_ITEM* li : pnsLine->Links() )
+        aRouter->GetInterface()->RemoveItem( li );
+
+    aRouter->GetWorld()->Remove( *pnsLine );
+
+    SHAPE_LINE_CHAIN straightChain;
+    straightChain.Append( pre );
+    straightChain.Append( aBaseLine );
+    straightChain.Append( post );
+    straightChain.Simplify();
+
+    PNS::LINE straightLine( *pnsLine, straightChain );
+
+    aRouter->GetWorld()->Add( straightLine, false );
+
+    for( PNS::LINKED_ITEM* li : straightLine.Links() )
+        aRouter->GetInterface()->AddItem( li );
+}
+
+
+void PCB_GENERATOR_MEANDERS::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+{
+    aTool->Router()->SyncWorld();
+
+    PNS::ROUTER* router = aTool->Router();
+    int          layer = GetLayer();
+    int          undoFlags = 0;
+
+    // Ungroup first so that undo works
+    if( !GetItems().empty() )
+    {
+        PCB_GENERATOR*    group = this;
+        PICKED_ITEMS_LIST undoList;
+
+        for( BOARD_ITEM* member : group->GetItems() )
+            undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
+
+        group->RemoveAll();
+
+        aFrame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
+        undoFlags |= APPEND_UNDO;
+    }
+
+    aCommit->Remove( this );
+
+    aTool->ClearRouterCommit();
+
+    if( baselineValid() )
+    {
+        removeToBaseline( router, layer, *m_baseLine );
+
+        if( m_tuningMode == DIFF_PAIR )
+            removeToBaseline( router, layer, *m_baseLineCoupled );
+    }
+
+    std::set<BOARD_ITEM*> clearRouterRemovedItems = aTool->GetRouterCommitRemovedItems();
+    std::set<BOARD_ITEM*> clearRouterAddedItems = aTool->GetRouterCommitAddedItems();
+
+    for( BOARD_ITEM* item : clearRouterRemovedItems )
+    {
+        item->ClearSelected();
+        aCommit->Remove( item );
+    }
+
+    for( BOARD_ITEM* item : clearRouterAddedItems )
+    {
+        aCommit->Add( item );
+    }
+
+    aCommit->Push( "Remove Meander", undoFlags );
+}
+
+
+PNS::MEANDER_SETTINGS PCB_GENERATOR_MEANDERS::toMeanderSettings()
+{
+    PNS::MEANDER_SETTINGS settings;
+
+    settings.m_cornerStyle = m_rounded ? PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND
+                                       : PNS::MEANDER_STYLE::MEANDER_STYLE_CHAMFER;
+
+    settings.m_minAmplitude = m_minAmplitude;
+    settings.m_maxAmplitude = m_maxAmplitude;
+    settings.m_spacing = m_spacing;
+    settings.m_targetLength = m_targetLength;
+    settings.m_targetSkew = m_targetSkew;
+    settings.m_overrideCustomRules = m_overrideCustomRules;
+    settings.m_singleSided = m_singleSide;
+    settings.m_segmentSide = m_initialSide;
+    settings.m_cornerRadiusPercentage = m_cornerRadiusPercentage;
+
+    return settings;
+}
+
+
+void PCB_GENERATOR_MEANDERS::fromMeanderSettings( const PNS::MEANDER_SETTINGS& aSettings )
+{
+    m_rounded = aSettings.m_cornerStyle == PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND;
+    m_minAmplitude = aSettings.m_minAmplitude;
+    m_maxAmplitude = aSettings.m_maxAmplitude;
+    m_spacing = aSettings.m_spacing;
+    m_targetLength = aSettings.m_targetLength;
+    m_targetSkew = aSettings.m_targetSkew;
+    m_overrideCustomRules = aSettings.m_overrideCustomRules;
+    m_singleSide = aSettings.m_singleSided;
+    m_initialSide = aSettings.m_segmentSide;
+    m_cornerRadiusPercentage = aSettings.m_cornerRadiusPercentage;
+}
+
+
+PNS::ROUTER_MODE PCB_GENERATOR_MEANDERS::toPNSMode()
+{
+    switch( m_tuningMode )
+    {
+    case LENGTH_TUNING_MODE::SINGLE:         return PNS::PNS_MODE_TUNE_SINGLE;
+    case LENGTH_TUNING_MODE::DIFF_PAIR:      return PNS::PNS_MODE_TUNE_DIFF_PAIR;
+    case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW;
+    default:                                 return PNS::PNS_MODE_TUNE_SINGLE;
+    }
+}
+
+
+bool PCB_GENERATOR_MEANDERS::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
+                                              PCB_BASE_EDIT_FRAME* aFrame,
+                                              SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
+{
+    PNS::NODE* world = aRouter->GetWorld();
+    VECTOR2I   startSnapPoint, endSnapPoint;
+
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ),
+                                                   aBaseLine.CPoint( -1 ), aRouter, aLayer,
+                                                   startSnapPoint, endSnapPoint );
+
+    wxCHECK( pnsLine, false );
+
+    SHAPE_LINE_CHAIN straightChain;
+    {
+        SHAPE_LINE_CHAIN pre, mid, post;
+        pnsLine->CLine().Split( startSnapPoint, endSnapPoint, pre, mid, post );
+
+        straightChain.Append( pre );
+        straightChain.Append( aBaseLine );
+        straightChain.Append( post );
+        straightChain.Simplify();
+    }
+
+    for( PNS::LINKED_ITEM* pnsItem : pnsLine->Links() )
+    {
+        if( BOARD_ITEM* item = pnsItem->Parent() )
+        {
+            aFrame->GetCanvas()->GetView()->Hide( item, true, true );
+            m_removedItems.insert( item );
+        }
+    }
+
+    world->Remove( *pnsLine );
+
+    PNS::LINE straightLine( *pnsLine, straightChain );
+
+    world->Add( straightLine, false );
+
+    if( aPrimary )
+    {
+        m_origin = straightChain.NearestPoint( m_origin );
+        m_end = straightChain.NearestPoint( m_end );
+
+        // Don't allow points too close
+        if( ( m_end - m_origin ).EuclideanNorm() < pcbIUScale.mmToIU( 0.1 ) )
+        {
+            m_origin = startSnapPoint;
+            m_end = endSnapPoint;
+        }
+
+        {
+            SHAPE_LINE_CHAIN pre, mid, post;
+            straightChain.Split( m_origin, m_end, pre, mid, post );
+
+            m_baseLine = mid;
+        }
+    }
+    else
+    {
+        VECTOR2I start = straightChain.NearestPoint( m_origin );
+        VECTOR2I end = straightChain.NearestPoint( m_end );
+
+        {
+            SHAPE_LINE_CHAIN pre, mid, post;
+            straightChain.Split( start, end, pre, mid, post );
+
+            m_baseLineCoupled = mid;
+        }
+    }
+
+    return true;
+}
+
+
+bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+{
+    PNS::ROUTER*     router = aTool->Router();
+    PNS_KICAD_IFACE* iface = aTool->GetInterface();
+    int              layer = GetLayer();
+
+    iface->SetStartLayer( layer );
+
+    if( router->RoutingInProgress() )
+    {
+        router->StopRouting();
+    }
+
+    if( !baselineValid() )
+    {
+        initBaseLines( router, layer, aBoard );
+    }
+    else
+    {
+        if( resetToBaseline( router, layer, aFrame, *m_baseLine, true ) )
+        {
+            m_origin = m_baseLine->CPoint( 0 );
+            m_end = m_baseLine->CPoint( -1 );
+        }
+        else
+        {
+            initBaseLines( router, layer, aBoard );
+            return false;
+        }
+
+        if( m_tuningMode == DIFF_PAIR
+                && !resetToBaseline( router, layer, aFrame, *m_baseLineCoupled, false ) )
+        {
+            initBaseLines( router, layer, aBoard );
+            return false;
+        }
+    }
+
+    // Snap points
+    VECTOR2I startSnapPoint, endSnapPoint;
+
+    PNS::LINKED_ITEM* startItem = pickSegment( router, m_origin, layer, startSnapPoint );
+    PNS::LINKED_ITEM* endItem = pickSegment( router, m_end, layer, endSnapPoint );
+
+    wxASSERT( startItem );
+    wxASSERT( endItem );
+
+    if( !startItem || !endItem )
+        return false;
+
+    router->SetMode( toPNSMode() );
+
+    if( !router->StartRouting( startSnapPoint, startItem, layer ) )
+        return false;
+
+    auto placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
+
+    PNS::MEANDER_SETTINGS settings = toMeanderSettings();
+
+    placer->UpdateSettings( settings );
+    router->Move( m_end, nullptr );
+
+    m_lastNetName = iface->GetNetName( startItem->Net() );
+    m_tuningInfo = placer->TuningInfo( aFrame->GetUserUnits() );
+    m_tuningStatus = placer->TuningStatus();
+
+    return true;
+}
+
+
+void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                       PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit,
+                                       const wxString& aCommitMsg, int aCommitFlags )
+{
+    PNS::ROUTER* router = aTool->Router();
+
+    if( router->RoutingInProgress() )
+    {
+        router->FixRoute( m_end, nullptr, true );
+        router->StopRouting();
+
+        std::set<BOARD_ITEM*> routerRemovedItems = aTool->GetRouterCommitRemovedItems();
+        std::set<BOARD_ITEM*> routerAddedItems = aTool->GetRouterCommitAddedItems();
+
+        for( BOARD_ITEM* item : m_removedItems )
+        {
+            aFrame->GetCanvas()->GetView()->Hide( item, false );
+            aCommit->Remove( item );
+        }
+
+        m_removedItems.clear();
+
+        for( BOARD_ITEM* item : routerRemovedItems )
+        {
+            aCommit->Remove( item );
+        }
+
+        for( BOARD_ITEM* item : routerAddedItems )
+        {
+            item->SetSelected();
+            AddItem( item );
+            aCommit->Add( item );
+        }
+    }
+
+    // Store isNew as BOARD_COMMIT::Push() is going to clear it.
+    bool isNew = IsNew();
+
+    if( aCommitMsg.IsEmpty() )
+        aCommit->Push( _( "Edit Meander" ), aCommitFlags );
+    else
+        aCommit->Push( aCommitMsg, aCommitFlags );
+
+    if( isNew && !GetItems().empty() )
+    {
+        PICKED_ITEMS_LIST undoList;
+
+        for( BOARD_ITEM* member : GetItems() )
+            undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::REGROUP ) );
+
+        aFrame->AppendCopyToUndoList( undoList, UNDO_REDO::REGROUP );
+    }
+}
+
+
+void PCB_GENERATOR_MEANDERS::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                         PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+{
+    for( BOARD_ITEM* item : m_removedItems )
+        aFrame->GetCanvas()->GetView()->Hide( item, false );
+
+    m_removedItems.clear();
+
+    aTool->Router()->StopRouting();
+
+    if( aCommit )
+        aCommit->Revert();
+}
+
+
+bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const
+{
+    VECTOR2I centerlineOffset;
+
+    if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+        centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+
+    points->AddPoint( m_origin + centerlineOffset );
+    points->AddPoint( m_end + centerlineOffset );
+
+    SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
+                                                            : SEG( m_origin, m_end );
+
+    base.A += centerlineOffset;
+    base.B += centerlineOffset;
+
+    int offset = m_maxAmplitude;
+
+    if( m_initialSide == -1 )
+        offset *= -1;
+
+    VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
+
+    points->AddPoint( base.A + widthHandleOffset );
+    points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
+
+    VECTOR2I spacingHandleOffset =
+            widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
+
+    points->AddPoint( base.A + spacingHandleOffset );
+    points->Point( 3 ).SetGridConstraint( IGNORE_GRID );
+
+    return true;
+}
+
+
+bool PCB_GENERATOR_MEANDERS::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
+                                                   BOARD_COMMIT* aCommit )
+{
+    VECTOR2I centerlineOffset;
+
+    if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+        centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+
+    SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
+                                                            : SEG( m_origin, m_end );
+
+    base.A += centerlineOffset;
+    base.B += centerlineOffset;
+
+    m_origin = aEditPoints->Point( 0 ).GetPosition() - centerlineOffset;
+    m_end = aEditPoints->Point( 1 ).GetPosition() - centerlineOffset;
+
+    if( aEditPoints->Point( 2 ).IsActive() )
+    {
+        VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
+
+        int value = base.LineDistance( wHandle );
+        SetMaxAmplitude( KiROUND( value / pcbIUScale.mmToIU( 0.1 ) ) * pcbIUScale.mmToIU( 0.1 ) );
+
+        int side = base.Side( wHandle );
+
+        if( side < 0 )
+            m_initialSide = PNS::MEANDER_SIDE_LEFT;
+        else
+            m_initialSide = PNS::MEANDER_SIDE_RIGHT;
+    }
+
+    if( aEditPoints->Point( 3 ).IsActive() )
+    {
+        VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
+        VECTOR2I sHandle = aEditPoints->Point( 3 ).GetPosition();
+
+        int value = KiROUND( SEG( base.A, wHandle ).LineDistance( sHandle ) / 1.5 );
+
+        SetSpacing( KiROUND( value / pcbIUScale.mmToIU( 0.01 ) ) * pcbIUScale.mmToIU( 0.01 ) );
+    }
+
+    return true;
+}
+
+
+bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints )
+{
+    VECTOR2I centerlineOffset;
+
+    if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+        centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+
+    SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
+                                                            : SEG( m_origin, m_end );
+
+    base.A += centerlineOffset;
+    base.B += centerlineOffset;
+
+    int offset = m_maxAmplitude;
+
+    if( m_initialSide == -1 )
+        offset *= -1;
+
+    VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
+
+    aEditPoints->Point( 0 ).SetPosition( m_origin + centerlineOffset );
+    aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffset );
+
+    aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
+
+    VECTOR2I spacingHandleOffset =  widthHandleOffset
+                                        + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
+
+    aEditPoints->Point( 3 ).SetPosition( base.A + spacingHandleOffset );
+
+    return true;
+}
+
+
+SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
+{
+    SHAPE_LINE_CHAIN chain;
+
+    if( m_baseLine )
+    {
+        SHAPE_LINE_CHAIN cl = *m_baseLine;
+
+        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+        {
+            for( int i = 0; i < cl.PointCount() && i < m_baseLineCoupled->PointCount(); ++i )
+                cl.SetPoint( i, ( cl.CPoint( i ) + m_baseLineCoupled->CPoint( i ) ) / 2 );
+        }
+
+        bool singleSided = m_tuningMode != DIFF_PAIR && m_singleSide;
+
+        if( singleSided )
+        {
+            SHAPE_LINE_CHAIN left, right;
+
+            if( cl.OffsetLine( m_maxAmplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
+                               left, right, true ) )
+            {
+                chain.Append( cl.CPoint( 0 ) );
+                chain.Append( m_initialSide >= 0 ? right : left );
+                chain.Append( cl.CPoint( -1 ) );
+
+                return chain;
+            }
+            else
+            {
+                singleSided = false;
+            }
+        }
+
+        if( !singleSided )
+        {
+            SHAPE_POLY_SET poly;
+
+            poly.OffsetLineChain( cl, m_maxAmplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                  ARC_LOW_DEF, false );
+
+            if( poly.OutlineCount() > 0 )
+            {
+                chain = poly.Outline( 0 );
+            }
+        }
+    }
+
+    return chain;
+}
+
+
+void PCB_GENERATOR_MEANDERS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+{
+    if( !IsSelected() )
+        return;
+
+    KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
+    int size = KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) * 0.8 );
+
+    if( m_baseLine )
+    {
+        for( int i = 0; i < m_baseLine->SegmentCount(); i++ )
+        {
+            SEG seg = m_baseLine->CSegment( i );
+            ctx.DrawLine( seg.A, seg.B, false );
+        }
+    }
+    else
+    {
+        ctx.DrawLine( m_origin, m_end, false );
+    }
+
+    if( m_baseLineCoupled )
+    {
+        for( int i = 0; i < m_baseLineCoupled->SegmentCount(); i++ )
+        {
+            SEG seg = m_baseLineCoupled->CSegment( i );
+            ctx.DrawLine( seg.A, seg.B, false );
+        }
+    }
+
+    SHAPE_LINE_CHAIN chain = getRectShape();
+
+    for( int i = 0; i < chain.SegmentCount(); i++ )
+    {
+        SEG seg = chain.Segment( i );
+        ctx.DrawLineDashed( seg.A, seg.B, size, size / 2, false );
+    }
+}
+
+
+const STRING_ANY_MAP PCB_GENERATOR_MEANDERS::GetProperties() const
+{
+    STRING_ANY_MAP props = PCB_GENERATOR::GetProperties();
+
+    props.set( "tuning_mode", tuningToString( m_tuningMode ) );
+    props.set( "initial_side", sideToString( m_initialSide ) );
+    props.set( "last_status", statusToString( m_tuningStatus ) );
+
+    props.set( "end", m_end );
+    props.set( "corner_radius_percent", m_cornerRadiusPercentage );
+    props.set( "single_sided", m_singleSide );
+    props.set( "rounded", m_rounded );
+
+    props.set_iu( "max_amplitude", m_maxAmplitude );
+    props.set_iu( "min_spacing", m_spacing );
+    props.set_iu( "target_length", m_targetLength );
+    props.set_iu( "target_skew", m_targetSkew );
+
+    props.set( "last_netname", m_lastNetName );
+    props.set( "last_tuning", m_tuningInfo );
+    props.set( "override_custom_rules", m_overrideCustomRules );
+
+    if( m_baseLine )
+        props.set( "base_line", wxAny( *m_baseLine ) );
+
+    if( m_baseLineCoupled )
+        props.set( "base_line_coupled", wxAny( *m_baseLineCoupled ) );
+
+    return props;
+}
+
+
+void PCB_GENERATOR_MEANDERS::SetProperties( const STRING_ANY_MAP& aProps )
+{
+    PCB_GENERATOR::SetProperties( aProps );
+
+    wxString tuningMode;
+    aProps.get_to( "tuning_mode", tuningMode );
+    m_tuningMode = tuningFromString( tuningMode.utf8_string() );
+
+    wxString side;
+    aProps.get_to( "initial_side", side );
+    m_initialSide = sideFromString( side.utf8_string() );
+
+    wxString status;
+    aProps.get_to( "last_status", status );
+    m_tuningStatus = statusFromString( status.utf8_string() );
+
+    aProps.get_to( "end", m_end );
+    aProps.get_to( "corner_radius_percent", m_cornerRadiusPercentage );
+    aProps.get_to( "single_sided", m_singleSide );
+    aProps.get_to( "side", m_initialSide );
+    aProps.get_to( "rounded", m_rounded );
+
+    aProps.get_to_iu( "max_amplitude", m_maxAmplitude );
+    aProps.get_to_iu( "min_spacing", m_spacing );
+    aProps.get_to_iu( "target_length", m_targetLength );
+    aProps.get_to_iu( "target_skew", m_targetSkew );
+    aProps.get_to( "override_custom_rules", m_overrideCustomRules );
+
+    aProps.get_to( "last_netname", m_lastNetName );
+    aProps.get_to( "last_tuning", m_tuningInfo );
+
+    if( auto baseLine = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line" ) )
+        m_baseLine = *baseLine;
+
+    if( auto baseLineCoupled = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line_coupled" ) )
+        m_baseLineCoupled = *baseLineCoupled;
+}
+
+
+void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
+{
+    PNS::MEANDER_SETTINGS settings = toMeanderSettings();
+    DRC_CONSTRAINT        constraint;
+
+    if( !m_items.empty() )
+    {
+        BOARD_ITEM*                  startItem = *m_items.begin();
+        std::shared_ptr<DRC_ENGINE>& drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+
+        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
+
+        if( !constraint.IsNull() && !settings.m_overrideCustomRules )
+            settings.m_targetLength = constraint.GetValue().Opt();
+    }
+
+    DIALOG_MEANDER_PROPERTIES dlg( aEditFrame, settings, toPNSMode(), constraint );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        BOARD_COMMIT commit( aEditFrame );
+        commit.Modify( this );
+
+        fromMeanderSettings( settings );
+
+        commit.Push( _( "Edit Meander Properties" ) );
+    }
+
+    aEditFrame->GetToolManager()->PostAction<PCB_GENERATOR*>( PCB_ACTIONS::regenerateItem, this );
+}
+
+
+void PCB_GENERATOR_MEANDERS::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
+                                           STATUS_TEXT_POPUP* aPopup )
+{
+    auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() );
+
+    if( !placer )
+        return;
+
+    aPopup->SetText( placer->TuningInfo( aFrame->GetUserUnits() ) );
+
+    // Determine the background color first and choose a contrasting value
+    COLOR4D bg( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+    double h, s, l;
+    bg.ToHSL( h, s, l );
+
+    switch( placer->TuningStatus() )
+    {
+    case PNS::MEANDER_PLACER_BASE::TUNED:
+        if( l < 0.5 )
+            aPopup->SetTextColor( wxColor( 127, 200, 127 ) );
+        else
+            aPopup->SetTextColor( wxColor( 0, 92, 0 ) );
+
+        break;
+
+    case PNS::MEANDER_PLACER_BASE::TOO_SHORT:
+        if( l < 0.5 )
+            aPopup->SetTextColor( wxColor( 242, 100, 126 ) );
+        else
+            aPopup->SetTextColor( wxColor( 122, 0, 0 ) );
+
+        break;
+
+    case PNS::MEANDER_PLACER_BASE::TOO_LONG:
+        if( l < 0.5 )
+            aPopup->SetTextColor( wxColor( 66, 184, 235 ) );
+        else
+            aPopup->SetTextColor( wxColor( 19, 19, 195 ) );
+
+        break;
+    }
+}
+
+
 const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Meanders" );
 const wxString PCB_GENERATOR_MEANDERS::GENERATOR_TYPE = wxS( "meanders" );
 
@@ -1395,7 +1482,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
     Activate();
 
-    LENGTH_TUNING_MODE       mode = FromPNSMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
+    LENGTH_TUNING_MODE       mode = fromPNSMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
     KIGFX::VIEW_CONTROLS*    controls = getViewControls();
     BOARD*                   board = m_frame->GetBoard();
     PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
