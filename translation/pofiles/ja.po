@@ -489,7 +489,6 @@ msgid "Move board Down"
 msgstr "基板を下へ移動"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
 msgstr "表示をホームへ"
 
@@ -498,7 +497,6 @@ msgid "Home view"
 msgstr "表示をホームへ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
-#, fuzzy
 msgid "Reset View"
 msgstr "表示をリセット"
 
@@ -669,9 +667,8 @@ msgid "Show/hide the appearance manager"
 msgstr "外観マネージャーの表示/非表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "基板本体:"
+msgstr "基板本体"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -790,19 +787,16 @@ msgid "Virtual Models"
 msgstr "仮想 3D モデルの切替"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "posファイルにない3Dモデルの切り替え"
+msgstr "POSファイルにないモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "[未実装]の部品の3Dモデル表示を切り替え"
+msgstr "未実装が指定されたモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "モデルをバウンディング ボックスで表示"
+msgstr "モデルのバウンディング ボックス"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -845,9 +839,8 @@ msgid "Show all footprint text"
 msgstr "すべてのフットプリントのテキストを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "シルクスクリーン"
+msgstr "基板外のシルクスクリーン"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
@@ -1146,9 +1139,8 @@ msgid "Redraw while moving"
 msgstr "オブジェクト移動時にパン"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
-#, fuzzy
 msgid "Redraw speed:"
-msgstr "画面の再描画"
+msgstr "再描画の間隔:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -2665,14 +2657,12 @@ msgid "Configure Global Library Table"
 msgstr "グローバル ライブラリ テーブルを編集"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "ドリルが許容範囲外"
+msgstr "グリッドサイズXが許容範囲外."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "ドリルが許容範囲外"
+msgstr "グリッドサイズXが許容範囲外."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -4936,13 +4926,10 @@ msgid "Could not use OpenGL"
 msgstr "OpenGL を使用できません"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:539
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:3087
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3024
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:3077
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2989
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "word の読み取りに失敗しました。"
+msgstr "画像データの読み込みに失敗しました。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:961
 #, c-format
@@ -6703,7 +6690,7 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:372
 #, c-format
 msgid "API responded with error code: %s"
-msgstr ""
+msgstr "APIがエラーコードを応答しました: %s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
@@ -6740,14 +6727,12 @@ msgstr "パラメータセットは現在サポートされていません。"
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "コンパイル マスクは現在サポートされていません。"
+msgstr "DXFの寸法は現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "ブランケットは現在サポートされていません。"
+msgstr "DXFのハッチングは現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:513
 #, fuzzy
@@ -7448,9 +7433,9 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "不正な円弧 (半径 %f 、角度 %f )"
 
 #: common/plugins/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "バス グループ %s の解析に失敗"
+msgstr "'%s' から数値のパースできませんでした"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:85
 #, c-format
@@ -7462,9 +7447,9 @@ msgstr ""
 "project.json が見つかりません。"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "ファイル '%s' を開くことができません"
+msgstr "Zipアーカイブ '%s' を読み取れません"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:117
 #, c-format
@@ -7477,9 +7462,9 @@ msgid "Error reading '%s': %s"
 msgstr "'%s' の読み込み中のエラー: %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "%s のピン '%s' が見つかりません。"
+msgstr "JSONのパースに失敗: %d行目 '%s': %s"
 
 #: common/project.cpp:374 common/project.cpp:379 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -7976,22 +7961,18 @@ msgstr "カーソルを中心に"
 msgid "Zoom to Selection"
 msgstr "選択範囲をズーム"
 
-#: common/tool/actions.cpp:475 common/widgets/mathplot.cpp:1447
-#: common/widgets/mathplot.cpp:1400
-#, fuzzy
+#: common/tool/actions.cpp:475 common/widgets/mathplot.cpp:1400
 msgid "Undo Last Zoom"
-msgstr "一つ前のコマンドを元に戻す"
+msgstr "一つ前のズームを元に戻す"
 
 #: common/tool/actions.cpp:476 common/widgets/mathplot.cpp:1447
 #: common/widgets/mathplot.cpp:1400
 msgid "Return zoom to level prior to last zoom action"
 msgstr ""
 
-#: common/tool/actions.cpp:482 common/widgets/mathplot.cpp:1448
-#: common/widgets/mathplot.cpp:1401
-#, fuzzy
+#: common/tool/actions.cpp:482 common/widgets/mathplot.cpp:1401
 msgid "Redo Last Zoom"
-msgstr "一つ前のコマンドをやり直し"
+msgstr "一つ前のズームをやり直し"
 
 #: common/tool/actions.cpp:483 common/widgets/mathplot.cpp:1448
 #: common/widgets/mathplot.cpp:1401
@@ -8088,9 +8069,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "高速グリッド2に切り替え"
 
 #: common/tool/actions.cpp:649
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "高速グリッド1に切り替え"
+msgstr "高速グリッドを切り替え"
 
 #: common/tool/actions.cpp:656
 msgid "Switch to Next Grid"
@@ -13638,13 +13618,12 @@ msgid "Differential"
 msgstr "差動"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:76
-#, fuzzy
 msgid "Pin model:"
-msgstr "線のモデル"
+msgstr "ピンのモデル:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
 msgid "Waveform:"
-msgstr ""
+msgstr "波形:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:100
 msgid "Built-in SPICE model"
@@ -13888,21 +13867,15 @@ msgstr "フォルダー '%s' へプロット ファイルを書き込めませ�
 msgid "Wrote BOM output to '%s'"
 msgstr "'%s' にBOMを出力しました"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1574
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1975
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1565
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1966
-#, fuzzy
 msgid "BOM preset name:"
-msgstr "レイヤー プリセット名:"
+msgstr "BOMプリセット名:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1574
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1975
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1565
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1966
-#, fuzzy
 msgid "Save BOM Preset"
-msgstr "レイヤー プリセットを保存"
+msgstr "BOMプリセットを保存"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1600
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2001
@@ -13948,9 +13921,8 @@ msgid "Recursive"
 msgstr "再帰レベル"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:181
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "選択範囲のクロスプローブ"
+msgstr "クロスプローブの動作:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:185
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -14011,9 +13983,8 @@ msgid "Keep line breaks"
 msgstr "改行を保持:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:266
-#, fuzzy
 msgid "Format presets:"
-msgstr "フォーマット %s"
+msgstr "既定のフォーマット:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:282
 msgid "Output file:"
@@ -14474,9 +14445,8 @@ msgid "Syntax Help"
 msgstr "構文ヘルプ"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "ユーザー定義原点"
+msgstr "ユーザー定義信号"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
 msgid "Wire/Bus"
@@ -14499,14 +14469,12 @@ msgid "Wire & Bus Properties"
 msgstr "配線、バスのプロパティ"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "部品表 (BOM)"
+msgstr "BOMプリセット:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "部品表 (BOM) 生成ヘルプ"
+msgstr "プリセットの部品表フォーマット:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -14816,9 +14784,8 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "シンボル選択中にフットプリントのプレビューを表示"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "シンボルをレスキュー"
+msgstr "シンボルのレスキューを行わない"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:264
 #, c-format
@@ -15329,13 +15296,11 @@ msgid "Add Anyway"
 msgstr "強制的に追加"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:847
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"現在の形式 (*.kicad_sym) として保存する以前の形式(*.lib) のライブラリを含む "
-"1 つまたは複数の行を選択します。"
+"現在のKiCad形式 (*.kicad_sym) として保存する1 つまたは複数の行を選択します。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:855
 #, c-format
@@ -15347,13 +15312,13 @@ msgstr ""
 "えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"%d 個の以前の形式のライブラリを現在の形式(* .kicad_sym)で保存して、テーブルの"
-"以前の形式の項目と置き換えますか?"
+"%d 個のライブラリを現在の形式(* .kicad_sym)で保存して、テーブルの以前の形式の"
+"項目と置き換えますか?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:889
 #: pcbnew/dialogs/dialog_export_step.cpp:397
@@ -15583,11 +15548,10 @@ msgstr "警告: 重複したニックネーム.\n"
 msgid "Unknown netlist format.\n"
 msgstr "未知のフォーマットのネットリストです。\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:438
 #: eeschema/eeschema_jobs_handler.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "ファイル '%s' が見つかりません"
+msgstr "BOMプリセット '%s' が見つかりません"
 
 #: eeschema/eeschema_jobs_handler.cpp:491
 #: eeschema/eeschema_jobs_handler.cpp:713
@@ -16666,9 +16630,8 @@ msgid "Bezier Curve with %d points"
 msgstr "%d 点のベジェ曲線"
 
 #: eeschema/lib_symbol.cpp:285
-#, fuzzy
 msgid "Power flag differs."
-msgstr "%s は異なります。"
+msgstr "電源フラグが異なります。"
 
 #: eeschema/lib_symbol.cpp:294
 msgid "Unit count differs."
@@ -16950,14 +16913,13 @@ msgid "Bus to bus entry from %s, %s to %s, %s"
 msgstr "バス-バス エントリー 始点 (%s, %s) 終点 (%s, %s)"
 
 #: eeschema/net_navigator.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "フットプリントのテキスト タイプに %s は使用できません"
+msgstr "処理されないアイテムタイプ %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "ディレクトリ '%s' の削除に失敗しました"
+msgstr "'devices' ディレクトリの作成に失敗しました."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:424
 #, c-format
@@ -17125,12 +17087,13 @@ msgstr "シンボル ライブラリがロードされていません。"
 msgid "Select Symbol Library"
 msgstr "シンボル ライブラリを選択"
 
-#: eeschema/sch_base_frame.cpp:723 eeschema/sch_base_frame.cpp:721
-#, fuzzy
+#: eeschema/sch_base_frame.cpp:721
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
-msgstr "プロジェクトの設定が変更されました、保存しますか?"
+msgstr ""
+"使用中のシンボルを含むライブラリが変更されました。\n"
+"ライブラリをリロードしますか?"
 
 #: eeschema/sch_bus_entry.cpp:426
 msgid "Bus to Wire Entry"
@@ -17263,20 +17226,18 @@ msgstr "[未保存]"
 msgid "[no schematic loaded]"
 msgstr "[回路図がロードされていません]"
 
-#: eeschema/sch_edit_frame.cpp:1823 eeschema/sch_edit_frame.cpp:1819
-#, fuzzy
+#: eeschema/sch_edit_frame.cpp:1819
 msgid "Schematic Cleanup"
-msgstr "回路図の設定"
+msgstr "回路図のクリーンアップ"
 
 #: eeschema/sch_edit_frame.cpp:1934 eeschema/sch_edit_frame.cpp:1929
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "ハイライトされたネット: %s"
 
-#: eeschema/sch_edit_frame.cpp:2112 eeschema/sch_edit_frame.cpp:2107
-#, fuzzy
+#: eeschema/sch_edit_frame.cpp:2107
 msgid "Save Symbol to Schematic"
-msgstr "回路図にシンボルを追加"
+msgstr "回路図にシンボルを保存"
 
 #: eeschema/sch_edit_frame.cpp:2213 eeschema/tools/ee_actions.cpp:63
 #: eeschema/sch_edit_frame.cpp:2208
@@ -17655,13 +17616,10 @@ msgstr "画像 '%s' の読み込み中にエラーしました。"
 msgid "File not found %s."
 msgstr "ファイル '%s' が見つかりません。"
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3974
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3948
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr ""
-"\"FileHeader\" セクション内の不明または予期しないレコード ID %dが見つかりまし"
-"た。"
+msgstr "不明または予期しないレコード ID %dが %s で見つかりました。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4073
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4047
@@ -22548,9 +22506,8 @@ msgid "Summary"
 msgstr "要約"
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
-#, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "回路図レイアウト エディター"
+msgstr "回路図とライブラリの比較:"
 
 #: eeschema/tools/ee_inspection_tool.cpp:281
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
@@ -27534,18 +27491,16 @@ msgid "Compute the clearance and creepage distances"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "電圧"
+msgstr "実効電圧:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "過渡ノイズ"
+msgstr "過渡過電圧:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -27575,9 +27530,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "テキスト方向"
+msgstr "絶縁タイプ:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -27601,9 +27555,8 @@ msgid "Reinforced"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
-#, fuzzy
 msgid "Pollution Degree:"
-msgstr "90度回転"
+msgstr "汚染度:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
 msgid ""
@@ -27692,9 +27645,8 @@ msgid "Clearance:"
 msgstr "クリアランス:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
-#, fuzzy
 msgid "Creepage:"
-msgstr "ページの中央"
+msgstr "沿面距離:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
 #, fuzzy
@@ -31469,9 +31421,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
-msgstr "X中央"
+msgstr "X中心:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
 #, fuzzy
@@ -33789,11 +33740,9 @@ msgstr "曲線"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:765
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:523
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:521
-#, fuzzy
 msgid "Points:"
-msgstr "ポイント"
+msgstr "点:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 #, fuzzy
@@ -38224,9 +38173,8 @@ msgstr "新規グラフィック アイテムのデフォルト値:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:38
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:304
-#, fuzzy
 msgid "Edges:"
-msgstr "基板外形"
+msgstr "形状:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:42
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:175
@@ -41283,29 +41231,25 @@ msgstr "フィールド %s を更新."
 msgid "Removed %s footprint fields not in symbol."
 msgstr "新しいシンボルにないフィールドを削除"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:491
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "%s を %s から %s へ更新しました。"
+msgstr "%s のシート名を '%s' へ更新します。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:498
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "%s を %s から %s へ更新しました。"
+msgstr "%s のシート名を '%s' へ更新しました。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:510
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "%s を %s から %s へ更新しました。"
+msgstr "%s のシートファイルを '%s' へ更新します。"
 
-#: pcbnew/netlist_reader/board_netlist_updater.cpp:517
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "%s を %s から %s へ更新しました。"
+msgstr "%s のシートファイルを '%s' へ更新しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:529
 #, fuzzy, c-format
@@ -41809,12 +41753,13 @@ msgstr "サーマルリリーフ スポーク角度"
 msgid "Thermal Relief Gap"
 msgstr "サーマルリリーフ ギャップ"
 
-#: pcbnew/pcb_base_frame.cpp:1220 pcbnew/pcb_base_frame.cpp:1242
-#, fuzzy
+#: pcbnew/pcb_base_frame.cpp:1242
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
-msgstr "プロジェクトの設定が変更されました、保存しますか?"
+msgstr ""
+"使用中のフットプリントを含むライブラリが変更されました。\n"
+"フットプリントをリロードしますか?"
 
 #: pcbnew/pcb_dimension.cpp:397 pcbnew/pcb_dimension.cpp:1448
 #: pcbnew/pcb_dimension.cpp:302 pcbnew/pcb_dimension.cpp:1353
@@ -42046,9 +41991,9 @@ msgid "Drawing"
 msgstr "図形"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
-msgstr "%s (%s 上)"
+msgstr "%s %s (%s 上)"
 
 #: pcbnew/pcb_shape.cpp:491
 #, c-format
@@ -42264,9 +42209,9 @@ msgid "Loading board\n"
 msgstr "基板をロード中\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "svgファイルの作成に成功しました"
+msgstr "%s へのVRMLのエクスポートが成功しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
 msgid "Error exporting VRML"
@@ -42464,7 +42409,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:503
 #, fuzzy, c-format
 msgid "File not found: '%s' for directory '%s'."
-msgstr "ファイルが見つかりません: '%s'."
+msgstr "ファイルが見つかりません: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:636
 #, c-format
@@ -42759,13 +42704,13 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
 msgstr ""
-"CADSTARのデザインにはティアドロップが含まれています。このインポーターはまだそ"
-"れらをサポートしていないため、デザインのティアドロップは無視されます。"
+"CADSTARのコンストラクションレイヤー '%s' は基板の面の外にあります。これは無視"
+"されます。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
@@ -43236,9 +43181,9 @@ msgstr "基板ロード中のエラー '%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find valid footprints in '%s'"
-msgstr "パッド番号 '%d' がフットプリント '%s' 中に見つかりませんでした。"
+msgstr "'%s' の中に正常なフットプリントがありません"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:362
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
@@ -43248,9 +43193,9 @@ msgstr "フットプリント %s をライブラリ %s からのロード中に�
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
-msgstr "フットプリント %s をライブラリ %s からのロード中にエラーしました。"
+msgstr "フットプリント '%s' をライブラリ %s から読み込み中にエラー: %s"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:325
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:375
@@ -45543,13 +45488,13 @@ msgstr "パッドのプロパティをペースト"
 msgid "Push Pad Settings"
 msgstr "パッドの設定をプッシュ"
 
-#: pcbnew/tools/pad_tool.cpp:373 pcbnew/tools/pad_tool.cpp:371
-#, fuzzy, c-format
+#: pcbnew/tools/pad_tool.cpp:371
+#, c-format
 msgid ""
 "Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"パッド %s%d 上をクリック\n"
+"パッド %s 上をクリック\n"
 "<ESC> ですべてキャンセル、ダブルクリックで確定します"
 
 #: pcbnew/tools/pad_tool.cpp:399 pcbnew/tools/pad_tool.cpp:497
@@ -48515,14 +48460,14 @@ msgid "%s"
 msgstr "%s"
 
 #: pcbnew/zone.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s と %s"
+msgstr "%s と %s と %s"
 
 #: pcbnew/zone.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s と %d ほか"
+msgstr "%s と %s と %d ほか"
 
 #: pcbnew/zone.cpp:646 pcbnew/zone.cpp:1626 pcbnew/zone.cpp:1479
 msgid "Fill Mode"
@@ -48562,15 +48507,15 @@ msgstr "%s 上"
 msgid "on %s and %s"
 msgstr "%s と %s"
 
-#: pcbnew/zone.cpp:855 pcbnew/zone.cpp:842
-#, fuzzy, c-format
+#: pcbnew/zone.cpp:842
+#, c-format
 msgid "on %s, %s and %s"
-msgstr "(ネット %s と %s)"
+msgstr "%s上の %s と %s"
 
-#: pcbnew/zone.cpp:862 pcbnew/zone.cpp:849
-#, fuzzy, c-format
+#: pcbnew/zone.cpp:849
+#, c-format
 msgid "on %s, %s and %zu more"
-msgstr "%s と %d ほか"
+msgstr "%s上の %s と %zu ほか"
 
 #: pcbnew/zone.cpp:872 pcbnew/zone.cpp:859
 #, fuzzy, c-format
@@ -48823,9 +48768,8 @@ msgid "Select with Browser"
 msgstr "ブラウザーで選択"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1181
-#, fuzzy
 msgid "Selected Output Filename"
-msgstr "出力ファイル名"
+msgstr "出力ファイル名を選択"
 
 #: eeschema/picksymbol.cpp:193
 #, c-format
@@ -49132,9 +49076,9 @@ msgid "Select Drawing Sheet File"
 msgstr "図面シート ファイルを選択"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1237
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output to '%s'."
-msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
+msgstr "BOMを '%s' に書き込めませんでした。"
 
 #: eeschema/erc_item.cpp:51
 msgid "Symbol pin or wire end off grid"
