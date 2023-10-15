@@ -904,19 +904,12 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
                                           aFrame->MessageTextFromValue( clearance ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 
-    MINOPTMAX<int> c = GetWidthConstraint( &source );
+    MINOPTMAX<int> constraintValue = GetWidthConstraint( &source );
+    msg = aFrame->MessageTextFromMinOptMax( constraintValue );
 
-    if( c.HasMax() )
+    if( !msg.IsEmpty() )
     {
-        aList.emplace_back( wxString::Format( _( "Width Constraints: min %s, max %s" ),
-                                              aFrame->MessageTextFromValue( c.Min() ),
-                                              aFrame->MessageTextFromValue( c.Max() ) ),
-                            wxString::Format( _( "(from %s)" ), source ) );
-    }
-    else
-    {
-        aList.emplace_back( wxString::Format( _( "Width Constraints: min %s" ),
-                                              aFrame->MessageTextFromValue( c.Min() ) ),
+        aList.emplace_back( wxString::Format( _( "Width Constraints: %s" ), msg ),
                             wxString::Format( _( "(from %s)" ), source ) );
     }
 }

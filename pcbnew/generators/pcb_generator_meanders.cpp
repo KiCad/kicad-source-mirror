@@ -1572,35 +1572,6 @@ void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         }
     }
 
-    auto getMinOptMax =
-            [&]( const MINOPTMAX<int>& v )
-            {
-                wxString msg;
-
-                if( v.HasMin() )
-                {
-                    msg += wxString::Format( _( "min %s" ), aFrame->MessageTextFromValue( v.Min() ) );
-                }
-
-                if( v.HasOpt() )
-                {
-                    if( !msg.IsEmpty() )
-                        msg += wxS( "; " );
-
-                    msg += wxString::Format( _( "opt %s" ), aFrame->MessageTextFromValue( v.Opt() ) );
-                }
-
-                if( v.HasMax() )
-                {
-                    if( !msg.IsEmpty() )
-                        msg += wxS( "; " );
-
-                    msg += wxString::Format( _( "max %s" ), aFrame->MessageTextFromValue( v.Max() ) );
-                }
-
-                return msg;
-            };
-
     if( m_tuningMode == DIFF_PAIR_SKEW )
     {
         constraint = drcEngine->EvalRules( SKEW_CONSTRAINT, primaryItem, coupledItem, m_layer );
@@ -1614,11 +1585,11 @@ void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         }
         else
         {
-            msg = getMinOptMax( constraint.GetValue() );
+            msg = aFrame->MessageTextFromMinOptMax( constraint.GetValue() );
 
             if( !msg.IsEmpty() )
             {
-                aList.emplace_back( wxString::Format( _( "Skew Constraints: %s." ), msg ),
+                aList.emplace_back( wxString::Format( _( "Skew Constraints: %s" ), msg ),
                                     wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
             }
         }
@@ -1636,11 +1607,11 @@ void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
         }
         else
         {
-            msg = getMinOptMax( constraint.GetValue() );
+            msg = aFrame->MessageTextFromMinOptMax( constraint.GetValue() );
 
             if( !msg.IsEmpty() )
             {
-                aList.emplace_back( wxString::Format( _( "Length Constraints: %s." ), msg ),
+                aList.emplace_back( wxString::Format( _( "Length Constraints: %s" ), msg ),
                                     wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
             }
         }
@@ -1877,8 +1848,8 @@ static struct PCB_GENERATOR_MEANDERS_DESC
     {
         ENUM_MAP<LENGTH_TUNING_MODE>::Instance()
                 .Map( LENGTH_TUNING_MODE::SINGLE, _HKI( "Single track" ) )
-                .Map( LENGTH_TUNING_MODE::DIFF_PAIR, _HKI( "Diff. pair" ) )
-                .Map( LENGTH_TUNING_MODE::DIFF_PAIR_SKEW, _HKI( "Diff. pair Skew" ) );
+                .Map( LENGTH_TUNING_MODE::DIFF_PAIR, _HKI( "Differential pair" ) )
+                .Map( LENGTH_TUNING_MODE::DIFF_PAIR_SKEW, _HKI( "Diff pair skew" ) );
 
         ENUM_MAP<PNS::MEANDER_SIDE>::Instance()
                 .Map( PNS::MEANDER_SIDE_LEFT, _HKI( "Left" ) )

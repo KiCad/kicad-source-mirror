@@ -29,6 +29,7 @@
 #include <wx/string.h>
 #include <geometry/eda_angle.h>
 #include <base_units.h>
+#include <core/minoptmax.h>
 
 /**
  * The type of unit.
@@ -216,10 +217,15 @@ namespace EDA_UNIT_UTILS
         KICOMMON_API wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel = true );
 
 
+        KICOMMON_API wxString MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale,
+                                                        EDA_UNITS aUnits,
+                                                        const MINOPTMAX<int>& aValue );
         /**
-         * Return in internal units the value "val" given in a real unit such as "in", "mm" or "deg"
+         * Return in internal units the value \a aValue given in a real unit such as "in", "mm",
+         * or "deg"
          */
-        KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
+        KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
+                                          double aValue );
 
 
         /**

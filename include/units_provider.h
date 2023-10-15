@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 
 #include <eda_units.h>
 #include <origin_transforms.h>
+#include <core/minoptmax.h>
 
 
 class UNITS_PROVIDER
@@ -110,6 +111,11 @@ public:
                                                          aValue.AsDegrees(), aAddUnitLabel,
                                                          EDA_DATA_TYPE::DISTANCE );
     }
+
+    wxString MessageTextFromMinOptMax( const MINOPTMAX<int>& aValue ) const
+    {
+        return EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( GetIuScale(), GetUserUnits(), aValue );
+    };
 
     /**
      * Converts \a aTextValue in \a aUnits to internal units used by the frame.

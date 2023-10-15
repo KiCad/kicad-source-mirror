@@ -26,6 +26,7 @@
 #include <math/util.h>      // for KiROUND
 #include <macros.h>
 #include <charconv>
+#include <wx/translation.h>
 
 bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )
 {
@@ -423,6 +424,37 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 
     return text;
 }
+
+
+wxString EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale,
+                                                       EDA_UNITS aUnits,
+                                                       const MINOPTMAX<int>& aValue )
+{
+    wxString msg;
+
+    if( aValue.HasMin() && aValue.Min() > 0 )
+    {
+        msg += _( "min" ) + wxS( " " ) + MessageTextFromValue( aIuScale, aUnits, aValue.Min() );
+    }
+
+    if( aValue.HasOpt() )
+    {
+        if( !msg.IsEmpty() )
+            msg += wxS( "; " );
+
+        msg += _( "opt" ) + wxS( " " ) + MessageTextFromValue( aIuScale, aUnits, aValue.Opt() );
+    }
+
+    if( aValue.HasMax() )
+    {
+        if( !msg.IsEmpty() )
+            msg += wxS( "; " );
+
+        msg += _( "max" ) + wxS( " " ) + MessageTextFromValue( aIuScale, aUnits, aValue.Max() );
+    }
+
+    return msg;
+};
 
 
 double EDA_UNIT_UTILS::UI::FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
