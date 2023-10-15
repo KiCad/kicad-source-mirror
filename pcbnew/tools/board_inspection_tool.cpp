@@ -315,7 +315,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine.EvalRules( MAX_UNCOUPLED_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
@@ -908,15 +908,14 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             reportHeader( _( "Diff-pair max uncoupled length resolution for:" ), ac, bc,
                           active, r );
 
-            if( !drcEngine.HasRulesForConstraintType( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT ) )
+            if( !drcEngine.HasRulesForConstraintType( MAX_UNCOUPLED_CONSTRAINT ) )
             {
                 r->Report( "" );
                 r->Report( _( "No 'diff_pair_uncoupled' constraints defined." ) );
             }
             else
             {
-                constraint = drcEngine.EvalRules( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT, ac, bc,
-                                                  active, r );
+                constraint = drcEngine.EvalRules( MAX_UNCOUPLED_CONSTRAINT, ac, bc, active, r );
 
                 r->Report( "" );
                 r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),

@@ -2535,7 +2535,8 @@ void ROUTER_TOOL::UpdateMessagePanel()
     if( m_router->GetState() == PNS::ROUTER::ROUTE_TRACK )
     {
         PNS::SIZES_SETTINGS          sizes( m_router->Sizes() );
-        PNS::RULE_RESOLVER*          resolver   = m_iface->GetRuleResolver();
+        PNS::RULE_RESOLVER*          resolver = m_iface->GetRuleResolver();
+        PNS::CONSTRAINT              constraint;
         std::vector<PNS::NET_HANDLE> nets = m_router->GetCurrentNets();
         wxString                     description;
         wxString                     secondary;
@@ -2620,6 +2621,18 @@ void ROUTER_TOOL::UpdateMessagePanel()
                                                   FORMAT_VALUE( sizes.DiffPairGap() ) ),
                                 wxString::Format( _( "(from %s)" ),
                                                   sizes.GetDiffPairGapSource() ) );
+
+            const PNS::ITEM_SET& traces = m_router->Placer()->Traces();
+            wxASSERT( traces.Count() == 2 );
+
+            if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED, traces[0],
+                                           traces[1], m_router->GetCurrentLayer(), &constraint ) )
+            {
+                items.emplace_back( wxString::Format( _( "DP Max Uncoupled-length: %s" ),
+                                                      FORMAT_VALUE( constraint.m_Value.Max() ) ),
+                                    wxString::Format( _( "(from %s)" ),
+                                                      constraint.m_RuleName ) );
+            }
         }
         else
         {

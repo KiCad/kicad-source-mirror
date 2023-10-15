@@ -1640,6 +1640,71 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 }
 
 
+int BOARD::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNet )
+{
+    int rv = 0;
+    int count = 0;
+
+    for( auto it = aNetName.rbegin(); it != aNetName.rend() && rv == 0; ++it, ++count )
+    {
+        int ch = *it;
+
+        if( ( ch >= '0' && ch <= '9' ) || ch == '_' )
+        {
+            continue;
+        }
+        else if( ch == '+' )
+        {
+            aComplementNet = wxT( "-" );
+            rv = 1;
+        }
+        else if( ch == '-' )
+        {
+            aComplementNet = wxT( "+" );
+            rv = -1;
+        }
+        else if( ch == 'N' )
+        {
+            aComplementNet = wxT( "P" );
+            rv = -1;
+        }
+        else if ( ch == 'P' )
+        {
+            aComplementNet = wxT( "N" );
+            rv = 1;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if( rv != 0 && count >= 1 )
+    {
+        aComplementNet = aNetName.Left( aNetName.length() - count )
+                            + aComplementNet
+                            + aNetName.Right( count - 1 );
+    }
+
+    return rv;
+}
+
+
+NETINFO_ITEM* BOARD::DpCoupledNet( const NETINFO_ITEM* aNet )
+{
+    if( aNet )
+    {
+        wxString refName = aNet->GetNetname();
+        wxString coupledNetName;
+
+        if( MatchDpSuffix( refName, coupledNetName ) )
+            return FindNet( coupledNetName );
+    }
+
+    return nullptr;
+}
+
+
 FOOTPRINT* BOARD::FindFootprintByReference( const wxString& aReference ) const
 {
     for( FOOTPRINT* footprint : m_footprints )

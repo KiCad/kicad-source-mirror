@@ -907,7 +907,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                               MessageTextFromValue( c->constraint.m_Value.Min() ) ) )
                     break;
 
-                case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
+                case MAX_UNCOUPLED_CONSTRAINT:
                     REPORT( wxString::Format( _( "Checking %s max uncoupled length: %s." ),
                                               EscapeHTML( c->constraint.GetName() ),
                                               MessageTextFromValue( c->constraint.m_Value.Max() ) ) )

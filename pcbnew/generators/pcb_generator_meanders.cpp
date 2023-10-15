@@ -363,14 +363,6 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 }
 
 
-static NETINFO_ITEM* getCoupledNet( PNS::ROUTER* aRouter, NETINFO_ITEM* aNet )
-{
-    PNS::RULE_RESOLVER* resolver = aRouter->GetRuleResolver();
-
-    return static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( aNet ) );
-}
-
-
 PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
                                                 LENGTH_TUNING_MODE aMode ) :
         PCB_GENERATOR( aParent, aLayer ),
@@ -452,7 +444,7 @@ PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool
     DRC_CONSTRAINT               constraint;
     PCB_LAYER_ID                 layer = aStartItem->GetLayer();
 
-    if( aMode == SINGLE && getCoupledNet( aTool->Router(), aStartItem->GetNet() ) )
+    if( aMode == SINGLE && board->DpCoupledNet( aStartItem->GetNet() ) )
         aMode = DIFF_PAIR;
 
     PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, aMode );
@@ -543,7 +535,7 @@ void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
         }
         else
         {
-            NETINFO_ITEM* coupledNet = static_cast<NETINFO_ITEM*>( resolver->DpCoupledNet( net ) );
+            NETINFO_ITEM* coupledNet = aBoard->DpCoupledNet( net );
             PNS::SEGMENT  coupledItem( m_baseLineCoupled->CSegment( 0 ), coupledNet );
 
             if( m_tuningMode == DIFF_PAIR )
@@ -749,7 +741,7 @@ bool PCB_GENERATOR_MEANDERS::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BO
     // DRC rules against.
     if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
     {
-        if( NETINFO_ITEM* coupledNet = getCoupledNet( aRouter, net ) )
+        if( NETINFO_ITEM* coupledNet = aBoard->DpCoupledNet( net ) )
         {
             VECTOR2I coupledStart = m_origin;
             VECTOR2I coupledEnd = m_end;

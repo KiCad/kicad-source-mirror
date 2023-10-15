@@ -131,18 +131,6 @@ public:
     void ClearCaches() override;
 
 private:
-    /**
-     * Checks for netnamed differential pairs.
-     * This accepts nets named suffixed by 'P', 'N', '+', '-', as well as additional
-     * numbers and underscores following the suffix.  So NET_P_123 is a valid positive net
-     * name matched to NET_N_123.
-     * @param aNetName Input net name to check for DP naming
-     * @param aComplementNet Generated net name for the pair
-     * @return -1 if found the negative pair, +1 if found the positive pair, 0 otherwise
-     */
-    int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet );
-
-private:
     PNS::ROUTER_IFACE* m_routerIface;
     BOARD*             m_board;
     PCB_TRACK          m_dummyTracks[2];
@@ -341,6 +329,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:  hostType = DIFF_PAIR_GAP_CONSTRAINT;  break;
     case PNS::CONSTRAINT_TYPE::CT_LENGTH:         hostType = LENGTH_CONSTRAINT;         break;
     case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW: hostType = SKEW_CONSTRAINT;           break;
+    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:  hostType = MAX_UNCOUPLED_CONSTRAINT;  break;
     case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:   hostType = VIA_DIAMETER_CONSTRAINT;   break;
     case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:       hostType = HOLE_SIZE_CONSTRAINT;      break;
     case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: hostType = HOLE_CLEARANCE_CONSTRAINT; break;
@@ -448,6 +437,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:
         case PNS::CONSTRAINT_TYPE::CT_LENGTH:
         case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW:
+        case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:
             aConstraint->m_Value = hostConstraint.GetValue();
             aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
@@ -807,68 +797,9 @@ int PNS_KICAD_IFACE_BASE::StackupHeight( int aFirstLayer, int aSecondLayer ) con
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet )
-{
-    int rv = 0;
-    int count = 0;
-
-    for( auto it = aNetName.rbegin(); it != aNetName.rend() && rv == 0; ++it, ++count )
-    {
-        int ch = *it;
-
-        if( ( ch >= '0' && ch <= '9' ) || ch == '_' )
-        {
-            continue;
-        }
-        else if( ch == '+' )
-        {
-            aComplementNet = wxT( "-" );
-            rv = 1;
-        }
-        else if( ch == '-' )
-        {
-            aComplementNet = wxT( "+" );
-            rv = -1;
-        }
-        else if( ch == 'N' )
-        {
-            aComplementNet = wxT( "P" );
-            rv = -1;
-        }
-        else if ( ch == 'P' )
-        {
-            aComplementNet = wxT( "N" );
-            rv = 1;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    if( rv != 0 && count >= 1 )
-    {
-        aComplementNet = aNetName.Left( aNetName.length() - count )
-                            + aComplementNet
-                            + aNetName.Right( count - 1 );
-    }
-
-    return rv;
-}
-
-
 PNS::NET_HANDLE PNS_PCBNEW_RULE_RESOLVER::DpCoupledNet( PNS::NET_HANDLE aNet )
 {
-    if( NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aNet ) )
-    {
-        wxString refName = net->GetNetname();
-        wxString coupledNetName;
-
-        if( matchDpSuffix( refName, coupledNetName ) )
-            return m_board->FindNet( coupledNetName );
-    }
-
-    return nullptr;
+    return m_board->DpCoupledNet( static_cast<NETINFO_ITEM*>( aNet ) );
 }
 
 
@@ -893,7 +824,7 @@ int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( PNS::NET_HANDLE aNet )
 
     wxString dummy1;
 
-    return matchDpSuffix( refName, dummy1 );
+    return m_board->MatchDpSuffix( refName, dummy1 );
 }
 
 
@@ -906,7 +837,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDL
     wxString netNameP = static_cast<NETINFO_ITEM*>( aItem->Net() )->GetNetname();
     wxString netNameN, netNameCoupled;
 
-    int r = matchDpSuffix( netNameP, netNameCoupled );
+    int r = m_board->MatchDpSuffix( netNameP, netNameCoupled );
 
     if( r == 0 )
     {

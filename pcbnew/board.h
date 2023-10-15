@@ -804,6 +804,22 @@ public:
      */
     NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
 
+    /**
+     * Fetch the coupled netname for a given net.
+     *
+     * This accepts netnames suffixed by 'P', 'N', '+', '-', as well as additional numbers and
+     * underscores following the suffix.  So NET_P_123 is a valid positive net name matched to
+     * NET_N_123.
+     *
+     * @return the polarity of the given net (or 0 if it is not a diffpair net).
+     */
+    int MatchDpSuffix( const wxString& aNetName, wxString& aComplementNet );
+
+    /**
+     * @return the coupled net for a given net.  If not a diffpair, nullptr is returned.
+     */
+    NETINFO_ITEM* DpCoupledNet( const NETINFO_ITEM* aNet );
+
     const NETINFO_LIST& GetNetInfo() const
     {
         return m_NetInfo;

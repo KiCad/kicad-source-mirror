@@ -297,7 +297,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     const DRC_CONSTRAINT_T constraintsToCheck[] = {
                             DIFF_PAIR_GAP_CONSTRAINT,
-                            DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT
+                            MAX_UNCOUPLED_CONSTRAINT
                     };
 
                     for( int i = 0; i < 2; i++ )
@@ -322,7 +322,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                             key.gapRuleName = ruleName;
                             break;
 
-                        case DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT:
+                        case MAX_UNCOUPLED_CONSTRAINT:
                             key.uncoupledConstraint = constraint.GetValue();
                             key.uncoupledRule = parentRule;
                             key.uncoupledRuleName = ruleName;

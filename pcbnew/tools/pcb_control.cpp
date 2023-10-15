@@ -1429,9 +1429,56 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() == 1 )
     {
-        EDA_ITEM*                   item = selection.Front();
+        EDA_ITEM* item = selection.Front();
 
         item->GetMsgPanelInfo( m_frame, msgItems );
+
+        PCB_TRACK*    track = dynamic_cast<PCB_TRACK*>( item );
+        NETINFO_ITEM* net = track ? track->GetNet() : nullptr;
+        NETINFO_ITEM* coupledNet = net ? m_frame->GetBoard()->DpCoupledNet( net ) : nullptr;
+
+        if( coupledNet )
+        {
+            SEG         trackSeg( track->GetStart(), track->GetEnd() );
+            PCB_TRACK*  coupledItem = nullptr;
+            SEG::ecoord closestDist_sq;
+
+            for( PCB_TRACK* candidate : m_frame->GetBoard()->Tracks() )
+            {
+                if( candidate->GetNet() != coupledNet )
+                    continue;
+
+                SEG::ecoord dist_sq = trackSeg.SquaredDistance( SEG( candidate->GetStart(),
+                                                                     candidate->GetEnd() ) );
+
+                if( !coupledItem || dist_sq < closestDist_sq )
+                {
+                    coupledItem = candidate;
+                    closestDist_sq = dist_sq;
+                }
+            }
+
+            constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, track, coupledItem,
+                                               track->GetLayer() );
+
+            wxString msg = m_frame->MessageTextFromMinOptMax( constraint.Value() );
+
+            if( !msg.IsEmpty() )
+            {
+                msgItems.emplace_back( wxString::Format( _( "DP Gap Constraints: %s" ), msg ),
+                                       wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
+            }
+
+            constraint = drcEngine->EvalRules( MAX_UNCOUPLED_CONSTRAINT, track,
+                                               coupledItem, track->GetLayer() );
+
+            if( constraint.Value().HasMax() )
+            {
+                msg = m_frame->MessageTextFromValue( constraint.Value().Max() );
+                msgItems.emplace_back( wxString::Format( _( "DP Max Uncoupled-length: %s" ), msg ),
+                                       wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
+            }
+        }
     }
     else if( pcbFrame && selection.GetSize() == 2 )
     {

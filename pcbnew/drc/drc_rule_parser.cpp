@@ -325,7 +325,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_skew:                      c.m_Type = SKEW_CONSTRAINT;                      break;
     case T_via_count:                 c.m_Type = VIA_COUNT_CONSTRAINT;                 break;
     case T_diff_pair_gap:             c.m_Type = DIFF_PAIR_GAP_CONSTRAINT;             break;
-    case T_diff_pair_uncoupled:       c.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;   break;
+    case T_diff_pair_uncoupled:       c.m_Type = MAX_UNCOUPLED_CONSTRAINT;             break;
     case T_physical_clearance:        c.m_Type = PHYSICAL_CLEARANCE_CONSTRAINT;        break;
     case T_physical_hole_clearance:   c.m_Type = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT;   break;
     default:
