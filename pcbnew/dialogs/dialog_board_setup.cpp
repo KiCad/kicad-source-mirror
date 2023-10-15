@@ -170,7 +170,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                                                  bds.m_singleTrackMeanderSettings,
                                                  bds.m_diffPairMeanderSettings,
                                                  bds.m_skewMeanderSettings );
-            }, _( "Meanders" ) );
+            }, _( "Length Tuning Patterns" ) );
 
     m_netclassesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(

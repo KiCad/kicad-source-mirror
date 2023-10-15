@@ -36,11 +36,12 @@ DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aFram
         m_maxA( aFrame, m_maxALabel, m_maxACtrl, m_maxAUnits ),
         m_spacing( aFrame, m_spacingLabel, m_spacingCtrl, m_spacingUnits ),
         m_r( aFrame, m_rLabel, m_rCtrl, m_rUnits ),
-        m_settings( aSettings )
+        m_settings( aSettings ),
+        m_mode( aMeanderType )
 {
     m_r.SetUnits( EDA_UNITS::PERCENT );
 
-    switch( aMeanderType )
+    switch( m_mode )
     {
     case PNS::PNS_MODE_TUNE_SINGLE:
         m_legend->SetBitmap( KiBitmap( BITMAPS::tune_single_track_length_legend ) );
@@ -53,6 +54,7 @@ DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aFram
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW:
         m_legend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_skew_legend ) );
+        m_targetLengthLabel->SetLabel( _( "Target skew: ") );
         break;
 
     default:
@@ -70,7 +72,11 @@ DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aFram
 
 bool DIALOG_MEANDER_PROPERTIES::TransferDataToWindow()
 {
-    m_targetLength.SetValue( m_settings.m_targetLength );
+    if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
+        m_targetLength.SetValue( m_settings.m_targetSkew );
+    else
+        m_targetLength.SetValue( m_settings.m_targetLength );
+
     m_overrideCustomRules->SetValue( m_settings.m_overrideCustomRules );
 
     m_targetLength.Enable( m_constraint.IsNull() || m_settings.m_overrideCustomRules );
@@ -93,7 +99,11 @@ bool DIALOG_MEANDER_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_MEANDER_PROPERTIES::TransferDataFromWindow()
 {
-    m_settings.m_targetLength = m_targetLength.GetValue();
+    if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
+        m_settings.m_targetSkew = m_targetLength.GetIntValue();
+    else
+        m_settings.m_targetLength = m_targetLength.GetValue();
+
     m_settings.m_overrideCustomRules = m_overrideCustomRules->GetValue();
 
     m_settings.m_minAmplitude = m_minA.GetIntValue();

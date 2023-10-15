@@ -59,6 +59,7 @@ private:
     UNIT_BINDER            m_r;
 
     PNS::MEANDER_SETTINGS& m_settings;
+    PNS::ROUTER_MODE       m_mode;
 };
 
 #endif // DIALOG_MEANDER_PROPERTIES_H

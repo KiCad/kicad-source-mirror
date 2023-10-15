@@ -81,6 +81,16 @@ public:
 
     wxString GetGeneratorType() const override { return wxS( "meanders" ); }
 
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
+    {
+        return wxString( _( "Tuning Pattern" ) );
+    }
+
+    wxString GetFriendlyName() const override
+    {
+        return wxString( _( "Tuning Pattern" ) );
+    }
+
     static PCB_GENERATOR_MEANDERS* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                               BOARD_CONNECTED_ITEM* aStartItem,
                                               LENGTH_TUNING_MODE aMode );
@@ -195,6 +205,8 @@ public:
 
     void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                        STATUS_TEXT_POPUP* aPopup ) override;
+
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
 protected:
     void swapData( BOARD_ITEM* aImage ) override
@@ -995,11 +1007,13 @@ bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
             return false;
         }
 
-        if( m_tuningMode == DIFF_PAIR
-                && !resetToBaseline( router, layer, aFrame, *m_baseLineCoupled, false ) )
+        if( m_tuningMode == DIFF_PAIR )
         {
-            initBaseLines( router, layer, aBoard );
-            return false;
+            if( !resetToBaseline( router, layer, aFrame, *m_baseLineCoupled, false ) )
+            {
+                initBaseLines( router, layer, aBoard );
+                return false;
+            }
         }
     }
 
@@ -1109,7 +1123,7 @@ bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points
 {
     VECTOR2I centerlineOffset;
 
-    if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+    if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
 
     points->AddPoint( m_origin + centerlineOffset );
@@ -1146,7 +1160,7 @@ bool PCB_GENERATOR_MEANDERS::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> 
 {
     VECTOR2I centerlineOffset;
 
-    if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+    if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
@@ -1191,7 +1205,7 @@ bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
 {
     VECTOR2I centerlineOffset;
 
-    if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+    if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
@@ -1229,10 +1243,12 @@ SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
     {
         SHAPE_LINE_CHAIN cl = *m_baseLine;
 
-        if( m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
         {
-            for( int i = 0; i < cl.PointCount() && i < m_baseLineCoupled->PointCount(); ++i )
+            for( int i = 0; i < cl.PointCount() - 1 && i < m_baseLineCoupled->PointCount(); ++i )
                 cl.SetPoint( i, ( cl.CPoint( i ) + m_baseLineCoupled->CPoint( i ) ) / 2 );
+
+            cl.SetPoint( -1, ( cl.CPoint( -1 ) + m_baseLineCoupled->CPoint( -1 ) ) / 2 );
         }
 
         bool singleSided = m_tuningMode != DIFF_PAIR && m_singleSide;
@@ -1295,7 +1311,7 @@ void PCB_GENERATOR_MEANDERS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         ctx.DrawLine( m_origin, m_end, false );
     }
 
-    if( m_baseLineCoupled )
+    if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
     {
         for( int i = 0; i < m_baseLineCoupled->SegmentCount(); i++ )
         {
@@ -1461,7 +1477,178 @@ void PCB_GENERATOR_MEANDERS::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_
 }
 
 
-const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Meanders" );
+void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                              std::vector<MSG_PANEL_ITEM>& aList )
+{
+    wxString      msg;
+    NETINFO_ITEM* primaryNet = nullptr;
+    NETINFO_ITEM* coupledNet = nullptr;
+    PCB_TRACK*    primaryItem = nullptr;
+    PCB_TRACK*    coupledItem = nullptr;
+    NETCLASS*     netclass = nullptr;
+    int           width = 0;
+    bool          mixedWidth = false;
+
+    aList.emplace_back( _( "Type" ), GetFriendlyName() );
+
+    for( BOARD_ITEM* member : GetItems() )
+    {
+        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( member ) )
+        {
+            if( !primaryNet )
+            {
+                primaryItem = track;
+                primaryNet = track->GetNet();
+            }
+            else if( !coupledNet && track->GetNet() != primaryNet )
+            {
+                coupledItem = track;
+                coupledNet = track->GetNet();
+            }
+
+            if( !netclass )
+                netclass = track->GetEffectiveNetClass();
+
+            if( !width )
+                width = track->GetWidth();
+            else if( width != track->GetWidth() )
+                mixedWidth = true;
+        }
+    }
+
+    if( coupledNet )
+    {
+        aList.emplace_back( _( "Nets" ), UnescapeString( primaryNet->GetNetname() )
+                                         + wxS( ", " )
+                                         + UnescapeString( coupledNet->GetNetname() ) );
+    }
+    else if( primaryNet )
+    {
+        aList.emplace_back( _( "Net" ), UnescapeString( primaryNet->GetNetname() ) );
+    }
+
+    if( netclass )
+        aList.emplace_back( _( "Resolved Netclass" ), UnescapeString( netclass->GetName() ) );
+
+    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
+
+    if( width && !mixedWidth )
+        aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( width ) );
+
+    BOARD*                       board = GetBoard();
+    std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
+    DRC_CONSTRAINT               constraint;
+
+    // Display full track length (in Pcbnew)
+    if( board && primaryItem && primaryItem->GetNetCode() > 0 )
+    {
+        int    count;
+        double trackLen;
+        double lenPadToDie;
+
+        std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *primaryItem );
+
+        if( coupledItem && coupledItem->GetNetCode() > 0 )
+        {
+            double coupledLen;
+            std::tie( count, coupledLen, lenPadToDie ) = board->GetTrackLength( *coupledItem );
+
+            aList.emplace_back( _( "Routed Lengths" ), aFrame->MessageTextFromValue( trackLen )
+                                                     + wxS( ", " )
+                                                     + aFrame->MessageTextFromValue( coupledLen ) );
+        }
+        else
+        {
+            aList.emplace_back( _( "Routed Length" ), aFrame->MessageTextFromValue( trackLen ) );
+        }
+
+        if( lenPadToDie != 0 )
+        {
+            msg = aFrame->MessageTextFromValue( lenPadToDie );
+            aList.emplace_back( _( "Pad To Die Length" ), msg );
+
+            msg = aFrame->MessageTextFromValue( trackLen + lenPadToDie );
+            aList.emplace_back( _( "Full Length" ), msg );
+        }
+    }
+
+    auto getMinOptMax =
+            [&]( const MINOPTMAX<int>& v )
+            {
+                wxString msg;
+
+                if( v.HasMin() )
+                {
+                    msg += wxString::Format( _( "min %s" ), aFrame->MessageTextFromValue( v.Min() ) );
+                }
+
+                if( v.HasOpt() )
+                {
+                    if( !msg.IsEmpty() )
+                        msg += wxS( "; " );
+
+                    msg += wxString::Format( _( "opt %s" ), aFrame->MessageTextFromValue( v.Opt() ) );
+                }
+
+                if( v.HasMax() )
+                {
+                    if( !msg.IsEmpty() )
+                        msg += wxS( "; " );
+
+                    msg += wxString::Format( _( "max %s" ), aFrame->MessageTextFromValue( v.Max() ) );
+                }
+
+                return msg;
+            };
+
+    if( m_tuningMode == DIFF_PAIR_SKEW )
+    {
+        constraint = drcEngine->EvalRules( SKEW_CONSTRAINT, primaryItem, coupledItem, m_layer );
+
+        if( constraint.IsNull() || m_overrideCustomRules )
+        {
+            msg = aFrame->MessageTextFromValue( m_targetSkew );
+
+            aList.emplace_back( wxString::Format( _( "Target Skew: %s" ), msg ),
+                                wxString::Format( _( "(from tuning pattern properties)" ) ) );
+        }
+        else
+        {
+            msg = getMinOptMax( constraint.GetValue() );
+
+            if( !msg.IsEmpty() )
+            {
+                aList.emplace_back( wxString::Format( _( "Skew Constraints: %s." ), msg ),
+                                    wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
+            }
+        }
+    }
+    else
+    {
+        constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
+
+        if( constraint.IsNull() || m_overrideCustomRules )
+        {
+            msg = aFrame->MessageTextFromValue( (double) m_targetLength );
+
+            aList.emplace_back( wxString::Format( _( "Target Length: %s" ), msg ),
+                                wxString::Format( _( "(from tuning pattern properties)" ) ) );
+        }
+        else
+        {
+            msg = getMinOptMax( constraint.GetValue() );
+
+            if( !msg.IsEmpty() )
+            {
+                aList.emplace_back( wxString::Format( _( "Length Constraints: %s." ), msg ),
+                                    wxString::Format( _( "(from %s)" ), constraint.GetName() ) );
+            }
+        }
+    }
+}
+
+
+const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Tuning Pattern" );
 const wxString PCB_GENERATOR_MEANDERS::GENERATOR_TYPE = wxS( "meanders" );
 
 
@@ -1705,7 +1892,7 @@ static struct PCB_GENERATOR_MEANDERS_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_GENERATOR_MEANDERS ), TYPE_HASH( PCB_GENERATOR ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_GENERATOR_MEANDERS ), TYPE_HASH( BOARD_ITEM ) );
 
-        const wxString groupTab = _HKI( "Meander Properties" );
+        const wxString groupTab = _HKI( "Pattern Properties" );
 
         propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
                                      _HKI( "End X" ), &PCB_GENERATOR_MEANDERS::SetEndX,
