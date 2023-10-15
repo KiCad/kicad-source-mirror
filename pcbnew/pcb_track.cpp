@@ -32,12 +32,10 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <pcb_track.h>
 #include <base_units.h>
-//#include <bitmaps.h>
 #include <string_utils.h>
 #include <view/view.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-//#include <i18n_utility.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>

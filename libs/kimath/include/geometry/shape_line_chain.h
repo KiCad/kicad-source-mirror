@@ -382,7 +382,7 @@ public:
     /**
      * Move a point to a specific location.
      *
-     * @param aIndex is the index of the point to move.
+     * @param aIndex is the index of the point to move.  Negative indexes are from the back.
      * @param aPos is the new absolute location of the point.
      */
     void SetPoint( int aIndex, const VECTOR2I& aPos );
@@ -390,7 +390,7 @@ public:
     /**
      * Return a reference to a given point in the line chain.
      *
-     * @param aIndex is the index of the point.
+     * @param aIndex is the index of the point.  Negative indexes are from the back.
      * @return a const reference to the point.
      */
     const VECTOR2I& CPoint( int aIndex ) const
