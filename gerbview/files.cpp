@@ -199,24 +199,24 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFileName )
      * Now (2014) Ucamco (the company which manages the Gerber format) encourages use of .gbr
      * only and the Gerber X2 file format.
      */
-    filetypes = _( "Gerber files" ) + AddFileExtListToFilter( { "G*", "PHO" } ) + wxT( "|" );
+    filetypes = _( "Gerber files" ) + AddFileExtListToFilter( { "g*", "pho" } ) + wxT( "|" );
 
     /* Special gerber filetypes */
-    filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "GTL" } ) + wxT( "|" );
-    filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "GBL" } ) + wxT( "|" );
-    filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "GBS" } ) + wxT( "|" );
-    filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "GTS" } ) + wxT( "|" );
-    filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "GBO" } ) + wxT( "|" );
-    filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "GTO" } ) + wxT( "|" );
-    filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "GBP" } ) + wxT( "|" );
-    filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "GTP" } ) + wxT( "|" );
-    filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "GKO" } ) + wxT( "|" );
+    filetypes += _( "Top layer" ) + AddFileExtListToFilter( { "gtl" } ) + wxT( "|" );
+    filetypes += _( "Bottom layer" ) + AddFileExtListToFilter( { "gbl" } ) + wxT( "|" );
+    filetypes += _( "Bottom solder resist" ) + AddFileExtListToFilter( { "gbs" } ) + wxT( "|" );
+    filetypes += _( "Top solder resist" ) + AddFileExtListToFilter( { "gts" } ) + wxT( "|" );
+    filetypes += _( "Bottom overlay" ) + AddFileExtListToFilter( { "gbo" } ) + wxT( "|" );
+    filetypes += _( "Top overlay" ) + AddFileExtListToFilter( { "gto" } ) + wxT( "|" );
+    filetypes += _( "Bottom paste" ) + AddFileExtListToFilter( { "gbp" } ) + wxT( "|" );
+    filetypes += _( "Top paste" ) + AddFileExtListToFilter( { "gtp" } ) + wxT( "|" );
+    filetypes += _( "Keep-out layer" ) + AddFileExtListToFilter( { "gko" } ) + wxT( "|" );
     filetypes += _( "Mechanical layers" )
                  + AddFileExtListToFilter(
-                         { "GM1", "GM2", "GM3", "GM4", "GM5", "GM6", "GM7", "GM8", "GM9" } )
+                         { "gm1", "gm2", "gm3", "gm4", "gm5", "gm6", "gm7", "gm8", "gm9" } )
                  + wxT( "|" );
-    filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "GPT" } ) + wxT( "|" );
-    filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "GPB" } ) + wxT( "|" );
+    filetypes += _( "Top Pad Master" ) + AddFileExtListToFilter( { "gpt" } ) + wxT( "|" );
+    filetypes += _( "Bottom Pad Master" ) + AddFileExtListToFilter( { "gpb" } ) + wxT( "|" );
 
     // All filetypes
     filetypes += AllFilesWildcard();
