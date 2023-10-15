@@ -43477,15 +43477,14 @@ msgstr "Soubory knihoven pouzder Altium PCB"
 msgid "Cannot interpret date code %d"
 msgstr "Nelze interpretovat kód data %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:1016
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?"
 msgstr ""
-"Položky nalezené na nedefinovaných vrstvách.  Přejete si\n"
-"je obnovit do vrstvy User.Comments?"
+"Položky nalezené na nedefinovaných vrstvách (%s).\n"
+"Přejete si je obnovit do vrstvy %s?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1021
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1015
