@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-08-27 09:55+0000\n"
+"PO-Revision-Date: 2023-10-17 04:17+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -6620,9 +6620,8 @@ msgid "Min grid spacing:"
 msgstr "Minimální rozteč mřížky:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Přichytávat k mřížce:"
+msgstr "Přichytit k mřížce:"
 
 #: common/widgets/gal_options_panel_base.cpp:76
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -38768,9 +38767,8 @@ msgid "Show Properties Manager"
 msgstr "Zobrazit správce vlastností"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show/hide the properties manager"
-msgstr "Zobrazit/skrýt správce vzhledu"
+msgstr "Zobrazit/skrýt správce vlastností"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Flip Board View"
@@ -40304,9 +40302,9 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "Zobrazit nebo skrýt naznačené spoje pro sítě v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2496
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Přednastavuje (Ctrl+Tab):"
+msgstr "Přednastavuje (%s+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2518
 msgid "Save preset..."
@@ -40360,9 +40358,8 @@ msgid "(unsaved)"
 msgstr "(neuloženo)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "Přednastavuje (Ctrl+Tab):"
+msgstr "Zobrazení (Alt+Tab):"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 #: pcbnew/widgets/legacyfiledlg_save_project.h:34
