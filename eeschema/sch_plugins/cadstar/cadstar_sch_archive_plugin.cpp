@@ -37,6 +37,7 @@
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
+#include <wx/dir.h>
 
 
 const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetName() const
@@ -257,11 +258,28 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
     }
     else
     {
-        // If none specified, use
-        // symbol.csa in same folder as the .lib
+        // If none specified, look for the
+        // .csa file in same folder as the .lib
         csafn = wxFileName( aLibraryPath );
-        csafn.SetName( "symbol" );
         csafn.SetExt( "csa" );
+
+        if( !csafn.FileExists() )
+        {
+            csafn.SetName( "symbol" );
+
+            if( !csafn.FileExists() )
+            {
+                csafn = wxDir::FindFirst( csafn.GetPath(), wxS( "*.csa" ),
+                                          wxDIR_FILES | wxDIR_HIDDEN );
+
+                if( !csafn.FileExists() )
+                {
+                    THROW_IO_ERROR( wxString::Format(
+                            _( "Cannot find the .csa file corresponding to library '%s'." ),
+                            aLibraryPath ) );
+                }
+            }
+        }
     }
 
     if( aProperties && aProperties->count( "fplib" ) )
