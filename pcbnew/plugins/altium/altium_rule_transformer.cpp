@@ -116,14 +116,12 @@ const ALTIUM_RULE_TOKEN& ALTIUM_RULE_TOKENIZER::Next()
     }
     else if( curCh == '\'' )
     {
-        std::cout << "start const string" << std::endl;
         wxString constString;
         while( m_it != m_expr.end() && nextCh != '\'' )
         {
             constString += nextCh; // TODO: escaping?
             nextCh = nextChar();
         }
-        std::cout << "end const string: " << constString << std::endl;
 
         if( m_it != m_expr.end() )
         {

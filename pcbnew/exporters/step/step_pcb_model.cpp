@@ -767,8 +767,6 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                             && aChain.IsArcSegment( aChain.PointCount() - 1 )
                             && aChain.ArcIndex( 0 ) == aChain.ArcIndex( aChain.PointCount() - 1 ) )
                         {
-                            std::cout << "Skip looping arc" << std::endl;
-
                             // Skip first arc (we should encounter it later)
                             int nextShape = aChain.NextShape( i );
 

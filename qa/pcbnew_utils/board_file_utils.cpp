@@ -96,8 +96,6 @@ std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
     std::istream* in_stream = nullptr;
     std::ifstream file_stream;
 
-    printf("RD from %s\n", aFilename.c_str() );
-
     if( aFilename.empty() )
     {
         // no file, read stdin
