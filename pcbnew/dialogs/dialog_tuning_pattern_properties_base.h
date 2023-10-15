@@ -33,9 +33,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_MEANDER_PROPERTIES_BASE
+/// Class DIALOG_TUNING_PATTERN_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_MEANDER_PROPERTIES_BASE : public DIALOG_SHIM
+class DIALOG_TUNING_PATTERN_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -71,9 +71,9 @@ class DIALOG_MEANDER_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_MEANDER_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Tuning Pattern Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Tuning Pattern Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_MEANDER_PROPERTIES_BASE();
+		~DIALOG_TUNING_PATTERN_PROPERTIES_BASE();
 
 };
 

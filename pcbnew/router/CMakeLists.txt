@@ -40,7 +40,6 @@ set( PCBNEW_PNS_SRCS
     pns_solid.cpp
     pns_tool_base.cpp
     pns_topology.cpp
-    pns_tune_status_popup.cpp
     pns_utils.cpp
     pns_via.cpp
     pns_walkaround.cpp

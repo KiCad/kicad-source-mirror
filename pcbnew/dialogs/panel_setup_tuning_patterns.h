@@ -17,10 +17,10 @@
  * with this program.  If not, see <http://www.gnu.or/licenses/>.
  */
 
-#ifndef PANEL_SETUP_MEANDERS_H
-#define PANEL_SETUP_MEANDERS_H
+#ifndef PANEL_SETUP_TUNING_PATTERNS_H
+#define PANEL_SETUP_TUNING_PATTERNS_H
 
-#include <panel_setup_meanders_base.h>
+#include <panel_setup_tuning_patterns_base.h>
 #include <widgets/unit_binder.h>
 
 
@@ -30,10 +30,10 @@ class MEANDER_SETTINGS;
 
 }
 
-class PANEL_SETUP_MEANDERS : public PANEL_SETUP_MEANDERS_BASE
+class PANEL_SETUP_TUNING_PATTERNS : public PANEL_SETUP_TUNING_PATTERNS_BASE
 {
 public:
-    PANEL_SETUP_MEANDERS( wxWindow* aParent, EDA_DRAW_FRAME* aFrame,
+    PANEL_SETUP_TUNING_PATTERNS( wxWindow* aParent, EDA_DRAW_FRAME* aFrame,
                           PNS::MEANDER_SETTINGS& aTrackSettings,
                           PNS::MEANDER_SETTINGS& aDiffPairSettings,
                           PNS::MEANDER_SETTINGS& aSkewSettings );
@@ -63,4 +63,4 @@ private:
     PNS::MEANDER_SETTINGS& m_skewSettings;
 };
 
-#endif // PANEL_SETUP_MEANDERS_H
+#endif // PANEL_SETUP_TUNING_PATTERNS_H

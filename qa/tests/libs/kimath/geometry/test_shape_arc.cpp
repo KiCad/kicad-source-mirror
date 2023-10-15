@@ -794,7 +794,7 @@ static const std::vector<ARC_ARC_COLLIDE_CASE> arc_arc_collide_cases = {
       { 86.063537, 88.295989, 84.968628, 87.581351, -255.5, 0.2 },
       0,
       true },
-    { "case 12: Simulated differential pair meander",
+    { "case 12: Simulated differential pair length-tuning",
       { 94.6551, 88.296, 95.6551, 88.296, 90.0, 0.1 },
       { 94.6551, 88.296, 95.8551, 88.296, 90.0, 0.1 },
       0.1,

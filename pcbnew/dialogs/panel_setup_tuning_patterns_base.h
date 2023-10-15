@@ -33,9 +33,9 @@ class TEXT_CTRL_EVAL;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_SETUP_MEANDERS_BASE
+/// Class PANEL_SETUP_TUNING_PATTERNS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_MEANDERS_BASE : public wxPanel
+class PANEL_SETUP_TUNING_PATTERNS_BASE : public wxPanel
 {
 	private:
 
@@ -96,9 +96,9 @@ class PANEL_SETUP_MEANDERS_BASE : public wxPanel
 
 	public:
 
-		PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_SETUP_MEANDERS_BASE();
+		~PANEL_SETUP_TUNING_PATTERNS_BASE();
 
 };
 

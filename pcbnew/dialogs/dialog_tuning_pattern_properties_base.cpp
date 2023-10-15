@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_meander_properties_base.h"
+#include "dialog_tuning_pattern_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_MEANDER_PROPERTIES_BASE::DIALOG_MEANDER_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_TUNING_PATTERN_PROPERTIES_BASE::DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
@@ -73,7 +73,7 @@ DIALOG_MEANDER_PROPERTIES_BASE::DIALOG_MEANDER_PROPERTIES_BASE( wxWindow* parent
 	gbSizer1->Add( m_spacingLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spacingCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent meander segments. The resulting spacing may be greater based on design rules.") );
+	m_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent tuning segments. The resulting spacing may be greater based on design rules.") );
 
 	gbSizer1->Add( m_spacingCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
@@ -129,12 +129,12 @@ DIALOG_MEANDER_PROPERTIES_BASE::DIALOG_MEANDER_PROPERTIES_BASE( wxWindow* parent
 	bMainSizer->Fit( this );
 
 	// Connect Events
-	m_overrideCustomRules->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_MEANDER_PROPERTIES_BASE::onOverrideCustomRules ), NULL, this );
+	m_overrideCustomRules->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TUNING_PATTERN_PROPERTIES_BASE::onOverrideCustomRules ), NULL, this );
 }
 
-DIALOG_MEANDER_PROPERTIES_BASE::~DIALOG_MEANDER_PROPERTIES_BASE()
+DIALOG_TUNING_PATTERN_PROPERTIES_BASE::~DIALOG_TUNING_PATTERN_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_overrideCustomRules->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_MEANDER_PROPERTIES_BASE::onOverrideCustomRules ), NULL, this );
+	m_overrideCustomRules->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TUNING_PATTERN_PROPERTIES_BASE::onOverrideCustomRules ), NULL, this );
 
 }

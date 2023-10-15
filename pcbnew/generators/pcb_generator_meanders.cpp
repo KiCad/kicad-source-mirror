@@ -32,6 +32,7 @@
 #include <geometry/shape_circle.h>
 #include <kiplatform/ui.h>
 #include <dialogs/dialog_unit_entry.h>
+#include <status_popup.h>
 #include <collectors.h>
 #include <scoped_set_reset.h>
 
@@ -57,9 +58,8 @@
 #include <router/pns_segment.h>
 #include <router/pns_arc.h>
 #include <router/pns_topology.h>
-#include <router/pns_tune_status_popup.h>
 
-#include <dialogs/dialog_meander_properties.h>
+#include <dialogs/dialog_tuning_pattern_properties.h>
 
 
 enum LENGTH_TUNING_MODE
@@ -317,7 +317,7 @@ static PNS::MEANDER_SIDE sideFromString( const std::string& aStr )
         return PNS::MEANDER_SIDE_RIGHT;
     else
     {
-        wxFAIL_MSG( wxS( "Unknown meander side token" ) );
+        wxFAIL_MSG( wxS( "Unknown length-tuning side token" ) );
         return PNS::MEANDER_SIDE_DEFAULT;
     }
 }
@@ -849,7 +849,7 @@ void PCB_GENERATOR_MEANDERS::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
         aCommit->Add( item );
     }
 
-    aCommit->Push( "Remove Meander", undoFlags );
+    aCommit->Push( "Remove Tuning Pattern", undoFlags );
 }
 
 
@@ -1088,7 +1088,7 @@ void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
     bool isNew = IsNew();
 
     if( aCommitMsg.IsEmpty() )
-        aCommit->Push( _( "Edit Meander" ), aCommitFlags );
+        aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
     else
         aCommit->Push( aCommitMsg, aCommitFlags );
 
@@ -1417,7 +1417,7 @@ void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFra
             settings.m_targetLength = constraint.GetValue().Opt();
     }
 
-    DIALOG_MEANDER_PROPERTIES dlg( aEditFrame, settings, toPNSMode(), constraint );
+    DIALOG_TUNING_PATTERN_PROPERTIES dlg( aEditFrame, settings, toPNSMode(), constraint );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -1426,7 +1426,7 @@ void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFra
 
         fromMeanderSettings( settings );
 
-        commit.Push( _( "Edit Meander Properties" ) );
+        commit.Push( _( "Edit Tuning Pattern" ) );
     }
 
     aEditFrame->GetToolManager()->PostAction<PCB_GENERATOR*>( PCB_ACTIONS::regenerateItem, this );
@@ -1677,10 +1677,10 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
     PNS::ROUTER*             router = generatorTool->Router();
-    SCOPED_DRAW_MODE         scopedDrawMode( m_mode, MODE::MEANDER );
+    SCOPED_DRAW_MODE         scopedDrawMode( m_mode, MODE::TUNING );
 
     m_pickerItem = nullptr;
-    m_meander = nullptr;
+    m_tuningPattern = nullptr;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     m_preview.Clear();
@@ -1696,17 +1696,17 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
     auto updateMeander =
             [&]()
             {
-                if( m_meander && m_meander->GetPosition() != m_meander->GetEnd() )
+                if( m_tuningPattern && m_tuningPattern->GetPosition() != m_tuningPattern->GetEnd() )
                 {
-                    m_meander->EditStart( generatorTool, m_board, m_frame, nullptr );
-                    m_meander->Update( generatorTool, m_board, m_frame, nullptr );
+                    m_tuningPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
+                    m_tuningPattern->Update( generatorTool, m_board, m_frame, nullptr );
 
                     m_statusPopup->Popup();
                     canvas()->SetStatusPopup( m_statusPopup.get() );
 
                     m_view->Update( &m_preview );
 
-                    m_meander->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
+                    m_tuningPattern->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
                     m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                 }
             };
@@ -1721,22 +1721,22 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            if( m_meander )
+            if( m_tuningPattern )
             {
                 // First click already made; clean up meander preview
-                m_meander->EditRevert( generatorTool, m_board, m_frame, nullptr );
+                m_tuningPattern->EditRevert( generatorTool, m_board, m_frame, nullptr );
 
                 m_preview.Clear();
 
-                delete m_meander;
-                m_meander = nullptr;
+                delete m_tuningPattern;
+                m_tuningPattern = nullptr;
             }
 
             break;
         }
         else if( evt->IsMotion() )
         {
-            if( !m_meander )
+            if( !m_tuningPattern )
             {
                 // First click not yet made; we're in highlight-net-under-cursor mode
 
@@ -1764,20 +1764,20 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             {
                 // First click already made; we're in preview-meander mode
 
-                m_meander->SetEnd( cursorPos );
+                m_tuningPattern->SetEnd( cursorPos );
                 updateMeander();
             }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( m_pickerItem && !m_meander )
+            if( m_pickerItem && !m_tuningPattern )
             {
                 // First click; create a meander
 
                 generatorTool->HighlightNets( nullptr );
 
                 m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                m_meander = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
+                m_tuningPattern = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
                                                                m_pickerItem, mode );
 
                 int      dummyDist;
@@ -1786,19 +1786,19 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
                 m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
                                                             &dummyDist, &closestPt );
-                m_meander->SetPosition( closestPt );
-                m_meander->SetEnd( closestPt );
+                m_tuningPattern->SetPosition( closestPt );
+                m_tuningPattern->SetEnd( closestPt );
 
-                m_preview.Add( m_meander );
+                m_preview.Add( m_tuningPattern );
             }
-            else if( m_pickerItem && m_meander )
+            else if( m_pickerItem && m_tuningPattern )
             {
                 // Second click; we're done
                 BOARD_COMMIT commit( m_frame );
 
-                m_meander->EditStart( generatorTool, m_board, m_frame, &commit );
-                m_meander->Update( generatorTool, m_board, m_frame, &commit );
-                m_meander->EditPush( generatorTool, m_board, m_frame, &commit, _( "Tune" ) );
+                m_tuningPattern->EditStart( generatorTool, m_board, m_frame, &commit );
+                m_tuningPattern->Update( generatorTool, m_board, m_frame, &commit );
+                m_tuningPattern->EditPush( generatorTool, m_board, m_frame, &commit, _( "Tune" ) );
 
                 break;
             }
@@ -1811,24 +1811,24 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &PCB_ACTIONS::spacingIncrease )
                  || evt->IsAction( &PCB_ACTIONS::spacingDecrease ) )
         {
-            if( m_meander )
+            if( m_tuningPattern )
             {
                 auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
                 placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
-                m_meander->SetSpacing( placer->MeanderSettings().m_spacing );
+                m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
                 updateMeander();
             }
         }
         else if( evt->IsAction( &PCB_ACTIONS::amplIncrease )
                  || evt->IsAction( &PCB_ACTIONS::amplDecrease ) )
         {
-            if( m_meander )
+            if( m_tuningPattern )
             {
                 auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
                 placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
-                m_meander->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
+                m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
                 updateMeander();
             }
         }
@@ -1843,8 +1843,8 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
 
-        controls->CaptureCursor( m_meander != nullptr );
-        controls->SetAutoPan( m_meander != nullptr );
+        controls->CaptureCursor( m_tuningPattern != nullptr );
+        controls->SetAutoPan( m_tuningPattern != nullptr );
     }
 
     controls->CaptureCursor( false );
@@ -1863,8 +1863,8 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
     m_frame->GetCanvas()->Refresh();
 
-    if( m_meander )
-        selectionTool->AddItemToSel( m_meander );
+    if( m_tuningPattern )
+        selectionTool->AddItemToSel( m_tuningPattern );
 
     m_frame->PopTool( aEvent );
     return 0;

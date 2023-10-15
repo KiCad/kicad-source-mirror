@@ -17,17 +17,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <panel_setup_meanders.h>
+#include <panel_setup_tuning_patterns.h>
 #include <router/pns_meander_placer.h>
 #include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 
-PANEL_SETUP_MEANDERS::PANEL_SETUP_MEANDERS( wxWindow* aParent, EDA_DRAW_FRAME* aFrame,
-                                            PNS::MEANDER_SETTINGS& aTrackSettings,
-                                            PNS::MEANDER_SETTINGS& aDiffPairSettings,
-                                            PNS::MEANDER_SETTINGS& aSkewSettings ) :
-        PANEL_SETUP_MEANDERS_BASE( aParent ),
+PANEL_SETUP_TUNING_PATTERNS::PANEL_SETUP_TUNING_PATTERNS( wxWindow* aParent, EDA_DRAW_FRAME* aFrame,
+                                                          PNS::MEANDER_SETTINGS& aTrackSettings,
+                                                          PNS::MEANDER_SETTINGS& aDiffPairSettings,
+                                                          PNS::MEANDER_SETTINGS& aSkewSettings ) :
+        PANEL_SETUP_TUNING_PATTERNS_BASE( aParent ),
         m_track_minA( aFrame, m_track_minALabel, m_track_minACtrl, m_track_minAUnits ),
         m_track_maxA( aFrame, m_track_maxALabel, m_track_maxACtrl, m_track_maxAUnits ),
         m_track_spacing( aFrame, m_track_spacingLabel, m_track_spacingCtrl, m_track_spacingUnits ),
@@ -54,7 +54,7 @@ PANEL_SETUP_MEANDERS::PANEL_SETUP_MEANDERS( wxWindow* aParent, EDA_DRAW_FRAME* a
 }
 
 
-bool PANEL_SETUP_MEANDERS::TransferDataToWindow()
+bool PANEL_SETUP_TUNING_PATTERNS::TransferDataToWindow()
 {
     m_track_minA.SetValue( m_trackSettings.m_minAmplitude );
     m_track_maxA.SetValue( m_trackSettings.m_maxAmplitude );
@@ -80,7 +80,7 @@ bool PANEL_SETUP_MEANDERS::TransferDataToWindow()
 }
 
 
-bool PANEL_SETUP_MEANDERS::TransferDataFromWindow()
+bool PANEL_SETUP_TUNING_PATTERNS::TransferDataFromWindow()
 {
     m_trackSettings.m_minAmplitude = m_track_minA.GetIntValue();
     m_trackSettings.m_maxAmplitude = m_track_maxA.GetIntValue();

@@ -7,16 +7,16 @@
 
 #include "widgets/text_ctrl_eval.h"
 
-#include "panel_setup_meanders_base.h"
+#include "panel_setup_tuning_patterns_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_singleTrackLabel = new wxStaticText( this, wxID_ANY, _("Default properties for single-track meanders:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_singleTrackLabel = new wxStaticText( this, wxID_ANY, _("Default properties for single-track tuning:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_singleTrackLabel->Wrap( -1 );
 	bMainSizer->Add( m_singleTrackLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
 
@@ -71,7 +71,7 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_track_spacingCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_track_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent meander segments. The resulting spacing may be greater based on design rules.") );
+	m_track_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent tuning segments. The resulting spacing may be greater based on design rules.") );
 
 	bSizer9->Add( m_track_spacingCtrl, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -137,7 +137,7 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	singleTrackSizer->Add( fgSizer3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	singleTrackSizer->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( singleTrackSizer, 0, wxEXPAND|wxRIGHT, 5 );
@@ -145,7 +145,7 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 
 	bMainSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
-	m_diffPairsLabel = new wxStaticText( this, wxID_ANY, _("Default properties for differential-pair meanders:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_diffPairsLabel = new wxStaticText( this, wxID_ANY, _("Default properties for differential-pairs:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_diffPairsLabel->Wrap( -1 );
 	bMainSizer->Add( m_diffPairsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
 
@@ -200,7 +200,7 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	bSizer91 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_dp_spacingCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_dp_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent meander segments. The resulting spacing may be greater based on design rules.") );
+	m_dp_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent tuning segments. The resulting spacing may be greater based on design rules.") );
 
 	bSizer91->Add( m_dp_spacingCtrl, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -272,7 +272,7 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	diffPairSizer->Add( fgSizer32, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	diffPairSizer->Add( fgSizer32, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( diffPairSizer, 0, wxEXPAND|wxRIGHT, 5 );
@@ -335,7 +335,7 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	bSizer92 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_skew_spacingCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_skew_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent meander segments. The resulting spacing may be greater based on design rules.") );
+	m_skew_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent tuning segments. The resulting spacing may be greater based on design rules.") );
 
 	bSizer92->Add( m_skew_spacingCtrl, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -392,10 +392,10 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	fgSizer31->Add( m_skew_rUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	skewSizer->Add( fgSizer31, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	skewSizer->Add( fgSizer31, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( skewSizer, 0, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( skewSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	this->SetSizer( bMainSizer );
@@ -403,6 +403,6 @@ PANEL_SETUP_MEANDERS_BASE::PANEL_SETUP_MEANDERS_BASE( wxWindow* parent, wxWindow
 	bMainSizer->Fit( this );
 }
 
-PANEL_SETUP_MEANDERS_BASE::~PANEL_SETUP_MEANDERS_BASE()
+PANEL_SETUP_TUNING_PATTERNS_BASE::~PANEL_SETUP_TUNING_PATTERNS_BASE()
 {
 }

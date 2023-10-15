@@ -17,10 +17,10 @@
  * with this program.  If not, see <http://www.gnu.or/licenses/>.
  */
 
-#ifndef DIALOG_MEANDER_PROPERTIES_H
-#define DIALOG_MEANDER_PROPERTIES_H
+#ifndef DIALOG_TUNING_PATTERN_PROPERTIES_H
+#define DIALOG_TUNING_PATTERN_PROPERTIES_H
 
-#include "dialog_meander_properties_base.h"
+#include "dialog_tuning_pattern_properties_base.h"
 
 #include <widgets/unit_binder.h>
 
@@ -36,11 +36,13 @@ class PCB_BASE_EDIT_FRAME;
 class DRC_CONSTRAINT;
 
 
-class DIALOG_MEANDER_PROPERTIES : public DIALOG_MEANDER_PROPERTIES_BASE
+class DIALOG_TUNING_PATTERN_PROPERTIES : public DIALOG_TUNING_PATTERN_PROPERTIES_BASE
 {
 public:
-    DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PNS::MEANDER_SETTINGS& aSettings,
-                               PNS::ROUTER_MODE aMeanderType, const DRC_CONSTRAINT& aConstraint );
+    DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
+                                      PNS::MEANDER_SETTINGS& aSettings,
+                                      PNS::ROUTER_MODE aMeanderType,
+                                      const DRC_CONSTRAINT& aConstraint );
 
 private:
     bool TransferDataToWindow() override;
@@ -62,4 +64,4 @@ private:
     PNS::ROUTER_MODE       m_mode;
 };
 
-#endif // DIALOG_MEANDER_PROPERTIES_H
+#endif // DIALOG_TUNING_PATTERN_PROPERTIES_H

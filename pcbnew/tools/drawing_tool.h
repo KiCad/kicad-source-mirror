@@ -80,7 +80,7 @@ public:
         ZONE,
         GRAPHIC_POLYGON,
         VIA,
-        MEANDER
+        TUNING
     };
 
     /**
@@ -356,7 +356,7 @@ private:
 
     PCB_SELECTION             m_preview;
     BOARD_CONNECTED_ITEM*     m_pickerItem;
-    PCB_GENERATOR_MEANDERS*   m_meander;
+    PCB_GENERATOR_MEANDERS*   m_tuningPattern;
 
     std::unique_ptr<STATUS_TEXT_POPUP>  m_statusPopup;
 

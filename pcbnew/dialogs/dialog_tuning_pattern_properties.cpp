@@ -17,18 +17,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialog_meander_properties.h"
+#include "dialog_tuning_pattern_properties.h"
 #include <bitmaps.h>
 #include <pcb_base_edit_frame.h>
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
 
 
-DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame,
-                                                      PNS::MEANDER_SETTINGS& aSettings,
-                                                      PNS::ROUTER_MODE aMeanderType,
-                                                      const DRC_CONSTRAINT& aConstraint ) :
-        DIALOG_MEANDER_PROPERTIES_BASE( aFrame ),
+DIALOG_TUNING_PATTERN_PROPERTIES::DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame,
+                                                                    PNS::MEANDER_SETTINGS& aSettings,
+                                                                    PNS::ROUTER_MODE aMeanderType,
+                                                                    const DRC_CONSTRAINT& aConstraint ) :
+        DIALOG_TUNING_PATTERN_PROPERTIES_BASE( aFrame ),
         m_frame( aFrame ),
         m_constraint( aConstraint ),
         m_targetLength( aFrame, m_targetLengthLabel, m_targetLengthCtrl, m_targetLengthUnits ),
@@ -70,7 +70,7 @@ DIALOG_MEANDER_PROPERTIES::DIALOG_MEANDER_PROPERTIES( PCB_BASE_EDIT_FRAME* aFram
 }
 
 
-bool DIALOG_MEANDER_PROPERTIES::TransferDataToWindow()
+bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataToWindow()
 {
     if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
         m_targetLength.SetValue( m_settings.m_targetSkew );
@@ -97,7 +97,7 @@ bool DIALOG_MEANDER_PROPERTIES::TransferDataToWindow()
 }
 
 
-bool DIALOG_MEANDER_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataFromWindow()
 {
     if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
         m_settings.m_targetSkew = m_targetLength.GetIntValue();
@@ -118,7 +118,7 @@ bool DIALOG_MEANDER_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_MEANDER_PROPERTIES::onOverrideCustomRules( wxCommandEvent& event )
+void DIALOG_TUNING_PATTERN_PROPERTIES::onOverrideCustomRules( wxCommandEvent& event )
 {
     m_targetLength.Enable( event.IsChecked() || m_constraint.IsNull() );
 

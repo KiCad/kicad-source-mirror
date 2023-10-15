@@ -596,7 +596,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             },
             {} ) );
 
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "meander_settings",
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "tuning_pattern_settings",
             [&]() -> nlohmann::json
             {
                 nlohmann::json js = {};
@@ -616,9 +616,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             return entry;
                         };
 
-                js["single_track_meander_defaults"] = make_settings( m_singleTrackMeanderSettings );
-                js["diff_pair_meander_defaults"] = make_settings( m_diffPairMeanderSettings );
-                js["skew_meander_defaults"] = make_settings( m_skewMeanderSettings );
+                js["single_track_defaults"] = make_settings( m_singleTrackMeanderSettings );
+                js["diff_pair_defaults"] = make_settings( m_diffPairMeanderSettings );
+                js["diff_pair_skew_defaults"] = make_settings( m_skewMeanderSettings );
 
                 return js;
             },
@@ -653,14 +653,14 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             return settings;
                         };
 
-                if( aObj.contains( "single_track_meander_defaults" ) )
-                    m_singleTrackMeanderSettings = read_settings( aObj["single_track_meander_defaults"] );
+                if( aObj.contains( "single_track_defaults" ) )
+                    m_singleTrackMeanderSettings = read_settings( aObj["single_track_defaults"] );
 
-                if( aObj.contains( "diff_pair_meander_defaults" ) )
-                    m_diffPairMeanderSettings = read_settings( aObj["diff_pair_meander_defaults"] );
+                if( aObj.contains( "diff_pair_defaults" ) )
+                    m_diffPairMeanderSettings = read_settings( aObj["diff_pair_defaults"] );
 
-                if( aObj.contains( "skew_meander_defaults" ) )
-                    m_skewMeanderSettings = read_settings( aObj["skew_meander_defaults"] );
+                if( aObj.contains( "diff_pair_skew_defaults" ) )
+                    m_skewMeanderSettings = read_settings( aObj["diff_pair_skew_defaults"] );
             },
             {} ) );
 

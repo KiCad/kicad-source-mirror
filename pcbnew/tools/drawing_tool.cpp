@@ -174,7 +174,7 @@ DRAWING_TOOL::DRAWING_TOOL() :
         m_layer( UNDEFINED_LAYER ),
         m_stroke( 1, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_pickerItem( nullptr ),
-        m_meander( nullptr )
+        m_tuningPattern( nullptr )
 {
 }
 
@@ -231,10 +231,10 @@ bool DRAWING_TOOL::Init()
                 return m_mode == MODE::VIA;
             };
 
-    auto meanderToolActive =
+    auto tuningToolActive =
             [this]( const SELECTION& aSel )
             {
-                return m_mode == MODE::MEANDER;
+                return m_mode == MODE::TUNING;
             };
 
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
@@ -250,12 +250,12 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,        canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,     canUndoPoint, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::arcPosture,          arcToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,     meanderToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,     meanderToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,        meanderToolActive, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::amplDecrease,        meanderToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,     tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,     tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,        tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::amplDecrease,        tuningToolActive, 200 );
 
-    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, !meanderToolActive, 250 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, !tuningToolActive, 250 );
     ctxMenu.AddSeparator( 500 );
 
     std::shared_ptr<VIA_SIZE_MENU> viaSizeMenu = std::make_shared<VIA_SIZE_MENU>();

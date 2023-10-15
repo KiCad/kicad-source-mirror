@@ -192,7 +192,7 @@ TOOL_ACTION PCB_ACTIONS::spacingIncrease( TOOL_ACTION_ARGS()
         .DefaultHotkey( '1' )
         .LegacyHotkeyName( "Increase meander spacing by one step." )
         .MenuText( _( "Increase Spacing" ) )
-        .Tooltip( _( "Increase meander spacing by one step." ) )
+        .Tooltip( _( "Increase tuning pattern spacing by one step." ) )
         .Icon( BITMAPS::router_len_tuner_dist_incr ) );
 
 TOOL_ACTION PCB_ACTIONS::spacingDecrease( TOOL_ACTION_ARGS()
@@ -201,7 +201,7 @@ TOOL_ACTION PCB_ACTIONS::spacingDecrease( TOOL_ACTION_ARGS()
         .DefaultHotkey( '2' )
         .LegacyHotkeyName( "Decrease meander spacing by one step." )
         .MenuText( _( "Decrease Spacing" ) )
-        .Tooltip( _( "Decrease meander spacing by one step." ) )
+        .Tooltip( _( "Decrease tuning pattern spacing by one step." ) )
         .Icon( BITMAPS::router_len_tuner_dist_decr ) );
 
 TOOL_ACTION PCB_ACTIONS::amplIncrease( TOOL_ACTION_ARGS()
@@ -210,7 +210,7 @@ TOOL_ACTION PCB_ACTIONS::amplIncrease( TOOL_ACTION_ARGS()
         .DefaultHotkey( '3' )
         .LegacyHotkeyName( "Increase meander amplitude by one step." )
         .MenuText( _( "Increase Amplitude" ) )
-        .Tooltip( _( "Increase meander amplitude by one step." ) )
+        .Tooltip( _( "Increase tuning pattern amplitude by one step." ) )
         .Icon( BITMAPS::router_len_tuner_amplitude_incr ) );
 
 TOOL_ACTION PCB_ACTIONS::amplDecrease( TOOL_ACTION_ARGS()
@@ -219,7 +219,7 @@ TOOL_ACTION PCB_ACTIONS::amplDecrease( TOOL_ACTION_ARGS()
         .DefaultHotkey( '4' )
         .LegacyHotkeyName( "Decrease meander amplitude by one step." )
         .MenuText( _( "Decrease Amplitude" ) )
-        .Tooltip( _( "Decrease meander amplitude by one step." ) )
+        .Tooltip( _( "Decrease tuning pattern amplitude by one step." ) )
         .Icon( BITMAPS::router_len_tuner_amplitude_decr ) );
 
 
