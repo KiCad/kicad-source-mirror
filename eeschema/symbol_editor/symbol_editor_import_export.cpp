@@ -84,12 +84,7 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName fn;
-
-    if( dlg.GetFilterIndex() == 0 )
-        fn = EnsureFileExtension( dlg.GetPath(), KiCadSymbolLibFileExtension );
-    else
-        fn = EnsureFileExtension( dlg.GetPath(), LegacySymbolLibFileExtension );
+    wxFileName fn( dlg.GetPath() );
 
     m_mruPath = fn.GetPath();
 
