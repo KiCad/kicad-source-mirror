@@ -156,12 +156,12 @@ DIALOG_IMPORT_GFX_SCH::~DIALOG_IMPORT_GFX_SCH()
 
     if( SYMBOL_EDIT_FRAME* symFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_parent ) )
     {
-        SYMBOL_EDITOR_SETTINGS* cfg = m_parent->libeditconfig();
+        SYMBOL_EDITOR_SETTINGS* cfg = symFrame->libeditconfig();
         saveToSettings( cfg );
     }
     else if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_parent ) )
     {
-        EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+        EESCHEMA_SETTINGS* cfg = schFrame->eeconfig();
         saveToSettings( cfg );
     }
 

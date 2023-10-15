@@ -375,6 +375,7 @@ PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_I
     m_spacing = pcbIUScale.mmToIU( 0.6 );
     m_targetLength = pcbIUScale.mmToIU( 100 );
     m_targetSkew = pcbIUScale.mmToIU( 0 );
+    m_overrideCustomRules = false;
     m_end = VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 );
     m_cornerRadiusPercentage = 100;
     m_initialSide = PNS::MEANDER_SIDE_DEFAULT;

@@ -525,7 +525,7 @@ public:
     {}
 
     LSEQ( std::initializer_list<PCB_LAYER_ID> aLayers ) :
-            BASE_SEQ( aLayers )
+            BASE_SEQ( aLayers ), m_index( 0 )
     {}
 
     void Rewind()           { m_index = 0; }
