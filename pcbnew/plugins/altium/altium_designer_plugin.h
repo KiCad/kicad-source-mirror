@@ -49,6 +49,8 @@ public:
         return PLUGIN_FILE_DESC( _HKI( "Altium PCB footprint library files" ), { "PcbLib" } );
     }
 
+    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
+
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadFootprintLib( const wxString& aFileName ) const override;
 
