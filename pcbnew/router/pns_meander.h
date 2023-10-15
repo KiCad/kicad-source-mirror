@@ -80,7 +80,7 @@ public:
         m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
         m_singleSided = false;
-        m_segmentSide = MEANDER_SIDE_DEFAULT;
+        m_segmentSide = MEANDER_SIDE_LEFT;
         m_lengthTolerance = 100000;
     }
 

@@ -246,7 +246,13 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     for( const DIFF_PAIR::COUPLED_SEGMENTS& sp : coupledSegments )
     {
-        SEG base = baselineSegment( sp );
+        SEG  base = baselineSegment( sp );
+        bool side = false;
+
+        if( m_settings.m_segmentSide == 0 )
+            side = base.Side( aP ) < 0;
+        else
+            side = m_settings.m_segmentSide < 0;
 
         PNS_DBG( Dbg(), AddShape, base, GREEN, 10000, wxT( "dp-baseline" ) );
 
@@ -282,7 +288,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
             curIndexN = tunedN.NextShape( curIndexN );
         }
 
-        m_result.MeanderSegment( base, base.Side( aP ) < 0 );
+        m_result.MeanderSegment( base, side );
     }
 
     while( curIndexP < tunedP.PointCount() && curIndexP != -1 )

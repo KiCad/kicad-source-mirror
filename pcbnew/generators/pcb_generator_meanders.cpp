@@ -1226,7 +1226,7 @@ bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
 
     aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
 
-    VECTOR2I spacingHandleOffset =  widthHandleOffset
+    VECTOR2I spacingHandleOffset = widthHandleOffset
                                         + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
 
     aEditPoints->Point( 3 ).SetPosition( base.A + spacingHandleOffset );
