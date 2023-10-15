@@ -160,6 +160,8 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
 
             if( aPart.m_PinNamesMap.count( termID ) )
                 pin->SetName( HandleTextOverbar( aPart.m_PinNamesMap.at( termID ) ) );
+            else if( aPart.m_PinLabelsMap.count( termID ) )
+                pin->SetName( HandleTextOverbar( aPart.m_PinLabelsMap.at( termID ) ) );
 
             pin->SetType( getKiCadPinType( sym.m_Pins[termIdx].m_Type ) );
 
