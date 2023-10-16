@@ -82,6 +82,8 @@ class APP_SETTINGS_BASE;
 class APPEARANCE_CONTROLS_3D;
 struct WINDOW_SETTINGS;
 struct WINDOW_STATE;
+class ACTION_MENU;
+class TOOL_INTERACTIVE;
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
@@ -680,6 +682,9 @@ protected:
      * Calls DoWithAcceptedFiles() to execute actions on files.
      */
     virtual void OnDropFiles( wxDropFilesEvent& aEvent );
+
+
+    void AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool );
 
     /**
      * Execute action on accepted dropped file.

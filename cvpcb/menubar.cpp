@@ -23,7 +23,6 @@
  */
 
 #include <bitmaps.h>
-#include <menus_helpers.h>
 #include <tool/actions.h>
 #include <tool/common_control.h>
 #include <tool/conditional_menu.h>

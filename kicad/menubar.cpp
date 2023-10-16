@@ -27,7 +27,6 @@
 #include <bitmaps.h>
 #include <file_history.h>
 #include <kiplatform/policy.h>
-#include <menus_helpers.h>
 #include <paths.h>
 #include <policy_keys.h>
 #include <tool/action_manager.h>

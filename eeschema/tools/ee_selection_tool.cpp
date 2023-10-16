@@ -36,7 +36,6 @@
 #include <symbol_viewer_frame.h>
 #include <math/util.h>
 #include <geometry/shape_rect.h>
-#include <menus_helpers.h>
 #include <sch_painter.h>
 #include <preview_items/selection_area.h>
 #include <sch_base_frame.h>

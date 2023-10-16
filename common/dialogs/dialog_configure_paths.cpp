@@ -26,7 +26,6 @@
 
 #include <bitmaps.h>
 #include <confirm.h>
-#include <menus_helpers.h>
 #include <validators.h>
 #include <dialogs/html_message_box.h>
 #include <filename_resolver.h>

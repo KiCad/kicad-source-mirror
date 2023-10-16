@@ -26,7 +26,6 @@
 #include <wx/checkbox.h>
 #include <wx/filedlg.h>
 #include <bitmaps.h>
-#include <menus_helpers.h>
 #include <gerbview.h>
 #include "gerbview_draw_panel_gal.h"
 #include <gerbview_frame.h>

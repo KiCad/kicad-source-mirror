@@ -29,7 +29,6 @@
 #include <gerbview_settings.h>
 #include <string_utils.h>
 #include <excellon_image.h>
-#include <menus_helpers.h>
 #include <tool/tool_manager.h>
 #include <project.h>
 #include <view/view.h>

@@ -32,7 +32,6 @@
 #include <kiface_base.h>
 #include <pgm_base.h>
 #include <widgets/wx_menubar.h>
-#include <menus_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>

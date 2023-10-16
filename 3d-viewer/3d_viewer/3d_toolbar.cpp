@@ -31,7 +31,6 @@
 #include <bitmaps.h>
 #include <dialogs/eda_view_switcher.h>
 #include <eda_3d_viewer_frame.h>
-#include <menus_helpers.h>
 #include <tool/action_toolbar.h>
 #include <tools/eda_3d_actions.h>
 #include <3d_viewer_id.h>

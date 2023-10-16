@@ -25,7 +25,6 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <widgets/wx_menubar.h>
-#include "menus_helpers.h"
 
 
 void SIMULATOR_FRAME::ReCreateHToolbar()

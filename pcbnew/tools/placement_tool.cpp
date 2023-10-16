@@ -35,8 +35,6 @@
 #include <board_commit.h>
 #include <bitmaps.h>
 
-#include <menus_helpers.h>
-
 
 ALIGN_DISTRIBUTE_TOOL::ALIGN_DISTRIBUTE_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Placement" ),

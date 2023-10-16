@@ -28,7 +28,6 @@
 #include <bitmaps.h>
 #include <tool/conditional_menu.h>
 #include <eda_3d_viewer_frame.h>
-#include <menus_helpers.h>
 #include <3d_viewer_id.h>
 #include <3d_viewer/tools/eda_3d_actions.h>
 #include <tool/tool_manager.h>

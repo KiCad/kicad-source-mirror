@@ -28,7 +28,6 @@
 #include <eda_list_dialog.h>
 #include <string_utils.h>
 #include <footprint_edit_frame.h>
-#include <menus_helpers.h>
 #include <confirm.h>
 #include <pcb_display_options.h>
 #include <pcb_edit_frame.h>

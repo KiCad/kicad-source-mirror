@@ -33,7 +33,6 @@
 #include <file_history.h>
 #include <id.h>
 #include <kiface_base.h>
-#include <menus_helpers.h>
 #include <hotkeys_basic.h>
 #include <panel_hotkeys_editor.h>
 #include <paths.h>
@@ -516,7 +515,7 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 
     helpMenu->AppendSeparator();
     helpMenu->Add( ACTIONS::about );
-    
+
     // Trailing space keeps OSX from hijacking our menu (and disabling everything in it).
     aMenuBar->Append( helpMenu, _( "&Help" ) + wxS( " " ) );
     helpMenu->wxMenu::SetTitle( _( "&Help" ) + wxS( " " ) );
@@ -1553,3 +1552,40 @@ WXLRESULT EDA_BASE_FRAME::MSWWindowProc( WXUINT message, WXWPARAM wParam, WXLPAR
     return wxFrame::MSWWindowProc( message, wParam, lParam );
 }
 #endif
+
+
+/**
+ * Function AddMenuLanguageList
+ * creates a menu list for language choice, and add it as submenu to \a MasterMenu.
+ *
+ * @param aMasterMenu is the main menu.
+ * @param aControlTool is the tool to associate with the menu
+ */
+void EDA_BASE_FRAME::AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool )
+{
+    ACTION_MENU* langsMenu = new ACTION_MENU( false, aControlTool );
+    langsMenu->SetTitle( _( "Set Language" ) );
+    langsMenu->SetIcon( BITMAPS::language );
+
+    wxString tooltip;
+
+    for( unsigned ii = 0; LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
+    {
+        wxString label;
+
+        if( LanguagesList[ii].m_DoNotTranslate )
+            label = LanguagesList[ii].m_Lang_Label;
+        else
+            label = wxGetTranslation( LanguagesList[ii].m_Lang_Label );
+
+        wxMenuItem* item =
+                new wxMenuItem( langsMenu,
+                                LanguagesList[ii].m_KI_Lang_Identifier, // wxMenuItem wxID
+                                label, tooltip, wxITEM_CHECK );
+
+        langsMenu->Append( item );
+    }
+
+    // This must be done after the items are added
+    aMasterMenu->Add( langsMenu );
+}

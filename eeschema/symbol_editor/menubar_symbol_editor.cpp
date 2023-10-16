@@ -24,7 +24,6 @@
  */
 
 #include <bitmaps.h>
-#include <menus_helpers.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>

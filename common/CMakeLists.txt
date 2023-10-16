@@ -450,7 +450,6 @@ set( COMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     kiway_player.cpp
-    languages_menu.cpp
     launch_ext.cpp
     lib_table_base.cpp
     lib_table_grid_tricks.cpp

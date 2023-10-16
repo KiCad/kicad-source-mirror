@@ -37,7 +37,6 @@
 
 #include <bitmaps.h>
 #include <macros.h>
-#include <menus_helpers.h>
 #include <widgets/indicator_icon.h>
 #include <widgets/wx_ellipsized_static_text.h>
 #include <wx/checkbox.h>

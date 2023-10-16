@@ -33,7 +33,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_track.h>
 #include <zone.h>
-#include <menus_helpers.h>
 #include <pcbnew_settings.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
