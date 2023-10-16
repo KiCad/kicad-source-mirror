@@ -46,6 +46,7 @@ class wxFindReplaceData;
 class SEARCH_PANE;
 class HOTKEY_CYCLE_POPUP;
 class PROPERTIES_PANEL;
+enum class BITMAP_TYPE;
 
 namespace KIGFX
 {
@@ -469,6 +470,18 @@ public:
     HOTKEY_CYCLE_POPUP* GetHotkeyPopup() { return m_hotkeyPopup; }
 
     virtual void CreateHotkeyPopup();
+
+
+    /**
+     * Save the current view as an image file.
+     *
+     * @param aFrame The current draw frame view to save.
+     * @param aFileName The file name to save the image.  This will overwrite an existing file.
+     * @param aBitmapType The type of bitmap create as defined by wxImage.
+     * @return True if the file was successfully saved or false if the file failed to be saved.
+     */
+    bool SaveCanvasImageToFile( const wxString& aFileName, BITMAP_TYPE aBitmapType );
+
 
     DECLARE_EVENT_TABLE()
 

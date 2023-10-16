@@ -30,7 +30,6 @@
 // test if it works under stable release
 // #include <wx/bitmap.h>   // only to define wxBitmap
 class wxBitmap;     // only to define wxBitmap
-class EDA_DRAW_FRAME;
 class wxWindow;
 class wxString;
 struct BITMAP_OPAQUE;
@@ -101,16 +100,5 @@ int KiIconScale( wxWindow* aWindow );
  * @return wxBitmap* - caller owns it.
  */
 wxBitmap* KiBitmapNew( BITMAPS aBitmap );
-
-/**
- * Save the current view as an image file.
- *
- * @param aFrame The current draw frame view to save.
- * @param aFileName The file name to save the image.  This will overwrite an existing file.
- * @param aBitmapType The type of bitmap create as defined by wxImage.
- * @return True if the file was successfully saved or false if the file failed to be saved.
- */
-bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
-                            BITMAP_TYPE aBitmapType = BITMAP_TYPE::PNG );
 
 #endif  // BITMAP_TYPES_H_

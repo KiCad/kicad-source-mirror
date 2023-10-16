@@ -42,11 +42,10 @@
 #include <bitmap_store.h>
 #include <bitmaps/bitmap_opaque.h> // for pcb_calculator compatibility shim
 #include <pgm_base.h>
-#include <eda_base_frame.h>
-#include <eda_draw_frame.h>
 #include <paths.h>
 #include <kiplatform/ui.h>
-
+#include <math/util.h>
+#include <settings/common_settings.h>
 
 static std::unique_ptr<BITMAP_STORE> s_BitmapStore;
 
@@ -210,42 +209,6 @@ wxBitmap* KiBitmapNew( BITMAPS aBitmap )
     wxBitmap* bitmap = new wxBitmap( GetBitmapStore()->GetBitmap( aBitmap ) );
 
     return bitmap;
-}
-
-
-bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
-                            BITMAP_TYPE aBitmapType )
-{
-    wxCHECK( aFrame != nullptr, false );
-
-    bool       retv = true;
-
-    // Make a screen copy of the canvas:
-    wxSize image_size = aFrame->GetCanvas()->GetClientSize();
-
-    wxClientDC dc( aFrame->GetCanvas() );
-    wxBitmap   bitmap( image_size.x, image_size.y );
-    wxMemoryDC memdc;
-
-    memdc.SelectObject( bitmap );
-    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
-    memdc.SelectObject( wxNullBitmap );
-
-    wxImage image = bitmap.ConvertToImage();
-
-    wxBitmapType type = wxBITMAP_TYPE_PNG;
-    switch( aBitmapType )
-    {
-    case BITMAP_TYPE::PNG: type = wxBITMAP_TYPE_PNG; break;
-    case BITMAP_TYPE::BMP: type = wxBITMAP_TYPE_BMP; break;
-    case BITMAP_TYPE::JPG: type = wxBITMAP_TYPE_JPEG; break;
-    }
-
-    if( !image.SaveFile( aFileName, type ) )
-        retv = false;
-
-    image.Destroy();
-    return retv;
 }
 
 

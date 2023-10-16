@@ -1359,5 +1359,5 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
     // calling wxYield is mandatory under Linux, after closing the file selector dialog
     // to refresh the screen before creating the PNG or JPEG image from screen
     wxYield();
-    SaveCanvasImageToFile( this, dlg.GetPath() );
+    this->SaveCanvasImageToFile( dlg.GetPath(), BITMAP_TYPE::PNG );
 }

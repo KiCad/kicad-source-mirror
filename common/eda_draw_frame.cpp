@@ -1266,3 +1266,37 @@ void EDA_DRAW_FRAME::onActivate( wxActivateEvent& aEvent )
 
     aEvent.Skip();
 }
+
+
+bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName,
+                                            BITMAP_TYPE aBitmapType )
+{
+    bool retv = true;
+
+    // Make a screen copy of the canvas:
+    wxSize image_size = GetCanvas()->GetClientSize();
+
+    wxClientDC dc( GetCanvas() );
+    wxBitmap   bitmap( image_size.x, image_size.y );
+    wxMemoryDC memdc;
+
+    memdc.SelectObject( bitmap );
+    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
+    memdc.SelectObject( wxNullBitmap );
+
+    wxImage image = bitmap.ConvertToImage();
+
+    wxBitmapType type = wxBITMAP_TYPE_PNG;
+    switch( aBitmapType )
+    {
+    case BITMAP_TYPE::PNG: type = wxBITMAP_TYPE_PNG; break;
+    case BITMAP_TYPE::BMP: type = wxBITMAP_TYPE_BMP; break;
+    case BITMAP_TYPE::JPG: type = wxBITMAP_TYPE_JPEG; break;
+    }
+
+    if( !image.SaveFile( aFileName, type ) )
+        retv = false;
+
+    image.Destroy();
+    return retv;
+}
