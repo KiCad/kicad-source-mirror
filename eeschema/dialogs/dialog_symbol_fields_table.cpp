@@ -1322,7 +1322,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
     if( m_radioHighlight->GetValue() )
         cfg->m_FieldEditorPanel.selection_mode = 0;
-    else if( m_radioHighlight->GetValue() )
+    else if( m_radioSelect->GetValue() )
         cfg->m_FieldEditorPanel.selection_mode = 1;
     else if( m_radioOff->GetValue() )
         cfg->m_FieldEditorPanel.selection_mode = 2;
