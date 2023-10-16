@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,8 +18,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <base_units.h> // God forgive me doing this...
 
 #include "pns_node.h"
 #include "pns_itemset.h"
@@ -69,39 +67,43 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
 
         double thr = (double) m.spacing();
 
-        bool fail = false;
+        bool   fail = false;
         double remaining = base_len - ( m_last - aBase.A ).EuclideanNorm();
 
-        auto addSingleIfFits = [&]()
-        {
-            fail = true;
-
-            if( m.Fit( MT_SINGLE, aBase, m_last, side ) )
-            {
-                AddMeander( new MEANDER_SHAPE( m ) );
-                fail = false;
-                started = false;
-            }
-
-            if( fail && !singleSided )
-            {
-                if( m.Fit( MT_SINGLE, aBase, m_last, !side ) )
+        auto flipInitialSide =
+                [&]()
                 {
-                    if( !started )
+                    MEANDER_SETTINGS settings = m_placer->MeanderSettings();
+                    settings.m_initialSide = (PNS::MEANDER_SIDE) -settings.m_initialSide;
+                    m_placer->UpdateSettings( settings );
+                };
+
+        auto addSingleIfFits =
+                [&]()
+                {
+                    fail = true;
+
+                    if( m.Fit( MT_SINGLE, aBase, m_last, side ) )
                     {
-                        // Update initial side to the one that fits
-                        MEANDER_SETTINGS settings = m_placer->MeanderSettings();
-                        settings.m_initialSide = ( PNS::MEANDER_SIDE) -settings.m_initialSide;
-                        m_placer->UpdateSettings( settings );
+                        AddMeander( new MEANDER_SHAPE( m ) );
+                        fail = false;
+                        started = false;
                     }
 
-                    AddMeander( new MEANDER_SHAPE( m ) );
-                    fail = false;
-                    started = false;
-                    side = !side;
-                }
-            }
-        };
+                    if( fail && !singleSided )
+                    {
+                        if( m.Fit( MT_SINGLE, aBase, m_last, !side ) )
+                        {
+                            if( !started )
+                                flipInitialSide();
+
+                            AddMeander( new MEANDER_SHAPE( m ) );
+                            fail = false;
+                            started = false;
+                            side = !side;
+                        }
+                    }
+                };
 
         if( remaining < Settings( ).m_step )
             break;
@@ -117,12 +119,7 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
                     if( m.Fit( MT_CHECK_START, aBase, m_last, checkSide ) )
                     {
                         if( !started && checkSide != side )
-                        {
-                            // Update initial side to the one that fits
-                            MEANDER_SETTINGS settings = m_placer->MeanderSettings();
-                            settings.m_initialSide = ( PNS::MEANDER_SIDE) -settings.m_initialSide;
-                            m_placer->UpdateSettings( settings );
-                        }
+                            flipInitialSide();
 
                         turning = true;
                         AddMeander( new MEANDER_SHAPE( m ) );
@@ -189,9 +186,8 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
             VECTOR2I pn = m_last + dir.Resize( nextP );
 
             if( aBase.Contains( pn ) && !m_dual )
-            {
                 AddCorner( pn );
-            } else
+            else
                 break;
         }
 
@@ -272,8 +268,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
         VECTOR2D center = aP + dir_v * ( aSide ? -1.0 : 1.0 );
 
         lc.Append( SHAPE_ARC( center, aP, ( aSide ? -ANGLE_90 : ANGLE_90 ) ) );
-    }
         break;
+    }
 
     case MEANDER_STYLE_CHAMFER:
     {
@@ -290,7 +286,10 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
         lc.Append( ( int ) p.x, ( int ) p.y );
         p = aP + dir_u + (dir_v + dir_cv) * ( aSide ? -1.0 : 1.0 );
         lc.Append( ( int ) p.x, ( int ) p.y );
+        break;
     }
+
+    default:
         break;
     }
 
@@ -373,19 +372,13 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     VECTOR2D dir_v_b( dir_u_b.Perpendicular() );
 
     if( 2 * cr > amplitude )
-    {
         cr = amplitude / 2;
-    }
 
     if( 2 * cr > spc )
-    {
         cr = spc / 2;
-    }
 
     if( cr - offset < 0 )
-    {
         cr = offset;
-    }
 
     m_meanCornerRadius = cr;
 
@@ -463,7 +456,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
         break;
     }
 
-    default: break;
+    default:
+        break;
     }
 
     if( aSide )
@@ -705,9 +699,7 @@ void MEANDERED_LINE::AddMeander( MEANDER_SHAPE* aShape )
 void MEANDERED_LINE::Clear()
 {
     for( MEANDER_SHAPE* m : m_meanders )
-    {
         delete m;
-    }
 
     m_meanders.clear( );
 }
