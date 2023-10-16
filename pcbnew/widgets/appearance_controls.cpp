@@ -1796,52 +1796,57 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
     delete m_layerContextMenu;
     m_layerContextMenu = new wxMenu;
 
-    AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_COPPER_LAYERS, _( "Show All Copper Layers" ),
-                 KiBitmap( BITMAPS::show_all_copper_layers ) );
-    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_COPPER_LAYERS, _( "Hide All Copper Layers" ),
-                 KiBitmap( BITMAPS::show_no_copper_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_COPPER_LAYERS, _( "Show All Copper Layers" ),
+                       KiBitmap( BITMAPS::show_all_copper_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_COPPER_LAYERS, _( "Hide All Copper Layers" ),
+                       KiBitmap( BITMAPS::show_no_copper_layers ) );
 
     m_layerContextMenu->AppendSeparator();
 
-    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE, _( "Hide All Layers But Active" ),
-                 KiBitmap( BITMAPS::select_w_layer ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_BUT_ACTIVE,
+                       _( "Hide All Layers But Active" ), KiBitmap( BITMAPS::select_w_layer ) );
 
     m_layerContextMenu->AppendSeparator();
 
-    AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_NON_COPPER, _( "Show All Non Copper Layers" ),
-                 KiBitmap( BITMAPS::show_no_copper_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_NON_COPPER,
+                       _( "Show All Non Copper Layers" ),
+                       KiBitmap( BITMAPS::show_no_copper_layers ) );
 
-    AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_NON_COPPER, _( "Hide All Non Copper Layers" ),
-                 KiBitmap( BITMAPS::show_all_copper_layers ) );
-
-    m_layerContextMenu->AppendSeparator();
-
-    AddMenuItem( m_layerContextMenu, ID_PRESET_ALL_LAYERS, _( "Show All Layers" ),
-                 KiBitmap( BITMAPS::show_all_layers ) );
-
-    AddMenuItem( m_layerContextMenu, ID_PRESET_NO_LAYERS, _( "Hide All Layers" ),
-                 KiBitmap( BITMAPS::show_no_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_NON_COPPER,
+                       _( "Hide All Non Copper Layers" ),
+                       KiBitmap( BITMAPS::show_all_copper_layers ) );
 
     m_layerContextMenu->AppendSeparator();
 
-    AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY, _( "Show Only Front Assembly Layers" ),
-                 KiBitmap( BITMAPS::show_front_assembly_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_ALL_LAYERS, _( "Show All Layers" ),
+                       KiBitmap( BITMAPS::show_all_layers ) );
 
-    AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
-                 KiBitmap( BITMAPS::show_all_front_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_NO_LAYERS, _( "Hide All Layers" ),
+                       KiBitmap( BITMAPS::show_no_layers ) );
+
+    m_layerContextMenu->AppendSeparator();
+
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT_ASSEMBLY,
+                       _( "Show Only Front Assembly Layers" ),
+                       KiBitmap( BITMAPS::show_front_assembly_layers ) );
+
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_FRONT, _( "Show Only Front Layers" ),
+                       KiBitmap( BITMAPS::show_all_front_layers ) );
 
     // Only show the internal layer option if internal layers are enabled
     if( m_frame->GetBoard()->GetCopperLayerCount() > 2 )
     {
-        AddMenuItem( m_layerContextMenu, ID_PRESET_INNER_COPPER, _( "Show Only Inner Layers" ),
+        KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_INNER_COPPER,
+                           _( "Show Only Inner Layers" ),
                      KiBitmap( BITMAPS::show_all_copper_layers ) );
     }
 
-    AddMenuItem( m_layerContextMenu, ID_PRESET_BACK, _( "Show Only Back Layers" ),
-                 KiBitmap( BITMAPS::show_all_back_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_BACK, _( "Show Only Back Layers" ),
+                       KiBitmap( BITMAPS::show_all_back_layers ) );
 
-    AddMenuItem( m_layerContextMenu, ID_PRESET_BACK_ASSEMBLY, _( "Show Only Back Assembly Layers" ),
-                 KiBitmap( BITMAPS::show_back_assembly_layers ) );
+    KIUI::AddMenuItem( m_layerContextMenu, ID_PRESET_BACK_ASSEMBLY,
+                       _( "Show Only Back Assembly Layers" ),
+                       KiBitmap( BITMAPS::show_back_assembly_layers ) );
 }
 
 

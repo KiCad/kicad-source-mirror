@@ -678,17 +678,16 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 
     if( can_switch_to_project )
     {
-        AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER,
-                     _( "Switch to this Project" ),
-                     _( "Close all editors, and switch to the selected project" ),
-                     KiBitmap( BITMAPS::open_project ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER, _( "Switch to this Project" ),
+                           _( "Close all editors, and switch to the selected project" ),
+                           KiBitmap( BITMAPS::open_project ) );
         popup_menu.AppendSeparator();
     }
 
     if( can_create_new_directory )
     {
-        AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New Directory..." ),
-                     _( "Create a New Directory" ), KiBitmap( BITMAPS::directory ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New Directory..." ),
+                           _( "Create a New Directory" ), KiBitmap( BITMAPS::directory ) );
     }
 
     if( can_open_this_directory )
@@ -714,8 +713,8 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 #endif
         }
 
-        AddMenuItem( &popup_menu, ID_PROJECT_OPEN_DIR, text, help_text,
-                     KiBitmap( BITMAPS::directory_browser ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_OPEN_DIR, text, help_text,
+                           KiBitmap( BITMAPS::directory_browser ) );
     }
 
     if( can_edit )
@@ -725,8 +724,8 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         else
             help_text = _( "Open files in a Text Editor" );
 
-        AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "Edit in a Text Editor" ),
-                     help_text, KiBitmap( BITMAPS::editor ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "Edit in a Text Editor" ), help_text,
+                           KiBitmap( BITMAPS::editor ) );
     }
 
     if( can_rename )
@@ -742,7 +741,8 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             help_text = _( "Rename files" );
         }
 
-        AddMenuItem( &popup_menu, ID_PROJECT_RENAME, text, help_text, KiBitmap( BITMAPS::right ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_RENAME, text, help_text,
+                           KiBitmap( BITMAPS::right ) );
     }
 
     if( can_delete )
@@ -762,11 +762,11 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         }
 
 #ifdef __WINDOWS__
-        AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text,
-                     KiBitmap( BITMAPS::trash ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text,
+                           KiBitmap( BITMAPS::trash ) );
 #else
-        AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Move to Trash" ), help_text,
-                     KiBitmap( BITMAPS::trash ) );
+        KIUI::AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Move to Trash" ), help_text,
+                           KiBitmap( BITMAPS::trash ) );
 #endif
     }
 

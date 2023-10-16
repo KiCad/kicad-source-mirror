@@ -482,7 +482,8 @@ void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
         const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap :
                                                          KiBitmap( BITMAPS::puzzle_piece );
 
-        item = AddMenuItem( actionMenu, wxID_ANY,  ap->GetName(), ap->GetDescription(), bitmap );
+        item = KIUI::AddMenuItem( actionMenu, wxID_ANY, ap->GetName(), ap->GetDescription(),
+                                  bitmap );
 
         Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                  wxCommandEventHandler( PCB_EDIT_FRAME::OnActionPluginMenu ) );

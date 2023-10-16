@@ -158,42 +158,43 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu* aMenu )
 {
     // Remember: menu text is capitalized (see our rules_for_capitalization_in_Kicad_UI.txt)
-    AddMenuItem( aMenu, ID_SHOW_ALL_LAYERS, _( "Show All Layers" ),
-                 KiBitmap( BITMAPS::show_all_layers ) );
+    KIUI::AddMenuItem( aMenu, ID_SHOW_ALL_LAYERS, _( "Show All Layers" ),
+                       KiBitmap( BITMAPS::show_all_layers ) );
 
-    AddMenuItem( aMenu, ID_SHOW_NO_LAYERS_BUT_ACTIVE,
-                 _( "Hide All Layers But Active" ),
-                 KiBitmap( BITMAPS::select_w_layer ) );
+    KIUI::AddMenuItem( aMenu, ID_SHOW_NO_LAYERS_BUT_ACTIVE, _( "Hide All Layers But Active" ),
+                       KiBitmap( BITMAPS::select_w_layer ) );
 
-    AddMenuItem( aMenu, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
-                 _( "Always Hide All Layers But Active" ),
-                 KiBitmap( BITMAPS::select_w_layer ) );
+    KIUI::AddMenuItem( aMenu, ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+                       _( "Always Hide All Layers But Active" ),
+                       KiBitmap( BITMAPS::select_w_layer ) );
 
-    AddMenuItem( aMenu, ID_SHOW_NO_LAYERS, _( "Hide All Layers" ),
-                 KiBitmap( BITMAPS::show_no_layers ) );
-
-    aMenu->AppendSeparator();
-
-    AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_X2, _( "Sort Layers if X2 Mode" ),
-                 KiBitmap( BITMAPS::reload ) );
-
-    AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_FILE_EXT, _( "Sort Layers by File Extension" ),
-                 KiBitmap( BITMAPS::reload ) );
+    KIUI::AddMenuItem( aMenu, ID_SHOW_NO_LAYERS, _( "Hide All Layers" ),
+                       KiBitmap( BITMAPS::show_no_layers ) );
 
     aMenu->AppendSeparator();
 
-    AddMenuItem( aMenu, ID_SET_GBR_LAYERS_DRAW_PRMS, _( "Layers Display Parameters: Offset and Rotation" ),
-                 KiBitmap( BITMAPS::tools ) );
+    KIUI::AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_X2, _( "Sort Layers if X2 Mode" ),
+                       KiBitmap( BITMAPS::reload ) );
+
+    KIUI::AddMenuItem( aMenu, ID_SORT_GBR_LAYERS_FILE_EXT, _( "Sort Layers by File Extension" ),
+                       KiBitmap( BITMAPS::reload ) );
 
     aMenu->AppendSeparator();
 
-    AddMenuItem( aMenu, ID_LAYER_MOVE_UP, _( "Move Current Layer Up" ), KiBitmap( BITMAPS::up ) );
+    KIUI::AddMenuItem( aMenu, ID_SET_GBR_LAYERS_DRAW_PRMS,
+                       _( "Layers Display Parameters: Offset and Rotation" ),
+                       KiBitmap( BITMAPS::tools ) );
 
-    AddMenuItem( aMenu, ID_LAYER_MOVE_DOWN, _( "Move Current Layer Down" ),
-                 KiBitmap( BITMAPS::down ) );
+    aMenu->AppendSeparator();
 
-    AddMenuItem( aMenu, ID_LAYER_DELETE, _( "Clear Current Layer..." ),
-                 KiBitmap( BITMAPS::delete_gerber ) );
+    KIUI::AddMenuItem( aMenu, ID_LAYER_MOVE_UP, _( "Move Current Layer Up" ),
+                       KiBitmap( BITMAPS::up ) );
+
+    KIUI::AddMenuItem( aMenu, ID_LAYER_MOVE_DOWN, _( "Move Current Layer Down" ),
+                       KiBitmap( BITMAPS::down ) );
+
+    KIUI::AddMenuItem( aMenu, ID_LAYER_DELETE, _( "Clear Current Layer..." ),
+                       KiBitmap( BITMAPS::delete_gerber ) );
 }
 
 

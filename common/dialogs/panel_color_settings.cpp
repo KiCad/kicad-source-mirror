@@ -292,13 +292,13 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
 
     wxMenu menu;
 
-    AddMenuItem( &menu, ID_COPY, _( "Copy color" ), KiBitmap( BITMAPS::copy ) );
+    KIUI::AddMenuItem( &menu, ID_COPY, _( "Copy color" ), KiBitmap( BITMAPS::copy ) );
 
     if( !readOnly && m_copied != COLOR4D::UNSPECIFIED )
-        AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( BITMAPS::paste ) );
+        KIUI::AddMenuItem( &menu, ID_PASTE, _( "Paste color" ), KiBitmap( BITMAPS::paste ) );
 
     if( !readOnly && current != saved )
-        AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( BITMAPS::undo ) );
+        KIUI::AddMenuItem( &menu, ID_REVERT, _( "Revert to saved color" ), KiBitmap( BITMAPS::undo ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
             [&]( wxCommandEvent& aCmd )

@@ -40,6 +40,7 @@
 #include <wx/stc/stc.h>
 #include <textentry_tricks.h>
 #include <wx/listctrl.h>
+#include <widgets/ui_common.h>
 
 using namespace std::placeholders;
 
@@ -128,7 +129,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
             Insert( 0, new wxMenuItem( this, wxID_NONE, m_title, wxEmptyString, wxITEM_NORMAL ) );
 
             if( !!m_icon )
-                AddBitmapToMenuItem( FindItemByPosition( 0 ), KiBitmap( m_icon ) );
+                KIUI::AddBitmapToMenuItem( FindItemByPosition( 0 ), KiBitmap( m_icon ) );
 
             m_titleDisplayed = true;
         }
@@ -143,7 +144,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, BITMAPS aIcon )
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
 
     if( !!aIcon )
-        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
+        KIUI::AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     return Append( item );
 }
@@ -158,7 +159,7 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     if( !!aIcon )
-        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
+        KIUI::AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     return Append( item );
 }
@@ -177,7 +178,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
                                        aAction.GetTooltip(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
     if( !!icon )
-        AddBitmapToMenuItem( item, KiBitmap( icon ) );
+        KIUI::AddBitmapToMenuItem( item, KiBitmap( icon ) );
 
     m_toolActions[aAction.GetUIId()] = &aAction;
 
@@ -194,7 +195,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
     if( !!aMenu->m_icon )
     {
         wxMenuItem* newItem = new wxMenuItem( this, -1, aMenu->m_title );
-        AddBitmapToMenuItem( newItem, KiBitmap( aMenu->m_icon ) );
+        KIUI::AddBitmapToMenuItem( newItem, KiBitmap( aMenu->m_icon ) );
         newItem->SetSubMenu( aMenu );
         return Append( newItem );
     }
@@ -658,7 +659,7 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
 #endif
 
     if( src_bitmap.IsOk() && src_bitmap.GetHeight() > 1 )    // a null bitmap has a 0 size
-        AddBitmapToMenuItem( newItem, src_bitmap );
+        KIUI::AddBitmapToMenuItem( newItem, src_bitmap );
 
     if( aSource->IsSubMenu() )
     {

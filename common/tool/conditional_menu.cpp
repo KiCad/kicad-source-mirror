@@ -28,6 +28,7 @@
 #include <tool/action_menu.h>
 #include <menus_helpers.h>
 #include <kiface_base.h>
+#include <widgets/ui_common.h>
 
 
 CONDITIONAL_MENU::CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool ) :
@@ -67,7 +68,7 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
     wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
 
     if( !!aIcon )
-        AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
+        KIUI::AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
 }
@@ -80,7 +81,7 @@ void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxStr
     wxMenuItem item( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
 
     if( !!aIcon )
-        AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
+        KIUI::AddBitmapToMenuItem( &item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, true ) );
 }
@@ -170,7 +171,7 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                                            entry.wxItem()->GetKind() );
 
                 if( !!entry.GetIcon() )
-                    AddBitmapToMenuItem( menuItem, KiBitmap( entry.GetIcon() ) );
+                    KIUI::AddBitmapToMenuItem( menuItem, KiBitmap( entry.GetIcon() ) );
 
                 // the wxMenuItem must be append only after the bitmap is set:
                 Append( menuItem );
