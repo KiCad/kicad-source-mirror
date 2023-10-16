@@ -252,6 +252,9 @@ protected:
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
     std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
 
+    int                m_trackWidth;
+    int                m_diffPairGap;
+
     bool               m_singleSide;
     bool               m_rounded;
 
@@ -366,6 +369,8 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
                                                 LENGTH_TUNING_MODE aMode ) :
         PCB_GENERATOR( aParent, aLayer ),
+        m_trackWidth( 0 ),
+        m_diffPairGap( 0 ),
         m_singleSide( false ),
         m_rounded( true ),
         m_tuningMode( aMode ),
@@ -386,11 +391,11 @@ PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_I
 }
 
 
-static NETINFO_ITEM* snapToNearestTrackPoint( VECTOR2I& aP, BOARD* aBoard, NETINFO_ITEM* aNet )
+static VECTOR2I snapToNearestTrack( const VECTOR2I& aP, BOARD* aBoard, NETINFO_ITEM* aNet,
+                                    PCB_TRACK** aNearestTrack )
 {
-    SEG::ecoord   minDistSq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord   minDist_sq = VECTOR2I::ECOORD_MAX;
     VECTOR2I      closestPt = aP;
-    NETINFO_ITEM* closestNet = nullptr;
 
     for( PCB_TRACK *track : aBoard->Tracks() )
     {
@@ -400,23 +405,19 @@ static NETINFO_ITEM* snapToNearestTrackPoint( VECTOR2I& aP, BOARD* aBoard, NETIN
         SEG seg( track->GetStart(), track->GetEnd() );
 
         VECTOR2I    nearest = seg.NearestPoint( aP );
-        SEG::ecoord distSq = ( nearest - aP ).SquaredEuclideanNorm();
+        SEG::ecoord dist_sq = ( nearest - aP ).SquaredEuclideanNorm();
 
-        if( distSq < minDistSq )
+        if( dist_sq < minDist_sq )
         {
-            minDistSq = distSq;
+            minDist_sq = dist_sq;
             closestPt = nearest;
-            closestNet = track->GetNet();
+
+            if( aNearestTrack )
+                *aNearestTrack = track;
         }
     }
 
-    if( minDistSq != VECTOR2I::ECOORD_MAX )
-    {
-        aP = closestPt;
-        return closestNet;
-    }
-
-    return nullptr;
+    return closestPt;
 }
 
 
@@ -513,15 +514,20 @@ void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
     aTool->ClearRouterCommit();
     router->SyncWorld();
 
+    PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
+    PNS::CONSTRAINT     constraint;
+
     if( !baselineValid() )
         initBaseLines( router, layer, aBoard );
 
     if( baselineValid() && !m_overrideCustomRules )
     {
-        PNS::CONSTRAINT     constraint;
-        PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
+        PCB_TRACK* track = nullptr;
 
-        NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
+        m_origin = snapToNearestTrack( m_origin, aBoard, nullptr, &track );
+        wxCHECK( track, /* void */ );
+
+        NETINFO_ITEM* net = track->GetNet();
         PNS::SEGMENT  pnsItem( m_baseLine->CSegment( 0 ), net );
 
         if( m_tuningMode == SINGLE )
@@ -694,8 +700,8 @@ bool PCB_GENERATOR_MEANDERS::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOA
 {
     PNS::NODE* world = aRouter->GetWorld();
 
-    snapToNearestTrackPoint( aStart, aBoard, aNet );
-    snapToNearestTrackPoint( aEnd, aBoard, aNet );
+    aStart = snapToNearestTrack( aStart, aBoard, aNet, nullptr );
+    aEnd = snapToNearestTrack( aEnd, aBoard, aNet, nullptr );
 
     VECTOR2I startSnapPoint, endSnapPoint;
 
@@ -732,7 +738,12 @@ bool PCB_GENERATOR_MEANDERS::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BO
 {
     m_baseLineCoupled.reset();
 
-    NETINFO_ITEM* net = snapToNearestTrackPoint( m_origin, aBoard, nullptr );
+    PCB_TRACK* track = nullptr;
+
+    m_origin = snapToNearestTrack( m_origin, aBoard, nullptr, &track );
+    wxCHECK( track, false );
+
+    NETINFO_ITEM* net = track->GetNet();
 
     if( !initBaseLine( aRouter, aLayer, aBoard, m_origin, m_end, net, m_baseLine ) )
         return false;
@@ -743,8 +754,8 @@ bool PCB_GENERATOR_MEANDERS::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BO
     {
         if( NETINFO_ITEM* coupledNet = aBoard->DpCoupledNet( net ) )
         {
-            VECTOR2I coupledStart = m_origin;
-            VECTOR2I coupledEnd = m_end;
+            VECTOR2I coupledStart = snapToNearestTrack( m_origin, aBoard, coupledNet, nullptr );
+            VECTOR2I coupledEnd = snapToNearestTrack( m_end, aBoard, coupledNet, nullptr );
 
             return initBaseLine( aRouter, aLayer, aBoard, coupledStart, coupledEnd, coupledNet,
                                  m_baseLineCoupled );
@@ -859,7 +870,7 @@ PNS::MEANDER_SETTINGS PCB_GENERATOR_MEANDERS::toMeanderSettings()
     settings.m_targetSkew = m_targetSkew;
     settings.m_overrideCustomRules = m_overrideCustomRules;
     settings.m_singleSided = m_singleSide;
-    settings.m_segmentSide = m_initialSide;
+    settings.m_initialSide = m_initialSide;
     settings.m_cornerRadiusPercentage = m_cornerRadiusPercentage;
 
     return settings;
@@ -876,7 +887,7 @@ void PCB_GENERATOR_MEANDERS::fromMeanderSettings( const PNS::MEANDER_SETTINGS& a
     m_targetSkew = aSettings.m_targetSkew;
     m_overrideCustomRules = aSettings.m_overrideCustomRules;
     m_singleSide = aSettings.m_singleSided;
-    m_initialSide = aSettings.m_segmentSide;
+    m_initialSide = aSettings.m_initialSide;
     m_cornerRadiusPercentage = aSettings.m_cornerRadiusPercentage;
 }
 
@@ -1026,13 +1037,16 @@ bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
     if( !router->StartRouting( startSnapPoint, startItem, layer ) )
         return false;
 
-    auto placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
+    PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
     PNS::MEANDER_SETTINGS settings = toMeanderSettings();
 
     placer->UpdateSettings( settings );
     router->Move( m_end, nullptr );
 
+    m_trackWidth = router->Sizes().TrackWidth();
+    m_diffPairGap = router->Sizes().DiffPairGap();
+    m_initialSide = placer->MeanderSettings().m_initialSide;
     m_lastNetName = iface->GetNetName( startItem->Net() );
     m_tuningInfo = placer->TuningInfo( aFrame->GetUserUnits() );
     m_tuningStatus = placer->TuningStatus();
@@ -1127,12 +1141,15 @@ bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points
     base.A += centerlineOffset;
     base.B += centerlineOffset;
 
-    int offset = m_maxAmplitude;
+    int amplitude = m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+
+    if( m_tuningMode == DIFF_PAIR )
+        amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
 
     if( m_initialSide == -1 )
-        offset *= -1;
+        amplitude *= -1;
 
-    VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
+    VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
 
     points->AddPoint( base.A + widthHandleOffset );
     points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
@@ -1169,6 +1186,12 @@ bool PCB_GENERATOR_MEANDERS::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> 
         VECTOR2I wHandle = aEditPoints->Point( 2 ).GetPosition();
 
         int value = base.LineDistance( wHandle );
+
+        value -= KiROUND( m_trackWidth / 2.0 );
+
+        if( m_tuningMode == DIFF_PAIR )
+            value -= KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
+
         SetMaxAmplitude( KiROUND( value / pcbIUScale.mmToIU( 0.1 ) ) * pcbIUScale.mmToIU( 0.1 ) );
 
         int side = base.Side( wHandle );
@@ -1206,12 +1229,15 @@ bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
     base.A += centerlineOffset;
     base.B += centerlineOffset;
 
-    int offset = m_maxAmplitude;
+    int amplitude = m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+
+    if( m_tuningMode == DIFF_PAIR )
+        amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
 
     if( m_initialSide == -1 )
-        offset *= -1;
+        amplitude *= -1;
 
-    VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( offset );
+    VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
 
     aEditPoints->Point( 0 ).SetPosition( m_origin + centerlineOffset );
     aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffset );
@@ -1243,13 +1269,20 @@ SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
             cl.SetPoint( -1, ( cl.CPoint( -1 ) + m_baseLineCoupled->CPoint( -1 ) ) / 2 );
         }
 
-        bool singleSided = m_tuningMode != DIFF_PAIR && m_singleSide;
+        bool singleSided = m_singleSide;
+        int  amplitude = m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+
+        if( m_tuningMode == DIFF_PAIR )
+        {
+            singleSided = false;
+            amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
+        }
 
         if( singleSided )
         {
             SHAPE_LINE_CHAIN left, right;
 
-            if( cl.OffsetLine( m_maxAmplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
+            if( cl.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
                                left, right, true ) )
             {
                 chain.Append( cl.CPoint( 0 ) );
@@ -1268,7 +1301,7 @@ SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
         {
             SHAPE_POLY_SET poly;
 
-            poly.OffsetLineChain( cl, m_maxAmplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+            poly.OffsetLineChain( cl, amplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                   ARC_LOW_DEF, false );
 
             if( poly.OutlineCount() > 0 )
@@ -1339,6 +1372,8 @@ const STRING_ANY_MAP PCB_GENERATOR_MEANDERS::GetProperties() const
     props.set_iu( "min_spacing", m_spacing );
     props.set_iu( "target_length", m_targetLength );
     props.set_iu( "target_skew", m_targetSkew );
+    props.set_iu( "last_track_width", m_trackWidth );
+    props.set_iu( "last_diff_pair_gap", m_diffPairGap );
 
     props.set( "last_netname", m_lastNetName );
     props.set( "last_tuning", m_tuningInfo );
@@ -1380,6 +1415,8 @@ void PCB_GENERATOR_MEANDERS::SetProperties( const STRING_ANY_MAP& aProps )
     aProps.get_to_iu( "min_spacing", m_spacing );
     aProps.get_to_iu( "target_length", m_targetLength );
     aProps.get_to_iu( "target_skew", m_targetSkew );
+    aProps.get_to_iu( "last_track_width", m_trackWidth );
+    aProps.get_to_iu( "last_diff_pair_gap", m_diffPairGap );
     aProps.get_to( "override_custom_rules", m_overrideCustomRules );
 
     aProps.get_to( "last_netname", m_lastNetName );

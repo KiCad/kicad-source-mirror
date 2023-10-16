@@ -249,10 +249,10 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         SEG  base = baselineSegment( sp );
         bool side = false;
 
-        if( m_settings.m_segmentSide == 0 )
+        if( m_settings.m_initialSide == 0 )
             side = base.Side( aP ) < 0;
         else
-            side = m_settings.m_segmentSide < 0;
+            side = m_settings.m_initialSide < 0;
 
         PNS_DBG( Dbg(), AddShape, base, GREEN, 10000, wxT( "dp-baseline" ) );
 

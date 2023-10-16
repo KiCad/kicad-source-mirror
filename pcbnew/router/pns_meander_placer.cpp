@@ -141,10 +141,10 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
         bool      side = false;
         const SEG s = tuned.CSegment( i );
 
-        if( m_settings.m_segmentSide == 0 )
+        if( m_settings.m_initialSide == 0 )
             side = s.Side( aP ) < 0;
         else
-            side = m_settings.m_segmentSide < 0;
+            side = m_settings.m_initialSide < 0;
 
         m_result.AddCorner( s.A );
         m_result.MeanderSegment( s, side );
@@ -159,7 +159,9 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     if( compareWithTolerance( lineLen, aTargetLength, m_settings.m_lengthTolerance ) > 0 )
     {
         m_lastStatus = TOO_LONG;
-    } else {
+    }
+    else
+    {
         m_lastLength = lineLen - tuned.Length();
         tuneLineLength( m_result, aTargetLength - lineLen );
     }

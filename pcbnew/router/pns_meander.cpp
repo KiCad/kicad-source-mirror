@@ -87,6 +87,14 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
             {
                 if( m.Fit( MT_SINGLE, aBase, m_last, !side ) )
                 {
+                    if( !started )
+                    {
+                        // Update initial side to the one that fits
+                        MEANDER_SETTINGS settings = m_placer->MeanderSettings();
+                        settings.m_initialSide = ( PNS::MEANDER_SIDE) -settings.m_initialSide;
+                        m_placer->UpdateSettings( settings );
+                    }
+
                     AddMeander( new MEANDER_SHAPE( m ) );
                     fail = false;
                     started = false;
@@ -108,6 +116,14 @@ void MEANDERED_LINE::MeanderSegment( const SEG& aBase, bool aSide, int aBaseInde
 
                     if( m.Fit( MT_CHECK_START, aBase, m_last, checkSide ) )
                     {
+                        if( !started && checkSide != side )
+                        {
+                            // Update initial side to the one that fits
+                            MEANDER_SETTINGS settings = m_placer->MeanderSettings();
+                            settings.m_initialSide = ( PNS::MEANDER_SIDE) -settings.m_initialSide;
+                            m_placer->UpdateSettings( settings );
+                        }
+
                         turning = true;
                         AddMeander( new MEANDER_SHAPE( m ) );
                         side = !checkSide;
