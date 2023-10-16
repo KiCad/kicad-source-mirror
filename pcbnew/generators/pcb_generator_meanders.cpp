@@ -1059,7 +1059,9 @@ void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                        PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit,
                                        const wxString& aCommitMsg, int aCommitFlags )
 {
-    PNS::ROUTER* router = aTool->Router();
+    PNS::ROUTER*      router = aTool->Router();
+    SHAPE_LINE_CHAIN  bounds = getRectShape();
+    PICKED_ITEMS_LIST groupUndoList;
 
     if( router->RoutingInProgress() )
     {
@@ -1084,8 +1086,16 @@ void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
         for( BOARD_ITEM* item : routerAddedItems )
         {
-            item->SetSelected();
-            AddItem( item );
+            PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+
+            if( bounds.PointInside( track->GetPosition(), 2 )
+                    && bounds.PointInside( track->GetEnd(), 2 ) )
+            {
+                item->SetSelected();
+                AddItem( item );
+                groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+            }
+
             aCommit->Add( item );
         }
     }
@@ -1098,15 +1108,7 @@ void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
     else
         aCommit->Push( aCommitMsg, aCommitFlags );
 
-    if( isNew && !GetItems().empty() )
-    {
-        PICKED_ITEMS_LIST undoList;
-
-        for( BOARD_ITEM* member : GetItems() )
-            undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::REGROUP ) );
-
-        aFrame->AppendCopyToUndoList( undoList, UNDO_REDO::REGROUP );
-    }
+    aFrame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
 }
 
 
