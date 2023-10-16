@@ -101,11 +101,13 @@ long long int MEANDER_PLACER::origPathLength() const
 
 bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
-    return doMove( aP, aEndItem, m_settings.m_targetLength );
+    return doMove( aP, aEndItem, m_settings.m_targetLength.Opt(), m_settings.m_targetLength.Min(),
+                   m_settings.m_targetLength.Max() );
 }
 
 
-bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength )
+bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength,
+                             long long int aTargetMin, long long int aTargetMax )
 {
     if( m_currentStart == aP )
         return false;
@@ -156,7 +158,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     m_lastLength = lineLen;
     m_lastStatus = TUNED;
 
-    if( compareWithTolerance( lineLen, aTargetLength, m_settings.m_lengthTolerance ) > 0 )
+    if( lineLen > m_settings.m_targetLength.Max() )
     {
         m_lastStatus = TOO_LONG;
     }
@@ -190,12 +192,9 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
 
         m_lastLength += tuned.Length();
 
-        int comp = compareWithTolerance( m_lastLength - aTargetLength, 0,
-                                         m_settings.m_lengthTolerance );
-
-        if( comp > 0 )
+        if( m_lastLength > aTargetMax )
             m_lastStatus = TOO_LONG;
-        else if( comp < 0 )
+        else if( m_lastLength < aTargetMin )
             m_lastStatus = TOO_SHORT;
         else
             m_lastStatus = TUNED;
@@ -304,7 +303,7 @@ const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
 
     status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength );
     status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength );
+    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength.Opt() );
 
     return status;
 }

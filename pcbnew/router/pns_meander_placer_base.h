@@ -121,12 +121,6 @@ protected:
      */
     void tuneLineLength( MEANDERED_LINE& aTuned, long long int aElongation );
 
-    /**
-     * Compare \a aValue against \a aExpected with given tolerance.
-     */
-    int compareWithTolerance( long long int aValue, long long int aExpected,
-                              long long int aTolerance = 0 ) const;
-
     VECTOR2I getSnappedStartPoint( LINKED_ITEM* aStartItem, VECTOR2I aStartPoint );
 
     /**

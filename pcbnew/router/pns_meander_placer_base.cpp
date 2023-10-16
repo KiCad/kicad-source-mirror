@@ -295,18 +295,6 @@ const MEANDER_SETTINGS& MEANDER_PLACER_BASE::MeanderSettings() const
 }
 
 
-int MEANDER_PLACER_BASE::compareWithTolerance(
-        long long int aValue, long long int aExpected, long long int aTolerance ) const
-{
-    if( aValue < aExpected - aTolerance )
-        return -1;
-    else if( aValue > aExpected + aTolerance )
-        return 1;
-    else
-        return 0;
-}
-
-
 VECTOR2I MEANDER_PLACER_BASE::getSnappedStartPoint( LINKED_ITEM* aStartItem, VECTOR2I aStartPoint )
 {
     if( aStartItem->Kind() == ITEM::SEGMENT_T )

@@ -98,9 +98,8 @@ public:
     bool CheckFit ( MEANDER_SHAPE* aShape ) override;
 
 protected:
-    bool doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength );
-
-    void setWorld( NODE* aWorld );
+    bool doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength,
+                 long long int aTargetMin, long long int aTargetMax );
 
     virtual long long int origPathLength() const;
 

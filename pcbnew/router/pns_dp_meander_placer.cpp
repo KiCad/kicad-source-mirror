@@ -182,12 +182,9 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     auto updateStatus =
             [&]()
             {
-                int comp = compareWithTolerance( m_lastLength - m_settings.m_targetLength, 0,
-                                                 m_settings.m_lengthTolerance );
-
-                if( comp > 0 )
+                if( m_lastLength > m_settings.m_targetLength.Max() )
                     m_lastStatus = TOO_LONG;
-                else if( comp < 0 )
+                else if( m_lastLength < m_settings.m_targetLength.Min() )
                     m_lastStatus = TOO_SHORT;
                 else
                     m_lastStatus = TUNED;
@@ -327,7 +324,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     m_lastStatus = TUNED;
 
-    if( dpLen - m_settings.m_targetLength > m_settings.m_lengthTolerance )
+    if( dpLen > m_settings.m_targetLength.Max() )
     {
         m_lastStatus = TOO_LONG;
         m_lastLength = dpLen;
@@ -335,7 +332,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     else
     {
         m_lastLength = dpLen - std::max( tunedP.Length(), tunedN.Length() );
-        tuneLineLength( m_result, m_settings.m_targetLength - dpLen );
+        tuneLineLength( m_result, m_settings.m_targetLength.Opt() - dpLen );
     }
 
     if( m_lastStatus != TOO_LONG )
@@ -480,7 +477,7 @@ const wxString DP_MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
 
     status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength );
     status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength );
+    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength.Opt() );
     status += wxT( " (gap: " );
     status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_originPair.Gap() );
     status += wxT( ")" );

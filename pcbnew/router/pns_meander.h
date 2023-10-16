@@ -24,6 +24,7 @@
 #define __PNS_MEANDER_H
 
 #include <math/vector2d.h>
+#include <core/minoptmax.h>
 
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
@@ -65,6 +66,8 @@ enum MEANDER_SIDE
  */
 class MEANDER_SETTINGS
 {
+#define DEFAULT_TOLERANCE 100000
+
 public:
 
     MEANDER_SETTINGS()
@@ -74,14 +77,49 @@ public:
         m_step = 50000;
         m_lenPadToDie = 0;
         m_spacing = 600000;
-        m_targetLength = 100000000;
-        m_targetSkew = 0;
+        SetTargetLength( 100000000 );
+        SetTargetSkew( 0 );
         m_overrideCustomRules = false;
         m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
         m_singleSided = false;
         m_initialSide = MEANDER_SIDE_LEFT;
-        m_lengthTolerance = 100000;
+    }
+
+    void SetTargetLength( long long int aOpt )
+    {
+        m_targetLength.SetOpt( aOpt );
+        m_targetLength.SetMin( aOpt - DEFAULT_TOLERANCE );
+        m_targetLength.SetMax( aOpt + DEFAULT_TOLERANCE );
+    }
+
+    void SetTargetLength( const MINOPTMAX<int>& aConstraint )
+    {
+        SetTargetLength( aConstraint.Opt() );
+
+        if( aConstraint.HasMin() )
+            m_targetLength.SetMin( aConstraint.Min() );
+
+        if( aConstraint.HasMax() )
+            m_targetLength.SetMax( aConstraint.Max() );
+    }
+
+    void SetTargetSkew( int aOpt )
+    {
+        m_targetSkew.SetOpt( aOpt );
+        m_targetSkew.SetMin( aOpt - DEFAULT_TOLERANCE );
+        m_targetSkew.SetMax( aOpt + DEFAULT_TOLERANCE );
+    }
+
+    void SetTargetSkew( const MINOPTMAX<int>& aConstraint )
+    {
+        SetTargetSkew( aConstraint.Opt() );
+
+        if( aConstraint.HasMin() )
+            m_targetSkew.SetMin( aConstraint.Min() );
+
+        if( aConstraint.HasMax() )
+            m_targetSkew.SetMax( aConstraint.Max() );
     }
 
     ///< Minimum meandering amplitude.
@@ -100,12 +138,12 @@ public:
     int m_lenPadToDie;
 
     ///< Desired length of the tuned line/diff pair (this is in nm, so allow more than board width).
-    long long int m_targetLength;
+    MINOPTMAX<long long int> m_targetLength;
 
     ///< Target skew value for diff pair de-skewing.
-    int           m_targetSkew;
+    MINOPTMAX<int>           m_targetSkew;
 
-    bool          m_overrideCustomRules;
+    bool                     m_overrideCustomRules;
 
     ///< Type of corners for the meandered line.
     MEANDER_STYLE m_cornerStyle;

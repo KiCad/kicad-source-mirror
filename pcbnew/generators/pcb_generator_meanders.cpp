@@ -160,35 +160,36 @@ public:
     LENGTH_TUNING_MODE GetTuningMode() const { return m_tuningMode; }
     void               SetTuningMode( LENGTH_TUNING_MODE aValue ) { m_tuningMode = aValue; }
 
-    int  GetMinAmplitude() const { return m_minAmplitude; }
-    void SetMinAmplitude( int aValue ) { m_minAmplitude = aValue; }
+    int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
+    void SetMinAmplitude( int aValue ) { m_settings.m_minAmplitude = aValue; }
 
-    int  GetMaxAmplitude() const { return m_maxAmplitude; }
-    void SetMaxAmplitude( int aValue ) { m_maxAmplitude = aValue; }
+    int  GetMaxAmplitude() const { return m_settings.m_maxAmplitude; }
+    void SetMaxAmplitude( int aValue ) { m_settings.m_maxAmplitude = aValue; }
 
-    PNS::MEANDER_SIDE GetInitialSide() const { return m_initialSide; }
-    void              SetInitialSide( PNS::MEANDER_SIDE aValue ) { m_initialSide = aValue; }
+    PNS::MEANDER_SIDE GetInitialSide() const { return m_settings.m_initialSide; }
+    void              SetInitialSide( PNS::MEANDER_SIDE aValue ) { m_settings.m_initialSide = aValue; }
 
-    int  GetSpacing() const { return m_spacing; }
-    void SetSpacing( int aValue ) { m_spacing = aValue; }
+    int  GetSpacing() const { return m_settings.m_spacing; }
+    void SetSpacing( int aValue ) { m_settings.m_spacing = aValue; }
 
-    long long int GetTargetLength() const { return m_targetLength; }
-    void          SetTargetLength( long long int aValue ) { m_targetLength = aValue; }
+    long long int GetTargetLength() const { return m_settings.m_targetLength.Opt(); }
+    void          SetTargetLength( long long int aValue ) { m_settings.SetTargetLength( aValue ); }
 
-    int  GetTargetSkew() const { return m_targetSkew; }
-    void SetTargetSkew( int aValue ) { m_targetSkew = aValue; }
+    int  GetTargetSkew() const { return m_settings.m_targetSkew.Opt(); }
+    void SetTargetSkew( int aValue ) { m_settings.SetTargetSkew( aValue ); }
 
-    bool GetOverrideCustomRules() const { return m_overrideCustomRules; }
-    void SetOverrideCustomRules( bool aOverride ) { m_overrideCustomRules = aOverride; }
+    bool GetOverrideCustomRules() const { return m_settings.m_overrideCustomRules; }
+    void SetOverrideCustomRules( bool aOverride ) { m_settings.m_overrideCustomRules = aOverride; }
 
-    int  GetCornerRadiusPercentage() const { return m_cornerRadiusPercentage; }
-    void SetCornerRadiusPercentage( int aValue ) { m_cornerRadiusPercentage = aValue; }
+    int  GetCornerRadiusPercentage() const { return m_settings.m_cornerRadiusPercentage; }
+    void SetCornerRadiusPercentage( int aValue ) { m_settings.m_cornerRadiusPercentage = aValue; }
 
-    bool IsSingleSided() const { return m_singleSide; }
-    void SetSingleSided( bool aValue ) { m_singleSide = aValue; }
+    bool IsSingleSided() const { return m_settings.m_singleSided; }
+    void SetSingleSided( bool aValue ) { m_settings.m_singleSided = aValue; }
 
-    bool IsRounded() const { return m_rounded; }
-    void SetRounded( bool aValue ) { m_rounded = aValue; }
+    bool IsRounded() const { return m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND; }
+    void SetRounded( bool aFlag ) { m_settings.m_cornerStyle = aFlag ? PNS::MEANDER_STYLE_ROUND
+                                                                     : PNS::MEANDER_STYLE_CHAMFER; }
 
     std::vector<std::pair<wxString, wxVariant>> GetRowData() override
     {
@@ -216,9 +217,6 @@ protected:
         std::swap( *this, *static_cast<PCB_GENERATOR_MEANDERS*>( aImage ) );
     }
 
-    PNS::MEANDER_SETTINGS toMeanderSettings();
-    void                  fromMeanderSettings( const PNS::MEANDER_SETTINGS& aSettings );
-
     PNS::ROUTER_MODE toPNSMode();
 
     bool baselineValid();
@@ -237,31 +235,20 @@ protected:
     SHAPE_LINE_CHAIN getRectShape() const;
 
 protected:
-    VECTOR2I           m_end;
+    VECTOR2I              m_end;
 
-    int                m_minAmplitude;
-    int                m_maxAmplitude;
-    int                m_spacing;
-    long long int      m_targetLength;
-    int                m_targetSkew;
-    bool               m_overrideCustomRules;
-    int                m_cornerRadiusPercentage;
-
-    PNS::MEANDER_SIDE  m_initialSide;
+    PNS::MEANDER_SETTINGS m_settings;
 
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
     std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
 
-    int                m_trackWidth;
-    int                m_diffPairGap;
+    int                   m_trackWidth;
+    int                   m_diffPairGap;
 
-    bool               m_singleSide;
-    bool               m_rounded;
+    LENGTH_TUNING_MODE    m_tuningMode;
 
-    LENGTH_TUNING_MODE m_tuningMode;
-
-    wxString           m_lastNetName;
-    wxString           m_tuningInfo;
+    wxString              m_lastNetName;
+    wxString              m_tuningInfo;
 
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
 
@@ -371,23 +358,13 @@ PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_I
         PCB_GENERATOR( aParent, aLayer ),
         m_trackWidth( 0 ),
         m_diffPairGap( 0 ),
-        m_singleSide( false ),
-        m_rounded( true ),
         m_tuningMode( aMode ),
         m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED )
 {
     m_generatorType = GENERATOR_TYPE;
     m_name = DISPLAY_NAME;
-
-    m_minAmplitude = pcbIUScale.mmToIU( 0.1 );
-    m_maxAmplitude = pcbIUScale.mmToIU( 2.0 );
-    m_spacing = pcbIUScale.mmToIU( 0.6 );
-    m_targetLength = pcbIUScale.mmToIU( 100 );
-    m_targetSkew = pcbIUScale.mmToIU( 0 );
-    m_overrideCustomRules = false;
     m_end = VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 );
-    m_cornerRadiusPercentage = 100;
-    m_initialSide = PNS::MEANDER_SIDE_DEFAULT;
+    m_settings.m_initialSide = PNS::MEANDER_SIDE_LEFT;
 }
 
 
@@ -461,13 +438,13 @@ PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool
             if( dlg.ShowModal() != wxID_OK )
                 return nullptr;
 
-            meander->m_targetSkew = dlg.GetValue();
-            meander->m_overrideCustomRules = true;
+            meander->m_settings.SetTargetSkew( dlg.GetValue() );
+            meander->m_settings.m_overrideCustomRules = true;
         }
         else
         {
-            meander->m_targetSkew = constraint.GetValue().Opt();
-            meander->m_overrideCustomRules = false;
+            meander->m_settings.SetTargetSkew( constraint.GetValue() );
+            meander->m_settings.m_overrideCustomRules = false;
         }
     }
     else
@@ -480,13 +457,13 @@ PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool
             if( dlg.ShowModal() != wxID_OK )
                 return nullptr;
 
-            meander->m_targetLength = dlg.GetValue();
-            meander->m_overrideCustomRules = true;
+            meander->m_settings.SetTargetLength( dlg.GetValue() );
+            meander->m_settings.m_overrideCustomRules = true;
         }
         else
         {
-            meander->m_targetLength = constraint.GetValue().Opt();
-            meander->m_overrideCustomRules = false;
+            meander->m_settings.SetTargetLength( constraint.GetValue() );
+            meander->m_settings.m_overrideCustomRules = false;
         }
     }
 
@@ -520,7 +497,7 @@ void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
     if( !baselineValid() )
         initBaseLines( router, layer, aBoard );
 
-    if( baselineValid() && !m_overrideCustomRules )
+    if( baselineValid() && !m_settings.m_overrideCustomRules )
     {
         PCB_TRACK* track = nullptr;
 
@@ -535,7 +512,7 @@ void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
             if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
                                            &pnsItem, nullptr, layer, &constraint ) )
             {
-                m_targetLength = constraint.m_Value.Opt();
+                m_settings.SetTargetLength( constraint.m_Value );
                 aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
             }
         }
@@ -549,7 +526,7 @@ void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
                 if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
                                                &pnsItem, &coupledItem, layer, &constraint ) )
                 {
-                    m_targetLength = constraint.m_Value.Opt();
+                    m_settings.SetTargetLength( constraint.m_Value );
                     aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
@@ -558,7 +535,7 @@ void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
                 if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW,
                                                &pnsItem, &coupledItem, layer, &constraint ) )
                 {
-                    m_targetSkew = constraint.m_Value.Opt();
+                    m_settings.m_targetSkew = constraint.m_Value;
                     aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
@@ -856,42 +833,6 @@ void PCB_GENERATOR_MEANDERS::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
 }
 
 
-PNS::MEANDER_SETTINGS PCB_GENERATOR_MEANDERS::toMeanderSettings()
-{
-    PNS::MEANDER_SETTINGS settings;
-
-    settings.m_cornerStyle = m_rounded ? PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND
-                                       : PNS::MEANDER_STYLE::MEANDER_STYLE_CHAMFER;
-
-    settings.m_minAmplitude = m_minAmplitude;
-    settings.m_maxAmplitude = m_maxAmplitude;
-    settings.m_spacing = m_spacing;
-    settings.m_targetLength = m_targetLength;
-    settings.m_targetSkew = m_targetSkew;
-    settings.m_overrideCustomRules = m_overrideCustomRules;
-    settings.m_singleSided = m_singleSide;
-    settings.m_initialSide = m_initialSide;
-    settings.m_cornerRadiusPercentage = m_cornerRadiusPercentage;
-
-    return settings;
-}
-
-
-void PCB_GENERATOR_MEANDERS::fromMeanderSettings( const PNS::MEANDER_SETTINGS& aSettings )
-{
-    m_rounded = aSettings.m_cornerStyle == PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND;
-    m_minAmplitude = aSettings.m_minAmplitude;
-    m_maxAmplitude = aSettings.m_maxAmplitude;
-    m_spacing = aSettings.m_spacing;
-    m_targetLength = aSettings.m_targetLength;
-    m_targetSkew = aSettings.m_targetSkew;
-    m_overrideCustomRules = aSettings.m_overrideCustomRules;
-    m_singleSide = aSettings.m_singleSided;
-    m_initialSide = aSettings.m_initialSide;
-    m_cornerRadiusPercentage = aSettings.m_cornerRadiusPercentage;
-}
-
-
 PNS::ROUTER_MODE PCB_GENERATOR_MEANDERS::toPNSMode()
 {
     switch( m_tuningMode )
@@ -1039,14 +980,12 @@ bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
     PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
-    PNS::MEANDER_SETTINGS settings = toMeanderSettings();
-
-    placer->UpdateSettings( settings );
+    placer->UpdateSettings( m_settings );
     router->Move( m_end, nullptr );
 
     m_trackWidth = router->Sizes().TrackWidth();
     m_diffPairGap = router->Sizes().DiffPairGap();
-    m_initialSide = placer->MeanderSettings().m_initialSide;
+    m_settings = placer->MeanderSettings();
     m_lastNetName = iface->GetNetName( startItem->Net() );
     m_tuningInfo = placer->TuningInfo( aFrame->GetUserUnits() );
     m_tuningStatus = placer->TuningStatus();
@@ -1140,12 +1079,12 @@ bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points
     base.A += centerlineOffset;
     base.B += centerlineOffset;
 
-    int amplitude = m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+    int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
     if( m_tuningMode == DIFF_PAIR )
         amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
 
-    if( m_initialSide == -1 )
+    if( m_settings.m_initialSide == -1 )
         amplitude *= -1;
 
     VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
@@ -1154,7 +1093,7 @@ bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points
     points->Point( 2 ).SetGridConstraint( IGNORE_GRID );
 
     VECTOR2I spacingHandleOffset =
-            widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
+            widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_settings.m_spacing * 1.5 ) );
 
     points->AddPoint( base.A + spacingHandleOffset );
     points->Point( 3 ).SetGridConstraint( IGNORE_GRID );
@@ -1196,9 +1135,9 @@ bool PCB_GENERATOR_MEANDERS::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> 
         int side = base.Side( wHandle );
 
         if( side < 0 )
-            m_initialSide = PNS::MEANDER_SIDE_LEFT;
+            m_settings.m_initialSide = PNS::MEANDER_SIDE_LEFT;
         else
-            m_initialSide = PNS::MEANDER_SIDE_RIGHT;
+            m_settings.m_initialSide = PNS::MEANDER_SIDE_RIGHT;
     }
 
     if( aEditPoints->Point( 3 ).IsActive() )
@@ -1228,12 +1167,12 @@ bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
     base.A += centerlineOffset;
     base.B += centerlineOffset;
 
-    int amplitude = m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+    int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
     if( m_tuningMode == DIFF_PAIR )
         amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
 
-    if( m_initialSide == -1 )
+    if( m_settings.m_initialSide == -1 )
         amplitude *= -1;
 
     VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
@@ -1243,8 +1182,8 @@ bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
 
     aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
 
-    VECTOR2I spacingHandleOffset = widthHandleOffset
-                                        + ( base.B - base.A ).Resize( KiROUND( m_spacing * 1.5 ) );
+    VECTOR2I spacingHandleOffset =
+            widthHandleOffset + ( base.B - base.A ).Resize( KiROUND( m_settings.m_spacing * 1.5 ) );
 
     aEditPoints->Point( 3 ).SetPosition( base.A + spacingHandleOffset );
 
@@ -1268,8 +1207,8 @@ SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
             cl.SetPoint( -1, ( cl.CPoint( -1 ) + m_baseLineCoupled->CPoint( -1 ) ) / 2 );
         }
 
-        bool singleSided = m_singleSide;
-        int  amplitude = m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+        bool singleSided = m_settings.m_singleSided;
+        int  amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
         if( m_tuningMode == DIFF_PAIR )
         {
@@ -1285,7 +1224,7 @@ SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
                                left, right, true ) )
             {
                 chain.Append( cl.CPoint( 0 ) );
-                chain.Append( m_initialSide >= 0 ? right : left );
+                chain.Append( m_settings.m_initialSide >= 0 ? right : left );
                 chain.Append( cl.CPoint( -1 ) );
 
                 return chain;
@@ -1359,24 +1298,28 @@ const STRING_ANY_MAP PCB_GENERATOR_MEANDERS::GetProperties() const
     STRING_ANY_MAP props = PCB_GENERATOR::GetProperties();
 
     props.set( "tuning_mode", tuningToString( m_tuningMode ) );
-    props.set( "initial_side", sideToString( m_initialSide ) );
+    props.set( "initial_side", sideToString( m_settings.m_initialSide ) );
     props.set( "last_status", statusToString( m_tuningStatus ) );
 
     props.set( "end", m_end );
-    props.set( "corner_radius_percent", m_cornerRadiusPercentage );
-    props.set( "single_sided", m_singleSide );
-    props.set( "rounded", m_rounded );
+    props.set( "corner_radius_percent", m_settings.m_cornerRadiusPercentage );
+    props.set( "single_sided", m_settings.m_singleSided );
+    props.set( "rounded", m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND );
 
-    props.set_iu( "max_amplitude", m_maxAmplitude );
-    props.set_iu( "min_spacing", m_spacing );
-    props.set_iu( "target_length", m_targetLength );
-    props.set_iu( "target_skew", m_targetSkew );
+    props.set_iu( "max_amplitude", m_settings.m_maxAmplitude );
+    props.set_iu( "min_spacing", m_settings.m_spacing );
+    props.set_iu( "target_length_min", m_settings.m_targetLength.Min() );
+    props.set_iu( "target_length", m_settings.m_targetLength.Opt() );
+    props.set_iu( "target_length_max", m_settings.m_targetLength.Max() );
+    props.set_iu( "target_skew_min", m_settings.m_targetSkew.Min() );
+    props.set_iu( "target_skew", m_settings.m_targetSkew.Opt() );
+    props.set_iu( "target_skew_max", m_settings.m_targetSkew.Max() );
     props.set_iu( "last_track_width", m_trackWidth );
     props.set_iu( "last_diff_pair_gap", m_diffPairGap );
 
     props.set( "last_netname", m_lastNetName );
     props.set( "last_tuning", m_tuningInfo );
-    props.set( "override_custom_rules", m_overrideCustomRules );
+    props.set( "override_custom_rules", m_settings.m_overrideCustomRules );
 
     if( m_baseLine )
         props.set( "base_line", wxAny( *m_baseLine ) );
@@ -1398,25 +1341,48 @@ void PCB_GENERATOR_MEANDERS::SetProperties( const STRING_ANY_MAP& aProps )
 
     wxString side;
     aProps.get_to( "initial_side", side );
-    m_initialSide = sideFromString( side.utf8_string() );
+    m_settings.m_initialSide = sideFromString( side.utf8_string() );
 
     wxString status;
     aProps.get_to( "last_status", status );
     m_tuningStatus = statusFromString( status.utf8_string() );
 
     aProps.get_to( "end", m_end );
-    aProps.get_to( "corner_radius_percent", m_cornerRadiusPercentage );
-    aProps.get_to( "single_sided", m_singleSide );
-    aProps.get_to( "side", m_initialSide );
-    aProps.get_to( "rounded", m_rounded );
+    aProps.get_to( "corner_radius_percent", m_settings.m_cornerRadiusPercentage );
+    aProps.get_to( "single_sided", m_settings.m_singleSided );
+    aProps.get_to( "side", m_settings.m_initialSide );
 
-    aProps.get_to_iu( "max_amplitude", m_maxAmplitude );
-    aProps.get_to_iu( "min_spacing", m_spacing );
-    aProps.get_to_iu( "target_length", m_targetLength );
-    aProps.get_to_iu( "target_skew", m_targetSkew );
+    bool rounded;
+    aProps.get_to( "rounded", rounded );
+    m_settings.m_cornerStyle = rounded ? PNS::MEANDER_STYLE_ROUND : PNS::MEANDER_STYLE_CHAMFER;
+
+    long long int val;
+
+    aProps.get_to_iu( "target_length", val );
+    m_settings.SetTargetLength( val );
+
+    if( aProps.get_to_iu( "target_length_min", val ) )
+        m_settings.m_targetLength.SetMin( val );
+
+    if( aProps.get_to_iu( "target_length_max", val ) )
+        m_settings.m_targetLength.SetMax( val );
+
+    int int_val;
+
+    aProps.get_to_iu( "target_skew", int_val );
+    m_settings.SetTargetSkew( int_val );
+
+    if( aProps.get_to_iu( "target_skew_min", int_val ) )
+        m_settings.m_targetSkew.SetMin( int_val );
+
+    if( aProps.get_to_iu( "target_skew_max", int_val ) )
+        m_settings.m_targetSkew.SetMax( int_val );
+
+    aProps.get_to_iu( "max_amplitude", m_settings.m_maxAmplitude );
+    aProps.get_to_iu( "min_spacing", m_settings.m_spacing );
     aProps.get_to_iu( "last_track_width", m_trackWidth );
     aProps.get_to_iu( "last_diff_pair_gap", m_diffPairGap );
-    aProps.get_to( "override_custom_rules", m_overrideCustomRules );
+    aProps.get_to( "override_custom_rules", m_settings.m_overrideCustomRules );
 
     aProps.get_to( "last_netname", m_lastNetName );
     aProps.get_to( "last_tuning", m_tuningInfo );
@@ -1431,7 +1397,7 @@ void PCB_GENERATOR_MEANDERS::SetProperties( const STRING_ANY_MAP& aProps )
 
 void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 {
-    PNS::MEANDER_SETTINGS settings = toMeanderSettings();
+    PNS::MEANDER_SETTINGS settings = m_settings;
     DRC_CONSTRAINT        constraint;
 
     if( !m_items.empty() )
@@ -1442,7 +1408,7 @@ void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFra
         constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
 
         if( !constraint.IsNull() && !settings.m_overrideCustomRules )
-            settings.m_targetLength = constraint.GetValue().Opt();
+            settings.SetTargetLength( constraint.GetValue() );
     }
 
     DIALOG_TUNING_PATTERN_PROPERTIES dlg( aEditFrame, settings, toPNSMode(), constraint );
@@ -1451,9 +1417,7 @@ void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFra
     {
         BOARD_COMMIT commit( aEditFrame );
         commit.Modify( this );
-
-        fromMeanderSettings( settings );
-
+        m_settings = settings;
         commit.Push( _( "Edit Tuning Pattern" ) );
     }
 
@@ -1591,9 +1555,9 @@ void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         constraint = drcEngine->EvalRules( SKEW_CONSTRAINT, primaryItem, coupledItem, m_layer );
 
-        if( constraint.IsNull() || m_overrideCustomRules )
+        if( constraint.IsNull() || m_settings.m_overrideCustomRules )
         {
-            msg = aFrame->MessageTextFromValue( m_targetSkew );
+            msg = aFrame->MessageTextFromValue( m_settings.m_targetSkew.Opt() );
 
             aList.emplace_back( wxString::Format( _( "Target Skew: %s" ), msg ),
                                 wxString::Format( _( "(from tuning pattern properties)" ) ) );
@@ -1613,9 +1577,9 @@ void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     {
         constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
 
-        if( constraint.IsNull() || m_overrideCustomRules )
+        if( constraint.IsNull() || m_settings.m_overrideCustomRules )
         {
-            msg = aFrame->MessageTextFromValue( (double) m_targetLength );
+            msg = aFrame->MessageTextFromValue( (double) m_settings.m_targetLength.Opt() );
 
             aList.emplace_back( wxString::Format( _( "Target Length: %s" ), msg ),
                                 wxString::Format( _( "(from tuning pattern properties)" ) ) );
