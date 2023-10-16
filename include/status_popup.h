@@ -88,16 +88,23 @@ public:
     /**
      * Display a text.
      *
-     * @param aText is the text to be displayed.
+     * @param aText text to be displayed.
      */
     void SetText( const wxString& aText );
 
     /**
      * Change text color.
      *
-     * @param aColor is the new text color.
+     * @param aColor new text color.
      */
     void SetTextColor( const wxColour& aColor );
+
+    /**
+     * Change background color.
+     *
+     * @param aColor new background color.
+     */
+    void SetBgColour( const wxColour& aColor );
 
 protected:
     wxStaticText* m_statusLine;

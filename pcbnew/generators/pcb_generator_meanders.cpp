@@ -1100,9 +1100,6 @@ void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
         }
     }
 
-    // Store isNew as BOARD_COMMIT::Push() is going to clear it.
-    bool isNew = IsNew();
-
     if( aCommitMsg.IsEmpty() )
         aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
     else
@@ -1476,35 +1473,22 @@ void PCB_GENERATOR_MEANDERS::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_
 
     // Determine the background color first and choose a contrasting value
     COLOR4D bg( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-    double h, s, l;
+    COLOR4D fg;
+    double  h, s, l;
     bg.ToHSL( h, s, l );
+
+    bg.FromHSL( h, s, l < 0.5 ? 0.1 : 0.9 );
+    aPopup->SetBgColour( bg.ToColour() );
 
     switch( placer->TuningStatus() )
     {
-    case PNS::MEANDER_PLACER_BASE::TUNED:
-        if( l < 0.5 )
-            aPopup->SetTextColor( wxColor( 127, 200, 127 ) );
-        else
-            aPopup->SetTextColor( wxColor( 0, 92, 0 ) );
-
-        break;
-
-    case PNS::MEANDER_PLACER_BASE::TOO_SHORT:
-        if( l < 0.5 )
-            aPopup->SetTextColor( wxColor( 242, 100, 126 ) );
-        else
-            aPopup->SetTextColor( wxColor( 122, 0, 0 ) );
-
-        break;
-
-    case PNS::MEANDER_PLACER_BASE::TOO_LONG:
-        if( l < 0.5 )
-            aPopup->SetTextColor( wxColor( 66, 184, 235 ) );
-        else
-            aPopup->SetTextColor( wxColor( 19, 19, 195 ) );
-
-        break;
+    case PNS::MEANDER_PLACER_BASE::TUNED:     h = 120.0; break;   // Green
+    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: h = 0;     break;   // Red
+    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  h = 240.0; break;   // Blue
     }
+
+    fg.FromHSL( h, 1.0, l < 0.5 ? 0.8 : 0.2 );
+    aPopup->SetTextColor( fg.ToColour() );
 }
 
 

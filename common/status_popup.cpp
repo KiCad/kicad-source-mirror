@@ -135,3 +135,10 @@ void STATUS_TEXT_POPUP::SetTextColor( const wxColour& aColor )
 {
     m_statusLine->SetForegroundColour( aColor );
 }
+
+
+void STATUS_TEXT_POPUP::SetBgColour( const wxColour& aColor )
+{
+    m_panel->SetBackgroundColour( aColor );
+    SetBackgroundColour( aColor );
+}
