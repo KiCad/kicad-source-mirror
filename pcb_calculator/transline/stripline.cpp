@@ -30,6 +30,9 @@
 #include "stripline.h"
 #include "units.h"
 
+// const to convert a attenuation / loss from log to decibel
+const double LOG2DB = 20.0 / log( 10.0 );
+
 STRIPLINE::STRIPLINE() : TRANSLINE()
 {
     m_Name = "StripLine";
@@ -38,7 +41,7 @@ STRIPLINE::STRIPLINE() : TRANSLINE()
 
 
 // -------------------------------------------------------------------
-// calculate characteristic impedance and conductor loss
+// calculate characteristic impedance and conductor loss (in log/meter)
 double STRIPLINE::lineImpedance( double height, double& ac )
 {
     double ZL;
@@ -95,8 +98,8 @@ void STRIPLINE::calcAnalyze()
     m_parameters[Z0_PRM] = 2.0
                            / ( 1.0 / lineImpedance( 2.0 * a + t, ac1 )
                                    + 1.0 / lineImpedance( 2.0 * ( h - a ) - t, ac2 ) );
-    m_parameters[LOSS_CONDUCTOR_PRM]  = m_parameters[PHYS_LEN_PRM] * 0.5 * ( ac1 + ac2 );
-    m_parameters[LOSS_DIELECTRIC_PRM] = 20.0 / log( 10.0 ) * m_parameters[PHYS_LEN_PRM]
+    m_parameters[LOSS_CONDUCTOR_PRM]  = LOG2DB * m_parameters[PHYS_LEN_PRM] * ( ac1 + ac2 );
+    m_parameters[LOSS_DIELECTRIC_PRM] = LOG2DB * m_parameters[PHYS_LEN_PRM]
                                         * ( M_PI / C0 ) * m_parameters[FREQUENCY_PRM]
                                         * sqrt( m_parameters[EPSILONR_PRM] )
                                         * m_parameters[TAND_PRM];
