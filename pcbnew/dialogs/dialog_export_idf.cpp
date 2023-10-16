@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015  Cirilo Bernardo
- * Copyright (C) 2013-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,13 +91,25 @@ public:
     {
         m_idfThouOpt = m_rbUnitSelection->GetSelection() == 1;
 
-        auto cfg = m_parent->GetPcbNewSettings();
+        PCBNEW_SETTINGS* cfg = nullptr;
 
-        cfg->m_ExportIdf.units_mils  = m_idfThouOpt;
-        cfg->m_ExportIdf.auto_adjust = m_AutoAdjust;
-        cfg->m_ExportIdf.ref_units   = m_RefUnits;
-        cfg->m_ExportIdf.ref_x       = m_XRef;
-        cfg->m_ExportIdf.ref_y       = m_YRef;
+        try
+        {
+            cfg = m_parent->GetPcbNewSettings();
+        }
+        catch( const std::runtime_error& e )
+        {
+            wxFAIL_MSG( e.what() );
+        }
+
+        if( cfg )
+        {
+            cfg->m_ExportIdf.units_mils  = m_idfThouOpt;
+            cfg->m_ExportIdf.auto_adjust = m_AutoAdjust;
+            cfg->m_ExportIdf.ref_units   = m_RefUnits;
+            cfg->m_ExportIdf.ref_x       = m_XRef;
+            cfg->m_ExportIdf.ref_y       = m_YRef;
+        }
     }
 
     bool GetThouOption()

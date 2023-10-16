@@ -2059,6 +2059,9 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
             m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
 
             simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
+
+            wxCHECK( simTab, false );
+
             simTab->SetLastSchTextSimCommand( js[ "last_sch_text_sim_command" ] );
         }
     }

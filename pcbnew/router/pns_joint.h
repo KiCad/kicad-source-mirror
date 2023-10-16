@@ -144,9 +144,11 @@ public:
                 if( !via || hasNonVirtualVia )
                     return false;
 
-                assert ( seg1 && seg2 );
+                // This compiles away in release builds so we still need to check it below
+                // to prevent segfaults in release builds.
+                assert( seg1 && seg2 );
 
-                return seg1->Width() == seg2->Width();
+                return ( seg1 && seg2 ) ? seg1->Width() == seg2->Width() : false;
             }
         }
 

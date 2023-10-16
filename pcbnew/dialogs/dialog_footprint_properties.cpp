@@ -176,8 +176,21 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
-    if( PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings() )
+    PCBNEW_SETTINGS* cfg = nullptr;
+
+    try
+    {
+        cfg = m_frame->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
         cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
+    }
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_fields );

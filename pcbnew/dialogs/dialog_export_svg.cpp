@@ -71,8 +71,6 @@ private:
 };
 
 
-/* DIALOG_EXPORT_SVG functions
-*/
 DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
         DIALOG_EXPORT_SVG_BASE( aParent ),
         m_board( aBoard ),
@@ -117,28 +115,42 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 
     m_parent->Prj().GetProjectFile().m_PcbLastPath[ LAST_PATH_SVG ] = m_outputDirectory;
 
-    auto cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_ExportSvg.black_and_white  = m_printBW;
-    cfg->m_ExportSvg.mirror           = m_printMirror;
-    cfg->m_ExportSvg.one_file         = m_oneFileOnly;
-    cfg->m_ExportSvg.page_size        = m_rbSvgPageSizeOpt->GetSelection();
-    cfg->m_ExportSvg.output_dir       = m_outputDirectory.ToStdString();
+    try
+    {
+        cfg = m_parent->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
 
-    cfg->m_ExportSvg.use_selected_theme = !m_cbUsedBoardTheme->GetValue();
-    cfg->m_ExportSvg.color_theme      = m_colorTheme->GetStringSelection();
+    if( cfg )
+    {
+        cfg->m_ExportSvg.black_and_white  = m_printBW;
+        cfg->m_ExportSvg.mirror           = m_printMirror;
+        cfg->m_ExportSvg.one_file         = m_oneFileOnly;
+        cfg->m_ExportSvg.page_size        = m_rbSvgPageSizeOpt->GetSelection();
+        cfg->m_ExportSvg.output_dir       = m_outputDirectory.ToStdString();
+        cfg->m_ExportSvg.use_selected_theme = !m_cbUsedBoardTheme->GetValue();
+        cfg->m_ExportSvg.color_theme      = m_colorTheme->GetStringSelection();
+    }
 
     if( m_checkboxPagePerLayer->GetValue() )
     {
         m_oneFileOnly = false;
-        cfg->m_ExportSvg.plot_board_edges = m_checkboxEdgesOnAllPages->GetValue();
+
+        if( cfg )
+            cfg->m_ExportSvg.plot_board_edges = m_checkboxEdgesOnAllPages->GetValue();
     }
     else
     {
         m_oneFileOnly = true;
     }
 
-    cfg->m_ExportSvg.layers.clear();
+    if( cfg )
+        cfg->m_ExportSvg.layers.clear();
 
     for( unsigned layer = 0; layer < arrayDim( m_boxSelectLayer ); ++layer )
     {
@@ -146,7 +158,10 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
             continue;
 
         if( m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) )
-            cfg->m_ExportSvg.layers.push_back( layer );
+        {
+            if( cfg )
+                cfg->m_ExportSvg.layers.push_back( layer );
+        }
     }
 }
 
@@ -302,6 +317,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     LSET all_selected = getCheckBoxSelectedLayers();
 
     PCB_PLOT_SVG_OPTIONS svgPlotOptions;
+    svgPlotOptions.m_negative = false;
     svgPlotOptions.m_blackAndWhite = m_printBW;
     svgPlotOptions.m_printMaskLayer = m_printMaskLayer;
     svgPlotOptions.m_pageSizeMode = m_rbSvgPageSizeOpt->GetSelection();

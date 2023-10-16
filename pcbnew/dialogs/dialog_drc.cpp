@@ -160,14 +160,27 @@ DIALOG_DRC::~DIALOG_DRC()
     for( int ii = 0; ii < m_ignoredList->GetItemCount(); ++ii )
         g_lastIgnored.push_back( m_ignoredList->GetItemText( ii ) );
 
-    PCBNEW_SETTINGS* settings = m_frame->GetPcbNewSettings();
-    settings->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
-    settings->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    if( !Kiface().IsSingle() )
-        settings->m_DrcDialog.test_footprints   = m_cbTestFootprints->GetValue();
+    try
+    {
+        cfg = m_frame->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
 
-    settings->m_DrcDialog.severities            = m_severities;
+    if( cfg )
+    {
+        cfg->m_DrcDialog.refill_zones          = m_cbRefillZones->GetValue();
+        cfg->m_DrcDialog.test_all_track_errors = m_cbReportAllTrackErrors->GetValue();
+
+        if( !Kiface().IsSingle() )
+            cfg->m_DrcDialog.test_footprints   = m_cbTestFootprints->GetValue();
+
+        cfg->m_DrcDialog.severities            = m_severities;
+    }
 
     m_markersTreeModel->DecRef();
     m_unconnectedTreeModel->DecRef();

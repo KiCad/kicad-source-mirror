@@ -167,7 +167,17 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    if( PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>() )
+    PCBNEW_SETTINGS* cfg = nullptr;
+    try
+    {
+        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
     {
         // Save any changes to column widths, etc.
         m_adapter->SaveSettings();

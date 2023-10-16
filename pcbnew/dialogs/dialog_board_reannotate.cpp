@@ -170,23 +170,37 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
 {
     GetParameters(); // Get the current menu settings
-    PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
-    cfg->m_Reannotate.remove_front_prefix     = m_RemoveFrontPrefix->GetValue();
-    cfg->m_Reannotate.remove_back_prefix      = m_RemoveBackPrefix->GetValue();
-    cfg->m_Reannotate.exclude_locked          = m_ExcludeLocked->GetValue();
 
-    cfg->m_Reannotate.grid_index              = m_gridIndex;
-    cfg->m_Reannotate.sort_code               = m_sortCode;
-    cfg->m_Reannotate.annotation_choice       = m_annotationScope;
-    cfg->m_Reannotate.report_severity         = m_severity;
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_Reannotate.front_refdes_start      = m_FrontRefDesStart->GetValue();
-    cfg->m_Reannotate.back_refdes_start       = m_BackRefDesStart->GetValue();
-    cfg->m_Reannotate.front_prefix            = m_FrontPrefix->GetValue();
-    cfg->m_Reannotate.back_prefix             = m_BackPrefix->GetValue();
-    cfg->m_Reannotate.exclude_list            = m_ExcludeList->GetValue();
-    cfg->m_Reannotate.report_file_name        = m_MessageWindow->GetFileName();
+    try
+    {
+        cfg = m_frame->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
+        cfg->m_Reannotate.remove_front_prefix     = m_RemoveFrontPrefix->GetValue();
+        cfg->m_Reannotate.remove_back_prefix      = m_RemoveBackPrefix->GetValue();
+        cfg->m_Reannotate.exclude_locked          = m_ExcludeLocked->GetValue();
+
+        cfg->m_Reannotate.grid_index              = m_gridIndex;
+        cfg->m_Reannotate.sort_code               = m_sortCode;
+        cfg->m_Reannotate.annotation_choice       = m_annotationScope;
+        cfg->m_Reannotate.report_severity         = m_severity;
+
+        cfg->m_Reannotate.front_refdes_start      = m_FrontRefDesStart->GetValue();
+        cfg->m_Reannotate.back_refdes_start       = m_BackRefDesStart->GetValue();
+        cfg->m_Reannotate.front_prefix            = m_FrontPrefix->GetValue();
+        cfg->m_Reannotate.back_prefix             = m_BackPrefix->GetValue();
+        cfg->m_Reannotate.exclude_list            = m_ExcludeList->GetValue();
+        cfg->m_Reannotate.report_file_name        = m_MessageWindow->GetFileName();
+    }
 }
 
 

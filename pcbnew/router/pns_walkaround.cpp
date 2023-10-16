@@ -188,8 +188,13 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
         if( s_cw != IN_PROGRESS && s_ccw != IN_PROGRESS )
             break;
 
-        double lcw = path_cw.Line().Length() / (double)aInitialPath.CLine().Length();
-        double lccw = path_ccw.Line().Length() / (double)aInitialPath.CLine().Length();
+        double length = (double)aInitialPath.CLine().Length();
+        wxCHECK2( length != 0, length = 1.0 );
+        double lcw = path_cw.Line().Length() / length;
+
+        length = (double)aInitialPath.CLine().Length();
+        wxCHECK2( length != 0, length = 1.0 );
+        double lccw = path_ccw.Line().Length() / length;
 
         PNS_DBG( Dbg(), Message, wxString::Format( wxT( "lcw %.1f lccw %.1f" ), lcw, lccw ) );
 

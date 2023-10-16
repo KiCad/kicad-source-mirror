@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,12 +91,24 @@ DIALOG_IMPORT_NETLIST::~DIALOG_IMPORT_NETLIST()
 {
     m_matchByUUID = m_matchByTimestamp->GetSelection() == 0;
 
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
-    cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
-    cfg->m_NetlistDialog.delete_shorting_tracks  = m_cbDeleteShortingTracks->GetValue();
-    cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
+    try
+    {
+        cfg = m_parent->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        cfg->m_NetlistDialog.report_filter           = m_MessageWindow->GetVisibleSeverities();
+        cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
+        cfg->m_NetlistDialog.delete_shorting_tracks  = m_cbDeleteShortingTracks->GetValue();
+        cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
+    }
 
     if( m_runDragCommand )
     {

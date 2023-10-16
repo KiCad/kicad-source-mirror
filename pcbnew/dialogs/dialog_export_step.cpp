@@ -255,23 +255,35 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 {
     GetOriginOption(); // Update m_origin member.
 
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
-    cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
-    cfg->m_ExportStep.replace_models = m_cbSubstModels->GetValue();
-    cfg->m_ExportStep.overwrite_file = m_cbOverwriteFile->GetValue();
+    try
+    {
+        cfg = m_parent->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
 
-    double val = 0.0;
+    if( cfg )
+    {
+        cfg->m_ExportStep.origin_mode = static_cast<int>( m_origin );
+        cfg->m_ExportStep.origin_units = m_STEP_OrgUnitChoice->GetSelection();
+        cfg->m_ExportStep.replace_models = m_cbSubstModels->GetValue();
+        cfg->m_ExportStep.overwrite_file = m_cbOverwriteFile->GetValue();
 
-    m_STEP_Xorg->GetValue().ToDouble( &val );
-    cfg->m_ExportStep.origin_x = val;
+        double val = 0.0;
 
-    m_STEP_Yorg->GetValue().ToDouble( &val );
-    cfg->m_ExportStep.origin_y = val;
+        m_STEP_Xorg->GetValue().ToDouble( &val );
+        cfg->m_ExportStep.origin_x = val;
 
-    cfg->m_ExportStep.no_unspecified = m_cbRemoveUnspecified->GetValue();
-    cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
+        m_STEP_Yorg->GetValue().ToDouble( &val );
+        cfg->m_ExportStep.origin_y = val;
+
+        cfg->m_ExportStep.no_unspecified = m_cbRemoveUnspecified->GetValue();
+        cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
+    }
 
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
     m_exportTracks = m_cbExportTracks->GetValue();

@@ -277,8 +277,21 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
-    auto libedit = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    Pgm().GetSettingsManager().Save( libedit );
+    SYMBOL_EDITOR_SETTINGS* cfg = nullptr;
+
+    try
+    {
+        cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        Pgm().GetSettingsManager().Save( cfg );
+    }
 
     delete m_libMgr;
 }
@@ -745,6 +758,8 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 
 void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 {
+    wxCHECK( m_toolManager, /* void */ );
+
     m_toolManager->RunAction( EE_ACTIONS::clearSelection );
     GetCanvas()->GetView()->Clear();
     delete m_symbol;
@@ -811,12 +826,14 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     }
     else if( IsSymbolAlias() )
     {
-        std::shared_ptr<LIB_SYMBOL> rootSymbol = m_symbol->GetRootSymbol().lock();
+        wxString rootSymbolName;
 
         // Don't assume the parent symbol shared pointer is still valid.
-        wxCHECK( rootSymbol, /* void */ );
+        if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_symbol->GetRootSymbol().lock() )
+            rootSymbolName = rootSymbol->GetName();
+        else
+            wxCHECK( false, /* void */ );
 
-        wxString rootSymbolName = rootSymbol->GetName();
         int      unit = GetUnit();
         int      convert = GetConvert();
         wxString msg;

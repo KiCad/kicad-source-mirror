@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,14 +59,26 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 {
-    auto cfg = m_parentFrame->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();
-    cfg->m_Cleanup.merge_segments         = m_mergeSegmOpt->GetValue();
-    cfg->m_Cleanup.cleanup_unconnected    = m_deleteUnconnectedOpt->GetValue();
-    cfg->m_Cleanup.cleanup_short_circuits = m_cleanShortCircuitOpt->GetValue();
-    cfg->m_Cleanup.cleanup_tracks_in_pad  = m_deleteTracksInPadsOpt->GetValue();
-    cfg->m_Cleanup.delete_dangling_vias   = m_deleteDanglingViasOpt->GetValue();
+    try
+    {
+        cfg = m_parentFrame->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        cfg->m_Cleanup.cleanup_vias           = m_cleanViasOpt->GetValue();
+        cfg->m_Cleanup.merge_segments         = m_mergeSegmOpt->GetValue();
+        cfg->m_Cleanup.cleanup_unconnected    = m_deleteUnconnectedOpt->GetValue();
+        cfg->m_Cleanup.cleanup_short_circuits = m_cleanShortCircuitOpt->GetValue();
+        cfg->m_Cleanup.cleanup_tracks_in_pad  = m_deleteTracksInPadsOpt->GetValue();
+        cfg->m_Cleanup.delete_dangling_vias   = m_deleteDanglingViasOpt->GetValue();
+    }
 
     m_changesTreeModel->DecRef();
 }

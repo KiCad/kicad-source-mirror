@@ -143,6 +143,10 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
         clearance = m_sizes.Clearance() + m_sizes.DiffPairWidth() / 2;
     }
 
+    PNS::ITEM_SET ret;
+
+    wxCHECK( node, ret );
+
     if( aUseClearance )
     {
         NODE::OBSTACLES          obs;
@@ -154,10 +158,6 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
 
         opts.m_differentNetsOnly = false;
         opts.m_overrideClearance = clearance;
-
-        PNS::ITEM_SET ret;
-
-        wxCHECK( node, ret );
 
         node->QueryColliding( &test, obs, opts );
 

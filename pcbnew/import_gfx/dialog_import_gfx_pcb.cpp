@@ -130,15 +130,28 @@ DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aImp
 
 DIALOG_IMPORT_GFX_PCB::~DIALOG_IMPORT_GFX_PCB()
 {
-    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_ImportGraphics.layer                 = m_SelLayerBox->GetLayerSelection();
-    cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
-    cfg->m_ImportGraphics.last_file             = m_textCtrlFileName->GetValue();
-    cfg->m_ImportGraphics.dxf_line_width        = pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() );
-    cfg->m_ImportGraphics.origin_x              = pcbIUScale.IUTomm( m_xOrigin.GetValue() );
-    cfg->m_ImportGraphics.origin_y              = pcbIUScale.IUTomm( m_yOrigin.GetValue() );
-    cfg->m_ImportGraphics.dxf_units             = m_choiceDxfUnits->GetSelection();
+    try
+    {
+        cfg = m_parent->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        cfg->m_ImportGraphics.layer                 = m_SelLayerBox->GetLayerSelection();
+        cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
+        cfg->m_ImportGraphics.last_file             = m_textCtrlFileName->GetValue();
+        cfg->m_ImportGraphics.dxf_line_width        =
+                pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() );
+        cfg->m_ImportGraphics.origin_x              = pcbIUScale.IUTomm( m_xOrigin.GetValue() );
+        cfg->m_ImportGraphics.origin_y              = pcbIUScale.IUTomm( m_yOrigin.GetValue() );
+        cfg->m_ImportGraphics.dxf_units             = m_choiceDxfUnits->GetSelection();
+    }
 
     m_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
 

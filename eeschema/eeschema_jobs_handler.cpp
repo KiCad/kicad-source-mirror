@@ -934,8 +934,8 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     m_reporter->Report( _( "Running ERC...\n" ), RPT_SEVERITY_INFO );
 
-    DS_PROXY_VIEW_ITEM* drawingSheet = getDrawingSheetProxyView( sch );
-    ercTester.RunTests( drawingSheet, nullptr, m_progressReporter );
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet( getDrawingSheetProxyView( sch ) );
+    ercTester.RunTests( drawingSheet.get(), nullptr, m_progressReporter );
 
     markersProvider->SetSeverities( ercJob->m_severity );
 

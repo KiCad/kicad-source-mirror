@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2015-2023 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -223,10 +223,23 @@ BOARD_ADAPTER::~BOARD_ADAPTER()
 
 void BOARD_ADAPTER::ReloadColorSettings() noexcept
 {
-    wxASSERT( PgmOrNull() );
+    wxCHECK( PgmOrNull(), /* void */ );
 
-    PCBNEW_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-    m_colors = Pgm().GetSettingsManager().GetColorSettings( settings->m_ColorTheme );
+    PCBNEW_SETTINGS* cfg = nullptr;
+
+    try
+    {
+        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        m_colors = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+    }
 }
 
 

@@ -68,12 +68,24 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
-    auto cfg = m_frame->GetPcbNewSettings();
+    PCBNEW_SETTINGS* cfg = nullptr;
 
-    cfg->m_NetlistDialog.associate_by_ref_sch    = m_cbRelinkFootprints->GetValue();
-    cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
-    cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
-    cfg->m_NetlistDialog.report_filter           = m_messagePanel->GetVisibleSeverities();
+    try
+    {
+        cfg = m_frame->GetPcbNewSettings();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxFAIL_MSG( e.what() );
+    }
+
+    if( cfg )
+    {
+        cfg->m_NetlistDialog.associate_by_ref_sch    = m_cbRelinkFootprints->GetValue();
+        cfg->m_NetlistDialog.update_footprints       = m_cbUpdateFootprints->GetValue();
+        cfg->m_NetlistDialog.delete_extra_footprints = m_cbDeleteExtraFootprints->GetValue();
+        cfg->m_NetlistDialog.report_filter           = m_messagePanel->GetVisibleSeverities();
+    }
 
     if( m_runDragCommand )
     {

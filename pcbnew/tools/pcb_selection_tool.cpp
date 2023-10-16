@@ -263,7 +263,16 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         MOUSE_DRAG_ACTION dragAction = m_frame->GetDragAction();
-        TRACK_DRAG_ACTION trackDragAction = m_frame->GetPcbNewSettings()->m_TrackDragAction;
+        TRACK_DRAG_ACTION trackDragAction = TRACK_DRAG_ACTION::MOVE;
+
+        try
+        {
+            m_frame->GetPcbNewSettings()->m_TrackDragAction;
+        }
+        catch( const std::runtime_error& e )
+        {
+            wxFAIL_MSG( e.what() );
+        }
 
         // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
         setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ),

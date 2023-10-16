@@ -2749,11 +2749,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         {
             ROUTER_TOOL* router = m_frame->GetToolManager()->GetTool<ROUTER_TOOL>();
 
-            m_allowDRCViolations = router->Router()->Settings().AllowDRCViolations();
+            if( router )
+                m_allowDRCViolations = router->Router()->Settings().AllowDRCViolations();
 
             try
             {
-                m_drcEngine->InitEngine( aFrame->GetDesignRulesPath() );
+                if( aFrame )
+                    m_drcEngine->InitEngine( aFrame->GetDesignRulesPath() );
 
                 DRC_CONSTRAINT constraint;
 
@@ -2787,6 +2789,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             KIGFX::PCB_VIEW*        view = m_frame->GetCanvas()->GetView();
             std::vector<PCB_TRACK*> possible_tracks;
+
+            wxCHECK( view, nullptr );
 
             view->Query( bbox, items );
 
