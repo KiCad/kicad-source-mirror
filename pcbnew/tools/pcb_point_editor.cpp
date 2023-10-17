@@ -112,7 +112,6 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
     m_editedPoint( nullptr ),
     m_hoveredPoint( nullptr ),
     m_original( VECTOR2I( 0, 0 ) ),
-    m_refill( false ),
     m_arcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
     m_altConstrainer( VECTOR2I( 0, 0 ) ),
     m_inPointEditorTool( false )
@@ -122,7 +121,6 @@ PCB_POINT_EDITOR::PCB_POINT_EDITOR() :
 
 void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
-    m_refill = false;
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
@@ -497,7 +495,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     getView()->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
-    m_refill = false;
     bool inDrag = false;
     bool useAltContraint = false;
 
@@ -666,7 +663,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             m_toolMgr->PostAction<EDA_ITEM*>( PCB_ACTIONS::reselectItem,
                                               item ); // FIXME: Needed for generators
-            m_refill = true;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1492,8 +1488,6 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
         validatePolygon( outline );
         zone->HatchBorder();
-
-        // TODO Refill zone when KiCad supports auto re-fill
         break;
     }
 
