@@ -606,7 +606,7 @@ TOOL_ACTION PCB_ACTIONS::filletTracks( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::filletLines( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.filletLines" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Fillet Lines" ) )
+        .MenuText( _( "Fillet Lines..." ) )
         .Tooltip( _( "Adds arcs tangent to the selected lines" ) )
         .Icon( BITMAPS::fillet ) );
 
