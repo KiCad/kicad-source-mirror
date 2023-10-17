@@ -174,24 +174,23 @@ private:
     int changeArcEditMode( const TOOL_EVENT& aEvent );
 
 private:
-    PCB_SELECTION_TOOL*                m_selectionTool;
-    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
-    std::shared_ptr<EDIT_POINTS>       m_editPoints;
+    PCB_SELECTION_TOOL*           m_selectionTool;
+    std::shared_ptr<EDIT_POINTS>  m_editPoints;
 
-    EDIT_POINT*                        m_editedPoint;
-    EDIT_POINT*                        m_hoveredPoint;
+    EDIT_POINT*                   m_editedPoint;
+    EDIT_POINT*                   m_hoveredPoint;
 
-    EDIT_POINT                         m_original;   ///< Original pos for the current drag point.
+    EDIT_POINT                    m_original;   ///< Original pos for the current drag point.
 
-    bool                               m_refill;
+    ARC_EDIT_MODE                 m_arcEditMode;
 
-    ARC_EDIT_MODE                      m_arcEditMode;
+    std::unique_ptr<STATUS_MIN_MAX_POPUP>        m_statusPopup;
 
     // Alternative constraint, enabled while a modifier key is held
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;
     EDIT_POINT                                   m_altConstrainer;
 
-    bool m_inPointEditorTool; // Re-entrancy guard
+    bool                          m_inPointEditorTool; // Re-entrancy guard
 
     static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };

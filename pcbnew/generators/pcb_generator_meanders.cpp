@@ -205,7 +205,7 @@ public:
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
 
     void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                       STATUS_TEXT_POPUP* aPopup ) override;
+                       STATUS_MIN_MAX_POPUP* aPopup ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -987,8 +987,21 @@ bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
     m_diffPairGap = router->Sizes().DiffPairGap();
     m_settings = placer->MeanderSettings();
     m_lastNetName = iface->GetNetName( startItem->Net() );
-    m_tuningInfo = placer->TuningInfo( aFrame->GetUserUnits() );
     m_tuningStatus = placer->TuningStatus();
+
+    wxString statusMessage;
+
+    switch ( m_tuningStatus )
+    {
+    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  statusMessage = _( "too long" );  break;
+    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: statusMessage = _( "too short" ); break;
+    case PNS::MEANDER_PLACER_BASE::TUNED:     statusMessage = _( "tuned" );     break;
+    default:                                  statusMessage = _( "unknown" );   break;
+    }
+
+    m_tuningInfo.Printf( wxS( "%s (%s)" ),
+                         aFrame->MessageTextFromValue( (double) placer->TuningResult() ),
+                         statusMessage );
 
     return true;
 }
@@ -1426,33 +1439,24 @@ void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFra
 
 
 void PCB_GENERATOR_MEANDERS::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                           STATUS_TEXT_POPUP* aPopup )
+                                           STATUS_MIN_MAX_POPUP* aPopup )
 {
     auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() );
 
     if( !placer )
         return;
 
-    aPopup->SetText( placer->TuningInfo( aFrame->GetUserUnits() ) );
-
-    // Determine the background color first and choose a contrasting value
-    COLOR4D bg( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-    COLOR4D fg;
-    double  h, s, l;
-    bg.ToHSL( h, s, l );
-
-    bg.FromHSL( h, s, l < 0.5 ? 0.1 : 0.9 );
-    aPopup->SetBgColour( bg.ToColour() );
-
-    switch( placer->TuningStatus() )
+    if( m_tuningMode == DIFF_PAIR_SKEW )
     {
-    case PNS::MEANDER_PLACER_BASE::TUNED:     h = 120.0; break;   // Green
-    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: h = 0;     break;   // Red
-    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  h = 240.0; break;   // Blue
+        aPopup->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
+        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current skew" ) );
     }
-
-    fg.FromHSL( h, 1.0, l < 0.5 ? 0.8 : 0.2 );
-    aPopup->SetTextColor( fg.ToColour() );
+    else
+    {
+        aPopup->SetMinMax( (double) m_settings.m_targetLength.Min(),
+                           (double) m_settings.m_targetLength.Max() );
+        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current length" ) );
+    }
 }
 
 

@@ -36,7 +36,7 @@ class BOARD;
 class BOARD_ITEM;
 class PCB_BASE_EDIT_FRAME;
 class GENERATOR_TOOL;
-class STATUS_TEXT_POPUP;
+class STATUS_MIN_MAX_POPUP;
 
 
 class PCB_GENERATOR : public PCB_GROUP
@@ -96,7 +96,7 @@ public:
     virtual void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) {};
 
     virtual void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                               STATUS_TEXT_POPUP* aPopup ) {};
+                               STATUS_MIN_MAX_POPUP* aPopup ) {};
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 

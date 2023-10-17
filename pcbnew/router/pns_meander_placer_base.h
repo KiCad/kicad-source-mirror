@@ -56,9 +56,9 @@ public:
     virtual ~MEANDER_PLACER_BASE();
 
     /**
-     * Return a string describing the status and length of the tuned traces.
+     * Return the resultant length or skew of the tuned traces.
      */
-    virtual const wxString TuningInfo( EDA_UNITS aUnits ) const = 0;
+    virtual long long int TuningResult() const = 0;
 
     /**
      * Return the tuning status (too short, too long, etc.) of the trace(s) being tuned.

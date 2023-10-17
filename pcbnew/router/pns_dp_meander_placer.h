@@ -104,7 +104,7 @@ public:
 
     long long int totalLength();
 
-    const wxString TuningInfo( EDA_UNITS aUnits ) const override;
+    long long int TuningResult() const override;
     TUNING_STATUS TuningStatus() const override;
 
     bool CheckFit( MEANDER_SHAPE* aShape ) override;

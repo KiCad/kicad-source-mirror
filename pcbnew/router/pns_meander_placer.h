@@ -88,11 +88,11 @@ public:
     /// @copydoc PLACEMENT_ALGO::CurrentLayer()
     int CurrentLayer() const override;
 
-    /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
-    virtual const wxString TuningInfo( EDA_UNITS aUnits ) const override;
+    /// @copydoc MEANDER_PLACER_BASE::TuningResult()
+    long long int TuningResult() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningStatus()
-    virtual TUNING_STATUS TuningStatus() const override;
+    TUNING_STATUS TuningStatus() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::CheckFit()
     bool CheckFit ( MEANDER_SHAPE* aShape ) override;

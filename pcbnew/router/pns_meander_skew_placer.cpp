@@ -19,8 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <base_units.h> // God forgive me doing this...
-
 #include "pns_node.h"
 #include "pns_itemset.h"
 #include "pns_topology.h"
@@ -168,30 +166,9 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 }
 
 
-const wxString MEANDER_SKEW_PLACER::TuningInfo( EDA_UNITS aUnits ) const
+long long int MEANDER_SKEW_PLACER::TuningResult() const
 {
-    wxString status;
-
-    switch( m_lastStatus )
-    {
-    case TOO_LONG:
-        status = _( "Too long: skew " );
-        break;
-    case TOO_SHORT:
-        status = _( "Too short: skew " );
-        break;
-    case TUNED:
-        status = _( "Tuned: skew " );
-        break;
-    default:
-        return _( "?" );
-    }
-
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength - m_coupledLength );
-    status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetSkew.Opt() );
-
-    return status;
+    return m_lastLength - m_coupledLength;
 }
 
 }

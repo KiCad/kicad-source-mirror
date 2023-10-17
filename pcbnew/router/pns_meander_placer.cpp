@@ -19,8 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <base_units.h> // God forgive me doing this...
-
 #include "pns_debug_decorator.h"
 #include "pns_itemset.h"
 #include "pns_meander_placer.h"
@@ -282,30 +280,9 @@ int MEANDER_PLACER::CurrentLayer() const
 }
 
 
-const wxString MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
+long long int MEANDER_PLACER::TuningResult() const
 {
-    wxString status;
-
-    switch ( m_lastStatus )
-    {
-    case TOO_LONG:
-        status = _( "Too long: " );
-        break;
-    case TOO_SHORT:
-        status = _( "Too short: " );
-        break;
-    case TUNED:
-        status = _( "Tuned: " );
-        break;
-    default:
-        return _( "?" );
-    }
-
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength );
-    status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength.Opt() );
-
-    return status;
+    return m_lastLength;
 }
 
 

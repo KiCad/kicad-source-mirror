@@ -48,8 +48,8 @@ public:
     /// @copydoc PLACEMENT_ALGO::Move()
     bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
-    /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
-    const wxString TuningInfo( EDA_UNITS aUnits ) const override;
+    /// @copydoc MEANDER_PLACER_BASE::TuningResult()
+    long long int TuningResult() const override;
 
     long long int CurrentSkew() const;
 

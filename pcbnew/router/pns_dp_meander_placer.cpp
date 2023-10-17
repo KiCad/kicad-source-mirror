@@ -21,8 +21,6 @@
 
 #include <optional>
 
-#include <base_units.h> // God forgive me doing this...
-
 #include "pns_node.h"
 #include "pns_itemset.h"
 #include "pns_topology.h"
@@ -456,33 +454,9 @@ int DP_MEANDER_PLACER::CurrentLayer() const
 }
 
 
-const wxString DP_MEANDER_PLACER::TuningInfo( EDA_UNITS aUnits ) const
+long long int DP_MEANDER_PLACER::TuningResult() const
 {
-    wxString status;
-
-    switch( m_lastStatus )
-    {
-    case TOO_LONG:
-        status = _( "Too long: " );
-        break;
-    case TOO_SHORT:
-        status = _("Too short: " );
-        break;
-    case TUNED:
-        status = _( "Tuned: " );
-        break;
-    default:
-        return _( "?" );
-    }
-
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_lastLength );
-    status += wxT( "/" );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_settings.m_targetLength.Opt() );
-    status += wxT( " (gap: " );
-    status += EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, m_originPair.Gap() );
-    status += wxT( ")" );
-
-    return status;
+    return m_lastLength;
 }
 
 
