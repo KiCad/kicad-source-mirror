@@ -143,10 +143,10 @@ DIALOG_IMPORT_GFX_PCB_BASE::DIALOG_IMPORT_GFX_PCB_BASE( wxWindow* parent, wxWind
 	fgSizerImportSettings->Add( m_importScaleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
+	fgSizerImportSettings->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bSizer7->Add( fgSizerImportSettings, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizer7->Add( fgSizerImportSettings, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	sbSizer1->Add( bSizer7, 1, wxEXPAND, 5 );
@@ -154,16 +154,47 @@ DIALOG_IMPORT_GFX_PCB_BASE::DIALOG_IMPORT_GFX_PCB_BASE( wxWindow* parent, wxWind
 	m_staticline1 = new wxStaticLine( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
+	wxBoxSizer* bSizer71;
+	bSizer71 = new wxBoxSizer( wxVERTICAL );
+
+	m_rbFixDiscontinuities = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Fix discontinuities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbFixDiscontinuities->SetToolTip( _("Trim/extend open shapes or add segments to make vertices of shapes coincide") );
+
+	bSizer71->Add( m_rbFixDiscontinuities, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_toleranceLabel = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toleranceLabel->Wrap( -1 );
+	bSizer14->Add( m_toleranceLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_toleranceCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer14->Add( m_toleranceCtrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_toleranceUnits = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toleranceUnits->Wrap( -1 );
+	bSizer14->Add( m_toleranceUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizer71->Add( bSizer14, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	sbSizer1->Add( bSizer71, 0, wxEXPAND, 5 );
+
+	m_staticline11 = new wxStaticLine( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	sbSizer1->Add( m_staticline11, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
 	m_groupItems = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Group items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_groupItems->SetToolTip( _("Add all imported items into a new group") );
 
-	bSizer8->Add( m_groupItems, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizer8->Add( m_groupItems, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 
-	sbSizer1->Add( bSizer8, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizer1->Add( bSizer8, 0, wxEXPAND|wxTOP, 5 );
 
 
 	bSizerMain->Add( sbSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -234,6 +265,7 @@ DIALOG_IMPORT_GFX_PCB_BASE::DIALOG_IMPORT_GFX_PCB_BASE( wxWindow* parent, wxWind
 	m_rbInteractivePlacement->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_rbAbsolutePlacement->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::onAbsolutePlacement ), NULL, this );
 	m_rbAbsolutePlacement->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::originOptionOnUpdateUI ), NULL, this );
+	m_rbFixDiscontinuities->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::onFixDiscontinuities ), NULL, this );
 	m_groupItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::onGroupItems ), NULL, this );
 }
 
@@ -245,6 +277,7 @@ DIALOG_IMPORT_GFX_PCB_BASE::~DIALOG_IMPORT_GFX_PCB_BASE()
 	m_rbInteractivePlacement->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_rbAbsolutePlacement->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::onAbsolutePlacement ), NULL, this );
 	m_rbAbsolutePlacement->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::originOptionOnUpdateUI ), NULL, this );
+	m_rbFixDiscontinuities->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::onFixDiscontinuities ), NULL, this );
 	m_groupItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB_BASE::onGroupItems ), NULL, this );
 
 }

@@ -63,6 +63,11 @@ class DIALOG_IMPORT_GFX_PCB_BASE : public DIALOG_SHIM
 		wxStaticText* m_importScaleLabel;
 		wxTextCtrl* m_importScaleCtrl;
 		wxStaticLine* m_staticline1;
+		wxCheckBox* m_rbFixDiscontinuities;
+		wxStaticText* m_toleranceLabel;
+		wxTextCtrl* m_toleranceCtrl;
+		wxStaticText* m_toleranceUnits;
+		wxStaticLine* m_staticline11;
 		wxCheckBox* m_groupItems;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
@@ -78,6 +83,7 @@ class DIALOG_IMPORT_GFX_PCB_BASE : public DIALOG_SHIM
 		virtual void onInteractivePlacement( wxCommandEvent& event ) { event.Skip(); }
 		virtual void originOptionOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onAbsolutePlacement( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFixDiscontinuities( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGroupItems( wxCommandEvent& event ) { event.Skip(); }
 
 

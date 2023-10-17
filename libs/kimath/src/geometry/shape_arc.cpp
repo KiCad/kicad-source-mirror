@@ -593,23 +593,27 @@ SHAPE_ARC SHAPE_ARC::Reversed() const
 
 bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const
 {
-    VECTOR2I  center = GetCenter();
-    EDA_ANGLE phi( p - center );
+    EDA_ANGLE sa = GetStartAngle().Normalize();
     EDA_ANGLE ca = GetCentralAngle();
-    EDA_ANGLE sa = GetStartAngle();
-    EDA_ANGLE ea;
+    EDA_ANGLE ea = sa + ca;
+
+    EDA_ANGLE phi( p - GetCenter() ); // Angle from center to the point
+    phi.Normalize();
 
     if( ca >= ANGLE_0 )
     {
-        ea = sa + ca;
+        while( phi < sa )
+            phi += ANGLE_360;
+
+        return phi >= sa && phi <= ea;
     }
     else
     {
-        ea = sa;
-        sa += ca;
-    }
+        while( phi > sa )
+            phi -= ANGLE_360;
 
-    return alg::within_wrapped_range( phi.AsDegrees(), sa.AsDegrees(), ea.AsDegrees(), 360.0 );
+        return phi <= sa && phi >= ea;
+    }
 }
 
 

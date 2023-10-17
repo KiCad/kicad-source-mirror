@@ -57,6 +57,7 @@
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_items.h>
 #include <core/kicad_algo.h>
+#include <fix_board_shape.h>
 #include <bitmaps.h>
 #include <cassert>
 #include <functional>
@@ -121,6 +122,10 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
                                                              PCB_SHAPE_LOCATE_RECT_T,
                                                              PCB_SHAPE_LOCATE_SEGMENT_T };
 
+    static const std::vector<KICAD_T> healShapesTypes = { PCB_SHAPE_LOCATE_SEGMENT_T,
+                                                          PCB_SHAPE_LOCATE_ARC_T,
+                                                          PCB_SHAPE_LOCATE_BEZIER_T };
+
     static const std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
 
     static const std::vector<KICAD_T> polygonBooleanTypes = { PCB_SHAPE_LOCATE_RECT_T,
@@ -143,6 +148,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
             };
 
     // clang-format off
+    menu->AddItem( PCB_ACTIONS::healShapes,              SELECTION_CONDITIONS::HasTypes( healShapesTypes ) );
     menu->AddItem( PCB_ACTIONS::filletLines,             SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::chamferLines,            SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::extendLines,             SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
@@ -150,7 +156,8 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     menu->AddItem( PCB_ACTIONS::pointEditorMoveCorner,   hasCornerCondition );
     menu->AddItem( PCB_ACTIONS::pointEditorMoveMidpoint, hasMidpointCondition );
 
-    menu->AddSeparator();
+    menu->AddSeparator( SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                        && SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     menu->AddItem( PCB_ACTIONS::mergePolygons,           SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
                                                              && SELECTION_CONDITIONS::MoreThan( 1 ) );
@@ -1402,6 +1409,85 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     if (const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage()) {
         frame()->ShowInfoBarMsg( *msg );
     }
+
+    return 0;
+}
+
+
+int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                std::vector<VECTOR2I> pts;
+
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    // We've converted the polygon and rectangle to segments, so drop everything
+                    // that isn't a segment at this point
+                    if( !item->IsType( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T,
+                                         PCB_SHAPE_LOCATE_BEZIER_T } ) )
+                    {
+                        aCollector.Remove( item );
+                    }
+                }
+            },
+            true /* prompt user regarding locked items */ );
+
+    // Store last used value
+    static int s_toleranceValue = pcbIUScale.mmToIU( 3 );
+
+    WX_UNIT_ENTRY_DIALOG dlg( frame(), _( "Heal Shapes" ), _( "Tolerance value:" ),
+                              s_toleranceValue );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    s_toleranceValue = dlg.GetValue();
+
+    if( s_toleranceValue <= 0 )
+        return 0;
+
+    BOARD_COMMIT commit{ this };
+
+    std::vector<PCB_SHAPE*>                 shapeList;
+    std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        {
+            shapeList.push_back( shape );
+            commit.Modify( shape );
+        }
+    }
+
+    ConnectBoardShapes( shapeList, newShapes, s_toleranceValue );
+
+    std::vector<PCB_SHAPE*> items_to_select;
+
+    for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
+    {
+        PCB_SHAPE* shape = ptr.release();
+
+        commit.Add( shape );
+        items_to_select.push_back( shape );
+    }
+
+    commit.Push( _( "Heal shapes" ) );
+
+    // Select added items
+    for( PCB_SHAPE* item : items_to_select )
+        m_selectionTool->AddItemToSel( item, true );
+
+    if( items_to_select.size() > 0 )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    // Notify other tools of the changes
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     return 0;
 }
@@ -2776,6 +2862,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
+    Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::subtractPolygons.MakeEvent() );

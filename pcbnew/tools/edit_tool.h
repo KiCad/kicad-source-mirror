@@ -127,6 +127,11 @@ public:
     int ModifyLines( const TOOL_EVENT& aEvent );
 
     /**
+     * Make ends of selected shapes meet by extending or cutting them, or adding extra geometry.
+     */
+    int HealShapes( const TOOL_EVENT& aEvent );
+
+    /**
      * Modify selected polygons into a single polygon using boolean operations
      * such as merge (union) or subtract (difference)
      */

@@ -27,6 +27,7 @@
 
 #include <dialog_cleanup_graphics_base.h>
 #include <cleanup_item.h>
+#include <widgets/unit_binder.h>
 
 
 class PCB_BASE_FRAME;
@@ -51,6 +52,8 @@ private:
     PCB_BASE_FRAME* m_parentFrame;
     bool            m_isFootprintEditor;
     RC_TREE_MODEL*  m_changesTreeModel;
+
+    UNIT_BINDER m_tolerance;
 
     std::vector<std::shared_ptr<CLEANUP_ITEM>> m_items;
 };

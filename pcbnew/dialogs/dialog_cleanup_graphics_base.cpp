@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,6 +38,25 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 
 	bSizerUpper->Add( bSizerMargins, 1, wxEXPAND|wxALL, 3 );
 
+	m_fixBoardOutlines = new wxCheckBox( this, wxID_ANY, _("Fix discontinuities in board outlines"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerUpper->Add( m_fixBoardOutlines, 0, wxALL, 5 );
+
+	m_toleranceSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_toleranceLabel = new wxStaticText( this, wxID_ANY, _("Tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toleranceLabel->Wrap( -1 );
+	m_toleranceSizer->Add( m_toleranceLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+
+	m_toleranceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_toleranceSizer->Add( m_toleranceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_toleranceUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toleranceUnits->Wrap( -1 );
+	m_toleranceSizer->Add( m_toleranceUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizerUpper->Add( m_toleranceSizer, 1, wxEXPAND, 5 );
+
 
 	bSizerMain->Add( bSizerUpper, 0, wxEXPAND|wxALL, 5 );
 
@@ -75,6 +94,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::DIALOG_CLEANUP_GRAPHICS_BASE( wxWindow* parent, wx
 	m_createRectanglesOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_deleteRedundantOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_mergePadsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
+	m_fixBoardOutlines->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnLeftDClickItem ), NULL, this );
 }
@@ -85,6 +105,7 @@ DIALOG_CLEANUP_GRAPHICS_BASE::~DIALOG_CLEANUP_GRAPHICS_BASE()
 	m_createRectanglesOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_deleteRedundantOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_mergePadsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
+	m_fixBoardOutlines->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnCheckBox ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnSelectItem ), NULL, this );
 	m_changesDataView->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_CLEANUP_GRAPHICS_BASE::OnLeftDClickItem ), NULL, this );
 

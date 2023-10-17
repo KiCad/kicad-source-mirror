@@ -31,6 +31,7 @@
 #include <pad.h>
 #include <footprint.h>
 #include <graphics_cleaner.h>
+#include <fix_board_shape.h>
 #include <board_design_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pad_tool.h>
@@ -48,12 +49,14 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootp
 }
 
 
-void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
+void GRAPHICS_CLEANER::CleanupBoard( bool                                        aDryRun,
                                      std::vector<std::shared_ptr<CLEANUP_ITEM>>* aItemsList,
-                                     bool aMergeRects, bool aDeleteRedundant, bool aMergePads )
+                                     bool aMergeRects, bool aDeleteRedundant, bool aMergePads,
+                                     bool aFixBoardOutlines, int aTolerance )
 {
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
+    m_outlinesTolerance = aTolerance;
 
     m_epsilon = m_commit.GetBoard()->GetDesignSettings().m_MaxError;
 
@@ -63,6 +66,9 @@ void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
 
     if( aDeleteRedundant )
         cleanupShapes();
+
+    if( aFixBoardOutlines )
+        fixBoardOutlines();
 
     if( aMergeRects )
         mergeRects();
@@ -196,6 +202,36 @@ void GRAPHICS_CLEANER::cleanupShapes()
             }
         }
     }
+}
+
+
+void GRAPHICS_CLEANER::fixBoardOutlines()
+{
+    if( m_dryRun )
+        return;
+
+    std::vector<PCB_SHAPE*>                 shapeList;
+    std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+        if( !shape || !shape->IsOnLayer( Edge_Cuts ) )
+            continue;
+
+        shapeList.push_back( shape );
+
+        if( !m_dryRun )
+            m_commit.Modify( shape );
+    }
+
+    ConnectBoardShapes( shapeList, newShapes, m_outlinesTolerance );
+
+    std::vector<PCB_SHAPE*> items_to_select;
+
+    for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
+        m_commit.Add( ptr.release() );
 }
 
 

@@ -53,12 +53,22 @@ public:
      * items must be moved by the mouse cursor to the final position
      * false means the imported items are placed to the final position after import.
      */
-    bool IsPlacementInteractive() { return m_placementInteractive; }
+    bool IsPlacementInteractive() { return s_placementInteractive; }
 
     /**
      * @return true if the items should be added into a group when being placed.
      */
-    bool ShouldGroupItems() { return m_shouldGroupItems; }
+    bool ShouldGroupItems() { return s_shouldGroupItems; }
+
+    /**
+     * @return true if discontinuities in the shapes should be fixed.
+     */
+    bool ShouldFixDiscontinuities() { return s_fixDiscontinuities; }
+
+    /**
+     * @return tolerance to connect the shapes.
+     */
+    int GetTolerance() { return s_toleranceValue; }
 
     bool TransferDataFromWindow() override;
 
@@ -70,17 +80,23 @@ private:
 
 	void onInteractivePlacement( wxCommandEvent& event ) override
     {
-        m_placementInteractive = true;
+        s_placementInteractive = true;
     }
 
 	void onAbsolutePlacement( wxCommandEvent& event ) override
     {
-        m_placementInteractive = false;
+        s_placementInteractive = false;
     }
 
     void onGroupItems( wxCommandEvent& event ) override
     {
-        m_shouldGroupItems = m_groupItems->GetValue();
+        s_shouldGroupItems = m_groupItems->GetValue();
+    }
+
+    void onFixDiscontinuities( wxCommandEvent& event ) override
+    {
+        s_fixDiscontinuities = m_rbFixDiscontinuities->GetValue();
+        m_tolerance.Enable( s_fixDiscontinuities );
     }
 
 private:
@@ -91,10 +107,13 @@ private:
     UNIT_BINDER          m_xOrigin;
     UNIT_BINDER          m_yOrigin;
     UNIT_BINDER          m_defaultLineWidth;
+    UNIT_BINDER          m_tolerance;
 
-    static bool          m_shouldGroupItems;
-    static bool          m_placementInteractive;
-    static double        m_importScale;         // a scale factor to change the size of imported
+    static bool          s_shouldGroupItems;
+    static bool          s_placementInteractive;
+    static bool          s_fixDiscontinuities;
+    static int           s_toleranceValue;
+    static double        s_importScale;         // a scale factor to change the size of imported
                                                 // items m_importScale =1.0 means keep original size
 };
 

@@ -617,6 +617,13 @@ TOOL_ACTION PCB_ACTIONS::chamferLines( TOOL_ACTION_ARGS()
         .Tooltip( _( "Cut away corners between selected lines" ) )
         .Icon( BITMAPS::chamfer ) );
 
+TOOL_ACTION PCB_ACTIONS::healShapes( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.healShapes" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Heal Shapes" ) )
+        .Tooltip( _( "Connect shapes, possibly extending or cutting them, or adding extra geometry" ) )
+        .Icon( BITMAPS::heal_shapes ) );
+
 TOOL_ACTION PCB_ACTIONS::extendLines( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.extendLines" )
         .Scope( AS_GLOBAL )
@@ -1485,8 +1492,8 @@ TOOL_ACTION* PCB_ACTIONS::LayerIDToAction( PCB_LAYER_ID aLayer )
 // in static action constructors
 TOOL_ACTION_GROUP PCB_ACTIONS::layerDirectSwitchActions()
 {
-    static TOOL_ACTION_GROUP group( "pcbnew.Control.DirectLayerActions" );
-    return group;
+    static TOOL_ACTION_GROUP s_toolActionGroup( "pcbnew.Control.DirectLayerActions" );
+    return s_toolActionGroup;
 }
 
 TOOL_ACTION PCB_ACTIONS::layerTop( TOOL_ACTION_ARGS()

@@ -31,11 +31,14 @@
 #include <pcb_base_frame.h>
 
 
+static int s_defaultTolerance = pcbIUScale.mmToIU( 2 );
+
 DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent,
                                                   bool aIsFootprintEditor ) :
         DIALOG_CLEANUP_GRAPHICS_BASE( aParent ),
         m_parentFrame( aParent ),
-        m_isFootprintEditor( aIsFootprintEditor )
+        m_isFootprintEditor( aIsFootprintEditor ),
+        m_tolerance( aParent, m_toleranceLabel, m_toleranceCtrl, m_toleranceUnits )
 {
     m_changesTreeModel = new RC_TREE_MODEL( m_parentFrame, m_changesDataView );
     m_changesDataView->AssociateModel( m_changesTreeModel );
@@ -44,6 +47,9 @@ DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent,
     {
         SetupStandardButtons( { { wxID_OK, _( "Update Footprint" ) } } );
         m_nettieHint->SetFont( KIUI::GetInfoFont( aParent ).Italic() );
+
+        m_fixBoardOutlines->Show( false );
+        m_toleranceSizer->Show( false );
     }
     else
     {
@@ -71,6 +77,8 @@ void DIALOG_CLEANUP_GRAPHICS::OnCheckBox( wxCommandEvent& anEvent )
 
 bool DIALOG_CLEANUP_GRAPHICS::TransferDataToWindow()
 {
+    m_tolerance.SetValue( s_defaultTolerance );
+
     doCleanup( true );
 
     return true;
@@ -79,6 +87,8 @@ bool DIALOG_CLEANUP_GRAPHICS::TransferDataToWindow()
 
 bool DIALOG_CLEANUP_GRAPHICS::TransferDataFromWindow()
 {
+    s_defaultTolerance = m_tolerance.GetValue();
+
     doCleanup( false );
 
     return true;
@@ -110,8 +120,8 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
     m_parentFrame->Compile_Ratsnest( false );
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_createRectanglesOpt->GetValue(),
-                                             m_deleteRedundantOpt->GetValue(),
-                                             m_mergePadsOpt->GetValue() );
+                          m_deleteRedundantOpt->GetValue(), m_mergePadsOpt->GetValue(),
+                          m_fixBoardOutlines, m_tolerance.GetIntValue() );
 
     if( aDryRun )
     {

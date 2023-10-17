@@ -46,14 +46,16 @@ public:
      * @param aMergePads = true to apply Pad Editor's merge algorithm to all pads in footprint
      *                     (it is assumed this will only be run on FPEditor boards)
      */
-    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
-                       bool aMergeRects, bool aDeleteRedundant, bool aMergePads );
+    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM>>* aItemsList,
+                       bool aMergeRects, bool aDeleteRedundant, bool aMergePads,
+                       bool aFixBoardOutlines, int aTolerance );
 
 private:
     bool isNullShape( PCB_SHAPE* aShape );
     bool areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 );
 
     void cleanupShapes();
+    void fixBoardOutlines();
     void mergeRects();
     void mergePads();
 
@@ -64,6 +66,7 @@ private:
     TOOL_MANAGER* m_toolMgr;
     bool          m_dryRun;
     int           m_epsilon;
+    int           m_outlinesTolerance;
 
     std::vector<std::shared_ptr<CLEANUP_ITEM>>* m_itemsList;
 };

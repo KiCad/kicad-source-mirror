@@ -301,6 +301,7 @@ set( BMAPS_MID
     group_leave
     group_remove
     group_ungroup
+    heal_shapes
     help
     help_online
     hidden_pin

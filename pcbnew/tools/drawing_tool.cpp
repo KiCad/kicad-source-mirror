@@ -72,6 +72,7 @@
 #include <scoped_set_reset.h>
 #include <string_utils.h>
 #include <zone.h>
+#include <fix_board_shape.h>
 
 const unsigned int DRAWING_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
@@ -1520,6 +1521,26 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         newItems.push_back( group );
         selectedItems.push_back( group );
         preview.Add( group );
+    }
+
+    if( dlg.ShouldFixDiscontinuities() )
+    {
+        std::vector<PCB_SHAPE*>                 shapeList;
+        std::vector<std::unique_ptr<PCB_SHAPE>> newShapes;
+
+        for( const std::unique_ptr<EDA_ITEM>& ptr : list )
+        {
+            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( ptr.get() ) )
+                shapeList.push_back( shape );
+        }
+
+        ConnectBoardShapes( shapeList, newShapes, dlg.GetTolerance() );
+
+        for( std::unique_ptr<PCB_SHAPE>& ptr : newShapes )
+        {
+            ptr->SetParent( m_frame->GetBoard() );
+            list.push_back( std::move( ptr ) );
+        }
     }
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
@@ -2971,7 +2992,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             int                 menuID = 1;
 
             for( int netcode : aNetcodeList )
-            {   
+            {
                 wxString menuText;
                 if( menuID < 10 )
                 {
@@ -2999,7 +3020,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             DRAWING_TOOL* drawingTool = m_frame->GetToolManager()->GetTool<DRAWING_TOOL>();
             drawingTool->SetContextMenu( &menu, CMENU_NOW );
-            
+
             int selectNetCode = -1;
             while( TOOL_EVENT* evt = drawingTool->Wait() )
             {
@@ -3010,7 +3031,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
                 {
                     std::optional<int> id = evt->GetCommandId();
-                    
+
                     // User has selected an item, so this one will be returned
                     if( id && ( *id > 0 ) && ( *id < menuID ) )
                     {
@@ -3039,7 +3060,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             const LSET     lset = aVia->GetLayerSet();
             PCB_DISPLAY_OPTIONS opts = m_frame->GetDisplayOptions();
             bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
-            
+
             // In high contrast mode, it should be treated as the only one visible layer
             // We just return the net of active layer (not the visible layers) without show menu
             if( highContrast )
@@ -3060,7 +3081,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             {
                 LSET tempLset = LSET( m_board->GetVisibleLayers() & lset );
                 std::list<int> netcodeList;
-                
+
                 // When there is only one visible layer and the others invisible,
                 // we find net in the only visible layer instead of showing menu
                 if( 1 != tempLset.Seq().size() )
@@ -3079,10 +3100,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             if( z->HitTestFilledArea( layer, position ) )
                                 netcodeList.push_back( z->GetNetCode() );
                         }
-                        
+
                     }
                 }
-            
+
                 netcodeList.sort();
                 netcodeList.unique();
 
@@ -3090,7 +3111,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     return netcodeList.front();
                 }
-                
+
                 // When there are more than one possible net , it's ambiguous
                 // So show a pop-up menu of possible nets
                 if( netcodeList.size() > 1 )
@@ -3099,7 +3120,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            return -1; 
+            return -1;
         }
 
         void SnapItem( BOARD_ITEM *aItem ) override
@@ -3154,12 +3175,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             else
             {
                 int netcode = findStitchedZoneNet( via );
-                
+
                 // -2 signifies that the user has canceled the placement
                 // of the via while remaining in the via tool
                 if( -2 == netcode )
                     return false;
-                
+
                 via->SetNetCode( netcode );
                 via->SetIsFree( via->GetNetCode() > 0 );
             }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,6 +19,7 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/textctrl.h>
 #include <wx/dataview.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -38,6 +39,11 @@ class DIALOG_CLEANUP_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_deleteRedundantOpt;
 		wxCheckBox* m_mergePadsOpt;
 		wxStaticText* m_nettieHint;
+		wxCheckBox* m_fixBoardOutlines;
+		wxBoxSizer* m_toleranceSizer;
+		wxStaticText* m_toleranceLabel;
+		wxTextCtrl* m_toleranceCtrl;
+		wxStaticText* m_toleranceUnits;
 		wxStaticText* staticChangesLabel;
 		wxDataViewCtrl* m_changesDataView;
 		wxStdDialogButtonSizer* m_sdbSizer;

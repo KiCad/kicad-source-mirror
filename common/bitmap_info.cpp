@@ -325,6 +325,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::group_leave].emplace_back( BITMAPS::group_leave, wxT( "group_leave_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::group_remove].emplace_back( BITMAPS::group_remove, wxT( "group_remove_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::group_ungroup].emplace_back( BITMAPS::group_ungroup, wxT( "group_ungroup_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::heal_shapes].emplace_back( BITMAPS::heal_shapes, wxT( "heal_shapes_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::help].emplace_back( BITMAPS::help, wxT( "help_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::help_online].emplace_back( BITMAPS::help_online, wxT( "help_online_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::hidden_pin].emplace_back( BITMAPS::hidden_pin, wxT( "hidden_pin_24.png" ), 24, wxT( "light" ) );
@@ -717,6 +718,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::group_leave].emplace_back( BITMAPS::group_leave, wxT( "group_leave_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::group_remove].emplace_back( BITMAPS::group_remove, wxT( "group_remove_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::group_ungroup].emplace_back( BITMAPS::group_ungroup, wxT( "group_ungroup_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::heal_shapes].emplace_back( BITMAPS::heal_shapes, wxT( "heal_shapes_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::help].emplace_back( BITMAPS::help, wxT( "help_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::help_online].emplace_back( BITMAPS::help_online, wxT( "help_online_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::hidden_pin].emplace_back( BITMAPS::hidden_pin, wxT( "hidden_pin_dark_24.png" ), 24, wxT( "dark" ) );

@@ -40,9 +40,11 @@
 #include <memory>
 
 // Static members of DIALOG_IMPORT_GFX_PCB, to remember the user's choices during the session
-bool   DIALOG_IMPORT_GFX_PCB::m_placementInteractive = true;
-bool   DIALOG_IMPORT_GFX_PCB::m_shouldGroupItems     = true;
-double DIALOG_IMPORT_GFX_PCB::m_importScale          = 1.0;   // Do not change the imported items size
+bool   DIALOG_IMPORT_GFX_PCB::s_placementInteractive = true;
+bool   DIALOG_IMPORT_GFX_PCB::s_shouldGroupItems     = true;
+bool   DIALOG_IMPORT_GFX_PCB::s_fixDiscontinuities   = true;
+int    DIALOG_IMPORT_GFX_PCB::s_toleranceValue       = pcbIUScale.mmToIU( 1 );
+double DIALOG_IMPORT_GFX_PCB::s_importScale = 1.0; // Do not change the imported items size
 
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
@@ -59,7 +61,8 @@ DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aImp
         m_parent( aParent ),
         m_xOrigin( aParent, m_xLabel, m_xCtrl, m_xUnits ),
         m_yOrigin( aParent, m_yLabel, m_yCtrl, m_yUnits ),
-        m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits )
+        m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
+        m_tolerance( aParent, m_toleranceLabel, m_toleranceCtrl, m_toleranceUnits )
 {
     if( aImportAsFootprintGraphic )
         m_importer = std::make_unique<GRAPHICS_IMPORTER_FOOTPRINT>( m_parent->GetBoard()->GetFirstFootprint() );
@@ -84,18 +87,21 @@ DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aImp
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
-    m_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
+    s_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
 
     m_xOrigin.SetValue( cfg->m_ImportGraphics.origin_x * pcbIUScale.IU_PER_MM );
     m_yOrigin.SetValue( cfg->m_ImportGraphics.origin_y * pcbIUScale.IU_PER_MM );
     m_defaultLineWidth.SetValue( cfg->m_ImportGraphics.dxf_line_width * pcbIUScale.IU_PER_MM );
 
-    m_textCtrlFileName->SetValue( cfg->m_ImportGraphics.last_file );
-    m_rbInteractivePlacement->SetValue( m_placementInteractive );
-    m_rbAbsolutePlacement->SetValue( !m_placementInteractive );
-    m_groupItems->SetValue( m_shouldGroupItems );
+    m_importScaleCtrl->SetValue( wxString::Format( wxT( "%f" ), s_importScale ) );
 
-    m_importScaleCtrl->SetValue( wxString::Format( wxT( "%f" ), m_importScale ) );
+    m_textCtrlFileName->SetValue( cfg->m_ImportGraphics.last_file );
+    m_rbInteractivePlacement->SetValue( s_placementInteractive );
+    m_rbAbsolutePlacement->SetValue( !s_placementInteractive );
+    m_groupItems->SetValue( s_shouldGroupItems );
+
+    m_tolerance.SetValue( s_toleranceValue );
+    m_rbFixDiscontinuities->SetValue( s_fixDiscontinuities );
 
     // Configure the layers list selector
     m_SelLayerBox->SetLayersHotkeys( false );    // Do not display hotkeys
@@ -141,19 +147,19 @@ DIALOG_IMPORT_GFX_PCB::~DIALOG_IMPORT_GFX_PCB()
         wxFAIL_MSG( e.what() );
     }
 
-    if( cfg )
+	if( cfg )
     {
-        cfg->m_ImportGraphics.layer                 = m_SelLayerBox->GetLayerSelection();
-        cfg->m_ImportGraphics.interactive_placement = m_placementInteractive;
-        cfg->m_ImportGraphics.last_file             = m_textCtrlFileName->GetValue();
-        cfg->m_ImportGraphics.dxf_line_width        =
-                pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() );
-        cfg->m_ImportGraphics.origin_x              = pcbIUScale.IUTomm( m_xOrigin.GetValue() );
-        cfg->m_ImportGraphics.origin_y              = pcbIUScale.IUTomm( m_yOrigin.GetValue() );
-        cfg->m_ImportGraphics.dxf_units             = m_choiceDxfUnits->GetSelection();
+        cfg->m_ImportGraphics.layer = m_SelLayerBox->GetLayerSelection();
+        cfg->m_ImportGraphics.interactive_placement = s_placementInteractive;
+        cfg->m_ImportGraphics.last_file = m_textCtrlFileName->GetValue();
+        cfg->m_ImportGraphics.dxf_line_width = pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() );
+        cfg->m_ImportGraphics.origin_x = pcbIUScale.IUTomm( m_xOrigin.GetValue() );
+        cfg->m_ImportGraphics.origin_y = pcbIUScale.IUTomm( m_yOrigin.GetValue() );
+        cfg->m_ImportGraphics.dxf_units = m_choiceDxfUnits->GetSelection();
     }
 
-    m_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
+    s_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
+    s_toleranceValue = m_tolerance.GetIntValue();
 
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
                                     wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB::onFilename ),
@@ -299,14 +305,16 @@ bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
 
 void DIALOG_IMPORT_GFX_PCB::originOptionOnUpdateUI( wxUpdateUIEvent& event )
 {
-    if( m_rbInteractivePlacement->GetValue() != m_placementInteractive )
-        m_rbInteractivePlacement->SetValue( m_placementInteractive );
+    if( m_rbInteractivePlacement->GetValue() != s_placementInteractive )
+        m_rbInteractivePlacement->SetValue( s_placementInteractive );
 
-    if( m_rbAbsolutePlacement->GetValue() == m_placementInteractive )
-        m_rbAbsolutePlacement->SetValue( !m_placementInteractive );
+    if( m_rbAbsolutePlacement->GetValue() == s_placementInteractive )
+        m_rbAbsolutePlacement->SetValue( !s_placementInteractive );
 
-    m_xOrigin.Enable( !m_placementInteractive );
-    m_yOrigin.Enable( !m_placementInteractive );
+    m_xOrigin.Enable( !s_placementInteractive );
+    m_yOrigin.Enable( !s_placementInteractive );
+
+    m_tolerance.Enable( s_fixDiscontinuities );
 }
 
 

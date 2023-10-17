@@ -27,8 +27,7 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint,
             return graphic;
     }
 
-    // Search again for anything that's close, even something already used.  (The latter is
-    // important for error reporting.)
+    // Search again for anything that's close.
     VECTOR2I    pt( aPoint );
     SEG::ecoord closest_dist_sq = SEG::Square( aLimit );
     PCB_SHAPE*  closest_graphic = nullptr;
@@ -78,6 +77,13 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
                                const VECTOR2I& aSecond ) -> bool
     {
         return ( aRef - aFirst ).SquaredEuclideanNorm() < ( aRef - aSecond ).SquaredEuclideanNorm();
+    };
+
+    auto min_distance_sq = []( const VECTOR2I& aRef, const VECTOR2I& aFirst,
+                               const VECTOR2I& aSecond ) -> bool
+    {
+        return std::min( ( aRef - aFirst ).SquaredEuclideanNorm(),
+                         ( aRef - aSecond ).SquaredEuclideanNorm() );
     };
 
     auto addSegment = [&]( const VECTOR2I start, const VECTOR2I end, int width, PCB_LAYER_ID layer )
@@ -151,6 +157,13 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
 
             for( const VECTOR2I& ip : ips )
             {
+                if( min_distance_sq( ip, segShape->GetStart(), segShape->GetEnd() ) <= 0
+                    && min_distance_sq( ip, arcShape->GetStart(), arcShape->GetEnd() ) <= 0 )
+                {
+                    // Already connected
+                    continue;
+                }
+
                 if( seg.Distance( ip ) <= aChainingEpsilon )
                 {
                     if( closer_to_first( ip, seg.A, seg.B ) )
@@ -158,35 +171,46 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
                     else
                         segShape->SetEnd( ip );
 
+                    // Move points in the actual PCB_SHAPE
                     if( closer_to_first( ip, arc.GetP0(), arc.GetP1() ) )
                         arcShape->SetArcGeometry( ip, arc.GetArcMid(), arc.GetP1() );
                     else
                         arcShape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), ip );
 
+                    // Reconstruct the arc shape - we may have more than 1 intersection
+                    arc = SHAPE_ARC( arcShape->GetStart(), arcShape->GetArcMid(),
+                                     arcShape->GetEnd(), 0 );
+
                     success = true;
+                    break;
                 }
             }
 
             if( !success )
             {
+                // Try to avoid acute angles
                 VECTOR2I lineProj = seg.LineProject( arc.GetCenter() );
+                bool     intersectsPerp = seg.SquaredDistance( lineProj ) <= 0;
 
-                if( closer_to_first( lineProj, seg.A, seg.B ) )
-                    segShape->SetStart( lineProj );
-                else
-                    segShape->SetEnd( lineProj );
+                if( intersectsPerp )
+                {
+                    if( closer_to_first( lineProj, seg.A, seg.B ) )
+                        segShape->SetStart( lineProj );
+                    else
+                        segShape->SetEnd( lineProj );
 
-                CIRCLE   circ( arc.GetCenter(), arc.GetRadius() );
-                VECTOR2I circProj = circ.NearestPoint( lineProj );
+                    CIRCLE   circ( arc.GetCenter(), arc.GetRadius() );
+                    VECTOR2I circProj = circ.NearestPoint( lineProj );
 
-                if( closer_to_first( circProj, arc.GetP0(), arc.GetP1() ) )
-                    arcShape->SetArcGeometry( circProj, arc.GetArcMid(), arc.GetP1() );
-                else
-                    arcShape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), circProj );
+                    if( closer_to_first( circProj, arc.GetP0(), arc.GetP1() ) )
+                        arcShape->SetArcGeometry( circProj, arc.GetArcMid(), arc.GetP1() );
+                    else
+                        arcShape->SetArcGeometry( arc.GetP0(), arc.GetArcMid(), circProj );
 
 
-                addSegment( circProj, lineProj, segShape->GetWidth(), segShape->GetLayer() );
-                success = true;
+                    addSegment( circProj, lineProj, segShape->GetWidth(), segShape->GetLayer() );
+                    success = true;
+                }
             }
         }
 
@@ -217,7 +241,8 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
             for( ;; )
             {
                 // Get next closest segment.
-                PCB_SHAPE* nextGraphic = findNext( curr_graphic, prevPt, aShapeList, aChainingEpsilon );
+                PCB_SHAPE* nextGraphic =
+                        findNext( curr_graphic, prevPt, aShapeList, aChainingEpsilon );
 
                 if( !nextGraphic )
                     break;
@@ -229,7 +254,8 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
                     std::swap( nstart, nend );
 
                 if( !connectPair( curr_graphic, nextGraphic ) )
-                    addSegment( prevPt, nstart, curr_graphic->GetWidth(), curr_graphic->GetLayer() );
+                    addSegment( prevPt, nstart, curr_graphic->GetWidth(),
+                                curr_graphic->GetLayer() );
 
                 // Shape might've changed
                 nstart = nextGraphic->GetStart();
@@ -245,8 +271,41 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
             }
         };
 
-        walkFrom( graphic, graphic->GetEnd() );
-        walkFrom( graphic, graphic->GetStart() );
+        const VECTOR2I ptEnd = graphic->GetEnd();
+        const VECTOR2I ptStart = graphic->GetStart();
+
+        PCB_SHAPE* grAtEnd = findNext( graphic, ptEnd, aShapeList, aChainingEpsilon );
+        PCB_SHAPE* grAtStart = findNext( graphic, ptStart, aShapeList, aChainingEpsilon );
+
+        bool beginFromEndPt = true;
+
+        // We need to start walking from a point that is closest to a point of another shape.
+        if( grAtEnd && grAtStart )
+        {
+            SEG::ecoord dAtEnd = min_distance_sq( ptEnd, grAtEnd->GetStart(), grAtEnd->GetEnd() );
+
+            SEG::ecoord dAtStart =
+                    min_distance_sq( ptStart, grAtStart->GetStart(), grAtStart->GetEnd() );
+
+            beginFromEndPt = dAtEnd <= dAtStart;
+        }
+        else if( grAtEnd )
+            beginFromEndPt = true;
+        else if( grAtStart )
+            beginFromEndPt = false;
+
+        if( beginFromEndPt )
+        {
+            // Do not inline GetEnd / GetStart as endpoints may update
+            walkFrom( graphic, graphic->GetEnd() );
+            walkFrom( graphic, graphic->GetStart() );
+        }
+        else
+        {
+            walkFrom( graphic, graphic->GetStart() );
+            walkFrom( graphic, graphic->GetEnd() );
+        }
+
         startCandidates.erase( graphic );
     }
 }
