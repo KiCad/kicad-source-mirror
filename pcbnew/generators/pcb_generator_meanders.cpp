@@ -79,7 +79,7 @@ public:
     PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
                             LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE );
 
-    wxString GetGeneratorType() const override { return wxS( "meanders" ); }
+    wxString GetGeneratorType() const override { return wxS( "tuning_pattern" ); }
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
     {
@@ -158,7 +158,6 @@ public:
     void SetEndY( int aValue ) { m_end.y = aValue; }
 
     LENGTH_TUNING_MODE GetTuningMode() const { return m_tuningMode; }
-    void               SetTuningMode( LENGTH_TUNING_MODE aValue ) { m_tuningMode = aValue; }
 
     int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
     void SetMinAmplitude( int aValue ) { m_settings.m_minAmplitude = aValue; }
@@ -1862,7 +1861,7 @@ static struct PCB_GENERATOR_MEANDERS_DESC
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_GENERATOR_MEANDERS, LENGTH_TUNING_MODE>(
                                      _HKI( "Tuning mode" ),
-                                     &PCB_GENERATOR_MEANDERS::SetTuningMode,
+                                     NO_SETTER( PCB_GENERATOR_MEANDERS, LENGTH_TUNING_MODE ),
                                      &PCB_GENERATOR_MEANDERS::GetTuningMode ),
                              groupTab );
 
@@ -1899,18 +1898,37 @@ static struct PCB_GENERATOR_MEANDERS_DESC
                                      PROPERTY_DISPLAY::PT_DEFAULT, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                              groupTab );
 
+        auto isSkew =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( auto* pattern = dynamic_cast<PCB_GENERATOR_MEANDERS*>( aItem ) )
+                        return pattern->GetTuningMode() == DIFF_PAIR_SKEW;
+
+                    return false;
+                };
+
+        auto notIsSkew =
+                [&]( INSPECTABLE* aItem ) -> bool
+                {
+                    return !isSkew( aItem );
+                };
+
         propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, long long int>(
                                      _HKI( "Target length" ),
                                      &PCB_GENERATOR_MEANDERS::SetTargetLength,
                                      &PCB_GENERATOR_MEANDERS::GetTargetLength,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab );
+                             groupTab )
+                .SetAvailableFunc( notIsSkew );
+
 
         propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
                                      _HKI( "Target skew" ), &PCB_GENERATOR_MEANDERS::SetTargetSkew,
                                      &PCB_GENERATOR_MEANDERS::GetTargetSkew,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
-                             groupTab );
+                             groupTab )
+                .SetAvailableFunc( isSkew );
+
 
         propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, bool>(
                                      _HKI( "Override custom rules" ),
