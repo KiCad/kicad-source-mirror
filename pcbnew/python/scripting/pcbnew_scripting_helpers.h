@@ -34,7 +34,7 @@ class BOARD;
 class SETTINGS_MANAGER;
 class BOARD_ITEM;
 enum class EDA_UNITS;
-enum PCB_LAYER_ID; 
+enum PCB_LAYER_ID : int;
 
 /* we could be including all these methods as static in a class, but
  * we want plain pcbnew.<method_name> access from python
