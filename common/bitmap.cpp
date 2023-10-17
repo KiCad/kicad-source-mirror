@@ -40,7 +40,6 @@
 #include <asset_archive.h>
 #include <bitmaps.h>
 #include <bitmap_store.h>
-#include <bitmaps/bitmap_opaque.h> // for pcb_calculator compatibility shim
 #include <pgm_base.h>
 #include <paths.h>
 #include <kiplatform/ui.h>
@@ -105,17 +104,6 @@ BITMAP_STORE* GetBitmapStore()
 wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag )
 {
     return GetBitmapStore()->GetBitmap( aBitmap, aHeightTag );
-}
-
-
-// TODO: Remove this once pcb_calculator images are moved into the main bitmap system
-wxBitmap KiBitmap( const BITMAP_OPAQUE* aBitmap )
-{
-    wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
-    wxImage image( is, wxBITMAP_TYPE_PNG );
-    wxBitmap bitmap( image );
-
-    return bitmap;
 }
 
 

@@ -750,20 +750,6 @@ function( png2png inputFile outFile )
         )
 endfunction()
 
-# Function png2cpp
-# converts a single *.png to *.cpp
-function( png2cpp inputFile outFile )
-    add_custom_command(
-        OUTPUT  ${outFile}
-
-        COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile} -DoutCppFile=${outFile}
-            -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
-
-        DEPENDS ${inputFile} ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/PNG2cpp.cmake
-        COMMENT "Creating ${outFile}"
-        )
-endfunction()
-
 
 # Function bitmap_dir
 # Creates build targets for all the source SVGs in the given list, output at the given resolution

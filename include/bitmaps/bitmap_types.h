@@ -32,7 +32,6 @@
 class wxBitmap;     // only to define wxBitmap
 class wxWindow;
 class wxString;
-struct BITMAP_OPAQUE;
 class BITMAP_STORE;
 
 enum class BITMAPS : unsigned int;
@@ -53,11 +52,6 @@ BITMAP_STORE* GetBitmapStore();
  * @param aHeightTag is the requested height tag for multi-res bitmaps (-1 for any)
  */
 wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
-
-/**
- * Compatibility shim for pcb_calculator until its images are pulled into the PNG pipeline
- */
-wxBitmap KiBitmap( const BITMAP_OPAQUE* aBitmap );
 
 /**
  * Wipes out the scaled bitmap cache so that the icon theme can be changed.
