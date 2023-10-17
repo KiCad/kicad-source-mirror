@@ -56,7 +56,8 @@ const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
 };
 
 
-DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic ) :
+DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent,
+                                              bool aImportAsFootprintGraphic ) :
         DIALOG_IMPORT_GFX_PCB_BASE( aParent ),
         m_parent( aParent ),
         m_xOrigin( aParent, m_xLabel, m_xCtrl, m_xUnits ),
@@ -273,7 +274,8 @@ bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
 
         m_importer->SetPlugin( std::move( plugin ) );
         m_importer->SetLayer( PCB_LAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
-        m_importer->SetImportOffsetMM( { pcbIUScale.IUTomm( origin.x ), pcbIUScale.IUTomm( origin.y ) } );
+        m_importer->SetImportOffsetMM( { pcbIUScale.IUTomm( origin.x ),
+                                         pcbIUScale.IUTomm( origin.y ) } );
 
         LOCALE_IO dummy;    // Ensure floats can be read.
 

@@ -67,12 +67,6 @@ enum PIN_TABLE_COL_ORDER
 
 class SCH_PIN_TABLE_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_PIN>
 {
-protected:
-    std::vector<wxGridCellAttr*> m_nameAttrs;
-    wxGridCellAttr*              m_readOnlyAttr;
-    wxGridCellAttr*              m_typeAttr;
-    wxGridCellAttr*              m_shapeAttr;
-
 public:
     SCH_PIN_TABLE_DATA_MODEL() :
             m_readOnlyAttr( nullptr ),
@@ -298,6 +292,12 @@ public:
                        return compare( lhs, rhs, aSortCol, ascending );
                    } );
     }
+
+protected:
+    std::vector<wxGridCellAttr*> m_nameAttrs;
+    wxGridCellAttr*              m_readOnlyAttr;
+    wxGridCellAttr*              m_typeAttr;
+    wxGridCellAttr*              m_shapeAttr;
 };
 
 
@@ -746,7 +746,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // reference.
     m_symbol->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE_FIELD ).GetText() );
 
-    // Similar for Value and Footprint, except that the GUI behaviour is that they are kept
+    // Similar for Value and Footprint, except that the GUI behavior is that they are kept
     // in sync between multiple instances.
     m_symbol->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
     m_symbol->SetFootprintFieldText(  m_fields->at( FOOTPRINT_FIELD ).GetText() );
@@ -907,7 +907,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     SCHEMATIC_SETTINGS& settings = m_symbol->Schematic()->Settings();
     int                 fieldID = (int) m_fields->size();
     SCH_FIELD           newField( VECTOR2I( 0, 0 ), fieldID, m_symbol,
-                                  TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID, DO_TRANSLATE ) );
+                                  TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID,
+                                                                           DO_TRANSLATE ) );
 
     newField.SetTextAngle( m_fields->at( REFERENCE_FIELD ).GetTextAngle() );
     newField.SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );

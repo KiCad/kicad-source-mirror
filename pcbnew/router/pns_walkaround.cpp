@@ -100,15 +100,20 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
 
     SHAPE_LINE_CHAIN path_walk;
 
-    
     SHAPE_LINE_CHAIN hull = current_obs->m_item->Hull( current_obs->m_clearance, aPath.Width() );
 
     bool s_cw = aPath.Walkaround( hull, path_walk, aWindingDirection );
 
     PNS_DBG( Dbg(), BeginGroup, "hull/walk", 1 );
-    PNS_DBG( Dbg(), AddShape, &hull, RED, 0, wxString::Format( "hull-%s-%d-cl %d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration, current_obs->m_clearance ) );
-    PNS_DBG( Dbg(), AddShape, &aPath.CLine(), GREEN, 0, wxString::Format( "path-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
-    PNS_DBG( Dbg(), AddShape, &path_walk, BLUE, 0, wxString::Format( "result-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ), m_iteration ) );
+    PNS_DBG( Dbg(), AddShape, &hull, RED, 0,
+             wxString::Format( "hull-%s-%d-cl %d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ),
+                               m_iteration, current_obs->m_clearance ) );
+    PNS_DBG( Dbg(), AddShape, &aPath.CLine(), GREEN, 0,
+             wxString::Format( "path-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ),
+                               m_iteration ) );
+    PNS_DBG( Dbg(), AddShape, &path_walk, BLUE, 0,
+             wxString::Format( "result-%s-%d", aWindingDirection ? wxT( "cw" ) : wxT( "ccw" ),
+                               m_iteration ) );
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "Stat cw %d" ), !!s_cw ) );
     PNS_DBGN( Dbg(), EndGroup );
 
@@ -200,7 +205,8 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
 
         // Safety valve
-        if( m_lengthLimitOn && path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() > lengthLimit )
+        if( m_lengthLimitOn && path_cw.Line().Length() > lengthLimit && path_ccw.Line().Length() >
+            lengthLimit )
             break;
 
         m_iteration++;
@@ -257,7 +263,8 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath, LINE&
     // special case for via-in-the-middle-of-track placement
     if( aInitialPath.PointCount() <= 1 )
     {
-        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(), m_itemMask ) )
+        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(),
+                                                                   m_itemMask ) )
             return STUCK;
 
         aWalkPath = aInitialPath;

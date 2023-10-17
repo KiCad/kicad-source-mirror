@@ -44,6 +44,7 @@ static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
     }
 }
 
+
 // prune self-collisions, i.e. a via/pad annular ring with its own hole
 static bool shouldWeConsiderHoleCollisions( const ITEM* aItem, const ITEM* aHead )
 {
@@ -60,14 +61,16 @@ static bool shouldWeConsiderHoleCollisions( const ITEM* aItem, const ITEM* aHead
         const VIA* parentViaI = dyn_cast<const VIA*>( parentI );
         const VIA* parentViaH = dyn_cast<const VIA*>( parentH );
 
-        // Note to self: the if() below is an ugly heuristic to determine if we aren't trying to check for collisions
-        // of the hole of the via with another (although identical) copy of it. Such case occurs when
-        // checking a LINE against a NODE where this LINE has been already added. LINE has no notion of
-        // ownership of it's via (it's just a copy) and before hole-to-hole clearance support has been introduced
-        // it didn't matter becasue we didn't consider collisions of the objects belonging to the same net anyway
-        // Now that hole clearance check doesn't care about the nets assigned to the parent vias/solids, I'll probably
-        // have to refactor the LINE class to manage ownership of its (optional) VIA. For the moment, we just treat
-        // via holes that are geometrically identical and belonging to the same net as non-colliding.
+        // Note to self: the if() below is an ugly heuristic to determine if we aren't trying
+        // to check for collisions of the hole of the via with another (although identical)
+        // copy of it. Such case occurs when checking a LINE against a NODE where this LINE
+        // has been already added. LINE has no notion of ownership of it's via (it's just a
+        // copy) and before hole-to-hole clearance support has been introduced it didn't matter
+        // becasue we didn't consider collisions of the objects belonging to the same net anyway
+        // Now that hole clearance check doesn't care about the nets assigned to the parent
+        // vias/solids, I'll probably have to refactor the LINE class to manage ownership of
+        // its (optional) VIA. For the moment, we just treat via holes that are geometrically
+        // identical and belonging to the same net as non-colliding.
 
         if( parentViaI && parentViaH && parentViaI->Pos() == parentViaH->Pos()
             && parentViaI->Diameter() == parentViaH->Diameter()

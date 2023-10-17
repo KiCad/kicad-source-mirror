@@ -45,17 +45,6 @@
 
 class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
 {
-private:
-    PCB_EDIT_FRAME* m_parent;
-    int             m_unitsOpt;             // Remember last units option
-    bool            m_copy3DFilesOpt;       // Remember last copy model files option
-    bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
-    int             m_RefUnits;             // Remember last units for Reference Point
-    double          m_XRef;                 // Remember last X Reference Point
-    double          m_YRef;                 // Remember last Y Reference Point
-    int             m_originMode;           // Origin selection option
-                                            // (0 = user, 1 = board center)
-
 public:
     DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
         DIALOG_EXPORT_3DFILE_BASE( parent ), m_parent( parent )
@@ -181,6 +170,17 @@ public:
     }
 
     bool TransferDataFromWindow() override;
+
+private:
+    PCB_EDIT_FRAME* m_parent;
+    int             m_unitsOpt;             // Remember last units option
+    bool            m_copy3DFilesOpt;       // Remember last copy model files option
+    bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
+    int             m_RefUnits;             // Remember last units for Reference Point
+    double          m_XRef;                 // Remember last X Reference Point
+    double          m_YRef;                 // Remember last Y Reference Point
+    int             m_originMode;           // Origin selection option
+                                            // (0 = user, 1 = board center)
 };
 
 
