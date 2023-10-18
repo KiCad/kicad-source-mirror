@@ -50,7 +50,6 @@ public:
     void DestroyManagerDialog();
 
     int ShowGeneratorsManager( const TOOL_EVENT& aEvent );
-    int ShowGeneratorProperties( const TOOL_EVENT& aEvent );
 
     int RegenerateSelected( const TOOL_EVENT& aEvent );
     int RegenerateAll( const TOOL_EVENT& aEvent );

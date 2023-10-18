@@ -539,9 +539,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 if( item->Type() == PCB_GENERATOR_T )
                 {
-                    m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
-                            PCB_ACTIONS::genStartEdit, &commit,
-                            static_cast<PCB_GENERATOR*>( item ) );
+                    m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, &commit,
+                                                     static_cast<PCB_GENERATOR*>( item ) );
                 }
                 else
                 {
@@ -652,8 +651,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 m_statusPopup->Hide();
 
-                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
-                        PCB_ACTIONS::genPushEdit, &commit, static_cast<PCB_GENERATOR*>( item ) );
+                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &commit,
+                                                 static_cast<PCB_GENERATOR*>( item ) );
             }
 
             commit.Push( _( "Drag Corner" ) );
@@ -670,9 +669,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( item->Type() == PCB_GENERATOR_T )
                 {
-                    m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
-                            PCB_ACTIONS::genRevertEdit, &commit,
-                            static_cast<PCB_GENERATOR*>( item ) );
+                    m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, &commit,
+                                                     static_cast<PCB_GENERATOR*>( item ) );
                 }
                 commit.Revert();
                 
@@ -1495,10 +1493,9 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
     {
         GENERATOR_TOOL* generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
         PCB_GENERATOR*  generatorItem = static_cast<PCB_GENERATOR*>( item );
-        generatorItem->UpdateFromEditPoints( m_editPoints, aCommit );
 
-        m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genUpdateEdit, aCommit,
-                                                         generatorItem );
+        generatorItem->UpdateFromEditPoints( m_editPoints, aCommit );
+        m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit, generatorItem );
 
         m_statusPopup->Popup();
         generatorItem->UpdateStatus( generatorTool, frame(), m_statusPopup.get() );

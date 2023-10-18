@@ -2391,11 +2391,6 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( TOOL_ACTION_ARGS()
 // GENERATOR_TOOL
 //
 
-TOOL_ACTION PCB_ACTIONS::generatorProperties( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Generator.generatorProperties" )
-        .Scope( AS_GLOBAL ) );
-
-
 TOOL_ACTION PCB_ACTIONS::regenerateOutdated( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Generator.regenerateOutdated" )
         .Scope( AS_GLOBAL )

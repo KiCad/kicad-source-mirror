@@ -252,8 +252,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     }
 
     case PCB_GROUP_T:
-        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties,
-                                              static_cast<PCB_GROUP*>( aItem ) );
+        m_toolManager->RunAction( PCB_ACTIONS::groupProperties, static_cast<PCB_GROUP*>( aItem ) );
         break;
 
     case PCB_MARKER_T:

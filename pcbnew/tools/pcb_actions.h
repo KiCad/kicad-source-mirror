@@ -269,7 +269,6 @@ public:
     static TOOL_ACTION routerInlineDrag;
 
     /// Generator tool
-    static TOOL_ACTION generatorProperties;
     static TOOL_ACTION regenerateOutdated;
     static TOOL_ACTION regenerateAll;
     static TOOL_ACTION regenerateSelected;

@@ -548,10 +548,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     if( item->Type() == PCB_GENERATOR_T )
                     {
-                        PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
-
-                        m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genUpdateEdit,
-                                                                         aCommit, generator );
+                        m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit,
+                                                         static_cast<PCB_GENERATOR*>( item ) );
                     }
                     else if( item->Type() == PCB_FOOTPRINT_T )
                     {
@@ -586,10 +584,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     {
                         if( item->Type() == PCB_GENERATOR_T )
                         {
-                            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
-
-                            m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>(
-                                    PCB_ACTIONS::genStartEdit, aCommit, generator );
+                            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, aCommit,
+                                                             static_cast<PCB_GENERATOR*>( item ) );
                         }
                         else
                         {
@@ -807,10 +803,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         {
             if( item->Type() == PCB_GENERATOR_T )
             {
-                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
-
-                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genPushEdit, aCommit,
-                                                                 generator );
+                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, aCommit,
+                                                 static_cast<PCB_GENERATOR*>( item ) );
             }
         }
     }
@@ -820,10 +814,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         {
             if( item->Type() == PCB_GENERATOR_T )
             {
-                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( item );
-
-                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRevertEdit,
-                                                                 aCommit, generator );
+                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, aCommit,
+                                                 static_cast<PCB_GENERATOR*>( item ) );
             }
         }
     }

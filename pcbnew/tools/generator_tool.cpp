@@ -82,17 +82,6 @@ int GENERATOR_TOOL::ShowGeneratorsManager( const TOOL_EVENT& aEvent )
 }
 
 
-int GENERATOR_TOOL::ShowGeneratorProperties( const TOOL_EVENT& aEvent )
-{
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-    PCB_GENERATOR*       gen = aEvent.Parameter<PCB_GENERATOR*>();
-
-    gen->ShowPropertiesDialog( editFrame );
-
-    return 0;
-}
-
-
 int GENERATOR_TOOL::RegenerateAll( const TOOL_EVENT& aEvent )
 {
     BOARD_COMMIT  localCommit( this );
@@ -292,7 +281,6 @@ void GENERATOR_TOOL::setTransitions()
 {
     // Generator actions
     Go( &GENERATOR_TOOL::ShowGeneratorsManager, PCB_ACTIONS::generatorsShowManager.MakeEvent() );
-    Go( &GENERATOR_TOOL::ShowGeneratorProperties, PCB_ACTIONS::generatorProperties.MakeEvent() );
 
     Go( &GENERATOR_TOOL::RegenerateAll, PCB_ACTIONS::regenerateAll.MakeEvent() );
     Go( &GENERATOR_TOOL::RegenerateOutdated, PCB_ACTIONS::regenerateOutdated.MakeEvent() );

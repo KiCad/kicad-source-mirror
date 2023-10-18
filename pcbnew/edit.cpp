@@ -168,13 +168,11 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     case PCB_GROUP_T:
-        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties,
-                                              static_cast<PCB_GROUP*>( aItem ) );
+        m_toolManager->RunAction( PCB_ACTIONS::groupProperties, static_cast<PCB_GROUP*>( aItem ) );
         break;
 
     case PCB_GENERATOR_T:
-        m_toolManager->RunAction<PCB_GENERATOR*>( PCB_ACTIONS::generatorProperties,
-                                                  static_cast<PCB_GENERATOR*>( aItem ) );
+        static_cast<PCB_GENERATOR*>( aItem )->ShowPropertiesDialog( this );
         break;
 
     case PCB_MARKER_T:
