@@ -370,16 +370,46 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     compFields.erase( GetCanonicalFieldName( VALUE_FIELD ) );
     compFields.erase( GetCanonicalFieldName( FOOTPRINT_FIELD ) );
 
+    // Fields are stored as an ordered map, but we don't (yet) support reordering
+    // the footprint fields to match the symbol, so we manually check the fields
+    // in the order they are stored in the symbol.
+    bool same = true;
 
-    if( fpFieldsAsMap != compFields )
+    for( std::pair<wxString, wxString> field : compFields )
+    {
+        if( fpFieldsAsMap.count( field.first ) == 0 || fpFieldsAsMap[field.first] != field.second )
+        {
+            same = false;
+            break;
+        }
+    }
+
+    if( !same )
     {
         if( m_isDryRun )
         {
             msg.Printf( _( "Update %s fields." ), aPcbFootprint->GetReference() );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+            // Remove fields that aren't present in the symbol
+            for( PCB_FIELD* field : aPcbFootprint->GetFields() )
+            {
+                if( field->IsMandatoryField() )
+                    continue;
+
+                if( compFields.count( field->GetName() ) == 0 )
+                {
+                    msg.Printf( _( "Remove %s footprint fields not in symbol." ),
+                                aPcbFootprint->GetReference() );
+                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                    break;
+                }
+            }
         }
         else
         {
             msg.Printf( _( "Updated %s fields." ), aPcbFootprint->GetReference() );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
             changed = true;
 
@@ -415,6 +445,8 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             }
 
             // Remove fields that aren't present in the symbol
+            bool warned = false;
+
             for( PCB_FIELD* field : aPcbFootprint->GetFields() )
             {
                 if( field->IsMandatoryField() )
@@ -422,6 +454,14 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
                 if( compFields.count( field->GetName() ) == 0 )
                 {
+                    if( !warned )
+                    {
+                        warned = true;
+                        msg.Printf( _( "Removed %s footprint fields not in symbol." ),
+                                    aPcbFootprint->GetReference() );
+                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                    }
+
                     aPcbFootprint->RemoveField( field->GetCanonicalName() );
 
                     if( m_frame )
@@ -429,8 +469,6 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                 }
             }
         }
-
-        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
     wxString sheetname;
