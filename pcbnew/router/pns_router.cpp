@@ -589,7 +589,7 @@ bool ROUTER::Finish()
 }
 
 
-bool ROUTER::ContinueFromEnd()
+bool ROUTER::ContinueFromEnd( ITEM** aNewStartItem )
 {
     PLACEMENT_ALGO* placer = Placer();
 
@@ -620,7 +620,9 @@ bool ROUTER::ContinueFromEnd()
         return false;
 
     // Attempt to route to our current position
-    Move( currentEnd, current );
+    Move( currentEnd, nullptr );
+
+    *aNewStartItem = otherEndItem;
 
     return true;
 }

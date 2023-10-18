@@ -1378,10 +1378,11 @@ void ROUTER_TOOL::performRouting()
         {
             bool needsAppend = m_router->Placer()->HasPlacedAnything();
 
-            if( m_router->ContinueFromEnd() )
+            if( m_router->ContinueFromEnd( &m_startItem ) )
             {
                 syncRouterAndFrameLayer();
                 m_startSnapPoint = m_router->Placer()->CurrentStart();
+                updateEndItem( *evt );
 
                 // Warp the mouse to wherever we actually ended up routing to
                 controls()->WarpMouseCursor( m_router->Placer()->CurrentEnd(), true, true );

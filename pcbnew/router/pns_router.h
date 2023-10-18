@@ -147,7 +147,7 @@ public:
     bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer );
     bool Move( const VECTOR2I& aP, ITEM* aItem );
     bool Finish();
-    bool ContinueFromEnd();
+    bool ContinueFromEnd( ITEM** aNewStartItem );
     bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
