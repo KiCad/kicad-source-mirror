@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_createRectanglesOpt->GetValue(),
                           m_deleteRedundantOpt->GetValue(), m_mergePadsOpt->GetValue(),
-                          m_fixBoardOutlines, m_tolerance.GetIntValue() );
+                          m_fixBoardOutlines->GetValue(), m_tolerance.GetIntValue() );
 
     if( aDryRun )
     {
