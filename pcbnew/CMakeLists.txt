@@ -198,8 +198,8 @@ set( PCBNEW_BRDSTACKUP_MGR
     )
 
 set( PCBNEW_IMPORT_GFX
-    import_gfx/dialog_import_gfx_pcb_base.cpp
-    import_gfx/dialog_import_gfx_pcb.cpp
+    import_gfx/dialog_import_graphics.cpp
+    import_gfx/dialog_import_graphics_base.cpp
     import_gfx/graphics_importer_pcbnew.cpp
     )
 

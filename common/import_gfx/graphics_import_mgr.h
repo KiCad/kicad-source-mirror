@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -46,19 +46,10 @@ public:
         SVG
     };
 
-    using TYPE_LIST = std::vector<GFX_FILE_T>;
-
-    /**
-     * Construct an import plugin manager, with a specified list of filetypes
-     * that are not permitted (can be used for when some file type support
-     * is not available due to config or other reasons)
-     */
-    GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist );
-
     ///< Vector containing all GFX_FILE_T values that can be imported.
-    TYPE_LIST GetImportableFileTypes() const
+    std::vector<GFX_FILE_T> GetImportableFileTypes() const
     {
-        return m_importableTypes;
+        return { DXF, SVG };
     }
 
     ///< Returns a plugin that handles a specific file extension.
@@ -66,9 +57,6 @@ public:
 
     ///< Returns a plugin instance for a specific file type.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPlugin( GFX_FILE_T aType ) const;
-
-private:
-    TYPE_LIST m_importableTypes;
 };
 
 #endif /* GRAPHICS_IMPORT_MGR_H */

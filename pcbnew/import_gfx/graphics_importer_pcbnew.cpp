@@ -33,7 +33,8 @@
 #include <tuple>
 
 
-GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW()
+GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW( BOARD_ITEM_CONTAINER* aParent ) :
+        m_parent( aParent )
 {
     m_layer = Dwgs_User;
     m_millimeterToIu = pcbIUScale.mmToIU( 1.0 );
@@ -76,7 +77,7 @@ STROKE_PARAMS GRAPHICS_IMPORTER_PCBNEW::MapStrokeParams( const IMPORTED_STROKE& 
 void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                                         const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<PCB_SHAPE> line( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> line = std::make_unique<PCB_SHAPE>( m_parent );
     line->SetShape( SHAPE_T::SEGMENT );
     line->SetLayer( GetLayer() );
     line->SetStroke( MapStrokeParams( aStroke ) );
@@ -95,7 +96,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
                                           const IMPORTED_STROKE& aStroke, bool aFilled,
                                           const COLOR4D& aFillColor )
 {
-    std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> circle = std::make_unique<PCB_SHAPE>( m_parent );
     circle->SetShape( SHAPE_T::CIRCLE );
     circle->SetFilled( aFilled );
     circle->SetLayer( GetLayer() );
@@ -110,7 +111,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                        const EDA_ANGLE& aAngle, const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_parent );
     arc->SetShape( SHAPE_T::ARC );
     arc->SetLayer( GetLayer() );
 
@@ -157,7 +158,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertice
     for( const VECTOR2D& precisePoint : aVertices )
         convertedPoints.emplace_back( MapCoordinate( precisePoint ) );
 
-    std::unique_ptr<PCB_SHAPE> polygon( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> polygon = std::make_unique<PCB_SHAPE>( m_parent );
     polygon->SetShape( SHAPE_T::POLY );
     polygon->SetFilled( GetLayer() != Edge_Cuts );
     polygon->SetLayer( GetLayer() );
@@ -179,7 +180,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
                                         double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
                                         GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
-    std::unique_ptr<PCB_TEXT> textItem = createText();
+    std::unique_ptr<PCB_TEXT> textItem = std::make_unique<PCB_TEXT>( m_parent );
     textItem->SetLayer( GetLayer() );
     textItem->SetTextThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
@@ -198,7 +199,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
                                           const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
                                           const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
+    std::unique_ptr<PCB_SHAPE> spline = std::make_unique<PCB_SHAPE>( m_parent );
     spline->SetShape( SHAPE_T::BEZIER );
     spline->SetLayer( GetLayer() );
     spline->SetStroke( MapStrokeParams( aStroke ) );
@@ -224,26 +225,3 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
     addItem( std::move( spline ) );
 }
 
-
-std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_BOARD::createDrawing()
-{
-    return std::make_unique<PCB_SHAPE>( m_board );
-}
-
-
-std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_BOARD::createText()
-{
-    return std::make_unique<PCB_TEXT>( m_board );
-}
-
-
-std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_FOOTPRINT::createDrawing()
-{
-    return std::make_unique<PCB_SHAPE>( m_footprint );
-}
-
-
-std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_FOOTPRINT::createText()
-{
-    return std::make_unique<PCB_TEXT>( m_footprint );
-}

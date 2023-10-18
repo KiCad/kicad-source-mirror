@@ -22,23 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_IMPORT_GFX_PCB_H__
-#define __DIALOG_IMPORT_GFX_PCB_H__
+#ifndef DIALOG_IMPORT_GRAPHICS_H
+#define DIALOG_IMPORT_GRAPHICS_H
 
 #include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
-#include "dialog_import_gfx_pcb_base.h"
+#include <import_gfx/dialog_import_graphics_base.h>
 #include <import_gfx/graphics_importer_pcbnew.h>
 
 class GRAPHICS_IMPORT_MGR;
 
 
-class DIALOG_IMPORT_GFX_PCB : public DIALOG_IMPORT_GFX_PCB_BASE
+class DIALOG_IMPORT_GRAPHICS : public DIALOG_IMPORT_GRAPHICS_BASE
 {
 public:
-    DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent, bool aUseModuleItems = false );
-    ~DIALOG_IMPORT_GFX_PCB();
+    DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent );
+    ~DIALOG_IMPORT_GRAPHICS();
 
     /**
      * @return a list of items imported from a vector graphics file.
@@ -53,22 +53,17 @@ public:
      * items must be moved by the mouse cursor to the final position
      * false means the imported items are placed to the final position after import.
      */
-    bool IsPlacementInteractive() { return s_placementInteractive; }
-
-    /**
-     * @return true if the items should be added into a group when being placed.
-     */
-    bool ShouldGroupItems() { return s_shouldGroupItems; }
+    bool IsPlacementInteractive() { return !m_placeAtCheckbox->GetValue(); }
 
     /**
      * @return true if discontinuities in the shapes should be fixed.
      */
-    bool ShouldFixDiscontinuities() { return s_fixDiscontinuities; }
+    bool ShouldFixDiscontinuities() { return m_rbFixDiscontinuities->GetValue(); }
 
     /**
      * @return tolerance to connect the shapes.
      */
-    int GetTolerance() { return s_toleranceValue; }
+    int GetTolerance() { return m_tolerance.GetValue(); }
 
     bool TransferDataFromWindow() override;
 
@@ -76,28 +71,7 @@ private:
     // Virtual event handlers
     void onBrowseFiles( wxCommandEvent& event ) override;
     void onFilename( wxCommandEvent& event );
-    void originOptionOnUpdateUI( wxUpdateUIEvent& event ) override;
-
-	void onInteractivePlacement( wxCommandEvent& event ) override
-    {
-        s_placementInteractive = true;
-    }
-
-	void onAbsolutePlacement( wxCommandEvent& event ) override
-    {
-        s_placementInteractive = false;
-    }
-
-    void onGroupItems( wxCommandEvent& event ) override
-    {
-        s_shouldGroupItems = m_groupItems->GetValue();
-    }
-
-    void onFixDiscontinuities( wxCommandEvent& event ) override
-    {
-        s_fixDiscontinuities = m_rbFixDiscontinuities->GetValue();
-        m_tolerance.Enable( s_fixDiscontinuities );
-    }
+    void onUpdateUI( wxUpdateUIEvent& event ) override;
 
 private:
     PCB_BASE_FRAME*                           m_parent;
@@ -117,4 +91,4 @@ private:
                                                 // items m_importScale =1.0 means keep original size
 };
 
-#endif    //  __DIALOG_IMPORT_GFX_PCB_H__
+#endif    //  DIALOG_IMPORT_GRAPHICS_H

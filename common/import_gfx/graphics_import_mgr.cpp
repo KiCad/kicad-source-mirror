@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,28 +25,11 @@
 
 #include "graphics_import_mgr.h"
 
-#include <core/kicad_algo.h>
 #include <eda_item.h>
 #include "dxf_import_plugin.h"
 #include "svg_import_plugin.h"
 
 #include <wx/regex.h>
-
-GRAPHICS_IMPORT_MGR::GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist )
-{
-    // This is the full list of types, from which we'll subtract our blacklist
-    static const TYPE_LIST all_types = {
-        DXF,
-        SVG,
-    };
-
-    std::copy_if( all_types.begin(), all_types.end(), std::back_inserter( m_importableTypes ),
-                  [&aBlacklist]( const GFX_FILE_T& arg )
-                  {
-                      return !alg::contains( aBlacklist, arg );
-                  } );
-}
-
 
 std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPlugin( GFX_FILE_T aType ) const
 {
@@ -53,11 +37,9 @@ std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPlugin( GFX_FILE
 
     switch( aType )
     {
-    case DXF: ret = std::make_unique<DXF_IMPORT_PLUGIN>(); break;
-
-    case SVG: ret = std::make_unique<SVG_IMPORT_PLUGIN>(); break;
-
-    default: throw std::runtime_error( "Unhandled graphics format" ); break;
+    case DXF: ret = std::make_unique<DXF_IMPORT_PLUGIN>();             break;
+    case SVG: ret = std::make_unique<SVG_IMPORT_PLUGIN>();             break;
+    default:  throw std::runtime_error( "Unhandled graphics format" ); break;
     }
 
     return ret;
@@ -67,10 +49,10 @@ std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPlugin( GFX_FILE
 std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPluginByExt(
         const wxString& aExtension ) const
 {
-    for( auto fileType : GetImportableFileTypes() )
+    for( GRAPHICS_IMPORT_MGR::GFX_FILE_T fileType : GetImportableFileTypes() )
     {
-        auto plugin = GetPlugin( fileType );
-        auto fileExtensions = plugin->GetFileExtensions();
+        std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = GetPlugin( fileType );
+        const std::vector<std::string>&         fileExtensions = plugin->GetFileExtensions();
 
         if( compareFileExtensions( aExtension.ToStdString(), fileExtensions ) )
             return plugin;

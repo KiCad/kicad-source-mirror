@@ -24,7 +24,7 @@
 
 #include <dialogs/html_message_box.h>
 
-#include "dialog_import_gfx_pcb.h"
+#include "dialog_import_graphics.h"
 #include <import_gfx/dxf_import_plugin.h>
 #include <base_units.h>
 #include <kiface_base.h>
@@ -34,17 +34,17 @@
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <map>
+#include <footprint.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
 #include <memory>
 
-// Static members of DIALOG_IMPORT_GFX_PCB, to remember the user's choices during the session
-bool   DIALOG_IMPORT_GFX_PCB::s_placementInteractive = true;
-bool   DIALOG_IMPORT_GFX_PCB::s_shouldGroupItems     = true;
-bool   DIALOG_IMPORT_GFX_PCB::s_fixDiscontinuities   = true;
-int    DIALOG_IMPORT_GFX_PCB::s_toleranceValue       = pcbIUScale.mmToIU( 1 );
-double DIALOG_IMPORT_GFX_PCB::s_importScale = 1.0; // Do not change the imported items size
+// Static members of DIALOG_IMPORT_GRAPHICS, to remember the user's choices during the session
+bool   DIALOG_IMPORT_GRAPHICS::s_placementInteractive = true;
+bool   DIALOG_IMPORT_GRAPHICS::s_fixDiscontinuities   = true;
+int    DIALOG_IMPORT_GRAPHICS::s_toleranceValue       = pcbIUScale.mmToIU( 1 );
+double DIALOG_IMPORT_GRAPHICS::s_importScale = 1.0; // Do not change the imported items size
 
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
@@ -56,35 +56,21 @@ const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
 };
 
 
-DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent,
-                                              bool aImportAsFootprintGraphic ) :
-        DIALOG_IMPORT_GFX_PCB_BASE( aParent ),
+DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
+        DIALOG_IMPORT_GRAPHICS_BASE( aParent ),
         m_parent( aParent ),
-        m_xOrigin( aParent, m_xLabel, m_xCtrl, m_xUnits ),
+        m_xOrigin( aParent, nullptr, m_xCtrl, nullptr ),
         m_yOrigin( aParent, m_yLabel, m_yCtrl, m_yUnits ),
         m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
         m_tolerance( aParent, m_toleranceLabel, m_toleranceCtrl, m_toleranceUnits )
 {
-    if( aImportAsFootprintGraphic )
-        m_importer = std::make_unique<GRAPHICS_IMPORTER_FOOTPRINT>( m_parent->GetBoard()->GetFirstFootprint() );
-    else
-        m_importer = std::make_unique<GRAPHICS_IMPORTER_BOARD>( m_parent->GetBoard() );
+    // The SVG import has currently a flaw: all SVG shapes are imported as curves and
+    // converted to a lot of segments.  A better approach is to convert to polylines
+    // (not yet existing in Pcbnew) and keep arcs and circles as primitives (not yet
+    // possible with tinysvg library).
 
-    // construct an import manager with options from config
-    {
-        GRAPHICS_IMPORT_MGR::TYPE_LIST blacklist;
-        // Currently: all types are allowed, so the blacklist is empty
-        // (no GFX_FILE_T in the blacklist)
-        // To disable SVG import, enable these 2 lines
-        // if( !ADVANCED_CFG::GetCfg().m_enableSvgImport )
-        //    blacklist.push_back( GRAPHICS_IMPORT_MGR::SVG );
-        // The SVG import has currently a flaw: all SVG shapes are imported as curves and
-        // converted to a lot of segments.  A better approach is to convert to polylines
-        // (not yet existing in Pcbnew) and keep arcs and circles as primitives (not yet
-        // possible with tinysvg library).
-
-        m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>( blacklist );
-    }
+    m_importer = std::make_unique<GRAPHICS_IMPORTER_PCBNEW>( aParent->GetModel() );
+    m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>();
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
@@ -97,9 +83,7 @@ DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent,
     m_importScaleCtrl->SetValue( wxString::Format( wxT( "%f" ), s_importScale ) );
 
     m_textCtrlFileName->SetValue( cfg->m_ImportGraphics.last_file );
-    m_rbInteractivePlacement->SetValue( s_placementInteractive );
-    m_rbAbsolutePlacement->SetValue( !s_placementInteractive );
-    m_groupItems->SetValue( s_shouldGroupItems );
+    m_placeAtCheckbox->SetValue( !s_placementInteractive );
 
     m_tolerance.SetValue( s_toleranceValue );
     m_rbFixDiscontinuities->SetValue( s_fixDiscontinuities );
@@ -113,9 +97,9 @@ DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent,
         m_SelLayerBox->SetLayerSelection( Dwgs_User );
 
     for( const std::pair<const DXF_IMPORT_UNITS, wxString>& unitEntry : dxfUnitsMap )
-        m_choiceDxfUnits->Append( unitEntry.second );
+        m_dxfUnitsChoice->Append( unitEntry.second );
 
-    m_choiceDxfUnits->SetSelection( cfg->m_ImportGraphics.dxf_units );
+    m_dxfUnitsChoice->SetSelection( cfg->m_ImportGraphics.dxf_units );
 
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
@@ -130,13 +114,17 @@ DIALOG_IMPORT_GFX_PCB::DIALOG_IMPORT_GFX_PCB( PCB_BASE_FRAME* aParent,
     Centre();
 
     m_textCtrlFileName->Connect( wxEVT_COMMAND_TEXT_UPDATED,
-                                 wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB::onFilename ),
+                                 wxCommandEventHandler( DIALOG_IMPORT_GRAPHICS::onFilename ),
                                  nullptr, this );
 }
 
 
-DIALOG_IMPORT_GFX_PCB::~DIALOG_IMPORT_GFX_PCB()
+DIALOG_IMPORT_GRAPHICS::~DIALOG_IMPORT_GRAPHICS()
 {
+    s_placementInteractive = !m_placeAtCheckbox->GetValue();
+    s_fixDiscontinuities = m_rbFixDiscontinuities->GetValue();
+    s_toleranceValue = m_tolerance.GetIntValue();
+
     PCBNEW_SETTINGS* cfg = nullptr;
 
     try
@@ -153,22 +141,22 @@ DIALOG_IMPORT_GFX_PCB::~DIALOG_IMPORT_GFX_PCB()
         cfg->m_ImportGraphics.layer = m_SelLayerBox->GetLayerSelection();
         cfg->m_ImportGraphics.interactive_placement = s_placementInteractive;
         cfg->m_ImportGraphics.last_file = m_textCtrlFileName->GetValue();
-        cfg->m_ImportGraphics.dxf_line_width = pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() );
-        cfg->m_ImportGraphics.origin_x = pcbIUScale.IUTomm( m_xOrigin.GetValue() );
-        cfg->m_ImportGraphics.origin_y = pcbIUScale.IUTomm( m_yOrigin.GetValue() );
-        cfg->m_ImportGraphics.dxf_units = m_choiceDxfUnits->GetSelection();
+        cfg->m_ImportGraphics.dxf_line_width = pcbIUScale.IUTomm( m_defaultLineWidth.GetIntValue() );
+        cfg->m_ImportGraphics.origin_x = pcbIUScale.IUTomm( m_xOrigin.GetIntValue() );
+        cfg->m_ImportGraphics.origin_y = pcbIUScale.IUTomm( m_yOrigin.GetIntValue() );
+        cfg->m_ImportGraphics.dxf_units = m_dxfUnitsChoice->GetSelection();
     }
 
     s_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
     s_toleranceValue = m_tolerance.GetIntValue();
 
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-                                    wxCommandEventHandler( DIALOG_IMPORT_GFX_PCB::onFilename ),
+                                    wxCommandEventHandler( DIALOG_IMPORT_GRAPHICS::onFilename ),
                                     nullptr, this );
 }
 
 
-void DIALOG_IMPORT_GFX_PCB::onFilename( wxCommandEvent& event )
+void DIALOG_IMPORT_GRAPHICS::onFilename( wxCommandEvent& event )
 {
     bool     enableDXFControls = true;
     wxString ext = wxFileName( m_textCtrlFileName->GetValue() ).GetExt();
@@ -178,12 +166,12 @@ void DIALOG_IMPORT_GFX_PCB::onFilename( wxCommandEvent& event )
 
     m_defaultLineWidth.Enable( enableDXFControls );
 
-    m_staticTextLineWidth1->Enable( enableDXFControls );
-    m_choiceDxfUnits->Enable( enableDXFControls );
+    m_dxfUnitsLabel->Enable( enableDXFControls );
+    m_dxfUnitsChoice->Enable( enableDXFControls );
 }
 
 
-void DIALOG_IMPORT_GFX_PCB::onBrowseFiles( wxCommandEvent& event )
+void DIALOG_IMPORT_GRAPHICS::onBrowseFiles( wxCommandEvent& event )
 {
     wxString path;
     wxString filename = m_textCtrlFileName->GetValue();
@@ -218,18 +206,18 @@ void DIALOG_IMPORT_GFX_PCB::onBrowseFiles( wxCommandEvent& event )
 }
 
 
-bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
+bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
     if( m_textCtrlFileName->GetValue().IsEmpty() )
     {
-        wxMessageBox( _( "No file selected!" ) );
+        wxMessageBox( _( "Please select a file to import." ) );
         return false;
     }
 
-    if( m_SelLayerBox->GetLayerSelection() < 0 )
+    if( m_setLayerCheckbox->GetValue() && m_SelLayerBox->GetLayerSelection() < 0 )
     {
         wxMessageBox( _( "Please select a valid layer." ) );
         return false;
@@ -242,30 +230,26 @@ bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
     double           yscale = scale;
 
     if( cfg->m_Display.m_DisplayInvertXAxis )
-    {
         xscale *= -1.0;
-    }
 
     if( cfg->m_Display.m_DisplayInvertYAxis )
-    {
         yscale *= -1.0;
-    }
 
-    VECTOR2D origin( m_xOrigin.GetValue() / xscale, m_yOrigin.GetValue() / yscale );
+    VECTOR2D origin( m_xOrigin.GetIntValue() / xscale, m_yOrigin.GetIntValue() / yscale );
 
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )
     {
         if( DXF_IMPORT_PLUGIN* dxfPlugin = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() ) )
         {
             auto it = dxfUnitsMap.begin();
-            std::advance( it, m_choiceDxfUnits->GetSelection() );
+            std::advance( it, m_dxfUnitsChoice->GetSelection() );
 
             if( it == dxfUnitsMap.end() )
                 dxfPlugin->SetUnit( DXF_IMPORT_UNITS::DEFAULT );
             else
                 dxfPlugin->SetUnit( it->first );
 
-            m_importer->SetLineWidthMM( pcbIUScale.IUTomm( m_defaultLineWidth.GetValue() ) );
+            m_importer->SetLineWidthMM( pcbIUScale.IUTomm( m_defaultLineWidth.GetIntValue() ) );
         }
         else
         {
@@ -273,7 +257,12 @@ bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
         }
 
         m_importer->SetPlugin( std::move( plugin ) );
-        m_importer->SetLayer( PCB_LAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+
+        if( m_setLayerCheckbox->GetValue() )
+            m_importer->SetLayer( PCB_LAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+        else
+            m_importer->SetLayer( m_parent->GetActiveLayer() );
+
         m_importer->SetImportOffsetMM( { pcbIUScale.IUTomm( origin.x ),
                                          pcbIUScale.IUTomm( origin.y ) } );
 
@@ -305,18 +294,14 @@ bool DIALOG_IMPORT_GFX_PCB::TransferDataFromWindow()
 }
 
 
-void DIALOG_IMPORT_GFX_PCB::originOptionOnUpdateUI( wxUpdateUIEvent& event )
+void DIALOG_IMPORT_GRAPHICS::onUpdateUI( wxUpdateUIEvent& event )
 {
-    if( m_rbInteractivePlacement->GetValue() != s_placementInteractive )
-        m_rbInteractivePlacement->SetValue( s_placementInteractive );
+    m_xOrigin.Enable( m_placeAtCheckbox->GetValue() );
+    m_yOrigin.Enable( m_placeAtCheckbox->GetValue() );
 
-    if( m_rbAbsolutePlacement->GetValue() == s_placementInteractive )
-        m_rbAbsolutePlacement->SetValue( !s_placementInteractive );
+    m_tolerance.Enable( m_rbFixDiscontinuities->GetValue() );
 
-    m_xOrigin.Enable( !s_placementInteractive );
-    m_yOrigin.Enable( !s_placementInteractive );
-
-    m_tolerance.Enable( s_fixDiscontinuities );
+    m_SelLayerBox->Enable( m_setLayerCheckbox->GetValue() );
 }
 
 

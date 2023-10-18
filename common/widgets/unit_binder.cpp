@@ -591,7 +591,9 @@ void UNIT_BINDER::SetLabel( const wxString& aLabel )
 
 void UNIT_BINDER::Enable( bool aEnable )
 {
-    m_label->Enable( aEnable );
+    if( m_label )
+        m_label->Enable( aEnable );
+
     m_valueCtrl->Enable( aEnable );
 
     if( m_unitLabel )

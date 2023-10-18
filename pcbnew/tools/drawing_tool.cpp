@@ -35,7 +35,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
-#include <import_gfx/dialog_import_gfx_pcb.h>
+#include <import_gfx/dialog_import_graphics.h>
 #include <preview_items/two_point_assistant.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <ratsnest/ratsnest_data.h>
@@ -1485,9 +1485,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
-    // items if needed
-    DIALOG_IMPORT_GFX_PCB dlg( m_frame, m_isFootprintEditor );
+    DIALOG_IMPORT_GRAPHICS dlg( m_frame );
     int dlgResult = dlg.ShowModal();
 
     std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
@@ -1508,20 +1506,14 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> selectedItems;     // the group, or newItems if no group
     PCB_SELECTION            preview;
     BOARD_COMMIT             commit( m_frame );
-    PCB_GROUP*               group = nullptr;
+    PICKED_ITEMS_LIST        groupUndoList;
     PCB_LAYER_ID             layer = F_Cu;
 
-    if( dlg.ShouldGroupItems() )
-    {
-        if( m_isFootprintEditor )
-            group = new PCB_GROUP( m_frame->GetBoard()->GetFirstFootprint() );
-        else
-            group = new PCB_GROUP( m_frame->GetBoard() );
+    PCB_GROUP* group = new PCB_GROUP( m_frame->GetModel() );
 
-        newItems.push_back( group );
-        selectedItems.push_back( group );
-        preview.Add( group );
-    }
+    newItems.push_back( group );
+    selectedItems.push_back( group );
+    preview.Add( group );
 
     if( dlg.ShouldFixDiscontinuities() )
     {
@@ -1545,19 +1537,14 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
-        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.get() );
+        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.release() );
         wxCHECK2( item, continue );
 
         newItems.push_back( item );
-
-        if( group )
-            group->AddItem( item );
-        else
-            selectedItems.push_back( item );
+        group->AddItem( item );
+        groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
 
         preview.Add( item );
-
-        ptr.release();
     }
 
     if( !dlg.IsPlacementInteractive() )
@@ -1565,7 +1552,11 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item : newItems )
             commit.Add( item );
 
-        commit.Push( _( "Import Graphic" ) );
+        commit.Push( _( "Import Graphics" ) );
+
+        if( groupUndoList.GetCount() > 0 )
+            m_frame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
+
         return 0;
     }
 
@@ -1652,7 +1643,11 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             for( BOARD_ITEM* item : newItems )
                 commit.Add( item );
 
-            commit.Push( _( "Import Graphic" ) );
+            commit.Push( _( "Import Graphics" ) );
+
+            if( groupUndoList.GetCount() > 0 )
+                m_frame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
+
             break;   // This is a one-shot command, not a tool
         }
         else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )

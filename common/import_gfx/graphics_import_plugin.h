@@ -39,17 +39,12 @@ class GRAPHICS_IMPORTER;
 class GRAPHICS_IMPORT_PLUGIN
 {
 public:
-    virtual ~GRAPHICS_IMPORT_PLUGIN()
-    {
-    }
+    virtual ~GRAPHICS_IMPORT_PLUGIN() { }
 
     /**
      * Set the receiver of the imported shapes.
      */
-    virtual void SetImporter( GRAPHICS_IMPORTER* aImporter )
-    {
-        m_importer = aImporter;
-    }
+    virtual void SetImporter( GRAPHICS_IMPORTER* aImporter ) { m_importer = aImporter; }
 
     /**
      * Return the plugin name.

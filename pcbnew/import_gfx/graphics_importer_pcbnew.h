@@ -28,36 +28,17 @@
 #define GRAPHICS_IMPORTER_PCBNEW_H
 
 #include <import_gfx/graphics_importer.h>
-
 #include <layer_ids.h>
 
-class BOARD;
-class FOOTPRINT;
-class PCB_SHAPE;
-class PCB_TEXT;
+class BOARD_ITEM_CONTAINER;
 
 class GRAPHICS_IMPORTER_PCBNEW : public GRAPHICS_IMPORTER
 {
 public:
-    GRAPHICS_IMPORTER_PCBNEW();
+    GRAPHICS_IMPORTER_PCBNEW( BOARD_ITEM_CONTAINER* aParent );
 
-    /**
-     * Set the target layer for the imported shapes.
-     *
-     * @param aLayer is the layer to be used by the imported shapes.
-     */
-    void SetLayer( PCB_LAYER_ID aLayer )
-    {
-        m_layer = aLayer;
-    }
-
-    /**
-     * Return the target layer for the imported shapes.
-     */
-    PCB_LAYER_ID GetLayer() const
-    {
-        return m_layer;
-    }
+    void SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
+    PCB_LAYER_ID GetLayer() const { return m_layer; }
 
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                   const IMPORTED_STROKE& aStroke ) override;
@@ -99,46 +80,11 @@ public:
     STROKE_PARAMS MapStrokeParams( const IMPORTED_STROKE& aStroke );
 
 protected:
-    ///< Create an object representing a graphical shape.
-    virtual std::unique_ptr<PCB_SHAPE> createDrawing() = 0;
-
-    ///< Create an object representing a text.
-    virtual std::unique_ptr<PCB_TEXT> createText() = 0;
-
     ///< Target layer for the imported shapes.
-    PCB_LAYER_ID m_layer;
+    PCB_LAYER_ID          m_layer;
+    BOARD_ITEM_CONTAINER* m_parent;
 };
 
 
-class GRAPHICS_IMPORTER_BOARD : public GRAPHICS_IMPORTER_PCBNEW
-{
-public:
-    GRAPHICS_IMPORTER_BOARD( BOARD* aBoard )
-        : m_board( aBoard )
-    {
-    }
 
-protected:
-    std::unique_ptr<PCB_SHAPE> createDrawing() override;
-    std::unique_ptr<PCB_TEXT> createText() override;
-
-    BOARD* m_board;
-};
-
-
-class GRAPHICS_IMPORTER_FOOTPRINT : public GRAPHICS_IMPORTER_PCBNEW
-{
-public:
-    GRAPHICS_IMPORTER_FOOTPRINT( FOOTPRINT* aFootprint )
-        : m_footprint( aFootprint )
-    {
-    }
-
-protected:
-    std::unique_ptr<PCB_SHAPE> createDrawing() override;
-    std::unique_ptr<PCB_TEXT> createText() override;
-
-    FOOTPRINT* m_footprint;
-};
-
-#endif /* GRAPHICS_IMPORTER_PCBNEW */
+#endif /* GRAPHICS_IMPORTER_PCBNEW_H */
