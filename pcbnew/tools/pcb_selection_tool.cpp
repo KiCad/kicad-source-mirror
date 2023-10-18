@@ -267,7 +267,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         try
         {
-            m_frame->GetPcbNewSettings()->m_TrackDragAction;
+            trackDragAction = m_frame->GetPcbNewSettings()->m_TrackDragAction;
         }
         catch( const std::runtime_error& e )
         {
