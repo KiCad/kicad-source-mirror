@@ -43,7 +43,7 @@ class BOARD;
 class PCB_BASE_EDIT_FRAME;
 class PCB_SHAPE;
 class POLYGON_GEOM_MANAGER;
-class PCB_GENERATOR_MEANDERS;
+class PCB_TUNING_PATTERN;
 class STATUS_MIN_MAX_POPUP;
 
 
@@ -109,7 +109,7 @@ public:
 
     /**
      */
-    int PlaceMeander( const TOOL_EVENT& aEvent );
+    int PlaceTuningPattern( const TOOL_EVENT& aEvent );
 
     /**
      * Start interactively drawing a line.
@@ -356,7 +356,7 @@ private:
 
     PCB_SELECTION             m_preview;
     BOARD_CONNECTED_ITEM*     m_pickerItem;
-    PCB_GENERATOR_MEANDERS*   m_tuningPattern;
+    PCB_TUNING_PATTERN*       m_tuningPattern;
 
     std::unique_ptr<STATUS_MIN_MAX_POPUP>  m_statusPopup;
 

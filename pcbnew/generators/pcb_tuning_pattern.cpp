@@ -70,14 +70,14 @@ enum LENGTH_TUNING_MODE
 };
 
 
-class PCB_GENERATOR_MEANDERS : public PCB_GENERATOR
+class PCB_TUNING_PATTERN : public PCB_GENERATOR
 {
 public:
     static const wxString GENERATOR_TYPE;
     static const wxString DISPLAY_NAME;
 
-    PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
-                            LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE );
+    PCB_TUNING_PATTERN( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
+                        LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE );
 
     wxString GetGeneratorType() const override { return wxS( "tuning_pattern" ); }
 
@@ -91,9 +91,9 @@ public:
         return wxString( _( "Tuning Pattern" ) );
     }
 
-    static PCB_GENERATOR_MEANDERS* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                              BOARD_CONNECTED_ITEM* aStartItem,
-                                              LENGTH_TUNING_MODE aMode );
+    static PCB_TUNING_PATTERN* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
+                                          BOARD_CONNECTED_ITEM* aStartItem,
+                                          LENGTH_TUNING_MODE aMode );
 
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override;
@@ -144,7 +144,7 @@ public:
 
     const BOX2I ViewBBox() const override { return GetBoundingBox(); }
 
-    EDA_ITEM* Clone() const override { return new PCB_GENERATOR_MEANDERS( *this ); }
+    EDA_ITEM* Clone() const override { return new PCB_TUNING_PATTERN( *this ); }
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
@@ -213,7 +213,7 @@ protected:
     {
         wxASSERT( aImage->Type() == PCB_GENERATOR_T );
 
-        std::swap( *this, *static_cast<PCB_GENERATOR_MEANDERS*>( aImage ) );
+        std::swap( *this, *static_cast<PCB_TUNING_PATTERN*>( aImage ) );
     }
 
     PNS::ROUTER_MODE toPNSMode();
@@ -352,8 +352,8 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 }
 
 
-PCB_GENERATOR_MEANDERS::PCB_GENERATOR_MEANDERS( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
-                                                LENGTH_TUNING_MODE aMode ) :
+PCB_TUNING_PATTERN::PCB_TUNING_PATTERN( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
+                                        LENGTH_TUNING_MODE aMode ) :
         PCB_GENERATOR( aParent, aLayer ),
         m_trackWidth( 0 ),
         m_diffPairGap( 0 ),
@@ -397,7 +397,7 @@ static VECTOR2I snapToNearestTrack( const VECTOR2I& aP, BOARD* aBoard, NETINFO_I
 }
 
 
-bool PCB_GENERATOR_MEANDERS::baselineValid()
+bool PCB_TUNING_PATTERN::baselineValid()
 {
     if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
     {
@@ -411,10 +411,10 @@ bool PCB_GENERATOR_MEANDERS::baselineValid()
 }
 
 
-PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool,
-                                                           PCB_BASE_EDIT_FRAME* aFrame,
-                                                           BOARD_CONNECTED_ITEM* aStartItem,
-                                                           LENGTH_TUNING_MODE aMode )
+PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
+                                                   PCB_BASE_EDIT_FRAME* aFrame,
+                                                   BOARD_CONNECTED_ITEM* aStartItem,
+                                                   LENGTH_TUNING_MODE aMode )
 {
     BOARD*                       board = aStartItem->GetBoard();
     std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
@@ -424,7 +424,7 @@ PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool
     if( aMode == SINGLE && board->DpCoupledNet( aStartItem->GetNet() ) )
         aMode = DIFF_PAIR;
 
-    PCB_GENERATOR_MEANDERS* meander = new PCB_GENERATOR_MEANDERS( board, layer, aMode );
+    PCB_TUNING_PATTERN* pattern = new PCB_TUNING_PATTERN( board, layer, aMode );
 
     constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
@@ -437,13 +437,13 @@ PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool
             if( dlg.ShowModal() != wxID_OK )
                 return nullptr;
 
-            meander->m_settings.SetTargetSkew( dlg.GetValue() );
-            meander->m_settings.m_overrideCustomRules = true;
+            pattern->m_settings.SetTargetSkew( dlg.GetValue() );
+            pattern->m_settings.m_overrideCustomRules = true;
         }
         else
         {
-            meander->m_settings.SetTargetSkew( constraint.GetValue() );
-            meander->m_settings.m_overrideCustomRules = false;
+            pattern->m_settings.SetTargetSkew( constraint.GetValue() );
+            pattern->m_settings.m_overrideCustomRules = false;
         }
     }
     else
@@ -456,23 +456,23 @@ PCB_GENERATOR_MEANDERS* PCB_GENERATOR_MEANDERS::CreateNew( GENERATOR_TOOL* aTool
             if( dlg.ShowModal() != wxID_OK )
                 return nullptr;
 
-            meander->m_settings.SetTargetLength( dlg.GetValue() );
-            meander->m_settings.m_overrideCustomRules = true;
+            pattern->m_settings.SetTargetLength( dlg.GetValue() );
+            pattern->m_settings.m_overrideCustomRules = true;
         }
         else
         {
-            meander->m_settings.SetTargetLength( constraint.GetValue() );
-            meander->m_settings.m_overrideCustomRules = false;
+            pattern->m_settings.SetTargetLength( constraint.GetValue() );
+            pattern->m_settings.m_overrideCustomRules = false;
         }
     }
 
-    meander->SetFlags( IS_NEW );
+    pattern->SetFlags( IS_NEW );
 
-    return meander;
+    return pattern;
 }
 
-void PCB_GENERATOR_MEANDERS::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                        PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                    PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
 {
     m_removedItems.clear();
 
@@ -670,9 +670,9 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
 }
 
 
-bool PCB_GENERATOR_MEANDERS::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard,
-                                           VECTOR2I& aStart, VECTOR2I& aEnd, NETINFO_ITEM* aNet,
-                                           std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
+bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard,
+                                       VECTOR2I& aStart, VECTOR2I& aEnd, NETINFO_ITEM* aNet,
+                                       std::optional<SHAPE_LINE_CHAIN>& aBaseLine )
 {
     PNS::NODE* world = aRouter->GetWorld();
 
@@ -710,7 +710,7 @@ bool PCB_GENERATOR_MEANDERS::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOA
 }
 
 
-bool PCB_GENERATOR_MEANDERS::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard )
+bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard )
 {
     m_baseLineCoupled.reset();
 
@@ -743,8 +743,8 @@ bool PCB_GENERATOR_MEANDERS::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BO
     return true;
 }
 
-void PCB_GENERATOR_MEANDERS::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
-                                               SHAPE_LINE_CHAIN& aBaseLine )
+void PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
+                                           SHAPE_LINE_CHAIN& aBaseLine )
 {
     VECTOR2I startSnapPoint, endSnapPoint;
 
@@ -778,8 +778,8 @@ void PCB_GENERATOR_MEANDERS::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
 }
 
 
-void PCB_GENERATOR_MEANDERS::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                 PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
 {
     aTool->Router()->SyncWorld();
 
@@ -832,7 +832,7 @@ void PCB_GENERATOR_MEANDERS::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
 }
 
 
-PNS::ROUTER_MODE PCB_GENERATOR_MEANDERS::toPNSMode()
+PNS::ROUTER_MODE PCB_TUNING_PATTERN::toPNSMode()
 {
     switch( m_tuningMode )
     {
@@ -844,9 +844,9 @@ PNS::ROUTER_MODE PCB_GENERATOR_MEANDERS::toPNSMode()
 }
 
 
-bool PCB_GENERATOR_MEANDERS::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
-                                              PCB_BASE_EDIT_FRAME* aFrame,
-                                              SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
+bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
+                                          PCB_BASE_EDIT_FRAME* aFrame, SHAPE_LINE_CHAIN& aBaseLine,
+                                          bool aPrimary )
 {
     PNS::NODE* world = aRouter->GetWorld();
     VECTOR2I   startSnapPoint, endSnapPoint;
@@ -919,8 +919,8 @@ bool PCB_GENERATOR_MEANDERS::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
 }
 
 
-bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                                 BOARD_COMMIT* aCommit )
 {
     PNS::ROUTER*     router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
@@ -1006,9 +1006,9 @@ bool PCB_GENERATOR_MEANDERS::Update( GENERATOR_TOOL* aTool, BOARD* aBoard,
 }
 
 
-void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                       PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit,
-                                       const wxString& aCommitMsg, int aCommitFlags )
+void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                   PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit,
+                                   const wxString& aCommitMsg, int aCommitFlags )
 {
     PNS::ROUTER*      router = aTool->Router();
     SHAPE_LINE_CHAIN  bounds = getRectShape();
@@ -1060,8 +1060,8 @@ void PCB_GENERATOR_MEANDERS::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 }
 
 
-void PCB_GENERATOR_MEANDERS::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                         PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
+                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
 {
     for( BOARD_ITEM* item : m_removedItems )
         aFrame->GetCanvas()->GetView()->Hide( item, false );
@@ -1075,7 +1075,7 @@ void PCB_GENERATOR_MEANDERS::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
 }
 
 
-bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const
+bool PCB_TUNING_PATTERN::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const
 {
     VECTOR2I centerlineOffset;
 
@@ -1114,8 +1114,8 @@ bool PCB_GENERATOR_MEANDERS::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points
 }
 
 
-bool PCB_GENERATOR_MEANDERS::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                                                   BOARD_COMMIT* aCommit )
+bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
+                                               BOARD_COMMIT* aCommit )
 {
     VECTOR2I centerlineOffset;
 
@@ -1166,7 +1166,7 @@ bool PCB_GENERATOR_MEANDERS::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> 
 }
 
 
-bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints )
+bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints )
 {
     VECTOR2I centerlineOffset;
 
@@ -1203,7 +1203,7 @@ bool PCB_GENERATOR_MEANDERS::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
 }
 
 
-SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
+SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getRectShape() const
 {
     SHAPE_LINE_CHAIN chain;
 
@@ -1265,7 +1265,7 @@ SHAPE_LINE_CHAIN PCB_GENERATOR_MEANDERS::getRectShape() const
 }
 
 
-void PCB_GENERATOR_MEANDERS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( !IsSelected() )
         return;
@@ -1305,7 +1305,7 @@ void PCB_GENERATOR_MEANDERS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-const STRING_ANY_MAP PCB_GENERATOR_MEANDERS::GetProperties() const
+const STRING_ANY_MAP PCB_TUNING_PATTERN::GetProperties() const
 {
     STRING_ANY_MAP props = PCB_GENERATOR::GetProperties();
 
@@ -1343,7 +1343,7 @@ const STRING_ANY_MAP PCB_GENERATOR_MEANDERS::GetProperties() const
 }
 
 
-void PCB_GENERATOR_MEANDERS::SetProperties( const STRING_ANY_MAP& aProps )
+void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
 {
     PCB_GENERATOR::SetProperties( aProps );
 
@@ -1407,7 +1407,7 @@ void PCB_GENERATOR_MEANDERS::SetProperties( const STRING_ANY_MAP& aProps )
 }
 
 
-void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
+void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 {
     PNS::MEANDER_SETTINGS settings = m_settings;
     DRC_CONSTRAINT        constraint;
@@ -1437,8 +1437,8 @@ void PCB_GENERATOR_MEANDERS::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFra
 }
 
 
-void PCB_GENERATOR_MEANDERS::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                           STATUS_MIN_MAX_POPUP* aPopup )
+void PCB_TUNING_PATTERN::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
+                                       STATUS_MIN_MAX_POPUP* aPopup )
 {
     auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() );
 
@@ -1459,8 +1459,8 @@ void PCB_GENERATOR_MEANDERS::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_
 }
 
 
-void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
-                                              std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                          std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString      msg;
     NETINFO_ITEM* primaryNet = nullptr;
@@ -1601,8 +1601,8 @@ void PCB_GENERATOR_MEANDERS::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 }
 
 
-const wxString PCB_GENERATOR_MEANDERS::DISPLAY_NAME = _HKI( "Tuning Pattern" );
-const wxString PCB_GENERATOR_MEANDERS::GENERATOR_TYPE = wxS( "meanders" );
+const wxString PCB_TUNING_PATTERN::DISPLAY_NAME = _HKI( "Tuning Pattern" );
+const wxString PCB_TUNING_PATTERN::GENERATOR_TYPE = wxS( "tuning_pattern" );
 
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
@@ -1611,7 +1611,7 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 {
     if( m_inDrawingTool )
         return 0;
@@ -1646,7 +1646,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
                 controls->ShowCursor( true );
             };
 
-    auto updateMeander =
+    auto updateTuningPattern =
             [&]()
             {
                 if( m_tuningPattern && m_tuningPattern->GetPosition() != m_tuningPattern->GetEnd() )
@@ -1676,7 +1676,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
         {
             if( m_tuningPattern )
             {
-                // First click already made; clean up meander preview
+                // First click already made; clean up tuning pattern preview
                 m_tuningPattern->EditRevert( generatorTool, m_board, m_frame, nullptr );
 
                 m_preview.Clear();
@@ -1715,23 +1715,23 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
             }
             else
             {
-                // First click already made; we're in preview-meander mode
+                // First click already made; we're in preview-tuning-pattern mode
 
                 m_tuningPattern->SetEnd( cursorPos );
-                updateMeander();
+                updateTuningPattern();
             }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( m_pickerItem && !m_tuningPattern )
             {
-                // First click; create a meander
+                // First click; create a tuning pattern
 
                 generatorTool->HighlightNets( nullptr );
 
                 m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                m_tuningPattern = PCB_GENERATOR_MEANDERS::CreateNew( generatorTool, m_frame,
-                                                               m_pickerItem, mode );
+                m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
+                                                                 m_pickerItem, mode );
 
                 int      dummyDist;
                 int      dummyClearance = std::numeric_limits<int>::max() / 2;
@@ -1770,7 +1770,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
                 placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
                 m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
-                updateMeander();
+                updateTuningPattern();
             }
         }
         else if( evt->IsAction( &PCB_ACTIONS::amplIncrease )
@@ -1782,7 +1782,7 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 
                 placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
                 m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
-                updateMeander();
+                updateTuningPattern();
             }
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
@@ -1824,9 +1824,9 @@ int DRAWING_TOOL::PlaceMeander( const TOOL_EVENT& aEvent )
 }
 
 
-static struct PCB_GENERATOR_MEANDERS_DESC
+static struct PCB_TUNING_PATTERN_DESC
 {
-    PCB_GENERATOR_MEANDERS_DESC()
+    PCB_TUNING_PATTERN_DESC()
     {
         ENUM_MAP<LENGTH_TUNING_MODE>::Instance()
                 .Map( LENGTH_TUNING_MODE::SINGLE, _HKI( "Single track" ) )
@@ -1839,69 +1839,69 @@ static struct PCB_GENERATOR_MEANDERS_DESC
                 .Map( PNS::MEANDER_SIDE_DEFAULT, _HKI( "Default" ) );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( PCB_GENERATOR_MEANDERS );
-        propMgr.AddTypeCast( new TYPE_CAST<PCB_GENERATOR_MEANDERS, PCB_GENERATOR> );
-        propMgr.AddTypeCast( new TYPE_CAST<PCB_GENERATOR_MEANDERS, BOARD_ITEM> );
-        propMgr.InheritsAfter( TYPE_HASH( PCB_GENERATOR_MEANDERS ), TYPE_HASH( PCB_GENERATOR ) );
-        propMgr.InheritsAfter( TYPE_HASH( PCB_GENERATOR_MEANDERS ), TYPE_HASH( BOARD_ITEM ) );
+        REGISTER_TYPE( PCB_TUNING_PATTERN );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_TUNING_PATTERN, PCB_GENERATOR> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_TUNING_PATTERN, BOARD_ITEM> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TUNING_PATTERN ), TYPE_HASH( PCB_GENERATOR ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TUNING_PATTERN ), TYPE_HASH( BOARD_ITEM ) );
 
         const wxString groupTab = _HKI( "Pattern Properties" );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
-                                     _HKI( "End X" ), &PCB_GENERATOR_MEANDERS::SetEndX,
-                                     &PCB_GENERATOR_MEANDERS::GetEndX, PROPERTY_DISPLAY::PT_SIZE,
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
+                                     _HKI( "End X" ), &PCB_TUNING_PATTERN::SetEndX,
+                                     &PCB_TUNING_PATTERN::GetEndX, PROPERTY_DISPLAY::PT_SIZE,
                                      ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
-                                     _HKI( "End Y" ), &PCB_GENERATOR_MEANDERS::SetEndY,
-                                     &PCB_GENERATOR_MEANDERS::GetEndY, PROPERTY_DISPLAY::PT_SIZE,
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
+                                     _HKI( "End Y" ), &PCB_TUNING_PATTERN::SetEndY,
+                                     &PCB_TUNING_PATTERN::GetEndY, PROPERTY_DISPLAY::PT_SIZE,
                                      ORIGIN_TRANSFORMS::ABS_Y_COORD ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_GENERATOR_MEANDERS, LENGTH_TUNING_MODE>(
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, LENGTH_TUNING_MODE>(
                                      _HKI( "Tuning mode" ),
-                                     NO_SETTER( PCB_GENERATOR_MEANDERS, LENGTH_TUNING_MODE ),
-                                     &PCB_GENERATOR_MEANDERS::GetTuningMode ),
+                                     NO_SETTER( PCB_TUNING_PATTERN, LENGTH_TUNING_MODE ),
+                                     &PCB_TUNING_PATTERN::GetTuningMode ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
                                      _HKI( "Min amplitude" ),
-                                     &PCB_GENERATOR_MEANDERS::SetMinAmplitude,
-                                     &PCB_GENERATOR_MEANDERS::GetMinAmplitude,
+                                     &PCB_TUNING_PATTERN::SetMinAmplitude,
+                                     &PCB_TUNING_PATTERN::GetMinAmplitude,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
                                      _HKI( "Max amplitude" ),
-                                     &PCB_GENERATOR_MEANDERS::SetMaxAmplitude,
-                                     &PCB_GENERATOR_MEANDERS::GetMaxAmplitude,
+                                     &PCB_TUNING_PATTERN::SetMaxAmplitude,
+                                     &PCB_TUNING_PATTERN::GetMaxAmplitude,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_GENERATOR_MEANDERS, PNS::MEANDER_SIDE>(
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, PNS::MEANDER_SIDE>(
                                      _HKI( "Initial side" ),
-                                     &PCB_GENERATOR_MEANDERS::SetInitialSide,
-                                     &PCB_GENERATOR_MEANDERS::GetInitialSide ),
+                                     &PCB_TUNING_PATTERN::SetInitialSide,
+                                     &PCB_TUNING_PATTERN::GetInitialSide ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
-                                     _HKI( "Min spacing" ), &PCB_GENERATOR_MEANDERS::SetSpacing,
-                                     &PCB_GENERATOR_MEANDERS::GetSpacing, PROPERTY_DISPLAY::PT_SIZE,
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
+                                     _HKI( "Min spacing" ), &PCB_TUNING_PATTERN::SetSpacing,
+                                     &PCB_TUNING_PATTERN::GetSpacing, PROPERTY_DISPLAY::PT_SIZE,
                                      ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
                                      _HKI( "Corner radius %" ),
-                                     &PCB_GENERATOR_MEANDERS::SetCornerRadiusPercentage,
-                                     &PCB_GENERATOR_MEANDERS::GetCornerRadiusPercentage,
+                                     &PCB_TUNING_PATTERN::SetCornerRadiusPercentage,
+                                     &PCB_TUNING_PATTERN::GetCornerRadiusPercentage,
                                      PROPERTY_DISPLAY::PT_DEFAULT, ORIGIN_TRANSFORMS::NOT_A_COORD ),
                              groupTab );
 
         auto isSkew =
                 []( INSPECTABLE* aItem ) -> bool
                 {
-                    if( auto* pattern = dynamic_cast<PCB_GENERATOR_MEANDERS*>( aItem ) )
+                    if( PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( aItem ) )
                         return pattern->GetTuningMode() == DIFF_PAIR_SKEW;
 
                     return false;
@@ -1913,43 +1913,59 @@ static struct PCB_GENERATOR_MEANDERS_DESC
                     return !isSkew( aItem );
                 };
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, long long int>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, long long int>(
                                      _HKI( "Target length" ),
-                                     &PCB_GENERATOR_MEANDERS::SetTargetLength,
-                                     &PCB_GENERATOR_MEANDERS::GetTargetLength,
+                                     &PCB_TUNING_PATTERN::SetTargetLength,
+                                     &PCB_TUNING_PATTERN::GetTargetLength,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab )
                 .SetAvailableFunc( notIsSkew );
 
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, int>(
-                                     _HKI( "Target skew" ), &PCB_GENERATOR_MEANDERS::SetTargetSkew,
-                                     &PCB_GENERATOR_MEANDERS::GetTargetSkew,
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
+                                     _HKI( "Target skew" ), &PCB_TUNING_PATTERN::SetTargetSkew,
+                                     &PCB_TUNING_PATTERN::GetTargetSkew,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab )
                 .SetAvailableFunc( isSkew );
 
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, bool>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>(
                                      _HKI( "Override custom rules" ),
-                                     &PCB_GENERATOR_MEANDERS::SetOverrideCustomRules,
-                                     &PCB_GENERATOR_MEANDERS::GetOverrideCustomRules ),
+                                     &PCB_TUNING_PATTERN::SetOverrideCustomRules,
+                                     &PCB_TUNING_PATTERN::GetOverrideCustomRules ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, bool>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>(
                                      _HKI( "Single-sided" ),
-                                     &PCB_GENERATOR_MEANDERS::SetSingleSided,
-                                     &PCB_GENERATOR_MEANDERS::IsSingleSided ),
+                                     &PCB_TUNING_PATTERN::SetSingleSided,
+                                     &PCB_TUNING_PATTERN::IsSingleSided ),
                              groupTab );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR_MEANDERS, bool>(
-                                     _HKI( "Rounded" ), &PCB_GENERATOR_MEANDERS::SetRounded,
-                                     &PCB_GENERATOR_MEANDERS::IsRounded ),
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>(
+                                     _HKI( "Rounded" ), &PCB_TUNING_PATTERN::SetRounded,
+                                     &PCB_TUNING_PATTERN::IsRounded ),
                              groupTab );
     }
-} _PCB_GENERATOR_MEANDERS_DESC;
+} _PCB_TUNING_PATTERN_DESC;
 
 ENUM_TO_WXANY( LENGTH_TUNING_MODE )
 ENUM_TO_WXANY( PNS::MEANDER_SIDE )
 
-static GENERATORS_MGR::REGISTER<PCB_GENERATOR_MEANDERS> registerMe;
+static GENERATORS_MGR::REGISTER<PCB_TUNING_PATTERN> registerMe;
+
+// Also register under the 7.99 name
+template <typename T>
+struct REGISTER_LEGACY_TUNING_PATTERN
+{
+    REGISTER_LEGACY_TUNING_PATTERN()
+    {
+        GENERATORS_MGR::Instance().Register( wxS( "meanders" ), T::DISPLAY_NAME,
+                                             []()
+                                             {
+                                                 return new T;
+                                             } );
+    }
+};
+
+static REGISTER_LEGACY_TUNING_PATTERN<PCB_TUNING_PATTERN> registerMeToo;
