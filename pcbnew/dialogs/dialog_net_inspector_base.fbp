@@ -490,8 +490,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="0">
-                    <property name="border">10</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                     <property name="proportion">1</property>
                     <object class="wxDataViewCtrl" expanded="0">
                         <property name="bg"></property>

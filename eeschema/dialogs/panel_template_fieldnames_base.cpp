@@ -56,7 +56,7 @@ PANEL_TEMPLATE_FIELDNAMES_BASE::PANEL_TEMPLATE_FIELDNAMES_BASE( wxWindow* parent
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_grid->SetMinSize( wxSize( -1,180 ) );
 
-	bPanelSizer->Add( m_grid, 1, wxEXPAND, 10 );
+	bPanelSizer->Add( m_grid, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );

@@ -172,7 +172,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackRightSizer->Add( 25, 0, 0, wxEXPAND, 5 );
 
 	m_TrackLayerCtrl = new PCB_LAYER_BOX_SELECTOR( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	m_sbTrackSizer->Add( fgTrackRightSizer, 1, wxEXPAND, 3 );
@@ -513,7 +513,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	bSizer20->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bSizer20->Add( fgSizerRightCol, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizer44;
 	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
@@ -532,7 +532,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	bSizer44->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer20->Add( bSizer44, 0, wxEXPAND|wxTOP|wxLEFT, 8 );
+	bSizer20->Add( bSizer44, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
 	bSizerShapeColumns->Add( bSizer20, 1, wxEXPAND, 5 );

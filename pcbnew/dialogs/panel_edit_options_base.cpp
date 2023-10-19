@@ -157,8 +157,8 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxString m_rbCtrlClickActionChoices[] = { _("Toggle selection."), _("Highlight net (for pads or tracks).") };
 	int m_rbCtrlClickActionNChoices = sizeof( m_rbCtrlClickActionChoices ) / sizeof( wxString );
 	m_rbCtrlClickAction = new wxRadioBox( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_rbCtrlClickActionNChoices, m_rbCtrlClickActionChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbCtrlClickAction->SetSelection( 0 );
-	fgSizerCmdsWinLin->Add( m_rbCtrlClickAction, 0, wxRIGHT|wxLEFT, 5 );
+	m_rbCtrlClickAction->SetSelection( 1 );
+	fgSizerCmdsWinLin->Add( m_rbCtrlClickAction, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	m_mouseCmdsWinLin->Add( fgSizerCmdsWinLin, 1, wxEXPAND|wxTOP, 5 );
@@ -230,7 +230,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	int m_rbCtrlClickActionMacNChoices = sizeof( m_rbCtrlClickActionMacChoices ) / sizeof( wxString );
 	m_rbCtrlClickActionMac = new wxRadioBox( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_rbCtrlClickActionMacNChoices, m_rbCtrlClickActionMacChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbCtrlClickActionMac->SetSelection( 0 );
-	fgSizerCmdsOSX->Add( m_rbCtrlClickActionMac, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizerCmdsOSX->Add( m_rbCtrlClickActionMac, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticText* staticText102;
 	staticText102 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Option"), wxDefaultPosition, wxDefaultSize, 0 );

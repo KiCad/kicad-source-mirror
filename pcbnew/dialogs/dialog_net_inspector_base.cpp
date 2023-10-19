@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,7 +67,7 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_VERT_RULES );
 	m_netsList->SetMinSize( wxSize( 640,300 ) );
 
-	bSizerMain->Add( m_netsList, 1, wxEXPAND, 10 );
+	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerListButtons;
 	bSizerListButtons = new wxBoxSizer( wxHORIZONTAL );

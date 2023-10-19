@@ -64,7 +64,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_textItemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_textItemsGrid->SetMinSize( wxSize( -1,140 ) );
 
-	defaultTextItemsSizer->Add( m_textItemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
+	defaultTextItemsSizer->Add( m_textItemsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
@@ -72,7 +72,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_bpAdd = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 
-	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT, 5 );
+	bButtonSize->Add( m_bpAdd, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 
 	bButtonSize->Add( 20, 0, 0, wxEXPAND, 5 );
@@ -80,14 +80,14 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 	m_bpDelete = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 
-	bButtonSize->Add( m_bpDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bButtonSize->Add( m_bpDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Note: a blank reference designator or value will use the footprint name."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	bButtonSize->Add( m_staticTextInfo, 0, wxBOTTOM|wxRIGHT|wxLEFT, 15 );
+	bButtonSize->Add( m_staticTextInfo, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 15 );
 
 
 	defaultTextItemsSizer->Add( bButtonSize, 0, wxEXPAND, 5 );
@@ -149,7 +149,7 @@ PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, 
 
 	// Cell Defaults
 	m_graphicsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxEXPAND|wxBOTTOM, 1 );
+	defaultPropertiesSizer->Add( m_graphicsGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 1 );
 
 
 	bSizerMargins->Add( defaultPropertiesSizer, 0, wxEXPAND|wxTOP, 5 );

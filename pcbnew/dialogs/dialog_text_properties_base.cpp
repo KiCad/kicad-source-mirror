@@ -165,7 +165,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizerButtonBar->Add( m_mirrored, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer1->Add( bSizerButtonBar, wxGBPosition( 2, 4 ), wxGBSpan( 1, 3 ), wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	gbSizer1->Add( bSizerButtonBar, wxGBPosition( 2, 4 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxEXPAND|wxTOP, 3 );
 
 	m_SizeXLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXLabel->Wrap( -1 );
@@ -276,6 +276,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 

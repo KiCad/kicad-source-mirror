@@ -117,7 +117,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	int m_typeFilterNChoices = sizeof( m_typeFilterChoices ) / sizeof( wxString );
 	m_typeFilter = new wxChoice( sbFilters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_typeFilterNChoices, m_typeFilterChoices, 0 );
 	m_typeFilter->SetSelection( 0 );
-	fgSizer2->Add( m_typeFilter, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_typeFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 
 
 	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -312,7 +312,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	m_staticText15 = new wxStaticText( m_specifiedValues, wxID_ANY, _("(fields only)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
-	fgSizer1->Add( m_staticText15, 0, wxLEFT, 5 );
+	fgSizer1->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );

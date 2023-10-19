@@ -144,7 +144,7 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	sbFields->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
 
 
-	bMainSizer->Add( sbFields, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( sbFields, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* optionsSizer;
 	optionsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -281,13 +281,13 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	m_formattingGB->Add( bSizer71, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 
-	formatting->Add( m_formattingGB, 1, wxEXPAND, 5 );
+	formatting->Add( m_formattingGB, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	optionsSizer->Add( formatting, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
-	bMainSizer->Add( optionsSizer, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bMainSizer->Add( optionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

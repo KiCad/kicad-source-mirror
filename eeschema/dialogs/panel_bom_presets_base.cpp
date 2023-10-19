@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,7 +52,7 @@ PANEL_BOM_PRESETS_BASE::PANEL_BOM_PRESETS_BASE( wxWindow* parent, wxWindowID id,
 	m_bomPresetsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_bomPresetsGrid->SetMinSize( wxSize( -1,180 ) );
 
-	bPanelSizer->Add( m_bomPresetsGrid, 1, wxEXPAND, 10 );
+	bPanelSizer->Add( m_bomPresetsGrid, 1, wxEXPAND|wxRIGHT, 5 );
 
 	m_btnDeleteBomPreset = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bPanelSizer->Add( m_btnDeleteBomPreset, 0, wxALL, 5 );
@@ -92,7 +92,7 @@ PANEL_BOM_PRESETS_BASE::PANEL_BOM_PRESETS_BASE( wxWindow* parent, wxWindowID id,
 	m_bomFmtPresetsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_bomFmtPresetsGrid->SetMinSize( wxSize( -1,180 ) );
 
-	bPanelSizer->Add( m_bomFmtPresetsGrid, 1, wxEXPAND, 10 );
+	bPanelSizer->Add( m_bomFmtPresetsGrid, 1, wxEXPAND|wxRIGHT, 5 );
 
 	m_btnDeleteBomFmtPreset = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bPanelSizer->Add( m_btnDeleteBomFmtPreset, 0, wxALL, 5 );

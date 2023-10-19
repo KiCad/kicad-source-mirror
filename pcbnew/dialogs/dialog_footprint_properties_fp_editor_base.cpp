@@ -166,13 +166,13 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAddLayer = new STD_BITMAP_BUTTON( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize1->Add( m_bpAddLayer, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSize1->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_bpDeleteLayer = new STD_BITMAP_BUTTON( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize1->Add( m_bpDeleteLayer, 0, wxRIGHT, 5 );
+	bButtonSize1->Add( m_bpDeleteLayer, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizerPrivateLayers->Add( bButtonSize1, 0, wxEXPAND, 5 );
@@ -226,7 +226,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -378,25 +378,25 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	bButtonSize2 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAddPadGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize2->Add( m_bpAddPadGroup, 0, wxRIGHT|wxLEFT, 5 );
+	bButtonSize2->Add( m_bpAddPadGroup, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bButtonSize2->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_bpRemovePadGroup = new STD_BITMAP_BUTTON( sbSizerNetTies->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSize2->Add( m_bpRemovePadGroup, 0, wxRIGHT, 5 );
+	bButtonSize2->Add( m_bpRemovePadGroup, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	sbSizerNetTies->Add( bButtonSize2, 0, wxEXPAND, 2 );
 
 
-	bSizerPanelClearances->Add( sbSizerNetTies, 1, wxEXPAND|wxALL, 5 );
+	bSizerPanelClearances->Add( sbSizerNetTies, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_PanelClearances->SetSizer( bSizerPanelClearances );
 	m_PanelClearances->Layout();
 	bSizerPanelClearances->Fit( m_PanelClearances );
-	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), false );
+	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), true );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 

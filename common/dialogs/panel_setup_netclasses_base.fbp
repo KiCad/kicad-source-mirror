@@ -257,7 +257,7 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="0">
-                                                <property name="border">1</property>
+                                                <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxGrid" expanded="0">

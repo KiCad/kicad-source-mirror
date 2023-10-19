@@ -75,7 +75,7 @@ PANEL_SETUP_BUSES_BASE::PANEL_SETUP_BUSES_BASE( wxWindow* parent, wxWindowID id,
 
 	m_source = new wxStaticText( this, wxID_ANY, _("(source)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_source->Wrap( -1 );
-	bSizer10->Add( m_source, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer10->Add( m_source, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bLeftCol->Add( bSizer10, 0, wxEXPAND, 10 );
