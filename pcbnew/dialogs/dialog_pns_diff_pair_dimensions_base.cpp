@@ -24,7 +24,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 
 	m_traceWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceWidthLabel->Wrap( -1 );
-	fgSizer1->Add( m_traceWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_traceWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
 
 	m_traceWidthText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_traceWidthText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
@@ -33,7 +33,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_traceWidthUnit->Wrap( -1 );
 	fgSizer1->Add( m_traceWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_traceGapLabel = new wxStaticText( this, wxID_ANY, _("Trace gap:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_traceGapLabel = new wxStaticText( this, wxID_ANY, _("Track gap:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceGapLabel->Wrap( -1 );
 	fgSizer1->Add( m_traceGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
@@ -48,7 +48,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_viaGapLabel->Wrap( -1 );
 	m_viaGapLabel->Enable( false );
 
-	fgSizer1->Add( m_viaGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer1->Add( m_viaGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	m_viaGapText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaGapText->Enable( false );

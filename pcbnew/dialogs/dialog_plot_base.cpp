@@ -278,7 +278,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	fgSizer2->SetMinSize( wxSize( 60,-1 ) );
 	m_fineAdjustXLabel = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("X scale factor:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fineAdjustXLabel->Wrap( -1 );
-	fgSizer2->Add( m_fineAdjustXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer2->Add( m_fineAdjustXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 1 );
 
 	m_fineAdjustXCtrl = new wxTextCtrl( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fineAdjustXCtrl->SetToolTip( _("Set global X scale adjust for exact scale PostScript output.") );
@@ -317,7 +317,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PSOptionsSizer->Add( fgSizer2, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_forcePSA4OutputOpt = new wxCheckBox( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Force A4 output"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxBOTTOM|wxRIGHT, 5 );
+	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 5 );

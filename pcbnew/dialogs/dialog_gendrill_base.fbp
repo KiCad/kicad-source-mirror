@@ -1404,8 +1404,8 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
-                                                    <property name="border">5</property>
-                                                    <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
+                                                    <property name="border">4</property>
+                                                    <property name="flag">wxLEFT|wxRIGHT|wxTOP|wxALIGN_BOTTOM</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>

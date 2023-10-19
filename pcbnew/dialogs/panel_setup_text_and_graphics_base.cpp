@@ -104,7 +104,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 
 	m_lblTextPositionMode = new wxStaticText( this, wxID_ANY, _("Text position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblTextPositionMode->Wrap( -1 );
-	gbSizer1->Add( m_lblTextPositionMode, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	gbSizer1->Add( m_lblTextPositionMode, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 4 );
 
 	wxString m_dimensionTextPositionModeChoices[] = { _("Outside"), _("Inline") };
 	int m_dimensionTextPositionModeNChoices = sizeof( m_dimensionTextPositionModeChoices ) / sizeof( wxString );
@@ -127,7 +127,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_dimensionTextKeepAligned = new wxCheckBox( this, wxID_ANY, _("Keep text aligned"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dimensionTextKeepAligned->SetToolTip( _("When checked, dimension text will be kept aligned with dimension lines") );
 
-	gbSizer1->Add( m_dimensionTextKeepAligned, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM, 5 );
+	gbSizer1->Add( m_dimensionTextKeepAligned, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 
 	m_lblDimensionPrecision = new wxStaticText( this, wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblDimensionPrecision->Wrap( -1 );
@@ -143,7 +143,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 
 	m_lblArrowLength = new wxStaticText( this, wxID_ANY, _("Arrow length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblArrowLength->Wrap( -1 );
-	gbSizer1->Add( m_lblArrowLength, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	gbSizer1->Add( m_lblArrowLength, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_dimensionArrowLength = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_dimensionArrowLength, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
@@ -159,7 +159,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 
 	m_lblExtensionOffset = new wxStaticText( this, wxID_ANY, _("Extension line offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblExtensionOffset->Wrap( -1 );
-	gbSizer1->Add( m_lblExtensionOffset, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	gbSizer1->Add( m_lblExtensionOffset, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_dimensionExtensionOffset = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_dimensionExtensionOffset, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );

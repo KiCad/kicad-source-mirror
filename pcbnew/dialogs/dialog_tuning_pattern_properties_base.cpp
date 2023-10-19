@@ -48,7 +48,7 @@ DIALOG_TUNING_PATTERN_PROPERTIES_BASE::DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wx
 
 	m_track_minALabel = new wxStaticText( this, wxID_ANY, _("Amplitude (A) min:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_track_minALabel->Wrap( -1 );
-	gbSizer1->Add( m_track_minALabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_track_minALabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	m_minACtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_minACtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
@@ -70,7 +70,7 @@ DIALOG_TUNING_PATTERN_PROPERTIES_BASE::DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wx
 
 	m_spacingLabel = new wxStaticText( this, wxID_ANY, _("Spacing (s):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spacingLabel->Wrap( -1 );
-	gbSizer1->Add( m_spacingLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_spacingLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	m_spacingCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_spacingCtrl->SetToolTip( _("Minimum spacing between adjacent tuning segments. The resulting spacing may be greater based on design rules.") );
@@ -83,7 +83,7 @@ DIALOG_TUNING_PATTERN_PROPERTIES_BASE::DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wx
 
 	m_cornerLabel = new wxStaticText( this, wxID_ANY, _("Corner style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerLabel->Wrap( -1 );
-	gbSizer1->Add( m_cornerLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_cornerLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	wxString m_cornerCtrlChoices[] = { _("Chamfer"), _("Fillet") };
 	int m_cornerCtrlNChoices = sizeof( m_cornerCtrlChoices ) / sizeof( wxString );

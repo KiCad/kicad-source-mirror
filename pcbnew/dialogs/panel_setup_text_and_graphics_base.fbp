@@ -572,10 +572,10 @@
                                     </object>
                                 </object>
                                 <object class="gbsizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">4</property>
                                     <property name="colspan">1</property>
                                     <property name="column">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT</property>
                                     <property name="row">0</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">
@@ -837,7 +837,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">2</property>
                                     <property name="column">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT</property>
                                     <property name="row">1</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxCheckBox" expanded="1">
@@ -1035,7 +1035,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT</property>
                                     <property name="row">2</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">
@@ -1297,7 +1297,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT</property>
                                     <property name="row">3</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">

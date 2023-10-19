@@ -2391,7 +2391,7 @@
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
+                                            <property name="border">4</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="1">

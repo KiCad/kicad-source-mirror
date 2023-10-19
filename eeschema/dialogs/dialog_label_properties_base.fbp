@@ -1449,7 +1449,7 @@
                                         <property name="flexible_direction">wxBOTH</property>
                                         <property name="growablecols"></property>
                                         <property name="growablerows"></property>
-                                        <property name="hgap">0</property>
+                                        <property name="hgap">1</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_formattingGB</property>
                                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
@@ -2322,7 +2322,7 @@
                                             </object>
                                         </object>
                                         <object class="gbsizeritem" expanded="1">
-                                            <property name="border">5</property>
+                                            <property name="border">4</property>
                                             <property name="colspan">1</property>
                                             <property name="column">0</property>
                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>

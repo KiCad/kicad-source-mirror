@@ -166,7 +166,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	staticTextThroughVias = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Through vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticTextThroughVias->Wrap( -1 );
-	fgSizer2->Add( staticTextThroughVias, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer2->Add( staticTextThroughVias, 0, wxLEFT|wxRIGHT|wxTOP|wxALIGN_BOTTOM, 4 );
 
 	m_ThroughViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThroughViasInfoMsg->Wrap( -1 );

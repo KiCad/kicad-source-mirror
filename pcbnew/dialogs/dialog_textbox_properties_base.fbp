@@ -1297,7 +1297,7 @@
                             </object>
                         </object>
                         <object class="gbsizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">4</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
@@ -1561,7 +1561,7 @@
                             </object>
                         </object>
                         <object class="gbsizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">4</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
@@ -1757,7 +1757,7 @@
                             </object>
                         </object>
                         <object class="gbsizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">4</property>
                             <property name="colspan">1</property>
                             <property name="column">0</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
