@@ -2391,19 +2391,21 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( TOOL_ACTION_ARGS()
 // GENERATOR_TOOL
 //
 
-TOOL_ACTION PCB_ACTIONS::regenerateOutdated( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Generator.regenerateOutdated" )
+TOOL_ACTION PCB_ACTIONS::regenerateAllTuning( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Generator.regenerateAllTuning" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Rebuild Outdated Generators" ) )
-        .Tooltip( _( "Rebuilds geometry of outdated generators" ) )
-        .Icon( BITMAPS::refresh ) );
+        .MenuText( _( "Update All Tuning Patterns" ) )
+        .Tooltip( _( "Attempt to re-tune existing tuning patterns within their bounds" ) )
+        .Icon( BITMAPS::router_len_tuner )
+        .Parameter( wxString( wxS( "tuning_pattern" ) ) ) );
 
 TOOL_ACTION PCB_ACTIONS::regenerateAll( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Generator.regenerateAll" )
         .Scope( AS_GLOBAL )
         .MenuText( _( "Rebuild All Generators" ) )
         .Tooltip( _( "Rebuilds geometry of all generators" ) )
-        .Icon( BITMAPS::refresh ) );
+        .Icon( BITMAPS::refresh )
+        .Parameter( wxString( wxS( "*" ) ) ) );
 
 TOOL_ACTION PCB_ACTIONS::regenerateSelected( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Generator.regenerateSelected" )

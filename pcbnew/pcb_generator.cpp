@@ -23,7 +23,6 @@
  */
 
 #include <pcb_generator.h>
-#include <i18n_utility.h>
 
 
 PCB_GENERATOR::PCB_GENERATOR( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer ) :
@@ -81,12 +80,6 @@ void PCB_GENERATOR::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_
 
 bool PCB_GENERATOR::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                             BOARD_COMMIT* aCommit )
-{
-    return true;
-}
-
-
-bool PCB_GENERATOR::NeedsUpdate()
 {
     return true;
 }
@@ -160,7 +153,10 @@ const STRING_ANY_MAP PCB_GENERATOR::GetProperties() const
 {
     STRING_ANY_MAP props( pcbIUScale.IU_PER_MM );
 
+#ifdef GENERATOR_ORDER
     props.set( "update_order", m_updateOrder );
+#endif
+
     props.set( "origin", m_origin );
 
     return props;
@@ -169,14 +165,21 @@ const STRING_ANY_MAP PCB_GENERATOR::GetProperties() const
 
 void PCB_GENERATOR::SetProperties( const STRING_ANY_MAP& aProps )
 {
+#ifdef GENERATOR_ORDER
     aProps.get_to( "update_order", m_updateOrder );
+#endif
+
     aProps.get_to( "origin", m_origin );
 }
 
 
 std::vector<std::pair<wxString, wxVariant>> PCB_GENERATOR::GetRowData()
 {
+#ifdef GENERATOR_ORDER
     return { { _HKI( "Update order" ), wxString::FromCDouble( GetUpdateOrder() ) } };
+#else
+    return { {} };
+#endif
 }
 
 
@@ -198,6 +201,7 @@ bool PCB_GENERATOR::ClassOf( const EDA_ITEM* aItem )
 }
 
 
+#ifdef GENERATOR_ORDER
 static struct PCB_GENERATOR_DESC
 {
     PCB_GENERATOR_DESC()
@@ -215,3 +219,4 @@ static struct PCB_GENERATOR_DESC
                              groupTab );
     }
 } _PCB_GENERATOR_DESC;
+#endif

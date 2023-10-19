@@ -91,6 +91,11 @@ public:
         return wxString( _( "Tuning Pattern" ) );
     }
 
+    wxString GetPluralName() const override
+    {
+        return wxString( _( "Tuning Patterns" ) );
+    }
+
     static PCB_TUNING_PATTERN* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                           BOARD_CONNECTED_ITEM* aStartItem,
                                           LENGTH_TUNING_MODE aMode );
@@ -1042,7 +1047,6 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
             if( bounds.PointInside( track->GetPosition(), 2 )
                     && bounds.PointInside( track->GetEnd(), 2 ) )
             {
-                item->SetSelected();
                 AddItem( item );
                 groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
             }
@@ -1752,6 +1756,9 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 m_tuningPattern->EditStart( generatorTool, m_board, m_frame, &commit );
                 m_tuningPattern->Update( generatorTool, m_board, m_frame, &commit );
                 m_tuningPattern->EditPush( generatorTool, m_board, m_frame, &commit, _( "Tune" ) );
+
+                for( BOARD_ITEM* item : m_tuningPattern->GetItems() )
+                    item->SetSelected();
 
                 break;
             }

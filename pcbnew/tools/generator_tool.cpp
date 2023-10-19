@@ -28,6 +28,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_actions.h>
+#include <router/router_tool.h>
 
 #include <dialog_generators.h>
 
@@ -47,6 +48,49 @@ GENERATOR_TOOL::~GENERATOR_TOOL()
 void GENERATOR_TOOL::Reset( RESET_REASON aReason )
 {
     GENERATOR_TOOL_PNS_PROXY::Reset( aReason );
+}
+
+
+bool GENERATOR_TOOL::Init()
+{
+    auto tuningPatternCondition =
+            []( const SELECTION& aSel )
+            {
+                for( EDA_ITEM* item : aSel )
+                {
+                    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( item ) )
+                    {
+                        if( generator->GetGeneratorType() == wxS( "tuning_pattern" ) )
+                            return true;
+                    }
+                }
+
+                return false;
+            };
+
+    // Add the generator control menus to relevant other tools
+
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    if( selTool )
+    {
+        TOOL_MENU&        toolMenu = selTool->GetToolMenu();
+        CONDITIONAL_MENU& menu = toolMenu.GetMenu();
+
+        menu.AddItem( PCB_ACTIONS::regenerateAllTuning, tuningPatternCondition, 100 );
+    }
+
+    ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
+
+    if( routerTool )
+    {
+        TOOL_MENU&        toolMenu = routerTool->GetToolMenu();
+        CONDITIONAL_MENU& menu = toolMenu.GetMenu();
+
+        menu.AddItem( PCB_ACTIONS::regenerateAllTuning, SELECTION_CONDITIONS::ShowAlways, 100 );
+    }
+
+    return true;
 }
 
 
@@ -82,67 +126,40 @@ int GENERATOR_TOOL::ShowGeneratorsManager( const TOOL_EVENT& aEvent )
 }
 
 
-int GENERATOR_TOOL::RegenerateAll( const TOOL_EVENT& aEvent )
+int GENERATOR_TOOL::RegenerateAllOfType( const TOOL_EVENT& aEvent )
 {
-    BOARD_COMMIT  localCommit( this );
-    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+    wxString     generatorType = aEvent.Parameter<wxString>();
+    BOARD_COMMIT commit( this );
+    wxString     commitMsg;
+    int          commitFlags = 0;
 
-    if( !commit )
-        commit = &localCommit;
+    if( generatorType == wxS( "*" ) )
+        commitMsg = _( "Regenerate All" );
 
-    GENERATORS generators = board()->Generators();
-
-    std::sort( generators.begin(), generators.end(),
-               []( const PCB_GENERATOR* a, const PCB_GENERATOR* b ) -> bool
-               {
-                   return a->GetUpdateOrder() < b->GetUpdateOrder();
-               } );
-
-    for( PCB_GENERATOR* gen : generators )
+    for( PCB_GENERATOR* generator : board()->Generators() )
     {
-        gen->EditStart( this, board(), frame(), commit );
-        gen->Update( this, board(), frame(), commit );
-        gen->EditPush( this, board(), frame(), commit, _( "Regenerate" ), APPEND_UNDO );
+        if( generatorType == wxS( "*" ) || generator->GetGeneratorType() == generatorType )
+        {
+            if( commitMsg.IsEmpty() )
+                commitMsg.Printf( _( "Update %s" ), generator->GetPluralName() );
+
+            generator->EditStart( this, board(), frame(), &commit );
+            generator->Update( this, board(), frame(), &commit );
+            generator->EditPush( this, board(), frame(), &commit, commitMsg, commitFlags );
+
+            commitFlags |= APPEND_UNDO;
+        }
     }
 
-    return 0;
-}
-
-
-int GENERATOR_TOOL::RegenerateOutdated( const TOOL_EVENT& aEvent )
-{
-    BOARD_COMMIT  localCommit( this );
-    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
-
-    if( !commit )
-        commit = &localCommit;
-
-    GENERATORS generators = board()->Generators();
-
-    std::sort( generators.begin(), generators.end(),
-               []( const PCB_GENERATOR* a, const PCB_GENERATOR* b ) -> bool
-               {
-                   return a->GetUpdateOrder() < b->GetUpdateOrder();
-               } );
-
-    for( PCB_GENERATOR* gen : generators )
-    {
-        gen->EditStart( this, board(), frame(), commit );
-        gen->Update( this, board(), frame(), commit );
-        gen->EditPush( this, board(), frame(), commit, _( "Regenerate Outdated" ), APPEND_UNDO );
-    }
-
+    frame()->RefreshCanvas();
     return 0;
 }
 
 
 int GENERATOR_TOOL::RegenerateSelected( const TOOL_EVENT& aEvent )
 {
-    BOARD_COMMIT  localCommit( this );
-    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
-
-    if( !commit )
-        commit = &localCommit;
+    BOARD_COMMIT commit( this );
+    int          commitFlags = 0;
 
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
@@ -167,37 +184,40 @@ int GENERATOR_TOOL::RegenerateSelected( const TOOL_EVENT& aEvent )
             generators.push_back( gen );
     }
 
+#ifdef GENERATOR_ORDER
     std::sort( generators.begin(), generators.end(),
                []( const PCB_GENERATOR* a, const PCB_GENERATOR* b ) -> bool
                {
                    return a->GetUpdateOrder() < b->GetUpdateOrder();
                } );
+#endif
 
     for( PCB_GENERATOR* gen : generators )
     {
-        gen->EditStart( this, board(), frame(), commit );
-        gen->Update( this, board(), frame(), commit );
-        gen->EditPush( this, board(), frame(), commit, _( "Regenerate Selected" ), APPEND_UNDO );
+        gen->EditStart( this, board(), frame(), &commit );
+        gen->Update( this, board(), frame(), &commit );
+        gen->EditPush( this, board(), frame(), &commit, _( "Regenerate Selected" ), commitFlags );
+
+        commitFlags |= APPEND_UNDO;
     }
 
+    frame()->RefreshCanvas();
     return 0;
 }
 
 
 int GENERATOR_TOOL::RegenerateItem( const TOOL_EVENT& aEvent )
 {
-    BOARD_COMMIT  localCommit( this );
-    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
-
-    if( !commit )
-        commit = &localCommit;
+    BOARD_COMMIT commit( this );
+    int          commitFlags = 0;
 
     PCB_GENERATOR* gen = aEvent.Parameter<PCB_GENERATOR*>();
 
-    gen->EditStart( this, board(), frame(), commit );
-    gen->Update( this, board(), frame(), commit );
-    gen->EditPush( this, board(), frame(), commit, _( "Regenerate Item" ) );
+    gen->EditStart( this, board(), frame(), &commit );
+    gen->Update( this, board(), frame(), &commit );
+    gen->EditPush( this, board(), frame(), &commit, _( "Regenerate Item" ), commitFlags );
 
+    frame()->RefreshCanvas();
     return 0;
 }
 
@@ -282,14 +302,14 @@ void GENERATOR_TOOL::setTransitions()
     // Generator actions
     Go( &GENERATOR_TOOL::ShowGeneratorsManager, PCB_ACTIONS::generatorsShowManager.MakeEvent() );
 
-    Go( &GENERATOR_TOOL::RegenerateAll, PCB_ACTIONS::regenerateAll.MakeEvent() );
-    Go( &GENERATOR_TOOL::RegenerateOutdated, PCB_ACTIONS::regenerateOutdated.MakeEvent() );
-    Go( &GENERATOR_TOOL::RegenerateSelected, PCB_ACTIONS::regenerateSelected.MakeEvent() );
-    Go( &GENERATOR_TOOL::RegenerateItem, PCB_ACTIONS::regenerateItem.MakeEvent() );
+    Go( &GENERATOR_TOOL::RegenerateAllOfType,   PCB_ACTIONS::regenerateAllTuning.MakeEvent() );
+    Go( &GENERATOR_TOOL::RegenerateAllOfType,   PCB_ACTIONS::regenerateAll.MakeEvent() );
+    Go( &GENERATOR_TOOL::RegenerateSelected,    PCB_ACTIONS::regenerateSelected.MakeEvent() );
+    Go( &GENERATOR_TOOL::RegenerateItem,        PCB_ACTIONS::regenerateItem.MakeEvent() );
 
-    Go( &GENERATOR_TOOL::GenEditAction, PCB_ACTIONS::genStartEdit.MakeEvent() );
-    Go( &GENERATOR_TOOL::GenEditAction, PCB_ACTIONS::genUpdateEdit.MakeEvent() );
-    Go( &GENERATOR_TOOL::GenEditAction, PCB_ACTIONS::genPushEdit.MakeEvent() );
-    Go( &GENERATOR_TOOL::GenEditAction, PCB_ACTIONS::genRevertEdit.MakeEvent() );
-    Go( &GENERATOR_TOOL::GenEditAction, PCB_ACTIONS::genRemove.MakeEvent() );
+    Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genStartEdit.MakeEvent() );
+    Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genUpdateEdit.MakeEvent() );
+    Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genPushEdit.MakeEvent() );
+    Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genRevertEdit.MakeEvent() );
+    Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genRemove.MakeEvent() );
 }

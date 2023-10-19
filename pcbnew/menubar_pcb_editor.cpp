@@ -214,6 +214,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     editMenu->AppendSeparator();
     editMenu->Add( PCB_ACTIONS::zoneFillAll );
     editMenu->Add( PCB_ACTIONS::zoneUnfillAll );
+    editMenu->Add( PCB_ACTIONS::regenerateAllTuning );
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::deleteTool );
@@ -400,7 +401,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
         toolsMenu->AppendSeparator();
         toolsMenu->Add( PCB_ACTIONS::generatorsShowManager );
         toolsMenu->Add( PCB_ACTIONS::regenerateAll );
-        toolsMenu->Add( PCB_ACTIONS::regenerateOutdated );
         toolsMenu->Add( PCB_ACTIONS::regenerateSelected );
     }
 

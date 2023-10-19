@@ -47,12 +47,15 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
+
     void DestroyManagerDialog();
 
     int ShowGeneratorsManager( const TOOL_EVENT& aEvent );
 
     int RegenerateSelected( const TOOL_EVENT& aEvent );
-    int RegenerateAll( const TOOL_EVENT& aEvent );
+    int RegenerateAllOfType( const TOOL_EVENT& aEvent );
     int RegenerateOutdated( const TOOL_EVENT& aEvent );
     int RegenerateItem( const TOOL_EVENT& aEvent );
     int GenEditAction( const TOOL_EVENT& aEvent );

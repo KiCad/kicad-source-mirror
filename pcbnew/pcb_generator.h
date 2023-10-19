@@ -63,8 +63,6 @@ public:
     virtual bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                          BOARD_COMMIT* aCommit );
 
-    virtual bool NeedsUpdate();
-
     virtual bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const;
 
     virtual bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
@@ -100,6 +98,8 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
+    virtual wxString GetPluralName() const = 0;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -108,18 +108,21 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem );
 
+#ifdef GENERATOR_ORDER
     int  GetUpdateOrder() const { return m_updateOrder; }
     void SetUpdateOrder( int aValue ) { m_updateOrder = aValue; }
+#endif
 
 protected:
     wxString m_generatorType;
 
     VECTOR2I m_origin;
+
+#ifdef GENERATOR_ORDER
     int m_updateOrder = 0;
+#endif
 
     friend class GENERATORS_MGR;
-    void setGeneratorType( const wxString& aGenType ) { m_generatorType = aGenType; }
-
 };
 
 #endif /* GENERATOR_H_ */

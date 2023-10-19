@@ -269,7 +269,7 @@ public:
     static TOOL_ACTION routerInlineDrag;
 
     /// Generator tool
-    static TOOL_ACTION regenerateOutdated;
+    static TOOL_ACTION regenerateAllTuning;
     static TOOL_ACTION regenerateAll;
     static TOOL_ACTION regenerateSelected;
     static TOOL_ACTION regenerateItem;
