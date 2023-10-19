@@ -1756,12 +1756,13 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 commit->Modify( item );
 
                 // If rotating a group, record position of all the descendants for undo
-                if( item->Type() == PCB_GROUP_T )
+                if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
                 {
-                    static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                       {
-                                                                           commit->Modify( bItem );
-                                                                       });
+                    static_cast<PCB_GROUP*>( item )->RunOnDescendants(
+                            [&]( BOARD_ITEM* bItem )
+                            {
+                                commit->Modify( bItem );
+                            });
                 }
             }
 
@@ -2042,7 +2043,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
             {
                 commit->Modify( boardItem );
 
-                if( boardItem->Type() == PCB_GROUP_T )
+                if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
                 {
                     static_cast<PCB_GROUP*>( boardItem )->RunOnDescendants(
                             [&]( BOARD_ITEM* descendant )
@@ -2387,7 +2388,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             {
                 commit.Modify( boardItem );
 
-                if( boardItem->Type() == PCB_GROUP_T )
+                if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
                 {
                     PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
 

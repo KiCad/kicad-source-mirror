@@ -129,7 +129,23 @@ public:
         m_end += aMoveVector;
     }
 
-    const BOX2I GetBoundingBox() const override { return getRectShape().BBox(); }
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override
+    {
+        RotatePoint( m_origin, aRotCentre, aAngle );
+        RotatePoint( m_end, aRotCentre, aAngle );
+        PCB_GROUP::Rotate( aRotCentre, aAngle );
+
+        if( m_baseLine )
+            m_baseLine->Rotate( aAngle, aRotCentre );
+
+        if( m_baseLineCoupled )
+            m_baseLineCoupled->Rotate( aAngle, aRotCentre );
+    }
+
+    const BOX2I GetBoundingBox() const override
+    {
+        return getRectShape().BBox();
+    }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
