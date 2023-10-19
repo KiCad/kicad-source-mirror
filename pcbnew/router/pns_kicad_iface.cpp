@@ -28,6 +28,7 @@
 #include <pcb_track.h>
 #include <zone.h>
 #include <pcb_shape.h>
+#include <pcb_generator.h>
 #include <pcb_text.h>
 #include <board_commit.h>
 #include <layer_ids.h>
@@ -1154,7 +1155,7 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack
     segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
     segment->SetParent( aTrack );
 
-    if( aTrack->IsLocked() )
+    if( aTrack->IsLocked() || dynamic_cast<PCB_GENERATOR*>( aTrack->GetParentGroup() ) )
         segment->Mark( PNS::MK_LOCKED );
 
     return segment;
@@ -1170,7 +1171,7 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
     arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
     arc->SetParent( aArc );
 
-    if( aArc->IsLocked() )
+    if( aArc->IsLocked() || dynamic_cast<PCB_GENERATOR*>( aArc->GetParentGroup() ) )
         arc->Mark( PNS::MK_LOCKED );
 
     return arc;
@@ -1191,7 +1192,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 
     via->SetParent( aVia );
 
-    if( aVia->IsLocked() )
+    if( aVia->IsLocked() || dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
         via->Mark( PNS::MK_LOCKED );
 
     via->SetIsFree( aVia->GetIsFree() );
@@ -1901,15 +1902,14 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 {
-    BOARD_CONNECTED_ITEM* newBI = createBoardItem( aItem );
+    BOARD_CONNECTED_ITEM* boardItem = createBoardItem( aItem );
 
-    if( newBI )
+    if( boardItem )
     {
-        //newBI->SetLocalRatsnestVisible( m_dispOptions->m_ShowGlobalRatsnest );
-        aItem->SetParent( newBI );
-        newBI->ClearFlags();
+        aItem->SetParent( boardItem );
+        boardItem->ClearFlags();
 
-        m_commit->Add( newBI );
+        m_commit->Add( boardItem );
     }
 }
 
@@ -1937,7 +1937,7 @@ void PNS_KICAD_IFACE::Commit()
 
     m_fpOffsets.clear();
 
-    m_commit->Push( _( "Interactive Router" ), m_commitFlags );
+    m_commit->Push( _( "Routing" ), m_commitFlags );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
 }
 
