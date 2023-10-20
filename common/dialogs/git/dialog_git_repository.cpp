@@ -30,9 +30,6 @@
 #include <cerrno>
 #include <cstring>
 #include <fstream>
-#include <openssl/err.h>
-#include <openssl/evp.h>
-#include <openssl/pem.h>
 
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
