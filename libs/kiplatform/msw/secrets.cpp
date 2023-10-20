@@ -29,28 +29,29 @@ namespace KIPLATFORM
     {
         bool StoreSecret( const wxString& aService, const wxString& aKey, const wxString& aSecret )
         {
-            wxString display = aService + L":" + aKey;
+            wxString display = aService + wxS( ":" ) + aKey;
 
             CREDENTIALW cred = { 0 };
             cred.Type = CRED_TYPE_GENERIC;
-            cred.TargetName = (LPWSTR)display.wc_str();
-            cred.CredentialBlobSize = (DWORD)aSecret.size();
-            cred.CredentialBlob = (LPBYTE)aSecret.c_str();
-            cred.Persist = CRED_PERSIST_USER;
+            cred.TargetName = (LPWSTR) display.wc_str();
+            cred.CredentialBlobSize = (DWORD) aSecret.size();
+            cred.CredentialBlob = (LPBYTE) aSecret.utf8_str().data();
+            cred.Persist = CRED_PERSIST_ENTERPRISE;
 
             return CredWriteW( &cred, 0 );
         }
 
         bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret )
         {
-            wxString display = aService + ":" + aKey;
+            wxString display = aService + wxS( ":" ) + aKey;
 
             CREDENTIALW* cred = nullptr;
             bool result = CredReadW( display.wc_str(), CRED_TYPE_GENERIC, 0, &cred );
 
             if( result )
             {
-                aSecret = wxString( (char*)cred->CredentialBlob, cred->CredentialBlobSize );
+                aSecret = wxString::FromUTF8( (const char*) cred->CredentialBlob,
+                                              cred->CredentialBlobSize );
                 CredFree( cred );
             }
 
