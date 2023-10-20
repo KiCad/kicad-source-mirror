@@ -2568,11 +2568,10 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     params.m_keepout = drawMode == MODE::KEEPOUT;
     params.m_mode = zoneMode;
     params.m_sourceZone = sourceZone;
+    params.m_layer = m_frame->GetActiveLayer();
 
-    if( zoneMode == ZONE_MODE::SIMILAR )
-        params.m_layer = sourceZone->GetLayer();
-    else
-        params.m_layer = m_frame->GetActiveLayer();
+    if( zoneMode == ZONE_MODE::SIMILAR && !sourceZone->IsOnLayer( params.m_layer ) )
+        params.m_layer = sourceZone->GetFirstLayer();
 
     ZONE_CREATE_HELPER   zoneTool( *this, params );
     // the geometry manager which handles the zone geometry, and hands the calculated points
