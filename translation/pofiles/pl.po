@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-10-01 22:34+0000\n"
+"PO-Revision-Date: 2023-10-21 10:00+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -221,7 +221,7 @@ msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 msgid "Raytracing"
-msgstr "Śledzenie promieni"
+msgstr "Modelowanie ze śledzeniem promieni"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:626
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:304
@@ -321,7 +321,7 @@ msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:93
 msgid "Render current view using Raytracing"
-msgstr "Renderuj bieżący widok z użyciem raytracingu"
+msgstr "Renderuj bieżący widok z użyciem modelowania ze śledzeniem promieni"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
@@ -506,7 +506,7 @@ msgstr "Siatka 3D 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr "Renderuj materiały realistycznie"
+msgstr "Renderowanie realistycznych materiałów"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
@@ -514,7 +514,7 @@ msgstr "Używa wszystkich właściwości materiałów z każdego pliku modelu 3D
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
-msgstr "Renderuj pełne kolory"
+msgstr "Renderowanie jednolitych kolorów"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
@@ -522,7 +522,7 @@ msgstr "Używa tylko właściwości rozpraszania koloru modelu z pliku modelu 3D
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
-msgstr "Renderuj kolory CAD"
+msgstr "Renderowanie w kolorach CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
