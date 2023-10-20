@@ -1060,8 +1060,8 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
         {
             PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
 
-            if( bounds.PointInside( track->GetPosition(), 2 )
-                    && bounds.PointInside( track->GetEnd(), 2 ) )
+            if( track && bounds.PointInside( track->GetPosition(), 2 )
+                      && bounds.PointInside( track->GetEnd(), 2 ) )
             {
                 AddItem( item );
                 groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
@@ -1759,10 +1759,14 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     int      dummyClearance = std::numeric_limits<int>::max() / 2;
                     VECTOR2I closestPt;
 
-                    m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
-                                                                &dummyDist, &closestPt );
-                    m_tuningPattern->SetPosition( closestPt );
-                    m_tuningPattern->SetEnd( closestPt );
+                    // With an artificially-large clearance this can't *not* collide, but the
+                    // if stmt keeps Coverity happy....
+                    if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
+                                                                    &dummyDist, &closestPt ) )
+                    {
+                        m_tuningPattern->SetPosition( closestPt );
+                        m_tuningPattern->SetEnd( closestPt );
+                    }
 
                     m_preview.Add( m_tuningPattern );
                 }
