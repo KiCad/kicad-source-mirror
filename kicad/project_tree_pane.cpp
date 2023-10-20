@@ -1798,12 +1798,25 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
     }
 
     // Clear all item states
+    std::stack<wxTreeItemId> items;
+    items.push( m_TreeProject->GetRootItem() );
 
-    for( wxTreeItemId cookie = m_TreeProject->GetRootItem();
-         cookie != nullptr;
-         cookie = m_TreeProject->GetNext( cookie ) )
+    while( !items.empty() )
     {
-        m_TreeProject->SetItemState( cookie, wxTREE_ITEMSTATE_NONE );
+        wxTreeItemId current = items.top();
+        items.pop();
+
+        // Process the current item
+        m_TreeProject->SetItemState( current, wxTREE_ITEMSTATE_NONE );
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId      child = m_TreeProject->GetFirstChild( current, cookie );
+
+        while( child.IsOk() )
+        {
+            items.push( child );
+            child = m_TreeProject->GetNextChild( current, cookie );
+        }
     }
 }
 
