@@ -39,7 +39,8 @@
     },
     "icu",
     "ngspice",
-    "wxpython"
+    "wxpython",
+    "libgit2"
   ],
   "overrides": [
     {
