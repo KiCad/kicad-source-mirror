@@ -1753,16 +1753,19 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
                                                                  m_pickerItem, mode );
 
-                int      dummyDist;
-                int      dummyClearance = std::numeric_limits<int>::max() / 2;
-                VECTOR2I closestPt;
+                if( m_tuningPattern )
+                {
+                    int      dummyDist;
+                    int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                    VECTOR2I closestPt;
 
-                m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
-                                                            &dummyDist, &closestPt );
-                m_tuningPattern->SetPosition( closestPt );
-                m_tuningPattern->SetEnd( closestPt );
+                    m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
+                                                                &dummyDist, &closestPt );
+                    m_tuningPattern->SetPosition( closestPt );
+                    m_tuningPattern->SetEnd( closestPt );
 
-                m_preview.Add( m_tuningPattern );
+                    m_preview.Add( m_tuningPattern );
+                }
             }
             else if( m_pickerItem && m_tuningPattern )
             {
