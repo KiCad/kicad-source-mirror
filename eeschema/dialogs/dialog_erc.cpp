@@ -637,6 +637,12 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
                      _( "Open the Schematic Setup... dialog" ) );
     }
 
+    if( rcItem->GetErrorCode() == ERCE_ENDPOINT_OFF_GRID )
+    {
+        menu.Append( 9, _( "Edit connection grid spacing..." ),
+                     _( "Open the Schematic Setup... dialog" ) );
+    }
+
     bool modified = false;
 
     switch( GetPopupMenuSelectionFromUser( menu ) )
@@ -731,6 +737,10 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     case 8:
         m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
+        break;
+
+    case 9:
+        m_parent->ShowSchematicSetupDialog( _( "Formatting" ) );
         break;
     }
 

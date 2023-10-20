@@ -48,7 +48,7 @@ ERC_ITEM ERC_ITEM::duplicateSheetName( ERCE_DUPLICATE_SHEET_NAME,
         wxT( "duplicate_sheet_names" ) );
 
 ERC_ITEM ERC_ITEM::endpointOffGrid( ERCE_ENDPOINT_OFF_GRID,
-        _( "Symbol pin or wire end off grid" ),
+        _( "Symbol pin or wire end off connection grid" ),
         wxT( "endpoint_off_grid" ) );
 
 ERC_ITEM ERC_ITEM::pinNotConnected( ERCE_PIN_NOT_CONNECTED,
