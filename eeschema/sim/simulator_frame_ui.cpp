@@ -697,6 +697,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
     if( !plotPanel )
         return;
 
+    SIM_TYPE              simType = plotPanel->GetSimType();
     std::vector<wxString> signals;
 
     if( plotPanel->GetSimType() == ST_FFT )
@@ -711,11 +712,29 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
     }
     else
     {
+        // NB: m_signals are already broken out into gain/phase, but m_userDefinedSignals are
+        // as the user typed them
+
         for( const wxString& signal : m_signals )
             signals.push_back( signal );
 
         for( const auto& [ id, signal ] : m_userDefinedSignals )
-            signals.push_back( signal );
+        {
+            if( simType == ST_AC )
+            {
+                signals.push_back( signal + _( " (gain)" ) );
+                signals.push_back( signal + _( " (phase)" ) );
+            }
+            else if( simType == ST_SP )
+            {
+                signals.push_back( signal + _( " (amplitude)" ) );
+                signals.push_back( signal + _( " (phase)" ) );
+            }
+            else
+            {
+                signals.push_back( signal );
+            }
+        }
 
         sortSignals( signals );
     }
@@ -2671,40 +2690,49 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         for( const auto& [ name, trace ] : plotTab->GetTraces() )
             traceMap[ trace ] = { wxEmptyString, SPT_UNKNOWN, false };
 
-        auto addSignalToTraceMap =
-                [&]( const wxString& signal, bool clearData )
-                {
-                    int      traceType = SPT_UNKNOWN;
-                    wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
-
-                    if( simType == ST_AC )
-                    {
-                        for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
-                        {
-                            if( TRACE* trace = plotTab->GetTrace( vectorName, traceType+subType ) )
-                                traceMap[ trace ] = { vectorName, traceType, clearData };
-                        }
-                    }
-                    else if( simType == ST_SP )
-                    {
-                        for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
-                        {
-                            if( TRACE* trace = plotTab->GetTrace( vectorName, traceType+subType ) )
-                                traceMap[trace] = { vectorName, traceType, clearData };
-                        }
-                    }
-                    else
-                    {
-                        if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
-                            traceMap[ trace ] = { vectorName, traceType, clearData };
-                    }
-                };
+        // NB: m_signals are already broken out into gain/phase, but m_userDefinedSignals are
+        // as the user typed them
 
         for( const wxString& signal : m_signals )
-            addSignalToTraceMap( signal, false );
+        {
+            int      traceType = SPT_UNKNOWN;
+            wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
+
+            if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
+                traceMap[ trace ] = { vectorName, traceType, false };
+        }
 
         for( const auto& [ id, signal ] : m_userDefinedSignals )
-            addSignalToTraceMap( signal, !aFinal );
+        {
+            int      traceType = SPT_UNKNOWN;
+            wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
+
+            if( simType == ST_AC )
+            {
+                int baseType = traceType &= ~( SPT_AC_GAIN | SPT_AC_PHASE );
+
+                for( int subType : { baseType | SPT_AC_GAIN, baseType | SPT_AC_PHASE } )
+                {
+                    if( TRACE* trace = plotTab->GetTrace( vectorName, subType ) )
+                        traceMap[ trace ] = { vectorName, subType, !aFinal };
+                }
+            }
+            else if( simType == ST_SP )
+            {
+                int baseType = traceType &= ~( SPT_SP_AMP | SPT_AC_PHASE );
+
+                for( int subType : { baseType | SPT_SP_AMP, baseType | SPT_AC_PHASE } )
+                {
+                    if( TRACE* trace = plotTab->GetTrace( vectorName, subType ) )
+                        traceMap[trace] = { vectorName, subType, !aFinal };
+                }
+            }
+            else
+            {
+                if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
+                    traceMap[ trace ] = { vectorName, traceType, !aFinal };
+            }
+        }
 
         // Two passes so that DC-sweep sub-traces get deleted and re-created:
 
@@ -2753,21 +2781,10 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 
             switch( type )
             {
-            case SPT_VOLTAGE:
-                value.Append( wxS( "V" ) );
-                break;
-
-            case SPT_CURRENT:
-                value.Append( wxS( "A" ) );
-                break;
-
-            case SPT_POWER:
-                value.Append( wxS( "W" ) );
-                break;
-
-            default:
-                value.Append( wxS( "?" ) );
-                break;
+            case SPT_VOLTAGE: value.Append( wxS( "V" ) ); break;
+            case SPT_CURRENT: value.Append( wxS( "A" ) ); break;
+            case SPT_POWER:   value.Append( wxS( "W" ) ); break;
+            default:          value.Append( wxS( "?" ) ); break;
             }
 
             msg.Printf( wxT( "%s%s\n" ),
