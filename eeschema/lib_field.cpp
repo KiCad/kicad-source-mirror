@@ -602,6 +602,9 @@ bool LIB_FIELD::operator==( const LIB_ITEM& aItem ) const
     if( m_name != field.m_name )
         return false;
 
+    if( !m_parent || !aItem.GetParent() )
+        return false;
+
     if( m_parent->m_Uuid != aItem.GetParent()->m_Uuid )
         return false;
 
