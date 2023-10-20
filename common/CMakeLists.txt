@@ -132,7 +132,6 @@ target_link_libraries( kicommon
     CURL::libcurl
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
 
     # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
     ${EXTRA_LIBS}

@@ -747,12 +747,6 @@ find_package(ZLIB REQUIRED)
 find_package( CURL REQUIRED )
 
 #
-# Find libssl, required
-#
-find_package( OpenSSL REQUIRED )
-include_directories( SYSTEM ${OPENSSL_INCLUDE_DIR} )
-
-#
 # Find Cairo library, required
 #
 find_package( Cairo 1.12 REQUIRED )
