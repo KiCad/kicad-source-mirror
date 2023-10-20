@@ -134,6 +134,9 @@ target_link_libraries( kicommon
     ${LIBGIT2_LIBRARIES}
     ${OPENSSL_LIBRARIES}
 
+    # MacOS security library.  Set to blank on other platforms
+    ${SECURITY_LIBRARY}
+
     # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
     ${EXTRA_LIBS}
 
