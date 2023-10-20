@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <functional> // std::function
 #include <utility>    // std::pair
+#include <vector>
 #include <wx/debug.h> // wxCHECK_MSG
 
 namespace alg
