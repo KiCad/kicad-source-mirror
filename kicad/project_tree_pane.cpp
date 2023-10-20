@@ -64,6 +64,7 @@
 #include <git/git_remove_from_index_handler.h>
 #include <git/git_sync_handler.h>
 #include <git/git_clone_handler.h>
+#include <git/kicad_git_compat.h>
 
 
 #include <dialogs/git/dialog_git_repository.h>
@@ -1866,12 +1867,26 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     // Collect a map to easily set the state of each item
     std::map<wxString, wxTreeItemId> branchMap;
     {
-        while( kid.IsOk() )
+        std::stack<wxTreeItemId> items;
+        items.push( kid );
+
+        while( !items.empty() )
         {
+            kid = items.top();
+            items.pop();
+
             PROJECT_TREE_ITEM* nextItem = GetItemIdData( kid );
 
             branchMap[nextItem->GetFileName()] = kid;
-            kid = m_TreeProject->GetNext( kid );
+
+            wxTreeItemIdValue cookie;
+            wxTreeItemId      child = m_TreeProject->GetFirstChild( kid, cookie );
+
+            while( child.IsOk() )
+            {
+                items.push( child );
+                child = m_TreeProject->GetNextChild( kid, cookie );
+            }
         }
     }
 
