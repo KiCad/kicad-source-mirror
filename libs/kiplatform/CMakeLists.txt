@@ -105,3 +105,13 @@ target_link_libraries( kiplatform
     ${wxWidgets_LIBRARIES}
     ${PLATFORM_LIBS}
     )
+
+if( APPLE )
+    find_library(COREFOUNDATION_LIBRARY CoreFoundation REQUIRED)
+    find_library(SECURITY_LIBRARY Security REQUIRED)
+
+    target_link_libraries( kiplatform
+            ${COREFOUNDATION_LIBRARY}
+            ${SECURITY_LIBRARY}
+    )
+endif()
