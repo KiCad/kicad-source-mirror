@@ -273,6 +273,8 @@ private:
      */
     void rebuildMeasurementsGrid();
 
+    void updateMeasurementsFromGrid();
+
     /**
      * Apply component values specified using tuner sliders to the current netlist.
      */

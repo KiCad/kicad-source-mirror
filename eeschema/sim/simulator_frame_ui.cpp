@@ -1965,7 +1965,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 if( tab_js.contains( "traces" ) )
                     traceInfo[plotTab] = tab_js[ "traces" ];
 
-                if( js.contains( "measurements" ) )
+                if( tab_js.contains( "measurements" ) )
                 {
                     for( const nlohmann::json& m_js : tab_js[ "measurements" ] )
                         plotTab->Measurements().emplace_back( m_js[ "expr" ], m_js[ "format" ] );
@@ -2097,6 +2097,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
 bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 {
+    updateMeasurementsFromGrid();
+
     wxFileName filename = aPath;
     filename.SetExt( WorkbookFileExtension );
 
@@ -2351,7 +2353,7 @@ void SIMULATOR_FRAME_UI::onPlotClosed( wxAuiNotebookEvent& event )
 }
 
 
-void SIMULATOR_FRAME_UI::onPlotChanging( wxAuiNotebookEvent& event )
+void SIMULATOR_FRAME_UI::updateMeasurementsFromGrid()
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
@@ -2368,6 +2370,12 @@ void SIMULATOR_FRAME_UI::onPlotChanging( wxAuiNotebookEvent& event )
             }
         }
     }
+}
+
+
+void SIMULATOR_FRAME_UI::onPlotChanging( wxAuiNotebookEvent& event )
+{
+    updateMeasurementsFromGrid();
 
     event.Skip();
 }
