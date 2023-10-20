@@ -21,55 +21,56 @@
 
 #import <Security/Security.h>
 
-bool KIPLATFORM::SECRETS::StoreSecret( const wxString& aService, const wxString& aKey, const wxString& aValue )
+bool KIPLATFORM::SECRETS::StoreSecret(const wxString& aService, const wxString& aKey, const wxString& aValue)
 {
-    SecKeychainItemRef itemRef = NULL;
+    // Create a query for the secret
+    CFMutableDictionaryRef query = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFDictionarySetValue(query, kSecClass, kSecClassGenericPassword);
+    CFDictionarySetValue(query, kSecAttrService, CFStringCreateWithCString(NULL, aService.utf8_str(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecAttrAccount, CFStringCreateWithCString(NULL, aKey.utf8_str(), kCFStringEncodingUTF8));
 
-    OSStatus status = SecKeychainFindGenericPassword( NULL, aService.length(), aService.utf8_str(),
-                                                      aKey.length(), aKey.utf8_str(),
-                                                      NULL, NULL, &itemRef );
+    // Try to find the existing item
+    OSStatus status = SecItemCopyMatching(query, NULL);
 
-    if( status == errSecItemNotFound )
+    if (status == errSecItemNotFound)
     {
-        status = SecKeychainAddGenericPassword( NULL, aService.length(), aService.utf8_str(),
-                                                aKey.length(), aKey.utf8_str(),
-                                                aValue.length(), aValue.utf8_str(),
-                                                NULL );
-
-        CFRelease( itemRef );
+        // Add the new secret to the keychain
+        CFDictionarySetValue(query, kSecValueData, CFDataCreate(NULL, (const UInt8*)aValue.utf8_str(), aValue.length()));
+        status = SecItemAdd(query, NULL);
     }
-    else if( status == errSecSuccess )
+    else if (status == errSecSuccess)
     {
-        status = SecKeychainItemModifyAttributesAndData( itemRef, NULL, aValue.length(), aValue.utf8_str() );
+        // Update the existing secret in the keychain
+        CFMutableDictionaryRef updateQuery = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+        CFDictionarySetValue(updateQuery, kSecValueData, CFDataCreate(NULL, (const UInt8*)aValue.utf8_str(), aValue.length()));
+        status = SecItemUpdate(query, updateQuery);
+        CFRelease(updateQuery);
     }
 
-
+    CFRelease(query);
     return status == errSecSuccess;
 }
 
-bool KIPLATFORM::SECRETS::GetSecret( const wxString& aService, const wxString& aKey, wxString& aValue )
+
+bool KIPLATFORM::SECRETS::GetSecret(const wxString& aService, const wxString& aKey, wxString& aValue)
 {
-    SecKeychainItemRef itemRef = NULL;
+    // Create a query for the secret
+    CFMutableDictionaryRef query = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFDictionarySetValue(query, kSecClass, kSecClassGenericPassword);
+    CFDictionarySetValue(query, kSecAttrService, CFStringCreateWithCString(NULL, aService.utf8_str(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecAttrAccount, CFStringCreateWithCString(NULL, aKey.utf8_str(), kCFStringEncodingUTF8));
+    CFDictionarySetValue(query, kSecReturnData, kCFBooleanTrue); // Return the secret data
 
-    OSStatus status = SecKeychainFindGenericPassword( NULL, aService.length(), aService.utf8_str(),
-                                                      aKey.length(), aKey.utf8_str(),
-                                                      NULL, NULL, &itemRef );
+    // Retrieve the secret from the keychain
+    CFDataRef secretData = NULL;
+    OSStatus status = SecItemCopyMatching(query, (CFTypeRef*)&secretData);
 
-    if( status == errSecSuccess )
+    if (status == errSecSuccess)
     {
-        UInt32 length;
-        char* data;
-
-        status = SecKeychainItemCopyAttributesAndData( itemRef, NULL, NULL, NULL, &length, (void**)&data );
-
-        if( status == errSecSuccess )
-        {
-            aValue = wxString::FromUTF8( data, length );
-            SecKeychainItemFreeAttributesAndData( NULL, data );
-        }
-
-        CFRelease( itemRef );
+        aValue = wxString::FromUTF8((const char*)CFDataGetBytePtr(secretData), CFDataGetLength(secretData));
+        CFRelease(secretData);
     }
 
+    CFRelease(query);
     return status == errSecSuccess;
 }
