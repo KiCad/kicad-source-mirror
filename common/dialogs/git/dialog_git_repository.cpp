@@ -338,10 +338,10 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
 {
     wxString file = aEvent.GetPath();
 
-    if( file.ends_with( ".pub" ) )
+    if( file.ends_with( wxS( ".pub" ) ) )
         file = file.Left( file.size() - 4 );
 
-    std::ifstream ifs( file.ToStdString() );
+    std::ifstream ifs( file.fn_str() );
 
     if( !ifs.good() || !ifs.is_open() )
     {
@@ -377,7 +377,8 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
 
     ifs.close();
 
-    std::ifstream pubIfs( file + ".pub" );
+    wxString      pubFile = file + wxS( ".pub" );
+    std::ifstream pubIfs( pubFile.fn_str() );
 
     if( !pubIfs.good() || !pubIfs.is_open() )
     {
