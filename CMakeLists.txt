@@ -767,13 +767,6 @@ find_package( libgit2 REQUIRED )
 # Set include directories for libgit
 include_directories(${LIBGIT2_INCLUDE_DIRS})
 
-# Find the MacOS security library, required for the MacOS keychain
-if( APPLE )
-    find_library(SECURITY_LIBRARY Security)
-else()
-    set( SECURITY_LIBRARY "" )
-endif()
-
 #
 # Find Boost headers and libraries, required.
 set( BOOST_REQUESTED_COMPONENTS locale )    # locale is required by nanoodbc/database libraries
