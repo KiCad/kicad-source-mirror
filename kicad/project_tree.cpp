@@ -46,7 +46,8 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
         wxTreeCtrl( parent, ID_PROJECT_TREE, wxDefaultPosition, wxDefaultSize,
                     PLATFORM_STYLE | wxTR_HAS_BUTTONS | wxTR_MULTIPLE, wxDefaultValidator,
                     wxT( "EDATreeCtrl" ) ),
-        m_imageList( nullptr )
+        m_imageList( nullptr ),
+        m_statusImageList( nullptr )
 {
     m_projectTreePane = parent;
     m_gitCommon = new KIGIT_COMMON( nullptr );
