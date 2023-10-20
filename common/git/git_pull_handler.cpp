@@ -159,7 +159,8 @@ std::string GIT_PULL_HANDLER::getFirstLineFromCommitMessage( const std::string& 
 std::string GIT_PULL_HANDLER::getFormattedCommitDate( const git_time& aTime )
 {
     char dateBuffer[64];
-    strftime( dateBuffer, sizeof( dateBuffer ), "%Y-%b-%d %H:%M:%S", gmtime( &aTime.time ) );
+    time_t time = static_cast<time_t>( aTime.time );
+    strftime( dateBuffer, sizeof( dateBuffer ), "%Y-%b-%d %H:%M:%S", gmtime( &time ) );
     return dateBuffer;
 }
 
