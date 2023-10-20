@@ -247,7 +247,7 @@ msgstr "Trójwymiarowa siatka"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:126
 msgid "Raytracing"
-msgstr "Śledzenie promieni"
+msgstr "Modelowanie ze śledzeniem promieni"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:133
@@ -323,7 +323,7 @@ msgstr "Kopiuj obraz 3D do schowka"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 msgid "Render current view using Raytracing"
-msgstr "Renderuj bieżący widok z użyciem raytracingu"
+msgstr "Renderuj bieżący widok z użyciem modelowania ze śledzeniem promieni"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
@@ -577,7 +577,7 @@ msgstr "Siatka 3D 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
 msgid "Render Realistic Materials"
-msgstr "Renderuj materiały realistycznie"
+msgstr "Renderowanie realistycznych materiałów"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:285
 msgid "Use all material properties from each 3D model file"
@@ -585,7 +585,7 @@ msgstr "Używa wszystkich właściwości materiałów z każdego pliku modelu 3D
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
 msgid "Render Solid Colors"
-msgstr "Renderuj pełne kolory"
+msgstr "Renderowanie jednolitych kolorów"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:293
 msgid "Use only the diffuse color property from model 3D model file"
@@ -593,7 +593,7 @@ msgstr "Używa tylko właściwości rozpraszania koloru modelu z pliku modelu 3D
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
 msgid "Render CAD Colors"
-msgstr "Renderuj kolory CAD"
+msgstr "Renderowanie w kolorach CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:301
 msgid "Use a CAD color style based on the diffuse color of the material"
