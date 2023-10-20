@@ -51,7 +51,6 @@ struct SELECTION_FILTER_OPTIONS
     bool zones;         ///< Copper zones
     bool keepouts;      ///< Keepout zones
     bool dimensions;    ///< Dimension items
-    bool generators;    ///< Generator items
     bool otherItems;    ///< Anything not fitting one of the above categories
 
     SELECTION_FILTER_OPTIONS()
@@ -66,7 +65,6 @@ struct SELECTION_FILTER_OPTIONS
         zones       = true;
         keepouts    = true;
         dimensions  = true;
-        generators  = true;
         otherItems  = true;
     }
 
@@ -76,7 +74,7 @@ struct SELECTION_FILTER_OPTIONS
     bool Any()
     {
         return ( footprints || text || tracks || vias || pads || graphics || zones
-                 || keepouts || dimensions || generators || otherItems );
+                 || keepouts || dimensions || otherItems );
     }
 
     /**
@@ -85,7 +83,7 @@ struct SELECTION_FILTER_OPTIONS
     bool All()
     {
         return ( footprints && text && tracks && vias && pads && graphics && zones
-                 && keepouts && dimensions && generators && otherItems );
+                 && keepouts && dimensions && otherItems );
     }
 };
 

@@ -46,6 +46,7 @@ using namespace std::placeholders;
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_marker.h>
+#include <pcb_generator.h>
 #include <zone.h>
 #include <collectors.h>
 #include <dialog_filter_selection.h>
@@ -2356,6 +2357,12 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
         }
     }
 
+    if( aItem->Type() == PCB_GENERATOR_T )
+        aItem = *( static_cast<PCB_GENERATOR*>( aItem )->GetItems().begin() );
+
+    if( !aItem )
+        return false;
+
     switch( aItem->Type() )
     {
     case PCB_FOOTPRINT_T:
@@ -2379,12 +2386,6 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
 
     case PCB_VIA_T:
         if( !m_filter.vias )
-            return false;
-
-        break;
-
-    case PCB_GENERATOR_T:
-        if( !m_filter.generators )
             return false;
 
         break;
