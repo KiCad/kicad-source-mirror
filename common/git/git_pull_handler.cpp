@@ -25,6 +25,7 @@
 #include <git/kicad_git_common.h>
 
 #include <iostream>
+#include <time.h>
 
 GIT_PULL_HANDLER::GIT_PULL_HANDLER( git_repository* aRepo ) :  KIGIT_COMMON( aRepo )
 {}
