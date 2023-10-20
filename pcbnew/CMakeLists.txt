@@ -649,7 +649,6 @@ target_link_libraries( pcbnew_kiface_objects
         rectpack2d
         gzip-hpp
         Boost::boost
-        git2
         ZLIB::ZLIB
         ${OCC_LIBRARIES}
     )
