@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +36,7 @@
 #include <math/vector2d.h>  // for VECTOR2I
 #include <trigo.h>
 
-// Returns true if the point P is on the segment S.
-// faster than TestSegmentHit() because P should be exactly on S
-// therefore works fine only for H, V and 45 deg segm (suitable for wires in eeschema)
+
 bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
                        const VECTOR2I& aTestPoint )
 {
@@ -47,7 +45,7 @@ bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
 
     // Use long long here to avoid overflow in calculations
     if( (long long) vectSeg.x * vectPoint.y - (long long) vectSeg.y * vectPoint.x )
-        return false;        /* Cross product non-zero, vectors not parallel */
+        return false;         /* Cross product non-zero, vectors not parallel */
 
     if( ( (long long) vectSeg.x * vectPoint.x + (long long) vectSeg.y * vectPoint.y ) <
         ( (long long) vectPoint.x * vectPoint.x + (long long) vectPoint.y * vectPoint.y ) )
@@ -57,19 +55,18 @@ bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
 }
 
 
-// Returns true if the segment 1 intersected the segment 2.
 bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
                                const VECTOR2I& a_p1_l2, const VECTOR2I& a_p2_l2,
                                VECTOR2I* aIntersectionPoint )
 {
 
-    //We are forced to use 64bit ints because the internal units can overflow 32bit ints when
+    // We are forced to use 64bit ints because the internal units can overflow 32bit ints when
     // multiplied with each other, the alternative would be to scale the units down (i.e. divide
     // by a fixed number).
     int64_t dX_a, dY_a, dX_b, dY_b, dX_ab, dY_ab;
     int64_t num_a, num_b, den;
 
-    //Test for intersection within the bounds of both line segments using line equations of the
+    // Test for intersection within the bounds of both line segments using line equations of the
     // form:
     // x_k(u_k) = u_k * dX_k + x_k(0)
     // y_k(u_k) = u_k * dY_k + y_k(0)
@@ -84,14 +81,14 @@ bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
 
     den   = dY_a  * dX_b - dY_b * dX_a ;
 
-    //Check if lines are parallel
+    // Check if lines are parallel.
     if( den == 0 )
         return false;
 
     num_a = dY_ab * dX_b - dY_b * dX_ab;
     num_b = dY_ab * dX_a - dY_a * dX_ab;
 
-    // Only compute the intersection point if requested
+    // Only compute the intersection point if requested.
     if( aIntersectionPoint )
     {
         *aIntersectionPoint = a_p1_l1;
@@ -106,19 +103,19 @@ bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
         num_b = -num_b;
     }
 
-    //Test sign( u_a ) and return false if negative
+    // Test sign( u_a ) and return false if negative.
     if( num_a < 0 )
         return false;
 
-    //Test sign( u_b ) and return false if negative
+    // Test sign( u_b ) and return false if negative.
     if( num_b < 0 )
         return false;
 
-    //Test to ensure (u_a <= 1)
+    // Test to ensure (u_a <= 1).
     if( num_a > den )
         return false;
 
-    //Test to ensure (u_b <= 1)
+    // Test to ensure (u_b <= 1).
     if( num_b > den )
         return false;
 
@@ -141,14 +138,14 @@ bool TestSegmentHit( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, const VE
     if( ymax < ymin )
         std::swap( ymax, ymin );
 
-    // First, check if we are outside of the bounding box
+    // Check if we are outside of the bounding box.
     if( ( ymin - aRefPoint.y > aDist ) || ( aRefPoint.y - ymax > aDist ) )
         return false;
 
     if( ( xmin - aRefPoint.x > aDist ) || ( aRefPoint.x - xmax > aDist ) )
         return false;
 
-    // Next, eliminate easy cases
+    // Eliminate easy cases.
     if( aStart.x == aEnd.x && aRefPoint.y > ymin && aRefPoint.y < ymax )
         return std::abs( delta.x ) <= aDist;
 
@@ -356,8 +353,8 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
     {
         if( aStart == aEnd )
         {
-            // This is a special case for a 360 degrees arc.  In this case, the center is halfway between
-            // the midpoint and either end point
+            // This is a special case for a 360 degrees arc.  In this case, the center is
+            // halfway between the midpoint and either end point.
             center.x = ( aStart.x + aMid.x ) / 2.0;
             center.y = ( aStart.y + aMid.y ) / 2.0 ;
             return center;
@@ -383,22 +380,24 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
     // to the standard deviation.
     // We ignore the possible covariance between variables.  We also truncate our series expansion
     // at the first term.  These are reasonable assumptions as the worst-case scenario is that we
-    // underestimate the potential uncertainty, which would potentially put us back at the status quo
+    // underestimate the potential uncertainty, which would potentially put us back at the status
+    // quo.
     double abSlopeStartEndY = aSlope * bSlope * ( aStart.y - aEnd.y );
-    double dabSlopeStartEndY = abSlopeStartEndY * std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
-                                                           + ( dbSlope / bSlope * dbSlope / bSlope )
-                                                           + ( M_SQRT1_2 / ( aStart.y - aEnd.y )
-                                                               * M_SQRT1_2 / ( aStart.y - aEnd.y ) ) );
+    double dabSlopeStartEndY = abSlopeStartEndY *
+                               std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
+                                        + ( dbSlope / bSlope * dbSlope / bSlope )
+                                        + ( M_SQRT1_2 / ( aStart.y - aEnd.y )
+                                          * M_SQRT1_2 / ( aStart.y - aEnd.y ) ) );
 
     double bSlopeStartMidX = bSlope * ( aStart.x + aMid.x );
     double dbSlopeStartMidX = bSlopeStartMidX * std::sqrt( ( dbSlope / bSlope * dbSlope / bSlope )
                                                          + ( M_SQRT1_2 / ( aStart.x + aMid.x )
-                                                                 * M_SQRT1_2 / ( aStart.x + aMid.x ) ) );
+                                                           * M_SQRT1_2 / ( aStart.x + aMid.x ) ) );
 
     double aSlopeMidEndX = aSlope * ( aMid.x + aEnd.x );
     double daSlopeMidEndX = aSlopeMidEndX * std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
                                                      + ( M_SQRT1_2 / ( aMid.x + aEnd.x )
-                                                             * M_SQRT1_2 / ( aMid.x + aEnd.x ) ) );
+                                                       * M_SQRT1_2 / ( aMid.x + aEnd.x ) ) );
 
     double twiceBASlopeDiff = 2 * ( bSlope - aSlope );
     double dtwiceBASlopeDiff = 2 * std::sqrt( dbSlope * dbSlope + daSlope * daSlope );
@@ -410,8 +409,10 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
 
     double centerX = ( abSlopeStartEndY + bSlopeStartMidX - aSlopeMidEndX ) / twiceBASlopeDiff;
 
-    double dCenterX = centerX * std::sqrt( ( dCenterNumeratorX / centerNumeratorX * dCenterNumeratorX / centerNumeratorX )
-                                         + ( dtwiceBASlopeDiff / twiceBASlopeDiff * dtwiceBASlopeDiff / twiceBASlopeDiff ) );
+    double dCenterX = centerX * std::sqrt( ( dCenterNumeratorX / centerNumeratorX *
+                                             dCenterNumeratorX / centerNumeratorX )
+                                         + ( dtwiceBASlopeDiff / twiceBASlopeDiff *
+                                             dtwiceBASlopeDiff / twiceBASlopeDiff ) );
 
 
     double centerNumeratorY = ( ( aStart.x + aMid.x ) / 2.0 - centerX );
@@ -419,7 +420,8 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
 
     double centerFirstTerm = centerNumeratorY / aSlope;
     double dcenterFirstTermY = centerFirstTerm * std::sqrt(
-                                          ( dCenterNumeratorY/ centerNumeratorY * dCenterNumeratorY / centerNumeratorY )
+                                          ( dCenterNumeratorY/ centerNumeratorY *
+                                            dCenterNumeratorY / centerNumeratorY )
                                         + ( daSlope / aSlope * daSlope / aSlope ) );
 
     double centerY = centerFirstTerm + ( aStart.y + aMid.y ) / 2.0;
@@ -430,16 +432,19 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
     double rounded10CenterX = std::floor( ( centerX + 5.0 ) / 10.0 ) * 10.0;
     double rounded10CenterY = std::floor( ( centerY + 5.0 ) / 10.0 ) * 10.0;
 
-    // The last step is to find the nice, round numbers near our baseline estimate and see if they are within our uncertainty
-    // range.  If they are, then we use this round value as the true value.  This is justified because ALL values within the
-    // uncertainty range are equally true.  Using a round number will make sure that we are on a multiple of 1mil or 100nm
+    // The last step is to find the nice, round numbers near our baseline estimate and see if
+    // they are within our uncertainty range.  If they are, then we use this round value as the
+    // true value.  This is justified because ALL values within the uncertainty range are equally
+    // true.  Using a round number will make sure that we are on a multiple of 1mil or 100nm
     // when calculating centers.
-    if( std::abs( rounded100CenterX - centerX ) < dCenterX && std::abs( rounded100CenterY - centerY ) < dCenterY )
+    if( std::abs( rounded100CenterX - centerX ) < dCenterX &&
+        std::abs( rounded100CenterY - centerY ) < dCenterY )
     {
         center.x = rounded100CenterX;
         center.y = rounded100CenterY;
     }
-    else if( std::abs( rounded10CenterX - centerX ) < dCenterX && std::abs( rounded10CenterY - centerY ) < dCenterY )
+    else if( std::abs( rounded10CenterX - centerX ) < dCenterX &&
+             std::abs( rounded10CenterY - centerY ) < dCenterY )
     {
         center.x = rounded10CenterX;
         center.y = rounded10CenterY;

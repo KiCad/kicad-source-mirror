@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
  * Test if \a aTestPoint is on line defined by \a aSegStart and \a aSegEnd.
  *
  * This function is faster than #TestSegmentHit() because \a aTestPoint  should be exactly on
- * the line.  This works fine only for H, V and 45 degree line segments.
+ * the line.  This only works for horizontal, vertical, and 45 degree line segments.
  *
  * @param aSegStart The first point of the line segment.
  * @param aSegEnd The second point of the line segment.
@@ -51,15 +51,15 @@ bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
  * @param a_p1_l2 The first point of the second line.
  * @param a_p2_l2 The second point of the second line.
  * @param aIntersectionPoint is filled with the intersection point if it exists
- * @return bool - true if the two segments defined by four points intersect.
+ * @return bool true if the two segments defined by four points intersect.
  * (i.e. if the 2 segments have at least a common point)
  */
 bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
                                const VECTOR2I& a_p1_l2, const VECTOR2I& a_p2_l2,
                                VECTOR2I* aIntersectionPoint = nullptr );
 
-/*
- * Calculate the new point of coord coord pX, pY, for a rotation center 0, 0
+/**
+ * Calculate the new point of coord coord pX, pY, for a rotation center 0, 0.
  */
 void RotatePoint( int *pX, int *pY, const EDA_ANGLE& aAngle );
 
@@ -69,8 +69,8 @@ inline void RotatePoint( VECTOR2I& point, const EDA_ANGLE& aAngle )
 }
 
 
-/*
- * Calculate the new point of coord coord pX, pY, for a rotation center cx, cy
+/**
+ * Calculate the new point of coord coord pX, pY, for a rotation center cx, cy.
  */
 void RotatePoint( int *pX, int *pY, int cx, int cy, const EDA_ANGLE& aAngle );
 
@@ -80,17 +80,15 @@ inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, const EDA_ANGL
 }
 
 
-/*
- * Calculate the new coord point point for a rotation center 0, 0
+/**
+ * Calculate the new coord point point for a rotation center 0, 0.
  */
-
 void RotatePoint( double* pX, double* pY, const EDA_ANGLE& aAngle );
 
 inline void RotatePoint( VECTOR2D& point, const EDA_ANGLE& aAngle )
 {
     RotatePoint( &point.x, &point.y, aAngle );
 }
-
 
 void RotatePoint( double* pX, double* pY, double cx, double cy, const EDA_ANGLE& aAngle );
 
@@ -102,10 +100,10 @@ inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, const EDA_ANG
 /**
  * Determine the center of an arc or circle given three points on its circumference.
  *
- * @param aStart The starting point of the circle (equivalent to aEnd)
- * @param aMid The point on the arc, half-way between aStart and aEnd
- * @param aEnd The ending point of the circle (equivalent to aStart)
- * @return The center of the circle
+ * @param aStart The starting point of the circle (equivalent to aEnd).
+ * @param aMid The point on the arc, half-way between aStart and aEnd.
+ * @param aEnd The ending point of the circle (equivalent to aStart).
+ * @return The center of the circle.
  */
 const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd );
@@ -113,15 +111,16 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                               const EDA_ANGLE& aAngle );
 
 /**
- * Return the middle point of an arc, half-way between aStart and aEnd. There are two possible
- * solutions which can be found by toggling aMinArcAngle. The behaviour is undefined for
- * semicircles (i.e. 180 degree arcs).
+ * Return the middle point of an arc, half-way between aStart and aEnd.
  *
- * @param aStart The starting point of the arc (for calculating the radius)
- * @param aEnd The end point of the arc (for determining the arc angle)
- * @param aCenter The center point of the arc
+ * There are two possible solutions which can be found by toggling aMinArcAngle. The behavior
+ * is undefined for semicircles (i.e. 180 degree arcs).
+ *
+ * @param aStart The starting point of the arc (for calculating the radius).
+ * @param aEnd The end point of the arc (for determining the arc angle).
+ * @param aCenter The center point of the arc.
  * @param aMinArcAngle If true, returns the point that results in the smallest arc angle.
- * @return The middle point of the arc
+ * @return The middle point of the arc.
 */
 const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
                            bool aMinArcAngle = true );
@@ -132,11 +131,15 @@ inline double EuclideanNorm( const VECTOR2I& vector )
     return hypot( vector.x, vector.y );
 }
 
-//! @brief Compute the distance between a line and a reference point
-//! Reference: http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
-//! @param linePointA Point on line
-//! @param linePointB Point on line
-//! @param referencePoint Reference point
+/**
+ * Compute the distance between a line and a reference point.
+ *
+ * Reference: http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
+ *
+ * @param linePointA Point on line.
+ * @param linePointB Point on line.
+ * @param referencePoint Reference point.
+ */
 inline double DistanceLinePoint( const VECTOR2I& linePointA, const VECTOR2I& linePointB,
                                  const VECTOR2I& referencePoint )
 {
@@ -151,11 +154,14 @@ inline double DistanceLinePoint( const VECTOR2I& linePointA, const VECTOR2I& lin
             / EuclideanNorm( linePointB - linePointA ) );
 }
 
-//! @brief Test, if two points are near each other
-//! @param pointA First point
-//! @param pointB Second point
-//! @param threshold The maximum distance
-//! @return True or false
+/**
+ * Test if two points are near each other.
+ *
+ * @param pointA First point.
+ * @param pointB Second point.
+ * @param threshold The maximum distance.
+ * @return true if \a pointA is within \a threshold of \a pointB otherwise false.
+ */
 inline bool HitTestPoints( const VECTOR2I& pointA, const VECTOR2I& pointB, double threshold )
 {
     VECTOR2I vectorAB = pointB - pointA;
@@ -201,7 +207,9 @@ inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
 /* These are templated over T (and not simply double) because Eeschema
    is still using int for angles in some place */
 
-/// Normalize angle to be in the 0.0 .. 360.0 range: angle is in 1/10 degrees.
+/**
+ * Normalize angle to be in the 0.0 .. 360.0 range: angle is in 1/10 degrees.
+ */
 template <class T> inline T NormalizeAnglePos( T Angle )
 {
     while( Angle < 0 )
@@ -217,7 +225,9 @@ template <class T> inline void NORMALIZE_ANGLE_POS( T& Angle )
 }
 
 
-/// Normalize angle to be in the -180.0 .. 180.0 range
+/**
+ * Normalize angle to be in the -180.0 .. 180.0 range.
+ */
 template <class T> inline T NormalizeAngle180( T Angle )
 {
     while( Angle <= -1800 )
