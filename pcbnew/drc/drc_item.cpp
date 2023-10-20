@@ -122,7 +122,7 @@ DRC_ITEM DRC_ITEM::annularWidth( DRCE_ANNULAR_WIDTH,
         wxT( "annular_width" ) );
 
 DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_DRILL_OUT_OF_RANGE,
-        _( "Drill out of range" ),
+        _( "Hole size out of range" ),
         wxT( "drill_out_of_range" ) );
 
 DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
@@ -134,7 +134,7 @@ DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
         wxT( "padstack" ) );
 
 DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_MICROVIA_DRILL_OUT_OF_RANGE,
-        _( "Micro via drill out of range" ),
+        _( "Micro via hole size out of range" ),
         wxT( "microvia_drill_out_of_range" ) );
 
 DRC_ITEM DRC_ITEM::courtyardsOverlap( DRCE_OVERLAPPING_FOOTPRINTS,

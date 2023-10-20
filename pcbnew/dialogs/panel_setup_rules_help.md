@@ -296,6 +296,15 @@ Deprecated; use `intersectsArea()` instead.
         (constraint connection_width (min 0.8mm))
         (condition "A.NetClass == 'Power'"))
 
+    # Separate drill bit and milling cutter size constraints
+    (rule "Plated through-hole size"
+        (constraint hole_size (min 0.2mm) (max 6.35mm))
+        (condition "A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y"))
+    (rule "Plated slot size"
+        (constraint hole_size (min 0.5mm))
+        (condition "A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y"))
+
+
 ### Documentation
 
 For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules).
