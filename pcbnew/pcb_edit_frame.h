@@ -598,11 +598,11 @@ public:
      *
      * @param aTrackItem the track segment or via to modify.
      * @param aItemsListPicker the list picker to use for an undo command (can be NULL).
-     * @param aUseNetclassValue true to use NetClass value, false to use current designSettings
+     * @param aUseDesignRules true to use NetClass value, false to use current designSettings
      *                          value.
      */
     void SetTrackSegmentWidth( PCB_TRACK* aTrackItem, PICKED_ITEMS_LIST* aItemsListPicker,
-                               bool aUseNetclassValue );
+                               bool aUseDesignRules );
 
 
     /**

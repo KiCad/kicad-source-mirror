@@ -39,7 +39,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Items") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 2, 4, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 3, 0 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->AddGrowableRow( 0 );
 	fgSizer3->AddGrowableRow( 1 );
@@ -63,10 +63,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizer3->Add( m_netclassFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	fgSizer3->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer3->Add( 0, 7, 1, wxEXPAND, 5 );
 
 
-	fgSizer3->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_layerFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_layerFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -75,7 +75,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizer3->Add( m_layerFilter, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizer3->Add( 0, 5, 1, wxEXPAND, 5 );
+	fgSizer3->Add( 0, 7, 1, wxEXPAND, 5 );
 
 
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -141,20 +141,20 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizerTrackViaPopups->AddGrowableCol( 2 );
 	fgSizerTrackViaPopups->AddGrowableRow( 0 );
 	fgSizerTrackViaPopups->AddGrowableRow( 1 );
-	fgSizerTrackViaPopups->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizerTrackViaPopups->SetFlexibleDirection( wxBOTH );
 	fgSizerTrackViaPopups->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 
 	m_trackWidthLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Track width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trackWidthLabel->Wrap( -1 );
-	fgSizerTrackViaPopups->Add( m_trackWidthLabel, 0, wxRIGHT|wxLEFT|wxALIGN_BOTTOM, 5 );
+	fgSizerTrackViaPopups->Add( m_trackWidthLabel, 0, wxALIGN_BOTTOM|wxTOP, 5 );
 
 	m_viaSizeLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Via size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaSizeLabel->Wrap( -1 );
-	fgSizerTrackViaPopups->Add( m_viaSizeLabel, 0, wxRIGHT|wxLEFT|wxALIGN_BOTTOM, 5 );
+	fgSizerTrackViaPopups->Add( m_viaSizeLabel, 0, wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_layerLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_layerLabel->Wrap( -1 );
-	fgSizerTrackViaPopups->Add( m_layerLabel, 0, wxRIGHT|wxLEFT|wxALIGN_BOTTOM, 5 );
+	fgSizerTrackViaPopups->Add( m_layerLabel, 0, wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString m_trackWidthCtrlChoices;
 	m_trackWidthCtrl = new wxChoice( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_trackWidthCtrlChoices, 0 );
@@ -170,47 +170,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizerTrackViaPopups->Add( m_layerCtrl, 0, wxRIGHT|wxLEFT, 3 );
 
 
-	sbAction->Add( fgSizerTrackViaPopups, 0, wxBOTTOM|wxEXPAND|wxLEFT, 22 );
+	sbAction->Add( fgSizerTrackViaPopups, 0, wxBOTTOM|wxEXPAND|wxLEFT, 25 );
 
-	m_setToNetclassValues = new wxRadioButton( sbAction->GetStaticBox(), ID_SPECIFIED_NET_TO_NETCLASS_VALUES, _("Set to net class values:"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbAction->Add( m_setToNetclassValues, 0, wxTOP|wxBOTTOM, 5 );
-
-	m_netclassGrid = new wxGrid( sbAction->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxVSCROLL );
-
-	// Grid
-	m_netclassGrid->CreateGrid( 6, 6 );
-	m_netclassGrid->EnableEditing( false );
-	m_netclassGrid->EnableGridLines( true );
-	m_netclassGrid->EnableDragGridSize( false );
-	m_netclassGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_netclassGrid->SetColSize( 0, 110 );
-	m_netclassGrid->SetColSize( 1, 110 );
-	m_netclassGrid->SetColSize( 2, 110 );
-	m_netclassGrid->SetColSize( 3, 110 );
-	m_netclassGrid->SetColSize( 4, 110 );
-	m_netclassGrid->SetColSize( 5, 110 );
-	m_netclassGrid->EnableDragColMove( false );
-	m_netclassGrid->EnableDragColSize( false );
-	m_netclassGrid->SetColLabelSize( 0 );
-	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_netclassGrid->EnableDragRowSize( false );
-	m_netclassGrid->SetRowLabelSize( 0 );
-	m_netclassGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_netclassGrid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-	m_netclassGrid->SetDefaultCellFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	sbAction->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT, 22 );
-
-
-	sbAction->Add( 0, 5, 0, wxEXPAND, 5 );
+	m_setToNetclassValues = new wxRadioButton( sbAction->GetStaticBox(), ID_SPECIFIED_NET_TO_NETCLASS_VALUES, _("Set to net class / custom rule values"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbAction->Add( m_setToNetclassValues, 0, wxBOTTOM, 5 );
 
 
 	bMainSizer->Add( sbAction, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -236,7 +199,6 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_viaSizeFilterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnViaSizeText ), NULL, this );
 	m_setToSpecifiedValues->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onActionButtonChange ), NULL, this );
 	m_setToNetclassValues->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onActionButtonChange ), NULL, this );
-	m_netclassGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSizeNetclassGrid ), NULL, this );
 }
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE()
@@ -248,6 +210,5 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BAS
 	m_viaSizeFilterCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnViaSizeText ), NULL, this );
 	m_setToSpecifiedValues->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onActionButtonChange ), NULL, this );
 	m_setToNetclassValues->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onActionButtonChange ), NULL, this );
-	m_netclassGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSizeNetclassGrid ), NULL, this );
 
 }

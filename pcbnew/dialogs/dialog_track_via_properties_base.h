@@ -26,6 +26,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/statbox.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
+#include <wx/gbsizer.h>
 #include <wx/bmpcbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -64,13 +65,13 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackEndYLabel;
 		wxTextCtrl* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
+		wxCheckBox* m_trackNetclass;
 		wxStaticText* m_DesignRuleWidths;
 		wxChoice* m_DesignRuleWidthsCtrl;
 		wxStaticText* m_DesignRuleWidthsUnits;
 		wxStaticText* m_TrackWidthLabel;
 		wxTextCtrl* m_TrackWidthCtrl;
 		wxStaticText* m_TrackWidthUnit;
-		wxCheckBox* m_trackNetclass;
 		wxStaticText* m_TrackLayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_TrackLayerCtrl;
 		wxStaticBoxSizer* m_sbViaSizer;
@@ -79,6 +80,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaYLabel;
 		wxTextCtrl* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
+		wxCheckBox* m_viaNetclass;
 		wxStaticText* m_DesignRuleVias;
 		wxChoice* m_DesignRuleViasCtrl;
 		wxStaticText* m_DesignRuleViasUnit;
@@ -88,7 +90,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaDrillLabel;
 		wxTextCtrl* m_ViaDrillCtrl;
 		wxStaticText* m_ViaDrillUnit;
-		wxCheckBox* m_viaNetclass;
 		wxStaticText* m_ViaTypeLabel;
 		wxChoice* m_ViaTypeChoice;
 		wxStaticText* m_ViaStartLayerLabel;
@@ -130,12 +131,12 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onViaNotFreeClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTrackNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthEdit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onTrackNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 

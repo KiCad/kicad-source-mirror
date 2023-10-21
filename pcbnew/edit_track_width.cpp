@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 
 void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,
-                                           bool               aUseNetclassValue )
+                                           bool               aUseDesignRules )
 {
     int initial_width;
     int new_width;
@@ -41,10 +41,19 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
 
     initial_width = aTrackItem->GetWidth();
 
-    if( aUseNetclassValue )
-        new_width = aTrackItem->GetEffectiveNetClass()->GetTrackWidth();
+    if( aUseDesignRules )
+    {
+        MINOPTMAX<int> constraint = aTrackItem->GetWidthConstraint();
+
+        if( constraint.HasOpt() )
+            new_width = constraint.Opt();
+        else
+            new_width = constraint.Min();
+    }
     else
+    {
         new_width = GetDesignSettings().GetCurrentTrackWidth();
+    }
 
     if( aTrackItem->Type() == PCB_VIA_T )
     {
@@ -58,7 +67,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
             new_width = aTrackItem->GetEffectiveNetClass()->GetuViaDiameter();
             new_drill = aTrackItem->GetEffectiveNetClass()->GetuViaDrill();
         }
-        else if( aUseNetclassValue )
+        else if( aUseDesignRules )
         {
             new_width = aTrackItem->GetEffectiveNetClass()->GetViaDiameter();
             new_drill = aTrackItem->GetEffectiveNetClass()->GetViaDrill();

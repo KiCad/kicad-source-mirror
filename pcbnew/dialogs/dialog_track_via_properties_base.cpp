@@ -50,13 +50,13 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticline1 = new wxStaticLine( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbCommonSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxTOP, 4 );
+	m_sbCommonSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxTOP, 2 );
 
 
-	m_sbCommonSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+	m_sbCommonSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	m_sbCommonSizer->Add( m_lockedCbox, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_sbCommonSizer->Add( m_lockedCbox, 0, wxTOP|wxBOTTOM|wxLEFT, 4 );
 
 
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 10 );
@@ -112,48 +112,46 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	bSizerTracksLeftCol->Add( fgTrackEnds, 0, wxEXPAND|wxBOTTOM, 8 );
 
-	wxFlexGridSizer* fgTrackSizes;
-	fgTrackSizes = new wxFlexGridSizer( 7, 3, 3, 3 );
-	fgTrackSizes->AddGrowableCol( 1 );
-	fgTrackSizes->SetFlexibleDirection( wxBOTH );
-	fgTrackSizes->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 3 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_trackNetclass = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Use net class / custom rule widths"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackNetclass->SetValue(true);
+	gbSizer1->Add( m_trackNetclass, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxTOP, 1 );
 
 	m_DesignRuleWidths = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Pre-defined sizes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleWidths->Wrap( -1 );
-	fgTrackSizes->Add( m_DesignRuleWidths, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
+	gbSizer1->Add( m_DesignRuleWidths, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	wxArrayString m_DesignRuleWidthsCtrlChoices;
 	m_DesignRuleWidthsCtrl = new wxChoice( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DesignRuleWidthsCtrlChoices, 0 );
 	m_DesignRuleWidthsCtrl->SetSelection( 0 );
-	fgTrackSizes->Add( m_DesignRuleWidthsCtrl, 0, wxEXPAND|wxTOP|wxALIGN_CENTER_VERTICAL, 1 );
+	gbSizer1->Add( m_DesignRuleWidthsCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 	m_DesignRuleWidthsUnits = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleWidthsUnits->Wrap( -1 );
-	fgTrackSizes->Add( m_DesignRuleWidthsUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 1 );
+	gbSizer1->Add( m_DesignRuleWidthsUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TrackWidthLabel = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Track width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackWidthLabel->Wrap( -1 );
-	fgTrackSizes->Add( m_TrackWidthLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_TrackWidthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_TrackWidthCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackSizes->Add( m_TrackWidthCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer1->Add( m_TrackWidthCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_TrackWidthUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackWidthUnit->Wrap( -1 );
-	fgTrackSizes->Add( m_TrackWidthUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_TrackWidthUnit, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgTrackSizes->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer1->AddGrowableCol( 1 );
 
-	m_trackNetclass = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Use net class widths"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_trackNetclass->SetValue(true);
-	fgTrackSizes->Add( m_trackNetclass, 0, wxBOTTOM, 3 );
+	bSizerTracksLeftCol->Add( gbSizer1, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bSizerTracksLeftCol->Add( fgTrackSizes, 1, wxEXPAND|wxTOP, 5 );
-
-
-	m_sbTrackSizer->Add( bSizerTracksLeftCol, 1, wxALL|wxEXPAND, 5 );
+	m_sbTrackSizer->Add( bSizerTracksLeftCol, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_sbTrackSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
@@ -175,7 +173,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackRightSizer->Add( m_TrackLayerCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	m_sbTrackSizer->Add( fgTrackRightSizer, 1, wxEXPAND, 3 );
+	m_sbTrackSizer->Add( fgTrackRightSizer, 1, 0, 3 );
 
 
 	m_MainSizer->Add( m_sbTrackSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -216,58 +214,53 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	bSizerViasLeftCol->Add( fgViaPos, 0, wxEXPAND|wxBOTTOM, 8 );
 
-	wxFlexGridSizer* fgViaSizes;
-	fgViaSizes = new wxFlexGridSizer( 6, 3, 3, 3 );
-	fgViaSizes->AddGrowableCol( 1 );
-	fgViaSizes->SetFlexibleDirection( wxBOTH );
-	fgViaSizes->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer3;
+	gbSizer3 = new wxGridBagSizer( 3, 3 );
+	gbSizer3->SetFlexibleDirection( wxBOTH );
+	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_viaNetclass = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use net class / custom rule sizes"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer3->Add( m_viaNetclass, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxTOP, 1 );
 
 	m_DesignRuleVias = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Pre-defined sizes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleVias->Wrap( -1 );
-	fgViaSizes->Add( m_DesignRuleVias, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
+	gbSizer3->Add( m_DesignRuleVias, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	wxArrayString m_DesignRuleViasCtrlChoices;
 	m_DesignRuleViasCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DesignRuleViasCtrlChoices, 0 );
 	m_DesignRuleViasCtrl->SetSelection( 0 );
-	fgViaSizes->Add( m_DesignRuleViasCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer3->Add( m_DesignRuleViasCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 	m_DesignRuleViasUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DesignRuleViasUnit->Wrap( -1 );
-	fgViaSizes->Add( m_DesignRuleViasUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_DesignRuleViasUnit, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDiameterLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterLabel->Wrap( -1 );
-	fgViaSizes->Add( m_ViaDiameterLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
+	gbSizer3->Add( m_ViaDiameterLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxLEFT, 1 );
 
 	m_ViaDiameterCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaSizes->Add( m_ViaDiameterCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer3->Add( m_ViaDiameterCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaDiameterUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterUnit->Wrap( -1 );
-	fgViaSizes->Add( m_ViaDiameterUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_ViaDiameterUnit, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ViaDrillLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Via hole:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillLabel->Wrap( -1 );
-	fgViaSizes->Add( m_ViaDrillLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
+	gbSizer3->Add( m_ViaDrillLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
 	m_ViaDrillCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaSizes->Add( m_ViaDrillCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer3->Add( m_ViaDrillCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_ViaDrillUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillUnit->Wrap( -1 );
-	fgViaSizes->Add( m_ViaDrillUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer3->Add( m_ViaDrillUnit, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgViaSizes->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer3->AddGrowableCol( 1 );
 
-	m_viaNetclass = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use net class sizes"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaSizes->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 3 );
-
-
-	fgViaSizes->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	bSizerViasLeftCol->Add( fgViaSizes, 1, wxEXPAND|wxTOP, 5 );
+	bSizerViasLeftCol->Add( gbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bSizerViaCols->Add( bSizerViasLeftCol, 1, wxEXPAND, 5 );
@@ -281,6 +274,9 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 0, 2, 3, 5 );
 	fgSizer4->AddGrowableCol( 1 );
+	fgSizer4->AddGrowableRow( 0 );
+	fgSizer4->AddGrowableRow( 1 );
+	fgSizer4->AddGrowableRow( 2 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -342,7 +338,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbViaSizer->Add( bSizerViaCols, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticline2 = new wxStaticLine( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbViaSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_sbViaSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 8 );
 
 	m_legacyTeardropsWarning = new wxBoxSizer( wxHORIZONTAL );
 
@@ -564,13 +560,13 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 
 	// Connect Events
 	m_viaNotFree->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNotFreeClicked ), NULL, this );
+	m_trackNetclass->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackNetclassCheck ), NULL, this );
 	m_DesignRuleWidthsCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthSelect ), NULL, this );
 	m_TrackWidthCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthEdit ), NULL, this );
-	m_trackNetclass->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackNetclassCheck ), NULL, this );
+	m_viaNetclass->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNetclassCheck ), NULL, this );
 	m_DesignRuleViasCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaSelect ), NULL, this );
 	m_ViaDiameterCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaDrillCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
-	m_viaNetclass->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNetclassCheck ), NULL, this );
 	m_ViaTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
@@ -601,13 +597,13 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::~DIALOG_TRACK_VIA_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	m_viaNotFree->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNotFreeClicked ), NULL, this );
+	m_trackNetclass->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackNetclassCheck ), NULL, this );
 	m_DesignRuleWidthsCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthSelect ), NULL, this );
 	m_TrackWidthCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onWidthEdit ), NULL, this );
-	m_trackNetclass->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onTrackNetclassCheck ), NULL, this );
+	m_viaNetclass->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNetclassCheck ), NULL, this );
 	m_DesignRuleViasCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaSelect ), NULL, this );
 	m_ViaDiameterCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaDrillCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
-	m_viaNetclass->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaNetclassCheck ), NULL, this );
 	m_ViaTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaStartLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );
 	m_ViaEndLayer->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES_BASE::onViaEdit ), NULL, this );

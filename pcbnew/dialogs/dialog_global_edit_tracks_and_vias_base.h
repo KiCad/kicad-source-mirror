@@ -27,7 +27,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
 #include <wx/radiobut.h>
-#include <wx/grid.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -67,7 +66,6 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxChoice* m_viaSizesCtrl;
 		PCB_LAYER_BOX_SELECTOR* m_layerCtrl;
 		wxRadioButton* m_setToNetclassValues;
-		wxGrid* m_netclassGrid;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -78,7 +76,6 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		virtual void OnTrackWidthText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnViaSizeText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onActionButtonChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 
 
 	public:
