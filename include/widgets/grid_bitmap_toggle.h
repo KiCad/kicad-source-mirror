@@ -21,7 +21,7 @@
 #ifndef KICAD_GRID_BITMAP_TOGGLE_H
 #define KICAD_GRID_BITMAP_TOGGLE_H
 
-#include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <wx/grid.h>
 
 
@@ -31,8 +31,8 @@
 class GRID_BITMAP_TOGGLE_RENDERER : public wxGridCellRenderer
 {
 public:
-    GRID_BITMAP_TOGGLE_RENDERER( const wxBitmap& aCheckedBitmap,
-                                 const wxBitmap& aUncheckedBitmap );
+    GRID_BITMAP_TOGGLE_RENDERER( const wxBitmapBundle& aCheckedBitmap,
+                                 const wxBitmapBundle& aUncheckedBitmap );
 
     ~GRID_BITMAP_TOGGLE_RENDERER() {}
 
@@ -45,9 +45,9 @@ public:
                         int aRow, int aCol) override;
 
 private:
-    wxBitmap m_bitmapChecked;
+    wxBitmapBundle m_bitmapChecked;
 
-    wxBitmap m_bitmapUnchecked;
+    wxBitmapBundle m_bitmapUnchecked;
 };
 
 #endif // KICAD_GRID_BITMAP_TOGGLE_H

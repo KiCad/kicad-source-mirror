@@ -24,8 +24,8 @@
 #include <algorithm>
 
 
-GRID_BITMAP_TOGGLE_RENDERER::GRID_BITMAP_TOGGLE_RENDERER( const wxBitmap& aCheckedBitmap,
-                                                          const wxBitmap& aUncheckedBitmap ) :
+GRID_BITMAP_TOGGLE_RENDERER::GRID_BITMAP_TOGGLE_RENDERER( const wxBitmapBundle& aCheckedBitmap,
+                                                          const wxBitmapBundle& aUncheckedBitmap ) :
         wxGridCellRenderer(),
         m_bitmapChecked( aCheckedBitmap ),
         m_bitmapUnchecked( aUncheckedBitmap )
@@ -48,10 +48,11 @@ void GRID_BITMAP_TOGGLE_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wx
     wxGridCellRenderer::Draw( aGrid, aAttr, aDc, aRect, aRow, aCol, aIsSelected );
 
     bool checked = aGrid.GetCellValue( aRow, aCol ) == "1";
-    const wxBitmap& bitmap = checked ? m_bitmapChecked : m_bitmapUnchecked;
+    const wxBitmapBundle& bundle = checked ? m_bitmapChecked : m_bitmapUnchecked;
+    wxBitmap bitmap = bundle.GetBitmapFor( &aGrid );
 
-    int x = std::max( 0, ( aRect.GetWidth() - m_bitmapChecked.GetWidth() ) / 2 );
-    int y = std::max( 0, ( aRect.GetHeight() - m_bitmapChecked.GetHeight() ) / 2 );
+    int x = std::max( 0, ( aRect.GetWidth() - bitmap.GetWidth() ) / 2 );
+    int y = std::max( 0, ( aRect.GetHeight() - bitmap.GetHeight() ) / 2 );
 
     aDc.DrawBitmap( bitmap, aRect.GetTopLeft() + wxPoint( x, y ) );
 }
@@ -60,5 +61,5 @@ void GRID_BITMAP_TOGGLE_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wx
 wxSize GRID_BITMAP_TOGGLE_RENDERER::GetBestSize( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDc,
                                                  int aRow, int aCol)
 {
-    return m_bitmapChecked.GetSize();
+    return m_bitmapChecked.GetPreferredBitmapSizeFor( &aGrid );
 }

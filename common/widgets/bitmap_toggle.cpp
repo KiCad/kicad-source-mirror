@@ -31,8 +31,9 @@
 wxDEFINE_EVENT( TOGGLE_CHANGED, wxCommandEvent );
 
 
-BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap& aCheckedBitmap,
-                              const wxBitmap& aUncheckedBitmap, bool aChecked ) :
+BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId,
+                              const wxBitmapBundle& aCheckedBitmap,
+                              const wxBitmapBundle& aUncheckedBitmap, bool aChecked ) :
         wxPanel( aParent, aId ),
         m_checked( aChecked ),
         m_unchecked_bitmap( aUncheckedBitmap ),
@@ -42,9 +43,9 @@ BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap&
     wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    const wxBitmap& bitmap = aChecked ? m_checked_bitmap : m_unchecked_bitmap;
+    const wxBitmapBundle& bundle = aChecked ? m_checked_bitmap : m_unchecked_bitmap;
 
-    m_bitmap = new wxStaticBitmap( this, aId, bitmap, wxDefaultPosition );
+    m_bitmap = new wxStaticBitmap( this, aId, bundle, wxDefaultPosition );
 
     sizer->Add( m_bitmap, 0, 0 );
 

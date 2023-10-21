@@ -523,8 +523,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
                 m_frame->GetToolManager()->RunAction( PCB_ACTIONS::flipBoard );
             } );
 
-    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( BITMAPS::visibility ),
-                                                            KiBitmap( BITMAPS::visibility_off ) );
+    m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER(
+            KiBitmapBundle( BITMAPS::visibility ), KiBitmapBundle( BITMAPS::visibility_off ) );
 
     m_netsGrid->RegisterDataType( wxT( "bool" ), m_toggleGridRenderer, new wxGridCellBoolEditor );
 
@@ -550,7 +550,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     wxSize size = ConvertDialogToPixels( SWATCH_SIZE_SMALL_DU );
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_COLOR, size.x + cellPadding );
 
-    size = KiBitmap( BITMAPS::visibility ).GetSize();
+    size = KiBitmapBundle( BITMAPS::visibility ).GetPreferredBitmapSizeFor( this );
     m_netsGrid->SetColSize( NET_GRID_TABLE::COL_VISIBILITY, size.x + cellPadding );
 
     m_netsGrid->SetDefaultCellFont( font );
@@ -1554,10 +1554,9 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 swatch->SetToolTip( _( "Double click or middle click for color change, "
                                        "right click for menu" ) );
 
-                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( panel, layer,
-                                                                KiBitmap( BITMAPS::visibility ),
-                                                                KiBitmap( BITMAPS::visibility_off ),
-                                                                aSetting->visible );
+                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE(
+                        panel, layer, KiBitmapBundle( BITMAPS::visibility ),
+                        KiBitmapBundle( BITMAPS::visibility_off ), aSetting->visible );
                 btn_visible->SetToolTip( _( "Show or hide this layer" ) );
 
                 wxStaticText* label = new wxStaticText( panel, layer, aSetting->label );
@@ -2159,10 +2158,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     sizer->AddSpacer( swatchWidth  );
                 }
 
-                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( m_windowObjects, layer,
-                                                                KiBitmap( BITMAPS::visibility ),
-                                                                KiBitmap( BITMAPS::visibility_off ),
-                                                                aSetting->visible );
+                BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE(
+                        m_windowObjects, layer, KiBitmapBundle( BITMAPS::visibility ),
+                        KiBitmapBundle( BITMAPS::visibility_off ), aSetting->visible );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
@@ -2392,10 +2390,9 @@ void APPEARANCE_CONTROLS::rebuildNets()
                 if( isDefaultClass )
                     setting->ctl_color->Hide();
 
-                setting->ctl_visibility = new BITMAP_TOGGLE( setting->ctl_panel, aId,
-                                                             KiBitmap( BITMAPS::visibility ),
-                                                             KiBitmap( BITMAPS::visibility_off ),
-                                                             !hiddenClasses.count( name ) );
+                setting->ctl_visibility = new BITMAP_TOGGLE(
+                        setting->ctl_panel, aId, KiBitmapBundle( BITMAPS::visibility ),
+                        KiBitmapBundle( BITMAPS::visibility_off ), !hiddenClasses.count( name ) );
 
                 wxString tip;
                 tip.Printf( _( "Show or hide ratsnest for nets in %s" ), name );

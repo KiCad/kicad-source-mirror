@@ -26,6 +26,7 @@
 #define _BITMAP_TOGGLE_H
 
 #include <wx/statbmp.h>
+#include <wx/bmpbndl.h>
 #include <wx/panel.h>
 
 #include <gal/color4d.h>
@@ -45,8 +46,8 @@ class BITMAP_TOGGLE : public wxPanel
 public:
     BITMAP_TOGGLE() {}
 
-    BITMAP_TOGGLE( wxWindow* aParent, wxWindowID aId, const wxBitmap& aCheckedBitmap,
-                   const wxBitmap& aUncheckedBitmap, bool aChecked = false );
+    BITMAP_TOGGLE( wxWindow* aParent, wxWindowID aId, const wxBitmapBundle& aCheckedBitmap,
+                   const wxBitmapBundle& aUncheckedBitmap, bool aChecked = false );
 
     ///< Set the checkbox state
     void SetValue( bool aValue );
@@ -68,8 +69,8 @@ private:
     bool            m_checked;
 
     wxStaticBitmap* m_bitmap;
-    wxBitmap        m_unchecked_bitmap;
-    wxBitmap        m_checked_bitmap;
+    wxBitmapBundle  m_unchecked_bitmap;
+    wxBitmapBundle  m_checked_bitmap;
 
     wxLongLong      m_debounce;            // Timestamp for debouncing events
 };
