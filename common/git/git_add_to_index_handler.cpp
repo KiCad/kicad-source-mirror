@@ -51,9 +51,7 @@ bool GIT_ADD_TO_INDEX_HANDLER::AddToIndex( const wxString& aFilePath )
         return false;
     }
 
-    git_index_find( &at_pos, index, aFilePath.ToUTF8().data() );
-
-    if( at_pos >= 0)
+    if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) == GIT_OK )
     {
         git_index_free( index );
         wxLogError( "%s already in index", aFilePath );

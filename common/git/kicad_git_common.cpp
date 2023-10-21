@@ -28,7 +28,8 @@
 #include <map>
 #include <vector>
 
-KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) : m_repo( aRepo )
+KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
+        m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 )
 {}
 
 KIGIT_COMMON::~KIGIT_COMMON()

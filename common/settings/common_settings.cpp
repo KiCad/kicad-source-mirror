@@ -385,6 +385,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                     repo.username = repoJson["username"].get<wxString>();
                     repo.ssh_path = repoJson["ssh_path"].get<wxString>();
                     repo.active = repoJson["active"].get<bool>();
+                    repo.checkValid = true;
 
                     m_Git.repositories.push_back( repo );
                 }

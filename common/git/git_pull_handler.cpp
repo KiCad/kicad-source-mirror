@@ -24,6 +24,8 @@
 #include "git_pull_handler.h"
 #include <git/kicad_git_common.h>
 
+#include <wx/log.h>
+
 #include <iostream>
 #include <time.h>
 
@@ -249,7 +251,7 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
     }
 
     // Get the repository index
-    git_index* index;
+    git_index* index = nullptr;
     if( git_repository_index( &index, m_repo ) )
     {
         AddErrorString( _( "Could not get repository index" ) );
@@ -257,16 +259,16 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
     }
 
     // Check for conflicts
-    git_index_conflict_iterator* conflicts;
+    git_index_conflict_iterator* conflicts = nullptr;
     if( git_index_conflict_iterator_new( &conflicts, index ) )
     {
         AddErrorString( _( "Could not get conflict iterator" ) );
         return PullResult::Error;
     }
 
-    const git_index_entry* ancestor;
-    const git_index_entry* our;
-    const git_index_entry* their;
+    const git_index_entry* ancestor = nullptr;
+    const git_index_entry* our = nullptr;
+    const git_index_entry* their = nullptr;
     std::vector<ConflictData> conflict_data;
 
     while( git_index_conflict_next( &ancestor, &our, &their, conflicts ) == 0 )
@@ -282,6 +284,7 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
             conflict_datum.their_commit_time = their->mtime.seconds;
             conflict_datum.our_status = _( "Changed" );
             conflict_datum.their_status = _( "Changed" );
+            conflict_datum.use_ours = true;
 
             conflict_data.push_back( conflict_datum );
         }
@@ -296,6 +299,7 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
             conflict_datum.their_commit_time = their->mtime.seconds;
             conflict_datum.our_status = _( "Added" );
             conflict_datum.their_status = _( "Added" );
+            conflict_datum.use_ours = true;
 
             conflict_data.push_back( conflict_datum );
         }
@@ -313,16 +317,7 @@ PullResult GIT_PULL_HANDLER::handleMerge( const git_annotated_commit** aMergeHea
         }
         else
         {
-            ConflictData conflict_datum;
-            conflict_datum.filename = our->path;
-            conflict_datum.our_oid = our->id;
-            conflict_datum.their_oid = their->id;
-            conflict_datum.our_commit_time = our->mtime.seconds;
-            conflict_datum.their_commit_time = their->mtime.seconds;
-            conflict_datum.our_status = _( "Other" );
-            conflict_datum.their_status = _( "Other" );
-
-            conflict_data.push_back( conflict_datum );
+            wxLogError( wxS( "Unexpected conflict state" ) );
         }
     }
 

@@ -111,6 +111,7 @@ bool PANEL_GIT_REPOS::TransferDataFromWindow()
 
         KIPLATFORM::SECRETS::StoreSecret( repo.path, repo.username, m_grid->GetCellValue( row, COL_PASSWORD ) );
         repo.ssh_path = m_grid->GetCellValue( row, COL_SSH_PATH );
+        repo.checkValid = m_grid->GetCellValue( row, COL_STATUS ) == "1";
         repos.push_back( repo );
     }
 
@@ -165,11 +166,19 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
 
     // Create a temporary directory to initialize the Git repository
     wxString tempDirPath = wxFileName::CreateTempFileName(wxT("kigit_temp"));
-    wxMkDir(tempDirPath, wxS_DIR_DEFAULT );
+
+    if( !wxMkDir(tempDirPath, wxS_DIR_DEFAULT ) )
+    {
+        git_libgit2_shutdown();
+        wxLogError( "Failed to create temporary directory for Git repository (%s): %s", tempDirPath,
+                    wxSysErrorMsg() );
+        return false;
+    }
 
     // Initialize the Git repository
     git_repository* repo = nullptr;
     int result = git_repository_init(&repo, tempDirPath.mb_str(wxConvUTF8), 0);
+
     if (result != 0) {
         git_repository_free(repo);
         git_libgit2_shutdown();
