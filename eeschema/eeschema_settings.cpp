@@ -480,6 +480,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "plot.frame_reference",
             &m_PlotPanel.frame_reference, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "plot.pdf_property_popups",
+            &m_PlotPanel.pdf_property_popups, true ) );
+
     m_params.emplace_back( new PARAM<int>( "plot.hpgl_paper_size",
             &m_PlotPanel.hpgl_paper_size, 0 ) );
 

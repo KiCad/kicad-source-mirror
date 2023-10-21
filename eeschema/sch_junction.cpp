@@ -237,7 +237,8 @@ bool SCH_JUNCTION::doIsConnected( const VECTOR2I& aPosition ) const
 }
 
 
-void SCH_JUNCTION::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_JUNCTION::Plot( PLOTTER* aPlotter, bool aBackground,
+                         const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
         return;

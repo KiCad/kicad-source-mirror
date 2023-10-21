@@ -54,9 +54,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxChoice* m_paperSizeOption;
 		wxCheckBox* m_plotDrawingSheet;
 		wxChoice* m_ModeColorOption;
-		wxCheckBox* m_plotBackgroundColor;
 		wxStaticText* m_staticText9;
 		wxChoice* m_colorTheme;
+		wxCheckBox* m_plotBackgroundColor;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
@@ -66,6 +66,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxStaticText* m_penWidthLabel;
 		wxTextCtrl* m_penWidthCtrl;
 		wxStaticText* m_penWidthUnits;
+		wxCheckBox* m_plotPDFPropertyPopups;
 		wxStaticBoxSizer* m_otherOptions;
 		wxCheckBox* m_openFileAfterPlot;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;

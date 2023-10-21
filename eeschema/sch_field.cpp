@@ -1125,7 +1125,8 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
-void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground,
+                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( GetShownText( true ).IsEmpty() || aBackground )
         return;

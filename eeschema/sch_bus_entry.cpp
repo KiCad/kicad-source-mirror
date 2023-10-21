@@ -468,7 +468,8 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccu
 }
 
 
-void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
+                               const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
         return;

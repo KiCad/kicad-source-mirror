@@ -349,7 +349,8 @@ bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 }
 
 
-void SCH_ITEM::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_ITEM::Plot( PLOTTER* aPlotter, bool aBackground,
+                     const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     wxFAIL_MSG( wxT( "Plot() method not implemented for class " ) + GetClass() );
 }

@@ -375,11 +375,12 @@ BITMAPS SCH_TEXTBOX::GetMenuImage() const
 }
 
 
-void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground,
+                        const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
     {
-        SCH_SHAPE::Plot( aPlotter, aBackground );
+        SCH_SHAPE::Plot( aPlotter, aBackground, aPlotSettings );
         return;
     }
 

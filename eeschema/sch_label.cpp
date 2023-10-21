@@ -26,7 +26,7 @@
 #include <base_units.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
-#include <plotters/plotter.h>
+#include <sch_plotter.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <string_utils.h>
@@ -1240,7 +1240,8 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 }
 
 
-void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
+                           const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     static std::vector<VECTOR2I> s_poly;
 
@@ -1301,25 +1302,28 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
         }
 
         // Plot attributes to a hypertext menu
-        std::vector<wxString> properties;
-
-        if( connection )
+        if( aPlotSettings.m_PDFPropertyPopups )
         {
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ),
-                                                       connection->Name() ) );
+            std::vector<wxString> properties;
 
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
-                                                       GetEffectiveNetClass()->GetName() ) );
+            if( connection )
+            {
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ),
+                                                           connection->Name() ) );
+
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
+                                                           GetEffectiveNetClass()->GetName() ) );
+            }
+
+            for( const SCH_FIELD& field : GetFields() )
+            {
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(),
+                                                           field.GetShownText( false ) ) );
+            }
+
+            if( !properties.empty() )
+                aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
         }
-
-        for( const SCH_FIELD& field : GetFields() )
-        {
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(),
-                                                       field.GetShownText( false ) ) );
-        }
-
-        if( !properties.empty() )
-            aPlotter->HyperlinkMenu( GetBodyBoundingBox(), properties );
 
         if( Type() == SCH_HIER_LABEL_T )
         {
@@ -1329,7 +1333,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
 
     for( const SCH_FIELD& field : m_fields )
-        field.Plot( aPlotter, aBackground );
+        field.Plot( aPlotter, aBackground, aPlotSettings );
 }
 
 

@@ -249,6 +249,7 @@ public:
         int      hpgl_paper_size;
         double   hpgl_pen_size;
         int      hpgl_origin;
+        bool     pdf_property_popups;
         bool     open_file_after_plot;
     };
 

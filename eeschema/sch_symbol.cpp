@@ -38,10 +38,10 @@
 #include <refdes_utils.h>
 #include <wx/log.h>
 #include <settings/settings_manager.h>
+#include <sch_plotter.h>
 #include <string_utils.h>
 
 #include <utility>
-#include "plotters/plotter.h"
 
 
 std::unordered_map<TRANSFORM, int> SCH_SYMBOL::s_transformToOrientationCache;
@@ -2313,7 +2313,8 @@ bool SCH_SYMBOL::IsInNetlist() const
 }
 
 
-void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground,
+                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
         return;
@@ -2364,38 +2365,40 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
             for( SCH_FIELD field : m_fields )
             {
                 field.ClearRenderCache();
-                field.Plot( aPlotter, local_background );
+                field.Plot( aPlotter, local_background, aPlotSettings );
             }
         }
 
         if( m_DNP )
             PlotDNP( aPlotter );
 
+        SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+
         // Plot attributes to a hypertext menu
-        std::vector<wxString> properties;
-        SCH_SHEET_PATH*       sheet = &Schematic()->CurrentSheet();
-
-        for( const SCH_FIELD& field : GetFields() )
+        if( aPlotSettings.m_PDFPropertyPopups )
         {
-            wxString text_field = field.GetShownText( sheet, false);
+            std::vector<wxString> properties;
 
-            if( text_field.IsEmpty() )
-                continue;
+            for( const SCH_FIELD& field : GetFields() )
+            {
+                wxString text_field = field.GetShownText( sheet, false);
 
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       field.GetName(), text_field ) );
+                if( text_field.IsEmpty() )
+                    continue;
+
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           field.GetName(), text_field ) );
+            }
+
+            if( !m_part->GetKeyWords().IsEmpty() )
+            {
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Keywords" ),
+                                                           m_part->GetKeyWords() ) );
+            }
+
+            aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
         }
-
-        if( !m_part->GetKeyWords().IsEmpty() )
-        {
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       _( "Keywords" ),
-                                                       m_part->GetKeyWords() ) );
-        }
-
-        aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
-
-
 
         aPlotter->EndBlock( nullptr );
 

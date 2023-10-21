@@ -203,13 +203,14 @@ bool SCH_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) c
 }
 
 
-void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground,
+                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
     {
         m_bitmapBase->PlotImage( aPlotter, m_pos,
-                            aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
-                            aPlotter->RenderSettings()->GetDefaultPenWidth() );
+                                 aPlotter->RenderSettings()->GetLayerColor( GetLayer() ),
+                                 aPlotter->RenderSettings()->GetDefaultPenWidth() );
     }
 }
 

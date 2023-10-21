@@ -27,7 +27,7 @@
 #include <string_utils.h>
 #include <core/mirror.h>
 #include <sch_painter.h>
-#include <plotters/plotter.h>
+#include <sch_plotter.h>
 #include <geometry/shape_segment.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
@@ -860,7 +860,8 @@ bool SCH_LINE::doIsConnected( const VECTOR2I& aPosition ) const
 }
 
 
-void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground,
+                     const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
         return;
@@ -887,31 +888,34 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     BOX2I                 bbox = GetBoundingBox();
     bbox.Inflate( GetPenWidth() * 3 );
 
-    if( GetLayer() == LAYER_WIRE )
+    if( aPlotSettings.m_PDFPropertyPopups )
     {
-        if( SCH_CONNECTION* connection = Connection() )
+        if( GetLayer() == LAYER_WIRE )
         {
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       _( "Net" ),
-                                                       connection->Name() ) );
+            if( SCH_CONNECTION* connection = Connection() )
+            {
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Net" ),
+                                                           connection->Name() ) );
 
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       _( "Resolved netclass" ),
-                                                       GetEffectiveNetClass()->GetName() ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Resolved netclass" ),
+                                                           GetEffectiveNetClass()->GetName() ) );
+            }
         }
-    }
-    else if( GetLayer() == LAYER_BUS )
-    {
-        if( SCH_CONNECTION* connection = Connection() )
+        else if( GetLayer() == LAYER_BUS )
         {
-            for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
-                properties.emplace_back( wxT( "!" ) + member->Name() );
+            if( SCH_CONNECTION* connection = Connection() )
+            {
+                for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+                    properties.emplace_back( wxT( "!" ) + member->Name() );
+            }
+
         }
 
+        if( !properties.empty() )
+            aPlotter->HyperlinkMenu( bbox, properties );
     }
-
-    if( !properties.empty() )
-        aPlotter->HyperlinkMenu( bbox, properties );
 }
 
 

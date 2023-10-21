@@ -111,7 +111,8 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 }
 
 
-void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground,
+                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     int pen_size = GetPenWidth();
 

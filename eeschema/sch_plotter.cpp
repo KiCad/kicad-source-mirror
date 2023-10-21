@@ -250,7 +250,7 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
                           aScreen->GetFileName(), color, aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( aPlotter );
+    aScreen->Plot( aPlotter, aPlotSettings );
 }
 
 
@@ -455,7 +455,7 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter );
+    aScreen->Plot( plotter, aPlotSettings );
 
     plotter->EndPlot();
     delete plotter;
@@ -630,7 +630,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter );
+    aScreen->Plot( plotter, aPlotSettings );
 
     plotter->EndPlot();
     delete plotter;
@@ -819,7 +819,7 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
                           COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter );
+    aScreen->Plot( plotter, aPlotSettings );
 
     plotter->EndPlot();
 
@@ -970,7 +970,7 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter );
+    aScreen->Plot( plotter, aPlotSettings );
 
     // finish
     plotter->EndPlot();

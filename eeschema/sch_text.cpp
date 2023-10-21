@@ -26,7 +26,7 @@
 #include <base_units.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
-#include <plotters/plotter.h>
+#include <sch_plotter.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <string_utils.h>
@@ -351,7 +351,8 @@ void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground,
+                     const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
         return;

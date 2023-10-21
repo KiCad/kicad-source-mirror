@@ -32,17 +32,16 @@
 #include <string_utils.h>
 #include <kiway.h>
 #include <plotters/plotter.h>
+#include <sch_plotter.h>
 #include <project.h>
 #include <project_sch.h>
 #include <reporter.h>
-#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 
 #include <symbol_library.h>
 #include <connection_graph.h>
 #include <lib_pin.h>
-#include <lib_shape.h>
 #include <sch_symbol.h>
 #include <sch_junction.h>
 #include <sch_line.h>
@@ -54,7 +53,6 @@
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 #include <sim/sim_model.h> // For V6 to V7 simulation model migration.
-#include <sim/sim_value.h> //
 #include <locale_io.h>
 
 #include <algorithm>
@@ -62,7 +60,6 @@
 // TODO(JE) Debugging only
 #include <core/profile.h>
 #include "sch_bus_entry.h"
-#include "sim/sim_model_ideal.h"
 
 /*
  * Flag to enable profiling of the TestDanglingEnds() function.
@@ -1110,7 +1107,7 @@ void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
 }
 
 
-void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
+void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector<SCH_ITEM*>   junctions;
@@ -1165,21 +1162,21 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
     for( const SCH_ITEM* item : bitmaps )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, background );
+        item->Plot( aPlotter, background, aPlotSettings );
     }
 
     // Plot the background items
     for( const SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, background );
+        item->Plot( aPlotter, background, aPlotSettings );
     }
 
     // Plot the foreground items
     for( const SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, !background );
+        item->Plot( aPlotter, !background, aPlotSettings );
     }
 
     // After plotting the symbols as a group above (in `other`), we need to overplot the pins
@@ -1191,7 +1188,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
         for( SCH_FIELD field : sym->GetFields() )
         {
             field.ClearRenderCache();
-            field.Plot( aPlotter, false );
+            field.Plot( aPlotter, false, aPlotSettings );
         }
 
         sym->PlotPins( aPlotter );
@@ -1203,7 +1200,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
     for( const SCH_ITEM* item : junctions )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, !background );
+        item->Plot( aPlotter, !background, aPlotSettings );
     }
 }
 

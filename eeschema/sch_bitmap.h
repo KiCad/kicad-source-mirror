@@ -150,7 +150,8 @@ public:
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter, bool aBackground ) const override;
+    void Plot( PLOTTER* aPlotter, bool aBackground,
+               const SCH_PLOT_SETTINGS& aPlotSettings ) const override;
 
     EDA_ITEM* Clone() const override;
 

@@ -82,15 +82,16 @@ struct SCH_PLOT_SETTINGS
     bool                  m_plotDrawingSheet;
     std::vector<wxString> m_plotPages;
 
-    bool         m_blackAndWhite;
-    int          m_pageSizeSelect;
-    bool         m_useBackgroundColor;
-    double       m_HPGLPenSize; // for HPGL format only: pen size
+    bool           m_blackAndWhite;
+    int            m_pageSizeSelect;
+    bool           m_useBackgroundColor;
+    double         m_HPGLPenSize; // for HPGL format only: pen size
     HPGL_PAGE_SIZE m_HPGLPaperSizeSelect;
-    wxString     m_theme;
+    bool           m_PDFPropertyPopups;
+    wxString       m_theme;
 
-    wxString m_outputDirectory;
-    wxString m_outputFile;
+    wxString       m_outputDirectory;
+    wxString       m_outputFile;
 
     HPGL_PLOT_ORIGIN_AND_UNITS m_HPGLPlotOrigin;
 

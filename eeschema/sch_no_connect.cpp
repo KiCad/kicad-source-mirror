@@ -172,7 +172,8 @@ bool SCH_NO_CONNECT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy
 }
 
 
-void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground,
+                           const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground )
         return;

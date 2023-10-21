@@ -1102,7 +1102,8 @@ bool SCH_SHEET::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
-void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
+void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground,
+                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
     if( aBackground && !aPlotter->GetColorMode() )
         return;
@@ -1147,11 +1148,11 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     // Plot sheet pins
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Plot( aPlotter, aBackground );
+        sheetPin->Plot( aPlotter, aBackground, aPlotSettings );
 
     // Plot the fields
     for( const SCH_FIELD& field : m_fields )
-        field.Plot( aPlotter, aBackground );
+        field.Plot( aPlotter, aBackground, aPlotSettings );
 }
 
 
