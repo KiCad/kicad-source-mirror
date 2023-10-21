@@ -72,17 +72,6 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 #endif
 
     /*
-     * Automatic icon scaling works fine on Mac.  It works mostly fine on MSW, but perhaps not
-     * uniformly enough to exclude the explicit controls there.
-     */
-#if defined( __WXGTK__ ) || defined( __WXMSW__ )
-    m_params.emplace_back( new PARAM<int>( "appearance.icon_scale",
-            &m_Appearance.icon_scale, 0 ) );
-#else
-    m_Appearance.icon_scale = 0.0;
-#endif
-
-    /*
    	 * Automatic canvas scaling works fine on all supported platforms, so it's no longer exposed as
      * a configuration option.
      */

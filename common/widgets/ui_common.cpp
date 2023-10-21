@@ -109,16 +109,7 @@ wxFont getGUIFont( wxWindow* aWindow, int aRelativeSize )
     font.SetPointSize( font.GetPointSize() + aRelativeSize );
 
     if( Pgm().GetCommonSettings()->m_Appearance.apply_icon_scale_to_fonts )
-    {
-        double icon_scale_fourths;
-
-        if( Pgm().GetCommonSettings()->m_Appearance.icon_scale <= 0 )
-            icon_scale_fourths = KiIconScale( aWindow );
-        else
-            icon_scale_fourths = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
-
-        font.SetPointSize( KiROUND( icon_scale_fourths * font.GetPointSize() / 4.0 ) );
-    }
+        font.SetPointSize( KiROUND( KiIconScale( aWindow ) * font.GetPointSize() / 4.0 ) );
 
 #ifdef __WXMAC__
     // https://trac.wxwidgets.org/ticket/19210

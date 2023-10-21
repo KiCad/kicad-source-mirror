@@ -248,10 +248,7 @@ void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 
 void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
 {
-    int scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
-
-    if( scale == 0 )
-        scale = KiIconScale( aWindow );
+    int scale = KiIconScale( aWindow );
 
     if( scale > 4 )
         AddSpacer( 16 * ( scale - 4 ) / 4 );

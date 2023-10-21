@@ -103,7 +103,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     COLOR4D    top_color, bottom_color, background_color;
     bool       change = aForceRebuild;
 
-    int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
+    int requested_scale = KiIconScale( this );
 
     if( m_prevIconVal.previous_requested_scale != requested_scale )
     {

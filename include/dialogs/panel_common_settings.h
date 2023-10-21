@@ -46,8 +46,6 @@ protected:
 
     void applySettingsToPanel( COMMON_SETTINGS& aSettings );
 
-    void OnScaleSlider( wxScrollEvent& aEvent );
-    void OnIconScaleAuto( wxCommandEvent& aEvent );
     void OnTextEditorClick( wxCommandEvent& event ) override;
     void OnPDFViewerClick( wxCommandEvent& event ) override;
     void OnRadioButtonPdfViewer( wxCommandEvent& event ) override;
@@ -64,13 +62,6 @@ protected:
 
 private:
     void setPdfViewerPathState();
-
-protected:
-    wxStaticText*   m_iconScaleLabel;
-    STEPPED_SLIDER* m_iconScaleSlider;
-    wxCheckBox*     m_iconScaleAuto;
-
-    int             m_last_scale;               ///< saved icon scale when Auto selected
 };
 
 #endif //KICAD_DIALOG_SUITE_OPTIONS_H

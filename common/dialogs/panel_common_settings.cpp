@@ -45,11 +45,7 @@
  */
 
 PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
-        : PANEL_COMMON_SETTINGS_BASE( aParent ),
-          m_iconScaleLabel( nullptr ),
-          m_iconScaleSlider( nullptr ),
-          m_iconScaleAuto( nullptr ),
-          m_last_scale( -1 )
+        : PANEL_COMMON_SETTINGS_BASE( aParent )
 {
     /*
      * Cairo canvas doesn't work on Mac, so no need for fallback anti-aliasing options
@@ -70,31 +66,6 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
     m_rbIconThemeLight->Show( false );
     m_rbIconThemeDark->Show( false );
     m_rbIconThemeAuto->Show( false );
-#endif
-
-    /*
-     * Automatic icon scaling works fine on Mac.  It works mostly fine on MSW, but perhaps not
-     * uniformly enough to exclude the explicit controls there.
-     */
-#if defined( __WXGTK__ ) || defined( __WXMSW__ )
-    // Sadly wxSlider is poorly implemented and adds its legends as sibling windows (so that
-    // showing/hiding the control doesn't work).  So we have to create it conditionally.
-    wxGridBagSizer* gb = m_gbUserInterface;
-
-    const int row_num = 0;
-    m_iconScaleLabel = new wxStaticText( this, wxID_ANY, _( "Icon scale:" ) );
-   	m_iconScaleLabel->Wrap( -1 );
-   	gb->Add( m_iconScaleLabel, wxGBPosition( row_num, 0 ),
-             wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-   	m_iconScaleSlider = new STEPPED_SLIDER( this, wxID_ANY, 100, 50, 275, wxDefaultPosition,
-                                            wxDefaultSize, wxSL_HORIZONTAL|wxSL_VALUE_LABEL );
-   	m_iconScaleSlider->SetStep( 25 );
-   	gb->Add( m_iconScaleSlider, wxGBPosition( row_num, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM, 5 );
-
-   	m_iconScaleAuto = new wxCheckBox( this, wxID_ANY, _( "Automatic" ) );
-   	gb->Add( m_iconScaleAuto, wxGBPosition( row_num, 2 ),
-             wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 #endif
 
    	/*
@@ -141,40 +112,6 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
     m_scaleFonts->Show( false );
     m_fontScalingHelp->Show( false );
 
-    if( m_iconScaleSlider )
-    {
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_TOP,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_BOTTOM,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEUP,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_LINEDOWN,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEUP,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_PAGEDOWN,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBTRACK,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_THUMBRELEASE,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleSlider->Connect( wxEVT_SCROLL_CHANGED,
-                                    wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                    nullptr, this );
-        m_iconScaleAuto->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
-                                  wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnIconScaleAuto ),
-                                  nullptr, this );
-    }
-
     if( m_canvasScaleCtrl )
     {
         m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
@@ -191,40 +128,6 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
 
 PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
 {
-    if( m_iconScaleSlider )
-    {
-        m_iconScaleSlider->Disconnect( wxEVT_SCROLL_TOP,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_BOTTOM,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_LINEUP,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_LINEDOWN,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_PAGEUP,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_PAGEDOWN,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_THUMBTRACK,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_THUMBRELEASE,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleSlider->Disconnect( wxEVT_SCROLL_CHANGED,
-                                       wxScrollEventHandler( PANEL_COMMON_SETTINGS::OnScaleSlider ),
-                                       nullptr, this );
-       	m_iconScaleAuto->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED,
-                                     wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnIconScaleAuto ),
-                                     nullptr, this );
-    }
-
     if( m_canvasScaleCtrl )
     {
         m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
@@ -261,12 +164,6 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Graphics.opengl_aa_mode = m_antialiasing->GetSelection();
     commonSettings->m_Graphics.cairo_aa_mode = m_antialiasingFallback->GetSelection();
-
-    if( m_iconScaleSlider )
-    {
-        int scale_fourths = m_iconScaleAuto->GetValue() ? -1 : m_iconScaleSlider->GetValue() / 25;
-        commonSettings->m_Appearance.icon_scale = scale_fourths;
-    }
 
     if( m_canvasScaleCtrl )
     {
@@ -348,22 +245,6 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_Clear3DCacheFilesOlder->SetValue( aSettings.m_System.clear_3d_cache_interval );
 
-    if( m_iconScaleSlider )
-    {
-        int icon_scale_fourths = aSettings.m_Appearance.icon_scale;
-
-        if( icon_scale_fourths <= 0 )
-        {
-            m_iconScaleAuto->SetValue( true );
-            m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-        }
-        else
-        {
-            m_iconScaleAuto->SetValue( false );
-            m_iconScaleSlider->SetValue( icon_scale_fourths * 25 );
-        }
-    }
-
     if( m_canvasScaleCtrl )
     {
         const DPI_SCALING_COMMON dpi( &aSettings, this );
@@ -399,31 +280,6 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     m_backupLimitTotalSize->SetValue( aSettings.m_Backup.limit_total_size / ( 1024 * 1024 ) );
 
     m_showScrollbars->SetValue( aSettings.m_Appearance.show_scrollbars );
-}
-
-
-void PANEL_COMMON_SETTINGS::OnScaleSlider( wxScrollEvent& aEvent )
-{
-    m_iconScaleAuto->SetValue( false );
-    aEvent.Skip();
-}
-
-
-void PANEL_COMMON_SETTINGS::OnIconScaleAuto( wxCommandEvent& aEvent )
-{
-    if( m_iconScaleSlider )
-    {
-        if( m_iconScaleAuto->GetValue() )
-        {
-            m_last_scale = m_iconScaleAuto->GetValue();
-            m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
-        }
-        else
-        {
-            if( m_last_scale >= 0 )
-                m_iconScaleSlider->SetValue( m_last_scale );
-        }
-    }
 }
 
 

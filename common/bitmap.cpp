@@ -144,21 +144,10 @@ int KiIconScale( wxWindow* aWindow )
 }
 
 
-static int get_scale_factor( wxWindow* aWindow )
-{
-    int requested_scale = Pgm().GetCommonSettings()->m_Appearance.icon_scale;
-
-    if( requested_scale > 0 )
-        return requested_scale;
-    else
-        return KiIconScale( aWindow );
-}
-
-
 wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight, bool aQuantized )
 {
     // Bitmap conversions are cached because they can be slow.
-    int scale = get_scale_factor( aWindow );
+    int scale = KiIconScale( aWindow );
 
     if( aQuantized )
         scale = KiROUND( (double) scale / 4.0 ) * 4;
@@ -189,7 +178,7 @@ void ClearScaledBitmapCache()
 
 wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow )
 {
-    const int scale = get_scale_factor( aWindow );
+    const int scale = KiIconScale( aWindow );
 
     if( scale == 4 )
     {
