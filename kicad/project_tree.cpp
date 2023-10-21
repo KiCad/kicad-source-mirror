@@ -62,6 +62,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
 PROJECT_TREE::~PROJECT_TREE()
 {
     delete m_imageList;
+    delete m_statusImageList;
 }
 
 

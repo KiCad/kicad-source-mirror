@@ -307,7 +307,8 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
     callbacks.payload = this;
 
-    git_remote_create_with_fetchspec( &remote, m_repository, "origin", m_txtURL->GetValue(),
+    wxString txtURL = m_txtURL->GetValue();
+    git_remote_create_with_fetchspec( &remote, m_repository, "origin", txtURL.ToStdString().c_str(),
                                       "+refs/heads/*:refs/remotes/origin/*" );
 
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr ) != GIT_OK )

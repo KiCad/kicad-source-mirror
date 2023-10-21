@@ -2004,8 +2004,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     git_repository_config( &config, repo );
 
     // Read relevant data from the git config
-    const char* authorName = nullptr;
-    const char* authorEmail = nullptr;
+    wxString authorName;
+    wxString authorEmail;
 
     // Read author name
     git_config_entry* name_c = nullptr;
