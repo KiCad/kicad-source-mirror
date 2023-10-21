@@ -276,6 +276,8 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "corrosion_table.threshold_voltage",
             &m_CorrosionTable.threshold_voltage, "0" ) );
 
+    m_params.emplace_back( new PARAM<bool>( "corrosion_table.show_symbols",
+            &m_CorrosionTable.show_symbols, true ) );
 }
 
 

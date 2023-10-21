@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,14 +38,15 @@ class PANEL_GALVANIC_CORROSION_BASE : public CALCULATOR_PANEL
 	private:
 
 	protected:
-		wxBoxSizer* bSizer6;
+		wxBoxSizer* bSizerMain;
 		wxScrolledWindow* m_scrolledWindow1;
 		wxGrid* m_table;
 		HTML_WINDOW* m_helpText;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_corFilterCtrl;
 		wxStaticText* m_staticText3;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline;
+		wxStaticText* m_stOpts;
 		wxRadioButton* m_radioBtnSymbol;
 		wxRadioButton* m_radioBtnName;
 
@@ -56,7 +57,7 @@ class PANEL_GALVANIC_CORROSION_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_GALVANIC_CORROSION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_GALVANIC_CORROSION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 509,245 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_GALVANIC_CORROSION_BASE();
 

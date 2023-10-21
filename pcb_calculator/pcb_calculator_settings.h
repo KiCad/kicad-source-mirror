@@ -155,6 +155,7 @@ public:
     struct CORROSION_TABLE
     {
         wxString threshold_voltage;
+        bool     show_symbols;
     };
 
     PCB_CALCULATOR_SETTINGS();

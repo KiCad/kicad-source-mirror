@@ -101,12 +101,21 @@ void PANEL_GALVANIC_CORROSION::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     m_corFilterCtrl->SetValue( aCfg->m_CorrosionTable.threshold_voltage );
     m_corFilterValue = DoubleFromString( m_corFilterCtrl->GetValue() );
+
+    bool refill_table = m_symbolicStatus != aCfg->m_CorrosionTable.show_symbols;
+    m_symbolicStatus = aCfg->m_CorrosionTable.show_symbols;
+    m_radioBtnSymbol->SetValue( m_symbolicStatus );
+    m_radioBtnName->SetValue( !m_symbolicStatus );
+
+    if( refill_table )
+        fillTable();
 }
 
 
 void PANEL_GALVANIC_CORROSION::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_CorrosionTable.threshold_voltage = wxString( "" ) << m_corFilterValue;
+    aCfg->m_CorrosionTable.show_symbols = m_symbolicStatus;
 }
 
 void PANEL_GALVANIC_CORROSION::OnNomenclatureChange( wxCommandEvent& aEvent )
