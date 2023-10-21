@@ -1378,25 +1378,38 @@ mpWindow::mpWindow() :
 }
 
 mpWindow::mpWindow( wxWindow* parent, wxWindowID id ) :
-        wxWindow( parent, id, wxDefaultPosition, wxDefaultSize, 0, wxT( "mathplot" ) )
+        wxWindow( parent, id, wxDefaultPosition, wxDefaultSize, 0, wxT( "mathplot" ) ),
+        m_minX( 0.0 ),
+        m_maxX( 0.0 ),
+        m_minY( 0.0 ),
+        m_maxY( 0.0 ),
+        m_scaleX( 1.0 ),
+        m_scaleY( 1.0 ),
+        m_posX( 0.0 ),
+        m_posY( 0.0 ),
+        m_scrX( 64 ),
+        m_scrY( 64 ),
+        m_clickedX( 0 ),
+        m_clickedY( 0 ),
+        m_yLocked( false ),
+        m_desiredXmin( 0.0 ),
+        m_desiredXmax( 1.0 ),
+        m_desiredYmin( 0.0 ),
+        m_desiredYmax( 1.0 ),
+        m_marginTop( 0 ),
+        m_marginRight( 0 ),
+        m_marginBottom( 0 ),
+        m_marginLeft( 0 ),
+        m_last_lx( 0 ),
+        m_last_ly( 0 ),
+        m_buff_bmp( nullptr ),
+        m_enableDoubleBuffer( false ),
+        m_enableMouseNavigation( true ),
+        m_enableMouseWheelPan( false ),
+        m_enableLimitedView( false ),
+        m_movingInfoLayer( nullptr ),
+        m_zooming( false )
 {
-    m_zooming   = false;
-    m_scaleX    = m_scaleY = 1.0;
-    m_posX = m_posY = 0;
-    m_desiredXmin   = m_desiredYmin = 0;
-    m_desiredXmax   = m_desiredYmax = 1;
-    m_scrX  = m_scrY = 64;    // Fixed from m_scrX = m_scrX = 64;
-    m_minX  = m_minY = 0;
-    m_maxX  = m_maxY = 0;
-    m_last_lx   = m_last_ly = 0;
-    m_buff_bmp = nullptr;
-    m_enableDoubleBuffer = false;
-    m_enableMouseNavigation = true;
-    m_enableLimitedView = false;
-    m_movingInfoLayer = nullptr;
-    // Set margins to 0
-    m_marginTop = 0; m_marginRight = 0; m_marginBottom = 0; m_marginLeft = 0;
-
     m_popmenu.Append( mpID_ZOOM_UNDO, _( "Undo Last Zoom" ), _( "Return zoom to level prior to last zoom action" ) );
     m_popmenu.Append( mpID_ZOOM_REDO, _( "Redo Last Zoom" ), _( "Return zoom to level prior to last zoom undo" ) );
     m_popmenu.AppendSeparator();
