@@ -42,6 +42,9 @@ public:
 
     void OnLoadFile();
 
+    void OnFileHistory( wxCommandEvent& event );
+    void OnClearFileHistory( wxCommandEvent& event );
+
     /**
      * Generate a schematic library which contains one component:
      * the logo

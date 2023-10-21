@@ -29,10 +29,12 @@
 #include <bitmap_io.h>
 #include <bitmaps.h>
 #include <common.h>
+#include <id.h>
 #include <kiface_base.h>
 #include <pgm_base.h>
 #include <widgets/wx_menubar.h>
 #include <wildcards_and_files_ext.h>
+#include <file_history.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/common_control.h>
@@ -139,6 +141,9 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
 BEGIN_EVENT_TABLE( BITMAP2CMP_FRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, BITMAP2CMP_FRAME::OnExit )
     EVT_MENU( wxID_EXIT, BITMAP2CMP_FRAME::OnExit )
+
+    EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, BITMAP2CMP_FRAME::OnFileHistory )
+    EVT_MENU( ID_FILE_LIST_CLEAR, BITMAP2CMP_FRAME::OnClearFileHistory )
 END_EVENT_TABLE()
 
 
@@ -218,6 +223,24 @@ wxWindow* BITMAP2CMP_FRAME::GetToolCanvas() const
 }
 
 
+void BITMAP2CMP_FRAME::OnFileHistory( wxCommandEvent& event )
+{
+    wxString fn = GetFileFromHistory( event.GetId(), _( "Image files" ) );
+
+    if( !fn.IsEmpty() )
+    {
+        OpenProjectFiles( std::vector<wxString>( 1, fn ) );
+        Refresh();
+    }
+}
+
+
+void BITMAP2CMP_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
+{
+    ClearFileHistory();
+}
+
+
 void BITMAP2CMP_FRAME::doReCreateMenuBar()
 {
     COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
@@ -236,6 +259,31 @@ void BITMAP2CMP_FRAME::doReCreateMenuBar()
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
     fileMenu->Add( ACTIONS::open );
+
+    static ACTION_MENU* openRecentMenu;
+    FILE_HISTORY&       fileHistory = GetFileHistory();
+
+    // Create the menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentMenu )
+    {
+        openRecentMenu = new ACTION_MENU( false, tool );
+        openRecentMenu->SetIcon( BITMAPS::recent );
+
+        fileHistory.UseMenu( openRecentMenu );
+        fileHistory.AddFilesToMenu();
+    }
+
+    // Ensure the title is up to date after changing language
+    openRecentMenu->SetTitle( _( "Open Recent" ) );
+    fileHistory.UpdateClearText( openRecentMenu, _( "Clear Recent Files" ) );
+
+    wxMenuItem* item = fileMenu->Add( openRecentMenu->Clone() );
+
+    // Add the file menu condition here since it needs the item ID for the submenu
+    ACTION_CONDITIONS cond;
+    cond.Enable( FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
+    RegisterUIUpdateHandler( item->GetId(), cond );
 
     fileMenu->AppendSeparator();
     fileMenu->AddQuit( _( "Image Converter" ) );
@@ -371,7 +419,13 @@ bool BITMAP2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
 {
     m_bitmapFileName = aFileSet[0];
 
-    return m_panel->OpenProjectFiles( aFileSet, aCtl );
+    if( m_panel->OpenProjectFiles( aFileSet, aCtl ) )
+    {
+        UpdateFileHistory( m_bitmapFileName );
+        return true;
+    }
+
+    return false;
 }
 
 
