@@ -1428,9 +1428,7 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 
     // If the new zone is on the same layer(s) as the initial zone,
     // offset it a bit so it can more easily be picked.
-    if( oldZone->GetIsRuleArea() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
-        newZone->Move( wxPoint( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
-    else if( !oldZone->GetIsRuleArea() && zoneSettings.m_Layers.test( oldZone->GetLayer() ) )
+    if( oldZone->GetLayerSet() == zoneSettings.m_Layers )
         newZone->Move( wxPoint( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
 
     commit.Add( newZone.release() );
