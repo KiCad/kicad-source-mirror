@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2022 KiCad Developers.
+ * Copyright (C) 2021-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,9 +216,11 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         TEST( a->GetStart0(), b->GetStart0() );
         TEST( a->GetEnd0(), b->GetEnd0() );
 
-        // Arc center is calculated and so may have round-off errors when parents are
-        // differentially rotated.
-        if( ( a->GetCenter0() - b->GetCenter0() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0001 ) )
+        // Arc center is calculated to the nearest 100nm increment and may have round-off errors
+        // when parents are differentially rotated.  See CalcArcCenter() function in
+        // ./libs/kimath/src/trigo.cpp.
+        if( ( std::abs( a->GetCenter0().x - b->GetCenter0().x ) > pcbIUScale.mmToIU( 0.0002 ) ) ||
+            ( std::abs( a->GetCenter0().y - b->GetCenter0().y ) > pcbIUScale.mmToIU( 0.0002 ) ) )
             return true;
 
         break;
