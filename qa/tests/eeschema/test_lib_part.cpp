@@ -635,18 +635,26 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     LIB_FIELD* field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
     field->SetText( "KiCad" );
     child->AddField( field );
+    field->SetParent( child.get() );
+
     field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
     field->SetText( "KiCad" );
     ref->AddField( field );
+    field->SetParent( ref.get() );
+
     BOOST_CHECK( *ref == *child->Flatten() );
 
     ref->SetName( "grandchild" );
     field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
     grandChild->AddField( field );
+    field->SetParent( grandChild.get() );
+
     field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
     ref->AddField( field );
+    field->SetParent( ref.get() );
+
     BOOST_CHECK( *ref == *grandChild->Flatten() );
 
     BOOST_CHECK_EQUAL( grandChild->Flatten()->GetDatasheetField().GetText(),
