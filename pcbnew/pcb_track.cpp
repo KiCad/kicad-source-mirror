@@ -320,6 +320,24 @@ MINOPTMAX<int> PCB_TRACK::GetWidthConstraint( wxString* aSource ) const
 }
 
 
+MINOPTMAX<int> PCB_VIA::GetDrillConstraint( wxString* aSource ) const
+{
+    DRC_CONSTRAINT constraint;
+
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    {
+        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this, nullptr, m_layer );
+    }
+
+    if( aSource )
+        *aSource = constraint.GetName();
+
+    return constraint.Value();
+}
+
+
 int PCB_VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
     if( !FlashLayer( aLayer ) )

@@ -596,12 +596,12 @@ public:
      * Note that casting this to boolean will allow you to determine whether any action
      * happened.
      *
-     * @param aTrackItem the track segment or via to modify.
+     * @param aItem the track segment or via to modify.
      * @param aItemsListPicker the list picker to use for an undo command (can be NULL).
-     * @param aUseDesignRules true to use NetClass value, false to use current designSettings
-     *                          value.
+     * @param aUseDesignRules true to use design rules value, false to use current designSettings
+     *                        value.
      */
-    void SetTrackSegmentWidth( PCB_TRACK* aTrackItem, PICKED_ITEMS_LIST* aItemsListPicker,
+    void SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* aItemsListPicker,
                                bool aUseDesignRules );
 
 
@@ -629,7 +629,7 @@ public:
      * -2 if the schematic cannot be opened and 1 if OK.
      * If OK, opens Eeschema, and opens the schematic for this project
      */
-    int TestStandalone( void );
+    int TestStandalone();
 
     /**
      * Read a netlist from a file into a #NETLIST object.

@@ -65,7 +65,7 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxChoice* m_trackWidthCtrl;
 		wxChoice* m_viaSizesCtrl;
 		PCB_LAYER_BOX_SELECTOR* m_layerCtrl;
-		wxRadioButton* m_setToNetclassValues;
+		wxRadioButton* m_setToDesignRuleValues;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

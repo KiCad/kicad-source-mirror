@@ -65,7 +65,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackEndYLabel;
 		wxTextCtrl* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
-		wxCheckBox* m_trackNetclass;
+		wxCheckBox* m_trackDesignRules;
 		wxStaticText* m_DesignRuleWidths;
 		wxChoice* m_DesignRuleWidthsCtrl;
 		wxStaticText* m_DesignRuleWidthsUnits;
@@ -80,7 +80,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaYLabel;
 		wxTextCtrl* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
-		wxCheckBox* m_viaNetclass;
+		wxCheckBox* m_viaDesignRules;
 		wxStaticText* m_DesignRuleVias;
 		wxChoice* m_DesignRuleViasCtrl;
 		wxStaticText* m_DesignRuleViasUnit;

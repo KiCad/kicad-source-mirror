@@ -417,6 +417,8 @@ public:
 
     std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
 
+    MINOPTMAX<int> GetDrillConstraint( wxString* aSource = nullptr ) const;
+
     bool IsTented() const override;
     int GetSolderMaskExpansion() const;
 

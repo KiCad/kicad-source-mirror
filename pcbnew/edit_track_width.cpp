@@ -30,82 +30,63 @@
 #include <tool/tool_manager.h>
 #include <wx/choice.h>
 
-void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK*         aTrackItem,
-                                           PICKED_ITEMS_LIST* aItemsListPicker,
-                                           bool               aUseDesignRules )
+void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* aItemsListPicker,
+                                           bool aUseDesignRules )
 {
-    int initial_width;
-    int new_width;
-    int initial_drill = -1;
-    int new_drill = -1;
-
-    initial_width = aTrackItem->GetWidth();
+    PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem );
+    int      new_width = -1;
+    int      new_drill = -1;
 
     if( aUseDesignRules )
     {
-        MINOPTMAX<int> constraint = aTrackItem->GetWidthConstraint();
+        MINOPTMAX<int> constraint = aItem->GetWidthConstraint();
 
         if( constraint.HasOpt() )
             new_width = constraint.Opt();
-        else
+        else if( constraint.Min() > 0 )
             new_width = constraint.Min();
+
+        if( via )
+        {
+            constraint = via->GetDrillConstraint();
+
+            if( constraint.HasOpt() )
+                new_drill = constraint.Opt();
+            else if( constraint.Min() > 0 )
+                new_drill = constraint.Min();
+        }
+    }
+    else if( via && via->GetViaType() == VIATYPE::MICROVIA )
+    {
+        new_width = aItem->GetEffectiveNetClass()->GetuViaDiameter();
+        new_drill = aItem->GetEffectiveNetClass()->GetuViaDrill();
+    }
+    else if( via )
+    {
+        new_width = GetDesignSettings().GetCurrentViaSize();
+        new_drill = GetDesignSettings().GetCurrentViaDrill();
     }
     else
     {
         new_width = GetDesignSettings().GetCurrentTrackWidth();
     }
 
-    if( aTrackItem->Type() == PCB_VIA_T )
+    if( new_width <= 0 )
+        new_width = aItem->GetWidth();
+
+    if( via && new_drill <= 0 )
+        new_drill = via->GetDrillValue();
+
+    if( aItem->GetWidth() != new_width || ( via && via->GetDrillValue() != new_drill ) )
     {
-        const PCB_VIA *via = static_cast<const PCB_VIA*>( aTrackItem );
+        ITEM_PICKER picker( nullptr, aItem, UNDO_REDO::CHANGED );
+        picker.SetLink( aItem->Clone() );
+        aItemsListPicker->PushItem( picker );
 
-        // Get the drill value, regardless it is default or specific
-        initial_drill = via->GetDrillValue();
+        aItem->SetWidth( new_width );
 
-        if( via->GetViaType() == VIATYPE::MICROVIA )
-        {
-            new_width = aTrackItem->GetEffectiveNetClass()->GetuViaDiameter();
-            new_drill = aTrackItem->GetEffectiveNetClass()->GetuViaDrill();
-        }
-        else if( aUseDesignRules )
-        {
-            new_width = aTrackItem->GetEffectiveNetClass()->GetViaDiameter();
-            new_drill = aTrackItem->GetEffectiveNetClass()->GetViaDrill();
-        }
-        else
-        {
-            new_width = GetDesignSettings().GetCurrentViaSize();
-            new_drill = GetDesignSettings().GetCurrentViaDrill();
-        }
-
-        // Old versions set a drill value <= 0, when the default netclass it used but it could
-        // be better to set the drill value to the actual value to avoid issues for existing vias,
-        // if the default drill value is modified in the netclass, and not in current vias.
-        if( via->GetDrill() <= 0 )      // means default netclass drill value used
-            initial_drill  = -1;        // Force drill vias re-initialization
-    }
-
-    if( initial_width != new_width || initial_drill != new_drill )
-    {
-        if( aItemsListPicker )
-        {
-            aTrackItem->SetWidth( initial_width );
-            ITEM_PICKER picker( nullptr, aTrackItem, UNDO_REDO::CHANGED );
-            picker.SetLink( aTrackItem->Clone() );
-            aItemsListPicker->PushItem( picker );
-            aTrackItem->SetWidth( new_width );
-
-            if( aTrackItem->Type() == PCB_VIA_T )
-            {
-                // Set new drill value. Note: currently microvias have only a default drill value
-                PCB_VIA *via = static_cast<PCB_VIA*>( aTrackItem );
-
-                if( new_drill > 0 )
-                    via->SetDrill( new_drill );
-                else
-                    via->SetDrillDefault();
-            }
-        }
+        if( via && new_drill > 0 )
+            via->SetDrill( new_drill );
     }
 }
 

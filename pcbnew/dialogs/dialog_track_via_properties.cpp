@@ -151,7 +151,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_trackEndX.SetValue( t->GetEnd().x );
                     m_trackEndY.SetValue( t->GetEnd().y );
                     m_trackWidth.SetValue( t->GetWidth() );
-                    m_trackNetclass->SetValue( false );
+                    m_trackDesignRules->SetValue( false );
                     track_selection_layer = t->GetLayer();
                     m_tracks = true;
                 }
@@ -597,13 +597,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( !m_trackEndY.IsIndeterminate() )
                     t->SetEnd( VECTOR2I( t->GetEnd().x, m_trackEndY.GetIntValue() ) );
 
-                if( m_trackNetclass->IsChecked() )
+                if( m_trackDesignRules->IsChecked() )
                 {
                     MINOPTMAX<int> constraint = t->GetWidthConstraint();
 
                     if( constraint.HasOpt() )
                         t->SetWidth( constraint.Opt() );
-                    else
+                    else if( constraint.Min() > 0 )
                         t->SetWidth( constraint.Min() );
                 }
                 else if( !m_trackWidth.IsIndeterminate() )
@@ -680,27 +680,21 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 v->SanitizeLayers();
 
-                if( m_viaNetclass->IsChecked() )
+                if( m_viaDesignRules->IsChecked() )
                 {
-                    NETCLASS* netclass = v->GetEffectiveNetClass();
+                    MINOPTMAX<int> constraint = v->GetWidthConstraint();
 
-                    switch( v->GetViaType() )
-                    {
-                    default:
-                        wxFAIL_MSG( wxT( "Unhandled via type" ) );
-                        KI_FALLTHROUGH;
+                    if( constraint.HasOpt() )
+                        v->SetWidth( constraint.Opt() );
+                    else if( constraint.Min() > 0 )
+                        v->SetWidth( constraint.Min() );
 
-                    case VIATYPE::THROUGH:
-                    case VIATYPE::BLIND_BURIED:
-                        v->SetWidth( netclass->GetViaDiameter() );
-                        v->SetDrill( netclass->GetViaDrill() );
-                        break;
+                    constraint = v->GetDrillConstraint();
 
-                    case VIATYPE::MICROVIA:
-                        v->SetWidth( netclass->GetuViaDiameter() );
-                        v->SetDrill( netclass->GetuViaDrill() );
-                        break;
-                    }
+                    if( constraint.HasOpt() )
+                        v->SetDrill( constraint.Opt() );
+                    else if( constraint.Min() > 0 )
+                        v->SetDrill( constraint.Min() );
                 }
                 else
                 {
