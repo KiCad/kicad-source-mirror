@@ -55,7 +55,11 @@ void SIM_LIB_MGR::Clear()
 
 wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PROJECT* aProject )
 {
-    wxString   expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, aProject );
+    wxString expandedPath = ExpandEnvVarSubstitutions( aLibraryPath, aProject );
+
+    // Convert it to UNIX format
+    expandedPath.Replace( '\\', '/' );
+
     wxFileName fn( expandedPath );
 
     if( fn.IsAbsolute() )
@@ -74,10 +78,10 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, const PR
     if( !spiceLibDir.IsEmpty() && spiceLibFn.MakeAbsolute( spiceLibDir ) && spiceLibFn.Exists() )
         return spiceLibFn.GetFullPath();
 
-    if( projectFn.GetFullPath() == spiceLibFn.GetFullPath() )
+    if( spiceLibDir.IsEmpty() || spiceLibFn.GetFullPath() == projectFn.GetFullPath() )
     {
         THROW_IO_ERROR( wxString::Format( _( "Simulation model library not found at '%s'" ),
-                                          spiceLibFn.GetFullPath() ) );
+                                          projectFn.GetFullPath() ) );
     }
     else
     {
