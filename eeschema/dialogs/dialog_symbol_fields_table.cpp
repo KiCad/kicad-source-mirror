@@ -172,13 +172,13 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     m_separator1->SetIsSeparator();
     m_separator2->SetIsSeparator();
-    m_bRefresh->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
-    m_bRefreshPreview->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
+    m_bRefreshPreview->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_removeFieldButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_renameFieldButton->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
+    m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
     m_removeFieldButton->Enable( false );
     m_renameFieldButton->Enable( false );

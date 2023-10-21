@@ -240,9 +240,9 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxWindow *aButton, PIN_ERROR a
     if( !!bitmap_butt )
     {
         if( wxBitmapButton* wx_btn = dynamic_cast<wxBitmapButton*>( aButton ) )
-            wx_btn->SetBitmap( KiBitmap( bitmap_butt ) );
+            wx_btn->SetBitmap( KiBitmapBundle( bitmap_butt ) );
         else if( BITMAP_BUTTON* ki_btn = dynamic_cast<BITMAP_BUTTON*>( aButton ) )
-            ki_btn->SetBitmap( KiBitmap( bitmap_butt ) );
+            ki_btn->SetBitmap( KiBitmapBundle( bitmap_butt ) );
 
         aButton->SetToolTip( tooltip );
     }

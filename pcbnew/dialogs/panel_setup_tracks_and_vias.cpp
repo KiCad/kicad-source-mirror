@@ -59,15 +59,15 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindo
     m_Pcb = m_Frame->GetBoard();
     m_BrdSettings = &m_Pcb->GetDesignSettings();
 
-    m_trackWidthsAddButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_trackWidthsSortButton->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
-    m_trackWidthsRemoveButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_viaSizesAddButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_viaSizesSortButton->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
-    m_viaSizesRemoveButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_diffPairsAddButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_diffPairsSortButton->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
-    m_diffPairsRemoveButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_trackWidthsAddButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_trackWidthsSortButton->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
+    m_trackWidthsRemoveButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_viaSizesAddButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_viaSizesSortButton->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
+    m_viaSizesRemoveButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_diffPairsAddButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_diffPairsSortButton->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
+    m_diffPairsRemoveButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     // Membership combobox editors require a bit more room, so increase the row size of
     // all our grids for consistency

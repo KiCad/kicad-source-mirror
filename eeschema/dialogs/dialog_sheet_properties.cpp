@@ -88,10 +88,10 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     SetupStandardButtons();
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // Set font sizes
     m_hierarchicalPathLabel->SetFont( KIUI::GetInfoFont( this ) );

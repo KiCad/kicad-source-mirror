@@ -75,10 +75,10 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
     m_grid1HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk1 ) ) );
     m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
 
-    m_addGridButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_removeGridButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_moveUpButton->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_moveDownButton->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_addGridButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeGridButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_moveUpButton->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_moveDownButton->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     Layout();
 }

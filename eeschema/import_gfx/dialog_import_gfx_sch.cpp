@@ -70,7 +70,7 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
         m_yOrigin( aParent, m_yLabel, m_yCtrl, m_yUnits ),
         m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits )
 {
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     auto initWidgetsFromSettings = [&]( const auto& aCfg )
     {

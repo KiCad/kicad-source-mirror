@@ -46,8 +46,8 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_errorRow( -1 ), m_errorCol( -1 ),
     m_gridWidthsDirty( true )
 {
-    m_btnAddTextVar->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_btnDeleteTextVar->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_btnAddTextVar->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_btnDeleteTextVar->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_TextVars->ClearRows();
 

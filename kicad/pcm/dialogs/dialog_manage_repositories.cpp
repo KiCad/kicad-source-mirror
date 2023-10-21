@@ -35,10 +35,10 @@ DIALOG_MANAGE_REPOSITORIES::DIALOG_MANAGE_REPOSITORIES(
         DIALOG_MANAGE_REPOSITORIES_BASE( parent ),
         m_pcm( pcm )
 {
-    m_buttonAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_buttonRemove->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_buttonMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_buttonMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_buttonAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_buttonRemove->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_buttonMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_buttonMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // For aesthetic reasons, we must set the size of m_buttonAdd to match the other bitmaps
     // manually (for instance m_buttonRemove)

@@ -40,8 +40,8 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
         m_toolMgr( aParent->GetToolManager() ),
         m_group( aGroup )
 {
-    m_bpAddMember->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpRemoveMember->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_bpAddMember->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpRemoveMember->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_nameCtrl->SetValue( m_group->GetName() );
 

@@ -42,12 +42,12 @@ PANEL_COLOR_CODE::~PANEL_COLOR_CODE()
 void PANEL_COLOR_CODE::ThemeChanged()
 {
     // Update the bitmaps
-    m_Band1bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value_and_name ) );
-    m_Band2bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
-    m_Band3bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
-    m_Band4bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
-    m_Band_mult_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_multiplier ) );
-    m_Band_tol_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_tolerance ) );
+    m_Band1bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value_and_name ) );
+    m_Band2bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value ) );
+    m_Band3bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value ) );
+    m_Band4bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value ) );
+    m_Band_mult_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_multiplier ) );
+    m_Band_tol_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_tolerance ) );
 
     Refresh();
 }
@@ -87,12 +87,12 @@ void PANEL_COLOR_CODE::ToleranceSelection( int aSelection )
     GetSizer()->Layout();
 
     // All this shouldn't be necessary but if you want the bitmaps to show up on OSX it is.
-    m_Band1bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value_and_name ) );
-    m_Band2bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
-    m_Band3bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
-    m_Band4bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
-    m_Band_mult_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_multiplier ) );
-    m_Band_tol_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_tolerance ) );
+    m_Band1bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value_and_name ) );
+    m_Band2bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value ) );
+    m_Band3bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value ) );
+    m_Band4bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_value ) );
+    m_Band_mult_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_multiplier ) );
+    m_Band_tol_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::color_code_tolerance ) );
 
     Refresh();
 }

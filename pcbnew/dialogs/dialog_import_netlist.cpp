@@ -64,7 +64,7 @@ DIALOG_IMPORT_NETLIST::DIALOG_IMPORT_NETLIST( PCB_EDIT_FRAME* aParent,
       m_runDragCommand( false )
 {
     m_NetlistFilenameCtrl->SetValue( m_netlistPath );
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     auto cfg = m_parent->GetPcbNewSettings();
 

@@ -93,7 +93,7 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
                                                wxDefaultSize, wxBU_EXACTFIT );
 
     m_notificationsButton->SetPadding( 0 );
-    m_notificationsButton->SetBitmap( KiBitmap( BITMAPS::notifications ) );
+    m_notificationsButton->SetBitmap( KiBitmapBundle( BITMAPS::notifications ) );
     m_notificationsButton->SetShowBadge( true );
     m_notificationsButton->SetBitmapCentered( true );
 

@@ -82,13 +82,13 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_addFilterButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_deleteFilterButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_editFilterButton->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
+    m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_addFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_editFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
 
     SetupStandardButtons();
 

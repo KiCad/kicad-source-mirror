@@ -76,8 +76,8 @@ DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
     m_html->SetPage( m_initial_help );
 
     // Configure button logos
-    m_append_button->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_delete_button->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_append_button->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_delete_button->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     // initial focus on the grid please.
     SetInitialFocus( m_grid );

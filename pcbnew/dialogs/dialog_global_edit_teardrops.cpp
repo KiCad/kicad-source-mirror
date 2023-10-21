@@ -154,7 +154,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
     m_parent = aParent;
     m_brd = m_parent->GetBoard();
 
-    m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
+    m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
 
     m_teardropHDPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );

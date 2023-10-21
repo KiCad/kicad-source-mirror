@@ -37,8 +37,8 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS::PANEL_EESCHEMA_ANNOTATION_OPTIONS(
         PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( aWindow ),
         m_schSettingsProvider( schSettingsProvider )
 {
-    annotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::annotate_down_right ) );
-    annotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::annotate_right_down ) );
+    annotate_down_right_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::annotate_down_right ) );
+    annotate_right_down_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::annotate_right_down ) );
 }
 
 

@@ -101,7 +101,7 @@ DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
 
     m_dxfUnitsChoice->SetSelection( cfg->m_ImportGraphics.dxf_units );
 
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     wxCommandEvent dummy;
     onFilename( dummy );

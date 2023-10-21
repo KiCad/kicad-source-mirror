@@ -64,7 +64,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
     m_shapeRegex.Compile( "^Shape\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_zoneConnStyleRegex.Compile( "^Zone_Connection_Style\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
-    m_compileButton->SetBitmap( KiBitmap( BITMAPS::drc ) );
+    m_compileButton->SetBitmap( KiBitmapBundle( BITMAPS::drc ) );
 
     m_textEditor->SetZoom( Pgm().GetCommonSettings()->m_Appearance.text_editor_zoom );
 

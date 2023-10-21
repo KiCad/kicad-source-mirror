@@ -36,9 +36,9 @@
 PANEL_GIT_REPOS::PANEL_GIT_REPOS( wxWindow* aParent ) : PANEL_GIT_REPOS_BASE( aParent)
 {
 
-    m_btnAddRepo->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_btnEditRepo->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
-    m_btnDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_btnAddRepo->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_btnEditRepo->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+    m_btnDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
 }
 

@@ -55,34 +55,34 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
     m_separator1->SetIsSeparator();
 
     m_horizontal->SetIsRadioButton();
-    m_horizontal->SetBitmap( KiBitmap( BITMAPS::text_horizontal ) );
+    m_horizontal->SetBitmap( KiBitmapBundle( BITMAPS::text_horizontal ) );
     m_vertical->SetIsRadioButton();
-    m_vertical->SetBitmap( KiBitmap( BITMAPS::text_vertical ) );
+    m_vertical->SetBitmap( KiBitmapBundle( BITMAPS::text_vertical ) );
 
     m_separator2->SetIsSeparator();
 
     m_bold->SetIsCheckButton();
-    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
-    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_separator3->SetIsSeparator();
 
     m_hAlignLeft->SetIsRadioButton();
-    m_hAlignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_hAlignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
     m_hAlignCenter->SetIsRadioButton();
-    m_hAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_hAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_align_center ) );
     m_hAlignRight->SetIsRadioButton();
-    m_hAlignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+    m_hAlignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
 
     m_separator4->SetIsSeparator();
 
     m_vAlignTop->SetIsRadioButton();
-    m_vAlignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
+    m_vAlignTop->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_top ) );
     m_vAlignCenter->SetIsRadioButton();
-    m_vAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
+    m_vAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_center ) );
     m_vAlignBottom->SetIsRadioButton();
-    m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
+    m_vAlignBottom->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_bottom ) );
 
     m_separator5->SetIsSeparator();
 

@@ -59,8 +59,8 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
     m_antialiasingFallbackLabel->Show( false );
 #endif
 
-    m_textEditorBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
-    m_pdfViewerBtn->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_textEditorBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_pdfViewerBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     /*
      * Automatic dark mode detection works fine on Mac, so no need for the explicit options.

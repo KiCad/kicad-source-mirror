@@ -44,9 +44,9 @@ PANEL_SETUP_TUNING_PATTERNS::PANEL_SETUP_TUNING_PATTERNS( wxWindow* aParent, EDA
         m_dpSettings( aDiffPairSettings ),
         m_skewSettings( aSkewSettings )
 {
-    m_singleTrackLegend->SetBitmap( KiBitmap( BITMAPS::tune_single_track_length_legend ) );
-    m_diffPairLegend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_length_legend ) );
-    m_skewLegend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_skew_legend ) );
+    m_singleTrackLegend->SetBitmap( KiBitmapBundle( BITMAPS::tune_single_track_length_legend ) );
+    m_diffPairLegend->SetBitmap( KiBitmapBundle( BITMAPS::tune_diff_pair_length_legend ) );
+    m_skewLegend->SetBitmap( KiBitmapBundle( BITMAPS::tune_diff_pair_skew_legend ) );
 
     m_track_r.SetUnits( EDA_UNITS::PERCENT );
     m_dp_r.SetUnits( EDA_UNITS::PERCENT );

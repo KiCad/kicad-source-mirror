@@ -30,6 +30,7 @@
 // test if it works under stable release
 // #include <wx/bitmap.h>   // only to define wxBitmap
 class wxBitmap;     // only to define wxBitmap
+class wxBitmapBundle;
 class wxWindow;
 class wxString;
 class BITMAP_STORE;
@@ -52,6 +53,10 @@ BITMAP_STORE* GetBitmapStore();
  * @param aHeightTag is the requested height tag for multi-res bitmaps (-1 for any)
  */
 wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
+
+wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap );
+
+wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap );
 
 /**
  * Wipes out the scaled bitmap cache so that the icon theme can be changed.

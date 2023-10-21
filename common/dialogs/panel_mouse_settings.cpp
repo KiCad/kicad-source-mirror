@@ -47,7 +47,7 @@ PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( wxWindow* aParent ) :
     m_lblAlt->SetLabel( _( "Option" ) );
 #endif
 
-    m_scrollWarning->SetBitmap( KiBitmap( BITMAPS::small_warning ) );
+    m_scrollWarning->SetBitmap( KiBitmapBundle( BITMAPS::small_warning ) );
     m_scrollWarning->Hide();
 
     m_checkAutoZoomSpeed->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,

@@ -35,8 +35,8 @@ EDA_REORDERABLE_LIST_DIALOG::EDA_REORDERABLE_LIST_DIALOG( wxWindow* aParent, con
         m_selectedAvailable( 0 ),
         m_selectedEnabled( 0 )
 {
-    m_btnUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_btnDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_btnUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_btnDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because so many dialogs share this same class, with different numbers of

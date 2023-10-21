@@ -443,7 +443,7 @@ wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap( wxScrolledWindow* aParent, wxB
     if( aIcon )
         bitmap->SetBitmap( *aIcon );
     else
-        bitmap->SetBitmap( KiBitmap( BITMAPS::right ) );
+        bitmap->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
 
     return bitmap;
 }

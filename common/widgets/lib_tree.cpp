@@ -85,7 +85,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_sort_ctrl = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
                                              wxDefaultSize, wxBU_AUTODRAW|0 );
-        m_sort_ctrl->SetBitmap( KiBitmap( BITMAPS::small_sort_desc ) );
+        m_sort_ctrl->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
         m_sort_ctrl->Bind( wxEVT_LEFT_DOWN,
                 [&]( wxMouseEvent& aEvent )
                 {

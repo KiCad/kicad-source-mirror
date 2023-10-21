@@ -42,11 +42,11 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
     m_genericIcon = KiBitmap( BITMAPS::puzzle_piece );
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    m_moveUpButton->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_moveDownButton->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_openDirectoryButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
-    m_reloadButton->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
-    m_showErrorsButton->SetBitmap( KiBitmap( BITMAPS::small_warning ) );
+    m_moveUpButton->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_moveDownButton->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_openDirectoryButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
+    m_showErrorsButton->SetBitmap( KiBitmapBundle( BITMAPS::small_warning ) );
 }
 
 

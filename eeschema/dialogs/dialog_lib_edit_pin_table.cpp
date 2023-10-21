@@ -804,9 +804,9 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_grid->SetColAttr( COL_POSY, attr );
     */
 
-    m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_refreshButton->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
+    m_addButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
     m_divider1->SetIsSeparator();
     m_divider2->SetIsSeparator();

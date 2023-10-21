@@ -41,7 +41,7 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
 {
     wxSize sizeNeeded;
 
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     // Make sure "Select All" button is big enough to hold "Deselect All"
     m_selectAllButton->SetLabel( _( "Deselect All" ) ); // Change the text temporarily

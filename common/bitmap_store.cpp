@@ -121,6 +121,39 @@ wxBitmap BITMAP_STORE::GetBitmap( BITMAPS aBitmapId, int aHeight )
 }
 
 
+wxBitmapBundle BITMAP_STORE::GetBitmapBundle( BITMAPS aBitmapId )
+{
+    wxVector<wxBitmap> bmps;
+
+    for( const BITMAP_INFO& info : m_bitmapInfoCache[aBitmapId] )
+    {
+        if( info.theme != m_theme )
+            continue;
+
+        bmps.push_back( wxBitmap( getImage( info.id, info.height ) ) );
+    }
+
+    return wxBitmapBundle::FromBitmaps( bmps );
+}
+
+
+wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundle( BITMAPS aBitmapId )
+{
+    wxVector<wxBitmap> bmps;
+
+    for( const BITMAP_INFO& info : m_bitmapInfoCache[aBitmapId] )
+    {
+        if( info.theme != m_theme )
+            continue;
+
+        bmps.push_back( wxBitmap( getImage( info.id, info.height ) )
+                                .ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 ) );
+    }
+
+    return wxBitmapBundle::FromBitmaps( bmps );
+}
+
+
 wxBitmap BITMAP_STORE::GetBitmapScaled( BITMAPS aBitmapId, int aScaleFactor, int aHeight )
 {
     wxImage image = getImage( aBitmapId, aHeight );
@@ -139,11 +172,11 @@ wxBitmap BITMAP_STORE::GetBitmapScaled( BITMAPS aBitmapId, int aScaleFactor, int
 wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 {
     const unsigned char* data = nullptr;
-    long count;
+    long                 count;
 
     if( aBitmapId == BITMAPS::dummy_item )
     {
-        data  = s_dummyItem;
+        data = s_dummyItem;
         count = sizeof( s_dummyItem );
     }
     else
@@ -152,16 +185,17 @@ wxImage BITMAP_STORE::getImage( BITMAPS aBitmapId, int aHeight )
 
         if( count < 0 )
         {
-            wxLogTrace( traceBitmaps, "Bitmap for %d, %d, %s has an info tag with file %s,"
+            wxLogTrace( traceBitmaps,
+                        "Bitmap for %d, %d, %s has an info tag with file %s,"
                         "but that file could not be found in the archive!",
                         aBitmapId, aHeight, m_theme );
-            data  = s_imageNotFound;
+            data = s_imageNotFound;
             count = sizeof( s_imageNotFound );
         }
     }
 
     wxMemoryInputStream is( data, count );
-    wxImage image( is, wxBITMAP_TYPE_PNG );
+    wxImage             image( is, wxBITMAP_TYPE_PNG );
 
     return image;
 }
@@ -176,8 +210,8 @@ void BITMAP_STORE::ThemeChanged()
     {
         switch( settings->m_Appearance.icon_theme )
         {
-        case ICON_THEME::LIGHT:     m_theme = wxT( "light" );   break;
-        case ICON_THEME::DARK:      m_theme = wxT( "dark" );    break;
+        case ICON_THEME::LIGHT: m_theme = wxT( "light" ); break;
+        case ICON_THEME::DARK: m_theme = wxT( "dark" ); break;
         case ICON_THEME::AUTO:
             m_theme = KIPLATFORM::UI::IsDarkTheme() ? wxT( "dark" ) : wxT( "light" );
             break;
@@ -228,8 +262,8 @@ wxString BITMAP_STORE::computeBitmapName( BITMAPS aBitmapId, int aHeight )
 
     if( fn.IsEmpty() )
     {
-        wxLogTrace( traceBitmaps, "No bitmap found matching ID %d, height %d, theme %s",
-                    aBitmapId, aHeight, m_theme );
+        wxLogTrace( traceBitmaps, "No bitmap found matching ID %d, height %d, theme %s", aBitmapId,
+                    aHeight, m_theme );
         return m_bitmapInfoCache.at( aBitmapId ).begin()->filename;
     }
 

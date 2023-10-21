@@ -198,11 +198,11 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     m_splitter->SetSashPosition( cfg->m_NetclassPanel.sash_pos );
 
-    m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_removeButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-    m_addAssignmentButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_removeAssignmentButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addAssignmentButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeAssignmentButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     // wxFormBuilder doesn't include this event...
     m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,

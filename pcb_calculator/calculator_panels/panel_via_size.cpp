@@ -66,7 +66,7 @@ PANEL_VIA_SIZE::PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id,
     m_viaThermalResUnits->SetLabel( wxT( "°C/W" ) );
     m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
 
-    m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
+    m_viaBitmap->SetBitmap( KiBitmapBundle( BITMAPS::viacalc ) );
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set
     GetSizer()->SetSizeHints( this );
@@ -80,7 +80,7 @@ PANEL_VIA_SIZE::~PANEL_VIA_SIZE()
 
 void PANEL_VIA_SIZE::ThemeChanged()
 {
-    m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
+    m_viaBitmap->SetBitmap( KiBitmapBundle( BITMAPS::viacalc ) );
 }
 
 

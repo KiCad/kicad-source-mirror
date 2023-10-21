@@ -96,27 +96,27 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_staticTextSizeInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
     m_bold->SetIsCheckButton();
-    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
-    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_separator2->SetIsSeparator();
 
     m_alignLeft->SetIsRadioButton();
-    m_alignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_alignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
     m_alignCenter->SetIsRadioButton();
-    m_alignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_alignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_align_center ) );
     m_alignRight->SetIsRadioButton();
-    m_alignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+    m_alignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
 
     m_separator3->SetIsSeparator();
 
     m_vAlignTop->SetIsRadioButton();
-    m_vAlignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
+    m_vAlignTop->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_top ) );
     m_vAlignMiddle->SetIsRadioButton();
-    m_vAlignMiddle->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
+    m_vAlignMiddle->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_center ) );
     m_vAlignBottom->SetIsRadioButton();
-    m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
+    m_vAlignBottom->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_bottom ) );
 
     m_separator4->SetIsSeparator();
 

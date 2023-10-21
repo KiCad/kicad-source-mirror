@@ -94,23 +94,23 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_separator0->SetIsSeparator();
 
     m_bold->SetIsCheckButton();
-    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
-    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_separator1->SetIsSeparator();
 
     m_alignLeft->SetIsRadioButton();
-    m_alignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_alignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
     m_alignCenter->SetIsRadioButton();
-    m_alignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_alignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_align_center ) );
     m_alignRight->SetIsRadioButton();
-    m_alignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+    m_alignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
 
     m_separator2->SetIsSeparator();
 
     m_mirrored->SetIsCheckButton();
-    m_mirrored->SetBitmap( KiBitmap( BITMAPS::text_mirrored ) );
+    m_mirrored->SetBitmap( KiBitmapBundle( BITMAPS::text_mirrored ) );
 
     m_separator3->SetIsSeparator();
 

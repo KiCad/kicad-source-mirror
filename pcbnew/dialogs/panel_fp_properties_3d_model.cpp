@@ -105,9 +105,9 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
     m_LowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     // Configure button logos
-    m_button3DShapeAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_button3DShapeBrowse->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
-    m_button3DShapeRemove->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_button3DShapeAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_button3DShapeBrowse->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_button3DShapeRemove->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 }
 
 

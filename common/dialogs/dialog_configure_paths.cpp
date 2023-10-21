@@ -64,8 +64,8 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent ) :
     m_helpBox( nullptr ),
     m_heightBeforeHelp( 400 )
 {
-    m_btnAddEnvVar->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_btnDeleteEnvVar->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_btnAddEnvVar->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_btnDeleteEnvVar->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_EnvVars->ClearRows();
     m_EnvVars->AppendCols( 1 );     // for the isExternal flags

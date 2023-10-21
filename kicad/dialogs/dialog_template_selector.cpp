@@ -143,8 +143,8 @@ void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent ) :
     DIALOG_TEMPLATE_SELECTOR_BASE( aParent )
 {
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
-    m_reloadButton->SetBitmap( KiBitmap( BITMAPS::small_refresh ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_reloadButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
 
     m_htmlWin->SetPage( _( "<h1>Template Selector</h1>" ) );
     m_notebook->Connect( wxEVT_SIZE,

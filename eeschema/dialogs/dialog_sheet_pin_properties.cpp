@@ -51,9 +51,9 @@ DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent
     m_separator1->SetIsSeparator();
 
     m_bold->SetIsCheckButton();
-    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
-    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_separator2->SetIsSeparator();
 

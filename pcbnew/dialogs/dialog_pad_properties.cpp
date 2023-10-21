@@ -189,9 +189,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     m_cbShowPadOutline->SetValue( m_sketchPreview );
 
-    m_FlippedWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
-    m_nonCopperWarningIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
-    m_legacyTeardropsIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
+    m_FlippedWarningIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
+    m_nonCopperWarningIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
+    m_legacyTeardropsIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
 
     m_masterPad = m_parent->GetDesignSettings().m_Pad_Master.get();
     m_previewPad = new PAD( (FOOTPRINT*) nullptr );
@@ -1165,13 +1165,13 @@ bool DIALOG_PAD_PROPERTIES::Show( bool aShow )
         // It *should* work to set the stackup bitmap in the constructor, but it doesn't.
         // wxWidgets needs to have these set when the panel is visible for some reason.
         // https://gitlab.com/kicad/code/kicad/-/issues/5534
-        m_stackupImage0->SetBitmap( KiBitmap( BITMAPS::pads_reset_unused ) );
-        m_stackupImage1->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused_keep_bottom ) );
-        m_stackupImage2->SetBitmap( KiBitmap( BITMAPS::pads_remove_unused ) );
-        m_stackupImage4->SetBitmap( KiBitmap( BITMAPS::pads_npth_top_bottom ) );
-        m_stackupImage5->SetBitmap( KiBitmap( BITMAPS::pads_npth_top ) );
-        m_stackupImage6->SetBitmap( KiBitmap( BITMAPS::pads_npth_bottom ) );
-        m_stackupImage7->SetBitmap( KiBitmap( BITMAPS::pads_npth ) );
+        m_stackupImage0->SetBitmap( KiBitmapBundle( BITMAPS::pads_reset_unused ) );
+        m_stackupImage1->SetBitmap( KiBitmapBundle( BITMAPS::pads_remove_unused_keep_bottom ) );
+        m_stackupImage2->SetBitmap( KiBitmapBundle( BITMAPS::pads_remove_unused ) );
+        m_stackupImage4->SetBitmap( KiBitmapBundle( BITMAPS::pads_npth_top_bottom ) );
+        m_stackupImage5->SetBitmap( KiBitmapBundle( BITMAPS::pads_npth_top ) );
+        m_stackupImage6->SetBitmap( KiBitmapBundle( BITMAPS::pads_npth_bottom ) );
+        m_stackupImage7->SetBitmap( KiBitmapBundle( BITMAPS::pads_npth ) );
 
         Layout();
     }
@@ -1655,13 +1655,13 @@ void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
     {
         m_sizeXLabel->SetLabel( _( "Diameter:" ) );
         m_sizeY.Show( false );
-        m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
+        m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
     }
     else
     {
         m_sizeXLabel->SetLabel( _( "Pad size X:" ) );
         m_sizeY.Show( true );
-        m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_rect_sizes ) );
+        m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_rect_sizes ) );
     }
 
     m_sizeXLabel->GetParent()->Layout();

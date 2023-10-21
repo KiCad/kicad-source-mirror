@@ -44,16 +44,16 @@ DIALOG_TUNING_PATTERN_PROPERTIES::DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDI
     switch( m_mode )
     {
     case PNS::PNS_MODE_TUNE_SINGLE:
-        m_legend->SetBitmap( KiBitmap( BITMAPS::tune_single_track_length_legend ) );
+        m_legend->SetBitmap( KiBitmapBundle( BITMAPS::tune_single_track_length_legend ) );
         break;
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR:
-        m_legend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_length_legend ) );
+        m_legend->SetBitmap( KiBitmapBundle( BITMAPS::tune_diff_pair_length_legend ) );
         m_r.Enable( false );
         break;
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW:
-        m_legend->SetBitmap( KiBitmap( BITMAPS::tune_diff_pair_skew_legend ) );
+        m_legend->SetBitmap( KiBitmapBundle( BITMAPS::tune_diff_pair_skew_legend ) );
         m_targetLengthLabel->SetLabel( _( "Target skew: ") );
         break;
 

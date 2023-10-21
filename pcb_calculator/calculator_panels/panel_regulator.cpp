@@ -43,8 +43,8 @@ PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id, const wxPoint
     m_r1Units->SetLabel( wxT( "kΩ" ) );
     m_r2Units->SetLabel( wxT( "kΩ" ) );
 
-    m_bitmapRegul3pins->SetBitmap( KiBitmap( BITMAPS::regul_3pins ) );
-    m_bitmapRegul4pins->SetBitmap( KiBitmap( BITMAPS::regul ) );
+    m_bitmapRegul3pins->SetBitmap( KiBitmapBundle( BITMAPS::regul_3pins ) );
+    m_bitmapRegul4pins->SetBitmap( KiBitmapBundle( BITMAPS::regul ) );
 
     m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
     SelectLastSelectedRegulator();
@@ -61,8 +61,8 @@ PANEL_REGULATOR::~PANEL_REGULATOR()
 void PANEL_REGULATOR::ThemeChanged()
 {
     // Update the bitmaps
-    m_bitmapRegul3pins->SetBitmap( KiBitmap( BITMAPS::regul_3pins ) );
-    m_bitmapRegul4pins->SetBitmap( KiBitmap( BITMAPS::regul ) );
+    m_bitmapRegul3pins->SetBitmap( KiBitmapBundle( BITMAPS::regul_3pins ) );
+    m_bitmapRegul4pins->SetBitmap( KiBitmapBundle( BITMAPS::regul ) );
 }
 
 

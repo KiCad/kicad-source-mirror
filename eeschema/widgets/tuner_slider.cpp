@@ -56,16 +56,16 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
         throw KI_PARAM_ERROR( wxString::Format( _( "%s not found" ), m_ref ) );
 
     m_name->SetLabel( wxString::Format( _( "Tune %s" ), m_ref ) );
-    m_closeBtn->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_closeBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-    m_e24->SetBitmap( KiBitmap( BITMAPS::e_24 ) );
+    m_e24->SetBitmap( KiBitmapBundle( BITMAPS::e_24 ) );
     m_e24->SetIsCheckButton();
     m_separator->SetIsSeparator();
-    m_e48->SetBitmap( KiBitmap( BITMAPS::e_48 ) );
+    m_e48->SetBitmap( KiBitmapBundle( BITMAPS::e_48 ) );
     m_e48->SetIsCheckButton();
-    m_e96->SetBitmap( KiBitmap( BITMAPS::e_96 ) );
+    m_e96->SetBitmap( KiBitmapBundle( BITMAPS::e_96 ) );
     m_e96->SetIsCheckButton();
-    m_e192->SetBitmap( KiBitmap( BITMAPS::e_192 ) );
+    m_e192->SetBitmap( KiBitmapBundle( BITMAPS::e_192 ) );
     m_e192->SetIsCheckButton();
 
     const SIM_MODEL::PARAM* tunerParam = item->model->GetTunerParam();

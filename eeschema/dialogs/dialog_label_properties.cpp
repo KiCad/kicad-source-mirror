@@ -123,17 +123,17 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     }
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     m_separator1->SetIsSeparator();
 
     m_bold->SetIsCheckButton();
-    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
-    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_separator2->SetIsSeparator();
 
@@ -155,10 +155,10 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_diamond->Hide();
         m_rectangle->Hide();
 
-        m_spin0->SetBitmap( KiBitmap( BITMAPS::label_align_left ) );
-        m_spin1->SetBitmap( KiBitmap( BITMAPS::label_align_right ) );
-        m_spin2->SetBitmap( KiBitmap( BITMAPS::label_align_bottom ) );
-        m_spin3->SetBitmap( KiBitmap( BITMAPS::label_align_top ) );
+        m_spin0->SetBitmap( KiBitmapBundle( BITMAPS::label_align_left ) );
+        m_spin1->SetBitmap( KiBitmapBundle( BITMAPS::label_align_right ) );
+        m_spin2->SetBitmap( KiBitmapBundle( BITMAPS::label_align_bottom ) );
+        m_spin3->SetBitmap( KiBitmapBundle( BITMAPS::label_align_top ) );
     }
     else if( m_currentLabel->Type() == SCH_DIRECTIVE_LABEL_T )
     {
@@ -174,10 +174,10 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_bold->Hide();
         m_italic->Hide();
         m_separator2->Hide();
-        m_spin0->SetBitmap( KiBitmap( BITMAPS::pinorient_down ) );
-        m_spin1->SetBitmap( KiBitmap( BITMAPS::pinorient_up ) );
-        m_spin2->SetBitmap( KiBitmap( BITMAPS::pinorient_right ) );
-        m_spin3->SetBitmap( KiBitmap( BITMAPS::pinorient_left ) );
+        m_spin0->SetBitmap( KiBitmapBundle( BITMAPS::pinorient_down ) );
+        m_spin1->SetBitmap( KiBitmapBundle( BITMAPS::pinorient_up ) );
+        m_spin2->SetBitmap( KiBitmapBundle( BITMAPS::pinorient_right ) );
+        m_spin3->SetBitmap( KiBitmapBundle( BITMAPS::pinorient_left ) );
         m_separator3->Hide();
 
         m_formattingGB->Detach( m_fontCtrl );
@@ -188,10 +188,10 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     {
         m_shapeSizer->Show( false );
 
-        m_spin0->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
-        m_spin1->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
-        m_spin2->SetBitmap( KiBitmap( BITMAPS::text_align_bottom ) );
-        m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
+        m_spin0->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
+        m_spin1->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
+        m_spin2->SetBitmap( KiBitmapBundle( BITMAPS::text_align_bottom ) );
+        m_spin3->SetBitmap( KiBitmapBundle( BITMAPS::text_align_top ) );
     }
 
     if( !m_currentLabel->AutoRotateOnPlacementSupported() )

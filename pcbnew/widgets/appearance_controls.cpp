@@ -451,10 +451,10 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     createControls();
 
-    m_btnNetInspector->SetBitmap( KiBitmap( BITMAPS::list_nets_16 ) );
+    m_btnNetInspector->SetBitmap( KiBitmapBundle( BITMAPS::list_nets_16 ) );
     m_btnNetInspector->SetPadding( 2 );
 
-    m_btnConfigureNetClasses->SetBitmap( KiBitmap( BITMAPS::options_generic_16 ) );
+    m_btnConfigureNetClasses->SetBitmap( KiBitmapBundle( BITMAPS::options_generic_16 ) );
     m_btnConfigureNetClasses->SetPadding( 2 );
 
     m_txtNetFilter->SetHint( _( "Filter nets" ) );

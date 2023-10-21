@@ -63,10 +63,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     wxASSERT( !m_items.Empty() );
 
-    m_legacyTeardropsIcon->SetBitmap( KiBitmap( BITMAPS::dialog_warning ) );
+    m_legacyTeardropsIcon->SetBitmap( KiBitmapBundle( BITMAPS::dialog_warning ) );
     m_legacyTeardropsWarning->Show( m_frame->GetBoard()->LegacyTeardrops() );
 
-    m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
+    m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
 
     m_teardropHDPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );

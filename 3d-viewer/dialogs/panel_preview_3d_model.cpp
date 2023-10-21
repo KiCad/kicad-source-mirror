@@ -79,16 +79,16 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_previewLabel->SetFont( KIUI::GetStatusFont( this ) );
 
     // Set the bitmap of 3D view buttons:
-    m_bpvTop->SetBitmap( KiBitmap( BITMAPS::axis3d_top ) );
-    m_bpvFront->SetBitmap( KiBitmap( BITMAPS::axis3d_front ) );
-    m_bpvBack->SetBitmap( KiBitmap( BITMAPS::axis3d_back ) );
-    m_bpvLeft->SetBitmap( KiBitmap( BITMAPS::axis3d_left ) );
-    m_bpvRight->SetBitmap( KiBitmap( BITMAPS::axis3d_right ) );
-    m_bpvBottom->SetBitmap( KiBitmap( BITMAPS::axis3d_bottom ) );
-    m_bpvISO->SetBitmap( KiBitmap( BITMAPS::ortho ) );
-    m_bpvBodyStyle->SetBitmap( KiBitmap( BITMAPS::axis3d ) );
-    m_bpUpdate->SetBitmap( KiBitmap( BITMAPS::reload ) );
-    m_bpSettings->SetBitmap( KiBitmap( BITMAPS::options_3drender ) );
+    m_bpvTop->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_top ) );
+    m_bpvFront->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_front ) );
+    m_bpvBack->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_back ) );
+    m_bpvLeft->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_left ) );
+    m_bpvRight->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_right ) );
+    m_bpvBottom->SetBitmap( KiBitmapBundle( BITMAPS::axis3d_bottom ) );
+    m_bpvISO->SetBitmap( KiBitmapBundle( BITMAPS::ortho ) );
+    m_bpvBodyStyle->SetBitmap( KiBitmapBundle( BITMAPS::axis3d ) );
+    m_bpUpdate->SetBitmap( KiBitmapBundle( BITMAPS::reload ) );
+    m_bpSettings->SetBitmap( KiBitmapBundle( BITMAPS::options_3drender ) );
 
     // Set the min and max values of spin buttons (mandatory on Linux)
     // They are not used, so they are set to min and max 32 bits int values

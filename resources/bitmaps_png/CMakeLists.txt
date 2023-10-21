@@ -898,8 +898,10 @@ if( MAINTAIN_PNGS )
 
     # these 3 cmake commands for each desired bitmap size set, repeat as needed:
     bitmap_dir( 16 16 "${BMAPS_SMALL}" )
+    bitmap_dir( 32 32 "${BMAPS_SMALL}" )    # 2x HiDPI
 
     bitmap_dir( 24 24 "${BMAPS_MID}" )
+    bitmap_dir( 48 48 "${BMAPS_MID}" )    # 2x HiDPI
 
     bitmap_dir( 32 32 "${BMAPS_32}" )
 

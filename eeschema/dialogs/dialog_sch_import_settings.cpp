@@ -39,7 +39,7 @@ DIALOG_SCH_IMPORT_SETTINGS::DIALOG_SCH_IMPORT_SETTINGS( wxWindow* aParent, SCH_E
         DIALOG_SCH_IMPORT_SETTINGS_BASE( aParent ),
         m_frame( aFrame )
 {
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     SetupStandardButtons( { { wxID_OK, _( "Import Settings" ) } } );
 }

@@ -38,7 +38,7 @@ PANEL_RF_ATTENUATORS::PANEL_RF_ATTENUATORS( wxWindow* parent, wxWindowID id, con
         PANEL_RF_ATTENUATORS_BASE( parent, id, pos, size, style, name )
 {
     m_CurrAttenuator = nullptr;
-    m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpButtonCalcAtt->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // Populate attenuator list ordered like in dialog menu list
     m_AttenuatorList.push_back( new ATTENUATOR_PI() );
@@ -71,8 +71,8 @@ PANEL_RF_ATTENUATORS::~PANEL_RF_ATTENUATORS()
 void PANEL_RF_ATTENUATORS::ThemeChanged()
 {
     // Update the bitmaps
-    m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
+    m_bpButtonCalcAtt->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_attenuatorBitmap->SetBitmap( KiBitmapBundle( m_CurrAttenuator->m_SchBitmapName ) );
 
     // Update the font
     m_staticTextAttMsg->SetFont( KIUI::GetInfoFont( this ).Italic() );
@@ -88,7 +88,7 @@ void PANEL_RF_ATTENUATORS::ThemeChanged()
 
 void PANEL_RF_ATTENUATORS::UpdateUI()
 {
-    m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
+    m_attenuatorBitmap->SetBitmap( KiBitmapBundle( m_CurrAttenuator->m_SchBitmapName ) );
 
     m_attenuatorBitmap->GetParent()->Layout();
     m_attenuatorBitmap->GetParent()->Refresh();
@@ -169,7 +169,7 @@ void PANEL_RF_ATTENUATORS::TransfPanelDataToAttenuator()
 
 void PANEL_RF_ATTENUATORS::TransfAttenuatorDataToPanel()
 {
-    m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
+    m_attenuatorBitmap->SetBitmap( KiBitmapBundle( m_CurrAttenuator->m_SchBitmapName ) );
 
     wxString msg;
 

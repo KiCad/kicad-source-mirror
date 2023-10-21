@@ -31,7 +31,7 @@ DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
 {
     m_standardButtonsCancel->SetLabel( _( "Quit KiCad" ) );
 
-    m_btnCustomPath->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_btnCustomPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     // Disabled for now.  See https://gitlab.com/kicad/code/kicad/-/issues/9826
     m_cbCopyLibraryTables->Hide();

@@ -37,10 +37,10 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
 {
     m_membersLabelTemplate = m_membersLabel->GetLabel();
 
-    m_addAlias->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_deleteAlias->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_addMember->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_removeMember->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addAlias->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteAlias->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_addMember->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeMember->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_source->SetFont( KIUI::GetInfoFont( aWindow ) );
 

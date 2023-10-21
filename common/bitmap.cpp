@@ -107,8 +107,22 @@ wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag )
 }
 
 
+wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap )
+{
+    return GetBitmapStore()->GetBitmapBundle( aBitmap );
+}
+
+
+wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap )
+{
+    return GetBitmapStore()->GetDisabledBitmapBundle( aBitmap );
+}
+
+
 int KiIconScale( wxWindow* aWindow )
 {
+    // For historical reasons, "4" here means unity (no scaling)
+
     #if defined( __WXMSW__)
     // Basically don't try and scale within kicad and let wx do its thing
     // with wx introducing bitmap bundles, it will auto scale automatically with dpi

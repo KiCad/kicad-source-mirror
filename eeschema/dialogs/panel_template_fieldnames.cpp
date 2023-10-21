@@ -54,8 +54,8 @@ PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
             m_templateMgr->AddTemplateFieldNames( cfg->m_Drawing.field_names );
     }
 
-    m_addFieldButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_deleteFieldButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_checkboxColWidth = m_grid->GetColSize( 1 );
 

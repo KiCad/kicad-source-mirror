@@ -139,8 +139,8 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_solderPasteRatio.SetNegativeZero();
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_tcLibraryID->SetBackgroundColour( KIPLATFORM::UI::GetDialogBGColour() );
 

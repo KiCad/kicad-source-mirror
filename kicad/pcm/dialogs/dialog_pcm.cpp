@@ -66,7 +66,7 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
 
     m_gridPendingActions->PushEventHandler( new GRID_TRICKS( m_gridPendingActions ) );
 
-    m_discardActionButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_discardActionButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_panelPending->Layout();
 
     m_actionCallback = [this]( const PACKAGE_VIEW_DATA& aData, PCM_PACKAGE_ACTION aAction,

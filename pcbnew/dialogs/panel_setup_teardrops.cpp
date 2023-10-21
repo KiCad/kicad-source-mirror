@@ -38,9 +38,9 @@ PANEL_SETUP_TEARDROPS::PANEL_SETUP_TEARDROPS( wxWindow* aParentWindow, PCB_EDIT_
         m_teardropMaxLenTrack( aFrame, m_stMaxLen2, m_tcTdMaxLen2, m_stMaxLenUnits2 ),
         m_teardropMaxHeightTrack( aFrame, m_stTdMaxSize2, m_tcMaxHeight2, m_stMaxHeightUnits2 )
 {
-    m_bitmapTeardrop->SetBitmap( KiBitmap( BITMAPS::teardrop_sizes ) );
-    m_bitmapTeardrop1->SetBitmap( KiBitmap( BITMAPS::teardrop_rect_sizes ) );
-    m_bitmapTeardrop2->SetBitmap( KiBitmap( BITMAPS::teardrop_track_sizes ) );
+    m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
+    m_bitmapTeardrop1->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_rect_sizes ) );
+    m_bitmapTeardrop2->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_track_sizes ) );
 
     wxFont infoFont = KIUI::GetInfoFont( this ).Italic();
     m_minTrackWidthHint->SetFont( infoFont );

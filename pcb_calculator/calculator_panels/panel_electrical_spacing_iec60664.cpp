@@ -54,7 +54,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664::PANEL_ELECTRICAL_SPACING_IEC60664( wxWindow* 
     ConvertMarkdown2Html( wxGetTranslation( iec60664help ), msg );
     m_panelHelp->SetPage( msg );
 
-    m_creepageclearanceBitmap->SetBitmap( KiBitmap( BITMAPS::creepage_clearance ) );
+    m_creepageclearanceBitmap->SetBitmap( KiBitmapBundle( BITMAPS::creepage_clearance ) );
 
 	Layout();
 }
@@ -67,7 +67,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664::~PANEL_ELECTRICAL_SPACING_IEC60664()
 
 void PANEL_ELECTRICAL_SPACING_IEC60664::ThemeChanged()
 {
-    m_creepageclearanceBitmap->SetBitmap( KiBitmap( BITMAPS::creepage_clearance ) );
+    m_creepageclearanceBitmap->SetBitmap( KiBitmapBundle( BITMAPS::creepage_clearance ) );
 }
 
 

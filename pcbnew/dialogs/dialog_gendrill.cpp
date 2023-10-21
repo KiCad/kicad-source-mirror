@@ -125,7 +125,7 @@ void DIALOG_GENDRILL::initDialog()
 
 void DIALOG_GENDRILL::InitDisplayParams()
 {
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     m_rbExcellon->SetValue( m_drillFileType == 0 );
     m_rbGerberX2->SetValue( m_drillFileType == 1 );

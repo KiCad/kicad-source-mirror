@@ -107,14 +107,14 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     InitValues();
 
     // Init bitmaps associated to some wxRadioButton
-    reannotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_down ) );
-    reannotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_down ) );
-    reannotate_down_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_right_up ) );
-    reannotate_left_down_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_left_up ) );
-    reannotate_up_right_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_left ) );
-    reannotate_right_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_left ) );
-    reannotate_up_left_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_down_right ) );
-    reannotate_left_up_bitmap->SetBitmap( KiBitmap( BITMAPS::reannotate_up_right ) );
+    reannotate_down_right_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_right_down ) );
+    reannotate_right_down_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_left_down ) );
+    reannotate_down_left_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_right_up ) );
+    reannotate_left_down_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_left_up ) );
+    reannotate_up_right_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_down_left ) );
+    reannotate_right_up_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_up_left ) );
+    reannotate_up_left_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_down_right ) );
+    reannotate_left_up_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::reannotate_up_right ) );
 
     m_FrontRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );
     m_BackRefDesStart->SetValidator( wxTextValidator( wxFILTER_DIGITS ) );

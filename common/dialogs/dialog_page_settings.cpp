@@ -86,7 +86,7 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aI
         m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits )
 {
     m_projectPath = Prj().GetProjectPath();
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     m_maxPageSizeMils = aMaxUserSizeMils;
     m_tb = m_parent->GetTitleBlock();

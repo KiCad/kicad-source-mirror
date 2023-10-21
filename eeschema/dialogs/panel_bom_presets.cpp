@@ -33,8 +33,8 @@
 PANEL_BOM_PRESETS::PANEL_BOM_PRESETS( wxWindow* aWindow, SCHEMATIC_SETTINGS& aSettings ) :
         PANEL_BOM_PRESETS_BASE( aWindow ), m_settings( aSettings )
 {
-    m_btnDeleteBomPreset->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_btnDeleteBomFmtPreset->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_btnDeleteBomPreset->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_btnDeleteBomFmtPreset->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 }
 
 

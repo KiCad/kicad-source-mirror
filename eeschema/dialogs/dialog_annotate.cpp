@@ -190,8 +190,8 @@ void DIALOG_ANNOTATE::InitValues()
 
     m_textNumberAfter->SetValue( wxString::Format( wxT( "%d" ), annotateStartNum ) );
 
-    annotate_down_right_bitmap->SetBitmap( KiBitmap( BITMAPS::annotate_down_right ) );
-    annotate_right_down_bitmap->SetBitmap( KiBitmap( BITMAPS::annotate_right_down ) );
+    annotate_down_right_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::annotate_down_right ) );
+    annotate_right_down_bitmap->SetBitmap( KiBitmapBundle( BITMAPS::annotate_right_down ) );
 
     m_MessageWindow->SetVisibleSeverities( cfg->m_AnnotatePanel.messages_filter );
 

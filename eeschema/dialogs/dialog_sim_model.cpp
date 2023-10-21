@@ -73,7 +73,7 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
         m_lastParamGridWidth( 0 ),
         m_inKillFocus( false )
 {
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     for( LIB_PIN* pin : aSymbol.GetAllLibPins() )
     {

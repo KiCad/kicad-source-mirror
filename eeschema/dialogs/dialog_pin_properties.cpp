@@ -217,8 +217,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     attr->SetEditor( new GRID_CELL_ICON_TEXT_POPUP( PinShapeIcons(), PinShapeNames() ) );
     m_alternatesGrid->SetColAttr( COL_SHAPE, attr );
 
-    m_addAlternate->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_deleteAlternate->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addAlternate->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteAlternate->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_addAlternate->GetParent()->Layout();
 
     SetupStandardButtons();

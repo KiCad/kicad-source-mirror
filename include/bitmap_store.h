@@ -23,6 +23,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <wx/bmpbndl.h>
+
 #include <bitmaps/bitmap_info.h>
 
 class ASSET_ARCHIVE;
@@ -53,6 +55,19 @@ public:
      * @param aHeight is the requested height in pixels of the source image, or -1 for any height
      */
     wxBitmap GetBitmap( BITMAPS aBitmapId, int aHeight = -1 );
+
+    /**
+     * Constructs and returns a bitmap bundle containing all available sizes of the given ID
+     * @param aBitmapId is from the BITMAPS enum in bitmaps_list.h
+     */
+    wxBitmapBundle GetBitmapBundle( BITMAPS aBitmapId );
+
+    /**
+     * Constructs and returns a bitmap bundle for the given icon ID, with the bitmaps
+     * converted to disabled state according to the current UI theme.
+     * @param aBitmapId is from the BITMAPS enum in bitmaps_list.h
+     */
+    wxBitmapBundle GetDisabledBitmapBundle( BITMAPS aBitmapId );
 
     /**
      * Retrieves a bitmap from the given bitmap id, scaled to a given factor.

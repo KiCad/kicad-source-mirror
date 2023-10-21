@@ -170,7 +170,7 @@ private:
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     PROJECT_FILE&    projectFile = m_parent->Prj().GetProjectFile();
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();

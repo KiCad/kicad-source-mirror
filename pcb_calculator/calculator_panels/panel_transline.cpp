@@ -32,8 +32,8 @@ PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint
         m_currTransLine( nullptr ),
         m_currTransLineType( DEFAULT_TYPE )
 {
-    m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_bpButtonAnalyze->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_bpButtonSynthetize->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
 
 
     // Populate transline list ordered like in dialog menu list
@@ -66,9 +66,9 @@ PANEL_TRANSLINE::~PANEL_TRANSLINE()
 void PANEL_TRANSLINE::ThemeChanged()
 {
     // Update the bitmaps
-    m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_translineBitmap->SetBitmap( KiBitmap( m_transline_list[m_currTransLineType]->m_BitmapName ) );
+    m_bpButtonAnalyze->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_bpButtonSynthetize->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_translineBitmap->SetBitmap( KiBitmapBundle( m_transline_list[m_currTransLineType]->m_BitmapName ) );
 }
 
 

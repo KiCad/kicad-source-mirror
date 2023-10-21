@@ -212,12 +212,12 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_solderPasteRatio.SetNegativeZero();
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_bpAddLayer->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDeleteLayer->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_bpAddPadGroup->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpRemovePadGroup->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpAddLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDeleteLayer->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpAddPadGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpRemovePadGroup->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
 

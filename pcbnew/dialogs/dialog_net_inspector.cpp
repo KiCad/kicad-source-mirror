@@ -1095,9 +1095,9 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
 
     adjustListColumns();
 
-    m_addNet->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_renameNet->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
-    m_deleteNet->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addNet->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_renameNet->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+    m_deleteNet->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
     // Now SetupStandardButtons is called, change the label of Cancel button

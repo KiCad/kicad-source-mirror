@@ -103,11 +103,11 @@ void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
         m_currTransLineType = DEFAULT_TYPE;
     }
 
-    m_translineBitmap->SetBitmap( KiBitmap( m_transline_list[m_currTransLineType]->m_BitmapName ) );
+    m_translineBitmap->SetBitmap( KiBitmapBundle( m_transline_list[m_currTransLineType]->m_BitmapName ) );
 
     // This helper bitmap is shown for coupled microstrip only:
     m_bmCMicrostripZoddZeven->Show( aType == C_MICROSTRIP_TYPE );
-    m_bmCMicrostripZoddZeven->SetBitmap( KiBitmap( BITMAPS::microstrip_zodd_zeven ) );
+    m_bmCMicrostripZoddZeven->SetBitmap( KiBitmapBundle( BITMAPS::microstrip_zodd_zeven ) );
 
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     m_currTransLine = tr_ident->m_TLine;

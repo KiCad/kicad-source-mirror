@@ -374,11 +374,11 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     m_parent->SetInitialFocus( m_cur_grid );
 
     // Configure button logos
-    m_append_button->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_delete_button->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_move_up_button->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_move_down_button->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_browse_button->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_append_button->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_delete_button->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_move_up_button->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_move_down_button->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
+    m_browse_button->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 }
 
 

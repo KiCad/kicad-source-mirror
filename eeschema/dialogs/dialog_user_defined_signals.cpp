@@ -47,8 +47,8 @@ DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aPare
     for( const auto& [ id, signal ] : *m_signals )
         addGridRow( signal, id );
 
-    m_addButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_deleteButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
     Layout();

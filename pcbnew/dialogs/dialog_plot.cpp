@@ -157,14 +157,14 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 	m_bpMoveUp = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
                                         wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
 	m_bpMoveUp->SetToolTip( _( "Move current selection up" ) );
-    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
 
 	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
 	m_bpMoveDown = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
                                           wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
 	m_bpMoveDown->SetToolTip( _( "Move current selection down" ) );
-    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
 	bButtonSizer->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
@@ -209,7 +209,7 @@ void DIALOG_PLOT::init_Dialog()
 
     m_zoneFillCheck->SetValue( cfg->m_Plot.check_zones_before_plotting );
 
-    m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     // m_PSWidthAdjust is stored in mm in user config
     m_PSWidthAdjust = KiROUND( cfg->m_Plot.ps_fine_width_adjust * pcbIUScale.IU_PER_MM );

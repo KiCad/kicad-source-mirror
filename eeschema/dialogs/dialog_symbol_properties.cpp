@@ -376,10 +376,10 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     SetupStandardButtons();
 
     // Configure button logos
-    m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
-    m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
-    m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-    m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_bpDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
+    m_bpMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
 
     // wxFormBuilder doesn't include this event...
     m_fieldsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging,
