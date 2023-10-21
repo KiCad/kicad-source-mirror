@@ -223,6 +223,8 @@ public:
     void OnSimReport( const wxString& aMsg );
     void OnSimRefresh( bool aFinal );
 
+    void OnModify();
+
 private:
     /**
      * Get the simulator output vector name for a given signal name and type.

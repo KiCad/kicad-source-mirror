@@ -417,6 +417,7 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         {
             m_parent->SetMeasureFormat( m_menuRow, format );
             m_parent->UpdateMeasurement( m_menuRow );
+            m_parent->OnModify();
         }
     }
     else if( event.GetId() == MYID_DELETE_MEASUREMENT )
@@ -431,9 +432,7 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
             if( cells1[i].GetCol() == COL_MEASUREMENT )
             {
                 for( int j = cells1[i].GetRow(); j < cells2[i].GetRow() + 1; j++ )
-                {
                     measurements.push_back( j );
-                }
             }
         }
 
@@ -456,6 +455,8 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
             m_parent->DeleteMeasurement( row );
 
         m_grid->ClearSelection();
+
+        m_parent->OnModify();
     }
     else
     {
@@ -1085,7 +1086,7 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
         // Update enabled/visible states of other controls
         updateSignalsGrid();
         updatePlotCursors();
-        m_simulatorFrame->OnModify();
+        OnModify();
     }
     else if( col == COL_SIGNAL_COLOR )
     {
@@ -1097,7 +1098,7 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
             trace->SetTraceColour( color.ToColour() );
             plotTab->UpdateTraceStyle( trace );
             plotTab->UpdatePlotColors();
-            m_simulatorFrame->OnModify();
+            OnModify();
         }
     }
     else if( col == COL_CURSOR_1 || col == COL_CURSOR_2 )
@@ -1111,7 +1112,7 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
             bool enable = ii == row && text == wxS( "1" );
 
             plotTab->EnableCursor( vectorName, traceType, id, enable, signalName );
-            m_simulatorFrame->OnModify();
+            OnModify();
         }
 
         // Update cursor checkboxes (which are really radio buttons)
@@ -1159,7 +1160,7 @@ void SIMULATOR_FRAME_UI::onCursorsGridCellChanged( wxGridEvent& aEvent )
             cursor2->SetCoordX( cursor1->GetCoords().x + value );
 
         updatePlotCursors();
-        m_simulatorFrame->OnModify();
+        OnModify();
     }
     else
     {
@@ -1179,17 +1180,13 @@ SPICE_VALUE_FORMAT SIMULATOR_FRAME_UI::GetMeasureFormat( int aRow ) const
 void SIMULATOR_FRAME_UI::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
 {
     m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_FORMAT, aFormat.ToString() );
-    m_simulatorFrame->OnModify();
 }
 
 
 void SIMULATOR_FRAME_UI::DeleteMeasurement( int aRow )
 {
     if( aRow < ( m_measurementsGrid->GetNumberRows() - 1 ) )
-    {
         m_measurementsGrid->DeleteRows( aRow, 1 );
-        m_simulatorFrame->OnModify();
-    }
 }
 
 
@@ -1207,7 +1204,7 @@ void SIMULATOR_FRAME_UI::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     if( col == COL_MEASUREMENT )
     {
         UpdateMeasurement( row );
-        m_simulatorFrame->OnModify();
+        OnModify();
     }
     else
     {
@@ -1244,7 +1241,7 @@ void SIMULATOR_FRAME_UI::OnUpdateUI( wxUpdateUIEvent& event )
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
         if( plotTab->GetLegendPosition() != plotTab->m_LastLegendPosition )
-            m_simulatorFrame->OnModify();
+            OnModify();
     }
 }
 
@@ -1401,7 +1398,7 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
         m_sizerTuners->Add( tuner );
         m_tuners.push_back( tuner );
         m_panelTuners->Layout();
-        m_simulatorFrame->OnModify();
+        OnModify();
     }
     catch( const KI_PARAM_ERROR& e )
     {
@@ -1449,7 +1446,7 @@ void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
     m_tuners.remove( aTuner );
     aTuner->Destroy();
     m_panelTuners->Layout();
-    m_simulatorFrame->OnModify();
+    OnModify();
 }
 
 
@@ -1486,7 +1483,7 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
     SetMeasureFormat( row, { 2, wxS( "~V" ) } );
 
     UpdateMeasurement( row );
-    m_simulatorFrame->OnModify();
+    OnModify();
 
     // Always leave at least one empty row for type-in:
     row = m_measurementsGrid->GetNumberRows() - 1;
@@ -1557,7 +1554,7 @@ void SIMULATOR_FRAME_UI::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
     plotTab->GetPlotWin()->UpdateAll();
 
     updateSignalsGrid();
-    m_simulatorFrame->OnModify();
+    OnModify();
 }
 
 
@@ -1628,7 +1625,7 @@ void SIMULATOR_FRAME_UI::SetUserDefinedSignals( const std::map<int, wxString>& a
     rebuildSignalsGrid( m_filter->GetValue() );
     updateSignalsGrid();
     updatePlotCursors();
-    m_simulatorFrame->OnModify();
+    OnModify();
 }
 
 
@@ -2328,7 +2325,7 @@ void SIMULATOR_FRAME_UI::ToggleDarkModePlots()
 
 void SIMULATOR_FRAME_UI::onPlotClose( wxAuiNotebookEvent& event )
 {
-    m_simulatorFrame->OnModify();
+    OnModify();
 }
 
 
@@ -2583,7 +2580,7 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
 void SIMULATOR_FRAME_UI::onPlotCursorUpdate( wxCommandEvent& aEvent )
 {
     updatePlotCursors();
-    m_simulatorFrame->OnModify();
+    OnModify();
 }
 
 
@@ -2817,3 +2814,7 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 }
 
 
+void SIMULATOR_FRAME_UI::OnModify()
+{
+    m_simulatorFrame->OnModify();
+}
