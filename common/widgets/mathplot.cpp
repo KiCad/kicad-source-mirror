@@ -529,7 +529,12 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
         // A buffer to store coordinates of lines to draw
         std::vector<wxPoint>pointList;
-        pointList.reserve( endPx - startPx + 1 );
+        pointList.reserve( ( endPx - startPx ) * 2 );
+
+        double nextX;
+        double nextY;
+        bool hasNext = GetNextXY( nextX, nextY );
+        bool offRight = false;
 
         // Note: we can use dc.DrawLines() only for a reasonable number or points (<10000),
         // because at least on Windows dc.DrawLines() can hang for a lot of points.
@@ -538,50 +543,68 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
         // To avoid artifacts when skipping points to the same x coordinate, for each group of
         // points at a give, x coordinate we also draw a vertical line at this coord, from the
         // ymin to the ymax vertical coordinates of skipped points
-        while( GetNextXY( x, y ) )
+        while( hasNext )
         {
+            x = nextX;
+            y = nextY;
+            hasNext = GetNextXY( nextX, nextY );
+
             double px = m_scaleX->TransformToPlot( x );
             double py = m_scaleY->TransformToPlot( y );
 
             wxCoord x1 = w.x2p( px );
             wxCoord y1 = w.y2p( py );
 
-            // Store only points on the drawing area, to speed up the drawing time
+            // Store only points near the drawing area, to speed up the drawing time.  Note that
+            // we can't start *right* at the borders because we need to interpolate between two
+            // points, one of which might be off-screen.
             // Note: x1 is a value truncated from px by w.x2p(). So to be sure the first point
             // is drawn, the x1 low limit is startPx-1 in plot coordinates
-            if( x1 >= startPx-1 && x1 <= endPx )
+            if( x1 < startPx-1 )
             {
-                if( !count || line_start.x != x1 )
-                {
+                wxCoord nextX1 = w.x2p( m_scaleX->TransformToPlot( nextX ) );
+
+                if( nextX1 < startPx-1 )
+                    continue;
+            }
+            else if( x1 > endPx )
+            {
+                if( offRight )
+                    continue;
+                else
+                    offRight = true;
+            }
+
+            if( !count || line_start.x != x1 )
+            {
 #ifndef __WXMAC__   // Drawing the vertical lines spoils anti-aliasing on Retina displays
-                    if( count && dupx0 > 1 && ymin0 != ymax0 )
-                    {
-                        // Vertical points are merged, draw the pending vertical line
-                        // However, if the line is one pixel length, it is not drawn, because
-                        // the main trace show this point
-                        dc.DrawLine( x0, ymin0, x0, ymax0 );
-                    }
+                if( count && dupx0 > 1 && ymin0 != ymax0 )
+                {
+                    // Vertical points are merged, draw the pending vertical line
+                    // However, if the line is one pixel length, it is not drawn, because
+                    // the main trace show this point
+                    dc.DrawLine( x0, ymin0, x0, ymax0 );
+                }
 #else
-                    if( x0 ) { };    // Quiet CLang
+                if( x0 ) { };    // Quiet CLang
 #endif
 
-                    x0 = x1;
-                    ymin0 = ymax0 = y1;
-                    dupx0 = 0;
+                x0 = x1;
+                ymin0 = ymax0 = y1;
+                dupx0 = 0;
 
-                    pointList.emplace_back( wxPoint( x1, y1 ) );
+                pointList.emplace_back( wxPoint( x1, y1 ) );
 
-                    line_start.x = x1;
-                    line_start.y = y1;
-                    count++;
-                }
-                else
-                {
-                    ymin0 = std::min( ymin0, y1 );
-                    ymax0 = std::max( ymax0, y1 );
-                    x0 = x1;
-                    dupx0++;
-                }
+                line_start.x = x1;
+                line_start.y = y1;
+                count++;
+            }
+            else
+            {
+                ymin0 = std::min( ymin0, y1 );
+                ymax0 = std::max( ymax0, y1 );
+                x0 = x1;
+                dupx0++;
             }
         }
 
