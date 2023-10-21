@@ -114,7 +114,6 @@ ACTION_TOOLBAR_PALETTE::ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertica
 
 void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
 {
-    // TODO(JE)
     wxBitmapBundle normalBmp = KiBitmapBundle( aAction.GetIcon() );
 
     int bmpWidth = normalBmp.GetPreferredBitmapSizeFor( this ).GetWidth();
