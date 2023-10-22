@@ -104,7 +104,7 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
     int bmpX = 0, bmpY = 0;
     int textX = 0, textY = 0;
 
-    double scale = KIPLATFORM::UI::GetPixelScaleFactor( aWindow ) ;
+    double scale = KIPLATFORM::UI::GetPixelScaleFactor( aWindow );
     const wxBitmapBundle& bundle = ( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED )
                                    ? aItem.GetDisabledBitmapBundle()
                                    : aItem.GetBitmapBundle();

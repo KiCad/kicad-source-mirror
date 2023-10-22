@@ -120,6 +120,7 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
     int padding = ( m_buttonSize.GetWidth() - bmpWidth ) / 2;
     int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
     wxSize bmSize( size, size );
+    bmSize *= KIPLATFORM::UI::GetPixelScaleFactor( m_parent );
 
     BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId(), wxDefaultPosition,
                                                bmSize );
@@ -129,6 +130,8 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
     button->SetPadding( padding );
     button->SetToolTip( aAction.GetTooltip() );
     button->AcceptDragInAsClick();
+    button->SetIsToolbarButton();
+    button->SetBitmapCentered();
 
     m_buttons[aAction.GetUIId()] = button;
 

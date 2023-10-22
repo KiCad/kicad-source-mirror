@@ -23,6 +23,8 @@
  */
 
 #include <kiplatform/ui.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <widgets/bitmap_button.h>
 #include <wx/button.h>
 #include <wx/dcclient.h>
@@ -41,6 +43,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         m_badgeTextColor( wxColor( wxT( "white" ) ) ),
         m_buttonState( 0 ),
         m_padding( 0 ),
+        m_isToolbarButton( false ),
         m_acceptDraggedInClicks( false ),
         m_centerBitmap( false )
 {
@@ -62,6 +65,7 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap&
         m_badgeTextColor( wxColor( wxT( "white" ) ) ),
         m_buttonState( 0 ),
         m_padding( 5 ),
+        m_isToolbarButton( false ),
         m_acceptDraggedInClicks( false ),
         m_centerBitmap( false )
 {
@@ -101,11 +105,7 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_normalBitmap = aBmp;
-#ifndef __WXMSW__
-    m_unadjustedMinSize = m_normalBitmap.GetDefaultSize();
-#else
     m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
-#endif
 
     SetMinSize( wxSize( m_unadjustedMinSize.GetWidth() + ( m_padding * 2 ),
                         m_unadjustedMinSize.GetHeight() + ( m_padding * 2 ) ) );
@@ -286,12 +286,32 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
     const wxBitmapBundle& bmp = hasFlag( wxCONTROL_DISABLED ) ? m_disabledBitmap : m_normalBitmap;
 
     wxPoint drawBmpPos( m_padding, m_padding );
-    wxBitmap bmpImg = bmp.GetBitmapFor( this );
+    wxBitmap bmpImg;
+    double scale = KIPLATFORM::UI::GetPixelScaleFactor( this );
+    int size;
+    wxSize bmSize;
+
+    if( m_isToolbarButton )
+    {
+        size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+        bmSize = wxSize( size, size );
+        bmpImg = bmp.GetBitmap( bmSize * scale );
+
+        // wxBitmapBundle::GetBitmap thinks we need this rescaled to match the base size
+        if( bmpImg.IsOk() )
+            bmpImg.SetScaleFactor( scale );
+    }
+    else
+    {
+        bmpImg = bmp.GetBitmapFor( this );
+        bmSize = bmpImg.GetSize();
+    }
+
     if( m_centerBitmap )
     {
         // dont let it go negative if bmp is larger than the button
-        int x = std::max( ( rect.width - bmpImg.GetWidth() ) / 2, 0 );
-        int y = std::max( ( rect.height - bmpImg.GetHeight() ) / 2, 0 );
+        int x = std::max( ( rect.width - bmSize.x ) / 2, 0 );
+        int y = std::max( ( rect.height - bmSize.y ) / 2, 0 );
         drawBmpPos = wxPoint( x, y );
     }
 

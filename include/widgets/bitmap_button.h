@@ -115,10 +115,13 @@ public:
         m_badgeTextColor = aBadgeTextColor;
     }
 
-    void SetBitmapCentered( bool aCentered )
+    void SetBitmapCentered( bool aCentered = true )
     {
         m_centerBitmap = aCentered;
     }
+
+    void SetIsToolbarButton( bool aIsToolbar = true ) { m_isToolbarButton = aIsToolbar; }
+    bool IsToolbarButton() const { return m_isToolbarButton; }
 
 protected:
     void setupEvents();
@@ -159,6 +162,7 @@ private:
     int       m_buttonState;
     int       m_padding;
     wxSize    m_unadjustedMinSize;
+    bool      m_isToolbarButton;
 
     ///< Accept mouse-up as click even if mouse-down happened outside of the control
     bool      m_acceptDraggedInClicks;
