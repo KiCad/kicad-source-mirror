@@ -147,6 +147,8 @@ public:
     ///< Returns status of an item.
     int GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr );
 
+    EDA_ITEM* GetFirst() const { return m_changes.empty() ? nullptr : m_changes[0].m_item; }
+
 protected:
     struct COMMIT_LINE
     {

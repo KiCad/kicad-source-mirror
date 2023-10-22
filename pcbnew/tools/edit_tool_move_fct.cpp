@@ -238,9 +238,19 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         BOARD_COMMIT localCommit( this );
 
         if( doMoveSelection( aEvent, &localCommit ) )
-            localCommit.Push( _( "Move" ) );
+        {
+            if( PCB_GENERATOR* genItem = dynamic_cast<PCB_GENERATOR*>( localCommit.GetFirst() ) )
+                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &localCommit, genItem );
+            else
+                localCommit.Push( _( "Move" ) );
+        }
         else
-            localCommit.Revert();
+        {
+            if( PCB_GENERATOR* genItem = dynamic_cast<PCB_GENERATOR*>( localCommit.GetFirst() ) )
+                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, &localCommit, genItem );
+            else
+                localCommit.Revert();
+        }
     }
 
     return 0;
@@ -798,26 +808,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     {
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
         m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &oItems );
-
-        for( BOARD_ITEM* item : sel_items )
-        {
-            if( item->Type() == PCB_GENERATOR_T )
-            {
-                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, aCommit,
-                                                 static_cast<PCB_GENERATOR*>( item ) );
-            }
-        }
-    }
-    else
-    {
-        for( BOARD_ITEM* item : sel_items )
-        {
-            if( item->Type() == PCB_GENERATOR_T )
-            {
-                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, aCommit,
-                                                 static_cast<PCB_GENERATOR*>( item ) );
-            }
-        }
     }
 
     // Remove the dynamic ratsnest from the screen

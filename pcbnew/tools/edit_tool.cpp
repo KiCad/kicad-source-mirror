@@ -2453,6 +2453,20 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
+
+                    // Iterate from the back so we don't have to worry about removals.
+                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                    {
+                        BOARD_ITEM* item = aCollector[i];
+
+                        if( item->Type() == PCB_GENERATOR_T )
+                        {
+                            // Could you duplicate something like a generated stitching pattern?
+                            // Dunno.  But duplicating a tuning pattern is a sure crash.
+                            //
+                            aCollector.Remove( item );
+                        }
+                    }
                 } );
 
     if( selection.Empty() )

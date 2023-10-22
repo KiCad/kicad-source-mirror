@@ -240,7 +240,7 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genPushEdit ) )
     {
-        gen->EditPush( this, board(), frame(), commit, wxEmptyString, APPEND_UNDO );
+        gen->EditPush( this, board(), frame(), commit, wxEmptyString );
 
         wxASSERT( commit->Empty() );
     }

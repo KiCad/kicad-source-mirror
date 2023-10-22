@@ -654,8 +654,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &commit,
                                                  static_cast<PCB_GENERATOR*>( item ) );
             }
-
-            commit.Push( _( "Drag Corner" ) );
+            else
+            {
+                commit.Push( _( "Drag Corner" ) );
+            }
 
             inDrag = false;
             frame()->UndoRedoBlock( false );
