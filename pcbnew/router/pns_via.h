@@ -221,8 +221,9 @@ public:
         VIA( aPos, LAYER_RANGE( aLayer, aLayer ), aDiameter, aDiameter / 2, aNet )
     {
         m_isVirtual = true;
-        //SetHole( SHAPE_CIRCLE( Pos(), 1 ) );
     }
+
+    bool HasHole() const override { return false; }
 };
 
 }
