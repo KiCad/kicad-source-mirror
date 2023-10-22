@@ -679,7 +679,7 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
     if( !startItem || !endItem )
         return std::nullopt;
 
-    PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
+    PNS::LINE        line = world->AssembleLine( startItem );
     SHAPE_LINE_CHAIN oldChain = line.CLine();
 
     wxCHECK( line.ContainsLink( endItem ), std::nullopt );
@@ -711,7 +711,7 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* 
     if( !startItem || !endItem || startSnapPoint == endSnapPoint )
         return false;
 
-    PNS::LINE               line = world->AssembleLine( startItem, nullptr, false, true );
+    PNS::LINE               line = world->AssembleLine( startItem );
     const SHAPE_LINE_CHAIN& chain = line.CLine();
 
     wxASSERT( line.ContainsLink( endItem ) );
@@ -1034,6 +1034,7 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
     PNS::ROUTER*      router = aTool->Router();
     SHAPE_LINE_CHAIN  bounds = getRectShape();
     PICKED_ITEMS_LIST groupUndoList;
+    int               epsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
 
     if( router->RoutingInProgress() )
     {
@@ -1060,8 +1061,8 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
         {
             PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
 
-            if( track && bounds.PointInside( track->GetPosition(), 2 )
-                      && bounds.PointInside( track->GetEnd(), 2 ) )
+            if( track && bounds.PointInside( track->GetPosition(), epsilon )
+                      && bounds.PointInside( track->GetEnd(), epsilon ) )
             {
                 AddItem( item );
                 groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );

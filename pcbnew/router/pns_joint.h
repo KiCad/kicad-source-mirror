@@ -105,6 +105,9 @@ public:
             LINKED_ITEM* seg1 = static_cast<LINKED_ITEM*>( m_linkedItems[0] );
             LINKED_ITEM* seg2 = static_cast<LINKED_ITEM*>( m_linkedItems[1] );
 
+            if( !aAllowLockedSegs && ( seg1->IsLocked() || seg2->IsLocked() ) )
+                return false;
+
             // joints between segments of different widths are not considered trivial.
             return seg1->Width() == seg2->Width();
         }
