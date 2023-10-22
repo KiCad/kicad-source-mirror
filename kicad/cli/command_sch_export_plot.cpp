@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,6 +35,7 @@
 #define ARG_HPGL_PEN_SIZE "--pen-size"
 #define ARG_HPGL_ORIGIN "--origin"
 #define ARG_PAGES "--pages"
+#define ARG_EXCLUDE_PDF_PROPERTY_POPUPS "--exclude-pdf-property-popups"
 
 const JOB_HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
     JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT,
@@ -68,6 +69,11 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
     m_argParser.add_argument( "-e", ARG_EXCLUDE_DRAWING_SHEET )
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( ARG_EXCLUDE_PDF_PROPERTY_POPUPS )
+            .help( UTF8STDSTR( _( "Do not generate property popups in PDF" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -147,6 +153,11 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
             return EXIT_CODES::ERR_ARGS;
         }
         plotJob->m_HPGLPlotOrigin = hpgl_origin_ops[origin];
+    }
+    // PDF local options
+    else if( m_plotFormat == SCH_PLOT_FORMAT::PDF )
+    {
+        plotJob->m_PDFPropertyPopups = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_PROPERTY_POPUPS );
     }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, plotJob.get() );

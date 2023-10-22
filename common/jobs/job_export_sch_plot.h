@@ -77,20 +77,21 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT : public JOB
 public:
     JOB_EXPORT_SCH_PLOT( bool aIsCli, SCH_PLOT_FORMAT aPlotFormat, wxString aFilename );
 
-    SCH_PLOT_FORMAT   m_plotFormat;
-    wxString          m_filename;
-    wxString          m_drawingSheet;
+    SCH_PLOT_FORMAT       m_plotFormat;
+    wxString              m_filename;
+    wxString              m_drawingSheet;
 
     bool                  m_plotAll;
     bool                  m_plotDrawingSheet;
     std::vector<wxString> m_plotPages;
 
-    bool           m_blackAndWhite;
-    JOB_PAGE_SIZE  m_pageSizeSelect;
-    bool           m_useBackgroundColor;
-    double         m_HPGLPenSize; // for HPGL format only: pen size
-    JOB_HPGL_PAGE_SIZE m_HPGLPaperSizeSelect;
-    wxString       m_theme;
+    bool                  m_blackAndWhite;
+    JOB_PAGE_SIZE         m_pageSizeSelect;
+    bool                  m_useBackgroundColor;
+    double                m_HPGLPenSize; // for HPGL format only: pen size
+    JOB_HPGL_PAGE_SIZE    m_HPGLPaperSizeSelect;
+    bool                  m_PDFPropertyPopups;
+    wxString              m_theme;
 
     wxString m_outputDirectory;
     wxString m_outputFile;
