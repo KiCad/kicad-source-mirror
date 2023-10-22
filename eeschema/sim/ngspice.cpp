@@ -593,6 +593,7 @@ std::string NGSPICE::findCmPath() const
                 "/../../../../../Contents/PlugIns/sim/ngspice",
         "../Plugins/sim/ngspice",
 #endif
+        "../eeschema/ngspice",
         "../lib/ngspice",
         "../../lib/ngspice",
         "lib/ngspice",
