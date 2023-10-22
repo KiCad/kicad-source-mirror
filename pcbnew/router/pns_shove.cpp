@@ -124,7 +124,15 @@ int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
     if( m_forceClearance >= 0 )
         return m_forceClearance;
 
-    return m_currentNode->GetClearance( aA, aB, false );
+    int clearance = m_currentNode->GetClearance( aA, aB, false );
+
+    if( aA->HasHole() )
+        clearance = std::max( clearance, m_currentNode->GetClearance( aA->Hole(), aB, false ) );
+
+    if( aB->HasHole() )
+        clearance = std::max( clearance, m_currentNode->GetClearance( aA, aB->Hole(), false ) );
+
+    return clearance;
 }
 
 
@@ -1303,7 +1311,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(),
              wxString::Format( wxT( "current-coll-chk rank %d" ), currentLine.Rank() ) );
 
-    for( ITEM::PnsKind search_order : { ITEM::HOLE_T, ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
+    for( ITEM::PnsKind search_order : { ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T, ITEM::HOLE_T } )
     {
         COLLISION_SEARCH_OPTIONS opts;
         opts.m_kindMask = search_order;
