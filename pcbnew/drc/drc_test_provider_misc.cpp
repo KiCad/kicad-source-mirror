@@ -85,6 +85,11 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     OUTLINE_ERROR_HANDLER errorHandler =
             [&]( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* itemB, const VECTOR2I& pt )
             {
+                errorHandled = true;
+
+                if( m_drcEngine->IsErrorLimitExceeded( DRCE_INVALID_OUTLINE ) )
+                    return;
+
                 if( !itemA )        // If we only have a single item, make sure it's A
                     std::swap( itemA, itemB );
 
@@ -94,7 +99,6 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 drcItem->SetItems( itemA, itemB );
 
                 reportViolation( drcItem, pt, Edge_Cuts );
-                errorHandled = true;
             };
 
     // Test for very small graphic items (a few nm size) that can create issues
