@@ -2069,34 +2069,95 @@ static struct SCH_LABEL_DESC
 {
     SCH_LABEL_DESC()
     {
+        auto& labelShapeEnum = ENUM_MAP<LABEL_SHAPE>::Instance();
+
+        if( labelShapeEnum.Choices().GetCount() == 0 )
+        {
+            labelShapeEnum.Map( LABEL_SHAPE::LABEL_INPUT, _HKI( "Input" ) )
+                          .Map( LABEL_SHAPE::LABEL_OUTPUT, _HKI( "Output" ) )
+                          .Map( LABEL_SHAPE::LABEL_BIDI, _HKI( "Bidirectional" ) )
+                          .Map( LABEL_SHAPE::LABEL_TRISTATE, _HKI( "Tri-state" ) )
+                          .Map( LABEL_SHAPE::LABEL_PASSIVE, _HKI( "Passive" ) );
+        }
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_LABEL_BASE );
         REGISTER_TYPE( SCH_LABEL );
         REGISTER_TYPE( SCH_HIERLABEL );
-        REGISTER_TYPE( SCH_GLOBALLABEL );
-        REGISTER_TYPE( SCH_DIRECTIVE_LABEL );
 
         propMgr.AddTypeCast( new TYPE_CAST<SCH_LABEL, SCH_LABEL_BASE> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_HIERLABEL, SCH_LABEL_BASE> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_GLOBALLABEL, SCH_LABEL_BASE> );
-        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, SCH_LABEL_BASE> );
 
         propMgr.AddTypeCast( new TYPE_CAST<SCH_LABEL, SCH_TEXT> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_HIERLABEL, SCH_TEXT> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_GLOBALLABEL, SCH_TEXT> );
-        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, SCH_TEXT> );
 
         propMgr.AddTypeCast( new TYPE_CAST<SCH_LABEL, EDA_TEXT> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_HIERLABEL, EDA_TEXT> );
         propMgr.AddTypeCast( new TYPE_CAST<SCH_GLOBALLABEL, EDA_TEXT> );
-        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, EDA_TEXT> );
 
         propMgr.InheritsAfter( TYPE_HASH( SCH_LABEL_BASE ), TYPE_HASH( SCH_TEXT ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_LABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_HIERLABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_GLOBALLABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
-        propMgr.InheritsAfter( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
+
+        auto hasLabelShape =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aItem ) )
+                        return label->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } );
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LABEL_BASE, LABEL_SHAPE>( _HKI( "Shape" ),
+                             &SCH_LABEL_BASE::SetLabelShape, &SCH_LABEL_BASE::GetLabelShape ) )
+                .SetAvailableFunc( hasLabelShape );
 
         propMgr.Mask( TYPE_HASH( SCH_LABEL_BASE ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
     }
 } _SCH_LABEL_DESC;
+
+
+static struct SCH_DIRECTIVE_LABEL_DESC
+{
+    SCH_DIRECTIVE_LABEL_DESC()
+    {
+        auto& flagShapeEnum = ENUM_MAP<FLAG_SHAPE>::Instance();
+
+        if( flagShapeEnum.Choices().GetCount() == 0 )
+        {
+            flagShapeEnum.Map( FLAG_SHAPE::FLAG_DOT, _HKI( "Dot" ) )
+                         .Map( FLAG_SHAPE::FLAG_CIRCLE, _HKI( "Circle" ) )
+                         .Map( FLAG_SHAPE::FLAG_DIAMOND, _HKI( "Diamond" ) )
+                         .Map( FLAG_SHAPE::FLAG_RECTANGLE, _HKI( "Rectangle" ) );
+        }
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_DIRECTIVE_LABEL );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, SCH_LABEL_BASE> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, SCH_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, EDA_TEXT> );
+
+        propMgr.InheritsAfter( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_DIRECTIVE_LABEL, FLAG_SHAPE>( _HKI( "Shape" ),
+                             &SCH_DIRECTIVE_LABEL::SetFlagShape, &SCH_DIRECTIVE_LABEL::GetFlagShape ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_DIRECTIVE_LABEL, int>( _HKI( "Pin length" ),
+                             &SCH_DIRECTIVE_LABEL::SetPinLength, &SCH_DIRECTIVE_LABEL::GetPinLength,
+                             PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Italic" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Bold" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ) );
+    }
+} _SCH_DIRECTIVE_LABEL_DESC;
+
+
+ENUM_TO_WXANY( LABEL_SHAPE )
+ENUM_TO_WXANY( FLAG_SHAPE )

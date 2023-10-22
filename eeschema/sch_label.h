@@ -102,6 +102,26 @@ enum LABEL_FLAG_SHAPE
     F_RECTANGLE
 };
 
+/*
+ * Specific enums for property manager (not used elsewhere)
+ */
+enum LABEL_SHAPE
+{
+    LABEL_INPUT    = L_INPUT,
+    LABEL_OUTPUT   = L_OUTPUT,
+    LABEL_BIDI     = L_BIDI,
+    LABEL_TRISTATE = L_TRISTATE,
+    LABEL_PASSIVE  = L_UNSPECIFIED
+};
+
+enum FLAG_SHAPE
+{
+    FLAG_DOT       = F_DOT,
+    FLAG_CIRCLE    = F_ROUND,
+    FLAG_DIAMOND   = F_DIAMOND,
+    FLAG_RECTANGLE = F_RECTANGLE
+};
+
 
 class SCH_LABEL_BASE : public SCH_TEXT
 {
@@ -146,6 +166,10 @@ public:
 
     LABEL_FLAG_SHAPE GetShape() const        { return m_shape; }
     void SetShape( LABEL_FLAG_SHAPE aShape ) { m_shape = aShape; }
+
+    // Type-specific versions for property manager
+    LABEL_SHAPE GetLabelShape() const        { return (LABEL_SHAPE) m_shape; }
+    void SetLabelShape( LABEL_SHAPE aShape ) { m_shape = (LABEL_FLAG_SHAPE) aShape; }
 
     COLOR4D GetLabelColor() const;
 
@@ -409,7 +433,10 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    int GetPinLength() const { return m_pinLength; }
+    FLAG_SHAPE GetFlagShape() const          { return (FLAG_SHAPE) m_shape; }
+    void SetFlagShape( FLAG_SHAPE aShape )   { m_shape = (LABEL_FLAG_SHAPE) aShape; }
+
+    int GetPinLength() const         { return m_pinLength; }
     void SetPinLength( int aLength ) { m_pinLength = aLength; }
 
     int GetPenWidth() const override;
