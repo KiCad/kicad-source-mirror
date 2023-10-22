@@ -1155,8 +1155,14 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack
     segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
     segment->SetParent( aTrack );
 
-    if( aTrack->IsLocked() || dynamic_cast<PCB_GENERATOR*>( aTrack->GetParentGroup() ) )
+    if( aTrack->IsLocked() )
         segment->Mark( PNS::MK_LOCKED );
+
+    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aTrack->GetParentGroup() ) )
+    {
+        if( !generator->IsMoving() )
+            segment->Mark( PNS::MK_LOCKED );
+    }
 
     return segment;
 }
@@ -1171,8 +1177,14 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
     arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
     arc->SetParent( aArc );
 
-    if( aArc->IsLocked() || dynamic_cast<PCB_GENERATOR*>( aArc->GetParentGroup() ) )
+    if( aArc->IsLocked() )
         arc->Mark( PNS::MK_LOCKED );
+
+    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aArc->GetParentGroup() ) )
+    {
+        if( !generator->IsMoving() )
+            arc->Mark( PNS::MK_LOCKED );
+    }
 
     return arc;
 }
@@ -1192,8 +1204,14 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 
     via->SetParent( aVia );
 
-    if( aVia->IsLocked() || dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
+    if( aVia->IsLocked() )
         via->Mark( PNS::MK_LOCKED );
+
+    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
+    {
+        if( !generator->IsMoving() )
+            via->Mark( PNS::MK_LOCKED );
+    }
 
     via->SetIsFree( aVia->GetIsFree() );
     via->SetHole( PNS::HOLE::MakeCircularHole( aVia->GetPosition(), aVia->GetDrillValue() / 2 ) );

@@ -505,6 +505,8 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
             aCommit->Modify( this );
     }
 
+    SetFlags( IS_MOVING );
+
     int          layer = GetLayer();
     PNS::ROUTER* router = aTool->Router();
 
