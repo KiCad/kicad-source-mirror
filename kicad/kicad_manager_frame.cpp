@@ -125,7 +125,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                         KICAD_MANAGER_FRAME_NAME, &::Kiway, unityScale ),
         m_leftWin( nullptr ),
         m_launcher( nullptr ),
-        m_mainToolBar( nullptr )
+        m_mainToolBar( nullptr ),
+        m_lastToolbarIconSize( 0 )
 {
     m_active_project = false;
     m_leftWinWidth = 250;       // Default value
@@ -788,6 +789,15 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     {
         m_pcm->ReadEnvVar();
     }
+
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( m_lastToolbarIconSize == 0
+        || m_lastToolbarIconSize != settings->m_Appearance.toolbar_icon_size )
+    {
+        onToolbarSizeChanged();
+        m_lastToolbarIconSize = settings->m_Appearance.toolbar_icon_size;
+    }
 }
 
 
@@ -985,4 +995,17 @@ void KICAD_MANAGER_FRAME::updatePcmButtonBadge()
 
         m_pcmButton->Refresh();
     }
+}
+
+
+void KICAD_MANAGER_FRAME::onToolbarSizeChanged()
+{
+    // No idea why, but the same mechanism used in EDA_DRAW_FRAME doesn't work here
+    // the only thing that seems to work is to blow it all up and start from scratch.
+    m_auimgr.DetachPane( m_mainToolBar );
+    delete m_mainToolBar;
+    m_mainToolBar = nullptr;
+    RecreateBaseHToolbar();
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Left()
+                      .Layer( 2 ) );
 }

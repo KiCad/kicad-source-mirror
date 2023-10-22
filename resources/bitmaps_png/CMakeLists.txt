@@ -900,12 +900,13 @@ if( MAINTAIN_PNGS )
     bitmap_dir( 16 16 "${BMAPS_SMALL}" )
     bitmap_dir( 32 32 "${BMAPS_SMALL}" )    # 2x HiDPI
 
-    bitmap_dir( 24 24 "${BMAPS_MID}" )
-    bitmap_dir( 48 48 "${BMAPS_MID}" )    # 2x HiDPI
+    bitmap_dir( 24 24 "${BMAPS_MID}" )  # "primary" size first
+    bitmap_dir( 16 16 "${BMAPS_MID}" )  # Small toolbar mode
+    bitmap_dir( 32 32 "${BMAPS_MID}" )  # Large toolbar mode
+    bitmap_dir( 48 48 "${BMAPS_MID}" )  # HiDPI normal size
+    bitmap_dir( 64 64 "${BMAPS_MID}" )  # HiDPI large size
 
     bitmap_dir( 32 32 "${BMAPS_32}" )
-
-    bitmap_dir( 22 22 "${BMAPS_22}" )
 
     bitmap_dir( 24 24 "${BMAPS_24}" )
 

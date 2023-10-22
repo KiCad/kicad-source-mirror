@@ -67,6 +67,10 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_rbIconThemeLight;
 		wxRadioButton* m_rbIconThemeDark;
 		wxRadioButton* m_rbIconThemeAuto;
+		wxStaticText* m_stToolbarIconSize;
+		wxRadioButton* m_rbIconSizeSmall;
+		wxRadioButton* m_rbIconSizeNormal;
+		wxRadioButton* m_rbIconSizeLarge;
 		wxGridBagSizer* m_gbUserInterface;
 		wxStaticText* m_staticTextCanvasScale;
 		wxSpinCtrlDouble* m_canvasScaleCtrl;

@@ -23,11 +23,7 @@
 #include <wx/aui/auibar.h>
 #include <wx/aui/dockart.h>
 
-/**
- * wxWidgets 3.1 has support for dark mode detection, but 3.0 doesn't.
- * The main purpose of this replacement art provider is to backport that functionality
- * so that it is available in Linux systems that will likely be stuck on 3.0 for a while.
- */
+
 class WX_AUI_TOOLBAR_ART : public wxAuiDefaultToolBarArt
 {
 public:
@@ -35,12 +31,10 @@ public:
 
     virtual ~WX_AUI_TOOLBAR_ART() = default;
 
+    wxSize GetToolSize( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem ) override;
+
     /**
-     * The same as wxAuiDefaultToolBarArt::DrawButton except with dark-mode awareness based on
-     * BITMAP_BUTTON.
-     *
-     * Unfortunately, wx 3.0 does not provide any hooks that would make it possible to do this in
-     * a way other than just copy/pasting the upstream implementation and modifying it.
+     * Unfortunately we need to re-implement this to actually be able to control the size
      */
     void DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                      const wxRect& aRect ) override;

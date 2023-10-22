@@ -188,6 +188,31 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	bUserInterfaceSizer->Add( bSizerIconsTheme, 0, wxEXPAND, 5 );
 
+	wxBoxSizer* bSizerToolbarSize;
+	bSizerToolbarSize = new wxBoxSizer( wxHORIZONTAL );
+
+	m_stToolbarIconSize = new wxStaticText( this, wxID_ANY, _("Toolbar icon size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stToolbarIconSize->Wrap( -1 );
+	bSizerToolbarSize->Add( m_stToolbarIconSize, 0, wxALL, 5 );
+
+	m_rbIconSizeSmall = new wxRadioButton( this, wxID_ANY, _("Small"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbIconSizeSmall->SetToolTip( _("Use compact icons in the toolbars") );
+
+	bSizerToolbarSize->Add( m_rbIconSizeSmall, 0, wxALL, 5 );
+
+	m_rbIconSizeNormal = new wxRadioButton( this, wxID_ANY, _("Normal"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbIconSizeNormal->SetToolTip( _("Use the default KiCad icon size in the toolbars") );
+
+	bSizerToolbarSize->Add( m_rbIconSizeNormal, 0, wxALL, 5 );
+
+	m_rbIconSizeLarge = new wxRadioButton( this, wxID_ANY, _("Large"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbIconSizeLarge->SetToolTip( _("Use larger icons in the toolbars") );
+
+	bSizerToolbarSize->Add( m_rbIconSizeLarge, 0, wxALL, 5 );
+
+
+	bUserInterfaceSizer->Add( bSizerToolbarSize, 0, wxEXPAND, 5 );
+
 	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
 	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
 	m_gbUserInterface->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );

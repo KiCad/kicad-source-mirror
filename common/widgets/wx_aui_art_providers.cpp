@@ -24,15 +24,71 @@
 #include <wx/settings.h>
 
 #include <kiplatform/ui.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <widgets/wx_aui_art_providers.h>
+
+
+wxSize WX_AUI_TOOLBAR_ART::GetToolSize( wxDC& aDc, wxWindow* aWindow,
+                                        const wxAuiToolBarItem& aItem )
+{
+    // Based on the upstream wxWidgets implementation, but simplified for our application
+    int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+
+#ifdef __WXMSW__
+    size *= KIPLATFORM::UI::GetContentScaleFactor( aWindow );
+#endif
+
+    int width = size;
+    int height = size;
+
+    if( m_flags & wxAUI_TB_TEXT )
+    {
+        aDc.SetFont( m_font );
+        int tx, ty;
+
+        if( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
+        {
+            aDc.GetTextExtent( wxT( "ABCDHgj" ), &tx, &ty );
+            height += ty;
+
+            if( !aItem.GetLabel().empty() )
+            {
+                aDc.GetTextExtent( aItem.GetLabel(), &tx, &ty );
+                width = wxMax( width, tx + aWindow->FromDIP( 6 ) );
+            }
+        }
+        else if( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT && !aItem.GetLabel().empty() )
+        {
+            width += aWindow->FromDIP( 3 ); // space between left border and bitmap
+            width += aWindow->FromDIP( 3 ); // space between bitmap and text
+
+            if( !aItem.GetLabel().empty() )
+            {
+                aDc.GetTextExtent( aItem.GetLabel(), &tx, &ty );
+                width += tx;
+                height = wxMax( height, ty );
+            }
+        }
+    }
+
+    if( aItem.HasDropDown() )
+    {
+        int dropdownWidth = GetElementSize( wxAUI_TBART_DROPDOWN_SIZE );
+        width += dropdownWidth + aWindow->FromDIP( 4 );
+    }
+
+    return wxSize( width, height );
+}
 
 
 void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiToolBarItem& aItem,
                                      const wxRect& aRect )
 {
-    bool darkMode   = KIPLATFORM::UI::IsDarkTheme();
-    int  textWidth  = 0;
-    int  textHeight = 0;
+    // Taken from upstream implementation; modified to respect tool size
+    wxSize bmpSize = GetToolSize( aDc, aWindow, aItem );
+
+    int textWidth = 0, textHeight = 0;
 
     if( m_flags & wxAUI_TB_TEXT )
     {
@@ -48,71 +104,78 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
     int bmpX = 0, bmpY = 0;
     int textX = 0, textY = 0;
 
+    double scale = KIPLATFORM::UI::GetPixelScaleFactor( aWindow ) ;
+    const wxBitmapBundle& bundle = ( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED )
+                                   ? aItem.GetDisabledBitmapBundle()
+                                   : aItem.GetBitmapBundle();
+    wxBitmap bmp = bundle.GetBitmap( bmpSize * scale );
+
+    // wxBitmapBundle::GetBitmap thinks we need this rescaled to match the base size, which we don't
+    if( bmp.IsOk() )
+        bmp.SetScaleFactor( scale );
+
     if( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
     {
-        bmpX = aRect.x + ( aRect.width / 2 ) - ( aItem.GetBitmap().GetWidth() / 2 );
+        bmpX = aRect.x + ( aRect.width / 2 ) - ( bmpSize.x / 2 );
 
-        bmpY = aRect.y + ( ( aRect.height - textHeight ) / 2 ) -
-               ( aItem.GetBitmap().GetHeight() / 2 );
+        bmpY = aRect.y + ( ( aRect.height - textHeight ) / 2 ) - ( bmpSize.y / 2 );
 
         textX = aRect.x + ( aRect.width / 2 ) - ( textWidth / 2 ) + 1;
         textY = aRect.y + aRect.height - textHeight - 1;
     }
     else if( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
     {
-        bmpX = aRect.x + 3;
+        bmpX = aRect.x + aWindow->FromDIP( 3 );
 
-        bmpY = aRect.y + ( aRect.height / 2 ) - ( aItem.GetBitmap().GetHeight() / 2 );
+        bmpY = aRect.y + ( aRect.height / 2 ) - ( bmpSize.y / 2 );
 
-        textX = bmpX + 3 + aItem.GetBitmap().GetWidth();
+        textX = bmpX + aWindow->FromDIP( 3 ) + bmpSize.x;
         textY = aRect.y + ( aRect.height / 2 ) - ( textHeight / 2 );
     }
+
+    bool isThemeDark = KIPLATFORM::UI::IsDarkTheme();
 
     if( !( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED ) )
     {
         if( aItem.GetState() & wxAUI_BUTTON_STATE_PRESSED )
         {
             aDc.SetPen( wxPen( m_highlightColour ) );
-            aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( darkMode ? 20 : 150 ) ) );
+            aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( isThemeDark ? 20 : 150 ) ) );
             aDc.DrawRectangle( aRect );
         }
         else if( ( aItem.GetState() & wxAUI_BUTTON_STATE_HOVER ) || aItem.IsSticky() )
         {
             aDc.SetPen( wxPen( m_highlightColour ) );
-            aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( darkMode  ? 40 : 170 ) ) );
+            aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( isThemeDark ? 40 : 170 ) ) );
 
-            // draw an even lighter background for checked aItem hovers (since
+            // draw an even lighter background for checked item hovers (since
             // the hover background is the same color as the check background)
             if( aItem.GetState() & wxAUI_BUTTON_STATE_CHECKED )
-                aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( darkMode ? 50 : 180 ) ) );
+                aDc.SetBrush(
+                        wxBrush( m_highlightColour.ChangeLightness( isThemeDark ? 50 : 180 ) ) );
 
             aDc.DrawRectangle( aRect );
         }
         else if( aItem.GetState() & wxAUI_BUTTON_STATE_CHECKED )
         {
             // it's important to put this code in an else statement after the
-            // hover, otherwise hovers won't draw properly for checked aItems
+            // hover, otherwise hovers won't draw properly for checked items
             aDc.SetPen( wxPen( m_highlightColour ) );
-            aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( darkMode  ? 40 : 170 ) ) );
+            aDc.SetBrush( wxBrush( m_highlightColour.ChangeLightness( isThemeDark ? 40 : 170 ) ) );
             aDc.DrawRectangle( aRect );
         }
     }
 
-    wxBitmap bmp;
-
-    if( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED )
-        bmp = aItem.GetDisabledBitmap();
-    else
-        bmp = aItem.GetBitmap();
-
     if( bmp.IsOk() )
         aDc.DrawBitmap( bmp, bmpX, bmpY, true );
 
-    // set the aItem's text color based on if it is disabled
-    aDc.SetTextForeground( *wxBLACK );
+    // set the item's text color based on if it is disabled
+    aDc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 
     if( aItem.GetState() & wxAUI_BUTTON_STATE_DISABLED )
+    {
         aDc.SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+    }
 
     if( ( m_flags & wxAUI_TB_TEXT ) && !aItem.GetLabel().empty() )
     {

@@ -174,6 +174,8 @@ protected:
 
     void doReCreateMenuBar() override;
 
+    void onToolbarSizeChanged();
+
 private:
     void setupTools();
     void setupActions();
@@ -199,6 +201,7 @@ private:
     PROJECT_TREE_PANE*    m_leftWin;
     PANEL_KICAD_LAUNCHER* m_launcher;
     ACTION_TOOLBAR*       m_mainToolBar;
+    int                   m_lastToolbarIconSize;
 
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;
     BITMAP_BUTTON*                          m_pcmButton;

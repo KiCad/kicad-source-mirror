@@ -146,8 +146,9 @@ wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundle( BITMAPS aBitmapId )
         if( info.theme != m_theme )
             continue;
 
-        bmps.push_back( wxBitmap( getImage( info.id, info.height ) )
-                                .ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 ) );
+        wxBitmap bmp( getImage( info.id, info.height )
+                              .ConvertToDisabled( KIPLATFORM::UI::IsDarkTheme() ? 70 : 255 ) );
+        bmps.push_back( bmp );
     }
 
     return wxBitmapBundle::FromBitmaps( bmps );

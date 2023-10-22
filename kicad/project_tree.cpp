@@ -71,66 +71,59 @@ void PROJECT_TREE::LoadIcons()
     delete m_imageList;
     delete m_statusImageList;
 
-    // icons size is not know (depending on they are built)
-    // so get it:
-    wxSize iconsize;
-    wxBitmap dummy = KiBitmap( BITMAPS::icon_eeschema_24 );
-    iconsize.x = dummy.GetWidth();
-    iconsize.y = dummy.GetHeight();
+    int size = 24;
 
     // Make an image list containing small icons
-    m_imageList = new wxImageList( iconsize.x, iconsize.y, true,
+    m_imageList = new wxImageList( size, size, true,
                                    static_cast<int>( TREE_FILE_TYPE::MAX ) );
 
-    m_imageList->Add( KiBitmap( BITMAPS::project ) );                // TREE_LEGACY_PROJECT
-    m_imageList->Add( KiBitmap( BITMAPS::project_kicad ) );          // TREE_JSON_PROJECT
-    m_imageList->Add( KiBitmap( BITMAPS::icon_eeschema_24 ) );       // TREE_LEGACY_SCHEMATIC
-    m_imageList->Add( KiBitmap( BITMAPS::icon_eeschema_24 ) );       // TREE_SEXPR_SCHEMATIC
-    m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24 ) );         // TREE_LEGACY_PCB
-    m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24 ) );         // TREE_SEXPR_PCB
-    m_imageList->Add( KiBitmap( BITMAPS::icon_gerbview_24 ) );       // TREE_GERBER
-    m_imageList->Add( KiBitmap( BITMAPS::file_gerber_job ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
-    m_imageList->Add( KiBitmap( BITMAPS::file_html ) );              // TREE_HTML
-    m_imageList->Add( KiBitmap( BITMAPS::file_pdf ) );               // TREE_PDF
-    m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // TREE_TXT
-    m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // TREE_MD
-    m_imageList->Add( KiBitmap( BITMAPS::netlist ) );                // TREE_NET
-    m_imageList->Add( KiBitmap( BITMAPS::unknown ) );                // TREE_UNKNOWN
-    m_imageList->Add( KiBitmap( BITMAPS::directory ) );              // TREE_DIRECTORY
-    m_imageList->Add( KiBitmap( BITMAPS::icon_cvpcb_24 ) );          // TREE_CMP_LINK
-    m_imageList->Add( KiBitmap( BITMAPS::tools ) );                  // TREE_REPORT
-    m_imageList->Add( KiBitmap( BITMAPS::file_pos ) );               // TREE_POS
-    m_imageList->Add( KiBitmap( BITMAPS::file_drl ) );               // TREE_DRILL
-    m_imageList->Add( KiBitmap( BITMAPS::file_drl ) );               // TREE_DRILL_NC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( BITMAPS::file_drl ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( BITMAPS::file_svg ) );               // TREE_SVG
-    m_imageList->Add( KiBitmap( BITMAPS::icon_pagelayout_editor_24 ) ); // TREE_PAGE_LAYOUT_DESCR
-    m_imageList->Add( KiBitmap( BITMAPS::module ) );                 // TREE_FOOTPRINT_FILE
-    m_imageList->Add( KiBitmap( BITMAPS::library ) );                // TREE_SCHEMATIC_LIBFILE
-    m_imageList->Add( KiBitmap( BITMAPS::library ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
-    m_imageList->Add( KiBitmap( BITMAPS::editor ) );                 // DESIGN_RULES
-    m_imageList->Add( KiBitmap( BITMAPS::zip ) );                    // ZIP_ARCHIVE
+    m_imageList->Add( KiBitmap( BITMAPS::project, size ) );                // TREE_LEGACY_PROJECT
+    m_imageList->Add( KiBitmap( BITMAPS::project_kicad, size ) );          // TREE_JSON_PROJECT
+    m_imageList->Add( KiBitmap( BITMAPS::icon_eeschema_24, size ) );       // TREE_LEGACY_SCHEMATIC
+    m_imageList->Add( KiBitmap( BITMAPS::icon_eeschema_24, size ) );       // TREE_SEXPR_SCHEMATIC
+    m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24, size ) );         // TREE_LEGACY_PCB
+    m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24, size ) );         // TREE_SEXPR_PCB
+    m_imageList->Add( KiBitmap( BITMAPS::icon_gerbview_24, size ) );       // TREE_GERBER
+    m_imageList->Add( KiBitmap( BITMAPS::file_gerber_job, size ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
+    m_imageList->Add( KiBitmap( BITMAPS::file_html, size ) ); // TREE_HTML
+    m_imageList->Add( KiBitmap( BITMAPS::file_pdf, size ) );               // TREE_PDF
+    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );    // TREE_TXT
+    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );                 // TREE_MD
+    m_imageList->Add( KiBitmap( BITMAPS::netlist, size ) );   // TREE_NET
+    m_imageList->Add( KiBitmap( BITMAPS::unknown, size ) );                // TREE_UNKNOWN
+    m_imageList->Add( KiBitmap( BITMAPS::directory, size ) ); // TREE_DIRECTORY
+    m_imageList->Add( KiBitmap( BITMAPS::icon_cvpcb_24, size ) );          // TREE_CMP_LINK
+    m_imageList->Add( KiBitmap( BITMAPS::tools, size ) );            // TREE_REPORT
+    m_imageList->Add( KiBitmap( BITMAPS::file_pos, size ) );               // TREE_POS
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) );         // TREE_DRILL
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) ); // TREE_DRILL_NC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) ); // TREE_DRILL_XNC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( BITMAPS::file_svg, size ) ); // TREE_SVG
+    m_imageList->Add( KiBitmap( BITMAPS::icon_pagelayout_editor_24, size ) ); // TREE_PAGE_LAYOUT_DESCR
+    m_imageList->Add( KiBitmap( BITMAPS::module, size ) );              // TREE_FOOTPRINT_FILE
+    m_imageList->Add( KiBitmap( BITMAPS::library, size ) );             // TREE_SCHEMATIC_LIBFILE
+    m_imageList->Add( KiBitmap( BITMAPS::library, size ) );          // TREE_SEXPR_SYMBOL_LIB_FILE
+    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );           // DESIGN_RULES
+    m_imageList->Add( KiBitmap( BITMAPS::zip, size ) );              // ZIP_ARCHIVE
 
     SetImageList( m_imageList );
 
     // Make an image list containing small icons
-    dummy = KiBitmap( BITMAPS::git_add );
-    iconsize.x = dummy.GetWidth();
-    iconsize.y = dummy.GetHeight();
+    size = 16;
 
-    wxBitmap blank_bitmap( iconsize.x, iconsize.y );
+    wxBitmap blank_bitmap( size, size );
 
-    m_statusImageList = new wxImageList( iconsize.x, iconsize.y, true,
+    m_statusImageList = new wxImageList( size, size, true,
                                          static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
 
     m_statusImageList->Add( blank_bitmap );                          // GIT_STATUS_UNTRACKED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_good_check ) );   // GIT_STATUS_CURRENT
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_modified ) );     // GIT_STATUS_MODIFIED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_add ) );          // GIT_STATUS_ADDED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_delete ) );       // GIT_STATUS_DELETED
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_out_of_date ) );  // GIT_STATUS_BEHIND
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_changed_ahead ) );// GIT_STATUS_AHEAD
-    m_statusImageList->Add( KiBitmap( BITMAPS::git_conflict ) );     // GIT_STATUS_CONFLICTED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_good_check, size ) ); // GIT_STATUS_CURRENT
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_modified, size ) ); // GIT_STATUS_MODIFIED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_add, size ) );    // GIT_STATUS_ADDED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_delete, size ) ); // GIT_STATUS_DELETED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_out_of_date, size ) );   // GIT_STATUS_BEHIND
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_changed_ahead, size ) ); // GIT_STATUS_AHEAD
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_conflict, size ) ); // GIT_STATUS_CONFLICTED
 
     SetStateImageList( m_statusImageList );
 

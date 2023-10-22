@@ -48,6 +48,7 @@
 #include <settings/settings_manager.h>
 #include <title_block.h>
 #include <tool/actions.h>
+#include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
 #include <tool/grid_menu.h>
 #include <tool/selection_conditions.h>
@@ -91,7 +92,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                 long aStyle, const wxString& aFrameName,
                                 const EDA_IU_SCALE& aIuScale ) :
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName, aIuScale ),
-    m_socketServer( nullptr )
+    m_socketServer( nullptr ),
+    m_lastToolbarIconSize( 0 )
 {
     m_mainToolBar         = nullptr;
     m_drawToolBar         = nullptr;
@@ -342,6 +344,13 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetToolManager()->RunAction( ACTIONS::gridPreset, config()->m_Window.grid.last_size_idx );
     UpdateGridSelectBox();
+
+    if( m_lastToolbarIconSize == 0
+        || m_lastToolbarIconSize != settings->m_Appearance.toolbar_icon_size )
+    {
+        OnToolbarSizeChanged();
+        m_lastToolbarIconSize = settings->m_Appearance.toolbar_icon_size;
+    }
 
 #ifndef __WXMAC__
     resolveCanvasType();
@@ -721,6 +730,8 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     for( const wxString& s : aCfg->m_FindReplace.replace_history )
         m_replaceStringHistoryList.Add( s );
+
+    m_lastToolbarIconSize = cmnCfg->m_Appearance.toolbar_icon_size;
 }
 
 
@@ -1148,6 +1159,26 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 
     if( m_auxiliaryToolBar )    // Additional tools under main toolbar
        ReCreateAuxiliaryToolbar();
+
+
+}
+
+
+void EDA_DRAW_FRAME::OnToolbarSizeChanged()
+{
+    if( m_mainToolBar )
+        m_auimgr.GetPane( m_mainToolBar ).MaxSize( m_mainToolBar->GetSize() );
+
+    if( m_drawToolBar )
+        m_auimgr.GetPane( m_drawToolBar ).MaxSize( m_drawToolBar->GetSize() );
+
+    if( m_optionsToolBar )
+        m_auimgr.GetPane( m_optionsToolBar ).MaxSize( m_optionsToolBar->GetSize() );
+
+    if( m_auxiliaryToolBar )
+        m_auimgr.GetPane( m_auxiliaryToolBar ).MaxSize( m_auxiliaryToolBar->GetSize() );
+
+    m_auimgr.Update();
 }
 
 

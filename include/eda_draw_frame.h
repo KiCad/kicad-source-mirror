@@ -463,6 +463,11 @@ public:
     void RecreateToolbars();
 
     /**
+     * Update toolbars if desired toolbar icon changed
+     */
+    void OnToolbarSizeChanged();
+
+    /**
      * Redraw the menus and what not in current language.
      */
     void ShowChangedLanguage() override;
@@ -563,6 +568,8 @@ private:
 
     ///< This the frame's interface to setting GAL display options.
     GAL_DISPLAY_OPTIONS_IMPL  m_galDisplayOptions;
+
+    int m_lastToolbarIconSize;
 };
 
 #endif  // DRAW_FRAME_H_

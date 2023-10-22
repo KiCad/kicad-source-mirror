@@ -56,6 +56,7 @@ public:
         bool       apply_icon_scale_to_fonts;
         double     hicontrast_dimming_factor;
         int        text_editor_zoom;
+        int        toolbar_icon_size;
     };
 
     struct AUTO_BACKUP

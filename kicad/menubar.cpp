@@ -247,19 +247,25 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::zip, this ),
-                            _( "Archive all project files" ) );
+                            KiBitmapBundle( BITMAPS::zip ),
+                            KiDisabledBitmapBundle( BITMAPS::zip ),
+                            wxITEM_NORMAL,
+                            _( "Archive all project files" ),
+                            wxEmptyString, nullptr );
 
     m_mainToolBar->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::unzip, this ),
-                            _( "Unarchive project files from zip archive" ) );
+                            KiBitmapBundle( BITMAPS::unzip ),
+                            KiDisabledBitmapBundle( BITMAPS::unzip ),
+                            wxITEM_NORMAL,
+                            _( "Unarchive project files from zip archive" ),
+                            wxEmptyString, nullptr );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
-                            KiScaledBitmap( BITMAPS::directory_browser, this ),
+                            KiBitmapBundle( BITMAPS::directory_browser ),
 #ifdef __APPLE__
                             _( "Reveal project folder in Finder" ) );
 #else
@@ -267,5 +273,5 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 #endif
 
     // Create m_mainToolBar
-    m_mainToolBar->Realize();
+    m_mainToolBar->KiRealize();
 }

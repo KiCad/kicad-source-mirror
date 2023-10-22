@@ -102,6 +102,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "appearance.text_editor_zoom",
             &m_Appearance.text_editor_zoom, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "appearance.toolbar_icon_size",
+            &m_Appearance.toolbar_icon_size, 24, 16, 64 ) );
+
     m_params.emplace_back( new PARAM<bool>( "auto_backup.enabled", &m_Backup.enabled, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "auto_backup.backup_on_autosave",

@@ -178,6 +178,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     else if( m_rbIconThemeAuto->GetValue() )
         commonSettings->m_Appearance.icon_theme = ICON_THEME::AUTO;
 
+    if( m_rbIconSizeSmall->GetValue() )
+        commonSettings->m_Appearance.toolbar_icon_size = 16;
+    else if( m_rbIconSizeNormal->GetValue() )
+        commonSettings->m_Appearance.toolbar_icon_size = 24;
+    else if( m_rbIconSizeLarge->GetValue() )
+        commonSettings->m_Appearance.toolbar_icon_size = 32;
+
     commonSettings->m_Appearance.use_icons_in_menus = m_checkBoxIconsInMenus->GetValue();
     commonSettings->m_Appearance.apply_icon_scale_to_fonts = m_scaleFonts->GetValue();
 
@@ -257,6 +264,13 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     case ICON_THEME::LIGHT: m_rbIconThemeLight->SetValue( true );   break;
     case ICON_THEME::DARK:  m_rbIconThemeDark->SetValue( true );    break;
     case ICON_THEME::AUTO:  m_rbIconThemeAuto->SetValue( true );    break;
+    }
+
+    switch( aSettings.m_Appearance.toolbar_icon_size )
+    {
+    case 16: m_rbIconSizeSmall->SetValue( true );   break;
+    case 24: m_rbIconSizeNormal->SetValue( true );  break;
+    case 32: m_rbIconSizeLarge->SetValue( true );   break;
     }
 
     m_checkBoxIconsInMenus->SetValue( aSettings.m_Appearance.use_icons_in_menus );

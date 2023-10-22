@@ -118,8 +118,11 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
 
     int bmpWidth = normalBmp.GetPreferredBitmapSizeFor( this ).GetWidth();
     int padding = ( m_buttonSize.GetWidth() - bmpWidth ) / 2;
+    int size = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+    wxSize bmSize( size, size );
 
-    BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId() );
+    BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId(), wxDefaultPosition,
+                                               bmSize );
 
     button->SetBitmap( normalBmp );
     button->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
@@ -184,6 +187,8 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
     m_palette( nullptr )
 {
     m_paletteTimer = new wxTimer( this );
+
+    SetArtProvider( new WX_AUI_TOOLBAR_ART );
 
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),
              nullptr, this );
