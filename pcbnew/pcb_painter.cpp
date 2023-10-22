@@ -2484,6 +2484,13 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             m_gal->SetIsStroke( true );
         }
 
+        // On Opengl, a not convex filled polygon is usually drawn by using triangles
+        // as primitives. CacheTriangulation() can create basic triangle primitives to
+        // draw the polygon solid shape on Opengl.  GLU tessellation is much slower,
+        // so currently we are using our tessellation.
+        if( m_gal->IsOpenGlEngine() && !polySet->IsTriangulationUpToDate() )
+            polySet->CacheTriangulation( true, true );
+
         m_gal->DrawPolygon( *polySet, displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION );
     }
 }
