@@ -3133,7 +3133,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
             bus_name = bus_wire->Connection( &sheet )->Name();
 
             std::set<wxString> test_names;
-            test_names.insert( bus_entry->Connection( &sheet )->Name() );
+            test_names.insert( bus_entry->Connection( &sheet )->FullLocalName() );
 
             wxString baseName = sheet.PathHumanReadable();
 
@@ -3146,11 +3146,11 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
                 {
                     for( const auto& sub_member : member->Members() )
                     {
-                        if( test_names.count( sub_member->Name() ) )
+                        if( test_names.count( sub_member->FullLocalName() ) )
                             conflict = false;
                     }
                 }
-                else if( test_names.count( member->Name() ) )
+                else if( test_names.count( member->FullLocalName() ) )
                 {
                     conflict = false;
                 }
