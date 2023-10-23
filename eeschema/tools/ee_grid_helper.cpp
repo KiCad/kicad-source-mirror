@@ -62,6 +62,16 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 }
 
 
+EE_GRID_HELPER::~EE_GRID_HELPER()
+{
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+
+    view->Remove( &m_viewAxis );
+    view->Remove( &m_viewSnapPoint );
+    view->Remove( &m_viewSnapLine );
+}
+
+
 VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                                          const EE_SELECTION& aItems )
 {

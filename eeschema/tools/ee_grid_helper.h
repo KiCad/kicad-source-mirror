@@ -40,6 +40,7 @@ class EE_GRID_HELPER : public GRID_HELPER
 public:
 
     EE_GRID_HELPER( TOOL_MANAGER* aToolMgr );
+    ~EE_GRID_HELPER() override;
 
     /**
      * Function GetSnapped

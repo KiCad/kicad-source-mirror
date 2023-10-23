@@ -79,6 +79,16 @@ PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMa
 }
 
 
+PCB_GRID_HELPER::~PCB_GRID_HELPER()
+{
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+
+    view->Remove( &m_viewAxis );
+    view->Remove( &m_viewSnapPoint );
+    view->Remove( &m_viewSnapLine );
+}
+
+
 VECTOR2I PCB_GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 {
     const int c_gridSnapEpsilon_sq = 4;

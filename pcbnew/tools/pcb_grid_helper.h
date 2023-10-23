@@ -39,6 +39,7 @@ class PCB_GRID_HELPER : public GRID_HELPER
 public:
 
     PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings );
+    ~PCB_GRID_HELPER() override;
 
     /**
      * Function GetSnapped
