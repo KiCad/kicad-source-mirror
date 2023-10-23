@@ -125,12 +125,12 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
     BITMAP_BUTTON* button = new BITMAP_BUTTON( m_panel, aAction.GetUIId(), wxDefaultPosition,
                                                bmSize );
 
+    button->SetIsToolbarButton();
     button->SetBitmap( normalBmp );
     button->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
     button->SetPadding( padding );
     button->SetToolTip( aAction.GetTooltip() );
     button->AcceptDragInAsClick();
-    button->SetIsToolbarButton();
     button->SetBitmapCentered();
 
     m_buttons[aAction.GetUIId()] = button;

@@ -105,7 +105,21 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_normalBitmap = aBmp;
-    m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
+
+    // This is a bit of a hack, but fixes button scaling issues on some platforms when those buttons
+    // use KiScaledBitmap.  When that method is retired, this can probably be revisited.
+    if( m_isToolbarButton )
+    {
+        m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
+    }
+    else
+    {
+#ifndef __WXMSW__
+        m_unadjustedMinSize = m_normalBitmap.GetDefaultSize();
+#else
+        m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
+#endif
+    }
 
     SetMinSize( wxSize( m_unadjustedMinSize.GetWidth() + ( m_padding * 2 ),
                         m_unadjustedMinSize.GetHeight() + ( m_padding * 2 ) ) );
