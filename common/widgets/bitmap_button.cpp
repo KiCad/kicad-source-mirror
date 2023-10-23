@@ -315,7 +315,7 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
         if( bmpImg.IsOk() )
             bmpImg.SetScaleFactor( scale );
     }
-    else
+    else if( bmp.IsOk() )
     {
         bmpImg = bmp.GetBitmapFor( this );
         bmSize = bmpImg.GetSize();
