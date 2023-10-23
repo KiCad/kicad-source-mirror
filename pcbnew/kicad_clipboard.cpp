@@ -169,6 +169,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             // Now delete items, duplicated but not added:
             for( BOARD_ITEM* skp_item : skipped_items )
             {
+                static_cast<PCB_GROUP*>( clone )->RemoveItem( skp_item );
                 skp_item->SetParentGroup( nullptr );
                 delete skp_item;
             }
