@@ -42,7 +42,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_generator.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
@@ -198,11 +198,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     // Generate list of edit points basing on the item type
     switch( aItem->Type() )
     {
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     {
-        PCB_BITMAP* bitmap = (PCB_BITMAP*) aItem;
-        VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-        VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+        PCB_REFERENCE_IMAGE* bitmap = (PCB_REFERENCE_IMAGE*) aItem;
+        VECTOR2I             topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+        VECTOR2I             botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
 
         points->AddPoint( topLeft );
         points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
@@ -1163,13 +1163,13 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
 
     switch( item->Type() )
     {
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     {
-        PCB_BITMAP* bitmap = (PCB_BITMAP*) item;
-        VECTOR2I    topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
-        VECTOR2I    topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
-        VECTOR2I    botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
-        VECTOR2I    botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
+        PCB_REFERENCE_IMAGE* bitmap = (PCB_REFERENCE_IMAGE*) item;
+        VECTOR2I             topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
+        VECTOR2I             topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
+        VECTOR2I             botLeft = m_editPoints->Point( RECT_BOT_LEFT ).GetPosition();
+        VECTOR2I             botRight = m_editPoints->Point( RECT_BOT_RIGHT ).GetPosition();
 
         pinEditedCorner( topLeft, topRight, botLeft, botRight );
 
@@ -1750,11 +1750,11 @@ void PCB_POINT_EDITOR::updatePoints()
 
     switch( item->Type() )
     {
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     {
-        PCB_BITMAP* bitmap = (PCB_BITMAP*) item;
-        VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-        VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+        PCB_REFERENCE_IMAGE* bitmap = (PCB_REFERENCE_IMAGE*) item;
+        VECTOR2I             topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+        VECTOR2I             botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
 
         m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( topLeft );
         m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( botRight.x, topLeft.y );

@@ -34,7 +34,7 @@
 #include <pcb_shape.h>
 #include <string_utils.h>
 #include <zone.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_marker.h>
@@ -439,9 +439,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             {
                 color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
 
-                // Bitmaps can't have their color mixed so just reduce the opacity a bit so they
-                // show through less
-                if( item->Type() == PCB_BITMAP_T )
+                // Reference images can't have their color mixed so just reduce the opacity a bit
+                // so they show through less
+                if( item->Type() == PCB_REFERENCE_IMAGE_T )
                     color.a *= m_hiContrastFactor;
             }
         }
@@ -468,7 +468,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_trackOpacity;
     else if( item->Type() == PCB_ZONE_T )
         color.a *= m_zoneOpacity;
-    else if( item->Type() == PCB_BITMAP_T )
+    else if( item->Type() == PCB_REFERENCE_IMAGE_T )
         color.a *= m_imageOpacity;
     else if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
         color.a *= m_trackOpacity;
@@ -546,8 +546,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         {
             FOOTPRINT* parentFP = item->GetParentFootprint();
 
-            // Never draw footprint bitmaps on board
-            if( item->Type() == PCB_BITMAP_T )
+            // Never draw footprint reference images on board
+            if( item->Type() == PCB_REFERENCE_IMAGE_T )
             {
                 return false;
             }
@@ -597,8 +597,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const PCB_SHAPE*>( item ), aLayer );
         break;
 
-    case PCB_BITMAP_T:
-        draw( static_cast<const PCB_BITMAP*>( item ), aLayer );
+    case PCB_REFERENCE_IMAGE_T:
+        draw( static_cast<const PCB_REFERENCE_IMAGE*>( item ), aLayer );
         break;
 
     case PCB_FIELD_T:
@@ -1990,7 +1990,7 @@ void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
 }
 
 
-void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
+void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
 {
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
@@ -2022,10 +2022,9 @@ void PCB_PAINTER::draw( const PCB_BITMAP* aBitmap, int aLayer )
 
         m_gal->DrawRectangle( origin, end );
 
-        // Hard code bitmaps as opaque when selected. Otherwise cached layers
-        // will not be rendered under the selected bitmap because cached layers
-        // are rendered after non-cached layers (e.g. bitmaps), which will have
-        // a closer Z order.
+        // Hard code reference images as opaque when selected. Otherwise cached layers will
+        // not be rendered under the selected image because cached layers are rendered after
+        // non-cached layers (e.g. bitmaps), which will have a closer Z order.
         m_gal->DrawBitmap( *aBitmap->GetImage(), 1.0 );
     }
     else

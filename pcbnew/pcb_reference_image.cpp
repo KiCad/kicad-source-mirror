@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_bitmap.cpp
- */
-
 #include <pcb_draw_panel_gal.h>
 #include <plotters/plotter.h>
 #include <settings/color_settings.h>
@@ -37,7 +33,7 @@
 #include <eda_draw_frame.h>
 #include <core/mirror.h>
 #include <board.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <trigo.h>
 #include <geometry/shape_rect.h>
 
@@ -47,8 +43,10 @@ using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
 
 
-PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos, PCB_LAYER_ID aLayer ) :
-        BOARD_ITEM( aParent, PCB_BITMAP_T, aLayer )
+
+PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( BOARD_ITEM* aParent, const VECTOR2I& pos,
+                                          PCB_LAYER_ID aLayer ) :
+        BOARD_ITEM( aParent, PCB_REFERENCE_IMAGE_T, aLayer )
 {
     m_pos = pos;
     m_bitmapBase = new BITMAP_BASE();
@@ -56,7 +54,8 @@ PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos, PCB_LAYER_ID a
 }
 
 
-PCB_BITMAP::PCB_BITMAP( const PCB_BITMAP& aPCBBitmap ) : BOARD_ITEM( aPCBBitmap )
+PCB_REFERENCE_IMAGE::PCB_REFERENCE_IMAGE( const PCB_REFERENCE_IMAGE& aPCBBitmap ) :
+        BOARD_ITEM( aPCBBitmap )
 {
     m_pos = aPCBBitmap.m_pos;
     m_bitmapBase = new BITMAP_BASE( *aPCBBitmap.m_bitmapBase );
@@ -64,7 +63,7 @@ PCB_BITMAP::PCB_BITMAP( const PCB_BITMAP& aPCBBitmap ) : BOARD_ITEM( aPCBBitmap 
 }
 
 
-PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
+PCB_REFERENCE_IMAGE& PCB_REFERENCE_IMAGE::operator=( const BOARD_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,
                  wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " )
@@ -74,7 +73,7 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
     {
         BOARD_ITEM::operator=( aItem );
 
-        PCB_BITMAP* bitmap = (PCB_BITMAP*) &aItem;
+        PCB_REFERENCE_IMAGE* bitmap = (PCB_REFERENCE_IMAGE*) &aItem;
 
         delete m_bitmapBase;
         m_bitmapBase = new BITMAP_BASE( *bitmap->m_bitmapBase );
@@ -86,7 +85,7 @@ PCB_BITMAP& PCB_BITMAP::operator=( const BOARD_ITEM& aItem )
 }
 
 
-bool PCB_BITMAP::ReadImageFile( const wxString& aFullFilename )
+bool PCB_REFERENCE_IMAGE::ReadImageFile( const wxString& aFullFilename )
 {
     if( m_bitmapBase->ReadImageFile( aFullFilename ) )
     {
@@ -98,7 +97,7 @@ bool PCB_BITMAP::ReadImageFile( const wxString& aFullFilename )
 }
 
 
-bool PCB_BITMAP::ReadImageFile( wxMemoryBuffer& aBuffer )
+bool PCB_REFERENCE_IMAGE::ReadImageFile( wxMemoryBuffer& aBuffer )
 {
     if( m_bitmapBase->ReadImageFile( aBuffer ) )
     {
@@ -110,19 +109,19 @@ bool PCB_BITMAP::ReadImageFile( wxMemoryBuffer& aBuffer )
 }
 
 
-EDA_ITEM* PCB_BITMAP::Clone() const
+EDA_ITEM* PCB_REFERENCE_IMAGE::Clone() const
 {
-    return new PCB_BITMAP( *this );
+    return new PCB_REFERENCE_IMAGE( *this );
 }
 
 
-void PCB_BITMAP::swapData( BOARD_ITEM* aItem )
+void PCB_REFERENCE_IMAGE::swapData( BOARD_ITEM* aItem )
 {
-    wxCHECK_RET( aItem->Type() == PCB_BITMAP_T,
-                 wxString::Format( wxT( "PCB_BITMAP object cannot swap data with %s object." ),
-                                   aItem->GetClass() ) );
+    wxCHECK_RET( aItem->Type() == PCB_REFERENCE_IMAGE_T,
+                 wxString::Format( wxT( "% object cannot swap data with %s object." ),
+                                   GetClass(), aItem->GetClass() ) );
 
-    PCB_BITMAP* item = (PCB_BITMAP*) aItem;
+    PCB_REFERENCE_IMAGE* item = (PCB_REFERENCE_IMAGE*) aItem;
     std::swap( m_layer, item->m_layer );
     std::swap( m_isKnockout, item->m_isKnockout );
     std::swap( m_isLocked, item->m_isLocked );
@@ -134,7 +133,7 @@ void PCB_BITMAP::swapData( BOARD_ITEM* aItem )
 }
 
 
-double PCB_BITMAP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
@@ -157,7 +156,7 @@ double PCB_BITMAP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-const BOX2I PCB_BITMAP::GetBoundingBox() const
+const BOX2I PCB_REFERENCE_IMAGE::GetBoundingBox() const
 {
     // Bitmaps are center origin, BOX2Is need top-left origin
     VECTOR2I size = m_bitmapBase->GetSize();
@@ -167,21 +166,21 @@ const BOX2I PCB_BITMAP::GetBoundingBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_BITMAP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_REFERENCE_IMAGE::GetEffectiveShape( PCB_LAYER_ID aLayer,
+                                                               FLASHING aFlash ) const
 {
     BOX2I box = GetBoundingBox();
-    return std::shared_ptr<SHAPE_RECT>( new SHAPE_RECT( box.GetPosition(), box.GetWidth(),
-                                                        box.GetHeight() ) );
+    return std::make_shared<SHAPE_RECT>( box.GetPosition(), box.GetWidth(), box.GetHeight() );
 }
 
 
-const VECTOR2I PCB_BITMAP::GetSize() const
+const VECTOR2I PCB_REFERENCE_IMAGE::GetSize() const
 {
     return m_bitmapBase->GetSize();
 }
 
 
-void PCB_BITMAP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
+void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -195,7 +194,7 @@ void PCB_BITMAP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     }
 }
 
-void PCB_BITMAP::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
+void PCB_REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 {
     EDA_ANGLE norm( aAngle.AsDegrees(), DEGREES_T );
 
@@ -210,7 +209,7 @@ void PCB_BITMAP::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 
 
 #if defined( DEBUG )
-void PCB_BITMAP::Show( int nestLevel, std::ostream& os ) const
+void PCB_REFERENCE_IMAGE::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();
@@ -220,7 +219,7 @@ void PCB_BITMAP::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-bool PCB_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
+bool PCB_REFERENCE_IMAGE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     BOX2I rect = GetBoundingBox();
 
@@ -230,7 +229,7 @@ bool PCB_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
-bool PCB_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
+bool PCB_REFERENCE_IMAGE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     BOX2I rect = aRect;
 
@@ -243,15 +242,16 @@ bool PCB_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) c
 }
 
 
-BITMAPS PCB_BITMAP::GetMenuImage() const
+BITMAPS PCB_REFERENCE_IMAGE::GetMenuImage() const
 {
     return BITMAPS::image;
 }
 
 
-void PCB_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_REFERENCE_IMAGE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                           std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Bitmap" ), wxEmptyString );
+    aList.emplace_back( _( "Reference Image" ), wxEmptyString );
 
     aList.emplace_back( _( "PPI" ), wxString::Format( wxT( "%d "), GetImage()->GetPPI() ) );
     aList.emplace_back( _( "Scale" ), wxString::Format( wxT( "%f "), GetImageScale() ) );
@@ -262,19 +262,19 @@ void PCB_BITMAP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void PCB_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
+void PCB_REFERENCE_IMAGE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = BITMAP_LAYER_FOR( m_layer );
 }
 
 
-bool PCB_BITMAP::operator==( const BOARD_ITEM& aOther ) const
+bool PCB_REFERENCE_IMAGE::operator==( const BOARD_ITEM& aOther ) const
 {
     if( aOther.Type() != Type() )
         return false;
 
-    const PCB_BITMAP& other = static_cast<const PCB_BITMAP&>( aOther );
+    const PCB_REFERENCE_IMAGE& other = static_cast<const PCB_REFERENCE_IMAGE&>( aOther );
 
     if( m_layer != other.m_layer )
         return false;
@@ -301,12 +301,12 @@ bool PCB_BITMAP::operator==( const BOARD_ITEM& aOther ) const
 }
 
 
-double PCB_BITMAP::Similarity( const BOARD_ITEM& aOther ) const
+double PCB_REFERENCE_IMAGE::Similarity( const BOARD_ITEM& aOther ) const
 {
     if( aOther.Type() != Type() )
         return 0.0;
 
-    const PCB_BITMAP& other = static_cast<const PCB_BITMAP&>( aOther );
+    const PCB_REFERENCE_IMAGE& other = static_cast<const PCB_REFERENCE_IMAGE&>( aOther );
 
     double similarity = 1.0;
 
@@ -335,21 +335,26 @@ double PCB_BITMAP::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
-static struct PCB_BITMAP_DESC
+static struct PCB_REFERENCE_IMAGE_DESC
 {
-    PCB_BITMAP_DESC()
+    PCB_REFERENCE_IMAGE_DESC()
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( PCB_BITMAP );
-        propMgr.InheritsAfter( TYPE_HASH( PCB_BITMAP ), TYPE_HASH( BOARD_ITEM ) );
+        REGISTER_TYPE( PCB_REFERENCE_IMAGE );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_REFERENCE_IMAGE ), TYPE_HASH( BOARD_ITEM ) );
 
-        const wxString groupBitmap = _HKI( "Bitmap Properties" );
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
+            new PROPERTY_ENUM<PCB_REFERENCE_IMAGE, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Associated Layer" ),
+            &PCB_REFERENCE_IMAGE::SetLayer, &PCB_REFERENCE_IMAGE::GetLayer ) );
 
-        propMgr.AddProperty( new PROPERTY<PCB_BITMAP, double>( _HKI( "Scale" ),
-                             &PCB_BITMAP::SetImageScale, &PCB_BITMAP::GetImageScale ),
-                             groupBitmap );
+        const wxString groupImage = _HKI( "Image Properties" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_REFERENCE_IMAGE, double>( _HKI( "Scale" ),
+                             &PCB_REFERENCE_IMAGE::SetImageScale,
+                             &PCB_REFERENCE_IMAGE::GetImageScale ),
+                             groupImage );
 
         // For future use
         const wxString greyscale = _HKI( "Greyscale" );
     }
-} _PCB_BITMAP_DESC;
+} _PCB_REFERENCE_IMAGE_DESC;

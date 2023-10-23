@@ -344,7 +344,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_FOOTPRINT_T,         _HKI( "Footprint" ) )
             .Map( PCB_PAD_T,               _HKI( "Pad" ) )
             .Map( PCB_SHAPE_T,             _HKI( "Graphic" ) )
-            .Map( PCB_BITMAP_T,            _HKI( "Bitmap" ) )
+            .Map( PCB_REFERENCE_IMAGE_T,   _HKI( "Reference Image" ) )
             .Map( PCB_GENERATOR_T,         _HKI( "Generator" ) )
             .Map( PCB_FIELD_T,             _HKI( "Field" ) )
             .Map( PCB_TEXT_T,              _HKI( "Text" ) )

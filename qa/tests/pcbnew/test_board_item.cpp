@@ -34,7 +34,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <zone.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
@@ -79,7 +79,7 @@ public:
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
-        case PCB_BITMAP_T:            return new PCB_BITMAP( &m_board );
+        case PCB_REFERENCE_IMAGE_T:   return new PCB_REFERENCE_IMAGE( &m_board );
         case PCB_TRACE_T:             return new PCB_TRACK( &m_board );
         case PCB_VIA_T:               return new PCB_VIA( &m_board );
         case PCB_ARC_T:               return new PCB_ARC( &m_board );

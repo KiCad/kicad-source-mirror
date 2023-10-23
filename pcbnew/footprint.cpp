@@ -39,7 +39,7 @@
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <pcb_dimension.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_textbox.h>
 #include <pcb_field.h>
 #include <footprint.h>
@@ -736,7 +736,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
         else
@@ -810,7 +810,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
             if( *it == aBoardItem )
@@ -1016,7 +1016,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
 
         // We want the bitmap bounding box just in the footprint editor
         // so it will start with the correct initial zoom
-        if( item->Type() == PCB_BITMAP_T && !isFPEdit )
+        if( item->Type() == PCB_REFERENCE_IMAGE_T && !isFPEdit )
             continue;
 
         // Handle text separately
@@ -1145,7 +1145,7 @@ const BOX2I FOOTPRINT::GetLayerBoundingBox( LSET aLayers ) const
 
         // We want the bitmap bounding box just in the footprint editor
         // so it will start with the correct initial zoom
-        if( item->Type() == PCB_BITMAP_T && !isFPEdit )
+        if( item->Type() == PCB_REFERENCE_IMAGE_T && !isFPEdit )
             continue;
 
         bbox.Merge( item->GetBoundingBox() );
@@ -1190,7 +1190,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() != PCB_TEXT_T && item->Type() != PCB_BITMAP_T )
+        if( item->Type() != PCB_TEXT_T && item->Type() != PCB_REFERENCE_IMAGE_T )
         {
             item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                            ERROR_OUTSIDE );

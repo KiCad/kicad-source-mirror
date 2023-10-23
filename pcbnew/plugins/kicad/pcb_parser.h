@@ -50,7 +50,7 @@ class PAD;
 class BOARD_DESIGN_SETTINGS;
 class PCB_DIMENSION_BASE;
 class PCB_SHAPE;
-class PCB_BITMAP;
+class PCB_REFERENCE_IMAGE;
 class EDA_TEXT;
 class FP_SHAPE;
 class PCB_TEXT;
@@ -207,33 +207,33 @@ private:
 
     void parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* tdParams );
 
-    PCB_SHAPE*          parsePCB_SHAPE( BOARD_ITEM* aParent );
-    PCB_TEXT*           parsePCB_TEXT( BOARD_ITEM* aParent );
-    void                parsePCB_TEXT_effects( PCB_TEXT* aText );
-    PCB_BITMAP*         parsePCB_BITMAP( BOARD_ITEM* aParent );
-    PCB_TEXTBOX*        parsePCB_TEXTBOX( BOARD_ITEM* aParent );
-    PCB_DIMENSION_BASE* parseDIMENSION( BOARD_ITEM* aParent );
+    PCB_SHAPE*           parsePCB_SHAPE( BOARD_ITEM* aParent );
+    PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent );
+    void                 parsePCB_TEXT_effects( PCB_TEXT* aText );
+    PCB_REFERENCE_IMAGE* parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent );
+    PCB_TEXTBOX*         parsePCB_TEXTBOX( BOARD_ITEM* aParent );
+    PCB_DIMENSION_BASE*  parseDIMENSION( BOARD_ITEM* aParent );
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-    FOOTPRINT*          parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
+    FOOTPRINT*  parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );
 
-    PAD*                parsePAD( FOOTPRINT* aParent = nullptr );
+    PAD*        parsePAD( FOOTPRINT* aParent = nullptr );
 
     // Parse only the (option ...) inside a pad description
-    bool                parsePAD_option( PAD* aPad );
+    bool        parsePAD_option( PAD* aPad );
 
-    PCB_ARC*            parseARC();
-    PCB_TRACK*          parsePCB_TRACK();
-    PCB_VIA*            parsePCB_VIA();
-    ZONE*               parseZONE( BOARD_ITEM_CONTAINER* aParent );
-    PCB_TARGET*         parsePCB_TARGET();
-    BOARD*              parseBOARD();
-    void                parseGROUP_members( GROUP_INFO& aGroupInfo );
-    void                parseGROUP( BOARD_ITEM* aParent );
-    void                parseGENERATOR( BOARD_ITEM* aParent );
+    PCB_ARC*    parseARC();
+    PCB_TRACK*  parsePCB_TRACK();
+    PCB_VIA*    parsePCB_VIA();
+    ZONE*       parseZONE( BOARD_ITEM_CONTAINER* aParent );
+    PCB_TARGET* parsePCB_TARGET();
+    BOARD*      parseBOARD();
+    void        parseGROUP_members( GROUP_INFO& aGroupInfo );
+    void        parseGROUP( BOARD_ITEM* aParent );
+    void        parseGENERATOR( BOARD_ITEM* aParent );
 
     // Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-    BOARD*              parseBOARD_unchecked();
+    BOARD*      parseBOARD_unchecked();
 
     /**
      * Parse the current token for the layer definition of a #BOARD_ITEM object.

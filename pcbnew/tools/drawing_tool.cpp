@@ -63,7 +63,7 @@
 #include <gal/painter.h>
 #include <pcb_edit_frame.h>
 #include <pcb_group.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_dimension.h>
@@ -536,22 +536,22 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 {
     if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD    guard( &m_inDrawingTool );
+    REENTRANCY_GUARD     guard( &m_inDrawingTool );
 
-    PCB_BITMAP*         image = aEvent.Parameter<PCB_BITMAP*>();
-    bool                immediateMode = image != nullptr;
-    PCB_GRID_HELPER     grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
-    bool                ignorePrimePosition = false;
-    COMMON_SETTINGS*    common_settings = Pgm().GetCommonSettings();
+    PCB_REFERENCE_IMAGE* image = aEvent.Parameter<PCB_REFERENCE_IMAGE*>();
+    bool                 immediateMode = image != nullptr;
+    PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    bool                 ignorePrimePosition = false;
+    COMMON_SETTINGS*     common_settings = Pgm().GetCommonSettings();
 
-    VECTOR2I            cursorPos = getViewControls()->GetCursorPosition();
-    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    BOARD_COMMIT        commit( m_frame );
+    VECTOR2I             cursorPos = getViewControls()->GetCursorPosition();
+    PCB_SELECTION_TOOL*  selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    BOARD_COMMIT         commit( m_frame );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
@@ -696,7 +696,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 wxString fullFilename = dlg.GetPath();
 
                 if( wxFileExists( fullFilename ) )
-                    image = new PCB_BITMAP( m_frame->GetModel(), cursorPos );
+                    image = new PCB_REFERENCE_IMAGE( m_frame->GetModel(), cursorPos );
 
                 if( !image || !image->ReadImageFile( fullFilename ) )
                 {
@@ -2871,8 +2871,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( PCB_LAYER_ID layer : aOther->GetLayerSet().Seq() )
             {
-                // Bitmaps are "on" a copper layer but are not actually part of it
-                if( !IsCopperLayer( layer ) || aOther->Type() == PCB_BITMAP_T )
+                // Reference images are "on" a copper layer but are not actually part of it
+                if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
                     continue;
 
                 constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,  aOther, layer );
@@ -3419,7 +3419,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia,               PCB_ACTIONS::drawVia.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceImage,            PCB_ACTIONS::placeImage.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceReferenceImage,   PCB_ACTIONS::placeReferenceImage.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );

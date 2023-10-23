@@ -49,7 +49,7 @@ class PCB_SHAPE;
 class PCB_GROUP;
 class FOOTPRINT;
 class ZONE;
-class PCB_BITMAP;
+class PCB_REFERENCE_IMAGE;
 class PCB_TEXT;
 class PCB_TEXTBOX;
 class PCB_DIMENSION_BASE;
@@ -182,7 +182,7 @@ protected:
     void draw( const PCB_VIA* aVia, int aLayer );
     void draw( const PAD* aPad, int aLayer );
     void draw( const PCB_SHAPE* aSegment, int aLayer );
-    void draw( const PCB_BITMAP* aBitmap, int aLayer );
+    void draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const PCB_TEXTBOX* aText, int aLayer );
     void draw( const FOOTPRINT* aFootprint, int aLayer );

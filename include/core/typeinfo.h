@@ -86,7 +86,7 @@ enum KICAD_T
     PCB_FOOTPRINT_T,         ///< class FOOTPRINT, a footprint
     PCB_PAD_T,               ///< class PAD, a pad in a footprint
     PCB_SHAPE_T,             ///< class PCB_SHAPE, a segment not on copper layers
-    PCB_BITMAP_T,            ///< class PCB_BITMAP, bitmap on a layer
+    PCB_REFERENCE_IMAGE_T,   ///< class PCB_REFERENCE_IMAGE, bitmap on a layer
     PCB_FIELD_T,             ///< class PCB_FIELD, text associated with a footprint property
     PCB_GENERATOR_T,         ///< class PCB_GENERATOR, generator on a layer
     PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
@@ -434,7 +434,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_FOOTPRINT_T:
     case PCB_PAD_T:
     case PCB_SHAPE_T:
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:

@@ -36,7 +36,7 @@
 #include <router/pns_routing_settings.h>
 
 // Forward declarations for types needed in the parameters
-class PCB_BITMAP;
+class PCB_REFERENCE_IMAGE;
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
@@ -159,14 +159,14 @@ TOOL_ACTION PCB_ACTIONS::placeStackup( TOOL_ACTION_ARGS()
         .Tooltip( _( "Add a board stackup table on a graphic layer" ) )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PCB_ACTIONS::placeImage( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveDrawing.placeImage" )
+TOOL_ACTION PCB_ACTIONS::placeReferenceImage( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeReferenceImage" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Add Image" ) )
-        .Tooltip( _( "Add bitmap image" ) )
+        .MenuText( _( "Add Reference Image" ) )
+        .Tooltip( _( "Add a bitmap image to be used as a reference (image will not be included in any output)" ) )
         .Icon( BITMAPS::image )
         .Flags( AF_ACTIVATE )
-        .Parameter<PCB_BITMAP*>( nullptr ) );
+        .Parameter<PCB_REFERENCE_IMAGE*>( nullptr ) );
 
 TOOL_ACTION PCB_ACTIONS::placeText( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.text" )
@@ -437,7 +437,7 @@ TOOL_ACTION PCB_ACTIONS::getAndPlace( TOOL_ACTION_ARGS()
         .DefaultHotkey( 'T' )
         .LegacyHotkeyName( "Get and Move Footprint" )
         .MenuText( _( "Get and Move Footprint" ) )
-        .Tooltip( _( "Selects a footprint by reference designator and places it under the cursor for moving") )
+        .Tooltip( _( "Selects a footprint by reference designator and places it under the cursor for moving" ) )
         .Icon( BITMAPS::move )
         .Flags( AF_ACTIVATE ) );
 

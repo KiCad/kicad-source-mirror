@@ -26,7 +26,6 @@
 #include <confirm.h>
 #include <bitmap_base.h>
 #include <pcb_base_edit_frame.h>
-#include <pcb_bitmap.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 

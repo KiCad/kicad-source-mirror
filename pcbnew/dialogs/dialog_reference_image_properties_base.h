@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,9 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
-#include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
+#include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -35,9 +35,9 @@ class PCB_LAYER_BOX_SELECTOR;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_IMAGE_PROPERTIES_BASE
+/// Class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
+class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -59,9 +59,9 @@ class DIALOG_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Image Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 353,260 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Reference Image Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~DIALOG_IMAGE_PROPERTIES_BASE();
+		~DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE();
 
 };
 

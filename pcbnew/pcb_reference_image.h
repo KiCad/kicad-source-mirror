@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 jean-pierre.charras
  * Copyright (C) 2022 Mike Williams
- * Copyright (C) 2011-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_bitmap.h
- */
-
-#ifndef _PCB_BITMAP_H_
-#define _PCB_BITMAP_H_
+#ifndef PCB_REFERENCE_IMAGE_H
+#define PCB_REFERENCE_IMAGE_H
 
 
 #include <board_item.h>
@@ -38,22 +34,22 @@
 /**
  * Object to handle a bitmap image that can be inserted in a PCB.
  */
-class PCB_BITMAP : public BOARD_ITEM
+class PCB_REFERENCE_IMAGE : public BOARD_ITEM
 {
 public:
-    PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos = VECTOR2I( 0, 0 ),
-                PCB_LAYER_ID aLayer = F_Cu );
+    PCB_REFERENCE_IMAGE( BOARD_ITEM* aParent, const VECTOR2I& pos = VECTOR2I( 0, 0 ),
+                         PCB_LAYER_ID aLayer = F_Cu );
 
-    PCB_BITMAP( const PCB_BITMAP& aPcbBitmap );
+    PCB_REFERENCE_IMAGE( const PCB_REFERENCE_IMAGE& aPcbBitmap );
 
-    ~PCB_BITMAP() { delete m_bitmapBase; }
+    ~PCB_REFERENCE_IMAGE() { delete m_bitmapBase; }
 
-    PCB_BITMAP& operator=( const BOARD_ITEM& aItem );
+    PCB_REFERENCE_IMAGE& operator=( const BOARD_ITEM& aItem );
 
     const BITMAP_BASE* GetImage() const
     {
         wxCHECK_MSG( m_bitmapBase != nullptr, nullptr,
-                     "Invalid PCB_BITMAP init, m_bitmapBase is NULL." );
+                     wxS( "Invalid PCB_REFERENCE_IMAGE init, m_bitmapBase is NULL." ) );
         return m_bitmapBase;
     }
 
@@ -77,10 +73,10 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && PCB_BITMAP_T == aItem->Type();
+        return aItem && PCB_REFERENCE_IMAGE_T == aItem->Type();
     }
 
-    wxString GetClass() const override { return wxT( "PCB_BITMAP" ); }
+    wxString GetClass() const override { return wxT( "PCB_REFERENCE_IMAGE" ); }
 
     /**
      * @return the actual size (in user units, not in pixels) of the image.
@@ -126,7 +122,7 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
     {
-        return wxString( _( "Image" ) );
+        return wxString( _( "Reference Image" ) );
     }
 
     BITMAPS GetMenuImage() const override;
@@ -157,4 +153,4 @@ private:
     BITMAP_BASE* m_bitmapBase; // the BITMAP_BASE item
 };
 
-#endif // _PCB_BITMAP_H_
+#endif // PCB_REFERENCE_IMAGE_H

@@ -45,7 +45,6 @@
 #include <pcb_generator.h>
 #include <pcb_target.h>
 #include <pcb_shape.h>
-#include <pcb_bitmap.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_dimension.h>
@@ -898,7 +897,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
@@ -1016,7 +1015,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
@@ -1502,7 +1501,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_FOOTPRINT_T:
         case PCB_PAD_T:
         case PCB_SHAPE_T:
-        case PCB_BITMAP_T:
+        case PCB_REFERENCE_IMAGE_T:
         case PCB_FIELD_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:

@@ -408,7 +408,7 @@ GRID_HELPER_GRIDS PCB_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
 
     case PCB_SHAPE_T:
     case PCB_DIMENSION_T:
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
     case PCB_TEXTBOX_T:
         return GRID_GRAPHICS;
 

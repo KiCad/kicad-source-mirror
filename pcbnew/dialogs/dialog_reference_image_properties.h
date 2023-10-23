@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,35 +21,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_IMAGE_PROPERTIES_H
-#define DIALOG_IMAGE_PROPERTIES_H
+#ifndef DIALOG_REFERENCE_IMAGE_PROPERTIES_H
+#define DIALOG_REFERENCE_IMAGE_PROPERTIES_H
 
-#include <dialogs/dialog_image_properties_base.h>
+#include <dialogs/dialog_reference_image_properties_base.h>
 #include <widgets/unit_binder.h>
 
 
 class PCB_BASE_FRAME;
-class PCB_BITMAP;
+class PCB_REFERENCE_IMAGE;
 class PANEL_IMAGE_EDITOR;
 
 
-class DIALOG_IMAGE_PROPERTIES : public DIALOG_IMAGE_PROPERTIES_BASE
+class DIALOG_REFERENCE_IMAGE_PROPERTIES : public DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE
 {
 public:
-    DIALOG_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_BITMAP* aBitmap );
-    ~DIALOG_IMAGE_PROPERTIES() override {}
+    DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_REFERENCE_IMAGE* aBitmap );
+    ~DIALOG_REFERENCE_IMAGE_PROPERTIES() override {}
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
-    PCB_BASE_FRAME*     m_frame;
-    PCB_BITMAP*         m_bitmap;
-    PANEL_IMAGE_EDITOR* m_imageEditor;
+    PCB_BASE_FRAME*      m_frame;
+    PCB_REFERENCE_IMAGE* m_bitmap;
+    PANEL_IMAGE_EDITOR*  m_imageEditor;
 
-    UNIT_BINDER m_posX;
-    UNIT_BINDER m_posY;
+    UNIT_BINDER          m_posX;
+    UNIT_BINDER          m_posY;
 };
 
-#endif
+#endif  // DIALOG_REFERENCE_IMAGE_PROPERTIES_H

@@ -63,7 +63,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include netclass.i
 %include pcb_plot_params.i
 %include pcb_group.i
-%include pcb_bitmap.i
+%include pcb_reference_image.i
 
 // std::vector templates
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;

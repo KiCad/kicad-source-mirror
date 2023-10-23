@@ -40,7 +40,7 @@
 const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_MARKER_T,           // in m_markers
     PCB_TEXT_T,             // in m_drawings
-    PCB_BITMAP_T,           // in m_drawings
+    PCB_REFERENCE_IMAGE_T,  // in m_drawings
     PCB_TEXTBOX_T,          // in m_drawings
     PCB_SHAPE_T,            // in m_drawings
     PCB_DIM_ALIGNED_T,      // in m_drawings
@@ -63,7 +63,7 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
 
 const std::vector<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
     PCB_MARKER_T,
-    PCB_BITMAP_T,
+    PCB_REFERENCE_IMAGE_T,
     PCB_TEXT_T,
     PCB_TEXTBOX_T,
     PCB_SHAPE_T,
@@ -110,8 +110,8 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_PAD_T,
     PCB_ZONE_T,
     PCB_GROUP_T,
-    PCB_BITMAP_T
-    };
+    PCB_REFERENCE_IMAGE_T
+};
 
 
 const std::vector<KICAD_T> GENERAL_COLLECTOR::Tracks = {

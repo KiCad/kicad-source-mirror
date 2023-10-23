@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialogs/dialog_image_properties.h>
+#include <dialogs/dialog_reference_image_properties.h>
 #include <dialogs/panel_image_editor.h>
 
 #include <pcb_base_edit_frame.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <pcb_layer_box_selector.h>
 
 
-DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_BITMAP* aBitmap ) :
-        DIALOG_IMAGE_PROPERTIES_BASE( aParent ), m_frame( aParent ), m_bitmap( aBitmap ),
+DIALOG_REFERENCE_IMAGE_PROPERTIES::DIALOG_REFERENCE_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent,
+                                                                      PCB_REFERENCE_IMAGE* aBitmap ) :
+        DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_bitmap( aBitmap ),
         m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
 {
@@ -57,10 +60,10 @@ DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( PCB_BASE_FRAME* aParent, PCB_B
 }
 
 
-void PCB_BASE_EDIT_FRAME::ShowBitmapPropertiesDialog( BOARD_ITEM* aBitmap )
+void PCB_BASE_EDIT_FRAME::ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitmap )
 {
-    PCB_BITMAP*             bitmap = static_cast<PCB_BITMAP*>( aBitmap );
-    DIALOG_IMAGE_PROPERTIES dlg( this, bitmap );
+    PCB_REFERENCE_IMAGE*              bitmap = static_cast<PCB_REFERENCE_IMAGE*>( aBitmap );
+    DIALOG_REFERENCE_IMAGE_PROPERTIES dlg( this, bitmap );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -72,7 +75,7 @@ void PCB_BASE_EDIT_FRAME::ShowBitmapPropertiesDialog( BOARD_ITEM* aBitmap )
 }
 
 
-bool DIALOG_IMAGE_PROPERTIES::TransferDataToWindow()
+bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataToWindow()
 {
     m_posX.SetValue( m_bitmap->GetPosition().x );
     m_posY.SetValue( m_bitmap->GetPosition().y );
@@ -80,15 +83,15 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataToWindow()
     m_LayerSelectionCtrl->SetLayerSelection( m_bitmap->GetLayer() );
 
     m_cbLocked->SetValue( m_bitmap->IsLocked() );
-    m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved and oriented on the "
-                               "canvas and can only be selected when the 'Locked items' checkbox "
-                               "is enabled in the selection filter." ) );
+    m_cbLocked->SetToolTip( _( "Locked items cannot be freely moved and oriented on the canvas "
+                               "and can only be selected when the 'Locked items' checkbox is "
+                               "checked in the selection filter." ) );
 
     return true;
 }
 
 
-bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
 {
     if( m_imageEditor->TransferDataFromWindow() )
     {

@@ -1018,6 +1018,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
     auto testGraphicAgainstZone =
             [&]( BOARD_ITEM* item )
             {
+                if( item->Type() == PCB_REFERENCE_IMAGE_T )
+                    return;
+
                 if( !IsCopperLayer( item->GetLayer() ) )
                     return;
 

@@ -70,7 +70,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <zone_filler.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 
 const unsigned int EDIT_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
@@ -2111,7 +2111,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_TEXT_T:
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
-        case PCB_BITMAP_T:
+        case PCB_REFERENCE_IMAGE_T:
         case PCB_DIMENSION_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_LEADER_T:
@@ -2518,7 +2518,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_FOOTPRINT_T:
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
-            case PCB_BITMAP_T:
+            case PCB_REFERENCE_IMAGE_T:
             case PCB_GENERATOR_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:

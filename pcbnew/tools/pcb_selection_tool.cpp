@@ -37,7 +37,7 @@ using namespace std::placeholders;
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <clipper.hpp>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <footprint.h>
 #include <pad.h>
@@ -2416,11 +2416,11 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
 
         break;
 
-    case PCB_BITMAP_T:
+    case PCB_REFERENCE_IMAGE_T:
         if( !m_filter.graphics )
             return false;
 
-        // a bitmap living in a footprint must not be selected inside the board editor
+        // a reference image living in a footprint must not be selected inside the board editor
         if( !m_isFootprintEditor && aItem->GetParentFootprint() )
             return false;
 
@@ -3157,9 +3157,9 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             // segments underneath them -- so artificially reduce their size from πr² to 1.5r².
             area = (double) SEG::Square( static_cast<PCB_VIA*>( item )->GetDrill() / 2 ) * 1.5;
         }
-        else if( item->Type() == PCB_BITMAP_T )
+        else if( item->Type() == PCB_REFERENCE_IMAGE_T )
         {
-            VECTOR2D size = static_cast<const PCB_BITMAP*>( item )->GetSize();
+            VECTOR2D size = static_cast<const PCB_REFERENCE_IMAGE*>( item )->GetSize();
             area = size.x * size.y;
         }
         else

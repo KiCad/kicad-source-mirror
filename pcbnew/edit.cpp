@@ -123,8 +123,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
-    case PCB_BITMAP_T:
-        ShowBitmapPropertiesDialog( aItem);
+    case PCB_REFERENCE_IMAGE_T:
+        ShowReferenceImagePropertiesDialog( aItem );
         break;
 
     case PCB_FIELD_T:

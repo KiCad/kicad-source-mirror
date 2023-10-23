@@ -41,7 +41,7 @@ class NETINFO_MAPPING;
 class BOARD_DESIGN_SETTINGS;
 class PCB_DIMENSION_BASE;
 class PCB_SHAPE;
-class PCB_BITMAP;
+class PCB_REFERENCE_IMAGE;
 class PCB_TARGET;
 class PAD;
 class PCB_GROUP;
@@ -407,7 +407,7 @@ private:
 
     void format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
-    void format( const PCB_BITMAP* aBitmap, int aNestLevel = 0 ) const;
+    void format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLevel = 0 ) const;
 
     void format( const PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
 

@@ -282,7 +282,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_cbLocked->SetValue( m_footprint->IsLocked() );
     m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved and oriented on the "
                                "canvas and can only be selected when the 'Locked items' checkbox "
-                               "is enabled in the selection filter." ) );
+                               "is checked in the selection filter." ) );
 
     if( m_footprint->GetAttributes() & FP_THROUGH_HOLE )
         m_componentType->SetSelection( 0 );

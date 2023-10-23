@@ -39,7 +39,7 @@
 #include <pcb_generator.h>
 #include <pcb_shape.h>
 #include <pcb_dimension.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
@@ -57,7 +57,7 @@
 #include <wx/log.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
-// base64 code. Needed for PCB_BITMAP
+// base64 code. Needed for PCB_REFERENCE_IMAGE
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 #include <wx/mstream.h>
@@ -374,8 +374,8 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<const PCB_SHAPE*>( aItem ), aNestLevel );
         break;
 
-    case PCB_BITMAP_T:
-        format( static_cast<const PCB_BITMAP*>( aItem ), aNestLevel );
+    case PCB_REFERENCE_IMAGE_T:
+        format( static_cast<const PCB_REFERENCE_IMAGE*>( aItem ), aNestLevel );
         break;
 
     case PCB_TARGET_T:
@@ -1030,7 +1030,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 }
 
 
-void PCB_PLUGIN::format( const PCB_BITMAP* aBitmap, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLevel ) const
 {
     wxCHECK_RET( aBitmap != nullptr && m_out != nullptr, "" );
 

@@ -38,7 +38,7 @@
 #include <board_design_settings.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
-#include <pcb_bitmap.h>
+#include <pcb_reference_image.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
 #include <pcb_target.h>
@@ -67,7 +67,7 @@
 #include <pgm_base.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
-// base64 code. Needed for PCB_BITMAP
+// base64 code. Needed for PCB_REFERENCE_IMAGE
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 #include <wx/mstream.h>
@@ -916,7 +916,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_image:
-            item = parsePCB_BITMAP( m_board );
+            item = parsePCB_REFERENCE_IMAGE( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -2958,13 +2958,13 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 }
 
 
-PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
+PCB_REFERENCE_IMAGE* PCB_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent )
 {
     wxCHECK_MSG( CurTok() == T_image, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an image." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a reference image." ) );
 
-    T                           token;
-    std::unique_ptr<PCB_BITMAP> bitmap = std::make_unique<PCB_BITMAP>( aParent );
+    T token;
+    std::unique_ptr<PCB_REFERENCE_IMAGE> bitmap = std::make_unique<PCB_REFERENCE_IMAGE>( aParent );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -4143,7 +4143,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_image:
         {
-            PCB_BITMAP* image = parsePCB_BITMAP( footprint.get() );
+            PCB_REFERENCE_IMAGE* image = parsePCB_REFERENCE_IMAGE( footprint.get() );
             footprint->Add( image, ADD_MODE::APPEND, true );
             break;
         }
