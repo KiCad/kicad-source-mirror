@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-29 08:57-0700\n"
-"PO-Revision-Date: 2023-04-25 20:50+0000\n"
+"PO-Revision-Date: 2023-10-24 10:00+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.1.1-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -2822,7 +2822,7 @@ msgstr "출력 모드:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:403
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:269
 msgid "Color"
-msgstr "색상 이미지"
+msgstr "컬러"
 
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:81
@@ -6617,7 +6617,6 @@ msgid "Min grid spacing:"
 msgstr "최소 그리드 간격:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "그리드에 맞추기:"
 
@@ -10264,7 +10263,7 @@ msgstr "도면 시트의 테두리와 제목 블록을 플롯"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:77
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 msgid "Black and White"
-msgstr "흑백 처리"
+msgstr "흑백"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot background color"
@@ -17689,7 +17688,7 @@ msgstr "BOM 생성..."
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate a bill of materials for the current schematic"
-msgstr "회로도 BOM 생성"
+msgstr "현재 회로도의 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Export Symbols to Library..."
@@ -36240,23 +36239,21 @@ msgstr ""
 "오프셋: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "오래된 영역 채우기 전략은 더 이상 지원되지 않습니다.\n"
-"영역을 부드러운 다각형 채우기로 변환할까요?"
+"영역 채우기는 최선의 노력으로 변환됩니다."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"오래된 세그먼트 채우기 모드는 더 이상 지원되지 않습니다.\n"
-"영역을 부드러운 다각형 채우기로 변환할까요?"
+"오래된 세그먼트 영역 채우기 모드는 더 이상 지원되지 않습니다.\n"
+"영역 채우기는 최선의 노력으로 변환됩니다."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -39262,7 +39259,7 @@ msgstr "선택한 객체에 대한 제약 해결 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Geographical Reannotate..."
-msgstr "위치별 재 주석 처리..."
+msgstr "지리적 재 주석..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Reannotate PCB in geographical order"
