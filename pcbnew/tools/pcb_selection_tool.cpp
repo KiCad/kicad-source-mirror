@@ -3295,6 +3295,10 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
         if( !fp )
             continue;
 
+        // Make footprints not difficult to select in high-contrast modes.
+        if( layers[fp->GetLayer()] )
+            continue;
+
         BOX2I bbox = fp->GetLayerBoundingBox( layers );
 
         // If the point clicked is not inside the visible bounding box, we can also remove it.
