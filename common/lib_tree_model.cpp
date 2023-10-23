@@ -255,6 +255,8 @@ LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aN
     m_Desc = aDesc;
     m_Parent = aParent;
     m_LibId.SetLibNickname( aName );
+
+    m_SearchTerms.emplace_back( SEARCH_TERM( aName, 8 ) );
 }
 
 
@@ -268,7 +270,10 @@ LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 
 void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
 {
-    // We need to score leaf nodes, which are usually (but not always) children.
+    // If we're matching then we default to not-matched; otherwise we default to whatever m_Score
+    // was initialized to (currently 1)
+    if( aMatcher )
+        m_Score = 0;
 
     if( m_Children.size() )
     {
@@ -278,11 +283,10 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxStr
             m_Score = std::max( m_Score, child->m_Score );
         }
     }
-    else if( aMatcher )
+    else
     {
-        // No children; we are a leaf.
-
-        m_Score = aMatcher->ScoreTerms( m_SearchTerms );
+        if( aMatcher )
+            m_Score = aMatcher->ScoreTerms( m_SearchTerms );
     }
 }
 
