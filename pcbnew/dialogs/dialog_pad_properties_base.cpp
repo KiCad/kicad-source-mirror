@@ -568,7 +568,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelGeneral->SetSizer( bGeneralSizer );
 	m_panelGeneral->Layout();
 	bGeneralSizer->Fit( m_panelGeneral );
-	m_notebook->AddPage( m_panelGeneral, _("General"), false );
+	m_notebook->AddPage( m_panelGeneral, _("General"), true );
 	m_connectionsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelConnections;
 	bSizerPanelConnections = new wxBoxSizer( wxVERTICAL );
@@ -876,7 +876,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_connectionsPanel->SetSizer( bSizerPanelConnections );
 	m_connectionsPanel->Layout();
 	bSizerPanelConnections->Fit( m_connectionsPanel );
-	m_notebook->AddPage( m_connectionsPanel, _("Connections"), true );
+	m_notebook->AddPage( m_connectionsPanel, _("Connections"), false );
 	m_localSettingsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearance;
 	bSizerPanelClearance = new wxBoxSizer( wxVERTICAL );
