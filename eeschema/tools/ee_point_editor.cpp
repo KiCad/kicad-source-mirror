@@ -437,7 +437,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     Activate();
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    EE_GRID_HELPER        grid( m_toolMgr );
+    EE_GRID_HELPER*       grid = new EE_GRID_HELPER( m_toolMgr );
     VECTOR2I              cursorPos;
     KIGFX::VIEW*          view = getView();
     EDA_ITEM*             item = selection.Front();
@@ -454,10 +454,10 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        grid->SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid->SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        cursorPos = grid->Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
         controls->ForceCursorPosition( true, cursorPos );
 
         if( !m_editPoints || evt->IsSelectionEvent() )
@@ -511,6 +511,17 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             if( inDrag )      // Restore the last change
             {
+                // Currently we are manually managing the lifetime of the grid
+                // helpers because there is a bug in the tool stack that adds
+                // the point editor again when commit.Revert() rebuilds the selection.
+                // We remove this grid here so the its destructor is called before it
+                // is added again.
+                if( grid )
+                {
+                    delete grid;
+                    grid = nullptr;
+                }
+
                 commit.Revert();
                 inDrag = false;
                 break;
@@ -543,6 +554,9 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         m_editPoints.reset();
         m_frame->GetCanvas()->Refresh();
     }
+
+    if( grid )
+        delete grid;
 
     return 0;
 }
