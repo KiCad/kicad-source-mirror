@@ -1441,7 +1441,7 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         {
             SEG         trackSeg( track->GetStart(), track->GetEnd() );
             PCB_TRACK*  coupledItem = nullptr;
-            SEG::ecoord closestDist_sq = 0;
+            SEG::ecoord closestDist_sq = VECTOR2I::ECOORD_MAX;
 
             for( PCB_TRACK* candidate : m_frame->GetBoard()->Tracks() )
             {
