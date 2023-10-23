@@ -138,7 +138,10 @@ private:
     std::vector<PCB_SHAPE*>  m_highlight;     // shapes highlighted in GAL mode
     PCB_DRAW_PANEL_GAL*      m_padPreviewGAL;
     KIGFX::ORIGIN_VIEWITEM*  m_axisOrigin;    // origin of the preview canvas
+
     static bool              m_sketchPreview; // session storage
+    static int               m_page;          // remember the last open page during session
+
 
     UNIT_BINDER m_posX, m_posY;
     UNIT_BINDER m_sizeX, m_sizeY;

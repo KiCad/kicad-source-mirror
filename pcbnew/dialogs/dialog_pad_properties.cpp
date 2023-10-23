@@ -52,6 +52,9 @@
 #include <wx/choicdlg.h>
 
 
+int DIALOG_PAD_PROPERTIES::m_page = 0;     // remember the last open page during session
+
+
 // list of pad shapes, ordered like the pad shape wxChoice in dialog.
 static PAD_SHAPE code_shape[] =
 {
@@ -270,6 +273,15 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     // Initialize canvas to be able to display the dummy pad:
     prepareCanvas();
 
+    m_notebook->SetSelection( m_page );
+
+    switch( m_page )
+    {
+    case 0: SetInitialFocus( m_padNumCtrl );     break;
+    case 1: SetInitialFocus( m_thermalGapCtrl ); break;
+    case 2: SetInitialFocus( m_clearanceCtrl );  break;
+    }
+
     SetInitialFocus( m_padNumCtrl );
     SetupStandardButtons();
     m_canUpdate = true;
@@ -302,6 +314,8 @@ DIALOG_PAD_PROPERTIES::~DIALOG_PAD_PROPERTIES()
     m_padNetSelector->Disconnect( NET_SELECTED,
                                   wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
                                   nullptr, this );
+
+    m_page = m_notebook->GetSelection();
 
     delete m_previewPad;
     delete m_axisOrigin;
