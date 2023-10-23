@@ -141,7 +141,9 @@ void STATUS_TEXT_POPUP::SetTextColor( const wxColour& aColor )
 
 STATUS_MIN_MAX_POPUP::STATUS_MIN_MAX_POPUP( EDA_DRAW_FRAME* aFrame ) :
         STATUS_POPUP( aFrame ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_min( 0.0 ),
+        m_max( 0.0 )
 {
     m_icon = new wxStaticBitmap( m_panel, wxID_ANY, KiBitmap( BITMAPS::checked_ok ),
                                  wxDefaultPosition, wxSize( 12, 12 ) );

@@ -44,6 +44,7 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootp
         m_toolMgr( aToolMgr ),
         m_dryRun( true ),
         m_epsilon( 0 ),
+        m_outlinesTolerance( 0 ),
         m_itemsList( nullptr )
 {
 }

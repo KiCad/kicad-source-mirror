@@ -84,6 +84,7 @@ public:
         m_cornerRadiusPercentage = 100;
         m_singleSided = false;
         m_initialSide = MEANDER_SIDE_LEFT;
+        m_lengthTolerance = 0;
     }
 
     void SetTargetLength( long long int aOpt )
