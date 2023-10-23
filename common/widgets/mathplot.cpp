@@ -536,13 +536,12 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
         bool hasNext = GetNextXY( nextX, nextY );
         bool offRight = false;
 
-        // Note: we can use dc.DrawLines() only for a reasonable number or points (<10000),
-        // because at least on Windows dc.DrawLines() can hang for a lot of points.
-        // (> 10000 points) (can happens when a lot of points is calculated)
-        // To avoid long draw time (and perhaps hanging) one plot only not redundant lines.
-        // To avoid artifacts when skipping points to the same x coordinate, for each group of
-        // points at a give, x coordinate we also draw a vertical line at this coord, from the
-        // ymin to the ymax vertical coordinates of skipped points
+        // Note: we can use dc.DrawLines() only for a reasonable number or points (<10,000),
+        // because at least on Windows dc.DrawLines() can hang for a lot of points.  Note that
+        // this includes the intermediate points when drawing dotted lines.
+
+        // Our first-pass optimization is to exclude points outside the view, and aggregate all
+        // contiguous y values found at a single x value into a vertical line.
         while( hasNext )
         {
             x = nextX;
@@ -555,9 +554,8 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             wxCoord x1 = w.x2p( px );
             wxCoord y1 = w.y2p( py );
 
-            // Store only points near the drawing area, to speed up the drawing time.  Note that
-            // we can't start *right* at the borders because we need to interpolate between two
-            // points, one of which might be off-screen.
+            // Note that we can't start *right* at the edge of the view because we need to
+            // interpolate between two points, one of which might be outside the view.
             // Note: x1 is a value truncated from px by w.x2p(). So to be sure the first point
             // is drawn, the x1 low limit is startPx-1 in plot coordinates
             if( x1 < startPx-1 )
@@ -577,17 +575,12 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
             if( !count || line_start.x != x1 )
             {
-#ifndef __WXMAC__   // Drawing the vertical lines spoils anti-aliasing on Retina displays
-                if( count && dupx0 > 1 && ymin0 != ymax0 )
-                {
-                    // Vertical points are merged, draw the pending vertical line
-                    // However, if the line is one pixel length, it is not drawn, because
-                    // the main trace show this point
+                // We've aggregated a bunch of y values with a shared x value, so we need to draw
+                // a vertical line.  However, short vertical segments spoil anti-aliasing on
+                // Retina displays, so only draw them if they're "significant" (the user should
+                // zoom in if they need a more accurate picture).
+                if( count && dupx0 > 1 && abs( ymax0 - ymin0 ) > 2 )
                     dc.DrawLine( x0, ymin0, x0, ymax0 );
-                }
-#else
-                if( x0 ) { };    // Quiet CLang
-#endif
 
                 x0 = x1;
                 ymin0 = ymax0 = y1;
@@ -610,12 +603,21 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
         if( pointList.size() > 1 )
         {
-            // For a better look (when using dashed lines) and more optimization, try to merge
-            // horizontal segments, in order to plot longer lines
-            // We are merging horizontal segments because this is easy, and horizontal segments
-            // are a frequent cases
+            // Second pass optimization is to merge horizontal segments.  This improves the look
+            // of dotted lines, keeps the point count down, and it's easy.
+            //
+            // This pass also includes a final protection to keep MSW from hanging by chunking to
+            // a size it can handle.
             std::vector<wxPoint> drawPoints;
-            drawPoints.reserve( endPx - startPx + 1 );
+            drawPoints.reserve( ( endPx - startPx ) * 2 );
+
+#ifdef __WXMSW__
+            int chunkSize = 10000;
+#else
+            int chunkSize = 100000;
+#endif
+            if( dc.GetPen().GetStyle() == wxPENSTYLE_DOT )
+                chunkSize /= 500;
 
             drawPoints.push_back( pointList[0] );   // push the first point in list
 
@@ -631,6 +633,15 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                 else
                 {
                     drawPoints.push_back( pointList[ii] );
+
+                    if( (int) drawPoints.size() > chunkSize )
+                    {
+                        dc.DrawLines( (int) drawPoints.size(), &drawPoints[0] );
+                        drawPoints.clear();
+
+                        // Restart the line with the current point
+                        drawPoints.push_back( pointList[ii] );
+                    }
                 }
             }
 
@@ -638,7 +649,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             if( drawPoints.back() != pointList.back() )
                 drawPoints.push_back( pointList.back() );
 
-            dc.DrawLines( drawPoints.size(), &drawPoints[0] );
+            dc.DrawLines( (int) drawPoints.size(), &drawPoints[0] );
         }
     }
 
