@@ -183,32 +183,63 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         m_freedTextureIds.pop_front();
     }
 
-    bmp.size = bmp.w * bmp.h * 4;
-    auto buf = std::make_unique<uint8_t[]>( bmp.size );
-
-    for( int y = 0; y < bmp.h; y++ )
+    if( imgData.HasAlpha() || imgData.HasMask() )
     {
-        for( int x = 0; x < bmp.w; x++ )
+        bmp.size = bmp.w * bmp.h * 4;
+        auto buf = std::make_unique<uint8_t[]>( bmp.size );
+
+        uint8_t* dstP = buf.get();
+        uint8_t* srcP = imgData.GetData();
+
+        long long pxCount = static_cast<long long>( bmp.w ) * bmp.h;
+
+        if( imgData.HasAlpha() )
         {
-            uint8_t* p = buf.get() + ( bmp.w * y + x ) * 4;
+            uint8_t* srcAlpha = imgData.GetAlpha();
 
-            p[0] = imgData.GetRed( x, y );
-            p[1] = imgData.GetGreen( x, y );
-            p[2] = imgData.GetBlue( x, y );
+            for( long long px = 0; px < pxCount; px++ )
+            {
+                memcpy( dstP, srcP, 3 );
+                dstP[3] = *srcAlpha;
 
-            if( imgData.HasAlpha() )
-                p[3] = imgData.GetAlpha( x, y );
-            else if( imgData.HasMask() && p[0] == imgData.GetMaskRed()
-                     && p[1] == imgData.GetMaskGreen() && p[2] == imgData.GetMaskBlue() )
-                p[3] = wxALPHA_TRANSPARENT;
-            else
-                p[3] = wxALPHA_OPAQUE;
+                srcAlpha += 1;
+                srcP += 3;
+                dstP += 4;
+            }
         }
-    }
+        else if( imgData.HasMask() )
+        {
+            uint8_t maskRed = imgData.GetMaskRed();
+            uint8_t maskGreen = imgData.GetMaskGreen();
+            uint8_t maskBlue = imgData.GetMaskBlue();
 
-    glBindTexture( GL_TEXTURE_2D, textureID );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                  buf.get() );
+            for( long long px = 0; px < pxCount; px++ )
+            {
+                memcpy( dstP, srcP, 3 );
+
+                if( dstP[0] == maskRed && dstP[1] == maskGreen && dstP[2] == maskBlue )
+                    dstP[3] = wxALPHA_TRANSPARENT;
+                else
+                    dstP[3] = wxALPHA_OPAQUE;
+
+                srcP += 3;
+                dstP += 4;
+            }
+        }
+
+        glBindTexture( GL_TEXTURE_2D, textureID );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                      buf.get() );
+    }
+    else
+    {
+        bmp.size = bmp.w * bmp.h * 3;
+
+        uint8_t* srcP = imgData.GetData();
+
+        glBindTexture( GL_TEXTURE_2D, textureID );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB8, bmp.w, bmp.h, 0, GL_RGB, GL_UNSIGNED_BYTE, srcP );
+    }
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
