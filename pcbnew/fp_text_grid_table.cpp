@@ -87,7 +87,10 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDi
     m_valueAttr->SetEditor( valueEditor );
 
     m_footprintAttr = new wxGridCellAttr;
-    m_footprintAttr->SetReadOnly( true );
+
+    if( !m_frame->IsType(  FRAME_FOOTPRINT_EDITOR ) )
+        m_footprintAttr->SetReadOnly( true );
+
     GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR( m_dialog, "" );
     fpIdEditor->SetValidator( m_nonUrlValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
