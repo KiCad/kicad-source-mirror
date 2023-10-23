@@ -644,6 +644,11 @@ int LEGACY_PLUGIN::getVersion( LINE_READER* aReader )
     int ver = 1; // if sccanf fails
     sscanf( line, "PCBNEW-BOARD Version %d", &ver );
 
+    // Some legacy files have a version number = 7, similar to version 2
+    // So use in this case ver = 2
+    if( ver == 7 )
+        ver = 2;
+
 #if !defined( DEBUG )
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
