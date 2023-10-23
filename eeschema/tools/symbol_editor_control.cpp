@@ -575,7 +575,7 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 
     wxString projectPath = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( editFrame, _( "Image File Name" ), projectPath, fn.GetFullName(),
+    wxFileDialog dlg( editFrame, _( "Export View as PNG" ), projectPath, fn.GetFullName(),
                       PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_OK && !dlg.GetPath().IsEmpty() )

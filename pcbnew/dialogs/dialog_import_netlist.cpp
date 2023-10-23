@@ -132,7 +132,7 @@ void DIALOG_IMPORT_NETLIST::onBrowseNetlistFiles( wxCommandEvent& event )
         filename = fn.GetFullName();
     }
 
-    wxFileDialog FilesDialog( this, _( "Select Netlist" ), dirPath, filename,
+    wxFileDialog FilesDialog( this, _( "Import Netlist" ), dirPath, filename,
                               NetlistFileWildcard(), wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( FilesDialog.ShowModal() != wxID_OK )

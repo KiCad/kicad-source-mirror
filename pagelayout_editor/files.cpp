@@ -154,7 +154,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     case wxID_OPEN:
     {
-         wxFileDialog openFileDialog( this, _( "Open" ), wxEmptyString, wxEmptyString,
+         wxFileDialog openFileDialog( this, _( "Open Drawing Sheet" ), wxEmptyString, wxEmptyString,
                                       DrawingSheetFileWildcard(), wxFD_OPEN );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
@@ -192,7 +192,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     case wxID_SAVEAS:
     {
         wxString dir = PATHS::GetUserTemplatesPath();
-        wxFileDialog openFileDialog( this, _( "Save As" ), dir, wxEmptyString,
+        wxFileDialog openFileDialog( this, _( "Save Drawing Sheet As" ), dir, wxEmptyString,
                                      DrawingSheetFileWildcard(),
                                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

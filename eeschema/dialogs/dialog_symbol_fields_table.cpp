@@ -1184,7 +1184,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& even
     wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().GetFileName() ) );
     fn.SetExt( CsvFileExtension );
 
-    wxFileDialog saveDlg( this, _( "Selected Output Filename" ), path, fn.GetFullName(),
+    wxFileDialog saveDlg( this, _( "Bill of Materials Output File" ), path, fn.GetFullName(),
                           CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )

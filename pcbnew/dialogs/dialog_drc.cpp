@@ -866,7 +866,7 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 {
     wxFileName fn( "DRC." + ReportFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
+    wxFileDialog dlg( this, _( "Save Report File" ), Prj().GetProjectPath(), fn.GetFullName(),
                       ReportFileWildcard() + wxS( "|" ) + JsonFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

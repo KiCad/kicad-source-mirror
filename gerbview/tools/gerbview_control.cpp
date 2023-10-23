@@ -123,8 +123,8 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
     wxString     fileDialogName( NAMELESS_PROJECT + wxT( "." ) + KiCadPcbFileExtension );
     wxString     path = m_frame->GetMruPath();
 
-    wxFileDialog filedlg( m_frame, _( "Board File Name" ), path, fileDialogName, PcbFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog filedlg( m_frame, _( "Export as KiCad Board File" ), path, fileDialogName,
+                          PcbFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( filedlg.ShowModal() == wxID_CANCEL )
         return 0;

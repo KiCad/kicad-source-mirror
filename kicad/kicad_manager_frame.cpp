@@ -735,8 +735,8 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 
     wxString default_dir = Prj().GetProjectPath();
 
-    wxFileDialog dlg( this, _( "Load File to Edit" ), default_dir,
-                      wxEmptyString, wildcard, wxFD_OPEN );
+    wxFileDialog dlg( this, _( "Edit File in Text Editor" ), default_dir,  wxEmptyString, wildcard,
+                      wxFD_OPEN );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

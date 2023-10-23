@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -19,16 +20,19 @@ class TEXT_CTRL_EVAL;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/filepicker.h>
+#include <wx/textctrl.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobut.h>
 #include <wx/statbox.h>
 #include <wx/choice.h>
-#include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,7 +48,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxBoxSizer* bSizerSTEPFile;
 		wxBoxSizer* bSizerTop;
 		wxStaticText* m_txtBrdFile;
-		wxFilePickerCtrl* m_filePickerSTEP;
+		wxTextCtrl* m_outputFileName;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxRadioButton* m_rbDrillAndPlotOrigin;
 		wxRadioButton* m_rbGridOrigin;
 		wxRadioButton* m_rbUserDefinedOrigin;
@@ -69,6 +74,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }

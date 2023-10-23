@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/choicdlg.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
 #include <wx/process.h>
 #include <wx/string.h>
+#include <wx/filedlg.h>
 
 #include <pgm_base.h>
 #include <board.h>
 #include <confirm.h>
+#include <bitmaps.h>
+#include <widgets/std_bitmap_button.h>
 #include "dialog_export_step_base.h"
 #include "dialog_export_step_process.h"
 #include <footprint.h>
@@ -63,6 +65,7 @@ public:
     ~DIALOG_EXPORT_STEP();
 
 protected:
+    void onBrowseClicked( wxCommandEvent& aEvent ) override;
     void onUpdateUnits( wxUpdateUIEvent& aEvent ) override;
     void onUpdateXPos( wxUpdateUIEvent& aEvent ) override;
     void onUpdateYPos( wxUpdateUIEvent& aEvent ) override;
@@ -129,41 +132,23 @@ bool DIALOG_EXPORT_STEP::m_exportZones = false;
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
 {
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+
     m_parent = aParent;
     m_boardPath = aBoardPath;
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sdbSizerOK->SetLabel( _( "Export" ) );
-    m_sdbSizer->Layout();
+
+    SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
+                            { wxID_CANCEL, _( "Close" )  } } );
 
     // Build default output file name
     wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
 
     if( path.IsEmpty() )
     {
-        wxFileName brdFile = m_parent->GetBoard()->GetFileName();
+        wxFileName brdFile( m_parent->GetBoard()->GetFileName() );
         brdFile.SetExt( wxT( "step" ) );
         path = brdFile.GetFullPath();
     }
-
-    // Reset this picker bc wxFormBuilder doesn't allow untranslated strings
-    wxSizerItem* sizer_item = bSizerTop->GetItem( 1UL );
-    wxWindow* widget = sizer_item->GetWindow();
-    bSizerTop->Hide( widget );
-    widget->Destroy();
-
-    wxString filter = _( "STEP files" )
-                      + AddFileExtListToFilter( { StepFileExtension, StepFileAbrvExtension } ) + "|"
-                      + _( "Binary GTLF files" )
-                      + AddFileExtListToFilter( { GltfBinaryFileExtension } );
-
-    m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString,
-                                             _( "Select a STEP export filename" ),
-                                             filter,
-                                             wxDefaultPosition,
-                                             wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
-    bSizerTop->Add( m_filePickerSTEP, 1, wxTOP | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
-
-    m_filePickerSTEP->SetPath( path );
 
     Layout();
     bSizerSTEPFile->Fit( this );
@@ -211,10 +196,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     {
         for( const FP_3DMODEL& model : fp->Models() )
         {
-
-            if( model.m_Scale.x != 1.0 ||
-                model.m_Scale.y != 1.0 ||
-                model.m_Scale.z != 1.0 )
+            if( model.m_Scale.x != 1.0 || model.m_Scale.y != 1.0 || model.m_Scale.z != 1.0 )
             {
                 bad_scales.Append( wxS("\n") );
                 bad_scales.Append( model.m_Filename );
@@ -348,9 +330,33 @@ void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
 }
 
 
+void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
+{
+    wxString filter = _( "STEP files" )
+                      + AddFileExtListToFilter( { StepFileExtension, StepFileAbrvExtension } ) + "|"
+                      + _( "Binary GTLF files" )
+                      + AddFileExtListToFilter( { GltfBinaryFileExtension } );
+
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    wxString   path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
+    wxFileName fn( Prj().AbsolutePath( path ) );
+
+    wxFileDialog dlg( this, _( "STEP Output File" ), fn.GetPath(), fn.GetFullName(), filter,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    m_outputFileName->SetValue( dlg.GetPath() );
+}
+
+
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
-    m_parent->SetLastPath( LAST_PATH_STEP, m_filePickerSTEP->GetPath() );
+    wxString path = m_outputFileName->GetValue();
+    m_parent->SetLastPath( LAST_PATH_STEP, path );
+
+    path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
@@ -384,7 +390,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         return;
     }
 
-    wxFileName fn = m_filePickerSTEP->GetFileName();
+    wxFileName fn( Prj().AbsolutePath( path ) );
 
     if( fn.FileExists() && !GetOverwriteFile() )
     {
@@ -500,12 +506,12 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
                                          quote, tolerance, quote ) );
     }
 
-    // Input file path.
-    cmdK2S.Append( wxString::Format( wxT( " -f -o %c%s%c" ),
-                                     dblquote, m_filePickerSTEP->GetPath(), dblquote ) );
-
-
     // Output file path.
+    cmdK2S.Append( wxString::Format( wxT( " -f -o %c%s%c" ),
+                                     dblquote, fn.GetFullPath(), dblquote ) );
+
+
+    // Input file path.
     cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), dblquote, m_boardPath, dblquote ) );
 
     wxLogTrace( traceKiCad2Step, wxT( "export step command: %s" ), cmdK2S );

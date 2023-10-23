@@ -64,7 +64,7 @@ public:
     /**
      * Generate a file suitable to be copied into a drawing sheet (.kicad_wks) file
      */
-    void ExportLogo();
+    void ExportDrawingSheetFormat();
 
     void UpdateTitle();
     void ShowChangedLanguage() override;

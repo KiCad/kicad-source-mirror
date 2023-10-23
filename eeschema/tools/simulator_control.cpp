@@ -91,7 +91,7 @@ int SIMULATOR_CONTROL::NewAnalysisTab( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::OpenWorkbook( const TOOL_EVENT& aEvent )
 {
-    wxFileDialog openDlg( m_simulatorFrame, _( "Open simulation workbook" ), getDefaultPath(), "",
+    wxFileDialog openDlg( m_simulatorFrame, _( "Open Simulation Workbook" ), getDefaultPath(), "",
                           WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )

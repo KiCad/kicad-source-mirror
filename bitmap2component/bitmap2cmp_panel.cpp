@@ -519,10 +519,10 @@ void BITMAP2CMP_PANEL::exportBitmap( OUTPUT_FMT_ID aFormat )
 {
     switch( aFormat )
     {
-    case EESCHEMA_FMT:     m_parentFrame->ExportEeschemaFormat();   break;
-    case PCBNEW_KICAD_MOD: m_parentFrame->ExportPcbnewFormat();     break;
-    case POSTSCRIPT_FMT:   m_parentFrame->ExportPostScriptFormat(); break;
-    case KICAD_WKS_LOGO:   m_parentFrame->ExportLogo();             break;
+    case EESCHEMA_FMT:     m_parentFrame->ExportEeschemaFormat();     break;
+    case PCBNEW_KICAD_MOD: m_parentFrame->ExportPcbnewFormat();       break;
+    case POSTSCRIPT_FMT:   m_parentFrame->ExportPostScriptFormat();   break;
+    case KICAD_WKS_LOGO:   m_parentFrame->ExportDrawingSheetFormat(); break;
     }
 }
 

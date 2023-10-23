@@ -882,7 +882,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 {
     wxFileName fn( wxS( "ERC." ) + ReportFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
+    wxFileDialog dlg( this, _( "Save Report File" ), Prj().GetProjectPath(), fn.GetFullName(),
                       ReportFileWildcard() + wxS( "|" ) + JsonFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

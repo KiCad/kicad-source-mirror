@@ -2221,7 +2221,7 @@ void DIALOG_NET_INSPECTOR::onDeleteNet( wxCommandEvent& aEvent )
 
 void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 {
-    wxFileDialog dlg( this, _( "Report file" ), "", "",
+    wxFileDialog dlg( this, _( "Save Report File" ), "", "",
                       _( "Report file" ) + AddFileExtListToFilter( { "csv" } ),
                       wxFD_SAVE );
 

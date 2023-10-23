@@ -286,7 +286,7 @@ void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 
 void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 {
-    wxFileDialog open_file_dialog( this, _( "Choose package file" ), wxEmptyString, wxEmptyString,
+    wxFileDialog open_file_dialog( this, _( "Install Package" ), wxEmptyString, wxEmptyString,
                                    wxT( "Zip files (*.zip)|*.zip" ),
                                    wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 

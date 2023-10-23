@@ -429,7 +429,7 @@ bool BITMAP2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
 }
 
 
-void BITMAP2CMP_FRAME::ExportLogo()
+void BITMAP2CMP_FRAME::ExportDrawingSheetFormat()
 {
     wxFileName  fn( m_convertedFileName );
     wxString    path = fn.GetPath();
@@ -437,7 +437,7 @@ void BITMAP2CMP_FRAME::ExportLogo()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create Logo File" ), path, wxEmptyString,
+    wxFileDialog fileDlg( this, _( "Create Drawing Sheet File" ), path, wxEmptyString,
                           DrawingSheetFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = fileDlg.ShowModal();
 

@@ -1350,7 +1350,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
 
     wxString projectPath = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Footprint Image File Name" ), projectPath,
+    wxFileDialog dlg( this, _( "Export View as PNG" ), projectPath,
                       fn.GetFullName(), PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetPath().IsEmpty() )

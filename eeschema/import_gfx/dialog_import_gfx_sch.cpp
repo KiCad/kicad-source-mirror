@@ -199,7 +199,7 @@ void DIALOG_IMPORT_GFX_SCH::onBrowseFiles( wxCommandEvent& event )
 
     wildcardsDesc = _( "All supported formats" ) + wxT( "|" ) + allWildcards + wildcardsDesc;
 
-    wxFileDialog dlg( m_parent, _( "Open File" ), path, filename, wildcardsDesc,
+    wxFileDialog dlg( m_parent, _( "Import Graphics" ), path, filename, wildcardsDesc,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_OK && !dlg.GetPath().IsEmpty() )
