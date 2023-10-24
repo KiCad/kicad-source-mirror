@@ -47,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_TEXT_PROPERTIES_BASE</property>
             <property name="pos"></property>
-            <property name="size">701,429</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Text Properties</property>
@@ -3004,7 +3004,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE</property>
                                     <property name="proportion">1</property>
                                     <object class="wxBitmapComboBox" expanded="1">
                                         <property name="BottomDockable">1</property>
