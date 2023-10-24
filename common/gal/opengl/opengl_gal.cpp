@@ -184,6 +184,8 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         m_freedTextureIds.pop_front();
     }
 
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+
     if( imgData.HasAlpha() || imgData.HasMask() )
     {
         bmp.size = bmp.w * bmp.h * 4;
