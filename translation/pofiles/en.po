@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 08:57-0700\n"
+"POT-Creation-Date: 2023-10-24 12:10-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8583,6 +8583,15 @@ msgstr ""
 "\n"
 "Do you want to save the current document before proceeding?"
 
+msgid ""
+"This operation replaces the contents of the current project.\n"
+"\n"
+"Do you want to proceed?"
+msgstr ""
+"This operation replaces the contents of the current project.\n"
+"\n"
+"Do you want to proceed?"
+
 msgid "All supported formats"
 msgstr "All supported formats"
 
@@ -11290,6 +11299,13 @@ msgstr "[no symbol loaded]"
 msgid "No schematic currently open."
 msgstr "No schematic currently open."
 
+#, c-format
+msgid "Symbol library '%s' is not writable."
+msgstr "Symbol library '%s' is not writable."
+
+msgid "You must save to a different location."
+msgstr "You must save to a different location."
+
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "The current symbol has been modified.  Save changes?"
 
@@ -11302,13 +11318,6 @@ msgstr "Symbol '%s' already exists in library '%s'."
 
 msgid "Overwrite"
 msgstr "Overwrite"
-
-#, c-format
-msgid "Symbol library '%s' is not writable."
-msgstr "Symbol library '%s' is not writable."
-
-msgid "You must save to a different location."
-msgstr "You must save to a different location."
 
 msgid "Save Symbol As"
 msgstr "Save Symbol As"
