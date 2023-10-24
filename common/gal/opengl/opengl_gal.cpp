@@ -218,7 +218,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
             {
                 memcpy( dstP, srcP, 3 );
 
-                if( dstP[0] == maskRed && dstP[1] == maskGreen && dstP[2] == maskBlue )
+                if( srcP[0] == maskRed && srcP[1] == maskGreen && srcP[2] == maskBlue )
                     dstP[3] = wxALPHA_TRANSPARENT;
                 else
                     dstP[3] = wxALPHA_OPAQUE;
