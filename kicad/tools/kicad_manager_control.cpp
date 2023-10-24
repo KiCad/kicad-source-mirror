@@ -870,9 +870,13 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
     if( pid > 0 )
     {
 #ifdef __WXMAC__
+        wxString script = wxString::Format( wxS( "tell application \"System Events\"\n"
+                          "  set frontmost of the first process whose unix id is %l to true\n"
+                          "end tell" ), pid );
+
         // This non-parameterized use of wxExecute is fine because execFile is not derived
         // from user input.
-        wxExecute( "osascript -e 'activate application \"" + execFile + "\"'" );
+        wxExecute( wxString::Format( "osascript -e '%s'", script ) );
 #endif
     }
     else
