@@ -80,6 +80,20 @@ principle should be easily implemented by adapting the current STL containers.
 %ignore to_json;
 %ignore from_json;
 
+%rename(GetEffectiveTextShapeNative) EDA_TEXT::GetEffectiveTextShape;
+
+%extend EDA_TEXT
+{
+    %pythoncode
+    %{
+
+    # KiCad 7.0 API Compatibility
+    def GetEffectiveTextShape(self, aTriangulate=True, aUseTextRotation=True):
+        return self.GetEffectiveTextShapeNative(aTriangulate)
+
+    %}
+}
+
 // headers/imports that must be included in the _wrapper.cpp at top
 
 %{
