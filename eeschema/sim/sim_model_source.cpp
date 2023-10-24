@@ -77,7 +77,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         && m_model.GetType() != SIM_MODEL::TYPE::I )
     {
         std::string args = "";
-        
+
         switch( m_model.GetType() )
         {
         case SIM_MODEL::TYPE::V_PWL:
@@ -137,31 +137,30 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             args.append( getParamValueString( "tcapt", "0" ) + " " );
             args.append( getParamValueString( "temit", "0" ) + " " );
             break;
-        
+
         case SIM_MODEL::TYPE::V_RANDUNIFORM:
         case SIM_MODEL::TYPE::I_RANDUNIFORM:
         {
-            /* JEY TODO
             args.append( "1 " );
             args.append( getParamValueString( "dt", "0" ) + " " );
             args.append( getParamValueString( "td", "0" ) + " " );
+            std::string min = getParamValueString( "min", "0" );
+            std::string max = getParamValueString( "max", "0" );
 
-            SIM_VALUE_FLOAT min = dynamic_cast<SIM_VALUE_FLOAT&>( m_model.FindParam( "max" )->value );
+            args.append( min + " " );
+            args.append( max + " " );
 
-            if( !min.ToString().empty() )
-                min.FromString( "0" );
+            double minVal = std::stod( min );
+            double maxVal = std::stod( max );
 
-            SIM_VALUE_FLOAT max = dynamic_cast<SIM_VALUE_FLOAT&>( m_model.FindParam( "min" )->value );
+            double rangeVal = maxVal - minVal;
+            double offsetVal = ( maxVal + minVal ) / 2;
 
-            if( !max.ToString().empty() )
-                max.FromString( "0" );
+            std::string range = std::to_string( rangeVal );
+            std::string offset = std::to_string( offsetVal );
 
-            SIM_VALUE_FLOAT range = max - min;
-            SIM_VALUE_FLOAT offset = ( max + min ) / SIM_VALUE_FLOAT( 2 );
-
-            args.append( range.ToSpiceString() + " " );
-            args.append( offset.ToSpiceString() + " " );
-            */
+            args.append( range + " " );
+            args.append( offset + " " );
             break;
         }
 
@@ -791,7 +790,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( 
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( std::string aPrefix, 
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( std::string aPrefix,
                                                                                std::string aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
