@@ -95,9 +95,10 @@ public:
 private:
     struct CACHED_BITMAP
     {
-        GLuint id;
-        int    w, h;
-        size_t size;
+        GLuint        id;
+        int           w, h;
+        size_t        size;
+        long long int accessTime;
     };
 
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
@@ -106,9 +107,9 @@ private:
     const size_t m_cacheMaxSize     = 256 * 1024 * 1024;
 
     std::map<const KIID, CACHED_BITMAP> m_bitmaps;
-    std::list<KIID> m_cacheLru;
-    size_t m_cacheSize;
-    std::list<GLuint> m_freedTextureIds;
+    std::list<KIID>                     m_cacheLru;
+    size_t                              m_cacheSize;
+    std::list<GLuint>                   m_freedTextureIds;
 };
 
 }; // namespace KIGFX
@@ -131,6 +132,7 @@ GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
         // A bitmap is found in cache bitmap. Ensure the associated texture is still valid.
         if( glIsTexture( it->second.id ) )
         {
+            it->second.accessTime = wxGetUTCTimeMillis().GetValue();
             return it->second.id;
         }
         else
@@ -244,26 +246,52 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
+    long long currentTime = wxGetUTCTimeMillis().GetValue();
+
     bmp.id = textureID;
+    bmp.accessTime = currentTime;
 
 #ifndef DISABLE_BITMAP_CACHE
-    m_cacheLru.emplace_back( aBitmap->GetImageID() );
-    m_cacheSize += bmp.size;
-    m_bitmaps.emplace( aBitmap->GetImageID(), std::move( bmp ) );
-
-    if( m_cacheLru.size() > m_cacheMaxElements
-        || m_cacheSize > m_cacheMaxSize )
+    if( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > m_cacheMaxSize )
     {
-        KIID last = m_cacheLru.front();
-        CACHED_BITMAP& cachedBitmap = m_bitmaps[last];
+        KIID toRemove( 0 );
+        auto toRemoveLru = m_cacheLru.end();
+
+        // Remove entries accessed > 1s ago first
+        for( const auto& [kiid, bmp] : m_bitmaps )
+        {
+            const int cacheTimeoutMillis = 1000L;
+
+            if( currentTime - bmp.accessTime > cacheTimeoutMillis )
+            {
+                toRemove = kiid;
+                toRemoveLru = std::find( m_cacheLru.begin(), m_cacheLru.end(), toRemove );
+                break;
+            }
+        }
+
+        // Otherwise, remove the latest entry (it's less likely to be needed soon)
+        if( toRemove == niluuid )
+        {
+            toRemoveLru = m_cacheLru.end();
+            toRemoveLru--;
+
+            toRemove = *toRemoveLru;
+        }
+
+        CACHED_BITMAP& cachedBitmap = m_bitmaps[toRemove];
 
         m_cacheSize -= cachedBitmap.size;
         glDeleteTextures( 1, &cachedBitmap.id );
         m_freedTextureIds.emplace_back( cachedBitmap.id );
 
-        m_bitmaps.erase( last );
-        m_cacheLru.pop_front();
+        m_bitmaps.erase( toRemove );
+        m_cacheLru.erase( toRemoveLru );
     }
+
+    m_cacheLru.emplace_back( aBitmap->GetImageID() );
+    m_cacheSize += bmp.size;
+    m_bitmaps.emplace( aBitmap->GetImageID(), std::move( bmp ) );
 #endif
 
     return textureID;
