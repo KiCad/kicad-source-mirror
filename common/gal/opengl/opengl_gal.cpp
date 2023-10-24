@@ -257,11 +257,11 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         auto toRemoveLru = m_cacheLru.end();
 
         // Remove entries accessed > 1s ago first
-        for( const auto& [kiid, bmp] : m_bitmaps )
+        for( const auto& [kiid, cachedBmp] : m_bitmaps )
         {
             const int cacheTimeoutMillis = 1000L;
 
-            if( currentTime - bmp.accessTime > cacheTimeoutMillis )
+            if( currentTime - cachedBmp.accessTime > cacheTimeoutMillis )
             {
                 toRemove = kiid;
                 toRemoveLru = std::find( m_cacheLru.begin(), m_cacheLru.end(), toRemove );
