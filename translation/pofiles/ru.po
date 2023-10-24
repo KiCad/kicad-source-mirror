@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 12:10-0700\n"
-"PO-Revision-Date: 2023-10-03 21:13+0000\n"
+"PO-Revision-Date: 2023-10-25 21:00+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4720,7 +4720,7 @@ msgstr "Полужирный курсив"
 #: eeschema/lib_text.cpp:435 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:784
 msgid "Left"
-msgstr "Влево"
+msgstr "Слева"
 
 #: common/eda_text.cpp:1032 common/eda_text.cpp:1036
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:264
@@ -4743,7 +4743,7 @@ msgstr "Центр"
 #: eeschema/lib_text.cpp:437 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:786
 msgid "Right"
-msgstr "Вправо"
+msgstr "Справа"
 
 #: common/eda_text.cpp:1035
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:288
@@ -4751,7 +4751,7 @@ msgstr "Вправо"
 #: eeschema/fields_grid_table.cpp:757 eeschema/lib_field.cpp:568
 #: eeschema/lib_text.cpp:444 eeschema/sch_field.cpp:793
 msgid "Top"
-msgstr "Вверх"
+msgstr "Сверху"
 
 #: common/eda_text.cpp:1037
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:288
@@ -4759,7 +4759,7 @@ msgstr "Вверх"
 #: eeschema/fields_grid_table.cpp:761 eeschema/lib_field.cpp:570
 #: eeschema/lib_text.cpp:446 eeschema/sch_field.cpp:795
 msgid "Bottom"
-msgstr "Вниз"
+msgstr "Снизу"
 
 #: common/eda_text.cpp:1042
 #: eeschema/dialogs/dialog_label_properties_base.cpp:96
@@ -29857,7 +29857,7 @@ msgstr "Формировать ошибку DRC если конт.пл. пере
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out copper fill"
-msgstr "Запретить заполнение медью"
+msgstr "Запретить заливку медью"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
