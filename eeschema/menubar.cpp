@@ -106,14 +106,10 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
-    if( Kiface().IsSingle() )
-    {
-        submenuImport->Add( _( "Non-KiCad Schematic..." ),
-                        _( "Replace current schematic sheet with one imported from another "
-                           "application" ),
-                        ID_IMPORT_NON_KICAD_SCH,
-                        BITMAPS::import_document );
-    }
+    submenuImport->Add( _( "Non-KiCad Schematic..." ),
+                _( "Replace current schematic sheet with one imported from another application" ),
+                ID_IMPORT_NON_KICAD_SCH,
+                BITMAPS::import_document );
 
     submenuImport->Add( EE_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL,
                         _( "Footprint Assignments..." ) );

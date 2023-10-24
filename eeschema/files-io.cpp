@@ -623,12 +623,10 @@ void SCH_EDIT_FRAME::OnAppendProject( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 {
-    if( !AskToSaveChanges() )
-        return;
-
     if( Schematic().RootScreen() && !Schematic().RootScreen()->Items().empty() )
     {
-        wxString msg = _( "This operation replaces the contents of the current project.\n\n"
+        wxString msg = _( "This operation replaces the contents of the current schematic, "
+                          "which will be permanently lost.\n\n"
                           "Do you want to proceed?" );
 
         if( !IsOK( this, msg ) )
