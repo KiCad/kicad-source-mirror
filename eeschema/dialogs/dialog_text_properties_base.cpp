@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -302,7 +302,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer11->Add( m_hyperlinkCombo, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizer11, wxGBPosition( 10, 1 ), wxGBSpan( 1, 6 ), wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( bSizer11, wxGBPosition( 10, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_textEntrySizer->AddGrowableCol( 3 );
@@ -321,7 +321,6 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_textCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
