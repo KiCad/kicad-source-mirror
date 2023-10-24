@@ -108,8 +108,15 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCH
         }
     }
 
-    LTSPICE_SCHEMATIC ascFile( aFileName, ltspiceDataDir, m_reporter, m_progressReporter );
-    ascFile.Load( aSchematic, rootSheet, aFileName );
+    try
+    {
+        LTSPICE_SCHEMATIC ascFile( aFileName, ltspiceDataDir, m_reporter, m_progressReporter );
+        ascFile.Load( aSchematic, rootSheet, aFileName, m_reporter );
+    }
+    catch( IO_ERROR& e )
+    {
+        m_reporter->Report( e.What(), RPT_SEVERITY_ERROR );
+    }
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
 

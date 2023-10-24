@@ -294,7 +294,8 @@ public:
      * @param aRootSheet is the root sheet referencing variable.
      * @param aLibraryFileName is the name of the library which gets created when the plugin runs.
      */
-    void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxFileName& aLibraryFileName );
+    void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxFileName& aLibraryFileName,
+               REPORTER* aReporter );
 
     /**
      * Used to get file path for Asc and Asy files.
@@ -333,6 +334,9 @@ public:
      */
     std::map<wxString, wxString> ReadAsyFiles( const std::vector<LTSPICE_FILE>& aSourceFiles,
                                                const std::map<wxString, wxString>& aAsyFileMap );
+
+    std::map<wxString, wxString> ReadAsyFile( const LTSPICE_FILE& aSourceFile,
+                                              const std::map<wxString, wxString>& aAsyFileMap );
 
     /**
      * Build Intermediate data structure.

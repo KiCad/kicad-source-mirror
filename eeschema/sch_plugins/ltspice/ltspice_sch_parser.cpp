@@ -191,12 +191,9 @@ void LTSPICE_SCH_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
                 // Calculating bounding box
                 BOX2I bbox;
 
-                std::vector<LTSPICE_FILE>    tempVector;
                 LTSPICE_SCHEMATIC::LT_SYMBOL tempSymbol;
                 LTSPICE_FILE                 tempAsyFile( lt_symbol.Name + ".asy", { 0, 0 } );
                 LTSPICE_SCHEMATIC::LT_ASC    dummyAsc;
-
-                tempVector.push_back( tempAsyFile );
 
                 tempSymbol = m_lt_schematic->SymbolBuilder( lt_symbol.Name, dummyAsc );
 

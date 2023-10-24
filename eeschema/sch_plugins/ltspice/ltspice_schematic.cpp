@@ -34,7 +34,7 @@
 
 
 void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-                              const wxFileName& aLibraryFileName )
+                              const wxFileName& aLibraryFileName, REPORTER* aReporter )
 {
     std::map<wxString, wxString> mapOfAscFiles;
     std::map<wxString, wxString> mapOfAsyFiles;
@@ -70,7 +70,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
     while( !ascFileQueue.empty() )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+        SCH_SCREEN* screen = nullptr;
 
         // Reading the .asc file
         wxString ascFilePath = mapOfAscFiles[ ascFileQueue.front() ];
@@ -96,6 +96,9 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
             if( IsAsySubsheet( asyBuffer ) )
             {
+                if( !screen )
+                    screen = new SCH_SCREEN( m_schematic );
+
                 newSubSchematicElement.ParentIndex = parentSheetIndex;
                 newSubSchematicElement.Screen = screen;
                 newSubSchematicElement.Sheet = new SCH_SHEET();
@@ -116,23 +119,23 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         wxString buffer = SafeReadFile( mapOfAscFiles[ascFiles[i].ElementName], wxS( "r" ) );
 
         // Getting the keywords to read
-        std::vector<LTSPICE_FILE> sourceFiles = GetSchematicElements( buffer );
+        {
+            std::vector<LTSPICE_FILE> sourceFiles = GetSchematicElements( buffer );
 
-        m_fileCache[ wxS( "asyFiles" ) ] = ReadAsyFiles( sourceFiles, mapOfAsyFiles );
-        m_fileCache[ wxS( "ascFiles" ) ][ wxS( "parentFile" ) ] = buffer;
+            m_fileCache[ wxS( "asyFiles" ) ] = ReadAsyFiles( sourceFiles, mapOfAsyFiles );
+            m_fileCache[ wxS( "ascFiles" ) ][ wxS( "parentFile" ) ] = buffer;
 
-        SCH_SHEET*         curSheet;
+            for( const LTSPICE_FILE& file : sourceFiles )
+                wxASSERT( file.Sheet == nullptr && file.Screen == nullptr );
+        }
+
         SCH_SHEET_PATH     curSheetPath;
         LTSPICE_SCH_PARSER parser( this );
 
         if( i > 0 )
         {
-            std::vector<LTSPICE_FILE> tempVector;
-
-            tempVector.push_back( ascFiles[i] );
-            curSheet = ascFiles[i].Sheet;
-
-            std::map   tempAsyMap = ReadAsyFiles( tempVector, mapOfAsyFiles );
+            SCH_SHEET* curSheet = ascFiles[i].Sheet;
+            std::map   tempAsyMap = ReadAsyFile( ascFiles[i], mapOfAsyFiles );
             wxString   ascFileName = ascFiles[i].ElementName;
             LT_ASC     dummyAsc;
             LT_SYMBOL  tempSymbol = SymbolBuilder( ascFileName, tempAsyMap[ascFileName], dummyAsc );
@@ -169,7 +172,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         }
         else
         {
-            curSheet = ascFiles[i].Sheet;
+            SCH_SHEET* curSheet = ascFiles[i].Sheet;
 
             ascFiles[i].SheetPath.push_back( curSheet );
             curSheetPath = ascFiles[i].SheetPath;
@@ -180,8 +183,15 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         for( const LTSPICE_FILE& ascFile : ascFiles )
             subSchematicAsyFiles.push_back( ascFile.ElementName );
 
-        std::vector<LTSPICE_SCHEMATIC::LT_ASC> lt_ascs = StructureBuilder();
-        parser.Parse( &curSheetPath, lt_ascs, subSchematicAsyFiles );
+        try
+        {
+            std::vector<LTSPICE_SCHEMATIC::LT_ASC> lt_ascs = StructureBuilder();
+            parser.Parse( &curSheetPath, lt_ascs, subSchematicAsyFiles );
+        }
+        catch( IO_ERROR& e )
+        {
+            aReporter->Report( e.What(), RPT_SEVERITY_ERROR );
+        }
     }
 }
 
@@ -256,6 +266,21 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
             cont = aDir.GetNext( &filename );
         }
     }
+}
+
+
+std::map<wxString, wxString>
+LTSPICE_SCHEMATIC::ReadAsyFile( const LTSPICE_FILE& aSourceFile,
+                                const std::map<wxString, wxString>& aAsyFileMap )
+{
+    std::map<wxString, wxString> resultantMap;
+
+    wxString fileName = aSourceFile.ElementName;
+
+    if( aAsyFileMap.count( fileName ) )
+        resultantMap[fileName] = SafeReadFile( aAsyFileMap.at( fileName ), wxS( "r" ) );
+
+    return resultantMap;
 }
 
 
