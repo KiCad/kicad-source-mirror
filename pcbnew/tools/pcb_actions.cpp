@@ -73,7 +73,7 @@ TOOL_ACTION PCB_ACTIONS::convertToKeepout( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::convertToLines( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Convert.convertToLines" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Create Lines from Selection" ) )
+        .MenuText( _( "Create Lines from Selection..." ) )
         .Tooltip( _( "Creates graphic lines from the selection" ) )
         .Icon( BITMAPS::add_line ) );
 

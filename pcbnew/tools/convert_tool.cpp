@@ -57,29 +57,43 @@ class CONVERT_SETTINGS_DIALOG : public DIALOG_SHIM
 {
 public:
     CONVERT_SETTINGS_DIALOG( EDA_DRAW_FRAME* aParent, CONVERT_SETTINGS* aSettings,
-                             bool aShowCopyLineWidth ) :
+                             bool aShowCopyLineWidthOption, bool aShowCenterlineOption,
+                             bool aShowBoundingHullOption ) :
             DIALOG_SHIM( aParent, wxID_ANY, _( "Conversion Settings" ), wxDefaultPosition,
                          wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
             m_settings( aSettings )
     {
+        // Allow each distinct version of the dialog to have a different size
+        m_hash_key = TO_UTF8( wxString::Format( wxS( "%s%c%c%c" ),
+                                                GetTitle(),
+                                                aShowCopyLineWidthOption,
+                                                aShowCenterlineOption,
+                                                aShowBoundingHullOption ) );
+
         wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
         wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
         SetSizer( mainSizer );
 
         m_rbMimicLineWidth = new wxRadioButton( this, wxID_ANY, _( "Copy line width of first object" ) );
 
-        if( aShowCopyLineWidth )
+        if( aShowCopyLineWidthOption )
             topSizer->Add( m_rbMimicLineWidth, 0, wxLEFT|wxRIGHT, 5 );
         else
             m_rbMimicLineWidth->Hide();
 
-        topSizer->AddSpacer( 6 );
         m_rbCenterline = new wxRadioButton( this, wxID_ANY, _( "Use centerlines" ) );
-        topSizer->Add( m_rbCenterline, 0, wxLEFT|wxRIGHT, 5 );
 
-        topSizer->AddSpacer( 6 );
+        if( aShowCenterlineOption )
+        {
+            topSizer->AddSpacer( 6 );
+            topSizer->Add( m_rbCenterline, 0, wxLEFT|wxRIGHT, 5 );
+        }
+        else
+        {
+            m_rbCenterline->Hide();
+        }
+
         m_rbEnvelope = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
-        topSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
 
         m_gapLabel = new wxStaticText( this, wxID_ANY, _( "Gap:" ) );
         m_gapCtrl = new wxTextCtrl( this, wxID_ANY );
@@ -91,25 +105,34 @@ public:
         m_widthUnits = new wxStaticText( this, wxID_ANY, _( "mm" ) );
         m_width = new UNIT_BINDER( aParent, m_widthLabel, m_widthCtrl, m_widthUnits );
 
-        wxBoxSizer* hullParamsSizer = new wxBoxSizer( wxHORIZONTAL );
-        hullParamsSizer->Add( m_gapLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
-        hullParamsSizer->Add( m_gapCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
-        hullParamsSizer->Add( m_gapUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
-        hullParamsSizer->AddSpacer( 18 );
-        hullParamsSizer->Add( m_widthLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
-        hullParamsSizer->Add( m_widthCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
-        hullParamsSizer->Add( m_widthUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+        if( aShowBoundingHullOption )
+        {
+            topSizer->AddSpacer( 6 );
+            topSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
 
-        topSizer->AddSpacer( 2 );
-        topSizer->Add( hullParamsSizer, 0, wxLEFT, 26 );
+            wxBoxSizer* hullParamsSizer = new wxBoxSizer( wxHORIZONTAL );
+            hullParamsSizer->Add( m_gapLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+            hullParamsSizer->Add( m_gapCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
+            hullParamsSizer->Add( m_gapUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+            hullParamsSizer->AddSpacer( 18 );
+            hullParamsSizer->Add( m_widthLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+            hullParamsSizer->Add( m_widthCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
+            hullParamsSizer->Add( m_widthUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
 
-        topSizer->AddSpacer( 15 );
+            topSizer->AddSpacer( 2 );
+            topSizer->Add( hullParamsSizer, 0, wxLEFT, 26 );
+
+            topSizer->AddSpacer( 15 );
+        }
+        else
+        {
+            m_rbEnvelope->Hide();
+            m_gap->Show( false, true );
+            m_width->Show( false, true );
+        }
+
         m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY, _( "Delete source objects after conversion" ) );
         topSizer->Add( m_cbDeleteOriginals, 0, wxALL, 5 );
-
-        wxStaticLine* line =  new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                wxLI_HORIZONTAL );
-        topSizer->Add( line, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 5 );
 
         mainSizer->Add( topSizer, 1, wxALL|wxEXPAND, 10 );
 
@@ -124,7 +147,7 @@ public:
         sdbSizer->Realize();
 
         buttonsSizer->Add( sdbSizer, 1, 0, 5 );
-        mainSizer->Add( buttonsSizer, 0, wxLEFT|wxRIGHT|wxBOTTOM|wxEXPAND, 5 );
+        mainSizer->Add( buttonsSizer, 0, wxALL|wxEXPAND, 5 );
 
         SetupStandardButtons();
 
@@ -374,7 +397,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             showCopyLineWidth = false;
         }
 
-        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings, showCopyLineWidth );
+        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings, showCopyLineWidth, true, true );
 
         if( dlg.ShowModal() != wxID_OK )
             return 0;
@@ -1013,6 +1036,13 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 return true;
         }
     }
+    else
+    {
+        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings, false, false, false );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return true;
+    }
 
     for( EDA_ITEM* item : selection )
     {
@@ -1063,6 +1093,18 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     commit.Add( track );
                 }
             }
+        }
+    }
+
+    if( m_userSettings.m_DeleteOriginals )
+    {
+        PCB_SELECTION selectionCopy = selection;
+        m_selectionTool->ClearSelection();
+
+        for( EDA_ITEM* item : selectionCopy )
+        {
+            if( item->GetFlags() & SKIP_STRUCT )
+                commit.Remove( item );
         }
     }
 
