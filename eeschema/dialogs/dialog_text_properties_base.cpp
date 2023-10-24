@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -296,10 +296,10 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_hyperlinkCombo = new WX_COMBOBOX( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	bSizer11->Add( m_hyperlinkCombo, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer11->Add( m_hyperlinkCombo, 1, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
 
-	m_textEntrySizer->Add( bSizer11, wxGBPosition( 9, 1 ), wxGBSpan( 1, 6 ), wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( bSizer11, wxGBPosition( 9, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_textEntrySizer->AddGrowableCol( 3 );

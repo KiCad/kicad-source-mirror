@@ -2925,7 +2925,7 @@
                         </object>
                         <object class="gbsizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="colspan">6</property>
+                            <property name="colspan">5</property>
                             <property name="column">1</property>
                             <property name="flag">wxEXPAND|wxBOTTOM|wxALIGN_CENTER_VERTICAL</property>
                             <property name="row">9</property>
@@ -2937,7 +2937,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE</property>
                                     <property name="proportion">1</property>
                                     <object class="wxBitmapComboBox" expanded="1">
                                         <property name="BottomDockable">1</property>
