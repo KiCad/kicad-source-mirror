@@ -30,6 +30,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <plotters/plotter.h>
 #include <settings/color_settings.h>
+#include <pcb_painter.h>
 #include <bitmaps.h>
 #include <base_units.h>
 #include <common.h>
@@ -41,6 +42,9 @@
 #include <geometry/shape_rect.h>
 
 #include <wx/mstream.h>
+
+using KIGFX::PCB_PAINTER;
+using KIGFX::PCB_RENDER_SETTINGS;
 
 
 PCB_BITMAP::PCB_BITMAP( BOARD_ITEM* aParent, const VECTOR2I& pos, PCB_LAYER_ID aLayer ) :
@@ -134,10 +138,20 @@ double PCB_BITMAP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
 
+    PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
+    PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
     // All bitmaps are drawn on LAYER_DRAW_BITMAPS, but their
     // associated board layer controls their visibility.
     if( !GetBoard()->IsLayerVisible( m_layer ) )
         return HIDE;
+
+    if( renderSettings->GetHighContrast()
+        && renderSettings->m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
+        && !renderSettings->GetLayerIsHighContrast( m_layer ) )
+    {
+        return HIDE;
+    }
 
     return aView->IsLayerVisible( LAYER_DRAW_BITMAPS ) ? 0.0 : HIDE;
 }
