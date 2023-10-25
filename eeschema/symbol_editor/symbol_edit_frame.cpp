@@ -832,7 +832,9 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_symbol->GetRootSymbol().lock() )
             rootSymbolName = rootSymbol->GetName();
         else
+        {
             wxCHECK( false, /* void */ );
+        }
 
         int      unit = GetUnit();
         int      convert = GetConvert();

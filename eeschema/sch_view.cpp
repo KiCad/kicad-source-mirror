@@ -163,7 +163,9 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
         if( std::shared_ptr< LIB_SYMBOL > parent = aSymbol->GetRootSymbol().lock() )
             drawnSymbol = parent.get();
         else
+        {
             wxCHECK( false, /* void */ );
+        }
     }
 
     for( LIB_ITEM& item : drawnSymbol->GetDrawItems() )
