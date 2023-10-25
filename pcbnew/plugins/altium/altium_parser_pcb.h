@@ -108,6 +108,7 @@ enum class ALTIUM_RULE_KIND
     SOLDER_MASK_EXPANSION  = 8,
     PLANE_CLEARANCE        = 9,
     POLYGON_CONNECT        = 10,
+    ROUTING_VIAS           = 11
 };
 
 enum class ALTIUM_CONNECT_STYLE
@@ -499,7 +500,24 @@ struct ARULE6
     wxString scope2expr;
 
     // ALTIUM_RULE_KIND::CLEARANCE
+    // ALTIUM_RULE_KIND::HOLE_TO_HOLE_CLEARANCE
     int clearanceGap;
+
+    // ALTIUM_RULE_KIND::WIDTH
+    // ALTIUM_RULE_KIND::HOLE_SIZE
+    int minLimit;
+    int maxLimit;
+
+    // ALTIUM_RULE_KIND::WIDTH
+    int preferredWidth;
+
+    // ALTIUM_RULE_KIND::ROUTING_VIAS
+    int width;
+    int minWidth;
+    int maxWidth;
+    int holeWidth;
+    int minHoleWidth;
+    int maxHoleWidth;
 
     // ALTIUM_RULE_KIND::PLANE_CLEARANCE
     int planeclearanceClearance;

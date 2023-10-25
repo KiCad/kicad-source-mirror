@@ -1901,6 +1901,35 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
                 } );
     }
 
+    const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::CLEARANCE );
+    const ARULE6* trackWidthRule = GetRuleDefault( ALTIUM_RULE_KIND::WIDTH );
+    const ARULE6* routingViasRule = GetRuleDefault( ALTIUM_RULE_KIND::ROUTING_VIAS );
+    const ARULE6* holeSizeRule = GetRuleDefault( ALTIUM_RULE_KIND::HOLE_SIZE );
+    const ARULE6* holeToHoleRule = GetRuleDefault( ALTIUM_RULE_KIND::HOLE_TO_HOLE_CLEARANCE );
+
+    if( clearanceRule )
+        m_board->GetDesignSettings().m_MinClearance = clearanceRule->clearanceGap;
+
+    if( trackWidthRule )
+    {
+        m_board->GetDesignSettings().m_TrackMinWidth = trackWidthRule->minLimit;
+        // TODO: construct a custom rule for preferredWidth and maxLimit values
+    }
+
+    if( routingViasRule )
+    {
+        m_board->GetDesignSettings().m_ViasMinSize = routingViasRule->minWidth;
+        m_board->GetDesignSettings().m_MinThroughDrill = routingViasRule->minHoleWidth;
+    }
+
+    if( holeSizeRule )
+    {
+        // TODO: construct a custom rule for minLimit / maxLimit values
+    }
+
+    if( holeToHoleRule )
+        m_board->GetDesignSettings().m_HoleToHoleMin = holeToHoleRule->clearanceGap;
+
     const ARULE6* soldermaskRule = GetRuleDefault( ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION );
     const ARULE6* pastemaskRule = GetRuleDefault( ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION );
 

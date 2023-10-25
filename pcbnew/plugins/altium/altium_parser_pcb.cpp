@@ -531,15 +531,31 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     else if( rulekind == wxT( "HoleSize" ) )
     {
         kind = ALTIUM_RULE_KIND::HOLE_SIZE;
+        minLimit = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MINLIMIT" ), wxT( "1mil" ) );
+        maxLimit = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MAXLIMIT" ), wxT( "150mil" ) );
     }
     else if( rulekind == wxT( "HoleToHoleClearance" ) )
     {
         kind = ALTIUM_RULE_KIND::HOLE_TO_HOLE_CLEARANCE;
+        clearanceGap = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "GAP" ), wxT( "10mil" ) );
+    }
+    else if( rulekind == wxT( "RoutingVias" ) )
+    {
+        kind = ALTIUM_RULE_KIND::ROUTING_VIAS;
+        width        = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "WIDTH" ), wxT( "20mil" ) );
+        minWidth     = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MINWIDTH" ), wxT( "20mil" ) );
+        maxWidth     = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MAXWIDTH" ), wxT( "50mil" ) );
+        holeWidth    = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "HOLEWIDTH" ), wxT( "10mil" ) );
+        minHoleWidth = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MINHOLEWIDTH" ), wxT( "10mil" ) );
+        maxHoleWidth = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MAXHOLEWIDTH" ), wxT( "28mil" ) );
     }
     else if( rulekind == wxT( "Width" ) )
     {
         kind = ALTIUM_RULE_KIND::WIDTH;
-    }
+        minLimit       = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MINLIMIT" ), wxT( "6mil" ) );
+        maxLimit       = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "MAXLIMIT" ), wxT( "40mil" ) );
+        preferredWidth = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "PREFERREDWIDTH" ), wxT( "6mil" ) );
+}
     else if( rulekind == wxT( "PasteMaskExpansion" ) )
     {
         kind = ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION;
@@ -548,8 +564,7 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     else if( rulekind == wxT( "SolderMaskExpansion" ) )
     {
         kind = ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION;
-        soldermaskExpansion =
-                ALTIUM_PARSER::ReadKicadUnit( props, wxT( "EXPANSION" ), wxT( "4mil" ) );
+        soldermaskExpansion = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "EXPANSION" ), wxT( "4mil" ) );
     }
     else if( rulekind == wxT( "PlaneClearance" ) )
     {
