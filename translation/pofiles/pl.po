@@ -13,17 +13,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 12:12-0700\n"
-"PO-Revision-Date: 2023-09-21 15:08+0000\n"
+"PO-Revision-Date: 2023-10-26 04:31+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3504,9 +3504,8 @@ msgstr "Nazwa bazowa"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
-#, fuzzy
 msgid "Password"
-msgstr "Hasło:"
+msgstr "Hasło"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
 #, fuzzy
@@ -3514,9 +3513,8 @@ msgid "Commit Message:"
 msgstr "Wiadomości:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
-#, fuzzy
 msgid "Author:"
-msgstr "Autor"
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
@@ -3543,14 +3541,14 @@ msgid "Connection successful"
 msgstr "Plik został prawidłowo utworzony."
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Nie można otworzyć pliku archiwum."
+msgstr "Nie można połączyć się z '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Nie można otworzyć pliku archiwum."
+msgstr "Nie można otworzyć klucza prywatnego '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
 #, fuzzy
@@ -3558,9 +3556,8 @@ msgid "Invalid SSH Key"
 msgstr "Nieprawidłowa nazwa pinu"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Zaznaczony plik nie jest prawidłowy lub może być uszkodzony!"
+msgstr "Zaznaczony plik nie jest prawidłowym prywatnym kluczem SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:386
 #, fuzzy, c-format
@@ -3585,9 +3582,8 @@ msgstr "Wprowadź w pełni kwalifikowany adres URL repozytorium"
 
 #: common/dialogs/git/dialog_git_repository.cpp:431
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Hasło:"
+msgstr "Hasło klucza SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 #, fuzzy
@@ -3623,9 +3619,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Nazwa użytkownika:"
+msgstr "Nazwa użytkownika"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 #, fuzzy
@@ -3680,9 +3675,8 @@ msgid "Author name:"
 msgstr "Nazwa obszaru:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Autor"
+msgstr "e-mail autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
 #, fuzzy
@@ -4431,9 +4425,8 @@ msgstr ""
 "jesteś pewien?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Skala"
+msgstr "Skala:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 #: common/dialogs/panel_image_editor_base.cpp:47
@@ -6335,9 +6328,9 @@ msgid "'%s' is not a directory"
 msgstr "Strefa miedzi '%s' nie została poprawnie przetworzona."
 
 #: common/gestfich.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Usuwam folder %s"
+msgstr "Wystąpił błąd podczas usuwania folderu '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, fuzzy, c-format
@@ -6365,9 +6358,8 @@ msgid "Could not fetch data from remote '%s'"
 msgstr "Nie można odnaleźć modelu IBIS '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Nie można odczytać pliku "
+msgstr "Nie można odczytać 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
 #, fuzzy
@@ -6375,9 +6367,8 @@ msgid "Could not lookup commit"
 msgstr "Nie można uruchomić CvPcb"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Nie można odczytać pliku "
+msgstr "Nie można przeanalizować zmian"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -6402,9 +6393,8 @@ msgid "Could not lookup commit '{}'"
 msgstr "Nie można załadować obrazu z '%s'."
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Nie można odczytać pliku "
+msgstr "Nie można scalić zmian"
 
 #: common/git/git_pull_handler.cpp:257
 #, fuzzy
@@ -6466,14 +6456,13 @@ msgid "* [rejected] %s (%s)"
 msgstr "Siatka: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Uaktualnione"
+msgstr "[uaktualnione] %s"
 
 #: common/git/kicad_git_errors.cpp:30
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Nieprawidłowy format raportu\n"
+msgstr "Nieprawidłowe repozytorium."
 
 #: common/git/kicad_git_errors.cpp:31
 #, fuzzy
@@ -10555,9 +10544,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Otwiera okno dialogowe Ustawienia schematu"
 
 #: eeschema/dialogs/dialog_erc.cpp:642
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Minimalny odstęp siatki:"
+msgstr "Edytuj odstępy siatki połączeń..."
 
 #: eeschema/dialogs/dialog_erc.cpp:735
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -16099,9 +16087,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "Zmiany w pliku ze schematem nie zostały zapisane"
 
 #: eeschema/files-io.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Pliki schematu programu LTSpice"
+msgstr "Niewspierany plik schematu '%s'."
 
 #: eeschema/files-io.cpp:257 eeschema/files-io.cpp:250
 msgid ""
@@ -17413,9 +17401,8 @@ msgid "Hierarchical Label '%s'"
 msgstr "Etykieta hierarchiczna '%s'"
 
 #: eeschema/sch_label.cpp:2148
-#, fuzzy
 msgid "Pin length"
-msgstr "Długość pinu:"
+msgstr "Długość pinu"
 
 #: eeschema/sch_line.cpp:99
 msgid "Graphic Line"
@@ -20433,14 +20420,16 @@ msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b> w symbolu %c."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b>."
+msgstr ""
+"<b>Okrąg (grafika) ma promień równy zero</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Pin poza siatką %s</b> %s na pozycji <b>(%s, %s)</b>."
+msgstr ""
+"<b>Prostokąt (grafika) ma zerowy rozmiar</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
 #, fuzzy
@@ -26181,9 +26170,8 @@ msgid "Commit File..."
 msgstr "Zmień nazwę pliku..."
 
 #: kicad/project_tree_pane.cpp:950
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Przełącz na warstwę wewnętrzną 1"
+msgstr "Przełącz do gałęzi "
 
 #: kicad/project_tree_pane.cpp:955
 msgid "Other..."
@@ -26227,9 +26215,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Ścieżka lokalna: monitorowanie zmian w folderze jest aktywne"
 
 #: kicad/project_tree_pane.cpp:1518
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "Zaznaczony plik nie jest prawidłowy lub może być uszkodzony!"
+msgstr "Zaznaczony folder jest już obecnie projektem git."
 
 #: kicad/project_tree_pane.cpp:1530
 msgid "Failed to initialize git project."
@@ -26257,9 +26244,9 @@ msgid "Failed to push project"
 msgstr "Nie udało się wygenerować danych"
 
 #: kicad/project_tree_pane.cpp:1729
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Nie można załadować '%s'."
+msgstr "Nie można przejrzeć gałęzi '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1741
 #, fuzzy, c-format
@@ -26267,9 +26254,9 @@ msgid "Failed to find branch head for '%s'"
 msgstr "Nie można odnaleźć przeglądarki dla '%s'."
 
 #: kicad/project_tree_pane.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s'"
-msgstr "Nie można wyrysować do '%s'.\n"
+msgstr "Nie można przełączyć się na '%s'"
 
 #: kicad/project_tree_pane.cpp:1763
 #, fuzzy, c-format
@@ -28070,9 +28057,8 @@ msgid "Threshold voltage:"
 msgstr "Napięcie progowe:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "Materiał"
+msgstr "Nazwy materiału:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 #, fuzzy
@@ -33657,9 +33643,9 @@ msgid "Buried vias:"
 msgstr "Przelotek zagrzebanych:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid "Generators A (%s)"
-msgstr "Plik generatora"
+msgstr "Generatory A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
@@ -34107,9 +34093,8 @@ msgid "Via size:"
 msgstr "Rozmiar przelotki:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "Set to net class / custom rule values"
-msgstr "Ustaw do wartości z klas połączeń:"
+msgstr "Ustaw do wartości z klas sieci/własnej reguły"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:83
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:86
@@ -36367,9 +36352,8 @@ msgid "Track and Via Dimensions"
 msgstr "Rozmiary ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target skew: "
-msgstr "Docelowa odchyłka:"
+msgstr "Docelowa odchyłka: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:85
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1598
@@ -36437,9 +36421,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:373
-#, fuzzy
 msgid "Corner style:"
-msgstr "Styl łamania"
+msgstr "Styl łamania:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -40898,9 +40881,8 @@ msgid "Tuning"
 msgstr "Ostrzeżenie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
-#, fuzzy
 msgid "Tune Skew"
-msgstr "Dostrojono: odchyłka "
+msgstr "Dostrajanie odchyłki"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:95
@@ -40914,19 +40896,16 @@ msgid "Tune Length"
 msgstr "Długość rdzenia"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1018
-#, fuzzy
 msgid "too long"
-msgstr "Zbyt długa: "
+msgstr "zbyt długa"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1019
-#, fuzzy
 msgid "too short"
-msgstr "Zbyt krótka: "
+msgstr "zbyt krótka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1020
-#, fuzzy
 msgid "tuned"
-msgstr "Dostrojono: "
+msgstr "dostrojono"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
@@ -40935,14 +40914,12 @@ msgid "Edit Tuning Pattern"
 msgstr "Edytuj w edytorze tekstu"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1474
-#, fuzzy
 msgid "current skew"
-msgstr "Bieżący skrót:"
+msgstr "bieżąca odchyłka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1480
-#, fuzzy
 msgid "current length"
-msgstr "Docelowa długość:"
+msgstr "bieżąca długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1561
 #, fuzzy
@@ -40965,9 +40942,9 @@ msgid "Full Length"
 msgstr "Pełna Długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1588
-#, fuzzy, c-format
+#, c-format
 msgid "Target Skew: %s"
-msgstr "Docelowa odchyłka:"
+msgstr "Docelowa odchyłka: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1589
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1611
@@ -40980,9 +40957,9 @@ msgid "Skew Constraints: %s"
 msgstr "Ograniczenia szerokości: min %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1610
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "Docelowa długość:"
+msgstr "Docelowa długość: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1619
 #, fuzzy, c-format
@@ -41000,9 +40977,8 @@ msgid "Single track"
 msgstr "Trasowanie pojedynczej ścieżki"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1866
-#, fuzzy
 msgid "Differential pair"
-msgstr "Pary różnicowe:"
+msgstr "Para różnicowa"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1867
 #, fuzzy
@@ -41020,39 +40996,32 @@ msgid "Tuning mode"
 msgstr "Model linii"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1902
-#, fuzzy
 msgid "Min amplitude"
-msgstr "Min. amplituda (A):"
+msgstr "Min. amplituda"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1909
-#, fuzzy
 msgid "Max amplitude"
-msgstr "Maksymalne wyniesienie:"
+msgstr "Max. amplituda"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1916
-#, fuzzy
 msgid "Initial side"
-msgstr "Czas początkowy:"
+msgstr "Strona początkowa"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1922
-#, fuzzy
 msgid "Min spacing"
-msgstr "Min odstęp (s):"
+msgstr "Min. odstęp"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1928
-#, fuzzy
 msgid "Corner radius %"
-msgstr "Promień narożnika:"
+msgstr "Procent promienia narożnika"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
-#, fuzzy
 msgid "Target length"
-msgstr "Docelowa długość:"
+msgstr "Docelowa długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1959
-#, fuzzy
 msgid "Target skew"
-msgstr "Docelowa odchyłka:"
+msgstr "Docelowa odchyłka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
 #, fuzzy
@@ -41080,9 +41049,8 @@ msgid "DXF default units:"
 msgstr "Domyślne jednostki:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:90
-#, fuzzy
 msgid "Place at X:"
-msgstr "Umieść przelotkę"
+msgstr "Umieść w osi X:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:127
 #, fuzzy
@@ -41475,9 +41443,9 @@ msgid "Update %s fields."
 msgstr "Uaktualniam %s pól."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s footprint fields not in symbol."
-msgstr "Usuń pola nie znajdujące się w nowym symbolu"
+msgstr "Usuń %s pól footprintu nie znajdujących się w symbolu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
@@ -41486,9 +41454,9 @@ msgid "Updated %s fields."
 msgstr "Uaktualniono %s pól."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s footprint fields not in symbol."
-msgstr "Usuń pola nie znajdujące się w nowym symbolu"
+msgstr "Usunięto %s pól nie znajdujących się w symbolu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:491
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:426
@@ -41515,14 +41483,14 @@ msgid "Updated %s sheetfile to '%s'."
 msgstr "Zaktualizowano plik arkusza %s do '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s footprint filters to '%s'."
-msgstr "Uaktualnij footprint %s z '%s' do '%s'"
+msgstr "Uaktualnij %s filtrów footprintów do '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s footprint filters to '%s'."
-msgstr "Zmieniono footprint %s z '%s' na '%s'."
+msgstr "Uaktualniono %s filtrów footrpintu na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
@@ -45223,18 +45191,20 @@ msgstr ""
 "Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1284
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "Przeanalizowano ograniczenia rozmiaru: min %s; maks %s."
+msgstr "Przeanalizowano ograniczenia średnicy: min %s; optymalne %s; maks. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1291
 msgid "Via Annular Width"
 msgstr "Szerokość pierścienia przelotki"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "Przeanalizowano ograniczenia szerokości pierścienia: min %s; maks %s."
+msgstr ""
+"Przeanalizowano ograniczenia szerokości pierścienia: min %s; optymalne %s; "
+"maks. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1322
 #, fuzzy, c-format
@@ -45249,9 +45219,9 @@ msgstr ""
 "Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "Przeanalizowano ograniczenia grubości: min %s; maks %s."
+msgstr "Przeanalizowano ograniczenia grubości: min %s; optymalne %s; maks. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
 msgid "Keepouts"
@@ -45583,9 +45553,8 @@ msgid "Tolerance value:"
 msgstr "Tolerancja:"
 
 #: pcbnew/tools/edit_tool.cpp:1480
-#, fuzzy
 msgid "Heal shapes"
-msgstr "Kształt otworu:"
+msgstr "Napraw kształty"
 
 #: pcbnew/tools/edit_tool.cpp:2061 pcbnew/tools/pcb_actions.cpp:552
 #: pcbnew/tools/edit_tool.cpp:1851 pcbnew/tools/pcb_actions.cpp:511
@@ -45658,9 +45627,9 @@ msgid "Regenerate All"
 msgstr "Zamień wszystkie"
 
 #: pcbnew/tools/generator_tool.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "Uaktualnienie"
+msgstr "Uaktualnienie %s"
 
 #: pcbnew/tools/generator_tool.cpp:199
 #, fuzzy
@@ -45896,9 +45865,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Dodaje tabelę ze stosem warstw na warstwie rysunkowej"
 
 #: pcbnew/tools/pcb_actions.cpp:165
-#, fuzzy
 msgid "Add Reference Image"
-msgstr "Węzeł odniesienia:"
+msgstr "Dodaj obrazek referencyjny"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid ""
@@ -47681,9 +47649,8 @@ msgid "Rebuilds geometry of selected generator(s)"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2446
-#, fuzzy
 msgid "Generators Manager"
-msgstr "Generator nazw skrótowych:"
+msgstr "Menedżer generatorów"
 
 #: pcbnew/tools/pcb_actions.cpp:2447
 msgid "Show a manager dialog for Generator objects"
