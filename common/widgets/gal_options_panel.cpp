@@ -137,7 +137,7 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
     m_cfg->m_Window.cursor.always_show_cursor = m_forceCursorDisplay->GetValue();
 
 #ifndef __WXMAC__
-    m_cfg->m_Graphics.canvas_type = m_renderingEngine->GetSelection() == 0 ?
+    m_cfg->m_Graphics.canvas_type = m_rbAccelerated->GetValue() ?
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL :
                                                     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
 #endif
