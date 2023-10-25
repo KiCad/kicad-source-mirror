@@ -1045,7 +1045,7 @@ TOOL_ACTION PCB_ACTIONS::generateDrillFiles( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::generatePosFile( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.generatePosFile" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Component Placement (.pos)..." ) )
+        .MenuText( _( "Component Placement (.pos, .gbr)..." ) )
         .Tooltip( _( "Generate component placement file(s) for pick and place" ) )
         .Icon( BITMAPS::post_compo ) );
 
