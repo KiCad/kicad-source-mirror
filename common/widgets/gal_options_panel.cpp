@@ -63,13 +63,8 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
     // Rendering engine
 #ifdef __WXMAC__
     // On MAC, Cairo render does not work.
-    m_renderingEngine->Hide();
+    m_renderingSizer->Show( false );
 #endif
-    m_renderingEngine->SetItemToolTip( 0, _( "Hardware-accelerated graphics (recommended)" ) );
-    m_renderingEngine->SetItemToolTip( 1, _( "Software graphics (for computers which do not "
-                                             "support KiCad's hardware acceleration "
-                                             "requirements)" ) );
-
     // Grid settings subpanel
     int selection = 0;  // default selection
 
@@ -95,9 +90,9 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
     auto canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( m_cfg->m_Graphics.canvas_type );
 
     if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
-        m_renderingEngine->SetSelection( 0 );
+        m_rbAccelerated->SetValue( true );
     else
-        m_renderingEngine->SetSelection( 1 );
+        m_rbFallback->SetValue( true );
 #endif
 
     m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );

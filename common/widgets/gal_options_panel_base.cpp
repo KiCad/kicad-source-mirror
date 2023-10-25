@@ -14,19 +14,37 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxBoxSizer* sLeftSizer;
-	sLeftSizer = new wxBoxSizer( wxVERTICAL );
+	m_renderingSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxString m_renderingEngineChoices[] = { _("Accelerated graphics"), _("Fallback graphics") };
-	int m_renderingEngineNChoices = sizeof( m_renderingEngineChoices ) / sizeof( wxString );
-	m_renderingEngine = new wxRadioBox( this, wxID_ANY, _("Rendering Engine"), wxDefaultPosition, wxDefaultSize, m_renderingEngineNChoices, m_renderingEngineChoices, 1, wxRA_SPECIFY_COLS );
-	m_renderingEngine->SetSelection( 0 );
-	sLeftSizer->Add( m_renderingEngine, 0, wxALL, 5 );
+	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Rendering Engine"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	m_renderingSizer->Add( m_staticText9, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_renderingSizer->Add( m_staticline3, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 1, 4, 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_rbAccelerated = new wxRadioButton( this, wxID_ANY, _("Accelerated graphics"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAccelerated->SetToolTip( _("Hardware-accelerated graphics (recommended)") );
+
+	fgSizer2->Add( m_rbAccelerated, 0, wxLEFT, 5 );
+
+	m_rbFallback = new wxRadioButton( this, wxID_ANY, _("Fallback graphics"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbFallback->SetToolTip( _("Software graphics (for computers which do not support KiCad's hardware acceleration requirements)") );
+
+	fgSizer2->Add( m_rbFallback, 0, wxLEFT, 5 );
 
 
-	mainSizer->Add( sLeftSizer, 0, wxEXPAND, 5 );
+	m_renderingSizer->Add( fgSizer2, 0, wxEXPAND|wxALL, 5 );
 
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Grid Options"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	mainSizer->Add( m_renderingSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Grid Display"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	mainSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
@@ -50,7 +68,7 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 	bSizerGridStyle->Add( m_rbCrosses, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	mainSizer->Add( bSizerGridStyle, 0, wxEXPAND|wxALL, 5 );
+	mainSizer->Add( bSizerGridStyle, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxGridBagSizer* gbGridSettings;
 	gbGridSettings = new wxGridBagSizer( 5, 5 );
@@ -99,7 +117,7 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 
 	mainSizer->Add( 0, 5, 0, 0, 5 );
 
-	m_stGridLabel = new wxStaticText( this, wxID_ANY, _("Cursor Options"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stGridLabel = new wxStaticText( this, wxID_ANY, _("Cursor"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stGridLabel->Wrap( -1 );
 	mainSizer->Add( m_stGridLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 

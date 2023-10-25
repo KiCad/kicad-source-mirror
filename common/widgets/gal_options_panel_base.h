@@ -11,15 +11,14 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/statline.h>
 #include <wx/radiobut.h>
+#include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
@@ -37,7 +36,11 @@ class GAL_OPTIONS_PANEL_BASE : public wxPanel
 	private:
 
 	protected:
-		wxRadioBox* m_renderingEngine;
+		wxBoxSizer* m_renderingSizer;
+		wxStaticText* m_staticText9;
+		wxStaticLine* m_staticline3;
+		wxRadioButton* m_rbAccelerated;
+		wxRadioButton* m_rbFallback;
 		wxStaticText* m_staticText1;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_gridStyleLabel;
