@@ -2661,11 +2661,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 if( IsCopperLayer( layer ) )
                 {
                     VECTOR2I start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
-                    double angle = 0.0;
-                    double end_angle = 0.0;
-                    double radius = 0.0;
-                    double delta_angle = 0.0;
-                    VECTOR2I center;
+                    VECTOR2I end( kicad_x( w.x2 ), kicad_y( w.y2 ) );
 
                     int width = w.width.ToPcbUnits();
 
@@ -2677,52 +2673,41 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( w.curve )
                     {
-                        center = ConvertArcCenter( VECTOR2I( kicad_x( w.x1 ), kicad_y( w.y1 ) ),
-                                                   VECTOR2I( kicad_x( w.x2 ), kicad_y( w.y2 ) ),
-                                                   *w.curve );
+                        VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
+                        double   radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
+                                                pow( center.y - kicad_y( w.y1 ), 2 ) );
+                        VECTOR2I mid = CalcArcMid( start, end, center, true );
+                        VECTOR2I otherMid = CalcArcMid( start, end, center, false );
 
-                        angle = DEG2RAD( *w.curve );
+                        double   radiusA = ( mid - center ).EuclideanNorm();
+                        double   radiusB = ( otherMid - center ).EuclideanNorm();
 
-                        end_angle = atan2( kicad_y( w.y2 ) - center.y,
-                                           kicad_x( w.x2 ) - center.x );
+                        if( abs( radiusA - radius ) > abs( radiusB - radius ) )
+                            std::swap( mid, otherMid );
 
-                        radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
-                                       pow( center.y - kicad_y( w.y1 ), 2 ) );
+                        PCB_ARC* arc = new PCB_ARC( m_board );
 
-                        int segs = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
-                                                         EDA_ANGLE( *w.curve, DEGREES_T ) );
-                        delta_angle = angle / segs;
+                        arc->SetPosition( start );
+                        arc->SetMid( mid );
+                        arc->SetEnd( end );
+                        arc->SetWidth( width );
+                        arc->SetLayer( layer );
+                        arc->SetNetCode( netCode );
+
+                        m_board->Add( arc );
                     }
-
-                    while( fabs( angle ) > fabs( delta_angle ) )
+                    else
                     {
-                        wxASSERT( radius > 0.0 );
-                        VECTOR2I end( KiROUND( radius * cos( end_angle + angle ) + center.x ),
-                                      KiROUND( radius * sin( end_angle + angle ) + center.y ) );
+                        PCB_TRACK* track = new PCB_TRACK( m_board );
 
-                        PCB_TRACK*  t = new PCB_TRACK( m_board );
+                        track->SetPosition( start );
+                        track->SetEnd( VECTOR2I( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
+                        track->SetWidth( width );
+                        track->SetLayer( layer );
+                        track->SetNetCode( netCode );
 
-                        t->SetPosition( start );
-                        t->SetEnd( end );
-                        t->SetWidth( width );
-                        t->SetLayer( layer );
-                        t->SetNetCode( netCode );
-
-                        m_board->Add( t );
-
-                        start = end;
-                        angle -= delta_angle;
+                        m_board->Add( track );
                     }
-
-                    PCB_TRACK*  t = new PCB_TRACK( m_board );
-
-                    t->SetPosition( start );
-                    t->SetEnd( VECTOR2I( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
-                    t->SetWidth( width );
-                    t->SetLayer( layer );
-                    t->SetNetCode( netCode );
-
-                    m_board->Add( t );
                 }
                 else
                 {
