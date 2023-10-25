@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 12:12-0700\n"
-"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"PO-Revision-Date: 2023-10-26 04:31+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -1467,9 +1467,8 @@ msgid "KiCad Image Converter"
 msgstr "Conversor de imagens do KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
-msgstr "Arquivos da imagem"
+msgstr "Arquivos de imagem"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:278 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:73 pagelayout_editor/menubar.cpp:63
@@ -1503,9 +1502,8 @@ msgid "Image Files"
 msgstr "Arquivos da imagem"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Selecione o arquivo da folha de desenho"
+msgstr "Criar arquivo de folha de desenho"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -3503,7 +3501,7 @@ msgstr "Básico"
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
@@ -3513,169 +3511,147 @@ msgstr "Teste"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Justificação"
+msgstr "Autenticação"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Nome base"
+msgstr "Nome de usuário"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
-#, fuzzy
 msgid "Password"
-msgstr "Senha:"
+msgstr "Senha"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Mensagens:"
+msgstr "Mensagem do commit:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
-#, fuzzy
 msgid "Author:"
-msgstr "Autor"
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
-msgstr ""
+msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:150
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Componente: o nome não pode estar vazio."
+msgstr "A mensagem de commit não pode estar vazia"
 
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:370
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Digite a senha da chave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
-#, fuzzy
 msgid "Test connection"
-msgstr "Seleciona conexão"
+msgstr "Testar a conexão"
 
 #: common/dialogs/git/dialog_git_repository.cpp:326
-#, fuzzy
 msgid "Connection successful"
-msgstr "O arquivo foi gerado com sucesso."
+msgstr "Conexão bem sucedida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Não foi possível abrir o arquivo compactado."
+msgstr "Não foi possível conectar ao '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Não foi possível abrir o arquivo compactado."
+msgstr "Não foi possível abrir a chave privada '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "O nome do pino é inválido"
+msgstr "Chave SSH inválida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "O arquivo selecionado é inválido ou pode estar corrompido!"
+msgstr "O arquivo selecionado não é uma chave privada SSH válida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Não foi possível encontrar o arquivo da biblioteca '%s'"
+msgstr "Não foi possível abrir a chave pública '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Missing information"
-msgstr "Footprint faltando"
+msgstr "Informações ausentes"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Digite a url do repositório plenamente credenciada"
+msgstr "Digite um nome para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Digite a url do repositório plenamente credenciada"
+msgstr "Digite uma URL para o repositório"
 
 #: common/dialogs/git/dialog_git_repository.cpp:431
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Senha:"
+msgstr "Senha da chave SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Rotação"
+msgstr "Localização"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Nome da conexão"
+msgstr "Tipo da conexão"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "Arquivo local"
+msgstr "Local"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Privado"
+msgstr "Chave privado SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Selecione um arquivo"
+msgstr "Selecione o arquivo da chave privada SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Nome do usuário:"
+msgstr "Nome de usuário"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Repositório"
+msgstr "Repositório do Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Troca da ramificação do Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Selecione ou insira um nome do ramo:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Ramo"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Último commit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Atualizado"
+msgstr "Última atualização"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3691,27 +3667,23 @@ msgstr "Adicione"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Dados de commit do Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Utilizar nome de rede padrão"
+msgstr "Usar valores padrão"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Nome da área:"
+msgstr "Nome do autor:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Autor"
+msgstr "E-mail do autor:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Gerir os repositórios"
+msgstr "Repositórios Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3735,19 +3707,16 @@ msgid "Status"
 msgstr "Condição geral"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Adicione um repositório"
+msgstr "Adicionar um novo repositório"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Edita as propriedades do footprint"
+msgstr "Editar as propriedades do repositório"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Remover o repositório"
+msgstr "Remover o repositório GIT"
 
 #: common/dialogs/panel_color_settings.cpp:50
 #: common/dialogs/panel_color_settings.cpp:51
@@ -3990,9 +3959,8 @@ msgstr ""
 "cores do sistema"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Tamanho do canto:"
+msgstr "Tamanho do ícone da barra de ferramentas:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4003,7 +3971,7 @@ msgstr "Pequeno"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Use ícones compactos nas barras de ferramentas"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:802
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1208
@@ -4023,7 +3991,7 @@ msgstr "Normal"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "Usar o tamanho padrão do ícone do KiCad nas barras de ferramentas"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4033,7 +4001,7 @@ msgstr "Grande"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Use ícones maiores nas barras de ferramentas"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 #: common/dialogs/panel_common_settings_base.cpp:195
@@ -4455,9 +4423,8 @@ msgstr ""
 "Esta escala resulta numa imagem muito grande (%.1f mm ou %.2f). Tem certeza?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Escala"
+msgstr "Escala:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 #: common/dialogs/panel_image_editor_base.cpp:47
@@ -4465,9 +4432,8 @@ msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Converte as linhas em retângulos"
+msgstr "Converter para tons de cinza"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -5228,9 +5194,8 @@ msgid "Hotkeys"
 msgstr "Teclas de atalho"
 
 #: common/eda_base_frame.cpp:1083 kicad/project_tree_pane.cpp:968
-#, fuzzy
 msgid "Version Control"
-msgstr "Somente o que foi selecionado"
+msgstr "Controle de versão"
 
 #: common/eda_base_frame.cpp:1090 common/eda_base_frame.cpp:1080
 msgid "Data Collection"
@@ -5538,14 +5503,12 @@ msgstr "Gráfico"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Referência"
+msgstr "imagem de referência"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:188
-#, fuzzy
 msgid "Generator"
-msgstr "Gere"
+msgstr "Gerador"
 
 #: common/eda_item.cpp:349 common/eda_item.cpp:381
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:190
@@ -6119,18 +6082,16 @@ msgid "Vertical Justification"
 msgstr "Justifica verticalmente"
 
 #: common/eda_units.cpp:437 common/status_popup.cpp:152
-#, fuzzy
 msgid "min"
-msgstr "em"
+msgstr "min"
 
 #: common/eda_units.cpp:445
-#, fuzzy
 msgid "opt"
-msgstr "Acima"
+msgstr "opc"
 
 #: common/eda_units.cpp:453 common/status_popup.cpp:153
 msgid "max"
-msgstr ""
+msgstr "máx"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -6354,258 +6315,230 @@ msgstr "Não é possível copiar o arquivo '%s'."
 
 #: common/gestfich.cpp:308
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Nome inválido de diretório, não é possível remover a raiz"
 
 #: common/gestfich.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "A unidade '%s' não termina com 'mil'."
+msgstr "O diretório '%s' não existe"
 
 #: common/gestfich.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' não foi analisado corretamente."
+msgstr "'%s' não é um diretório"
 
 #: common/gestfich.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Removendo diretório %s"
+msgstr "Houve um erro ao remover o diretório '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Não foi possível criar a pasta de saída '%s'."
+msgstr "Não foi possível criar o diretório '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Não foi possível carregar a imagem de '%s'."
+msgstr "Não foi possível clonar o repositório '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Não foi possível carregar a imagem de '%s'."
+msgstr "Não foi possível pesquisar '%s' remotamente"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Não foi possível encontrar o modelo IBIS '%s'"
+msgstr "Não foi possível conectar em '%s' remotamente"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Não foi possível encontrar o modelo IBIS '%s'"
+msgstr "Não foi possível obter dados remotamente de '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Não foi possível ler o arquivo "
+msgstr "Não foi possível ler 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Não foi possível abrir o CvPcb"
+msgstr "Não foi possível procurar pelo commit"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Não foi possível ler o arquivo "
+msgstr "Não foi possível analisar a mesclagem"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "HEAD inválido.  Não foi possível mesclar."
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Não foi possível obter o cabeçalho do repositório"
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "Não foi possível encontrar o item Spice com referência ao '%s'"
+msgstr "Não foi possível obter o OID de referência para a referência '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:45
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Houve uma falha ao executar a operação de checkout."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Não foi possível carregar a imagem de '%s'."
+msgstr "Não foi possível procurar pelo commit '{}'"
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Não foi possível ler o arquivo "
+msgstr "Não foi possível mesclar os commits"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Não foi possível abrir o arquivo de biblioteca."
+msgstr "Não foi possível obter o índice do repositório"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Não foi possível abrir o arquivo de configuração"
+msgstr "Não foi possível obter o iterador de conflitos"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Troque"
+msgstr "Alterado"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Adicionado"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Não foi possível abrir o arquivo compactado."
+msgstr "Não foi possível procurar remotamente"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Não foi possível abrir o arquivo compactado."
+msgstr "Não foi possível se conectar remotamente"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Não foi possível usar o OpenGL"
+msgstr "Não foi possível fazer o push remotamente"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Recebido %u de %u objetos"
 
 #: common/git/kicad_git_common.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Atualizado %s de %s para %s."
+msgstr "* [atualizado] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Região %s %s"
+msgstr "* [novo] %s %s"
 
 #: common/git/kicad_git_common.cpp:466
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Escrevendo objetos: %d%% (%d/%d), %d bytes"
 
 #: common/git/kicad_git_common.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Grade: %s (%s)"
+msgstr "* [rejeitado] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Atualizado"
+msgstr "[atualizado] %s"
 
 #: common/git/kicad_git_errors.cpp:30
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Formato inválido do relatório\n"
+msgstr "Repositório inválido."
 
 #: common/git/kicad_git_errors.cpp:31
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Houve uma falha ao criar o arquivo."
+msgstr "Houve uma falha ao aplicar as alterações."
 
 #: common/git/kicad_git_errors.cpp:32
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Houve uma falha ao salvar a recuperação da biblioteca %s."
+msgstr "Houve uma falha ao mesclar os ramos."
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Não é possível carregar a url do repositório"
+msgstr "Houve uma falha ao clonar o repositório."
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Remover o repositório"
+msgstr "O repositório remoto não foi encontrado."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Houve uma falha na autenticação do repositório remoto."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Branch not found."
-msgstr "Pino %s não foi encontrado."
+msgstr "O ramo não foi encontrado."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Houve uma falha ao criar o arquivo."
+msgstr "Houve uma falha ao criar o ramo."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Falhou ao criar \"%s\""
+msgstr "Houve uma falha ao excluir o ramo."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "O arquivo não foi encontrado durante a operação de checkout."
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Foram encontrados conflitos de mesclagem."
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Foram encontrados conflitos de rebase."
 
 #: common/git/kicad_git_errors.cpp:53
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Não foi possível analisar o repository.json armazenado localmente."
+msgstr "Houve uma falha ao obter as alterações a partir do repositório remoto."
 
 #: common/git/kicad_git_errors.cpp:54
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Não foi possível analisar o repository.json armazenado localmente."
+msgstr "Houve um falha ao enviar as alterações para o repositório remoto."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Nenhum ramo upstream foi configurado."
 
 #: common/git/kicad_git_errors.cpp:56
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Não foi possível analisar o repository.json armazenado localmente."
+msgstr "Houve uma falha ao estabelecer conexão com o repositório remoto."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s não foi encontrado"
+msgstr "A tag não foi encontrada."
 
 #: common/git/kicad_git_errors.cpp:60
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Houve uma falha ao criar o arquivo."
+msgstr "Houve uma falha ao criar a tag."
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Falhou ao criar \"%s\""
+msgstr "Houve uma falha ao excluir a tag."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "Erro desconhecido"
+msgstr "Erro desconhecido."
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "No error."
-msgstr "Nenhum erro foi encontrado."
+msgstr "Nenhum erro."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "erros"
+msgstr "Sem erro"
 
 #: common/grid_tricks.cpp:353 common/tool/actions.cpp:193
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:117
@@ -7683,9 +7616,8 @@ msgid "KiCad Classic"
 msgstr "KiCad clássico"
 
 #: common/status_popup.cpp:151
-#, fuzzy
 msgid "current"
-msgstr "Corrente"
+msgstr "atual"
 
 #: common/template_fieldnames.cpp:68
 #, c-format
@@ -8389,14 +8321,12 @@ msgid "Open product documentation in a web browser"
 msgstr "Abrir a documentação do produto num navegador de internet"
 
 #: common/tool/actions.cpp:966
-#, fuzzy
 msgid "About KiCad"
-msgstr "&Sobre o KiCad"
+msgstr "Sobre o KiCad"
 
 #: common/tool/actions.cpp:967
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Exibe o diálogo Sobre o KiCad"
+msgstr "Abre o diálogo sobre"
 
 #: common/tool/actions.cpp:976 common/tool/actions.cpp:968
 msgid "List Hotkeys..."
@@ -10593,9 +10523,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Abrir a caixa de diálogo da configuração do esquema... diálogo"
 
 #: eeschema/dialogs/dialog_erc.cpp:642
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Espaçamento mínimo de grade:"
+msgstr "Editar o espaçamento da grade de conexão..."
 
 #: eeschema/dialogs/dialog_erc.cpp:735
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -12630,9 +12559,8 @@ msgid "PDF Options"
 msgstr "Opções do PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Gere pop-ups de propriedade para os foot prints de trás"
+msgstr "Gerar pop-ups de propriedade"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:159
@@ -13764,14 +13692,12 @@ msgid "Simulation Model Editor"
 msgstr "Editor do modelo de simulação"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
-msgstr "Escolha um símbolo"
+msgstr "Escolha o símbolo"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:63
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Símbolo de alimentação"
+msgstr "Escolha o símbolo de alimentação"
 
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:49
 #: pcbnew/footprint_chooser_frame.cpp:98
@@ -13893,9 +13819,8 @@ msgid "The Item Number column cannot be grouped by."
 msgstr "A coluna número do item não pode ser agrupada por."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1187
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Lista de materiais"
+msgstr "Arquivo de saída da lista de materiais"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1199
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1208
@@ -13926,24 +13851,23 @@ msgstr ""
 "salvos?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1238
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "Nenhum nome de arquivo foi inserido"
+msgstr "Nenhum nome de arquivo foi definido no exportador"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1252
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Não foi possível criar o ficheiro \"%s\"."
+msgstr "Não foi possível abrir/criar o caminho '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "Não foi possível gravar o BOM gerado em '%s'."
+msgstr "Não foi possível gerar o BOM em '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "Não foi possível gravar o BOM gerado em '%s'."
+msgstr "Não foi possível gravar o BOM em '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1275
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1266
@@ -15006,9 +14930,8 @@ msgid "Largest"
 msgstr "Maior"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Texto da conexão:"
+msgstr "Grade de conexão:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
@@ -15353,9 +15276,8 @@ msgid "Error Loading Library"
 msgstr "Houve um erro ao carregar a biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:612
-#, fuzzy
 msgid "Add Library"
-msgstr "Adicione a Biblioteca…"
+msgstr "Adicionar biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:626
 msgid "Warning: Duplicate Nickname"
@@ -15923,9 +15845,9 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "Folhas com nomes duplicados dentro da folha informada"
 
 #: eeschema/erc_item.cpp:51
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "Símbolo do pino ou da extremidade de fio fora da grade"
+msgstr ""
+"O símbolo do pino ou da extremidade do fio está fora da grade de conexão"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
@@ -16141,9 +16063,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "As alterações feitas no arquivo do esquema não foram salvas"
 
 #: eeschema/files-io.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Arquivos esquemáticos do LTspice"
+msgstr "Arquivo esquemático não compatível '%s'."
 
 #: eeschema/files-io.cpp:257 eeschema/files-io.cpp:250
 msgid ""
@@ -16484,9 +16406,8 @@ msgstr "Pés"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:201
 #: pcbnew/tools/drawing_tool.cpp:1555 pcbnew/tools/drawing_tool.cpp:1646
-#, fuzzy
 msgid "Import Graphics"
-msgstr "Importar gráficos"
+msgstr "Importação de gráficos"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:208
@@ -17465,9 +17386,8 @@ msgid "Hierarchical Label '%s'"
 msgstr "Rótulo hierárquico '%s'"
 
 #: eeschema/sch_label.cpp:2148
-#, fuzzy
 msgid "Pin length"
-msgstr "Comprimento do pino:"
+msgstr "Comprimento do pino"
 
 #: eeschema/sch_line.cpp:99
 msgid "Graphic Line"
@@ -17769,13 +17689,13 @@ msgstr ""
 "não foi carregada."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
 msgstr ""
-"Quantidade inconsistentes de pinos no símbolo %s em comparação com o "
-"definido na parte %s. A peça não foi carregada."
+"Quantidade de pinos inconsistentes no símbolo %s em comparação com o "
+"definido na peça %s. A peça não foi carregada."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:367
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:365
@@ -18032,9 +17952,10 @@ msgstr ""
 "'cadstarpcblib' será o predefinido."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:278
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "Não é possível criar o footprint da biblioteca '%s'."
+msgstr ""
+"Não foi possível encontrar o arquivo .csa correspondente a biblioteca '%s'."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:63
 msgid "CADSTAR Schematic Archive files"
@@ -18068,13 +17989,13 @@ msgid "KiCad database library files"
 msgstr "Arquivos da biblioteca do banco de dados do KiCad"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
-"'%s' é um arquivo esquemático de formato binário do Eagle; somente esquemas "
-"no formato Eagle XML podem ser importados."
+"'%s' é um arquivo em formato binário do Eagle; apenas esquemas no formato "
+"Eagle XML podem ser importados."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:644
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3156
@@ -18105,9 +18026,8 @@ msgid "Eagle XML schematic files"
 msgstr "Arquivos do esquemático XML do Eagle"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.h:105
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Ver. do Eagle Arquivos da biblioteca XML PCB 6.x"
+msgstr "Arquivos da biblioteca Eagle XML"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:152
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:302
@@ -20502,24 +20422,23 @@ msgstr ""
 "<b>Pino %s fora da grade</b> %s na região <b> (%s, %s)</b> na unidade %c."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Pino %s fora da grade</b> %s na região <b>(%s, %s)</b>."
+msgstr "<b>O círculo gráfico tem um raio = 0</b> na posição <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Pino %s fora da grade</b> %s na região <b>(%s, %s)</b>."
+msgstr ""
+"<b>O retângulo gráfico tem um tamanho = 0</b> na posição <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Verificador de símbolos"
+msgstr "Seletor de símbolos"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "Visualizador dos símbolos da biblioteca do KiCad"
+msgstr "Visualizador de diferenças de símbolos do KiCad"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 #: eeschema/symbol_viewer_frame.cpp:186
@@ -21077,9 +20996,8 @@ msgid "(failed to load)"
 msgstr "(houve uma falha ao carregar)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Navegador da biblioteca dos símbolos"
+msgstr "Navegador da biblioteca de símbolos do KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021 eeschema/symbol_viewer_frame.cpp:1269
@@ -23059,9 +22977,8 @@ msgid "Page '%s' not found."
 msgstr "A página '%s' não foi encontrada."
 
 #: eeschema/tools/simulator_control.cpp:94
-#, fuzzy
 msgid "Open Simulation Workbook"
-msgstr "Abrir a pasta de trabalho da simulação"
+msgstr "Abrir a pasta de trabalho de simulação"
 
 #: eeschema/tools/simulator_control.cpp:113
 msgid "noname"
@@ -23109,9 +23026,8 @@ msgstr "Não há nenhum símbolo para exportar"
 
 #: eeschema/tools/symbol_editor_control.cpp:578
 #: pcbnew/footprint_edit_frame.cpp:1353
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "Exporta a visualização como um PNG..."
+msgstr "Exportar a visualização como um PNG"
 
 #: eeschema/tools/symbol_editor_control.cpp:589
 #, c-format
@@ -23173,9 +23089,8 @@ msgid "Recently Used"
 msgstr "Utilizado recentemente"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:163
-#, fuzzy
 msgid "Already Placed"
-msgstr "Move e posiciona"
+msgstr "Já posicionado"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:503
 #: eeschema/dialogs/dialog_choose_symbol.cpp:442
@@ -24295,9 +24210,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr "Nenhuma das camadas Gerber contém dados"
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "Importa arquivo não KiCad da placa"
+msgstr "Exportar como arquivo de placa do KiCad"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -25127,9 +25041,8 @@ msgstr ""
 "Tema das cores que será usado (o padrão será as configurações do esquema)"
 
 #: kicad/cli/command_sch_export_plot.cpp:76
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "Gere pop-ups de propriedade para os foot prints de trás"
+msgstr "Não gerar pop-ups de propriedade em PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:81
 #: kicad/cli/command_sch_export_plot.cpp:73
@@ -25432,9 +25345,8 @@ msgid "%d package update(s) avaliable"
 msgstr "Há Atualização(ões) do(s) pacote(s) %d disponível(is)"
 
 #: kicad/kicad_manager_frame.cpp:738
-#, fuzzy
 msgid "Edit File in Text Editor"
-msgstr "Edita num editor de texto"
+msgstr "Editar o arquivo num editor de texto"
 
 #: kicad/kicad_manager_frame.cpp:820 kicad/kicad_manager_frame.cpp:810
 msgid "[no project loaded]"
@@ -25641,9 +25553,8 @@ msgstr ""
 "alterações pendentes?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:289
-#, fuzzy
 msgid "Install Package"
-msgstr "Pacote de instalação"
+msgstr "Instalar pacote"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:402
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -25793,9 +25704,8 @@ msgid "Error downloading package"
 msgstr "Houve um erro ao baixar o pacote"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:528
-#, fuzzy
 msgid "Save Package"
-msgstr "Salve o pacote"
+msgstr "Salvar pacote"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:541
 #: kicad/pcm/dialogs/panel_packages_view.cpp:538
@@ -26246,71 +26156,63 @@ msgstr "Mova para a lixeira"
 
 #: kicad/project_tree_pane.cpp:916
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "Adicionar o projeto ao Version Control..."
 
 #: kicad/project_tree_pane.cpp:917
-#, fuzzy
 msgid "Initialize a new repository"
-msgstr "Não foi possível analisar o repositório: %s"
+msgstr "Inicializar um novo repositório"
 
 #: kicad/project_tree_pane.cpp:921
-#, fuzzy
 msgid "Commit Project..."
-msgstr "&Projeto…"
+msgstr "Aplicar o commit no projeto..."
 
 #: kicad/project_tree_pane.cpp:922 kicad/project_tree_pane.cpp:936
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Aplicar o commit com as alterações no repositório local"
 
 #: kicad/project_tree_pane.cpp:925
 msgid "Push"
-msgstr ""
+msgstr "Enviar"
 
 #: kicad/project_tree_pane.cpp:926
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "Enviar as alterações locais para o repositório remoto"
 
 #: kicad/project_tree_pane.cpp:929
 msgid "Pull"
-msgstr ""
+msgstr "Obter"
 
 #: kicad/project_tree_pane.cpp:930
-#, fuzzy
 msgid "Pull changes from remote repository into local"
-msgstr "Aplicar alterações do esquema na PCI"
+msgstr "Obter as alterações do repositório remoto localmente"
 
 #: kicad/project_tree_pane.cpp:935
-#, fuzzy
 msgid "Commit File..."
-msgstr "Editar Campo…"
+msgstr "Aplicar o commit no arquivo…"
 
 #: kicad/project_tree_pane.cpp:950
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Alterna para a camada interna 1"
+msgstr "Alternar para o ramo "
 
 #: kicad/project_tree_pane.cpp:955
 msgid "Other..."
 msgstr "Outro…"
 
 #: kicad/project_tree_pane.cpp:956
-#, fuzzy
 msgid "Switch to a different branch"
-msgstr "Alterna para um método diferente da edição de arcos"
+msgstr "Alternar para um ramo diferente"
 
 #: kicad/project_tree_pane.cpp:959
-#, fuzzy
 msgid "Switch to Branch"
-msgstr "Alterna para o editor de PCI"
+msgstr "Alternar para o ramo"
 
 #: kicad/project_tree_pane.cpp:963
-#, fuzzy
 msgid "Remove Version Control"
-msgstr "Remover o canto da região"
+msgstr "Remover o Version Control"
 
 #: kicad/project_tree_pane.cpp:964
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "Excluir todos os arquivos do version control do diretório do projeto."
 
 #: kicad/project_tree_pane.cpp:1022 kicad/project_tree_pane.cpp:824
 #, c-format
