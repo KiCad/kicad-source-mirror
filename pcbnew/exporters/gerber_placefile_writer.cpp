@@ -132,6 +132,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     brd_plotter.SetLayerSet( LSET( aLayer ) );
     int cmp_count = 0;
     bool allowUtf8 = true;
+    const bool quoteOption = false;
 
     // Plot components data: position, outlines, pad1 and other pads.
     for( FOOTPRINT* footprint : fp_list )
@@ -141,9 +142,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_POSITION );
 
         // Add object attribute: component reference to flash (mainly useful for users)
-        // using quoted UTF8 string
+        // using not quoted UTF8 string
         wxString ref = ConvertNotAllowedCharsInGerber( footprint->Reference().GetShownText( false ),
-                                                       allowUtf8, true );
+                                                       allowUtf8, quoteOption );
 
         gbr_metadata.SetCmpReference( ref );
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
@@ -164,15 +165,15 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
         // Add component value info:
         pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( footprint->Value().GetShownText( false ),
-                                                            allowUtf8, true );
+                                                            allowUtf8, quoteOption );
 
         // Add component footprint info:
         wxString fp_info = FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
-        pnpAttrib.m_Footprint = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
+        pnpAttrib.m_Footprint = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, quoteOption );
 
         // Add footprint lib name:
         fp_info = FROM_UTF8( footprint->GetFPID().GetLibNickname().c_str() );
-        pnpAttrib.m_LibraryName = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
+        pnpAttrib.m_LibraryName = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, quoteOption );
 
         gbr_metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
 
@@ -247,9 +248,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 gbr_metadata.SetApertureAttrib(
                         GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POSITION );
 
-                gbr_metadata.SetPadName( pad1->GetNumber(), allowUtf8, true );
+                gbr_metadata.SetPadName( pad1->GetNumber(), allowUtf8, quoteOption );
 
-                gbr_metadata.SetPadPinFunction( pad1->GetPinFunction(), allowUtf8, true );
+                gbr_metadata.SetPadPinFunction( pad1->GetPinFunction(), allowUtf8, quoteOption );
 
                 gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
@@ -286,9 +287,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 if( !pad->IsOnLayer( aLayer ) )
                     continue;
 
-                gbr_metadata.SetPadName( pad->GetNumber(), allowUtf8, true );
+                gbr_metadata.SetPadName( pad->GetNumber(), allowUtf8, quoteOption );
 
-                gbr_metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, true );
+                gbr_metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, quoteOption );
 
                 // Flashes a round, 0 sized round shape at pad position
                 plotter.FlashPadCircle( pad->GetPosition(), other_pads_mark_size, FILLED,
