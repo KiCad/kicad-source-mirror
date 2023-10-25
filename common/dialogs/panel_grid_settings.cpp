@@ -41,7 +41,9 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
                                           wxWindow* aEventSource, APP_SETTINGS_BASE* aCfg,
                                           FRAME_T aFrameType ) :
         PANEL_GRID_SETTINGS_BASE( aParent ),
-        m_unitsProvider( aUnitsProvider ), m_cfg( aCfg ), m_frameType( aFrameType ),
+        m_unitsProvider( aUnitsProvider ),
+        m_cfg( aCfg ),
+        m_frameType( aFrameType ),
         m_eventSource( aEventSource )
 {
     RebuildGridSizes();

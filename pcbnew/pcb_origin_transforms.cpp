@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Reece R. Pollack <reece@his.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <wx/debug.h>     // for wxASSERT
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <pcb_origin_transforms.h>
 
 using COORD_TYPE = ORIGIN_TRANSFORMS::COORD_TYPES_T;
@@ -119,10 +120,16 @@ int PCB_ORIGIN_TRANSFORMS::getUserYOrigin() const
 
 bool PCB_ORIGIN_TRANSFORMS::invertXAxis() const
 {
-    return m_pcbBaseFrame.GetPcbNewSettings()->m_Display.m_DisplayInvertXAxis;
+    if( m_pcbBaseFrame.GetFrameType() == FRAME_PCB_EDITOR )
+        return m_pcbBaseFrame.GetPcbNewSettings()->m_Display.m_DisplayInvertXAxis;
+    else
+        return m_pcbBaseFrame.GetFootprintEditorSettings()->m_DisplayInvertXAxis;
 }
 
 bool PCB_ORIGIN_TRANSFORMS::invertYAxis() const
 {
-    return m_pcbBaseFrame.GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis;
+    if( m_pcbBaseFrame.GetFrameType() == FRAME_PCB_EDITOR )
+        return m_pcbBaseFrame.GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis;
+    else
+        return m_pcbBaseFrame.GetFootprintEditorSettings()->m_DisplayInvertYAxis;
 }

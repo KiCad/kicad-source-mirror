@@ -43,6 +43,8 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_Display(),
         m_UserGrid(),
         m_PolarCoords( false ),
+        m_DisplayInvertXAxis( false ),
+        m_DisplayInvertYAxis( false ),
         m_RotationAngle( ANGLE_90 ),
         m_Use45Limit( true ),
         m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
@@ -101,6 +103,12 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
             &m_PolarCoords, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "origin_invert_x_axis",
+            &m_DisplayInvertXAxis, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "origin_invert_y_axis",
+            &m_DisplayInvertYAxis, false ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<int>( "editing.rotation_angle",
             [this] () -> int

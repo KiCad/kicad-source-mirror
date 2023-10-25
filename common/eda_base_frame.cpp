@@ -1140,6 +1140,7 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
         book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
@@ -1150,10 +1151,10 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
         book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
 
         if( GetFrameType() == FRAME_PCB_DISPLAY3D )
             expand.push_back( (int) book->GetPageCount() );

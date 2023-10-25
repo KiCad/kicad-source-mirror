@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,13 +199,20 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
     frame()->PushTool( aEvent );
 
+    bool invertXAxis = displayOptions().m_DisplayInvertXAxis;
+    bool invertYAxis = displayOptions().m_DisplayInvertYAxis;
+
+    if( IsFootprintFrame() )
+    {
+        invertXAxis = frame()->GetFootprintEditorSettings()->m_DisplayInvertXAxis;
+        invertYAxis = frame()->GetFootprintEditorSettings()->m_DisplayInvertYAxis;
+    }
+
     TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     PCB_GRID_HELPER            grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
     bool                       originSet = false;
     EDA_UNITS                  units = frame()->GetUserUnits();
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, pcbIUScale, units,
-                                      displayOptions().m_DisplayInvertXAxis,
-                                      displayOptions().m_DisplayInvertYAxis );
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, pcbIUScale, units, invertXAxis, invertYAxis );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -323,8 +330,16 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::updatePreferences ) )
         {
-            ruler.UpdateDir( displayOptions().m_DisplayInvertXAxis,
-                             displayOptions().m_DisplayInvertYAxis );
+            invertXAxis = displayOptions().m_DisplayInvertXAxis;
+            invertYAxis = displayOptions().m_DisplayInvertYAxis;
+
+            if( IsFootprintFrame() )
+            {
+                invertXAxis = frame()->GetFootprintEditorSettings()->m_DisplayInvertXAxis;
+                invertYAxis = frame()->GetFootprintEditorSettings()->m_DisplayInvertYAxis;
+            }
+
+            ruler.UpdateDir( invertXAxis, invertYAxis );
 
             view.Update( &ruler, KIGFX::GEOMETRY );
             canvas()->Refresh();

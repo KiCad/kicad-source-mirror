@@ -69,6 +69,8 @@ public:
     USER_GRID m_UserGrid;
 
     bool m_PolarCoords;
+    bool m_DisplayInvertXAxis;
+    bool m_DisplayInvertYAxis;
 
     EDA_ANGLE m_RotationAngle;
 

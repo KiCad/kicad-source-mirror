@@ -25,13 +25,14 @@
 #ifndef PANEL_PCBNEW_DISPLAY_ORIGIN_H
 #define PANEL_PCBNEW_DISPLAY_ORIGIN_H 1
 
+#include <frame_type.h>
 #include "panel_pcbnew_display_origin_base.h"
 
 
 class PANEL_PCBNEW_DISPLAY_ORIGIN : public PANEL_PCBNEW_DISPLAY_ORIGIN_BASE
 {
 public:
-    PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent );
+    PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent, APP_SETTINGS_BASE* aCfg, FRAME_T aFrameType );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -39,7 +40,11 @@ public:
     void ResetPanel() override;
 
 private:
-    void loadPCBSettings( PCBNEW_SETTINGS* aCfg );
+    void loadSettings( APP_SETTINGS_BASE* aCfg );
+
+private:
+    APP_SETTINGS_BASE* m_cfg;
+    FRAME_T            m_frameType;
 };
 
 

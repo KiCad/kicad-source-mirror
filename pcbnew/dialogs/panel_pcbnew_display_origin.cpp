@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,37 +25,52 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <panel_pcbnew_display_origin.h>
 
 
-PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent ) :
-        PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( aParent )
+PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent,
+                                                          APP_SETTINGS_BASE* aCfg,
+                                                          FRAME_T aFrameType ) :
+        PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( aParent ),
+        m_cfg( aCfg ),
+        m_frameType( aFrameType )
 {
+    m_DisplayOrigin->Show( m_frameType == FRAME_PCB_EDITOR );
 }
 
 
-void PANEL_PCBNEW_DISPLAY_ORIGIN::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
+void PANEL_PCBNEW_DISPLAY_ORIGIN::loadSettings( APP_SETTINGS_BASE* aCfg )
 {
-    int origin = 0;
-
-    switch( aCfg->m_Display.m_DisplayOrigin )
+    if( m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
-    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE: origin = 0; break;
-    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX:  origin = 1; break;
-    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID: origin = 2; break;
-    }
+        FOOTPRINT_EDITOR_SETTINGS* cfg = static_cast<FOOTPRINT_EDITOR_SETTINGS*>( aCfg );
 
-    m_DisplayOrigin->SetSelection( origin );
-    m_XAxisDirection->SetSelection( aCfg->m_Display.m_DisplayInvertXAxis ? 1 : 0 );
-    m_YAxisDirection->SetSelection( aCfg->m_Display.m_DisplayInvertYAxis ? 0 : 1 );
+        m_XAxisDirection->SetSelection( cfg->m_DisplayInvertXAxis ? 1 : 0 );
+        m_YAxisDirection->SetSelection( cfg->m_DisplayInvertYAxis ? 0 : 1 );
+    }
+    else
+    {
+        PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( aCfg );
+        int              origin = 0;
+
+        switch( cfg->m_Display.m_DisplayOrigin )
+        {
+        case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE: origin = 0; break;
+        case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX:  origin = 1; break;
+        case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID: origin = 2; break;
+        }
+
+        m_DisplayOrigin->SetSelection( origin );
+        m_XAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertXAxis ? 1 : 0 );
+        m_YAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertYAxis ? 0 : 1 );
+    }
 }
 
 
 bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-
-    loadPCBSettings( cfg );
+    loadSettings( m_cfg );
 
     return true;
 }
@@ -63,17 +78,27 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
 
 bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-
-    switch( m_DisplayOrigin->GetSelection() )
+    if( m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
-    case 0: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE; break;
-    case 1: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;  break;
-    case 2: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID; break;
-    }
+        FOOTPRINT_EDITOR_SETTINGS* cfg = static_cast<FOOTPRINT_EDITOR_SETTINGS*>( m_cfg );
 
-    cfg->m_Display.m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
-    cfg->m_Display.m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
+        cfg->m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
+        cfg->m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
+    }
+    else
+    {
+        PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( m_cfg );
+
+        switch( m_DisplayOrigin->GetSelection() )
+        {
+        case 0: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE; break;
+        case 1: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;  break;
+        case 2: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID; break;
+        }
+
+        cfg->m_Display.m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;
+        cfg->m_Display.m_DisplayInvertYAxis = m_YAxisDirection->GetSelection() == 0;
+    }
 
     return true;
 }
@@ -81,10 +106,20 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
 
 void PANEL_PCBNEW_DISPLAY_ORIGIN::ResetPanel()
 {
-    PCBNEW_SETTINGS cfg;
-    cfg.Load();           // Loading without a file will init to defaults
+    if( m_frameType == FRAME_FOOTPRINT_EDITOR )
+    {
+        FOOTPRINT_EDITOR_SETTINGS cfg;
+        cfg.Load();                     // Loading without a file will init to defaults
 
-    loadPCBSettings( &cfg );
+        loadSettings( &cfg );
+    }
+    else
+    {
+        PCBNEW_SETTINGS cfg;
+        cfg.Load();                     // Loading without a file will init to defaults
+
+        loadSettings( &cfg );
+    }
 }
 
 
