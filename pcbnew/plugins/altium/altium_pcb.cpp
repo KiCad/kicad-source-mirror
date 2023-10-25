@@ -1737,11 +1737,32 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
 
-        // TODO: more flexible rule parsing
-        const ARULE6* clearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
+        const ARULE6* planeClearanceRule = GetRuleDefault( ALTIUM_RULE_KIND::PLANE_CLEARANCE );
+        const ARULE6* zoneClearanceRule = GetRule( ALTIUM_RULE_KIND::CLEARANCE,
+                                                   wxT( "PolygonClearance" ) );
+        int planeLayers = 0;
+        int signalLayers = 0;
+        int clearance = 0;
 
-        if( clearanceRule != nullptr )
-            zone->SetLocalClearance( clearanceRule->planeclearanceClearance );
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            LAYER_T layerType = m_board->GetLayerType( layer );
+
+            if( layerType == LT_POWER || LT_MIXED )
+                planeLayers++;
+
+            if( layerType == LT_SIGNAL || LT_MIXED )
+                signalLayers++;
+        }
+
+        if( planeLayers > 0 && planeClearanceRule )
+            clearance = std::max( clearance, planeClearanceRule->planeclearanceClearance );
+
+        if( signalLayers > 0 && zoneClearanceRule )
+            clearance = std::max( clearance, zoneClearanceRule->clearanceGap );
+
+        if( clearance > 0 )
+            zone->SetLocalClearance( clearance );
 
         const ARULE6* polygonConnectRule = GetRuleDefault( ALTIUM_RULE_KIND::POLYGON_CONNECT );
 
