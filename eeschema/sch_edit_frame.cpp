@@ -2138,8 +2138,12 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    // update the References
+    // update the references, units, and intersheet-refs
     GetCurrentSheet().UpdateAllScreenReferences();
+
+    // dangling state can also have changed if different units with different pin locations are
+    // used
+    GetCurrentSheet().LastScreen()->TestDanglingEnds();
     SetSheetNumberAndCount();
     RefreshOperatingPointDisplay();
 
