@@ -1748,10 +1748,10 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         {
             LAYER_T layerType = m_board->GetLayerType( layer );
 
-            if( layerType == LT_POWER || LT_MIXED )
+            if( layerType == LT_POWER || layerType == LT_MIXED )
                 planeLayers++;
 
-            if( layerType == LT_SIGNAL || LT_MIXED )
+            if( layerType == LT_SIGNAL || layerType == LT_MIXED )
                 signalLayers++;
         }
 
