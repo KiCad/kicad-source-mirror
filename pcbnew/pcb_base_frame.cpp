@@ -925,11 +925,13 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_BASE_FRAME::GetViewerSettingsBase() const
     switch( GetFrameType() )
     {
     case FRAME_PCB_EDITOR:
-    case FRAME_FOOTPRINT_EDITOR:
-    case FRAME_FOOTPRINT_WIZARD:
     case FRAME_PCB_DISPLAY3D:
     default:
         return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    case FRAME_FOOTPRINT_EDITOR:
+    case FRAME_FOOTPRINT_WIZARD:
+        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
     case FRAME_FOOTPRINT_VIEWER:
     case FRAME_FOOTPRINT_CHOOSER:

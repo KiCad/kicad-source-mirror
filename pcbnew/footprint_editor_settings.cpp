@@ -37,7 +37,7 @@ const int fpEditSchemaVersion = 2;
 
 
 FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
-        APP_SETTINGS_BASE( "fpedit", fpEditSchemaVersion ),
+        PCB_VIEWERS_SETTINGS_BASE( "fpedit", fpEditSchemaVersion ),
         m_DesignSettings( nullptr, "fpedit.settings" ),
         m_MagneticItems(),
         m_Display(),
@@ -87,6 +87,18 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_import_export_path",
             &m_LastExportPath, "" ) );
+
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.graphics_fill",
+            &m_ViewersDisplay.m_DisplayGraphicsFill, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",
+            &m_ViewersDisplay.m_DisplayTextFill, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
+            &m_ViewersDisplay.m_DisplayPadFill, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_numbers",
+            &m_ViewersDisplay.m_DisplayPadNumbers, true ) );
 
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );

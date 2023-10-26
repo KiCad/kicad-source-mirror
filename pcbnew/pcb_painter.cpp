@@ -50,6 +50,7 @@
 #include <settings/settings_manager.h>
 #include <settings/cvpcb_settings.h>
 #include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -81,11 +82,13 @@ PCB_VIEWERS_SETTINGS_BASE* PCB_PAINTER::viewer_settings()
     switch( m_frameType )
     {
     case FRAME_PCB_EDITOR:
-    case FRAME_FOOTPRINT_EDITOR:
-    case FRAME_FOOTPRINT_WIZARD:
     case FRAME_PCB_DISPLAY3D:
     default:
         return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    case FRAME_FOOTPRINT_EDITOR:
+    case FRAME_FOOTPRINT_WIZARD:
+        return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
     case FRAME_FOOTPRINT_VIEWER:
     case FRAME_FOOTPRINT_CHOOSER:

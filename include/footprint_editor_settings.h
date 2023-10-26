@@ -27,7 +27,7 @@
 #include <project/board_project_settings.h>
 
 
-class FOOTPRINT_EDITOR_SETTINGS : public APP_SETTINGS_BASE
+class FOOTPRINT_EDITOR_SETTINGS : public PCB_VIEWERS_SETTINGS_BASE
 {
 public:
     struct AUI_PANELS

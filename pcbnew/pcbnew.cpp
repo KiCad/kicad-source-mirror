@@ -172,6 +172,14 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_FOOTPRINT_EDITOR );
         }
 
+        case PANEL_FP_ORIGINS_AXES:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
+            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_FOOTPRINT_EDITOR );
+        }
+
         case PANEL_FP_EDIT_OPTIONS:
         {
             EDA_BASE_FRAME* frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
@@ -210,17 +218,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case PANEL_PCB_DISPLAY_OPTS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
             return new PANEL_PCB_DISPLAY_OPTIONS( aParent, cfg );
-        }
-
-        case PANEL_FP_ORIGINS_AXES:
-        {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-
-            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_FOOTPRINT_EDITOR );
         }
 
         case PANEL_PCB_GRIDS:
@@ -239,6 +239,14 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                 SetUserUnits( frame->GetUserUnits() );
 
             return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_PCB_EDITOR );
+        }
+
+        case PANEL_PCB_ORIGINS_AXES:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+
+            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_PCB_EDITOR );
         }
 
         case PANEL_PCB_EDIT_OPTIONS:
@@ -270,14 +278,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_PCB_ACTION_PLUGINS:
             return new PANEL_PCBNEW_ACTION_PLUGINS( aParent );
-
-        case PANEL_PCB_ORIGINS_AXES:
-        {
-            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-
-            return new PANEL_PCBNEW_DISPLAY_ORIGIN( aParent, cfg, FRAME_PCB_EDITOR );
-        }
 
         case PANEL_3DV_DISPLAY_OPTIONS:
             return new PANEL_3D_DISPLAY_OPTIONS( aParent );
