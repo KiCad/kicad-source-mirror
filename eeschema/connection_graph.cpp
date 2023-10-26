@@ -613,30 +613,12 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     m_sheetList = aSheetList;
     std::set<SCH_ITEM*> dirty_items;
 
-    // If we update a sheet which shares the current sheet's SCH_SCREEN, then we're going to
-    // potentially mess up the current units, dangling states, etc.  So we have to make sure that
-    // the current sheet is done last so that its updates to its SCH_SCREEN will "stick".
-    SCH_SCREEN*    currentScreen = m_schematic->CurrentSheet().LastScreen();
-    bool           currentScreenMatched = false;
-    SCH_SHEET_LIST orderedSheetList;
-
     for( const SCH_SHEET_PATH& sheet : aSheetList )
     {
-        if( sheet.LastScreen() == currentScreen )
-            currentScreenMatched = true;
-
-        // If anything matches the current screen we're going to add the current sheet at the
-        // end, so don't bother adding it here (there's no point in updating it twice).
-        if( sheet != m_schematic->CurrentSheet() )
-            orderedSheetList.push_back( sheet );
-    }
-
-    if( currentScreenMatched )
-        orderedSheetList.push_back( m_schematic->CurrentSheet() );
-
-    for( const SCH_SHEET_PATH& sheet : orderedSheetList )
-    {
         std::vector<SCH_ITEM*> items;
+
+        // Store current unit value, to replace it after calculations
+        std::vector<std::pair<SCH_SYMBOL*, int>> symbolsChanged;
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
@@ -648,12 +630,18 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                 dirty_items.insert( item );
             }
 
-            // Ensure the hierarchy info stored in SCREENS is built and up to date
-            // (multi-unit symbols)
+            // Ensure the hierarchy info stored in the SCH_SCREEN (such as symbol units) reflects
+            // the current SCH_SHEET_PATH
             if( item->Type() == SCH_SYMBOL_T )
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                symbol->UpdateUnit( symbol->GetUnitSelection( &sheet ) );
+                int new_unit = symbol->GetUnitSelection( &sheet );
+
+                // Store the initial unit value so we can restore it after calculations
+                if( symbol->GetUnit() != new_unit )
+                    symbolsChanged.push_back( { symbol, symbol->GetUnit() } );
+
+                symbol->UpdateUnit( new_unit );
             }
         }
 
@@ -663,7 +651,16 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
         // UpdateDanglingState() also adds connected items for SCH_TEXT
         sheet.LastScreen()->TestDanglingEnds( &sheet, aChangedItemHandler );
+
+        // Restore the m_unit member variables where we had to change them
+        for( const auto& [ symbol, originalUnit ] : symbolsChanged )
+            symbol->UpdateUnit( originalUnit );
     }
+
+    // Restore the danlging states of items in the current SCH_SCREEN to match the current
+    // SCH_SHEET_PATH.
+    m_schematic->CurrentSheet().LastScreen()->TestDanglingEnds( &m_schematic->CurrentSheet(),
+                                                                aChangedItemHandler );
 
     for( SCH_ITEM* item : dirty_items )
         item->SetConnectivityDirty( false );
