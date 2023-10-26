@@ -145,8 +145,6 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
 
     aSchematic = LoadHierarchyFromRoot( schematicPath, &aSettingsManager.Prj() );
 
-    aSchematic->CurrentSheet().push_back( &aSchematic->Root() );
-
     SCH_SCREENS screens( aSchematic->Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
