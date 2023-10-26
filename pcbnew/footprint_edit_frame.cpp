@@ -130,7 +130,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcons( icon_bundle );
 
     // Create GAL canvas
-    m_canvasType = loadCanvasTypeSetting();
+    m_canvasType = loadCanvasTypeSetting( GetSettings() );
 
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
@@ -629,6 +629,19 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
         m_treePane->GetLibTree()->SetSortMode( (LIB_TREE_MODEL_ADAPTER::SORT_MODE) cfg->m_LibrarySortMode );
     }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::resolveCanvasType()
+{
+    // Load canvas type from the FOOTPRINT_EDITOR_SETTINGS:
+    m_canvasType = loadCanvasTypeSetting( GetSettings() );
+
+    // If we had an OpenGL failure this session, use the fallback GAL but don't update the
+    // user preference silently:
+
+    if( m_openGLFailureOccured && m_canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+        m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 }
 
 

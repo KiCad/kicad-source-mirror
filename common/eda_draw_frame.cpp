@@ -846,7 +846,7 @@ void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 }
 
 
-EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
+EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting(  APP_SETTINGS_BASE* aCfg )
 {
 #ifdef __WXMAC__
     // Cairo renderer doesn't handle Retina displays so there's really only one game
@@ -855,7 +855,7 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
 #endif
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
+    APP_SETTINGS_BASE* cfg = aCfg ? aCfg : Kiface().KifaceSettings();
 
     if( cfg )
         canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );

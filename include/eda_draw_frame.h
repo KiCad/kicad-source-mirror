@@ -502,12 +502,14 @@ protected:
     /**
      * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
      */
-    void resolveCanvasType();
+    virtual void resolveCanvasType();
 
     /**
      * Returns the canvas type stored in the application settings.
+     * @param aCfg is the APP_SETTINGS_BASE config storing the canvas type.
+     * If nullptr (default) the KifaceSettings() will be used
      */
-    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting( APP_SETTINGS_BASE* aCfg = nullptr );
 
     /**
      * Stores the canvas type in the application settings.

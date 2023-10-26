@@ -332,6 +332,11 @@ protected:
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     /**
+     * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
+     */
+    void resolveCanvasType() override;
+
+    /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize
      * the footprint library tree.
      */
