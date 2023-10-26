@@ -283,9 +283,10 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                           const COLLISION_SEARCH_OPTIONS& aOpts )
 {
-    const int            clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
-    OBSTACLES            obstacleList;
-    std::vector<SEGMENT> tmpSegs;
+    DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
+    const int                 clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
+    OBSTACLES                 obstacleList;
+    std::vector<SEGMENT>      tmpSegs;
 
     tmpSegs.reserve( aLine->CLine().SegmentCount() );
 
@@ -335,10 +336,20 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         if( aOpts.m_restrictedSet && !aOpts.m_restrictedSet->empty() && aOpts.m_restrictedSet->count( obstacle.m_item ) == 0 )
             continue;
 
-        int clearance =
-            GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon ) + aLine->Width() / 2;
+        int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
+                            + aLine->Width() / 2;
 
         obstacleHull = obstacle.m_item->Hull( clearance, 0, layer );
+
+        if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
+        {
+            BOX2I bbox = obstacleHull.BBox();
+            obstacleHull.Clear();
+            obstacleHull.Append( bbox.GetLeft(),  bbox.GetTop()    );
+            obstacleHull.Append( bbox.GetRight(), bbox.GetTop()    );
+            obstacleHull.Append( bbox.GetRight(), bbox.GetBottom() );
+            obstacleHull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+        }
         //debugDecorator->AddLine( obstacleHull, 2, 40000, "obstacle-hull-test" );
         //debugDecorator->AddLine( aLine->CLine(), 5, 40000, "obstacle-test-line" );
 
@@ -359,6 +370,16 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                + via.Diameter() / 2;
 
             obstacleHull = obstacle.m_item->Hull( viaClearance, 0, layer );
+
+            if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
+            {
+                BOX2I bbox = obstacleHull.BBox();
+                obstacleHull.Clear();
+                obstacleHull.Append( bbox.GetLeft(),  bbox.GetTop()    );
+                obstacleHull.Append( bbox.GetRight(), bbox.GetTop()    );
+                obstacleHull.Append( bbox.GetRight(), bbox.GetBottom() );
+                obstacleHull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+            }
             //debugDecorator->AddLine( obstacleHull, 3 );
 
             intersectingPts.clear();

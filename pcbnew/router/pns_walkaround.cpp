@@ -102,6 +102,18 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath, bool aWinding
 
     SHAPE_LINE_CHAIN hull = current_obs->m_item->Hull( current_obs->m_clearance, aPath.Width() );
 
+    DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
+
+    if( cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90 )
+    {
+        BOX2I bbox = hull.BBox();
+        hull.Clear();
+        hull.Append( bbox.GetLeft(),  bbox.GetTop()    );
+        hull.Append( bbox.GetRight(), bbox.GetTop()    );
+        hull.Append( bbox.GetRight(), bbox.GetBottom() );
+        hull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+    }
+
     bool s_cw = aPath.Walkaround( hull, path_walk, aWindingDirection );
 
     PNS_DBG( Dbg(), BeginGroup, "hull/walk", 1 );

@@ -1897,8 +1897,14 @@ void SHOVE::runOptimizer( NODE* aNode )
         optimizer.SetRestrictArea( *area, false );
     }
 
-    if( Settings().SmartPads() )
+    DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
+
+    // Smart Pads is incompatible with 90-degree mode for now
+    if( Settings().SmartPads()
+            && ( cornerMode == DIRECTION_45::MITERED_45 || cornerMode == DIRECTION_45::ROUNDED_45 ) )
+    {
         optFlags |= OPTIMIZER::SMART_PADS;
+    }
 
 
     optimizer.SetEffortLevel( optFlags & ~m_optFlagDisableMask );

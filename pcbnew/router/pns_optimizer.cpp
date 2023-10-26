@@ -695,8 +695,11 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
     if( aLine->SegmentCount() < 2 )
         return false;
 
-    DIRECTION_45 orig_start( aLine->CSegment( 0 ) );
-    DIRECTION_45 orig_end( aLine->CSegment( -1 ) );
+    DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
+    bool is90mode = cornerMode == DIRECTION_45::MITERED_90 || cornerMode == DIRECTION_45::ROUNDED_90;
+
+    DIRECTION_45 orig_start( aLine->CSegment( 0 ), is90mode );
+    DIRECTION_45 orig_end( aLine->CSegment( -1 ), is90mode );
 
 
     for( int n = 0; n < n_segs - step; n++ )
@@ -717,7 +720,7 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
         for( int i = 0; i < 2; i++ )
         {
-            SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.A, s2.B, i );
+            SHAPE_LINE_CHAIN bypass = DIRECTION_45().BuildInitialTrace( s1.A, s2.B, i, cornerMode );
             cost[i] = INT_MAX;
 
             bool ok = false;
@@ -1111,6 +1114,8 @@ bool OPTIMIZER::fanoutCleanup( LINE* aLine )
     if( aLine->PointCount() < 3 )
         return false;
 
+    DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
+
     VECTOR2I p_start = aLine->CPoint( 0 ), p_end = aLine->CPoint( -1 );
 
     ITEM* startPad = findPadOrVia( aLine->Layer(), aLine->Net(), p_start );
@@ -1138,7 +1143,7 @@ bool OPTIMIZER::fanoutCleanup( LINE* aLine )
     {
         for( int i = 0; i < 2; i++ )
         {
-            SHAPE_LINE_CHAIN l2 = DIRECTION_45().BuildInitialTrace( p_start, p_end, i );
+            SHAPE_LINE_CHAIN l2 = DIRECTION_45().BuildInitialTrace( p_start, p_end, i, cornerMode );
             LINE repl;
             repl = LINE( *aLine, l2 );
 
