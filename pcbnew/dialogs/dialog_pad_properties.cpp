@@ -1679,6 +1679,9 @@ void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
     }
 
     m_sizeXLabel->GetParent()->Layout();
+    resetSize();
+    Layout();
+    m_MainSizer->Fit( this );
 }
 
 
