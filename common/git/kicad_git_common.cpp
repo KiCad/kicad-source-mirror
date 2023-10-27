@@ -499,7 +499,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
         return GIT_PASSTHROUGH;
 
-    if( aAllowedTypes & GIT_CREDENTIAL_USERNAME
+    if( aAllowedTypes & GIT_CREDTYPE_USERNAME
         && !( parent->TestedTypes() & GIT_CREDTYPE_USERNAME ) )
     {
         wxString username = parent->GetUsername().Trim().Trim( false );
@@ -507,7 +507,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         parent->TestedTypes() |= GIT_CREDTYPE_USERNAME;
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS
-                && ( aAllowedTypes & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
+                && ( aAllowedTypes & GIT_CREDTYPE_USERPASS_PLAINTEXT )
                 && !( parent->TestedTypes() & GIT_CREDTYPE_USERPASS_PLAINTEXT ) )
     {
         wxString username = parent->GetUsername().Trim().Trim( false );
@@ -518,7 +518,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         parent->TestedTypes() |= GIT_CREDTYPE_USERPASS_PLAINTEXT;
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
-                && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
+                && ( aAllowedTypes & GIT_CREDTYPE_SSH_KEY )
                 && !( parent->TestedTypes() & GIT_CREDTYPE_SSH_KEY ) )
     {
         // SSH key authentication

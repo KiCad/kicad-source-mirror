@@ -264,7 +264,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
         if( dialog->GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
             return GIT_PASSTHROUGH;
 
-        if( aAllowedTypes & GIT_CREDENTIAL_USERNAME
+        if( aAllowedTypes & GIT_CREDTYPE_USERNAME
             && !( dialog->GetTested() & GIT_CREDTYPE_USERNAME ) )
         {
             wxString username = dialog->GetUsername().Trim().Trim( false );
@@ -272,7 +272,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
             dialog->GetTested() |= GIT_CREDTYPE_USERNAME;
         }
         else if( dialog->GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS
-                 && ( aAllowedTypes & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
+                 && ( aAllowedTypes & GIT_CREDTYPE_USERPASS_PLAINTEXT )
                  && !( dialog->GetTested() & GIT_CREDTYPE_USERPASS_PLAINTEXT ) )
         {
             wxString username = dialog->GetUsername().Trim().Trim( false );
@@ -283,7 +283,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
             dialog->GetTested() |= GIT_CREDTYPE_USERPASS_PLAINTEXT;
         }
         else if( dialog->GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
-                 && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
+                 && ( aAllowedTypes & GIT_CREDTYPE_SSH_KEY )
                  && !( dialog->GetTested() & GIT_CREDTYPE_SSH_KEY ) )
         {
             // SSH key authentication
