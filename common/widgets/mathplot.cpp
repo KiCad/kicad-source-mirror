@@ -1601,14 +1601,20 @@ void mpWindow::onMouseMove( wxMouseEvent& event )
         m_mouseMClick.x = event.GetX();
         m_mouseMClick.y = event.GetY();
 
-        double  Ax_units    = Ax / m_scaleX;
-        double  Ay_units    = -Ay / m_scaleY;
-
-        if( SetXView( m_posX + Ax_units, m_desiredXmax + Ax_units, m_desiredXmin + Ax_units )
-            || SetYView( m_posY + Ay_units, m_desiredYmax + Ay_units, m_desiredYmin + Ay_units ) )
+        if( Ax )
         {
-            UpdateAll();
+            double  Ax_units = Ax / m_scaleX;
+            SetXView( m_posX + Ax_units, m_desiredXmax + Ax_units, m_desiredXmin + Ax_units );
         }
+
+        if( Ay )
+        {
+            double  Ay_units = -Ay / m_scaleY;
+            SetYView( m_posY + Ay_units, m_desiredYmax + Ay_units, m_desiredYmin + Ay_units );
+        }
+
+        if( Ax || Ay )
+             UpdateAll();
     }
     else if( event.m_leftDown )
     {
