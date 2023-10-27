@@ -1085,20 +1085,15 @@ void GENCAD_EXPORTER::CreateBoardSection( )
     fputs( "$BOARD\n", m_file );
 
     // Extract the board edges
-    for( BOARD_ITEM* drawing : m_board->Drawings() )
-    {
-        if( drawing->Type() == PCB_SHAPE_T )
-        {
-            PCB_SHAPE* drawseg = static_cast<PCB_SHAPE*>( drawing );
+    SHAPE_POLY_SET outline;
+    m_board->GetBoardPolygonOutlines( outline );
 
-            if( drawseg->GetLayer() == Edge_Cuts )
-            {
-                // XXX GenCAD supports arc boundaries but I've seen nothing that reads them
-                fprintf( m_file, "LINE %g %g %g %g\n",
-                         MapXTo( drawseg->GetStart().x ), MapYTo( drawseg->GetStart().y ),
-                         MapXTo( drawseg->GetEnd().x ), MapYTo( drawseg->GetEnd().y ) );
-            }
-        }
+    for( auto seg1 = outline.IterateSegmentsWithHoles(); seg1; seg1++ )
+    {
+        SEG seg = *seg1;
+        fprintf( m_file, "LINE %g %g %g %g\n",
+                 MapXTo( seg.A.x ), MapYTo( seg.A.y ),
+                 MapXTo( seg.B.x ), MapYTo( seg.B.y ) );
     }
 
     fputs( "$ENDBOARD\n\n", m_file );
