@@ -194,17 +194,20 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
 
     wxString text = aText;
 
-    if( !aText.IsEmpty() && allowEval() && m_needsEval && m_eval.Process( aText ) )
+    if( allowEval() && m_needsEval && m_eval.Process( aText ) )
     {
-        double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
+        if( !aText.IsEmpty() )
+        {
+            double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-        if( std::isnan( value ) || SIM_VALUE::Equal( value, aText.ToStdString() ) )
-        {
-            // Don't mess up user formatting if eval'ing didn't actually change the value.
-        }
-        else
-        {
-            text = SIM_VALUE::Normalize( value );
+            if( std::isnan( value ) || SIM_VALUE::Equal( value, aText.ToStdString() ) )
+            {
+                // Don't mess up user formatting if eval'ing didn't actually change the value.
+            }
+            else
+            {
+                text = SIM_VALUE::Normalize( value );
+            }
         }
     }
 
