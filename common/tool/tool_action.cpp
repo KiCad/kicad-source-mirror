@@ -46,7 +46,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
         m_defaultHotKey( aDefaultHotKey ),
         m_defaultHotKeyAlt( 0 ),
         m_legacyName( aLegacyHotKeyName ),
-        m_label( aLabel ),
+        m_menuLabel( aLabel ),
         m_tooltip( aTooltip ),
         m_icon( aIcon ),
         m_id( -1 ),
@@ -78,7 +78,7 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_hotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
         m_hotKeyAlt( 0 ),
         m_legacyName( aArgs.m_legacyName.value_or( "" ) ),
-        m_label( TowxString( aArgs.m_menuText.value_or( "" ) ) ),
+        m_friendlyName( TowxString( aArgs.m_friendlyName.value_or( "" ) ) ),
         m_tooltip( TowxString( aArgs.m_tooltip.value_or( "" ) ) ),
         m_icon( aArgs.m_icon.value_or( BITMAPS::INVALID_BITMAP) ),
         m_id( -1 ),
@@ -87,6 +87,9 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
 {
     // Action name is the only mandatory part
     assert( !m_name.empty() );
+
+    if( aArgs.m_menuText.has_value() )
+        m_menuLabel = TowxString( aArgs.m_menuText.value() );
 
     if( aArgs.m_uiid.has_value() )
         m_uiid = aArgs.m_uiid.value();
@@ -144,18 +147,27 @@ TOOL_EVENT TOOL_ACTION::MakeEvent() const
 }
 
 
-wxString TOOL_ACTION::GetLabel() const
+wxString TOOL_ACTION::GetFriendlyName() const
 {
-    if( m_label.empty() )
+    if( m_friendlyName.empty() )
         return wxEmptyString;
 
-    return wxGetTranslation( m_label );
+    return wxGetTranslation( m_friendlyName );
+}
+
+
+wxString TOOL_ACTION::GetMenuLabel() const
+{
+    if( m_menuLabel.has_value() )
+        return wxGetTranslation( m_menuLabel.value() );
+    
+    return GetFriendlyName();
 }
 
 
 wxString TOOL_ACTION::GetMenuItem() const
 {
-    wxString label = wxGetTranslation( m_label );
+    wxString label = GetMenuLabel();
     label.Replace( wxS( "&" ), wxS( "&&" ) );
     return AddHotkeyName( label, m_hotKey, IS_HOTKEY );
 }

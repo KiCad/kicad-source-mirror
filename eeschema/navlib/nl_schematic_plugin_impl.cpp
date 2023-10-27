@@ -179,7 +179,7 @@ void NL_SCHEMATIC_PLUGIN_IMPL::exportCommandsAndImages()
     for( it = actions.begin(); it != actions.end(); ++it )
     {
         const TOOL_ACTION* action = *it;
-        std::string        label = action->GetLabel().ToStdString();
+        std::string        label = action->GetMenuLabel().ToStdString();
 
         if( label.empty() )
         {

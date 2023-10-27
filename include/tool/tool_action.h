@@ -114,6 +114,12 @@ public:
         return *this;
     }
 
+    TOOL_ACTION_ARGS& FriendlyName( const std::string_view& aName )
+    {
+        m_friendlyName = aName;
+        return *this;
+    }
+
     /**
      * The scope of the action.
      */
@@ -227,6 +233,7 @@ protected:
     friend class TOOL_ACTION;
 
     std::optional<std::string_view>     m_name;
+    std::optional<std::string_view>     m_friendlyName;
     std::optional<TOOL_ACTION_SCOPE>    m_scope;
     std::optional<TOOL_ACTION_FLAGS>    m_flags;
 
@@ -345,10 +352,15 @@ public:
     /**
      * Return the translated label for the action.
     */
-    wxString GetLabel() const;
+    wxString GetMenuLabel() const;
     wxString GetMenuItem() const;
     wxString GetTooltip( bool aIncludeHotkey = true ) const;
     wxString GetDescription() const;
+
+    /**
+     * Return the translated user-friendly name of the action.
+     */
+    wxString GetFriendlyName() const;
 
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 
@@ -431,9 +443,10 @@ protected:
     int                  m_hotKeyAlt;      // The alternate hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
-    wxString                m_label;       // Menu label
-    wxString                m_tooltip;     // User-facing tooltip help text
-    std::optional<wxString> m_description; // Description of the action
+    wxString                m_friendlyName; // User-friendly name
+    std::optional<wxString> m_menuLabel;    // Menu label
+    wxString                m_tooltip;      // User-facing tooltip help text
+    std::optional<wxString> m_description;  // Description of the action
 
     BITMAPS              m_icon;           // Icon for the menu entry
 

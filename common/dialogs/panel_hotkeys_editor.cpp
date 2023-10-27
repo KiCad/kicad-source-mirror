@@ -246,7 +246,7 @@ void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 
         for( HOTKEY& hk : section.m_HotKeys )
         {
-            stream << wxT( "| " ) << hk.m_Actions[0]->GetLabel() << endl;
+            stream << wxT( "| " ) << hk.m_Actions[0]->GetFriendlyName() << endl;
 
             if( hk.m_EditKeycode > 0 )
             {

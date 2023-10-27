@@ -85,7 +85,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                         m_toolManager->ProcessEvent( *evt );
                     };
 
-            wxStaticText* label = new wxStaticText( this, wxID_ANY, aAction.GetLabel() );
+            wxStaticText* label = new wxStaticText( this, wxID_ANY, aAction.GetFriendlyName() );
             wxStaticText* help;
 
             label->SetToolTip( aAction.GetTooltip() );

@@ -68,7 +68,7 @@ void TOOLS_HOLDER::PushTool( const TOOL_EVENT& aEvent )
     TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
 
     if( action )
-        DisplayToolMsg( action->GetLabel() );
+        DisplayToolMsg( action->GetFriendlyName() );
     else
         DisplayToolMsg( actionName );
 }
@@ -109,7 +109,7 @@ void TOOLS_HOLDER::PopTool( const TOOL_EVENT& aEvent )
                 }
             }
             else
-                DisplayToolMsg( ACTIONS::selectionTool.GetLabel() );
+                DisplayToolMsg( ACTIONS::selectionTool.GetFriendlyName() );
 
             return;
         }
@@ -146,7 +146,7 @@ void TOOLS_HOLDER::ShowChangedLanguage()
     TOOL_ACTION* action = GetToolManager()->GetActionManager()->FindAction( actionName );
 
     if( action )
-        DisplayToolMsg( action->GetLabel() );
+        DisplayToolMsg( action->GetFriendlyName() );
 }
 
 

@@ -34,7 +34,7 @@ class PSEUDO_ACTION : public TOOL_ACTION
 public:
     PSEUDO_ACTION( const wxString& aLabel, int aHotKey )
     {
-        m_label = aLabel;
+        m_friendlyName = aLabel;
         m_hotKey = aHotKey;
     }
 };
@@ -98,7 +98,7 @@ void HOTKEY_STORE::Init( std::vector<TOOL_ACTION*> aActionsList, bool aIncludeRe
     for( TOOL_ACTION* action : aActionsList )
     {
         // Internal actions probably shouldn't be allowed hotkeys
-        if( action->GetLabel().IsEmpty() )
+        if( action->GetFriendlyName().IsEmpty() )
             continue;
 
         if( !ADVANCED_CFG::GetCfg().m_ExtraZoneDisplayModes )
