@@ -1827,6 +1827,9 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     if( ADVANCED_CFG::GetCfg().m_EnableGit == false )
         return;
 
+    if( !m_TreeProject )
+        return;
+
     wxTimeSpan timeSinceLastUpdate = wxDateTime::Now() - m_lastGitStatusUpdate;
 
     if( timeSinceLastUpdate.Abs() < wxTimeSpan::Seconds( 2 ) )
