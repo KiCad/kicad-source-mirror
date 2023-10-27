@@ -11,22 +11,40 @@ You are free to use the *sources* under the terms of their respective licenses.
 Licensed under Apache License, Version 2.0
  - portions of code in libs/kimath/include/math/util.h
 Licensed under BOOSTv1:
-- libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
 - clipper in thirdparty/clipper
+- clipper2 in thirdparty/clipper2
+- libcontext [https://github.com/boostorg/context] in thirdparty/libcontext
+- pegtl in thirdparty/pegtl
+- picosha2 in thirdparty/picosha2
+- turtle in thirdparty/turtle
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
 Licensed under MIT:
+- argparse in thirdparty/argparse
 - compoundfilereader in thirdparty/compoundfilereader
 - delaunator in thirdparty/delaunator
-- tinyspline_lib in thirdparty/tinyspline_lib
+- fmt in thirdparty/fmt
+- json_schema_validator in thirdparty/json_schema_validator
+- magic_enum in thirdparty/magic_enum
+- nanodbc in thirdparty/nanodbc
 - nlohmann/json in thirdparty/nlohmann_json
 - nlohmann/fifo_map in thirdparty/nlohmann_json
 - pboettch/json-schema-validator in thirdparty/json_schema_validator
 - picoSHA2 in thirdparty/picosha2
+- rectpack2d in thirdparty/rectpack2d
+- sentry-native in thirdparty/sentry-native
+- thread-pool in thirdparty/thread-pool
+- tinyspline_lib in thirdparty/tinyspline_lib
+Licensed under MIT and BSD:
+- glew in thirdparty/glew
+Licensed under BSD:
+- pybind11 in thirdparty/pybind11
+Licensed under BSD2:
+- gzip-hpp in thirdparty/gzip-hpp
 Licensed under GPLv2 (or later):
 - dxflib in thirdparty/dxflib_qcad
-- potrace in thirdparty/potrace
 - math_for_graphics in thirdparty/other_math
+- potrace in thirdparty/potrace
 - SutherlandHodgmanClipPoly in thirdparty/other_math
 Licensed under ZLib:
 - nanosvg in thirdparty/nanosvg
