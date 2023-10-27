@@ -215,7 +215,7 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
             if( oldStr.length() && oldStr != textEntry->GetValue() )
             {
-                textEntry->SetValue( oldStr );
+                textEntry->ChangeValue( oldStr );
                 textEntry->SetSelection( m_selStart, m_selEnd );
             }
 
