@@ -209,6 +209,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_d356.cpp
     exporters/export_footprint_associations.cpp
     exporters/export_gencad.cpp
+    exporters/export_gencad_writer.cpp
     exporters/export_idf.cpp
     exporters/export_svg.cpp
     exporters/step/exporter_step.cpp
