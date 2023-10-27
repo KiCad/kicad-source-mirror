@@ -344,7 +344,8 @@ private:
 
 EE_POINT_EDITOR::EE_POINT_EDITOR() :
     EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.PointEditor" ),
-    m_editedPoint( nullptr )
+    m_editedPoint( nullptr ),
+    m_inPointEditor( false )
 {
 }
 
@@ -410,6 +411,11 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
     if( !m_selectionTool )
         return 0;
+
+    if( m_inPointEditor )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inPointEditor );
 
     if( m_isSymbolEditor )
     {

@@ -105,6 +105,9 @@ private:
     ///< Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
 
+    ///< Re-entrancy guards
+    bool m_inPointEditor;
+
     ///< Currently available edit points.
     std::shared_ptr<EDIT_POINTS> m_editPoints;
 };
