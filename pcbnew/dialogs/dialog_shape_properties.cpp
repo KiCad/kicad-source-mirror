@@ -117,12 +117,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     m_bezierCtrl2X.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_bezierCtrl2Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_segmentLength.SetUnits( EDA_UNITS::MILLIMETRES );
     m_segmentAngle.SetUnits( EDA_UNITS::DEGREES );
     m_segmentAngle.SetPrecision( 4 );
-
-    m_rectangleHeight.SetUnits( EDA_UNITS::MILLIMETRES );
-    m_rectangleWidth.SetUnits( EDA_UNITS::MILLIMETRES );
 
     m_angle.SetUnits( EDA_UNITS::DEGREES );
 
