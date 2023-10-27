@@ -1009,6 +1009,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         // File doesn't exist yet; true if we just imported something
         updateFileHistory = true;
     }
+    else if( !Schematic().GetSheets().IsModified() )
+    {
+        return true;
+    }
 
     if( filenameMap.empty() || !saveCopy )
     {
@@ -1018,6 +1022,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
     // Warn user on potential file overwrite.  This can happen on shared sheets.
     wxArrayString overwrittenFiles;
+    wxArrayString lockedFiles;
 
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
@@ -1031,6 +1036,9 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         if( !tmpFn.IsOk() )
             continue;
 
+        if( tmpFn.FileExists() && !tmpFn.IsFileWritable() )
+            lockedFiles.Add( tmpFn.GetFullPath() );
+
         if( tmpFn.GetExt() == KiCadSchematicFileExtension )
             continue;
 
@@ -1038,6 +1046,26 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
         if( tmpFn.FileExists() )
             overwrittenFiles.Add( tmpFn.GetFullPath() );
+    }
+
+    if( !lockedFiles.IsEmpty() )
+    {
+        for( const wxString& lockedFile : lockedFiles )
+        {
+            if( msg.IsEmpty() )
+                msg = lockedFile;
+            else
+                msg += "\n" + lockedFile;
+        }
+
+        wxRichMessageDialog dlg( this, wxString::Format( _( "Failed to save %s." ),
+                                                         Schematic().Root().GetFileName() ),
+                                 _( "Locked File Warning" ),
+                                 wxOK | wxICON_WARNING | wxCENTER );
+        dlg.SetExtendedMessage( _( "You do not have write permissions to:\n\n" ) + msg );
+
+        dlg.ShowModal();
+        return false;
     }
 
     if( !overwrittenFiles.IsEmpty() )
