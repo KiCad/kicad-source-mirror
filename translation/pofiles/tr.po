@@ -11,21 +11,22 @@
 # Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>, 2022, 2023.
 # turkce <turkceceviri@protonmail.com>, 2023.
 # Marine Biologist <fatihvolkanster@gmail.com>, 2023.
+# Mert Gülsoy <mgulsoy@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 12:12-0700\n"
-"PO-Revision-Date: 2023-09-21 15:08+0000\n"
-"Last-Translator: Marine Biologist <fatihvolkanster@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2023-10-30 16:42+0000\n"
+"Last-Translator: Mert Gülsoy <mgulsoy@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -153,9 +154,9 @@ msgid "Load OpenGL: layers"
 msgstr "OpenGL yükle: katmanlar"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "%d OpenGL katmanını yükle"
+msgstr "%s OpenGL katmanını yükle"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -412,14 +413,13 @@ msgid "Can't save file"
 msgstr "Dosya kaydedilemiyor"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Sayfa Bacağı"
+msgstr "Pivot Belirle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Merkez pivot dönüşü (orta fare tıklaması)"
+msgstr ""
+"Kartın etrafında döndürülmesi için merkezi bir nokta ekle (fare orta tıklama)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
@@ -452,45 +452,40 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Z'yi Saat Yönünün Tersinde Döndür"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
-msgstr "Kartı sola hareket ettir"
+msgstr "Kartı Sola Hareket Ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:111
 msgid "Move board Left"
 msgstr "Kartı sola hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
-msgstr "Kartı sağa hareket ettir"
+msgstr "Kartı Sağa Hareket Ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:121
 msgid "Move board Right"
 msgstr "Kartı sağa hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
-msgstr "Kartı yukarı hareket ettir"
+msgstr "Kartı Yukarı Hareket Ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
 msgid "Move board Up"
 msgstr "Kartı yukarı hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
-msgstr "Kartı aşağı hareket ettir"
+msgstr "Kartı Aşağı Hareket Ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Move board Down"
 msgstr "Kartı aşağı hareket ettir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
-msgstr "Ana görünüm"
+msgstr "Ana Görünüm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:151
 msgid "Home view"
@@ -514,9 +509,8 @@ msgid "Flip the board view"
 msgstr "Kart Görünümünü Ters Çevir"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:177
-#, fuzzy
 msgid "Toggle Orthographic Projection"
-msgstr "Ortografik projeksiyonu aç / kapat"
+msgstr "Ortografik Projeksiyonu Aç / Kapat"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:178
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:197
@@ -604,63 +598,52 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Malzemenin temel rengine dayalı bir CAD renk stili kullan"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Delik İçi 3D Modelleri Aç / Kapa"
+msgstr "Delik İçi 3D Modelleri Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "'Delik içi' tipi olan 3D modelleri aç/kapat"
+msgstr "'Delik içi' tipi olan 3D modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "SMD 3D modelleri aç/kapat"
+msgstr "SMD 3D modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "'Yüzey monte' özelliği olan 3D modelleri aç/kapat"
+msgstr "'Yüzey monte' özelliği olan 3D modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Belirtilmemiş 3B modellere geçiş yap"
+msgstr "Belirtilmemiş 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "'Belirtilmemiş' tip bileşenler için 3B modellere geçiş yap"
+msgstr "'Belirtilmemiş' tip bileşenler için 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Pos dosyasında olmayan 3B modellere geçiş yap"
+msgstr "POS dosyasında olmayan 3B modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Pos dosyasında olmayan 3B modellere geçiş yap"
+msgstr "3B modelleri .pos dosyasında olmasa bile göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "SMD 3D modelleri aç/kapat"
+msgstr "Sanal olarak işaretlenmiş 3D modelleri göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:346
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "'Sanal' özelliği olan 3B modelleri aç/kapat"
+msgstr "3D modeller 'Sanal' olarak işaretlenmiş olsa bile göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
 msgid "Show Model Bounding Boxes"
 msgstr "Model Sınırlama Kutusunu Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:354
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Model sınırlama kutularını göster"
+msgstr "3D model sınırlama kutularını gerçek zamanlı olarak göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:361
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:362
@@ -669,9 +652,8 @@ msgstr "3D Ekseni Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:369
 #: pcbnew/tools/pcb_actions.cpp:1330 pcbnew/tools/pcb_actions.cpp:1261
-#, fuzzy
 msgid "Show Appearance Manager"
-msgstr "Sayfa Özellikleri"
+msgstr "Görünüm Yöneticisini Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:370
 #: pcbnew/tools/pcb_actions.cpp:1331 pcbnew/tools/pcb_actions.cpp:1262
