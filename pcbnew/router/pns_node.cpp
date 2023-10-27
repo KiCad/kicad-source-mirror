@@ -128,15 +128,15 @@ NODE::~NODE()
 
 int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
 {
-   if( !m_ruleResolver )
+    if( !m_ruleResolver )
         return 100000;
 
-   if( aA->IsVirtual() || aB->IsVirtual() )
-       return 0;
+    if( aA->IsVirtual() || aB->IsVirtual() )
+        return 0;
 
     int cl = m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
 
-   return cl;
+    return cl;
 }
 
 
@@ -973,7 +973,7 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
         const VECTOR2I p  = aCurrent->Anchor( aScanDirection ^ prevReversed );
         const JOINT*   jt = FindJoint( p, aCurrent );
 
-        assert( jt );
+        wxCHECK( jt, /* void */ );
 
         aCorners[aPos]     = jt->Pos();
         aSegments[aPos]    = aCurrent;

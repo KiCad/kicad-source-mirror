@@ -222,6 +222,8 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                     obs.m_head = const_cast<ITEM*>( aHead );
                     obs.m_item = const_cast<ITEM*>( this );
                     obs.m_clearance = clearance;
+                    obs.m_distFirst = 0;
+                    obs.m_maxFanoutWidth = 0;
                     aCtx->obstacles.insert( obs );
                 }
                 else

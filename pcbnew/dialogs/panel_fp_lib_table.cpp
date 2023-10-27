@@ -864,11 +864,11 @@ bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 
+    if( !newFileName.DirExists() && !wxMkDir( aNewFilePath, wxS_DIR_DEFAULT ) )
+        return false;
+
     try
     {
-        if( !newFileName.DirExists() )
-            wxMkDir( aNewFilePath, wxS_DIR_DEFAULT );
-
         bool bestEfforts = false; // throw on first error
         oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
 

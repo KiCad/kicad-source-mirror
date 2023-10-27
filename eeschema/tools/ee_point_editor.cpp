@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -454,11 +454,22 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        grid->SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid->SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        if( grid )
+        {
+            grid->SetSnap( !evt->Modifier( MD_SHIFT ) );
+            grid->SetUseGrid( getView()->GetGAL()->GetGridSnapping() &&
+                              !evt->DisableGridSnapping() );
 
-        cursorPos = grid->Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
-        controls->ForceCursorPosition( true, cursorPos );
+            cursorPos = grid->Align( controls->GetMousePosition(),
+                                     GRID_HELPER_GRIDS::GRID_GRAPHICS );
+            controls->ForceCursorPosition( true, cursorPos );
+        }
+        else
+        {
+            // This check is based on the assumption that the grid object must be valid.
+            // If this assumption is wrong, please fix the code above.
+            wxCHECK( false, 0 );
+        }
 
         if( !m_editPoints || evt->IsSelectionEvent() )
             break;

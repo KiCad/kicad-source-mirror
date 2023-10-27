@@ -391,7 +391,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
 bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice )
 {
-    EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS*    cfg = nullptr;
+
+    try
+    {
+        cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    }
+    catch( const std::runtime_error& e )
+    {
+        wxCHECK_MSG( false, false, e.what() );
+    }
+
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;

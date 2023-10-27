@@ -157,8 +157,19 @@ const std::string TOOL_EVENT::Format() const
 
     if( m_actionGroup.has_value() )
     {
-        ev += m_actionGroup.value().GetName()
-              +  "(" + std::to_string( m_actionGroup.value().GetGroupID() ) + ")" + " ";
+        // This should probably be checking to see if the m_actionGroup option is
+        // actually set rather than attempting to access the value when no option
+        // is set.  If that is the case, then the check above should first check
+        // if the options is set so that an exception cannot be thrown.
+        try
+        {
+            ev += m_actionGroup.value().GetName() +
+                  "(" + std::to_string( m_actionGroup.value().GetGroupID() ) + ")" + " ";
+        }
+        catch( const std::bad_optional_access& e )
+        {
+            wxFAIL_MSG( e.what() );
+        }
     }
     else
     {

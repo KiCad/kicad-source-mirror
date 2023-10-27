@@ -4,7 +4,7 @@
  * Copyright (C) 1992-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,7 @@ struct SCH_PLOT_SETTINGS
         m_useBackgroundColor( true ),
         m_HPGLPenSize( 1.0 ),
         m_HPGLPaperSizeSelect( HPGL_PAGE_SIZE::DEFAULT ),
+        m_PDFPropertyPopups( false ),
         m_theme(),
         m_outputDirectory(),
         m_outputFile(),

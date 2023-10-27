@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,6 +59,29 @@ struct CAMERA_FRUSTUM
     SFVEC3F fbr; ///< Far Bottom Right
     float nearD, farD, ratio, angle, tang;
     float nw, nh, fw, fh;
+
+    CAMERA_FRUSTUM() :
+        nc( { 0.0, 0.0, 0.0 } ),
+        fc( { 0.0, 0.0, 0.0 } ),
+        ntl( { 0.0, 0.0, 0.0 } ),
+        ntr( { 0.0, 0.0, 0.0 } ),
+        nbl( { 0.0, 0.0, 0.0 } ),
+        nbr( { 0.0, 0.0, 0.0 } ),
+        ftl( { 0.0, 0.0, 0.0 } ),
+        ftr( { 0.0, 0.0, 0.0 } ),
+        fbl( { 0.0, 0.0, 0.0 } ),
+        fbr( { 0.0, 0.0, 0.0 } ),
+        nearD( 0.0 ),
+        farD( 0.0 ),
+        ratio( 1.0 ),
+        angle( 0.0 ),
+        tang( 0.0 ),
+        nw( 0.0 ),
+        nh( 0.0 ),
+        fw( 0.0 ),
+        fh( 0.0 )
+    {
+    }
 };
 
 

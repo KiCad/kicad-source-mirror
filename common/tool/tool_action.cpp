@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -121,7 +122,20 @@ TOOL_EVENT TOOL_ACTION::MakeEvent() const
         evt = TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope );
 
     if( m_group.has_value() )
-        evt.SetActionGroup( m_group.value() );
+    {
+        // This should probably be checking to see if the m_group option is actually
+        // set rather than attempting to access the value when no option is set.  If
+        // that is the case, then the check above should first check if the options is
+        // set so that an exception cannot be thrown.
+        try
+        {
+            evt.SetActionGroup( m_group.value() );
+        }
+        catch( const std::bad_optional_access& e )
+        {
+            wxFAIL_MSG( e.what() );
+        }
+    }
 
     if( m_param.has_value() )
         evt.SetParameter( m_param );
