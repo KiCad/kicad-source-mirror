@@ -46,6 +46,7 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;
             wxRect swatch( aRect.GetPosition() + wxPoint( offset, offset ), swatchSize );
 
+            aDC.Clear();    // Ensure the "old" background is erased.
             COLOR_SWATCH::RenderToDC( &aDC, color, colorProp->GetBackgroundColor(), swatch,
                                       aGrid->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
                                       aGrid->GetBackgroundColour() );
