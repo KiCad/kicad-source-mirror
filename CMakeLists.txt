@@ -1040,6 +1040,7 @@ add_custom_target( uninstall
 
 include( CTest )
 enable_testing()
+list( APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure" )
 
 #================================================
 # Let CMake look in these directories for nested
