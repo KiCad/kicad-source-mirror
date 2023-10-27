@@ -330,9 +330,19 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
                 attr = new wxGridCellAttr;
                 attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
-                                                            &cfg->m_lastFootprintLibDir,
-                                                            wxEmptyString, true,
-                                                            m_projectBasePath ) );
+                        &cfg->m_lastFootprintLibDir, true, m_projectBasePath,
+                        [this]( WX_GRID* grid, int row ) -> wxString
+                        {
+                            auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
+                            auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
+                            IO_MGR::PCB_FILE_T fileType = tableRow->GetFileType();
+                            const PLUGIN_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
+
+                            if( pluginDesc.m_IsFile )
+                                return pluginDesc.FileFilter();
+                            else
+                                return wxEmptyString;
+                        } ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
                 attr = new wxGridCellAttr;
@@ -426,12 +436,13 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
         if( desc.m_IsFile && !desc.m_FileExtensions.empty() )
         {
-            entryStr << wxString::Format( wxS( " (%s)" ), joinExts( desc.m_FileExtensions ) );
+            entryStr << wxString::Format( wxS( " (%s)" ),
+                                          joinExts( desc.m_FileExtensions ) );
         }
         else if( !desc.m_IsFile && !desc.m_ExtensionsInDir.empty() )
         {
-            wxString midPart =
-                    wxString::Format( _( "folder with %s files" ), joinExts( desc.m_ExtensionsInDir ) );
+            wxString midPart = wxString::Format( _( "folder with %s files" ),
+                                                 joinExts( desc.m_ExtensionsInDir ) );
 
             entryStr << wxString::Format( wxS( " (%s)" ), midPart );
         }

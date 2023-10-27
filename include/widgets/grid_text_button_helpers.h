@@ -145,27 +145,57 @@ public:
      * Constructor
      *
      * @param aCurrentDir is current directory the path editor will open at
-     * @param aExt is the file extension(s) to filter by. If empty, the path editor will switch
-     *             to folder mode instead of file.
+     * @param aNormalize indicates whether to normalize the selected path (replace part of path
+     *                   with variables or relative path)
+     * @param aNormalizeBasePath is the path to use when trying to base variables (generally
+     *                           current project path)
+     * @param aFileFilterFn a callback which provides a file extension(s) filter.
+     */
+    GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
+                           bool aNormalize, const wxString& aNormalizeBasePath,
+                           std::function<wxString( WX_GRID* grid, int row )> aFileFilterFn ) :
+            m_dlg( aParentDialog ),
+            m_grid( aGrid ),
+            m_currentDir( aCurrentDir ),
+            m_normalize( aNormalize ),
+            m_normalizeBasePath( aNormalizeBasePath ),
+            m_fileFilterFn( std::move( aFileFilterFn ) )
+    { }
+
+    /**
+     * Constructor
+     *
+     * @param aCurrentDir is current directory the path editor will open at
+     * @param aFileFilter is the file extension(s) to filter by. If empty, the path editor will
+     *                    switch to folder mode instead of file.
      * @param aNormalize indicates whether to normalize the selected path (replace part of path
      *                   with variables or relative path)
      * @param aNormalizeBasePath is the path to use when trying to base variables (generally
      *                           current project path)
      */
     GRID_CELL_PATH_EDITOR( DIALOG_SHIM* aParentDialog, WX_GRID* aGrid, wxString* aCurrentDir,
-                           const wxString& aExt, bool aNormalize = false,
+                           const wxString& aFileFilter, bool aNormalize = false,
                            const wxString& aNormalizeBasePath = wxEmptyString ) :
             m_dlg( aParentDialog ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
-            m_ext( aExt ),
             m_normalize( aNormalize ),
-            m_normalizeBasePath( aNormalizeBasePath )
+            m_normalizeBasePath( aNormalizeBasePath ),
+            m_fileFilter( aFileFilter )
     { }
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_PATH_EDITOR( m_dlg, m_grid, m_currentDir, m_ext );
+        if( m_fileFilterFn )
+        {
+        return new GRID_CELL_PATH_EDITOR( m_dlg, m_grid, m_currentDir, m_normalize,
+                                          m_normalizeBasePath, m_fileFilterFn );
+        }
+        else
+        {
+            return new GRID_CELL_PATH_EDITOR( m_dlg, m_grid, m_currentDir, m_fileFilter,
+                                              m_normalize, m_normalizeBasePath );
+        }
     }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
@@ -174,9 +204,11 @@ protected:
     DIALOG_SHIM* m_dlg;
     WX_GRID*     m_grid;
     wxString*    m_currentDir;
-    wxString     m_ext;
     bool         m_normalize;
     wxString     m_normalizeBasePath;
+
+    wxString                                            m_fileFilter;
+    std::function<wxString( WX_GRID* aGrid, int aRow )> m_fileFilterFn;
 };
 
 

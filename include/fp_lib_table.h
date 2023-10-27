@@ -40,8 +40,6 @@ class FP_LIB_TABLE_GRID;
 class FP_LIB_TABLE_ROW : public LIB_TABLE_ROW
 {
 public:
-    typedef IO_MGR::PCB_FILE_T LIB_T;
-
     FP_LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
                       const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
         LIB_TABLE_ROW( aNick, aURI, aOptions, aDescr )
@@ -68,6 +66,8 @@ public:
      */
     void SetType( const wxString& aType ) override;
 
+    IO_MGR::PCB_FILE_T GetFileType() { return type; }
+
 protected:
     FP_LIB_TABLE_ROW( const FP_LIB_TABLE_ROW& aRow ) :
         LIB_TABLE_ROW( aRow ),
@@ -88,8 +88,9 @@ private:
 
     friend class FP_LIB_TABLE;
 
-    PLUGIN::RELEASER  plugin;
-    LIB_T             type;
+private:
+    PLUGIN::RELEASER   plugin;
+    IO_MGR::PCB_FILE_T type;
 };
 
 

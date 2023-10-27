@@ -374,7 +374,7 @@ public:
             m_dlg( aParentDlg ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
-            m_ext( aExt ),
+            m_fileFilter( aExt ),
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath )
     {
@@ -399,10 +399,10 @@ protected:
         else
             fn.SetPath( ExpandEnvVarSubstitutions( fn.GetPath(), &m_dlg->Prj() ) );
 
-        if( m_ext )
+        if( m_fileFilter )
         {
-            wxFileDialog dlg( m_dlg, _( "Select a File" ), fn.GetPath(), fn.GetFullName(), *m_ext,
-                              wxFD_FILE_MUST_EXIST | wxFD_OPEN );
+            wxFileDialog dlg( m_dlg, _( "Select a File" ), fn.GetPath(), fn.GetFullName(),
+                              *m_fileFilter, wxFD_FILE_MUST_EXIST | wxFD_OPEN );
 
             if( dlg.ShowModal() == wxID_OK )
             {
@@ -464,7 +464,7 @@ protected:
     DIALOG_SHIM* m_dlg;
     WX_GRID*     m_grid;
     wxString*    m_currentDir;
-    wxString*    m_ext;
+    wxString*    m_fileFilter;
     bool         m_normalize;
     wxString     m_normalizeBasePath;
 };
@@ -473,11 +473,14 @@ protected:
 void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
-    if( m_ext.IsEmpty() )
+    if( m_fileFilterFn )
+        m_fileFilter = m_fileFilterFn( m_grid, m_grid->GetGridCursorRow() );
+
+    if( m_fileFilter.IsEmpty() )
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, nullptr,
                                                   m_normalize, m_normalizeBasePath );
     else
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, &m_ext,
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, &m_fileFilter,
                                                   m_normalize, m_normalizeBasePath );
 
 #if wxUSE_VALIDATORS
