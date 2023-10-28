@@ -248,7 +248,6 @@ private:
     ROUTER_IFACE*     m_iface;
 
     int               m_iterLimit;
-    bool              m_forceMarkObstaclesMode = false;
 
     ROUTING_SETTINGS* m_settings;
     SIZES_SETTINGS    m_sizes;

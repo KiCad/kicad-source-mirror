@@ -189,16 +189,10 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     if( aStartItems.Count( ITEM::SOLID_T ) == aStartItems.Size() )
     {
         m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
-        m_forceMarkObstaclesMode = true;
         m_state = DRAG_COMPONENT;
     }
     else
     {
-        if( aDragMode & DM_FREE_ANGLE )
-            m_forceMarkObstaclesMode = true;
-        else
-            m_forceMarkObstaclesMode = false;
-
         m_dragger = std::make_unique<DRAGGER>( this );
         m_state = DRAG_SEGMENT;
     }
@@ -419,8 +413,6 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 
     if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
         return false;
-
-    m_forceMarkObstaclesMode = false;
 
     switch( m_mode )
     {

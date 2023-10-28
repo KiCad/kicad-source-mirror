@@ -157,6 +157,7 @@ private:
 
     ///< If true, moves the connection lines without maintaining 45 degrees corners
     bool                   m_freeAngleMode;
+    bool                   m_forceMarkObstaclesMode;
     MOUSE_TRAIL_TRACER     m_mouseTrailTracer;
 };
 

@@ -41,6 +41,7 @@ DRAGGER::DRAGGER( ROUTER* aRouter ) :
     m_dragStatus = false;
     m_currentMode = RM_MarkObstacles;
     m_freeAngleMode = false;
+    m_forceMarkObstaclesMode = false;
 }
 
 
@@ -112,10 +113,15 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     m_draggedLine      = m_world->AssembleLine( aSeg, &m_draggedSegmentIndex );
     m_lastDragSolution = m_draggedLine;
 
-    if( m_shove )
+    if ( m_world->CheckColliding( &m_draggedLine ) )
     {
-        m_shove->SetInitialLine( m_draggedLine );
+        // If we're already in a state that violates DRC then there's not much we can do but
+        // switch to mark obstacles mode (and ignore other DRC violation).
+        m_forceMarkObstaclesMode = true;
     }
+
+    if( m_shove )
+        m_shove->SetInitialLine( m_draggedLine );
 
     auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
     auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
@@ -153,6 +159,13 @@ bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
     m_shove->SetInitialLine( m_draggedLine );
     m_mode = DM_ARC;
 
+    if ( m_world->CheckColliding( &m_draggedLine ) )
+    {
+        // If we're already in a state that violates DRC then there's not much we can do but
+        // switch to mark obstacles mode (and ignore other DRC violation).
+        m_forceMarkObstaclesMode = true;
+    }
+
     return true;
 }
 
@@ -163,6 +176,13 @@ bool DRAGGER::startDragVia( VIA* aVia )
     m_draggedVia = m_initialVia;
 
     m_mode = DM_VIA;
+
+    if ( m_world->CheckColliding( aVia ) )
+    {
+        // If we're already in a state that violates DRC then there's not much we can do but
+        // switch to mark obstacles mode (and ignore other DRC violation).
+        m_forceMarkObstaclesMode = true;
+    }
 
     return true;
 }
@@ -209,6 +229,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     m_draggedItems.Clear();
     m_currentMode = Settings().Mode();
     m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
+    m_forceMarkObstaclesMode = false;
     m_lastValidPoint = aP;
 
     m_mouseTrailTracer.Clear();
@@ -320,7 +341,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
     }
     }
 
-    if( Settings().AllowDRCViolations() )
+    if( m_forceMarkObstaclesMode || Settings().AllowDRCViolations() )
         m_dragStatus = true;
     else
         m_dragStatus = !m_lastNode->CheckColliding( m_draggedItems );
@@ -718,7 +739,7 @@ bool DRAGGER::FixRoute()
                 return false;
         }
 
-        if( !m_dragStatus && !Settings().AllowDRCViolations() )
+        if( !m_dragStatus && !Settings().AllowDRCViolations() && !m_forceMarkObstaclesMode )
             return false;
 
         Router()->CommitRouting( node );
@@ -735,7 +756,7 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
 
     bool ret = false;
 
-    if( m_freeAngleMode )
+    if( m_freeAngleMode || m_forceMarkObstaclesMode )
     {
         ret = dragMarkObstacles( aP );
     }
