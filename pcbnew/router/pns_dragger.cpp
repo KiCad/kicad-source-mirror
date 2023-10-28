@@ -235,7 +235,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     m_mouseTrailTracer.Clear();
     m_mouseTrailTracer.AddTrailPoint( aP );
 
-    if( m_currentMode == RM_Shove  && !m_freeAngleMode )
+    if( m_currentMode == RM_Shove && !m_freeAngleMode )
     {
         m_shove = std::make_unique<SHOVE>( m_world, Router() );
         m_shove->SetLogger( Logger() );
@@ -255,13 +255,9 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         VVIA* vvia = checkVirtualVia( aP, seg );
 
         if( vvia )
-        {
             return startDragVia( vvia );
-        }
         else
-        {
             return startDragSegment( aP, seg );
-        }
     }
     case ITEM::VIA_T:
         return startDragVia( static_cast<VIA*>( startItem ) );
@@ -334,11 +330,9 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
     }
 
     case DM_VIA: // fixme...
-    {
         dragViaMarkObstacles( m_initialVia, m_lastNode, aP );
 
         break;
-    }
     }
 
     if( m_forceMarkObstaclesMode || Settings().AllowDRCViolations() )
@@ -357,9 +351,7 @@ bool DRAGGER::dragViaMarkObstacles( const VIA_HANDLE& aHandle, NODE* aNode, cons
     ITEM_SET fanout = findViaFanoutByHandle( aNode, aHandle );
 
     if( fanout.Empty() )
-    {
         return true;
-    }
 
     for( ITEM* item : fanout.Items() )
     {
@@ -399,18 +391,16 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
     ITEM_SET fanout = findViaFanoutByHandle( aNode, aHandle );
 
     if( fanout.Empty() )
-    {
         return true;
-    }
 
     bool viaPropOk = false;
     VECTOR2I viaTargetPos;
 
     for( ITEM* item : fanout.Items() )
     {
-        if ( VIA *via = dyn_cast<VIA*>( item ) )
+        if( VIA *via = dyn_cast<VIA*>( item ) )
         {
-            auto draggedVia = Clone( *via );
+            std::unique_ptr<VIA> draggedVia = Clone( *via );
 
             draggedVia->SetPos( aP );
             m_draggedItems.Add( draggedVia.get() );
@@ -473,11 +463,8 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
 
 void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, const VECTOR2I& aP )
 {
-    VECTOR2D lockV;
     aDragged.ClearLinks();
     aDragged.Unmark();
-
-    lockV = aDragged.CLine().NearestPoint( aP );
 
     OPTIMIZER optimizer( m_lastNode );
 
@@ -492,9 +479,7 @@ void DRAGGER::optimizeAndUpdateDraggedLine( LINE& aDragged, const LINE& aOrig, c
     VECTOR2I anchor( aP );
 
     if( aDragged.CLine().Find( aP ) < 0 )
-    {
         anchor = aDragged.CLine().NearestPoint( aP );
-    }
 
     optimizer.SetPreserveVertex( anchor );
 
@@ -618,10 +603,8 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
         break;
     }
     case DM_VIA: // fixme...
-    {
         ok = dragViaWalkaround( m_initialVia, m_lastNode, aP );
         break;
-    }
     }
 
     m_dragStatus = ok;
