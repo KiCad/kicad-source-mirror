@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ void kimathLogDebug( const char* aFormatString, ... )
 void kimathLogOverflow( double v, const char* aTypeName )
 {
     wxString typeName( aTypeName );
-    wxLogWarning( wxString::Format( wxT( "Overflow converting value %f to %s." ), v, typeName ) );
+    wxFAIL_MSG( wxString::Format( wxT( "\n\nOverflow converting value %f to %s." ), v, typeName ) );
 }
 
 
