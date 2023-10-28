@@ -142,7 +142,7 @@ public:
      *
      * @return the weak_ptr to the root symbol of this symbol.
      */
-    LIB_SYMBOL_REF GetRootSymbol() const;
+    LIB_SYMBOL_SPTR GetRootSymbol() const;
 
     void ClearCaches();
 

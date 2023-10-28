@@ -607,9 +607,9 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( grandChild->IsAlias() );
     BOOST_CHECK_EQUAL( grandChild->GetInheritanceDepth(), 2 );
 
-    BOOST_CHECK( parent->GetRootSymbol().lock().get() == parent.get() );
-    BOOST_CHECK( child->GetRootSymbol().lock().get() == parent.get() );
-    BOOST_CHECK( grandChild->GetRootSymbol().lock().get() == parent.get() );
+    BOOST_CHECK( parent->GetRootSymbol().get() == parent.get() );
+    BOOST_CHECK( child->GetRootSymbol().get() == parent.get() );
+    BOOST_CHECK( grandChild->GetRootSymbol().get() == parent.get() );
 
     LIB_SYMBOL_SPTR parentRef = child->GetParent().lock();
     BOOST_CHECK( parentRef );

@@ -534,7 +534,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 }
 
 
-LIB_SYMBOL_REF LIB_SYMBOL::GetRootSymbol() const
+LIB_SYMBOL_SPTR LIB_SYMBOL::GetRootSymbol() const
 {
     const LIB_SYMBOL_SPTR sp = m_parent.lock();
 

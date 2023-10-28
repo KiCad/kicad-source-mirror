@@ -436,7 +436,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             // If it's a derive symbol, use the parent symbol to perform the pin test.
             if( lib_match && lib_match->IsAlias() )
             {
-                lib_match_parent = lib_match->GetRootSymbol().lock();
+                lib_match_parent = lib_match->GetRootSymbol();
 
                 if( !lib_match_parent )
                     lib_match = nullptr;
