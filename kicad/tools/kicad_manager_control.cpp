@@ -874,7 +874,7 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
                           "  set frontmost of the first process whose unix id is %l to true\n"
                           "end tell" ), pid );
 
-        // This non-parameterized use of wxExecute is fine because execFile is not derived
+        // This non-parameterized use of wxExecute is fine because script is not derived
         // from user input.
         wxExecute( wxString::Format( "osascript -e '%s'", script ) );
 #endif
