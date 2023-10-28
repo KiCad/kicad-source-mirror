@@ -1,6 +1,6 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
-# Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021.
+# Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021, 2023.
 # pimjansen98 <pimjansen1998@gmail.com>, 2021.
 # CJ van der Hoeven <KeesEnJoa@gmail.com>, 2021.
 # Bas Wijnen <wijnen@debian.org>, 2022, 2023.
@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 12:12-0700\n"
-"PO-Revision-Date: 2023-06-03 06:51+0000\n"
-"Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2023-10-30 16:41+0000\n"
+"Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -38312,7 +38312,7 @@ msgstr "Vrije afstand van silkscreen naar board-rand controleren..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
-msgstr "De gaten in de remblokjes controleren ..."
+msgstr "Gaten controleren ..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:93
 msgid "Checking via holes..."
