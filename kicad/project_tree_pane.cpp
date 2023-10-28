@@ -380,10 +380,12 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     TREE_FILE_TYPE type = TREE_FILE_TYPE::UNKNOWN;
     wxFileName     fn( aName );
 
-    // Files/dirs names starting by "." are not visible files under unices.
-    // Skip them also under Windows
+#ifndef __WXMSW__
+    // Files/dirs names starting by "." are not visible files under unices (including MacOS),
+    // but are under MSW.
     if( fn.GetName().StartsWith( wxT( "." ) ) )
         return wxTreeItemId();
+#endif
 
     if( wxDirExists( aName ) )
     {
