@@ -126,18 +126,7 @@ TOOL_EVENT TOOL_ACTION::MakeEvent() const
 
     if( m_group.has_value() )
     {
-        // This should probably be checking to see if the m_group option is actually
-        // set rather than attempting to access the value when no option is set.  If
-        // that is the case, then the check above should first check if the options is
-        // set so that an exception cannot be thrown.
-        try
-        {
-            evt.SetActionGroup( m_group.value() );
-        }
-        catch( const std::bad_optional_access& e )
-        {
-            wxFAIL_MSG( e.what() );
-        }
+        evt.SetActionGroup( m_group.value() );
     }
 
     if( m_param.has_value() )
