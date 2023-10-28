@@ -351,6 +351,14 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         {
             RotatePoint( m_start, aRotCentre, aAngle );
             RotatePoint( m_end, aRotCentre, aAngle );
+
+            // Normalize
+            BOX2I bbox;
+            bbox.Merge( m_start );
+            bbox.Merge( m_end );
+            m_start = bbox.GetOrigin();
+            m_end = bbox.GetEnd();
+
             break;
         }
 
@@ -405,6 +413,17 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
         }
 
         std::swap( m_start, m_end );
+
+        if( m_shape == SHAPE_T::RECTANGLE )
+        {
+            // Normalize
+            BOX2I bbox;
+            bbox.Merge( m_start );
+            bbox.Merge( m_end );
+            m_start = bbox.GetOrigin();
+            m_end = bbox.GetEnd();
+        }
+
         break;
 
     case SHAPE_T::CIRCLE:
