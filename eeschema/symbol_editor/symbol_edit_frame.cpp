@@ -427,39 +427,39 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return getTargetSymbol() != nullptr;
             };
 
-    mgr->SetConditions( ACTIONS::saveAll,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::saveLibraryAs,  ENABLE( libSelectedCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveSymbolAs,   ENABLE( saveSymbolAsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::newSymbol,      ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::importSymbol,   ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( ACTIONS::saveAll,             ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( ACTIONS::save,                ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::saveLibraryAs,    ENABLE( libSelectedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolCopyAs, ENABLE( saveSymbolAsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::newSymbol,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::importSymbol,     ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
 
-    mgr->SetConditions( ACTIONS::undo,              ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
-    mgr->SetConditions( ACTIONS::redo,              ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
-    mgr->SetConditions( ACTIONS::revert,            ENABLE( symbolModifiedCondition ) );
+    mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
+    mgr->SetConditions( ACTIONS::revert,              ENABLE( symbolModifiedCondition ) );
 
-    mgr->SetConditions( ACTIONS::toggleGrid,        CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
-    mgr->SetConditions( ACTIONS::toggleCursorStyle, CHECK( cond.FullscreenCursor() ) );
-    mgr->SetConditions( ACTIONS::millimetersUnits,  CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
-    mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
-    mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
+    mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
+    mgr->SetConditions( ACTIONS::millimetersUnits,    CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );
+    mgr->SetConditions( ACTIONS::inchesUnits,         CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
+    mgr->SetConditions( ACTIONS::milsUnits,           CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,               ENABLE( isEditableCond ) );
-    mgr->SetConditions( ACTIONS::copy,              ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( ACTIONS::paste,             ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
-    mgr->SetConditions( ACTIONS::doDelete,          ENABLE( isEditableCond ) );
-    mgr->SetConditions( ACTIONS::duplicate,         ENABLE( isEditableCond ) );
-    mgr->SetConditions( ACTIONS::selectAll,         ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::cut,                 ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::copy,                ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::paste,               ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::doDelete,            ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::duplicate,           ENABLE( isEditableCond ) );
+    mgr->SetConditions( ACTIONS::selectAll,           ENABLE( haveSymbolCond ) );
     mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( haveSymbolCond ) );
 
-    mgr->SetConditions( EE_ACTIONS::rotateCW,       ENABLE( isEditableCond ) );
-    mgr->SetConditions( EE_ACTIONS::rotateCCW,      ENABLE( isEditableCond ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorH,        ENABLE( isEditableCond ) );
-    mgr->SetConditions( EE_ACTIONS::mirrorV,        ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorH,          ENABLE( isEditableCond ) );
+    mgr->SetConditions( EE_ACTIONS::mirrorV,          ENABLE( isEditableCond ) );
 
-    mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
-    mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
+    mgr->SetConditions( ACTIONS::zoomTool,            CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
+    mgr->SetConditions( ACTIONS::selectionTool,       CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
     auto pinTypeCond =
             [this]( const SELECTION& )

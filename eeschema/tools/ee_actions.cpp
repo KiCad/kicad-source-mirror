@@ -197,11 +197,11 @@ TOOL_ACTION EE_ACTIONS::renameSymbol( TOOL_ACTION_ARGS()
         .Tooltip( _( "Rename the selected symbol" ) )
         .Icon( BITMAPS::edit ) );
 
-TOOL_ACTION EE_ACTIONS::saveSymbolAs( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.saveSymbolAs" )
+TOOL_ACTION EE_ACTIONS::saveSymbolCopyAs( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.saveSymbolCopyAs" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Save As..." ) )
-        .Tooltip( _( "Save the current symbol to a different library." ) )
+        .FriendlyName( _( "Save Copy As..." ) )
+        .Tooltip( _( "Save a copy of the current symbol to a different library." ) )
         .Icon( BITMAPS::save_as ) );
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( TOOL_ACTION_ARGS()

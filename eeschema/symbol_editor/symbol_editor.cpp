@@ -548,9 +548,9 @@ void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 }
 
 
-void SYMBOL_EDIT_FRAME::SaveSymbolAs()
+void SYMBOL_EDIT_FRAME::SaveSymbolCopyAs()
 {
-    saveSymbolAs();
+    saveSymbolCopyAs();
 
     m_treePane->GetLibTree()->RefreshLibTree();
 }
@@ -662,7 +662,7 @@ private:
 };
 
 
-void SYMBOL_EDIT_FRAME::saveSymbolAs()
+void SYMBOL_EDIT_FRAME::saveSymbolCopyAs()
 {
     LIB_SYMBOL* symbol = getTargetSymbol();
 
@@ -745,8 +745,6 @@ void SYMBOL_EDIT_FRAME::saveSymbolAs()
 
     m_libMgr->UpdateSymbol( &new_symbol, libraryName );
     SyncLibraries( false );
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( libraryName, new_symbol.GetName() ) );
-    LoadSymbol( symbolName, libraryName, m_unit );
 }
 
 
