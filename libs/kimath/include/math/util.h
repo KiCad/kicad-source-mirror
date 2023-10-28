@@ -3,12 +3,12 @@
  *
  * Copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  * Copyright (C) CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * The equals() method to compare two floating point values adapted from
- * AlmostEqualRelativeAndAbs() on 
+ * AlmostEqualRelativeAndAbs() on
  * https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
  * (C) Bruce Dawson subject to the Apache 2.0 license.
  *
@@ -90,7 +90,7 @@ constexpr ret_type KiROUND( fp_type v )
     if( ret > std::numeric_limits<ret_type>::max() )
     {
         kimathLogOverflow( double( v ), typeid( ret_type ).name() );
-        
+
         return std::numeric_limits<ret_type>::max() - 1;
     }
     else if( ret < std::numeric_limits<ret_type>::lowest() )

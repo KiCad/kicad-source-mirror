@@ -149,7 +149,7 @@ wxString TOOL_ACTION::GetMenuLabel() const
 {
     if( m_menuLabel.has_value() )
         return wxGetTranslation( m_menuLabel.value() );
-    
+
     return GetFriendlyName();
 }
 
