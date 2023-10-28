@@ -355,7 +355,9 @@ static git_repository* get_git_repository_for_file( const char* filename )
     // Find the repository path for the given file
     if( git_repository_discover( &repo_path, filename, 0, NULL ) )
     {
-        printf( "Error %s\n", git_error_last()->message );
+        #if 0
+        printf( "get_git_repository_for_file: %s\n", git_error_last()->message ); fflush( 0 );
+        #endif
         return nullptr;
     }
 
