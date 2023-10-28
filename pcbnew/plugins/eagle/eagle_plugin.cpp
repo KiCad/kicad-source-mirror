@@ -904,31 +904,26 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             ERECT        r( gr );
             PCB_LAYER_ID layer = kicad_layer( r.layer );
+            ZONE*        zone = new ZONE( m_board );
 
-            if( IsCopperLayer( layer ) )
-            {
-                // use a "netcode = 0" type ZONE:
-                ZONE* zone = new ZONE( m_board );
-                m_board->Add( zone, ADD_MODE::APPEND );
+            m_board->Add( zone, ADD_MODE::APPEND );
 
-                zone->SetLayer( layer );
-                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+            zone->SetLayer( layer );
+            zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-                ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
+            ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
 
-                const int outlineIdx = -1;      // this is the id of the copper zone main outline
-                zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
-                zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
-                zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
-                zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
+            const int outlineIdx = -1;      // this is the id of the copper zone main outline
+            zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
+            zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
+            zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
+            zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
-                if( r.rot )
-                    zone->Rotate( zone->GetPosition(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+            if( r.rot )
+                zone->Rotate( zone->GetPosition(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
 
-                // this is not my fault:
-                zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(),
-                                             true );
-            }
+            // this is not my fault:
+            zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(), true );
 
             m_xpath->pop();
         }
@@ -1451,9 +1446,6 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
                                         eagle_layer_name( p.layer ), p.layer ) );
         return nullptr;
     }
-
-    if( !IsCopperLayer( layer ) && !keepout )
-        return nullptr;
 
     // use a "netcode = 0" type ZONE:
     std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( m_board );
