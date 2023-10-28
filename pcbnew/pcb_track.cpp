@@ -808,6 +808,36 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
 }
 
 
+void PCB_VIA::GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
+                                           PCB_LAYER_ID* aBottommost ) const
+{
+    *aTopmost = UNDEFINED_LAYER;
+    *aBottommost = UNDEFINED_LAYER;
+
+    static std::initializer_list<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
+                                                             PCB_PAD_T };
+
+    for( int layer = TopLayer(); layer <= BottomLayer(); ++layer )
+    {
+        bool connected = false;
+
+        if( m_zoneLayerOverrides[ layer ] == ZLO_FORCE_FLASHED )
+            connected = true;
+        else if( GetBoard()->GetConnectivity()->IsConnectedOnLayer( this, layer, connectedTypes ) )
+            connected = true;
+
+        if( connected )
+        {
+            if( *aTopmost == UNDEFINED_LAYER )
+                *aTopmost = ToLAYER_ID( layer );
+
+            *aBottommost = ToLAYER_ID( layer );
+        }
+    }
+
+}
+
+
 void PCB_TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Show the track and its netname on different layers

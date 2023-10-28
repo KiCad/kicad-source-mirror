@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
 #include <footprint.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
-#include <pad.h>
 #include <geometry/shape_segment.h>
 #include <geometry/seg.h>
 #include <drc/drc_engine.h>

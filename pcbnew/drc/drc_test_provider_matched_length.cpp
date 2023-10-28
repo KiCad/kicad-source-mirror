@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,7 +31,6 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
 
-#include <pcbexpr_evaluator.h>
 
 /*
     Single-ended matched length + skew + via count test.
@@ -66,8 +65,6 @@ public:
         return wxT( "Tests matched track lengths." );
     }
 
-    DRC_LENGTH_REPORT BuildLengthReport() const;
-
 private:
 
     bool runInternal( bool aDelayReportMode = false );
@@ -81,7 +78,8 @@ private:
     void checkViaCounts( const DRC_CONSTRAINT& aConstraint,
                          const std::vector<CONNECTION>& aMatchedConnections );
 
-    BOARD* m_board;
+private:
+    BOARD*            m_board;
     DRC_LENGTH_REPORT m_report;
 };
 
@@ -142,16 +140,16 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
 void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstraint,
                                                    const std::vector<CONNECTION>& aMatchedConnections )
 {
-    int avgLength = 0;
+    double avgLength = 0;
 
     for( const DRC_LENGTH_REPORT::ENTRY& ent : aMatchedConnections )
         avgLength += ent.total;
 
-    avgLength /= aMatchedConnections.size();
+    avgLength /= (double) aMatchedConnections.size();
 
     for( const auto& ent : aMatchedConnections )
     {
-        int skew = ent.total - avgLength;
+        int skew = KiROUND( ent.total - avgLength );
         if( aConstraint.GetValue().HasMax() && abs( skew ) > aConstraint.GetValue().Max() )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SKEW_OUT_OF_RANGE );
@@ -302,8 +300,13 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     if( bds.m_UseHeightForLengthCalcs )
                     {
                         const PCB_VIA* v = static_cast<PCB_VIA*>( citem );
+                        PCB_LAYER_ID   topmost;
+                        PCB_LAYER_ID   bottommost;
 
-                        ent.totalVia += stackup.GetLayerDistance( v->TopLayer(), v->BottomLayer() );
+                        v->GetOutermostConnectedLayers( &topmost, &bottommost );
+
+                        if( topmost != UNDEFINED_LAYER && topmost != bottommost )
+                            ent.totalVia += stackup.GetLayerDistance( topmost, bottommost );
                     }
                 }
                 else if( citem->Type() == PCB_TRACE_T )

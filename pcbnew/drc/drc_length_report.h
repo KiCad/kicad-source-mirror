@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,10 +38,10 @@ public:
         wxString                        to;
         std::set<BOARD_CONNECTED_ITEM*> items;
         int                             viaCount;
-        int                             totalRoute;
+        double                          totalRoute;
         int                             totalVia;
         int                             totalPadToDie;
-        int                             total;
+        double                          total;
     };
 
     DRC_LENGTH_REPORT()

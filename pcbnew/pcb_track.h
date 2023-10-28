@@ -534,6 +534,14 @@ public:
     bool FlashLayer( LSET aLayers ) const;
 
     /**
+     * Return the top-most and bottom-most connected layers.
+     * @param aTopmost
+     * @param aBottommost
+     */
+    void GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
+                             PCB_LAYER_ID* aBottommost ) const;
+
+    /**
      * Set the drill value for vias.
      *
      * @param aDrill is the new drill diameter
