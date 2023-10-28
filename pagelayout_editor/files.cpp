@@ -214,14 +214,13 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             msg.Printf( _( "Failed to create file '%s'." ), filename );
             DisplayErrorMessage( this, msg );
         }
-
         else
         {
-            msg.Printf( _("File \"%s\" saved."), filename );
+            msg.Printf( _( "File '%s' saved." ), filename );
             SetStatusText( msg );
 
-            if( GetCurrentFileName().IsEmpty() )
-                SetCurrentFileName( filename );
+            SetCurrentFileName( filename );
+            UpdateTitleAndInfo();
         }
     }
         break;
