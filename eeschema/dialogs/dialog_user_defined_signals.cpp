@@ -108,7 +108,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onAddSignal( wxCommandEvent& event )
         long usedId;
         m_grid->GetCellValue( ii, 1 ).ToLong( &usedId );
 
-        if( usedId > newId )
+        if( usedId >= newId )
             newId = usedId + 1;
     }
 
