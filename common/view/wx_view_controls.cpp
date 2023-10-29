@@ -647,15 +647,25 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
         double dist = 0;
 
         if( type == wxEVT_SCROLLWIN_PAGEUP )
+        {
             dist = pagePanDelta;
+        }
         else if( type == wxEVT_SCROLLWIN_PAGEDOWN )
+        {
             dist = -pagePanDelta;
+        }
         else if( type == wxEVT_SCROLLWIN_LINEUP )
+        {
             dist = linePanDelta;
+        }
         else if( type == wxEVT_SCROLLWIN_LINEDOWN )
+        {
             dist = -linePanDelta;
+        }
         else
+        {
             wxCHECK_MSG( false, /* void */, wxT( "Unhandled event type" ) );
+        }
 
         VECTOR2D scroll = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) * dist;
 

@@ -625,9 +625,13 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
     if( symbol->IsAlias() )
     {
         if(  LIB_SYMBOL_SPTR parent = symbol->GetRootSymbol() )
+        {
             symbolToPlot = parent.get();
+        }
         else
+        {
             wxCHECK( false, CLI::EXIT_CODES::ERR_UNKNOWN );
+        }
     }
 
     if( aSvgJob->m_includeHiddenPins )
