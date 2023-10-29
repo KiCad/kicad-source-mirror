@@ -141,6 +141,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
                             { wxID_CANCEL, _( "Close" )  } } );
 
     // Build default output file name
+    // (last saved filename in project or built from board filename)
     wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
 
     if( path.IsEmpty() )
@@ -149,6 +150,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
         brdFile.SetExt( wxT( "step" ) );
         path = brdFile.GetFullPath();
     }
+
+    m_outputFileName->SetValue( path );
 
     Layout();
     bSizerSTEPFile->Fit( this );
@@ -342,7 +345,7 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
     wxFileName fn( Prj().AbsolutePath( path ) );
 
     wxFileDialog dlg( this, _( "STEP Output File" ), fn.GetPath(), fn.GetFullName(), filter,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -357,6 +360,12 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     m_parent->SetLastPath( LAST_PATH_STEP, path );
 
     path = ExpandEnvVarSubstitutions( path, &Prj() );
+
+    if( path.IsEmpty() )
+    {
+        DisplayErrorMessage( this, _( "No filename for output file" ) );
+        return;
+    }
 
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
