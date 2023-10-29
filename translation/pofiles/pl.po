@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-24 12:12-0700\n"
-"PO-Revision-Date: 2023-10-26 04:31+0000\n"
+"PO-Revision-Date: 2023-10-30 16:41+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1452,7 +1452,6 @@ msgid "KiCad Image Converter"
 msgstr "Konwerter obrazów programu KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
 msgstr "Pliki obrazów"
 
@@ -1488,9 +1487,8 @@ msgid "Image Files"
 msgstr "Pliki obrazów"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Wybierz plik z ramką arkusza"
+msgstr "Utwórz plik z ramką arkusza"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -3479,7 +3477,7 @@ msgstr "Podstawowy"
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
@@ -3489,18 +3487,16 @@ msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Wyrównanie"
+msgstr "Autoryzacja"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Nazwa bazowa"
+msgstr "Nazwa użytkownika"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
@@ -3508,9 +3504,8 @@ msgid "Password"
 msgstr "Hasło"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Wiadomości:"
+msgstr "Wiadomość wprowadzająca:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
 msgid "Author:"
@@ -3518,27 +3513,24 @@ msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
-msgstr ""
+msgstr "Wprowadź"
 
 #: common/dialogs/git/dialog_git_commit.cpp:150
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Komponent: Nazwa nie może być pusta."
+msgstr "Opis zmian nie może być pusty"
 
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:370
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Wpisz hasło dla klucza SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
-#, fuzzy
 msgid "Test connection"
-msgstr "Zaznacz połączenie"
+msgstr "Testuj połączenie"
 
 #: common/dialogs/git/dialog_git_repository.cpp:326
-#, fuzzy
 msgid "Connection successful"
-msgstr "Plik został prawidłowo utworzony."
+msgstr "Pomyślnie połączono"
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
 #, c-format
@@ -3551,34 +3543,30 @@ msgid "Could not open private key '%s'"
 msgstr "Nie można otworzyć klucza prywatnego '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Nieprawidłowa nazwa pinu"
+msgstr "Nieprawidłowy klucz SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
 msgid "The selected file is not a valid SSH private key"
 msgstr "Zaznaczony plik nie jest prawidłowym prywatnym kluczem SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Nie można odnaleźć pliku biblioteki '%s'"
+msgstr "Nie można otworzyć klucza publicznego '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Missing information"
-msgstr "Brakujący footprint"
+msgstr "Brakujące informacje"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Wprowadź w pełni kwalifikowany adres URL repozytorium"
+msgstr "Wprowadź nazwę repozytorium"
 
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Wprowadź w pełni kwalifikowany adres URL repozytorium"
+msgstr "Wprowadź adres URL repozytorium"
 
 #: common/dialogs/git/dialog_git_repository.cpp:431
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
@@ -3586,33 +3574,28 @@ msgid "SSH Key Password"
 msgstr "Hasło klucza SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Obrót"
+msgstr "Położenie"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Nazwa połączenia"
+msgstr "Typ połączenia"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "Plik lokalny"
+msgstr "Lokalnie"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Prywatne"
+msgstr "Klucz prywatny SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Wybierz plik"
+msgstr "Wybierz plik klucza prywatnego SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
@@ -3623,30 +3606,28 @@ msgid "Username"
 msgstr "Nazwa użytkownika"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Repozytorium"
+msgstr "Repozytorium Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Przełącz gałąź Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Wybierz lub wpisz nazwę gałęzi:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Gałąź"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Ostatnie zmiany"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Uaktualnione"
+msgstr "Ostatnio alktualizowane"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3662,26 +3643,23 @@ msgstr "Dodaj"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Dane wprowadzane na Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Domyślne wartości"
+msgstr "Użyj domyślnych wartości"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Nazwa obszaru:"
+msgstr "Nazwisko autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
 msgid "Author e-mail:"
 msgstr "e-mail autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Zarządzanie Repozytoriami"
+msgstr "Repozytoria Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3705,19 +3683,16 @@ msgid "Status"
 msgstr "Status"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Dodaj repozytorium"
+msgstr "Dodaj nowe repozytorium"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Modyfikuj właściwości footprintu"
+msgstr "Edycja właściwości repozytorium"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Usuń repozytorium"
+msgstr "Usuń repozytorium Git"
 
 #: common/dialogs/panel_color_settings.cpp:50
 #: common/dialogs/panel_color_settings.cpp:51
@@ -3959,9 +3934,8 @@ msgstr ""
 "kolorystycznego systemu"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Rozmiar narożnika:"
+msgstr "Rozmiar ikon pasków narzędzi:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3972,7 +3946,7 @@ msgstr "Mały"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Użyj kompaktowych ikon w paskach narzędzi"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:802
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1208
@@ -3992,7 +3966,7 @@ msgstr "Normalny"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "Użyj domyślnego rozmiaru ikon programu KiCad w paskach narzędzi"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4002,7 +3976,7 @@ msgstr "Duży"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Użyj większych ikon w paskach narzędzi"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 #: common/dialogs/panel_common_settings_base.cpp:195
@@ -4434,9 +4408,8 @@ msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Konwertuj na łuk"
+msgstr "Konwertuj do skali szarości"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -5193,9 +5166,8 @@ msgid "Hotkeys"
 msgstr "Skróty klawiszowe"
 
 #: common/eda_base_frame.cpp:1083 kicad/project_tree_pane.cpp:968
-#, fuzzy
 msgid "Version Control"
-msgstr "Tylko zaznaczone"
+msgstr "Kontrola wersji"
 
 #: common/eda_base_frame.cpp:1090 common/eda_base_frame.cpp:1080
 msgid "Data Collection"
@@ -5502,14 +5474,12 @@ msgstr "Grafika"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Oznaczenie"
+msgstr "Obraz referencyjny"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:188
-#, fuzzy
 msgid "Generator"
-msgstr "Utwórz listę"
+msgstr "Generator"
 
 #: common/eda_item.cpp:349 common/eda_item.cpp:381
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:190
@@ -6083,18 +6053,16 @@ msgid "Vertical Justification"
 msgstr "Wyrównanie pionowe"
 
 #: common/eda_units.cpp:437 common/status_popup.cpp:152
-#, fuzzy
 msgid "min"
-msgstr "w"
+msgstr "minimum"
 
 #: common/eda_units.cpp:445
-#, fuzzy
 msgid "opt"
-msgstr "Górna"
+msgstr "optymalnie"
 
 #: common/eda_units.cpp:453 common/status_popup.cpp:153
 msgid "max"
-msgstr ""
+msgstr "maks"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -6315,17 +6283,17 @@ msgstr "Nie można skopiować '%s'."
 
 #: common/gestfich.cpp:308
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Niepoprawna nazwa folderu, nie można usunąć głównego"
 
 #: common/gestfich.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "Jednostka '%s' nie kończy się na 'mil'."
+msgstr "Folder '%s' nie istnieje"
 
 #: common/gestfich.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "Strefa miedzi '%s' nie została poprawnie przetworzona."
+msgstr "'%s' nie jest folderem"
 
 #: common/gestfich.cpp:338
 #, c-format
@@ -6333,38 +6301,37 @@ msgid "Error removing directory '%s': %s"
 msgstr "Wystąpił błąd podczas usuwania folderu '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć folderu '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Nie można załadować obrazu z '%s'."
+msgstr "Nie można sklonować repozytorium '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Nie można załadować obrazu z '%s'."
+msgstr "Nie można wyszukać zdalnego '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Nie można odnaleźć modelu IBIS '%s'"
+msgstr "Nie można połączyć się zdalnie z '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Nie można odnaleźć modelu IBIS '%s'"
+msgstr "Nie można pobrać danych ze zdalnego '%s'"
 
 #: common/git/git_pull_handler.cpp:90
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Nie można odczytać 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Nie można uruchomić CvPcb"
+msgstr "Nie można przejrzeć zmian"
 
 #: common/git/git_pull_handler.cpp:108
 msgid "Could not analyze merge"
@@ -6372,88 +6339,81 @@ msgstr "Nie można przeanalizować zmian"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "Nieprawidłowy HEAD.  Nie można scalić."
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Nie można pobrać najwyższej pozycji repozytorium"
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "Nie można odnaleźć elementu SPICE z oznaczeniem '%s'"
+msgstr "Nie można uzyskać referencyjnego identyfikatora OID '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:45
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Nie udało się wykonać operacji sprawdzenia."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Nie można załadować obrazu z '%s'."
+msgstr "Nie można wyszukać zatwierdzenia '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
 msgstr "Nie można scalić zmian"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Nie można otworzyć pliku biblioteki."
+msgstr "Nie można uzyskać indeksu repozytorium"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Nie można otworzyć pliku konfigurującego"
+msgstr "Nie udało się pobrać iteratora konfliktu"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Zmień (jeśli trzeba)"
+msgstr "Zmieniono"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Dodano"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Nie można otworzyć pliku archiwum."
+msgstr "Nie można wyszukać zdalnego"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Nie można otworzyć pliku archiwum."
+msgstr "Nie można połączyć się ze zdalnym"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Nie można wykorzystać OpenGL"
+msgstr "Nie można wypchnąć zdalnie"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Otrzymano %u z %u obiektów"
 
 #: common/git/kicad_git_common.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Uaktualnione %s z %s do %s."
+msgstr "* [uaktualniono] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Strefa %s %s"
+msgstr "* [nowy] %s %s"
 
 #: common/git/kicad_git_common.cpp:466
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Zapisywanie obiektów: %d%% (%d/%d), %d bajtów"
 
 #: common/git/kicad_git_common.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Siatka: %s (%s)"
+msgstr "* [odrzucony] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
 #, c-format
@@ -6465,104 +6425,88 @@ msgid "Invalid repository."
 msgstr "Nieprawidłowe repozytorium."
 
 #: common/git/kicad_git_errors.cpp:31
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Nie można utworzyć pliku."
+msgstr "Nie udało się zatwierdzić zmian."
 
 #: common/git/kicad_git_errors.cpp:32
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Zapis biblioteki odzyskiwania %s nie powiódł się."
+msgstr "Nie udało się połączyć gałęzi."
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Nie mogę załadować URL repozytorium"
+msgstr "Nie można sklonować repozytorium."
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Usuń repozytorium"
+msgstr "Nie znaleziono zdalnego repozytorium."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Błąd autoryzacji zdalnego repozytorium."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Branch not found."
-msgstr "Pin %s nie został znaleziony."
+msgstr "Gałąź nie została znaleziona."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Nie można utworzyć pliku."
+msgstr "Nie można utworzyć gałęzi."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Niepowodzenie przy usuwaniu '%s'"
+msgstr "Nie udało się usunąć gałęzi."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Nie znaleziono pliku podczas operacji sprawdzania."
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Wystąpił konflikt w scaleniu."
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Wystąpił konflikt przy zmianie bazy."
 
 #: common/git/kicad_git_errors.cpp:53
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Nie można przetworzyć lokalnego pliku 'repository.json'."
+msgstr "Nie udało się pobrać zmian ze zdalnego repozytorium."
 
 #: common/git/kicad_git_errors.cpp:54
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Nie można przetworzyć lokalnego pliku 'repository.json'."
+msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Nie skonfigurowano żadnej gałęzi nadrzędnej."
 
 #: common/git/kicad_git_errors.cpp:56
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Nie można przetworzyć lokalnego pliku 'repository.json'."
+msgstr "Nie udało się nawiązać połączenia ze zdalnym repozytorium."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "Nie znaleziono %s"
+msgstr "Znacznik nie został znaleziony."
 
 #: common/git/kicad_git_errors.cpp:60
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Nie można utworzyć pliku."
+msgstr "Nie udało się utworzyć znacznika."
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Niepowodzenie przy usuwaniu '%s'"
+msgstr "Nie udało się usunąć znacznika."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "Nieznany błąd"
+msgstr "Nieznany błąd."
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "No error."
-msgstr "Nie znaleziono błędów."
+msgstr "Brak błędów."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "błędy"
+msgstr "Brak błędu"
 
 #: common/grid_tricks.cpp:353 common/tool/actions.cpp:193
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:117
@@ -7635,9 +7579,8 @@ msgid "KiCad Classic"
 msgstr "Klasyczny programu KiCad"
 
 #: common/status_popup.cpp:151
-#, fuzzy
 msgid "current"
-msgstr "Prąd"
+msgstr "bieżący"
 
 #: common/template_fieldnames.cpp:68
 #, c-format
@@ -8348,14 +8291,12 @@ msgid "Open product documentation in a web browser"
 msgstr "Otwiera powiązaną dokumentację w przeglądarce"
 
 #: common/tool/actions.cpp:966
-#, fuzzy
 msgid "About KiCad"
-msgstr "&O programie KiCad"
+msgstr "O programie KiCad"
 
 #: common/tool/actions.cpp:967
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Otwórz edytor tekstu"
+msgstr "Otwiera okno z informacjami o programie"
 
 #: common/tool/actions.cpp:976 common/tool/actions.cpp:968
 msgid "List Hotkeys..."
@@ -12582,9 +12523,8 @@ msgid "PDF Options"
 msgstr "Opcje PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Generuj wyskakujące okienka właściwości dla footprintów na dole"
+msgstr "Generuj wyskakujące okienka właściwości"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:159
@@ -13718,14 +13658,12 @@ msgid "Simulation Model Editor"
 msgstr "Edytor modelu symulacyjnego"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
 msgstr "Wybierz symbol"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:63
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Symbol Zasilania"
+msgstr "Wybierz symbol zasilania"
 
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:49
 #: pcbnew/footprint_chooser_frame.cpp:98
@@ -13845,9 +13783,8 @@ msgid "The Item Number column cannot be grouped by."
 msgstr "Kolumna Ilość Elementów nie może zostać pogrupowana."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1187
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Lista materiałowa"
+msgstr "Plik listy materiałowej"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1199
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1208
@@ -13876,24 +13813,23 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Zmiany nie są zapisane. Eksportować mimo to?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1238
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "Nie podano nazwy pliku"
+msgstr "Nie podano nazwy pliku w eksporterze"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1252
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Nie można utworzyć pliku \"%s\"."
+msgstr "Nie można otworzyć/utworzyć ścieżki '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "Nie mogę zapisać listy materiałowej do '%s'."
+msgstr "Nie można utworzyć listy materiałowej '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "Nie mogę zapisać listy materiałowej do '%s'."
+msgstr "Nie mogę zapisać listy materiałowej '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1275
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1266
@@ -14954,9 +14890,8 @@ msgid "Largest"
 msgstr "Największy"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Tekst łącza:"
+msgstr "Siatka połączeń:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:179
@@ -15300,9 +15235,8 @@ msgid "Error Loading Library"
 msgstr "Błąd podczas ładowania biblioteki"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:612
-#, fuzzy
 msgid "Add Library"
-msgstr "Dodaj bibliotekę..."
+msgstr "Dodaj bibliotekę"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:626
 msgid "Warning: Duplicate Nickname"
@@ -15871,9 +15805,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "Zdublowane nazwy arkuszy w podanym akruszu"
 
 #: eeschema/erc_item.cpp:51
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "Koniec pinu lub połączenia poza siatką"
+msgstr "Koniec pinu lub połączenia poza siatką połączeń"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
@@ -16216,9 +16149,9 @@ msgid ""
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Ta operacja zamieni zawartość bieżącego projektu.\n"
+"Ta operacja spowoduje nadpisanie obecnego projektu.\n"
 "\n"
-"Kontynuować?"
+"Czy chcesz kontynuować?"
 
 #: eeschema/files-io.cpp:672 eeschema/files-io.cpp:665
 msgid "Import Schematic"
@@ -16421,7 +16354,6 @@ msgstr "Stopy"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:201
 #: pcbnew/tools/drawing_tool.cpp:1555 pcbnew/tools/drawing_tool.cpp:1646
-#, fuzzy
 msgid "Import Graphics"
 msgstr "Importuj grafikę"
 
@@ -17701,7 +17633,7 @@ msgstr ""
 "została załadowana."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
@@ -17965,9 +17897,9 @@ msgstr ""
 "'cadstarpcblib'."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:278
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "Nie można utworzyć biblioteki footprintu '%s'."
+msgstr "Nie można odnaleźć pliku .csa odnoszącym się do biblioteki '%s'."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:63
 msgid "CADSTAR Schematic Archive files"
@@ -18001,13 +17933,13 @@ msgid "KiCad database library files"
 msgstr "Bazodanowe pliki bibliotek symboli"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
-"'%s' to plik schematu programu Eagle w formacie binarnym; importować można "
-"tylko schematy w formacie Eagle XML."
+"'%s' to plik programu Eagle w formacie binarnym; importować można tylko "
+"pliki w formacie Eagle XML."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:644
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3156
@@ -18038,9 +17970,8 @@ msgid "Eagle XML schematic files"
 msgstr "Pliki schematów programu EAGLE XML"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.h:105
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Pliki bibliotek programu EAGLE v. 6.x XML"
+msgstr "Pliki bibliotek programu EAGLE XML"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:152
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:302
@@ -18604,7 +18535,7 @@ msgstr "Symulacja"
 
 #: eeschema/sch_symbol.cpp:1814 eeschema/sch_symbol.cpp:1804
 msgid "BOM"
-msgstr "BOM"
+msgstr "Lista materiałowa"
 
 #: eeschema/sch_symbol.cpp:1826 eeschema/sch_text.cpp:422
 #: eeschema/sch_textbox.cpp:450 eeschema/sch_symbol.cpp:1816
@@ -20432,14 +20363,12 @@ msgstr ""
 "<b>Prostokąt (grafika) ma zerowy rozmiar</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Sprawdzanie symbolu"
+msgstr "Wybór symbolu"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "Przeglądarka symboli bibliotecznych programu KiCad"
+msgstr "Przeglądarka różnic w symbolach bibliotecznych programu KiCad"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 #: eeschema/symbol_viewer_frame.cpp:186
@@ -20994,9 +20923,8 @@ msgid "(failed to load)"
 msgstr "(nie można załadować)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Przeglądarka bibliotek symboli"
+msgstr "Przeglądarka bibliotek symboli programu KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021 eeschema/symbol_viewer_frame.cpp:1269
@@ -22971,7 +22899,6 @@ msgid "Page '%s' not found."
 msgstr "Nie znaleziono strony '%s'."
 
 #: eeschema/tools/simulator_control.cpp:94
-#, fuzzy
 msgid "Open Simulation Workbook"
 msgstr "Otwórz skoroszyt symulacji"
 
@@ -23021,9 +22948,8 @@ msgstr "Nie ma nic do wyeksportowania"
 
 #: eeschema/tools/symbol_editor_control.cpp:578
 #: pcbnew/footprint_edit_frame.cpp:1353
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "Eksportuj widok jako plik PNG..."
+msgstr "Eksportuj widok jako plik PNG"
 
 #: eeschema/tools/symbol_editor_control.cpp:589
 #, c-format
@@ -23085,9 +23011,8 @@ msgid "Recently Used"
 msgstr "Ostatnio użyte"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:163
-#, fuzzy
 msgid "Already Placed"
-msgstr "Przesuwanie i rozmieszczanie"
+msgstr "Obecnie umieszczone"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:503
 #: eeschema/dialogs/dialog_choose_symbol.cpp:442
@@ -24205,9 +24130,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr "Żadna z warstw Gerbera nie zawiera danych"
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "Importuj płytkę spoza programu KiCad"
+msgstr "Eksportuj jako płytkę programu KiCad"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -25022,9 +24946,8 @@ msgstr ""
 "schematu)"
 
 #: kicad/cli/command_sch_export_plot.cpp:76
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "Generuj wyskakujące okienka właściwości dla footprintów na dole"
+msgstr "Nie generuj wyskakujących okienek właściwości w plikach PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:81
 #: kicad/cli/command_sch_export_plot.cpp:73
@@ -25318,9 +25241,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d dostępnych aktualizacji pakietów"
 
 #: kicad/kicad_manager_frame.cpp:738
-#, fuzzy
 msgid "Edit File in Text Editor"
-msgstr "Edytuj w edytorze tekstu"
+msgstr "Edytuj plik w edytorze tekstu"
 
 #: kicad/kicad_manager_frame.cpp:820 kicad/kicad_manager_frame.cpp:810
 msgid "[no project loaded]"
@@ -25529,9 +25451,8 @@ msgstr ""
 "Czy na pewno chcesz zamknąć menedżera pakietów i odrzucić oczekujące zmiany?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:289
-#, fuzzy
 msgid "Install Package"
-msgstr "Instaluj pakiet"
+msgstr "Zainstaluj pakiet"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:402
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -25681,7 +25602,6 @@ msgid "Error downloading package"
 msgstr "Błąd wczytywania pakietu"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:528
-#, fuzzy
 msgid "Save Package"
 msgstr "Zapisz pakiet"
 
@@ -26131,43 +26051,39 @@ msgstr "Przenieś do kosza"
 
 #: kicad/project_tree_pane.cpp:916
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "Dodaj projekt do systemu kontroli wersji..."
 
 #: kicad/project_tree_pane.cpp:917
-#, fuzzy
 msgid "Initialize a new repository"
-msgstr "Nie można przetworzyć repozytorium: %s"
+msgstr "Inicjuje nowe repozytorium"
 
 #: kicad/project_tree_pane.cpp:921
-#, fuzzy
 msgid "Commit Project..."
-msgstr "Nowy projekt..."
+msgstr "Wprowadź projekt..."
 
 #: kicad/project_tree_pane.cpp:922 kicad/project_tree_pane.cpp:936
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Wprowadza zmiany do lokalnego repozytorium"
 
 #: kicad/project_tree_pane.cpp:925
 msgid "Push"
-msgstr ""
+msgstr "Wypchnij"
 
 #: kicad/project_tree_pane.cpp:926
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "Wypycha wprowadzone lokalnie zmiany do zdalnego repozytorium"
 
 #: kicad/project_tree_pane.cpp:929
 msgid "Pull"
-msgstr ""
+msgstr "Wyciągnij"
 
 #: kicad/project_tree_pane.cpp:930
-#, fuzzy
 msgid "Pull changes from remote repository into local"
-msgstr "Przekazuje zmiany na schemacie do PCB"
+msgstr "Pobiera zmiany ze zdalnego repozytorium do jego lokalnej kopii"
 
 #: kicad/project_tree_pane.cpp:935
-#, fuzzy
 msgid "Commit File..."
-msgstr "Zmień nazwę pliku..."
+msgstr "Wprowadź plik..."
 
 #: kicad/project_tree_pane.cpp:950
 msgid "Switch to branch "
@@ -26178,23 +26094,20 @@ msgid "Other..."
 msgstr "Inne..."
 
 #: kicad/project_tree_pane.cpp:956
-#, fuzzy
 msgid "Switch to a different branch"
-msgstr "Przełącza na odmienną metodę edycji łuków"
+msgstr "Przełącza na inną gałąź repozytorium"
 
 #: kicad/project_tree_pane.cpp:959
-#, fuzzy
 msgid "Switch to Branch"
-msgstr "Przełącz do edytora PCB"
+msgstr "Przełącz gałąź"
 
 #: kicad/project_tree_pane.cpp:963
-#, fuzzy
 msgid "Remove Version Control"
-msgstr "Usuń narożnik strefy"
+msgstr "Usuń informacje kontroli wersji"
 
 #: kicad/project_tree_pane.cpp:964
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "Usuń wszystkie pliki kontroli wersji z katalogu projektu."
 
 #: kicad/project_tree_pane.cpp:1022 kicad/project_tree_pane.cpp:824
 #, c-format
@@ -26220,28 +26133,24 @@ msgstr "Zaznaczony folder jest już obecnie projektem git."
 
 #: kicad/project_tree_pane.cpp:1530
 msgid "Failed to initialize git project."
-msgstr ""
+msgstr "Nie udało się zainicjować projektu git."
 
 #: kicad/project_tree_pane.cpp:1542
-#, fuzzy
 msgid "Set default remote"
-msgstr "Ustaw jako domyślne"
+msgstr "Ustaw domyślne repozytorium zdalne"
 
 #: kicad/project_tree_pane.cpp:1592
-#, fuzzy
 msgid "Failed to set default remote."
-msgstr "Nie można utworzyć pliku."
+msgstr "Nie udało się ustawić domyślnego repozytorium zdalnego."
 
 #: kicad/project_tree_pane.cpp:1604 kicad/project_tree_pane.cpp:1641
 #: kicad/project_tree_pane.cpp:1661
-#, fuzzy
 msgid "Fetching Remote"
-msgstr "Pobieranie repozytorium"
+msgstr "Pobieranie repozytorium zdalnego"
 
 #: kicad/project_tree_pane.cpp:1667
-#, fuzzy
 msgid "Failed to push project"
-msgstr "Nie udało się wygenerować danych"
+msgstr "Nie udało się wypchnąć projektu"
 
 #: kicad/project_tree_pane.cpp:1729
 #, c-format
@@ -26249,9 +26158,9 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Nie można przejrzeć gałęzi '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1741
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s'"
-msgstr "Nie można odnaleźć przeglądarki dla '%s'."
+msgstr "Nie można odnaleźć głównej gałęzi dla '%s'"
 
 #: kicad/project_tree_pane.cpp:1752
 #, c-format
@@ -26259,72 +26168,70 @@ msgid "Failed to switch to branch '%s'"
 msgstr "Nie można przełączyć się na '%s'"
 
 #: kicad/project_tree_pane.cpp:1763
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
-msgstr "Nie można przetworzyć cyfry z '%s'"
+msgstr "Nie udało się zaktualizować odnośnika HEAD dla gałęzi '%s'"
 
 #: kicad/project_tree_pane.cpp:1781
-#, fuzzy
 msgid "Are you sure you want to remove git tracking from this project?"
-msgstr "Czy jesteś pewien, by usunąć pole '%s'?"
+msgstr "Czy jesteś pewien, by usunąć dane o śledzeniu zmian w tym projekcie?"
 
 #: kicad/project_tree_pane.cpp:1798
-#, fuzzy
 msgid "Failed to remove git directory"
-msgstr "Nie można usunąć folderu %s"
+msgstr "Nie można usunąć folderu Git"
 
 #: kicad/project_tree_pane.cpp:2105
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "Odrzucanie zatwierdzenia z powodu pustego komunikatu opisującego."
 
 #: kicad/project_tree_pane.cpp:2111
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "Odrzucanie zatwierdzenia z powodu braku wyboru plików."
 
 #: kicad/project_tree_pane.cpp:2117
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Nie można przetworzyć repozytorium: %s"
+msgstr "Nie udało się pobrać indeksu repozyrium: %s"
 
 #: kicad/project_tree_pane.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Niepowodzenie przy usuwaniu '%s'"
+msgstr "Nie udało się dodać pliku do indeksu: %s"
 
 #: kicad/project_tree_pane.cpp:2133
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "Nie można było utworzyć pliku '%s'."
+msgstr "Nie można zapisać indeksu: '%s'"
 
 #: kicad/project_tree_pane.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Niepowodzenie przy usuwaniu '%s'"
+msgstr "Nie udało się zapisać drzewa: %s"
 
 #: kicad/project_tree_pane.cpp:2149
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Niepowodzenie przy usuwaniu '%s'"
+msgstr "Nie udało się sprawdzić drzewa: %s"
 
 #: kicad/project_tree_pane.cpp:2157
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Nie można usunąć folderu %s"
+msgstr "Nie udało się pobrać odnośnika HEAD: %s"
 
 #: kicad/project_tree_pane.cpp:2164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "Nie powiódł się zapis schematu '%s'"
+msgstr "Nie udało się pobrać zmian: %s"
 
 #: kicad/project_tree_pane.cpp:2180
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "Nie udało się utworzyć pliku tymczasowego '%s'."
+msgstr "Nie udało się utworzyć podpisu autora: '%s'"
 
 #: kicad/project_tree_pane.cpp:2190
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "Nie można było utworzyć pliku '%s'."
+msgstr "Nie można było utworzyć bloku zmian: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -26343,13 +26250,12 @@ msgid "Create new project from template"
 msgstr "Tworzy nowy projekt na podstawie szablonu"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
-#, fuzzy
 msgid "Clone Project from Repository..."
-msgstr "Nowy projekt na podstawie szablonu..."
+msgstr "Klonuj projekt z repozytorium..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
 msgid "Clone a project from an existing repository"
-msgstr ""
+msgstr "Sklonuj projekt z istniejącego repozytorium"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
 #: kicad/tools/kicad_manager_actions.cpp:60
@@ -26468,18 +26374,16 @@ msgstr ""
 "Czy chcesz kontynuować?"
 
 #: kicad/tools/kicad_manager_control.cpp:150
-#, fuzzy
 msgid "Clone Project from Git Repository"
-msgstr "Tworzy nowy projekt na podstawie szablonu"
+msgstr "Klonowanie projektu z repozytorium Git"
 
 #: kicad/tools/kicad_manager_control.cpp:172
-#, fuzzy
 msgid "Cloning Repository"
-msgstr "Repozytorium"
+msgstr "Klonowanie repozytorium"
 
 #: kicad/tools/kicad_manager_control.cpp:184
 msgid "No project files were found in the repository."
-msgstr ""
+msgstr "W repozytorium nie znaleziono żadnych plików projektu."
 
 #: kicad/tools/kicad_manager_control.cpp:220
 #: kicad/tools/kicad_manager_control.cpp:142
@@ -26857,9 +26761,8 @@ msgid "File \"%s\" inserted"
 msgstr "Plik \"%s\" został dołączony"
 
 #: pagelayout_editor/files.cpp:157
-#, fuzzy
 msgid "Open Drawing Sheet"
-msgstr "Ramka arkusza"
+msgstr "Otwórz arkusz"
 
 #: pagelayout_editor/files.cpp:173 pagelayout_editor/files.cpp:220
 #, c-format
@@ -26872,9 +26775,8 @@ msgid "Unable to write '%s'."
 msgstr "Nie można zapisać '%s'."
 
 #: pagelayout_editor/files.cpp:195
-#, fuzzy
 msgid "Save Drawing Sheet As"
-msgstr "Ramka arkusza"
+msgstr "Zapisz arkusz jako"
 
 #: pagelayout_editor/files.cpp:245
 msgid "Error reading drawing sheet"
@@ -28061,9 +27963,8 @@ msgid "Material names:"
 msgstr "Nazwy materiału:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
-#, fuzzy
 msgid "Chemical symbols"
-msgstr "Wybierz symbol"
+msgstr "Symbole chemiczne"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:91
@@ -30084,22 +29985,22 @@ msgstr "(wielokrotne obrysy płytki nie są obsługiwane)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:619
 #, c-format
 msgid "(Rectangle has null or very small size: %d nm)"
-msgstr ""
+msgstr "(Prostokąt ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:636
 #, c-format
 msgid "(Circle has null or very small radius: %d nm)"
-msgstr ""
+msgstr "(Okrąg ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:656
 #, c-format
 msgid "(Segment has null or very small length: %d nm)"
-msgstr ""
+msgstr "(Segment ma zerową lub bardzo małą długość: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:679
 #, c-format
 msgid "(Arc has null or very small size: %d nm)"
-msgstr ""
+msgstr "(Łuk ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/cross-probing.cpp:104 pcbnew/dialogs/dialog_board_setup.cpp:190
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/pcb_edit_frame.cpp:2395
@@ -30694,9 +30595,8 @@ msgid "Pre-defined Sizes"
 msgstr "Zdefiniowane rozmiary"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:173
-#, fuzzy
 msgid "Length-tuning Patterns"
-msgstr "Dostrajanie długości"
+msgstr "Wzorce dostrajania długości"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
 #: pcbnew/dialogs/dialog_board_setup.cpp:196
@@ -30943,7 +30843,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "Automatycznie naprawia przerwy w obrysie płytki"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:150
@@ -32372,9 +32272,8 @@ msgid "Binary GTLF files"
 msgstr "Pliki binarne GTLF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:344
-#, fuzzy
 msgid "STEP Output File"
-msgstr "Plik wyjściowy listy materiałowej"
+msgstr "Plik wyjściowy STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:388
 #: pcbnew/dialogs/dialog_export_step.cpp:370
@@ -32847,15 +32746,14 @@ msgid "3D Models"
 msgstr "Modele 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:283
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
 msgstr ""
-"Zablokowanych footprintów nie można swobodnie przenosić ani umieszczać "
-"automatycznie na kanwie i można je wybrać tylko wtedy, gdy w filtrze wyboru "
-"jest zaznaczone pole wyboru 'Zablokowane elementy'."
+"Zablokowanych footprintów nie można swobodnie przenosić ani obracać na "
+"kanwie i można je wybrać tylko wtedy, gdy w filtrze wyboru jest zaznaczone "
+"pole wyboru 'Zablokowane elementy'."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:387
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:374
@@ -32963,7 +32861,7 @@ msgstr "Do montażu przewlekanego (THT)"
 #: pcbnew/footprint_libraries_utils.cpp:1186 pcbnew/pad.cpp:1243
 #: pcbnew/pad.cpp:1688
 msgid "SMD"
-msgstr "SMD"
+msgstr "Do montażu powierzchniowego"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -33648,24 +33546,20 @@ msgid "Generators A (%s)"
 msgstr "Generatory A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild selected"
-msgstr "Nie zaznaczono magistrali"
+msgstr "Odbuduj zaznaczone"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
-#, fuzzy
 msgid "Rebuild this type"
-msgstr "Odbuduj połączenia wspomagające"
+msgstr "Odbuduj tylko tego typu"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
-#, fuzzy
 msgid "Rebuild All"
-msgstr "Zamień wszystkie"
+msgstr "Odbuduj wszystko"
 
 #: pcbnew/dialogs/dialog_generators_base.h:63
-#, fuzzy
 msgid "Generator Objects"
-msgstr "Plik generatora"
+msgstr "Obiekty generatorów"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:69
@@ -35617,7 +35511,6 @@ msgid "user choice"
 msgstr "wybrane przez użytkownika"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
-#, fuzzy
 msgid "Track gap:"
 msgstr "Dystans pomiędzy ścieżkami:"
 
@@ -35937,15 +35830,14 @@ msgid "Push Pad Properties"
 msgstr "Wymuś właściwości pola lutowniczego"
 
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:86
-#, fuzzy
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
 msgstr ""
-"Zablokowanych footprintów nie można swobodnie przenosić ani umieszczać "
-"automatycznie na kanwie i można je wybrać tylko wtedy, gdy w filtrze wyboru "
-"jest zaznaczone pole wyboru 'Zablokowane elementy'."
+"Zablokowanych footprintów nie można swobodnie przenosić ani obracać na "
+"kanwie i można je wybrać tylko wtedy, gdy w filtrze wyboru jest zaznaczone "
+"pole wyboru 'Zablokowane elementy'."
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
@@ -36248,9 +36140,8 @@ msgid "End X:"
 msgstr "Koniec X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:120
-#, fuzzy
 msgid "Use net class / custom rule widths"
-msgstr "Użyj szerokości z klas sieci"
+msgstr "Użyj szerokości z reguł klas sieci / reguł własnych"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:124
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:225
@@ -36265,9 +36156,8 @@ msgid "Pos X:"
 msgstr "Pozycja X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
-#, fuzzy
 msgid "Use net class / custom rule sizes"
-msgstr "Użyj rozmiarów z klas sieci"
+msgstr "Użyj rozmiarów z klas sieci / reguł własnych"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:238
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -36381,19 +36271,17 @@ msgstr "Docelowa długość:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1967
-#, fuzzy
 msgid "Override custom rules"
-msgstr "Omiń blokadę"
+msgstr "Omiń reguły niestandardowe"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
-msgstr ""
+msgstr "(z 'rule name')"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:167
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:302
-#, fuzzy
 msgid "Amplitude (A) min:"
 msgstr "Min. amplituda (A):"
 
@@ -36401,15 +36289,13 @@ msgstr "Min. amplituda (A):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:66
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:195
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:330
-#, fuzzy
 msgid "Spacing (s):"
-msgstr "Min odstęp (s):"
+msgstr "Odstęp (s):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:76
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:74
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:203
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:338
-#, fuzzy
 msgid ""
 "Minimum spacing between adjacent tuning segments. The resulting spacing may "
 "be greater based on design rules."
@@ -36428,9 +36314,8 @@ msgstr "Styl łamania:"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:248
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:383
-#, fuzzy
 msgid "Radius (r):"
-msgstr "Promień:"
+msgstr "Promień (r):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
@@ -36441,9 +36326,8 @@ msgid "Single-sided"
 msgstr "Jednostronne"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
-#, fuzzy
 msgid "Tuning Pattern Properties"
-msgstr "Właściwości linii"
+msgstr "Właściwości wzorca dostrajania"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 msgid "Remove Unused Layers"
@@ -37166,7 +37050,6 @@ msgstr ""
 "wysokość stosu warstw jest ignorowana."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
-#, fuzzy
 msgid "When Adding Footprints to Board"
 msgstr "Gdy dodawane są footprinty na PCB"
 
@@ -37180,9 +37063,10 @@ msgid "Apply board defaults to footprint text"
 msgstr "Zastosuj ustawienia domyślne płytki do tekstu footprintu"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:64
-#, fuzzy
 msgid "Apply board defaults to non-copper footprint shapes"
-msgstr "Zastosuj ustawienia domyślne płytki do grafiki footprintów"
+msgstr ""
+"Zastosuj ustawienia domyślne płytki do kształtów footprintów nie będących "
+"miedzią"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
@@ -38388,6 +38272,511 @@ msgid ""
 "For the full documentation see [https://docs.kicad.org](https://docs.kicad."
 "org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 msgstr ""
+"### Klauzule najwyższego poziomu\n"
+"\n"
+"    (version <numer>)\n"
+"\n"
+"    (rule <nazwa_reguły> <warunek_reguły> ...)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
+"### Klauzule warunkowe\n"
+"\n"
+"    (constraint <typ_ograniczenia> ...)\n"
+"\n"
+"    (condition \"<wyrażenie>\")\n"
+"\n"
+"    (layer \"<nazwa_warstwy>\")\n"
+"\n"
+"    (severity <nazwa_ważności>)\n"
+"\n"
+"\n"
+"<br>\n"
+"\n"
+"### Typy ograniczeń\n"
+"\n"
+"| Typ ograniczenia          | Typ argumentu                                  "
+"                                                                        | Opi"
+"s                                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                          |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"--------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza szerokość okręgów przelotek.<br>                                    "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"|                                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                     \n"
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Określa **elektryczny** odstęp pomiędzy elementami miedzi różnych sieci. ("
+"Zobacz `physical_clearance` jeśli chcesz określić odstęp pomiędzy obiektami "
+"niezależnie od sieci.)<br><br>Aby umożliwić miedzianym obiektom nakładanie "
+"się (kolidowanie), utwórz ograniczenie `clearance` z wartością `min` "
+"mniejszą od zera (na przykład , `-1`).<br>                                   "
+"                                                                             "
+"              |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy polami zajętości footprintów i generuje błąd, jeśli "
+"dowolne dwa z nich są bliżej niż odległość `min`. Jeśli obrys nie ma "
+"oznaczonego tego kształtu nie zostaną wygenerowane żadne błędy.<br>          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"        |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp między ścieżkami pary różnicowej. Para różnicowa to odcinki "
+"równoległe do siebie. Odstęp między parami różnicowymi nie jest testowany na "
+"niesprzężonych częściach pary różnicowej (na przykład na rozgałęzieniu "
+"komponentu).<br>                                                             "
+"                                                                             "
+"                                                                             "
+"       |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Sprawdza odległość, z jaką jest poprowadzona ścieżka pary różnicowej bez "
+"odłączenia od ścieżki przeciwnej polaryzacji w parze (na przykład, gdy para "
+"rozchodzi się od komponentu lub zostaje rozłączona, aby ominąć inny obiekt, "
+"np. przelotkę).<br>                                                          "
+"                                                                             "
+"                                                                             "
+"      |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Określa jeden lub więcej typów obiektów, które stają się zabronione, "
+"oddzielając je spacjami. Na przykład `(constraint disallow track)` lub `("
+"constraint disallow track via pad)`. Jeśli obiekt podanego typu pasuje do "
+"warunku reguły, zostanie utworzony błąd DRC.<br><br>To ograniczenie jest "
+"zasadniczo takie samo jak obszar odcięty, ale można go wykorzystać do "
+"utworzenia bardziej szczegółowych "
+"ograniczeń.<br>                                                      |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp między obiektami a krawędzią płytki.<br><br>Można to również "
+"traktować jako `tolerancję frezowania`, ponieważ krawędź płytki będzie "
+"zawierać wszystkie elementy graficzne na warstwie `Edge.Cuts` oraz wszelkie "
+"otwory *owalne*. (Zobacz `physical_hole_clearance`, aby zapoznać się z "
+"tolerancją wiercenia.)<br>                                                   "
+"                                                                             "
+"             |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Sprawdza całkowitą długość trasy dla sieci spełniających warunek reguły i "
+"generuje błąd dla każdej sieci, która jest poniżej wartości `min` (jeśli "
+"została określona) lub powyżej wartości `max` (jeśli została określona) ogran"
+"iczenia.<br>                                                                 "
+"                                                                             "
+"                                                                             "
+"       |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Sprawdza wielkość (średnicę) otworu wierconego w polu lutowniczym, lub "
+"przelotce. W przypadku otworów owalnych mniejsza (poboczna) średnica "
+"zostanie przetestowana w stosunku do wartości `min` (jeśli została określona)"
+", a większa (główna) średnica zostanie przetestowana w odniesieniu do "
+"wartości `max` (jeśli została określona).<br>                                "
+"                                                                             "
+"                     |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
+"przelotce a miedzianymi elementami innej sieci. Odstęp mierzy się od "
+"średnicy otworu, a nie od jego środka.<br>                                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy mechanicznie wywierconymi otworami w polach "
+"lutowniczych i przelotkach. Odstęp mierzy się pomiędzy średnicami otworów, a "
+"nie pomiędzy ich środkami.<br><br>Ograniczenie służy wyłącznie do ochrony "
+"wierteł. Nie sprawdza się odstępu między **wywierconymi laserowo** "
+"(mikroprzelotkami) a innymi otworami nie wierconymi mechanicznie, ani "
+"odstępem pomiędzy **frezowanymi** (owalnymi) otworami i innymi otworami nie "
+"wierconymi mechanicznie.<br> |  \n"
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy dwoma obiektami na danej warstwie (w tym warstwami "
+"nie będącymi sygnałowymi).<br><br>Chociaż można tym wykonywać kontrolę "
+"bardziej ogólnego przeznaczenia niż `clearance`, jest ona znacznie "
+"wolniejsza. Jeśli to możliwe, użyj `clearance`.<br>                          "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy wywierconym otworem w polu lutowniczym lub "
+"przelotce a innym obiektem, niezależnie od przynależnośći do sieci. odstęp "
+"mierzy się od średnicy otworu, a nie od jego środka.<br><br>Można to również "
+"traktować jako `tolerancję wiercenia`, ponieważ obejmuje tylko **okrągłe** "
+"otwory (zobacz `edge_clearance` dla tolerancja frezowania).<br>              "
+"                                                                             "
+"             | \n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza odstęp pomiędzy obiektami na warstwach sitodruku a innymi obiektami."
+"<br>                                                                         "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"|\n"
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Sprawdza całkowite nachylenie sieci spełniających warunek reguły, czyli "
+"różnicę między długością każdej sieci a średnią wszystkich długości każdej "
+"sieci spełniającej warunek reguły. Jeśli wartość bezwzględna różnicy między "
+"tą średnią a długością dowolnej sieci przekracza wartość ograniczenia `max`, "
+"zostanie wygenerowany błąd.<br>                                              "
+"                                                                             "
+"        |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Określa szerokość szczeliny pomiędzy polem lutowniczym a strefą z "
+"połączeniem termicznym.<br>                                                  "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"           |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Określa szerokość ramion łączących pole lutownicze ze strefą z połączeniem te"
+"rmicznym.<br>                                                                "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"|\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Sprawdza szerokość segmentów ścieżek i łuków. Błąd zostanie wygenerowany dla "
+"każdego segmentu, którego szerokość jest mniejsza niż wartość `min` (jeśli "
+"została określona) lub większa niż wartość `max` (jeśli została określona).<b"
+"r>                                                                           "
+"                                                                             "
+"                                                                             "
+"  |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Zlicza przelotki w każdej sieci spełniającej warunek reguły. Jeśli liczba ta "
+"przekroczy wartość ograniczenia `max` w dowolnej dopasowanej sieci, dla tej "
+"sieci zostanie wygenerowany błąd.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+" |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Określa typ połączenia, które ma zostać wykonane pomiędzy strefą a polem luto"
+"wniczym.<br>                                                                 "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"|\n"
+"\n"
+"\n"
+"### Elementy\n"
+"\n"
+" * `A` &nbsp;&nbsp; _pierwszy (lub tylko jeden) element poddany testowi_\n"
+" * `B` &nbsp;&nbsp; _drugi element poddany testowi (dla testów binarnych)_\n"
+" * `L` &nbsp;&nbsp; _warstwa poddawana testowi_\n"
+"\n"
+"<br>\n"
+"\n"
+"### Poziomy naruszeń\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
+"\n"
+"<br>\n"
+"\n"
+"### Przykłady\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # szerszy odstęp pomiędzy ścieżkami HV\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"<br><br>\n"
+"\n"
+"### Uwagi\n"
+"\n"
+"Klauzula wersji musi być pierwszą klauzulą.  Oznacza ona wersję składni "
+"zastosowanej w pliku, \n"
+"wobec czego przyszłe parsery będą mogły przeprowadzać automatyczne "
+"aktualizacje.  Obecnie powinna \n"
+"być ustawiona na \"1\".\n"
+"\n"
+"Reguły powinny być uporządkowane według szczegółowości.  Dalsze reguły \n"
+"mają pierwszeństwo nad regułami wcześniejszymi; jak tylko odnaleziona \n"
+"będzie pasująca reguła dalsze reguły nie będą sprawdzane.\n"
+"\n"
+"Użyj Ctrl+/ by zakomentować lub odkomentować linię.\n"
+"<br><br><br>\n"
+"\n"
+"### Funkcje wyrażeniowe\n"
+"\n"
+"Wszystkie parametry funkcji obsługują proste sybmole wieloznaczne (`*` oraz "
+"`?`).\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsCourtyard('<oznaczenie_footprintu>')\n"
+"Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
+"footprintu.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsFrontCourtyard('<oznaczenie_footprintu>')\n"
+"Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
+"footprintu na stronie górnej.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsBackCourtyard('<oznaczenie_footprintu>')\n"
+"Prawdziwe jeśli dowolna część `A` leży wewnątrz obszaru zajętości podanego "
+"footprintu na stronie dolnej.\n"
+"<br><br>\n"
+"\n"
+"    A.intersectsArea('<nazwa_strefy>')\n"
+"Prawdziwe jeśli dowolna część `A` leży w obrysie podanej strefy.\n"
+"<br><br>\n"
+"\n"
+"    A.enclosedByArea('<nazwa_strefy>')\n"
+"Prawdziwe jeśli całość `A` leży w obrysie podanej strefy.  \n"
+"\n"
+"UWAGA: Jest to potencjalnie bardziej czasochłonne wywołanie niż "
+"`intersectsArea()`.  Użyj `intersectsArea()` \n"
+"tam gdzie to możliwe.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"Prawdziwe jeśli `A` posiada otwór, który jest metalizowany.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<nazwa_sieci>')\n"
+"Prawdziwe jeśli `A` posiada sieć, która jest składnikiem pary różnicowej.\n"
+"`<nazwa_sieci>` to nazwa bazowa pary różnicowej.  Na przykład "
+"`inDiffPair('/CLK')`\n"
+"odnosi się do sieci zarówno `/CLK_P` jak i `/CLK_N`.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"Prawdziwe jeśli `A` i `B` są członkami tej samej pary różnicowej.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfGroup('<nazwa_groupy>')\n"
+"Prawdziwe jeśli `A` jest członkiem podanej grupy. Można użyć sybmoli "
+"wieloznacznych. \n"
+"Nawet zagnieżdżonej w innej grupie.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfFootprint('<odnośnik_do_footprintu>')\n"
+"Prawdziwe jeśli `A` jest elementem footprintu pasującego do podanego "
+"oznaczenia. \n"
+"Można użyć sybmoli wieloznacznych. \n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<nazwa_warstwy>')\n"
+"Prawdziwe jeśli `A` istnieje na określonej warstwie.  Nazwa warstwy może być "
+"zarówno\n"
+"nazwą przypisaną w oknie dialogowym Ustawienia Płytki > Ustawienia warstw "
+"jak też\n"
+"jej nazwą kanoniczną (na przykład: `F.Cu`).\n"
+"\n"
+"UWAGA: Zwraca prawdę, jeśli `A` znajduje się na danej warstwie, \n"
+"niezależnie czy reguła jest oceniana dla tej warstwy.\n"
+"W tym ostatnim przypadku użyj w regule klauzuli `(layer \"nazwa_warstwy\")`."
+"\n"
+"<br><br>\n"
+"\n"
+"    !!! A.memberOf('<nazwa_grupy>') !!!\n"
+"Przestarzałe; zamiast tego użyj `memberOfGroup()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideCourtyard('<oznaczenie_footprintu>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideFrontCourtyard('<oznaczenie_footprintu>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsFrontCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideBackCourtyard('<oznaczenie_footprintu>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsBackCourtyard()`.\n"
+"<br><br>\n"
+"\n"
+"    !!! A.insideArea('<nazwa_strefy>') !!!\n"
+"Przestarzałe; zamiast tego użyj `intersectsArea()`.\n"
+"<br><br><br>\n"
+"\n"
+"### Więcej przykładów\n"
+"\n"
+"    (rule \"blokada strefy\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.intersectsArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # zapobiega opisowi na przelotkach\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Odległość między przelotkami różnych sieci\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"odstęp między polami różnych sieci\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"odstęp między otworem a ścieżką\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"odstęp między polem a ścieżką\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Maksymalny rozmiar otworu mechanicznego\"  \n"
+"        (constraint hole (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Maksymalny rozmiar otworu przewlekanego\"  \n"
+"        (constraint hole (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Określa optymalną przerwę dla konkretnej pary różnicowej\n"
+"    (rule \"odstęp dp dla lini zegarowej\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # Określa większy odstęp wokół dowolnej pary różnicowej\n"
+"    (rule \"odstęp dp\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Nie używaj łącz termicznych na polach radiatorowych\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Wymagaj wszystkich czterech łącz termicznych, aby połączyć się ze "
+"strefą nadrzędną\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Ustaw odstęp termiczny i szerokość łącza dla wszystkich stref\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Zastąp odstęp łącza termicznego oraz grubość łącz dla stref GND i PWR\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    \n"
+"\n"
+"    # Zapobiegaj tworzeniu nitek cyny dla pól SMD\n"
+"    (rule holes_in_pads\n"
+"        (constraint physical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Nie zezwalaj na nadpisywanie marginesów maski lutowniczej\n"
+"    (rule \"nie zezwalaj na nadpisywanie marginesów maski lutowniczej\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))\n"
+"\n"
+"\n"
+"    # Wymuś odstęp pod względem mechanicznym pomiędzy komponentami a "
+"krawędzią płytki\n"
+"    (rule front_mechanical_board_edge_clearance\n"
+"        (layer \"F.Courtyard\")\n"
+"        (constraint physical_clearance (min 3mm))\n"
+"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"\n"
+"\n"
+"    # Sprawdź bieżącą obciążalność prądową\n"
+"    (rule high-current\n"
+"        (constraint track_width (min 1.0mm))\n"
+"        (constraint connection_width (min 0.8mm))\n"
+"        (condition \"A.NetClass == 'Power'\"))\n"
+"\n"
+"    # Oddzielne ograniczenia dotyczące rozmiaru wiertła oraz frezu\n"
+"    (rule \"Rozmiar owiertu powlekanych otworów\"\n"
+"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
+"    (rule \"Rozmiar powlekanych slotów\"\n"
+"        (constraint hole_size (min 0.5mm))\n"
+"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
+"\n"
+"\n"
+"### Dokumentacja\n"
+"\n"
+"Pełna dokumentację można znaleźć pod adresem [https://docs.kicad."
+"org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default properties for round shapes:"
@@ -38521,19 +38910,16 @@ msgid "Via Gap"
 msgstr "Dystans między przelotkami"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default properties for single-track tuning:"
-msgstr "Domyślne ustawienia dla nowych elementów graficznych:"
+msgstr "Domyślne ustawienia dla dostrajania pojedynczych ścieżek:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default properties for differential-pairs:"
-msgstr "Domyślne ustawienia dla prostokątnych kształtów:"
+msgstr "Domyślne ustawienia dla par różnicowych:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:283
-#, fuzzy
 msgid "Default properties for differential-pair skews:"
-msgstr "Domyślne ustawienia dla prostokątnych kształtów:"
+msgstr "Domyślne ustawienia dla nachylenia par różnicowych:"
 
 #: pcbnew/drc/drc_cache_generator.cpp:123
 #: pcbnew/drc/drc_cache_generator.cpp:122
@@ -38994,9 +39380,8 @@ msgid "Annular width"
 msgstr "Szerokość pierścienia"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Hole size out of range"
-msgstr "Rozmiar siatki w osi X poza zakresem."
+msgstr "Rozmiar otworu poza zakresem"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Via diameter"
@@ -39007,7 +39392,6 @@ msgid "Padstack is not valid"
 msgstr "Stos pól lutowniczych nie jest prawidłowy"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Micro via hole size out of range"
 msgstr "Rozmiar wiercenia mikroprzelotki jest poza zakresem"
 
@@ -39137,9 +39521,9 @@ msgid "Local override"
 msgstr "Wartość lokalna"
 
 #: pcbnew/drc/drc_rule.h:156
-#, fuzzy, c-format
+#, c-format
 msgid "rule '%s'"
-msgstr "reguła %s"
+msgstr "reguła '%s'"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
@@ -39883,9 +40267,8 @@ msgid "Checking length constraints..."
 msgstr "Sprawdzenie ograniczeń długości..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:119
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "(nie znaleziono krawędzi na warstwie Edge.Cuts)"
+msgstr "(Podejrzane elementy znalezione na warstwie Edge.Cuts)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:145
 #: pcbnew/drc/drc_test_provider_misc.cpp:116
@@ -40548,9 +40931,8 @@ msgid "Footprint Chooser"
 msgstr "Wybór footprintu"
 
 #: pcbnew/footprint_chooser_frame.cpp:99
-#, fuzzy
 msgid "Apply footprint filters"
-msgstr "Dodaje filtr footprintów"
+msgstr "Zastosuj filtry footprintów"
 
 #: pcbnew/footprint_edit_frame.cpp:115
 msgid "KiCad Footprint Editor"
@@ -40801,7 +41183,6 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Footprint '%s' istnieje już w bibliotece '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:116
-#, fuzzy
 msgid "KiCad Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
 
@@ -40866,19 +41247,16 @@ msgstr "Wystąpił błąd podczas ładowania footprintu %s z biblioteki '%s'."
 #: pcbnew/generators/pcb_tuning_pattern.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:91
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1627
-#, fuzzy
 msgid "Tuning Pattern"
-msgstr "Szablon"
+msgstr "Wzorzec dostrajania"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:96
-#, fuzzy
 msgid "Tuning Patterns"
-msgstr "Szablon"
+msgstr "Wzorce dostrajania"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:218
-#, fuzzy
 msgid "Tuning"
-msgstr "Ostrzeżenie"
+msgstr "Dostrajanie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 msgid "Tune Skew"
@@ -40891,9 +41269,8 @@ msgstr "Docelowa odchyłka:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:474
 #: pcbnew/tools/pcb_actions.cpp:2293
-#, fuzzy
 msgid "Tune Length"
-msgstr "Długość rdzenia"
+msgstr "Długość dostrojenia"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1018
 msgid "too long"
@@ -40909,9 +41286,8 @@ msgstr "dostrojono"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
-#, fuzzy
 msgid "Edit Tuning Pattern"
-msgstr "Edytuj w edytorze tekstu"
+msgstr "Edytuj wzorzec dostrajania"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1474
 msgid "current skew"
@@ -40922,9 +41298,8 @@ msgid "current length"
 msgstr "bieżąca długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1561
-#, fuzzy
 msgid "Routed Lengths"
-msgstr "Długość trasowania"
+msgstr "Wytrasowane długości"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1567 pcbnew/pcb_track.cpp:1042
 #: pcbnew/pcb_track.cpp:890
@@ -40949,12 +41324,12 @@ msgstr "Docelowa odchyłka: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1589
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1611
 msgid "(from tuning pattern properties)"
-msgstr ""
+msgstr "(z właściwości wzorca dostrajania)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1597
-#, fuzzy, c-format
+#, c-format
 msgid "Skew Constraints: %s"
-msgstr "Ograniczenia szerokości: min %s"
+msgstr "Ograniczenia nachylenia: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1610
 #, c-format
@@ -40962,38 +41337,33 @@ msgid "Target Length: %s"
 msgstr "Docelowa długość: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1619
-#, fuzzy, c-format
+#, c-format
 msgid "Length Constraints: %s"
-msgstr "Ograniczenia szerokości: min %s"
+msgstr "Ograniczenia długości: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1784
-#, fuzzy
 msgid "Tune"
-msgstr "Dostrajanie %s"
+msgstr "Dostrajanie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1865
-#, fuzzy
 msgid "Single track"
-msgstr "Trasowanie pojedynczej ścieżki"
+msgstr "Pojedyncza ścieżka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1866
 msgid "Differential pair"
 msgstr "Para różnicowa"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1867
-#, fuzzy
 msgid "Diff pair skew"
-msgstr "Para różnicowa"
+msgstr "Nachylenie pary różnicowej"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1881
-#, fuzzy
 msgid "Pattern Properties"
-msgstr "Właściwości pinu"
+msgstr "Właściwości wzorca"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1896
-#, fuzzy
 msgid "Tuning mode"
-msgstr "Model linii"
+msgstr "Tryb dostrajania"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1902
 msgid "Min amplitude"
@@ -41024,14 +41394,12 @@ msgid "Target skew"
 msgstr "Docelowa odchyłka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
-#, fuzzy
 msgid "Rounded"
 msgstr "Zaokrąglony"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:216
-#, fuzzy
 msgid "Please select a file to import."
-msgstr "Proszę wybrać prawidłową warstwę."
+msgstr "Proszę wybrać plik by importować."
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:222
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:214
@@ -41039,32 +41407,31 @@ msgid "Please select a valid layer."
 msgstr "Proszę wybrać prawidłową warstwę."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
-#, fuzzy
 msgid "DXF default line width:"
-msgstr "Domyślna szerokość linii:"
+msgstr "Domyślna szerokość linii DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:70
-#, fuzzy
 msgid "DXF default units:"
-msgstr "Domyślne jednostki:"
+msgstr "Domyślne jednostki DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:90
 msgid "Place at X:"
 msgstr "Umieść w osi X:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:127
-#, fuzzy
 msgid "Set layer:"
-msgstr "Początkowa warstwa:"
+msgstr "Ustaw warstwę:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:145
 msgid "Fix discontinuities"
-msgstr ""
+msgstr "Napraw nieciągłości"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:146
 msgid ""
 "Trim/extend open shapes or add segments to make vertices of shapes coincide"
 msgstr ""
+"Przycina/wydłuża nieciągłe kształty lub dodaje segmenty, aby wierzchołki "
+"kształtu się pokrywały"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -42155,14 +42522,12 @@ msgid "Field '%s' of %s"
 msgstr "Pole '%s' z %s"
 
 #: pcbnew/pcb_generator.cpp:179 pcbnew/pcb_generator.cpp:216
-#, fuzzy
 msgid "Update order"
-msgstr "Uaktualnione"
+msgstr "Kolejność aktualizacji"
 
 #: pcbnew/pcb_generator.cpp:214
-#, fuzzy
 msgid "Generator Properties"
-msgstr "Właściwości skryptu generatora"
+msgstr "Właściwości generatora"
 
 #: pcbnew/pcb_group.cpp:384 pcbnew/pcb_group.cpp:377
 #, c-format
@@ -42201,9 +42566,8 @@ msgid "Marker (%s)"
 msgstr "Znacznik (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
-#, fuzzy
 msgid "Associated Layer"
-msgstr "Warstwa aktywna"
+msgstr "Przydzielona warstwa"
 
 #: pcbnew/pcb_reference_image.cpp:358 pcbnew/pcb_bitmap.cpp:273
 msgid "Greyscale"
@@ -42290,9 +42654,9 @@ msgid "Segment Length"
 msgstr "Długość segmentu"
 
 #: pcbnew/pcb_track.cpp:1066
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: %s"
-msgstr "Ograniczenia szerokości: min %s"
+msgstr "Ograniczenia szerokości: %s"
 
 #: pcbnew/pcb_track.cpp:1078 pcbnew/pcb_track.cpp:933
 msgid "Micro Via"
@@ -43691,9 +44055,9 @@ msgid "Undefined Layers Warning"
 msgstr "Ostrzeżenie o niezdefiniowanaej warstwie"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1140
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć wygenerowanego obiektu typu '%s'"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1278
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1243
@@ -44194,9 +44558,8 @@ msgstr ""
 "Proszę zweryfikować czy nie jest to strefa nachodząca na inną strefę."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1958
-#, fuzzy
 msgid "Routing"
-msgstr "Trasowanie pojedynczej ścieżki"
+msgstr "Trasowanie"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
@@ -44524,9 +44887,9 @@ msgid "Diff Pair Gap: %s"
 msgstr "Prześwit między ścieżkami pary różnicowej: %s"
 
 #: pcbnew/router/router_tool.cpp:2632 pcbnew/tools/pcb_control.cpp:1478
-#, fuzzy, c-format
+#, c-format
 msgid "DP Max Uncoupled-length: %s"
-msgstr "Przeanalizowano maksymalną długość niesprzężonej pary różnicowej: %s."
+msgstr "Maksymalna długość niesprzężonej pary różnicowej: %s"
 
 #: pcbnew/sel_layer.cpp:351 pcbnew/sel_layer.cpp:341
 msgid "Warning: top and bottom layers are same."
@@ -44867,9 +45230,9 @@ msgid "Connection width resolution for:"
 msgstr "Analiza szerokości połączeń dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width: %s."
-msgstr "Rozpoznane ograniczenie min. szerokości połączenia: %s."
+msgstr "Analiza minimalnej szerokości połączenia: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:386
 #: pcbnew/tools/board_inspection_tool.cpp:1274
@@ -44916,14 +45279,13 @@ msgstr "Rozmiar otworu"
 
 #: pcbnew/tools/board_inspection_tool.cpp:418
 #: pcbnew/tools/board_inspection_tool.cpp:1313
-#, fuzzy
 msgid "Hole size resolution for:"
 msgstr "Analiza rozmiaru otworu dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "Przeanalizowano ograniczenia wysokości tekstu: min %s; maks %s."
+msgstr "Przeanalizowano ograniczenia rozmiaru otworu: min %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:432
 #: pcbnew/tools/board_inspection_tool.cpp:431
@@ -44960,9 +45322,9 @@ msgstr "Elementy należą do tej samej sieci. Prześwit wynosi 0."
 #: pcbnew/tools/board_inspection_tool.cpp:1111
 #: pcbnew/tools/board_inspection_tool.cpp:1140
 #: pcbnew/tools/board_inspection_tool.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min clearance: %s."
-msgstr "Prześwit pola lutowniczego: %s."
+msgstr "Przeanalizowano minimalny prześwit: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:456
 #: pcbnew/tools/board_inspection_tool.cpp:1189
@@ -44983,7 +45345,6 @@ msgstr "Otwór wobec otworu"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:1063
-#, fuzzy
 msgid "Hole-to-hole clearance resolution for:"
 msgstr "Analiza prześwitu pomiędzy otworami między:"
 
@@ -45063,7 +45424,6 @@ msgid "Zone connection resolution for:"
 msgstr "Analiza połączeń ze strefami dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:732
-#, fuzzy
 msgid "Thermal-relief gap resolution for:"
 msgstr "Analiza odległości przerwy w łączu termicznym dla:"
 
@@ -45074,22 +45434,20 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Rozpoznany prześwit łącza termicznego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:746
-#, fuzzy
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Analiza odległości przerwy w łączu termicznym dla:"
+msgstr "Analiza szerokości łącza termicznego dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:755
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved spoke width: %s."
 msgstr "Rozpoznana szerokość poł. termicznego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
-#, fuzzy
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Analiza odległości przerwy w łączu termicznym dla:"
+msgstr "Analiza ilości łącz w łączu termicznym dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min spoke count: %d."
 msgstr "Rozpoznano min. liczbę łącz termicznych: %d."
 
@@ -45119,14 +45477,12 @@ msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
 msgstr "Zastąpiony większym fizycznym prześwitem otworu od %s; prześwit: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:852
-#, fuzzy
 msgid "Items belong to the same net. Min clearance is 0."
 msgstr "Elementy należą do tej samej sieci. Prześwit wynosi 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:867
-#, fuzzy
 msgid "Min clearance is 0."
-msgstr "Prześwit jest zerowy."
+msgstr "Minimalny prześwit jest zerowy."
 
 #: pcbnew/tools/board_inspection_tool.cpp:871
 #: pcbnew/tools/board_inspection_tool.cpp:870
@@ -45140,9 +45496,8 @@ msgid "Diff Pair"
 msgstr "Para różnicowa"
 
 #: pcbnew/tools/board_inspection_tool.cpp:895
-#, fuzzy
 msgid "Diff-pair gap resolution for:"
-msgstr "Analiza prześwitu pary różnicowej między:"
+msgstr "Analiza prześwitu pary różnicowej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:900
 #: pcbnew/tools/board_inspection_tool.cpp:899
@@ -45152,9 +45507,8 @@ msgstr ""
 "Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:908
-#, fuzzy
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Analiza długości niesprzężonej pary różnicowej dla:"
+msgstr "Analiza maksymalnej długości niesprzężonej pary różnicowej dla:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:914
 #: pcbnew/tools/board_inspection_tool.cpp:913
@@ -45185,10 +45539,10 @@ msgid "Select an item for a constraints resolution report."
 msgstr "Wybierz element do raportu z analizą ograniczeń."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1264
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr ""
-"Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
+"Przeanalizowano ograniczenia szerokości: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1284
 #, c-format
@@ -45207,16 +45561,15 @@ msgstr ""
 "maks. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1322
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr ""
-"Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
+"Przeanalizowano ograniczenia rozmiaru otworu: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr ""
-"Przeanalizowano ograniczenia prześwitu: min %s; optymalnie %s; maks %s."
+msgstr "Przeanalizowano ograniczenia wysokości: min %s; optymalnie %s; maks %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1357
 #, c-format
@@ -45543,14 +45896,12 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Muszą być wybrane dokładnie dwa odcinki linii."
 
 #: pcbnew/tools/edit_tool.cpp:1443 pcbnew/tools/pcb_actions.cpp:623
-#, fuzzy
 msgid "Heal Shapes"
-msgstr "Kształt łezek"
+msgstr "Napraw kształty"
 
 #: pcbnew/tools/edit_tool.cpp:1443
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "Tolerancja:"
+msgstr "Wartość tolerancji:"
 
 #: pcbnew/tools/edit_tool.cpp:1480
 msgid "Heal shapes"
@@ -45622,9 +45973,8 @@ msgid "No footprint problems found."
 msgstr "Nie znaleziono żadnych problemów z footprintami."
 
 #: pcbnew/tools/generator_tool.cpp:137
-#, fuzzy
 msgid "Regenerate All"
-msgstr "Zamień wszystkie"
+msgstr "Odtwórz wszystkie"
 
 #: pcbnew/tools/generator_tool.cpp:144
 #, c-format
@@ -45632,14 +45982,12 @@ msgid "Update %s"
 msgstr "Uaktualnienie %s"
 
 #: pcbnew/tools/generator_tool.cpp:199
-#, fuzzy
 msgid "Regenerate Selected"
-msgstr "Usuń trasowanie z wybranych"
+msgstr "Odtwórz wybrane"
 
 #: pcbnew/tools/generator_tool.cpp:218
-#, fuzzy
 msgid "Regenerate Item"
-msgstr "Powtórz element"
+msgstr "Odtwórz element"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -45691,49 +46039,40 @@ msgid "Some of the lines could not be extended to meet."
 msgstr "Pewne linie nie mogły zostać poszerzone by pasowały do siebie."
 
 #: pcbnew/tools/item_modification_routine.cpp:380
-#, fuzzy
 msgid "Merge polygons."
-msgstr "Rysuje wielokąty"
+msgstr "Połączono wielokąty."
 
 #: pcbnew/tools/item_modification_routine.cpp:388
-#, fuzzy
 msgid "Unable to merge the selected polygons."
-msgstr "Nie można ściąć wybranych linii."
+msgstr "Nie można połączyć zaznaczonych polygonów."
 
 #: pcbnew/tools/item_modification_routine.cpp:392
-#, fuzzy
 msgid "Some of the polygons could not be merged."
-msgstr "Pewne linie nie mogły zostać ścięte."
+msgstr "Niektórych polygonów nie można połączyć."
 
 #: pcbnew/tools/item_modification_routine.cpp:418
-#, fuzzy
 msgid "Subtract polygons."
-msgstr "Zarysy stref"
+msgstr "Odjęto wielokąty."
 
 #: pcbnew/tools/item_modification_routine.cpp:426
-#, fuzzy
 msgid "Unable to subtract the selected polygons."
-msgstr "Nie można zaokrąglić wybranych linii."
+msgstr "Nie można odjąć zaznaczonych polygonów."
 
 #: pcbnew/tools/item_modification_routine.cpp:430
-#, fuzzy
 msgid "Some of the polygons could not be subtracted."
-msgstr "Pewne linie nie mogły zostać zaokrąglone."
+msgstr "Niektóre polygony nie mogą być odjęte od siebie."
 
 #: pcbnew/tools/item_modification_routine.cpp:459
-#, fuzzy
 msgid "Intersect polygons."
-msgstr "Zarysy stref"
+msgstr "Przecięcie polygonów."
 
 #: pcbnew/tools/item_modification_routine.cpp:467
-#, fuzzy
 msgid "Unable to intersect the selected polygons."
-msgstr "Nie można zaokrąglić wybranych linii."
+msgstr "Nie można przeciąć wybranych polygonów."
 
 #: pcbnew/tools/item_modification_routine.cpp:471
-#, fuzzy
 msgid "Some of the polygons could not be intersected."
-msgstr "Pewne linie nie mogły zostać zaokrąglone."
+msgstr "Niektóre polygony nie mogą być przecięte."
 
 #: pcbnew/tools/pad_tool.cpp:162 pcbnew/tools/pad_tool.cpp:160
 msgid "Paste Pad Properties"
@@ -45762,9 +46101,8 @@ msgid "Place pad"
 msgstr "Umieść pole lutownicze"
 
 #: pcbnew/tools/pad_tool.cpp:633 pcbnew/tools/pad_tool.cpp:646
-#, fuzzy
 msgid "Edit Pad"
-msgstr "Edytuj obwód drukowany"
+msgstr "Edytuj pole lutownicze"
 
 #: pcbnew/tools/pad_tool.cpp:723 pcbnew/tools/pad_tool.cpp:714
 #, c-format
@@ -45873,6 +46211,8 @@ msgid ""
 "Add a bitmap image to be used as a reference (image will not be included in "
 "any output)"
 msgstr ""
+"Dodaje obraz bitmapowy, który będzie używany jako odniesienie (Obraz nie "
+"zostanie uwzględniony w żadnym z plików wynikowych)"
 
 #: pcbnew/tools/pcb_actions.cpp:185 pcbnew/tools/pcb_actions.cpp:184
 msgid "Add a wrapped text item"
@@ -45883,36 +46223,32 @@ msgid "Increase Spacing"
 msgstr "Zwiększ prześwit"
 
 #: pcbnew/tools/pcb_actions.cpp:195
-#, fuzzy
 msgid "Increase tuning pattern spacing by one step."
-msgstr "Zwiększa prześwit meandra o jeden krok."
+msgstr "Zwiększa prześwit wzorca dostrajania o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:203 pcbnew/router/length_tuner_tool.cpp:64
 msgid "Decrease Spacing"
 msgstr "Zmniejsz prześwit"
 
 #: pcbnew/tools/pcb_actions.cpp:204
-#, fuzzy
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "Zmniejsza prześwit meandra o jeden krok."
+msgstr "Zmniejsza prześwit wzorca dostrajania o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:212 pcbnew/router/length_tuner_tool.cpp:70
 msgid "Increase Amplitude"
 msgstr "Zwiększ amplitudę"
 
 #: pcbnew/tools/pcb_actions.cpp:213
-#, fuzzy
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "Zwiększa amplitudę meandra o jeden krok."
+msgstr "Zwiększa amplitudę wzorca dostrajania o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:221 pcbnew/router/length_tuner_tool.cpp:76
 msgid "Decrease Amplitude"
 msgstr "Zmniejsz amplitudę"
 
 #: pcbnew/tools/pcb_actions.cpp:222
-#, fuzzy
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Zmniejsza amplitudę meandra o jeden krok."
+msgstr "Zmniejsza amplitudę wzorca dostrajania o jeden krok."
 
 #: pcbnew/tools/pcb_actions.cpp:231 pcbnew/tools/pcb_actions.cpp:193
 msgid "Add Aligned Dimension"
@@ -46199,9 +46535,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "Dodaje łuki styczne do wybranych odcinków ścieżek prostych"
 
 #: pcbnew/tools/pcb_actions.cpp:609
-#, fuzzy
 msgid "Fillet Lines..."
-msgstr "Linie zaokrąglone"
+msgstr "Zaokrąglenia linii..."
 
 #: pcbnew/tools/pcb_actions.cpp:610 pcbnew/tools/pcb_actions.cpp:569
 msgid "Adds arcs tangent to the selected lines"
@@ -46215,38 +46550,35 @@ msgstr "Obetnij rogi między wybranymi liniami"
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
 msgstr ""
+"Łączy kształty, ewentualnie je wydłuża, obcina lub dodaje dodatkową geometrię"
 
 #: pcbnew/tools/pcb_actions.cpp:631 pcbnew/tools/pcb_actions.cpp:583
 msgid "Extend lines to meet each other"
 msgstr "Rozszerz linie by pasowały do siebie"
 
 #: pcbnew/tools/pcb_actions.cpp:636
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "Połącz strefy w jedną"
+msgstr "Połącz polygony"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "Łączy wybrane wielokąty w jeden wielokąt"
 
 #: pcbnew/tools/pcb_actions.cpp:643
-#, fuzzy
 msgid "Subtract Polygons"
-msgstr "Strefy jako zarys"
+msgstr "Odejmij polygony"
 
 #: pcbnew/tools/pcb_actions.cpp:644
 msgid "Subtract selected polygons from the last one selected"
-msgstr ""
+msgstr "Odejmuje wybrane wielokąty od ostatnio wybranego"
 
 #: pcbnew/tools/pcb_actions.cpp:650
-#, fuzzy
 msgid "Intersect Polygons"
-msgstr "Utwórz wielokąt"
+msgstr "Przetnij polygony"
 
 #: pcbnew/tools/pcb_actions.cpp:651
-#, fuzzy
 msgid "Create the intersection of the selected polygons"
-msgstr "Tworzy ścieżki z zaznaczonych linii graficznych"
+msgstr "Utwórz przecięcie wybranych polygonów"
 
 #: pcbnew/tools/pcb_actions.cpp:659 pcbnew/tools/pcb_actions.cpp:590
 msgid "Delete Full Track"
@@ -47535,14 +47867,12 @@ msgid "Change active layer pair for routing"
 msgstr "Ustawia aktywną w danej chwili parę warstw do umieszczania przelotek"
 
 #: pcbnew/tools/pcb_actions.cpp:2294
-#, fuzzy
 msgid "Tune length of a single track or differential pair"
-msgstr "Dostrój długość pary różnicowej"
+msgstr "Dostraja długość pojedynczej ścieżki lub pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:2305
-#, fuzzy
 msgid "Tune Skew of a Differential Pair"
-msgstr "Wyrównaj długości ścieżek pary różnicowej"
+msgstr "Wyrównaj nachylenie pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:2306 pcbnew/tools/pcb_actions.cpp:2204
 #: pcbnew/tools/pcb_actions.cpp:2205
@@ -47624,29 +47954,27 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2397
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "Uaktualnij wszystkie wzorce dostrajania"
 
 #: pcbnew/tools/pcb_actions.cpp:2398
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
-msgstr ""
+msgstr "Próbuje ponownie dostroić istniejące wzorce strojenia w ich granicach"
 
 #: pcbnew/tools/pcb_actions.cpp:2405
-#, fuzzy
 msgid "Rebuild All Generators"
-msgstr "Usuń generator"
+msgstr "Odbuduj wszystkie generatory"
 
 #: pcbnew/tools/pcb_actions.cpp:2406
 msgid "Rebuilds geometry of all generators"
-msgstr ""
+msgstr "Odbudowuje geometrię wszystkich generatorów"
 
 #: pcbnew/tools/pcb_actions.cpp:2413
-#, fuzzy
 msgid "Rebuild Selected Generators"
-msgstr "Usuń generator"
+msgstr "Odbuduj wybrane generatory"
 
 #: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr ""
+msgstr "Odbudowuje geometrię zaznaczonych generatorów"
 
 #: pcbnew/tools/pcb_actions.cpp:2446
 msgid "Generators Manager"
@@ -47654,7 +47982,7 @@ msgstr "Menedżer generatorów"
 
 #: pcbnew/tools/pcb_actions.cpp:2447
 msgid "Show a manager dialog for Generator objects"
-msgstr ""
+msgstr "Pokazuje okno dialogowe menedżera obiektów generatora"
 
 #: pcbnew/tools/pcb_control.cpp:232
 msgid "Don't show again"
@@ -47727,9 +48055,9 @@ msgid "Object Snapping"
 msgstr "Przyciąganie obiektów"
 
 #: pcbnew/tools/pcb_control.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid "DP Gap Constraints: %s"
-msgstr "Ograniczenia szerokości: min %s"
+msgstr "Ograniczenia prześwitu pary różnicowej: min %s"
 
 #: pcbnew/tools/pcb_control.cpp:1515 pcbnew/tools/pcb_control.cpp:1465
 msgid "Resolved clearance"
