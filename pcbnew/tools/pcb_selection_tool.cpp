@@ -3348,8 +3348,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
     BOX2D viewport = getView()->GetViewport();
-    BOX2I extents( { KiROUND( viewport.GetPosition().x ), KiROUND( viewport.GetPosition().y ) },
-                    { KiROUND( viewport.GetSize().x ), KiROUND( viewport.GetSize().y ) } );
+    BOX2I extents( viewport.GetPosition(), viewport.GetSize() );
 
     bool need_direct_hit = false;
     FOOTPRINT* single_fp = nullptr;
