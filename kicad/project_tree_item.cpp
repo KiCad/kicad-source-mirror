@@ -123,10 +123,11 @@ bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
     if( newFile == GetFileName() )
         return false;
 
+    // If required, prompt the user if the filename extension has changed:
     wxString ext = PROJECT_TREE_PANE::GetFileExt( GetType() );
-    wxRegEx  reg( wxT( "^.*\\" ) + ext + wxT( "$" ), wxRE_ICASE );
+    wxString full_ext = wxT( "." ) + ext;
 
-    if( check && !ext.IsEmpty() && !reg.Matches( newFile ) )
+    if( check && !ext.IsEmpty() && !newFile.EndsWith( full_ext ) )
     {
         wxMessageDialog dialog( m_parent, _( "Changing file extension will change file type.\n"
                                              "Do you want to continue ?" ),
