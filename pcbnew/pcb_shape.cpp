@@ -244,7 +244,7 @@ void PCB_SHAPE::Scale( double aScale )
 }
 
 
-void PCB_SHAPE::NormalizeRect()
+void PCB_SHAPE::Normalize()
 {
     if( m_shape == SHAPE_T::RECTANGLE )
     {

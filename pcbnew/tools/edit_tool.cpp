@@ -1767,7 +1767,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
 
             if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
+            {
                 board_item->Rotate( refPt, rotateAngle );
+                board_item->Normalize();
+            }
         }
 
         if( !localCommit.Empty() )
@@ -2054,6 +2057,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
             }
 
             boardItem->Flip( refPt, leftRight );
+            boardItem->Normalize();
         }
     }
 

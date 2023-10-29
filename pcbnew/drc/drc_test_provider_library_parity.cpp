@@ -530,10 +530,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
             temp->SetOrientation( ANGLE_0 );
 
         for( BOARD_ITEM* item : temp->GraphicalItems() )
-        {
-            if( item->Type() == PCB_SHAPE_T )
-                static_cast<PCB_SHAPE*>( item )->NormalizeRect();
-        }
+            item->Normalize();
 
         diff = temp->FootprintNeedsUpdate( aLibFP, aReporter );
 

@@ -2745,13 +2745,12 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
         if( aParent && aParent->Type() == PCB_FOOTPRINT_T )
         {
-            // I'm not aware of any reason to skip normalization of footprint rects, except
-            // that that's what we've always done.  (And, FWIW, the Alitum test gold files
-            // currently depend on this behaviour.)
+            // Footprint shapes are stored in board-relative coordinates, but we want the
+            // normalization to remain in footprint-relative coordinates.
         }
         else
         {
-            shape->NormalizeRect();
+            shape->Normalize();
         }
 
         NeedRIGHT();

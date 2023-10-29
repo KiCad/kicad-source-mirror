@@ -121,13 +121,13 @@ public:
         return hitTest( aRect, aContained, aAccuracy );
     }
 
-    void NormalizeRect();
+    void Normalize() override;
 
-    virtual void Move( const VECTOR2I& aMoveVector ) override;
+    void Move( const VECTOR2I& aMoveVector ) override;
 
-    virtual void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
-    virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     virtual void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
 

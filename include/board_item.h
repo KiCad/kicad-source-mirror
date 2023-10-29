@@ -328,6 +328,11 @@ public:
     virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight );
 
     /**
+     * Perform any normalization required after a user rotate and/or flip.
+     */
+    virtual void Normalize() {}
+
+    /**
      * Return the #BOARD in which this #BOARD_ITEM resides, or NULL if none.
      */
     virtual const BOARD* GetBoard() const;
