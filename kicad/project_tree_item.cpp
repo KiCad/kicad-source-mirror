@@ -127,7 +127,7 @@ bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
     wxString ext = PROJECT_TREE_PANE::GetFileExt( GetType() );
     wxString full_ext = wxT( "." ) + ext;
 
-    if( check && !ext.IsEmpty() && !newFile.EndsWith( full_ext ) )
+    if( check && !ext.IsEmpty() && !newFile.Lower().EndsWith( full_ext.Lower() ) )
     {
         wxMessageDialog dialog( m_parent, _( "Changing file extension will change file type.\n"
                                              "Do you want to continue ?" ),
