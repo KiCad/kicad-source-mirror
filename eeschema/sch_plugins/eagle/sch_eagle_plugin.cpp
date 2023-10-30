@@ -172,7 +172,11 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
 
 wxFileName SCH_EAGLE_PLUGIN::getLibFileName()
 {
-    wxFileName fn( m_schematic->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
+    wxFileName fn;
+
+    wxCHECK( m_schematic, fn );
+
+    fn.Assign( m_schematic->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
 
     return fn;
 }

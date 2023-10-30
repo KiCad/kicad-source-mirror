@@ -468,8 +468,15 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     BOARD_INSPECTION_TOOL* controller = m_toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
 
-                    if( controller && m_frame->GetPcbNewSettings()->m_ESCClearsNetHighlight )
-                        controller->ClearHighlight( *evt );
+                    try
+                    {
+                        if( controller && m_frame->GetPcbNewSettings()->m_ESCClearsNetHighlight )
+                            controller->ClearHighlight( *evt );
+                    }
+                    catch( const std::runtime_error& e )
+                    {
+                        wxCHECK_MSG( false, 0, e.what() );
+                    }
                 }
             }
         }

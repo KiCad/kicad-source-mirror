@@ -942,7 +942,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
 
     // Remove all refs that match this symbol using remove_if
     m_symbolsList.erase( std::remove_if( m_symbolsList.begin(), m_symbolsList.end(),
-                                         [aSymbol]( const SCH_REFERENCE& ref ) -> bool
+                                         [&aSymbol]( const SCH_REFERENCE& ref ) -> bool
                                          {
                                              return ref.GetSymbol()->m_Uuid == aSymbol.m_Uuid;
                                          } ),

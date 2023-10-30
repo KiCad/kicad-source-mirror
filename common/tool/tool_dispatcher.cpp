@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2021 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2013-2023 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -552,7 +552,11 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         static ACTION_MENU* currentMenu;
 
-        wxMenuEvent& menuEvent = *dynamic_cast<wxMenuEvent*>( &aEvent );
+        wxMenuEvent* tmp = dynamic_cast<wxMenuEvent*>( &aEvent );
+
+        wxCHECK( tmp, /* void */ );
+
+        wxMenuEvent& menuEvent = *tmp;
 
         if( type == wxEVT_MENU_OPEN )
         {
