@@ -37,7 +37,10 @@
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>
 #include <wx/popupwin.h>
-#include "wx/app.h"
+
+#include <eda_doc.h>                    // for GetAssociatedDocument()
+#include <pgm_base.h>                   // for PROJECT
+#include <settings/settings_manager.h>  // for PROJECT
 
 constexpr int RECENT_SEARCHES_MAX = 10;
 
@@ -808,7 +811,10 @@ void LIB_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 void LIB_TREE::onDetailsLink( wxHtmlLinkEvent& aEvent )
 {
     const wxHtmlLinkInfo& info = aEvent.GetLinkInfo();
-    ::wxLaunchDefaultBrowser( info.GetHref() );
+    wxString docname = info.GetHref();
+    PROJECT& prj = Pgm().GetSettingsManager().Prj();
+
+    GetAssociatedDocument( this, docname, &prj );
 }
 
 
