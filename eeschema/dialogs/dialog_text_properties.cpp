@@ -72,18 +72,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     }
     else
     {
-        m_separator3->Show( false );
-        m_vAlignTop->Show( false );
-        m_vAlignCenter->Show( false );
-        m_vAlignBottom->Show( false );
-
-        wxSizer* parentSizer = m_vAlignTop->GetContainingSizer();
-        parentSizer->Detach( m_separator3 );
-        parentSizer->Detach( m_vAlignTop );
-        parentSizer->Detach( m_vAlignCenter );
-        parentSizer->Detach( m_vAlignBottom );
-        parentSizer->Layout();
-
         m_borderCheckbox->Show( false );
         m_borderWidth.Show( false );
         m_borderColorLabel->Show( false );
@@ -276,6 +264,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check();  break;
     }
 
+    switch( m_currentText->GetVertJustify() )
+    {
+    case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check();    break;
+    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
+    }
+
     if( m_currentText->GetTextAngle() == ANGLE_VERTICAL )
         m_vertical->Check();
     else
@@ -284,13 +279,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     if( m_currentItem->Type() == SCH_TEXTBOX_T )
     {
         SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( m_currentItem );
-
-        switch( m_currentText->GetVertJustify() )
-        {
-        case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check();    break;
-        case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
-        case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
-        }
 
         m_borderCheckbox->SetValue( textBox->GetWidth() >= 0 );
 
@@ -505,6 +493,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     else
         m_currentText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
+    if( m_vAlignBottom->IsChecked() )
+        m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    else if( m_vAlignCenter->IsChecked() )
+        m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    else
+        m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
     if( m_vertical->IsChecked() )
         m_currentText->SetTextAngle( ANGLE_VERTICAL );
     else
@@ -513,13 +508,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_currentItem->Type() == SCH_TEXTBOX_T )
     {
         SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( m_currentItem );
-
-        if( m_vAlignBottom->IsChecked() )
-            m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        else if( m_vAlignCenter->IsChecked() )
-            m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-        else
-            m_currentText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
         STROKE_PARAMS stroke = textBox->GetStroke();
 
