@@ -681,7 +681,7 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
     if( !startItem || !endItem )
         return std::nullopt;
 
-    PNS::LINE        line = world->AssembleLine( startItem );
+    PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
     SHAPE_LINE_CHAIN oldChain = line.CLine();
 
     wxCHECK( line.ContainsLink( endItem ), std::nullopt );
