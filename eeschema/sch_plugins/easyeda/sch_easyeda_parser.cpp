@@ -46,6 +46,7 @@
 #include <gfx_import_utils.h>
 #include <import_gfx/svg_import_plugin.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
+#include <import_gfx/graphics_importer_sch.h>
 
 
 SCH_EASYEDA_PARSER::SCH_EASYEDA_PARSER( SCHEMATIC*         aSchematic,
@@ -57,6 +58,77 @@ SCH_EASYEDA_PARSER::SCH_EASYEDA_PARSER( SCHEMATIC*         aSchematic,
 
 SCH_EASYEDA_PARSER::~SCH_EASYEDA_PARSER()
 {
+}
+
+
+static std::vector<std::vector<wxString>> RegexMatchAll( wxRegEx& aRegex, const wxString& aString )
+{
+    std::vector<std::vector<wxString>> allMatches;
+
+    size_t start = 0;
+    size_t len = 0;
+    size_t prevstart = 0;
+
+    wxString str = aString;
+
+    while( aRegex.Matches( str ) )
+    {
+        std::vector<wxString> matches;
+        aRegex.GetMatch( &start, &len );
+
+        for( size_t i = 0; i < aRegex.GetMatchCount(); i++ )
+            matches.emplace_back( aRegex.GetMatch( str, i ) );
+
+        allMatches.emplace_back( matches );
+
+        prevstart = start + len;
+        str = str.Mid( prevstart );
+    }
+
+    return allMatches;
+}
+
+
+/**
+ * EasyEDA image transformations are in the form of:
+ *
+ * scale(1,-1) translate(-555,1025) rotate(270,425,-785)
+ *
+ * Order of operations is from end to start, similar to CSS.
+ */
+static std::vector<std::pair<wxString, std::vector<double>>>
+ParseImageTransform( const wxString& transformData )
+{
+    wxRegEx transformRegex( "(rotate|translate|scale)\\(([\\w\\s,\\.\\-]*)\\)", wxRE_ICASE );
+    std::vector<std::vector<wxString>> allMatches = RegexMatchAll( transformRegex, transformData );
+
+    std::vector<std::pair<wxString, std::vector<double>>> transformCmds;
+
+    for( int cmdId = allMatches.size() - 1; cmdId >= 0; cmdId-- )
+    {
+        std::vector<wxString>& groups = allMatches[cmdId];
+
+        if( groups.size() != 3 )
+            continue;
+
+        const wxString& cmdName = groups[1].Strip( wxString::both ).Lower();
+        const wxString& cmdArgsStr = groups[2];
+
+        wxArrayString       cmdParts = wxSplit( cmdArgsStr, ',', '\0' );
+        std::vector<double> cmdArgs;
+
+        for( const wxString& cmdPart : cmdParts )
+        {
+            double arg = 0;
+            wxASSERT( cmdPart.Strip( wxString::both ).ToCDouble( &arg ) );
+
+            cmdArgs.push_back( arg );
+        }
+
+        transformCmds.emplace_back( cmdName, cmdArgs );
+    }
+
+    return transformCmds;
 }
 
 
@@ -419,7 +491,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
                     ParseLineChains( pointsData, schIUScale.MilsToIU( 10 ) );
 
             for( SHAPE_LINE_CHAIN outline : lineChains )
-            {
+             {
                 std::unique_ptr<LIB_SHAPE> shape =
                         std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
 
@@ -1397,8 +1469,86 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
         {
             VECTOR2D start( Convert( arr[1] ), Convert( arr[2] ) );
             VECTOR2D size( Convert( arr[3] ), Convert( arr[4] ) );
-            double   angle = Convert( arr[5] );
+            //double   angle = Convert( arr[5] ); // CSS-like transformations are used instead.
             wxString imageUrl = arr[6];
+            wxString transformData = arr[9];
+
+            VECTOR2D kstart = RelPos( start );
+            VECTOR2D ksize = ScalePos( size );
+
+            std::vector<std::pair<wxString, std::vector<double>>> transformCmds =
+                    ParseImageTransform( transformData );
+
+            auto applyTransform = [&]( SCH_ITEM* aSchItem )
+            {
+                for( const auto& cmd : transformCmds )
+                {
+                    if( cmd.first == wxS( "rotate" ) )
+                    {
+                        if( cmd.second.size() != 3 )
+                            continue;
+
+                        double   cmdAngle = 360 - cmd.second[0];
+                        VECTOR2D cmdAround( cmd.second[1], cmd.second[2] );
+
+                        for( double i = cmdAngle; i > 0; i -= 90 )
+                        {
+                            if( aSchItem->Type() == SCH_LINE_T )
+                            {
+                                // Lines need special handling for some reason
+                                aSchItem->SetFlags( STARTPOINT );
+                                aSchItem->Rotate( RelPos( cmdAround ) );
+                                aSchItem->ClearFlags( STARTPOINT );
+
+                                aSchItem->SetFlags( ENDPOINT );
+                                aSchItem->Rotate( RelPos( cmdAround ) );
+                                aSchItem->ClearFlags( ENDPOINT );
+                            }
+                            else
+                            {
+                                aSchItem->Rotate( RelPos( cmdAround ) );
+                            }
+                        }
+                    }
+                    else if( cmd.first == wxS( "translate" ) )
+                    {
+                        if( cmd.second.size() != 2 )
+                            continue;
+
+                        VECTOR2D cmdOffset( cmd.second[0], cmd.second[1] );
+                        aSchItem->Move( ScalePos( cmdOffset ) );
+                    }
+                    else if( cmd.first == wxS( "scale" ) )
+                    {
+                        if( cmd.second.size() != 2 )
+                            continue;
+
+                        double cmdScaleX = cmd.second[0];
+                        double cmdScaleY = cmd.second[1];
+
+                        // Lines need special handling for some reason
+                        if( aSchItem->Type() == SCH_LINE_T )
+                            aSchItem->SetFlags( STARTPOINT | ENDPOINT );
+
+                        if( cmdScaleX < 0 && cmdScaleY > 0 )
+                        {
+                            aSchItem->MirrorHorizontally( 0 );
+                        }
+                        else if( cmdScaleX > 0 && cmdScaleY < 0 )
+                        {
+                            aSchItem->MirrorVertically( 0 );
+                        }
+                        else if( cmdScaleX < 0 && cmdScaleY < 0 )
+                        {
+                            aSchItem->MirrorHorizontally( 0 );
+                            aSchItem->MirrorVertically( 0 );
+                        }
+
+                        if( aSchItem->Type() == SCH_LINE_T )
+                            aSchItem->ClearFlags( STARTPOINT | ENDPOINT );
+                    }
+                }
+            };
 
             if( imageUrl.BeforeFirst( ':' ) == wxS( "data" ) )
             {
@@ -1414,7 +1564,37 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
 
                     if( mimeType == wxS( "image/svg+xml" ) )
                     {
-                        // TODO: Not supported yet
+                        VECTOR2D offset = RelPos( start );
+
+                        SVG_IMPORT_PLUGIN     svgImportPlugin;
+                        GRAPHICS_IMPORTER_SCH schImporter;
+
+                        svgImportPlugin.SetImporter( &schImporter );
+                        svgImportPlugin.LoadFromMemory( buf );
+
+                        VECTOR2D imSize( svgImportPlugin.GetImageWidth(),
+                                         svgImportPlugin.GetImageHeight() );
+
+                        VECTOR2D pixelScale( schIUScale.IUTomm( ScaleSize( size.x ) ) / imSize.x,
+                                             schIUScale.IUTomm( ScaleSize( size.y ) ) / imSize.y );
+
+                        schImporter.SetScale( pixelScale );
+
+                        VECTOR2D offsetMM( schIUScale.IUTomm( offset.x ),
+                                           schIUScale.IUTomm( offset.y ) );
+
+                        schImporter.SetImportOffsetMM( offsetMM );
+
+                        svgImportPlugin.Import();
+
+                        for( std::unique_ptr<EDA_ITEM>& item : schImporter.GetItems() )
+                        {
+                            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item.release() );
+
+                            applyTransform( schItem );
+
+                            createdItems.emplace_back( schItem );
+                        }
                     }
                     else
                     {
@@ -1425,16 +1605,13 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
 
                         if( bitmap->ReadImageFile( buf ) )
                         {
-                            VECTOR2D kstart = RelPos( start );
-                            VECTOR2D ksize = ScalePos( size );
                             VECTOR2D kcenter = kstart + ksize / 2;
 
                             double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
                             bitmap->SetImageScale( scaleFactor );
                             bitmap->SetPosition( kcenter );
 
-                            for( double i = angle; i > 0; i -= 90 )
-                                bitmap->Rotate( kcenter );
+                            applyTransform( bitmap.get() );
 
                             createdItems.push_back( std::move( bitmap ) );
                         }
