@@ -173,8 +173,6 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         }
         else
         {
-            BOOST_CHECK_EQUAL( violations.size(), entry.second );
-
             UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
 
             std::map<KIID, EDA_ITEM*> itemMap;
@@ -185,6 +183,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
                 BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
                                                      itemMap ) );
             }
+
+            BOOST_CHECK_EQUAL( violations.size(), entry.second );
 
             BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", entry.first ) );
         }
