@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 12:12-0700\n"
+"POT-Creation-Date: 2023-10-30 09:45-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1445,6 +1445,25 @@ msgstr "Grid size Y out of range."
 
 msgid "Hotkey List"
 msgstr "Hotkey List"
+
+msgid "Project Name"
+msgstr "Project Name"
+
+msgid "PCB"
+msgstr "PCB"
+
+msgid "Schematic"
+msgstr "Schematic"
+
+msgid ""
+"This project file contains multiple PCB+Schematic combinations.\n"
+"Choose which one should be imported to KiCad."
+msgstr ""
+"This project file contains multiple PCB+Schematic combinations.\n"
+"Choose which one should be imported to KiCad."
+
+msgid "Choose Project to Import"
+msgstr "Choose Project to Import"
 
 msgid "Skip Locked Items"
 msgstr "Skip Locked Items"
@@ -2927,6 +2946,9 @@ msgstr "Field Name Templates"
 msgid "Footprint Editor"
 msgstr "Footprint Editor"
 
+msgid "Origins & Axes"
+msgstr "Origins & Axes"
+
 msgid "Default Values"
 msgstr "Default Values"
 
@@ -2935,9 +2957,6 @@ msgstr "PCB Editor"
 
 msgid "Action Plugins"
 msgstr "Action Plugins"
-
-msgid "Origins & Axes"
-msgstr "Origins & Axes"
 
 msgid "General"
 msgstr "General"
@@ -4953,8 +4972,17 @@ msgstr "Loading Footprint Libraries"
 msgid "No default footprint"
 msgstr "No default footprint"
 
+msgid "Rendering Engine"
+msgstr "Rendering Engine"
+
+msgid "Accelerated graphics"
+msgstr "Accelerated graphics"
+
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Hardware-accelerated graphics (recommended)"
+
+msgid "Fallback graphics"
+msgstr "Fallback graphics"
 
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
@@ -4963,17 +4991,8 @@ msgstr ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 
-msgid "Accelerated graphics"
-msgstr "Accelerated graphics"
-
-msgid "Fallback graphics"
-msgstr "Fallback graphics"
-
-msgid "Rendering Engine"
-msgstr "Rendering Engine"
-
-msgid "Grid Options"
-msgstr "Grid Options"
+msgid "Grid Display"
+msgstr "Grid Display"
 
 msgid "Style:"
 msgstr "Style:"
@@ -5004,9 +5023,6 @@ msgstr "When grid shown"
 
 msgid "Never"
 msgstr "Never"
-
-msgid "Cursor Options"
-msgstr "Cursor Options"
 
 msgid "Small crosshairs"
 msgstr "Small crosshairs"
@@ -9852,11 +9868,13 @@ msgstr ""
 "Do you want to save the current document before proceeding?"
 
 msgid ""
-"This operation replaces the contents of the current project.\n"
+"This operation replaces the contents of the current schematic, which will be "
+"permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"This operation replaces the contents of the current project.\n"
+"This operation replaces the contents of the current schematic, which will be "
+"permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 
@@ -9907,6 +9925,20 @@ msgstr ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
+
+#, c-format
+msgid "Failed to save %s."
+msgstr "Failed to save %s."
+
+msgid "Locked File Warning"
+msgstr "Locked File Warning"
+
+msgid ""
+"You do not have write permissions to:\n"
+"\n"
+msgstr ""
+"You do not have write permissions to:\n"
+"\n"
 
 msgid "Saving will overwrite existing files."
 msgstr "Saving will overwrite existing files."
@@ -10536,9 +10568,6 @@ msgstr ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
-
-msgid "Schematic"
-msgstr "Schematic"
 
 msgid "New Schematic"
 msgstr "New Schematic"
@@ -13447,8 +13476,11 @@ msgstr "Rename Symbol..."
 msgid "Rename the selected symbol"
 msgstr "Rename the selected symbol"
 
-msgid "Save the current symbol to a different library."
-msgstr "Save the current symbol to a different library."
+msgid "Save Copy As..."
+msgstr "Save Copy As..."
+
+msgid "Save a copy of the current symbol to a different library."
+msgstr "Save a copy of the current symbol to a different library."
 
 msgid "Remove the selected symbol from its library"
 msgstr "Remove the selected symbol from its library"
@@ -15635,9 +15667,6 @@ msgstr "Forces the footprint library to be resaved regardless of versioning"
 
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "Footprint library path does not exist or is not accessible\n"
-
-msgid "PCB"
-msgstr "PCB"
 
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -21203,6 +21232,9 @@ msgstr "Binary GTLF files"
 
 msgid "STEP Output File"
 msgstr "STEP Output File"
+
+msgid "No filename for output file"
+msgstr "No filename for output file"
 
 #, c-format
 msgid ""
@@ -31099,8 +31131,8 @@ msgstr "Create Rule Area from Selection..."
 msgid "Creates a rule area from the selection"
 msgstr "Creates a rule area from the selection"
 
-msgid "Create Lines from Selection"
-msgstr "Create Lines from Selection"
+msgid "Create Lines from Selection..."
+msgstr "Create Lines from Selection..."
 
 msgid "Creates graphic lines from the selection"
 msgstr "Creates graphic lines from the selection"
@@ -31701,8 +31733,8 @@ msgstr "Drill Files (.drl)..."
 msgid "Generate Excellon drill file(s)"
 msgstr "Generate Excellon drill file(s)"
 
-msgid "Component Placement (.pos)..."
-msgstr "Component Placement (.pos)..."
+msgid "Component Placement (.pos, .gbr)..."
+msgstr "Component Placement (.pos, .gbr)..."
 
 msgid "Generate component placement file(s) for pick and place"
 msgstr "Generate component placement file(s) for pick and place"
@@ -33316,6 +33348,30 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Grid Options"
+#~ msgstr "Grid Options"
+
+#~ msgid "Cursor Options"
+#~ msgstr "Cursor Options"
+
+#~ msgid ""
+#~ "This operation replaces the contents of the current project.\n"
+#~ "\n"
+#~ "Do you want to proceed?"
+#~ msgstr ""
+#~ "This operation replaces the contents of the current project.\n"
+#~ "\n"
+#~ "Do you want to proceed?"
+
+#~ msgid "Save the current symbol to a different library."
+#~ msgstr "Save the current symbol to a different library."
+
+#~ msgid "Create Lines from Selection"
+#~ msgstr "Create Lines from Selection"
+
+#~ msgid "Component Placement (.pos)..."
+#~ msgstr "Component Placement (.pos)..."
 
 #~ msgid "Create Logo File"
 #~ msgstr "Create Logo File"
@@ -44066,9 +44122,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Checking mechanical clearances..."
 #~ msgstr "Checking mechanical clearances..."
-
-#~ msgid "Save Copy As..."
-#~ msgstr "Save Copy As..."
 
 #, c-format
 #~ msgid "The name '%s' conflicts with an existing entry in the library '%s'."
