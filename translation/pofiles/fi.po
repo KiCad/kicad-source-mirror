@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-10-30 16:41+0000\n"
+"PO-Revision-Date: 2023-11-02 03:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2474,11 +2474,8 @@ msgid "Hotkey List"
 msgstr "Pikanäppäinluettelo"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Projektin nimi:\n"
-"%s\n"
+msgstr "Projektin nimi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1047
@@ -2498,11 +2495,12 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Tämä projektitiedosto sisältää useita PCB+kytkentäkaavioyhdistelmiä.\n"
+"Valitse, mikä niistä tuodaan KiCadiin."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Sulje Projekti"
+msgstr "Valitse tuotava projekti"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -8000,9 +7998,8 @@ msgstr ""
 "laitteistokiihdytysvaatimuksia)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Näytä"
+msgstr "Ruudukkonäyttö"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -15201,16 +15198,16 @@ msgstr ""
 "Haluatko tallentaa nykyisen asiakirjan ennen jatkamista?"
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Tämä toiminto korvaa nykyisen projektin sisällön.\n"
+"Tämä toiminto korvaa nykyisen kytkentäkaavion sisällön, joka katoaa "
+"pysyvästi.\n"
 "\n"
-"Haluatko edetä?"
+"Haluatko jatkaa?"
 
 #: eeschema/files-io.cpp:672
 msgid "Import Schematic"
@@ -15273,21 +15270,21 @@ msgstr ""
 "Varmista, että sinulla on kirjoitusoikeudet ja yritä uudelleen."
 
 #: eeschema/files-io.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "Luominen epäonnistui"
+msgstr "%s:n tallentaminen epäonnistui."
 
 #: eeschema/files-io.cpp:1065
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "Mallin Skaalavaroitus"
+msgstr "Varoitus lukitusta tiedostosta"
 
 #: eeschema/files-io.cpp:1067
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "Sinulla ei ole kirjoitusoikeuksia kansioon \"%s\"."
+msgstr ""
+"Sinulla ei ole kirjoitusoikeuksia:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1083
 msgid "Saving will overwrite existing files."
@@ -19928,9 +19925,8 @@ msgid "Save Copy As..."
 msgstr "Tallenna kopio nimellä ..."
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "Tallenna nykyinen symboli eri kirjastoon."
+msgstr "Tallenna kopio nykyisestä symbolista toiseen kirjastoon."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
@@ -30608,9 +30604,8 @@ msgid "STEP Output File"
 msgstr "STEP-tulostustiedosto"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:366
-#, fuzzy
 msgid "No filename for output file"
-msgstr "Ei ole jalanjälkitiedosto."
+msgstr "Tulostiedostolle ei ole tiedostonimeä"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:397
 #, c-format
@@ -43257,9 +43252,8 @@ msgid "Creates a rule area from the selection"
 msgstr "Luo säännön alueen valinnasta"
 
 #: pcbnew/tools/pcb_actions.cpp:76
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "Luo Viivat Valinnasta"
+msgstr "Luo viivat valinnasta..."
 
 #: pcbnew/tools/pcb_actions.cpp:77
 msgid "Creates graphic lines from the selection"
@@ -44067,9 +44061,8 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Luo Excellon-poratiedosto (t)"
 
 #: pcbnew/tools/pcb_actions.cpp:1048
-#, fuzzy
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "Komponenttien sijoittelu (.pos)..."
+msgstr "Komponenttien sijoittelu (.pos,.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Generate component placement file(s) for pick and place"
