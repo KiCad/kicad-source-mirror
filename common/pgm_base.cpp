@@ -914,6 +914,28 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
 }
 
 
+#ifdef KICAD_USE_SENTRY
+struct SENTRY_ASSERT_CACHE_KEY
+{
+    wxString file;
+    int      line;
+    wxString func;
+    wxString cond;
+    wxString msg;
+};
+
+
+bool operator<( const SENTRY_ASSERT_CACHE_KEY& aKey1, const SENTRY_ASSERT_CACHE_KEY& aKey2 )
+{
+    return aKey1.file < aKey2.file ||
+        aKey1.line < aKey2.line ||
+        aKey1.func < aKey2.func ||
+        aKey1.cond < aKey2.cond ||
+        aKey1.msg < aKey2.msg;
+}
+#endif
+
+
 void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& aFunc,
                              const wxString& aCond, const wxString& aMsg )
 {
@@ -937,12 +959,19 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
 #ifdef KICAD_USE_SENTRY
     if( IsSentryOptedIn() )
     {
-        sentry_value_t exc = sentry_value_new_exception( "assert", assertStr );
-        sentry_value_set_stacktrace( exc, NULL, 0 );
+        static std::set<SENTRY_ASSERT_CACHE_KEY> assertCache;
 
-        sentry_value_t sentryEvent = sentry_value_new_event();
-        sentry_event_add_exception( sentryEvent, exc );
-        sentry_capture_event( sentryEvent );
+        SENTRY_ASSERT_CACHE_KEY key = { aFile, aLine, aFunc, aCond, aMsg };
+        if( assertCache.find( key ) == assertCache.end() )
+        {
+            sentry_value_t exc = sentry_value_new_exception( "assert", assertStr );
+            sentry_value_set_stacktrace( exc, NULL, 0 );
+
+            sentry_value_t sentryEvent = sentry_value_new_event();
+            sentry_event_add_exception( sentryEvent, exc );
+            sentry_capture_event( sentryEvent );
+            assertCache.insert( key );
+        }
     }
 #endif
 }
