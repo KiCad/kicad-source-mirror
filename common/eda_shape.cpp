@@ -1904,13 +1904,16 @@ static struct EDA_SHAPE_DESC
                     &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
                 .SetAvailableFunc( isNotPolygon );
-        // TODO: m_arcCenter, m_bezierC1, m_bezierC2, m_poly
+
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         void ( EDA_SHAPE::*lineStyleSetter )( PLOT_DASH_TYPE ) = &EDA_SHAPE::SetLineStyle;
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, PLOT_DASH_TYPE>(
-                _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
+                    _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),
+                    &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ) );
 
         auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
                     NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle,
@@ -1925,35 +1928,32 @@ static struct EDA_SHAPE_DESC
                 } );
         propMgr.AddProperty( angle );
 
-        auto filled = new PROPERTY<EDA_SHAPE, bool>( _HKI( "Filled" ),
-                                                     &EDA_SHAPE::SetFilled, &EDA_SHAPE::IsFilled );
-        filled->SetAvailableFunc(
-                      [=]( INSPECTABLE* aItem ) -> bool
-                      {
-                          SHAPE_T itemShape;
+        auto fillAvailable =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                    {
+                        switch( shape->GetShape() )
+                        {
+                        case SHAPE_T::POLY:
+                        case SHAPE_T::RECTANGLE:
+                        case SHAPE_T::CIRCLE:
+                            return true;
 
-                          try
-                          {
-                            itemShape = aItem->Get<SHAPE_T>( shape );
-                          }
-                          catch( std::runtime_error& err )
-                          {
-                              wxFAIL_MSG( err.what() );
-                              return false;
-                          }
+                        default:
+                            return false;
+                        }
+                    }
 
-                          switch( itemShape )
-                          {
-                          case SHAPE_T::POLY:
-                          case SHAPE_T::RECTANGLE:
-                          case SHAPE_T::CIRCLE:
-                              return true;
+                    return false;
+                };
 
-                          default:
-                              return false;
-                          }
-                      } );
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, bool>( _HKI( "Filled" ),
+                    &EDA_SHAPE::SetFilled, &EDA_SHAPE::IsFilled ) )
+                .SetAvailableFunc( fillAvailable );
 
-        propMgr.AddProperty( filled );
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Fill Color" ),
+                    &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ) )
+                .SetAvailableFunc( fillAvailable );
     }
 } _EDA_SHAPE_DESC;

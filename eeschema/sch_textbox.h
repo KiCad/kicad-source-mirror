@@ -53,6 +53,9 @@ public:
 
     int GetTextMargin() const;
 
+    int GetSchTextSize() const { return GetTextWidth(); }
+    void SetSchTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
+
     VECTOR2I GetDrawPos() const override;
 
     virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,

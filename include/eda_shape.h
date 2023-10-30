@@ -95,7 +95,7 @@ public:
 
     void SetFilled( bool aFlag )
     {
-        m_fill = aFlag ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+        setFilled( aFlag );
     }
 
     void SetFillMode( FILL_T aFill )           { m_fill = aFill; }
@@ -112,6 +112,9 @@ public:
 
     void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
     PLOT_DASH_TYPE GetLineStyle() const;
+
+    void    SetLineColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }
+    COLOR4D GetLineColor() const                  { return m_stroke.GetColor(); }
 
     void SetShape( SHAPE_T aShape )            { m_shape = aShape; }
     SHAPE_T GetShape() const                   { return m_shape; }
@@ -338,6 +341,11 @@ public:
 protected:
     void    setPosition( const VECTOR2I& aPos );
     VECTOR2I getPosition() const;
+
+    virtual void setFilled( bool aFlag )
+    {
+        m_fill = aFlag ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+    }
 
     void move( const VECTOR2I& aMoveVector );
     void rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );

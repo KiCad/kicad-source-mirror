@@ -116,6 +116,13 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
+protected:
+    void setFilled( bool aFlag ) override
+    {
+        m_fill = aFlag ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL;
+    }
+
+
 private:
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
     void PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;

@@ -62,6 +62,9 @@ public:
         return GetShownText( nullptr, aAllowExtraText, aDepth );
     }
 
+    int GetSchTextSize() const { return GetTextWidth(); }
+    void SetSchTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
+
     bool IsHypertext() const override
     {
         return HasHyperlink();

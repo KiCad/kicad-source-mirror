@@ -681,6 +681,9 @@ static struct PCB_SHAPE_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Position Y" ), isPolygon );
 
+        propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
+        propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ) );
+
         auto isCopper =
                 []( INSPECTABLE* aItem ) -> bool
                 {

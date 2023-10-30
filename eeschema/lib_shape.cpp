@@ -489,11 +489,11 @@ BITMAPS LIB_SHAPE::GetMenuImage() const
 {
     switch( GetShape() )
     {
-    case SHAPE_T::SEGMENT: return BITMAPS::add_line;
-    case SHAPE_T::ARC:     return BITMAPS::add_arc;
-    case SHAPE_T::CIRCLE:  return BITMAPS::add_circle;
-    case SHAPE_T::RECTANGLE:    return BITMAPS::add_rectangle;
-    case SHAPE_T::POLY:    return BITMAPS::add_graphical_segments;
+    case SHAPE_T::SEGMENT:   return BITMAPS::add_line;
+    case SHAPE_T::ARC:       return BITMAPS::add_arc;
+    case SHAPE_T::CIRCLE:    return BITMAPS::add_circle;
+    case SHAPE_T::RECTANGLE: return BITMAPS::add_rectangle;
+    case SHAPE_T::POLY:      return BITMAPS::add_graphical_segments;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -582,5 +582,25 @@ static struct LIB_SHAPE_DESC
                                       _HKI( "Position X" ), isPolygon );
         propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ),
                                       _HKI( "Position Y" ), isPolygon );
+
+        propMgr.Mask( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ) );
+
+        ENUM_MAP<FILL_T>& fillEnum = ENUM_MAP<FILL_T>::Instance();
+
+        if( fillEnum.Choices().GetCount() == 0 )
+        {
+            fillEnum.Map( FILL_T::NO_FILL, _HKI( "None" ) )
+                    .Map( FILL_T::FILLED_SHAPE, _HKI( "Body outline color" ) )
+                    .Map( FILL_T::FILLED_WITH_BG_BODYCOLOR, _HKI( "Body background color" ) )
+                    .Map( FILL_T::FILLED_WITH_COLOR, _HKI( "Fill color" ) );
+        }
+
+        void ( LIB_SHAPE::*fillModeSetter )( FILL_T ) = &LIB_SHAPE::SetFillMode;
+        FILL_T ( LIB_SHAPE::*fillModeGetter )() const = &LIB_SHAPE::GetFillMode;
+
+        propMgr.AddProperty( new PROPERTY_ENUM< LIB_SHAPE, FILL_T>( _HKI( "Fill" ),
+                        fillModeSetter, fillModeGetter ) );
     }
 } _LIB_SHAPE_DESC;
+
+ENUM_TO_WXANY( FILL_T )
