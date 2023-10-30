@@ -2985,7 +2985,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextCodeIfExists( EDA_TEXT*          aKiCa
 
     aKiCadTextItem->SetTextWidth( textWidth );
     aKiCadTextItem->SetTextHeight( textHeight );
+
+#if 0
+    // EEschema currently supports only normal vs bold for text thickness.
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
+#endif
 
     aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
     aKiCadTextItem->SetItalic( textCode.Font.Italic );
@@ -3105,7 +3109,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
             angle = ANGLE_VERTICAL;
             textAlignment = rotate180( textAlignment );
             break;
-        default: wxFAIL_MSG( "Unknown Quadrant" );
+        default:
+            wxFAIL_MSG( "Unknown Quadrant" );
         }
 
         aKiCadTextItem->SetTextAngle( angle );
