@@ -70,6 +70,7 @@ private:
     size_t m_teardropsPage;
     size_t m_tuningPatternsPage;
     size_t m_netclassesPage;
+    size_t m_customRulesPage;
     size_t m_severitiesPage;
 };
 

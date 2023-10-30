@@ -41,6 +41,8 @@ public:
     PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_RULES( ) override;
 
+    void ImportSettingsFrom( BOARD* aBoard );
+
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 

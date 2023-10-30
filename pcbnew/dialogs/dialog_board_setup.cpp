@@ -69,6 +69,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         m_teardropsPage( 0 ),
         m_tuningPatternsPage( 0 ),
         m_netclassesPage( 0 ),
+        m_customRulesPage( 0 ),
         m_severitiesPage( 0 )
 
 {
@@ -183,6 +184,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                                                    false );
             }, _( "Net Classes" ) );
 
+    m_customRulesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
@@ -378,10 +380,22 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
                           m_teardropsPage )->ImportSettingsFrom( otherBoard );
         }
 
+        if( importDlg.m_TuningPatternsOpt->GetValue() )
+        {
+            RESOLVE_PAGE( PANEL_SETUP_TUNING_PATTERNS,
+                          m_tuningPatternsPage )->ImportSettingsFrom( otherBoard );
+        }
+
         if( importDlg.m_MaskAndPasteOpt->GetValue() )
         {
             RESOLVE_PAGE( PANEL_SETUP_MASK_AND_PASTE,
                           m_maskAndPagePage )->ImportSettingsFrom( otherBoard );
+        }
+
+        if( importDlg.m_CustomRulesOpt->GetValue() )
+        {
+            RESOLVE_PAGE( PANEL_SETUP_RULES,
+                          m_customRulesPage )->ImportSettingsFrom( otherBoard );
         }
 
         if( importDlg.m_SeveritiesOpt->GetValue() )

@@ -38,6 +38,7 @@
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
 #include <pgm_base.h>
+#include "wildcards_and_files_ext.h"
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParentWindow ),
@@ -705,4 +706,35 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     m_helpWindow->AddHTML_Text( html_txt );
 
     m_helpWindow->ShowModeless();
+}
+
+
+void PANEL_SETUP_RULES::ImportSettingsFrom( BOARD* aBoard )
+{
+    if( !m_frame->Prj().IsNullProject() )
+    {
+        wxFileName relFile = aBoard->GetFileName();
+        relFile.SetExt( DesignRulesFileExtension );
+
+        wxFileName absFile( aBoard->GetProject()->AbsolutePath( relFile.GetFullName() ) );
+
+        if( absFile.FileExists() )
+        {
+            wxTextFile file( absFile.GetFullPath() );
+
+            if( file.Open() )
+            {
+                for ( wxString str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
+                {
+                    ConvertSmartQuotesAndDashes( &str );
+                    m_textEditor->AddText( str << '\n' );
+                }
+
+                m_textEditor->EmptyUndoBuffer();
+
+                wxCommandEvent dummy;
+                OnCompile( dummy );
+            }
+        }
+    }
 }

@@ -22,6 +22,8 @@
 #include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
+#include <board.h>
+#include <board_design_settings.h>
 
 PANEL_SETUP_TUNING_PATTERNS::PANEL_SETUP_TUNING_PATTERNS( wxWindow* aParent, EDA_DRAW_FRAME* aFrame,
                                                           PNS::MEANDER_SETTINGS& aTrackSettings,
@@ -87,7 +89,7 @@ bool PANEL_SETUP_TUNING_PATTERNS::TransferDataFromWindow()
     m_trackSettings.m_spacing = m_track_spacing.GetIntValue();
     m_trackSettings.m_cornerStyle = m_track_cornerCtrl->GetSelection() ? PNS::MEANDER_STYLE_ROUND
                                                                        : PNS::MEANDER_STYLE_CHAMFER;
-    m_trackSettings.m_cornerRadiusPercentage = m_track_r.GetValue();
+    m_trackSettings.m_cornerRadiusPercentage = m_track_r.GetIntValue();
     m_trackSettings.m_singleSided = m_track_singleSided->GetValue();
 
     m_dpSettings.m_minAmplitude = m_dp_minA.GetIntValue();
@@ -104,7 +106,24 @@ bool PANEL_SETUP_TUNING_PATTERNS::TransferDataFromWindow()
     m_skewSettings.m_spacing = m_skew_spacing.GetIntValue();
     m_skewSettings.m_cornerStyle = m_skew_cornerCtrl->GetSelection() ? PNS::MEANDER_STYLE_ROUND
                                                                      : PNS::MEANDER_STYLE_CHAMFER;
-    m_skewSettings.m_cornerRadiusPercentage = m_skew_r.GetValue();
+    m_skewSettings.m_cornerRadiusPercentage = m_skew_r.GetIntValue();
 
     return true;
+}
+
+
+void PANEL_SETUP_TUNING_PATTERNS::ImportSettingsFrom( BOARD* aBoard )
+{
+    PNS::MEANDER_SETTINGS savedTrackSettings = m_trackSettings;
+    PNS::MEANDER_SETTINGS savedDPSettings = m_dpSettings;
+    PNS::MEANDER_SETTINGS savedSkewSettings = m_skewSettings;
+
+    m_trackSettings = aBoard->GetDesignSettings().m_singleTrackMeanderSettings;
+    m_dpSettings = aBoard->GetDesignSettings().m_diffPairMeanderSettings;
+    m_skewSettings = aBoard->GetDesignSettings().m_skewMeanderSettings;
+    TransferDataToWindow();
+
+    m_trackSettings = savedTrackSettings;
+    m_dpSettings = savedDPSettings;
+    m_skewSettings = savedSkewSettings;
 }

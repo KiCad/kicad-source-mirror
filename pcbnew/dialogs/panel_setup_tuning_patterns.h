@@ -30,6 +30,9 @@ class MEANDER_SETTINGS;
 
 }
 
+class BOARD;
+
+
 class PANEL_SETUP_TUNING_PATTERNS : public PANEL_SETUP_TUNING_PATTERNS_BASE
 {
 public:
@@ -37,6 +40,8 @@ public:
                           PNS::MEANDER_SETTINGS& aTrackSettings,
                           PNS::MEANDER_SETTINGS& aDiffPairSettings,
                           PNS::MEANDER_SETTINGS& aSkewSettings );
+
+    void ImportSettingsFrom( BOARD* aBoard );
 
 private:
     bool TransferDataToWindow() override;

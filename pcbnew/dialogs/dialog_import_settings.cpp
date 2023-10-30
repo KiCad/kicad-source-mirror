@@ -82,7 +82,8 @@ bool DIALOG_IMPORT_SETTINGS::UpdateImportSettingsButton()
     bool buttonEnableState = ( m_LayersOpt->IsChecked() || m_MaskAndPasteOpt->IsChecked()
                                || m_ConstraintsOpt->IsChecked() || m_NetclassesOpt->IsChecked()
                                || m_SeveritiesOpt->IsChecked() || m_TextAndGraphicsOpt->IsChecked()
-                               || m_FormattingOpt->IsChecked() || m_TracksAndViasOpt->IsChecked() );
+                               || m_FormattingOpt->IsChecked() || m_TracksAndViasOpt->IsChecked()
+                               || m_TuningPatternsOpt->IsChecked() || m_CustomRulesOpt->IsChecked() );
 
     m_sdbSizer1OK->Enable( buttonEnableState );
 
@@ -144,6 +145,8 @@ void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
     m_TracksAndViasOpt->SetValue( m_showSelectAllOnBtn );
     m_MaskAndPasteOpt->SetValue( m_showSelectAllOnBtn );
     m_SeveritiesOpt->SetValue( m_showSelectAllOnBtn );
+    m_TuningPatternsOpt->SetValue( m_showSelectAllOnBtn );
+    m_CustomRulesOpt->SetValue( m_showSelectAllOnBtn );
 
     // Ensure "Import Settings" button state is enabled as appropriate
     UpdateImportSettingsButton();
