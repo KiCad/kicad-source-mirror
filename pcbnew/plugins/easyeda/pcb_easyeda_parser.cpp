@@ -778,7 +778,7 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
             double height = ConvertSize( arr[9] ) * 0.8;
             text->SetTextSize( VECTOR2I( height, height ) );
 
-            text->SetText( arr[10] );
+            text->SetText( UnescapeHTML( arr[10] ) );
 
             //arr[11] // Geometry data
 

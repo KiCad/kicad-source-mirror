@@ -810,7 +810,10 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString fontSize = arr[7];
             wxString baselineAlign = arr[10];
             wxString textStr = arr[12];
+
             textStr.Replace( wxS( "\\n" ), wxS( "\n" ) );
+            textStr = UnescapeHTML( textStr );
+
             wxString halignStr = arr[14]; // Empty, start, middle, end, inherit
 
             bool      added = false;
@@ -1311,7 +1314,10 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             wxString fontSize = arr[7];
             wxString baselineAlign = arr[10];
             wxString textStr = arr[12];
+
             textStr.Replace( wxS( "\\n" ), wxS( "\n" ) );
+            textStr = UnescapeHTML( textStr );
+
             wxString halignStr = arr[14]; // Empty, start, middle, end, inherit
 
             std::unique_ptr<SCH_TEXT> textItem =

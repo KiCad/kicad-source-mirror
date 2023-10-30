@@ -545,7 +545,37 @@ wxString UnescapeHTML( const wxString& aString )
     converted.Replace( wxS( "&lt;" ), wxS( "<" ) );
     converted.Replace( wxS( "&gt;" ), wxS( ">" ) );
 
-    return converted;
+    // Yes, &amp;#123; is going to give unexpected results.
+
+    wxString result;
+
+    wxRegEx regex( "&#(\\d*);" );
+
+    size_t start = 0;
+    size_t len = 0;
+
+    wxString str = aString;
+
+    while( regex.Matches( str ) )
+    {
+        std::vector<wxString> matches;
+        regex.GetMatch( &start, &len );
+
+        result << str.Left( start );
+
+        unsigned long codeVal = 0;
+        wxString      code = regex.GetMatch( str, 1 );
+        code.ToCULong( &codeVal );
+
+        if( codeVal != 0 )
+            result << wxUniChar( codeVal );
+
+        str = str.Mid( start + len );
+    }
+
+    result << str;
+
+    return result;
 }
 
 
