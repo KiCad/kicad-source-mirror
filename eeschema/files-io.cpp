@@ -30,6 +30,7 @@
 #include <connection_graph.h>
 #include <dialog_migrate_buses.h>
 #include <dialog_symbol_remap.h>
+#include <dialog_import_choose_project.h>
 #include <eeschema_settings.h>
 #include <id.h>
 #include <kiface_base.h>
@@ -41,6 +42,7 @@
 #include <project_rescue.h>
 #include <project_sch.h>
 #include <dialog_HTML_reporter_base.h>
+#include <plugins/common/plugin_common_choose_project.h>
 #include <reporter.h>
 #include <richio.h>
 #include <sch_bus_entry.h>
@@ -1282,7 +1284,8 @@ bool SCH_EDIT_FRAME::doAutoSave()
 }
 
 
-void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
+bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
+                                 const STRING_UTF8_MAP* aProperties )
 {
     wxFileName             filename( aFileName );
     wxFileName             newfilename;
@@ -1299,7 +1302,7 @@ void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case SCH_IO_MGR::SCH_EASYEDAPRO:
     {
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-        wxCHECK_MSG( filename.IsAbsolute(), /*void*/,
+        wxCHECK_MSG( filename.IsAbsolute(), false,
                      wxS( "Import schematic: path is not absolute!" ) );
 
         try
@@ -1308,36 +1311,57 @@ void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             DIALOG_HTML_REPORTER            errorReporter( this );
             WX_PROGRESS_REPORTER            progressReporter( this, _( "Importing Schematic" ), 1 );
 
-            pi->SetReporter( errorReporter.m_Reporter );
-            pi->SetProgressReporter( &progressReporter );
-            Schematic().SetRoot( pi->LoadSchematicFile( aFileName, &Schematic() ) );
+            PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
+                    dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (SCH_PLUGIN*) pi );
 
-            if( errorReporter.m_Reporter->HasMessage() )
+            if( projectChooserPlugin )
             {
-                errorReporter.m_Reporter->Flush();  // Build HTML messages
-                errorReporter.ShowModal();
+                projectChooserPlugin->RegisterChooseProjectCallback(
+                        std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal, this,
+                                   std::placeholders::_1 ) );
             }
 
-            // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works differently
-            // to KiCad), so set it to an empty one
-            DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
-            drawingSheet.SetEmptyLayout();
-            BASE_SCREEN::m_DrawingSheetFileName = "empty.kicad_wks";
+            pi->SetReporter( errorReporter.m_Reporter );
+            pi->SetProgressReporter( &progressReporter );
 
-            newfilename.SetPath( Prj().GetProjectPath() );
-            newfilename.SetName( Prj().GetProjectName() );
-            newfilename.SetExt( KiCadSchematicFileExtension );
+            SCH_SHEET* loadedSheet =
+                    pi->LoadSchematicFile( aFileName, &Schematic(), nullptr, aProperties );
 
-            SetScreen( GetCurrentSheet().LastScreen() );
+            if( loadedSheet )
+            {
+                Schematic().SetRoot( loadedSheet );
 
-            Schematic().Root().SetFileName( newfilename.GetFullName() );
-            GetScreen()->SetFileName( newfilename.GetFullPath() );
-            GetScreen()->SetContentModified();
+                if( errorReporter.m_Reporter->HasMessage() )
+                {
+                    errorReporter.m_Reporter->Flush(); // Build HTML messages
+                    errorReporter.ShowModal();
+                }
 
-            RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+                // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works differently
+                // to KiCad), so set it to an empty one
+                DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
+                drawingSheet.SetEmptyLayout();
+                BASE_SCREEN::m_DrawingSheetFileName = "empty.kicad_wks";
 
-            // Only perform the dangling end test on root sheet.
-            GetScreen()->TestDanglingEnds();
+                newfilename.SetPath( Prj().GetProjectPath() );
+                newfilename.SetName( Prj().GetProjectName() );
+                newfilename.SetExt( KiCadSchematicFileExtension );
+
+                SetScreen( GetCurrentSheet().LastScreen() );
+
+                Schematic().Root().SetFileName( newfilename.GetFullName() );
+                GetScreen()->SetFileName( newfilename.GetFullPath() );
+                GetScreen()->SetContentModified();
+
+                RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+
+                // Only perform the dangling end test on root sheet.
+                GetScreen()->TestDanglingEnds();
+            }
+            else
+            {
+                CreateScreens();
+            }
         }
         catch( const IO_ERROR& ioe )
         {
@@ -1398,6 +1422,7 @@ void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
         break;
     }
 
+    return true;
 }
 
 

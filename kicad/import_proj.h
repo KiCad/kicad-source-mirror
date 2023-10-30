@@ -3,6 +3,7 @@
 
 #include <wx/filename.h>
 #include <core/typeinfo.h>
+#include <string_utf8_map.h>
 
 class KICAD_MANAGER_FRAME;
 
@@ -36,6 +37,8 @@ public:
 private:
     KICAD_MANAGER_FRAME* m_frame;
 
+    STRING_UTF8_MAP m_properties;
+
     std::vector<wxString> m_copiedSchPaths;
     std::vector<wxString> m_copiedPcbPaths;
 
@@ -44,6 +47,8 @@ private:
 
     void OutputCopyError( const wxFileName& aSrc, const wxFileName& aFileCopy );
     void ImportIndividualFile( KICAD_T aKicad_T, int aImportedFileType );
+
+    void EasyEDAProProjectHandler();
 };
 
 #endif

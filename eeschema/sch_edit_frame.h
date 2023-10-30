@@ -955,7 +955,8 @@ private:
      *  @param full filepath of file to be imported.
      *  @param aFileType SCH_FILE_T value for file type
      */
-    void importFile( const wxString& aFileName, int aFileType );
+    bool importFile( const wxString& aFileName, int aFileType,
+                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Save \a aSheet to a schematic file.

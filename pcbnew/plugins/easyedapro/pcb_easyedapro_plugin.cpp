@@ -43,6 +43,7 @@
 #include <nlohmann/json.hpp>
 #include <core/json_serializers.h>
 #include <core/map_helpers.h>
+#include <string_utf8_map.h>
 
 
 struct EASYEDAPRO_PLUGIN::PRJ_DATA
@@ -125,23 +126,31 @@ BOARD* EASYEDAPRO_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     {
         nlohmann::json project = EASYEDAPRO::ReadProjectFile( aFileName );
 
-        std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
-        std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = project.at( "boards" );
-        std::map<wxString, wxString>                  prjPcbNames = project.at( "pcbs" );
-
         wxString pcbToLoad;
 
-        if( prjBoards.size() > 0 )
+        if( m_props && m_props->Exists( "pcb_id" ) )
         {
-            EASYEDAPRO::PRJ_BOARD boardToLoad = prjBoards.begin()->second;
-            pcbToLoad = boardToLoad.pcb;
+            pcbToLoad = m_props->at( "pcb_id" );
         }
-        else if( prjPcbNames.size() > 0 )
+        else
         {
-            pcbToLoad = prjPcbNames.begin()->first;
+            std::map<wxString, wxString> prjPcbNames = project.at( "pcbs" );
+
+            if( prjPcbNames.size() == 1 )
+            {
+                pcbToLoad = prjPcbNames.begin()->first;
+            }
+            else
+            {
+                std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler(
+                        EASYEDAPRO::ProjectToSelectorDialog( project, true, false ) );
+
+                if( chosen.size() > 0 )
+                    pcbToLoad = chosen[0].PCBId;
+            }
         }
 
-        if( prjPcbNames.empty() )
+        if( pcbToLoad.empty() )
             return nullptr;
 
         LoadAllDataFromProject( aFileName, project );

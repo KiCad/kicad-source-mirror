@@ -225,6 +225,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_grid_settings_base.cpp
     dialogs/dialog_hotkey_list.cpp
     dialogs/dialog_HTML_reporter_base.cpp
+    dialogs/dialog_import_choose_project.cpp
+    dialogs/dialog_import_choose_project_base.cpp
     dialogs/dialog_locked_items_query.cpp
     dialogs/dialog_locked_items_query_base.cpp
     dialogs/dialog_migrate_settings.cpp

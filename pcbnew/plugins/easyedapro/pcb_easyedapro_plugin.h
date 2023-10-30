@@ -27,9 +27,10 @@
 
 #include <io_mgr.h>
 #include <nlohmann/json_fwd.hpp>
+#include <plugins/common/plugin_common_choose_project.h>
 
 
-class EASYEDAPRO_PLUGIN : public PLUGIN
+class EASYEDAPRO_PLUGIN : public PLUGIN, public PROJECT_CHOOSER_PLUGIN
 {
 public:
     const wxString PluginName() const override

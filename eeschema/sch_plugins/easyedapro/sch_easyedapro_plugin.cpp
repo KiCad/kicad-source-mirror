@@ -416,19 +416,27 @@ SCH_SHEET* SCH_EASYEDAPRO_PLUGIN::LoadSchematicFile( const wxString& aFileName,
     nlohmann::json project = EASYEDAPRO::ReadProjectFile( aFileName );
 
     std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
-    std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = project.at( "boards" );
-    std::map<wxString, wxString>                  prjPcbNames = project.at( "pcbs" );
 
     wxString schematicToLoad;
 
-    if( prjBoards.size() > 0 )
+    if( aProperties && aProperties->Exists( "sch_id" ) )
     {
-        EASYEDAPRO::PRJ_BOARD boardToLoad = prjBoards.begin()->second;
-        schematicToLoad = boardToLoad.schematic;
+        schematicToLoad = aProperties->at( "sch_id" );
     }
-    else if( prjSchematics.size() > 0 )
+    else
     {
-        schematicToLoad = prjSchematics.begin()->first;
+        if( prjSchematics.size() == 1 )
+        {
+            schematicToLoad = prjSchematics.begin()->first;
+        }
+        else
+        {
+            std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler(
+                    EASYEDAPRO::ProjectToSelectorDialog( project, false, true ) );
+
+            if( chosen.size() > 0 )
+                schematicToLoad = chosen[0].SchematicId;
+        }
     }
 
     if( schematicToLoad.empty() )

@@ -30,6 +30,8 @@
 #include <lib_id.h>
 #include <nlohmann/json_fwd.hpp>
 
+struct IMPORT_PROJECT_DESC;
+
 #define EASY_IT_CONTINUE return false
 #define EASY_IT_BREAK return true
 
@@ -39,6 +41,10 @@ namespace EASYEDAPRO
 wxString ShortenLibName( wxString aProjectName );
 
 LIB_ID ToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
+
+std::vector<IMPORT_PROJECT_DESC> ProjectToSelectorDialog( const nlohmann::json& aProject,
+                                                          bool                  aPcbOnly = false,
+                                                          bool                  aSchOnly = false );
 
 nlohmann::json ReadProjectFile( const wxString& aZipFileName );
 

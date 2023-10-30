@@ -193,7 +193,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_inspectClearanceDlg( nullptr ),
     m_inspectConstraintsDlg( nullptr ),
     m_footprintDiffDlg( nullptr ),
-    m_netInspectorDlg( nullptr )
+    m_netInspectorDlg( nullptr ),
+    m_importProperties( nullptr )
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references

@@ -57,6 +57,7 @@ class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
+class STRING_UTF8_MAP;
 
 enum LAST_PATH_TYPE : unsigned int;
 
@@ -507,17 +508,6 @@ public:
     void OnExportHyperlynx( wxCommandEvent& event );
 
     /**
-     * run teardrop tool
-     */
-    void OnRunTeardropTool( wxCommandEvent& event );
-
-    /**
-     * Remove all teardrops
-     */
-    void OnRemoveTeardropTool( wxCommandEvent& event );
-
-
-    /**
      * Create an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
      *
      * @param aPcb a pointer to the board to be exported to IDF.
@@ -571,8 +561,6 @@ public:
                             bool deleteExtraTexts = true, bool resetTextLayers = true,
                             bool resetTextEffects = true, bool resetFabricationAttrs = true,
                             bool reset3DModels = true, bool* aUpdated = nullptr );
-
-    bool FootprintMatchesLibrary();
 
     /**
      * Install the corresponding dialog editor for the given item.
@@ -804,7 +792,8 @@ protected:
      * @param full file path of file to be imported.
      * @param aFileType PCB_FILE_T value for file type
      */
-    bool importFile( const wxString& aFileName, int aFileType );
+    bool importFile( const wxString& aFileName, int aFileType,
+                     const STRING_UTF8_MAP* aProperties = nullptr );
 
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
@@ -858,6 +847,8 @@ private:
     DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
     DIALOG_NET_INSPECTOR* m_netInspectorDlg;
+
+    const STRING_UTF8_MAP* m_importProperties; // Properties used for non-KiCad import.
 
     /**
      * Keep track of viewport so that track net labels can be adjusted when it changes.

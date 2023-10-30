@@ -27,13 +27,14 @@
 
 #include <sch_io_mgr.h>
 #include <reporter.h>
+#include <plugins/common/plugin_common_choose_project.h>
 
 
 class SCH_SHEET;
 class SCH_SCREEN;
 
 
-class SCH_EASYEDAPRO_PLUGIN : public SCH_PLUGIN
+class SCH_EASYEDAPRO_PLUGIN : public SCH_PLUGIN, public PROJECT_CHOOSER_PLUGIN
 {
 public:
     SCH_EASYEDAPRO_PLUGIN();

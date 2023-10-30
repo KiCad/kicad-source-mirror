@@ -23,10 +23,14 @@
  */
 
 #include "easyedapro_import_utils.h"
+#include "easyedapro_parser.h"
+
+#include <plugins/common/plugin_common_choose_project.h>
 
 #include <ki_exception.h>
 #include <string_utils.h>
 #include <nlohmann/json.hpp>
+#include <core/json_serializers.h>
 
 #include <wx/log.h>
 #include <wx/stream.h>
@@ -58,6 +62,81 @@ LIB_ID EASYEDAPRO::ToKiCadLibID( const wxString& aLibName, const wxString& aLibR
     libId.Parse( key, true );
 
     return libId;
+}
+
+
+std::vector<IMPORT_PROJECT_DESC>
+EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOnly, bool aSchOnly )
+{
+    std::vector<IMPORT_PROJECT_DESC> result;
+
+    std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = aProject.at( "schematics" );
+    std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = aProject.at( "boards" );
+    std::map<wxString, wxString>                  prjPcbNames = aProject.at( "pcbs" );
+
+    for( const auto& [prjName, board] : prjBoards )
+    {
+        IMPORT_PROJECT_DESC desc;
+        desc.ComboName = desc.ComboId = prjName;
+        desc.PCBId = board.pcb;
+        desc.SchematicId = board.schematic;
+
+        auto pcbNameIt = prjPcbNames.find( desc.PCBId );
+        if( pcbNameIt != prjPcbNames.end() )
+        {
+            desc.PCBName = pcbNameIt->second;
+
+            if( desc.PCBName.empty() )
+                desc.PCBName = pcbNameIt->first;
+
+            prjPcbNames.erase( pcbNameIt );
+        }
+
+        auto schIt = prjSchematics.find( desc.SchematicId );
+        if( schIt != prjSchematics.end() )
+        {
+            desc.SchematicName = schIt->second.name;
+
+            if( desc.SchematicName.empty() )
+                desc.SchematicName = schIt->first;
+
+            prjSchematics.erase( schIt );
+        }
+
+        result.emplace_back( desc );
+    }
+
+    if( !aSchOnly )
+    {
+        for( const auto& [pcbId, pcbName] : prjPcbNames )
+        {
+            IMPORT_PROJECT_DESC desc;
+            desc.PCBId = pcbId;
+            desc.PCBName = pcbName;
+
+            if( desc.PCBName.empty() )
+                desc.PCBName = pcbId;
+
+            result.emplace_back( desc );
+        }
+    }
+
+    if( !aPcbOnly )
+    {
+        for( const auto& [schId, schData] : prjSchematics )
+        {
+            IMPORT_PROJECT_DESC desc;
+            desc.SchematicId = schId;
+            desc.SchematicName = schData.name;
+
+            if( desc.SchematicName.empty() )
+                desc.SchematicName = schId;
+
+            result.emplace_back( desc );
+        }
+    }
+
+    return result;
 }
 
 

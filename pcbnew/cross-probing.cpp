@@ -49,6 +49,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <render_settings.h>
+#include <string_utf8_map.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -673,14 +674,22 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_IMPORT_FILE:
     {
-        // Extract file format type and path (plugin type and path separated with \n)
-        size_t split = payload.find( '\n' );
-        wxCHECK( split != std::string::npos, /*void*/ );
+        // Extract file format type and path (plugin type, path and properties keys, values separated with \n)
+        std::stringstream ss( payload );
+        char              delim = '\n';
+
+        std::string formatStr;
+        wxCHECK( std::getline( ss, formatStr, delim ), /* void */ );
+
+        std::string fnameStr;
+        wxCHECK( std::getline( ss, fnameStr, delim ), /* void */ );
+        wxASSERT( !fnameStr.empty() );
+
         int importFormat;
 
         try
         {
-            importFormat = std::stoi( payload.substr( 0, split ) );
+            importFormat = std::stoi( formatStr );
         }
         catch( std::invalid_argument& )
         {
@@ -688,11 +697,23 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             importFormat = -1;
         }
 
-        std::string path = payload.substr( split + 1 );
-        wxASSERT( !path.empty() );
+        STRING_UTF8_MAP props;
+
+        std::string key, value;
+        do
+        {
+            if( !std::getline( ss, key, delim ) )
+                break;
+
+            if( !std::getline( ss, value, delim ) )
+                break;
+
+            props.emplace( key, value );
+
+        } while( true );
 
         if( importFormat >= 0 )
-            importFile( path, importFormat );
+            importFile( fnameStr, importFormat, props.empty() ? nullptr : &props );
 
         break;
     }

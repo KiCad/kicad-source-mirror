@@ -19,15 +19,26 @@
  */
 
 #include "import_proj.h"
-#include <kicad_manager_frame.h>
-#include <kiway.h>
-#include <kiway_player.h>
 #include <wildcards_and_files_ext.h>
 #include <macros.h>
 #include <string_utils.h>
 #include <richio.h>
 
 #include <wx/msgdlg.h>
+
+#include <kiway.h>
+#include <kiway_player.h>
+#include <kicad_manager_frame.h>
+#include <pcb_edit_frame.h>
+#include <sch_edit_frame.h>
+
+#include <io_mgr.h>
+#include <sch_io_mgr.h>
+
+#include <plugins/easyedapro/easyedapro_import_utils.h>
+#include <plugins/easyedapro/easyedapro_parser.h>
+#include <plugins/common/plugin_common_choose_project.h>
+#include <dialogs/dialog_import_choose_project.h>
 
 
 IMPORT_PROJ_HELPER::IMPORT_PROJ_HELPER( KICAD_MANAGER_FRAME*         aFrame,
@@ -137,7 +148,13 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
 
     KIWAY_PLAYER* frame = m_frame->Kiway().Player( frame_type, true );
 
-    std::string packet = StrPrintf( "%d\n%s", aImportedFileType, TO_UTF8( appImportFile ) );
+    std::stringstream ss;
+    ss << aImportedFileType << '\n' << TO_UTF8( appImportFile );
+
+    for( const auto& [key, value] : m_properties )
+        ss << '\n' << key << '\n' << value;
+
+    std::string packet = ss.str();
     frame->Kiway().ExpressMail( frame_type, MAIL_IMPORT_FILE, packet, m_frame );
 
     if( !frame->IsShownOnScreen() )
@@ -151,8 +168,52 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
 }
 
 
+void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
+{
+    wxFileName fname = m_InputFile;
+
+    if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
+    {
+        nlohmann::json project = EASYEDAPRO::ReadProjectFile( fname.GetFullPath() );
+
+        std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
+        std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = project.at( "boards" );
+        std::map<wxString, wxString>                  prjPcbNames = project.at( "pcbs" );
+
+        std::vector<IMPORT_PROJECT_DESC> toImport =
+                EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
+
+        if( toImport.size() > 1 )
+        {
+            toImport = DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal( m_frame, toImport );
+        }
+
+        if( toImport.size() == 1 )
+        {
+            const IMPORT_PROJECT_DESC& desc = toImport[0];
+
+            m_properties["pcb_id"] = desc.PCBId;
+            m_properties["sch_id"] = desc.SchematicId;
+        }
+        else
+        {
+            m_properties["pcb_id"] = "";
+            m_properties["sch_id"] = "";
+        }
+    }
+}
+
+
 void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcbFileType )
 {
+    m_properties.clear();
+
+    if( aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO
+        || aImportedPcbFileType == IO_MGR::EASYEDAPRO )
+    {
+        EasyEDAProProjectHandler();
+    }
+
     ImportIndividualFile( SCHEMATIC_T, aImportedSchFileType );
     ImportIndividualFile( PCB_T, aImportedPcbFileType );
 }

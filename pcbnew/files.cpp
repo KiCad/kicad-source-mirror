@@ -48,6 +48,7 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 #include <settings/settings_manager.h>
+#include <string_utf8_map.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
@@ -57,6 +58,8 @@
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
+#include <dialogs/dialog_import_choose_project.h>
+#include <plugins/common/plugin_common_choose_project.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
 #include <board_commit.h>
@@ -609,6 +612,16 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, std::placeholders::_1 ) );
         }
 
+        PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
+                dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (PLUGIN*) pi );
+
+        if( projectChooserPlugin )
+        {
+            projectChooserPlugin->RegisterChooseProjectCallback(
+                    std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal, this,
+                               std::placeholders::_1 ) );
+        }
+
         // This will rename the file if there is an autosave and the user want to recover
 		CheckForAutoSaveFile( fullFileName );
 
@@ -623,6 +636,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             }
 
             STRING_UTF8_MAP props;
+
+            if( m_importProperties )
+                props.insert( m_importProperties->begin(), m_importProperties->end() );
 
             // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
             props["page_width"] = std::to_string( GetPageSizeIU().x );
@@ -1174,8 +1190,11 @@ bool PCB_EDIT_FRAME::doAutoSave()
 }
 
 
-bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
+bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
+                                 const STRING_UTF8_MAP* aProperties )
 {
+    m_importProperties = aProperties;
+
     switch( (IO_MGR::PCB_FILE_T) aFileType )
     {
     case IO_MGR::CADSTAR_PCB_ARCHIVE:
@@ -1187,6 +1206,8 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
     default: break;
     }
+
+    m_importProperties = nullptr;
 
     return false;
 }
