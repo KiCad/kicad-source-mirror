@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 12:10-0700\n"
+"POT-Creation-Date: 2023-10-30 09:43-0700\n"
 "PO-Revision-Date: 2023-09-13 18:36+0000\n"
 "Last-Translator: Li Yidong <alenks@foxmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -13078,7 +13078,7 @@ msgid "Derived from"
 msgstr "派生自"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
-#: kicad/pcm/pcm.cpp:813 pcbnew/zone.cpp:607
+#: kicad/pcm/pcm.cpp:815 pcbnew/zone.cpp:607
 msgid "Unknown"
 msgstr "未知"
 
@@ -20300,34 +20300,34 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:464
+#: kicad/pcm/pcm.cpp:465
 msgid "Failed to parse locally stored repository.json."
 msgstr "無法解析本地儲存的倉庫.json."
 
-#: kicad/pcm/pcm.cpp:492
+#: kicad/pcm/pcm.cpp:493
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr "當前倉庫的軟體包快取已損壞，將重新下載軟體包。"
 
-#: kicad/pcm/pcm.cpp:544
+#: kicad/pcm/pcm.cpp:546
 msgid "Downloading resources"
 msgstr "正在下載資源"
 
-#: kicad/pcm/pcm.cpp:564
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr "資原始檔 HASH 不匹配，將不會被使用。 倉庫可能已損壞。"
 
-#: kicad/pcm/pcm.cpp:809
+#: kicad/pcm/pcm.cpp:811
 msgid "Local file"
 msgstr "本地檔案"
 
-#: kicad/pcm/pcm.cpp:1191
+#: kicad/pcm/pcm.cpp:1193
 msgid "Package updates are available"
 msgstr "有可用的包更新"
 
-#: kicad/pcm/pcm.cpp:1192
+#: kicad/pcm/pcm.cpp:1194
 msgid "No package updates available"
 msgstr "無可用的包更新"
 
@@ -20449,7 +20449,7 @@ msgstr "找不到此模板的元 HTML 資訊檔案！"
 msgid "Cannot create folder '%s'."
 msgstr "無法建立資料夾 '%s'。"
 
-#: kicad/project_tree_item.cpp:131
+#: kicad/project_tree_item.cpp:132
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
@@ -20457,24 +20457,24 @@ msgstr ""
 "修改副檔名可能會導致檔案不可用。\n"
 "你確定要修改嗎?"
 
-#: kicad/project_tree_item.cpp:133
+#: kicad/project_tree_item.cpp:134
 msgid "Rename File"
 msgstr "重新命名檔案"
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Unable to rename file ... "
 msgstr "無法重新命名檔案... "
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Permission error?"
 msgstr "許可權錯誤？"
 
-#: kicad/project_tree_item.cpp:160
+#: kicad/project_tree_item.cpp:161
 #, c-format
 msgid "Can not move '%s' to recycle bin."
 msgstr "無法移動 '%s' 到回收站。"
 
-#: kicad/project_tree_item.cpp:163
+#: kicad/project_tree_item.cpp:164
 #, c-format
 msgid "Can not move '%s' to trash."
 msgstr "無法移動 '%s' 到垃圾箱。"
@@ -32461,7 +32461,7 @@ msgstr "正在檢查敷銅區間隙..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1197
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124

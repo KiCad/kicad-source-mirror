@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 12:10-0700\n"
+"POT-Creation-Date: 2023-10-30 09:43-0700\n"
 "PO-Revision-Date: 2023-05-15 21:48+0000\n"
 "Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v7/hu/>\n"
@@ -15144,7 +15144,7 @@ msgid "Derived from"
 msgstr "Törli az extra egységeket a rajzjelből?"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
-#: kicad/pcm/pcm.cpp:813 pcbnew/zone.cpp:607
+#: kicad/pcm/pcm.cpp:815 pcbnew/zone.cpp:607
 #, fuzzy
 msgid "Unknown"
 msgstr "Ismeretlen"
@@ -23460,39 +23460,39 @@ msgstr ""
 "Nem sikerült elemezni az URL-t:\n"
 "\"%s\""
 
-#: kicad/pcm/pcm.cpp:464
+#: kicad/pcm/pcm.cpp:465
 #, fuzzy
 msgid "Failed to parse locally stored repository.json."
 msgstr ""
 "Nem sikerült elemezni az URL-t:\n"
 "\"%s\""
 
-#: kicad/pcm/pcm.cpp:492
+#: kicad/pcm/pcm.cpp:493
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:544
+#: kicad/pcm/pcm.cpp:546
 #, fuzzy
 msgid "Downloading resources"
 msgstr "3D modell könyvtárak letöltése"
 
-#: kicad/pcm/pcm.cpp:564
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:809
+#: kicad/pcm/pcm.cpp:811
 #, fuzzy
 msgid "Local file"
 msgstr "Helyi fájl szerkesztése"
 
-#: kicad/pcm/pcm.cpp:1191
+#: kicad/pcm/pcm.cpp:1193
 msgid "Package updates are available"
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:1192
+#: kicad/pcm/pcm.cpp:1194
 msgid "No package updates available"
 msgstr ""
 
@@ -23617,7 +23617,7 @@ msgstr ""
 msgid "Cannot create folder '%s'."
 msgstr "Nem sikerült létrehozni a(z) \"%s\" mappát."
 
-#: kicad/project_tree_item.cpp:131
+#: kicad/project_tree_item.cpp:132
 #, fuzzy
 msgid ""
 "Changing file extension will change file type.\n"
@@ -23626,26 +23626,26 @@ msgstr ""
 "A fájlkiterjesztés módosítása megváltoztatja a fájltípust.\n"
 "Folytatja?"
 
-#: kicad/project_tree_item.cpp:133
+#: kicad/project_tree_item.cpp:134
 #, fuzzy
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Unable to rename file ... "
 msgstr "A fájlt nem lehet átnevezni... "
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 #, fuzzy
 msgid "Permission error?"
 msgstr "Hozzáférési jogosultság hiba?"
 
-#: kicad/project_tree_item.cpp:160
+#: kicad/project_tree_item.cpp:161
 #, fuzzy, c-format
 msgid "Can not move '%s' to recycle bin."
 msgstr "A(z) \"%s\" nem konvertálható egész számra."
 
-#: kicad/project_tree_item.cpp:163
+#: kicad/project_tree_item.cpp:164
 #, fuzzy, c-format
 msgid "Can not move '%s' to trash."
 msgstr "A(z) \"%s\" nem konvertálható egész számra."
@@ -37090,7 +37090,7 @@ msgstr "Rézkitöltések közötti szigetelési távolságok...\n"
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1197
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124

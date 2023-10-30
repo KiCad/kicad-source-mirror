@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 12:10-0700\n"
+"POT-Creation-Date: 2023-10-30 09:43-0700\n"
 "PO-Revision-Date: 2022-12-17 19:13+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
@@ -13777,7 +13777,7 @@ msgid "Derived from"
 msgstr ""
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
-#: kicad/pcm/pcm.cpp:813 pcbnew/zone.cpp:607
+#: kicad/pcm/pcm.cpp:815 pcbnew/zone.cpp:607
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
@@ -21417,37 +21417,37 @@ msgid ""
 "%s"
 msgstr "Tidak dapat membuat berkas laporan '%s'"
 
-#: kicad/pcm/pcm.cpp:464
+#: kicad/pcm/pcm.cpp:465
 #, fuzzy
 msgid "Failed to parse locally stored repository.json."
 msgstr "Tidak dapat membuat berkas laporan '%s'"
 
-#: kicad/pcm/pcm.cpp:492
+#: kicad/pcm/pcm.cpp:493
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:544
+#: kicad/pcm/pcm.cpp:546
 #, fuzzy
 msgid "Downloading resources"
 msgstr "Progres Unduhan"
 
-#: kicad/pcm/pcm.cpp:564
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:809
+#: kicad/pcm/pcm.cpp:811
 #, fuzzy
 msgid "Local file"
 msgstr "Sunting Berkas Lokal..."
 
-#: kicad/pcm/pcm.cpp:1191
+#: kicad/pcm/pcm.cpp:1193
 msgid "Package updates are available"
 msgstr "Pembaruan paket tersedia"
 
-#: kicad/pcm/pcm.cpp:1192
+#: kicad/pcm/pcm.cpp:1194
 msgid "No package updates available"
 msgstr "Tidak ada pembaruan paket"
 
@@ -21568,7 +21568,7 @@ msgstr "Tidak dapat menemukan berkas informasi meta HTML untuk templat ini!"
 msgid "Cannot create folder '%s'."
 msgstr "Tidak dapat membuat berkas \"%s\".\n"
 
-#: kicad/project_tree_item.cpp:131
+#: kicad/project_tree_item.cpp:132
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
@@ -21576,24 +21576,24 @@ msgstr ""
 "Mengubah ekstensi berkas akan mengubah tipe berkas.\n"
 "Apakah Anda ingin melanjutkan?"
 
-#: kicad/project_tree_item.cpp:133
+#: kicad/project_tree_item.cpp:134
 msgid "Rename File"
 msgstr "Ganti Nama Berkas"
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Unable to rename file ... "
 msgstr "Tidak dapat mengganti nama berkas ... "
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Permission error?"
 msgstr "Galat izin?"
 
-#: kicad/project_tree_item.cpp:160
+#: kicad/project_tree_item.cpp:161
 #, fuzzy, c-format
 msgid "Can not move '%s' to recycle bin."
 msgstr "Tidak dapat membuka berkas '%s'."
 
-#: kicad/project_tree_item.cpp:163
+#: kicad/project_tree_item.cpp:164
 #, fuzzy, c-format
 msgid "Can not move '%s' to trash."
 msgstr "Tidak dapat membuka berkas '%s'."
@@ -33778,7 +33778,7 @@ msgstr "Memeriksa permasalahan simbol pustaka..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1197
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124

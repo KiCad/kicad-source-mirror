@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 12:10-0700\n"
+"POT-Creation-Date: 2023-10-30 09:43-0700\n"
 "PO-Revision-Date: 2023-10-24 10:00+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
@@ -13214,7 +13214,7 @@ msgid "Derived from"
 msgstr "파생 위치"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
-#: kicad/pcm/pcm.cpp:813 pcbnew/zone.cpp:607
+#: kicad/pcm/pcm.cpp:815 pcbnew/zone.cpp:607
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -20554,20 +20554,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:464
+#: kicad/pcm/pcm.cpp:465
 msgid "Failed to parse locally stored repository.json."
 msgstr "로컬에 저장된 repository.json을 구문 분석하지 못함."
 
-#: kicad/pcm/pcm.cpp:492
+#: kicad/pcm/pcm.cpp:493
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr "현재 레포지토리에 대한 패키지가 손상되었습니다. 다시 다운로드됩니다."
 
-#: kicad/pcm/pcm.cpp:544
+#: kicad/pcm/pcm.cpp:546
 msgid "Downloading resources"
 msgstr "리소스 다운로드 중"
 
-#: kicad/pcm/pcm.cpp:564
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
@@ -20575,15 +20575,15 @@ msgstr ""
 "리소스 파일 해시가 일치하지 않아 사용되지 않습니다. 레포지토리가 손상되었을 "
 "수 있습니다."
 
-#: kicad/pcm/pcm.cpp:809
+#: kicad/pcm/pcm.cpp:811
 msgid "Local file"
 msgstr "로컬 파일"
 
-#: kicad/pcm/pcm.cpp:1191
+#: kicad/pcm/pcm.cpp:1193
 msgid "Package updates are available"
 msgstr "패키지 업데이트를 사용할 수 있습니다"
 
-#: kicad/pcm/pcm.cpp:1192
+#: kicad/pcm/pcm.cpp:1194
 msgid "No package updates available"
 msgstr "사용 가능한 패키지 업데이트가 없습니다"
 
@@ -20708,7 +20708,7 @@ msgstr "이 템플릿의 메타 HTML 정보 파일을 찾을 수 없습니다!"
 msgid "Cannot create folder '%s'."
 msgstr "폴더 '%s'을(를) 만들 수 없습니다."
 
-#: kicad/project_tree_item.cpp:131
+#: kicad/project_tree_item.cpp:132
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
@@ -20716,24 +20716,24 @@ msgstr ""
 "확장자를 바꾸면 파일 형식이 변경됩니다.\n"
 "그래도 계속 하시겠습니까?"
 
-#: kicad/project_tree_item.cpp:133
+#: kicad/project_tree_item.cpp:134
 msgid "Rename File"
 msgstr "파일 이름 바꾸기"
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Unable to rename file ... "
 msgstr "파일 이름을 바꿀 수 없습니다 ... "
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Permission error?"
 msgstr "권한 오류?"
 
-#: kicad/project_tree_item.cpp:160
+#: kicad/project_tree_item.cpp:161
 #, c-format
 msgid "Can not move '%s' to recycle bin."
 msgstr "휴지통으로 '%s'을(를) 이동할 수 없습니다."
 
-#: kicad/project_tree_item.cpp:163
+#: kicad/project_tree_item.cpp:164
 #, c-format
 msgid "Can not move '%s' to trash."
 msgstr "'%s'을(를) 휴지통으로 이동할 수 없습니다."
@@ -32749,7 +32749,7 @@ msgstr "구리 영역 클리어런스 확인 중..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1197
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124

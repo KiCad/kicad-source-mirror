@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 12:10-0700\n"
+"POT-Creation-Date: 2023-10-30 09:43-0700\n"
 "PO-Revision-Date: 2023-08-25 10:50+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v7/et/>\n"
@@ -12728,7 +12728,7 @@ msgid "Derived from"
 msgstr ""
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:85
-#: kicad/pcm/pcm.cpp:813 pcbnew/zone.cpp:607
+#: kicad/pcm/pcm.cpp:815 pcbnew/zone.cpp:607
 msgid "Unknown"
 msgstr ""
 
@@ -19656,34 +19656,34 @@ msgid ""
 "%s"
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:464
+#: kicad/pcm/pcm.cpp:465
 msgid "Failed to parse locally stored repository.json."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:492
+#: kicad/pcm/pcm.cpp:493
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:544
+#: kicad/pcm/pcm.cpp:546
 msgid "Downloading resources"
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:564
+#: kicad/pcm/pcm.cpp:566
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:809
+#: kicad/pcm/pcm.cpp:811
 msgid "Local file"
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:1191
+#: kicad/pcm/pcm.cpp:1193
 msgid "Package updates are available"
 msgstr ""
 
-#: kicad/pcm/pcm.cpp:1192
+#: kicad/pcm/pcm.cpp:1194
 msgid "No package updates available"
 msgstr ""
 
@@ -19798,30 +19798,30 @@ msgstr ""
 msgid "Cannot create folder '%s'."
 msgstr ""
 
-#: kicad/project_tree_item.cpp:131
+#: kicad/project_tree_item.cpp:132
 msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
 
-#: kicad/project_tree_item.cpp:133
+#: kicad/project_tree_item.cpp:134
 msgid "Rename File"
 msgstr ""
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Unable to rename file ... "
 msgstr ""
 
-#: kicad/project_tree_item.cpp:141
+#: kicad/project_tree_item.cpp:142
 msgid "Permission error?"
 msgstr ""
 
-#: kicad/project_tree_item.cpp:160
+#: kicad/project_tree_item.cpp:161
 #, c-format
 msgid "Can not move '%s' to recycle bin."
 msgstr ""
 
-#: kicad/project_tree_item.cpp:163
+#: kicad/project_tree_item.cpp:164
 #, c-format
 msgid "Can not move '%s' to trash."
 msgstr ""
@@ -30992,7 +30992,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1197
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124
