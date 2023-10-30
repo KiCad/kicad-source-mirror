@@ -25,6 +25,8 @@
 #include "sch_easyedapro_parser.h"
 #include <plugins/easyedapro/easyedapro_import_utils.h>
 
+#include <core/map_helpers.h>
+
 #include <sch_io_mgr.h>
 #include <schematic.h>
 #include <sch_sheet.h>
@@ -47,7 +49,7 @@
 #include <gfx_import_utils.h>
 #include <import_gfx/svg_import_plugin.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
-#include <core/map_helpers.h>
+#include <import_gfx/graphics_importer_sch.h>
 
 
 SCH_EASYEDAPRO_PARSER::SCH_EASYEDAPRO_PARSER( SCHEMATIC*         aSchematic,
@@ -849,14 +851,14 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             VECTOR2D start, size;
             wxString mimeType, base64Data;
             double   angle = 0;
-            int      upsideDown = 0;
+            int      flipped = 0;
 
             if( line.at( 3 ).is_number() )
             {
                 start = VECTOR2D( line.at( 3 ), line.at( 4 ) );
                 size = VECTOR2D( line.at( 5 ), line.at( 6 ) );
                 angle = line.at( 7 );
-                upsideDown = line.at( 8 );
+                flipped = line.at( 8 );
 
                 wxString imageUrl = line.at( 9 );
 
@@ -908,34 +910,56 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             if( mimeType == wxS( "image/svg+xml" ) )
             {
-                // VECTOR2D offset = ScalePosSym( start );
+                VECTOR2D offset = ScalePos( start );
 
-                //SVG_IMPORT_PLUGIN            svgImportPlugin;
-                //GRAPHICS_IMPORTER_LIB_SYMBOL libsymImporter( ksymbol, 0 );
+                SVG_IMPORT_PLUGIN     svgImportPlugin;
+                GRAPHICS_IMPORTER_SCH schImporter;
 
-                //svgImportPlugin.SetImporter( &libsymImporter );
-                //svgImportPlugin.LoadFromMemory( buf );
+                svgImportPlugin.SetImporter( &schImporter );
+                svgImportPlugin.LoadFromMemory( buf );
 
-                //VECTOR2D imSize( svgImportPlugin.GetImageWidth(),
-                //                 svgImportPlugin.GetImageHeight() );
+                VECTOR2D imSize( svgImportPlugin.GetImageWidth(),
+                                 svgImportPlugin.GetImageHeight() );
 
-                //VECTOR2D pixelScale( schIUScale.IUTomm( ScaleSizeUnit( size.x ) ) / imSize.x,
-                //                     schIUScale.IUTomm( -ScaleSizeUnit( size.y ) ) / imSize.y );
+                VECTOR2D pixelScale( schIUScale.IUTomm( ScaleSize( size.x ) ) / imSize.x,
+                                     schIUScale.IUTomm( ScaleSize( size.y ) ) / imSize.y );
 
-                //if( upsideDown )
-                //    pixelScale.y *= -1;
+                if( flipped )
+                    pixelScale.x *= -1;
 
-                //libsymImporter.SetScale( pixelScale );
+                schImporter.SetScale( pixelScale );
 
-                //VECTOR2D offsetMM( schIUScale.IUTomm( offset.x ), schIUScale.IUTomm( offset.y ) );
+                VECTOR2D offsetMM( schIUScale.IUTomm( offset.x ), schIUScale.IUTomm( offset.y ) );
 
-                //libsymImporter.SetImportOffsetMM( offsetMM );
+                schImporter.SetImportOffsetMM( offsetMM );
 
-                //svgImportPlugin.Import();
+                svgImportPlugin.Import();
 
-                //// TODO: rotation
-                //for( std::unique_ptr<EDA_ITEM>& item : libsymImporter.GetItems() )
-                //    ksymbol->AddDrawItem( static_cast<LIB_ITEM*>( item.release() ) );
+                for( std::unique_ptr<EDA_ITEM>& item : schImporter.GetItems() )
+                {
+                    SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item.release() );
+
+                    for( double i = angle; i > 0; i -= 90 )
+                    {
+                        if( schItem->Type() == SCH_LINE_T )
+                        {
+                            // Lines need special handling for some reason
+                            schItem->SetFlags( STARTPOINT );
+                            schItem->Rotate( offset );
+                            schItem->ClearFlags( STARTPOINT );
+
+                            schItem->SetFlags( ENDPOINT );
+                            schItem->Rotate( offset );
+                            schItem->ClearFlags( ENDPOINT );
+                        }
+                        else
+                        {
+                            schItem->Rotate( offset );
+                        }
+                    }
+
+                    createdItems.emplace_back( schItem );
+                }
             }
             else
             {
@@ -950,12 +974,15 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     VECTOR2D ksize = ScaleSize( size );
                     VECTOR2D kcenter = kstart + ksize / 2;
 
-                    RotatePoint( kcenter, kstart, -EDA_ANGLE( angle, DEGREES_T ) );
-                    // TODO: rotation
-
                     double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
                     bitmap->SetImageScale( scaleFactor );
                     bitmap->SetPosition( kcenter );
+
+                    for( double i = angle; i > 0; i -= 90 )
+                        bitmap->Rotate( kstart );
+
+                    if( flipped )
+                        bitmap->MirrorHorizontally( kstart.x );
 
                     createdItems.push_back( std::move( bitmap ) );
                 }

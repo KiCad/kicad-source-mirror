@@ -102,7 +102,7 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
     }
     else if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( aParent ) )
     {
-        m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>( schFrame->GetScreen() );
+        m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>();
 
         EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
         initWidgetsFromSettings( cfg );

@@ -35,7 +35,7 @@ class SCH_SCREEN;
 class GRAPHICS_IMPORTER_SCH : public GRAPHICS_IMPORTER
 {
 public:
-    GRAPHICS_IMPORTER_SCH( SCH_SCREEN* aScreen );
+    GRAPHICS_IMPORTER_SCH();
 
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                   const IMPORTED_STROKE& aStroke ) override;
@@ -75,8 +75,6 @@ public:
     int MapLineWidth( double aLineWidth );
 
     STROKE_PARAMS MapStrokeParams( const IMPORTED_STROKE& aStroke );
-
-    SCH_SCREEN* m_screen;
 };
 
 #endif /* GRAPHICS_IMPORTER_SCH_H_ */

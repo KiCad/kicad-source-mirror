@@ -33,7 +33,7 @@
 #include <sch_text.h>
 
 
-GRAPHICS_IMPORTER_SCH::GRAPHICS_IMPORTER_SCH( SCH_SCREEN* aScreen ) : m_screen( aScreen )
+GRAPHICS_IMPORTER_SCH::GRAPHICS_IMPORTER_SCH()
 {
     m_millimeterToIu = schIUScale.mmToIU( 1.0 );
 }
