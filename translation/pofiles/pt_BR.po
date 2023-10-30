@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-10-30 16:42+0000\n"
+"PO-Revision-Date: 2023-11-02 03:01+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -2487,11 +2487,8 @@ msgid "Hotkey List"
 msgstr "Lista dos atalhos"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Nome do projeto:\n"
-"%s\n"
+msgstr "Nome do projeto"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1047
@@ -2511,11 +2508,12 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Esse arquivo de projeto contém várias combinações de PCB+esquema.\n"
+"Escolha qual delas deve ser importada para o KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Fechar o projeto"
+msgstr "Escolha o projeto que deseja importar"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -8041,9 +8039,8 @@ msgstr ""
 "requisitos de aceleração via hardware do KiCad)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Visualização"
+msgstr "Exibição da grade"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -15301,14 +15298,13 @@ msgstr ""
 "Deseja salvar o documento atual antes de prosseguir?"
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Esta operação substitui o conteúdo do projeto atual.\n"
+"Esta operação substitui permanentemente o conteúdo do esquema atual.\n"
 "\n"
 "Deseja prosseguir?"
 
@@ -15373,21 +15369,21 @@ msgstr ""
 "Certifique-se de ter permissões de gravação e tente novamente."
 
 #: eeschema/files-io.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "Falha ao salvar \"%s\""
+msgstr "Houve uma falha ao salvar %s."
 
 #: eeschema/files-io.cpp:1065
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "Aviso da escala do modelo"
+msgstr "Aviso de arquivo bloqueado"
 
 #: eeschema/files-io.cpp:1067
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "Você não tem permissão de escrita na pasta \"%s\"."
+msgstr ""
+"Você não tem permissão de escrita para:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1083
 msgid "Saving will overwrite existing files."
@@ -20098,9 +20094,8 @@ msgid "Save Copy As..."
 msgstr "Salve uma cópia como..."
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "Salve o símbolo atual numa biblioteca diferente."
+msgstr "Salvar uma cópia do símbolo atual numa biblioteca diferente."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
@@ -30845,9 +30840,8 @@ msgid "STEP Output File"
 msgstr "Arquivo STEP gerado"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:366
-#, fuzzy
 msgid "No filename for output file"
-msgstr "Não é um arquivo de footprint."
+msgstr "Nenhum nome para o arquivo de saída"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:397
 #, c-format
@@ -44066,9 +44060,8 @@ msgid "Creates a rule area from the selection"
 msgstr "Cria uma regra da região a partir da seleção"
 
 #: pcbnew/tools/pcb_actions.cpp:76
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "Cria linhas a partir da seleção"
+msgstr "Criar linhas a partir da seleção..."
 
 #: pcbnew/tools/pcb_actions.cpp:77
 msgid "Creates graphic lines from the selection"
@@ -44886,9 +44879,8 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Gera o(s) arquivo(s) de perfuração Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:1048
-#, fuzzy
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "Posicionamento dos componentes (.pos)..."
+msgstr "Posicionamento de componente (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Generate component placement file(s) for pick and place"
