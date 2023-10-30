@@ -415,21 +415,21 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString       fillColor = arr[5].Lower();
             //bool           locked = arr[7] != wxS( "0" );
 
-            SHAPE_POLY_SET polygons = ParsePolygons( pointsData, schIUScale.MilsToIU( 10 ) );
+             std::vector<SHAPE_LINE_CHAIN> lineChains =
+                    ParseLineChains( pointsData, schIUScale.MilsToIU( 10 ) );
 
-            for( const SHAPE_POLY_SET::POLYGON& poly : polygons.CPolygons() )
+            for( SHAPE_LINE_CHAIN outline : lineChains )
             {
                 std::unique_ptr<LIB_SHAPE> shape =
                         std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
-
-                SHAPE_LINE_CHAIN outline = poly[0];
 
                 outline.Mirror( false, true );
 
                 if( outline.IsClosed() )
                     outline.Append( outline.CPoint( 0 ), true );
 
-                shape->SetPolyShape( outline );
+                for( const VECTOR2I& pt : outline.CPoints() )
+                    shape->AddPoint( pt );
 
                 shape->SetUnit( 0 );
                 shape->SetStroke( STROKE_PARAMS( ScaleSize( lineWidth ), strokeStyle ) );

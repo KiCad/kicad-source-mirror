@@ -66,9 +66,10 @@ double EASYEDA_PARSER_BASE::RelPosY( const wxString& aValue )
 }
 
 
-SHAPE_POLY_SET EASYEDA_PARSER_BASE::ParsePolygons( const wxString& data, int aArcMinSegLen )
+std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data,
+                                                                    int             aArcMinSegLen )
 {
-    SHAPE_POLY_SET result;
+    std::vector<SHAPE_LINE_CHAIN> result;
 
     VECTOR2D         prevPt;
     SHAPE_LINE_CHAIN chain;
@@ -110,7 +111,7 @@ SHAPE_POLY_SET EASYEDA_PARSER_BASE::ParsePolygons( const wxString& data, int aAr
             if( chain.PointCount() > 2 )
             {
                 chain.SetClosed( true );
-                result.Append( chain );
+                result.emplace_back( chain );
             }
 
             chain.Clear();
@@ -125,7 +126,7 @@ SHAPE_POLY_SET EASYEDA_PARSER_BASE::ParsePolygons( const wxString& data, int aAr
             if( chain.PointCount() > 2 )
             {
                 chain.SetClosed( true );
-                result.Append( chain );
+                result.emplace_back( chain );
             }
             chain.Clear();
         }
@@ -227,8 +228,7 @@ SHAPE_POLY_SET EASYEDA_PARSER_BASE::ParsePolygons( const wxString& data, int aAr
 
     if( chain.PointCount() > 2 )
     {
-        chain.SetClosed( true );
-        result.Append( chain );
+        result.emplace_back( chain );
     }
 
     return result;

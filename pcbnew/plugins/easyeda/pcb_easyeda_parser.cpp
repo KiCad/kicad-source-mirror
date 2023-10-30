@@ -434,7 +434,7 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
         {
             wxString layer = arr[1];
 
-            SHAPE_POLY_SET polySet = ParsePolygons( arr[3].Trim(), pcbIUScale.mmToIU( 0.01 ) );
+            SHAPE_POLY_SET polySet = ParseLineChains( arr[3].Trim(), pcbIUScale.mmToIU( 0.01 ) );
 
             if( layer == wxS( "11" ) ) // Multi-layer (board cutout)
             {
@@ -508,7 +508,7 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
                 // Do not fill?
             }
 
-            SHAPE_POLY_SET polySet = ParsePolygons( arr[4].Trim(), pcbIUScale.mmToIU( 0.01 ) );
+            SHAPE_POLY_SET polySet = ParseLineChains( arr[4].Trim(), pcbIUScale.mmToIU( 0.01 ) );
 
             for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                 zone->Outline()->AddPolygon( poly );
@@ -529,7 +529,7 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
                 {
                     for( const nlohmann::json& contourData : polyData )
                     {
-                        SHAPE_POLY_SET contourPolySet = ParsePolygons( contourData.get<wxString>(),
+                        SHAPE_POLY_SET contourPolySet = ParseLineChains( contourData.get<wxString>(),
                                                                        pcbIUScale.mmToIU( 0.01 ) );
 
                         SHAPE_POLY_SET currentOutline( contourPolySet.COutline( 0 ) );
@@ -698,7 +698,7 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
                     if( auto dataStr = get_opt( attributes, "d" ) )
                     {
                         SHAPE_POLY_SET polySet =
-                                ParsePolygons( dataStr->Trim(),
+                                ParseLineChains( dataStr->Trim(),
                                                dataStr->size() < 8000 ? pcbIUScale.mmToIU( 0.005 )
                                                                       : pcbIUScale.mmToIU( 0.05 ) );
 

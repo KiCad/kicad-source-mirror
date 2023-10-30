@@ -58,7 +58,7 @@ public:
         return ScalePos( aVec - m_relOrigin );
     }
 
-    SHAPE_POLY_SET ParsePolygons( const wxString& aData, int aArcMinSegLen );
+     std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen );
 
 protected:
     VECTOR2D m_relOrigin;
