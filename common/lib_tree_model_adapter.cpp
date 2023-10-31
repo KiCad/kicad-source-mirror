@@ -173,18 +173,26 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         {
             while( tokenizer.HasMoreTokens() )
             {
-                wxString lib;
-                wxString term = tokenizer.GetNextToken().Lower();
+                // First search for the full token, in case it appears in a search string
+                wxString             term = tokenizer.GetNextToken().Lower();
+                EDA_COMBINED_MATCHER termMatcher( term, CTX_LIBITEM );
+
+                m_tree.UpdateScore( &termMatcher, wxEmptyString );
 
                 if( term.Contains( ":" ) )
                 {
-                    lib = term.BeforeFirst( ':' );
-                    term = term.AfterFirst( ':' );
+                    // Next search for the library:item_name
+                    wxString             lib = term.BeforeFirst( ':' );
+                    wxString             itemName = term.AfterFirst( ':' );
+                    EDA_COMBINED_MATCHER itemNameMatcher( itemName, CTX_LIBITEM );
+
+                    m_tree.UpdateScore( &itemNameMatcher, lib );
                 }
-
-                EDA_COMBINED_MATCHER matcher( term, CTX_LIBITEM );
-
-                m_tree.UpdateScore( &matcher, lib );
+                else
+                {
+                    // In case the full token happens to be a library name
+                    m_tree.UpdateScore( nullptr, term );
+                }
             }
         }
         else

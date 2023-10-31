@@ -27,11 +27,6 @@
 #include <pgm_base.h>
 #include <string_utils.h>
 
-// Each node gets this lowest score initially, without any matches applied.  Matches will then
-// increase this score.  This way, an empty search string will result in all components being
-// displayed as they have the minimum score. However, in that case, we avoid expanding all the
-// nodes asd the result is very unspecific.
-static const int kLowestDefaultScore = 1;
 
 
 void LIB_TREE_NODE::ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter )
@@ -39,7 +34,7 @@ void LIB_TREE_NODE::ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFil
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         child->ResetScore( aFilter );
 
-    m_Score = kLowestDefaultScore;
+    m_Score = 0;
 }
 
 
@@ -127,7 +122,7 @@ LIB_TREE_NODE::LIB_TREE_NODE()
     : m_Parent( nullptr ),
       m_Type( INVALID ),
       m_IntrinsicRank( 0 ),
-      m_Score( kLowestDefaultScore ),
+      m_Score( 0 ),
       m_Pinned( false ),
       m_Unit( 0 ),
       m_IsRoot( false )
@@ -225,25 +220,21 @@ void LIB_TREE_NODE_LIB_ID::ResetScore( std::function<int( LIB_TREE_NODE& aNode )
         child->ResetScore( aFilter );
 
     if( aFilter )
-        m_Score = kLowestDefaultScore + (*aFilter)(*this);
+        m_Score = (*aFilter)(*this);
     else
-        m_Score = kLowestDefaultScore;
+        m_Score = 0;
 }
 
 
 void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
 {
-    if( m_Score <= 0 )
-        return; // Leaf nodes without scores are out of the game.
-
-    if( !aLib.IsEmpty() && m_Parent->m_Name.Lower() != aLib )
+    if( aLib.IsEmpty() || m_Parent->m_Name.Lower() == aLib )
     {
-        m_Score = 0;
-        return;
+        if( aMatcher )
+            m_Score += aMatcher->ScoreTerms( m_SearchTerms );
+        else
+            m_Score = std::max( m_Score, 1 );
     }
-
-    if( aMatcher )
-        m_Score = aMatcher->ScoreTerms( m_SearchTerms );
 }
 
 
@@ -270,11 +261,6 @@ LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 
 void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
 {
-    // If we're matching then we default to not-matched; otherwise we default to whatever m_Score
-    // was initialized to (currently 1)
-    if( aMatcher )
-        m_Score = 0;
-
     if( m_Children.size() )
     {
         for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
@@ -283,10 +269,19 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxStr
             m_Score = std::max( m_Score, child->m_Score );
         }
     }
-    else
+
+    if( !aLib.IsEmpty() )
     {
-        if( aMatcher )
-            m_Score = aMatcher->ScoreTerms( m_SearchTerms );
+        if( m_Name.Lower() == aLib )
+            m_Score += 1;
+    }
+    else if( aMatcher )
+    {
+        m_Score += aMatcher->ScoreTerms( m_SearchTerms );
+    }
+    else    // No search string or library filters; show, but don't expand (mScore == 1)
+    {
+        m_Score = std::max( m_Score, 1 );
     }
 }
 
