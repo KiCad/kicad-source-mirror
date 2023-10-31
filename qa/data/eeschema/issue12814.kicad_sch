@@ -1,0 +1,61 @@
+(kicad_sch (version 20230819) (generator eeschema)
+
+  (uuid 9d9c2574-56a3-45db-8021-2a92a85311b1)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (bus (pts (xy 116.84 66.04) (xy 129.54 66.04))
+    (stroke (width 0) (type default))
+    (uuid 81974d25-c0e9-441c-bc85-27ea024c7251)
+  )
+
+  (sheet (at 76.2 54.61) (size 40.64 31.75) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 9a030759-73ea-44ba-bd5b-ba78c58ff624)
+    (property "Sheetname" "Drive" (at 76.2 53.8984 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "issue12814_1.kicad_sch" (at 76.2 86.9446 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "A[0..2]" input (at 116.84 66.04 0)
+      (effects (font (size 1.27 1.27)) (justify right))
+      (uuid 13a18ea9-dc2c-4521-84c7-cc78685d285c)
+    )
+    (instances
+      (project "issue12814"
+        (path "/9d9c2574-56a3-45db-8021-2a92a85311b1" (page "2"))
+      )
+    )
+  )
+
+  (sheet (at 129.54 54.61) (size 43.18 31.75) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid fd81cd4d-ed06-4c80-bc4c-cba1d4bc410f)
+    (property "Sheetname" "Usage" (at 129.54 53.8984 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "issue12814_2.kicad_sch" (at 129.54 86.9446 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "A[0..2]" input (at 129.54 66.04 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 2ffe2f66-5971-469c-921b-edb737430ec5)
+    )
+    (instances
+      (project "issue12814"
+        (path "/9d9c2574-56a3-45db-8021-2a92a85311b1" (page "3"))
+      )
+    )
+  )
+
+  (sheet_instances
+    (path "/" (page "1"))
+  )
+)

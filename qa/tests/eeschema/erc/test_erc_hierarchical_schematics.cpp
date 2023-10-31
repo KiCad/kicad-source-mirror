@@ -44,7 +44,8 @@ BOOST_FIXTURE_TEST_CASE( ERCHierarchicalSchematics, ERC_REGRESSION_TEST_FIXTURE 
 
     // Check not-connected ERC errors
 
-    std::vector<std::pair<wxString, int>> tests = { { "issue10926_1", 3 } };
+    std::vector<std::pair<wxString, int>> tests = { { "issue10926_1", 3 },
+                                                    { "issue12814", 0 } };
 
     for( const std::pair<wxString, int>& test : tests )
     {
