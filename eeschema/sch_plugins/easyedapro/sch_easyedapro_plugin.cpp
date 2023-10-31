@@ -421,7 +421,7 @@ SCH_SHEET* SCH_EASYEDAPRO_PLUGIN::LoadSchematicFile( const wxString& aFileName,
 
     if( aProperties && aProperties->Exists( "sch_id" ) )
     {
-        schematicToLoad = aProperties->at( "sch_id" );
+        schematicToLoad = wxString::FromUTF8( aProperties->at( "sch_id" ) );
     }
     else
     {
