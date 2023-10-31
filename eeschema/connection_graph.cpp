@@ -127,16 +127,9 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                 return a_name < b_name;
         };
 
-    auto strong_cmp = [this]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
-    {
-            const wxString& a_name = GetNameForDriver( a );
-            const wxString& b_name = GetNameForDriver( b );
-            return a_name < b_name;
-    };
-
     PRIORITY            highest_priority = PRIORITY::INVALID;
     std::set<SCH_ITEM*, decltype( candidate_cmp )> candidates( candidate_cmp );
-    std::set<SCH_ITEM*, decltype( strong_cmp )> strong_drivers( strong_cmp );
+    std::set<SCH_ITEM*> strong_drivers;
 
     m_driver = nullptr;
 
