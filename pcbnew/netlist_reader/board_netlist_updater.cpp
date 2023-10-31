@@ -638,7 +638,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     // Create a copy only if the footprint has not been added during this update
     FOOTPRINT* copy = nullptr;
 
-    if( !m_commit.GetStatus( aFootprint ) )
+    if( !m_isDryRun && !m_commit.GetStatus( aFootprint ) )
     {
         copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
         copy->SetParentGroup( nullptr );
@@ -650,9 +650,11 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     PADS pads = aFootprint->Pads();
     std::set<wxString> padNetnames;
 
-    std::sort( pads.begin(), pads.end(), []( PAD* a, PAD* b ) {
-        return a->m_Uuid < b->m_Uuid;
-    } );
+    std::sort( pads.begin(), pads.end(),
+               []( PAD* a, PAD* b )
+               {
+                   return a->m_Uuid < b->m_Uuid;
+               } );
 
     for( PAD* pad : pads )
     {
@@ -1273,7 +1275,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             {
                 msg.Printf( _( "Removed unused net %s." ), net->GetNetname() );
                 m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-                m_commit.Removed( net );
             }
         }
 

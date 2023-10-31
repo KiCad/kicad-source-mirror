@@ -163,6 +163,7 @@ protected:
     void clear()
     {
         m_changedItems.clear();
+        m_deletedItems.clear();
         m_changes.clear();
     }
 
@@ -188,6 +189,7 @@ protected:
 
 protected:
     std::set<EDA_ITEM*>      m_changedItems;
+    std::set<EDA_ITEM*>      m_deletedItems;
     std::vector<COMMIT_LINE> m_changes;
 };
 

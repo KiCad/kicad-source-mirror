@@ -61,6 +61,9 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
         return *this;
 
     case CHT_REMOVE:
+        wxASSERT_MSG( m_deletedItems.find( aItem ) == m_deletedItems.end(),
+                      wxT( "Item already staged for deletion" ) );
+        m_deletedItems.insert( aItem );
         makeEntry( aItem, CHT_REMOVE | flag, nullptr, aScreen );
         return *this;
 
@@ -133,9 +136,8 @@ int COMMIT::GetStatus( EDA_ITEM* aItem, BASE_SCREEN *aScreen )
 COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags, BASE_SCREEN* aScreen )
 {
     EDA_ITEM* parent = parentObject( aItem );
-    auto entryIt = m_changedItems.find( parent );
 
-    if( entryIt != m_changedItems.end() )
+    if( m_changedItems.find( parent ) != m_changedItems.end() )
     {
         delete aCopy;
         return *this; // item has been already modified once
