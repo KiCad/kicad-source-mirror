@@ -1694,6 +1694,8 @@ LIB_TEXTBOX* SCH_SEXPR_PARSER::parseTextBox()
     FILL_PARAMS   fill;
     std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
 
+    textBox->SetUnit( m_unit );
+    textBox->SetConvert( m_convert );
     token = NextTok();
 
     if( token == T_private )
