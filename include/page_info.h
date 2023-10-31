@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,11 @@
 #define MIN_PAGE_SIZE_MILS          1000
 #define MAX_PAGE_SIZE_PCBNEW_MILS   48000
 #define MAX_PAGE_SIZE_EESCHEMA_MILS 120000
+
+/// Min and max page sizes for clamping, in mm.
+#define MIN_PAGE_SIZE_MM            25.4
+#define MAX_PAGE_SIZE_PCBNEW_MM     48000*.0254
+#define MAX_PAGE_SIZE_EESCHEMA_MM   120000*.0254
 
 class OUTPUTFORMATTER;
 
@@ -125,13 +130,17 @@ public:
      */
     wxPaperSize GetPaperId() const { return m_paper_id; }
 
-    void SetWidthMils(  int aWidthInMils );
-    int GetWidthMils() const { return m_size.x; }
+    void SetWidthMM(  double aWidthInMM ) { SetWidthMils( aWidthInMM * 1000 / 25.4 ); }
+    void SetWidthMils(  double aWidthInMils );
+    double GetWidthMils() const { return m_size.x; }
+    double GetWidthMM() const { return m_size.x * 25.4 / 1000; }
 
-    void SetHeightMils( int aHeightInMils );
-    int GetHeightMils() const { return m_size.y; }
+    void SetHeightMM( double aHeightInMM ) { SetHeightMils( aHeightInMM * 1000 / 25.4 ); }
+    void SetHeightMils( double aHeightInMils );
+    double GetHeightMils() const { return m_size.y; }
+    double GetHeightMM() const { return m_size.y * 25.4 / 1000; }
 
-    const VECTOR2I& GetSizeMils() const { return m_size; }
+    const VECTOR2D& GetSizeMils() const { return m_size; }
 
     /**
      * Gets the page width in IU
@@ -158,32 +167,32 @@ public:
      * variable being passed. Note, this constexpr variable changes depending
      * on application, hence why it is passed.
      */
-    const VECTOR2I GetSizeIU( double aIUScale ) const
+    const VECTOR2D GetSizeIU( double aIUScale ) const
     {
-        return VECTOR2I( GetWidthIU( aIUScale ), GetHeightIU( aIUScale ) );
+        return VECTOR2D( GetWidthIU( aIUScale ), GetHeightIU( aIUScale ) );
     }
 
     /**
      * Set the width of Custom page in mils for any custom page constructed or made via
      * SetType() after making this call.
      */
-    static void SetCustomWidthMils( int aWidthInMils );
+    static void SetCustomWidthMils( double aWidthInMils );
 
     /**
      * Set the height of Custom page in mils for any custom page constructed or made via
      * SetType() after making this call.
      */
-    static void SetCustomHeightMils( int aHeightInMils );
+    static void SetCustomHeightMils( double aHeightInMils );
 
     /**
      * @return custom paper width in mils.
      */
-    static int GetCustomWidthMils() { return s_user_width; }
+    static double GetCustomWidthMils() { return s_user_width; }
 
     /**
      * @return custom paper height in mils.
      */
-    static int GetCustomHeightMils() { return s_user_height; }
+    static double GetCustomHeightMils() { return s_user_height; }
 
     /**
      * Output the page class to \a aFormatter in s-expression form.
@@ -197,7 +206,7 @@ public:
 
 protected:
     // only the class implementation(s) may use this constructor
-    PAGE_INFO( const VECTOR2I& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
+    PAGE_INFO( const VECTOR2D& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
 
 private:
     // standard pre-defined sizes
@@ -223,14 +232,14 @@ private:
     // all dimensions here are in mils
 
     wxString    m_type;             ///< paper type: A4, A3, etc.
-    VECTOR2I    m_size;             ///< mils
+    VECTOR2D    m_size;             ///< mils
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 
     wxPaperSize m_paper_id;         ///< wx' style paper id.
 
-    static int s_user_height;
-    static int s_user_width;
+    static double s_user_height;
+    static double s_user_width;
 
     void    updatePortrait();
 

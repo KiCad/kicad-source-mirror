@@ -65,7 +65,7 @@ const wxChar PAGE_INFO::Custom[]   = wxT( "User" );
 // also see: wx/defs.h
 
 // local readability macro for millimeter wxSize
-#define MMsize( x, y ) VECTOR2I( EDA_UNIT_UTILS::Mm2mils( x ), EDA_UNIT_UTILS::Mm2mils( y ) )
+#define MMsize( x, y ) VECTOR2D( EDA_UNIT_UTILS::Mm2mils( x ), EDA_UNIT_UTILS::Mm2mils( y ) )
 
 // All MUST be defined as landscape.
 const PAGE_INFO  PAGE_INFO::pageA5(     MMsize( 210,   148 ),   wxT( "A5" ),    wxPAPER_A5 );
@@ -75,24 +75,24 @@ const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    
 const PAGE_INFO  PAGE_INFO::pageA1(     MMsize( 841,   594 ),   wxT( "A1" ),    PAPER_A1 );
 const PAGE_INFO  PAGE_INFO::pageA0(     MMsize( 1189,  841 ),   wxT( "A0" ),    PAPER_A0 );
 
-const PAGE_INFO  PAGE_INFO::pageA( VECTOR2I( 11000, 8500 ), wxT( "A" ), wxPAPER_LETTER );
-const PAGE_INFO  PAGE_INFO::pageB( VECTOR2I( 17000, 11000 ), wxT( "B" ), wxPAPER_TABLOID );
-const PAGE_INFO  PAGE_INFO::pageC( VECTOR2I( 22000, 17000 ), wxT( "C" ), wxPAPER_CSHEET );
-const PAGE_INFO  PAGE_INFO::pageD( VECTOR2I( 34000, 22000 ), wxT( "D" ), wxPAPER_DSHEET );
-const PAGE_INFO  PAGE_INFO::pageE( VECTOR2I( 44000, 34000 ), wxT( "E" ), wxPAPER_ESHEET );
+const PAGE_INFO  PAGE_INFO::pageA( VECTOR2D( 11000, 8500 ), wxT( "A" ), wxPAPER_LETTER );
+const PAGE_INFO  PAGE_INFO::pageB( VECTOR2D( 17000, 11000 ), wxT( "B" ), wxPAPER_TABLOID );
+const PAGE_INFO  PAGE_INFO::pageC( VECTOR2D( 22000, 17000 ), wxT( "C" ), wxPAPER_CSHEET );
+const PAGE_INFO  PAGE_INFO::pageD( VECTOR2D( 34000, 22000 ), wxT( "D" ), wxPAPER_DSHEET );
+const PAGE_INFO  PAGE_INFO::pageE( VECTOR2D( 44000, 34000 ), wxT( "E" ), wxPAPER_ESHEET );
 
-const PAGE_INFO PAGE_INFO::pageGERBER( VECTOR2I( 32000, 32000 ), wxT( "GERBER" ), wxPAPER_NONE );
-const PAGE_INFO PAGE_INFO::pageUser( VECTOR2I( 17000, 11000 ), Custom, wxPAPER_NONE );
+const PAGE_INFO PAGE_INFO::pageGERBER( VECTOR2D( 32000, 32000 ), wxT( "GERBER" ), wxPAPER_NONE );
+const PAGE_INFO PAGE_INFO::pageUser( VECTOR2D( 17000, 11000 ), Custom, wxPAPER_NONE );
 
 // US paper sizes
-const PAGE_INFO  PAGE_INFO::pageUSLetter( VECTOR2I( 11000, 8500  ),  wxT( "USLetter" ), wxPAPER_LETTER );
-const PAGE_INFO PAGE_INFO::pageUSLegal( VECTOR2I( 14000, 8500 ), wxT( "USLegal" ), wxPAPER_LEGAL );
-const PAGE_INFO  PAGE_INFO::pageUSLedger( VECTOR2I( 17000, 11000 ), wxT( "USLedger" ),
+const PAGE_INFO  PAGE_INFO::pageUSLetter( VECTOR2D( 11000, 8500  ),  wxT( "USLetter" ), wxPAPER_LETTER );
+const PAGE_INFO PAGE_INFO::pageUSLegal( VECTOR2D( 14000, 8500 ), wxT( "USLegal" ), wxPAPER_LEGAL );
+const PAGE_INFO  PAGE_INFO::pageUSLedger( VECTOR2D( 17000, 11000 ), wxT( "USLedger" ),
                                           wxPAPER_TABLOID );
 
 // Custom paper size for next instantiation of type "User"
-int PAGE_INFO::s_user_width  = 17000;
-int PAGE_INFO::s_user_height = 11000;
+double PAGE_INFO::s_user_width  = 17000;
+double PAGE_INFO::s_user_height = 11000;
 
 
 inline void PAGE_INFO::updatePortrait()
@@ -102,7 +102,7 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
-PAGE_INFO::PAGE_INFO( const VECTOR2I& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
+PAGE_INFO::PAGE_INFO( const VECTOR2D& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
     m_type( aType ), m_size( aSizeMils ), m_paper_id( aPaperId )
 {
     updatePortrait();
@@ -200,7 +200,7 @@ void PAGE_INFO::SetPortrait( bool aIsPortrait )
 }
 
 
-static int clampWidth( int aWidthInMils )
+static double clampWidth( double aWidthInMils )
 {
 /*  was giving EESCHEMA single component SVG plotter grief
     However a minimal test is made to avoid values that crashes Kicad
@@ -215,7 +215,7 @@ static int clampWidth( int aWidthInMils )
 }
 
 
-static int clampHeight( int aHeightInMils )
+static double clampHeight( double aHeightInMils )
 {
 /*  was giving EESCHEMA single component SVG plotter grief
     clamping is best done at the UI, i.e. dialog, levels
@@ -225,25 +225,26 @@ static int clampHeight( int aHeightInMils )
     else if( aHeightInMils > 44000 )
         aHeightInMils = 44000;
 */
-    if( aHeightInMils < 10 )
-        aHeightInMils = 10;
+    if( aHeightInMils < 10.0 )
+        aHeightInMils = 10.0;
+
     return aHeightInMils;
 }
 
 
-void PAGE_INFO::SetCustomWidthMils( int aWidthInMils )
+void PAGE_INFO::SetCustomWidthMils( double aWidthInMils )
 {
     s_user_width = clampWidth( aWidthInMils );
 }
 
 
-void PAGE_INFO::SetCustomHeightMils( int aHeightInMils )
+void PAGE_INFO::SetCustomHeightMils( double aHeightInMils )
 {
     s_user_height = clampHeight( aHeightInMils );
 }
 
 
-void PAGE_INFO::SetWidthMils(  int aWidthInMils )
+void PAGE_INFO::SetWidthMils( double aWidthInMils )
 {
     if( m_size.x != aWidthInMils )
     {
@@ -257,7 +258,7 @@ void PAGE_INFO::SetWidthMils(  int aWidthInMils )
 }
 
 
-void PAGE_INFO::SetHeightMils( int aHeightInMils )
+void PAGE_INFO::SetHeightMils( double aHeightInMils )
 {
     if( m_size.y != aHeightInMils )
     {

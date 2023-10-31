@@ -1505,8 +1505,8 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SHEET* aSheet )
     const PAGE_INFO& page = screen->GetPageSettings();
 
     m_out->Print( 0, "$Descr %s %d %d%s\n", TO_UTF8( page.GetType() ),
-                  page.GetWidthMils(),
-                  page.GetHeightMils(),
+                  (int)page.GetWidthMils(),
+                  (int)page.GetHeightMils(),
                   !page.IsCustom() && page.IsPortrait() ? " portrait" : "" );
     m_out->Print( 0, "encoding utf-8\n" );
     m_out->Print( 0, "Sheet %d %d\n", screen->GetVirtualPageNumber(), screen->GetPageCount() );

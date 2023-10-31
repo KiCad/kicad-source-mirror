@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -75,7 +75,7 @@ static const wxString pageFmts[] =
 };
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
-                                              const VECTOR2I& aMaxUserSizeMils ) :
+                                              const VECTOR2D& aMaxUserSizeMils ) :
         DIALOG_PAGES_SETTINGS_BASE( aParent ),
         m_parent( aParent ),
         m_screen( m_parent->GetScreen() ),
@@ -151,13 +151,13 @@ bool DIALOG_PAGES_SETTINGS::TransferDataToWindow()
 
     if( m_customFmt )
     {
-        m_customSizeX.SetValue( m_pageInfo.GetWidthMils() * m_iuPerMils );
-        m_customSizeY.SetValue( m_pageInfo.GetHeightMils() * m_iuPerMils );
+        m_customSizeX.SetDoubleValue( m_pageInfo.GetWidthMils() * m_iuPerMils );
+        m_customSizeY.SetDoubleValue( m_pageInfo.GetHeightMils() * m_iuPerMils );
     }
     else
     {
-        m_customSizeX.SetValue( m_pageInfo.GetCustomWidthMils() * m_iuPerMils );
-        m_customSizeY.SetValue( m_pageInfo.GetCustomHeightMils() * m_iuPerMils );
+        m_customSizeX.SetDoubleValue( m_pageInfo.GetCustomWidthMils() * m_iuPerMils );
+        m_customSizeY.SetDoubleValue( m_pageInfo.GetCustomHeightMils() * m_iuPerMils );
     }
 
     m_TextRevision->SetValue( m_tb.GetRevision() );
@@ -592,8 +592,8 @@ void DIALOG_PAGES_SETTINGS::UpdateDrawingSheetExample()
 {
     int lyWidth, lyHeight;
 
-    wxSize clamped_layout_size( Clamp( MIN_PAGE_SIZE_MILS, m_layout_size.x, m_maxPageSizeMils.x ),
-                                Clamp( MIN_PAGE_SIZE_MILS, m_layout_size.y, m_maxPageSizeMils.y ) );
+    VECTOR2D clamped_layout_size( Clamp( (double)MIN_PAGE_SIZE_MILS, m_layout_size.x, m_maxPageSizeMils.x ),
+                                  Clamp( (double)MIN_PAGE_SIZE_MILS, m_layout_size.y, m_maxPageSizeMils.y ) );
 
     double lyRatio = clamped_layout_size.x < clamped_layout_size.y ?
                         (double) clamped_layout_size.y / clamped_layout_size.x :
@@ -744,8 +744,8 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
         wxASSERT( i != arrayDim(papers) );   // dialog UI match the above list?
 
-        VECTOR2I sz = pageInfo.GetSizeMils();
-        m_layout_size = VECTOR2I( sz.x, sz.y );
+        VECTOR2D sz = pageInfo.GetSizeMils();
+        m_layout_size = VECTOR2D( sz.x, sz.y );
 
         // swap sizes to match orientation
         bool isPortrait = (bool) m_orientationComboBox->GetSelection();
@@ -761,13 +761,13 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
 void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 {
-    double customSizeX = (double) m_customSizeX.GetValue() / m_iuPerMils;
-    double customSizeY = (double) m_customSizeY.GetValue() / m_iuPerMils;
+    double customSizeX = (double) m_customSizeX.GetDoubleValue() / m_iuPerMils;
+    double customSizeY = (double) m_customSizeY.GetDoubleValue() / m_iuPerMils;
 
-    // Prepare to painless double -> int conversion.
+    // Ensure layout size can be converted to int coordinates later
     customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );
     customSizeY = Clamp( double( INT_MIN ), customSizeY, double( INT_MAX ) );
-    m_layout_size = VECTOR2I( KiROUND( customSizeX ), KiROUND( customSizeY ) );
+    m_layout_size = VECTOR2D( customSizeX, customSizeY );
 }
 
 

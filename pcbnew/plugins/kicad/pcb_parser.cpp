@@ -1283,23 +1283,21 @@ void PCB_PARSER::parsePAGE_INFO()
     {
         double width = parseDouble( "width" );      // width in mm
 
-        const double Mils2mm = 0.0254;
-
         // Perform some controls to avoid crashes if the size is edited by hands
-        if( width < MIN_PAGE_SIZE_MILS*Mils2mm )
-            width = MIN_PAGE_SIZE_MILS*Mils2mm;
-        else if( width > MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm )
-            width = MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm;
+        if( width < MIN_PAGE_SIZE_MM )
+            width = MIN_PAGE_SIZE_MM;
+        else if( width > MAX_PAGE_SIZE_PCBNEW_MM )
+            width = MAX_PAGE_SIZE_PCBNEW_MM;
 
         double height = parseDouble( "height" );    // height in mm
 
-        if( height < MIN_PAGE_SIZE_MILS*Mils2mm )
-            height = MIN_PAGE_SIZE_MILS*Mils2mm;
-        else if( height > MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm )
-            height = MAX_PAGE_SIZE_PCBNEW_MILS*Mils2mm;
+        if( height < MIN_PAGE_SIZE_MM )
+            height = MIN_PAGE_SIZE_MM;
+        else if( height > MAX_PAGE_SIZE_PCBNEW_MM )
+            height = MAX_PAGE_SIZE_PCBNEW_MM;
 
-        pageInfo.SetWidthMils( EDA_UNIT_UTILS::Mm2mils( width ) );
-        pageInfo.SetHeightMils( EDA_UNIT_UTILS::Mm2mils( height ) );
+        pageInfo.SetWidthMM( width );
+        pageInfo.SetHeightMM( height );
     }
 
     token = NextTok();

@@ -1838,23 +1838,23 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 
     if( pageType == PAGE_INFO::Custom )
     {
-        int width = EDA_UNIT_UTILS::Mm2mils( parseDouble( "width" ) ); // width stored in mm so we convert to mils
+        int width = parseDouble( "width" );
 
         // Perform some controls to avoid crashes if the size is edited by hands
-        if( width < MIN_PAGE_SIZE_MILS )
-            width = MIN_PAGE_SIZE_MILS;
-        else if( width > MAX_PAGE_SIZE_EESCHEMA_MILS )
-            width = MAX_PAGE_SIZE_EESCHEMA_MILS;
+        if( width < MIN_PAGE_SIZE_MM )
+            width = MIN_PAGE_SIZE_MM;
+        else if( width > MAX_PAGE_SIZE_EESCHEMA_MM )
+            width = MAX_PAGE_SIZE_EESCHEMA_MM;
 
-        int height = EDA_UNIT_UTILS::Mm2mils( parseDouble( "height" ) ); // height stored in mm so we convert to mils
+        int height = parseDouble( "height" );
 
-        if( height < MIN_PAGE_SIZE_MILS )
-            height = MIN_PAGE_SIZE_MILS;
-        else if( height > MAX_PAGE_SIZE_EESCHEMA_MILS )
-            height = MAX_PAGE_SIZE_EESCHEMA_MILS;
+        if( height < MIN_PAGE_SIZE_MM )
+            height = MIN_PAGE_SIZE_MM;
+        else if( height > MAX_PAGE_SIZE_EESCHEMA_MM )
+            height = MAX_PAGE_SIZE_EESCHEMA_MM;
 
-        aPageInfo.SetWidthMils( width );
-        aPageInfo.SetHeightMils( height );
+        aPageInfo.SetWidthMM( width );
+        aPageInfo.SetHeightMM( height );
     }
 
     token = NextTok();

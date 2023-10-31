@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,7 +36,7 @@ class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 {
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
-                           const VECTOR2I& aMaxUserSizeMils );
+                           const VECTOR2D& aMaxUserSizeMils );
     virtual ~DIALOG_PAGES_SETTINGS();
 
     const wxString GetWksFileName()
@@ -121,8 +121,8 @@ protected:
     bool            m_initialized;
     bool            m_localPrjConfigChanged; /// the page layuout filename was changed
     wxBitmap*       m_pageBitmap;            /// Temporary bitmap for the drawing sheet example.
-    VECTOR2I        m_layout_size;           /// Logical drawing sheet size.
-    VECTOR2I        m_maxPageSizeMils;       /// The max page size allowed by the caller frame
+    VECTOR2D        m_layout_size;           /// Logical drawing sheet size.
+    VECTOR2D        m_maxPageSizeMils;       /// The max page size allowed by the caller frame
     PAGE_INFO       m_pageInfo;              /// Temporary page info.
     bool            m_customFmt;             /// true if the page selection is custom
     TITLE_BLOCK     m_tb;                    /// Temporary title block (basic inscriptions).
