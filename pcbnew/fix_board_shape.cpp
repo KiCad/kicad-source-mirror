@@ -104,7 +104,7 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
     };
 
     auto min_distance_sq = []( const VECTOR2I& aRef, const VECTOR2I& aFirst,
-                               const VECTOR2I& aSecond ) -> bool
+                               const VECTOR2I& aSecond ) -> SEG::ecoord
     {
         return std::min( ( aRef - aFirst ).SquaredEuclideanNorm(),
                          ( aRef - aSecond ).SquaredEuclideanNorm() );

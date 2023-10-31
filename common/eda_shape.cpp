@@ -1931,9 +1931,9 @@ static struct EDA_SHAPE_DESC
         auto fillAvailable =
                 [=]( INSPECTABLE* aItem ) -> bool
                 {
-                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                    if( EDA_SHAPE* edaShape = dynamic_cast<EDA_SHAPE*>( aItem ) )
                     {
-                        switch( shape->GetShape() )
+                        switch( edaShape->GetShape() )
                         {
                         case SHAPE_T::POLY:
                         case SHAPE_T::RECTANGLE:

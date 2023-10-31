@@ -97,14 +97,14 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
         m_importer = std::make_unique<GRAPHICS_IMPORTER_LIB_SYMBOL>( symFrame->GetCurSymbol(),
                                                                      symFrame->GetUnit() );
 
-        SYMBOL_EDITOR_SETTINGS* cfg = m_parent->libeditconfig();
+        SYMBOL_EDITOR_SETTINGS* cfg = aParent->libeditconfig();
         initWidgetsFromSettings( cfg );
     }
-    else if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( aParent ) )
+    else if( dynamic_cast<SCH_EDIT_FRAME*>( aParent ) )
     {
         m_importer = std::make_unique<GRAPHICS_IMPORTER_SCH>();
 
-        EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+        EESCHEMA_SETTINGS* cfg = aParent->eeconfig();
         initWidgetsFromSettings( cfg );
     }
 
