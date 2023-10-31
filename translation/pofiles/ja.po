@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-09-21 15:08+0000\n"
+"PO-Revision-Date: 2023-11-02 03:01+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -620,18 +620,16 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "導体/表面の仕上がり色"
+msgstr "導体/表面の仕上がり色を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "導体/表面の仕上がり色"
+msgstr "導体/表面の仕上がり色を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "Adhesive"
@@ -686,9 +684,8 @@ msgid "User.Drawings"
 msgstr "User.Drawings"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "コメントと線画のレイヤーを表示"
+msgstr "ユーザー描画レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Comments"
@@ -782,9 +779,8 @@ msgid "Do not clip silk layers to board outline"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "X軸"
+msgstr "3D軸"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 #, fuzzy
@@ -802,38 +798,36 @@ msgid "Background End"
 msgstr "背景"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "背景のグラデーションの終了:"
+msgstr "背景のグラデーションの終端の色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"レイヤーの可視性の組み合わせを保存および復元します。\n"
+"色と可視性の組み合わせを保存および復元します。\n"
 "%s+Tabを使用して選択項目をアクティブにします。\n"
 "%sを押したまま連続してタブを押下すると、ポップアップにあるビューポートを循環"
 "します。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"表示の位置とズームを保存および復元します。\n"
+"カメラ位置とズームを保存および復元します。\n"
 "%s+Tabを使用して選択項目をアクティブにします。\n"
 "%sを押したまま連続してタブを押下すると、ポップアップにあるビューポートを循環"
 "します。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
-#, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr "左ダブルクリックまたは中クリックで色の変更"
 
@@ -995,9 +989,8 @@ msgid "Show filled areas in zones"
 msgstr "ゾーンの塗りつぶし領域を表示"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "メッキされていない導体には裸の銅の色を使用する"
+msgstr "メッキされていない導体には裸の銅の色を使用する(遅い)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1042,9 +1035,8 @@ msgid "deg"
 msgstr "度"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "オブジェクト移動時にパン"
+msgstr "移動時に再描画"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
@@ -1355,7 +1347,6 @@ msgid "KiCad Image Converter"
 msgstr "KiCad イメージ コンバーター"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
 msgstr "画像ファイル"
 
@@ -1384,9 +1375,8 @@ msgid "Image Files"
 msgstr "画像ファイル"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "図面シート ファイルを選択"
+msgstr "図面シート ファイルを作成"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -2475,11 +2465,8 @@ msgid "Hotkey List"
 msgstr "ホットキー リスト"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"プロジェクト名:\n"
-"%s\n"
+msgstr "プロジェクト名"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1047
@@ -3294,7 +3281,7 @@ msgstr ""
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
@@ -3304,105 +3291,91 @@ msgstr "テスト"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "位置合わせ"
+msgstr "認証"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "基本のピン名"
+msgstr "ユーザー名"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
-#, fuzzy
 msgid "Password"
-msgstr "Password:"
+msgstr "パスワード"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
-#, fuzzy
 msgid "Commit Message:"
-msgstr "エラーメッセージ:"
+msgstr "コミット メッセージ:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
-#, fuzzy
 msgid "Author:"
-msgstr "作者"
+msgstr "作者:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
-msgstr ""
+msgstr "コミット(&o)"
 
 #: common/dialogs/git/dialog_git_commit.cpp:150
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "コンポーネント: 名前は空欄にできません。"
+msgstr "コミット メッセージは空欄にできません"
 
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:370
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "SSH鍵のパスワードを入力してください"
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
-#, fuzzy
 msgid "Test connection"
-msgstr "接続を選択"
+msgstr "接続をテスト"
 
 #: common/dialogs/git/dialog_git_repository.cpp:326
-#, fuzzy
 msgid "Connection successful"
-msgstr "ファイルの生成に成功しました。"
+msgstr "接続に成功しました"
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "フィルター 選択"
+msgstr "’%s’ に接続できません "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "アーカイブ ファイルを開くことができません。"
+msgstr "秘密鍵 '%s' を開くことができません"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "不正な Z スケール値"
+msgstr "不正なSSH鍵"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "選択したファイルは不正であるか、壊れています!"
+msgstr "選択したファイルは不正なSSHの秘密鍵です"
 
 #: common/dialogs/git/dialog_git_repository.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "ライブラリ ファイル '%s' が見つかりませんでした"
+msgstr "公開鍵 '%s' を開けませんでした"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Missing information"
-msgstr "見つからないフットプリント"
+msgstr "情報がありません"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "完全修飾されたリポジトリのURLを入力してください"
+msgstr "リポジトリ名を入力してください"
 
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "完全修飾されたリポジトリのURLを入力してください"
+msgstr "リポジトリのURLを入力してください"
 
 #: common/dialogs/git/dialog_git_repository.cpp:431
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Password:"
+msgstr "SSH鍵のパスワード"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 #, fuzzy
@@ -3410,13 +3383,12 @@ msgid "Location"
 msgstr "回転"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "接続名"
+msgstr "接続タイプ"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #, fuzzy
@@ -3424,49 +3396,44 @@ msgid "Local"
 msgstr "ローカル ファイル"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "プライベート"
+msgstr "SSH秘密鍵"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "ファイルを選択"
+msgstr "SSH秘密鍵のファイルを選択"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Username:"
+msgstr "ユーザー名"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "リポジトリ"
+msgstr "Git リポジトリ"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Git ブランチを切り替え"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "ブランチ名を選択もしくは入力:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "ブランチ"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "最後のコミット"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "更新"
+msgstr "最後の更新"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3481,27 +3448,23 @@ msgstr "追加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Git コミットデータ"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "デフォルトのネット名を使用"
+msgstr "デフォルト値を使用"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "エリア名:"
+msgstr "作者の名前:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "作者"
+msgstr "作者のメールアドレス:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "リポジトリを管理"
+msgstr "Gitリポジトリ"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3522,19 +3485,16 @@ msgid "Status"
 msgstr "ステータス"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "リポジトリを追加"
+msgstr "新規リポジトリを追加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "フットプリントのプロパティを編集"
+msgstr "リポジトリのプロパティを編集"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "リポジトリ"
+msgstr "Gitリポジトリを削除"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3757,9 +3717,8 @@ msgstr ""
 "システムのカラー テーマに基づいて、ライトまたはダークのアイコンを自動的に選択"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "マイクロ ビアのサイズが小さ過ぎます"
+msgstr "ツールバーのアイコンサイズ:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -5840,52 +5799,51 @@ msgstr "ファイル '%s' をコピーできません。"
 
 #: common/gestfich.cpp:308
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "不正なディレクトリ名、ルート ディレクトリは削除できません"
 
 #: common/gestfich.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "ディレクトリー \"%s\" は書き込み禁止です。"
+msgstr "ディレクトリー '%s' がありません"
 
 #: common/gestfich.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' 正しくパースされませんでした。"
+msgstr "'%s' はディレクトリーではありません"
 
 #: common/gestfich.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "ディレクトリ %s を削除しています"
+msgstr "ディレクトリ '%s' を削除中にエラーしました: %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr "ディレクトリ '%s' を作成できませんでした"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "'%s' から画像をロードできません。"
+msgstr "リポジトリ '%s' をクローンできません"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "'%s' から画像をロードできません。"
+msgstr "リモート '%s' を参照できません"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "IBISモデル '%s' が見つかりません"
+msgstr "リモート '%s' に接続できません"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "IBISモデル '%s' が見つかりません"
+msgstr "リモート '%s' からデータを取得できません"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "ファイル \"%s\" を作成できません "
+msgstr "'FETCH_HEAD' を読み込めません"
 
 #: common/git/git_pull_handler.cpp:98
 #, fuzzy
@@ -5893,9 +5851,8 @@ msgid "Could not lookup commit"
 msgstr "CvPcb を開くことができません"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "ファイル \"%s\" を作成できません "
+msgstr "マージを解析できません"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -5915,19 +5872,16 @@ msgid "Failed to perform checkout operation."
 msgstr ""
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "'%s' から画像をロードできません。"
+msgstr "コミット '{}' を参照できません"
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "ファイル \"%s\" を作成できません "
+msgstr "マージをコミットできません"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "ライブラリ ファイルを開くことができません。"
+msgstr "リポジトリのインデックスを取得できません"
 
 #: common/git/git_pull_handler.cpp:265
 #, fuzzy
@@ -5935,28 +5889,24 @@ msgid "Could not get conflict iterator"
 msgstr "設定ファイルを開くことができません"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
 msgstr "変更"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "追加"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "アーカイブ ファイルを開くことができません。"
+msgstr "リモートを参照できませんｎ"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "フィルター 選択"
+msgstr "リモートに接続できません"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "OpenGL を使用できません"
+msgstr "リモートにプッシュできません"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
@@ -5984,14 +5934,13 @@ msgid "* [rejected] %s (%s)"
 msgstr "グリッド: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "更新"
+msgstr "[更新] %s"
 
 #: common/git/kicad_git_errors.cpp:30
-#, fuzzy
 msgid "Invalid repository."
-msgstr "不正なレポート フォーマットです\n"
+msgstr "不正なリポジトリです。"
 
 #: common/git/kicad_git_errors.cpp:31
 #, fuzzy
@@ -6004,14 +5953,12 @@ msgid "Failed to merge branches."
 msgstr "レスキュー ライブラリ %s を保存できませんでした。"
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "リポジトリのURLを読み込めません"
+msgstr "リポジトリをクローンできませんでした。"
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "リポジトリ"
+msgstr "リモートリポジトリが見つかりません。"
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
@@ -6028,9 +5975,8 @@ msgid "Failed to create branch."
 msgstr "ファイルの作成に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "\"%s\" の作成に失敗しました"
+msgstr "ブランチの削除に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
@@ -6064,9 +6010,8 @@ msgid "Failed to establish connection with remote repository."
 msgstr "ローカルに保存された repository.json の解析に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s が見つかりません"
+msgstr "タグが見つかりません。"
 
 #: common/git/kicad_git_errors.cpp:60
 #, fuzzy
@@ -6074,14 +6019,12 @@ msgid "Failed to create tag."
 msgstr "ファイルの作成に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "\"%s\" の作成に失敗しました"
+msgstr "タグの削除に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "不明なエラー"
+msgstr "不明なエラー."
 
 #: common/git/kicad_git_errors.cpp:64
 #, fuzzy
@@ -6271,9 +6214,8 @@ msgid "DXF traces not currently supported."
 msgstr "ブランケットは現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "ブランケットは現在サポートされていません。"
+msgstr "DXF 3dfaces は現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:523
 #, fuzzy
@@ -6281,9 +6223,8 @@ msgid "DXF solids not currently supported."
 msgstr "コンパイル マスクは現在サポートされていません。"
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "ブランケットは現在サポートされていません。"
+msgstr "DXFイメージは現在サポートされていません。"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -7565,9 +7506,8 @@ msgid "Grid Origin"
 msgstr "グリッド原点"
 
 #: common/tool/actions.cpp:670
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "グリッド原点をセット"
+msgstr "グリッド原点を配置"
 
 #: common/tool/actions.cpp:678
 msgid "Reset Grid Origin"
@@ -7586,9 +7526,8 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
 #: common/tool/actions.cpp:704
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "グリッドの寸法を設定"
+msgstr "グリッド定義を編集"
 
 #: common/tool/actions.cpp:710
 msgid "Grid Origin..."
@@ -7704,14 +7643,12 @@ msgid "Interactively measure distance between points"
 msgstr "２点間の距離をインタラクティブに計測"
 
 #: common/tool/actions.cpp:847
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "プロジェクト マネージャー"
+msgstr "プロジェクト マネージャー に切り替え"
 
 #: common/tool/actions.cpp:848
-#, fuzzy
 msgid "Show project window"
-msgstr "コンソール ウィンドウを表示"
+msgstr "プロジェクト ウィンドウを表示"
 
 #: common/tool/actions.cpp:857
 msgid "Show 3D viewer window"
@@ -7825,7 +7762,6 @@ msgid "About KiCad"
 msgstr "KiCad について"
 
 #: common/tool/actions.cpp:967
-#, fuzzy
 msgid "Open about dialog"
 msgstr "KiCad について のダイアログを表示"
 
@@ -12344,9 +12280,8 @@ msgid "A frequency range must be specified."
 msgstr "周波数の範囲を指定する必要があります。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:608
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "シミュレーション"
+msgstr "新しいシミュレーション タブ"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
 msgid "Analysis type:"
@@ -12591,7 +12526,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:564
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(出力電圧) / (入力電流)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:570
 msgid "Input:"
@@ -13119,14 +13054,14 @@ msgid "Could not open/create path '%s'."
 msgstr "ファイル \"%s\" を作成できません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
+msgstr "BOM出力 '%s' を作成できませんでした。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
+msgstr "BOM出力 '%s' に書き込めませんでした。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1275
 #, c-format
@@ -13152,14 +13087,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:64
-#, fuzzy
 msgid "View presets:"
-msgstr "プリセット:"
+msgstr "プリセットを表示:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:102
-#, fuzzy
 msgid "Exclude DNP"
-msgstr "除外"
+msgstr "未実装を除外"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -15144,9 +15077,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "回路図ファイルの変更は保存されていません"
 
 #: eeschema/files-io.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "LTspice 回路図ファイル"
+msgstr "未サポートの回路図ファイル '%s'."
 
 #: eeschema/files-io.cpp:259
 msgid ""
@@ -15336,9 +15269,9 @@ msgstr ""
 "書き込み権限を確認後、再実行して下さい。"
 
 #: eeschema/files-io.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "\"%s\" の保存に失敗しました"
+msgstr "'%s' の保存に失敗しました。"
 
 #: eeschema/files-io.cpp:1065
 #, fuzzy
@@ -15346,11 +15279,12 @@ msgid "Locked File Warning"
 msgstr "スケーリングされたモデルの警告"
 
 #: eeschema/files-io.cpp:1067
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "フォルダー \"%s\" への書き込み権限がありません。"
+msgstr ""
+"書き込み権限がありません:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1083
 msgid "Saving will overwrite existing files."
@@ -19241,14 +19175,14 @@ msgstr ""
 "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (ユニット %c)."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b>."
+msgstr "<b>半径=0 の円</b> 位置 <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b>."
+msgstr "<b>サイズが0 の矩形</b> 位置 <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
 #, fuzzy
@@ -21676,9 +21610,8 @@ msgstr "エクスポートするシンボルがありません"
 
 #: eeschema/tools/symbol_editor_control.cpp:578
 #: pcbnew/footprint_edit_frame.cpp:1366
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "ビューを PNG としてエクスポート..."
+msgstr "ビューを PNG としてエクスポート"
 
 #: eeschema/tools/symbol_editor_control.cpp:589
 #, c-format
@@ -24743,9 +24676,8 @@ msgid "Commit File..."
 msgstr "フィールドを編集..."
 
 #: kicad/project_tree_pane.cpp:954
-#, fuzzy
 msgid "Switch to branch "
-msgstr "描画キャンバスを Cairo(2D) に切替"
+msgstr "ブランチを切り替え "
 
 #: kicad/project_tree_pane.cpp:959
 msgid "Other..."
@@ -24788,9 +24720,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "ローカル パス: フォルダーの変更を監視します"
 
 #: kicad/project_tree_pane.cpp:1522
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "選択したファイルは不正であるか、壊れています!"
+msgstr "選択したディレクトリはすでにgitプロジェクトです。"
 
 #: kicad/project_tree_pane.cpp:1534
 msgid "Failed to initialize git project."
@@ -24818,9 +24749,9 @@ msgid "Failed to push project"
 msgstr "バス グループの解析に失敗"
 
 #: kicad/project_tree_pane.cpp:1733
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "'%s' のロードに失敗しました。"
+msgstr "'%s' ブランチの削除に失敗しました: %s"
 
 #: kicad/project_tree_pane.cpp:1745
 #, fuzzy, c-format
@@ -24828,9 +24759,9 @@ msgid "Failed to find branch head for '%s'"
 msgstr "'%s' を開くための PDF ビューアーが見つかりませんでした。"
 
 #: kicad/project_tree_pane.cpp:1756
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s'"
-msgstr "'%s' へのプロットに失敗しました。\n"
+msgstr "'%s' ブランチへの切り替えに失敗しました"
 
 #: kicad/project_tree_pane.cpp:1767
 #, fuzzy, c-format
@@ -24866,9 +24797,9 @@ msgid "Failed to add file to index: %s"
 msgstr "\"%s\" の作成に失敗しました"
 
 #: kicad/project_tree_pane.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "ファイル '%s' の作成に失敗しました。"
+msgstr "インデックスの書き込みに失敗しました: '%s'"
 
 #: kicad/project_tree_pane.cpp:2147
 #, fuzzy, c-format
@@ -24891,14 +24822,14 @@ msgid "Failed to get commit: %s"
 msgstr "回路図 '%s' の保存に失敗しました"
 
 #: kicad/project_tree_pane.cpp:2187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "一時ファイル '%s の作成に失敗しました。"
+msgstr "署名の作成に失敗しました: %s"
 
 #: kicad/project_tree_pane.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "ファイル '%s' の作成に失敗しました。"
+msgstr "コミットの作成に失敗しました: '%s'"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -25029,9 +24960,8 @@ msgid "Cloning Repository"
 msgstr "リポジトリ"
 
 #: kicad/tools/kicad_manager_control.cpp:184
-#, fuzzy
 msgid "No project files were found in the repository."
-msgstr "他のソフトウェアからプロジェクト ファイルをインポートします"
+msgstr "リポジトリにプロジェクト ファイルがありません。"
 
 #: kicad/tools/kicad_manager_control.cpp:220
 msgid "System Templates"
@@ -26523,9 +26453,8 @@ msgid "Threshold voltage:"
 msgstr "電圧の閾値:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "材料"
+msgstr "素材名:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 #, fuzzy
@@ -30631,9 +30560,8 @@ msgid "STEP Output File"
 msgstr "出力サイズ"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:366
-#, fuzzy
 msgid "No filename for output file"
-msgstr "フットプリント ファイルではありません。"
+msgstr "出力ファイル名がありません"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:397
 #, c-format
@@ -31834,9 +31762,9 @@ msgid "Buried vias:"
 msgstr "ベリード ビア:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid "Generators A (%s)"
-msgstr "ジェネレーター ファイル:"
+msgstr "ジェネレーター A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
@@ -32086,9 +32014,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:135
-#, fuzzy
 msgid "(as a percentage of pad/via size)"
-msgstr "追加のクリアランスをパッドのサイズに対するパーセンテージで指定します。"
+msgstr "(パッド/ビア サイズに対するパーセンテージ)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:222
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:698
@@ -33184,9 +33111,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:654
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:268
-#, fuzzy
 msgid "(as a percentage of pad size)"
-msgstr "追加のクリアランスをパッドのサイズに対するパーセンテージで指定します。"
+msgstr "(パッド サイズに対するパーセンテージ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:667
 #, fuzzy
@@ -34420,9 +34346,8 @@ msgid "Track and Via Dimensions"
 msgstr "配線とビアの寸法"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target skew: "
-msgstr "目標の遅延(スキュー):"
+msgstr "目標のスキュー: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:85
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1598
@@ -34485,9 +34410,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:373
-#, fuzzy
 msgid "Corner style:"
-msgstr "角のスタイル"
+msgstr "角のスタイル:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -38749,9 +38673,8 @@ msgid "Tuning"
 msgstr "警告"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
-#, fuzzy
 msgid "Tune Skew"
-msgstr "調整済: 遅延(スキュー) "
+msgstr "スキューの調整"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 msgid "Target skew:"
@@ -38764,19 +38687,16 @@ msgid "Tune Length"
 msgstr "配線長を調整"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1018
-#, fuzzy
 msgid "too long"
-msgstr "長すぎます: "
+msgstr "長すぎます"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1019
-#, fuzzy
 msgid "too short"
-msgstr "短すぎます: "
+msgstr "短すぎます"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1020
-#, fuzzy
 msgid "tuned"
-msgstr "調整: "
+msgstr "調整済み"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
@@ -38813,9 +38733,9 @@ msgid "Full Length"
 msgstr "全長"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1588
-#, fuzzy, c-format
+#, c-format
 msgid "Target Skew: %s"
-msgstr "目標の遅延(スキュー):"
+msgstr "目標のスキュー: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1589
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1611
@@ -38824,14 +38744,14 @@ msgid "(from tuning pattern properties)"
 msgstr "フットプリントのプロパティ"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1597
-#, fuzzy, c-format
+#, c-format
 msgid "Skew Constraints: %s"
-msgstr "制限:"
+msgstr "スキューの制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1610
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "目標の長さ:"
+msgstr "目標の長さ: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1619
 #, fuzzy, c-format
@@ -38928,9 +38848,8 @@ msgid "DXF default units:"
 msgstr "デフォルトの単位:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:90
-#, fuzzy
 msgid "Place at X:"
-msgstr "ビアを配置"
+msgstr "配置するX座標:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:127
 #, fuzzy
@@ -42219,9 +42138,9 @@ msgid "Diff Pair Gap: %s"
 msgstr "差動ペアのギャップ: %s"
 
 #: pcbnew/router/router_tool.cpp:2632 pcbnew/tools/pcb_control.cpp:1478
-#, fuzzy, c-format
+#, c-format
 msgid "DP Max Uncoupled-length: %s"
-msgstr "解決された最大非結合長：%s。"
+msgstr "差動ペアの最大非結合長：%s"
 
 #: pcbnew/sel_layer.cpp:351
 msgid "Warning: top and bottom layers are same."
@@ -42802,38 +42721,38 @@ msgid "Select an item for a constraints resolution report."
 msgstr "制約解決レポートの項目を選択します。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1264
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "解決済みのギャップ幅の制約: 最小 %s; 最適 %s; 最大 %s."
+msgstr "解決済みの幅の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1284
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "直径の制約: 最小 %s; 最大 %s."
+msgstr "解決済みの直径の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1291
 msgid "Via Annular Width"
 msgstr "ビアのアニュラー幅"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "アニュラー幅の制約: 最小 %s; 最大 %s."
+msgstr "解決済みのアニュラー幅の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1322
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "解決済みのギャップ幅の制約: 最小 %s; 最適 %s; 最大 %s."
+msgstr "解決済みの穴のサイズの制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "解決済みのギャップ幅の制約: 最小 %s; 最適 %s; 最大 %s."
+msgstr "解決済みの高さの制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "幅の制約: 最小 %s; 最大 %s."
+msgstr "解決済みの幅の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
 msgid "Keepouts"
@@ -43234,9 +43153,9 @@ msgid "Regenerate All"
 msgstr "全て削除"
 
 #: pcbnew/tools/generator_tool.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "更新"
+msgstr "%s を更新"
 
 #: pcbnew/tools/generator_tool.cpp:199
 #, fuzzy
@@ -43295,9 +43214,8 @@ msgid "Some of the lines could not be extended to meet."
 msgstr "いくつかの線にフィレットをかけられません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:380
-#, fuzzy
 msgid "Merge polygons."
-msgstr "ポリゴンを描く"
+msgstr "ポリゴンをマージ."
 
 #: pcbnew/tools/item_modification_routine.cpp:388
 #, fuzzy
@@ -43310,9 +43228,8 @@ msgid "Some of the polygons could not be merged."
 msgstr "いくつかの線にフィレットをかけられません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:418
-#, fuzzy
 msgid "Subtract polygons."
-msgstr "ポリゴンをスケッチ モードで表示"
+msgstr "ポリゴンを分割."
 
 #: pcbnew/tools/item_modification_routine.cpp:426
 #, fuzzy
@@ -43325,9 +43242,8 @@ msgid "Some of the polygons could not be subtracted."
 msgstr "いくつかの線にフィレットをかけられません。"
 
 #: pcbnew/tools/item_modification_routine.cpp:459
-#, fuzzy
 msgid "Intersect polygons."
-msgstr "不正なポリゴン"
+msgstr "ポリゴンの交差."
 
 #: pcbnew/tools/item_modification_routine.cpp:467
 #, fuzzy
@@ -43403,9 +43319,8 @@ msgid "Creates a rule area from the selection"
 msgstr "選択対象からルールエリアを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:76
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "選択対象からラインを作成"
+msgstr "選択対象からラインを作成..."
 
 #: pcbnew/tools/pcb_actions.cpp:77
 msgid "Creates graphic lines from the selection"
@@ -43636,7 +43551,7 @@ msgstr "アクティブ レイヤーのみオブジェクトのスナップを�
 
 #: pcbnew/tools/pcb_actions.cpp:375
 msgid "Enables snapping to objects on the active layer only"
-msgstr ""
+msgstr "アクティブレイヤーでのみオブジェクトのスナップを有効にする"
 
 #: pcbnew/tools/pcb_actions.cpp:380
 #, fuzzy
@@ -43799,9 +43714,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "選択した直線の配線セグメントに接する円弧を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:609
-#, fuzzy
 msgid "Fillet Lines..."
-msgstr "線をフィレット"
+msgstr "線をフィレット..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Adds arcs tangent to the selected lines"
@@ -45251,9 +45165,9 @@ msgid "Object Snapping"
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid "DP Gap Constraints: %s"
-msgstr "制限:"
+msgstr "差動ペアのギャップの制約: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1515
 msgid "Resolved clearance"
@@ -46278,7 +46192,7 @@ msgstr "ガーバー ファイルの閲覧"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
-msgstr ""
+msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
@@ -46315,7 +46229,7 @@ msgstr "様々な電気関係の計算用ツール"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr ""
+msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
