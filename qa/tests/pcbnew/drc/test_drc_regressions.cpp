@@ -142,9 +142,9 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "fill_bad",   1 }         // zone max BBox was too small
     };
 
-    for( const std::pair<wxString, int>& entry : tests )
+    for( const auto& [testName, expectedErrors] : tests )
     {
-        KI_TEST::LoadBoard( m_settingsManager, entry.first, m_board );
+        KI_TEST::LoadBoard( m_settingsManager, testName, m_board );
         // Do not refill zones here because this is testing the DRC engine, not the zone filler
 
         std::vector<DRC_ITEM>  violations;
@@ -166,10 +166,10 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 
         bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-        if( violations.size() == entry.second )
+        if( violations.size() == expectedErrors )
         {
             BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", entry.first ) );
+            BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", testName ) );
         }
         else
         {
@@ -184,9 +184,9 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
                                                      itemMap ) );
             }
 
-            BOOST_CHECK_EQUAL( violations.size(), entry.second );
+            BOOST_CHECK_EQUAL( violations.size(), expectedErrors );
 
-            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", entry.first ) );
+            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", testName ) );
         }
     }
 }
