@@ -169,10 +169,15 @@ public:
     ///< Return reference name with unit altogether
     wxString GetFullRef() const
     {
+        wxString refNum = m_numRefStr;
+
+        if( refNum.IsEmpty() )
+            refNum << m_numRef;
+
         if( GetSymbol()->GetUnitCount() > 1 )
-            return GetRef() + GetRefNumber() + LIB_SYMBOL::SubReference( GetUnit() );
+            return GetRef() + refNum + LIB_SYMBOL::SubReference( GetUnit() );
         else
-            return GetRef() + GetRefNumber();
+            return GetRef() + refNum;
     }
 
     wxString GetRefNumber() const
@@ -187,7 +192,7 @@ public:
         if( GetLibPart() && GetLibPart()->IsPower() )
             ref = wxT( "0" );
 
-        return m_numRefStr.IsEmpty() ? ( ref << m_numRef ) : ( ref << m_numRefStr );
+        return ref << m_numRef;
     }
 
     int CompareValue( const SCH_REFERENCE& item ) const
