@@ -325,18 +325,19 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     switch ( aType )
     {
-    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:      hostType = CLEARANCE_CONSTRAINT;      break;
-    case PNS::CONSTRAINT_TYPE::CT_WIDTH:          hostType = TRACK_WIDTH_CONSTRAINT;    break;
-    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:  hostType = DIFF_PAIR_GAP_CONSTRAINT;  break;
-    case PNS::CONSTRAINT_TYPE::CT_LENGTH:         hostType = LENGTH_CONSTRAINT;         break;
-    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW: hostType = SKEW_CONSTRAINT;           break;
-    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:  hostType = MAX_UNCOUPLED_CONSTRAINT;  break;
-    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:   hostType = VIA_DIAMETER_CONSTRAINT;   break;
-    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:       hostType = HOLE_SIZE_CONSTRAINT;      break;
-    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: hostType = HOLE_CLEARANCE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE: hostType = EDGE_CLEARANCE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:   hostType = HOLE_TO_HOLE_CONSTRAINT;   break;
-    default:                                      return false; // should not happen
+    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:          hostType = CLEARANCE_CONSTRAINT;          break;
+    case PNS::CONSTRAINT_TYPE::CT_WIDTH:              hostType = TRACK_WIDTH_CONSTRAINT;        break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:      hostType = DIFF_PAIR_GAP_CONSTRAINT;      break;
+    case PNS::CONSTRAINT_TYPE::CT_LENGTH:             hostType = LENGTH_CONSTRAINT;             break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW:     hostType = SKEW_CONSTRAINT;               break;
+    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:      hostType = MAX_UNCOUPLED_CONSTRAINT;      break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:       hostType = VIA_DIAMETER_CONSTRAINT;       break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:           hostType = HOLE_SIZE_CONSTRAINT;          break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE:     hostType = HOLE_CLEARANCE_CONSTRAINT;     break;
+    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE:     hostType = EDGE_CLEARANCE_CONSTRAINT;     break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:       hostType = HOLE_TO_HOLE_CONSTRAINT;       break;
+    case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE: hostType = PHYSICAL_CLEARANCE_CONSTRAINT; break;
+    default:                                          return false; // should not happen
     }
 
     BOARD_ITEM*    parentA = aItemA ? aItemA->BoardItem() : nullptr;
@@ -439,6 +440,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::CONSTRAINT_TYPE::CT_LENGTH:
         case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW:
         case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:
+        case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE:
             aConstraint->m_Value = hostConstraint.GetValue();
             aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
@@ -543,6 +545,12 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                 if( constraint.m_Value.Min() > rv )
                     rv = constraint.m_Value.Min();
             }
+        }
+
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE, aA, aB, layer, &constraint ) )
+        {
+            if( constraint.m_Value.Min() > rv )
+                rv = constraint.m_Value.Min();
         }
     }
 
