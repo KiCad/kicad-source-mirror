@@ -154,8 +154,14 @@ public:
         std::list<CN_ITEM*> m_items;
     };
 
-    CN_CONNECTIVITY_ALGO() {}
-    ~CN_CONNECTIVITY_ALGO() { Clear(); }
+    CN_CONNECTIVITY_ALGO() :
+            m_isLocal( false )
+    {}
+
+    ~CN_CONNECTIVITY_ALGO()
+    {
+        Clear();
+    }
 
     bool ItemExists( const BOARD_CONNECTED_ITEM* aItem ) const
     {
@@ -197,8 +203,9 @@ public:
         return m_dirtyNets.size();
     }
 
-    void Build( BOARD* aZoneLayer, PROGRESS_REPORTER* aReporter = nullptr );
-    void LocalBuild( const std::vector<BOARD_ITEM*>& aItems );
+    void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
+    void LocalBuild( std::shared_ptr<CN_CONNECTIVITY_ALGO> aGlobalConnectivity,
+                     const std::vector<BOARD_ITEM*>& aLocalItems );
 
     void Clear();
 
@@ -271,6 +278,9 @@ private:
     std::vector<std::shared_ptr<CN_CLUSTER>>              m_connClusters;
     std::vector<std::shared_ptr<CN_CLUSTER>>              m_ratsnestClusters;
     std::vector<bool>                                     m_dirtyNets;
+
+    bool                                                  m_isLocal;
+    std::shared_ptr<CN_CONNECTIVITY_ALGO>                 m_globalConnectivity;
 
     PROGRESS_REPORTER* m_progressReporter = nullptr;
 };

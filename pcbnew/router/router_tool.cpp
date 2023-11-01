@@ -2099,7 +2099,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             courtyardClearanceDRC.m_FpInMove.push_back( footprint );
         }
 
-        dynamicData = std::make_unique<CONNECTIVITY_DATA>( dynamicItems, true );
+        dynamicData = std::make_unique<CONNECTIVITY_DATA>( board()->GetConnectivity(),
+                                                           dynamicItems, true );
         connectivityData->BlockRatsnestItems( dynamicItems );
     }
     else
