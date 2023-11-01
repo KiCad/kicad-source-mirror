@@ -537,6 +537,10 @@ __asm (
 ".balign  16\n"
 ".global _jump_fcontext\n"
 "_jump_fcontext:\n"
+#if defined(__ARM_FEATURE_BTI_DEFAULT) && (__ARM_FEATURE_BTI_DEFAULT == 1)
+"    # bti c\n"
+"    hint #34\n"
+#endif
 "    # prepare stack for GP + FPU\n"
 "    sub  sp, sp, #0xb0\n"
 "    # test if fpu env should be preserved\n"
@@ -598,6 +602,10 @@ __asm (
 ".align  2\n"
 ".global _make_fcontext\n"
 "_make_fcontext:\n"
+#if defined(__ARM_FEATURE_BTI_DEFAULT) && (__ARM_FEATURE_BTI_DEFAULT == 1)
+"    # bti c\n"
+"    hint #34\n"
+#endif
 "    # shift address in x0 (allocated stack) to lower 16 byte boundary\n"
 "    and x0, x0, ~0xF\n"
 "    # reserve space for context-data on context-stack\n"
@@ -700,6 +708,10 @@ __asm (
 ".global jump_fcontext\n"
 ".type   jump_fcontext, %function\n"
 "jump_fcontext:\n"
+#if defined(__ARM_FEATURE_BTI_DEFAULT) && (__ARM_FEATURE_BTI_DEFAULT == 1)
+"    # bti c\n"
+"    hint #34\n"
+#endif
 "    # prepare stack for GP + FPU\n"
 "    sub  sp, sp, #0xb0\n"
 "# Because gcc may save integer registers in fp registers across a\n"
@@ -769,6 +781,10 @@ __asm (
 ".global make_fcontext\n"
 ".type   make_fcontext, %function\n"
 "make_fcontext:\n"
+#if defined(__ARM_FEATURE_BTI_DEFAULT) && (__ARM_FEATURE_BTI_DEFAULT == 1)
+"    # bti c\n"
+"    hint #34\n"
+#endif
 "    # shift address in x0 (allocated stack) to lower 16 byte boundary\n"
 "    and x0, x0, ~0xF\n"
 "    # reserve space for context-data on context-stack\n"
