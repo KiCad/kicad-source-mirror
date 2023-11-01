@@ -341,8 +341,14 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 
     third_party_path.AppendDir( wxS( "colors" ) );
 
+    // PCM-managed themes
     wxDir third_party_colors_dir( third_party_path.GetFullPath() );
-    wxString color_settings_path = GetColorSettingsPath();
+
+    // System-installed themes
+    wxDir system_colors_dir( PATHS::GetStockDataPath( false ) + "/colors" );
+
+    // User-created themes
+    wxDir colors_dir( GetColorSettingsPath() );
 
     // Search for and load any other settings
     JSON_DIR_TRAVERSER loader( [&]( const wxFileName& aFilename )
@@ -350,22 +356,21 @@ void SETTINGS_MANAGER::loadAllColorSettings()
                                    registerColorSettings( aFilename.GetName() );
                                } );
 
-    JSON_DIR_TRAVERSER thirdPartyLoader(
+    JSON_DIR_TRAVERSER readOnlyLoader(
             [&]( const wxFileName& aFilename )
             {
                 COLOR_SETTINGS* settings = registerColorSettings( aFilename.GetFullPath(), true );
                 settings->SetReadOnly( true );
             } );
 
-    wxDir colors_dir( color_settings_path );
+    if( system_colors_dir.IsOpened() )
+        system_colors_dir.Traverse( readOnlyLoader );
+
+    if( third_party_colors_dir.IsOpened() )
+       third_party_colors_dir.Traverse( readOnlyLoader );
 
     if( colors_dir.IsOpened() )
-    {
-        if( third_party_colors_dir.IsOpened() )
-           third_party_colors_dir.Traverse( thirdPartyLoader );
-
         colors_dir.Traverse( loader );
-    }
 }
 
 
