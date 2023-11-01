@@ -555,7 +555,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 GetRefsInUse( first, idList, minRefId );
                 LastReferenceNumber = createFirstFreeRefId( idList, minRefId );
                 ref_unit.m_numRef = LastReferenceNumber;
-                ref_unit.m_numRefStr << LastReferenceNumber;
+                ref_unit.m_numRefStr = wxString::Format( "%d", LastReferenceNumber );
             }
 
             ref_unit.m_flag  = 1;
@@ -574,7 +574,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             {
                 LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
                 ref_unit.m_numRef = LastReferenceNumber;
-                ref_unit.m_numRefStr << LastReferenceNumber;
+                ref_unit.m_numRefStr = wxString::Format( "%d", LastReferenceNumber );
                 ref_unit.m_isNew = false;
                 ref_unit.m_flag = 1;
             }
