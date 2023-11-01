@@ -1,11 +1,11 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 2323577b-cad3-4f70-b734-06368b53e30c)
 
   (paper "A4")
 
   (lib_symbols
-    (symbol "custom_pads_schlib:Antenna" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "custom_pads_schlib:Antenna" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "AE" (at -1.905 1.905 0)
         (effects (font (size 1.27 1.27)) (justify right))
       )
@@ -16,6 +16,9 @@
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Description" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "Antenna_0_1"
@@ -44,7 +47,7 @@
         )
       )
     )
-    (symbol "custom_pads_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "custom_pads_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -6.35 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -55,6 +58,9 @@
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Description" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
@@ -78,7 +84,7 @@
         )
       )
     )
-    (symbol "custom_pads_schlib:Jumper-device" (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "custom_pads_schlib:Jumper-device" (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "JP" (at 0 3.81 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -89,6 +95,9 @@
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Description" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "Jumper-device_0_1"
@@ -114,7 +123,7 @@
         )
       )
     )
-    (symbol "custom_pads_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "custom_pads_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -125,6 +134,9 @@
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Description" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R_* R_*" (at 0 0 0)
@@ -147,7 +159,7 @@
         )
       )
     )
-    (symbol "power:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "power:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 1.905 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -160,10 +172,10 @@
       (property "Datasheet" "~" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "power-flag" (at 0 0 0)
+      (property "Description" "Special symbol for telling ERC where power comes from" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Special symbol for telling ERC where power comes from" (at 0 0 0)
+      (property "ki_keywords" "power-flag" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
@@ -221,7 +233,7 @@
   )
 
   (symbol (lib_id "custom_pads_schlib:Jumper-device") (at 121.92 100.33 90) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000056a7ce3b)
     (property "Reference" "SW1" (at 118.11 102.87 90)
       (effects (font (size 1.27 1.27)))
@@ -235,6 +247,9 @@
     (property "Datasheet" "" (at 121.92 100.33 0)
       (effects (font (size 0.762 0.762)))
     )
+    (property "Description" "" (at 121.92 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ca2cfa7d-a869-4eb1-8c0a-07188bbaccf0))
     (pin "2" (uuid 10860437-a635-4d74-b402-955f5ed187da))
     (instances
@@ -247,7 +262,7 @@
   )
 
   (symbol (lib_id "custom_pads_schlib:R") (at 134.62 100.33 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000056a7cec8)
     (property "Reference" "R2" (at 136.652 100.33 90)
       (effects (font (size 1.27 1.27)))
@@ -261,6 +276,9 @@
     (property "Datasheet" "" (at 134.62 100.33 0)
       (effects (font (size 0.762 0.762)))
     )
+    (property "Description" "" (at 134.62 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a142be99-c29a-42f2-940b-9ec81c3ef4a3))
     (pin "2" (uuid b4dd82a4-5077-4d9a-a760-ac6779aaf468))
     (instances
@@ -273,7 +291,7 @@
   )
 
   (symbol (lib_id "custom_pads_schlib:Antenna") (at 92.71 66.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a3a4e22)
     (property "Reference" "AE1" (at 90.805 64.135 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -287,6 +305,9 @@
     (property "Datasheet" "" (at 92.71 66.04 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "" (at 92.71 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b59c4dab-c021-4b53-a74a-0bec4ed69fb1))
     (instances
       (project "custom_pads_test"
@@ -298,7 +319,7 @@
   )
 
   (symbol (lib_id "custom_pads_schlib:Antenna") (at 113.03 66.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a3a4ef2)
     (property "Reference" "AE2" (at 111.125 64.135 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -312,6 +333,9 @@
     (property "Datasheet" "" (at 113.03 66.04 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "" (at 113.03 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 60a403dd-a34c-4a29-8f71-799067995cfd))
     (instances
       (project "custom_pads_test"
@@ -323,9 +347,9 @@
   )
 
   (symbol (lib_id "custom_pads_schlib:GND") (at 92.71 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a3a4f3d)
-    (property "Reference" "#PWR01" (at 92.71 77.47 0)
+    (property "Reference" "#PWR0001" (at 92.71 77.47 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 92.71 74.93 0)
@@ -337,20 +361,23 @@
     (property "Datasheet" "" (at 92.71 71.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "" (at 92.71 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4ecf714e-5b71-4668-b538-2197c7a782e7))
     (instances
       (project "custom_pads_test"
         (path "/2323577b-cad3-4f70-b734-06368b53e30c"
-          (reference "#PWR01") (unit 1)
+          (reference "#PWR0001") (unit 1)
         )
       )
     )
   )
 
   (symbol (lib_id "custom_pads_schlib:GND") (at 113.03 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a3a4f67)
-    (property "Reference" "#PWR02" (at 113.03 77.47 0)
+    (property "Reference" "#PWR0002" (at 113.03 77.47 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 113.03 74.93 0)
@@ -362,20 +389,23 @@
     (property "Datasheet" "" (at 113.03 71.12 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "" (at 113.03 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7cd2ec9f-4877-489f-b2ba-b60b140d9b7e))
     (instances
       (project "custom_pads_test"
         (path "/2323577b-cad3-4f70-b734-06368b53e30c"
-          (reference "#PWR02") (unit 1)
+          (reference "#PWR0002") (unit 1)
         )
       )
     )
   )
 
   (symbol (lib_id "custom_pads_schlib:GND") (at 129.54 72.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 5a23b4f5-7864-45c4-a601-01a32e276ea1)
-    (property "Reference" "#PWR0101" (at 129.54 78.74 0)
+    (property "Reference" "#PWR000101" (at 129.54 78.74 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 129.54 76.2 0)
@@ -387,20 +417,23 @@
     (property "Datasheet" "" (at 129.54 72.39 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "" (at 129.54 72.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fafe19cb-82f5-4a4e-89fa-b574df0dbfe9))
     (instances
       (project "custom_pads_test"
         (path "/2323577b-cad3-4f70-b734-06368b53e30c"
-          (reference "#PWR0101") (unit 1)
+          (reference "#PWR000101") (unit 1)
         )
       )
     )
   )
 
   (symbol (lib_id "power:PWR_FLAG") (at 129.54 72.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid a1b27662-a56b-4634-b3bd-f96c76803928)
-    (property "Reference" "#FLG0101" (at 129.54 70.485 0)
+    (property "Reference" "#FLG000101" (at 129.54 70.485 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "PWR_FLAG" (at 129.54 68.0656 0)
@@ -412,11 +445,14 @@
     (property "Datasheet" "~" (at 129.54 72.39 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "" (at 129.54 72.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d4ba3335-efee-4bc8-a0b5-433823f2c23f))
     (instances
       (project "custom_pads_test"
         (path "/2323577b-cad3-4f70-b734-06368b53e30c"
-          (reference "#FLG0101") (unit 1)
+          (reference "#FLG000101") (unit 1)
         )
       )
     )

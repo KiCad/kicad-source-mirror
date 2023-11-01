@@ -1,4 +1,4 @@
-(kicad_sch (version 20230409) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 07104395-590a-4ebf-a72b-dad9fa47c291)
 
@@ -12,7 +12,7 @@
   )
 
   (lib_symbols
-    (symbol "pic_programmer_schlib:24C16" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:24C16" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 8.89 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -24,6 +24,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "24C16_0_0"
         (pin power_in line (at 0 -12.7 90) (length 5.08)
@@ -66,7 +69,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -78,6 +81,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -111,7 +117,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -123,6 +129,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
         (polyline
@@ -143,7 +152,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:PIC12C508A" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:PIC12C508A" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 17.78 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -155,6 +164,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PIC12C508A_0_1"
         (rectangle (start 10.16 -15.24) (end -11.43 16.51)
@@ -197,7 +209,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:PIC16F54" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:PIC16F54" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U?" (at 0 -19.05 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -209,6 +221,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PIC16F54_0_1"
         (rectangle (start -12.7 17.78) (end 11.43 -17.78)
@@ -365,7 +380,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 2.413 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -377,6 +392,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
@@ -399,7 +417,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:SUPP28" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:SUPP28" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 2.54 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -411,6 +429,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "SUPP28_0_1"
         (rectangle (start -7.62 -19.05) (end 7.62 19.05)
@@ -533,7 +554,7 @@
         )
       )
     )
-    (symbol "pic_programmer_schlib:SUPP40" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "pic_programmer_schlib:SUPP40" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 0 27.94 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -545,6 +566,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "SUPP40_0_1"
         (rectangle (start -7.62 -26.67) (end 7.62 26.67)
@@ -1221,7 +1245,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:PIC12C508A") (at 95.25 73.66 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a81a5)
     (property "Reference" "U6" (at 93.98 55.88 0)
       (effects (font (size 1.524 1.524)))
@@ -1234,6 +1258,9 @@
     )
     (property "Datasheet" "" (at 95.25 73.66 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 95.25 73.66 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 99a3b205-4c13-43c3-a4ba-a6acef509e57))
     (pin "2" (uuid d9917204-672b-4130-8dd6-03e456b16565))
@@ -1253,7 +1280,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:PIC16F54") (at 95.25 116.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a81a7)
     (property "Reference" "U5" (at 95.25 97.79 0)
       (effects (font (size 1.524 1.524)))
@@ -1266,6 +1293,9 @@
     )
     (property "Datasheet" "" (at 95.25 116.84 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 95.25 116.84 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 1593826f-a3b4-416e-8265-d96233bb35bb))
     (pin "10" (uuid 694f224a-ac36-46b3-8ea4-a4307beffe5a))
@@ -1295,7 +1325,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 113.03 60.96 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a8205)
     (property "Reference" "#PWR045" (at 113.03 60.96 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1309,6 +1339,9 @@
     (property "Datasheet" "" (at 113.03 60.96 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 113.03 60.96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 896e9950-bf18-47a9-a269-9fcdfe097616))
     (instances
       (project "pic_programmer"
@@ -1320,7 +1353,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 69.85 118.11 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a820f)
     (property "Reference" "#PWR044" (at 69.85 118.11 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1334,6 +1367,9 @@
     (property "Datasheet" "" (at 69.85 118.11 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 69.85 118.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9347174d-5098-4a6e-9576-f9527f200e7f))
     (instances
       (project "pic_programmer"
@@ -1345,7 +1381,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 203.2 127 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a8794)
     (property "Reference" "#PWR036" (at 203.2 127 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1359,6 +1395,9 @@
     (property "Datasheet" "" (at 203.2 127 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 203.2 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1e708e4c-cf98-4614-9a7b-44c953c30586))
     (instances
       (project "pic_programmer"
@@ -1370,7 +1409,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:24C16") (at 93.98 33.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a87f7)
     (property "Reference" "U1" (at 97.79 24.13 0)
       (effects (font (size 1.524 1.524)))
@@ -1383,6 +1422,9 @@
     )
     (property "Datasheet" "" (at 93.98 33.02 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 93.98 33.02 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "4" (uuid 227f6df8-2033-41fe-94e6-e99071068964))
     (pin "8" (uuid b209b5dc-b5b1-4308-a8e6-b4e84c9017e7))
@@ -1402,7 +1444,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 71.12 34.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a8838)
     (property "Reference" "#PWR043" (at 71.12 34.29 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1416,6 +1458,9 @@
     (property "Datasheet" "" (at 71.12 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 71.12 34.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5a24261c-1eb6-4ba5-b35f-c5aeebdf78e1))
     (instances
       (project "pic_programmer"
@@ -1427,7 +1472,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:SUPP40") (at 218.44 123.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a88ed)
     (property "Reference" "P3" (at 218.44 95.25 0)
       (effects (font (size 1.778 1.778)))
@@ -1440,6 +1485,9 @@
     )
     (property "Datasheet" "" (at 218.44 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 218.44 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 51cabf8f-4a1d-460a-bd87-bdbf62501ee0))
     (pin "10" (uuid 49e6d1fd-4371-41fb-85fd-22651d22e75e))
@@ -1491,7 +1539,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 233.68 121.92 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a896a)
     (property "Reference" "#PWR042" (at 233.68 121.92 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1505,6 +1553,9 @@
     (property "Datasheet" "" (at 233.68 121.92 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 233.68 121.92 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5419ba17-801c-4fe8-b658-bea7ee16810e))
     (instances
       (project "pic_programmer"
@@ -1516,7 +1567,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:C") (at 60.96 171.45 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442aa12b)
     (property "Reference" "C6" (at 62.23 168.91 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -1530,6 +1581,9 @@
     (property "Datasheet" "" (at 60.96 171.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 171.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid adae2e95-95de-4fb3-b541-198154bda014))
     (pin "2" (uuid 6c5f563c-fd70-463f-8b82-5604a68a8600))
     (instances
@@ -1542,7 +1596,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 60.96 176.53 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442aa138)
     (property "Reference" "#PWR041" (at 60.96 176.53 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1556,6 +1610,9 @@
     (property "Datasheet" "" (at 60.96 176.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 176.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5b515cba-7fee-455c-bac4-24b3a0917117))
     (instances
       (project "pic_programmer"
@@ -1567,7 +1624,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:C") (at 83.82 171.45 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442aa145)
     (property "Reference" "C7" (at 85.09 168.91 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -1581,6 +1638,9 @@
     (property "Datasheet" "" (at 83.82 171.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 171.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid bf89f5e3-36b0-40a4-82cb-4cc9ca66e842))
     (pin "2" (uuid 2d77a9a0-a0ac-4bfb-842d-01d21b50747c))
     (instances
@@ -1593,7 +1653,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 83.82 176.53 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442aa147)
     (property "Reference" "#PWR040" (at 83.82 176.53 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1607,6 +1667,9 @@
     (property "Datasheet" "" (at 83.82 176.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 176.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid cfc23887-4c50-4bd5-ac95-ff681973a87d))
     (instances
       (project "pic_programmer"
@@ -1618,7 +1681,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:SUPP28") (at 218.44 64.77 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004436967e)
     (property "Reference" "P2" (at 218.44 44.45 0)
       (effects (font (size 1.778 1.778)))
@@ -1631,6 +1694,9 @@
     )
     (property "Datasheet" "" (at 218.44 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 218.44 64.77 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 3689e4a0-35c4-487d-8729-feec28a6e80f))
     (pin "10" (uuid 6e9b1f21-eb3c-4b05-a319-2108d8937adc))
@@ -1670,7 +1736,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 203.2 66.04 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000443697c3)
     (property "Reference" "#PWR039" (at 203.2 66.04 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1684,6 +1750,9 @@
     (property "Datasheet" "" (at 203.2 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 203.2 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8537acdb-bf21-466a-bbcb-5c6fe636d28c))
     (instances
       (project "pic_programmer"
@@ -1695,7 +1764,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 233.68 71.12 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000443697c7)
     (property "Reference" "#PWR038" (at 233.68 71.12 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1709,6 +1778,9 @@
     (property "Datasheet" "" (at 233.68 71.12 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 233.68 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 04cc8890-5243-4233-91e6-b2cbe0c6da7e))
     (instances
       (project "pic_programmer"
@@ -1720,7 +1792,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 203.2 116.84 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000443cca5d)
     (property "Reference" "#PWR037" (at 203.2 116.84 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1734,6 +1806,9 @@
     (property "Datasheet" "" (at 203.2 116.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 203.2 116.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1d880819-7a7b-45dc-a927-8a5bef4526f4))
     (instances
       (project "pic_programmer"
@@ -1745,7 +1820,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:GND") (at 93.98 46.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052c92629)
     (property "Reference" "#PWR046" (at 93.98 46.99 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1759,6 +1834,9 @@
     (property "Datasheet" "" (at 93.98 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9328fc87-4eac-4dd6-97ae-2152d62d0bef))
     (instances
       (project "pic_programmer"
@@ -1770,7 +1848,7 @@
   )
 
   (symbol (lib_id "pic_programmer_schlib:PWR_FLAG") (at 83.82 165.1 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005558fa28)
     (property "Reference" "#FLG047" (at 86.233 165.1 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1783,6 +1861,9 @@
     )
     (property "Datasheet" "" (at 83.82 165.1 0)
       (effects (font (size 1.524 1.524)))
+    )
+    (property "Description" "" (at 83.82 165.1 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 2c7c1f23-8dc3-420f-a24a-af265d8851a1))
     (instances

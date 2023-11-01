@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid e63e39d7-6ac0-4ffd-8aa3-1841a4541b55)
 
@@ -11,7 +11,7 @@
   )
 
   (lib_symbols
-    (symbol "ecc83_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -23,6 +23,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -56,7 +59,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:CONN_1" (pin_numbers hide) (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:CONN_1" (pin_numbers hide) (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 2.032 0 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -68,6 +71,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_1_0_1"
         (polyline
@@ -90,7 +96,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:CONN_2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:CONN_2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at -1.27 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -102,6 +108,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_2_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
@@ -120,7 +129,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -133,10 +142,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "cap capacitor" (at 0 0 0)
+      (property "Description" "Polarised capacitor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Polarised capacitor" (at 0 0 0)
+      (property "ki_keywords" "cap capacitor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "CP_*" (at 0 0 0)
@@ -191,7 +200,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:ECC83" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:ECC83" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.302 7.874 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -203,6 +212,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_locked" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)))
@@ -411,7 +423,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -6.35 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -423,6 +435,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
         (polyline
@@ -445,7 +460,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 2.413 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -457,6 +472,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
@@ -479,7 +497,7 @@
         )
       )
     )
-    (symbol "ecc83_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "ecc83_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -491,6 +509,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R_* Resistor_*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -713,7 +734,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:R") (at 165.1 82.55 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f38a)
     (property "Reference" "R1" (at 162.56 77.47 0)
       (effects (font (size 1.27 1.27)))
@@ -727,6 +748,9 @@
     (property "Datasheet" "" (at 165.1 82.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 165.1 82.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f760fa01-be9c-4fa4-8fc4-293a593f5054))
     (pin "2" (uuid a95d61bc-0f20-4e8e-aa23-cb302481e8e7))
     (instances
@@ -739,7 +763,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:R") (at 162.56 134.62 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f39d)
     (property "Reference" "R2" (at 160.02 129.54 0)
       (effects (font (size 1.27 1.27)))
@@ -753,6 +777,9 @@
     (property "Datasheet" "" (at 162.56 134.62 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 162.56 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9c6c5300-302c-484d-88e2-9772619279c7))
     (pin "2" (uuid 43495766-e380-42df-b457-df886310d093))
     (instances
@@ -765,7 +792,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:R") (at 152.4 134.62 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f3a2)
     (property "Reference" "R4" (at 149.86 129.54 0)
       (effects (font (size 1.27 1.27)))
@@ -779,6 +806,9 @@
     (property "Datasheet" "" (at 152.4 134.62 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 152.4 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 44003cdb-dc62-4e28-a0f1-677c091977a7))
     (pin "2" (uuid 3f5cfcf2-d56b-4975-b94c-10a3bbaf41c1))
     (instances
@@ -791,7 +821,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:R") (at 193.04 90.17 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f3ad)
     (property "Reference" "R3" (at 190.5 85.09 0)
       (effects (font (size 1.27 1.27)))
@@ -805,6 +835,9 @@
     (property "Datasheet" "" (at 193.04 90.17 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 193.04 90.17 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c920157b-b297-43e0-9e6a-447089abf100))
     (pin "2" (uuid d1d8db8c-bd5a-4978-bfa6-139d27d84e8e))
     (instances
@@ -817,7 +850,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:C") (at 185.42 73.66 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f3be)
     (property "Reference" "C2" (at 185.42 69.85 90)
       (effects (font (size 1.27 1.27)))
@@ -831,6 +864,9 @@
     (property "Datasheet" "" (at 185.42 73.66 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 185.42 73.66 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid bd495094-4c44-4d1b-b6da-dfe21668ebfb))
     (pin "2" (uuid c0bd8c0e-ec10-4b79-8f71-40a865790994))
     (instances
@@ -843,7 +879,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_2") (at 135.89 109.22 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f464)
     (property "Reference" "P1" (at 137.16 109.22 90)
       (effects (font (size 1.016 1.016)))
@@ -857,6 +893,9 @@
     (property "Datasheet" "" (at 135.89 109.22 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 135.89 109.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ebd73573-2de7-4684-88e1-e0683a020874))
     (pin "2" (uuid 2c7bc651-bce3-43d4-aab4-1721e0037dc4))
     (instances
@@ -869,7 +908,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_2") (at 212.09 76.2 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f46c)
     (property "Reference" "P2" (at 210.82 76.2 90)
       (effects (font (size 1.016 1.016)))
@@ -883,6 +922,9 @@
     (property "Datasheet" "" (at 212.09 76.2 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 212.09 76.2 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fa6e86eb-e691-4697-91d4-797e3d3c2512))
     (pin "2" (uuid d1891dd4-b247-42e0-b938-83fc56f110e7))
     (instances
@@ -895,7 +937,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_2") (at 77.47 48.26 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f4a5)
     (property "Reference" "P3" (at 78.74 48.26 90)
       (effects (font (size 1.016 1.016)))
@@ -909,6 +951,9 @@
     (property "Datasheet" "" (at 77.47 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 77.47 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d24a7210-8ec9-4ecf-a9b8-0fde3306da0f))
     (pin "2" (uuid 156d475d-e037-4767-ab2d-e90a3b82f815))
     (instances
@@ -921,7 +966,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CP") (at 104.14 53.34 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004549f4be)
     (property "Reference" "C1" (at 107.95 52.07 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -935,6 +980,9 @@
     (property "Datasheet" "" (at 104.14 53.34 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 104.14 53.34 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c78022a3-bb29-45bf-a73a-61277b294726))
     (pin "2" (uuid 42b6b902-4f69-4dc7-be29-5b490fc26021))
     (instances
@@ -947,7 +995,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_2") (at 77.47 93.98 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000456a8acc)
     (property "Reference" "P4" (at 78.74 93.98 90)
       (effects (font (size 1.016 1.016)))
@@ -961,6 +1009,9 @@
     (property "Datasheet" "" (at 77.47 93.98 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 77.47 93.98 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4c52893f-4d6c-44f1-92fc-ed75fdd55054))
     (pin "2" (uuid 1add56fa-6cda-481d-aee1-5d15bb30854d))
     (instances
@@ -973,7 +1024,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:PWR_FLAG") (at 93.98 55.88 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000457dbac0)
     (property "Reference" "#FLG05" (at 93.98 49.022 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -987,6 +1038,9 @@
     (property "Datasheet" "" (at 93.98 55.88 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 55.88 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 613846cd-6b50-4a64-a07a-2d645ddbeeb7))
     (instances
       (project "ecc83-pp_v2"
@@ -998,7 +1052,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:GND") (at 152.4 139.7 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000457dbaef)
     (property "Reference" "#PWR04" (at 152.4 139.7 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1012,6 +1066,9 @@
     (property "Datasheet" "" (at 152.4 139.7 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 152.4 139.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f2f38bea-12a5-4413-bc32-ebf03b3ce43a))
     (instances
       (project "ecc83-pp_v2"
@@ -1023,7 +1080,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:GND") (at 162.56 139.7 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000457dbaf1)
     (property "Reference" "#PWR03" (at 162.56 139.7 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1037,6 +1094,9 @@
     (property "Datasheet" "" (at 162.56 139.7 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 162.56 139.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6c1f0667-50bd-4fcb-8d76-e9535e5e7681))
     (instances
       (project "ecc83-pp_v2"
@@ -1048,7 +1108,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:GND") (at 193.04 96.52 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000457dbaf5)
     (property "Reference" "#PWR02" (at 193.04 96.52 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1062,6 +1122,9 @@
     (property "Datasheet" "" (at 193.04 96.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 193.04 96.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1f4ba74b-a003-4c32-8d9d-8b153b9e3d45))
     (instances
       (project "ecc83-pp_v2"
@@ -1073,7 +1136,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:GND") (at 199.39 82.55 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000457dbaf8)
     (property "Reference" "#PWR01" (at 199.39 82.55 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1087,6 +1150,9 @@
     (property "Datasheet" "" (at 199.39 82.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 199.39 82.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2d549ceb-e4e8-4062-850f-b0d20bf1f7a8))
     (instances
       (project "ecc83-pp_v2"
@@ -1098,7 +1164,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:ECC83") (at 167.64 58.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000048b4f256)
     (property "Reference" "U1" (at 180.34 55.88 0)
       (effects (font (size 1.27 1.27)))
@@ -1111,6 +1177,9 @@
     )
     (property "Datasheet" "" (at 167.64 58.42 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 167.64 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "6" (uuid afde033c-2b5d-46a7-938b-84faf447fe0d))
     (pin "7" (uuid 84b1224c-3dea-41e8-9b87-0f77096f0bc6))
@@ -1131,7 +1200,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:ECC83") (at 165.1 106.68 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000048b4f263)
     (property "Reference" "U1" (at 177.8 104.14 0)
       (effects (font (size 1.27 1.27)))
@@ -1144,6 +1213,9 @@
     )
     (property "Datasheet" "" (at 165.1 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 165.1 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "6" (uuid 255f28f8-4cd1-4a97-900c-0c3bb0aefaae))
     (pin "7" (uuid 917c7ffb-0bd4-4646-a2df-a9ab042be197))
@@ -1164,7 +1236,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:ECC83") (at 99.06 77.47 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000048b4f266)
     (property "Reference" "U1" (at 106.68 74.93 0)
       (effects (font (size 1.27 1.27)))
@@ -1177,6 +1249,9 @@
     )
     (property "Datasheet" "" (at 99.06 77.47 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 99.06 77.47 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "6" (uuid 1bb091a2-55cc-4057-acc7-36a7c415ec68))
     (pin "7" (uuid e988c567-24f1-4840-ae6f-8697c1ca90d6))
@@ -1197,7 +1272,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_1") (at 160.02 167.64 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000054a5830a)
     (property "Reference" "P5" (at 162.052 167.64 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -1211,6 +1286,9 @@
     (property "Datasheet" "" (at 160.02 167.64 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 160.02 167.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ea5e96cd-2c68-4ff5-9adf-bfc3ac8a3424))
     (instances
       (project "ecc83-pp_v2"
@@ -1222,7 +1300,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_1") (at 160.02 170.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000054a58363)
     (property "Reference" "P6" (at 162.052 170.18 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -1236,6 +1314,9 @@
     (property "Datasheet" "" (at 160.02 170.18 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 160.02 170.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fdfd088c-7ae1-42ab-b1c5-d0bd94558ede))
     (instances
       (project "ecc83-pp_v2"
@@ -1247,7 +1328,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_1") (at 160.02 172.72 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000054a5837a)
     (property "Reference" "P7" (at 162.052 172.72 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -1261,6 +1342,9 @@
     (property "Datasheet" "" (at 160.02 172.72 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 160.02 172.72 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d1e31115-7215-464f-aafd-c73790df2cda))
     (instances
       (project "ecc83-pp_v2"
@@ -1272,7 +1356,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:CONN_1") (at 160.02 175.26 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000054a58391)
     (property "Reference" "P8" (at 162.052 175.26 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -1286,6 +1370,9 @@
     (property "Datasheet" "" (at 160.02 175.26 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 160.02 175.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8d0d99fc-4a93-41a8-b5a7-4cb0ae92248d))
     (instances
       (project "ecc83-pp_v2"
@@ -1297,7 +1384,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:PWR_FLAG") (at 93.98 43.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000550e41d9)
     (property "Reference" "#FLG06" (at 93.98 36.322 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1311,6 +1398,9 @@
     (property "Datasheet" "" (at 93.98 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b467d6b1-67b1-4131-9ab2-d582a6bcab00))
     (instances
       (project "ecc83-pp_v2"
@@ -1322,7 +1412,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:GND") (at 104.14 63.5 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000550e42c4)
     (property "Reference" "#PWR07" (at 104.14 63.5 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1336,6 +1426,9 @@
     (property "Datasheet" "" (at 104.14 63.5 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 104.14 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid bdae119a-f9f2-4840-911f-c0af4dfaff9b))
     (instances
       (project "ecc83-pp_v2"
@@ -1347,7 +1440,7 @@
   )
 
   (symbol (lib_id "ecc83_schlib:GND") (at 147.32 115.57 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000550e4c85)
     (property "Reference" "#PWR08" (at 147.32 115.57 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -1360,6 +1453,9 @@
     )
     (property "Datasheet" "" (at 147.32 115.57 0)
       (effects (font (size 1.524 1.524)))
+    )
+    (property "Description" "" (at 147.32 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 159a3362-85c7-438c-b3e0-a295baf080c1))
     (instances

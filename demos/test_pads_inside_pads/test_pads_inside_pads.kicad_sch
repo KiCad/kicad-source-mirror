@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 8d3a5066-9577-4e18-8fe9-905c643339bb)
 
@@ -9,7 +9,7 @@
   )
 
   (lib_symbols
-    (symbol "test_pads_inside_pads_schlib:CONN_1" (pin_numbers hide) (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "test_pads_inside_pads_schlib:CONN_1" (pin_numbers hide) (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 2.032 0 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -21,6 +21,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_1_0_1"
         (polyline
@@ -65,7 +68,7 @@
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 109.22 44.45 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004edf7cc0)
     (property "Reference" "P2" (at 111.252 44.45 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -79,6 +82,9 @@
     (property "Datasheet" "" (at 109.22 44.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 109.22 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 445c5ef2-f52e-4b79-ab7e-4feec4e7af63))
     (instances
       (project "test_pads_inside_pads"
@@ -90,7 +96,7 @@
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 91.44 44.45 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004edf7cc5)
     (property "Reference" "P1" (at 89.408 44.45 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -104,6 +110,9 @@
     (property "Datasheet" "" (at 91.44 44.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 91.44 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9adf6b14-a8d6-45d3-89c7-a5c3bd7770c9))
     (instances
       (project "test_pads_inside_pads"
@@ -115,7 +124,7 @@
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 91.44 36.83 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004ee5056c)
     (property "Reference" "P3" (at 89.408 36.83 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -129,6 +138,9 @@
     (property "Datasheet" "" (at 91.44 36.83 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 91.44 36.83 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b8ad4eef-d6ed-4840-ae33-c063c8bdbb53))
     (instances
       (project "test_pads_inside_pads"
@@ -140,7 +152,7 @@
   )
 
   (symbol (lib_id "test_pads_inside_pads_schlib:CONN_1") (at 109.22 36.83 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004ee5056d)
     (property "Reference" "P4" (at 111.252 36.83 0)
       (effects (font (size 1.016 1.016)) (justify left))
@@ -153,6 +165,9 @@
     )
     (property "Datasheet" "" (at 109.22 36.83 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 109.22 36.83 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 89815e55-a712-4edd-8370-bdd10c92726d))
     (instances

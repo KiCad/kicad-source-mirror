@@ -1,4 +1,4 @@
-(kicad_sch (version 20230409) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 6ef8dcea-e7e0-41da-b420-77ba9c5e63ff)
 
@@ -12,7 +12,7 @@
   )
 
   (lib_symbols
-    (symbol "flat_hierarchy_schlib:74LS125" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:74LS125" (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 5.08 3.81 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -23,6 +23,9 @@
         (effects (font (size 0.254 0.254)) hide)
       )
       (property "Datasheet" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Description" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "DIP?14*" (at 0 0 0)
@@ -135,7 +138,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:7805" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:7805" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 -4.9784 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -147,6 +150,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "7805_0_1"
         (rectangle (start -5.08 -3.81) (end 5.08 3.81)
@@ -169,7 +175,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:BC237" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:BC237" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "Q" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) (justify right))
       )
@@ -181,6 +187,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "BC237_0_1"
         (polyline
@@ -249,7 +258,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:BC307" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:BC307" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "Q" (at 0 -3.81 0)
         (effects (font (size 1.524 1.524)) (justify right))
       )
@@ -261,6 +270,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "BC307_0_1"
         (polyline
@@ -329,7 +341,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -341,6 +353,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -374,7 +389,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:CONN_2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:CONN_2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at -1.27 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -386,6 +401,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_2_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
@@ -404,7 +422,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -416,6 +434,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "CP* Elko* TantalC* C*elec c_elec* SMD*_Pol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -461,7 +482,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:D" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:D" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -473,6 +494,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "Diode_* D-Pak_TO252AA *SingleDiode *_Diode_* *SingleDiode*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -507,7 +531,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:DB9" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:DB9" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 13.97 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -519,6 +543,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "DB9*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -768,7 +795,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:D_Schottky" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:D_Schottky" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -780,6 +807,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "D-Pak_TO252AA Diode_* *SingleDiode *SingleDiode* *_Diode_*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -809,16 +839,16 @@
       )
       (symbol "D_Schottky_1_1"
         (pin passive line (at -3.81 0 0) (length 2.54)
-          (name "K" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
+          (name "K" (effects (font (size 0.762 0.762))))
+          (number "1" (effects (font (size 0.762 0.762))))
         )
         (pin passive line (at 3.81 0 180) (length 2.54)
-          (name "A" (effects (font (size 1.27 1.27))))
-          (number "2" (effects (font (size 1.27 1.27))))
+          (name "A" (effects (font (size 0.762 0.762))))
+          (number "2" (effects (font (size 0.762 0.762))))
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -830,6 +860,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
         (polyline
@@ -850,7 +883,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:INDUCTOR" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:INDUCTOR" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "L" (at -1.27 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -862,6 +895,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "INDUCTOR_0_1"
         (arc (start 0.0254 -5.0546) (mid 1.245 -3.7973) (end 0.0254 -2.54)
@@ -892,7 +928,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:JUMPER" (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:JUMPER" (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "JP" (at 0 3.81 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -904,6 +940,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "JUMPER_0_1"
         (circle (center -2.54 0) (radius 0.889)
@@ -928,7 +967,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:LED" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:LED" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -940,6 +979,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -992,7 +1034,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:LT1373" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:LT1373" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 15.24 12.7 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1004,6 +1046,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "LT1373_0_1"
         (rectangle (start -17.78 -10.16) (end 17.78 10.16)
@@ -1046,7 +1091,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:POT" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:POT" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "RV" (at 0 -2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -1058,6 +1103,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "POT_0_1"
         (rectangle (start -3.81 1.27) (end 3.81 -1.27)
@@ -1089,7 +1137,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 2.413 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1101,6 +1149,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
@@ -1123,7 +1174,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -1135,6 +1186,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R_* Resistor_*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1156,7 +1210,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:VCC" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1168,6 +1222,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VCC_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -1191,7 +1248,7 @@
         )
       )
     )
-    (symbol "flat_hierarchy_schlib:VPP" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "flat_hierarchy_schlib:VPP" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 5.08 0)
         (effects (font (size 1.016 1.016)) hide)
       )
@@ -1203,6 +1260,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VPP_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -1671,10 +1731,6 @@
     (stroke (width 0) (type solid))
     (uuid 772dafc5-7f9f-490f-a1b2-5d71de63d151)
   )
-  (wire (pts (xy 210.82 53.34) (xy 210.82 58.42))
-    (stroke (width 0) (type solid))
-    (uuid 774969e3-658d-4081-abfb-8db42d843140)
-  )
   (wire (pts (xy 200.66 96.52) (xy 210.82 96.52))
     (stroke (width 0) (type solid))
     (uuid 77e9f06f-973e-4e95-910e-4b5b73aaa02b)
@@ -2040,37 +2096,37 @@
     (uuid c69bdb12-3752-43ac-8ce4-fea54d969bb8)
   )
 
-  (global_label "VCC_PIC" (shape output) (at 226.06 96.52 0)
+  (global_label "VCC_PIC" (shape output) (at 226.06 96.52 0) (fields_autoplaced)
     (effects (font (size 1.524 1.524)) (justify left))
     (uuid 60a11985-2504-490c-8d31-f02153744023)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 238.1307 96.52 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
   )
-  (global_label "CLOCK-RB6" (shape output) (at 142.24 114.3 0)
+  (global_label "CLOCK-RB6" (shape output) (at 142.24 114.3 0) (fields_autoplaced)
     (effects (font (size 1.524 1.524)) (justify left))
     (uuid 7817fed5-668c-4158-9c43-8b505039012d)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 158.8102 114.3 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
   )
-  (global_label "VPP-MCLR" (shape output) (at 226.06 38.1 0)
+  (global_label "VPP-MCLR" (shape output) (at 226.06 38.1 0) (fields_autoplaced)
     (effects (font (size 1.524 1.524)) (justify left))
     (uuid 9159b89a-a338-4c2d-b72a-a46e6e05074e)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 241.1062 38.1 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
   )
-  (global_label "DATA-RB7" (shape output) (at 147.32 80.01 0)
+  (global_label "DATA-RB7" (shape output) (at 147.32 80.01 0) (fields_autoplaced)
     (effects (font (size 1.524 1.524)) (justify left))
     (uuid ab2c3f47-5807-48e1-8b31-55a1947e63e5)
-    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 0 0 0)
-      (effects (font (size 1.27 1.27)) hide)
+    (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 161.7856 80.01 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:DB9") (at 31.75 91.44 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4c93)
     (property "Reference" "J1" (at 31.75 76.2 0)
       (effects (font (size 1.778 1.778)))
@@ -2083,6 +2139,9 @@
     )
     (property "Datasheet" "" (at 31.75 91.44 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 31.75 91.44 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 4f0e421b-91bd-4dfc-a6ff-00631da70c1f))
     (pin "2" (uuid 3a4529bf-1319-4c26-afe8-a4b5147aab06))
@@ -2103,7 +2162,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:74LS125") (at 105.41 30.48 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4cc8)
     (property "Reference" "U2" (at 114.0461 29.3306 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -2116,6 +2175,9 @@
     )
     (property "Datasheet" "" (at 105.41 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 105.41 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 4f6dea23-326e-47c7-88a9-fa741336fc5d))
     (pin "7" (uuid bba25ed3-9351-4ceb-aa0e-2ba0d547e1a0))
@@ -2141,7 +2203,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 86.36 33.02 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4cf4)
     (property "Reference" "R1" (at 86.36 30.988 90)
       (effects (font (size 1.27 1.27)))
@@ -2155,6 +2217,9 @@
     (property "Datasheet" "" (at 86.36 33.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 86.36 33.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e241713f-deb5-4bb0-a706-bf9c1afb223d))
     (pin "2" (uuid 4e8e39ee-101a-4ddb-ac4a-9d9d2d99fae7))
     (instances
@@ -2167,7 +2232,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 73.66 39.37 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4cfb)
     (property "Reference" "R2" (at 71.12 34.29 0)
       (effects (font (size 1.27 1.27)))
@@ -2181,6 +2246,9 @@
     (property "Datasheet" "" (at 73.66 39.37 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 73.66 39.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 491f647a-d3a1-448e-8c21-a94a3c8bc096))
     (pin "2" (uuid 2362b163-4295-4b55-9113-5065360fcad6))
     (instances
@@ -2193,7 +2261,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 95.25 24.13 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d1b)
     (property "Reference" "D2" (at 90.17 25.4 90)
       (effects (font (size 1.27 1.27)))
@@ -2207,6 +2275,9 @@
     (property "Datasheet" "" (at 95.25 24.13 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 95.25 24.13 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a0d718b3-2e86-4ef5-a51e-385d1ef170e2))
     (pin "2" (uuid 3e623b30-4b10-4ec1-a51e-fca4ddad6fd5))
     (instances
@@ -2219,7 +2290,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 95.25 39.37 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d25)
     (property "Reference" "D3" (at 90.17 40.64 90)
       (effects (font (size 1.27 1.27)))
@@ -2233,6 +2304,9 @@
     (property "Datasheet" "" (at 95.25 39.37 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 95.25 39.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5c0472ff-badf-427e-be64-4b15ff0f8557))
     (pin "2" (uuid 408b2efb-15e0-438d-85dc-a9b3ae29f49a))
     (instances
@@ -2245,7 +2319,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 104.14 36.83 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d38)
     (property "Reference" "#PWR046" (at 104.14 36.83 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2259,6 +2333,9 @@
     (property "Datasheet" "" (at 104.14 36.83 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 104.14 36.83 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 34adc535-e746-40f0-91c9-82ed7d94e33f))
     (instances
       (project "flat_hierarchy"
@@ -2270,7 +2347,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 95.25 43.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d3b)
     (property "Reference" "#PWR045" (at 95.25 43.18 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2284,6 +2361,9 @@
     (property "Datasheet" "" (at 95.25 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 95.25 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d3a7f17d-7639-4140-8ad0-b7e81a5153a6))
     (instances
       (project "flat_hierarchy"
@@ -2295,7 +2375,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 95.25 20.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d41)
     (property "Reference" "#PWR044" (at 95.25 17.78 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2309,6 +2389,9 @@
     (property "Datasheet" "" (at 95.25 20.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 95.25 20.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7201b51b-60ed-464d-ab57-aa0dc3851885))
     (instances
       (project "flat_hierarchy"
@@ -2320,7 +2403,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:74LS125") (at 106.68 80.01 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d59)
     (property "Reference" "U2" (at 115.3161 78.8606 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -2333,6 +2416,9 @@
     )
     (property "Datasheet" "" (at 106.68 80.01 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 106.68 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 86570c4d-2804-41b4-821b-4925edcff1b3))
     (pin "7" (uuid 11ec5540-9d61-47bd-8daf-1632bd951d92))
@@ -2358,7 +2444,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 85.09 82.55 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d5a)
     (property "Reference" "R3" (at 85.09 80.518 90)
       (effects (font (size 1.27 1.27)))
@@ -2372,6 +2458,9 @@
     (property "Datasheet" "" (at 85.09 82.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 85.09 82.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a5c7eb83-67ba-49ed-a32d-564a1d1df643))
     (pin "2" (uuid 7e68f0c5-a2f0-4813-ac88-ce68b2e7fe4e))
     (instances
@@ -2384,7 +2473,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 76.2 88.9 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d5b)
     (property "Reference" "R4" (at 78.232 88.9 90)
       (effects (font (size 1.27 1.27)))
@@ -2398,6 +2487,9 @@
     (property "Datasheet" "" (at 76.2 88.9 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 76.2 88.9 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8741078f-a202-44ea-91f6-a436fe205796))
     (pin "2" (uuid 2767eb35-d06f-4400-bab8-5202b7e8c75d))
     (instances
@@ -2410,7 +2502,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 93.98 73.66 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d5c)
     (property "Reference" "D4" (at 88.9 74.93 90)
       (effects (font (size 1.27 1.27)))
@@ -2424,6 +2516,9 @@
     (property "Datasheet" "" (at 93.98 73.66 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 73.66 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b20fe998-0c87-4dc2-b99d-5b0fb9728958))
     (pin "2" (uuid 246eb111-4937-4425-aa1f-467659ede845))
     (instances
@@ -2436,7 +2531,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 93.98 88.9 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d5d)
     (property "Reference" "D5" (at 88.9 90.17 90)
       (effects (font (size 1.27 1.27)))
@@ -2450,6 +2545,9 @@
     (property "Datasheet" "" (at 93.98 88.9 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 88.9 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 04bae407-b5b3-4214-879c-634b565512fa))
     (pin "2" (uuid 0cad157f-9fa3-4996-8a3f-01a7a0ebc40f))
     (instances
@@ -2462,7 +2560,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 105.41 86.36 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d5e)
     (property "Reference" "#PWR043" (at 105.41 86.36 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2476,6 +2574,9 @@
     (property "Datasheet" "" (at 105.41 86.36 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 105.41 86.36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ca4dcfe4-5ebc-4ec1-b0cc-8315079cdbb8))
     (instances
       (project "flat_hierarchy"
@@ -2487,7 +2588,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 93.98 93.98 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d5f)
     (property "Reference" "#PWR042" (at 93.98 93.98 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2501,6 +2602,9 @@
     (property "Datasheet" "" (at 93.98 93.98 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 93.98 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fabcee5e-36d5-4ccf-ae92-e42e5b7a74b6))
     (instances
       (project "flat_hierarchy"
@@ -2512,7 +2616,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 93.98 69.85 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d60)
     (property "Reference" "#PWR041" (at 93.98 67.31 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2526,6 +2630,9 @@
     (property "Datasheet" "" (at 93.98 69.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 69.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0267da0c-9d98-4d29-971f-b30cf8b81cd9))
     (instances
       (project "flat_hierarchy"
@@ -2537,7 +2644,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:74LS125") (at 111.76 114.3 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d61)
     (property "Reference" "U2" (at 120.3961 113.1506 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -2550,6 +2657,9 @@
     )
     (property "Datasheet" "" (at 111.76 114.3 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 111.76 114.3 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 1d03b8fd-4fdc-44ba-bec9-5b1fa984abe2))
     (pin "7" (uuid fc3cb3ee-0e74-4ac9-9a56-6348e0407206))
@@ -2575,7 +2685,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 90.17 111.76 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d62)
     (property "Reference" "R5" (at 90.17 109.728 90)
       (effects (font (size 1.27 1.27)))
@@ -2589,6 +2699,9 @@
     (property "Datasheet" "" (at 90.17 111.76 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 90.17 111.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 04389397-9c6e-404c-a63c-94483b3b5067))
     (pin "2" (uuid 49f68b6d-34d2-4253-8614-4ae88650b29e))
     (instances
@@ -2601,7 +2714,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 81.28 118.11 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d63)
     (property "Reference" "R6" (at 78.74 113.03 0)
       (effects (font (size 1.27 1.27)))
@@ -2615,6 +2728,9 @@
     (property "Datasheet" "" (at 81.28 118.11 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 81.28 118.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a94899d5-6fc3-4160-8ff9-1bf347cd3955))
     (pin "2" (uuid a9b26a49-5166-4bc5-8ed4-1b649a70d835))
     (instances
@@ -2627,7 +2743,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 99.06 105.41 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d64)
     (property "Reference" "D6" (at 93.98 106.68 90)
       (effects (font (size 1.27 1.27)))
@@ -2641,6 +2757,9 @@
     (property "Datasheet" "" (at 99.06 105.41 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 105.41 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7937a08e-0dd8-4c08-b3b9-18ee3e4185b7))
     (pin "2" (uuid efbbd4d1-640d-4a3a-b8de-55bd91cde636))
     (instances
@@ -2653,7 +2772,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 99.06 120.65 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d65)
     (property "Reference" "D7" (at 93.98 121.92 90)
       (effects (font (size 1.27 1.27)))
@@ -2667,6 +2786,9 @@
     (property "Datasheet" "" (at 99.06 120.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 120.65 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f56b4446-2b7c-4735-a656-c77cb957dd69))
     (pin "2" (uuid 3c378ca2-ddff-48ec-90ef-fe22da1f2456))
     (instances
@@ -2679,7 +2801,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 110.49 120.65 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d66)
     (property "Reference" "#PWR040" (at 110.49 120.65 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2693,6 +2815,9 @@
     (property "Datasheet" "" (at 110.49 120.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 110.49 120.65 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8aa45895-4ac7-44f6-a84a-8a0dfbd8e866))
     (instances
       (project "flat_hierarchy"
@@ -2704,7 +2829,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 99.06 125.73 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d67)
     (property "Reference" "#PWR039" (at 99.06 125.73 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2718,6 +2843,9 @@
     (property "Datasheet" "" (at 99.06 125.73 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 125.73 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e720fb43-1458-4620-88ab-45bab08f6b28))
     (instances
       (project "flat_hierarchy"
@@ -2729,7 +2857,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 99.06 101.6 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d68)
     (property "Reference" "#PWR038" (at 99.06 99.06 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2743,6 +2871,9 @@
     (property "Datasheet" "" (at 99.06 101.6 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid aecf2305-f7bd-47ef-b475-2951c5b12867))
     (instances
       (project "flat_hierarchy"
@@ -2754,7 +2885,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:74LS125") (at 105.41 55.88 0) (mirror y) (unit 4)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d6b)
     (property "Reference" "U2" (at 114.0461 54.7306 0)
       (effects (font (size 1.27 1.27)) (justify right))
@@ -2767,6 +2898,9 @@
     )
     (property "Datasheet" "" (at 105.41 55.88 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 105.41 55.88 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 3a3d0ce3-27e9-415b-94e8-ade02cfddc50))
     (pin "7" (uuid ef1a5acb-4b94-465a-a4d7-55ea2d2d45af))
@@ -2792,7 +2926,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 106.68 62.23 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d75)
     (property "Reference" "#PWR037" (at 106.68 62.23 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2806,6 +2940,9 @@
     (property "Datasheet" "" (at 106.68 62.23 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 106.68 62.23 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 24be2c2c-49f5-4eeb-815a-50283745fc59))
     (instances
       (project "flat_hierarchy"
@@ -2817,7 +2954,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 124.46 80.01 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d85)
     (property "Reference" "R12" (at 124.46 77.978 90)
       (effects (font (size 1.27 1.27)))
@@ -2831,6 +2968,9 @@
     (property "Datasheet" "" (at 124.46 80.01 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 124.46 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 33156d6d-1a2e-4799-b95c-9b667fc9f48b))
     (pin "2" (uuid 2d40fdd0-143c-4dbc-87f6-69629d607311))
     (instances
@@ -2843,7 +2983,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 133.35 114.3 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d8d)
     (property "Reference" "R13" (at 133.35 111.76 90)
       (effects (font (size 1.27 1.27)))
@@ -2857,6 +2997,9 @@
     (property "Datasheet" "" (at 133.35 114.3 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 133.35 114.3 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f35a89f4-60be-41ed-9488-e9dfea1a8685))
     (pin "2" (uuid ab1c378c-743b-4ee7-8ba4-2e0c3c6a764d))
     (instances
@@ -2869,7 +3012,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 123.19 30.48 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4d92)
     (property "Reference" "R8" (at 123.19 28.448 90)
       (effects (font (size 1.27 1.27)))
@@ -2883,6 +3026,9 @@
     (property "Datasheet" "" (at 123.19 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 123.19 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b26653b3-f18d-4d8e-81b5-088ecc9f139b))
     (pin "2" (uuid 3c067d94-52e6-44bc-b092-9c49d202fb07))
     (instances
@@ -2895,7 +3041,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 76.2 93.98 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4dab)
     (property "Reference" "#PWR036" (at 76.2 93.98 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2909,6 +3055,9 @@
     (property "Datasheet" "" (at 76.2 93.98 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 76.2 93.98 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 63dfd07f-7321-4958-b06b-a12034db80ac))
     (instances
       (project "flat_hierarchy"
@@ -2920,7 +3069,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 81.28 123.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4dae)
     (property "Reference" "#PWR035" (at 81.28 123.19 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2934,6 +3083,9 @@
     (property "Datasheet" "" (at 81.28 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 81.28 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 38fb25df-4197-40a1-a00c-68481eeac1db))
     (instances
       (project "flat_hierarchy"
@@ -2945,7 +3097,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 73.66 45.72 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4db3)
     (property "Reference" "#PWR034" (at 73.66 45.72 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2959,6 +3111,9 @@
     (property "Datasheet" "" (at 73.66 45.72 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 73.66 45.72 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 55201dd2-6aac-4715-aa4b-435a7b161557))
     (instances
       (project "flat_hierarchy"
@@ -2970,7 +3125,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 43.18 102.87 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4e06)
     (property "Reference" "#PWR033" (at 43.18 102.87 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -2984,6 +3139,9 @@
     (property "Datasheet" "" (at 43.18 102.87 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 43.18 102.87 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 91ca8d83-7fd2-46a6-90d6-429f0c55fbde))
     (instances
       (project "flat_hierarchy"
@@ -2995,19 +3153,22 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:BC237") (at 167.64 66.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 00000000-0000-0000-0000-0000442a4eb9)
-    (property "Reference" "Q1" (at 165.1 59.69 0)
-      (effects (font (size 1.27 1.27)))
+    (property "Reference" "Q1" (at 172.4914 64.8278 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "BC237" (at 165.1508 62.23 0)
-      (effects (font (size 1.27 1.27)))
+    (property "Value" "BC237" (at 172.4914 67.2521 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "pic_programmer_fp:TO-92" (at 167.64 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
     (property "Datasheet" "" (at 167.64 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 167.64 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid c3d68554-9c10-4410-8331-5da6b6fd0752))
     (pin "2" (uuid d963ccf1-6291-451b-98a1-031b072e6f98))
@@ -3022,7 +3183,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 170.18 72.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4f1c)
     (property "Reference" "#PWR032" (at 170.18 72.39 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3036,6 +3197,9 @@
     (property "Datasheet" "" (at 170.18 72.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 170.18 72.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1312778b-8168-495a-8283-ce54cbed6c1e))
     (instances
       (project "flat_hierarchy"
@@ -3047,7 +3211,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 170.18 49.53 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4f23)
     (property "Reference" "R11" (at 167.64 44.45 0)
       (effects (font (size 1.27 1.27)))
@@ -3061,6 +3225,9 @@
     (property "Datasheet" "" (at 170.18 49.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 170.18 49.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b26cb03c-e8ea-4ba2-8d6a-f74684454679))
     (pin "2" (uuid 9e9dc4ac-f192-42f0-9237-036f4bba8b2e))
     (instances
@@ -3073,7 +3240,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 170.18 26.67 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4f2a)
     (property "Reference" "R7" (at 167.64 22.86 0)
       (effects (font (size 1.27 1.27)))
@@ -3087,6 +3254,9 @@
     (property "Datasheet" "" (at 170.18 26.67 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 170.18 26.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 283b4558-5194-4276-b358-5bc0b530bda8))
     (pin "2" (uuid acf7461c-6d3d-40ef-a4e8-0936c2c8ff5e))
     (instances
@@ -3099,19 +3269,22 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:BC307") (at 198.12 30.48 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 00000000-0000-0000-0000-0000442a4f30)
-    (property "Reference" "Q2" (at 195.58 22.86 0)
-      (effects (font (size 1.27 1.27)))
+    (property "Reference" "Q2" (at 202.9714 29.2678 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "BC307" (at 195.58 25.4 0)
-      (effects (font (size 1.27 1.27)))
+    (property "Value" "BC307" (at 202.9714 31.6921 0)
+      (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "pic_programmer_fp:TO-92" (at 198.12 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
     (property "Datasheet" "" (at 198.12 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 198.12 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid f41bd119-c58b-409a-8366-ddf4d6078083))
     (pin "2" (uuid a2ef8c7f-c7d0-423f-a169-85d93ac23c1a))
@@ -3126,7 +3299,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VPP") (at 170.18 19.05 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4f44)
     (property "Reference" "#PWR22" (at 170.18 13.97 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3140,6 +3313,9 @@
     (property "Datasheet" "" (at 170.18 19.05 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 170.18 19.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 63ffe885-cd62-44ab-83f5-9ca0d44cc36b))
     (instances
       (project "flat_hierarchy"
@@ -3151,7 +3327,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VPP") (at 200.66 22.86 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4f48)
     (property "Reference" "#PWR23" (at 200.66 17.78 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3165,6 +3341,9 @@
     (property "Datasheet" "" (at 200.66 22.86 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 22.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9e565fbe-1448-454c-9f0f-652de15a6659))
     (instances
       (project "flat_hierarchy"
@@ -3176,7 +3355,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 200.66 46.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4f52)
     (property "Reference" "R9" (at 198.12 41.91 0)
       (effects (font (size 1.27 1.27)))
@@ -3190,6 +3369,9 @@
     (property "Datasheet" "" (at 200.66 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1bd62998-85da-4674-860a-c551696af7be))
     (pin "2" (uuid e41a8d6e-a3e2-4926-872c-805d1a11617d))
     (instances
@@ -3202,13 +3384,13 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:LED") (at 200.66 59.69 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 00000000-0000-0000-0000-0000442a4f5d)
-    (property "Reference" "D8" (at 204.47 62.23 90)
-      (effects (font (size 1.27 1.27)))
+    (property "Reference" "D8" (at 203.327 57.4148 90)
+      (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "RED-LED" (at 198.12 59.69 0)
-      (effects (font (size 1.27 1.27)))
+    (property "Value" "RED-LED" (at 203.327 59.8391 90)
+      (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "LED_THT:LED_D5.0mm" (at 200.66 59.69 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -3216,11 +3398,14 @@
     (property "Datasheet" "" (at 200.66 59.69 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (property "Champ4" "Low Current Led" (at 200.66 50.8 90)
-      (effects (font (size 1.016 1.016)))
+    (property "Description" "" (at 200.66 59.69 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Champ5" "RED LED" (at 195.58 59.69 0)
-      (effects (font (size 1.016 1.016)))
+    (property "Champ4" "Low Current Led" (at 203.327 62.059 90)
+      (effects (font (size 1.016 1.016)) (justify right))
+    )
+    (property "Champ5" "RED LED" (at 203.327 64.0745 90)
+      (effects (font (size 1.016 1.016)) (justify right))
     )
     (pin "1" (uuid 614d140c-97d6-4d56-b3c8-125c36fcc50b))
     (pin "2" (uuid e3d080e3-3e1f-44b6-a64b-522d86e59a99))
@@ -3234,7 +3419,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:CONN_2") (at 189.23 137.16 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a4fe7)
     (property "Reference" "P1" (at 190.5 137.16 90)
       (effects (font (size 1.016 1.016)))
@@ -3248,6 +3433,9 @@
     (property "Datasheet" "" (at 189.23 137.16 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 189.23 137.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5e5e4e9f-f6a1-479b-a901-0fbaae382efb))
     (pin "2" (uuid 2627cd73-a1f1-4532-8d7f-3a8e9279f5bc))
     (instances
@@ -3260,7 +3448,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D") (at 205.74 134.62 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a500b)
     (property "Reference" "D1" (at 205.74 137.16 0)
       (effects (font (size 1.27 1.27)))
@@ -3274,6 +3462,9 @@
     (property "Datasheet" "" (at 205.74 134.62 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 205.74 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6749c3aa-d199-4641-8bed-38fb6c18f69f))
     (pin "2" (uuid 31acaa6c-595f-41b9-808d-f5db01e11813))
     (instances
@@ -3286,7 +3477,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 200.66 142.24 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a500f)
     (property "Reference" "#PWR031" (at 200.66 142.24 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3300,6 +3491,9 @@
     (property "Datasheet" "" (at 200.66 142.24 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 142.24 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f8de46d5-e0d2-41ea-b671-0547e8404f54))
     (instances
       (project "flat_hierarchy"
@@ -3311,7 +3505,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:CP") (at 213.36 140.97 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a501d)
     (property "Reference" "C2" (at 217.17 139.7 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3325,6 +3519,9 @@
     (property "Datasheet" "" (at 213.36 140.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 213.36 140.97 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 76ec2b30-56ab-4db6-a0f4-90e2a635b2d3))
     (pin "2" (uuid da29b71a-7fe8-494a-9d1c-e073bb15b672))
     (instances
@@ -3337,7 +3534,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 213.36 147.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5023)
     (property "Reference" "#PWR030" (at 213.36 147.32 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3351,6 +3548,9 @@
     (property "Datasheet" "" (at 213.36 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 213.36 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d570c61c-fc8d-4e5e-9ef6-b8386a967f1c))
     (instances
       (project "flat_hierarchy"
@@ -3362,7 +3562,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:7805") (at 232.41 135.89 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a504a)
     (property "Reference" "U3" (at 232.41 128.27 0)
       (effects (font (size 1.524 1.524)))
@@ -3375,6 +3575,9 @@
     )
     (property "Datasheet" "" (at 232.41 135.89 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 232.41 135.89 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 42120484-7ae0-42d3-97ac-af5a218d248c))
     (pin "2" (uuid a58adb11-33a3-4a17-9601-8c1c404114a8))
@@ -3389,7 +3592,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 232.41 143.51 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5050)
     (property "Reference" "#PWR029" (at 232.41 143.51 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3403,6 +3606,9 @@
     (property "Datasheet" "" (at 232.41 143.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 232.41 143.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6f2438cb-44da-49dc-925d-e5737b25ffe4))
     (instances
       (project "flat_hierarchy"
@@ -3414,7 +3620,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:CP") (at 245.11 140.97 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5056)
     (property "Reference" "C1" (at 248.92 139.7 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3428,6 +3634,9 @@
     (property "Datasheet" "" (at 245.11 140.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 245.11 140.97 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 07ebe49d-6717-485b-9bcb-8a143d22d9b5))
     (pin "2" (uuid ff5b075a-1d87-42b2-897d-ae354f73cfa8))
     (instances
@@ -3440,7 +3649,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 245.11 147.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5057)
     (property "Reference" "#PWR028" (at 245.11 147.32 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3454,6 +3663,9 @@
     (property "Datasheet" "" (at 245.11 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 245.11 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4c7d838e-ba57-49e3-b5ee-650cb52dda1e))
     (instances
       (project "flat_hierarchy"
@@ -3465,7 +3677,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 259.08 142.24 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5083)
     (property "Reference" "R14" (at 256.54 137.16 0)
       (effects (font (size 1.27 1.27)))
@@ -3479,6 +3691,9 @@
     (property "Datasheet" "" (at 259.08 142.24 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 259.08 142.24 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 822c514c-e827-4d29-a747-a1fba753ee47))
     (pin "2" (uuid ebe1ed6e-9c0c-4d3c-aa75-9abb07660293))
     (instances
@@ -3491,13 +3706,13 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:LED") (at 259.08 156.21 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 00000000-0000-0000-0000-0000442a5084)
-    (property "Reference" "D9" (at 262.89 158.75 90)
-      (effects (font (size 1.27 1.27)))
+    (property "Reference" "D9" (at 261.747 154.9426 90)
+      (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "GREEN-LED" (at 256.54 156.21 0)
-      (effects (font (size 1.27 1.27)))
+    (property "Value" "GREEN-LED" (at 261.747 157.3669 90)
+      (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "LED_THT:LED_D5.0mm" (at 259.08 156.21 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -3505,8 +3720,11 @@
     (property "Datasheet" "" (at 259.08 156.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (property "Champ4" "GREEN LED" (at 254 156.21 0)
-      (effects (font (size 1.016 1.016)))
+    (property "Description" "" (at 259.08 156.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Champ4" "GREEN LED" (at 261.747 159.5868 90)
+      (effects (font (size 1.016 1.016)) (justify right))
     )
     (pin "1" (uuid f97a39f3-dd43-4db1-bdb1-8c854a41e559))
     (pin "2" (uuid 6b9aeadf-d4b2-472d-ace9-d12ce542ab6b))
@@ -3520,7 +3738,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 259.08 161.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5095)
     (property "Reference" "#PWR027" (at 259.08 161.29 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3534,6 +3752,9 @@
     (property "Datasheet" "" (at 259.08 161.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 259.08 161.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8535e684-2b56-4ad5-9c14-211c0f2b2a73))
     (instances
       (project "flat_hierarchy"
@@ -3545,7 +3766,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 259.08 133.35 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a50b3)
     (property "Reference" "#PWR026" (at 259.08 130.81 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3559,6 +3780,9 @@
     (property "Datasheet" "" (at 259.08 133.35 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 259.08 133.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fa11ce95-b020-4187-8b7d-6a07c9bda331))
     (instances
       (project "flat_hierarchy"
@@ -3570,7 +3794,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 210.82 49.53 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a50bf)
     (property "Reference" "R17" (at 208.28 44.45 0)
       (effects (font (size 1.27 1.27)))
@@ -3584,6 +3808,9 @@
     (property "Datasheet" "" (at 210.82 49.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 210.82 49.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 62c5367e-7c3c-4037-ad53-959280b2cca8))
     (pin "2" (uuid eeb70fc4-da54-4b20-8f2c-6eab9419a9a9))
     (instances
@@ -3595,20 +3822,23 @@
     )
   )
 
-  (symbol (lib_id "flat_hierarchy_schlib:GND") (at 210.82 58.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+  (symbol (lib_id "flat_hierarchy_schlib:GND") (at 210.82 53.34 0) (unit 1)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a50c2)
-    (property "Reference" "#PWR025" (at 210.82 58.42 0)
+    (property "Reference" "#PWR025" (at 210.82 53.34 0)
       (effects (font (size 0.762 0.762)) hide)
     )
-    (property "Value" "GND" (at 210.82 60.198 0)
+    (property "Value" "GND" (at 210.82 55.118 0)
       (effects (font (size 0.762 0.762)) hide)
     )
-    (property "Footprint" "" (at 210.82 58.42 0)
+    (property "Footprint" "" (at 210.82 53.34 0)
       (effects (font (size 1.524 1.524)) hide)
     )
-    (property "Datasheet" "" (at 210.82 58.42 0)
+    (property "Datasheet" "" (at 210.82 53.34 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 210.82 53.34 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid e01634a0-474f-4da3-bc92-7bc4130b6fa4))
     (instances
@@ -3621,7 +3851,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:INDUCTOR") (at 64.77 135.89 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a57be)
     (property "Reference" "L1" (at 64.77 137.16 90)
       (effects (font (size 1.016 1.016)))
@@ -3635,6 +3865,9 @@
     (property "Datasheet" "" (at 64.77 135.89 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 64.77 135.89 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5dde519c-d888-4558-9943-25f2f83a88df))
     (pin "2" (uuid 51fa6283-c762-45c2-9116-71e9b83e4a8f))
     (instances
@@ -3647,7 +3880,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 48.26 134.62 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a57cb)
     (property "Reference" "#PWR024" (at 48.26 132.08 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3661,6 +3894,9 @@
     (property "Datasheet" "" (at 48.26 134.62 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d61b8bec-a142-4247-8eae-0f949437ea80))
     (instances
       (project "flat_hierarchy"
@@ -3672,7 +3908,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VPP") (at 100.33 147.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5846)
     (property "Reference" "#PWR34" (at 100.33 142.24 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3686,6 +3922,9 @@
     (property "Datasheet" "" (at 100.33 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6b840323-886c-4bc9-8a6e-9d8a2b58e8b3))
     (instances
       (project "flat_hierarchy"
@@ -3697,7 +3936,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:CP") (at 100.33 156.21 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a584c)
     (property "Reference" "C3" (at 104.14 154.94 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3711,6 +3950,9 @@
     (property "Datasheet" "" (at 100.33 156.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 156.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9a0f2632-1b7b-4489-b7ee-a799616c13f9))
     (pin "2" (uuid 5655a50f-9bfb-40ea-beee-1af3b14d5e20))
     (instances
@@ -3723,7 +3965,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:PWR_FLAG") (at 93.98 147.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5893)
     (property "Reference" "#FLG023" (at 93.98 140.462 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3737,6 +3979,9 @@
     (property "Datasheet" "" (at 93.98 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 93.98 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 159f4886-1e42-44d6-84cb-00428b2995ff))
     (instances
       (project "flat_hierarchy"
@@ -3748,7 +3993,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:C") (at 41.91 182.88 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a58b1)
     (property "Reference" "C5" (at 41.91 179.07 90)
       (effects (font (size 1.27 1.27)))
@@ -3762,6 +4007,9 @@
     (property "Datasheet" "" (at 41.91 182.88 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 41.91 182.88 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 495b9d86-ea51-44a8-8c9a-ba70500a0538))
     (pin "2" (uuid 5bd216b9-f606-4889-9caf-939c38d65a53))
     (instances
@@ -3774,7 +4022,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 91.44 182.88 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a58d7)
     (property "Reference" "R15" (at 87.63 179.07 0)
       (effects (font (size 1.27 1.27)))
@@ -3788,6 +4036,9 @@
     (property "Datasheet" "" (at 91.44 182.88 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 91.44 182.88 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c666df9b-53a4-44fe-99a0-3bc4411ade6e))
     (pin "2" (uuid a5917b40-eb66-454e-a2c9-6f81a00a9414))
     (instances
@@ -3800,7 +4051,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 91.44 157.48 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a58dc)
     (property "Reference" "R16" (at 87.63 153.67 0)
       (effects (font (size 1.27 1.27)))
@@ -3814,6 +4065,9 @@
     (property "Datasheet" "" (at 91.44 157.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 91.44 157.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e5b7e0de-0547-4b0f-a154-9cd671bab75e))
     (pin "2" (uuid 5cd76257-6503-4a03-a1ae-b48f2de32d77))
     (instances
@@ -3826,7 +4080,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:LT1373") (at 48.26 154.94 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5e20)
     (property "Reference" "U4" (at 63.5 142.24 0)
       (effects (font (size 1.524 1.524)))
@@ -3839,6 +4093,9 @@
     )
     (property "Datasheet" "" (at 48.26 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 48.26 154.94 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid dd1bf755-543d-4f7e-868c-fb2da4f34168))
     (pin "2" (uuid 8d133847-c2da-4d03-ab00-39f8cf1d59df))
@@ -3858,7 +4115,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:C") (at 48.26 189.23 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5f61)
     (property "Reference" "C4" (at 48.26 185.42 90)
       (effects (font (size 1.27 1.27)))
@@ -3872,6 +4129,9 @@
     (property "Datasheet" "" (at 48.26 189.23 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 189.23 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid af9b87f0-425b-4910-a8ca-c330859cf22e))
     (pin "2" (uuid 81069cc9-ac49-45cf-8e9c-00eda6f01052))
     (instances
@@ -3884,7 +4144,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 54.61 182.88 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a5f83)
     (property "Reference" "R10" (at 54.61 180.848 90)
       (effects (font (size 1.27 1.27)))
@@ -3898,6 +4158,9 @@
     (property "Datasheet" "" (at 54.61 182.88 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 182.88 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 65d126c5-d6ca-447a-be30-37da834a2b98))
     (pin "2" (uuid 6fa5f589-f0a9-49a1-a8b0-be13ca61aeb1))
     (instances
@@ -3910,12 +4173,12 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 83.82 148.59 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 00000000-0000-0000-0000-0000442a6026)
-    (property "Reference" "D10" (at 83.82 151.13 90)
+    (property "Reference" "D10" (at 84.1883 143.8141 0)
       (effects (font (size 1.016 1.016)))
     )
-    (property "Value" "SCHOTTKY" (at 83.82 146.05 0)
+    (property "Value" "SCHOTTKY" (at 84.1883 145.8296 0)
       (effects (font (size 1.016 1.016)))
     )
     (property "Footprint" "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal" (at 83.82 148.59 0)
@@ -3923,6 +4186,9 @@
     )
     (property "Datasheet" "" (at 83.82 148.59 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 83.82 148.59 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid cef46f7d-4fec-4b59-8dc4-5c70a1031b9e))
     (pin "2" (uuid 84d5ba1b-6cd3-433c-9f36-ff424ebc4e28))
@@ -3936,7 +4202,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:PWR_FLAG") (at 205.74 140.97 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442a8330)
     (property "Reference" "#FLG022" (at 205.74 147.828 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3950,6 +4216,9 @@
     (property "Datasheet" "" (at 205.74 140.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 205.74 140.97 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ec7cf289-6f1d-44f1-94ad-ab1ce21d2b44))
     (instances
       (project "flat_hierarchy"
@@ -3961,7 +4230,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 200.66 66.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000442aabc2)
     (property "Reference" "#PWR021" (at 200.66 66.04 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3975,6 +4244,9 @@
     (property "Datasheet" "" (at 200.66 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5cab76ea-0b89-478f-8ed3-ce1462587134))
     (instances
       (project "flat_hierarchy"
@@ -3986,7 +4258,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 217.17 38.1 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000044369638)
     (property "Reference" "R18" (at 217.17 36.068 90)
       (effects (font (size 1.27 1.27)))
@@ -4000,6 +4272,9 @@
     (property "Datasheet" "" (at 217.17 38.1 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 217.17 38.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3bdc1ec1-7824-4422-8ae0-97e330eeddee))
     (pin "2" (uuid 62ce67ee-57a9-40f6-9662-1a6cf11c01dd))
     (instances
@@ -4012,7 +4287,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:POT") (at 91.44 171.45 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000443d0101)
     (property "Reference" "RV1" (at 87.63 167.64 90)
       (effects (font (size 1.27 1.27)))
@@ -4025,6 +4300,9 @@
     )
     (property "Datasheet" "" (at 91.44 171.45 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 91.44 171.45 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid c0f0ebe7-887e-4b4d-8b0c-e822c76fbfa5))
     (pin "2" (uuid c7ce8647-6578-48e0-a258-41ad6a9c77d0))
@@ -4039,7 +4317,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 187.96 69.85 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004638ab33)
     (property "Reference" "#PWR020" (at 187.96 67.31 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4053,6 +4331,9 @@
     (property "Datasheet" "" (at 187.96 69.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 187.96 69.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f638cf9d-5df0-487f-a12a-17926b5bd3a6))
     (instances
       (project "flat_hierarchy"
@@ -4064,7 +4345,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:BC307") (at 198.12 86.36 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639b996)
     (property "Reference" "Q3" (at 195.58 80.01 0)
       (effects (font (size 1.27 1.27)))
@@ -4077,6 +4358,9 @@
     )
     (property "Datasheet" "" (at 198.12 86.36 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 198.12 86.36 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid c49d1fbc-820d-4610-9c5c-75a7097b841e))
     (pin "2" (uuid 4dc7f17c-9de7-4176-b925-662b7b084bb1))
@@ -4091,7 +4375,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 187.96 96.52 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639b9b0)
     (property "Reference" "R19" (at 185.42 91.44 0)
       (effects (font (size 1.27 1.27)))
@@ -4105,6 +4389,9 @@
     (property "Datasheet" "" (at 187.96 96.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 187.96 96.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 355c30e6-6de3-43be-93e8-204255084de4))
     (pin "2" (uuid 3721038c-7748-4777-ab9e-4911ef37d3c0))
     (instances
@@ -4117,7 +4404,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 187.96 77.47 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639b9b3)
     (property "Reference" "R20" (at 185.42 72.39 0)
       (effects (font (size 1.27 1.27)))
@@ -4131,6 +4418,9 @@
     (property "Datasheet" "" (at 187.96 77.47 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 187.96 77.47 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 57a551cb-a4e9-4e43-bef0-6a78d17efbe9))
     (pin "2" (uuid 24e40981-d7a0-4608-9840-2f2632572f60))
     (instances
@@ -4143,7 +4433,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:R") (at 200.66 105.41 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639b9e9)
     (property "Reference" "R21" (at 198.12 100.33 0)
       (effects (font (size 1.27 1.27)))
@@ -4157,6 +4447,9 @@
     (property "Datasheet" "" (at 200.66 105.41 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 105.41 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2ef63030-073b-475d-8f26-266ab9f09f5a))
     (pin "2" (uuid 5bb34160-ef17-4804-8ab3-f6ac7e0b8bd4))
     (instances
@@ -4169,7 +4462,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:LED") (at 200.66 119.38 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639b9ea)
     (property "Reference" "D12" (at 204.47 121.92 90)
       (effects (font (size 1.27 1.27)))
@@ -4182,6 +4475,9 @@
     )
     (property "Datasheet" "" (at 200.66 119.38 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 200.66 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (property "Champ4" "YELLOW-LED" (at 195.58 119.38 0)
       (effects (font (size 1.016 1.016)))
@@ -4198,7 +4494,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 200.66 125.73 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639b9eb)
     (property "Reference" "#PWR019" (at 200.66 125.73 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4212,6 +4508,9 @@
     (property "Datasheet" "" (at 200.66 125.73 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 125.73 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 43d23b0f-c6e5-48e7-9b0a-cb56a6b6dae1))
     (instances
       (project "flat_hierarchy"
@@ -4223,7 +4522,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 200.66 81.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639ba17)
     (property "Reference" "#PWR018" (at 200.66 78.74 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4237,6 +4536,9 @@
     (property "Datasheet" "" (at 200.66 81.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 200.66 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4f1ae5c4-1735-4ca7-96e6-5844a1ae25b5))
     (instances
       (project "flat_hierarchy"
@@ -4248,7 +4550,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:D_Schottky") (at 187.96 107.95 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639ba28)
     (property "Reference" "D11" (at 182.88 109.22 90)
       (effects (font (size 1.27 1.27)))
@@ -4262,6 +4564,9 @@
     (property "Datasheet" "" (at 187.96 107.95 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 187.96 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5e504bca-0c4c-4cd5-91d9-fe1f3dc3b0d9))
     (pin "2" (uuid 7ea572c8-d25f-45dc-b4aa-8f07adfa0163))
     (instances
@@ -4274,7 +4579,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:JUMPER") (at 210.82 86.36 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639baf8)
     (property "Reference" "JP1" (at 213.36 81.28 90)
       (effects (font (size 1.524 1.524)))
@@ -4288,6 +4593,9 @@
     (property "Datasheet" "" (at 210.82 86.36 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 210.82 86.36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3bf4be66-a7a3-4962-b52f-d636a40b0641))
     (pin "2" (uuid 23dd450b-d305-4acf-96cd-9a6aa3e19be2))
     (instances
@@ -4300,7 +4608,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 210.82 78.74 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004639bb04)
     (property "Reference" "#PWR017" (at 210.82 76.2 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4314,6 +4622,9 @@
     (property "Datasheet" "" (at 210.82 78.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 210.82 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7703ff7c-8648-46a3-a4fb-13c32c9902fa))
     (instances
       (project "flat_hierarchy"
@@ -4325,7 +4636,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:C") (at 157.48 29.21 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000464ad280)
     (property "Reference" "C9" (at 158.75 26.67 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4339,6 +4650,9 @@
     (property "Datasheet" "" (at 157.48 29.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 157.48 29.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5f07dc33-d4cb-4a5d-88e8-4e5ec5fedb4a))
     (pin "2" (uuid 5a6ce9fd-dc06-422c-8ca6-61975f692fc7))
     (instances
@@ -4351,7 +4665,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:PWR_FLAG") (at 223.52 35.56 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000048553f27)
     (property "Reference" "#FLG016" (at 223.52 28.702 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4365,6 +4679,9 @@
     (property "Datasheet" "" (at 223.52 35.56 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 223.52 35.56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b383277a-4e14-4644-b593-18e750b1f35b))
     (instances
       (project "flat_hierarchy"
@@ -4376,7 +4693,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:PWR_FLAG") (at 220.98 91.44 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000048553f47)
     (property "Reference" "#FLG015" (at 220.98 84.582 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4390,6 +4707,9 @@
     (property "Datasheet" "" (at 220.98 91.44 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 220.98 91.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3b7c9da7-8749-43bc-a5f8-0fe3e55a79ec))
     (instances
       (project "flat_hierarchy"
@@ -4401,7 +4721,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 40.64 173.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005510c3a9)
     (property "Reference" "#PWR047" (at 40.64 173.99 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4415,6 +4735,9 @@
     (property "Datasheet" "" (at 40.64 173.99 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 40.64 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c05d992c-ec65-48fd-9620-2af18e254756))
     (instances
       (project "flat_hierarchy"
@@ -4426,7 +4749,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 35.56 190.5 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005510c540)
     (property "Reference" "#PWR048" (at 35.56 190.5 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4440,6 +4763,9 @@
     (property "Datasheet" "" (at 35.56 190.5 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 35.56 190.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a7141067-31a7-40fb-8483-db4692a69abd))
     (instances
       (project "flat_hierarchy"
@@ -4451,7 +4777,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 91.44 187.96 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005510ee04)
     (property "Reference" "#PWR049" (at 91.44 187.96 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4465,6 +4791,9 @@
     (property "Datasheet" "" (at 91.44 187.96 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 91.44 187.96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4713544c-1d17-4204-a603-d6846bf6bbf9))
     (instances
       (project "flat_hierarchy"
@@ -4476,7 +4805,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:GND") (at 100.33 161.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005510f50d)
     (property "Reference" "#PWR050" (at 100.33 161.29 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4490,6 +4819,9 @@
     (property "Datasheet" "" (at 100.33 161.29 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 100.33 161.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f5f65300-0645-4f25-ae75-cc297a87134e))
     (instances
       (project "flat_hierarchy"
@@ -4501,7 +4833,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 106.68 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 2bdd9f4b-3b6c-4a47-b8b5-9aea8b818481)
     (property "Reference" "#PWR0102" (at 106.68 48.26 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4515,6 +4847,9 @@
     (property "Datasheet" "" (at 106.68 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 106.68 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid de411c1e-ea34-43ef-b44d-9073da5db469))
     (instances
       (project "flat_hierarchy"
@@ -4526,7 +4861,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 104.14 25.4 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 37e1b4fe-5071-4441-87b3-a5d92bd28884)
     (property "Reference" "#PWR0104" (at 104.14 22.86 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4540,6 +4875,9 @@
     (property "Datasheet" "" (at 104.14 25.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 104.14 25.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e0b6f67c-3dcc-4705-b163-bf1c2fd8bab9))
     (instances
       (project "flat_hierarchy"
@@ -4551,7 +4889,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 110.49 109.22 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 80e255a3-2e71-438f-9f56-22615c4a6f90)
     (property "Reference" "#PWR0101" (at 110.49 106.68 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4565,6 +4903,9 @@
     (property "Datasheet" "" (at 110.49 109.22 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 110.49 109.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 698bfbbc-5254-42b0-9fea-5820b3627b30))
     (instances
       (project "flat_hierarchy"
@@ -4576,7 +4917,7 @@
   )
 
   (symbol (lib_id "flat_hierarchy_schlib:VCC") (at 105.41 74.93 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 81bce414-2c5d-48bd-b219-914f16ddb9c5)
     (property "Reference" "#PWR0103" (at 105.41 72.39 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4589,6 +4930,9 @@
     )
     (property "Datasheet" "" (at 105.41 74.93 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 105.41 74.93 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 558b866b-8cd3-4f82-b00e-a6cf9a524865))
     (instances
