@@ -197,7 +197,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             const std::shared_ptr<const CN_ANCHOR>& sourceNode = edge.GetSourceNode();
             const std::shared_ptr<const CN_ANCHOR>& targetNode = edge.GetTargetNode();
 
-            if( !sourceNode || !sourceNode->Valid() || !targetNode || !targetNode->Valid() )
+            if( !sourceNode || sourceNode->Dirty() || !targetNode || targetNode->Dirty() )
                 continue;
 
             const VECTOR2I source( sourceNode->Pos() );

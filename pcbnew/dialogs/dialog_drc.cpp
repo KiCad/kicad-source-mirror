@@ -479,6 +479,14 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             m_frame->GetBoard()->GetConnectivity()->RunOnUnconnectedEdges(
                     [&]( CN_EDGE& edge )
                     {
+                        // Connectivity was valid when DRC was run, but this is a modeless dialog
+                        // so it might not be now.
+                        if( !edge.GetSourceNode() || edge.GetSourceNode()->Dirty() )
+                            return true;
+
+                        if( !edge.GetTargetNode() || edge.GetTargetNode()->Dirty() )
+                            return true;
+
                         if( edge.GetSourceNode()->Parent() == a
                                 && edge.GetTargetNode()->Parent() == b )
                         {

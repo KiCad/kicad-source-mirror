@@ -385,6 +385,10 @@ void CONNECTIVITY_DATA::ComputeLocalRatsnest( const std::vector<BOARD_ITEM*>& aI
     {
         const std::shared_ptr<const CN_ANCHOR>& nodeA = edge.GetSourceNode();
         const std::shared_ptr<const CN_ANCHOR>& nodeB = edge.GetTargetNode();
+
+        if( !nodeA || nodeA->Dirty() || !nodeB || nodeB->Dirty() )
+            continue;
+
         RN_DYNAMIC_LINE l;
 
         // Use the parents' positions
@@ -964,6 +968,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
             std::shared_ptr<const CN_ANCHOR> srcNode = edge.GetSourceNode();
             std::shared_ptr<const CN_ANCHOR> dstNode = edge.GetTargetNode();
 
+            if( !srcNode || srcNode->Dirty() || !dstNode || dstNode->Dirty() )
+                continue;
+
             BOARD_CONNECTED_ITEM* srcParent = srcNode->Parent();
             BOARD_CONNECTED_ITEM* dstParent = dstNode->Parent();
 
@@ -986,6 +993,12 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForPad( const PAD* aPad
 
     for( const CN_EDGE& edge : net->GetEdges() )
     {
+        if( !edge.GetSourceNode() || edge.GetSourceNode()->Dirty() )
+            continue;
+
+        if( !edge.GetTargetNode() || edge.GetTargetNode()->Dirty() )
+            continue;
+
         if( edge.GetSourceNode()->Parent() == aPad || edge.GetTargetNode()->Parent() == aPad )
             edges.push_back( edge );
     }
@@ -1014,6 +1027,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
         {
             auto srcNode = edge.GetSourceNode();
             auto dstNode = edge.GetTargetNode();
+
+            if( !srcNode || srcNode->Dirty() || !dstNode || dstNode->Dirty() )
+                continue;
 
             const PAD* srcParent = static_cast<const PAD*>( srcNode->Parent() );
             const PAD* dstParent = static_cast<const PAD*>( dstNode->Parent() );
