@@ -195,7 +195,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_stToolbarIconSize->Wrap( -1 );
 	bSizerToolbarSize->Add( m_stToolbarIconSize, 0, wxALL, 5 );
 
-	m_rbIconSizeSmall = new wxRadioButton( this, wxID_ANY, _("Small"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbIconSizeSmall = new wxRadioButton( this, wxID_ANY, _("Small"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_rbIconSizeSmall->SetToolTip( _("Use compact icons in the toolbars") );
 
 	bSizerToolbarSize->Add( m_rbIconSizeSmall, 0, wxALL, 5 );
