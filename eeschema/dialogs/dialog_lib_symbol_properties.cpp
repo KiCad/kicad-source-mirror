@@ -361,6 +361,12 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     wxString   newName = EscapeString( m_SymbolNameCtrl->GetValue(), CTX_LIBID );
     wxString   oldName = m_libEntry->GetName();
 
+    if( newName.IsEmpty() )
+    {
+        wxMessageBox( _( "Symbol must have a name." ) );
+        return false;
+    }
+
     if( oldName != newName )
     {
         wxString libName = m_Parent->GetCurLib();
