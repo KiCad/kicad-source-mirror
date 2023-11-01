@@ -268,6 +268,8 @@ public:
     KISPINLOCK& GetLock() { return m_lock; }
 
     void MarkItemNetAsDirty( BOARD_ITEM* aItem );
+    void RemoveInvalidRefs();
+
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
     const std::map<int, wxString>& GetNetclassMap() const { return m_netclassMap; }

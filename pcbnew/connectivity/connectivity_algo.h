@@ -92,6 +92,15 @@ public:
     void SetSourceNode( const std::shared_ptr<const CN_ANCHOR>& aNode ) { m_source = aNode; }
     void SetTargetNode( const std::shared_ptr<const CN_ANCHOR>& aNode ) { m_target = aNode; }
 
+    void RemoveInvalidRefs()
+    {
+        if( m_source && !m_source->Valid() )
+            m_source.reset();
+
+        if( m_target && !m_target->Valid() )
+            m_target.reset();
+    }
+
     void SetWeight( unsigned weight ) { m_weight = weight; }
     unsigned GetWeight() const { return m_weight; }
 
@@ -158,7 +167,8 @@ public:
         std::list<CN_ITEM*> m_items;
     };
 
-    CN_CONNECTIVITY_ALGO() :
+    CN_CONNECTIVITY_ALGO( CONNECTIVITY_DATA* aParentConnectivityData ) :
+            m_parentConnectivityData( aParentConnectivityData ),
             m_isLocal( false )
     {}
 
@@ -208,7 +218,7 @@ public:
     }
 
     void Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
-    void LocalBuild( std::shared_ptr<CN_CONNECTIVITY_ALGO> aGlobalConnectivity,
+    void LocalBuild( std::shared_ptr<CONNECTIVITY_DATA> aGlobalConnectivity,
                      const std::vector<BOARD_ITEM*>& aLocalItems );
 
     void Clear();
@@ -258,6 +268,8 @@ public:
     }
 
     void MarkNetAsDirty( int aNet );
+    void RemoveInvalidRefs();
+
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 private:
@@ -276,6 +288,7 @@ private:
     void markItemNetAsDirty( const BOARD_ITEM* aItem );
 
 private:
+    CONNECTIVITY_DATA*                                    m_parentConnectivityData;
     CN_LIST                                               m_itemList;
     std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
 
@@ -284,7 +297,7 @@ private:
     std::vector<bool>                                     m_dirtyNets;
 
     bool                                                  m_isLocal;
-    std::shared_ptr<CN_CONNECTIVITY_ALGO>                 m_globalConnectivity;
+    std::shared_ptr<CONNECTIVITY_DATA>                    m_globalConnectivityData;
 
     PROGRESS_REPORTER* m_progressReporter = nullptr;
 };

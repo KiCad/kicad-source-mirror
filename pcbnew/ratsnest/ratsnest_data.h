@@ -77,6 +77,8 @@ public:
      */
     void UpdateNet();
 
+    void RemoveInvalidRefs();
+
     /**
      * Find optimal ends of RNEdges.  The MST will have found the closest anchors, but when
      * zones are involved we might have points closer than the anchors.

@@ -213,6 +213,13 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 }
 
 
+void CN_CONNECTIVITY_ALGO::RemoveInvalidRefs()
+{
+    for( CN_ITEM* item : m_itemList )
+        item->RemoveInvalidRefs();
+}
+
+
 void CN_CONNECTIVITY_ALGO::searchConnections()
 {
 #ifdef PROFILE
@@ -221,13 +228,12 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     std::vector<CN_ITEM*> garbage;
     garbage.reserve( 1024 );
 
-    m_itemList.RemoveInvalidItems( garbage );
+    m_parentConnectivityData->RemoveInvalidRefs();
 
     if( m_isLocal )
-    {
-        for( CN_ITEM* item : m_globalConnectivity->m_itemList )
-            item->RemoveInvalidRefs();
-    }
+        m_globalConnectivityData->RemoveInvalidRefs();
+
+    m_itemList.RemoveInvalidItems( garbage );
 
     for( CN_ITEM* item : garbage )
         delete item;
@@ -559,11 +565,11 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 }
 
 
-void CN_CONNECTIVITY_ALGO::LocalBuild( std::shared_ptr<CN_CONNECTIVITY_ALGO> aGlobalConnectivity,
+void CN_CONNECTIVITY_ALGO::LocalBuild( std::shared_ptr<CONNECTIVITY_DATA> aGlobalConnectivity,
                                        const std::vector<BOARD_ITEM*>& aLocalItems )
 {
     m_isLocal = true;
-    m_globalConnectivity = aGlobalConnectivity;
+    m_globalConnectivityData = aGlobalConnectivity;
 
     for( BOARD_ITEM* item : aLocalItems )
     {

@@ -47,7 +47,7 @@
 CONNECTIVITY_DATA::CONNECTIVITY_DATA() :
         m_skipRatsnestUpdate( false )
 {
-    m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
+    m_connAlgo.reset( new CN_CONNECTIVITY_ALGO( this ) );
     m_progressReporter = nullptr;
     m_fromToCache.reset( new FROM_TO_CACHE );
 }
@@ -112,7 +112,7 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-    m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
+    m_connAlgo.reset( new CN_CONNECTIVITY_ALGO( this ) );
     m_connAlgo->Build( aBoard, aReporter );
 
     m_netclassMap.clear();
@@ -151,8 +151,8 @@ void CONNECTIVITY_DATA::Build( std::shared_ptr<CONNECTIVITY_DATA>& aGlobalConnec
     if( !lock )
         return;
 
-    m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
-    m_connAlgo->LocalBuild( aGlobalConnectivity->GetConnectivityAlgo(), aLocalItems );
+    m_connAlgo.reset( new CN_CONNECTIVITY_ALGO( this ) );
+    m_connAlgo->LocalBuild( aGlobalConnectivity, aLocalItems );
 
     internalRecalculateRatsnest();
 }
@@ -929,6 +929,15 @@ void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
 
     if (aItem->IsConnected() )
         m_connAlgo->MarkNetAsDirty( static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() );
+}
+
+
+void CONNECTIVITY_DATA::RemoveInvalidRefs()
+{
+    m_connAlgo->RemoveInvalidRefs();
+
+    for( RN_NET* rnNet : m_nets )
+        rnNet->RemoveInvalidRefs();
 }
 
 

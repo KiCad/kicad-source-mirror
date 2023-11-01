@@ -288,9 +288,6 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 
     m_items.resize( lastItem - m_items.begin() );
 
-    for( CN_ITEM* item : m_items )
-        item->RemoveInvalidRefs();
-
     for( CN_ITEM* item : aGarbage )
         m_index.Remove( item );
 

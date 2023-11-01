@@ -456,6 +456,16 @@ void RN_NET::UpdateNet()
 }
 
 
+void RN_NET::RemoveInvalidRefs()
+{
+    for( CN_EDGE& edge : m_rnEdges )
+        edge.RemoveInvalidRefs();
+
+    for( CN_EDGE& edge : m_boardEdges )
+        edge.RemoveInvalidRefs();
+}
+
+
 void RN_NET::Clear()
 {
     m_rnEdges.clear();
