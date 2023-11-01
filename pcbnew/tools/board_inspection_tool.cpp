@@ -1974,7 +1974,7 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
     if( !m_dynamicData )
     {
-        m_dynamicData = new CONNECTIVITY_DATA( items, true );
+        m_dynamicData = new CONNECTIVITY_DATA( board()->GetConnectivity(), items, true );
         connectivity->BlockRatsnestItems( items );
     }
     else

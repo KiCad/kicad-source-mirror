@@ -89,7 +89,8 @@ public:
     CONNECTIVITY_DATA();
     ~CONNECTIVITY_DATA();
 
-    CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bool aSkipItems = false );
+    CONNECTIVITY_DATA( std::shared_ptr<CONNECTIVITY_DATA> aGlobalConnectivity,
+                       const std::vector<BOARD_ITEM*>& aLocalItems, bool                               aSkipRatsnestUpdate = false );
 
     /**
      * Function Build()
@@ -101,7 +102,8 @@ public:
      * Function Build()
      * Builds the connectivity database for a set of items aItems.
      */
-    void Build( const std::vector<BOARD_ITEM*>& aItems );
+    void Build( std::shared_ptr<CONNECTIVITY_DATA>& aGlobalConnectivity,
+                const std::vector<BOARD_ITEM*>& aLocalItems );
 
     /**
      * Function Add()
@@ -300,7 +302,7 @@ private:
     std::vector<RN_NET*>            m_nets;
 
     /// Used to suppress ratsnest calculations on dynamic ratsnests
-    bool                            m_skipRatsnest = false;
+    bool                            m_skipRatsnestUpdate;
 
     KISPINLOCK                      m_lock;
 

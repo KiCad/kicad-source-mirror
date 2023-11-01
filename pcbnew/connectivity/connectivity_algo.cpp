@@ -223,6 +223,12 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     m_itemList.RemoveInvalidItems( garbage );
 
+    if( m_isLocal )
+    {
+        for( CN_ITEM* item : m_globalConnectivity->m_itemList )
+            item->RemoveInvalidRefs();
+    }
+
     for( CN_ITEM* item : garbage )
         delete item;
 
@@ -553,9 +559,13 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 }
 
 
-void CN_CONNECTIVITY_ALGO::LocalBuild( const std::vector<BOARD_ITEM*>& aItems )
+void CN_CONNECTIVITY_ALGO::LocalBuild( std::shared_ptr<CN_CONNECTIVITY_ALGO> aGlobalConnectivity,
+                                       const std::vector<BOARD_ITEM*>& aLocalItems )
 {
-    for( BOARD_ITEM* item : aItems )
+    m_isLocal = true;
+    m_globalConnectivity = aGlobalConnectivity;
+
+    for( BOARD_ITEM* item : aLocalItems )
     {
         switch( item->Type() )
         {

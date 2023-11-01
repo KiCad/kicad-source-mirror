@@ -44,7 +44,8 @@
 #include <trigo.h>
 #include <drc/drc_rtree.h>
 
-CONNECTIVITY_DATA::CONNECTIVITY_DATA()
+CONNECTIVITY_DATA::CONNECTIVITY_DATA() :
+        m_skipRatsnestUpdate( false )
 {
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_progressReporter = nullptr;
@@ -52,10 +53,12 @@ CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 }
 
 
-CONNECTIVITY_DATA::CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems, bool aSkipRatsnest )
-    : m_skipRatsnest( aSkipRatsnest )
+CONNECTIVITY_DATA::CONNECTIVITY_DATA( std::shared_ptr<CONNECTIVITY_DATA> aGlobalConnectivity,
+                                      const std::vector<BOARD_ITEM*>& aLocalItems,
+                                      bool aSkipRatsnestUpdate ) :
+        m_skipRatsnestUpdate( aSkipRatsnestUpdate )
 {
-    Build( aItems );
+    Build( aGlobalConnectivity, aLocalItems );
     m_progressReporter = nullptr;
     m_fromToCache.reset( new FROM_TO_CACHE );
 }
@@ -140,7 +143,8 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 }
 
 
-void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
+void CONNECTIVITY_DATA::Build( std::shared_ptr<CONNECTIVITY_DATA>& aGlobalConnectivity,
+                               const std::vector<BOARD_ITEM*>& aLocalItems )
 {
     std::unique_lock<KISPINLOCK> lock( m_lock, std::try_to_lock );
 
@@ -148,7 +152,7 @@ void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
         return;
 
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
-    m_connAlgo->LocalBuild( aItems );
+    m_connAlgo->LocalBuild( aGlobalConnectivity->GetConnectivityAlgo(), aLocalItems );
 
     internalRecalculateRatsnest();
 }
@@ -272,7 +276,7 @@ void CONNECTIVITY_DATA::internalRecalculateRatsnest( BOARD_COMMIT* aCommit  )
 
     m_connAlgo->ClearDirtyFlags();
 
-    if( !m_skipRatsnest )
+    if( !m_skipRatsnestUpdate )
         updateRatsnest();
 }
 
