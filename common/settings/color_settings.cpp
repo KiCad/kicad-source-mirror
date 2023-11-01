@@ -254,6 +254,9 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
 
                 return true;
             } );
+
+    // this bump shouldn't have happened; add a no-op migration to avoid future issues
+    registerMigration( 4, 5, []() { return true; } );
 }
 
 
@@ -320,9 +323,10 @@ bool COLOR_SETTINGS::migrateSchema0to1()
         return true;
     }
 
-    wxString filename = m_filename + wxT( "_footprints" );
+    wxString filename = GetFilename().BeforeLast( '.' ) + wxT( "_footprints" );
 
     COLOR_SETTINGS* fpsettings = m_manager->AddNewColorSettings( filename );
+    fpsettings->SetLocation( GetLocation() );
 
     // Start out with a clone
     fpsettings->m_internals->CloneFrom( *m_internals );
