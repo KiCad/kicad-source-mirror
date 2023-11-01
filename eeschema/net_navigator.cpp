@@ -29,6 +29,7 @@
 #include <sch_junction.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
+#include <string_utils.h>
 #include <connection_graph.h>
 #include <widgets/wx_aui_utils.h>
 #include <tools/ee_actions.h>
@@ -82,7 +83,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         wxCHECK( symbol, retv );
 
         retv.Printf( _( "Symbol '%s' pin '%s'" ), symbol->GetRef( &aSheetPath, true ),
-                     pin->GetNumber() );
+                     UnescapeString( pin->GetNumber() ) );
         break;
     }
     case SCH_SHEET_PIN_T:
@@ -93,7 +94,8 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         SCH_SHEET* sheet = pin->GetParent();
         wxCHECK( sheet, retv );
 
-        retv.Printf( _( "Sheet '%s' pin '%s'" ), sheet->GetName(), pin->GetText() );
+        retv.Printf( _( "Sheet '%s' pin '%s'" ), sheet->GetName(),
+                     UnescapeString( pin->GetText() ) );
         break;
     }
     case SCH_LABEL_T:
@@ -101,7 +103,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_LABEL* label = static_cast<const SCH_LABEL*>( aItem );
         wxCHECK( label, retv );
 
-        retv.Printf( _( "Label '%s' at %s, %s" ), label->GetText(),
+        retv.Printf( _( "Label '%s' at %s, %s" ), UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -111,7 +113,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( aItem );
         wxCHECK( label, retv );
 
-        retv.Printf( _( "Global label '%s' at %s, %s" ), label->GetText(),
+        retv.Printf( _( "Global label '%s' at %s, %s" ), UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -121,7 +123,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_HIERLABEL* label = static_cast<const SCH_HIERLABEL*>( aItem );
         wxCHECK( label, retv );
 
-        retv.Printf( _( "Hierarchical label '%s' at %s, %s" ), label->GetText(),
+        retv.Printf( _( "Hierarchical label '%s' at %s, %s" ), UnescapeString( label->GetText() ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -255,7 +257,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
         {
             m_netNavigator->DeleteAllItems();
 
-            wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
+            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
             MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
         }
@@ -269,14 +271,14 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
                 itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
 
             m_netNavigator->DeleteAllItems();
-            wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
+            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
             MakeNetNavigatorNode( m_highlightedConn, rootId, itemData );
         }
     }
     else
     {
-        wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
+        wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
         MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
     }
