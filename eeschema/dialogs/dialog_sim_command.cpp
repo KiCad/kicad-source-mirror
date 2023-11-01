@@ -64,6 +64,8 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
         m_settings( aSettings ),
         m_spiceEmptyValidator( true )
 {
+    m_simPages->Hide();
+
     m_posIntValidator.SetMin( 1 );
 
     m_acPointsNumber->SetValidator( m_posIntValidator );
@@ -619,6 +621,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_commandTypeSizer->Show( true );
         m_commandType->SetSelection( 0 );
         m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
+        m_simPages->Show();
         return;
     }
 
@@ -827,6 +830,8 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
         break;
     }
+
+    m_simPages->Show();
 }
 
 

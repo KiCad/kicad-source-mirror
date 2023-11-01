@@ -25,7 +25,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	wxString m_commandTypeChoices[] = { _("AC"), _("DC"), _("OP"), _("TRAN"), _("FFT"), _("NOISE"), _("SP"), _("Custom") };
 	int m_commandTypeNChoices = sizeof( m_commandTypeChoices ) / sizeof( wxString );
 	m_commandType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_commandTypeNChoices, m_commandTypeChoices, 0 );
-	m_commandType->SetSelection( 0 );
+	m_commandType->SetSelection( 6 );
 	m_commandTypeSizer->Add( m_commandType, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
@@ -50,7 +50,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_acScale->SetSelection( 0 );
 	m_acScale->Hide();
 
-	bSizer3->Add( m_acScale, 0, wxALL|wxEXPAND, 5 );
+	bSizer3->Add( m_acScale, 0, wxEXPAND|wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 3, 5, 0 );
@@ -214,7 +214,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->Add( m_src2DCStepUnit, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer82->Add( gbSizer1, 0, wxALL, 5 );
+	bSizer82->Add( gbSizer1, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer82->Add( 0, 10, 0, wxEXPAND, 5 );
@@ -340,7 +340,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer14->Add( m_linearize, 0, wxALL, 5 );
 
 
-	bSizer151->Add( bSizer14, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer151->Add( bSizer14, 1, wxRIGHT|wxLEFT, 5 );
 
 
 	m_pgFFT->SetSizer( bSizer151 );
@@ -394,7 +394,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bSizer15->Add( fgSizer7, 0, wxALL, 5 );
+	bSizer15->Add( fgSizer7, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
@@ -475,11 +475,11 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_spScale->SetSelection( 0 );
 	m_spScale->Hide();
 
-	bSizer31->Add( m_spScale, 0, wxALL|wxEXPAND, 5 );
+	bSizer31->Add( m_spScale, 0, wxEXPAND|wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer12;
-	fgSizer12 = new wxFlexGridSizer( 0, 3, 5, 0 );
-	fgSizer12->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer12 = new wxFlexGridSizer( 0, 3, 4, 5 );
+	fgSizer12->SetFlexibleDirection( wxBOTH );
 	fgSizer12->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText12 = new wxStaticText( m_pgSP, wxID_ANY, _("Number of points per decade:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -487,7 +487,9 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer12->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_spPointsNumber = new wxTextCtrl( m_pgSP, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_spPointsNumber, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_spPointsNumber->SetMinSize( wxSize( 100,-1 ) );
+
+	fgSizer12->Add( m_spPointsNumber, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -499,7 +501,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_spFreqStart = new wxTextCtrl( m_pgSP, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_spFreqStart->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer12->Add( m_spFreqStart, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer12->Add( m_spFreqStart, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText191 = new wxStaticText( m_pgSP, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText191->Wrap( -1 );
@@ -510,17 +512,19 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer12->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_spFreqStop = new wxTextCtrl( m_pgSP, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_spFreqStop, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_spFreqStop->SetMinSize( wxSize( 100,-1 ) );
+
+	fgSizer12->Add( m_spFreqStop, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText1101 = new wxStaticText( m_pgSP, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1101->Wrap( -1 );
 	fgSizer12->Add( m_staticText1101, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
-	m_spDoNoise = new wxCheckBox( m_pgSP, wxID_ANY, _("Compute noise current correlation matrix"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_spDoNoise, 0, wxALL, 5 );
-
 
 	bSizer31->Add( fgSizer12, 0, wxEXPAND|wxALL, 5 );
+
+	m_spDoNoise = new wxCheckBox( m_pgSP, wxID_ANY, _("Compute noise current correlation matrix"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer31->Add( m_spDoNoise, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	m_pgSP->SetSizer( bSizer31 );
@@ -533,7 +537,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText18 = new wxStaticText( m_pgCustom, wxID_ANY, _("Spice directives:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
-	bSizer2->Add( m_staticText18, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( m_staticText18, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_customTxt = new wxTextCtrl( m_pgCustom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	m_customTxt->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
@@ -551,6 +555,9 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pgPZ = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer821;
 	bSizer821 = new wxBoxSizer( wxVERTICAL );
+
+
+	bSizer821->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer11;
 	gbSizer11 = new wxGridBagSizer( 6, 0 );
@@ -604,7 +611,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer11->Add( m_pzOutputRef, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 10 );
 
 
-	bSizer821->Add( gbSizer11, 0, wxALL, 10 );
+	bSizer821->Add( gbSizer11, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
