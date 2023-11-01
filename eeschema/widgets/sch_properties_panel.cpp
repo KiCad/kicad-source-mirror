@@ -21,6 +21,9 @@
 
 #include "sch_properties_panel.h"
 
+#include <font/fontconfig.h>
+#include <font/kicad_font_name.h>
+#include <pgm_base.h>
 #include <connection_graph.h>
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
@@ -206,5 +209,18 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
 void SCH_PROPERTIES_PANEL::updateLists( const SCHEMATIC& aSchematic )
 {
-    // No lists yet
+    wxPGChoices fonts;
+
+    // Regnerate font names
+    std::vector<std::string> fontNames;
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
+
+    fonts.Add( _( "Default Font" ), -1 );
+    fonts.Add( KICAD_FONT_NAME, -2 );
+
+    for( int ii = 0; ii < (int) fontNames.size(); ++ii )
+        fonts.Add( wxString( fontNames[ii] ), ii );
+
+    auto fontProperty = m_propMgr.GetProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Font" ) );
+    fontProperty->SetChoices( fonts );
 }

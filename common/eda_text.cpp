@@ -52,6 +52,9 @@
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>
 #include <wx/url.h>             // for wxURL
+#include "font/kicad_font_name.h"
+#include "font/fontconfig.h"
+#include "pgm_base.h"
 
 class OUTPUTFORMATTER;
 class wxFindReplaceData;
@@ -818,6 +821,47 @@ wxString EDA_TEXT::GetFontName() const
 }
 
 
+int EDA_TEXT::GetFontIndex() const
+{
+    if( !GetFont() )
+        return -1;
+
+    if( GetFont()->GetName() == KICAD_FONT_NAME )
+        return -2;
+
+    std::vector<std::string> fontNames;
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
+
+    for( int ii = 0; ii < (int) fontNames.size(); ++ii )
+    {
+        if( fontNames[ii] == GetFont()->GetName() )
+            return ii;
+    }
+
+    return 0;
+}
+
+
+void EDA_TEXT::SetFontIndex( int aIdx )
+{
+    if( aIdx == -1 )
+    {
+        SetFont( nullptr );
+    }
+    else if( aIdx == -2 )
+    {
+        SetFont( KIFONT::FONT::GetFont( wxEmptyString, IsBold(), IsItalic() ) );
+    }
+    else
+    {
+        std::vector<std::string> fontNames;
+        Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
+
+        SetFont( KIFONT::FONT::GetFont( fontNames[ aIdx ], IsBold(), IsItalic() ) );
+    }
+}
+
+
 bool EDA_TEXT::IsDefaultFormatting() const
 {
     return ( IsVisible()
@@ -1133,10 +1177,13 @@ static struct EDA_TEXT_DESC
                                                                &EDA_TEXT::SetText,
                                                                &EDA_TEXT::GetText ),
                              textProps );
-        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ),
-                                                               &EDA_TEXT::SetHyperlink,
-                                                               &EDA_TEXT::GetHyperlink ),
-                             textProps );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, int>( _HKI( "Font" ),
+                                                               &EDA_TEXT::SetFontIndex,
+                                                               &EDA_TEXT::GetFontIndex ),
+                             textProps )
+                .SetIsHiddenFromRulesEditor();
+
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
                                                           &EDA_TEXT::SetTextThickness,
                                                           &EDA_TEXT::GetTextThickness,
@@ -1178,6 +1225,11 @@ static struct EDA_TEXT_DESC
                              GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
                                                  &EDA_TEXT::SetVertJustify,
                                                  &EDA_TEXT::GetVertJustify ),
+                             textProps );
+
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ),
+                                                               &EDA_TEXT::SetHyperlink,
+                                                               &EDA_TEXT::GetHyperlink ),
                              textProps );
     }
 } _EDA_TEXT_DESC;

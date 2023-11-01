@@ -21,6 +21,9 @@
 
 #include "pcb_properties_panel.h"
 
+#include <font/fontconfig.h>
+#include <font/kicad_font_name.h>
+#include <pgm_base.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -232,7 +235,10 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
 void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 {
-    wxPGChoices layersAll, layersCu, nets;
+    wxPGChoices layersAll;
+    wxPGChoices layersCu;
+    wxPGChoices nets;
+    wxPGChoices fonts;
 
     // Regenerate all layers
     for( LSEQ seq = aBoard->GetEnabledLayers().UIOrder(); seq; ++seq )
@@ -256,4 +262,16 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
 
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
+
+    // Regnerate font names
+    std::vector<std::string> fontNames;
+    Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
+
+    fonts.Add( KICAD_FONT_NAME, -1 );
+
+    for( int ii = 0; ii < (int) fontNames.size(); ++ii )
+        fonts.Add( wxString( fontNames[ii] ), ii );
+
+    auto fontProperty = m_propMgr.GetProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Font" ) );
+    fontProperty->SetChoices( fonts );
 }

@@ -169,7 +169,6 @@ static struct BOARD_CONNECTED_ITEM_DESC
         layer->SetChoices( layerEnum.Choices() );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
 
-        // Not really deprecated, but hidden from rule editor suggestions
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
                              &BOARD_CONNECTED_ITEM::SetNetCode,
                              &BOARD_CONNECTED_ITEM::GetNetCode ) )
