@@ -5,6 +5,7 @@
  * Copyright (C) 2002 Claudio Girardi <claudio.girardi@ieee.org>
  * Copyright (C) 2005, 2006 Stefan Jahn <stefan@lkcc.org>
  * Modified for Kicad: 2018 Jean-Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -516,18 +517,19 @@ void MICROSTRIP::showAnalyze()
  */
 void MICROSTRIP::calcSynthesize()
 {
-    double const er_eff = m_parameters[EPSILON_EFF_PRM];
-    double angl_dest, z0_dest;
-    z0_dest   = m_parameters[Z0_PRM];
-    angl_dest = m_parameters[ANG_L_PRM];
+    double z0_dest   = m_parameters[Z0_PRM];
+    double angl_dest = m_parameters[ANG_L_PRM];
     /* calculate width and use for initial value in Newton's method */
     m_parameters[PHYS_WIDTH_PRM] = synth_width();
     minimizeZ0Error1D( &( m_parameters[PHYS_WIDTH_PRM] ) );
+
     m_parameters[Z0_PRM]       = z0_dest;
     m_parameters[ANG_L_PRM]    = angl_dest;
+    double const er_eff = m_parameters[EPSILON_EFF_PRM];
     m_parameters[PHYS_LEN_PRM] = C0 / m_parameters[FREQUENCY_PRM] / sqrt( er_eff * mur_eff )
                                  * m_parameters[ANG_L_PRM] / 2.0 / M_PI; /* in m */
     calcAnalyze();
+
     m_parameters[Z0_PRM]       = z0_dest;
     m_parameters[ANG_L_PRM]    = angl_dest;
     m_parameters[PHYS_LEN_PRM] = C0 / m_parameters[FREQUENCY_PRM] / sqrt( er_eff * mur_eff )
