@@ -180,7 +180,7 @@ void SCH_CONNECTION::ConfigureFromLabel( const wxString& aLabel )
                     auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
                     member->SetPrefix( prefix );
                     member->SetGraph( m_graph );
-                    member->ConfigureFromLabel( alias_member );
+                    member->ConfigureFromLabel( EscapeString( alias_member, CTX_NETNAME ) );
                     m_members.push_back( member );
                 }
             }
