@@ -1640,10 +1640,13 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
             std::shared_ptr<const CN_ANCHOR> target = edge.GetTargetNode();
             std::shared_ptr<const CN_ANCHOR> source = edge.GetSourceNode();
 
+            if( !source || source->Dirty() || !target || target->Dirty() )
+                continue;
+
             if( source->Parent() == item )
-                anchors.push_back( edge.GetSourceNode() );
+                anchors.push_back( source );
             else if( target->Parent() == item )
-                anchors.push_back( edge.GetTargetNode() );
+                anchors.push_back( target );
         }
 
         // Route them

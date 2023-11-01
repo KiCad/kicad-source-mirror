@@ -1651,6 +1651,9 @@ int PCB_SELECTION_TOOL::selectUnconnected( const TOOL_EVENT& aEvent )
     {
         for( const CN_EDGE& edge : conn->GetRatsnestForPad( pad ) )
         {
+            wxCHECK2( edge.GetSourceNode() && !edge.GetSourceNode()->Dirty(), continue );
+            wxCHECK2( edge.GetTargetNode() && !edge.GetTargetNode()->Dirty(), continue );
+
             BOARD_CONNECTED_ITEM* sourceParent = edge.GetSourceNode()->Parent();
             BOARD_CONNECTED_ITEM* targetParent = edge.GetTargetNode()->Parent();
 
@@ -1713,6 +1716,8 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
             // Figure out if we are the source or the target node on the ratnest
             const CN_ANCHOR* other = edge.GetSourceNode()->Parent() == pad ? edge.GetTargetNode().get()
                                                                            : edge.GetSourceNode().get();
+
+            wxCHECK2( other && !other->Dirty(), continue );
 
             // We only want to grab footprints, so the ratnest has to point to a pad
             if( other->Parent()->Type() != PCB_PAD_T )
