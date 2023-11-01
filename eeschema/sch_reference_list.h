@@ -187,7 +187,7 @@ public:
         if( GetLibPart() && GetLibPart()->IsPower() )
             ref = wxT( "0" );
 
-        return ref << m_numRef;
+        return m_numRefStr.IsEmpty() ? ( ref << m_numRef ) : ( ref << m_numRefStr );
     }
 
     int CompareValue( const SCH_REFERENCE& item ) const
@@ -245,6 +245,7 @@ private:
     int             m_sheetNum;          ///< The sheet number for the reference.
     KIID            m_symbolUuid;        ///< UUID of the symbol.
     int             m_numRef;            ///< The numeric part of the reference designator.
+    wxString        m_numRefStr;         ///< The numeric part in original string form (may have leading zeroes)
     int             m_flag;
 };
 

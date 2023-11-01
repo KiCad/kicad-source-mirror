@@ -852,6 +852,7 @@ void SCH_REFERENCE::Split()
     std::string refText = GetRefStr();
 
     m_numRef = -1;
+    m_numRefStr.Clear();
 
     int ll = refText.length() - 1;
 
@@ -883,7 +884,8 @@ void SCH_REFERENCE::Split()
                     m_numRef = atoi( cp );
                 }
 
-                refText.erase( ll+1 );  // delete from ll+1 to end
+                m_numRefStr = std::string( refText, ll + 1 );
+                refText.erase( ll + 1 );
                 break;
             }
         }
