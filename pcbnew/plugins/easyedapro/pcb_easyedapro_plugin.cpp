@@ -130,7 +130,7 @@ BOARD* EASYEDAPRO_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
 
         if( m_props && m_props->Exists( "pcb_id" ) )
         {
-            pcbToLoad = m_props->at( "pcb_id" );
+            pcbToLoad = wxString::FromUTF8( aProperties->at( "pcb_id" ) );
         }
         else
         {
