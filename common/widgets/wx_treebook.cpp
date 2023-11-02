@@ -24,6 +24,7 @@
 #include <widgets/wx_treebook.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <dialog_shim.h>
 
 
 class LAZY_PAGE : public wxPanel
@@ -48,6 +49,9 @@ public:
             m_mainSizer->Layout();
 
             m_contents->TransferDataToWindow();
+
+            if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
+                dlg->SelectAllInTextCtrls( GetChildren() );
         }
 
         return m_contents;

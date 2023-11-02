@@ -67,15 +67,15 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	m_textEditor->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
 	m_textEditor->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 	m_textEditor->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-	m_topMargin->Add( m_textEditor, 3, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+	m_topMargin->Add( m_textEditor, 3, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_compileButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 40,40 ), wxBU_AUTODRAW|0 );
+	m_compileButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 28,28 ), wxBU_AUTODRAW|0 );
 	m_compileButton->SetToolTip( _("Check rule syntax") );
 
-	bSizer5->Add( m_compileButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	bSizer5->Add( m_compileButton, 0, wxTOP|wxBOTTOM, 5 );
 
 	m_errorsReport = new WX_HTML_REPORT_BOX( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_errorsReport->SetMinSize( wxSize( 400,60 ) );

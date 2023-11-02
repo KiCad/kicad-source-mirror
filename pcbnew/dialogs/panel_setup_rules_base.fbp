@@ -214,7 +214,7 @@
                         <property name="permission">protected</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP</property>
+                            <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT</property>
                             <property name="proportion">3</property>
                             <object class="wxStyledTextCtrl" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -290,8 +290,8 @@
                                 <property name="orient">wxHORIZONTAL</property>
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">3</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
+                                    <property name="border">5</property>
+                                    <property name="flag">wxTOP|wxBOTTOM</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapButton" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -348,7 +348,7 @@
                                         <property name="pressed"></property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
-                                        <property name="size">40,40</property>
+                                        <property name="size">28,28</property>
                                         <property name="style"></property>
                                         <property name="subclass">; ; forward_declare</property>
                                         <property name="toolbar_pane">0</property>

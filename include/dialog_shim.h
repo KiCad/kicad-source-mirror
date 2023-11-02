@@ -123,6 +123,8 @@ public:
         return m_units;
     }
 
+    void SelectAllInTextCtrls( wxWindowList& children );
+
     void SetupStandardButtons( std::map<int, wxString> aLabels = {} );
 
     static bool IsCtrl( int aChar, const wxKeyEvent& e )
@@ -181,8 +183,6 @@ protected:
     virtual void OnCharHook( wxKeyEvent& aEvt );
 
 private:
-    void selectAllInTextCtrls( wxWindowList& children );
-
     /**
      * Properly handle the wxCloseEvent when in the quasimodal mode when not calling
      * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.

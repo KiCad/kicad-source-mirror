@@ -356,7 +356,7 @@ bool DIALOG_SHIM::Enable( bool enable )
 // Recursive descent doing a SelectAll() in wxTextCtrls.
 // MacOS User Interface Guidelines state that when tabbing to a text control all its
 // text should be selected.  Since wxWidgets fails to implement this, we do it here.
-void DIALOG_SHIM::selectAllInTextCtrls( wxWindowList& children )
+void DIALOG_SHIM::SelectAllInTextCtrls( wxWindowList& children )
 {
     for( wxWindow* child : children )
     {
@@ -392,6 +392,10 @@ void DIALOG_SHIM::selectAllInTextCtrls( wxWindowList& children )
             {
                 // Respect an existing selection
             }
+            else if( scintilla->GetMarginType( 0 ) == wxSTC_MARGIN_NUMBER )
+            {
+                // Don't select-all in Custom Rules, etc.
+            }
             else if( scintilla->IsEditable() )
             {
                 scintilla->SelectAll();
@@ -416,7 +420,7 @@ void DIALOG_SHIM::selectAllInTextCtrls( wxWindowList& children )
 #endif
         else
         {
-            selectAllInTextCtrls( child->GetChildren() );
+            SelectAllInTextCtrls( child->GetChildren() );
         }
     }
 }
@@ -428,7 +432,7 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
     {
         KIPLATFORM::UI::FixupCancelButtonCmdKeyCollision( this );
 
-        selectAllInTextCtrls( GetChildren() );
+        SelectAllInTextCtrls( GetChildren() );
 
         if( m_initialFocusTarget )
             KIPLATFORM::UI::ForceFocus( m_initialFocusTarget );

@@ -38,7 +38,7 @@
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
 #include <pgm_base.h>
-#include "wildcards_and_files_ext.h"
+#include <wildcards_and_files_ext.h>
 
 PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_RULES_BASE( aParentWindow ),
@@ -97,8 +97,13 @@ void PANEL_SETUP_RULES::onCharHook( wxKeyEvent& aEvent )
     {
         if( m_originalText != m_textEditor->GetText() )
         {
-            if( !IsOK( this, _( "Cancel Changes?" ) ) )
-                return;
+            if( IsOK( this, _( "Cancel Changes?" ) ) )
+            {
+                m_textEditor->SetText( m_originalText );
+                m_textEditor->SelectAll();
+            }
+
+            return;
         }
     }
 
