@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-07-09 09:52+0000\n"
+"PO-Revision-Date: 2023-11-03 17:32+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -81,13 +81,13 @@ msgid "Build Tech layer %d"
 msgstr "Κατασκευή Τεχνικού επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
-#, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1032
+#, fuzzy
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Υπολογισμός χαλκού επιμετάλλωσης"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1106
 #, c-format
@@ -104,9 +104,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Κατασκευή Ιεραρχίας Ορίων Αντικειμένων για τρύπες και διελεύσεις"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:388
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Ανάλυση πλήθους ακτίνων για:"
+msgstr "Σφάλμα δημιουργίας περιεχομένου OpenGL"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:419
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -1089,14 +1088,12 @@ msgid "deg"
 msgstr "μοίρες"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Μετακίνηση &προβολής κατά τη μετακίνηση αντικειμένου"
+msgstr "Επανασχεδίαση κατά τη μετακίνηση"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
-#, fuzzy
 msgid "Redraw speed:"
-msgstr "Επανασχεδίαση οθόνης"
+msgstr "Ταχύτητα επανασχεδίασης:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1302,9 +1299,8 @@ msgid "3D Preview Options"
 msgstr "Επιλογές Gerbview"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Πάχος πλακέτας: "
+msgstr "Πάχος πλακέτας:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -1409,9 +1405,8 @@ msgid "KiCad Image Converter"
 msgstr "Μετατροπέας Εικόνας Kicad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
-msgstr "Αρχεία Εικόνας"
+msgstr "Αρχεία εικόνας"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:278 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:73 pagelayout_editor/menubar.cpp:63
@@ -1811,7 +1806,7 @@ msgstr "Εξαγωγή στο Πρόχειρο"
 #: common/background_jobs_monitor.cpp:97
 #, fuzzy
 msgid "Background Jobs"
-msgstr "Παρασκήνιο"
+msgstr "Διεργασίες Παρασκηνίου"
 
 #: common/common.cpp:270
 #, c-format
@@ -2532,25 +2527,20 @@ msgid "Configure Global Library Table"
 msgstr "Ρύθμιση Καθολικού Καταλόγου Βιβλιοθήκης"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Μήκος ίσχνους εκτός έυρους"
+msgstr "Εκτός εύρους η διάσταση Χ του πλέγματος."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Μήκος ίσχνους εκτός έυρους"
+msgstr "Εκτός εύρους η διάσταση Ψ του πλέγματος."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
 msgstr "Λίστα Συντομεύσεων"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Όνομα έργου:\n"
-"%s\n"
+msgstr "Όνομα Έργου"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1047
@@ -3371,7 +3361,7 @@ msgstr ""
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
@@ -3385,29 +3375,27 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Στοίχιση"
+msgstr "Αυθεντικοποίηση"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Βασική Ονομασία"
+msgstr "Όνομα Χρήστη"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
 msgid "Password"
-msgstr ""
+msgstr "Κωδικός"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
 #, fuzzy
 msgid "Commit Message:"
-msgstr "Μηνύματα σφάλματος:"
+msgstr "Μήνυμα του Commit:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
 #, fuzzy
 msgid "Author:"
-msgstr "Συγγραφέας"
+msgstr "Author:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
