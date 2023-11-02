@@ -1552,8 +1552,8 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">3</property>
-                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                    <property name="border">5</property>
+                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxBitmapComboBox" expanded="1">
                                         <property name="BottomDockable">1</property>

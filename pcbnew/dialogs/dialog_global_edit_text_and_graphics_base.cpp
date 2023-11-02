@@ -241,7 +241,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer2->Add( fgSizer1, 1, wxEXPAND|wxTOP, 2 );
+	bSizer2->Add( fgSizer1, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	m_specifiedValues->SetSizer( bSizer2 );
@@ -285,13 +285,13 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_grid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_grid->SetDefaultCellFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	sbAction->Add( m_grid, 0, wxEXPAND|wxLEFT, 22 );
+	sbAction->Add( m_grid, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	sbAction->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bMainSizer->Add( sbAction, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( sbAction, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );

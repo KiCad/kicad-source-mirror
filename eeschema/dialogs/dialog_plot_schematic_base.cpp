@@ -32,7 +32,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	bSizerDir->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
 
 	m_browseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerDir->Add( m_browseButton, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerDir->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bMainSizer->Add( bSizerDir, 0, wxALL|wxEXPAND, 7 );
@@ -113,7 +113,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	gbSizer1->AddGrowableCol( 1 );
 
-	sbOptions->Add( gbSizer1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	sbOptions->Add( gbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	m_optionsSizer->Add( sbOptions, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -152,7 +152,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	gbSizer2->AddGrowableCol( 1 );
 
-	m_HPGLOptionsSizer->Add( gbSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_HPGLOptionsSizer->Add( gbSizer2, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bOptionsRight->Add( m_HPGLOptionsSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

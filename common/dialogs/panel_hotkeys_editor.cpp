@@ -79,7 +79,7 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     bMargins->Add( m_filterSearch, 0, wxEXPAND, 0 );
 
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
-    bMargins->Add( m_hotkeyListCtrl, 1, wxEXPAND, 0 );
+    bMargins->Add( m_hotkeyListCtrl, 1, wxEXPAND | wxTOP, 5 );
 
     if( !m_readOnly )
         installButtons( bMargins );
@@ -87,13 +87,20 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     mainSizer->Add( bMargins, 1, wxEXPAND, 0 );
 
 #ifdef __WXGTK__
+
+    // It appears that this may have been fixed in wxWidgets 3.2.3.
+#if wxVERSION_NUMBER < 3203
+
     // Work around a bug that clips the text vertically in the wxSearchCtrl on GTK
     m_filterSearch->SetMinSize(
             wxSize( m_filterSearch->GetSize().x, int( m_filterSearch->GetSize().y * 1.6 ) ) );
 #endif
 
+#endif
+
     SetSizer( mainSizer );
     Layout();
+    mainSizer->Fit( this );
 
     // Connect Events
     m_filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
