@@ -381,6 +381,7 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
     BOARD*          brd        = board();
     int             layer      = editFrame->GetActiveLayer();
     int             startLayer = layer;
+    bool            wraparound = false;
 
     while( startLayer != ++layer )
     {
@@ -388,7 +389,18 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
             break;
 
         if( layer >= B_Cu )
-            layer = F_Cu - 1;
+        {
+            if( wraparound )
+            {
+                wxBell();
+                return 0;
+            }
+            else
+            {
+                wraparound = true;
+                layer = F_Cu - 1;
+            }
+        }
     }
 
     wxCHECK( IsCopperLayer( layer ), 0 );
@@ -404,6 +416,7 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
     BOARD*          brd        = board();
     int             layer      = editFrame->GetActiveLayer();
     int             startLayer = layer;
+    bool            wraparound = false;
 
     while( startLayer != --layer )
     {
@@ -414,7 +427,18 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
         }
 
         if( layer <= F_Cu )
-            layer = B_Cu + 1;
+        {
+            if( wraparound )
+            {
+                wxBell();
+                return 0;
+            }
+            else
+            {
+                wraparound = true;
+                layer = B_Cu + 1;
+            }
+        }
     }
 
     wxCHECK( IsCopperLayer( layer ), 0 );
