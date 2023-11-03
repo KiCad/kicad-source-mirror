@@ -162,6 +162,12 @@ public:
         return false;   // don't allow adjacent cell overflow, even if we are actually empty
     }
 
+    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override
+    {
+        // Don't accept random values; must use the popup to change to a known alternate
+        return false;
+    }
+
     wxString GetValue( int aRow, int aCol ) override
     {
         return GetValue( at( aRow ), aCol );
