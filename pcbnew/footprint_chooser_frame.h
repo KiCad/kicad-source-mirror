@@ -52,6 +52,15 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    /**
+     * Force the position of the dialog to a new position.  This mimics the DIALOG_SHIM
+     * implementation.
+     * @param aNewPosition is the new forced position
+     */
+    void SetPosition( const wxPoint& aNewPosition );
+
+    bool Show( bool show ) override;
+
 protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 

@@ -32,6 +32,7 @@
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include <footprint_chooser_frame.h>
+#include "wx/display.h"
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -303,6 +304,57 @@ bool FOOTPRINT_CHOOSER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent
     }
 
     return KIWAY_PLAYER::ShowModal( aFootprint, aParent );
+}
+
+
+static wxRect s_dialogRect( 0, 0, 0, 0 );
+
+
+void FOOTPRINT_CHOOSER_FRAME::SetPosition( const wxPoint& aNewPosition )
+{
+    PCB_BASE_FRAME::SetPosition( aNewPosition );
+
+    s_dialogRect.SetPosition( aNewPosition );
+}
+
+
+bool FOOTPRINT_CHOOSER_FRAME::Show( bool show )
+{
+    bool  ret;
+
+    // Show or hide the window.  If hiding, save current position and size.
+    // If showing, use previous position and size.
+    if( show )
+    {
+#ifndef __WINDOWS__
+        PCB_BASE_FRAME::Raise();  // Needed on OS X and some other window managers (i.e. Unity)
+#endif
+        ret = PCB_BASE_FRAME::Show( show );
+
+        // returns a zeroed-out default wxRect if none existed before.
+        wxRect savedDialogRect = s_dialogRect;
+
+        if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
+        {
+            SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
+                     std::max( wxWindow::GetSize().x, savedDialogRect.GetSize().x ),
+                     std::max( wxWindow::GetSize().y, savedDialogRect.GetSize().y ),
+                     0 );
+        }
+
+        // Be sure that the dialog appears in a visible area
+        // (the dialog position might have been stored at the time when it was
+        // shown on another display)
+        if( wxDisplay::GetFromWindow( this ) == wxNOT_FOUND )
+            Centre();
+    }
+    else
+    {
+        s_dialogRect = wxRect( wxWindow::GetPosition(), wxWindow::GetSize() );
+        ret = PCB_BASE_FRAME::Show( show );
+    }
+
+    return ret;
 }
 
 

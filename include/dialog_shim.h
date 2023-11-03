@@ -113,7 +113,8 @@ public:
 
     void OnModify();
 
-    /** Force the position of the dialog to a new position
+    /**
+     * Force the position of the dialog to a new position
      * @param aNewPosition is the new forced position
      */
     void SetPosition( const wxPoint& aNewPosition );
