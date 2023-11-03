@@ -96,12 +96,23 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
 
     m_versionMajor = parseInt( reader, line, &line );
 
-    if( *line != '.' )
-        SCH_PARSE_ERROR( "invalid file version formatting in header", reader, line );
+    if( *line == '/' )
+    {
+        // Some old libraries use a version syntax like
+        // EESchema-LIBRARY Version  2/10/2006-18:49:15
+        // use 2.3 version numer to read the file
+        m_versionMajor = 2;
+        m_versionMinor = 3;
+    }
+    else
+    {
+        if( *line != '.' )
+            SCH_PARSE_ERROR( "invalid file version formatting in header", reader, line );
 
-    line++;
+        line++;
 
-    m_versionMinor = parseInt( reader, line, &line );
+        m_versionMinor = parseInt( reader, line, &line );
+    }
 
     if( m_versionMajor < 1 || m_versionMinor < 0 || m_versionMinor > 99 )
         SCH_PARSE_ERROR( "invalid file version in header", reader, line );
