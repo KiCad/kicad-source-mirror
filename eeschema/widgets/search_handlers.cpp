@@ -34,6 +34,8 @@ void SCH_SEARCH_HANDLER::ActivateItem( long aItemRow )
 {
     std::vector<long> item = { aItemRow };
     SelectItems( item );
+
+    m_frame->GetToolManager()->RunAction( EE_ACTIONS::properties, true );
 }
 
 
