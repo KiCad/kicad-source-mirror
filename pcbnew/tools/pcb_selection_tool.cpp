@@ -334,6 +334,9 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_selection.SetIsHover( true );
             }
 
+            // Show selection before opening menu
+            m_frame->GetCanvas()->ForceRefresh();
+
             if( !selectionCancelled )
                 m_menu.ShowContextMenu( m_selection );
         }
