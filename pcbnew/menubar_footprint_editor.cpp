@@ -111,6 +111,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     editMenu->AppendSeparator();
     editMenu->Add( PCB_ACTIONS::editTextAndGraphics );
     editMenu->Add( PCB_ACTIONS::defaultPadProperties );
+    editMenu->Add( PCB_ACTIONS::enumeratePads );
 
 
     //-- View menu -------------------------------------------------------
