@@ -1734,9 +1734,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
     zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance() ) );
 
-    // Is a point on the boundary of the polygon inside or outside?  This small epsilon lets
-    // us avoid the question.
-    int epsilon = KiROUND( pcbIUScale.IU_PER_MM * 0.04 ); // about 1.5 mil
+    // Is a point on the boundary of the polygon inside or outside?  The boundary may be off by
+    // MaxError, and we add 1.5 mil for some wiggle room.
+    int epsilon = KiROUND( bds.m_MaxError + pcbIUScale.IU_PER_MM * 0.038 ); // 1.5 mil
 
     for( PAD* pad : aSpokedPadsList )
     {
