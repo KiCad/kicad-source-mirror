@@ -365,7 +365,8 @@ void SIMULATOR_FRAME::StartSimulation()
     if( !simTab )
         return;
 
-    if( simTab->GetSimCommand().Upper().StartsWith( wxT( "FFT" ) ) )
+    if( simTab->GetSimCommand().Upper().StartsWith( wxT( "FFT" ) )
+        || simTab->GetSimCommand().Upper().Contains( wxT( "\nFFT" ) ) )
     {
         wxString tranSpicePlot;
 

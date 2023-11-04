@@ -109,8 +109,11 @@ SIM_TYPE SPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
     else if( cmd.StartsWith( wxT( ".sens" ) ) )  return ST_SENS;
     else if( cmd.StartsWith( wxT( ".sp" ) ) )    return ST_SP;
     else if( cmd.StartsWith( wxT( ".tf" ) ) )    return ST_TF;
-    else if( cmd.StartsWith( wxT( "fft" ) ) )    return ST_FFT;
-    else                                         return ST_UNKNOWN;
+
+    else if( cmd.StartsWith( wxT( "fft" ) ) || cmd.Contains( wxT( "\nfft" ) ) )
+        return ST_FFT;
+    else
+        return ST_UNKNOWN;
 }
 
 
