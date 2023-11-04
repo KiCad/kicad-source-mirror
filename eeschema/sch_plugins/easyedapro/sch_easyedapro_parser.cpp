@@ -903,6 +903,9 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 base64Data = line.at( 9 ).get<wxString>();
             }
 
+            VECTOR2D kstart = ScalePos( start );
+            VECTOR2D ksize = ScaleSize( size );
+
             if( mimeType.empty() || base64Data.empty() )
                 continue;
 
@@ -910,8 +913,6 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             if( mimeType == wxS( "image/svg+xml" ) )
             {
-                VECTOR2D offset = ScalePos( start );
-
                 SVG_IMPORT_PLUGIN     svgImportPlugin;
                 GRAPHICS_IMPORTER_SCH schImporter;
 
@@ -924,12 +925,9 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 VECTOR2D pixelScale( schIUScale.IUTomm( ScaleSize( size.x ) ) / imSize.x,
                                      schIUScale.IUTomm( ScaleSize( size.y ) ) / imSize.y );
 
-                if( flipped )
-                    pixelScale.x *= -1;
-
                 schImporter.SetScale( pixelScale );
 
-                VECTOR2D offsetMM( schIUScale.IUTomm( offset.x ), schIUScale.IUTomm( offset.y ) );
+                VECTOR2D offsetMM( schIUScale.IUTomm( kstart.x ), schIUScale.IUTomm( kstart.y ) );
 
                 schImporter.SetImportOffsetMM( offsetMM );
 
@@ -945,17 +943,29 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                         {
                             // Lines need special handling for some reason
                             schItem->SetFlags( STARTPOINT );
-                            schItem->Rotate( offset );
+                            schItem->Rotate( kstart );
                             schItem->ClearFlags( STARTPOINT );
 
                             schItem->SetFlags( ENDPOINT );
-                            schItem->Rotate( offset );
+                            schItem->Rotate( kstart );
                             schItem->ClearFlags( ENDPOINT );
                         }
                         else
                         {
-                            schItem->Rotate( offset );
+                            schItem->Rotate( kstart );
                         }
+                    }
+
+                    if( flipped )
+                    {
+                        // Lines need special handling for some reason
+                        if( schItem->Type() == SCH_LINE_T )
+                            schItem->SetFlags( STARTPOINT | ENDPOINT );
+
+                        schItem->MirrorHorizontally( kstart.x );
+
+                        if( schItem->Type() == SCH_LINE_T )
+                            schItem->ClearFlags( STARTPOINT | ENDPOINT );
                     }
 
                     createdItems.emplace_back( schItem );
@@ -970,8 +980,6 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                 if( bitmap->ReadImageFile( buf ) )
                 {
-                    VECTOR2D kstart = ScalePos( start );
-                    VECTOR2D ksize = ScaleSize( size );
                     VECTOR2D kcenter = kstart + ksize / 2;
 
                     double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
