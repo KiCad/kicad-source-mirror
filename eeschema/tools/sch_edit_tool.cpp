@@ -904,7 +904,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         case SCH_SHAPE_T:
         case SCH_TEXTBOX_T:
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 head->Rotate( rotPoint );
 
             break;
