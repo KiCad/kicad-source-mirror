@@ -2586,9 +2586,6 @@ void SIMULATOR_FRAME_UI::onPlotCursorUpdate( wxCommandEvent& aEvent )
 
 void SIMULATOR_FRAME_UI::OnSimUpdate()
 {
-    if( SIM_TAB* simTab = GetCurrentSimTab() )
-        simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
-
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
         plotTab->ResetScales( true );
 
@@ -2654,6 +2651,8 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
     // If there are any signals plotted, update them
     if( SIM_TAB::IsPlottable( simType ) )
     {
+        simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
+
         if( simType == ST_NOISE && aFinal )
         {
             m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
