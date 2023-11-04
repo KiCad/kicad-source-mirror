@@ -35,6 +35,8 @@
 #include <string_utils.h>
 #include <lib_pin.h>
 #include <project_sch.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_marker.h>
 #include <sch_reference_list.h>
@@ -551,6 +553,55 @@ int ERC_TESTER::TestMissingUnits()
     }
 
     return errors;
+}
+
+
+int ERC_TESTER::TestMissingNetclasses()
+{
+    int                            err_count = 0;
+    std::shared_ptr<NET_SETTINGS>& settings = m_schematic->Prj().GetProjectFile().NetSettings();
+
+    auto logError =
+            [&]( const SCH_SHEET_PATH& sheet, SCH_ITEM* item, const wxString& netclass )
+            {
+                err_count++;
+
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_UNDEFINED_NETCLASS );
+
+                ercItem->SetItems( item );
+                ercItem->SetErrorMessage( wxString::Format( _( "Netclass %s is not defined" ),
+                                                            netclass ) );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+                sheet.LastScreen()->Append( marker );
+            };
+
+    for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        {
+            item->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        if( aChild->Type() == SCH_FIELD_T )
+                        {
+                            SCH_FIELD* field = static_cast<SCH_FIELD*>( aChild );
+
+                            if( field->GetCanonicalName() == wxT( "Netclass" ) )
+                            {
+                                wxString netclass = field->GetText();
+
+                                if( settings->m_NetClasses.count( netclass ) == 0 )
+                                    logError( sheet, item, netclass );
+                            }
+                        }
+
+                        return true;
+                    } );
+        }
+    }
+
+    return err_count;
 }
 
 
@@ -1200,6 +1251,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for off grid pins and wires..." ) );
 
         TestOffGridEndpoints();
+    }
+
+    if( settings.IsTestEnabled( ERCE_UNDEFINED_NETCLASS ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking for undefined netclasses..." ) );
+
+        TestMissingNetclasses();
     }
 
     m_schematic->ResolveERCExclusionsPostUpdate();

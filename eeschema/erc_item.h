@@ -206,6 +206,7 @@ private:
     static ERC_ITEM busToBusConflict;
     static ERC_ITEM busToNetConflict;
     static ERC_ITEM unresolvedVariable;
+    static ERC_ITEM undefinedNetclass;
     static ERC_ITEM simulationModelIssues;
     static ERC_ITEM wireDangling;
     static ERC_ITEM libSymbolIssues;

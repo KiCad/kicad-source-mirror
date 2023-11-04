@@ -135,6 +135,10 @@ ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
 
+ERC_ITEM ERC_ITEM::undefinedNetclass( ERCE_UNDEFINED_NETCLASS,
+        _( "Undefined netclass" ),
+        wxT( "undefined_netclass" ) );
+
 ERC_ITEM ERC_ITEM::simulationModelIssues( ERCE_SIMULATION_MODEL,
         _( "SPICE model issue" ),
         wxT( "simulation_model_issue" ) );
@@ -256,6 +260,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_NETCLASS_CONFLICT:       return std::make_shared<ERC_ITEM>( netclassConflict );
     case ERCE_GLOBLABEL:               return std::make_shared<ERC_ITEM>( globalLabelDangling );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
+    case ERCE_UNDEFINED_NETCLASS:      return std::make_shared<ERC_ITEM>( undefinedNetclass );
     case ERCE_SIMULATION_MODEL:        return std::make_shared<ERC_ITEM>( simulationModelIssues );
     case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );
     case ERCE_LIB_SYMBOL_ISSUES:       return std::make_shared<ERC_ITEM>( libSymbolIssues );

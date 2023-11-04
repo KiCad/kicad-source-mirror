@@ -68,6 +68,7 @@ enum ERCE_T
     ERCE_NETCLASS_CONFLICT,       ///< Multiple labels assign different netclasses to same net.
     ERCE_GLOBLABEL,               ///< A global label is unique.
     ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
+    ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced by not defined.
     ERCE_SIMULATION_MODEL,        ///< An error was found in the simulation model.
     ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
     ERCE_LIB_SYMBOL_ISSUES,       ///< Library symbol changed from current symbol in schematic or

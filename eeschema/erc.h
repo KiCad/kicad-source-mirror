@@ -52,19 +52,6 @@ public:
     }
 
     /**
-     * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
-     * (mainly pin) on the same net.
-     *
-     * @param aList = a reference to the list of connected objects
-     * @param aNetItemRef = index in list of the current object
-     * @param aNetStart = index in list of net objects of the first item
-     * @param aMinConnexion = a pointer to a variable to store the minimal connection
-     * found( NOD, DRV, NPI, NET_NC)
-     */
-    void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aNetStart,
-                          int* aMinConnexion );
-
-    /**
      * Inside a given sheet, one cannot have sheets with duplicate names (file
      * names can be duplicated).
      *
@@ -141,6 +128,12 @@ public:
      * Test for uninstantiated units of multi unit symbols
      */
     int TestMissingUnits();
+
+    /**
+     * Tests for netclasses that are referenced but not defined.
+     * @return
+     */
+    int TestMissingNetclasses();
 
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                    PROGRESS_REPORTER* aProgressReporter );
