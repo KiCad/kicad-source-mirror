@@ -567,8 +567,18 @@ void PCB_EASYEDA_PARSER::ParseToBoardItemContainer(
                 zone->SetMinThickness( minThickness );
             }
 
-            zone->SetThermalReliefSpokeWidth(
-                    std::max( int( ConvertSize( arr[18] ) ), zone->GetMinThickness() ) );
+            if( arr.size() > 18 )
+            {
+                zone->SetThermalReliefSpokeWidth(
+                        std::max( int( ConvertSize( arr[18] ) ), zone->GetMinThickness() ) );
+            }
+            else
+            {
+                wxFAIL_MSG( wxString::Format( "COPPERAREA unexpected size %d: %s ", arr.size(),
+                                              shape ) );
+
+                zone->SetThermalReliefSpokeWidth( zone->GetMinThickness() );
+            }
 
             aContainer->Add( zone.release(), ADD_MODE::APPEND );
         }
