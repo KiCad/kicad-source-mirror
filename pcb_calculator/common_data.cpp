@@ -58,22 +58,22 @@ wxArrayString StandardLossTangentList()
 
     // List of current dielectric loss factor (tangent delta)
     list.Clear();
-    list.Add( wxT( "2e-2 \tFR4 @ 1GHz" ) );
-    list.Add( wxT( "12e-3 \tIsola FR408 @ 2 GHz" ) );
-    list.Add( wxT( "21e-3 \tIsola 370HR @ 2 GHz" ) );
-    list.Add( wxT( "27e-4 \tRogers RO4003C @ 10 GHz" ) );
-    list.Add( wxT( "21e-4 \tRogers RO4003C @ 2.5 GHz" ) );
-    list.Add( wxT( "37e-4 \tRogers RO4350B @ 10 GHz" ) );
-    list.Add( wxT( "31e-4 \tRogers RO4350B @ 2.5 GHz" ) );
+    list.Add( wxT( "0.02 \tFR4 @ 1GHz" ) );
+    list.Add( wxT( "0.012 \tIsola FR408 @ 2 GHz" ) );
+    list.Add( wxT( "0.021 \tIsola 370HR @ 2 GHz" ) );
+    list.Add( wxT( "0.0027 \tRogers RO4003C @ 10 GHz" ) );
+    list.Add( wxT( "0.0021 \tRogers RO4003C @ 2.5 GHz" ) );
+    list.Add( wxT( "0.0037 \tRogers RO4350B @ 10 GHz" ) );
+    list.Add( wxT( "0.0031 \tRogers RO4350B @ 2.5 GHz" ) );
     list.Add( wxT( "3e-4 \tberyllia @ 10GHz" ) );
     list.Add( wxT( "2e-4 \taluminia (Al2O3) @ 10GHz" ) );
     list.Add( wxT( "1e-4 \tfused quartz @ 10GHz" ) );
-    list.Add( wxT( "2e-3 \tRO4003 @ 10GHz" ) );
+    list.Add( wxT( "0.002 \tRO4003 @ 10GHz" ) );
     list.Add( wxT( "9e-4 \tRT/duroid 5880 @ 10GHz" ) );
     list.Add( wxT( "2e-4 \tteflon (PTFE) @ 1MHz" ) );
-    list.Add( wxT( "5e-2 \tPVC @ 1MHz" ) );
+    list.Add( wxT( "0.05 \tPVC @ 1MHz" ) );
     list.Add( wxT( "2e-4 \tPE @ 1MHz" ) );
-    list.Add( wxT( "1e-3 \taluminum nitride @ 10GHz" ) );
+    list.Add( wxT( "0.001 \taluminum nitride @ 10GHz" ) );
     list.Add( wxT( "0.015 \tsilicon @ 10GHz" ) );
     list.Add( wxT( "0.002 \tGaAs @ 10GHz" ) );
 
