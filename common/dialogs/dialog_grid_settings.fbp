@@ -47,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_GRID_SETTINGS_BASE</property>
             <property name="pos"></property>
-            <property name="size">288,233</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h; forward_declare</property>
             <property name="title">Grid Settings</property>

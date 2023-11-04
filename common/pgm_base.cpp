@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,7 +94,8 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_GREEK,      ID_LANGUAGE_GREEK,      wxT( "Ελληνικά" ), true },
     { wxLANGUAGE_ENGLISH,    ID_LANGUAGE_ENGLISH,    wxT( "English" ),  true },
     { wxLANGUAGE_SPANISH,    ID_LANGUAGE_SPANISH,    wxT( "Español" ),  true },
-    { wxLANGUAGE_SPANISH_MEXICAN, ID_LANGUAGE_SPANISH_MEXICAN, wxT( "Español (Latinoamericano)" ),  true },
+    { wxLANGUAGE_SPANISH_MEXICAN, ID_LANGUAGE_SPANISH_MEXICAN,
+      wxT( "Español (Latinoamericano)" ),  true },
     { wxLANGUAGE_FRENCH,     ID_LANGUAGE_FRENCH,     wxT( "Français" ), true },
     { wxLANGUAGE_KOREAN,     ID_LANGUAGE_KOREAN,     wxT( "한국어"),       true },
     { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    wxT( "Italiano" ), true },
@@ -105,7 +106,8 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_THAI,       ID_LANGUAGE_THAI,       wxT( "ภาษาไทย" ),    true },
     { wxLANGUAGE_POLISH,     ID_LANGUAGE_POLISH,     wxT( "Polski" ),   true },
     { wxLANGUAGE_PORTUGUESE, ID_LANGUAGE_PORTUGUESE, wxT( "Português" ),true },
-    { wxLANGUAGE_PORTUGUESE_BRAZILIAN, ID_LANGUAGE_PORTUGUESE_BRAZILIAN, wxT( "Português (Brasil)" ), true },
+    { wxLANGUAGE_PORTUGUESE_BRAZILIAN, ID_LANGUAGE_PORTUGUESE_BRAZILIAN,
+      wxT( "Português (Brasil)" ), true },
     { wxLANGUAGE_RUSSIAN,    ID_LANGUAGE_RUSSIAN,    wxT( "Русский" ),  true },
 //    { wxLANGUAGE_SERBIAN,    ID_LANGUAGE_SERBIAN,    wxT( "Српски" ),   true },
     { wxLANGUAGE_FINNISH,    ID_LANGUAGE_FINNISH,    wxT( "Suomi" ),    true },
@@ -343,7 +345,8 @@ void PGM_BASE::sentryInit()
 
         sentry_options_set_release( options, GetCommitHash().ToStdString().c_str() );
 
-        // This just gives us more filtering within sentry, issues still get grouped across environments
+        // This just gives us more filtering within sentry, issues still get grouped across
+        // environments.
         sentry_options_set_environment( options, GetMajorMinorVersion().c_str() );
 
         sentry_init( options );
@@ -418,7 +421,8 @@ void PGM_BASE::ShowSplash()
         return;
 
     m_splash = new WX_SPLASH( KiBitmap( BITMAPS::splash ), wxSPLASH_CENTRE_ON_SCREEN, 0,
-                                    NULL, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP );
+                              NULL, -1, wxDefaultPosition, wxDefaultSize,
+                              wxBORDER_NONE | wxSTAY_ON_TOP );
     wxYield();
 }
 
@@ -641,6 +645,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     if( first_time )
     {
         setLanguageId( wxLANGUAGE_DEFAULT );
+
         // First time SetLanguage is called, the user selected language id is set
         // from common user config settings
         wxString languageSel = GetCommonSettings()->m_System.language;
@@ -827,7 +832,8 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     if( aName.IsEmpty() )
     {
         wxLogTrace( traceEnvVars,
-                    wxT( "PGM_BASE::SetLocalEnvVariable: Attempt to set empty variable to value %s" ),
+                    wxT( "PGM_BASE::SetLocalEnvVariable: Attempt to set empty variable to "
+                         "value %s" ),
                     aValue );
         return false;
     }
@@ -836,7 +842,8 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     if( wxGetEnv( aName, &env ) )
     {
         wxLogTrace( traceEnvVars,
-                    wxT( "PGM_BASE::SetLocalEnvVariable: Environment variable %s already set to %s" ),
+                    wxT( "PGM_BASE::SetLocalEnvVariable: Environment variable %s already set "
+                         "to %s" ),
                     aName, env );
         return env == aValue;
     }
@@ -856,7 +863,8 @@ void PGM_BASE::SetLocalEnvVariables()
     for( const std::pair<wxString, ENV_VAR_ITEM> m_local_env_var : GetCommonSettings()->m_Env.vars )
     {
         wxLogTrace( traceEnvVars,
-                    wxT( "PGM_BASE::SetLocalEnvVariables: Setting local environment variable %s to %s" ),
+                    wxT( "PGM_BASE::SetLocalEnvVariables: Setting local environment variable %s "
+                         "to %s" ),
                     m_local_env_var.first,
                     m_local_env_var.second.GetValue() );
         wxSetEnv( m_local_env_var.first, m_local_env_var.second.GetValue() );
@@ -940,6 +948,7 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
                              const wxString& aCond, const wxString& aMsg )
 {
     wxString assertStr;
+
     // Log the assertion details to standard log
     if( !aMsg.empty() )
     {
@@ -962,6 +971,7 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
         static std::set<SENTRY_ASSERT_CACHE_KEY> assertCache;
 
         SENTRY_ASSERT_CACHE_KEY key = { aFile, aLine, aFunc, aCond, aMsg };
+
         if( assertCache.find( key ) == assertCache.end() )
         {
             sentry_value_t exc = sentry_value_new_exception( "assert", assertStr );
