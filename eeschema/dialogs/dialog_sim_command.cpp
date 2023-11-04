@@ -367,6 +367,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     }
     else if( page == m_pgFFT )          // Fast Fourier transform
     {
+        m_simCommand = wxEmptyString;
         wxString vectors;
 
         for( int ii = 0; ii < (int) m_inputSignalsList->GetCount(); ++ii )
@@ -378,7 +379,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         if( m_linearize->IsChecked() )
             m_simCommand = wxT( "linearize" ) + vectors + wxS( "\n" );
 
-        m_simCommand = wxT( "fft" ) + vectors;
+        m_simCommand += wxT( "fft" ) + vectors;
     }
     else if( page == m_pgPZ )           // Pole-zero analyses
     {
