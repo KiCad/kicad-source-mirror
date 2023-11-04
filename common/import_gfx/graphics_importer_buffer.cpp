@@ -144,10 +144,17 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
         upscaledW = ( origW == 0.0f ? 0.0 : origW * convert_scale / origH );
     }
 
-    std::vector<SHAPE_LINE_CHAIN> upscaledPaths;
+    std::vector<IMPORTED_POLYGON*> openPaths;
+    std::vector<SHAPE_LINE_CHAIN>  upscaledPaths;
 
     for( IMPORTED_POLYGON* path : aPaths )
     {
+        if( path->Vertices().size() < 3 )
+        {
+            openPaths.push_back( path );
+            continue;
+        }
+
         SHAPE_LINE_CHAIN lc;
 
         for( VECTOR2D& v : path->Vertices() )
@@ -178,6 +185,9 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
         aShapes.push_back(
                 std::make_unique<IMPORTED_POLYGON>( pts, aStroke, aFilled, aFillColor ) );
     }
+
+    for( IMPORTED_POLYGON* openPath : openPaths )
+        aShapes.push_back( std::make_unique<IMPORTED_POLYGON>( *openPath ) );
 }
 
 
