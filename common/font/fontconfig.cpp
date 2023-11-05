@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
+ * Copyright (C) 2023 CERN (www.cern.ch)
  * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -208,8 +209,8 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
 
                     if( !styleStr.IsEmpty() )
                     {
-                        styleStr.Replace( wxS( " " ), wxS( ":" ) );
-                        fontName += ":" + styleStr;
+                        styleStr.Replace( ' ', ':' );
+                        fontName += ':' + styleStr;
                     }
                 }
 
@@ -217,10 +218,25 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
                 bool has_ital = false;
                 wxString lower_style = styleStr.Lower();
 
-                if( lower_style.Contains( wxS( "bold" ) )
-                        || lower_style.Contains( wxS( "black" ) )
-                        || lower_style.Contains( wxS( "thick" ) )
-                        || lower_style.Contains( wxS( "dark" ) ) )
+                if( lower_style.Contains( wxS( "thin" ) )
+                         || lower_style.Contains( wxS( "light" ) )   // also cataches ultralight and extralight
+                         || lower_style.Contains( wxS( "regular" ) )
+                         || lower_style.Contains( wxS( "roman" ) )
+                         || lower_style.Contains( wxS( "book" ) ) )
+                {
+                    has_bold = false;
+                }
+                else if( lower_style.Contains( wxS( "medium" ) )
+                         || lower_style.Contains( wxS( "semibold" ) )
+                         || lower_style.Contains( wxS( "demibold" ) ) )
+                {
+                    has_bold = aBold;
+                }
+                else if( lower_style.Contains( wxS( "bold" ) )       // also catches ultrabold
+                         || lower_style.Contains( wxS( "heavy" ) )
+                         || lower_style.Contains( wxS( "black" ) )   // also catches extrablack
+                         || lower_style.Contains( wxS( "thick" ) )
+                         || lower_style.Contains( wxS( "dark" ) ) )
                 {
                     has_bold = true;
                 }
@@ -260,9 +276,14 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
     }
 
     if( retval == FF_RESULT::FF_ERROR )
+    {
         wxLogWarning( _( "Error loading font '%s'." ), qualifiedFontName );
+    }
     else if( retval == FF_RESULT::FF_SUBSTITUTE )
+    {
+        fontName.Replace( ':', ' ' );
         wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), qualifiedFontName, fontName );
+    }
 
     FcPatternDestroy( pat );
     return retval;
