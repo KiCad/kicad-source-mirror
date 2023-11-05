@@ -547,6 +547,17 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
             tempPin->SetShape( symbolPin->GetShape() );
         }
 
+        for( LIB_ITEM& item : tempSymbol.GetDrawItems() )
+        {
+            if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
+            {
+                // Use SCH_FIELD's text resolver
+                SCH_FIELD dummy( (SCH_ITEM*) this, -1 );
+                dummy.SetText( text->GetText() );
+                text->SetText( dummy.GetShownText( false ) );
+            }
+        }
+
         tempSymbol.Print( aSettings, m_pos + aOffset, m_unit, m_convert, opts, GetDNP() );
     }
     else    // Use dummy() part if the actual cannot be found.
