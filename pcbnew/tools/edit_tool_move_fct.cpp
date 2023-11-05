@@ -154,6 +154,10 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             FOOTPRINT* aFP = static_cast<FOOTPRINT*>( a );
             FOOTPRINT* bFP = static_cast<FOOTPRINT*>( b );
 
+            // Store initial orientation of footprints, before flipping them.
+            EDA_ANGLE aAngle = aFP->GetOrientation();
+            EDA_ANGLE bAngle = bFP->GetOrientation();
+
             // Flip both if needed
             if( aFP->IsFlipped() != bFP->IsFlipped() )
             {
@@ -162,7 +166,6 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             }
 
             // Set orientation
-            EDA_ANGLE aAngle = aFP->GetOrientation(), bAngle = bFP->GetOrientation();
             std::swap( aAngle, bAngle );
             aFP->SetOrientation( aAngle );
             bFP->SetOrientation( bAngle );
