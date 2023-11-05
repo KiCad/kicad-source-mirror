@@ -465,7 +465,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     text.GetLinePositions( positions, (int) strings_list.Count() );
 
-    TEXT_ATTRIBUTES attrs = GetAttributes();
+    TEXT_ATTRIBUTES attrs = text.GetAttributes();
     attrs.m_StrokeWidth = penWidth;
     attrs.m_Multiline = false;
 
