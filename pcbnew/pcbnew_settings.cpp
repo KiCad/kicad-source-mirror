@@ -512,6 +512,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "plot.mirror",
             &m_Plot.mirror, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "plot.as_item_checkboxes",
+            &m_Plot.as_item_checkboxes, false ) );
+
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );
 

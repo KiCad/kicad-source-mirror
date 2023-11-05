@@ -276,6 +276,7 @@ public:
         double ps_fine_width_adjust;
         bool   check_zones_before_plotting;
         bool   mirror;
+        bool   as_item_checkboxes;
     };
 
     struct DIALOG_REANNOTATE

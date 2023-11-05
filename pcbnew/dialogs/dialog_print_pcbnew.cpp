@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2018 CERN
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 CERN
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -26,9 +26,6 @@
  */
 
 #include <kiface_base.h>
-#include <confirm.h>
-#include <core/arraydim.h>
-#include <base_units.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <board.h>
@@ -38,7 +35,6 @@
 #include <dialogs/dialog_print_generic.h>
 #include <pcbnew_printout.h>
 #include <wx/checklst.h>
-#include <wx/textdlg.h>
 
 
 class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC
@@ -160,6 +156,7 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
             m_layerCheckListBox->Check( checkIndex );
     }
 
+    m_checkAsItems->SetValue( settings()->m_AsItemCheckboxes );
     m_checkboxMirror->SetValue( settings()->m_Mirror );
     m_titleBlock->SetValue( settings()->m_titleBlock );
 
