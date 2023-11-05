@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2013 CERN (www.cern.ch)
+ * Copyright (C) 2013-2023 CERN (www.cern.ch)
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -236,7 +236,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         autoSaveFn.SetName( getAutoSaveFileName() );
         autoSaveFn.ClearExt();
 
-		CheckForAutoSaveFile( autoSaveFn );
+        if( ( aCtl & KICTL_REVERT ) )
+        {
+            DeleteAutoSaveFile( fullFileName );
+        }
+        else
+        {
+            // This will rename the file if there is an autosave and the user wants to recover
+            CheckForAutoSaveFile( autoSaveFn );
+        }
 
         SetScreen( nullptr );
 
@@ -1517,6 +1525,15 @@ bool SCH_EDIT_FRAME::updateAutoSaveFile()
 }
 
 
+void removeFile( const wxString& aFilename, wxArrayString& aUnremoved )
+{
+    wxLogTrace( traceAutoSave, wxS( "Removing auto save file " ) + aFilename );
+
+    if( wxFileExists( aFilename ) && !wxRemoveFile( aFilename ) )
+        aUnremoved.Add( aFilename );
+};
+
+
 void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 {
     if( !Pgm().IsGUI() )
@@ -1538,11 +1555,11 @@ void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     int response = wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxYES_NO | wxICON_QUESTION,
                                  this );
 
-    wxTextFile autoSaveFile( aFileName.GetFullPath() );
+    wxTextFile fileList( aFileName.GetFullPath() );
 
-    if( !autoSaveFile.Open() )
+    if( !fileList.Open() )
     {
-        msg.Printf( _( "The file '%s` could not be opened.\n"
+        msg.Printf( _( "The file '%s' could not be opened.\n"
                        "Manual recovery of automatically saved files is required." ),
                     aFileName.GetFullPath() );
 
@@ -1554,8 +1571,7 @@ void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     {
         wxArrayString unrecoveredFiles;
 
-        for( wxString fn = autoSaveFile.GetFirstLine(); !autoSaveFile.Eof();
-             fn = autoSaveFile.GetNextLine() )
+        for( wxString fn = fileList.GetFirstLine(); !fileList.Eof(); fn = fileList.GetNextLine() )
         {
             wxFileName recoveredFn = fn;
             wxString tmp = recoveredFn.GetName();
@@ -1602,50 +1618,53 @@ void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
             wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION,
                           this );
         }
-    }
-    else
-    {
+
         wxArrayString unremovedFiles;
-
-        for( wxString fn = autoSaveFile.GetFirstLine(); !autoSaveFile.Eof();
-             fn = autoSaveFile.GetNextLine() )
-        {
-            wxLogTrace( traceAutoSave, wxS( "Removing auto save file " ) + fn );
-
-            if( wxFileExists( fn ) && !wxRemoveFile( fn ) )
-                unremovedFiles.Add( fn );
-        }
+        removeFile( aFileName.GetFullPath(), unremovedFiles );
 
         if( !unremovedFiles.IsEmpty() )
         {
-            msg = _( "The following automatically saved file(s) could not be removed\n" );
+            msg.Printf( _( "The autosave file '%s' could not be removed.\n"
+                           "Manual removal will be required." ),
+                        unremovedFiles[0] );
 
-            for( size_t i = 0; i < unremovedFiles.GetCount(); i++ )
-                msg += unremovedFiles[i] + wxS( "\n" );
-
-            msg += _( "Manual removal will be required for the file(s) above." );
-            wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION,
-                          this );
+            wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION, this );
         }
     }
-
-    // Remove the auto save master file.
-    wxLogTrace( traceAutoSave, wxS( "Removing auto save file '%s'" ), aFileName.GetFullPath() );
-
-    if( !wxRemoveFile( aFileName.GetFullPath() ) )
+    else
     {
-        msg.Printf( _( "The automatic save master file\n"
-                       "'%s'\n"
-                       "could not be deleted." ), aFileName.GetFullPath() );
+        DeleteAutoSaveFile( aFileName );
+    }
+}
 
-        wxMessageDialog dlg( this, msg, Pgm().App().GetAppDisplayName(),
-                             wxOK | wxICON_EXCLAMATION | wxCENTER );
 
-        dlg.SetExtendedMessage(
-                _( "This file must be manually removed or the auto save feature will be\n"
-                   "shown every time the schematic editor is launched." ) );
+void SCH_EDIT_FRAME::DeleteAutoSaveFile( const wxFileName& aFileName )
+{
+    if( !Pgm().IsGUI() )
+        return;
 
-        dlg.ShowModal();
+    wxCHECK_RET( aFileName.IsOk(), wxS( "Invalid file name!" ) );
+
+    if( !aFileName.FileExists() )
+        return;
+
+    wxTextFile    fileList( aFileName.GetFullPath() );
+    wxArrayString unremovedFiles;
+
+    for( wxString fn = fileList.GetFirstLine(); !fileList.Eof(); fn = fileList.GetNextLine() )
+        removeFile( fn, unremovedFiles );
+
+    removeFile( aFileName.GetFullPath(), unremovedFiles );
+
+    if( !unremovedFiles.IsEmpty() )
+    {
+        wxString msg = _( "The following automatically saved file(s) could not be removed\n" );
+
+        for( size_t i = 0; i < unremovedFiles.GetCount(); i++ )
+            msg += unremovedFiles[i] + wxS( "\n" );
+
+        msg += _( "Manual removal will be required for the file(s) above." );
+        wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION, this );
     }
 }
 

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2023 CERN (www.cern.ch)
  * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -322,7 +323,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
         ReleaseFile();
 
-        return OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+        return OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
     }
 
     case ID_NEW_BOARD:
@@ -622,8 +623,15 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                std::placeholders::_1 ) );
         }
 
-        // This will rename the file if there is an autosave and the user want to recover
-		CheckForAutoSaveFile( fullFileName );
+        if( ( aCtl & KICTL_REVERT ) )
+        {
+            DeleteAutoSaveFile( fullFileName );
+        }
+        else
+        {
+            // This will rename the file if there is an autosave and the user wants to recover
+            CheckForAutoSaveFile( fullFileName );
+        }
 
         bool failedLoad = false;
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 CERN
+ * Copyright (C) 2019-2023 CERN
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -160,7 +160,7 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
         screen->SetContentModified( false );    // do not prompt the user for changes
 
     m_frame->ReleaseFile();
-    m_frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFileName() ) );
+    m_frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFileName() ), KICTL_REVERT );
 
     return 0;
 }

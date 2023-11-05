@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2023 CERN (www.cern.ch)
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1356,11 +1357,25 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     }
     else
     {
-        wxLogTrace( traceAutoSave,
-                    wxT( "Removing auto save file " ) + autoSaveFileName.GetFullPath() );
+        DeleteAutoSaveFile( aFileName );
+    }
+}
 
-        // Remove the auto save file when using the previous file as is.
-        wxRemoveFile( autoSaveFileName.GetFullPath() );
+
+void EDA_BASE_FRAME::DeleteAutoSaveFile( const wxFileName& aFileName )
+{
+    if( !Pgm().IsGUI() )
+        return;
+
+    wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );
+
+    wxFileName autoSaveFn = aFileName;
+    autoSaveFn.SetName( GetAutoSaveFilePrefix() + aFileName.GetName() );
+
+    if( autoSaveFn.FileExists() )
+    {
+        wxLogTrace( traceAutoSave, wxT( "Removing auto save file " ) + autoSaveFn.GetFullPath() );
+        wxRemoveFile( autoSaveFn.GetFullPath() );
     }
 }
 

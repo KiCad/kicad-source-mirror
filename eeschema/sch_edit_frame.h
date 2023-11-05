@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2023 CERN (www.cern.ch)
  * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -809,6 +810,7 @@ public:
      */
     virtual void CheckForAutoSaveFile( const wxFileName& aFileName ) override;
 
+    virtual void DeleteAutoSaveFile( const wxFileName& aFileName ) override;
 
     /**
      * Toggle the show/hide state of the left side schematic navigation panel

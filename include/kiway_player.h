@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2017-2023 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2023 CERN (www.cern.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +77,7 @@ public:
 #define KICTL_KICAD_ONLY        (1<<1)   ///< chosen file is from KiCad according to user
 #define KICTL_CREATE            (1<<2)   ///< caller thinks requested project files may not exist.
 #define KICTL_IMPORT_LIB        (1<<3)   ///< import all footprints into a project library.
+#define KICTL_REVERT            (1<<4)   ///< reverting to a previously-saved (KiCad) file.
 
     /**
      * Open a project or set of files given by @a aFileList.
