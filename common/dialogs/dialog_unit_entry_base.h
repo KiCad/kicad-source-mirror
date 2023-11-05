@@ -33,6 +33,7 @@ class WX_UNIT_ENTRY_DIALOG_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxBoxSizer* bSizerMain;
 		wxStaticText* m_label;
 		wxTextCtrl* m_textCtrl;
 		wxStaticText* m_unit_label;
@@ -56,6 +57,7 @@ class WX_PT_ENTRY_DIALOG_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxBoxSizer* bSizerMain;
 		wxStaticText* m_labelX;
 		wxTextCtrl* m_textCtrlX;
 		wxStaticText* m_unitsX;

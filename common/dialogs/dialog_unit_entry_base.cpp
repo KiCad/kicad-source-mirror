@@ -13,7 +13,6 @@ WX_UNIT_ENTRY_DIALOG_BASE::WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizerContent;
@@ -67,7 +66,6 @@ WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID i
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
-	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer;

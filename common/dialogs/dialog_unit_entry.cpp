@@ -36,6 +36,9 @@ WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxStr
 
     SetInitialFocus( m_textCtrl );
     SetupStandardButtons();
+
+	Layout();
+	bSizerMain->Fit( this );
 }
 
 
@@ -59,7 +62,11 @@ WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString&
 
     SetInitialFocus( m_textCtrlX );
     SetupStandardButtons();
+
+	Layout();
+	bSizerMain->Fit( this );
 }
+
 
 VECTOR2I WX_PT_ENTRY_DIALOG::GetValue()
 {
