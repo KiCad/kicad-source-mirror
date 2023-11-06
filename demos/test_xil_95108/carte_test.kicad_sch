@@ -1,4 +1,4 @@
-(kicad_sch (version 20230409) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 15a5bbab-5625-4b9a-aabf-f67f0843b1a5)
 
@@ -10,7 +10,7 @@
   )
 
   (lib_symbols
-    (symbol "carte_test_schlib:+12V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:+12V" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -23,10 +23,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
+      (property "Description" "power-flag symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "power-flag symbol" (at 0 0 0)
+      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "+12V_0_1"
@@ -62,7 +62,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:-12V" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:-12V" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -75,10 +75,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
+      (property "Description" "power-flag symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "power-flag symbol" (at 0 0 0)
+      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "-12V_0_0"
@@ -102,7 +102,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:74HC04" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:74HC04" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 2.54 0)
         (effects (font (size 1.016 1.016)))
       )
@@ -114,6 +114,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74HC04_0_0"
         (polyline
@@ -256,7 +259,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -269,10 +272,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "cap capacitor" (at 0 0 0)
+      (property "Description" "Unpolarized capacitor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Unpolarized capacitor" (at 0 0 0)
+      (property "ki_keywords" "cap capacitor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "C_*" (at 0 0 0)
@@ -307,7 +310,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:CONN_2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:CONN_2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at -1.27 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -319,6 +322,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_2_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
@@ -337,7 +343,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:CONN_2X2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:CONN_2X2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 0 3.81 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -349,6 +355,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_2X2_0_1"
         (rectangle (start -2.54 2.54) (end 2.54 -2.54)
@@ -375,7 +384,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:CONN_3" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:CONN_3" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "K" (at -1.27 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -387,6 +396,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_3_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
@@ -409,7 +421,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0.635 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left))
       )
@@ -422,10 +434,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "cap capacitor" (at 0 0 0)
+      (property "Description" "Polarised capacitor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Polarised capacitor" (at 0 0 0)
+      (property "ki_keywords" "cap capacitor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "CP_*" (at 0 0 0)
@@ -480,7 +492,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:CRYSTAL" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:CRYSTAL" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "X" (at 0 3.81 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -492,6 +504,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CRYSTAL_0_1"
         (polyline
@@ -533,7 +548,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:DB25" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:DB25" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 1.27 34.29 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -545,6 +560,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "DB25_0_1"
         (arc (start -3.81 -32.004) (mid -3.4129 -32.8094) (end -2.54 -33.02)
@@ -999,7 +1017,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:DB9" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:DB9" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 13.97 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -1011,6 +1029,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "DB9_0_1"
         (circle (center -1.778 -10.16) (radius 0.762)
@@ -1257,7 +1278,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:DIODE" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:DIODE" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.016 1.016)))
       )
@@ -1269,6 +1290,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "D? S*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1303,7 +1327,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -6.35 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -1316,10 +1340,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
+      (property "Description" "GROUND power-flag symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "GROUND power-flag symbol" (at 0 0 0)
+      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
@@ -1343,7 +1367,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:LED" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:LED" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -1355,6 +1379,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1407,7 +1434,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:LM318N" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:LM318N" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 2.54 7.62 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1419,6 +1446,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "LM318N_0_1"
         (polyline
@@ -1491,7 +1521,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:LM7805" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:LM7805" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 -4.9784 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1503,6 +1533,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "LM7805_0_1"
         (rectangle (start -5.08 -3.81) (end 5.08 3.81)
@@ -1525,7 +1558,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 2.413 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1537,6 +1570,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
@@ -1559,7 +1595,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -1572,10 +1608,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "r res resistor" (at 0 0 0)
+      (property "Description" "Resistor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Resistor" (at 0 0 0)
+      (property "ki_keywords" "r res resistor" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R_* R_*" (at 0 0 0)
@@ -1598,7 +1634,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:RAM_32KO" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:RAM_32KO" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 22.86 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -1610,6 +1646,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "RAM_32KO_0_0"
         (pin power_in line (at 0 -31.75 90) (length 5.08)
@@ -1734,7 +1773,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:SW_PUSH" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:SW_PUSH" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "SW" (at 3.81 2.794 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -1746,6 +1785,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "SW_PUSH_0_1"
         (rectangle (start -4.318 1.27) (end 4.318 1.524)
@@ -1772,7 +1814,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:TDA8702" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:TDA8702" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 5.08 20.32 0)
         (effects (font (size 1.524 1.524)) (justify left))
       )
@@ -1784,6 +1826,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "TDA8702_0_1"
         (rectangle (start -12.7 17.78) (end 12.7 -17.78)
@@ -1858,7 +1903,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:VCC" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -1871,10 +1916,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
+      (property "Description" "power-flag symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "power-flag symbol" (at 0 0 0)
+      (property "ki_keywords" "Power Flag Symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VCC_0_1"
@@ -1898,7 +1943,7 @@
         )
       )
     )
-    (symbol "carte_test_schlib:XC95108PC84" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "carte_test_schlib:XC95108PC84" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 13.97 64.77 0)
         (effects (font (size 1.524 1.524)) (justify left))
       )
@@ -1910,6 +1955,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "XC95108PC84_0_1"
         (rectangle (start -21.59 62.23) (end 21.59 -46.99)
@@ -3865,7 +3913,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:TDA8702") (at 264.16 102.87 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec238e5)
     (property "Reference" "U1" (at 269.24 82.55 0)
       (effects (font (size 1.524 1.524)) (justify left))
@@ -3878,6 +3926,9 @@
     )
     (property "Datasheet" "" (at 264.16 102.87 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 264.16 102.87 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid d6dcc474-2755-4889-a8bc-b8eb1b2925e2))
     (pin "10" (uuid 35eaf837-70f8-47d6-8f11-4069ad581775))
@@ -3905,7 +3956,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 264.16 77.47 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec239fe)
     (property "Reference" "#PWR046" (at 264.16 72.39 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3919,6 +3970,9 @@
     (property "Datasheet" "" (at 264.16 77.47 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 264.16 77.47 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 87670da9-a8e9-4ad7-81f2-7d7b07a0b25d))
     (instances
       (project "carte_test"
@@ -3930,7 +3984,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 132.08 260.35 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23a2d)
     (property "Reference" "#PWR048" (at 132.08 260.35 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3944,6 +3998,9 @@
     (property "Datasheet" "" (at 132.08 260.35 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 132.08 260.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid bc7c8d5a-ffe4-483e-8329-3a84659e1625))
     (instances
       (project "carte_test"
@@ -3955,7 +4012,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 264.16 127 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23a35)
     (property "Reference" "#PWR044" (at 264.16 127 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3969,6 +4026,9 @@
     (property "Datasheet" "" (at 264.16 127 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 264.16 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2daae261-8a97-44c8-b161-48b8f3f76358))
     (instances
       (project "carte_test"
@@ -3980,7 +4040,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 241.3 125.73 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23aba)
     (property "Reference" "C1" (at 242.57 123.19 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3994,6 +4054,9 @@
     (property "Datasheet" "" (at 241.3 125.73 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 241.3 125.73 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 01f6e04a-5eaa-48ee-ae12-54151ffa6e51))
     (pin "2" (uuid 35d92d05-0f2c-4f9b-985f-5e9464a478f8))
     (instances
@@ -4006,7 +4069,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 241.3 129.54 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23add)
     (property "Reference" "#PWR043" (at 241.3 129.54 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4020,6 +4083,9 @@
     (property "Datasheet" "" (at 241.3 129.54 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 241.3 129.54 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8258d775-37d5-41ef-85f4-4d7c977393eb))
     (instances
       (project "carte_test"
@@ -4031,7 +4097,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CP") (at 289.56 106.68 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23b98)
     (property "Reference" "C2" (at 289.56 102.87 90)
       (effects (font (size 1.27 1.27)) (justify bottom))
@@ -4045,6 +4111,9 @@
     (property "Datasheet" "" (at 289.56 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 289.56 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 190f7af2-bf6d-403c-8074-0ad677df0da2))
     (pin "2" (uuid db54ce23-e7fb-4887-b09a-ce892ec9ebb2))
     (instances
@@ -4057,7 +4126,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CP") (at 99.06 205.74 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23dcd)
     (property "Reference" "C3" (at 100.33 203.2 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4071,6 +4140,9 @@
     (property "Datasheet" "" (at 99.06 205.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 205.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ec3e3059-a1a7-4ae1-a0dd-f5d4a8d417a0))
     (pin "2" (uuid f71e1de3-fe13-4fcb-85ae-92e2e13c286a))
     (instances
@@ -4083,7 +4155,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 99.06 209.55 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23de5)
     (property "Reference" "#PWR042" (at 99.06 209.55 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4097,6 +4169,9 @@
     (property "Datasheet" "" (at 99.06 209.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 209.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a8567bf3-12e1-444d-9bed-d188827d6908))
     (instances
       (project "carte_test"
@@ -4108,7 +4183,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 96.52 55.88 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec23e6e)
     (property "Reference" "#PWR040" (at 96.52 55.88 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4122,6 +4197,9 @@
     (property "Datasheet" "" (at 96.52 55.88 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 96.52 55.88 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d213d63c-1147-4b5c-a9f5-b2ecca8903c9))
     (instances
       (project "carte_test"
@@ -4133,7 +4211,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CRYSTAL") (at 146.05 238.76 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec2428d)
     (property "Reference" "X1" (at 146.05 234.95 0)
       (effects (font (size 1.524 1.524)))
@@ -4147,6 +4225,9 @@
     (property "Datasheet" "" (at 146.05 238.76 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 146.05 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 41c5bc62-9587-4e83-b807-eebed9d06d3b))
     (pin "2" (uuid 3cdec976-69b5-4ce2-a88a-33450037ac35))
     (instances
@@ -4159,7 +4240,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 160.02 256.54 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec242ad)
     (property "Reference" "C4" (at 162.56 254 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4173,6 +4254,9 @@
     (property "Datasheet" "" (at 160.02 256.54 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 256.54 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c38b2f35-468c-42b3-a3e2-08b634d38ad3))
     (pin "2" (uuid 92dc4724-cc2b-4e5f-85df-aae6dd91d2ed))
     (instances
@@ -4185,7 +4269,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 146.05 248.92 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec242c1)
     (property "Reference" "R1" (at 146.05 250.952 90)
       (effects (font (size 1.27 1.27)))
@@ -4199,6 +4283,9 @@
     (property "Datasheet" "" (at 146.05 248.92 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 146.05 248.92 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 43a983aa-60f3-4f81-9491-81aa8d63a1ba))
     (pin "2" (uuid 7dbe2cd4-6ac1-480c-b077-686871360ddc))
     (instances
@@ -4211,7 +4298,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:LM7805") (at 86.36 199.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec2436d)
     (property "Reference" "U3" (at 86.36 191.77 0)
       (effects (font (size 1.524 1.524)))
@@ -4224,6 +4311,9 @@
     )
     (property "Datasheet" "" (at 86.36 199.39 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 86.36 199.39 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 395ada43-c36e-4e18-ac7e-b8fcf87799e5))
     (pin "2" (uuid 44cb9b14-6a91-456c-a0e0-67414515e894))
@@ -4238,7 +4328,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 86.36 207.01 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec2437a)
     (property "Reference" "#PWR038" (at 86.36 207.01 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4252,6 +4342,9 @@
     (property "Datasheet" "" (at 86.36 207.01 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 86.36 207.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4a30ac56-ba01-49cf-ab43-215f03ba2403))
     (instances
       (project "carte_test"
@@ -4263,7 +4356,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 99.06 196.85 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec24382)
     (property "Reference" "#PWR037" (at 99.06 191.77 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4277,6 +4370,9 @@
     (property "Datasheet" "" (at 99.06 196.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 99.06 196.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e74d7cb7-f39f-4492-8722-4d0ebef40b9d))
     (instances
       (project "carte_test"
@@ -4288,7 +4384,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CONN_3") (at 29.21 200.66 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec243ac)
     (property "Reference" "P2" (at 30.4292 200.66 90)
       (effects (font (size 1.016 1.016)))
@@ -4301,6 +4397,9 @@
     )
     (property "Datasheet" "" (at 29.21 200.66 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 29.21 200.66 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 6bb7b39e-e9b7-4a60-b1dc-b0309fc842ec))
     (pin "2" (uuid ed6a1f17-2065-4624-9a57-da679bebe1ae))
@@ -4315,7 +4414,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 38.1 200.66 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec243bd)
     (property "Reference" "#PWR036" (at 38.1 200.66 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4329,6 +4428,9 @@
     (property "Datasheet" "" (at 38.1 200.66 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 38.1 200.66 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c281dd60-7f7a-4aca-907e-6156535b0928))
     (instances
       (project "carte_test"
@@ -4340,7 +4442,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:DIODE") (at 53.34 198.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec243c8)
     (property "Reference" "D1" (at 53.34 195.58 0)
       (effects (font (size 1.27 1.27)))
@@ -4348,11 +4450,14 @@
     (property "Value" "1N4004" (at 53.34 193.04 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal" (at 53.34 194.31 0)
+    (property "Footprint" "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal" (at 55.118 199.898 0)
       (effects (font (size 0.508 0.508)))
     )
     (property "Datasheet" "" (at 53.34 198.12 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 53.34 198.12 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 0e097b8f-c70a-466e-bf1e-77079ee3ace4))
     (pin "2" (uuid ae3f0438-4f10-43bd-ab4f-64ea5181a46d))
@@ -4366,7 +4471,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CP") (at 71.12 205.74 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec243d6)
     (property "Reference" "C6" (at 72.39 203.2 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4380,6 +4485,9 @@
     (property "Datasheet" "" (at 71.12 205.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 71.12 205.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid eac1e914-cbb8-4f6d-ad06-278f1b89e8bd))
     (pin "2" (uuid 493374a5-b6af-4821-a38a-0b2571b09d7e))
     (instances
@@ -4392,7 +4500,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 71.12 209.55 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec243dc)
     (property "Reference" "#PWR035" (at 71.12 209.55 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4406,6 +4514,9 @@
     (property "Datasheet" "" (at 71.12 209.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 71.12 209.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9c55711e-95f9-4f0e-868b-91e97486b87b))
     (instances
       (project "carte_test"
@@ -4417,7 +4528,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CONN_2") (at 369.57 104.14 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec2446d)
     (property "Reference" "P3" (at 368.3 104.14 90)
       (effects (font (size 1.016 1.016)))
@@ -4431,6 +4542,9 @@
     (property "Datasheet" "" (at 369.57 104.14 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 369.57 104.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6a738d0f-8af5-46d8-9163-1a338712820c))
     (pin "2" (uuid 08ca427c-c586-4dc7-9c0d-1552249cf23c))
     (instances
@@ -4443,7 +4557,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:PWR_FLAG") (at 46.99 218.44 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec24491)
     (property "Reference" "#FLG032" (at 46.99 211.582 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4457,6 +4571,9 @@
     (property "Datasheet" "" (at 46.99 218.44 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 46.99 218.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3c68e11e-bea9-44db-a1f8-a03546138e13))
     (instances
       (project "carte_test"
@@ -4468,7 +4585,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:74HC04") (at 146.05 226.06 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c2f6)
     (property "Reference" "U4" (at 151.003 223.139 0)
       (effects (font (size 1.524 1.524)))
@@ -4481,6 +4598,9 @@
     )
     (property "Datasheet" "" (at 146.05 226.06 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 146.05 226.06 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid fb0216fc-4f27-4724-ab5e-6104c0ad40a4))
     (pin "7" (uuid 1e31b7a5-749b-48e7-a6fc-47aef049a707))
@@ -4506,7 +4626,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:74HC04") (at 173.99 226.06 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c300)
     (property "Reference" "U4" (at 178.943 223.139 0)
       (effects (font (size 1.524 1.524)))
@@ -4519,6 +4639,9 @@
     )
     (property "Datasheet" "" (at 173.99 226.06 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 173.99 226.06 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 9da62c94-9653-4a98-91dc-bf18ff95ecfb))
     (pin "7" (uuid cbeffd6d-25eb-4334-8c04-a33617d6487d))
@@ -4544,7 +4667,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:74HC04") (at 39.37 247.65 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c30a)
     (property "Reference" "U4" (at 44.323 244.729 0)
       (effects (font (size 1.524 1.524)))
@@ -4557,6 +4680,9 @@
     )
     (property "Datasheet" "" (at 39.37 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 39.37 247.65 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid f5aca87f-54b4-4d29-b293-b5973e1ad451))
     (pin "7" (uuid 1a44a158-96c4-4118-828f-dc81f0226dd8))
@@ -4582,7 +4708,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:74HC04") (at 39.37 261.62 0) (unit 4)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c30c)
     (property "Reference" "U4" (at 44.323 258.699 0)
       (effects (font (size 1.524 1.524)))
@@ -4595,6 +4721,9 @@
     )
     (property "Datasheet" "" (at 39.37 261.62 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 39.37 261.62 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 7e94f39d-abe9-4f15-90f7-91acb7ba18be))
     (pin "7" (uuid 58344027-2978-4157-9305-5f9a35a6e056))
@@ -4620,7 +4749,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:74HC04") (at 39.37 274.32 0) (unit 5)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c311)
     (property "Reference" "U4" (at 44.323 271.399 0)
       (effects (font (size 1.524 1.524)))
@@ -4633,6 +4762,9 @@
     )
     (property "Datasheet" "" (at 39.37 274.32 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 39.37 274.32 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 7f18f4c5-d2e1-49df-bb30-5223b9ada120))
     (pin "7" (uuid 7d560a61-ec58-4c85-b8e4-3ef095bada0e))
@@ -4658,7 +4790,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:74HC04") (at 67.31 261.62 0) (unit 6)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c318)
     (property "Reference" "U4" (at 72.263 258.699 0)
       (effects (font (size 1.524 1.524)))
@@ -4671,6 +4803,9 @@
     )
     (property "Datasheet" "" (at 67.31 261.62 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 67.31 261.62 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 2634fab4-476d-4d00-ad35-12e6eeab67bd))
     (pin "7" (uuid 3db2b736-0143-403e-8b0e-6b30d7719c52))
@@ -4696,7 +4831,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 26.67 276.86 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c322)
     (property "Reference" "#PWR031" (at 26.67 276.86 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4710,6 +4845,9 @@
     (property "Datasheet" "" (at 26.67 276.86 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 26.67 276.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 79fa516d-6a2e-42c5-89ef-3fd67794363f))
     (instances
       (project "carte_test"
@@ -4721,7 +4859,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 55.88 262.89 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c328)
     (property "Reference" "#PWR030" (at 55.88 262.89 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4735,6 +4873,9 @@
     (property "Datasheet" "" (at 55.88 262.89 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 55.88 262.89 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b444ef37-0b4b-40f3-8cc2-acd1477303a3))
     (instances
       (project "carte_test"
@@ -4746,7 +4887,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:RAM_32KO") (at 289.56 172.72 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c463)
     (property "Reference" "U5" (at 289.56 149.86 0)
       (effects (font (size 1.778 1.778)))
@@ -4759,6 +4900,9 @@
     )
     (property "Datasheet" "" (at 289.56 172.72 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 289.56 172.72 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 835599a6-78fd-4343-a9b7-afc24477e2d3))
     (pin "28" (uuid 0cada1f0-8128-4e00-845f-f114e3715ad9))
@@ -4798,7 +4942,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CONN_3") (at 248.92 203.2 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c49f)
     (property "Reference" "K1" (at 248.92 201.93 90)
       (effects (font (size 1.27 1.27)))
@@ -4811,6 +4955,9 @@
     )
     (property "Datasheet" "" (at 248.92 203.2 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 248.92 203.2 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid caa56ab8-c1e1-4f6c-8315-5f212eda5857))
     (pin "2" (uuid d6534467-5182-4b6d-bdc1-4199a2e88e19))
@@ -4825,7 +4972,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 251.46 193.04 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c4b5)
     (property "Reference" "#PWR029" (at 251.46 187.96 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4839,6 +4986,9 @@
     (property "Datasheet" "" (at 251.46 193.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 251.46 193.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9416cc21-43a3-4054-9e2a-fc53f2287770))
     (instances
       (project "carte_test"
@@ -4850,7 +5000,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:DB25") (at 38.1 119.38 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c60f)
     (property "Reference" "J1" (at 36.83 85.09 0)
       (effects (font (size 1.778 1.778)))
@@ -4863,6 +5013,9 @@
     )
     (property "Datasheet" "" (at 38.1 119.38 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 38.1 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 0ff73488-e862-4329-aa6c-760bb09c4b0b))
     (pin "10" (uuid fb27a410-ef66-4396-a4ec-cb4bad39132e))
@@ -4899,7 +5052,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 91.44 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c76b)
     (property "Reference" "#PWR028" (at 49.53 91.44 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4913,6 +5066,9 @@
     (property "Datasheet" "" (at 49.53 91.44 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 91.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 187ce6c4-ef2b-41cf-b4a5-0f3b56b0e8cd))
     (instances
       (project "carte_test"
@@ -4924,7 +5080,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 119.38 234.95 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c7db)
     (property "Reference" "C12" (at 120.65 232.41 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4938,6 +5094,9 @@
     (property "Datasheet" "" (at 119.38 234.95 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 119.38 234.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9d164cb9-5292-493e-9d84-958676b41bbc))
     (pin "2" (uuid e4490e0e-5e7b-48ce-8460-95b85c37075a))
     (instances
@@ -4950,7 +5109,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 119.38 231.14 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c7ea)
     (property "Reference" "#PWR022" (at 119.38 226.06 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4964,6 +5123,9 @@
     (property "Datasheet" "" (at 119.38 231.14 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 119.38 231.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 588d1a46-8369-4620-8eae-aa4868534436))
     (instances
       (project "carte_test"
@@ -4975,7 +5137,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 119.38 238.76 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4c7f6)
     (property "Reference" "#PWR021" (at 119.38 238.76 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -4989,6 +5151,9 @@
     (property "Datasheet" "" (at 119.38 238.76 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 119.38 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c6120b79-77bc-4f9f-9f16-780c344732e7))
     (instances
       (project "carte_test"
@@ -5000,7 +5165,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 285.75 66.04 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4d082)
     (property "Reference" "R3" (at 285.75 68.072 90)
       (effects (font (size 1.27 1.27)))
@@ -5014,6 +5179,9 @@
     (property "Datasheet" "" (at 285.75 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 285.75 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 995d1110-d4d1-44a8-902a-21c064bec46e))
     (pin "2" (uuid ba4e0b6e-e22d-478e-a2c3-3c8951b4c23a))
     (instances
@@ -5026,7 +5194,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:LED") (at 297.18 66.04 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4d08f)
     (property "Reference" "D3" (at 297.18 68.58 0)
       (effects (font (size 1.27 1.27)))
@@ -5040,6 +5208,9 @@
     (property "Datasheet" "" (at 297.18 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 297.18 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1f1e4605-30b2-4f75-9c06-3b75c3fb6395))
     (pin "2" (uuid 8bd1dfcd-0adb-4066-b16c-1f91f4878561))
     (instances
@@ -5052,7 +5223,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 303.53 66.04 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4d095)
     (property "Reference" "#PWR019" (at 303.53 66.04 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5066,6 +5237,9 @@
     (property "Datasheet" "" (at 303.53 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 303.53 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 382fbfbc-1d22-4c36-84d6-54d4c454070d))
     (instances
       (project "carte_test"
@@ -5077,7 +5251,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 116.84 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec4f034)
     (property "Reference" "#PWR018" (at 49.53 116.84 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5091,6 +5265,9 @@
     (property "Datasheet" "" (at 49.53 116.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 116.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7b85e128-c4ae-4d6b-a213-a0556adadfe3))
     (instances
       (project "carte_test"
@@ -5102,7 +5279,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:SW_PUSH") (at 304.8 40.64 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b876)
     (property "Reference" "SW1" (at 308.61 36.83 0)
       (effects (font (size 1.27 1.27)))
@@ -5116,6 +5293,9 @@
     (property "Datasheet" "" (at 304.8 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 304.8 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c6e08c29-8d7a-468b-a47d-c52adf95abf5))
     (pin "2" (uuid a725240b-6dc6-4348-8b5e-38049f144455))
     (instances
@@ -5128,7 +5308,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:SW_PUSH") (at 304.8 46.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b882)
     (property "Reference" "SW2" (at 304.8 50.8 0)
       (effects (font (size 1.27 1.27)))
@@ -5142,6 +5322,9 @@
     (property "Datasheet" "" (at 304.8 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 304.8 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid dbc4f8b4-2bc9-46aa-b807-e97f51719800))
     (pin "2" (uuid edd1df93-843a-4166-9612-64f7db7e1aa9))
     (instances
@@ -5154,7 +5337,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 313.69 40.64 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b88c)
     (property "Reference" "#PWR017" (at 313.69 40.64 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5168,6 +5351,9 @@
     (property "Datasheet" "" (at 313.69 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 313.69 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0a25d147-97d5-4ab3-bfed-f2754cf658dd))
     (instances
       (project "carte_test"
@@ -5179,7 +5365,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 313.69 46.99 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b890)
     (property "Reference" "#PWR016" (at 313.69 46.99 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5193,6 +5379,9 @@
     (property "Datasheet" "" (at 313.69 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 313.69 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid de06aecb-18f5-4fac-bcd4-06d88b585672))
     (instances
       (project "carte_test"
@@ -5204,7 +5393,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 284.48 34.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b970)
     (property "Reference" "R4" (at 286.512 34.29 90)
       (effects (font (size 1.27 1.27)))
@@ -5218,6 +5407,9 @@
     (property "Datasheet" "" (at 284.48 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 284.48 34.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 82cedcdb-f539-4673-ad33-9b84a127c603))
     (pin "2" (uuid aac333bc-588f-4156-91b6-580fee931578))
     (instances
@@ -5230,7 +5422,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 279.4 34.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b978)
     (property "Reference" "R5" (at 281.432 34.29 90)
       (effects (font (size 1.27 1.27)))
@@ -5244,6 +5436,9 @@
     (property "Datasheet" "" (at 279.4 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 279.4 34.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 304c2744-33fe-4c73-8842-e52adc94df50))
     (pin "2" (uuid 0a4dcaa1-8baf-4e0c-9eef-873614d80059))
     (instances
@@ -5256,7 +5451,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 279.4 30.48 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b97e)
     (property "Reference" "#PWR015" (at 279.4 25.4 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5270,6 +5465,9 @@
     (property "Datasheet" "" (at 279.4 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 279.4 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5e22d131-a74f-4d67-a8b2-820148846650))
     (instances
       (project "carte_test"
@@ -5281,7 +5479,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 284.48 30.48 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ec8b981)
     (property "Reference" "#PWR014" (at 284.48 25.4 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5295,6 +5493,9 @@
     (property "Datasheet" "" (at 284.48 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 284.48 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 73b96679-d66e-47e1-9f22-366bde02cd36))
     (instances
       (project "carte_test"
@@ -5306,7 +5507,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 96.52 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3a48)
     (property "Reference" "#PWR013" (at 49.53 96.52 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5320,6 +5521,9 @@
     (property "Datasheet" "" (at 49.53 96.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 96.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid cdbb7cb9-2907-48a1-a58c-ac049c494cdd))
     (instances
       (project "carte_test"
@@ -5331,7 +5535,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 101.6 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3a4b)
     (property "Reference" "#PWR012" (at 49.53 101.6 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5345,6 +5549,9 @@
     (property "Datasheet" "" (at 49.53 101.6 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d4a7a61e-165c-4c4c-82d9-a5d75669ea3e))
     (instances
       (project "carte_test"
@@ -5356,7 +5563,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 106.68 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3a4d)
     (property "Reference" "#PWR011" (at 49.53 106.68 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5370,6 +5577,9 @@
     (property "Datasheet" "" (at 49.53 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1510b704-bdc1-4f0d-874e-1d6d75b1a747))
     (instances
       (project "carte_test"
@@ -5381,7 +5591,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 111.76 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3a50)
     (property "Reference" "#PWR010" (at 49.53 111.76 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5395,6 +5605,9 @@
     (property "Datasheet" "" (at 49.53 111.76 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 111.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 057c95b9-5a3a-408f-9cbd-8dfb652d2c9f))
     (instances
       (project "carte_test"
@@ -5406,7 +5619,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 121.92 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3a8d)
     (property "Reference" "#PWR09" (at 49.53 121.92 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5420,6 +5633,9 @@
     (property "Datasheet" "" (at 49.53 121.92 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 121.92 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6002a229-3a9b-43c4-9874-63be1e2446fd))
     (instances
       (project "carte_test"
@@ -5431,7 +5647,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 49.53 127 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3a8f)
     (property "Reference" "#PWR08" (at 49.53 127 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5445,6 +5661,9 @@
     (property "Datasheet" "" (at 49.53 127 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 49.53 127 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 397c0476-5e10-4617-8d2e-4815839799bc))
     (instances
       (project "carte_test"
@@ -5456,7 +5675,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CONN_2X2") (at 355.6 39.37 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3f5e)
     (property "Reference" "P4" (at 355.6 35.56 0)
       (effects (font (size 1.27 1.27)))
@@ -5469,6 +5688,9 @@
     )
     (property "Datasheet" "" (at 355.6 39.37 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 355.6 39.37 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid c40088fc-aa01-4d0b-8248-743272534d8d))
     (pin "2" (uuid f53ea933-be71-4998-b04c-b354ed60be90))
@@ -5484,7 +5706,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 344.17 41.91 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecb3f8b)
     (property "Reference" "#PWR07" (at 344.17 41.91 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5498,6 +5720,9 @@
     (property "Datasheet" "" (at 344.17 41.91 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 344.17 41.91 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d8944d8d-dc04-4b17-b24d-b3aeefcd7c6b))
     (instances
       (project "carte_test"
@@ -5509,7 +5734,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CP") (at 289.56 97.79 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddacb)
     (property "Reference" "C14" (at 289.56 93.98 90)
       (effects (font (size 1.27 1.27)))
@@ -5523,6 +5748,9 @@
     (property "Datasheet" "" (at 289.56 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 289.56 97.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7343ab77-237a-4701-967c-46d943bd5485))
     (pin "2" (uuid 37d80f2f-8072-4679-b094-fdef3788fbb3))
     (instances
@@ -5535,7 +5763,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 304.8 97.79 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddb43)
     (property "Reference" "R8" (at 304.8 99.822 90)
       (effects (font (size 1.27 1.27)))
@@ -5549,6 +5777,9 @@
     (property "Datasheet" "" (at 304.8 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 304.8 97.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4407e31a-19a8-4c77-9415-65d79a9ff8cf))
     (pin "2" (uuid fcd32b20-470d-42b1-9c33-7e2e54143a77))
     (instances
@@ -5561,7 +5792,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 304.8 106.68 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddb4b)
     (property "Reference" "R9" (at 304.8 108.712 90)
       (effects (font (size 1.27 1.27)))
@@ -5575,6 +5806,9 @@
     (property "Datasheet" "" (at 304.8 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 304.8 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ec19091f-16f4-4e79-8ca8-cffa66becdee))
     (pin "2" (uuid d2cc9786-6004-44a1-a593-ee1043bcef15))
     (instances
@@ -5587,7 +5821,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 312.42 114.3 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddb57)
     (property "Reference" "R6" (at 308.61 110.49 0)
       (effects (font (size 1.27 1.27)))
@@ -5601,6 +5835,9 @@
     (property "Datasheet" "" (at 312.42 114.3 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 114.3 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ba4d3775-45ed-4b69-8927-e69aaf82e604))
     (pin "2" (uuid 4961a8ba-305c-4c0e-9108-2854719e1555))
     (instances
@@ -5613,7 +5850,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 328.93 83.82 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddb60)
     (property "Reference" "R7" (at 328.93 85.852 90)
       (effects (font (size 1.27 1.27)))
@@ -5627,6 +5864,9 @@
     (property "Datasheet" "" (at 328.93 83.82 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 328.93 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0134853b-188c-42cc-821a-de51261d4c11))
     (pin "2" (uuid c884200f-0af4-4129-be6e-12cc1c157833))
     (instances
@@ -5639,7 +5879,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 351.79 101.6 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddb6d)
     (property "Reference" "R10" (at 351.79 103.632 90)
       (effects (font (size 1.27 1.27)))
@@ -5653,6 +5893,9 @@
     (property "Datasheet" "" (at 351.79 101.6 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 351.79 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 48292df4-f7a4-4842-9dc0-e730396f9ac9))
     (pin "2" (uuid c15b1572-8c44-454e-ade3-f2d71eb5f6db))
     (instances
@@ -5665,7 +5908,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:LM318N") (at 327.66 101.6 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddb8b)
     (property "Reference" "U6" (at 330.2 109.22 0)
       (effects (font (size 1.524 1.524)))
@@ -5678,6 +5921,9 @@
     )
     (property "Datasheet" "" (at 327.66 101.6 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 327.66 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid ad49b206-1790-4e23-9f5f-1f10bb2d8831))
     (pin "2" (uuid 6b4c9d6e-93af-49d3-a3f7-9d5402e424c8))
@@ -5697,7 +5943,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 312.42 118.11 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddbe0)
     (property "Reference" "#PWR06" (at 312.42 118.11 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5711,6 +5957,9 @@
     (property "Datasheet" "" (at 312.42 118.11 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 118.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 46aca207-ec74-4005-a5e5-2b117d32b2b5))
     (instances
       (project "carte_test"
@@ -5722,7 +5971,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:+12V") (at 68.58 196.85 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddbf2)
     (property "Reference" "#PWR05" (at 68.58 191.77 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5736,6 +5985,9 @@
     (property "Datasheet" "" (at 68.58 196.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 68.58 196.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d822b5f8-27ee-4fbd-a4a6-5ea836670be9))
     (instances
       (project "carte_test"
@@ -5747,7 +5999,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:+12V") (at 325.12 110.49 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddc05)
     (property "Reference" "#PWR04" (at 325.12 115.57 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5761,6 +6013,9 @@
     (property "Datasheet" "" (at 325.12 110.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 325.12 110.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 79b60d95-3731-4dab-83f7-63db9fbad80e))
     (instances
       (project "carte_test"
@@ -5772,7 +6027,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:-12V") (at 325.12 92.71 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddc1a)
     (property "Reference" "#PWR118" (at 325.12 87.63 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5786,6 +6041,9 @@
     (property "Datasheet" "" (at 325.12 92.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 325.12 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 97e98b78-d3d5-479b-b7b4-1f766c73b1a3))
     (instances
       (project "carte_test"
@@ -5797,7 +6055,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:-12V") (at 64.77 204.47 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddc9f)
     (property "Reference" "#PWR139" (at 64.77 209.55 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5811,6 +6069,9 @@
     (property "Datasheet" "" (at 64.77 204.47 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 64.77 204.47 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1aab5159-a107-4d96-8865-2b1781a64378))
     (instances
       (project "carte_test"
@@ -5822,7 +6083,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:CP") (at 60.96 215.9 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddcad)
     (property "Reference" "C13" (at 62.23 218.44 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5836,6 +6097,9 @@
     (property "Datasheet" "" (at 60.96 215.9 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 215.9 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5d8a4b36-eb42-4f16-be7a-969226f96451))
     (pin "2" (uuid 81faac1c-8f35-46eb-808f-cb5b2c9b9634))
     (instances
@@ -5848,7 +6112,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 60.96 219.71 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddcb7)
     (property "Reference" "#PWR03" (at 60.96 219.71 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5862,6 +6126,9 @@
     (property "Datasheet" "" (at 60.96 219.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 219.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 03557d74-b7ae-490a-9ba7-3e2e4d9679a1))
     (instances
       (project "carte_test"
@@ -5873,7 +6140,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:PWR_FLAG") (at 58.42 204.47 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddcbe)
     (property "Reference" "#FLG02" (at 58.42 211.328 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5887,6 +6154,9 @@
     (property "Datasheet" "" (at 58.42 204.47 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 58.42 204.47 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b85f423f-ead7-4d9b-b394-40956432c9ef))
     (instances
       (project "carte_test"
@@ -5898,7 +6168,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:DIODE") (at 53.34 203.2 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddcdd)
     (property "Reference" "D4" (at 55.88 201.93 0)
       (effects (font (size 1.27 1.27)))
@@ -5912,6 +6182,9 @@
     (property "Datasheet" "" (at 53.34 203.2 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 203.2 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 037acd88-d1df-4f98-8067-37a4abbb8ac0))
     (pin "2" (uuid 1f3b9240-0c8f-462c-9458-a4fd72b23221))
     (instances
@@ -5924,7 +6197,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:PWR_FLAG") (at 60.96 196.85 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecddd9a)
     (property "Reference" "#FLG01" (at 60.96 189.992 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5938,6 +6211,9 @@
     (property "Datasheet" "" (at 60.96 196.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 196.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 99ea676b-b08e-4fb0-b3a2-c94bbba2eb40))
     (instances
       (project "carte_test"
@@ -5949,7 +6225,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:DB9") (at 104.14 41.91 270) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecdebea)
     (property "Reference" "J2" (at 119.38 41.91 90)
       (effects (font (size 1.778 1.778)))
@@ -5962,6 +6238,9 @@
     )
     (property "Datasheet" "" (at 104.14 41.91 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 104.14 41.91 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid b03eac91-d6ae-4730-82ca-54f47032c406))
     (pin "2" (uuid 1cc53e9c-b9f5-4627-9067-29f44749b1a4))
@@ -5982,7 +6261,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 87.63 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c0)
     (property "Reference" "#PWR041" (at 87.63 45.72 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5996,6 +6275,9 @@
     (property "Datasheet" "" (at 87.63 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 87.63 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 452aca37-2e0a-4389-892f-a72c4bd12c58))
     (instances
       (project "carte_test"
@@ -6007,7 +6289,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 156.21 48.26 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c1)
     (property "Reference" "#PWR047" (at 156.21 43.18 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6021,6 +6303,9 @@
     (property "Datasheet" "" (at 156.21 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 156.21 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid bb7fb04f-5138-43e6-8a0e-1283e40ab3b2))
     (instances
       (project "carte_test"
@@ -6032,7 +6317,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 160.02 260.35 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c2)
     (property "Reference" "#PWR039" (at 160.02 260.35 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6046,6 +6331,9 @@
     (property "Datasheet" "" (at 160.02 260.35 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 260.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 31c7f4da-a07f-4741-8921-45b3ea37041c))
     (instances
       (project "carte_test"
@@ -6057,7 +6345,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 157.48 177.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c3)
     (property "Reference" "#PWR045" (at 157.48 177.8 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6071,6 +6359,9 @@
     (property "Datasheet" "" (at 157.48 177.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 157.48 177.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid aa18d226-181e-4b95-a96b-956c0062c013))
     (instances
       (project "carte_test"
@@ -6082,7 +6373,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 360.68 107.95 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c4)
     (property "Reference" "#PWR034" (at 360.68 107.95 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6096,6 +6387,9 @@
     (property "Datasheet" "" (at 360.68 107.95 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 360.68 107.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d3e42c30-68f2-4550-af5a-a941591616e2))
     (instances
       (project "carte_test"
@@ -6107,7 +6401,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 132.08 256.54 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c5)
     (property "Reference" "C5" (at 134.62 254 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6121,6 +6415,9 @@
     (property "Datasheet" "" (at 132.08 256.54 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 132.08 256.54 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5d380c3b-72ff-4576-975c-ace818a109d7))
     (pin "2" (uuid ab391236-06cf-4f14-b999-a55557a3f617))
     (instances
@@ -6133,7 +6430,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 46.99 219.71 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c6)
     (property "Reference" "#PWR033" (at 46.99 219.71 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6147,6 +6444,9 @@
     (property "Datasheet" "" (at 46.99 219.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 46.99 219.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f51bf2a8-2f38-4bf2-9a6f-9b9d75c7dec9))
     (instances
       (project "carte_test"
@@ -6158,7 +6458,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 203.2 48.26 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c7)
     (property "Reference" "C11" (at 204.47 45.72 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6172,6 +6472,9 @@
     (property "Datasheet" "" (at 203.2 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 203.2 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8ac02454-ecbf-4445-97a7-8d2b64bf4d7d))
     (pin "2" (uuid ea3e84f0-200c-4bfe-8162-7e3829f4186e))
     (instances
@@ -6184,7 +6487,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 312.42 195.58 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c8)
     (property "Reference" "C7" (at 313.69 193.04 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6198,6 +6501,9 @@
     (property "Datasheet" "" (at 312.42 195.58 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 195.58 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6e565b7d-32f1-403c-a038-ab36a3e12c36))
     (pin "2" (uuid ac142cff-c7e0-482e-82ad-8d2164b735d7))
     (instances
@@ -6210,7 +6516,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 193.04 48.26 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1c9)
     (property "Reference" "C10" (at 194.31 45.72 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6224,6 +6530,9 @@
     (property "Datasheet" "" (at 193.04 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 193.04 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a6604b70-9234-4c42-8124-6d924c6ee5c0))
     (pin "2" (uuid 8d6ff895-ca36-4557-a2dd-069825f70ed1))
     (instances
@@ -6236,7 +6545,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:C") (at 182.88 48.26 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1ca)
     (property "Reference" "C8" (at 184.15 45.72 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6250,6 +6559,9 @@
     (property "Datasheet" "" (at 182.88 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 182.88 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 57c1fee6-3549-40c8-a6ae-0a961a9f5dfe))
     (pin "2" (uuid bed10a5e-db26-451d-9d35-8e660ec0a17c))
     (instances
@@ -6262,7 +6574,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 182.88 43.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1cb)
     (property "Reference" "#PWR027" (at 182.88 38.1 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6276,6 +6588,9 @@
     (property "Datasheet" "" (at 182.88 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 182.88 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4a42d0e5-b230-4efd-a457-ce1028e9faa7))
     (instances
       (project "carte_test"
@@ -6287,7 +6602,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 193.04 43.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1cc)
     (property "Reference" "#PWR026" (at 193.04 38.1 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6301,6 +6616,9 @@
     (property "Datasheet" "" (at 193.04 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 193.04 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2f725d16-ed28-4d35-aa05-078566ec8eb0))
     (instances
       (project "carte_test"
@@ -6312,7 +6630,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 203.2 43.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1cd)
     (property "Reference" "#PWR025" (at 203.2 38.1 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6326,6 +6644,9 @@
     (property "Datasheet" "" (at 203.2 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 203.2 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e4d7a3db-e9a3-4f03-900f-634c91903a2e))
     (instances
       (project "carte_test"
@@ -6337,7 +6658,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 312.42 191.77 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1ce)
     (property "Reference" "#PWR024" (at 312.42 186.69 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6351,6 +6672,9 @@
     (property "Datasheet" "" (at 312.42 191.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 191.77 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ae06e38f-42fa-4dad-b147-704d70e8a9c6))
     (instances
       (project "carte_test"
@@ -6362,7 +6686,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 193.04 52.07 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1cf)
     (property "Reference" "#PWR050" (at 193.04 52.07 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6376,6 +6700,9 @@
     (property "Datasheet" "" (at 193.04 52.07 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 193.04 52.07 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d024ce67-ea9f-492a-b276-8cbf64d9c806))
     (instances
       (project "carte_test"
@@ -6387,7 +6714,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 203.2 52.07 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1d0)
     (property "Reference" "#PWR051" (at 203.2 52.07 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6401,6 +6728,9 @@
     (property "Datasheet" "" (at 203.2 52.07 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 203.2 52.07 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9724befc-150a-4ef0-84cc-4a65080c4db1))
     (instances
       (project "carte_test"
@@ -6412,7 +6742,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 182.88 52.07 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1d1)
     (property "Reference" "#PWR049" (at 182.88 52.07 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6426,6 +6756,9 @@
     (property "Datasheet" "" (at 182.88 52.07 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 182.88 52.07 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ccbff5e1-a659-4904-bd48-8614e1daf4a6))
     (instances
       (project "carte_test"
@@ -6437,7 +6770,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 312.42 199.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1d2)
     (property "Reference" "#PWR023" (at 312.42 199.39 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6451,6 +6784,9 @@
     (property "Datasheet" "" (at 312.42 199.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 199.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a7ef5895-0f23-4711-b815-3e8b90fab3e7))
     (instances
       (project "carte_test"
@@ -6462,7 +6798,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:R") (at 285.75 58.42 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1d3)
     (property "Reference" "R2" (at 285.75 60.452 90)
       (effects (font (size 1.27 1.27)))
@@ -6476,6 +6812,9 @@
     (property "Datasheet" "" (at 285.75 58.42 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 285.75 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1222c7c9-669a-402b-8027-3b076ca7a90d))
     (pin "2" (uuid e7819818-302c-4ad9-89e7-b34c4e9e2e1d))
     (instances
@@ -6488,7 +6827,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:LED") (at 297.18 58.42 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1d4)
     (property "Reference" "D2" (at 297.18 60.96 0)
       (effects (font (size 1.27 1.27)))
@@ -6502,6 +6841,9 @@
     (property "Datasheet" "" (at 297.18 58.42 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 297.18 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 499c3de7-1609-4e3d-8bf2-6faab5a36a81))
     (pin "2" (uuid fc112d02-7849-4c23-bc9c-569713fd9ab5))
     (instances
@@ -6514,7 +6856,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 303.53 58.42 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000052cee1d5)
     (property "Reference" "#PWR020" (at 303.53 58.42 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6528,6 +6870,9 @@
     (property "Datasheet" "" (at 303.53 58.42 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 303.53 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid cc606a2f-a0f5-4736-8e5b-75078580e1e0))
     (instances
       (project "carte_test"
@@ -6539,7 +6884,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:XC95108PC84") (at 151.13 120.65 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005633ae5a)
     (property "Reference" "U2" (at 165.1 55.88 0)
       (effects (font (size 1.524 1.524)) (justify left))
@@ -6552,6 +6897,9 @@
     )
     (property "Datasheet" "" (at 151.13 120.65 0)
       (effects (font (size 1.524 1.524)))
+    )
+    (property "Description" "" (at 151.13 120.65 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 4d8d30d4-7a4a-4467-9137-ee1d02093404))
     (pin "10" (uuid b367e171-af84-4f18-bd1c-f08e446c21c7))
@@ -6647,7 +6995,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:GND") (at 289.56 204.47 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a59f32b)
     (property "Reference" "#PWR01" (at 289.56 204.47 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6661,6 +7009,9 @@
     (property "Datasheet" "" (at 289.56 204.47 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 289.56 204.47 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 964ea02a-b9be-4266-b290-450c7540a3db))
     (instances
       (project "carte_test"
@@ -6672,7 +7023,7 @@
   )
 
   (symbol (lib_id "carte_test_schlib:VCC") (at 289.56 146.05 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005a59f50c)
     (property "Reference" "#PWR02" (at 289.56 140.97 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6685,6 +7036,9 @@
     )
     (property "Datasheet" "" (at 289.56 146.05 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 289.56 146.05 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid a7db3db3-ea62-4790-aca6-40e7d5e1cb94))
     (instances

@@ -3,6 +3,9 @@
     "3dviewports": [],
     "design_settings": {
       "defaults": {
+        "apply_defaults_to_fp_fields": false,
+        "apply_defaults_to_fp_shapes": false,
+        "apply_defaults_to_fp_text": false,
         "board_outline_line_width": 0.09999999999999999,
         "copper_line_width": 0.3,
         "copper_text_italic": false,
@@ -72,6 +75,7 @@
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
+        "footprint": "error",
         "footprint_type_mismatch": "error",
         "hole_clearance": "error",
         "hole_near_hole": "error",
@@ -84,13 +88,13 @@
         "lib_footprint_mismatch": "warning",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
-        "missing_courtyard": "ignore",
+        "missing_courtyard": "warning",
         "missing_footprint": "warning",
         "net_conflict": "warning",
-        "npth_inside_courtyard": "ignore",
+        "npth_inside_courtyard": "warning",
         "overlapping_pads": "warning",
         "padstack": "error",
-        "pth_inside_courtyard": "ignore",
+        "pth_inside_courtyard": "warning",
         "shorting_items": "error",
         "silk_edge_clearance": "warning",
         "silk_over_copper": "error",
@@ -136,9 +140,6 @@
       },
       "teardrop_options": [
         {
-          "td_allow_use_two_tracks": true,
-          "td_curve_segcount": 5,
-          "td_on_pad_in_zone": false,
           "td_onpadsmd": true,
           "td_onroundshapesonly": false,
           "td_ontrackend": false,
@@ -147,29 +148,35 @@
       ],
       "teardrop_parameters": [
         {
+          "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
           "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
           "td_target_name": "td_round_shape",
           "td_width_to_size_filter_ratio": 0.9
         },
         {
+          "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
           "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
           "td_target_name": "td_rect_shape",
           "td_width_to_size_filter_ratio": 0.9
         },
         {
+          "td_allow_use_two_tracks": true,
           "td_curve_segcount": 0,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
           "td_maxlen": 1.0,
+          "td_on_pad_in_zone": false,
           "td_target_name": "td_track_end",
           "td_width_to_size_filter_ratio": 0.9
         }
@@ -179,6 +186,32 @@
         0.4,
         1.0
       ],
+      "tuning_pattern_settings": {
+        "diff_pair_defaults": {
+          "corner_radius_percentage": 100,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.1,
+          "single_sided": false,
+          "spacing": 0.6
+        },
+        "diff_pair_skew_defaults": {
+          "corner_radius_percentage": 100,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.1,
+          "single_sided": false,
+          "spacing": 0.6
+        },
+        "single_track_defaults": {
+          "corner_radius_percentage": 100,
+          "corner_style": 1,
+          "max_amplitude": 1.0,
+          "min_amplitude": 0.1,
+          "single_sided": false,
+          "spacing": 0.6
+        }
+      },
       "via_dimensions": [
         {
           "diameter": 0.0,
@@ -447,8 +480,11 @@
       "gencad": "",
       "idf": "",
       "netlist": "sonde xilinx.net",
+      "plot": "",
+      "pos_files": "",
       "specctra_dsn": "",
       "step": "",
+      "svg": "",
       "vmrl": "",
       "vrml": ""
     },
@@ -507,6 +543,7 @@
       "sort_asc": true,
       "sort_field": "Référence"
     },
+    "connection_grid_size": 50.0,
     "drawing": {
       "dashed_lines_dash_length_ratio": 12.0,
       "dashed_lines_gap_length_ratio": 3.0,
@@ -527,8 +564,9 @@
       "operating_point_overlay_i_range": "~A",
       "operating_point_overlay_v_precision": 3,
       "operating_point_overlay_v_range": "~V",
+      "overbar_offset_ratio": 1.23,
       "pin_symbol_size": 25.0,
-      "text_offset_ratio": 0.3
+      "text_offset_ratio": 0.1
     },
     "legacy_lib_dir": "",
     "legacy_lib_list": [],

@@ -1,4 +1,4 @@
-(kicad_sch (version 20230409) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 5ade2176-b41a-41ec-91fe-ba9644669489)
 
@@ -11,7 +11,7 @@
   )
 
   (lib_symbols
-    (symbol "74LS125_1" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_1" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -23,6 +23,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_1_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -111,7 +114,7 @@
         )
       )
     )
-    (symbol "74LS125_2" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_2" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -123,6 +126,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_2_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -211,7 +217,7 @@
         )
       )
     )
-    (symbol "74LS125_3" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_3" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -223,6 +229,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_3_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -311,7 +320,7 @@
         )
       )
     )
-    (symbol "74LS125_4" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_4" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -323,6 +332,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_4_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -411,7 +423,7 @@
         )
       )
     )
-    (symbol "74LS125_5" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_5" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -423,6 +435,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_5_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -511,7 +526,7 @@
         )
       )
     )
-    (symbol "74LS125_6" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_6" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -523,6 +538,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_6_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -611,7 +629,7 @@
         )
       )
     )
-    (symbol "74LS125_7" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "74LS125_7" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -623,6 +641,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_7_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -711,7 +732,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:74LS125" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:74LS125" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -723,6 +744,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -811,7 +835,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0 2.54 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -823,6 +847,9 @@
       )
       (property "Datasheet" "" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "SM* C? C1-1" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -856,7 +883,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:CONN_6" (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:CONN_6" (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at -1.27 0 90)
         (effects (font (size 1.524 1.524)))
       )
@@ -868,6 +895,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_6_0_1"
         (rectangle (start -2.54 7.62) (end 2.54 -7.62)
@@ -902,7 +932,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254) hide) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 1.27 2.54 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -914,6 +944,9 @@
       )
       (property "Datasheet" "" (at 1.27 2.54 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "CP* SM*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -951,7 +984,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:DB25" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:DB25" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 1.27 34.29 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -963,6 +996,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "DB25*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1420,7 +1456,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:DB9" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:DB9" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 13.97 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -1432,6 +1468,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "DB9*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1681,7 +1720,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:DIODESCH" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:DIODESCH" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.016 1.016)))
       )
@@ -1693,6 +1732,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "D? S*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1731,7 +1773,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1743,6 +1785,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
         (polyline
@@ -1763,7 +1808,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 2.413 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1775,6 +1820,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
@@ -1797,7 +1845,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -1809,6 +1857,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1830,7 +1881,7 @@
         )
       )
     )
-    (symbol "sonde_xilinx_schlib:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "sonde_xilinx_schlib:VCC" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1842,6 +1893,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VCC_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -2533,7 +2587,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:DB25") (at 44.45 71.12 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d04)
     (property "Reference" "J1" (at 43.18 36.83 0)
       (effects (font (size 1.778 1.778)))
@@ -2546,6 +2600,9 @@
     )
     (property "Datasheet" "" (at 44.45 71.12 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 44.45 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 08a8ff8d-bd8d-432a-bd95-447f8afe8d44))
     (pin "10" (uuid 022bf782-ee66-4e80-9944-f89448220142))
@@ -2582,7 +2639,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 25.4 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d16)
     (property "Reference" "R1" (at 100.33 27.432 90)
       (effects (font (size 1.27 1.27)))
@@ -2596,6 +2653,9 @@
     (property "Datasheet" "" (at 100.33 25.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 25.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 79b0df4c-5500-4fff-a13c-2d5d0651a21e))
     (pin "2" (uuid 8929efd9-39db-43e2-a7c0-5edf48ecc3cd))
     (instances
@@ -2608,7 +2668,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 40.64 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d22)
     (property "Reference" "R4" (at 100.33 42.672 90)
       (effects (font (size 1.27 1.27)))
@@ -2622,6 +2682,9 @@
     (property "Datasheet" "" (at 100.33 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 467e4dd9-9715-4892-8e19-fab71c12e069))
     (pin "2" (uuid 3e075ea8-1d37-4451-b4a4-f58fcd8ee671))
     (instances
@@ -2634,7 +2697,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 57.15 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d26)
     (property "Reference" "R6" (at 100.33 59.182 90)
       (effects (font (size 1.27 1.27)))
@@ -2648,6 +2711,9 @@
     (property "Datasheet" "" (at 100.33 57.15 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 57.15 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 83ad1047-802c-47a0-bc1a-d123f8f09b4c))
     (pin "2" (uuid 1a521706-e793-497f-80c0-6f6740711122))
     (instances
@@ -2660,7 +2726,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 83.82 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d31)
     (property "Reference" "R10" (at 100.33 85.852 90)
       (effects (font (size 1.27 1.27)))
@@ -2674,6 +2740,9 @@
     (property "Datasheet" "" (at 100.33 83.82 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid abb11976-313c-48cc-b1cd-19b077d5bebe))
     (pin "2" (uuid ebc22734-1666-4a7d-b842-12e84cec97a3))
     (instances
@@ -2686,7 +2755,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 106.68 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d33)
     (property "Reference" "R9" (at 100.33 108.712 90)
       (effects (font (size 1.27 1.27)))
@@ -2700,6 +2769,9 @@
     (property "Datasheet" "" (at 100.33 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c3b0b3ca-3865-4db7-a9d9-a19b91d47fcf))
     (pin "2" (uuid daca4702-bf2f-4de6-961c-636a47227e5a))
     (instances
@@ -2712,7 +2784,7 @@
   )
 
   (symbol (lib_name "74LS125_2") (lib_id "sonde_xilinx_schlib:74LS125") (at 118.11 40.64 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d92)
     (property "Reference" "U2" (at 118.11 38.1 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2725,6 +2797,9 @@
     )
     (property "Datasheet" "" (at 118.11 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 118.11 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid e266bf35-a7ca-4f8c-9c05-35a602c36ba3))
     (pin "7" (uuid d3d0aea6-f071-412e-b3c2-c212006606be))
@@ -2750,7 +2825,7 @@
   )
 
   (symbol (lib_name "74LS125_1") (lib_id "sonde_xilinx_schlib:74LS125") (at 137.16 48.26 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7d9f)
     (property "Reference" "U1" (at 137.16 45.72 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2763,6 +2838,9 @@
     )
     (property "Datasheet" "" (at 137.16 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 137.16 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 16a2d9cd-e405-4e9d-b447-be8f6db62104))
     (pin "7" (uuid 10b95242-d551-42c4-b711-16ae6d6d4b3a))
@@ -2788,7 +2866,7 @@
   )
 
   (symbol (lib_name "74LS125_6") (lib_id "sonde_xilinx_schlib:74LS125") (at 138.43 66.04 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7dad)
     (property "Reference" "U1" (at 138.43 63.5 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2801,6 +2879,9 @@
     )
     (property "Datasheet" "" (at 138.43 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 138.43 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 1e69a8fb-e894-46aa-a178-9cb232e0904f))
     (pin "7" (uuid 2a2f8709-c9c9-4b54-bce5-c2e3d848120f))
@@ -2826,7 +2907,7 @@
   )
 
   (symbol (lib_name "74LS125_7") (lib_id "sonde_xilinx_schlib:74LS125") (at 138.43 83.82 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7db3)
     (property "Reference" "U1" (at 138.43 81.28 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2839,6 +2920,9 @@
     )
     (property "Datasheet" "" (at 138.43 83.82 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 138.43 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid f9fce80b-b6f9-4581-8dc8-1cf9c02e03ef))
     (pin "7" (uuid e84bac41-8303-4296-8856-42af7eb468d3))
@@ -2864,7 +2948,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:74LS125") (at 138.43 106.68 0) (unit 4)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7dbd)
     (property "Reference" "U1" (at 138.43 104.14 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2877,6 +2961,9 @@
     )
     (property "Datasheet" "" (at 138.43 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 138.43 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 074cf7a8-535c-448c-a201-91d9e9e4315d))
     (pin "7" (uuid f8abfe3a-45e8-4f50-91f8-61f2c97bdeb3))
@@ -2902,7 +2989,7 @@
   )
 
   (symbol (lib_name "74LS125_3") (lib_id "sonde_xilinx_schlib:74LS125") (at 43.18 175.26 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7edd)
     (property "Reference" "U2" (at 43.18 172.72 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2915,6 +3002,9 @@
     )
     (property "Datasheet" "" (at 43.18 175.26 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 43.18 175.26 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 5aee5f30-91b2-4e49-ab5f-1263aeeea122))
     (pin "7" (uuid 75f4ee50-0721-4584-bd63-0d8535c63332))
@@ -2940,7 +3030,7 @@
   )
 
   (symbol (lib_name "74LS125_4") (lib_id "sonde_xilinx_schlib:74LS125") (at 43.18 158.75 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7edf)
     (property "Reference" "U2" (at 43.18 156.21 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2953,6 +3043,9 @@
     )
     (property "Datasheet" "" (at 43.18 158.75 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 43.18 158.75 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 9d561bea-623d-49da-8341-395d1e0d2f1f))
     (pin "7" (uuid a6f252b8-76eb-4fd2-a2c1-29f1ac466266))
@@ -2978,7 +3071,7 @@
   )
 
   (symbol (lib_name "74LS125_5") (lib_id "sonde_xilinx_schlib:74LS125") (at 43.18 142.24 0) (unit 4)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7eec)
     (property "Reference" "U2" (at 43.18 139.7 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -2991,6 +3084,9 @@
     )
     (property "Datasheet" "" (at 43.18 142.24 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 43.18 142.24 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid fce30c82-dd3d-4fc3-8743-816ad6237daa))
     (pin "7" (uuid ee7780b1-6e21-4912-bb1f-b9d16c433cd0))
@@ -3016,7 +3112,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 29.21 185.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf7f0d)
     (property "Reference" "#PWR016" (at 29.21 185.42 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3030,6 +3126,9 @@
     (property "Datasheet" "" (at 29.21 185.42 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 29.21 185.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 09b6345e-7c1b-4140-a88f-2cb68419fbff))
     (instances
       (project "sonde xilinx"
@@ -3041,7 +3140,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 118.11 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf80dd)
     (property "Reference" "#PWR015" (at 118.11 50.8 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3055,6 +3154,9 @@
     (property "Datasheet" "" (at 118.11 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 118.11 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2972383c-c1cc-4d55-bce6-6cdd7e548ff8))
     (instances
       (project "sonde xilinx"
@@ -3066,7 +3168,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 63.5 44.45 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf8100)
     (property "Reference" "#PWR014" (at 63.5 44.45 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3080,6 +3182,9 @@
     (property "Datasheet" "" (at 63.5 44.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 63.5 44.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 61050f47-206d-4c5b-ad78-fe3278d12ddb))
     (instances
       (project "sonde xilinx"
@@ -3091,7 +3196,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:DIODESCH") (at 114.3 25.4 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf815e)
     (property "Reference" "D1" (at 114.3 22.86 0)
       (effects (font (size 1.27 1.27)))
@@ -3105,6 +3210,9 @@
     (property "Datasheet" "" (at 114.3 25.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 25.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 939e595e-1974-4dc7-a18e-a78f9ff0e89e))
     (pin "2" (uuid f95278c5-0ece-4553-81eb-efa3dc0e50cc))
     (instances
@@ -3117,7 +3225,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:DIODESCH") (at 180.34 25.4 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf8176)
     (property "Reference" "D2" (at 180.34 22.86 0)
       (effects (font (size 1.27 1.27)))
@@ -3131,6 +3239,9 @@
     (property "Datasheet" "" (at 180.34 25.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 180.34 25.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b3b3e95d-9fa9-4711-862e-8ae6223bf660))
     (pin "2" (uuid f85f3dee-4ba0-4802-b618-887ee892b1d3))
     (instances
@@ -3143,7 +3254,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 149.86 33.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf8187)
     (property "Reference" "R2" (at 146.05 27.94 0)
       (effects (font (size 1.27 1.27)))
@@ -3157,6 +3268,9 @@
     (property "Datasheet" "" (at 149.86 33.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 149.86 33.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 08188842-3714-44a7-9fc6-3754d564d607))
     (pin "2" (uuid d413601c-1e3b-4c08-bd93-bb3b1fbc3e15))
     (instances
@@ -3169,7 +3283,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 157.48 33.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf818e)
     (property "Reference" "R5" (at 153.67 27.94 0)
       (effects (font (size 1.27 1.27)))
@@ -3183,6 +3297,9 @@
     (property "Datasheet" "" (at 157.48 33.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 157.48 33.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a8207773-2b64-4cce-9b08-5502fa16215e))
     (pin "2" (uuid 30aaa5eb-83f0-4e11-85de-8084dd7e6250))
     (instances
@@ -3195,7 +3312,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 168.91 48.26 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf819b)
     (property "Reference" "R14" (at 168.91 50.292 90)
       (effects (font (size 1.27 1.27)))
@@ -3209,6 +3326,9 @@
     (property "Datasheet" "" (at 168.91 48.26 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 168.91 48.26 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7bcf5bda-b8dc-46fe-b1a8-0c7ff62aa6ce))
     (pin "2" (uuid 390308cd-866d-4b21-8f64-f93d3dcd6be9))
     (instances
@@ -3221,7 +3341,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:C") (at 160.02 113.03 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf81a7)
     (property "Reference" "C4" (at 161.29 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3235,6 +3355,9 @@
     (property "Datasheet" "" (at 160.02 113.03 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 113.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0f80592d-b7a6-45c0-a846-0b35b798b3bf))
     (pin "2" (uuid 75848d23-8292-4f15-84f2-3b18e961018f))
     (instances
@@ -3247,7 +3370,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 160.02 119.38 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf81b1)
     (property "Reference" "#PWR01" (at 160.02 119.38 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3261,6 +3384,9 @@
     (property "Datasheet" "" (at 160.02 119.38 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 119.38 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 863c9e52-f97f-41ff-910c-5bcf544bc8bd))
     (instances
       (project "sonde xilinx"
@@ -3272,7 +3398,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 157.48 40.64 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf81b3)
     (property "Reference" "#PWR012" (at 157.48 40.64 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3286,6 +3412,9 @@
     (property "Datasheet" "" (at 157.48 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 157.48 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 89d29655-6c79-4db2-acd2-781cd753a905))
     (instances
       (project "sonde xilinx"
@@ -3297,7 +3426,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:CP") (at 165.1 31.75 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf82c6)
     (property "Reference" "C1" (at 166.37 29.21 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3311,6 +3440,9 @@
     (property "Datasheet" "" (at 165.1 31.75 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 165.1 31.75 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4e8d19ed-ddc5-4fe7-a6ee-f7ec0a9f9996))
     (pin "2" (uuid a5d0a4bb-654c-404d-ad6f-c285a0e5bf26))
     (instances
@@ -3323,7 +3455,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 165.1 38.1 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf82cf)
     (property "Reference" "#PWR09" (at 165.1 38.1 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3337,6 +3469,9 @@
     (property "Datasheet" "" (at 165.1 38.1 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 165.1 38.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fdb46ae4-9389-4f46-a949-91bb5224c158))
     (instances
       (project "sonde xilinx"
@@ -3348,7 +3483,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:CONN_6") (at 224.79 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf830c)
     (property "Reference" "P1" (at 223.52 71.12 90)
       (effects (font (size 1.524 1.524)))
@@ -3361,6 +3496,9 @@
     )
     (property "Datasheet" "" (at 224.79 71.12 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 224.79 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 3e706ee3-e265-435b-ad5b-874cba601b48))
     (pin "2" (uuid ffa963a0-5551-4243-8100-720dbee0fb09))
@@ -3378,7 +3516,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 214.63 67.31 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf8376)
     (property "Reference" "#PWR08" (at 214.63 67.31 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3392,6 +3530,9 @@
     (property "Datasheet" "" (at 214.63 67.31 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 214.63 67.31 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 88ebfce3-3e12-4c3d-b97f-f2a155e88cb2))
     (instances
       (project "sonde xilinx"
@@ -3403,7 +3544,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:PWR_FLAG") (at 259.08 121.92 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf843c)
     (property "Reference" "#FLG05" (at 259.08 115.062 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3417,6 +3558,9 @@
     (property "Datasheet" "" (at 259.08 121.92 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 259.08 121.92 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 51edd725-afb3-4ee6-8f2d-37fc202c4a87))
     (instances
       (project "sonde xilinx"
@@ -3428,7 +3572,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 259.08 123.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf8458)
     (property "Reference" "#PWR04" (at 259.08 123.19 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3442,6 +3586,9 @@
     (property "Datasheet" "" (at 259.08 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 259.08 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4214f8c0-65f1-4828-9326-f0082044d87a))
     (instances
       (project "sonde xilinx"
@@ -3453,7 +3600,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:VCC") (at 147.32 24.13 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf8479)
     (property "Reference" "#PWR03" (at 147.32 21.59 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3467,6 +3614,9 @@
     (property "Datasheet" "" (at 147.32 24.13 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 147.32 24.13 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 374a80eb-4f57-4b53-9dc0-9b64943d4e7a))
     (instances
       (project "sonde xilinx"
@@ -3478,7 +3628,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:PWR_FLAG") (at 154.94 24.13 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ebf848f)
     (property "Reference" "#FLG02" (at 154.94 17.272 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3492,6 +3642,9 @@
     (property "Datasheet" "" (at 154.94 24.13 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 154.94 24.13 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6091cffc-147c-4837-96c2-5effd9de2e93))
     (instances
       (project "sonde xilinx"
@@ -3503,7 +3656,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:DB9") (at 271.78 99.06 0) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00003ecde5c8)
     (property "Reference" "J2" (at 271.78 113.03 0)
       (effects (font (size 1.778 1.778)))
@@ -3516,6 +3669,9 @@
     )
     (property "Datasheet" "" (at 271.78 99.06 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 271.78 99.06 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 72e88e10-230e-4eae-942f-3eb9bd7e8a79))
     (pin "2" (uuid face34a3-d47d-4c31-8a7d-e8cf2da8a509))
@@ -3536,7 +3692,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 168.91 66.04 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d527316)
     (property "Reference" "R11" (at 168.91 68.072 90)
       (effects (font (size 1.27 1.27)))
@@ -3550,6 +3706,9 @@
     (property "Datasheet" "" (at 168.91 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 168.91 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7437b9d9-825f-436a-935f-282bf5cbcc9e))
     (pin "2" (uuid de9b1c0d-6f43-463f-bd17-068907abee56))
     (instances
@@ -3562,7 +3721,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 66.04 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d52807f)
     (property "Reference" "R7" (at 100.33 68.072 90)
       (effects (font (size 1.27 1.27)))
@@ -3576,6 +3735,9 @@
     (property "Datasheet" "" (at 100.33 66.04 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 66.04 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 53cdee76-1151-4a2d-b76c-90dc9c753e8e))
     (pin "2" (uuid 8b334a3f-0f79-4001-9785-79faf11555b7))
     (instances
@@ -3588,7 +3750,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 100.33 73.66 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528080)
     (property "Reference" "R8" (at 100.33 75.692 90)
       (effects (font (size 1.27 1.27)))
@@ -3602,6 +3764,9 @@
     (property "Datasheet" "" (at 100.33 73.66 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 100.33 73.66 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 18b7b838-ba38-465d-a83a-8f787c1287e7))
     (pin "2" (uuid 995d5d8f-ad25-4d13-8b7f-aa73a46ccb2c))
     (instances
@@ -3614,7 +3779,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 63.5 69.85 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528081)
     (property "Reference" "#PWR06" (at 63.5 69.85 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3628,6 +3793,9 @@
     (property "Datasheet" "" (at 63.5 69.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 63.5 69.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 417d217f-e1f8-44f1-a403-c20391657faf))
     (instances
       (project "sonde xilinx"
@@ -3639,7 +3807,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 168.91 106.68 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528082)
     (property "Reference" "R13" (at 168.91 108.712 90)
       (effects (font (size 1.27 1.27)))
@@ -3653,6 +3821,9 @@
     (property "Datasheet" "" (at 168.91 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 168.91 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ba9260c3-2b8d-49d3-82fd-a355559ed73d))
     (pin "2" (uuid 39b57c71-f2d1-48b0-a42c-38936b17e699))
     (instances
@@ -3665,7 +3836,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:R") (at 168.91 83.82 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528083)
     (property "Reference" "R12" (at 168.91 85.852 90)
       (effects (font (size 1.27 1.27)))
@@ -3679,6 +3850,9 @@
     (property "Datasheet" "" (at 168.91 83.82 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 168.91 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid be1cbc5f-1176-45d9-8f52-6982374134da))
     (pin "2" (uuid bd2e2e17-b643-4775-b1cb-98e1f5491122))
     (instances
@@ -3691,7 +3865,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:C") (at 160.02 54.61 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528084)
     (property "Reference" "C3" (at 161.29 52.07 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3705,6 +3879,9 @@
     (property "Datasheet" "" (at 160.02 54.61 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 54.61 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a0d18b94-9a81-4627-8456-05d64e707292))
     (pin "2" (uuid d1a609b4-966e-4693-839a-5d7e49958475))
     (instances
@@ -3717,7 +3894,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:C") (at 160.02 72.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528085)
     (property "Reference" "C2" (at 161.29 69.85 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3731,6 +3908,9 @@
     (property "Datasheet" "" (at 160.02 72.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 72.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 965ba623-78db-4004-98d9-4fbcb41df9eb))
     (pin "2" (uuid 4729b78b-83f3-4c81-aa69-a40be0fb4d03))
     (instances
@@ -3743,7 +3923,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:C") (at 160.02 90.17 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528086)
     (property "Reference" "C5" (at 161.29 87.63 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3757,6 +3937,9 @@
     (property "Datasheet" "" (at 160.02 90.17 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 90.17 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6b2041d4-8329-4bcf-bc36-af927264273c))
     (pin "2" (uuid 9c1ce62f-a75a-40f0-be3c-6e86b47c9471))
     (instances
@@ -3769,7 +3952,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 160.02 60.96 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528087)
     (property "Reference" "#PWR013" (at 160.02 60.96 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3783,6 +3966,9 @@
     (property "Datasheet" "" (at 160.02 60.96 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 60.96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b948ad7d-fdae-43b1-91f1-d8ffd38513b8))
     (instances
       (project "sonde xilinx"
@@ -3794,7 +3980,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 160.02 78.74 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528088)
     (property "Reference" "#PWR011" (at 160.02 78.74 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3808,6 +3994,9 @@
     (property "Datasheet" "" (at 160.02 78.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e5e06bf1-08de-43b8-a424-1d489abc9b04))
     (instances
       (project "sonde xilinx"
@@ -3819,7 +4008,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 160.02 96.52 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d528089)
     (property "Reference" "#PWR010" (at 160.02 96.52 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3833,6 +4022,9 @@
     (property "Datasheet" "" (at 160.02 96.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 160.02 96.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0ecf9fe3-ca8d-418f-8286-0c064cccb1a0))
     (instances
       (project "sonde xilinx"
@@ -3844,7 +4036,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 255.27 91.44 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004d52808a)
     (property "Reference" "#PWR07" (at 255.27 91.44 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3858,6 +4050,9 @@
     (property "Datasheet" "" (at 255.27 91.44 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 255.27 91.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 641ed273-d69c-40ea-8fd3-37dcc6c66bf0))
     (instances
       (project "sonde xilinx"
@@ -3869,7 +4064,7 @@
   )
 
   (symbol (lib_id "sonde_xilinx_schlib:GND") (at 125.73 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005510fc05)
     (property "Reference" "#PWR017" (at 125.73 50.8 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3882,6 +4077,9 @@
     )
     (property "Datasheet" "" (at 125.73 50.8 0)
       (effects (font (size 1.524 1.524)))
+    )
+    (property "Description" "" (at 125.73 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid ac9ab809-6919-4e02-9b1d-1c8486217379))
     (instances
