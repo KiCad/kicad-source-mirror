@@ -131,6 +131,9 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
     int numSegs = GetArcToSegmentCount( radius, aError, FULL_CIRCLE );
     numSegs = std::max( aMinSegCount, numSegs );
 
+    // Round up to 8 to make segment approximations align properly at 45-degrees
+    numSegs = ( numSegs + 7 ) / 8 * 8;
+
     EDA_ANGLE delta = ANGLE_360 / numSegs;
 
     if( aErrorLoc == ERROR_OUTSIDE )
@@ -168,7 +171,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
 
     // add right rounded end:
 
-    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_180; angle += delta )
+    for( EDA_ANGLE angle = delta / 2; angle < ANGLE_180; angle += delta )
     {
         corner = VECTOR2I( 0, radius );
         RotatePoint( corner, angle );
@@ -181,7 +184,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aBuffer, const VECTOR2I& aStart, co
     polyshape.Append( corner.x, corner.y );
 
     // add left rounded end:
-    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_180; angle += delta )
+    for( EDA_ANGLE angle = delta / 2; angle < ANGLE_180; angle += delta )
     {
         corner = VECTOR2I( 0, -radius );
         RotatePoint( corner, angle );
