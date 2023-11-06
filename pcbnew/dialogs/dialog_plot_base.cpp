@@ -57,10 +57,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
 	m_layerCheckListBox->SetMinSize( wxSize( 150,-1 ) );
 
-	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 5 );
+	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 3 );
 
 
-	bmiddleSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );
+	bmiddleSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 5 );
 
 	m_PlotOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -463,38 +463,13 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	this->SetSizer( m_MainSizer );
 	this->Layout();
 	m_MainSizer->Fit( this );
-	m_popMenu = new wxMenu();
-	wxMenuItem* m_menuItem1;
-	m_menuItem1 = new wxMenuItem( m_popMenu, ID_LAYER_FAB, wxString( _("Select Fab Layers") ) , wxEmptyString, wxITEM_NORMAL );
-	m_popMenu->Append( m_menuItem1 );
-
-	wxMenuItem* m_menuItem2;
-	m_menuItem2 = new wxMenuItem( m_popMenu, ID_SELECT_COPPER_LAYERS, wxString( _("Select all Copper Layers") ) , wxEmptyString, wxITEM_NORMAL );
-	m_popMenu->Append( m_menuItem2 );
-
-	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_popMenu, ID_DESELECT_COPPER_LAYERS, wxString( _("Deselect all Copper Layers") ) , wxEmptyString, wxITEM_NORMAL );
-	m_popMenu->Append( m_menuItem3 );
-
-	wxMenuItem* m_menuItem4;
-	m_menuItem4 = new wxMenuItem( m_popMenu, ID_SELECT_ALL_LAYERS, wxString( _("Select all Layers") ) , wxEmptyString, wxITEM_NORMAL );
-	m_popMenu->Append( m_menuItem4 );
-
-	wxMenuItem* m_menuItem5;
-	m_menuItem5 = new wxMenuItem( m_popMenu, ID_DESELECT_ALL_LAYERS, wxString( _("Deselect all Layers") ) , wxEmptyString, wxITEM_NORMAL );
-	m_popMenu->Append( m_menuItem5 );
-
-	this->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::DIALOG_PLOT_BASEOnContextMenu ), NULL, this );
-
 
 	this->Centre( wxBOTH );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PLOT_BASE::OnInitDialog ) );
-	this->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ) );
 	m_plotFormatOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::SetPlotFormat ), NULL, this );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
-	m_layerCheckListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ), NULL, this );
 	m_plotFootprintValues->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPValues ), NULL, this );
 	m_plotFootprintRefs->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPRefs ), NULL, this );
 	m_plotFootprintText->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPText ), NULL, this );
@@ -505,21 +480,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_buttonDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onRunDRC ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
-	m_popMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ), this, m_menuItem1->GetId());
-	m_popMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ), this, m_menuItem2->GetId());
-	m_popMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ), this, m_menuItem3->GetId());
-	m_popMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ), this, m_menuItem4->GetId());
-	m_popMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnPopUpLayers ), this, m_menuItem5->GetId());
 }
 
 DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PLOT_BASE::OnInitDialog ) );
-	this->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ) );
 	m_plotFormatOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::SetPlotFormat ), NULL, this );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
-	m_layerCheckListBox->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_PLOT_BASE::OnRightClick ), NULL, this );
 	m_plotFootprintValues->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPValues ), NULL, this );
 	m_plotFootprintRefs->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPRefs ), NULL, this );
 	m_plotFootprintText->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::onPlotFPText ), NULL, this );
@@ -531,5 +499,4 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 
-	delete m_popMenu;
 }

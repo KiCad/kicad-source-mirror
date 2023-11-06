@@ -57,7 +57,6 @@
             <property name="window_name"></property>
             <property name="window_style"></property>
             <event name="OnInitDialog">OnInitDialog</event>
-            <event name="OnRightDown">OnRightClick</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">m_MainSizer</property>
@@ -419,7 +418,7 @@
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">protected</property>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">3</property>
+                            <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxStaticBoxSizer" expanded="1">
@@ -431,7 +430,7 @@
                                 <property name="parent">1</property>
                                 <property name="permission">protected</property>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">3</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">1</property>
                                     <object class="wxCheckListBox" expanded="1">
@@ -491,7 +490,6 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnRightDown">OnRightClick</event>
                                     </object>
                                 </object>
                             </object>
@@ -4405,81 +4403,6 @@
                             </object>
                         </object>
                     </object>
-                </object>
-            </object>
-            <object class="wxMenu" expanded="0">
-                <property name="label">MyMenu</property>
-                <property name="name">m_popMenu</property>
-                <property name="permission">protected</property>
-                <object class="wxMenuItem" expanded="0">
-                    <property name="bitmap"></property>
-                    <property name="checked">0</property>
-                    <property name="enabled">1</property>
-                    <property name="help"></property>
-                    <property name="id">ID_LAYER_FAB</property>
-                    <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Select Fab Layers</property>
-                    <property name="name">m_menuItem1</property>
-                    <property name="permission">none</property>
-                    <property name="shortcut"></property>
-                    <property name="unchecked_bitmap"></property>
-                    <event name="OnMenuSelection">OnPopUpLayers</event>
-                </object>
-                <object class="wxMenuItem" expanded="0">
-                    <property name="bitmap"></property>
-                    <property name="checked">0</property>
-                    <property name="enabled">1</property>
-                    <property name="help"></property>
-                    <property name="id">ID_SELECT_COPPER_LAYERS</property>
-                    <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Select all Copper Layers</property>
-                    <property name="name">m_menuItem2</property>
-                    <property name="permission">none</property>
-                    <property name="shortcut"></property>
-                    <property name="unchecked_bitmap"></property>
-                    <event name="OnMenuSelection">OnPopUpLayers</event>
-                </object>
-                <object class="wxMenuItem" expanded="0">
-                    <property name="bitmap"></property>
-                    <property name="checked">0</property>
-                    <property name="enabled">1</property>
-                    <property name="help"></property>
-                    <property name="id">ID_DESELECT_COPPER_LAYERS</property>
-                    <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Deselect all Copper Layers</property>
-                    <property name="name">m_menuItem3</property>
-                    <property name="permission">none</property>
-                    <property name="shortcut"></property>
-                    <property name="unchecked_bitmap"></property>
-                    <event name="OnMenuSelection">OnPopUpLayers</event>
-                </object>
-                <object class="wxMenuItem" expanded="0">
-                    <property name="bitmap"></property>
-                    <property name="checked">0</property>
-                    <property name="enabled">1</property>
-                    <property name="help"></property>
-                    <property name="id">ID_SELECT_ALL_LAYERS</property>
-                    <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Select all Layers</property>
-                    <property name="name">m_menuItem4</property>
-                    <property name="permission">none</property>
-                    <property name="shortcut"></property>
-                    <property name="unchecked_bitmap"></property>
-                    <event name="OnMenuSelection">OnPopUpLayers</event>
-                </object>
-                <object class="wxMenuItem" expanded="0">
-                    <property name="bitmap"></property>
-                    <property name="checked">0</property>
-                    <property name="enabled">1</property>
-                    <property name="help"></property>
-                    <property name="id">ID_DESELECT_ALL_LAYERS</property>
-                    <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Deselect all Layers</property>
-                    <property name="name">m_menuItem5</property>
-                    <property name="permission">none</property>
-                    <property name="shortcut"></property>
-                    <property name="unchecked_bitmap"></property>
-                    <event name="OnMenuSelection">OnPopUpLayers</event>
                 </object>
             </object>
         </object>

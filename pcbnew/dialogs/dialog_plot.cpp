@@ -50,8 +50,9 @@
 #include <wx/dirdlg.h>
 
 
-LSET DIALOG_PLOT::m_lastLayerSet;
-LSEQ DIALOG_PLOT::m_lastPlotOnAllLayersOrder;
+LSET DIALOG_PLOT::s_lastLayerSet;
+LSET DIALOG_PLOT::s_lastAllLayersSet;
+LSEQ DIALOG_PLOT::s_lastAllLayersOrder;
 
 
 /**
@@ -60,16 +61,26 @@ LSEQ DIALOG_PLOT::m_lastPlotOnAllLayersOrder;
 class PCB_LAYER_ID_CLIENT_DATA : public wxClientData
 {
 public:
-    PCB_LAYER_ID_CLIENT_DATA() : m_id( UNDEFINED_LAYER ) { }
-    PCB_LAYER_ID_CLIENT_DATA( PCB_LAYER_ID aId ) : m_id( aId ) { }
+    PCB_LAYER_ID_CLIENT_DATA() :
+            m_id( UNDEFINED_LAYER )
+    { }
+
+    PCB_LAYER_ID_CLIENT_DATA( PCB_LAYER_ID aId ) :
+            m_id( aId )
+    { }
 
     void SetData( PCB_LAYER_ID aId ) { m_id = aId; }
-
-    PCB_LAYER_ID GetData() const { return m_id; }
+    PCB_LAYER_ID Layer() const { return m_id; }
 
 private:
     PCB_LAYER_ID m_id;
 };
+
+
+PCB_LAYER_ID_CLIENT_DATA* getLayerClientData( const wxRearrangeList* aList, int aIdx )
+{
+    return static_cast<PCB_LAYER_ID_CLIENT_DATA*>( aList->GetClientObject( aIdx ) );
+}
 
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
@@ -93,7 +104,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     std::vector<PCB_LAYER_ID> layersIdChoiceList;
     int                       textWidth = 0;
 
-    for( LSEQ seq = board->GetEnabledLayers().UIOrder(); seq; ++seq )
+    for( LSEQ seq = board->GetEnabledLayers().SeqStackupBottom2Top(); seq; ++seq )
     {
         PCB_LAYER_ID id = *seq;
         wxString     layerName = board->GetLayerName( id );
@@ -149,7 +160,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
         m_plotAllLayersList->SetClientObject( list_idx, new PCB_LAYER_ID_CLIENT_DATA( layer_id ) );
     }
 
-	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND, 5 );
+	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND, 3 );
 
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -159,7 +170,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 	m_bpMoveUp->SetToolTip( _( "Move current selection up" ) );
     m_bpMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
 
-	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
+	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 3 );
 
 	m_bpMoveDown = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
                                           wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
@@ -168,9 +179,9 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
 	bButtonSizer->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
-    sbSizer->Add( bButtonSizer, 0, wxALL | wxEXPAND, 5 );
+    sbSizer->Add( bButtonSizer, 0, wxALL | wxEXPAND, 3 );
 
-	bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 3 );
+	bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 5 );
 
     init_Dialog();
 
@@ -183,11 +194,24 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
     m_bpMoveUp->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
     m_bpMoveDown->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
+
+    m_layerCheckListBox->Connect( wxEVT_RIGHT_DOWN,
+                                  wxMouseEventHandler( DIALOG_PLOT::OnRightClickLayers ), nullptr,
+                                  this );
+
+    m_plotAllLayersList->Connect( wxEVT_RIGHT_DOWN,
+                                  wxMouseEventHandler( DIALOG_PLOT::OnRightClickAllLayers ), nullptr,
+                                  this );
 }
 
 
 DIALOG_PLOT::~DIALOG_PLOT()
 {
+    s_lastAllLayersOrder.clear();
+
+    for( int ii = 0; ii < (int) m_plotAllLayersList->GetCount(); ++ii )
+        s_lastAllLayersOrder.push_back( getLayerClientData( m_plotAllLayersList, ii )->Layer() );
+
     m_bpMoveDown->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
     m_bpMoveUp->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
 }
@@ -270,6 +294,8 @@ void DIALOG_PLOT::init_Dialog()
         if( m_plotOpts.GetLayerSelection()[layer] )
             m_layerCheckListBox->Check( checkIndex );
     }
+
+    arrangeAllLayersList( s_lastAllLayersOrder );
 
     // Option for disabling Gerber Aperture Macro (for broken Gerber readers)
     m_disableApertMacros->SetValue( m_plotOpts.GetDisableGerberMacros() );
@@ -400,67 +426,160 @@ void DIALOG_PLOT::reInitDialog()
 }
 
 
-// A helper function to show a popup menu, when the dialog is right clicked.
-void DIALOG_PLOT::OnRightClick( wxMouseEvent& event )
+void DIALOG_PLOT::arrangeAllLayersList( const LSEQ& aSeq )
 {
-    PopupMenu( m_popMenu );
+    auto findLayer =
+            [&]( wxRearrangeList* aList, PCB_LAYER_ID aLayer ) -> int
+            {
+                for( int ii = 0; ii < (int) aList->GetCount(); ++ii )
+                {
+                    if( getLayerClientData( aList, ii )->Layer() == aLayer )
+                        return ii;
+                }
+
+                return -1;
+            };
+
+    int  idx = 0;
+
+    for( LSEQ seq = aSeq; seq; ++seq, ++idx )
+    {
+        int currentPos = findLayer( m_plotAllLayersList, *seq );
+
+        while( currentPos > idx )
+        {
+            m_plotAllLayersList->Select( currentPos );
+            m_plotAllLayersList->MoveCurrentUp();
+            currentPos--;
+        }
+    }
 }
 
 
-// Select or deselect groups of layers in the layers list:
-void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
+#define ID_LAYER_FAB              13001
+#define ID_SELECT_COPPER_LAYERS   13002
+#define ID_DESELECT_COPPER_LAYERS 13003
+#define ID_SELECT_ALL_LAYERS      13004
+#define ID_DESELECT_ALL_LAYERS    13005
+#define ID_STACKUP_ORDER          13006
+
+
+// A helper function to show a popup menu, when the dialog is right clicked.
+void DIALOG_PLOT::OnRightClickLayers( wxMouseEvent& event )
 {
     // Build a list of layers for usual fabrication: copper layers + tech layers without courtyard
     LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() ) & ~LSET( 2, B_CrtYd, F_CrtYd );
 
-    switch( event.GetId() )
-    {
-    case ID_LAYER_FAB: // Select layers usually needed to build a board
-        for( unsigned i = 0; i < m_layerList.size(); i++ )
-        {
-            LSET layermask( m_layerList[ i ] );
+    wxMenu menu;
+    menu.Append( new wxMenuItem( &menu, ID_LAYER_FAB, _( "Select Fab Layers" ) ) );
 
-            if( ( layermask & fab_layer_set ).any() )
-                m_layerCheckListBox->Check( i, true );
-            else
-                m_layerCheckListBox->Check( i, false );
-        }
+    menu.AppendSeparator();
+    menu.Append( new wxMenuItem( &menu, ID_SELECT_COPPER_LAYERS, _( "Select All Copper Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_DESELECT_COPPER_LAYERS, _( "Deselect All Copper Layers" ) ) );
 
-        break;
+    menu.AppendSeparator();
+    menu.Append( new wxMenuItem( &menu, ID_SELECT_ALL_LAYERS, _( "Select All Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_DESELECT_ALL_LAYERS, _( "Deselect All Layers" ) ) );
 
-    case ID_SELECT_COPPER_LAYERS:
-        for( unsigned i = 0; i < m_layerList.size(); i++ )
-        {
-            if( IsCopperLayer( m_layerList[i] ) )
-                m_layerCheckListBox->Check( i, true );
-        }
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
+            [&]( wxCommandEvent& aCmd )
+            {
+                switch( aCmd.GetId() )
+                {
+                case ID_LAYER_FAB: // Select layers usually needed to build a board
+                {
+                    for( unsigned i = 0; i < m_layerList.size(); i++ )
+                    {
+                        LSET layermask( m_layerList[ i ] );
 
-        break;
+                        if( ( layermask & fab_layer_set ).any() )
+                            m_layerCheckListBox->Check( i, true );
+                        else
+                            m_layerCheckListBox->Check( i, false );
+                    }
 
-    case ID_DESELECT_COPPER_LAYERS:
-        for( unsigned i = 0; i < m_layerList.size(); i++ )
-        {
-            if( IsCopperLayer( m_layerList[i] ) )
-                m_layerCheckListBox->Check( i, false );
-        }
+                    break;
+                }
 
-        break;
+                case ID_SELECT_COPPER_LAYERS:
+                    for( unsigned i = 0; i < m_layerList.size(); i++ )
+                    {
+                        if( IsCopperLayer( m_layerList[i] ) )
+                            m_layerCheckListBox->Check( i, true );
+                    }
 
-    case ID_SELECT_ALL_LAYERS:
-        for( unsigned i = 0; i < m_layerList.size(); i++ )
-            m_layerCheckListBox->Check( i, true );
+                    break;
 
-        break;
+                case ID_DESELECT_COPPER_LAYERS:
+                    for( unsigned i = 0; i < m_layerList.size(); i++ )
+                    {
+                        if( IsCopperLayer( m_layerList[i] ) )
+                            m_layerCheckListBox->Check( i, false );
+                    }
 
-    case ID_DESELECT_ALL_LAYERS:
-        for( unsigned i = 0; i < m_layerList.size(); i++ )
-            m_layerCheckListBox->Check( i, false );
+                    break;
 
-        break;
+                case ID_SELECT_ALL_LAYERS:
+                    for( unsigned i = 0; i < m_layerList.size(); i++ )
+                        m_layerCheckListBox->Check( i, true );
 
-    default:
-        break;
-    }
+                    break;
+
+                case ID_DESELECT_ALL_LAYERS:
+                    for( unsigned i = 0; i < m_layerList.size(); i++ )
+                        m_layerCheckListBox->Check( i, false );
+
+                    break;
+
+                default:
+                    aCmd.Skip();
+                }
+            } );
+
+    PopupMenu( &menu );
+}
+
+
+void DIALOG_PLOT::OnRightClickAllLayers( wxMouseEvent& event )
+{
+    wxMenu menu;
+    menu.Append( new wxMenuItem( &menu, ID_SELECT_ALL_LAYERS, _( "Select All Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_DESELECT_ALL_LAYERS, _( "Deselect All Layers" ) ) );
+
+    menu.AppendSeparator();
+    menu.Append( new wxMenuItem( &menu, ID_STACKUP_ORDER, _( "Order as Board Stackup" ) ) );
+
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
+            [&]( wxCommandEvent& aCmd )
+            {
+                switch( aCmd.GetId() )
+                {
+                case ID_SELECT_ALL_LAYERS:
+                    for( unsigned i = 0; i < m_plotAllLayersList->GetCount(); i++ )
+                        m_plotAllLayersList->Check( i, true );
+
+                    break;
+
+                case ID_DESELECT_ALL_LAYERS:
+                    for( unsigned i = 0; i < m_plotAllLayersList->GetCount(); i++ )
+                        m_plotAllLayersList->Check( i, false );
+
+                    break;
+
+                case ID_STACKUP_ORDER:
+                {
+                    LSEQ stackup = m_parent->GetBoard()->GetEnabledLayers().SeqStackupBottom2Top();
+                    arrangeAllLayersList( stackup );
+                    m_plotAllLayersList->Select( -1 );
+                    break;
+                }
+
+                default:
+                    aCmd.Skip();
+                }
+            } );
+
+    PopupMenu( &menu );
 }
 
 
@@ -926,7 +1045,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
         wxCHECK2( layerId, continue );
 
-        plotOnAllLayers.set( layerId->GetData() );
+        plotOnAllLayers.set( layerId->Layer() );
     }
 
     tempOptions.SetPlotOnAllLayersSelection( plotOnAllLayers );
@@ -1072,17 +1191,13 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             for( size_t i = 0; i < count; i++ )
             {
                 int index = plotOnAllLayers.Item( i );
-                wxClientData* tmp = m_plotAllLayersList->GetClientObject( index );
-                PCB_LAYER_ID_CLIENT_DATA* layerId = dynamic_cast<PCB_LAYER_ID_CLIENT_DATA*>( tmp );
-
-                wxCHECK2( layerId, continue );
+                PCB_LAYER_ID layer = getLayerClientData( m_plotAllLayersList, index )->Layer();
 
                 // Don't plot the same layer more than once;
-                if( find( plotSequence.begin(), plotSequence.end(), layerId->GetData() ) !=
-                    plotSequence.end() )
+                if( find( plotSequence.begin(), plotSequence.end(), layer ) != plotSequence.end() )
                     continue;
 
-                plotSequence.push_back( layerId->GetData() );
+                plotSequence.push_back( layer );
             }
         }
 

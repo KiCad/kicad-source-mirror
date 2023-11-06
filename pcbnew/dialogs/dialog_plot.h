@@ -47,8 +47,8 @@ private:
     // Event called functions
     void        Plot( wxCommandEvent& event ) override;
     void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
-    void        OnRightClick( wxMouseEvent& event ) override;
-    void        OnPopUpLayers( wxCommandEvent& event ) override;
+    void        OnRightClickLayers( wxMouseEvent& event );
+    void        OnRightClickAllLayers( wxMouseEvent& event );
     void        SetPlotFormat( wxCommandEvent& event ) override;
     void        OnChangeDXFPlotMode( wxCommandEvent& event ) override;
     void        OnSetScaleOpt( wxCommandEvent& event ) override;
@@ -70,11 +70,14 @@ private:
     void        applyPlotSettings();
     PLOT_FORMAT getPlotFormat();
 
-    void        setPlotModeChoiceSelection( OUTLINE_MODE aPlotMode )
+    void setPlotModeChoiceSelection( OUTLINE_MODE aPlotMode )
     {
         m_plotModeOpt->SetSelection( aPlotMode == SKETCH ? 1 : 0 );
     }
 
+    void arrangeAllLayersList( const LSEQ& aSeq );
+
+private:
     PCB_EDIT_FRAME*     m_parent;
     LSEQ                m_layerList;                // List to hold CheckListBox layer numbers
     double              m_XScaleAdjust;             // X scale factor adjust to compensate
@@ -101,8 +104,9 @@ private:
     STD_BITMAP_BUTTON*  m_bpMoveDown;
 
     /// The plot layer set that last time the dialog was opened.
-    static LSET         m_lastLayerSet;
+    static LSET         s_lastLayerSet;
+    static LSET         s_lastAllLayersSet;
 
     /// The plot on all layers ordering the last time the dialog was opened.
-    static LSEQ         m_lastPlotOnAllLayersOrder;
+    static LSEQ         s_lastAllLayersOrder;
 };

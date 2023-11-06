@@ -36,7 +36,6 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/hyperlink.h>
 #include <wx/spinctrl.h>
 #include <wx/panel.h>
-#include <wx/menu.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -53,12 +52,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		{
 			ID_PRINT_REF = 1000,
 			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
-			ID_MIROR_OPT,
-			ID_LAYER_FAB,
-			ID_SELECT_COPPER_LAYERS,
-			ID_DESELECT_COPPER_LAYERS,
-			ID_SELECT_ALL_LAYERS,
-			ID_DESELECT_ALL_LAYERS
+			ID_MIROR_OPT
 		};
 
 		wxBoxSizer* m_MainSizer;
@@ -138,11 +132,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
-		wxMenu* m_popMenu;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlotFPValues( wxCommandEvent& event ) { event.Skip(); }
@@ -155,7 +147,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPopUpLayers( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -163,11 +154,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_PLOT_BASE();
-
-		void DIALOG_PLOT_BASEOnContextMenu( wxMouseEvent &event )
-		{
-			this->PopupMenu( m_popMenu, event.GetPosition() );
-		}
 
 };
 
