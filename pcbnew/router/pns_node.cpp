@@ -286,19 +286,15 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
     DIRECTION_45::CORNER_MODE cornerMode = ROUTER::GetInstance()->Settings().GetCornerMode();
     const int                 clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
     OBSTACLES                 obstacleList;
-    std::vector<SEGMENT>      tmpSegs;
-
-    tmpSegs.reserve( aLine->CLine().SegmentCount() );
-
 
     for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
     {
-        // Note: Clearances between tmpSegs.back() and other items are cached,
+        // Note: Clearances between &s and other items are cached,
         // which means they'll be the same for all segments in the line.
         // Disabling the cache will lead to slowness.
 
-        tmpSegs.emplace_back( *aLine, aLine->CLine().CSegment( i ) );
-        QueryColliding( &tmpSegs.back(), obstacleList, aOpts );
+        const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
+        QueryColliding( &s, obstacleList, aOpts );
     }
 
     if( aLine->EndsWithVia() )
