@@ -167,7 +167,7 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
     // Create a temporary directory to initialize the Git repository
     wxString tempDirPath = wxFileName::CreateTempFileName(wxT("kigit_temp"));
 
-    if( !wxMkDir(tempDirPath, wxS_DIR_DEFAULT ) )
+    if( !wxFileName::Mkdir( tempDirPath, wxS_DIR_DEFAULT ) )
     {
         git_libgit2_shutdown();
         wxLogError( "Failed to create temporary directory for Git repository (%s): %s", tempDirPath,

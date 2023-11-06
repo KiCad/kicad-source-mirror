@@ -875,7 +875,7 @@ bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 
-    if( !newFileName.DirExists() && !wxMkDir( aNewFilePath, wxS_DIR_DEFAULT ) )
+    if( !newFileName.DirExists() && !wxFileName::Mkdir( aNewFilePath, wxS_DIR_DEFAULT ) )
         return false;
 
     try
