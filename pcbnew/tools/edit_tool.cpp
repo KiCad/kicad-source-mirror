@@ -1721,7 +1721,15 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    updateModificationPoint( selection );
+    if( selection.Size() == 1 )
+    {
+        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
+            selection.SetReferencePoint( item->GetCenter() );
+    }
+    else
+    {
+        updateModificationPoint( selection );
+    }
 
     VECTOR2I  refPt = selection.GetReferencePoint();
     EDA_ANGLE rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
@@ -2029,12 +2037,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // If only one item selected, flip around the selection or item anchor point (instead
     // of the bounding box center) to avoid moving the item anchor
     if( selection.GetSize() == 1 )
-    {
-        if( m_dragging && selection.HasReferencePoint() )
-            refPt = selection.GetReferencePoint();
-        else if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
-            refPt = boardItem->GetPosition();
-    }
+        refPt = selection.GetReferencePoint();
 
     bool leftRight = frame()->GetPcbNewSettings()->m_FlipLeftRight;
 

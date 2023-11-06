@@ -156,40 +156,80 @@ void PCB_TEXTBOX::SetTextAngle( const EDA_ANGLE& aAngle )
 std::vector<VECTOR2I> PCB_TEXTBOX::GetAnchorAndOppositeCorner() const
 {
     std::vector<VECTOR2I> pts;
-    std::vector<VECTOR2I> corners = GetCorners();
     EDA_ANGLE             textAngle( GetDrawRotation() );
 
     textAngle.Normalize();
 
-    pts.emplace_back( corners[0] );
+    if( textAngle.IsCardinal() )
+    {
+        BOX2I bbox = PCB_SHAPE::GetBoundingBox();
+        bbox.Normalize();
 
-    if( textAngle < ANGLE_90 )
-    {
-        if( corners[1].y <= corners[0].y )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
-    }
-    else if( textAngle < ANGLE_180 )
-    {
-        if( corners[1].x <= corners[0].x )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
-    }
-    else if( textAngle < ANGLE_270 )
-    {
-        if( corners[1].y >= corners[0].y )
-            pts.emplace_back( corners[1] );
-        else
-            pts.emplace_back( corners[3] );
+        if( textAngle == ANGLE_0 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
+        }
+        else if( textAngle == ANGLE_90 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
+        }
+        else if( textAngle == ANGLE_180 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetBottom() ) );
+        }
+        else if( textAngle == ANGLE_270 )
+        {
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetTop() ) );
+            pts.emplace_back( VECTOR2I( bbox.GetRight(), bbox.GetBottom() ) );
+        }
     }
     else
     {
-        if( corners[1].x >= corners[0].x )
-            pts.emplace_back( corners[1] );
+        std::vector<VECTOR2I> corners = GetCorners();
+
+        VECTOR2I minX = corners[0];
+        VECTOR2I maxX = corners[0];
+        VECTOR2I minY = corners[0];
+        VECTOR2I maxY = corners[0];
+
+        for( const VECTOR2I& corner : corners )
+        {
+            if( corner.x < minX.x )
+                minX = corner;
+
+            if( corner.x > maxX.x )
+                maxX = corner;
+
+            if( corner.y < minY.y )
+                minY = corner;
+
+            if( corner.y > maxY.y )
+                maxY = corner;
+        }
+
+        if( textAngle < ANGLE_90 )
+        {
+            pts.emplace_back( minX );
+            pts.emplace_back( minY );
+        }
+        else if( textAngle < ANGLE_180 )
+        {
+            pts.emplace_back( maxY );
+            pts.emplace_back( minX );
+        }
+        else if( textAngle < ANGLE_270 )
+        {
+            pts.emplace_back( maxX );
+            pts.emplace_back( maxY );
+        }
         else
-            pts.emplace_back( corners[3] );
+        {
+            pts.emplace_back( minY );
+            pts.emplace_back( maxX );
+        }
     }
 
     return pts;
@@ -202,9 +242,6 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
     GR_TEXT_H_ALIGN_T     effectiveAlignment = GetHorizJustify();
     VECTOR2I              textAnchor;
     VECTOR2I              offset;
-
-    if( IsBackLayer( GetLayer() ) )
-        std::swap( corners[0], corners[1] );
 
     if( IsMirrored() )
     {
@@ -379,32 +416,24 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 {
-    // the position is mirrored, but not the text (or its justification)
+    // the position and angle are mirrored, but not the text (or its justification)
     PCB_SHAPE::Mirror( aCentre, aMirrorAroundXAxis );
 
-    BOX2I rect( m_start, m_end - m_start );
-    rect.Normalize();
-    m_start = VECTOR2I( rect.GetLeft(), rect.GetTop() );
-    m_end = VECTOR2I( rect.GetRight(), rect.GetBottom() );
+    if( aMirrorAroundXAxis )
+        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
+    else
+        EDA_TEXT::SetTextAngle( -GetTextAngle() );
 }
 
 
 void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
-    if( aFlipLeftRight )
-    {
-        m_start.x = aCentre.x - ( m_start.x - aCentre.x );
-        m_end.x   = aCentre.x - ( m_end.x - aCentre.x );
-        EDA_TEXT::SetTextAngle( -GetTextAngle() );
-    }
-    else
-    {
-        m_start.y = aCentre.y - ( m_start.y - aCentre.y );
-        m_end.y   = aCentre.y - ( m_end.y - aCentre.y );
-        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
-    }
+    PCB_SHAPE::Flip( aCentre, aFlipLeftRight );
 
-    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    if( aFlipLeftRight )
+        EDA_TEXT::SetTextAngle( -GetTextAngle() );
+    else
+        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
 
     if( ( GetLayerSet() & LSET::SideSpecificMask() ).any() )
         SetMirrored( !IsMirrored() );
