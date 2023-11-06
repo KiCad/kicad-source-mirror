@@ -281,21 +281,17 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles,
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
                                           const COLLISION_SEARCH_OPTIONS& aOpts )
 {
-    const int            clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
-    OBSTACLES            obstacleList;
-    std::vector<SEGMENT> tmpSegs;
-
-    tmpSegs.reserve( aLine->CLine().SegmentCount() );
-
+    const int clearanceEpsilon = GetRuleResolver()->ClearanceEpsilon();
+    OBSTACLES obstacleList;
 
     for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
     {
-        // Note: Clearances between tmpSegs.back() and other items are cached,
+        // Note: Clearances between &s and other items are cached,
         // which means they'll be the same for all segments in the line.
         // Disabling the cache will lead to slowness.
 
-        tmpSegs.emplace_back( *aLine, aLine->CLine().CSegment( i ) );
-        QueryColliding( &tmpSegs.back(), obstacleList, aOpts );
+        const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
+        QueryColliding( &s, obstacleList, aOpts );
     }
 
     if( aLine->EndsWithVia() )
@@ -703,7 +699,7 @@ void NODE::doRemove( ITEM* aItem )
     if( aItem->BelongsTo( m_root ) && !isRoot() )
     {
         m_override.insert( aItem );
-    
+
         if( aItem->HasHole() )
             m_override.insert( aItem->Hole() );
     }
