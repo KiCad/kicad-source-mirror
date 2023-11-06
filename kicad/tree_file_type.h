@@ -34,19 +34,20 @@
 enum class TREE_FILE_TYPE
 {
     ROOT = 0,
-    LEGACY_PROJECT,   // Legacy project file (.pro)
-    JSON_PROJECT,     // JSON formatted project file (.kicad_pro)
-    LEGACY_SCHEMATIC, // Schematic file (.sch)
-    SEXPR_SCHEMATIC,  // Schematic file (.kicad_sch)
-    LEGACY_PCB,       // board file (.brd) legacy format
-    SEXPR_PCB,        // board file (.kicad_brd) new s expression format
-    GERBER,           // Gerber  file (.pho, .g*)
-    GERBER_JOB_FILE,  // Gerber  file (.gbrjob)
-    HTML,             // HTML file (.htm, *.html)
-    PDF,              // PDF file (.pdf)
-    TXT,              // ascii text file (.txt)
-    MD,               // markdown file (.md)
-    NET,              // netlist file (.net)
+    LEGACY_PROJECT,         // Legacy project file (.pro)
+    JSON_PROJECT,           // JSON formatted project file (.kicad_pro)
+    LEGACY_SCHEMATIC,       // Schematic file (.sch)
+    SEXPR_SCHEMATIC,        // Schematic file (.kicad_sch)
+    LEGACY_PCB,             // board file (.brd) legacy format
+    SEXPR_PCB,              // board file (.kicad_brd) new s expression format
+    GERBER,                 // Gerber  file (.pho, .g*)
+    GERBER_JOB_FILE,        // Gerber  file (.gbrjob)
+    HTML,                   // HTML file (.htm, *.html)
+    PDF,                    // PDF file (.pdf)
+    TXT,                    // ascii text file (.txt)
+    MD,                     // markdown file (.md)
+    NET,                    // netlist file (.net)
+    NET_SPICE,              // spice netlist file (.cir)
     UNKNOWN,
     DIRECTORY,
     CMP_LINK,              // cmp/footprint link file (.cmp)
@@ -62,7 +63,7 @@ enum class TREE_FILE_TYPE
     SEXPR_SYMBOL_LIB_FILE, // s-expression symbol library file (.kicad_sym)
     DESIGN_RULES,          // design rules (.kicad_dru)
     ZIP_ARCHIVE,           // .zip file
-    MAX
+    MAX                    // Sentinel
 };
 
 #endif // TREE_FILE_TYPE_H

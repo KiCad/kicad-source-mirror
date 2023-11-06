@@ -85,11 +85,12 @@ void PROJECT_TREE::LoadIcons()
     m_imageList->Add( KiBitmap( BITMAPS::icon_pcbnew_24, size ) );         // TREE_SEXPR_PCB
     m_imageList->Add( KiBitmap( BITMAPS::icon_gerbview_24, size ) );       // TREE_GERBER
     m_imageList->Add( KiBitmap( BITMAPS::file_gerber_job, size ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
-    m_imageList->Add( KiBitmap( BITMAPS::file_html, size ) ); // TREE_HTML
+    m_imageList->Add( KiBitmap( BITMAPS::file_html, size ) );              // TREE_HTML
     m_imageList->Add( KiBitmap( BITMAPS::file_pdf, size ) );               // TREE_PDF
-    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );    // TREE_TXT
+    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );                 // TREE_TXT
     m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );                 // TREE_MD
-    m_imageList->Add( KiBitmap( BITMAPS::netlist, size ) );   // TREE_NET
+    m_imageList->Add( KiBitmap( BITMAPS::netlist, size ) );                // TREE_NET
+    m_imageList->Add( KiBitmap( BITMAPS::netlist, size ) );                // TREE_NET_SPICE
     m_imageList->Add( KiBitmap( BITMAPS::unknown, size ) );                // TREE_UNKNOWN
     m_imageList->Add( KiBitmap( BITMAPS::directory, size ) ); // TREE_DIRECTORY
     m_imageList->Add( KiBitmap( BITMAPS::icon_cvpcb_24, size ) );          // TREE_CMP_LINK

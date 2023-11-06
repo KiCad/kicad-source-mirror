@@ -310,6 +310,7 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::TXT:                   return TextFileExtension;
     case TREE_FILE_TYPE::MD:                    return MarkdownFileExtension;
     case TREE_FILE_TYPE::NET:                   return NetlistFileExtension;
+    case TREE_FILE_TYPE::NET_SPICE:             return SpiceFileExtension;
     case TREE_FILE_TYPE::CMP_LINK:              return FootprintAssignmentFileExtension;
     case TREE_FILE_TYPE::REPORT:                return ReportFileExtension;
     case TREE_FILE_TYPE::FP_PLACE:              return FootprintPlaceFileExtension;
@@ -323,8 +324,14 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
     case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return KiCadSymbolLibFileExtension;
     case TREE_FILE_TYPE::DESIGN_RULES:          return DesignRulesFileExtension;
     case TREE_FILE_TYPE::ZIP_ARCHIVE:           return ArchiveFileExtension;
-    default:                                    return wxEmptyString;
+
+    case TREE_FILE_TYPE::ROOT:
+    case TREE_FILE_TYPE::UNKNOWN:
+    case TREE_FILE_TYPE::MAX:
+    case TREE_FILE_TYPE::DIRECTORY:             break;
     }
+
+    return wxEmptyString;
 }
 
 
