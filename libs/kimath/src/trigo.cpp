@@ -469,13 +469,13 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
 
     VECTOR2I iCenter;
 
-    iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
+    iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() + 100 ),
                                         dCenter.x,
-                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
+                                        double( std::numeric_limits<int>::max() - 100 ) ) );
 
-    iCenter.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
+    iCenter.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() + 100 ),
                                         dCenter.y,
-                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
+                                        double( std::numeric_limits<int>::max() - 100 ) ) );
 
     return iCenter;
 }
