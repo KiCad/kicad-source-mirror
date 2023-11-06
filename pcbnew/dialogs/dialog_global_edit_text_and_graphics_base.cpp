@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -239,6 +239,12 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_ThicknessUnit = new wxStaticText( m_specifiedValues, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessUnit->Wrap( -1 );
 	fgSizer1->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 20 );
+
+	m_centerOnFP = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Center on footprint"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_centerOnFP, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 120 );
 
 
 	bSizer2->Add( fgSizer1, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );

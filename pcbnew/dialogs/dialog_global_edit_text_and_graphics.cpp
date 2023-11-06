@@ -399,6 +399,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
 
                 if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED )
                     text->SetKeepUpright( m_keepUpright->GetValue() );
+
+                if( m_centerOnFP->GetValue() == wxCHK_CHECKED )
+                    text->SetTextPos( text->GetParent()->GetCenter() );
             }
         }
 
