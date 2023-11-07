@@ -151,6 +151,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     ROUTER*       router = ROUTER::GetInstance();
     ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
     bool          differentNetsOnly = true;
+    bool          enforce = false;
     int           clearance;
 
     if( aCtx )
@@ -170,9 +171,12 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
         // a pad associated with a "free" pin (NIC) doesn't have a net until it has been used
         clearance = -1;
     }
-    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead ) )
+    else if( aNode->GetRuleResolver()->IsKeepout( this, aHead, &enforce ) )
     {
-        clearance = 0;    // keepouts are exact boundary; no clearance
+        if( enforce )
+            clearance = 0;    // keepouts are exact boundary; no clearance
+        else
+            clearance = -1;
     }
     else if( iface && !iface->IsFlashedOnLayer( this, aHead->Layers() ) )
     {

@@ -105,31 +105,38 @@ public:
     PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER_IFACE* aRouterIface );
     virtual ~PNS_PCBNEW_RULE_RESOLVER();
 
-    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
-                           bool aUseClearanceEpsilon = true ) override;
+    int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
+                   bool aUseClearanceEpsilon = true ) override;
 
-    virtual PNS::NET_HANDLE DpCoupledNet( PNS::NET_HANDLE aNet ) override;
-    virtual int DpNetPolarity( PNS::NET_HANDLE aNet ) override;
-    virtual bool DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDLE& aNetP,
-                            PNS::NET_HANDLE& aNetN ) override;
+    PNS::NET_HANDLE DpCoupledNet( PNS::NET_HANDLE aNet ) override;
+    int DpNetPolarity( PNS::NET_HANDLE aNet ) override;
+    bool DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDLE& aNetP,
+                    PNS::NET_HANDLE& aNetN ) override;
 
-    virtual int NetCode( PNS::NET_HANDLE aNet ) override;
-    virtual wxString NetName( PNS::NET_HANDLE aNet ) override;
+    int NetCode( PNS::NET_HANDLE aNet ) override;
+    wxString NetName( PNS::NET_HANDLE aNet ) override;
 
-    virtual bool IsInNetTie( const PNS::ITEM* aA ) override;
-    virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
-                                    const PNS::ITEM* aCollidingItem ) override;
+    bool IsInNetTie( const PNS::ITEM* aA ) override;
+    bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
+                            const PNS::ITEM* aCollidingItem ) override;
 
-    virtual bool IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+    /**
+     * @return true if \a aObstacle is a keepout.  Set \a aEnforce if said keepout's rules
+     *         exclude \a aItem.
+     */
+    bool IsKeepout( const PNS::ITEM* aObstacle, const PNS::ITEM* aItem, bool* aEnforce ) override;
 
-    virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
-                                  const PNS::ITEM* aItemB, int aLayer,
-                                  PNS::CONSTRAINT* aConstraint ) override;
+    bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
+                          const PNS::ITEM* aItemB, int aLayer,
+                          PNS::CONSTRAINT* aConstraint ) override;
 
     int ClearanceEpsilon() const override { return m_clearanceEpsilon; }
 
     void ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems ) override;
     void ClearCaches() override;
+
+private:
+    BOARD_ITEM* getBoardItem( const PNS::ITEM* aItem, int aLayer, int aIdx = 0 );
 
 private:
     PNS::ROUTER_IFACE* m_routerIface;
@@ -209,7 +216,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
 }
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* aB )
+bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aObstacle, const PNS::ITEM* aItem,
+                                          bool* aEnforce )
 {
     auto checkKeepout =
             []( const ZONE* aKeepout, const BOARD_ITEM* aOther )
@@ -233,20 +241,15 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* 
                 return false;
             };
 
-    if( aA->Parent() && aA->Parent()->Type() == PCB_ZONE_T )
+    if( aObstacle->Parent() && aObstacle->Parent()->Type() == PCB_ZONE_T )
     {
-        const ZONE* zoneA = static_cast<ZONE*>( aA->Parent() );
+        const ZONE* zone = static_cast<ZONE*>( aObstacle->Parent() );
 
-        if( zoneA->GetIsRuleArea() && aB->Parent() )
-            return checkKeepout( zoneA, aB->Parent() );
-    }
-
-    if( aB->Parent() && aB->Parent()->Type() == PCB_ZONE_T )
-    {
-        const ZONE* zoneB = static_cast<ZONE*>( aB->Parent() );
-
-        if( zoneB->GetIsRuleArea() && aA->Parent() )
-            return checkKeepout( zoneB, aA->Parent() );
+        if( zone->GetIsRuleArea() )
+        {
+            *aEnforce = checkKeepout( zone, getBoardItem( aItem, aObstacle->Layer() ) );
+            return true;
+        }
     }
 
     return false;
@@ -312,6 +315,38 @@ static bool isEdge( const PNS::ITEM* aItem )
 }
 
 
+BOARD_ITEM* PNS_PCBNEW_RULE_RESOLVER::getBoardItem( const PNS::ITEM* aItem, int aLayer, int aIdx )
+{
+    switch( aItem->Kind() )
+    {
+    case PNS::ITEM::ARC_T:
+        m_dummyArcs[aIdx].SetLayer( ToLAYER_ID( aLayer ) );
+        m_dummyArcs[aIdx].SetNet( static_cast<NETINFO_ITEM*>( aItem->Net() ) );
+        m_dummyArcs[aIdx].SetStart( aItem->Anchor( 0 ) );
+        m_dummyArcs[aIdx].SetEnd( aItem->Anchor( 1 ) );
+        return &m_dummyArcs[aIdx];
+
+    case PNS::ITEM::VIA_T:
+    case PNS::ITEM::HOLE_T:
+        m_dummyVias[aIdx].SetLayer( ToLAYER_ID( aLayer ) );
+        m_dummyVias[aIdx].SetNet( static_cast<NETINFO_ITEM*>( aItem->Net() ) );
+        m_dummyVias[aIdx].SetStart( aItem->Anchor( 0 ) );
+        return &m_dummyVias[aIdx];
+
+    case PNS::ITEM::SEGMENT_T:
+    case PNS::ITEM::LINE_T:
+        m_dummyTracks[aIdx].SetLayer( ToLAYER_ID( aLayer ) );
+        m_dummyTracks[aIdx].SetNet( static_cast<NETINFO_ITEM*>( aItem->Net() ) );
+        m_dummyTracks[aIdx].SetStart( aItem->Anchor( 0 ) );
+        m_dummyTracks[aIdx].SetEnd( aItem->Anchor( 1 ) );
+        return &m_dummyTracks[aIdx];
+
+    default:
+        return nullptr;
+    }
+}
+
+
 bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
                                                 const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
                                                 int aLayer, PNS::CONSTRAINT* aConstraint )
@@ -346,72 +381,10 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     // A track being routed may not have a BOARD_ITEM associated yet.
     if( aItemA && !parentA )
-    {
-        switch( aItemA->Kind() )
-        {
-        case PNS::ITEM::ARC_T:
-            m_dummyArcs[0].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyArcs[0].SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
-            m_dummyArcs[0].SetStart( aItemA->Anchor( 0 ) );
-            m_dummyArcs[0].SetEnd( aItemA->Anchor( 1 ) );
-            parentA = &m_dummyArcs[0];
-            break;
-
-        case PNS::ITEM::VIA_T:
-        case PNS::ITEM::HOLE_T:
-            m_dummyVias[0].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyVias[0].SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
-            m_dummyVias[0].SetStart( aItemA->Anchor( 0 ) );
-            parentA = &m_dummyVias[0];
-            break;
-
-        case PNS::ITEM::SEGMENT_T:
-        case PNS::ITEM::LINE_T:
-            m_dummyTracks[0].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyTracks[0].SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
-            m_dummyTracks[0].SetStart( aItemA->Anchor( 0 ) );
-            m_dummyTracks[0].SetEnd( aItemA->Anchor( 1 ) );
-            parentA = &m_dummyTracks[0];
-            break;
-
-        default:
-            break;
-        }
-    }
+        parentA = getBoardItem( aItemA, aLayer, 0 );
 
     if( aItemB && !parentB )
-    {
-        switch( aItemB->Kind() )
-        {
-        case PNS::ITEM::ARC_T:
-            m_dummyArcs[1].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyArcs[1].SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
-            m_dummyArcs[1].SetStart( aItemB->Anchor( 0 ) );
-            m_dummyArcs[1].SetEnd( aItemB->Anchor( 1 ) );
-            parentB = &m_dummyArcs[1];
-            break;
-
-        case PNS::ITEM::VIA_T:
-        case PNS::ITEM::HOLE_T:
-            m_dummyVias[1].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyVias[1].SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
-            m_dummyVias[1].SetStart( aItemB->Anchor( 0 ) );
-            parentB = &m_dummyVias[1];
-            break;
-
-        case PNS::ITEM::SEGMENT_T:
-        case PNS::ITEM::LINE_T:
-            m_dummyTracks[1].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyTracks[1].SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
-            m_dummyTracks[1].SetStart( aItemB->Anchor( 0 ) );
-            m_dummyTracks[1].SetEnd( aItemB->Anchor( 1 ) );
-            parentB = &m_dummyTracks[1];
-            break;
-
-        default:
-            break;
-        }
-    }
+        parentB = getBoardItem( aItemB, aLayer, 1 );
 
     if( parentA )
         hostConstraint = drcEngine->EvalRules( hostType, parentA, parentB, ToLAYER_ID( aLayer ) );
@@ -1230,14 +1203,13 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 
 bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline )
 {
+    static wxString msg;
     SHAPE_POLY_SET* poly;
 
-    // TODO handle aZone->GetDoNotAllowVias()
-    // TODO handle rules which disallow tracks & vias
-    if( !aZone->GetIsRuleArea() || !aZone->GetDoNotAllowTracks() )
+    if( !aZone->GetIsRuleArea() )
         return false;
 
-    LSET      layers = aZone->GetLayerSet();
+    LSET layers = aZone->GetLayerSet();
 
     poly = aZone->Outline();
     poly->CacheTriangulation( false );
@@ -1245,12 +1217,11 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
     if( !poly->IsTriangulationUpToDate() )
     {
         UNITS_PROVIDER unitsProvider( pcbIUScale, GetUnits() );
-        KIDIALOG       dlg( nullptr, wxString::Format( _( "%s is malformed." ),
-                                              aZone->GetItemDescription( &unitsProvider ) ),
-                            KIDIALOG::KD_WARNING );
-        dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the router.\n"
-                                                   "Please verify it is not a self-intersecting "
-                                                   "polygon." ) ) );
+        msg.Printf( _( "%s is malformed." ), aZone->GetItemDescription( &unitsProvider ) );
+
+        KIDIALOG dlg( nullptr, msg, KIDIALOG::KD_WARNING );
+        dlg.ShowDetailedText( _( "This zone cannot be handled by the router.\n"
+                                 "Please verify it is not a self-intersecting polygon." ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
         dlg.ShowModal();
 

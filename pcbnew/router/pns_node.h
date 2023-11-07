@@ -153,7 +153,11 @@ public:
     virtual bool IsNetTieExclusion( const ITEM* aItem, const VECTOR2I& aCollisionPos,
                                     const ITEM* aCollidingItem )= 0;
 
-    virtual bool IsKeepout( const ITEM* aA, const ITEM* aB ) = 0;
+    /**
+     * @return true if \a aObstacle is a keepout.  Set \a aEnforce if said keepout's rules
+     *         exclude \a aItem.
+     */
+    virtual bool IsKeepout( const ITEM* aObstacle, const ITEM* aItem, bool* aEnforce ) = 0;
 
     virtual bool QueryConstraint( CONSTRAINT_TYPE aType, const ITEM* aItemA, const ITEM* aItemB,
                                   int aLayer, CONSTRAINT* aConstraint ) = 0;
