@@ -757,6 +757,68 @@ FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char*
 }
 
 
+/**
+ * This function based on version 6.0 is required for reading legacy arcs.
+ * Changing it in any way will likely break arcs.
+ */
+static bool MapAnglesV6( int* aAngle1, int* aAngle2 )
+{
+    auto DECIDEG2RAD = []( double deg ) -> double
+    {
+        return deg * M_PI / 1800.0;
+    };
+
+    int    angle, delta;
+    double x, y;
+    bool   swap = false;
+
+    delta = *aAngle2 - *aAngle1;
+
+    if( delta >= 1800 )
+    {
+        *aAngle1 -= 1;
+        *aAngle2 += 1;
+    }
+
+    x = cos( DECIDEG2RAD( *aAngle1 ) );
+    y = -sin( DECIDEG2RAD( *aAngle1 ) );
+    *aAngle1 = KiROUND( RAD2DECIDEG( atan2( y, x ) ) );
+
+    x = cos( DECIDEG2RAD( *aAngle2 ) );
+    y = -sin( DECIDEG2RAD( *aAngle2 ) );
+    *aAngle2 = KiROUND( RAD2DECIDEG( atan2( y, x ) ) );
+
+    NORMALIZE_ANGLE_POS( *aAngle1 );
+    NORMALIZE_ANGLE_POS( *aAngle2 );
+
+    if( *aAngle2 < *aAngle1 )
+        *aAngle2 += 3600;
+
+    if( *aAngle2 - *aAngle1 > 1800 ) // Need to swap the two angles
+    {
+        angle = ( *aAngle1 );
+        *aAngle1 = ( *aAngle2 );
+        *aAngle2 = angle;
+
+        NORMALIZE_ANGLE_POS( *aAngle1 );
+        NORMALIZE_ANGLE_POS( *aAngle2 );
+
+        if( *aAngle2 < *aAngle1 )
+            *aAngle2 += 3600;
+
+        swap = true;
+    }
+
+    if( delta >= 1800 )
+    {
+        *aAngle1 += 1;
+        *aAngle2 -= 1;
+    }
+
+    return swap;
+}
+
+
 LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                              LINE_READER&                 aReader )
 {
@@ -773,10 +835,12 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     arc->SetPosition( center );
 
-    (void) schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    int radius = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    int angle1 = parseInt( aReader, line, &line );
+    int angle2 = parseInt( aReader, line, &line );
 
-    EDA_ANGLE angle1( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
-    EDA_ANGLE angle2( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
+    NORMALIZE_ANGLE_POS( angle1 );
+    NORMALIZE_ANGLE_POS( angle2 );
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
@@ -803,38 +867,33 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
         arc->SetStart( arcStart );
         arc->SetEnd( arcEnd );
     }
-    // Actual Coordinates of arc ends are not read from file (old library), calculate them
     else
     {
-        arc->SetArcAngleAndEnd( angle2 - angle1, true );
+        // Actual Coordinates of arc ends are not read from file
+        // (old library), calculate them
+        VECTOR2I arcStart( radius, 0 );
+        VECTOR2I arcEnd( radius, 0 );
+
+        RotatePoint( arcStart, EDA_ANGLE( -angle1, EDA_ANGLE_T::TENTHS_OF_A_DEGREE_T ) );
+        arcStart += arc->GetCenter();
+        arc->SetStart( arcStart );
+        RotatePoint( arcEnd, EDA_ANGLE( -angle2, EDA_ANGLE_T::TENTHS_OF_A_DEGREE_T ) );
+        arcEnd += arc->GetCenter();
+        arc->SetEnd( arcEnd );
     }
 
-    /*
-     * Current file format stores start-mid-end and so doesn't care about winding. We
-     * store start-end with an implied winding internally though.
-     * This issue is only for 180 deg arcs, because 180 deg are a limit to handle arcs in
-     * legacy libs.
-     *
-     * So a workaround is to slightly change the arc angle to
-     * avoid 180 deg arc after correction
+    /**
+     * This accounts for an oddity in the old library format, where the symbol is overdefined.
+     * The previous draw (based on wxwidgets) used start point and end point and always drew
+     * counter-clockwise.  The new GAL draw takes center, radius and start/end angles.  All of
+     * these points were stored in the file, so we need to mimic the swapping of start/end
+     * points rather than using the stored angles in order to properly map edge cases.
      */
-    EDA_ANGLE arc_angle = arc->GetArcAngle();
-
-    if( arc_angle == ANGLE_180 )
+    if( !MapAnglesV6( &angle1, &angle2 ) )
     {
-        VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
-                              EDA_ANGLE( 179.5, DEGREES_T ) );
-        arc->SetCenter( new_center );
-    }
-
-    // In legacy libraries, an arc angle is always <= 180.0 degrees
-    // So if the created arc is > 180 degrees, swap arc ends to have a < 180 deg arc.
-    if( arc->GetArcAngle() > ANGLE_180 )
-    {
-        VECTOR2I new_end = arc->GetStart();
-        VECTOR2I new_start = arc->GetEnd();
-        arc->SetStart( new_start );
-        arc->SetEnd( new_end );
+        VECTOR2I temp = arc->GetStart();
+        arc->SetStart( arc->GetEnd() );
+        arc->SetEnd( temp );
     }
 
     return arc;
