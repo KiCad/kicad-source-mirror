@@ -307,7 +307,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 5 )
                       .Caption( _( "Properties" ) ).PaneBorder( false )
-                      .MinSize( 240, -1 ).BestSize( 300, -1 ) );
+                      .MinSize( 240, 60 ).BestSize( 300, 200 ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
@@ -315,8 +315,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_searchPane, EDA_PANE().Name( SearchPaneName() )
                       .Bottom()
-                      .Caption( _( "Search" ) ) .PaneBorder( false )
-                      .MinSize( 180, -1 ).BestSize( 180, -1 )
+                      .Caption( _( "Search" ) ).PaneBorder( false )
+                      .MinSize( 180, 60 ).BestSize( 180, 100 )
                       .FloatingSize( 480, 200 )
                       .CloseButton( true )
                       .DestroyOnClose( false ) );

@@ -74,8 +74,7 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
 
-    m_grid = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, wxSize( 300, 400 ),
-                                 wxPG_DEFAULT_STYLE );
+    m_grid = new wxPropertyGrid( this );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
     m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
 

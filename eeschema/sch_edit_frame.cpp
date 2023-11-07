@@ -221,16 +221,16 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Center() );
 
     m_auimgr.AddPane( m_searchPane, EDA_PANE()
-                                            .Name( SearchPaneName() )
-                                            .Bottom()
-                                            .Caption( _( "Search" ) )
-                                            .PaneBorder( false )
-                                            .MinSize( 180, -1 )
-                                            .BestSize( 180, -1 )
-                                            .FloatingSize( 480, 200 )
-                                            .CloseButton( true )
-                                            .DestroyOnClose( false )
-                                            .Show( m_show_search ) );
+                      .Name( SearchPaneName() )
+                      .Bottom()
+                      .Caption( _( "Search" ) )
+                      .PaneBorder( false )
+                      .MinSize( 180, 60 )
+                      .BestSize( 180, 100 )
+                      .FloatingSize( 480, 200 )
+                      .CloseButton( true )
+                      .DestroyOnClose( false )
+                      .Show( m_show_search ) );
 
     FinishAUIInitialization();
 

@@ -23,7 +23,8 @@
 
 
 SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
-        SEARCH_PANE( aFrame ), m_schFrame( aFrame )
+        SEARCH_PANE( aFrame ),
+        m_schFrame( aFrame )
 {
     m_sch = &(m_schFrame->Schematic());
 

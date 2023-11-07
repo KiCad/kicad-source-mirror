@@ -97,8 +97,8 @@ const wxAuiPaneInfo& defaultPropertiesPaneInfo()
             .BottomDockable( false )
             .CloseButton( true )
             .MinSize( 240, 60 )
-            .BestSize( 200, 200 )
-            .FloatingSize( 200, 400 )
+            .BestSize( 300, 200 )
+            .FloatingSize( 300, 400 )
             .FloatingPosition( 50, 200 )
             .Show( true );
 

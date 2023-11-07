@@ -11,8 +11,6 @@
 
 SEARCH_PANE_BASE::SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetMinSize( wxSize( 360,100 ) );
-
 	m_sizerOuter = new wxBoxSizer( wxVERTICAL );
 
 	m_searchCtrl1 = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -29,6 +27,7 @@ SEARCH_PANE_BASE::SEARCH_PANE_BASE( wxWindow* parent, wxWindowID id, const wxPoi
 
 	this->SetSizer( m_sizerOuter );
 	this->Layout();
+	m_sizerOuter->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( SEARCH_PANE_BASE::OnSetFocus ) );

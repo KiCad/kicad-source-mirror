@@ -23,7 +23,6 @@
 #include <pcb_painter.h>
 #include <pcb_textbox.h>
 #include <pcb_text.h>
-#include <connectivity/connectivity_data.h>
 #include <ratsnest/ratsnest_data.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -174,7 +173,7 @@ wxString ZONE_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
 
     if( aCol == 0 )
         return zone->GetZoneName();
-    if( aCol == 1 )
+    else if( aCol == 1 )
         return UnescapeString( zone->GetNetname() );
     else if( aCol == 2 )
     {
@@ -250,7 +249,7 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
         else if( PCB_TEXTBOX::ClassOf( aItem ) )
             return UnescapeString( static_cast<PCB_TEXTBOX*>( aItem )->GetText() );
     }
-    if( aCol == 2 )
+    else if( aCol == 2 )
         return aItem->GetLayerName();
     else if( aCol == 3 )
         return m_frame->MessageTextFromValue( aItem->GetX() );
