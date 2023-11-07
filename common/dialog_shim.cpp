@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -392,7 +393,7 @@ void DIALOG_SHIM::SelectAllInTextCtrls( wxWindowList& children )
             {
                 // Respect an existing selection
             }
-            else if( scintilla->GetMarginType( 0 ) == wxSTC_MARGIN_NUMBER )
+            else if( scintilla->GetMarginWidth( 0 ) > 0 )
             {
                 // Don't select-all in Custom Rules, etc.
             }
