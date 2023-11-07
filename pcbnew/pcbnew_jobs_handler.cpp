@@ -536,6 +536,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     BOARD* brd = LoadBoard( aDrillJob->m_filename );
 
+    // ensure output dir exists
+    wxFileName fn( aDrillJob->m_outputDir + wxT( "/" ) );
+    if( !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
     std::unique_ptr<GENDRILL_WRITER_BASE> drillWriter;
 
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
