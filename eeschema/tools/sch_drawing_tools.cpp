@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 CERN
+ * Copyright (C) 2019-2023 CERN
  * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -70,7 +70,11 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
         m_lastTextAngle( ANGLE_0 ),
-        m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
+        m_lastTextboxAngle( ANGLE_0 ),
+        m_lastTextHJustify( GR_TEXT_H_ALIGN_CENTER ),
+        m_lastTextVJustify( GR_TEXT_V_ALIGN_CENTER ),
+        m_lastTextboxHJustify( GR_TEXT_H_ALIGN_LEFT ),
+        m_lastTextboxVJustify( GR_TEXT_V_ALIGN_TOP ),
         m_lastFillStyle( FILL_T::NO_FILL ),
         m_lastTextboxFillStyle( FILL_T::NO_FILL ),
         m_lastFillColor( COLOR4D::UNSPECIFIED ),
@@ -1240,7 +1244,15 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     }
 
     if( labelItem )
+    {
         labelItem->SetSpinStyle( m_lastTextOrientation );
+    }
+    else
+    {
+        textItem->SetHorizJustify( m_lastTextHJustify );
+        textItem->SetVertJustify( m_lastTextVJustify );
+        textItem->SetTextAngle( m_lastTextAngle );
+    }
 
     textItem->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     textItem->SetFlags( IS_NEW | IS_MOVING );
@@ -1288,7 +1300,15 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     }
 
     if( labelItem )
+    {
         m_lastTextOrientation = labelItem->GetSpinStyle();
+    }
+    else
+    {
+        m_lastTextHJustify = textItem->GetHorizJustify();
+        m_lastTextVJustify = textItem->GetVertJustify();
+        m_lastTextAngle = textItem->GetTextAngle();
+    }
 
     if( aType == LAYER_GLOBLABEL || aType == LAYER_HIERLABEL )
     {
@@ -1820,8 +1840,9 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 textbox->SetItalic( m_lastTextItalic );
                 textbox->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize,
                                                 sch_settings.m_DefaultTextSize ) );
-                textbox->SetTextAngle( m_lastTextAngle );
-                textbox->SetHorizJustify( m_lastTextJust );
+                textbox->SetTextAngle( m_lastTextboxAngle );
+                textbox->SetHorizJustify( m_lastTextboxHJustify );
+                textbox->SetVertJustify( m_lastTextboxVJustify );
                 textbox->SetStroke( m_lastTextboxStroke );
                 textbox->SetFillColor( m_lastTextboxFillColor );
                 textbox->SetParent( schematic );
@@ -1875,8 +1896,9 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                     m_lastTextBold = textbox->IsBold();
                     m_lastTextItalic = textbox->IsItalic();
-                    m_lastTextAngle = textbox->GetTextAngle();
-                    m_lastTextJust = textbox->GetHorizJustify();
+                    m_lastTextboxAngle = textbox->GetTextAngle();
+                    m_lastTextboxHJustify = textbox->GetHorizJustify();
+                    m_lastTextboxVJustify = textbox->GetVertJustify();
                     m_lastTextboxStroke = textbox->GetStroke();
                     m_lastTextboxFillStyle = textbox->GetFillMode();
                     m_lastTextboxFillColor = textbox->GetFillColor();

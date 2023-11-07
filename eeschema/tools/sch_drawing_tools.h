@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 CERN
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,11 @@ private:
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
     EDA_ANGLE                  m_lastTextAngle;
-    GR_TEXT_H_ALIGN_T          m_lastTextJust;
+    EDA_ANGLE                  m_lastTextboxAngle;
+    GR_TEXT_H_ALIGN_T          m_lastTextHJustify;
+    GR_TEXT_V_ALIGN_T          m_lastTextVJustify;
+    GR_TEXT_H_ALIGN_T          m_lastTextboxHJustify;
+    GR_TEXT_V_ALIGN_T          m_lastTextboxVJustify;
     FILL_T                     m_lastFillStyle;
     FILL_T                     m_lastTextboxFillStyle;
     COLOR4D                    m_lastFillColor;
