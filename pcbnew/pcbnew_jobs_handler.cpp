@@ -465,7 +465,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     wxFileName fn( aDrillJob->m_outputDir + wxT( "/" ) );
     if( !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
     {
-        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        wxFprintf( stderr, _( "Failed to create output directory\n" ) );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
