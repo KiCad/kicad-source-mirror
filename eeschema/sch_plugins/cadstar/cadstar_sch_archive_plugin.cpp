@@ -38,11 +38,41 @@
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 #include <wx/dir.h>
+#include <wx/wfstream.h>
+#include <wx/txtstrm.h>
 
 
 const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetName() const
 {
     return wxT( "CADSTAR Schematic Archive" );
+}
+
+
+bool CADSTAR_SCH_ARCHIVE_PLUGIN::CanReadLibrary( const wxString& aFileName ) const
+{
+    if( !SCH_PLUGIN::CanReadLibrary( aFileName ) )
+        return false;
+
+    wxFFileInputStream input( aFileName );
+
+    if( !input.IsOk() || input.Eof() )
+        return false;
+
+    // Find first non-empty line
+    wxTextInputStream text( input );
+    wxString          line = text.ReadLine();
+
+    while( !input.Eof() && line.IsEmpty() )
+        line = text.ReadLine().Trim( false /*trim from left*/ );
+
+    // CADSTAR libs start with
+    // # FORMAT 32
+    // or
+    // .PartName :2 ;Part 0 Description
+    if( line.StartsWith( wxS( "#" ) ) || line.StartsWith( wxS( "." ) ) )
+        return true;
+
+    return false;
 }
 
 

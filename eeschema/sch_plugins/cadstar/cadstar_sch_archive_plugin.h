@@ -70,6 +70,8 @@ public:
                                  { CadstarPartsLibraryFileExtension } );
     }
 
+    bool CanReadLibrary( const wxString& aFileName ) const override;
+
     int GetModifyHash() const override;
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
