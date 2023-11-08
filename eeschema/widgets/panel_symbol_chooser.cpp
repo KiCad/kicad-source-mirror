@@ -106,10 +106,10 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
             // HACK ALERT: the only filter ever used for symbols is the power filter, so we
             // just look for the function pointer being non-null.  (What the function does is
             // therefore immaterial as it's never called.)
-            static std::function<int( LIB_TREE_NODE& )> powerFilter =
-                    []( LIB_TREE_NODE& ) -> int
+            static std::function<bool( LIB_TREE_NODE& )> powerFilter =
+                    []( LIB_TREE_NODE& ) -> bool
                     {
-                        return 0;
+                        return false;
                     };
 
             adapter->SetFilter( &powerFilter );

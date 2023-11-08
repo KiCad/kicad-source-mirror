@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -80,12 +81,13 @@ public:
      *
      * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search term
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) = 0;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) = 0;
 
     /**
-     * Initialize score to kLowestDefaultScore, recursively.
+     * Initialize scores recursively.
      */
-    virtual void ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter );
+    virtual void ResetScore();
 
     /**
      * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
@@ -175,7 +177,8 @@ public:
     /**
      * Do nothing, units just take the parent's score
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override {}
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override {}
 };
 
 
@@ -211,12 +214,11 @@ public:
      */
     void Update( LIB_TREE_ITEM* aItem );
 
-    void ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter ) override;
-
     /**
      * Perform the actual search.
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 
 protected:
     /**
@@ -257,7 +259,8 @@ public:
      */
     LIB_TREE_NODE_LIB_ID& AddItem( LIB_TREE_ITEM* aItem );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
 
@@ -284,7 +287,8 @@ public:
      */
     LIB_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
 

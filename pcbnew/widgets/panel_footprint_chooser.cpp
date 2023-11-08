@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -43,7 +44,7 @@
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                                                   const wxArrayString& aFootprintHistoryList,
-                                                  std::function<int( LIB_TREE_NODE& )> aFilter,
+                                                  std::function<bool( LIB_TREE_NODE& )> aFilter,
                                                   std::function<void()> aCloseHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_hsplitter( nullptr ),

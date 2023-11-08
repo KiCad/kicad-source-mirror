@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
- *lib_tree_model
+ *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -29,10 +30,10 @@
 
 
 
-void LIB_TREE_NODE::ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE::ResetScore()
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->ResetScore( aFilter );
+        child->ResetScore();
 
     m_Score = 0;
 }
@@ -214,27 +215,24 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB_ID::ResetScore( std::function<int( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                        std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->ResetScore( aFilter );
+    // aMatcher test is additive
+    if( aMatcher )
+        m_Score += aMatcher->ScoreTerms( m_SearchTerms );
 
-    if( aFilter )
-        m_Score = (*aFilter)(*this);
-    else
+    // aLib test is additive
+    if( !aLib.IsEmpty() && m_Parent->m_Name.Lower() == aLib )
+        m_Score += 1;
+
+    // aFilter test is subtractive
+    if( aFilter && !(*aFilter)(*this) )
         m_Score = 0;
-}
 
-
-void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
-{
-    if( aLib.IsEmpty() || m_Parent->m_Name.Lower() == aLib )
-    {
-        if( aMatcher )
-            m_Score += aMatcher->ScoreTerms( m_SearchTerms );
-        else
-            m_Score = std::max( m_Score, 1 );
-    }
+    // show all nodes if no search/filter/etc. criteria are given
+    if( !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
+        m_Score = 1;
 }
 
 
@@ -259,30 +257,29 @@ LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
+void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                     std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     if( m_Children.size() )
     {
         for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         {
-            child->UpdateScore( aMatcher, aLib );
+            child->UpdateScore( aMatcher, aLib, aFilter );
             m_Score = std::max( m_Score, child->m_Score );
         }
     }
 
-    if( !aLib.IsEmpty() )
-    {
-        if( m_Name.Lower() == aLib )
-            m_Score += 1;
-    }
-    else if( aMatcher )
-    {
+    // aLib test is additive
+    if( !aLib.IsEmpty() && m_Name.Lower() == aLib )
+        m_Score += 1;
+
+    // aMatcher test is additive
+    if( aMatcher )
         m_Score += aMatcher->ScoreTerms( m_SearchTerms );
-    }
-    else    // No search string or library filters; show, but don't expand (mScore == 1)
-    {
-        m_Score = std::max( m_Score, 1 );
-    }
+
+    // show all nodes if no search/filter/etc. criteria are given
+    if( m_Children.empty() && !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
+        m_Score = 1;
 }
 
 
@@ -300,9 +297,10 @@ LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString c
 }
 
 
-void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib )
+void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->UpdateScore( aMatcher, aLib );
+        child->UpdateScore( aMatcher, aLib, aFilter );
 }
 

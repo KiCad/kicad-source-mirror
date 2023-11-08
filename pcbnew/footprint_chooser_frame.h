@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -29,6 +30,7 @@
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <lib_tree_model.h>
 
 class PANEL_FOOTPRINT_CHOOSER;
 class wxCheckBox;
@@ -65,7 +67,7 @@ protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
 private:
-    int filterFootprint( LIB_TREE_NODE& aNode );
+    bool filterFootprint( LIB_TREE_NODE& aNode );
 
     void OnPaint( wxPaintEvent& aEvent );
     void OnOK( wxCommandEvent& aEvent );

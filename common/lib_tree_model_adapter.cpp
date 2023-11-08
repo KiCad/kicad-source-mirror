@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -165,39 +166,40 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         Freeze();
         BeforeReset();
 
-        m_tree.ResetScore( m_filter );
+        m_tree.ResetScore();
 
         wxStringTokenizer tokenizer( aSearch );
+        bool              firstTerm = true;
 
-        if( tokenizer.HasMoreTokens() )
+        while( tokenizer.HasMoreTokens() )
         {
-            while( tokenizer.HasMoreTokens() )
+            // First search for the full token, in case it appears in a search string
+            wxString             term = tokenizer.GetNextToken().Lower();
+            EDA_COMBINED_MATCHER termMatcher( term, CTX_LIBITEM );
+
+            m_tree.UpdateScore( &termMatcher, wxEmptyString, firstTerm ? m_filter : nullptr );
+            firstTerm = false;
+
+            if( term.Contains( ":" ) )
             {
-                // First search for the full token, in case it appears in a search string
-                wxString             term = tokenizer.GetNextToken().Lower();
-                EDA_COMBINED_MATCHER termMatcher( term, CTX_LIBITEM );
+                // Next search for the library:item_name
+                wxString             lib = term.BeforeFirst( ':' );
+                wxString             itemName = term.AfterFirst( ':' );
+                EDA_COMBINED_MATCHER itemNameMatcher( itemName, CTX_LIBITEM );
 
-                m_tree.UpdateScore( &termMatcher, wxEmptyString );
-
-                if( term.Contains( ":" ) )
-                {
-                    // Next search for the library:item_name
-                    wxString             lib = term.BeforeFirst( ':' );
-                    wxString             itemName = term.AfterFirst( ':' );
-                    EDA_COMBINED_MATCHER itemNameMatcher( itemName, CTX_LIBITEM );
-
-                    m_tree.UpdateScore( &itemNameMatcher, lib );
-                }
-                else
-                {
-                    // In case the full token happens to be a library name
-                    m_tree.UpdateScore( nullptr, term );
-                }
+                m_tree.UpdateScore( &itemNameMatcher, lib, nullptr );
+            }
+            else
+            {
+                // In case the full token happens to be a library name
+                m_tree.UpdateScore( nullptr, term, nullptr );
             }
         }
-        else
+
+        if( firstTerm )
         {
-            m_tree.UpdateScore( nullptr, wxEmptyString );
+            // No terms processed; just run the filter
+            m_tree.UpdateScore( nullptr, wxEmptyString, m_filter );
         }
 
         m_tree.SortNodes( m_sort_mode == BEST_MATCH );

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -141,12 +142,12 @@ public:
      *
      * @param aFilter   if SYM_FILTER_POWER, only power parts are loaded
      */
-    void SetFilter( std::function<int( LIB_TREE_NODE& aNode )>* aFilter ) { m_filter = aFilter; }
+    void SetFilter( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) { m_filter = aFilter; }
 
     /**
      * Return the active filter.
      */
-    std::function<int( LIB_TREE_NODE& aNode )>* GetFilter() const { return m_filter; }
+    std::function<bool( LIB_TREE_NODE& aNode )>* GetFilter() const { return m_filter; }
 
     void SetSortMode( SORT_MODE aMode ) { m_sort_mode = aMode; }
     SORT_MODE GetSortMode() const { return m_sort_mode; }
@@ -415,7 +416,7 @@ private:
 
     wxDataViewCtrl*              m_widget;
 
-    std::function<int( LIB_TREE_NODE& aNode )>*  m_filter;
+    std::function<bool( LIB_TREE_NODE& aNode )>* m_filter;
 
     std::vector<wxDataViewColumn*>               m_columns;
     std::map<wxString, wxDataViewColumn*>        m_colNameMap;

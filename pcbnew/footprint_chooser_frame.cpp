@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -79,10 +80,22 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 {
     SetModal( true );
 
+    m_filterByFPFilters = new wxCheckBox( this, wxID_ANY, _( "Apply footprint filters" ) );
+    m_filterByPinCount = new wxCheckBox( this, wxID_ANY, _( "Filter by pin count" ) );
+
+    m_filterByFPFilters->Show( false );
+    m_filterByPinCount->Show( false );
+
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
+        m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
+    }
+
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( this, this, s_FootprintHistoryList,
             // Filter
-            [this]( LIB_TREE_NODE& aNode ) -> int
+            [this]( LIB_TREE_NODE& aNode ) -> bool
             {
                 return filterFootprint( aNode );
             },
@@ -96,24 +109,11 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     sizer->Add( m_chooserPanel, 1, wxEXPAND | wxBOTTOM, 2 );
 
     wxBoxSizer* fpFilterSizer = new wxBoxSizer( wxVERTICAL );
-
-    m_filterByFPFilters = new wxCheckBox( this, wxID_ANY, _( "Apply footprint filters" ) );
     fpFilterSizer->Add( m_filterByFPFilters, 0, wxTOP | wxEXPAND, 5 );
-    m_filterByFPFilters->Show( false );
-
     sizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
 
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    m_filterByPinCount = new wxCheckBox( this, wxID_ANY, _( "Filter by pin count" ) );
     buttonsSizer->Add( m_filterByPinCount, 0, wxLEFT | wxTOP | wxALIGN_TOP, 5 );
-    m_filterByPinCount->Show( false );
-
-    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
-        m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
-    }
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( this, wxID_OK );
@@ -157,9 +157,15 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     }
 }
 
-int FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
+bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 {
-    bool filtering = false;
+    if( aNode.m_Type == LIB_TREE_NODE::TYPE::LIB )
+    {
+        // Normally lib nodes get scored by the max of their children's scores.  However, if a
+        // lib node *has* no children then the scorer will call the filter on the lib node itself,
+        // and we just want to return true if we're not filtering at all.
+        return !m_filterByPinCount->GetValue() && !m_filterByFPFilters->GetValue();
+    }
 
     auto patternMatch =
             []( LIB_ID& id, std::vector<std::unique_ptr<EDA_PATTERN_MATCH>>& filters ) -> bool
@@ -186,24 +192,17 @@ int FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 
     if( m_pinCount > 0 && m_filterByPinCount->GetValue() )
     {
-        filtering = true;
-
         if( aNode.m_PinCount != m_pinCount )
-            return -1;
+            return false;
     }
 
     if( !m_fpFilters.empty() && m_filterByFPFilters->GetValue() )
     {
-        filtering = true;
-
         if( !patternMatch( aNode.m_LibId, m_fpFilters ) )
-            return -1;
+            return false;
     }
 
-    if( filtering )
-        return 1;
-    else
-        return 0;
+    return true;
 }
 
 

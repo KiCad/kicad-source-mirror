@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2023 CERN
  * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,9 +38,9 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( aParent, this, aFootprintHistoryList,
             // Filter
-            []( LIB_TREE_NODE& aNode ) -> int
+            []( LIB_TREE_NODE& aNode ) -> bool
             {
-                return 0;
+                return true;
             },
             // Close handler
             [this]()
