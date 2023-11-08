@@ -612,7 +612,7 @@ SHAPE_LINE_CHAIN CADSTAR_ARCHIVE_PARSER::SHAPE::OutlineAsChain(
         outline.SetClosed( true );
 
         // Append after closing, to ensre first and last point remain the same
-        Vertices.at( 0 ).AppendToChain( &outline, aCadstarToKicadPointCallback, aAccuracy );
+        outline.Append( outline.CPoint( 0 ), true );
     }
 
     return outline;
