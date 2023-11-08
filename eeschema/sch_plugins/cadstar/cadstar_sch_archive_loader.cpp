@@ -67,12 +67,12 @@ std::vector<LIB_SYMBOL*> CADSTAR_SCH_ARCHIVE_LOADER::LoadPartsLib( const wxStrin
 
     CADSTAR_PARTS_LIB_PARSER p;
 
-    if( !p.CheckFileHeader( aFilename.utf8_string() ) )
+    if( !p.CheckFileHeader( aFilename.fn_str() ) )
         THROW_IO_ERROR(
                 _( "The selected file does not appear to be a CADSTAR parts Library file" ) );
 
     // TODO: we could add progress reporting for reading .lib
-    CADSTAR_PARTS_LIB_MODEL csLib = p.ReadFile( aFilename.utf8_string() );
+    CADSTAR_PARTS_LIB_MODEL csLib = p.ReadFile( aFilename.fn_str() );
 
     if( m_progressReporter )
     {

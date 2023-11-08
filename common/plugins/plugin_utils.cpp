@@ -29,9 +29,10 @@
 namespace PLUGIN_UTILS
 {
 
-bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix, bool aIgnoreWhitespace )
+bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
+                           bool aIgnoreWhitespace )
 {
-    wxFileInputStream input( aFilePath );
+    wxFFileInputStream input( aFilePath );
 
     if( input.IsOk() && !input.Eof() )
     {
@@ -41,7 +42,7 @@ bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix, b
 
         if( aIgnoreWhitespace )
         {
-            while( line.IsEmpty() )
+            while( !input.Eof() && line.IsEmpty() )
                 line = text.ReadLine().Trim( false /*trim from left*/ );
         }
 
@@ -55,7 +56,7 @@ bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix, b
 
 bool fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader )
 {
-    wxFileInputStream input( aFilePath );
+    wxFFileInputStream input( aFilePath );
 
     if( input.IsOk() && !input.Eof() )
     {

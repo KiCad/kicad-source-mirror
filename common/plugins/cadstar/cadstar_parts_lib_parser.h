@@ -36,20 +36,9 @@ public:
 
     bool CheckFileHeader( const std::filesystem::path& aPath ) const;
 
-    bool CheckFileHeader( const std::string& aPath ) const
-    {
-        return CheckFileHeader( std::filesystem::path( aPath ) );
-    };
-
-
     CADSTAR_PARTS_LIB_MODEL ReadContent( const std::string& aSource ) const;
 
     CADSTAR_PARTS_LIB_MODEL ReadFile( const std::filesystem::path& aPath ) const;
-
-    CADSTAR_PARTS_LIB_MODEL ReadFile( const std::string& aPath ) const
-    {
-        return ReadFile( std::filesystem::path( aPath ) );
-    };
 };
 
 #endif //CADSTAR_PARTS_LIB_PARSER_H
