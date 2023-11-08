@@ -147,7 +147,7 @@ struct HIERARCHY_NODE_ENTRY :
                     star<WHITESPACE_OR_CONTINUATION>,
                     HIERARCHY_NODE_NAME,       // 'subnode1'
                     star<WHITESPACE_OR_CONTINUATION>,
-                    plus<HIERARCHY_PART_NAME, star<WHITESPACE_OR_CONTINUATION>>, // 'part1' 'part2'
+                    star<HIERARCHY_PART_NAME, star<WHITESPACE_OR_CONTINUATION>>, // 'part1' 'part2'
                     opt<eol>
                 >
  {};
