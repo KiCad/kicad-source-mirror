@@ -709,8 +709,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotModeOpt->Enable( false );
         setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( true );
-        m_useAuxOriginCheckBox->Enable( false );
-        m_useAuxOriginCheckBox->SetValue( false );
         m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
@@ -767,7 +765,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
-        m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
@@ -816,7 +813,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         setPlotModeChoiceSelection( FILLED );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
-        m_useAuxOriginCheckBox->Enable( true );
         m_defaultPenSize.Enable( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
