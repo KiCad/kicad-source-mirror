@@ -89,6 +89,21 @@ struct STRING_IN_BRACKETS :
                 >
 {};
 
+/**
+ * String inside brackets with preceding spaces, ending with EOL
+ */
+struct STRING_IN_BRACKETS_EOL :
+                seq
+                <
+                    spaced_ch<'('>,
+                    sor<
+                        QUOTED_STRING,
+                        STRING_EXCLUDING<seq<one<')'>, eol>>
+                    >,
+                    seq<one<')'>, eol>
+                >
+{};
+
 
 // **************
 // * FORMAT     *
@@ -470,6 +485,7 @@ struct USER_PART_ATTRIBUTE :
 struct READONLY : one <'!'>{};
 struct ATTRIBUTE_NAME : sor<QUOTED_STRING, STRING_EXCLUDING< spaced_ch<'('>>> {};
 struct ATTRIBUTE_VALUE : STRING_IN_BRACKETS {};
+struct ATTRIBUTE_VALUE_EOL : STRING_IN_BRACKETS_EOL {};
 
 template<char START_TOKEN>
 struct GENERIC_ATTRIBUTE :
@@ -479,8 +495,7 @@ struct GENERIC_ATTRIBUTE :
                     one<START_TOKEN>,
                     opt<READONLY>,
                     ATTRIBUTE_NAME,
-                    ATTRIBUTE_VALUE,
-                    opt<eol>
+                    ATTRIBUTE_VALUE_EOL
                 >
 {};
 
