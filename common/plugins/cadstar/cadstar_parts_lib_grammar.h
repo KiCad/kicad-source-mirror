@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -90,17 +90,17 @@ struct STRING_IN_BRACKETS :
 {};
 
 /**
- * String inside brackets with preceding spaces, ending with EOL
+ * String inside brackets with preceding spaces, ending with EOL or EOF
  */
-struct STRING_IN_BRACKETS_EOL :
+struct STRING_IN_BRACKETS_EOLF :
                 seq
                 <
                     spaced_ch<'('>,
                     sor<
                         QUOTED_STRING,
-                        STRING_EXCLUDING<seq<one<')'>, eol>>
+                        STRING_EXCLUDING<seq<one<')'>, eolf>>
                     >,
-                    seq<one<')'>, eol>
+                    seq<one<')'>, eolf>
                 >
 {};
 
@@ -485,7 +485,7 @@ struct USER_PART_ATTRIBUTE :
 struct READONLY : one <'!'>{};
 struct ATTRIBUTE_NAME : sor<QUOTED_STRING, STRING_EXCLUDING< spaced_ch<'('>>> {};
 struct ATTRIBUTE_VALUE : STRING_IN_BRACKETS {};
-struct ATTRIBUTE_VALUE_EOL : STRING_IN_BRACKETS_EOL {};
+struct ATTRIBUTE_VALUE_EOLF : STRING_IN_BRACKETS_EOLF {};
 
 template<char START_TOKEN>
 struct GENERIC_ATTRIBUTE :
@@ -495,7 +495,7 @@ struct GENERIC_ATTRIBUTE :
                     one<START_TOKEN>,
                     opt<READONLY>,
                     ATTRIBUTE_NAME,
-                    ATTRIBUTE_VALUE_EOL
+                    ATTRIBUTE_VALUE_EOLF
                 >
 {};
 
