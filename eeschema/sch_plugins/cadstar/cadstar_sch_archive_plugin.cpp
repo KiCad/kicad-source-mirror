@@ -26,6 +26,7 @@
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_loader.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
+#include <plugins/cadstar/cadstar_parts_lib_parser.h>
 
 #include <lib_symbol.h>
 #include <progress_reporter.h>
@@ -53,24 +54,14 @@ bool CADSTAR_SCH_ARCHIVE_PLUGIN::CanReadLibrary( const wxString& aFileName ) con
     if( !SCH_PLUGIN::CanReadLibrary( aFileName ) )
         return false;
 
-    wxFFileInputStream input( aFileName );
-
-    if( !input.IsOk() || input.Eof() )
-        return false;
-
-    // Find first non-empty line
-    wxTextInputStream text( input );
-    wxString          line = text.ReadLine();
-
-    while( !input.Eof() && line.IsEmpty() )
-        line = text.ReadLine().Trim( false /*trim from left*/ );
-
-    // CADSTAR libs start with
-    // # FORMAT 32
-    // or
-    // .PartName :2 ;Part 0 Description
-    if( line.StartsWith( wxS( "#" ) ) || line.StartsWith( wxS( "." ) ) )
-        return true;
+    try
+    {
+        CADSTAR_PARTS_LIB_PARSER p;
+        return p.CheckFileHeader( aFileName.fn_str() );
+    }
+    catch( const std::runtime_error& )
+    {
+    }
 
     return false;
 }
