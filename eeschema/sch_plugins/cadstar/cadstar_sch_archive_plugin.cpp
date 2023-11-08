@@ -57,7 +57,7 @@ bool CADSTAR_SCH_ARCHIVE_PLUGIN::CanReadLibrary( const wxString& aFileName ) con
     try
     {
         CADSTAR_PARTS_LIB_PARSER p;
-        return p.CheckFileHeader( aFileName.fn_str() );
+        return p.CheckFileHeader( aFileName.utf8_string() );
     }
     catch( const std::runtime_error& )
     {
