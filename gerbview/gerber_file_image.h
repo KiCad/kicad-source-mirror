@@ -99,6 +99,10 @@ public:
                                         // and the actual coordinates calculation must handle this
 };
 
+// size of a single line of text from a gerber file.
+// warning: some files can have *very long* lines, so the buffer must be large.
+#define GERBER_BUFZ 1000000
+
 /**
  * Hold the image data and parameters for one gerber file and layer parameters.
  *
@@ -468,6 +472,9 @@ public:
     ///< Do not change actual coordinates/orientation
     VECTOR2I           m_DisplayOffset;
     EDA_ANGLE          m_DisplayRotation;
+
+    // A large buffer to store one line
+    static char m_LineBuffer[GERBER_BUFZ+1];
 
 private:
     wxArrayString      m_messagesList;         // A list of messages created when reading a file

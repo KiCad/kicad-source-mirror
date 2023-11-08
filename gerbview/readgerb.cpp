@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,11 +224,9 @@ bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
     return false;
 }
 
-// size of a single line of text from a gerber file.
-// warning: some files can have *very long* lines, so the buffer must be large.
-#define GERBER_BUFZ 1000000
+
 // A large buffer to store one line
-static char lineBuffer[GERBER_BUFZ+1];
+char GERBER_FILE_IMAGE::m_LineBuffer[GERBER_BUFZ+1];
 
 bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 {
@@ -253,11 +251,11 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
 
     while( true )
     {
-        if( fgets( lineBuffer, GERBER_BUFZ, m_Current_File ) == nullptr )
+        if( fgets( m_LineBuffer, GERBER_BUFZ, m_Current_File ) == nullptr )
             break;
 
         m_LineNum++;
-        text = StrPurge( lineBuffer );
+        text = StrPurge( m_LineBuffer );
 
         while( text && *text )
         {
@@ -314,7 +312,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 if( m_CommandState != ENTER_RS274X_CMD )
                 {
                     m_CommandState = ENTER_RS274X_CMD;
-                    ReadRS274XCommand( lineBuffer, GERBER_BUFZ, text );
+                    ReadRS274XCommand( m_LineBuffer, GERBER_BUFZ, text );
                 }
                 else        //Error
                 {

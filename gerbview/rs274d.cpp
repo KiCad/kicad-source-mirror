@@ -1,8 +1,3 @@
-/**
- * @file rs274d.cpp
- * @brief functions to read the rs274d commands from a rs274d/rs274x file
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -25,6 +20,11 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+/**
+ * @brief functions to read the rs274d commands from a rs274d/rs274x file
+ */
+
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -464,8 +464,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
             ExecuteRS274XCommand( code_command, nullptr, 0, cptr );
         }
 
-        while( *text && (*text != '*') )
-            text++;
+        GetEndOfBlock( m_LineBuffer, GERBER_BUFZ, text, m_Current_File );
 
         break;
 
