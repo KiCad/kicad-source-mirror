@@ -326,8 +326,8 @@ protected:
      */
     LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, const wxString& aPinnedKey );
 
-    LIB_TREE_NODE_LIB& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
-                                         bool pinned );
+    LIB_TREE_NODE_LIBRARY& DoAddLibraryNode( const wxString& aNodeName, const wxString& aDesc,
+                                             bool pinned );
 
     /**
      * Check whether a container has columns too

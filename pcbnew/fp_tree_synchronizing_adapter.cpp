@@ -64,7 +64,7 @@ TOOL_INTERACTIVE* FP_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
 bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
     const LIB_TREE_NODE* node = ToNode( aItem );
-    return node ? node->m_Type == LIB_TREE_NODE::LIB : true;
+    return node ? node->m_Type == LIB_TREE_NODE::LIBRARY : true;
 }
 
 
@@ -88,7 +88,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FP_LIB_TABLE* aLibs )
             continue;
         }
 
-        updateLibrary( *(LIB_TREE_NODE_LIB*) it->get() );
+        updateLibrary( *(LIB_TREE_NODE_LIBRARY*) it->get() );
         ++it;
     }
 
@@ -128,7 +128,7 @@ int FP_TREE_SYNCHRONIZING_ADAPTER::GetLibrariesCount() const
 }
 
 
-void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
+void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode )
 {
     std::vector<LIB_TREE_ITEM*> footprints = getFootprints( aLibNode.m_Name );
 
@@ -148,7 +148,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
         {
             // footprint exists both in the lib tree and the footprint info list; just
             // update the node data
-            static_cast<LIB_TREE_NODE_LIB_ID*>( nodeIt->get() )->Update( *footprintIt );
+            static_cast<LIB_TREE_NODE_LIB_ITEM*>( nodeIt->get() )->Update( *footprintIt );
             footprints.erase( footprintIt );
             ++nodeIt;
         }
@@ -229,7 +229,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         {
             node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetLibDescription();
         }
-        else if( node->m_Type == LIB_TREE_NODE::LIB )
+        else if( node->m_Type == LIB_TREE_NODE::LIBRARY )
         {
             try
             {
@@ -277,7 +277,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 
     switch( node->m_Type )
     {
-    case LIB_TREE_NODE::LIB:
+    case LIB_TREE_NODE::LIBRARY:
         if( node->m_Name == m_frame->GetLoadedFPID().GetLibNickname() )
         {
 #ifdef __WXGTK__
@@ -295,7 +295,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
         }
         break;
 
-    case LIB_TREE_NODE::LIBID:
+    case LIB_TREE_NODE::LIB_ITEM:
         if( node->m_LibId == m_frame->GetLoadedFPID() )
         {
 #ifdef __WXGTK__
@@ -326,7 +326,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    return node->m_Type == LIB_TREE_NODE::LIBID && node->m_LibId != m_frame->GetLoadedFPID();
+    return node->m_Type == LIB_TREE_NODE::LIB_ITEM && node->m_LibId != m_frame->GetLoadedFPID();
 }
 
 

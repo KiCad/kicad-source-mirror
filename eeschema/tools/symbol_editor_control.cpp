@@ -70,14 +70,14 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         auto pinnedLibSelectedCondition =
                 [ editFrame ]( const SELECTION& aSel )
                 {
-                    LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
-                    return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
+                    LIB_TREE_NODE* node = editFrame->GetCurrentTreeNode();
+                    return node && node->m_Type == LIB_TREE_NODE::LIBRARY && node->m_Pinned;
                 };
         auto unpinnedLibSelectedCondition =
                 [ editFrame ](const SELECTION& aSel )
                 {
-                    LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
-                    return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
+                    LIB_TREE_NODE* node = editFrame->GetCurrentTreeNode();
+                    return node && node->m_Type == LIB_TREE_NODE::LIBRARY && !node->m_Pinned;
                 };
         auto symbolSelectedCondition =
                 [ editFrame ]( const SELECTION& aSel )

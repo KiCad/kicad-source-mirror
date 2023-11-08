@@ -54,7 +54,7 @@ public:
     virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) override;
 
 protected:
-    void updateLibrary( LIB_TREE_NODE_LIB& aLibNode );
+    void updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNode );
 
     LIB_TREE_NODE::PTR_VECTOR::iterator deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
 

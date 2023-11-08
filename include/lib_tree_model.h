@@ -112,8 +112,8 @@ public:
     enum TYPE
     {
         ROOT,
-        LIB,
-        LIBID,
+        LIBRARY,
+        LIB_ITEM,
         UNIT,
         INVALID
     };
@@ -185,15 +185,15 @@ public:
 /**
  * Node type: #LIB_ID.
  */
-class LIB_TREE_NODE_LIB_ID: public LIB_TREE_NODE
+class LIB_TREE_NODE_LIB_ITEM : public LIB_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE_LIB_ID const& _ ) = delete;
-    void operator=( LIB_TREE_NODE_LIB_ID const& _ ) = delete;
+    LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE_LIB_ITEM const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_LIB_ITEM const& _ ) = delete;
 
     /**
      * Construct a #LIB_ID node.
@@ -207,7 +207,7 @@ public:
      * @param aParent   parent node, should be a CMP_TREE_NODE_LIB
      * @param aItem     LIB_COMPONENT to populate the node.
      */
-    LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem );
+    LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem );
 
     /**
      * Update the node using data from a LIB_ALIAS object.
@@ -233,15 +233,15 @@ protected:
 /**
  * Node type: library
  */
-class LIB_TREE_NODE_LIB: public LIB_TREE_NODE
+class LIB_TREE_NODE_LIBRARY : public LIB_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    LIB_TREE_NODE_LIB( LIB_TREE_NODE_LIB const& _ ) = delete;
-    void operator=( LIB_TREE_NODE_LIB const& _ ) = delete;
+    LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE_LIBRARY const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_LIBRARY const& _ ) = delete;
 
     /**
      * Construct an empty library node.
@@ -250,14 +250,14 @@ public:
      * @param aName     display name of the library
      * @param aDesc     a description of the library
      */
-    LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, const wxString& aName, const wxString& aDesc );
+    LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, const wxString& aName, const wxString& aDesc );
 
     /**
      * Construct a new alias node, add it to this library, and return it.
      *
      * @param aItem    LIB_COMPONENT to provide data
      */
-    LIB_TREE_NODE_LIB_ID& AddItem( LIB_TREE_ITEM* aItem );
+    LIB_TREE_NODE_LIB_ITEM& AddItem( LIB_TREE_ITEM* aItem );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                               std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
@@ -285,7 +285,7 @@ public:
     /**
      * Construct an empty library node, add it to the root, and return it.
      */
-    LIB_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
+    LIB_TREE_NODE_LIBRARY& AddLib( wxString const& aName, wxString const& aDesc );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                               std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;

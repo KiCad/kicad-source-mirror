@@ -96,13 +96,13 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
             [ this ]( const SELECTION& aSel )
             {
                 LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
-                return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
+                return current && current->m_Type == LIB_TREE_NODE::LIBRARY && current->m_Pinned;
             };
     auto unpinnedLibSelectedCondition =
             [ this ](const SELECTION& aSel )
             {
                 LIB_TREE_NODE* current = m_frame->GetCurrentTreeNode();
-                return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
+                return current && current->m_Type == LIB_TREE_NODE::LIBRARY && !current->m_Pinned;
             };
     auto fpSelectedCondition =
             [ this ]( const SELECTION& aSel )

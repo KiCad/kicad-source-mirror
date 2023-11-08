@@ -159,7 +159,7 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 
 bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 {
-    if( aNode.m_Type == LIB_TREE_NODE::TYPE::LIB )
+    if( aNode.m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
     {
         // Normally lib nodes get scored by the max of their children's scores.  However, if a
         // lib node *has* no children then the scorer will call the filter on the lib node itself,

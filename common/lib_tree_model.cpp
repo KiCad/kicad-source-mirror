@@ -160,9 +160,9 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
 }
 
 
-LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
+LIB_TREE_NODE_LIB_ITEM::LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
 {
-    m_Type = LIBID;
+    m_Type = LIB_ITEM;
     m_Parent = aParent;
 
     m_LibId.SetLibNickname( aItem->GetLibNickname() );
@@ -187,7 +187,7 @@ LIB_TREE_NODE_LIB_ID::LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE* aParent, LIB_TREE_ITE
 }
 
 
-LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ID::AddUnit( LIB_TREE_ITEM* aItem, int aUnit )
+LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ITEM::AddUnit( LIB_TREE_ITEM* aItem, int aUnit )
 {
     LIB_TREE_NODE_UNIT* unit = new LIB_TREE_NODE_UNIT( this, aItem, aUnit );
     m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( unit ) );
@@ -195,7 +195,7 @@ LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ID::AddUnit( LIB_TREE_ITEM* aItem, int aUn
 }
 
 
-void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
+void LIB_TREE_NODE_LIB_ITEM::Update( LIB_TREE_ITEM* aItem )
 {
     m_LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
     m_LibId.SetLibItemName( aItem->GetName() );
@@ -215,8 +215,8 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                                        std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE_LIB_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     // aMatcher test is additive
     if( aMatcher )
@@ -236,10 +236,10 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wx
 }
 
 
-LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aName,
-                                      wxString const& aDesc )
+LIB_TREE_NODE_LIBRARY::LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, wxString const& aName,
+                                              wxString const& aDesc )
 {
-    m_Type = LIB;
+    m_Type = LIBRARY;
     m_Name = aName;
     m_Desc = aDesc;
     m_Parent = aParent;
@@ -249,16 +249,16 @@ LIB_TREE_NODE_LIB::LIB_TREE_NODE_LIB( LIB_TREE_NODE* aParent, wxString const& aN
 }
 
 
-LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
+LIB_TREE_NODE_LIB_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 {
-    LIB_TREE_NODE_LIB_ID* item = new LIB_TREE_NODE_LIB_ID( this, aItem );
+    LIB_TREE_NODE_LIB_ITEM* item = new LIB_TREE_NODE_LIB_ITEM( this, aItem );
     m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( item ) );
     return *item;
 }
 
 
-void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                                     std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                         std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     if( m_Children.size() )
     {
@@ -289,9 +289,9 @@ LIB_TREE_NODE_ROOT::LIB_TREE_NODE_ROOT()
 }
 
 
-LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString const& aDesc )
+LIB_TREE_NODE_LIBRARY& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString const& aDesc )
 {
-    LIB_TREE_NODE_LIB* lib = new LIB_TREE_NODE_LIB( this, aName, aDesc );
+    LIB_TREE_NODE_LIBRARY* lib = new LIB_TREE_NODE_LIBRARY( this, aName, aDesc );
     m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( lib ) );
     return *lib;
 }

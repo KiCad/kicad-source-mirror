@@ -584,7 +584,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     case WXK_ADD:
         updateRecentSearchMenu();
 
-        if( type == LIB_TREE_NODE::LIB )
+        if( type == LIB_TREE_NODE::LIBRARY )
             m_tree_ctrl->Expand( sel );
 
         break;
@@ -592,7 +592,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
     case WXK_SUBTRACT:
         updateRecentSearchMenu();
 
-        if( type == LIB_TREE_NODE::LIB )
+        if( type == LIB_TREE_NODE::LIBRARY )
             m_tree_ctrl->Collapse( sel );
 
         break;
@@ -603,7 +603,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
         if( GetSelectedLibId().IsValid() )
             postSelectEvent();
-        else if( type == LIB_TREE_NODE::LIB )
+        else if( type == LIB_TREE_NODE::LIBRARY )
             toggleExpand( sel );
 
         break;
@@ -878,7 +878,7 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
     {
         LIB_TREE_NODE* current = GetCurrentTreeNode();
 
-        if( current && current->m_Type == LIB_TREE_NODE::LIB )
+        if( current && current->m_Type == LIB_TREE_NODE::LIBRARY )
         {
             ACTION_MENU menu( true, nullptr );
 

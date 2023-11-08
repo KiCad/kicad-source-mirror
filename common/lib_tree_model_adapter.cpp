@@ -110,10 +110,11 @@ void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( const LIB_ID& aLibId, int aUnit )
 }
 
 
-LIB_TREE_NODE_LIB& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNodeName,
-                                                             const wxString& aDesc, bool pinned )
+LIB_TREE_NODE_LIBRARY& LIB_TREE_MODEL_ADAPTER::DoAddLibraryNode( const wxString& aNodeName,
+                                                                 const wxString& aDesc,
+                                                                 bool pinned )
 {
-    LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
+    LIB_TREE_NODE_LIBRARY& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
     lib_node.m_Pinned = pinned;
 
@@ -125,7 +126,7 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNodeName, const wxSt
                                            const std::vector<LIB_TREE_ITEM*>& aItemList,
                                            bool pinned, bool presorted )
 {
-    LIB_TREE_NODE_LIB& lib_node = DoAddLibraryNode( aNodeName, aDesc, pinned );
+    LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( aNodeName, aDesc, pinned );
 
     for( LIB_TREE_ITEM* item: aItemList )
         lib_node.AddItem( item );
@@ -416,8 +417,8 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
     unsigned int         count = 0;
 
     if( node->m_Type == LIB_TREE_NODE::TYPE::ROOT
-            || node->m_Type == LIB_TREE_NODE::LIB
-            || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIBID ) )
+            || node->m_Type == LIB_TREE_NODE::LIBRARY
+            || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM ) )
     {
         for( std::unique_ptr<LIB_TREE_NODE> const& child: node->m_Children )
         {
@@ -591,7 +592,7 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    if( node->m_Type == LIB_TREE_NODE::LIBID )
+    if( node->m_Type == LIB_TREE_NODE::LIB_ITEM )
     {
         if( !node->m_IsRoot && aCol == 0 )
         {
@@ -625,7 +626,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
     recursiveDescent( m_tree,
             [&]( const LIB_TREE_NODE* n )
             {
-                if( n->m_Type == LIB_TREE_NODE::TYPE::LIBID && n->m_Score > 1 )
+                if( n->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM && n->m_Score > 1 )
                 {
                     if( !firstMatch )
                         firstMatch = n;
@@ -644,7 +645,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
-                    if( n->m_Type == LIB_TREE_NODE::LIBID
+                    if( n->m_Type == LIB_TREE_NODE::LIB_ITEM
                               && ( n->m_Children.empty() || !m_preselect_unit )
                               && m_preselect_lib_id == n->m_LibId )
                     {
@@ -671,7 +672,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
-                    if( n->m_Type == LIB_TREE_NODE::TYPE::LIBID
+                    if( n->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM
                             && n->m_Parent->m_Parent->m_Children.size() == 1 )
                     {
                         firstMatch = n;

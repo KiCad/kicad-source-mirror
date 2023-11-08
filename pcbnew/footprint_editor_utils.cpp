@@ -156,7 +156,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem,
     if( aTreeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
                              // from file therefore not yet in tree.
     {
-        static_cast<LIB_TREE_NODE_LIB_ID*>( aTreeItem.GetID() )->Update( &footprintInfo );
+        static_cast<LIB_TREE_NODE_LIB_ITEM*>( aTreeItem.GetID() )->Update( &footprintInfo );
         m_treePane->GetLibTree()->RefreshLibTree();
     }
 }
