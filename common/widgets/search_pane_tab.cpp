@@ -29,7 +29,8 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
         wxListView( parent, winid, pos, size, wxLC_REPORT | wxLC_VIRTUAL ),
         m_handler( handler ),
         m_sortCol( -1 ),
-        m_sortAscending( true )
+        m_sortAscending( true ),
+        m_selectionDirty( false )
 {
     SetItemCount( 0 );
 
@@ -40,6 +41,7 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
     Bind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
     Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
     Bind( wxEVT_LIST_COL_CLICK, &SEARCH_PANE_LISTVIEW::OnColClicked, this );
+    Bind( wxEVT_UPDATE_UI, &SEARCH_PANE_LISTVIEW::OnUpdateUI, this );
 }
 
 
@@ -49,6 +51,7 @@ SEARCH_PANE_LISTVIEW::~SEARCH_PANE_LISTVIEW()
     Unbind( wxEVT_LIST_ITEM_ACTIVATED, &SEARCH_PANE_LISTVIEW::OnItemActivated, this );
     Unbind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
     Unbind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
+    Unbind( wxEVT_UPDATE_UI, &SEARCH_PANE_LISTVIEW::OnUpdateUI, this );
 }
 
 
@@ -77,42 +80,37 @@ void SEARCH_PANE_LISTVIEW::OnItemActivated( wxListEvent& aEvent )
             [=]()
             {
                 m_handler->ActivateItem( aEvent.GetIndex() );
-
-                // Reset our selection to match the selected list items
-                std::vector<long> list;
-                GetSelectRowsList( list );
-                m_handler->SelectItems( list );
             } );
 
+    m_selectionDirty = true;
     aEvent.Skip();
 }
 
 
 void SEARCH_PANE_LISTVIEW::OnItemSelected( wxListEvent& aEvent )
 {
-    CallAfter(
-            [=]()
-            {
-                std::vector<long> list;
-                GetSelectRowsList( list );
-                m_handler->SelectItems( list );
-            } );
-
+    m_selectionDirty = true;
     aEvent.Skip();
 }
 
 
 void SEARCH_PANE_LISTVIEW::OnItemDeselected( wxListEvent& aEvent )
 {
-    CallAfter(
-            [=]()
-            {
-                std::vector<long> list;
-                GetSelectRowsList( list );
-                m_handler->SelectItems( list );
-            } );
-
+    m_selectionDirty = true;
     aEvent.Skip();
+}
+
+
+void SEARCH_PANE_LISTVIEW::OnUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    if( m_selectionDirty )
+    {
+        m_selectionDirty = false;
+
+        std::vector<long> list;
+        GetSelectRowsList( list );
+        m_handler->SelectItems( list );
+    }
 }
 
 

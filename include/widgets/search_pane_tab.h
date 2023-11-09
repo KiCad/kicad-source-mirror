@@ -48,6 +48,7 @@ protected:
     void     OnItemActivated( wxListEvent& aEvent );
     void     OnItemDeselected( wxListEvent& aEvent );
     void     OnColClicked( wxListEvent& aEvent );
+    void     OnUpdateUI( wxUpdateUIEvent& aEvent );
 
     void GetSelectRowsList( std::vector<long>& aSelectedList );
 
@@ -55,6 +56,7 @@ private:
     SEARCH_HANDLER*       m_handler;
     int                   m_sortCol;
     bool                  m_sortAscending;
+    bool                  m_selectionDirty;
 };
 
 
