@@ -157,23 +157,11 @@ void ARRAY_CREATOR::Invoke()
                     // it this state, reset the selected stated of aItem:
                     this_item->ClearSelected();
 
-                    if( this_item->Type() == PCB_GROUP_T )
-                    {
-                        static_cast<PCB_GROUP*>( this_item )->RunOnDescendants(
-                                [&]( BOARD_ITEM* aItem )
-                                {
-                                    aItem->ClearSelected();
-                                    commit.Add( aItem );
-                                });
-                    }
-                    else if( this_item->Type() == PCB_FOOTPRINT_T )
-                    {
-                        static_cast<FOOTPRINT*>( this_item )->RunOnChildren(
-                                [&]( BOARD_ITEM* aItem )
-                                {
-                                    aItem->ClearSelected();
-                                });
-                    }
+                    this_item->RunOnDescendants(
+                            [&]( BOARD_ITEM* aItem )
+                            {
+                                aItem->ClearSelected();
+                            });
 
                     TransformItem( *array_opts, ptN, *this_item );
                     commit.Add( this_item );

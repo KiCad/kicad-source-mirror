@@ -526,7 +526,7 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
             {
                 items.erase( aItem );
 
-                aItem->RunOnChildren(
+                aItem->RunOnDescendants(
                         [&]( BOARD_ITEM* aChild )
                         {
                             skipItem( aChild );

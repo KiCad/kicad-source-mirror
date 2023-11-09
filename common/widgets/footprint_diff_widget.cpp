@@ -64,11 +64,11 @@ void FOOTPRINT_DIFF_WIDGET::DisplayDiff( FOOTPRINT* aBoardFootprint,
     m_boardItemCopy->ClearSelected();
     m_boardItemCopy->ClearBrightened();
 
-    m_boardItemCopy->RunOnChildren(
-            [&]( BOARD_ITEM* child )
+    m_boardItemCopy->RunOnDescendants(
+            [&]( BOARD_ITEM* item )
             {
-                child->ClearSelected();
-                child->ClearBrightened();
+                item->ClearSelected();
+                item->ClearBrightened();
             } );
 
     m_boardItemCopy->Move( -m_boardItemCopy->GetPosition() );
@@ -103,10 +103,10 @@ void FOOTPRINT_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
 
         m_boardItemCopy->SetForcedTransparency( val );
 
-        m_boardItemCopy->RunOnChildren(
-                [&]( BOARD_ITEM* child )
+        m_boardItemCopy->RunOnDescendants(
+                [&]( BOARD_ITEM* item )
                 {
-                    child->SetForcedTransparency( val );
+                    item->SetForcedTransparency( val );
                 } );
     }
 
@@ -121,10 +121,10 @@ void FOOTPRINT_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
 
         m_libraryItem->SetForcedTransparency( val );
 
-        m_libraryItem->RunOnChildren(
-                [&]( BOARD_ITEM* child )
+        m_libraryItem->RunOnDescendants(
+                [&]( BOARD_ITEM* item )
                 {
-                    child->SetForcedTransparency( val );
+                    item->SetForcedTransparency( val );
                 } );
     }
 

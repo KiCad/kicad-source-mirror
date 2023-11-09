@@ -426,7 +426,7 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
             aFunction( item );
 
             if( item->Type() == PCB_GROUP_T )
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( aFunction );
+                item->RunOnDescendants( aFunction );
         }
     }
     catch( std::bad_function_call& )
@@ -434,6 +434,7 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
         wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnDescendants" ) );
     }
 }
+
 
 bool PCB_GROUP::operator==( const BOARD_ITEM& aOther ) const
 {

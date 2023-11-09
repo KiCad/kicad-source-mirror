@@ -641,26 +641,17 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
         for( EDA_ITEM* item : m_selection )
         {
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+            bool        lockedDescendant = false;
 
-            if( boardItem->Type() == PCB_GROUP_T )
-            {
-                PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
-                bool       lockedDescendant = false;
+            boardItem->RunOnDescendants(
+                    [&]( BOARD_ITEM* item )
+                    {
+                        if( item->IsLocked() )
+                            lockedDescendant = true;
+                    } );
 
-                group->RunOnDescendants(
-                        [&lockedDescendant]( BOARD_ITEM* child )
-                        {
-                            if( child->IsLocked() )
-                                lockedDescendant = true;
-                        } );
-
-                if( lockedDescendant )
-                    lockedItems.push_back( group );
-            }
-            else if( boardItem->IsLocked() )
-            {
+            if( boardItem->IsLocked() || lockedDescendant )
                 lockedItems.push_back( boardItem );
-            }
         }
 
         if( !lockedItems.empty() )
@@ -2882,8 +2873,8 @@ void PCB_SELECTION_TOOL::highlightInternal( EDA_ITEM* aItem, int aMode, bool aUs
 
     if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
     {
-        boardItem->RunOnChildren( std::bind( &PCB_SELECTION_TOOL::highlightInternal, this, _1,
-                                             aMode, aUsingOverlay ) );
+        boardItem->RunOnDescendants( std::bind( &PCB_SELECTION_TOOL::highlightInternal, this, _1,
+                                                aMode, aUsingOverlay ) );
     }
 }
 
@@ -2914,8 +2905,8 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
 
     if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
     {
-        boardItem->RunOnChildren( std::bind( &PCB_SELECTION_TOOL::unhighlightInternal, this, _1,
-                                             aMode, aUsingOverlay ) );
+        boardItem->RunOnDescendants( std::bind( &PCB_SELECTION_TOOL::unhighlightInternal, this, _1,
+                                                aMode, aUsingOverlay ) );
     }
 }
 
@@ -2938,15 +2929,12 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
             bool found = false;
 
-            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
-            {
-                group->RunOnDescendants(
-                        [&]( BOARD_ITEM* aItem )
-                        {
-                            if( aItem->HitTest( aPoint, margin ) )
-                                found = true;
-                        } );
-            }
+            static_cast<BOARD_ITEM*>( item )->RunOnDescendants(
+                    [&]( BOARD_ITEM* aItem )
+                    {
+                        if( aItem->HitTest( aPoint, margin ) )
+                            found = true;
+                    } );
 
             if( found )
                 return true;

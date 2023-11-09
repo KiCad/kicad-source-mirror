@@ -83,12 +83,6 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_brdEditor );
     commit.Modify( m_group );
 
-    m_group->RunOnDescendants(
-            [&]( BOARD_ITEM* descendant )
-            {
-                commit.Modify( descendant );
-            } );
-
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) );

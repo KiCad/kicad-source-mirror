@@ -76,11 +76,11 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCRE
 {
     wxCHECK( aItem, *this );
 
-    if( aChangeType == CHT_MODIFY && aItem->Type() == PCB_GROUP_T )
+    // Many operations (move, rotate, etc.) are applied directly to a group's children, so they
+    // must be staged as well.
+    if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
     {
-        // Many operations on group (move, rotate, etc.) are applied directly to their
-        // children, so it's the children that must be staged.
-        static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+        group->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
                     COMMIT::Stage( child, aChangeType );
@@ -305,6 +305,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             switch( boardItem->Type() )
             {
             case PCB_FIELD_T:
+                static_cast<PCB_FIELD*>( boardItem )->SetVisible( false );
+                break;
+
             case PCB_TEXT_T:
             case PCB_PAD_T:
             case PCB_SHAPE_T:            // a shape (normally not on copper layers)

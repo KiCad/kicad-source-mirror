@@ -196,35 +196,14 @@ public:
     /// @copydoc EDA_ITEM::GetMenuImage
     BITMAPS GetMenuImage() const override;
 
-
-    /**
-     * Add all the immediate children of this group to the board commit. This function does not
-     * enter any subgroups of this group, or add the group itself.
-     *
-     * @param aCommit is the commit to add the children to.
-     */
-    void AddChildrenToCommit( BOARD_COMMIT& aCommit )
-    {
-        RunOnChildren( [&]( BOARD_ITEM* bItem )
-                       {
-                           aCommit.Add( bItem );
-                       } );
-    }
-
-
     /// @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     ///< @copydoc BOARD_ITEM::RunOnChildren
     void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const override;
 
-    /**
-     * Invoke a function on all descendants of the group.
-     *
-     * @note This function should not add or remove items to the group or descendant groups.
-     * @param aFunction is the function to be invoked.
-     */
-    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const;
+    ///< @copydoc BOARD_ITEM::RunOnDescendants
+    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const override;
 
     /**
      * Check if the proposed type can be added to a group

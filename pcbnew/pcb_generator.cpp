@@ -40,12 +40,6 @@ void PCB_GENERATOR::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_ED
                                BOARD_COMMIT* aCommit )
 {
     aCommit->Modify( this );
-
-    RunOnDescendants(
-            [&]( BOARD_ITEM* aItem )
-            {
-                aCommit->Modify( aItem );
-            } );
 }
 
 
@@ -66,14 +60,6 @@ void PCB_GENERATOR::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_E
 void PCB_GENERATOR::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                             BOARD_COMMIT* aCommit )
 {
-    RunOnDescendants(
-            [&]( BOARD_ITEM* aItem )
-            {
-                aCommit->Stage( aItem, CHT_MODIFY );
-            } );
-
-    RemoveAll();
-
     aCommit->Remove( this );
 }
 

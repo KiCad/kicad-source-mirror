@@ -1760,19 +1760,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
         {
             if( !item->IsNew() && !item->IsMoving() )
-            {
                 commit->Modify( item );
-
-                // If rotating a group, record position of all the descendants for undo
-                if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-                {
-                    static_cast<PCB_GROUP*>( item )->RunOnDescendants(
-                            [&]( BOARD_ITEM* bItem )
-                            {
-                                commit->Modify( bItem );
-                            });
-                }
-            }
 
             if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
             {
@@ -2046,18 +2034,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
         {
             if( !boardItem->IsNew() && !boardItem->IsMoving() )
-            {
                 commit->Modify( boardItem );
-
-                if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
-                {
-                    static_cast<PCB_GROUP*>( boardItem )->RunOnDescendants(
-                            [&]( BOARD_ITEM* descendant )
-                            {
-                                commit->Modify( descendant );
-                            });
-                }
-            }
 
             boardItem->Flip( refPt, leftRight );
             boardItem->Normalize();
@@ -2125,6 +2102,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
+        case PCB_GROUP_T:
             if( parentFP )
             {
                 commit.Modify( parentFP );
@@ -2193,61 +2171,20 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
             break;
 
-        case PCB_GROUP_T:
-        {
-            PCB_GROUP* group = static_cast<PCB_GROUP*>( board_item );
-
-            auto removeItem =
-                    [&]( BOARD_ITEM* bItem )
-                    {
-                        if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_FOOTPRINT_T )
-                        {
-                            // Just make fields invisible if they happen to be in group.
-                            if( bItem->Type() == PCB_FIELD_T )
-                            {
-                                commit.Modify( bItem->GetParent() );
-                                static_cast<PCB_FIELD*>( board_item )->SetVisible( false );
-                                getView()->Update( board_item );
-
-                                return;
-                            }
-                            else if( bItem->Type() == PCB_PAD_T )
-                            {
-                                if( !IsFootprintEditor()
-                                        && !frame()->GetPcbNewSettings()->m_AllowFreePads )
-                                {
-                                    return;
-                                }
-                            }
-
-                            commit.Modify( bItem->GetParent() );
-                            getView()->Remove( bItem );
-                            bItem->GetParent()->Remove( bItem );
-                        }
-                        else
-                        {
-                            commit.Remove( bItem );
-                        }
-                    };
-
-            removeItem( group );
-
-            group->RunOnDescendants( [&]( BOARD_ITEM* aDescendant )
-                                     {
-                                         removeItem( aDescendant );
-                                     });
-            break;
-        }
-
         case PCB_GENERATOR_T:
-        {
-            PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
+            if( aItems.Size() == 1 )
+            {
+                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
 
-            m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, &commit,
-                                                             generator );
+                m_toolMgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, &commit,
+                                                                 generator );
+            }
+            else
+            {
+                commit.Remove( board_item );
+            }
 
             break;
-        }
 
         default:
             wxASSERT_MSG( parentFP == nullptr, wxT( "Try to delete an item living in a footrprint" ) );
@@ -2392,19 +2329,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             wxCHECK2( boardItem, continue );
 
             if( !boardItem->IsNew() )
-            {
                 commit.Modify( boardItem );
-
-                if( boardItem->Type() == PCB_GROUP_T || boardItem->Type() == PCB_GENERATOR_T )
-                {
-                    PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
-
-                    group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
-                                             {
-                                                 commit.Modify( descendant );
-                                             });
-                }
-            }
 
             if( !boardItem->GetParent() || !boardItem->GetParent()->IsSelected() )
                 boardItem->Move( translation );
@@ -2554,15 +2479,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( dupe_item )
         {
-            if( dupe_item->Type() == PCB_GROUP_T )
-            {
-                static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants(
-                        [&]( BOARD_ITEM* bItem )
-                        {
-                            commit.Add( bItem );
-                        });
-            }
-
             // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
             // will not properly select it later on
             dupe_item->ClearSelected();

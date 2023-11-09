@@ -894,7 +894,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
             };
 
     fixUuid( const_cast<KIID&>( newFootprint->m_Uuid ) );
-    newFootprint->RunOnChildren(
+
+    newFootprint->RunOnDescendants(
             [&]( BOARD_ITEM* aChild )
             {
                 fixUuid( const_cast<KIID&>( aChild->m_Uuid ) );
@@ -1311,7 +1312,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName,
     if( footprint->GetValue().IsEmpty() )
         footprint->SetValue( footprintName );
 
-    footprint->RunOnChildren(
+    footprint->RunOnDescendants(
             [&]( BOARD_ITEM* aChild )
             {
                 if( aChild->Type() == PCB_FIELD_T || aChild->Type() == PCB_TEXT_T )

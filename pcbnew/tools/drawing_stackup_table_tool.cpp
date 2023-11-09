@@ -648,10 +648,6 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
             for( BOARD_ITEM* item : aItems )
             {
                 item->Move( cursorPosition );
-
-                if( item->Type() == PCB_GROUP_T )
-                    static_cast<PCB_GROUP*>( item )->AddChildrenToCommit( commit );
-
                 commit.Add( item );
             }
 

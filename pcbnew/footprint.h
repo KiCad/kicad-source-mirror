@@ -827,14 +827,11 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    /**
-     * Invoke a function on all BOARD_ITEMs that belong to the footprint (pads, drawings, texts).
-     *
-     * @note This function should not add or remove items to the footprint.
-     *
-     * @param aFunction is the function to be invoked.
-     */
+    ///< @copydoc BOARD_ITEM::RunOnChildren
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const override;
+
+    ///< @copydoc BOARD_ITEM::RunOnDescendants
+    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

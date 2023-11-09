@@ -144,7 +144,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
             if( group )
             {
-                static_cast<PCB_GROUP*>( clone )->RunOnDescendants(
+                clone->RunOnDescendants(
                         [&]( BOARD_ITEM* descendant )
                         {
                             // One cannot add an additional mandatory field to a given footprint:
@@ -239,14 +239,9 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 copy = static_cast<BOARD_ITEM*>( boardItem->Clone() );
             }
 
-            auto prepItem = [&]( BOARD_ITEM* aItem )
-                            {
-                                aItem->SetLocked( false );
-                            };
-
             if( copy )
             {
-                prepItem( copy );
+                copy->SetLocked( false );
 
                 // locate the reference point at (0, 0) in the copied items
                 copy->Move( -refPoint );
@@ -255,11 +250,12 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
                 if( copy->Type() == PCB_GROUP_T )
                 {
-                    static_cast<PCB_GROUP*>( copy )->RunOnDescendants( prepItem );
-                    static_cast<PCB_GROUP*>( copy )->RunOnDescendants( [&]( BOARD_ITEM* titem )
-                                                                       {
-                                                                           Format( titem, 1 );
-                                                                       } );
+                    copy->RunOnDescendants(
+                            [&]( BOARD_ITEM* titem )
+                            {
+                                titem->SetLocked( false );
+                                Format( titem, 1 );
+                            } );
                 }
 
                 copy->SetParentGroup( nullptr );

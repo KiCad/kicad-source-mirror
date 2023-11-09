@@ -290,7 +290,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             lastItem->ClearBrightened();
 
-            lastItem->RunOnChildren(
+            lastItem->RunOnDescendants(
                     [&]( BOARD_ITEM* child )
                     {
                         child->ClearBrightened();
@@ -337,7 +337,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             item->SetBrightened();
 
-            item->RunOnChildren(
+            item->RunOnDescendants(
                     [&]( BOARD_ITEM* child )
                     {
                         child->SetBrightened();

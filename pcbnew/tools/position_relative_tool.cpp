@@ -139,17 +139,6 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
             }
 
             m_commit->Modify( boardItem );
-
-            // If moving a group, record position of all the descendants for undo
-            if( boardItem->Type() == PCB_GROUP_T )
-            {
-                PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
-                group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
-                                         {
-                                             m_commit->Modify( descendant );
-                                         });
-            }
-
             boardItem->Move( aggregateTranslation );
         }
     }

@@ -127,6 +127,14 @@ public:
     {
         m_origin += aMoveVector;
         m_end += aMoveVector;
+
+        PCB_GROUP::Move( aMoveVector );
+
+        if( m_baseLine )
+            m_baseLine->Move( aMoveVector );
+
+        if( m_baseLineCoupled )
+            m_baseLineCoupled->Move( aMoveVector );
     }
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override

@@ -91,19 +91,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
     {
         if( !item->IsNew() && !item->IsMoving() )
-        {
             commit->Modify( item );
-
-            // If swapping a group, record position of all the descendants for undo
-            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-            {
-                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
-                                         {
-                                             commit->Modify( descendant );
-                                         });
-            }
-        }
     }
 
     for( size_t i = 0; i < sorted.size() - 1; i++ )
@@ -559,15 +547,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
 
-                    if( item->Type() == PCB_GENERATOR_T )
+                    if( item->Type() == PCB_GENERATOR_T && sel_items.size() == 1 )
                     {
                         m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit,
                                                          static_cast<PCB_GENERATOR*>( item ) );
                     }
-                    else if( item->Type() == PCB_FOOTPRINT_T )
-                    {
+
+                    if( item->Type() == PCB_FOOTPRINT_T )
                         redraw3D = true;
-                    }
                 }
 
                 if( redraw3D && allowRedraw3D )
@@ -595,7 +582,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     if( !item->IsNew() && !item->IsMoving() )
                     {
-                        if( item->Type() == PCB_GENERATOR_T )
+                        if( item->Type() == PCB_GENERATOR_T && sel_items.size() == 1 )
                         {
                             m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, aCommit,
                                                              static_cast<PCB_GENERATOR*>( item ) );
@@ -603,19 +590,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         else
                         {
                             aCommit->Modify( item );
+
                             item->SetFlags( IS_MOVING );
 
-                            // If moving a group, record position of all the descendants for undo
-                            if( item->Type() == PCB_GROUP_T )
-                            {
-                                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                                group->RunOnDescendants(
-                                        [&]( BOARD_ITEM* bItem )
-                                        {
-                                            aCommit->Modify( bItem );
-                                            item->SetFlags( IS_MOVING );
-                                        } );
-                            }
+                            static_cast<BOARD_ITEM*>( item )->RunOnDescendants(
+                                    [&]( BOARD_ITEM* bItem )
+                                    {
+                                        item->SetFlags( IS_MOVING );
+                                    } );
                         }
                     }
                 }

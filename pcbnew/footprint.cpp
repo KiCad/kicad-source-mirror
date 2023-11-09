@@ -1695,28 +1695,60 @@ EDA_ITEM* FOOTPRINT::Clone() const
 }
 
 
-void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM*)>& aFunction ) const
+void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const
 {
     try
     {
         for( PCB_FIELD* field : m_fields )
-            aFunction( static_cast<PCB_FIELD*>( field ) );
+            aFunction( field );
 
         for( PAD* pad : m_pads )
-            aFunction( static_cast<BOARD_ITEM*>( pad ) );
+            aFunction( pad );
 
         for( ZONE* zone : m_zones )
-            aFunction( static_cast<ZONE*>( zone ) );
+            aFunction( zone );
 
         for( PCB_GROUP* group : m_groups )
-            aFunction( static_cast<PCB_GROUP*>( group ) );
+            aFunction( group );
 
         for( BOARD_ITEM* drawing : m_drawings )
-            aFunction( static_cast<BOARD_ITEM*>( drawing ) );
+            aFunction( drawing );
     }
     catch( std::bad_function_call& )
     {
         wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnChildren" ) );
+    }
+}
+
+
+void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const
+{
+    try
+    {
+        for( PCB_FIELD* field : m_fields )
+            aFunction( field );
+
+        for( PAD* pad : m_pads )
+            aFunction( pad );
+
+        for( ZONE* zone : m_zones )
+            aFunction( zone  );
+
+        for( PCB_GROUP* group : m_groups )
+        {
+            aFunction( group );
+            group->RunOnDescendants( aFunction );
+        }
+
+        for( BOARD_ITEM* drawing : m_drawings )
+        {
+            aFunction( drawing );
+            drawing->RunOnDescendants( aFunction );
+        }
+    }
+    catch( std::bad_function_call& )
+    {
+        wxFAIL_MSG( wxT( "Error running FOOTPRINT::RunOnDescendants" ) );
     }
 }
 
@@ -2063,10 +2095,10 @@ BOARD_ITEM* FOOTPRINT::Duplicate() const
 {
     FOOTPRINT* dupe = static_cast<FOOTPRINT*>( BOARD_ITEM::Duplicate() );
 
-    dupe->RunOnChildren( [&]( BOARD_ITEM* child )
-                         {
-                             const_cast<KIID&>( child->m_Uuid ) = KIID();
-                         });
+    dupe->RunOnDescendants( [&]( BOARD_ITEM* child )
+                            {
+                                const_cast<KIID&>( child->m_Uuid ) = KIID();
+                            });
 
     return dupe;
 }
@@ -2755,17 +2787,14 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->IsOnCopperLayer() )
-        {
             copperItems.push_back( item );
-        }
-        else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
-        {
-            group->RunOnDescendants( [&]( BOARD_ITEM* descendent )
-                                     {
-                                         if( descendent->IsOnCopperLayer() )
-                                             copperItems.push_back( descendent );
-                                     } );
-        }
+
+        item->RunOnDescendants(
+                [&]( BOARD_ITEM* descendent )
+                {
+                    if( descendent->IsOnCopperLayer() )
+                        copperItems.push_back( descendent );
+                } );
     }
 
     for( ZONE* zone : m_zones )
