@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-09-21 15:08+0000\n"
+"PO-Revision-Date: 2023-11-09 22:53+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1348,7 +1348,6 @@ msgid "KiCad Image Converter"
 msgstr "KiCad bildkonverterare"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
 msgstr "Bildfiler"
 
@@ -1377,9 +1376,8 @@ msgid "Image Files"
 msgstr "Bildfiler"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Välj ritningsarksfil"
+msgstr "Skapa ritningsarksfil"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -1967,7 +1965,7 @@ msgstr "Webbplats för utvecklare - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Official KiCad library repositories - "
-msgstr "Officiella arkiv för KiCad-bibliotek - "
+msgstr "Officiella mjukvaruförråd för KiCad-bibliotek - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Bug tracker"
@@ -2457,22 +2455,19 @@ msgstr "Konfigurera global bibliotekstabell"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
 msgid "Grid size X out of range."
-msgstr "Rutnäntsstorlek X utanför tillåtet område."
+msgstr "Rutnäntsstorlek X utanför tillåtet intervall."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
 msgid "Grid size Y out of range."
-msgstr "Rutnätsstorlek Y utanför tillåtet område."
+msgstr "Rutnätsstorlek Y utanför tillåtet intervall."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
 msgstr "Snabbtangentslista"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Projektnamn:\n"
-"%s\n"
+msgstr "Projektnamn"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1047
@@ -2492,11 +2487,13 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Denna projektfil innehåller flera kombinationer av mönsterkort och "
+"kretsschema.\n"
+"Välj vilken som skall importeras till KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Stäng projektet"
+msgstr "Välj projekt att importera"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -3286,7 +3283,7 @@ msgstr "Grundläggande"
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
@@ -3296,105 +3293,91 @@ msgstr "Testa"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url-adress"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Justering"
+msgstr "Autentisering"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Grundnamn"
+msgstr "Användarnamn"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
-#, fuzzy
 msgid "Password"
-msgstr "Lösenord:"
+msgstr "Lösenord"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Meddelanden:"
+msgstr "Meddelande för överlämning:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
-#, fuzzy
 msgid "Author:"
-msgstr "Upphovsman"
+msgstr "Upphovsman:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
-msgstr ""
+msgstr "Ö&verlämna"
 
 #: common/dialogs/git/dialog_git_commit.cpp:150
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Komponentnamnet kan inte utelämnas."
+msgstr "Meddelande för överlämning kan inte vara tomt"
 
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:370
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Ange lösenordet för SSH-nyckeln"
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
-#, fuzzy
 msgid "Test connection"
-msgstr "Välj Anslutning"
+msgstr "Testa anslutning"
 
 #: common/dialogs/git/dialog_git_repository.cpp:326
-#, fuzzy
 msgid "Connection successful"
-msgstr "Filen skapades."
+msgstr "Anslutning lyckades"
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Kunde inte öppna arkivfilen."
+msgstr "Kunde inte ansluta till '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Kunde inte öppna arkivfilen."
+msgstr "Kunde inte öppna privat nyckel '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Ogiltigt stiftnamn"
+msgstr "Ogiltig SSH-nyckel"
 
 #: common/dialogs/git/dialog_git_repository.cpp:362
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Den valda filen är inte giltig eller kan vara skadad!"
+msgstr "Den valda filen är inte en giltig privat SSH-nyckel"
 
 #: common/dialogs/git/dialog_git_repository.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Kunde inte hitta biblioteksfilen '%s'"
+msgstr "Kunde inte hitta publik nyckel '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Missing information"
-msgstr "Fotavtryck saknas"
+msgstr "Saknad information"
 
 #: common/dialogs/git/dialog_git_repository.cpp:404
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Ange en fullt kvalificerad länk till mjukvaruförråd"
+msgstr "Vänligen ange ett namn för Git-förvaret"
 
 #: common/dialogs/git/dialog_git_repository.cpp:410
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Ange en fullt kvalificerad länk till mjukvaruförråd"
+msgstr "Vänligen ange en URL-adress till förvaret"
 
 #: common/dialogs/git/dialog_git_repository.cpp:431
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Lösenord:"
+msgstr "Lösenord för SSH-nyckel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 #, fuzzy
@@ -3402,13 +3385,12 @@ msgid "Location"
 msgstr "Rotation"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Anslutningens namn"
+msgstr "Anslutningstyp"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #, fuzzy
@@ -3416,28 +3398,24 @@ msgid "Local"
 msgstr "Lokal fil"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Privat"
+msgstr "Privat SSH-nyckel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Välj en fil"
+msgstr "Välj en fil med privat SSH-nyckel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Användarnamn:"
+msgstr "Användarnamn"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Mjukvaruförråd"
+msgstr "Git-förvar"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
@@ -3445,20 +3423,19 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Välj eller ange ett grennamn:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Gren"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Senaste överlämning"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Uppdaterad"
+msgstr "Senast uppdaterad"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3473,27 +3450,23 @@ msgstr "Lägg till"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Git-överlämningsdata"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Ursprungliga värden"
+msgstr "Använd förinställda värden"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Områdets namn:"
+msgstr "Upphovsmannens namn:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Upphovsman"
+msgstr "Upphovsmannens e-post:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Hantera mjukvaruförråd"
+msgstr "Git-förvar"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3514,19 +3487,16 @@ msgid "Status"
 msgstr "Status"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Lägg till mjukvaruförråd"
+msgstr "Lägg till nytt förvar"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Ändra egenskaper för fotavtryck"
+msgstr "Ändra egenskaper för förvar"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Ta bort mjukvaruförråd"
+msgstr "Ta bort förvar"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3749,9 +3719,8 @@ msgstr ""
 "Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgtema"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Hörnstorlek:"
+msgstr "Verktygslistens ikonstorlek:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3761,7 +3730,7 @@ msgstr "Liten"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Använd kompakta ikoner i verktygslisterna"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:802
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1208
@@ -3777,7 +3746,7 @@ msgstr "Normal"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "Använd KiCads förinställda ikonstorlek för verktygslisterna"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3786,7 +3755,7 @@ msgstr "Stor"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Använd större ikoner i verktygslisterna"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
@@ -4159,18 +4128,16 @@ msgstr ""
 "tum). Är du säker?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Skala"
+msgstr "Skala:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Konvertera till Arc"
+msgstr "Konvertera till gråskala"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4871,9 +4838,8 @@ msgid "Hotkeys"
 msgstr "Snabbtangenter"
 
 #: common/eda_base_frame.cpp:1083 kicad/project_tree_pane.cpp:972
-#, fuzzy
 msgid "Version Control"
-msgstr "Endast markering"
+msgstr "Versionshantering"
 
 #: common/eda_base_frame.cpp:1090
 msgid "Data Collection"
@@ -5141,9 +5107,8 @@ msgstr "Grafik"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Referensbeteckning"
+msgstr "Referensbild"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:188
 #, fuzzy
@@ -5624,18 +5589,16 @@ msgid "Vertical Justification"
 msgstr "Vertikal Justering"
 
 #: common/eda_units.cpp:437 common/status_popup.cpp:152
-#, fuzzy
 msgid "min"
-msgstr "in"
+msgstr "minimum"
 
 #: common/eda_units.cpp:445
-#, fuzzy
 msgid "opt"
-msgstr "Överst"
+msgstr "optimum"
 
 #: common/eda_units.cpp:453 common/status_popup.cpp:153
 msgid "max"
-msgstr ""
+msgstr "maximum"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -5850,258 +5813,233 @@ msgstr "Kan inte kopiera filen '%s'."
 
 #: common/gestfich.cpp:308
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Ogiltigt namn på katalog, kan inte ta bort rotkatalog"
 
 #: common/gestfich.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "Enhet '%s' slutar inte med 'mil'."
+msgstr "Katalog '%s' finns inte"
 
 #: common/gestfich.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' tolkades inte korrekt."
+msgstr "'%s' är inte en katalog"
 
 #: common/gestfich.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Tar bort katalog %s"
+msgstr "Fel vid borttagande av katalog '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Det gick inte att skapa katalogen '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Det gick inte att ladda bilden från '%s'."
+msgstr "Det gick inte att klona förvaret '%s'"
 
 #: common/git/git_pull_handler.cpp:46
 #, fuzzy, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Det gick inte att ladda bilden från '%s'."
+msgstr "Det gick inte att slå upp fjärr '%s'"
 
 #: common/git/git_pull_handler.cpp:59
 #, fuzzy, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Kunde inte hitta IBIS-modell '%s'"
+msgstr "Kunde inte ansluta till fjärr '%s'"
 
 #: common/git/git_pull_handler.cpp:69
 #, fuzzy, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Kunde inte hitta IBIS-modell '%s'"
+msgstr "Kunde inte hämta data från fjärr '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Kunde inte läsa fil "
+msgstr "Kunde inte läsa 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Det gick inte att öppna CvPcb"
+msgstr "Det gick inte att slå upp överlämning"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Kunde inte läsa fil "
+msgstr "Kunde inte analysera sammanslagning"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "Ogiltig HEAS.  Kan inte slå samman."
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
 msgstr ""
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "Kunde inte hitta SPICE-objekt med referens '%s'"
+msgstr "Kunde inte hämta referens-OID för referens '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:45
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Lyckades inte genomföra utckeckning."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Det gick inte att ladda bilden från '%s'."
+msgstr "Det gick inte att slå upp överlämning '{}'"
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Kunde inte läsa fil "
+msgstr "Kunde inte slå samman överlämningar"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Det gick inte att öppna biblioteksfilen."
+msgstr "Kunde inte hämta förvarets index"
 
 #: common/git/git_pull_handler.cpp:265
 #, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Det gick inte att öppna konfigurationsfilen"
+msgstr "Kunde inte hämta konfliktiterator"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Ersätt"
+msgstr "Ändrad"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Tillagd"
 
 #: common/git/git_push_handler.cpp:44
 #, fuzzy
 msgid "Could not lookup remote"
-msgstr "Kunde inte öppna arkivfilen."
+msgstr "Kunde inte slå upp fjärr"
 
 #: common/git/git_push_handler.cpp:58
 #, fuzzy
 msgid "Could not connect to remote"
-msgstr "Kunde inte öppna arkivfilen."
+msgstr "Kunde inte ansluta till fjärr"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Kunde inte använda OpenGL"
+msgstr "Kunde inte skicka till fjärrförvar"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Tog emot %u av %u objekt"
 
 #: common/git/kicad_git_common.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Uppdaterade %s från %s till %s."
+msgstr "* [updaterad] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Zon %s %s"
+msgstr "* [ny] %s %s"
 
 #: common/git/kicad_git_common.cpp:466
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Skriver objekt: %d%% (%d/%d), %d bytes"
 
 #: common/git/kicad_git_common.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Rutnät: %s (%s)"
+msgstr "* [avvisad] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Uppdaterad"
+msgstr "[updaterad] %s"
 
 #: common/git/kicad_git_errors.cpp:30
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Ogiltigt rapportformat\n"
+msgstr "Ogiltigt förvar."
 
 #: common/git/kicad_git_errors.cpp:31
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Det gick inte att skapa filen."
+msgstr "Det gick inte att överlämna ändringar."
 
 #: common/git/kicad_git_errors.cpp:32
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Det gick inte att spara räddningsbiblioteket %s."
+msgstr "Det gick inte att sammanslå grenar."
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Kunde inte läsa mjukvaruförrådets webadress"
+msgstr "Kunde inte klona förvaret."
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Ta bort mjukvaruförråd"
+msgstr "Fjärrförvar hittades inte."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Autentisering för fjärrförvaret misslyckades."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Branch not found."
-msgstr "Stift %s hittades inte."
+msgstr "Gren hittades inte."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Det gick inte att skapa filen."
+msgstr "Det gick inte att skapa gren."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Det gick inte att ta bort '%s'"
+msgstr "Det gick inte att radera gren."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Fil hittades inte under utcheckning."
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Sammanslagningskonflikt påträffad."
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Konflikt påträffades vid grenflytt."
 
 #: common/git/kicad_git_errors.cpp:53
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Kan inte tolka lokalt lagrad repository.json."
+msgstr "Lyckades inte hämta ändringar från fjärrförvar."
 
 #: common/git/kicad_git_errors.cpp:54
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Kan inte tolka lokalt lagrad repository.json."
+msgstr "Lyckades inte skicka ändringar till fjärrförvar."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Ingen uppströms gren konfigurerad."
 
 #: common/git/kicad_git_errors.cpp:56
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Kan inte tolka lokalt lagrad repository.json."
+msgstr "Lyckades inte etablera kontakt med fjärrförvar."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s hittades inte"
+msgstr "Tagg hittades inte."
 
 #: common/git/kicad_git_errors.cpp:60
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Det gick inte att skapa filen."
+msgstr "Lyckades inte skapa tagg."
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Det gick inte att ta bort '%s'"
+msgstr "Lyckades inte radera tagg."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "Okänt fel"
+msgstr "Okänt fel."
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "No error."
-msgstr "Inga fel hittades."
+msgstr "Inget fel."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "fel"
+msgstr "Inget fel"
 
 #: common/grid_tricks.cpp:353 common/tool/actions.cpp:193
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:117
@@ -6216,7 +6154,7 @@ msgstr "KiCad mottog ett tomt svar!"
 #: common/http_lib/http_lib_connection.cpp:155
 #: common/http_lib/http_lib_connection.cpp:278
 #: common/http_lib/http_lib_connection.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
 msgstr "Fel: %s"
 
@@ -6268,9 +6206,8 @@ msgid "DXF dimensions not currently supported."
 msgstr "DXF-måttsättning stöds för närvarande inte."
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "stöds för närvarande inte."
+msgstr "DXF \"hatch\" (skraffering) stöds för närvarande inte."
 
 #: common/import_gfx/dxf_import_plugin.h:513
 msgid "DXF traces not currently supported."
@@ -7125,7 +7062,7 @@ msgstr "KiCad Klassisk"
 #: common/status_popup.cpp:151
 #, fuzzy
 msgid "current"
-msgstr "Ström"
+msgstr "nuvarande"
 
 #: common/template_fieldnames.cpp:68
 #, c-format
@@ -7820,14 +7757,12 @@ msgid "Open product documentation in a web browser"
 msgstr "Öppna produktdokumentation i en webbläsare"
 
 #: common/tool/actions.cpp:966
-#, fuzzy
 msgid "About KiCad"
-msgstr "&Om KiCad"
+msgstr "Om KiCad"
 
 #: common/tool/actions.cpp:967
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Öppna textredigeraren"
+msgstr "Öppna dialogrutan om"
 
 #: common/tool/actions.cpp:976
 msgid "List Hotkeys..."
@@ -9959,9 +9894,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Öppna dialogrutan \"Kretsschemainställningar...\""
 
 #: eeschema/dialogs/dialog_erc.cpp:642
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Minsta rutnätsavstånd:"
+msgstr "Redigera rutnätsavstånd för anslutningar..."
 
 #: eeschema/dialogs/dialog_erc.cpp:735
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -12979,14 +12913,12 @@ msgid "Simulation Model Editor"
 msgstr "Simualtionsmodellredigerare"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
 msgstr "Välj symbol"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:63
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Power-symbol"
+msgstr "Välj strömförsörjningssymbol"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:65
 #: eeschema/symbol_chooser_frame.cpp:98
@@ -13093,9 +13025,8 @@ msgid "The Item Number column cannot be grouped by."
 msgstr "Kan inte gruppera efter objektnummerkolumnen."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1187
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Komponentlista"
+msgstr "Utmatningsfil för komponentlista"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1199
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1208
@@ -13119,24 +13050,23 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Ändringar har inte sparats. Exportera data som ej sparats?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1238
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "Inget filnamn inmatat"
+msgstr "Inget filnamn specificerat i export"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1252
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Det gick inte att skapa filen \"%s\"."
+msgstr "Det gick inte att öppna/skapa sökvägen '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "Det gick inte att skriva materiallistefil till '%s'."
+msgstr "Det gick inte att skapa komponentlistefil '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "Det gick inte att skriva materiallistefil till '%s'."
+msgstr "Det gick inte att skriva komponentlistefil '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1275
 #, c-format
@@ -13160,6 +13090,8 @@ msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 msgstr ""
+"Förinställningar kan inte modifieras.\n"
+"Vänligen använd ett annat namn."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:64
 msgid "View presets:"
@@ -14436,9 +14368,8 @@ msgid "Error Loading Library"
 msgstr "Fel vid inläsning av bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:612
-#, fuzzy
 msgid "Add Library"
-msgstr "Lägg till Bibliotek..."
+msgstr "Lägg till bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:626
 msgid "Warning: Duplicate Nickname"
@@ -15155,9 +15086,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "Kretsschemat innehåller ändringar som ännu inte sparats till fil"
 
 #: eeschema/files-io.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "LTspice kretsschemafiler"
+msgstr "Kretsschemafil '%s' stöds ej."
 
 #: eeschema/files-io.cpp:259
 msgid ""
@@ -15346,9 +15277,9 @@ msgstr ""
 "Se till att du har skrivbehörighet och försök igen."
 
 #: eeschema/files-io.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "Kunde inte skapa '%s'"
+msgstr "Lyckades inte spara %s."
 
 #: eeschema/files-io.cpp:1065
 #, fuzzy
@@ -15356,11 +15287,12 @@ msgid "Locked File Warning"
 msgstr "Modellskalevarning"
 
 #: eeschema/files-io.cpp:1067
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "Du har inte skrivbehörighet till mappen \"%s\"."
+msgstr ""
+"Du har inte skrivbehörighet för:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1083
 msgid "Saving will overwrite existing files."
@@ -16880,9 +16812,9 @@ msgstr ""
 "'cadstarpcblib'."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:278
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "Kan inte skapa fotavtrycksbibliotek '%s'."
+msgstr "Kan inte hitta .csa-fil som motsvarar bibliotek '%s'."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:63
 msgid "CADSTAR Schematic Archive files"
@@ -16915,13 +16847,13 @@ msgid "KiCad database library files"
 msgstr "KiCad databasbiblioteksfiler"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:640
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
-"'%s' är ett kretsschema i Eagle binärformat; endast kretsscheman i Eagel XML-"
-"format kan importeras."
+"'%s' är en fil i Eagle binärformat; endast filer i Eagel XML-format kan "
+"importeras."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:648
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3133
@@ -16948,9 +16880,8 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML kretsschemafiler"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.h:105
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Eagle ver. 6.x XML biblioteksfiler"
+msgstr "Eagle XML biblioteksfiler"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:152
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:302
@@ -19264,24 +19195,22 @@ msgstr ""
 "<b> Stift %s utanför rutnät </b> %s på plats <b> (%s, %s) </b> i symbol %c."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b> Stift %s utanför rutnät</b> %s på plats <b> (%s, %s) </b>."
+msgstr "<b> Grafisk cirkel har radie = 0</b> på plats <b> (%s, %s) </b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b> Stift %s utanför rutnät</b> %s på plats <b> (%s, %s) </b>."
+msgstr "<b> Grafisk rektangel har storlek 0</b> på plats <b> (%s, %s) </b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Symbolkontroll"
+msgstr "Symbolväljare"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "KiCad symbolbiblioteksvisare"
+msgstr "KiCad symbolskillnadsvisare"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 msgid ""
@@ -19729,9 +19658,8 @@ msgid "(failed to load)"
 msgstr "(misslyckades att ladda)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Bläddrare för symbolbibliotek"
+msgstr "KiCad bläddrare för symbolbibliotek"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021
@@ -20007,9 +19935,8 @@ msgid "Save Copy As..."
 msgstr "Spara Kopia Som..."
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "Spara den aktuella symbolen i ett annat bibliotek."
+msgstr "Spara en kopia av den aktuella symbolen i ett annat bibliotek."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
@@ -21633,7 +21560,6 @@ msgid "Page '%s' not found."
 msgstr "Sida '%s' hittades inte."
 
 #: eeschema/tools/simulator_control.cpp:94
-#, fuzzy
 msgid "Open Simulation Workbook"
 msgstr "Öppna simuleringsarbetsbok"
 
@@ -21682,9 +21608,8 @@ msgstr "Ingen symbol att exportera"
 
 #: eeschema/tools/symbol_editor_control.cpp:578
 #: pcbnew/footprint_edit_frame.cpp:1366
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "Exportera vy som PNG ..."
+msgstr "Exportera vy som PNG"
 
 #: eeschema/tools/symbol_editor_control.cpp:589
 #, c-format
@@ -21745,9 +21670,8 @@ msgid "Recently Used"
 msgstr "Nyligen använda"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:163
-#, fuzzy
 msgid "Already Placed"
-msgstr "Flytta och placera"
+msgstr "Redan placerad"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:503
 msgid "No footprint specified"
@@ -22840,9 +22764,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr "Inget av Gerber-lagren innehåller några data"
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "Importera icke KiCad Board-fil"
+msgstr "Exportera som KiCad mönsterkortsfil"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -23626,9 +23549,8 @@ msgstr ""
 "inställningarna i kretsschemat)"
 
 #: kicad/cli/command_sch_export_plot.cpp:76
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "Skapa popuprutor för baksidans fotavtrycks egenskaper"
+msgstr "Skapa inte popuprutor för egenskaper i PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:81
 msgid "Avoid setting a background color (regardless of theme)"
@@ -23777,7 +23699,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Hantera nedladdningsbara paket från KiCad och 3:e parts repositories"
+msgstr "Hantera nedladdningsbara paket från KiCad och 3:e parts mjukvaruförråd"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -23923,9 +23845,8 @@ msgid "%d package update(s) avaliable"
 msgstr "%d paketuppdatering(ar) tillgänglig(a)"
 
 #: kicad/kicad_manager_frame.cpp:738
-#, fuzzy
 msgid "Edit File in Text Editor"
-msgstr "Redigera i en textredigerare"
+msgstr "Redigera fil i textredigerare"
 
 #: kicad/kicad_manager_frame.cpp:820
 msgid "[no project loaded]"
@@ -24130,7 +24051,6 @@ msgstr ""
 "ändringar?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:289
-#, fuzzy
 msgid "Install Package"
 msgstr "Installera paket"
 
@@ -24271,7 +24191,6 @@ msgid "Error downloading package"
 msgstr "Fel vid nedladdning av paket"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:528
-#, fuzzy
 msgid "Save Package"
 msgstr "Spara paket"
 
@@ -24715,71 +24634,63 @@ msgstr "Flytta till papperskorgen"
 
 #: kicad/project_tree_pane.cpp:920
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "Lägg till projekt till versionshantering..."
 
 #: kicad/project_tree_pane.cpp:921
-#, fuzzy
 msgid "Initialize a new repository"
-msgstr "Kan inte tolka mjukvaruförråd: %s"
+msgstr "Initialisera nytt förvar"
 
 #: kicad/project_tree_pane.cpp:925
-#, fuzzy
 msgid "Commit Project..."
-msgstr "&Projekt"
+msgstr "Överlämna projekt..."
 
 #: kicad/project_tree_pane.cpp:926 kicad/project_tree_pane.cpp:940
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Överlämna ändringar till det lokala förvaret"
 
 #: kicad/project_tree_pane.cpp:929
 msgid "Push"
-msgstr ""
+msgstr "Skicka"
 
 #: kicad/project_tree_pane.cpp:930
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "Skicka överlämnade lokala ändringar till fjärrförvar"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Pull"
-msgstr ""
+msgstr "Hämta"
 
 #: kicad/project_tree_pane.cpp:934
-#, fuzzy
 msgid "Pull changes from remote repository into local"
-msgstr "Skriv ut schema"
+msgstr "Hämta ändringar från fjärrförvar till lokalt förvar"
 
 #: kicad/project_tree_pane.cpp:939
-#, fuzzy
 msgid "Commit File..."
-msgstr "Redigera fält"
+msgstr "Överlämna fil..."
 
 #: kicad/project_tree_pane.cpp:954
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Byt till inre lager 1"
+msgstr "Byt till gren "
 
 #: kicad/project_tree_pane.cpp:959
 msgid "Other..."
 msgstr "Annan..."
 
 #: kicad/project_tree_pane.cpp:960
-#, fuzzy
 msgid "Switch to a different branch"
-msgstr "Byt till en annan metod att redigera bågar"
+msgstr "Byt till en annan gren"
 
 #: kicad/project_tree_pane.cpp:963
-#, fuzzy
 msgid "Switch to Branch"
-msgstr "Byt till mönsterkortsredigeraren"
+msgstr "Byt till gren"
 
 #: kicad/project_tree_pane.cpp:967
-#, fuzzy
 msgid "Remove Version Control"
-msgstr "Ta bort hörnet från zon"
+msgstr "Ta bort versionshantering"
 
 #: kicad/project_tree_pane.cpp:968
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "Ta bort alla versionshanteringsfiler från projektkatalogen."
 
 #: kicad/project_tree_pane.cpp:1026
 #, c-format
@@ -24799,39 +24710,34 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokal sökväg: övervakning av mappändringar"
 
 #: kicad/project_tree_pane.cpp:1522
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "Den valda filen är inte giltig eller kan vara skadad!"
+msgstr "Den valda katalogen är redan ett git-projekt."
 
 #: kicad/project_tree_pane.cpp:1534
 msgid "Failed to initialize git project."
-msgstr ""
+msgstr "Lyckades inte initialisera git-projekt."
 
 #: kicad/project_tree_pane.cpp:1546
-#, fuzzy
 msgid "Set default remote"
-msgstr "Ställ in som standard"
+msgstr "Ställ in standardfjärr"
 
 #: kicad/project_tree_pane.cpp:1596
-#, fuzzy
 msgid "Failed to set default remote."
-msgstr "Det gick inte att skapa filen."
+msgstr "Lyckades inte ställa in standardfjärr."
 
 #: kicad/project_tree_pane.cpp:1608 kicad/project_tree_pane.cpp:1645
 #: kicad/project_tree_pane.cpp:1665
-#, fuzzy
 msgid "Fetching Remote"
-msgstr "Hämtar mjukvaruförråd"
+msgstr "Hämtar fjärrförvar"
 
 #: kicad/project_tree_pane.cpp:1671
-#, fuzzy
 msgid "Failed to push project"
-msgstr "Misslyckades med utmatning av data"
+msgstr "Lyckades inte skicka projekt"
 
 #: kicad/project_tree_pane.cpp:1733
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Det gick inte att läsa in '%s'."
+msgstr "Det gick inte hitta gren '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1745
 #, fuzzy, c-format
@@ -24839,9 +24745,9 @@ msgid "Failed to find branch head for '%s'"
 msgstr "Det gick inte att hitta en visare för '%s'."
 
 #: kicad/project_tree_pane.cpp:1756
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s'"
-msgstr "Det gick inte att plotta till '%s'.\n"
+msgstr "Lyckades inte byta till gren '%s'"
 
 #: kicad/project_tree_pane.cpp:1767
 #, fuzzy, c-format
@@ -24849,42 +24755,40 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Lyckades inte läsa ut nummer från '%s'"
 
 #: kicad/project_tree_pane.cpp:1785
-#, fuzzy
 msgid "Are you sure you want to remove git tracking from this project?"
-msgstr "Är du säker på att du vill ta bort fältet '%s'?"
+msgstr "Är du säker på att du vill ta bort git-övervakning från detta projekt?"
 
 #: kicad/project_tree_pane.cpp:1802
-#, fuzzy
 msgid "Failed to remove git directory"
-msgstr "Kunde inte flytta katalog %s"
+msgstr "Kunde inte ta bort git-katalog"
 
 #: kicad/project_tree_pane.cpp:2112
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "Avvisar överlämning på grund av tomt överlämningsmeddelande."
 
 #: kicad/project_tree_pane.cpp:2118
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "Avvisar överlämning på grund av tomt filval."
 
 #: kicad/project_tree_pane.cpp:2124
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Kan inte tolka mjukvaruförråd: %s"
+msgstr "Lyckades inte hämta förvarets index: %s"
 
 #: kicad/project_tree_pane.cpp:2132
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Det gick inte att ta bort '%s'"
+msgstr "Lyckades inte lägga till fil till index: %s"
 
 #: kicad/project_tree_pane.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "Det gick inte att skapa filen '%s'."
+msgstr "Lyckades inte skriva index: %s"
 
 #: kicad/project_tree_pane.cpp:2147
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Det gick inte att ta bort '%s'"
+msgstr "Lyckades inte skriva träd: %s"
 
 #: kicad/project_tree_pane.cpp:2156
 #, fuzzy, c-format
@@ -24897,19 +24801,19 @@ msgid "Failed to get HEAD reference: %s"
 msgstr "Kunde inte flytta katalog %s"
 
 #: kicad/project_tree_pane.cpp:2171
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "Det gick inte att spara kretsschemat '%s'"
+msgstr "Lyckades inte hämta överlämning: %s"
 
 #: kicad/project_tree_pane.cpp:2187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "Det gick inte att skapa temporär fil '%s'."
+msgstr "Lyckades inte skapa upphovssignatur: %s"
 
 #: kicad/project_tree_pane.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "Det gick inte att skapa filen '%s'."
+msgstr "Lyckades inte skapa överlämning: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -24928,14 +24832,12 @@ msgid "Create new project from template"
 msgstr "Skapa nytt projekt från mall"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
-#, fuzzy
 msgid "Clone Project from Repository..."
-msgstr "Nytt projekt från mall ..."
+msgstr "Klona projekt från förvar..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
-#, fuzzy
 msgid "Clone a project from an existing repository"
-msgstr "Välj en existerande projektbeskrivning"
+msgstr "Klona ett projekt från ett befintligt förvar"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
 msgid "Open Demo Project..."
@@ -25032,18 +24934,16 @@ msgstr ""
 "Vill du fortsätta?"
 
 #: kicad/tools/kicad_manager_control.cpp:150
-#, fuzzy
 msgid "Clone Project from Git Repository"
-msgstr "Skapa nytt projekt från mall"
+msgstr "Klona projekt från Git-förvar"
 
 #: kicad/tools/kicad_manager_control.cpp:172
-#, fuzzy
 msgid "Cloning Repository"
-msgstr "Mjukvaruförråd"
+msgstr "Klonar förvar"
 
 #: kicad/tools/kicad_manager_control.cpp:184
 msgid "No project files were found in the repository."
-msgstr ""
+msgstr "Inga projektfiler hittades i förvaret."
 
 #: kicad/tools/kicad_manager_control.cpp:220
 msgid "System Templates"
@@ -25400,9 +25300,8 @@ msgid "File \"%s\" inserted"
 msgstr "Filen %s infogades"
 
 #: pagelayout_editor/files.cpp:157
-#, fuzzy
 msgid "Open Drawing Sheet"
-msgstr "Ritningsark"
+msgstr "Öppna ritningsark"
 
 #: pagelayout_editor/files.cpp:173
 #, c-format
@@ -25415,9 +25314,8 @@ msgid "Unable to write '%s'."
 msgstr "Kunde inte skriva '%s'."
 
 #: pagelayout_editor/files.cpp:195
-#, fuzzy
 msgid "Save Drawing Sheet As"
-msgstr "Ritningsark"
+msgstr "Spara ritningsark som"
 
 #: pagelayout_editor/files.cpp:244
 msgid "Error reading drawing sheet"
@@ -26589,14 +26487,12 @@ msgid "Threshold voltage:"
 msgstr "Tröskelspänning:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "Material"
+msgstr "Materialnamn:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
-#, fuzzy
 msgid "Chemical symbols"
-msgstr "Välj symbol"
+msgstr "Kemiska symboler"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:95
 msgid "Names"
@@ -28570,27 +28466,27 @@ msgstr "(fler än ett mönsterkort stöds inte)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:619
 #, c-format
 msgid "(Rectangle has null or very small size: %d nm)"
-msgstr ""
+msgstr "(Rektangel har storlek noll eller väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:636
 #, c-format
 msgid "(Circle has null or very small radius: %d nm)"
-msgstr ""
+msgstr "(Cirkel har radie noll eller väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:656
 #, c-format
 msgid "(Segment has null or very small length: %d nm)"
-msgstr ""
+msgstr "(Segment har längd noll eller väldigt liten: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:679
 #, c-format
 msgid "(Arc has null or very small size: %d nm)"
-msgstr ""
+msgstr "(Båge har storlek noll eller väldigt liten: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:190
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/pcb_edit_frame.cpp:2396
 msgid "Custom Rules"
-msgstr "Anpassade regler"
+msgstr "Användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:87
 msgid "Only front"
@@ -29083,7 +28979,7 @@ msgstr "Mönsterkortsinställningar"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:56
 msgid "Import Settings from Another Board..."
-msgstr "Importera inställningar från ett annat kort ..."
+msgstr "Importera inställningar från ett annat mönsterkort..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:81
 msgid "Board Stackup"
@@ -29128,9 +29024,8 @@ msgid "Pre-defined Sizes"
 msgstr "Fördefinierade storlekar"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:173
-#, fuzzy
 msgid "Length-tuning Patterns"
-msgstr "Längdjustering"
+msgstr "Längdjusteringsmönster"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:210
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -29367,7 +29262,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "Reparera diskontinuiteter i mönsterkortets kontur"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:150
@@ -29606,7 +29501,7 @@ msgstr "Avfasning"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:242
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:377
 msgid "Fillet"
-msgstr "Filea"
+msgstr "Avrundning"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 msgid "Electrical Properties"
@@ -29831,9 +29726,8 @@ msgid "Bad parameters"
 msgstr "Felaktiga parametrar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
-#, fuzzy
 msgid "Grid Array Size"
-msgstr "Rutnät"
+msgstr "Rutnätsstorlek"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:40
 msgid "Horizontal count:"
@@ -29873,7 +29767,7 @@ msgstr "Horisontell förskjutning:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Offset added to the next row position."
-msgstr ""
+msgstr "Förskjutning som läggs till nästa radposition."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Vertical offset:"
@@ -29881,7 +29775,7 @@ msgstr "Vertikal förskjutning:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Offset added to the next column position"
-msgstr ""
+msgstr "Förskjutning som läggs till nästa kolumnposition"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
 #, fuzzy
@@ -29997,7 +29891,6 @@ msgid "Circular array params"
 msgstr "Parametrar för cirkulär matris"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:320
-#, fuzzy
 msgid "Set center by position"
 msgstr "Definiera centrum efter position"
 
@@ -30439,8 +30332,8 @@ msgstr "Kör DRC"
 #: pcbnew/dialogs/dialog_drc.cpp:276
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
-"Designregelkontroll (DRC) ofullständig: kunde inte sammanställa anpassade "
-"designregler."
+"Designregelkontroll (DRC) ofullständig: kunde inte sammanställa "
+"användardefinierade designregler."
 
 #: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/tools/board_inspection_tool.cpp:211
 msgid "Show design rules."
@@ -30752,14 +30645,12 @@ msgid "Binary GTLF files"
 msgstr "Binära glTF-filer"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:347
-#, fuzzy
 msgid "STEP Output File"
-msgstr "Utmatningsfil för materiallista"
+msgstr "STEP-utmatningsfil"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:366
-#, fuzzy
 msgid "No filename for output file"
-msgstr "Inte en fotavtrycksfil."
+msgstr "Inget filnamn för utmatningsfil"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:397
 #, c-format
@@ -31197,7 +31088,6 @@ msgid "3D Models"
 msgstr "3D-modeller"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:283
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
@@ -31962,9 +31852,9 @@ msgid "Buried vias:"
 msgstr "Begravda vior:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid "Generators A (%s)"
-msgstr "Generatorfil"
+msgstr "Generatorer A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
@@ -31974,17 +31864,16 @@ msgstr "Ingen buss vald"
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
 #, fuzzy
 msgid "Rebuild this type"
-msgstr "Återuppbygga Ratsnest"
+msgstr "Återuppbygg denna typ"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
 #, fuzzy
 msgid "Rebuild All"
-msgstr "Ersätt alla"
+msgstr "Återuppbygg alla"
 
 #: pcbnew/dialogs/dialog_generators_base.h:63
-#, fuzzy
 msgid "Generator Objects"
-msgstr "Generatorfil"
+msgstr "Generatorobjekt"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:69
@@ -32400,9 +32289,8 @@ msgid "Via size:"
 msgstr "Via-storlek:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "Set to net class / custom rule values"
-msgstr "Ställ in nätklassvärden:"
+msgstr "Sätt till värden från nätklass eller användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:83
 msgid "Set Track and Via Properties"
@@ -33839,9 +33727,8 @@ msgid "user choice"
 msgstr "användarval"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
-#, fuzzy
 msgid "Track gap:"
-msgstr "Isolationsavstånd ledare:"
+msgstr "Isolationsavstånd mellan ledare:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
@@ -33877,7 +33764,7 @@ msgid ""
 "is violating the DRC rules."
 msgstr ""
 "(Endast i läge markera kollisioner) - tillåter att ledare skapas även om det "
-"bryter mot DRC-reglerna."
+"bryter mot designreglerna."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:45
 msgid "Shove"
@@ -34151,14 +34038,13 @@ msgid "Push Pad Properties"
 msgstr "Använd lödyteegenskaper"
 
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:86
-#, fuzzy
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
 msgstr ""
-"Låsta fotavtryck kan inte flyttas eller roteras fritt, och kan endast väljas "
-"när kryssrutan 'Låsta objekt' är aktiverad i urvalsfiltret."
+"Låsta fotavtryck kan inte flyttas eller roteras fritt på ritytan, och kan "
+"endast väljas när kryssrutan 'Låsta objekt' är aktiverad i urvalsfiltret."
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
@@ -34180,7 +34066,7 @@ msgstr "Områdets namn:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Ett unikt namn för detta regelområde för användning i DRC-regler"
+msgstr "Ett unikt namn för detta regelområde för användning i designregler"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
@@ -34449,9 +34335,8 @@ msgid "End X:"
 msgstr "Slut X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:120
-#, fuzzy
 msgid "Use net class / custom rule widths"
-msgstr "Använd nätklassbredder"
+msgstr "Använd bredd från nätklass / användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:124
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:225
@@ -34463,9 +34348,8 @@ msgid "Pos X:"
 msgstr "Position X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
-#, fuzzy
 msgid "Use net class / custom rule sizes"
-msgstr "Använd nätklasstorlekar"
+msgstr "Använd storlek från nätklass / användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:238
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -34559,19 +34443,17 @@ msgstr "Mållängd:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1967
-#, fuzzy
 msgid "Override custom rules"
-msgstr "Åsidosätt låsningar"
+msgstr "Åsidosätt användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
-msgstr ""
+msgstr "(från 'regelnamn')"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:167
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:302
-#, fuzzy
 msgid "Amplitude (A) min:"
 msgstr "Min amplitud (A):"
 
@@ -34579,37 +34461,33 @@ msgstr "Min amplitud (A):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:66
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:195
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:330
-#, fuzzy
 msgid "Spacing (s):"
-msgstr "Minsta avstånd:"
+msgstr "Mellanrum (s):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:76
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:74
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:203
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:338
-#, fuzzy
 msgid ""
 "Minimum spacing between adjacent tuning segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
-"Minsta utrymme mellan intilliggande meanderslingor. Det slutliga utrymmet "
+"Minsta avstånd mellan intilliggande meanderslingor. Det slutliga avståndet "
 "kan bli större beroende på designregler."
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:84
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:373
-#, fuzzy
 msgid "Corner style:"
-msgstr "Hörnstil"
+msgstr "Hörnstil:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:248
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:383
-#, fuzzy
 msgid "Radius (r):"
-msgstr "Radie:"
+msgstr "Radie (r):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
@@ -34619,9 +34497,8 @@ msgid "Single-sided"
 msgstr "Enkelsidig"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
-#, fuzzy
 msgid "Tuning Pattern Properties"
-msgstr "Linjeegenskaper"
+msgstr "Egenskaper för längdjusteringsmönster"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 msgid "Remove Unused Layers"
@@ -35100,7 +34977,7 @@ msgid ""
 msgstr ""
 "Minsta isolationsavstånd mellan kopparelement som inte hör till samma nät. "
 "Om angivet är detta ett absolut minimum som inte kan underskridas av "
-"nätklasser, anpassade regler, eller andra inställningar."
+"nätklasser, användardefinierade regler, eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -35112,7 +34989,8 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta ledarbredd. Om angiven är detta ett absolut minimum som inte kan "
-"underskridas av nätklasser, anpassade regler, eller andra inställningar."
+"underskridas av nätklasser, användardefinierade regler, eller andra "
+"inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 msgid "Minimum connection width:"
@@ -35132,7 +35010,8 @@ msgid ""
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta bredd för årsringar. Om angiven är detta ett absolut minimum som inte "
-"kan underskridas av nätklasser, anpassade regler, eller andra inställningar."
+"kan underskridas av nätklasser, användardefinierade regler, eller andra "
+"inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -35144,7 +35023,8 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta via-diameter. Om angiven är detta ett absolut minimum som inte kan "
-"underskridas av nätklasser, anpassade regler, eller andra inställningar."
+"underskridas av nätklasser, användardefinierade regler, eller andra "
+"inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
@@ -35157,8 +35037,8 @@ msgid ""
 "other settings."
 msgstr ""
 "Minsta frigång mellan ett hål och ett oförknippat kopparelement. Om angivet "
-"är detta ett absolut minimum som inte kan underskridas av anpassade regler "
-"eller andra inställningar."
+"är detta ett absolut minimum som inte kan underskridas av "
+"användardefinierade regler eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
@@ -35171,8 +35051,8 @@ msgid ""
 "settings."
 msgstr ""
 "Minsta frigång mellan mönsterkortets kant och kopparelement. Om angivet är "
-"detta ett absolut minimum som inte kan underskridas av anpassade regler "
-"eller andra inställningar."
+"detta ett absolut minimum som inte kan underskridas av användarderinierade "
+"regler eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -35188,8 +35068,8 @@ msgid ""
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
 "Minsta diameter för genomgående hål. Om angiven är detta ett absolut minimum "
-"som inte kan underskridas av nätklasser, anpassade regler eller andra "
-"inställningar."
+"som inte kan underskridas av nätklasser, användardefinierade regler eller "
+"andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
@@ -35202,7 +35082,7 @@ msgid ""
 "(Note: does not apply to milled holes.)"
 msgstr ""
 "Minsta frigång mellan två borrade hål. Om angivet är detta ett absolut "
-"minimum som inte kan underskridas av anpassade regler eller andra "
+"minimum som inte kan underskridas av användardefinierade regler eller andra "
 "inställningar. (Obs: detta gäller inte frästa hål.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
@@ -35219,7 +35099,7 @@ msgid ""
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta diameter för mikrovior.  Om angiven är denna ett absolut minimum som "
-"inte kan underskridas av nätklasser, anpassade regler, eller andra "
+"inte kan underskridas av nätklasser, användardefinierade regler, eller andra "
 "inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
@@ -35231,8 +35111,8 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minsta storlek för micro-vior. Om angiven är detta ett absolut minimum som "
-"inte kan underskridas av nätklasser, anpassade regler eller andra "
+"Minsta storlek för mikrovior. Om angiven är detta ett absolut minimum som "
+"inte kan underskridas av nätklasser, användardefinierade regler eller andra "
 "inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
@@ -35324,7 +35204,6 @@ msgstr ""
 "höjd ignoreras."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
-#, fuzzy
 msgid "When Adding Footprints to Board"
 msgstr "När fotavtryck läggs till på mönsterkortet"
 
@@ -36066,7 +35945,7 @@ msgstr "Designregler kan inte läggas till utan ett projekt"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:22
 msgid "DRC rules:"
-msgstr "DRC-regler:"
+msgstr "Designregler:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:76
 msgid "Check rule syntax"
@@ -36655,19 +36534,16 @@ msgid "Via Gap"
 msgstr "Viors isolationsavstånd"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default properties for single-track tuning:"
-msgstr "Standardegenskaper för nya grafiska objekt:"
+msgstr "Standardegenskaper för längdjustering av enskild ledare:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default properties for differential-pairs:"
-msgstr "Standardegenskaper för rektangulära objekt:"
+msgstr "Standardegenskaper för differentialpar:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:283
-#, fuzzy
 msgid "Default properties for differential-pair skews:"
-msgstr "Standardegenskaper för rektangulära objekt:"
+msgstr "Standardegenskaper för differentialpars skevhet:"
 
 #: pcbnew/drc/drc_cache_generator.cpp:123
 msgid "Gathering copper items..."
@@ -37088,7 +36964,7 @@ msgstr "Ledarens ända saknar anslutning"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "Brott mot hålröjning"
+msgstr "Otillräcklig frigång för hål"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -37108,12 +36984,11 @@ msgstr "Ledarbredd"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Annular width"
-msgstr "Ringformad bredd"
+msgstr "Kragbredd"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Hole size out of range"
-msgstr "Rutnäntsstorlek X utanför tillåtet område."
+msgstr "Hålstorlek utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Via diameter"
@@ -37124,9 +36999,8 @@ msgid "Padstack is not valid"
 msgstr "Kragstapeln är inte giltig"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Micro via hole size out of range"
-msgstr "Micro via borr utanför räckvidden"
+msgstr "Mikroviats hålstorlek utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -37134,19 +37008,19 @@ msgstr "Gårdsplanerna överlappar varandra"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Footprint has no courtyard defined"
-msgstr "Fotavtryck har ingen innergård definierad"
+msgstr "Fotavtryck har ingen gårdsplan definierad"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Footprint has malformed courtyard"
-msgstr "Fotavtrycket har missformat innergården"
+msgstr "Fotavtrycket har missformad gårdsplan"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "PTH inside courtyard"
-msgstr "PTH inne på gården"
+msgstr "Genompläterat hål inom gårdsplan"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "NPTH inside courtyard"
-msgstr "NPTH inne på gården"
+msgstr "Opläterat hål inom gårdsplan"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Item on a disabled copper layer"
@@ -37207,11 +37081,11 @@ msgstr "Överlappande anvisningstryck"
 
 #: pcbnew/drc/drc_item.cpp:221
 msgid "Text height out of range"
-msgstr "Texthöjd utanför intervall"
+msgstr "Texthöjd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:225
 msgid "Text thickness out of range"
-msgstr "Texttjocklek utanför intervall"
+msgstr "Texttjocklek utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:229
 msgid "Trace length out of range"
@@ -37219,7 +37093,7 @@ msgstr "Ledarlängd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Skew between traces out of range"
-msgstr "Skjuvning mellan ledare utanför intervall"
+msgstr "Längdskillnad mellan ledare utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Too many vias on a connection"
@@ -37227,7 +37101,7 @@ msgstr "För många vior på en anslutning"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Differential pair gap out of range"
-msgstr "Differentialparavstånd utanför intervallet"
+msgstr "Differentialpars isolationsavstånd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Differential uncoupled length too long"
@@ -37255,9 +37129,9 @@ msgid "Local override"
 msgstr "Lokalt undantag"
 
 #: pcbnew/drc/drc_rule.h:156
-#, fuzzy, c-format
+#, c-format
 msgid "rule '%s'"
-msgstr "regel %s"
+msgstr "regel '%s'"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
@@ -37476,7 +37350,7 @@ msgstr "(%s frigång %s; faktisk <0)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr "Kontrollerar innergårdens definitioner ..."
+msgstr "Kontrollerar fotavtrycks gårdsplaners definitioner..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
@@ -37926,9 +37800,8 @@ msgid "Checking length constraints..."
 msgstr "Kontrollerar längdbegränsningar..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:119
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "(inga kanter hittades på Edge.Cuts lager)"
+msgstr "(Misstänkta objekt hittades på Edge.Cuts lager)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:145
 msgid "(no edges found on Edge.Cuts layer)"
@@ -38367,7 +38240,7 @@ msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 #: pcbnew/files.cpp:961 pcbnew/files.cpp:1113
 #, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr "Fel under sparning av fil för anpassade regler '%s'."
+msgstr "Fel när fil '%s' för användardefinierade regler sparades."
 
 #: pcbnew/files.cpp:987 pcbnew/files.cpp:1089
 #, c-format
@@ -38550,9 +38423,8 @@ msgid "Footprint Chooser"
 msgstr "Fotavtrycksväljare"
 
 #: pcbnew/footprint_chooser_frame.cpp:99
-#, fuzzy
 msgid "Apply footprint filters"
-msgstr "Lägg till fotavtrycksfilter"
+msgstr "Tillämpa fotavtrycksfilter"
 
 #: pcbnew/footprint_edit_frame.cpp:115
 msgid "KiCad Footprint Editor"
@@ -38770,9 +38642,8 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Fotavtryck '%s' existerar redan i bibliotek '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:116
-#, fuzzy
 msgid "KiCad Footprint Library Browser"
-msgstr "Fotavtrycksbiblioteksläsaren"
+msgstr "KiCad fotavtrycksbiblioteksläsare"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -38834,19 +38705,16 @@ msgstr "Fel vid inläsning av fotavtryck %s från bibliotek '%s'."
 #: pcbnew/generators/pcb_tuning_pattern.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:91
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1627
-#, fuzzy
 msgid "Tuning Pattern"
-msgstr "Mönster"
+msgstr "Längdjusteringsmönster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:96
-#, fuzzy
 msgid "Tuning Patterns"
-msgstr "Mönster"
+msgstr "Längdjusteringsmönster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:218
-#, fuzzy
 msgid "Tuning"
-msgstr "Varning"
+msgstr "Längdjustering"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 #, fuzzy
@@ -38859,45 +38727,37 @@ msgstr "Snedvridning:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:474
 #: pcbnew/tools/pcb_actions.cpp:2293
-#, fuzzy
 msgid "Tune Length"
-msgstr "Längd till chip"
+msgstr "Justerad längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1018
-#, fuzzy
 msgid "too long"
-msgstr "För länge: "
+msgstr "för lång"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1019
-#, fuzzy
 msgid "too short"
-msgstr "För kort: "
+msgstr "för kort"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1020
-#, fuzzy
 msgid "tuned"
-msgstr "Anpassad: "
+msgstr "anpassad"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
-#, fuzzy
 msgid "Edit Tuning Pattern"
-msgstr "Redigera i en textredigerare"
+msgstr "Redigera längdjusteringsmönster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1474
-#, fuzzy
 msgid "current skew"
-msgstr "Aktuell tangent:"
+msgstr "aktuell skevhet"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1480
-#, fuzzy
 msgid "current length"
-msgstr "Mållängd:"
+msgstr "nuvarande längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1561
-#, fuzzy
 msgid "Routed Lengths"
-msgstr "Dragen längd"
+msgstr "Dragna längder"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1567 pcbnew/pcb_track.cpp:1072
 msgid "Routed Length"
@@ -38913,83 +38773,74 @@ msgid "Full Length"
 msgstr "Full längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1588
-#, fuzzy, c-format
+#, c-format
 msgid "Target Skew: %s"
-msgstr "Snedvridning:"
+msgstr "Mål för skevhet: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1589
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1611
 msgid "(from tuning pattern properties)"
-msgstr ""
+msgstr "(från längdjusteringsmönstrets egenskaper)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1597
-#, fuzzy, c-format
+#, c-format
 msgid "Skew Constraints: %s"
-msgstr "Breddbegränsning: min %s"
+msgstr "Skevhetsbegränsningar: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1610
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "Mållängd:"
+msgstr "Önskad längd: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1619
-#, fuzzy, c-format
+#, c-format
 msgid "Length Constraints: %s"
-msgstr "Breddbegränsning: min %s"
+msgstr "Längdbegränsningar: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1784
 msgid "Tune"
 msgstr "Ställ in"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1865
-#, fuzzy
 msgid "Single track"
-msgstr "Radera bana"
+msgstr "Enskild ledare"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1866
-#, fuzzy
 msgid "Differential pair"
-msgstr "Differentialpar:"
+msgstr "Differentialpar"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1867
-#, fuzzy
 msgid "Diff pair skew"
-msgstr "Differentiellt par"
+msgstr "Differentialpars skevhet"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1881
-#, fuzzy
 msgid "Pattern Properties"
-msgstr "Egenskaper för stift"
+msgstr "Mönsteregenskaper"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1896
-#, fuzzy
 msgid "Tuning mode"
-msgstr "Transmissionslinjemodell"
+msgstr "Justeringsläge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1902
-#, fuzzy
 msgid "Min amplitude"
-msgstr "Min amplitud (A):"
+msgstr "Minsta amplitud"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1909
-#, fuzzy
 msgid "Max amplitude"
-msgstr "Max höjd över havet:"
+msgstr "Största amplitud"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1916
-#, fuzzy
 msgid "Initial side"
-msgstr "Starttid:"
+msgstr "Sida att börja på"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1922
 #, fuzzy
 msgid "Min spacing"
-msgstr "Minsta avstånd:"
+msgstr "Minsta mellanrum:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1928
-#, fuzzy
 msgid "Corner radius %"
-msgstr "Hörnradie:"
+msgstr "Hörnradie %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
 #, fuzzy
@@ -39002,47 +38853,43 @@ msgid "Target skew"
 msgstr "Snedvridning:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
-#, fuzzy
 msgid "Rounded"
-msgstr "Rund"
+msgstr "Avrundad"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:216
-#, fuzzy
 msgid "Please select a file to import."
-msgstr "Välj ett giltigt lager."
+msgstr "Vänligen välj en fil att importera."
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:222
 msgid "Please select a valid layer."
 msgstr "Välj ett giltigt lager."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
-#, fuzzy
 msgid "DXF default line width:"
-msgstr "Förinställd linjebredd:"
+msgstr "Förinställd linjebredd för DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:70
-#, fuzzy
 msgid "DXF default units:"
-msgstr "Standard måttenheter:"
+msgstr "Standard måttenheter för DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:90
-#, fuzzy
 msgid "Place at X:"
-msgstr "Placera via"
+msgstr "Placera vid X:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:127
-#, fuzzy
 msgid "Set layer:"
-msgstr "Startlager:"
+msgstr "Ställ in lager:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:145
 msgid "Fix discontinuities"
-msgstr ""
+msgstr "Reparera diskontinuiteter"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:146
 msgid ""
 "Trim/extend open shapes or add segments to make vertices of shapes coincide"
 msgstr ""
+"Anpassa/förläng öppna former eller lägg till segment för att få formernas "
+"spetsar att sammanfalla"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -39412,9 +39259,9 @@ msgid "Update %s fields."
 msgstr "Uppdatera %s fält."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s footprint fields not in symbol."
-msgstr "Ta bort fält om de saknas i den nya symbolen"
+msgstr "Ta bort %s fotavtrycksfält som saknas i symbolen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
 #, c-format
@@ -39422,9 +39269,9 @@ msgid "Updated %s fields."
 msgstr "Uppdaterade %s fält."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s footprint fields not in symbol."
-msgstr "Ta bort fält om de saknas i den nya symbolen"
+msgstr "Tog bort %s fotavtrycksfält som saknas i symbolen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:491
 #, c-format
@@ -39447,14 +39294,14 @@ msgid "Updated %s sheetfile to '%s'."
 msgstr "Uppdaterade arkfil %s till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s footprint filters to '%s'."
-msgstr "Uppdatera fotavtryck %s från '%s' till '%s'"
+msgstr "Uppdatera %s fotavtrycksfilter till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s footprint filters to '%s'."
-msgstr "Ändrade fotavtryck %s från '%s' till '%s'."
+msgstr "Uppdaterade %s fotavtrycksfilter till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
 #, c-format
@@ -40020,7 +39867,7 @@ msgstr "Ändra designregler"
 
 #: pcbnew/pcb_edit_frame.cpp:2402
 msgid "Could not compile custom design rules."
-msgstr "Kunde inte kompilera anpassade designregler."
+msgstr "Kunde inte kompilera användardefinierade designregler."
 
 #: pcbnew/pcb_edit_frame.cpp:2440
 msgid "Export Hyperlynx Layout"
@@ -40072,9 +39919,8 @@ msgid "Field '%s' of %s"
 msgstr "Fält '%s' för %s"
 
 #: pcbnew/pcb_generator.cpp:179 pcbnew/pcb_generator.cpp:216
-#, fuzzy
 msgid "Update order"
-msgstr "Uppdaterad"
+msgstr "Uppdateringsordning"
 
 #: pcbnew/pcb_generator.cpp:214
 #, fuzzy
@@ -40207,9 +40053,9 @@ msgid "Segment Length"
 msgstr "Segmentlängd"
 
 #: pcbnew/pcb_track.cpp:1096
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: %s"
-msgstr "Breddbegränsning: min %s"
+msgstr "Breddbegränsningar: %s"
 
 #: pcbnew/pcb_track.cpp:1108
 msgid "Micro Via"
@@ -40226,7 +40072,7 @@ msgstr "Genom Via"
 #: pcbnew/pcb_track.cpp:1131
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr "Min ringformad bredd: %s"
+msgstr "Minsta kragbredd: %s"
 
 #: pcbnew/pcb_track.cpp:1147
 msgid "NetCode"
@@ -40283,7 +40129,7 @@ msgstr "Footprint gård är inte en enda, stängd form."
 
 #: pcbnew/pcbexpr_functions.cpp:474
 msgid "Footprint has no front courtyard."
-msgstr "Fotavtryck har ingen innergård."
+msgstr "Fotavtryck har ingen gårdsplan på framsidan."
 
 #: pcbnew/pcbexpr_functions.cpp:489
 msgid "Footprint has no back courtyard."
@@ -40999,7 +40845,7 @@ msgstr ""
 "inställning har ingen KiCad-ekvivalent, så den har ignorerats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
@@ -41019,7 +40865,7 @@ msgstr ""
 "så denna inställning ignorerades."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1954
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
 "Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not distinguish "
@@ -41198,6 +41044,7 @@ msgstr ""
 "har importerats för alla nät)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3986
+#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -41543,9 +41390,9 @@ msgid "Undefined Layers Warning"
 msgstr "Odefinierad varning för lager"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1140
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Det går inte att skapa genererat objekt av typ '%s'"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1278
 #, c-format
@@ -41975,13 +41822,12 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Denna zon kan inte hanteras av spårlayoutverktyget.\n"
-"Kontrollera att det inte är en självkorsande polygon."
+"Denna zon kan inte hanteras av ledardragningsverktyget.\n"
+"Kontrollera att den inte är en självkorsande polygon."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1958
-#, fuzzy
 msgid "Routing"
-msgstr "Drar ledare"
+msgstr "Ledardragning"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
 msgid "Please select a differential pair trace you want to tune."
@@ -42304,9 +42150,9 @@ msgid "Diff Pair Gap: %s"
 msgstr "Mellanrum för differentialpar: %s"
 
 #: pcbnew/router/router_tool.cpp:2632 pcbnew/tools/pcb_control.cpp:1478
-#, fuzzy, c-format
+#, c-format
 msgid "DP Max Uncoupled-length: %s"
-msgstr "Tog reda på okopplad längd: %s."
+msgstr "Diffpar max okopplad längd: %s"
 
 #: pcbnew/sel_layer.cpp:351
 msgid "Warning: top and bottom layers are same."
@@ -42561,7 +42407,9 @@ msgstr "[nätklass %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:209
 msgid "Report incomplete: could not compile custom design rules."
-msgstr "Rapport ofullständig: kunde inte sammanställa anpassade designregler."
+msgstr ""
+"Rapport ofullständig: kunde inte sammanställa användardefinierade "
+"designregler."
 
 #: pcbnew/tools/board_inspection_tool.cpp:312
 msgid "Uncoupled Length"
@@ -42616,9 +42464,9 @@ msgid "Connection width resolution for:"
 msgstr "Tar reda på anslutningens bredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width: %s."
-msgstr "Fastställd begränsning för minsta anslutningsbredd: %s."
+msgstr "Fastställd minsta anslutningsbredd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:386
 #: pcbnew/tools/board_inspection_tool.cpp:1274
@@ -42661,9 +42509,9 @@ msgid "Hole size resolution for:"
 msgstr "Tar reda på håldiameter för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "Tog reda på höjdbegränsningar: min %s; max %s."
+msgstr "Tog reda på hålstorleksbegränsningar: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:432
 msgid "Hole Clearance"
@@ -42697,7 +42545,7 @@ msgstr "Objekt tillhör samma nät. Clearance är 0."
 #: pcbnew/tools/board_inspection_tool.cpp:1206
 #, fuzzy, c-format
 msgid "Resolved min clearance: %s."
-msgstr "Löst avstånd: %s."
+msgstr "Tog reda på minsta avstånd: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:456
 #: pcbnew/tools/board_inspection_tool.cpp:1189
@@ -42715,7 +42563,6 @@ msgstr "Hål till hål"
 
 #: pcbnew/tools/board_inspection_tool.cpp:477
 #: pcbnew/tools/board_inspection_tool.cpp:1063
-#, fuzzy
 msgid "Hole-to-hole clearance resolution for:"
 msgstr "Tar reda på frigång hål till hål för:"
 
@@ -42836,9 +42683,8 @@ msgid "Items belong to the same net. Min clearance is 0."
 msgstr "Objekt tillhör samma nät. Clearance är 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:867
-#, fuzzy
 msgid "Min clearance is 0."
-msgstr "Isolationsavstånd/frigång är 0."
+msgstr "Minsta isolationsavstånd/frigång är 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:871
 #, c-format
@@ -42900,16 +42746,16 @@ msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
 #: pcbnew/tools/board_inspection_tool.cpp:1284
 #, fuzzy, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "Tog reda på begränsningar för diameter: min %s; max %s."
+msgstr "Tog reda på begränsningar för diameter: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1291
 msgid "Via Annular Width"
-msgstr "Via ringformad bredd"
+msgstr "Kragbredd för via"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1301
 #, fuzzy, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "Tog reda på begränsningar för kragbredd: min %s; max %s."
+msgstr "Tog reda på begränsningar för kragbredd: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1322
 #, fuzzy, c-format
@@ -42924,7 +42770,7 @@ msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
 #: pcbnew/tools/board_inspection_tool.cpp:1357
 #, fuzzy, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "Tog reda på begränsningar för tjocklek: min %s; max %s."
+msgstr "Tog reda på begränsningar för tjocklek: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1365
 msgid "Keepouts"
@@ -43233,19 +43079,16 @@ msgid "Exactly two lines must be selected to extend them."
 msgstr "Exakt två linjer måste vara valda för att förlänga dem."
 
 #: pcbnew/tools/edit_tool.cpp:1443 pcbnew/tools/pcb_actions.cpp:623
-#, fuzzy
 msgid "Heal Shapes"
-msgstr "Kragförstärkningens form"
+msgstr "Reparera former"
 
 #: pcbnew/tools/edit_tool.cpp:1443
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "Tolerans:"
+msgstr "Toleransvärde:"
 
 #: pcbnew/tools/edit_tool.cpp:1480
-#, fuzzy
 msgid "Heal shapes"
-msgstr "Hålform:"
+msgstr "Reparera former"
 
 #: pcbnew/tools/edit_tool.cpp:2065 pcbnew/tools/pcb_actions.cpp:552
 msgid "Change Side / Flip"
@@ -43312,19 +43155,17 @@ msgid "Regenerate All"
 msgstr "Radera alla"
 
 #: pcbnew/tools/generator_tool.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "Uppdatera"
+msgstr "Uppdatera %s"
 
 #: pcbnew/tools/generator_tool.cpp:199
-#, fuzzy
 msgid "Regenerate Selected"
-msgstr "Ta bort vald ledardragning"
+msgstr "Återskapa valda"
 
 #: pcbnew/tools/generator_tool.cpp:218
-#, fuzzy
 msgid "Regenerate Item"
-msgstr "Upprepa objekt"
+msgstr "Återskapa objekt"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -43368,49 +43209,40 @@ msgid "Some of the lines could not be extended to meet."
 msgstr "Vissa av linjerna kunde inte förlängas så att de möts."
 
 #: pcbnew/tools/item_modification_routine.cpp:380
-#, fuzzy
 msgid "Merge polygons."
-msgstr "Rita polygoner"
+msgstr "Sammanfoga polygoner."
 
 #: pcbnew/tools/item_modification_routine.cpp:388
-#, fuzzy
 msgid "Unable to merge the selected polygons."
-msgstr "Det går inte att fasa av de valda linjerna."
+msgstr "Det går inte att sammanfoga de valda polygonerna."
 
 #: pcbnew/tools/item_modification_routine.cpp:392
-#, fuzzy
 msgid "Some of the polygons could not be merged."
-msgstr "Vissa av linjerna kunde inte fasas av."
+msgstr "Vissa av polygonerna kunde inte sammanfogas."
 
 #: pcbnew/tools/item_modification_routine.cpp:418
-#, fuzzy
 msgid "Subtract polygons."
-msgstr "Skissa polygoner"
+msgstr "Subtrahera polygoner."
 
 #: pcbnew/tools/item_modification_routine.cpp:426
-#, fuzzy
 msgid "Unable to subtract the selected polygons."
-msgstr "Det går inte att runda av de valda linjerna."
+msgstr "Det går inte att subtrahera de valda polygonerna."
 
 #: pcbnew/tools/item_modification_routine.cpp:430
-#, fuzzy
 msgid "Some of the polygons could not be subtracted."
-msgstr "Vissa av linjerna kunde inte rundas av."
+msgstr "Vissa av polyfonerna kunde inte subtraheras."
 
 #: pcbnew/tools/item_modification_routine.cpp:459
-#, fuzzy
 msgid "Intersect polygons."
-msgstr "Skissa polygoner"
+msgstr "Ta snittet av polygoner."
 
 #: pcbnew/tools/item_modification_routine.cpp:467
-#, fuzzy
 msgid "Unable to intersect the selected polygons."
-msgstr "Det går inte att runda av de valda linjerna."
+msgstr "Det går inte att ta snittet av de valda polygonerna."
 
 #: pcbnew/tools/item_modification_routine.cpp:471
-#, fuzzy
 msgid "Some of the polygons could not be intersected."
-msgstr "Vissa av linjerna kunde inte rundas av."
+msgstr "Det gick inte att ta snittet av vissa polygoner."
 
 #: pcbnew/tools/pad_tool.cpp:162
 msgid "Paste Pad Properties"
@@ -43418,7 +43250,7 @@ msgstr "Klistra in lödytans egenskaper"
 
 #: pcbnew/tools/pad_tool.cpp:269
 msgid "Push Pad Settings"
-msgstr "Push Pad-inställningar"
+msgstr "Klona lödyteinställningar"
 
 #: pcbnew/tools/pad_tool.cpp:373
 #, c-format
@@ -43438,9 +43270,8 @@ msgid "Place pad"
 msgstr "Placera lödyta"
 
 #: pcbnew/tools/pad_tool.cpp:633 pcbnew/tools/pad_tool.cpp:646
-#, fuzzy
 msgid "Edit Pad"
-msgstr "Redigera pinne"
+msgstr "Redigera lödyta"
 
 #: pcbnew/tools/pad_tool.cpp:723
 #, c-format
@@ -43477,9 +43308,8 @@ msgid "Creates a rule area from the selection"
 msgstr "Skapar ett regelområde från urvalet"
 
 #: pcbnew/tools/pcb_actions.cpp:76
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "Skapa linjer från markering"
+msgstr "Skapa linjer från markering..."
 
 #: pcbnew/tools/pcb_actions.cpp:77
 msgid "Creates graphic lines from the selection"
@@ -43542,15 +43372,16 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "Lägg till en lageruppbyggnadstabell på ett grafiskt lager"
 
 #: pcbnew/tools/pcb_actions.cpp:165
-#, fuzzy
 msgid "Add Reference Image"
-msgstr "Referensnod:"
+msgstr "Lägg till referensbild"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid ""
 "Add a bitmap image to be used as a reference (image will not be included in "
 "any output)"
 msgstr ""
+"Lägg till en bitmappsbild att använda som referens (bilden tas inte med i "
+"någon utmatning)"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add a wrapped text item"
@@ -43561,7 +43392,6 @@ msgid "Increase Spacing"
 msgstr "Öka avståndet"
 
 #: pcbnew/tools/pcb_actions.cpp:195
-#, fuzzy
 msgid "Increase tuning pattern spacing by one step."
 msgstr "Öka meanderavståndet med ett steg."
 
@@ -43570,7 +43400,6 @@ msgid "Decrease Spacing"
 msgstr "Minska avståndet"
 
 #: pcbnew/tools/pcb_actions.cpp:204
-#, fuzzy
 msgid "Decrease tuning pattern spacing by one step."
 msgstr "Minska meanderavståndet med ett steg."
 
@@ -43579,7 +43408,6 @@ msgid "Increase Amplitude"
 msgstr "Öka amplituden"
 
 #: pcbnew/tools/pcb_actions.cpp:213
-#, fuzzy
 msgid "Increase tuning pattern amplitude by one step."
 msgstr "Öka meanderamplituden med ett steg."
 
@@ -43588,9 +43416,8 @@ msgid "Decrease Amplitude"
 msgstr "Minska amplituden"
 
 #: pcbnew/tools/pcb_actions.cpp:222
-#, fuzzy
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Minska slingrande amplitud med ett steg."
+msgstr "Minska meanderamplituden med ett steg."
 
 #: pcbnew/tools/pcb_actions.cpp:231
 msgid "Add Aligned Dimension"
@@ -43874,9 +43701,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "Lägger till bågar som tangerar de valda raka ledarsegmenten"
 
 #: pcbnew/tools/pcb_actions.cpp:609
-#, fuzzy
 msgid "Fillet Lines..."
-msgstr "Avrundningslinjer"
+msgstr "Runda av linjer..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Adds arcs tangent to the selected lines"
@@ -43890,38 +43716,36 @@ msgstr "Fasa av hörn mellan valda linjer"
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
 msgstr ""
+"Sammanfoga former, möjligen genom att förlänga eller klippa av dem, eller "
+"lägga till extra geometri"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid "Extend lines to meet each other"
 msgstr "Förläng linjerna så att de möts"
 
 #: pcbnew/tools/pcb_actions.cpp:636
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "Slå samman zoner"
+msgstr "Sammanfoga polygoner"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "Sammanfoga valda polygoner till en enda polygon"
 
 #: pcbnew/tools/pcb_actions.cpp:643
-#, fuzzy
 msgid "Subtract Polygons"
-msgstr "Skissa polygoner"
+msgstr "Subtrahera polygoner"
 
 #: pcbnew/tools/pcb_actions.cpp:644
 msgid "Subtract selected polygons from the last one selected"
-msgstr ""
+msgstr "Subtrahera valda polygoner från den föregående valda"
 
 #: pcbnew/tools/pcb_actions.cpp:650
-#, fuzzy
 msgid "Intersect Polygons"
-msgstr "Skapa polygon"
+msgstr "Ta snittet av polygoner"
 
 #: pcbnew/tools/pcb_actions.cpp:651
-#, fuzzy
 msgid "Create the intersection of the selected polygons"
-msgstr "Skapar ledare från de valda grafiska linjerna"
+msgstr "Skapar snittet (överlappningen) av de valda polygonerna"
 
 #: pcbnew/tools/pcb_actions.cpp:659
 msgid "Delete Full Track"
@@ -44291,9 +44115,8 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Skapa Excellon borrfil (er)"
 
 #: pcbnew/tools/pcb_actions.cpp:1048
-#, fuzzy
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "Komponentplacering (.pos)..."
+msgstr "Komponentplacering (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Generate component placement file(s) for pick and place"
@@ -45151,12 +44974,10 @@ msgid "Change active layer pair for routing"
 msgstr "Ändra aktivt lagerpar för routing"
 
 #: pcbnew/tools/pcb_actions.cpp:2294
-#, fuzzy
 msgid "Tune length of a single track or differential pair"
-msgstr "Anpassa längden på ett differentialpar"
+msgstr "Anpassa längden på en enskild ledare eller ett differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:2305
-#, fuzzy
 msgid "Tune Skew of a Differential Pair"
 msgstr "Anpassa skevhet för ett differentiellt par"
 
@@ -45230,11 +45051,13 @@ msgstr "Dra den närmaste fogen i ledaren utan att begränsa ledarvinkeln."
 
 #: pcbnew/tools/pcb_actions.cpp:2397
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "Uppdatera alla längdanpassningsmönster"
 
 #: pcbnew/tools/pcb_actions.cpp:2398
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
+"Försök anpassa befintliga längdanpassningsmönster på nytt inom deras "
+"begränsningar"
 
 #: pcbnew/tools/pcb_actions.cpp:2405
 #, fuzzy
@@ -45333,9 +45156,9 @@ msgid "Object Snapping"
 msgstr "Fäst mot objekt"
 
 #: pcbnew/tools/pcb_control.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid "DP Gap Constraints: %s"
-msgstr "Breddbegränsning: min %s"
+msgstr "Diffpars ledaravståndsbegränsningar: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1515
 msgid "Resolved clearance"
@@ -45444,7 +45267,7 @@ msgstr "Fyll zon (er)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:143 pcbnew/tools/zone_filler_tool.cpp:230
 msgid "Show DRC rules"
-msgstr "Visa DRC-regler"
+msgstr "Visa designregler"
 
 #: pcbnew/tools/zone_filler_tool.cpp:150 pcbnew/tools/zone_filler_tool.cpp:237
 msgid "Rules"
@@ -45452,7 +45275,7 @@ msgstr "Regler"
 
 #: pcbnew/tools/zone_filler_tool.cpp:156 pcbnew/tools/zone_filler_tool.cpp:243
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr "Zonfyllningar kan vara felaktiga. DRC-regler innehåller fel."
+msgstr "Zonfyllningar kan vara felaktiga. Designregler innehåller fel."
 
 #: pcbnew/tools/zone_filler_tool.cpp:254
 #, c-format
