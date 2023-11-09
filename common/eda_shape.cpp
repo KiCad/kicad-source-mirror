@@ -25,7 +25,6 @@
  */
 
 #include <bezier_curves.h>
-#include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <eda_draw_frame.h>
 #include <geometry/shape_simple.h>
@@ -710,8 +709,7 @@ wxString EDA_SHAPE::GetFriendlyName() const
 
 void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
-    wxString          msg;
+    wxString msg;
 
     wxString shape = _( "Shape" );
     aList.emplace_back( shape, GetFriendlyName() );

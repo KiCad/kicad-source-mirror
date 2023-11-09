@@ -430,7 +430,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     aList.emplace_back( _( "Text Width" ), unitsProvider.MessageTextFromValue( GetTextWidth() ) );
     aList.emplace_back( _( "Text Height" ), unitsProvider.MessageTextFromValue( GetTextHeight() ) );
 
-    ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
+    ORIGIN_TRANSFORMS& originTransforms = aFrame->GetOriginTransforms();
 
     if( Type() == PCB_DIM_CENTER_T )
     {
@@ -1184,7 +1184,7 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( _( "Leader" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
-    ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
+    ORIGIN_TRANSFORMS& originTransforms = aFrame->GetOriginTransforms();
 
     VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
     wxString start = wxString::Format( wxT( "@(%s, %s)" ),

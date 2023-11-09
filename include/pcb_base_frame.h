@@ -26,7 +26,7 @@
 #ifndef  PCB_BASE_FRAME_H
 #define  PCB_BASE_FRAME_H
 
-
+#include <eda_units.h>
 #include <eda_item.h>
 #include <board.h>
 #include <eda_draw_frame.h>
@@ -143,6 +143,11 @@ public:
      * Return a reference to the default ORIGIN_TRANSFORMS object
      */
     ORIGIN_TRANSFORMS& GetOriginTransforms() override;
+
+    wxString MessageTextFromCoord( int aValue, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) const
+    {
+        return MessageTextFromValue( m_originTransforms.ToDisplay( aValue, aCoordType ) );
+    }
 
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;

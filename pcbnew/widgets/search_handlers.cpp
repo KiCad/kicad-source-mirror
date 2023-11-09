@@ -124,9 +124,9 @@ wxString FOOTPRINT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
     else if( aCol == 2 )
         return fp->GetLayerName();
     else if( aCol == 3 )
-        return m_frame->MessageTextFromValue( fp->GetX() );
+        return m_frame->MessageTextFromCoord( fp->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
     else if( aCol == 4 )
-        return m_frame->MessageTextFromValue( fp->GetY() );
+        return m_frame->MessageTextFromCoord( fp->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     return wxEmptyString;
 }
@@ -188,9 +188,10 @@ wxString ZONE_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
     else if( aCol == 3 )
         return wxString::Format( "%d", zone->GetAssignedPriority() );
     else if( aCol == 4 )
-        return m_frame->MessageTextFromValue( zone->GetX() );
+        return m_frame->MessageTextFromCoord( zone->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
     else if( aCol == 5 )
-        return m_frame->MessageTextFromValue( zone->GetY() );
+        return m_frame->MessageTextFromCoord( zone->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
+
 
     return wxEmptyString;
 }
@@ -252,9 +253,9 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
     else if( aCol == 2 )
         return aItem->GetLayerName();
     else if( aCol == 3 )
-        return m_frame->MessageTextFromValue( aItem->GetX() );
+        return m_frame->MessageTextFromCoord( aItem->GetX(), ORIGIN_TRANSFORMS::ABS_X_COORD );
     else if( aCol == 4 )
-        return m_frame->MessageTextFromValue( aItem->GetY() );
+        return m_frame->MessageTextFromCoord( aItem->GetY(), ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     return wxEmptyString;
 }
