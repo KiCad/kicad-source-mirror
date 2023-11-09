@@ -24,13 +24,14 @@
 # 이윤성 <yunslee@student.42seoul.kr>, 2022.
 # KwonHyeokbeom <gurqja3810@naver.com>, 2022.
 # "minsu kim (0xGabriel)" <rlaalstn9601@gmail.com>, 2023.
+# pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
 "PO-Revision-Date: 2023-11-09 22:53+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: pedrolinharesmoreira <pedrolinhares@unifei.edu.br>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -3507,7 +3508,7 @@ msgstr "분기 이름을 선택하거나 입력:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "브랜치"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
@@ -17120,7 +17121,7 @@ msgstr "HTTP 라이브러리 설정 파일 %s에 잘못된 라이브러리 유�
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:306
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
-msgstr ""
+msgstr "%s에 연결할 수 없습니다. 오류 메시지: %s"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.h:51
 #, fuzzy
