@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 39bf5ddc-d073-496b-8d93-14dacb63ae69)
 
@@ -12,7 +12,7 @@
   )
 
   (lib_symbols
-    (symbol "74LS245_1" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "74LS245_1" (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 2.54 14.605 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -24,6 +24,9 @@
       )
       (property "Datasheet" "" (at 2.54 14.605 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS245_1_0_0"
         (pin power_in line (at 0 -13.97 90) (length 0) hide
@@ -135,7 +138,7 @@
         )
       )
     )
-    (symbol "74LS245_2" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "74LS245_2" (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 2.54 14.605 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -147,6 +150,9 @@
       )
       (property "Datasheet" "" (at 2.54 14.605 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS245_2_0_0"
         (pin power_in line (at 0 -13.97 90) (length 0) hide
@@ -258,7 +264,7 @@
         )
       )
     )
-    (symbol "74LS245_3" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "74LS245_3" (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 2.54 14.605 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -270,6 +276,9 @@
       )
       (property "Datasheet" "" (at 2.54 14.605 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS245_3_0_0"
         (pin power_in line (at 0 -13.97 90) (length 0) hide
@@ -381,7 +390,7 @@
         )
       )
     )
-    (symbol "power:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "power:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -6.35 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -394,10 +403,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "power-flag" (at 0 0 0)
+      (property "Description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Power symbol creates a global label with name \"GND\" , ground" (at 0 0 0)
+      (property "ki_keywords" "global power" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
@@ -421,7 +430,7 @@
         )
       )
     )
-    (symbol "video_schlib:74LS245" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:74LS245" (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 2.54 14.605 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -433,6 +442,9 @@
       )
       (property "Datasheet" "" (at 2.54 14.605 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS245_0_0"
         (pin power_in line (at 0 -13.97 90) (length 0) hide
@@ -544,7 +556,7 @@
         )
       )
     )
-    (symbol "video_schlib:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:VCC" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -556,6 +568,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VCC_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -579,7 +594,7 @@
         )
       )
     )
-    (symbol "video_schlib:XC4003-VQ100" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:XC4003-VQ100" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -591,6 +606,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "XC4003-VQ100_0_1"
         (rectangle (start -16.51 -59.69) (end 16.51 59.69)
@@ -2362,7 +2380,7 @@
   )
 
   (symbol (lib_id "video_schlib:XC4003-VQ100") (at 179.07 97.79 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033a567b8)
     (property "Reference" "U22" (at 179.07 95.25 0)
       (effects (font (size 1.778 1.778)))
@@ -2375,6 +2393,9 @@
     )
     (property "Datasheet" "" (at 179.07 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 179.07 97.79 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 25e063b9-13b6-4b6d-b8fc-7e3cc56158df))
     (pin "10" (uuid a794c24d-7117-49dd-b185-55d607a03775))
@@ -2486,7 +2507,7 @@
   )
 
   (symbol (lib_id "video_schlib:VCC") (at 154.94 39.37 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033a567e7)
     (property "Reference" "#PWR06" (at 154.94 34.29 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -2500,6 +2521,9 @@
     (property "Datasheet" "" (at 154.94 39.37 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 154.94 39.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 06ae5ced-2f91-4bbd-ad5a-6e387d2c72ff))
     (instances
       (project "video"
@@ -2511,7 +2535,7 @@
   )
 
   (symbol (lib_name "74LS245_1") (lib_id "video_schlib:74LS245") (at 83.82 40.64 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033a7e303)
     (property "Reference" "U3" (at 83.82 45.72 0)
       (effects (font (size 1.524 1.524)))
@@ -2524,6 +2548,9 @@
     )
     (property "Datasheet" "" (at 83.82 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 83.82 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "10" (uuid 7840c61a-ea1c-4b68-bf78-cd058f724d5e))
     (pin "20" (uuid 64b15b72-29b8-4db9-bab9-2b19fea4895d))
@@ -2555,7 +2582,7 @@
   )
 
   (symbol (lib_name "74LS245_3") (lib_id "video_schlib:74LS245") (at 83.82 132.08 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036d5)
     (property "Reference" "U6" (at 83.82 137.16 0)
       (effects (font (size 1.524 1.524)))
@@ -2568,6 +2595,9 @@
     )
     (property "Datasheet" "" (at 83.82 132.08 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 83.82 132.08 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "10" (uuid e126c032-fdc2-4cab-ba01-91d23444a434))
     (pin "20" (uuid 6575e40b-36d6-4563-b40c-fdb3712206c3))
@@ -2599,7 +2629,7 @@
   )
 
   (symbol (lib_id "video_schlib:74LS245") (at 83.82 101.6 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036d6)
     (property "Reference" "U5" (at 83.82 106.68 0)
       (effects (font (size 1.524 1.524)))
@@ -2612,6 +2642,9 @@
     )
     (property "Datasheet" "" (at 83.82 101.6 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 83.82 101.6 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "10" (uuid 545ffdca-1eac-4880-9376-7cec4dc85022))
     (pin "20" (uuid 60f50b65-3b94-4133-9d80-9cabf74f060a))
@@ -2643,7 +2676,7 @@
   )
 
   (symbol (lib_name "74LS245_2") (lib_id "video_schlib:74LS245") (at 83.82 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036d7)
     (property "Reference" "U4" (at 83.82 76.2 0)
       (effects (font (size 1.524 1.524)))
@@ -2656,6 +2689,9 @@
     )
     (property "Datasheet" "" (at 83.82 71.12 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 83.82 71.12 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "10" (uuid 16d0af27-bf11-4480-9365-0248569bd422))
     (pin "20" (uuid 079a66d9-a8cd-4e78-8908-8fddb12ec446))
@@ -2687,7 +2723,7 @@
   )
 
   (symbol (lib_id "video_schlib:VCC") (at 168.91 31.75 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid b4de66fd-90e9-44bb-b65e-871e7f34678c)
     (property "Reference" "#PWR0103" (at 168.91 26.67 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -2701,6 +2737,9 @@
     (property "Datasheet" "" (at 168.91 31.75 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 168.91 31.75 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5a918387-71b6-4418-b51a-d81f467e406c))
     (instances
       (project "video"
@@ -2712,7 +2751,7 @@
   )
 
   (symbol (lib_id "power:GND") (at 168.91 163.83 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid e4fb23f6-6a30-4b25-ac5d-cb5cbf5bffbb)
     (property "Reference" "#PWR0102" (at 168.91 170.18 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -2724,6 +2763,9 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (at 168.91 163.83 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Description" "Power symbol creates a global label with name \"GND\" , ground" (at 168.91 163.83 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 817742a5-e0ec-4e1f-a6e1-51983eb8723d))

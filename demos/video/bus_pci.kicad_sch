@@ -1,4 +1,4 @@
-(kicad_sch (version 20230121) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 95fec9b4-a774-45ee-ab6f-5a336ab16745)
 
@@ -13,7 +13,7 @@
   )
 
   (lib_symbols
-    (symbol "power:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "power:VCC" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -3.81 0)
         (effects (font (size 1.27 1.27)) hide)
       )
@@ -26,10 +26,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "power-flag" (at 0 0 0)
+      (property "Description" "Power symbol creates a global label with name \"VCC\"" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Power symbol creates a global label with name \"VCC\"" (at 0 0 0)
+      (property "ki_keywords" "global power" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VCC_0_1"
@@ -65,7 +65,7 @@
         )
       )
     )
-    (symbol "video_schlib:+12V" (power) (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:+12V" (power) (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -1.27 0)
         (effects (font (size 0.508 0.508)) hide)
       )
@@ -77,6 +77,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "+12V_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -100,7 +103,7 @@
         )
       )
     )
-    (symbol "video_schlib:+3.3V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:+3.3V" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -1.016 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -112,6 +115,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "+3.3V_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -135,7 +141,7 @@
         )
       )
     )
-    (symbol "video_schlib:+5V" (power) (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:+5V" (power) (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 2.286 0)
         (effects (font (size 0.508 0.508)) hide)
       )
@@ -147,6 +153,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "+5V_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -171,7 +180,7 @@
         )
       )
     )
-    (symbol "video_schlib:24C16" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:24C16" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 8.89 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -183,6 +192,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "24C16_0_0"
         (pin power_in line (at 0 -12.7 90) (length 5.08)
@@ -225,7 +237,7 @@
         )
       )
     )
-    (symbol "video_schlib:BUSPCI-5V" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:BUSPCI-5V" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 81.28 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -237,6 +249,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "BUSPCI-5V_0_1"
         (rectangle (start -19.05 80.01) (end 19.05 -80.01)
@@ -727,7 +742,7 @@
         )
       )
     )
-    (symbol "video_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0 2.54 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -739,6 +754,9 @@
       )
       (property "Datasheet" "" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "SM* C? C1-1" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -772,7 +790,7 @@
         )
       )
     )
-    (symbol "video_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254) hide) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 1.27 2.54 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -784,6 +802,9 @@
       )
       (property "Datasheet" "" (at 1.27 2.54 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "CP* SM*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -821,7 +842,7 @@
         )
       )
     )
-    (symbol "video_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -833,6 +854,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
         (polyline
@@ -853,7 +877,7 @@
         )
       )
     )
-    (symbol "video_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#FLG" (at 0 2.413 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -865,6 +889,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PWR_FLAG_0_0"
         (pin power_out line (at 0 0 90) (length 0)
@@ -887,7 +914,7 @@
         )
       )
     )
-    (symbol "video_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -899,6 +926,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -920,7 +950,7 @@
         )
       )
     )
-    (symbol "video_schlib:RR8" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:RR8" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "RR" (at 1.27 13.97 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -932,6 +962,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "RR8_0_1"
         (polyline
@@ -986,7 +1019,7 @@
         )
       )
     )
-    (symbol "video_schlib:S5933_PQ160" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:S5933_PQ160" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 57.15 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -998,6 +1031,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "S5933_PQ160_0_0"
         (pin power_in line (at -3.81 -107.95 90) (length 3.81)
@@ -1650,7 +1686,7 @@
         )
       )
     )
-    (symbol "video_schlib:TEST" (pin_numbers hide) (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:TEST" (pin_numbers hide) (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "W" (at 0 1.524 0)
         (effects (font (size 1.016 1.016)))
       )
@@ -1662,6 +1698,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "TEST_0_1"
         (circle (center -1.778 0) (radius 0.762)
@@ -1682,7 +1721,7 @@
         )
       )
     )
-    (symbol "video_schlib:VCC" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:VCC" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1694,6 +1733,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VCC_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -1717,7 +1759,7 @@
         )
       )
     )
-    (symbol "video_schlib:VSS" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "video_schlib:VSS" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1729,6 +1771,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "VSS_0_1"
         (polyline
@@ -4012,7 +4057,8 @@
     (uuid fed94f7c-83ff-4a30-b98e-627f7db1d066)
   )
 
-  (text "Decoupling for \"S5933\"" (at 64.77 276.86 0)
+  (text "Decoupling for \"S5933\"" (exclude_from_sim no)
+ (at 64.77 276.86 0)
     (effects (font (size 1.524 1.524)) (justify left bottom))
     (uuid 8ae5ec6d-982f-4fd4-9132-8a55c971a847)
   )
@@ -5044,7 +5090,7 @@
   )
 
   (symbol (lib_id "video_schlib:S5933_PQ160") (at 240.03 129.54 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000021fa8347)
     (property "Reference" "U11" (at 240.03 72.39 0)
       (effects (font (size 1.524 1.524)))
@@ -5057,6 +5103,9 @@
     )
     (property "Datasheet" "" (at 240.03 129.54 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 240.03 129.54 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "10" (uuid f8631323-10ea-4bd6-bd3c-f519aaacec45))
     (pin "11" (uuid dafbe851-0276-497a-8727-f0eaf25f588a))
@@ -5228,7 +5277,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 34.29 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5bf)
     (property "Reference" "#GND086" (at 57.15 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5242,6 +5291,9 @@
     (property "Datasheet" "" (at 54.61 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 34.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 22b85ec9-3dc1-45b7-a66c-cfeb4dac76b5))
     (instances
       (project "video"
@@ -5253,7 +5305,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 64.77 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5ce)
     (property "Reference" "#GND087" (at 57.15 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5267,6 +5319,9 @@
     (property "Datasheet" "" (at 54.61 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 64.77 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0fedb9df-fd91-4928-a7af-1a49bd81b021))
     (instances
       (project "video"
@@ -5278,7 +5333,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 69.85 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5d3)
     (property "Reference" "#GND088" (at 57.15 69.85 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5292,6 +5347,9 @@
     (property "Datasheet" "" (at 54.61 69.85 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 69.85 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f57c0770-9f8d-486e-883c-6b8ae665a766))
     (instances
       (project "video"
@@ -5303,7 +5361,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 82.55 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5d8)
     (property "Reference" "#GND089" (at 57.15 82.55 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5317,6 +5375,9 @@
     (property "Datasheet" "" (at 54.61 82.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 82.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 918bb600-ccab-4093-87c8-b803ffaa50c9))
     (instances
       (project "video"
@@ -5328,7 +5389,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 97.79 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5dd)
     (property "Reference" "#GND090" (at 57.15 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5342,6 +5403,9 @@
     (property "Datasheet" "" (at 54.61 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 97.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6515d821-af2d-4754-a360-b8b739ba9b66))
     (instances
       (project "video"
@@ -5353,7 +5417,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 113.03 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5e2)
     (property "Reference" "#GND091" (at 57.15 113.03 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5367,6 +5431,9 @@
     (property "Datasheet" "" (at 54.61 113.03 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 113.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7a3eb054-4e79-4dd7-ad37-52e84d799ce2))
     (instances
       (project "video"
@@ -5378,7 +5445,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 123.19 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5e7)
     (property "Reference" "#GND092" (at 57.15 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5392,6 +5459,9 @@
     (property "Datasheet" "" (at 54.61 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 744ddfbe-0165-4672-8e0d-a0858f7c2c90))
     (instances
       (project "video"
@@ -5403,7 +5473,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 143.51 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5ec)
     (property "Reference" "#GND093" (at 57.15 143.51 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5417,6 +5487,9 @@
     (property "Datasheet" "" (at 54.61 143.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 143.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a67d8fff-f210-4301-8c33-1e90226772b0))
     (instances
       (project "video"
@@ -5428,7 +5501,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 151.13 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5f1)
     (property "Reference" "#GND094" (at 57.15 151.13 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5442,6 +5515,9 @@
     (property "Datasheet" "" (at 54.61 151.13 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 151.13 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid af142cdd-e16d-4b5f-af1c-772270933984))
     (instances
       (project "video"
@@ -5453,7 +5529,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 54.61 171.45 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5f6)
     (property "Reference" "#GND095" (at 57.15 171.45 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5467,6 +5543,9 @@
     (property "Datasheet" "" (at 54.61 171.45 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 54.61 171.45 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 94c62848-c3a9-49e7-9fc5-76a21b323f3e))
     (instances
       (project "video"
@@ -5478,7 +5557,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 168.91 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b5fb)
     (property "Reference" "#GND096" (at 111.76 168.91 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5492,6 +5571,9 @@
     (property "Datasheet" "" (at 114.3 168.91 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 168.91 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid cf50e8f6-f6e5-4d7b-b5ef-499289b463fe))
     (instances
       (project "video"
@@ -5503,7 +5585,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 148.59 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b600)
     (property "Reference" "#GND097" (at 111.76 148.59 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5517,6 +5599,9 @@
     (property "Datasheet" "" (at 114.3 148.59 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 148.59 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid efed7874-2f0d-4de8-a7e8-3940ec395934))
     (instances
       (project "video"
@@ -5528,7 +5613,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 133.35 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b605)
     (property "Reference" "#GND098" (at 111.76 133.35 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5542,6 +5627,9 @@
     (property "Datasheet" "" (at 114.3 133.35 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 133.35 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8204ecbb-62d3-4a83-a3ea-0756a4e65612))
     (instances
       (project "video"
@@ -5553,7 +5641,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 120.65 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b60a)
     (property "Reference" "#GND099" (at 111.76 120.65 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5567,6 +5655,9 @@
     (property "Datasheet" "" (at 114.3 120.65 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 120.65 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5b678a84-c1d6-4095-a38d-6a185b742b00))
     (instances
       (project "video"
@@ -5578,7 +5669,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 115.57 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b60f)
     (property "Reference" "#GND0100" (at 111.76 115.57 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5592,6 +5683,9 @@
     (property "Datasheet" "" (at 114.3 115.57 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 115.57 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6443ab03-bd60-4da9-9709-1f39bfcd536c))
     (instances
       (project "video"
@@ -5603,7 +5697,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 102.87 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b614)
     (property "Reference" "#GND0101" (at 111.76 102.87 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5617,6 +5711,9 @@
     (property "Datasheet" "" (at 114.3 102.87 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 102.87 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8fe1ae61-d550-4764-97e0-47016ccdd8ca))
     (instances
       (project "video"
@@ -5628,7 +5725,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 87.63 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b619)
     (property "Reference" "#GND0102" (at 111.76 87.63 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5642,6 +5739,9 @@
     (property "Datasheet" "" (at 114.3 87.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 46c5eb2c-5a37-453e-8727-9cf5e944fcd2))
     (instances
       (project "video"
@@ -5653,7 +5753,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 114.3 72.39 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b61e)
     (property "Reference" "#GND0103" (at 114.3 72.39 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5667,6 +5767,9 @@
     (property "Datasheet" "" (at 114.3 72.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 72.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c07b435c-c7c2-4e66-8fc7-51cf7c95ceae))
     (instances
       (project "video"
@@ -5678,7 +5781,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 45.72 54.61 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b632)
     (property "Reference" "W4" (at 45.72 53.086 0)
       (effects (font (size 1.016 1.016)))
@@ -5692,6 +5795,9 @@
     (property "Datasheet" "" (at 45.72 54.61 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 45.72 54.61 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b3e57851-4618-46e1-b1f7-fc98d88bc1a0))
     (pin "2" (uuid 98ef1872-e6d4-48a4-bc8f-9da2c5801803))
     (instances
@@ -5704,7 +5810,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 45.72 49.53 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b637)
     (property "Reference" "W5" (at 45.72 48.006 0)
       (effects (font (size 1.016 1.016)))
@@ -5718,6 +5824,9 @@
     (property "Datasheet" "" (at 45.72 49.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 45.72 49.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0ffc4de1-6546-44ea-b7e0-57df21404378))
     (pin "2" (uuid 54c71613-d931-48f4-8093-7757f02c8d9b))
     (instances
@@ -5730,7 +5839,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 38.1 57.15 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002691b63c)
     (property "Reference" "#GND0104" (at 38.1 57.15 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -5744,6 +5853,9 @@
     (property "Datasheet" "" (at 38.1 57.15 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 38.1 57.15 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8aa89eac-1620-4448-b955-ce007a16124f))
     (instances
       (project "video"
@@ -5755,7 +5867,7 @@
   )
 
   (symbol (lib_id "video_schlib:BUSPCI-5V") (at 83.82 106.68 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000269c6109)
     (property "Reference" "BUS1" (at 83.82 25.4 0)
       (effects (font (size 1.524 1.524)))
@@ -5768,6 +5880,9 @@
     )
     (property "Datasheet" "" (at 83.82 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 83.82 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "A1" (uuid fc714787-de2b-41bd-9265-4d6fde9c10ac))
     (pin "A10" (uuid cde87ea6-daa4-452a-a6cf-b741d96dab28))
@@ -5899,7 +6014,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 317.5 156.21 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a799e8)
     (property "Reference" "R5" (at 317.5 154.178 90)
       (effects (font (size 1.27 1.27)))
@@ -5913,6 +6028,9 @@
     (property "Datasheet" "" (at 317.5 156.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 317.5 156.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b311421a-ece0-4231-8a18-6d3e3f1c33bd))
     (pin "2" (uuid cdf5b861-cf99-4b5e-b723-d1f272d7c3c0))
     (instances
@@ -5925,7 +6043,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 306.07 163.83 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a799ed)
     (property "Reference" "W1" (at 303.53 163.83 0)
       (effects (font (size 1.524 1.524)))
@@ -5939,6 +6057,9 @@
     (property "Datasheet" "" (at 306.07 163.83 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 306.07 163.83 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 27d44ba0-add3-4292-99a7-323cfbc1264d))
     (pin "2" (uuid 0072f722-9012-4003-be37-48aeb805b7eb))
     (instances
@@ -5951,7 +6072,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 306.07 170.18 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a799f2)
     (property "Reference" "#GND0105" (at 306.07 167.64 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -5965,6 +6086,9 @@
     (property "Datasheet" "" (at 306.07 170.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 306.07 170.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 70a31aa3-1ce9-4951-89a4-661144f4daeb))
     (instances
       (project "video"
@@ -5976,7 +6100,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 302.26 194.31 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a799f7)
     (property "Reference" "W2" (at 299.72 194.31 0)
       (effects (font (size 1.524 1.524)))
@@ -5990,6 +6114,9 @@
     (property "Datasheet" "" (at 302.26 194.31 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 302.26 194.31 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5410699a-4481-4ef0-9810-5c33d5eac86f))
     (pin "2" (uuid b87c5591-bd68-41e6-94ee-d7892bbb92c4))
     (instances
@@ -6002,7 +6129,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 302.26 201.93 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a799fc)
     (property "Reference" "#GND0106" (at 302.26 199.39 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6016,6 +6143,9 @@
     (property "Datasheet" "" (at 302.26 201.93 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 302.26 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 78682e93-6b20-40c4-98e5-cae30363001e))
     (instances
       (project "video"
@@ -6027,7 +6157,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 313.69 186.69 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a79a01)
     (property "Reference" "R6" (at 313.69 184.658 90)
       (effects (font (size 1.27 1.27)))
@@ -6041,6 +6171,9 @@
     (property "Datasheet" "" (at 313.69 186.69 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 313.69 186.69 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b463db4b-1c5a-402c-97d3-ba6e0710ac30))
     (pin "2" (uuid f8dd6c0d-ee23-4aaa-a615-d89a7c8a0747))
     (instances
@@ -6053,7 +6186,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 302.26 224.79 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a79a06)
     (property "Reference" "#GND0107" (at 302.26 222.25 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6067,6 +6200,9 @@
     (property "Datasheet" "" (at 302.26 224.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 302.26 224.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 596984bd-0799-4e8d-bede-0903b92ce482))
     (instances
       (project "video"
@@ -6078,7 +6214,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 313.69 209.55 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a79a0b)
     (property "Reference" "R7" (at 313.69 207.518 90)
       (effects (font (size 1.27 1.27)))
@@ -6092,6 +6228,9 @@
     (property "Datasheet" "" (at 313.69 209.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 313.69 209.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8fabf94f-72df-4905-a9cc-ad1393c9e2e7))
     (pin "2" (uuid 500041be-608f-4ca4-a5ad-481a5da358f9))
     (instances
@@ -6104,7 +6243,7 @@
   )
 
   (symbol (lib_id "video_schlib:TEST") (at 302.26 217.17 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026a79a10)
     (property "Reference" "W3" (at 300.736 217.17 0)
       (effects (font (size 1.016 1.016)))
@@ -6118,6 +6257,9 @@
     (property "Datasheet" "" (at 302.26 217.17 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 302.26 217.17 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid dcaea122-020e-45ba-bba8-f2e79c287087))
     (pin "2" (uuid 986846f8-878b-4eb6-8d73-1c46ab476a07))
     (instances
@@ -6130,7 +6272,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 125.73 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211bb)
     (property "Reference" "#GND0108" (at 125.73 241.3 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6144,6 +6286,9 @@
     (property "Datasheet" "" (at 125.73 243.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 125.73 243.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2b047126-74a6-43c5-aac0-e58e29e6c854))
     (instances
       (project "video"
@@ -6155,7 +6300,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 172.72 236.22 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211c0)
     (property "Reference" "R28" (at 174.752 236.22 90)
       (effects (font (size 1.27 1.27)))
@@ -6169,6 +6314,9 @@
     (property "Datasheet" "" (at 172.72 236.22 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 172.72 236.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 37989892-8969-4006-b299-645b743324ca))
     (pin "2" (uuid 9ba357de-e41d-45d9-b4b1-8b2c320831ce))
     (instances
@@ -6181,7 +6329,7 @@
   )
 
   (symbol (lib_id "video_schlib:R") (at 180.34 236.22 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211cf)
     (property "Reference" "R29" (at 182.372 236.22 90)
       (effects (font (size 1.27 1.27)))
@@ -6195,6 +6343,9 @@
     (property "Datasheet" "" (at 180.34 236.22 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 180.34 236.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7d2f859d-f660-49ad-82f4-101253bab5b0))
     (pin "2" (uuid 2d13fcb8-6780-49c4-8ba6-db3ed0e2c8d6))
     (instances
@@ -6207,7 +6358,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 48.26 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211d9)
     (property "Reference" "C24" (at 49.53 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6221,6 +6372,9 @@
     (property "Datasheet" "" (at 48.26 243.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 243.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fe1f9514-62e0-4a38-aeb8-6b419f10e9d7))
     (pin "2" (uuid 86064afd-798f-462e-ad6f-91454ba1d1af))
     (instances
@@ -6233,7 +6387,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 48.26 250.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211de)
     (property "Reference" "#GND0109" (at 48.26 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6247,6 +6401,9 @@
     (property "Datasheet" "" (at 48.26 250.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 250.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6bfa55a7-b635-4859-827d-ab3fab9c77b4))
     (instances
       (project "video"
@@ -6258,7 +6415,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 66.04 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211e3)
     (property "Reference" "C25" (at 67.31 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6272,6 +6429,9 @@
     (property "Datasheet" "" (at 66.04 243.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 66.04 243.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ce277a71-2194-43b0-a31e-ca3213adfa6f))
     (pin "2" (uuid d3e522b3-5274-4ab6-ad8c-b52bb05f3279))
     (instances
@@ -6284,7 +6444,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 66.04 250.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211e8)
     (property "Reference" "#GND0110" (at 66.04 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6298,6 +6458,9 @@
     (property "Datasheet" "" (at 66.04 250.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 66.04 250.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a05ac05f-9961-4faf-8994-e0e92aee0e71))
     (instances
       (project "video"
@@ -6309,7 +6472,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 83.82 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211ed)
     (property "Reference" "C26" (at 85.09 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6323,6 +6486,9 @@
     (property "Datasheet" "" (at 83.82 243.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 243.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b18ea78f-5d73-40b4-ad97-8838dbc0de12))
     (pin "2" (uuid b7a102bc-8eb8-4b36-85fb-251596690977))
     (instances
@@ -6335,7 +6501,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 83.82 250.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211f2)
     (property "Reference" "#GND0111" (at 83.82 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6349,6 +6515,9 @@
     (property "Datasheet" "" (at 83.82 250.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 250.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 60c202c9-d386-45bf-a476-95305ad42331))
     (instances
       (project "video"
@@ -6360,7 +6529,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 101.6 243.84 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211f7)
     (property "Reference" "C27" (at 102.87 241.3 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6374,6 +6543,9 @@
     (property "Datasheet" "" (at 101.6 243.84 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 101.6 243.84 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9ff87cd1-db64-4d02-a989-39c90313535d))
     (pin "2" (uuid 9826b3e3-287d-41a1-bb9b-19d972e54142))
     (instances
@@ -6386,7 +6558,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 101.6 250.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b211fc)
     (property "Reference" "#GND0112" (at 101.6 247.65 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6400,6 +6572,9 @@
     (property "Datasheet" "" (at 101.6 250.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 101.6 250.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a29dbfd5-3436-49f9-b7c0-57e622f1f4ec))
     (instances
       (project "video"
@@ -6411,7 +6586,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 48.26 264.16 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b21201)
     (property "Reference" "C28" (at 49.53 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6425,6 +6600,9 @@
     (property "Datasheet" "" (at 48.26 264.16 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 264.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 570d7907-ad51-4015-a5e2-7c189854e3a3))
     (pin "2" (uuid e14d24ff-9ff4-45ef-ac10-07889e88e64b))
     (instances
@@ -6437,7 +6615,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 48.26 270.51 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b21206)
     (property "Reference" "#GND0113" (at 48.26 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6451,6 +6629,9 @@
     (property "Datasheet" "" (at 48.26 270.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 270.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1acf7893-957c-490c-a51e-95da4250b4ba))
     (instances
       (project "video"
@@ -6462,7 +6643,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 66.04 264.16 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b2120b)
     (property "Reference" "C29" (at 67.31 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6476,6 +6657,9 @@
     (property "Datasheet" "" (at 66.04 264.16 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 66.04 264.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a5128b17-0b5f-484f-ad38-6619fa0d51d4))
     (pin "2" (uuid 45c9a2b9-78c4-440b-b901-34e7551e7f6c))
     (instances
@@ -6488,7 +6672,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 66.04 270.51 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b21210)
     (property "Reference" "#GND0114" (at 66.04 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6502,6 +6686,9 @@
     (property "Datasheet" "" (at 66.04 270.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 66.04 270.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c979ded1-8da6-4091-bb01-2407f89b8f2d))
     (instances
       (project "video"
@@ -6513,7 +6700,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 83.82 264.16 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b21215)
     (property "Reference" "C30" (at 85.09 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6527,6 +6714,9 @@
     (property "Datasheet" "" (at 83.82 264.16 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 264.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5792733d-89cc-4c6e-9a03-cc382fcadce2))
     (pin "2" (uuid d1dbd462-24cc-4e75-8c62-23c5428f75f8))
     (instances
@@ -6539,7 +6729,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 83.82 270.51 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b2121a)
     (property "Reference" "#GND0115" (at 83.82 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6553,6 +6743,9 @@
     (property "Datasheet" "" (at 83.82 270.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 270.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 764e3b36-4b2b-4978-b1c6-a9c866c52025))
     (instances
       (project "video"
@@ -6564,7 +6757,7 @@
   )
 
   (symbol (lib_id "video_schlib:C") (at 101.6 264.16 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b2121f)
     (property "Reference" "C31" (at 102.87 261.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6578,6 +6771,9 @@
     (property "Datasheet" "" (at 101.6 264.16 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 101.6 264.16 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 13f77c05-4507-441e-bbb2-160fabd5cf05))
     (pin "2" (uuid d7b57f8e-7dd9-4747-a695-3b1bf49b39f3))
     (instances
@@ -6590,7 +6786,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 101.6 270.51 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000026b21224)
     (property "Reference" "#GND0116" (at 101.6 267.97 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6604,6 +6800,9 @@
     (property "Datasheet" "" (at 101.6 270.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 101.6 270.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d786fa3b-0bdf-4545-aacc-098469486a5c))
     (instances
       (project "video"
@@ -6615,7 +6814,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 17.78 232.41 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002820f08a)
     (property "Reference" "C38" (at 19.05 229.87 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6629,6 +6828,9 @@
     (property "Datasheet" "" (at 17.78 232.41 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 17.78 232.41 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 175845b8-ab21-4e79-825e-4a93b56bc6d6))
     (pin "2" (uuid 3574e78d-cc7b-4fea-a653-c17363b6737f))
     (instances
@@ -6641,7 +6843,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 17.78 240.03 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002820f094)
     (property "Reference" "#GND0117" (at 17.78 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -6655,6 +6857,9 @@
     (property "Datasheet" "" (at 17.78 240.03 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 17.78 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d6a0c2dd-296d-4bed-929d-c607458cfd96))
     (instances
       (project "video"
@@ -6666,7 +6871,7 @@
   )
 
   (symbol (lib_id "video_schlib:24C16") (at 146.05 242.57 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00002f5f7e5c)
     (property "Reference" "U1" (at 149.86 233.68 0)
       (effects (font (size 1.524 1.524)))
@@ -6679,6 +6884,9 @@
     )
     (property "Datasheet" "" (at 146.05 242.57 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 146.05 242.57 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "4" (uuid 108291d4-3dcc-4618-a9c8-518d4309c601))
     (pin "8" (uuid fe1ff7e6-88cf-4d16-a152-df02122b0fa4))
@@ -6698,7 +6906,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 29.21 232.41 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033afd420)
     (property "Reference" "C67" (at 30.48 229.87 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6712,6 +6920,9 @@
     (property "Datasheet" "" (at 29.21 232.41 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 29.21 232.41 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 78695262-0e2f-485a-881f-cc6ae30c104a))
     (pin "2" (uuid 3c15ba46-877c-4c79-98e8-9803093c482a))
     (instances
@@ -6724,7 +6935,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 26.67 266.7 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033afd43a)
     (property "Reference" "C69" (at 27.94 264.16 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6738,6 +6949,9 @@
     (property "Datasheet" "" (at 26.67 266.7 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 26.67 266.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b2695287-9df0-4b61-a136-357121207d9e))
     (pin "2" (uuid c692e701-9e9b-492f-9e24-b26032934301))
     (instances
@@ -6750,7 +6964,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 15.24 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033afd455)
     (property "Reference" "#PWR082" (at 15.24 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6764,6 +6978,9 @@
     (property "Datasheet" "" (at 15.24 257.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 15.24 257.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6c073a40-8af3-44cb-b764-d349c88485ba))
     (instances
       (project "video"
@@ -6775,7 +6992,7 @@
   )
 
   (symbol (lib_id "video_schlib:VCC") (at 21.59 223.52 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033b3dc6a)
     (property "Reference" "#PWR081" (at 21.59 218.44 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6789,6 +7006,9 @@
     (property "Datasheet" "" (at 21.59 223.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 21.59 223.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b0700629-0cb2-4ce6-a667-26d2d12099b4))
     (instances
       (project "video"
@@ -6800,7 +7020,7 @@
   )
 
   (symbol (lib_id "video_schlib:VSS") (at 31.75 274.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000033ba4d4a)
     (property "Reference" "#PWR080" (at 31.75 274.32 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6814,6 +7034,9 @@
     (property "Datasheet" "" (at 31.75 274.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 31.75 274.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 49f08162-c488-4dc0-9288-3c24a9e9c33f))
     (instances
       (project "video"
@@ -6825,7 +7048,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 29.21 224.79 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004174d80f)
     (property "Reference" "#FLG079" (at 29.21 217.932 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6839,6 +7062,9 @@
     (property "Datasheet" "" (at 29.21 224.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 29.21 224.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8a5eb279-a378-480b-9910-5a4d7b8f46e9))
     (instances
       (project "video"
@@ -6850,7 +7076,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 107.95 25.4 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004174d820)
     (property "Reference" "#FLG078" (at 107.95 18.542 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6864,6 +7090,9 @@
     (property "Datasheet" "" (at 107.95 25.4 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 107.95 25.4 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3a0b249a-8739-46cc-93fc-298ec09da380))
     (instances
       (project "video"
@@ -6875,7 +7104,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 38.1 273.05 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004174d9fb)
     (property "Reference" "#FLG076" (at 38.1 266.192 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6889,6 +7118,9 @@
     (property "Datasheet" "" (at 38.1 273.05 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 38.1 273.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 77ec6fe1-7249-4a76-bc83-c8652f4a4c2e))
     (instances
       (project "video"
@@ -6900,7 +7132,7 @@
   )
 
   (symbol (lib_id "video_schlib:PWR_FLAG") (at 26.67 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03691)
     (property "Reference" "#FLG077" (at 26.67 250.952 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6914,6 +7146,9 @@
     (property "Datasheet" "" (at 26.67 257.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 26.67 257.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 32780751-aafb-48b6-a132-4128894f4874))
     (instances
       (project "video"
@@ -6925,7 +7160,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 17.78 223.52 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03692)
     (property "Reference" "#+0129" (at 17.78 218.44 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6939,6 +7174,9 @@
     (property "Datasheet" "" (at 17.78 223.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 17.78 223.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 21b7d7f2-7874-4272-8a29-e1bd347243d6))
     (instances
       (project "video"
@@ -6950,7 +7188,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 140.97 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03693)
     (property "Reference" "#+0128" (at 119.38 140.97 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6964,6 +7202,9 @@
     (property "Datasheet" "" (at 114.3 140.97 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 140.97 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid aadf0e63-68c9-44f0-aea4-b4d3b4a5f026))
     (instances
       (project "video"
@@ -6975,7 +7216,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 80.01 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03694)
     (property "Reference" "#+0127" (at 119.38 80.01 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -6989,6 +7230,9 @@
     (property "Datasheet" "" (at 114.3 80.01 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0c6db899-1f33-42bf-bd79-9d3a9b2bcbbf))
     (instances
       (project "video"
@@ -7000,7 +7244,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 101.6 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03695)
     (property "Reference" "#+0126" (at 101.6 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7014,6 +7258,9 @@
     (property "Datasheet" "" (at 101.6 257.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 101.6 257.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1b8cb40e-c9db-4c3d-8036-4245cbe91b59))
     (instances
       (project "video"
@@ -7025,7 +7272,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 83.82 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03696)
     (property "Reference" "#+0125" (at 83.82 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7039,6 +7286,9 @@
     (property "Datasheet" "" (at 83.82 257.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 257.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 845d12f4-1439-4c76-9be9-dbe1e549a71c))
     (instances
       (project "video"
@@ -7050,7 +7300,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 66.04 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03697)
     (property "Reference" "#+0124" (at 66.04 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7064,6 +7314,9 @@
     (property "Datasheet" "" (at 66.04 257.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 66.04 257.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4cb8c077-8beb-4958-a2dc-98ab2569f332))
     (instances
       (project "video"
@@ -7075,7 +7328,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 48.26 257.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf03698)
     (property "Reference" "#+0123" (at 48.26 252.73 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7089,6 +7342,9 @@
     (property "Datasheet" "" (at 48.26 257.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 257.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6bf1d7c0-c563-41b2-ab58-9a72d22c1bf4))
     (instances
       (project "video"
@@ -7100,7 +7356,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 166.37 224.79 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf0369f)
     (property "Reference" "#+0118" (at 166.37 219.71 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7114,6 +7370,9 @@
     (property "Datasheet" "" (at 166.37 224.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 166.37 224.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f1c37148-815a-4515-8448-70e91f8dd942))
     (instances
       (project "video"
@@ -7125,7 +7384,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 101.6 237.49 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a0)
     (property "Reference" "#+0122" (at 101.6 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7139,6 +7398,9 @@
     (property "Datasheet" "" (at 101.6 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 101.6 237.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 378b7ad7-2b88-4baf-af43-201eb6cc72ea))
     (instances
       (project "video"
@@ -7150,7 +7412,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 48.26 237.49 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a1)
     (property "Reference" "#+0119" (at 48.26 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7164,6 +7426,9 @@
     (property "Datasheet" "" (at 48.26 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 48.26 237.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4c99841e-0a26-4b57-9bc3-5e1e45328fc4))
     (instances
       (project "video"
@@ -7175,7 +7440,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 83.82 237.49 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a2)
     (property "Reference" "#+0121" (at 83.82 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7189,6 +7454,9 @@
     (property "Datasheet" "" (at 83.82 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 237.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 17403663-bb6d-41d3-8f89-c7799b110fa3))
     (instances
       (project "video"
@@ -7200,7 +7468,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 66.04 237.49 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a3)
     (property "Reference" "#+0120" (at 66.04 232.41 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7214,6 +7482,9 @@
     (property "Datasheet" "" (at 66.04 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 66.04 237.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2266ac95-1a12-466e-99c4-66d714654be0))
     (instances
       (project "video"
@@ -7225,7 +7496,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 53.34 74.93 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a4)
     (property "Reference" "#+0148" (at 48.26 74.93 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7239,6 +7510,9 @@
     (property "Datasheet" "" (at 53.34 74.93 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 74.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 983bf5bc-27ad-42a7-88ab-454af0924c27))
     (instances
       (project "video"
@@ -7250,7 +7524,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 161.29 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a5)
     (property "Reference" "#+0149" (at 119.38 161.29 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7264,6 +7538,9 @@
     (property "Datasheet" "" (at 114.3 161.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 161.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e101fc00-2952-4b23-aab5-12d607ceae6e))
     (instances
       (project "video"
@@ -7275,7 +7552,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 125.73 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a6)
     (property "Reference" "#+0150" (at 119.38 125.73 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7289,6 +7566,9 @@
     (property "Datasheet" "" (at 114.3 125.73 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 125.73 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d64724c5-a6b2-4d55-82ff-f0ee5db2d4a4))
     (instances
       (project "video"
@@ -7300,7 +7580,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 110.49 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a7)
     (property "Reference" "#+0151" (at 119.38 110.49 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7314,6 +7594,9 @@
     (property "Datasheet" "" (at 114.3 110.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 110.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e4428e87-af6f-4348-bf87-5d97b7316017))
     (instances
       (project "video"
@@ -7325,7 +7608,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 114.3 95.25 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a8)
     (property "Reference" "#+0152" (at 119.38 95.25 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7339,6 +7622,9 @@
     (property "Datasheet" "" (at 114.3 95.25 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 95.25 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0f2b27af-1274-4084-82a7-0d55778e61f9))
     (instances
       (project "video"
@@ -7350,7 +7636,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 116.84 176.53 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036a9)
     (property "Reference" "#+0153" (at 121.92 176.53 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7364,6 +7650,9 @@
     (property "Datasheet" "" (at 116.84 176.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 116.84 176.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e2947120-15e2-412b-92e4-8692b32e1fa8))
     (instances
       (project "video"
@@ -7375,7 +7664,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 326.39 156.21 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036aa)
     (property "Reference" "#+0154" (at 326.39 151.13 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7389,6 +7678,9 @@
     (property "Datasheet" "" (at 326.39 156.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 326.39 156.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b8009bfe-9b62-4198-891a-22fef6e2f122))
     (instances
       (project "video"
@@ -7400,7 +7692,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 322.58 186.69 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036ab)
     (property "Reference" "#+0155" (at 322.58 181.61 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7414,6 +7706,9 @@
     (property "Datasheet" "" (at 322.58 186.69 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 322.58 186.69 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d7469a49-9d33-4986-8f8e-c086eca7df25))
     (instances
       (project "video"
@@ -7425,7 +7720,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 322.58 209.55 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036ac)
     (property "Reference" "#+0156" (at 322.58 204.47 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7439,6 +7734,9 @@
     (property "Datasheet" "" (at 322.58 209.55 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 322.58 209.55 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4f5a2340-ec2d-4690-ab41-6303622c2147))
     (instances
       (project "video"
@@ -7450,7 +7748,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 114.3 46.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036ad)
     (property "Reference" "#+0157" (at 114.3 41.91 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7464,6 +7762,9 @@
     (property "Datasheet" "" (at 114.3 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8eb789c4-6b53-48f2-a71d-56c829e2bf87))
     (instances
       (project "video"
@@ -7475,7 +7776,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 114.3 52.07 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036ae)
     (property "Reference" "#+0158" (at 114.3 46.99 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7489,6 +7790,9 @@
     (property "Datasheet" "" (at 114.3 52.07 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 52.07 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f860e22d-536e-435f-b63d-7e1db8b7a58b))
     (instances
       (project "video"
@@ -7500,7 +7804,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 114.3 67.31 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036af)
     (property "Reference" "#+0159" (at 119.38 67.31 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7514,6 +7818,9 @@
     (property "Datasheet" "" (at 114.3 67.31 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 67.31 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f97837cd-9984-4747-9fee-bde74dd0aa1b))
     (instances
       (project "video"
@@ -7525,7 +7832,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 124.46 38.1 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036b5)
     (property "Reference" "#+0130" (at 124.46 35.814 0)
       (effects (font (size 0.508 0.508)) hide)
@@ -7539,6 +7846,9 @@
     (property "Datasheet" "" (at 124.46 38.1 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 124.46 38.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f9f82009-c460-4c1d-8735-865dc595acf6))
     (instances
       (project "video"
@@ -7550,7 +7860,7 @@
   )
 
   (symbol (lib_id "video_schlib:+12V") (at 114.3 24.13 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036b6)
     (property "Reference" "#+0131" (at 114.3 19.05 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7564,6 +7874,9 @@
     (property "Datasheet" "" (at 114.3 24.13 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 24.13 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 26d587e3-1988-4af5-a694-28c8f78ee694))
     (instances
       (project "video"
@@ -7575,7 +7888,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 21.59 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036b7)
     (property "Reference" "#+0132" (at 355.6 16.51 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7589,6 +7902,9 @@
     (property "Datasheet" "" (at 355.6 21.59 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 21.59 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 624386ef-337a-434e-bf7d-805f560ee85e))
     (instances
       (project "video"
@@ -7600,7 +7916,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 46.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036b8)
     (property "Reference" "#+0133" (at 355.6 41.91 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7614,6 +7930,9 @@
     (property "Datasheet" "" (at 355.6 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a6109662-0ace-4185-bedb-1200bcc28d0a))
     (instances
       (project "video"
@@ -7625,7 +7944,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 72.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036b9)
     (property "Reference" "#+0134" (at 355.6 67.31 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7639,6 +7958,9 @@
     (property "Datasheet" "" (at 355.6 72.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 72.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7d94da70-a54c-48b9-99e2-b21a6040de5f))
     (instances
       (project "video"
@@ -7650,7 +7972,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 97.79 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036ba)
     (property "Reference" "#+0135" (at 355.6 92.71 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7664,6 +7986,9 @@
     (property "Datasheet" "" (at 355.6 97.79 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 97.79 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8eae1802-be9e-4a95-a20e-9378c3bd6966))
     (instances
       (project "video"
@@ -7675,7 +8000,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 123.19 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036bb)
     (property "Reference" "#+0136" (at 355.6 118.11 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7689,6 +8014,9 @@
     (property "Datasheet" "" (at 355.6 123.19 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 123.19 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0a855c0b-2688-41b5-87c7-aba9b6e98970))
     (instances
       (project "video"
@@ -7700,7 +8028,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 148.59 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036bc)
     (property "Reference" "#+0137" (at 355.6 143.51 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7714,6 +8042,9 @@
     (property "Datasheet" "" (at 355.6 148.59 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 148.59 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fc68f9c2-2249-4ea4-ab20-df257b8bddf4))
     (instances
       (project "video"
@@ -7725,7 +8056,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 173.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036bd)
     (property "Reference" "#+0138" (at 355.6 168.91 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7739,6 +8070,9 @@
     (property "Datasheet" "" (at 355.6 173.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0cbc0373-9dce-4769-b193-cf626a34e649))
     (instances
       (project "video"
@@ -7750,7 +8084,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 355.6 199.39 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036be)
     (property "Reference" "#+0139" (at 355.6 194.31 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7764,6 +8098,9 @@
     (property "Datasheet" "" (at 355.6 199.39 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 355.6 199.39 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c58df773-d66c-4774-af7b-4eb513ed8b16))
     (instances
       (project "video"
@@ -7775,7 +8112,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 90.17 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036bf)
     (property "Reference" "#+0140" (at 48.26 90.17 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7789,6 +8126,9 @@
     (property "Datasheet" "" (at 53.34 90.17 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 90.17 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 51d6cb3b-47ad-4d0b-878e-67580c89c099))
     (instances
       (project "video"
@@ -7800,7 +8140,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 105.41 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c0)
     (property "Reference" "#+0141" (at 48.26 105.41 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7814,6 +8154,9 @@
     (property "Datasheet" "" (at 53.34 105.41 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 105.41 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0e90bb07-1e8f-42af-9e41-a3bc1a3cc02f))
     (instances
       (project "video"
@@ -7825,7 +8168,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 118.11 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c1)
     (property "Reference" "#+0142" (at 48.26 118.11 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7839,6 +8182,9 @@
     (property "Datasheet" "" (at 53.34 118.11 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 118.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7fbeb9a0-7791-41b8-a01b-989c2732d5e4))
     (instances
       (project "video"
@@ -7850,7 +8196,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 130.81 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c2)
     (property "Reference" "#+0143" (at 48.26 130.81 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7864,6 +8210,9 @@
     (property "Datasheet" "" (at 53.34 130.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 130.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 79cf6236-d8c5-48a1-b644-35bb5eb00c4e))
     (instances
       (project "video"
@@ -7875,7 +8224,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 135.89 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c3)
     (property "Reference" "#+0144" (at 48.26 135.89 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7889,6 +8238,9 @@
     (property "Datasheet" "" (at 53.34 135.89 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 135.89 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6aecedb3-976f-4b24-9e22-802c5cab1619))
     (instances
       (project "video"
@@ -7900,7 +8252,7 @@
   )
 
   (symbol (lib_id "video_schlib:+3.3V") (at 53.34 163.83 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c4)
     (property "Reference" "#+0145" (at 48.26 163.83 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7914,6 +8266,9 @@
     (property "Datasheet" "" (at 53.34 163.83 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 163.83 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid bd0320ab-64f3-4ea3-a9ab-57253f0e1a7a))
     (instances
       (project "video"
@@ -7925,7 +8280,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 50.8 176.53 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c5)
     (property "Reference" "#+0146" (at 45.72 176.53 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7939,6 +8294,9 @@
     (property "Datasheet" "" (at 50.8 176.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 50.8 176.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid be8797c8-6b86-4c6f-b98d-8ca98aeb853b))
     (instances
       (project "video"
@@ -7950,7 +8308,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 53.34 41.91 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036c6)
     (property "Reference" "#+0147" (at 53.34 36.83 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -7964,6 +8322,9 @@
     (property "Datasheet" "" (at 53.34 41.91 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 53.34 41.91 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid dc4f8a07-a6cd-495b-af2e-df9a8460fe2f))
     (instances
       (project "video"
@@ -7975,7 +8336,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 26.67 274.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036cb)
     (property "Reference" "#GND083" (at 26.67 271.78 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -7989,6 +8350,9 @@
     (property "Datasheet" "" (at 26.67 274.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 26.67 274.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid da5325eb-d161-48a1-adbd-658c39c47db4))
     (instances
       (project "video"
@@ -8000,7 +8364,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 15.24 274.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036cc)
     (property "Reference" "#GND084" (at 15.24 271.78 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -8014,6 +8378,9 @@
     (property "Datasheet" "" (at 15.24 274.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 15.24 274.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 82b11e4e-8d8b-4c5b-b4be-34847b431e44))
     (instances
       (project "video"
@@ -8025,7 +8392,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 29.21 240.03 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036cd)
     (property "Reference" "#GND085" (at 29.21 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -8039,6 +8406,9 @@
     (property "Datasheet" "" (at 29.21 240.03 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 29.21 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 26117f89-6911-471a-b8c7-81829debc189))
     (instances
       (project "video"
@@ -8050,7 +8420,7 @@
   )
 
   (symbol (lib_id "video_schlib:CP") (at 15.24 266.7 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004bf036d8)
     (property "Reference" "C68" (at 16.51 264.16 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -8064,6 +8434,9 @@
     (property "Datasheet" "" (at 15.24 266.7 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 15.24 266.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d7c2419f-3b7f-47ad-9ce8-00fa9f7eb1d7))
     (pin "2" (uuid 018da4e3-badb-4047-9e1c-f343be154ce9))
     (instances
@@ -8076,7 +8449,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 146.05 256.54 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000054022e29)
     (property "Reference" "#PWR0160" (at 146.05 256.54 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -8090,6 +8463,9 @@
     (property "Datasheet" "" (at 146.05 256.54 0)
       (effects (font (size 1.524 1.524)))
     )
+    (property "Description" "" (at 146.05 256.54 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ede12f82-6672-4c12-8e45-d225aecc194d))
     (instances
       (project "video"
@@ -8101,7 +8477,7 @@
   )
 
   (symbol (lib_id "video_schlib:+5V") (at 146.05 228.6 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000054022ee0)
     (property "Reference" "#+0161" (at 146.05 223.52 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -8115,6 +8491,9 @@
     (property "Datasheet" "" (at 146.05 228.6 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 146.05 228.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d79ecba3-5602-449c-9575-8b07e82bee4b))
     (instances
       (project "video"
@@ -8126,7 +8505,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 185.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 0a10ddc9-f5b4-416b-a279-8bc56a0cde83)
     (property "Reference" "RR7" (at 365.76 171.45 0)
       (effects (font (size 1.778 1.778)))
@@ -8139,6 +8518,9 @@
     )
     (property "Datasheet" "" (at 364.49 185.42 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 185.42 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 1a50033f-f961-4587-912b-8cde0a16d157))
     (pin "2" (uuid c20ba3ea-d8cd-428a-8185-4332f9af2c53))
@@ -8159,7 +8541,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 160.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 0d72cb84-214a-4f55-b89c-8e802b018c38)
     (property "Reference" "RR6" (at 365.76 146.05 0)
       (effects (font (size 1.778 1.778)))
@@ -8172,6 +8554,9 @@
     )
     (property "Datasheet" "" (at 364.49 160.02 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 160.02 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 8919a9be-1054-458d-a762-3e7ee22c476a))
     (pin "2" (uuid c0792668-a37e-42da-8f5f-31f1ba59a3fd))
@@ -8192,7 +8577,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 109.22 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 1673ae86-8bfa-4306-b497-9562aac9aa0f)
     (property "Reference" "RR4" (at 365.76 95.25 0)
       (effects (font (size 1.778 1.778)))
@@ -8205,6 +8590,9 @@
     )
     (property "Datasheet" "" (at 364.49 109.22 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 109.22 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 2f75ae4e-da69-455a-ba57-a812840482f8))
     (pin "2" (uuid 82bc48ac-433b-4c1a-ab1d-cd19683f10fe))
@@ -8225,7 +8613,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 210.82 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 30c75539-e37c-4416-9a98-41fce74c0c4d)
     (property "Reference" "RR8" (at 365.76 196.85 0)
       (effects (font (size 1.778 1.778)))
@@ -8238,6 +8626,9 @@
     )
     (property "Datasheet" "" (at 364.49 210.82 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 210.82 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 5f5ebfbb-df10-4063-9868-4345198227dc))
     (pin "2" (uuid e3be0587-7bea-446e-b673-be2dc06c0898))
@@ -8258,7 +8649,7 @@
   )
 
   (symbol (lib_id "video_schlib:GND") (at 251.46 240.03 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 41053da6-3d48-4832-aad2-4f362515e304)
     (property "Reference" "#GND0118" (at 251.46 237.49 0)
       (effects (font (size 1.524 1.524)) hide)
@@ -8272,6 +8663,9 @@
     (property "Datasheet" "" (at 251.46 240.03 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 251.46 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7a7b7e00-735e-49d9-8ac4-afc44f1c05ae))
     (instances
       (project "video"
@@ -8283,7 +8677,7 @@
   )
 
   (symbol (lib_id "power:VCC") (at 232.41 19.05 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 4723e250-8a07-4f1d-8630-a26e6206b7e5)
     (property "Reference" "#PWR0101" (at 232.41 22.86 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -8297,6 +8691,9 @@
     (property "Datasheet" "" (at 232.41 19.05 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "Description" "Power symbol creates a global label with name \"VCC\"" (at 232.41 19.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 004b5285-33a0-42f6-9e29-3ccd9773b17f))
     (instances
       (project "video"
@@ -8308,7 +8705,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 83.82 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid ede1d0be-e5db-462b-a4aa-3ad732cce48c)
     (property "Reference" "RR3" (at 365.76 69.85 0)
       (effects (font (size 1.778 1.778)))
@@ -8321,6 +8718,9 @@
     )
     (property "Datasheet" "" (at 364.49 83.82 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 83.82 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid c5b819eb-9c1f-4f98-acc0-45d2eb3e6c93))
     (pin "2" (uuid 53898582-805d-4b17-a711-6f05f8bc1771))
@@ -8341,7 +8741,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 134.62 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid ee907db8-badf-4094-8694-56f7ba6be7c2)
     (property "Reference" "RR5" (at 365.76 120.65 0)
       (effects (font (size 1.778 1.778)))
@@ -8354,6 +8754,9 @@
     )
     (property "Datasheet" "" (at 364.49 134.62 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 134.62 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 27cf01d6-2720-4356-b756-f1bbe8ac9672))
     (pin "2" (uuid 25fc6df5-f3ad-4485-9757-16a5631e35f8))
@@ -8374,7 +8777,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 58.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid f05e8a3c-9074-468d-ab5a-80c65f0f8e4d)
     (property "Reference" "RR2" (at 365.76 44.45 0)
       (effects (font (size 1.778 1.778)))
@@ -8387,6 +8790,9 @@
     )
     (property "Datasheet" "" (at 364.49 58.42 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 9cefa608-f7ac-4946-bc19-e06d8205456b))
     (pin "2" (uuid c3cc4bb6-d555-4d33-8e7d-fae90ed24242))
@@ -8407,7 +8813,7 @@
   )
 
   (symbol (lib_id "video_schlib:RR8") (at 364.49 33.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid f8b56667-c397-4841-b68a-71337ea317d4)
     (property "Reference" "RR1" (at 365.76 19.05 0)
       (effects (font (size 1.778 1.778)))
@@ -8420,6 +8826,9 @@
     )
     (property "Datasheet" "" (at 364.49 33.02 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 364.49 33.02 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 4b538504-6082-4fe3-9f23-417b5de7b803))
     (pin "2" (uuid 7c570e69-9c00-468c-a04a-0c1d53e17ac1))

@@ -2370,8 +2370,8 @@
       (net 13 "GND") (pinfunction "P25") (pintype "passive")
       (tstamp 8f9d01df-9e28-4016-b3d6-582408c63e27)
     )
-    (model "${KICAD6_3DMODEL_DIR}/Connector_Dsub.3dshapes/DSUB-25_Female_Vertical_P2.77x2.84mm_MountingHoles.step"
-      (offset (xyz 17 -2.5 0.7))
+    (model "${KICAD6_3DMODEL_DIR}/Connector_Dsub.3dshapes/DSUB-25_Male_Vertical_P2.77x2.84mm_MountingHoles.step"
+      (offset (xyz -16.7 -2.54 0.7))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 0))
     )
