@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-10-24 10:00+0000\n"
+"PO-Revision-Date: 2023-11-10 23:33+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1.1-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -19532,9 +19532,8 @@ msgid "Lock file already exists"
 msgstr "파일 %s이(가) 이미 존재합니다."
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "회로도 파일을 로드하지 못했습니다.\n"
+msgstr "잠금 파일에 액세스 실패"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -21859,7 +21858,7 @@ msgid "Linear resistance:"
 msgstr "선형 저항:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "침투깊이 100%를 위한 주파수:"
 
@@ -26176,9 +26175,8 @@ msgid "Export STEP"
 msgstr "STEP 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "명령어:"
+msgstr "명령줄:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
