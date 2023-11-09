@@ -37,8 +37,8 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
     m_yOrigin( 0.0 ),
     // max dist to chain 2 items (lines or curves) to build the board outlines
     m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
-    m_exportTracks( false ),     // Extremely time consuming if true
-    m_exportZones( false ),      // Extremely time consuming if true
+    m_exportTracks( false ),     // Time consuming if true
+    m_exportZones( false ),      // Time consuming if true
     m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
     m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
     m_vrmlModelDir( wxEmptyString ),
