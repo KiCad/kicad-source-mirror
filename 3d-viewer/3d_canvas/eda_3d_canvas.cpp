@@ -637,6 +637,9 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 
 void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 {
+    if( m_3d_render && m_3d_render->IsReloadRequestPending() )
+        return; // Prevents using invalid m_3d_render_raytracing data
+
     if( m_camera_is_moving )
         return;
 
