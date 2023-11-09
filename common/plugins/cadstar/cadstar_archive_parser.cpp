@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -2421,20 +2421,28 @@ void CADSTAR_ARCHIVE_PARSER::PARTNAMECOL::Parse( XNODE* aNode, PARSER_CONTEXT* a
 
 void CADSTAR_ARCHIVE_PARSER::InsertAttributeAtEnd( XNODE* aNode, wxString aValue )
 {
-    wxString result;
-    int      numAttributes = 0;
+    static const wxString c_numAttributes = wxT( "numAttributes" );
 
-    if( aNode->GetAttribute( wxT( "numAttributes" ), &result ) )
+    wxString result;
+    long     numAttributes = 0;
+
+    if( aNode->GetAttribute( c_numAttributes, &result ) )
     {
-        numAttributes = wxAtoi( result );
-        aNode->DeleteAttribute( wxT( "numAttributes" ) );
+        numAttributes = wxAtol( result );
+        aNode->DeleteAttribute( c_numAttributes );
         ++numAttributes;
     }
 
-    aNode->AddAttribute( wxT( "numAttributes" ), wxString::Format( wxT( "%i" ), numAttributes ) );
+#if wxUSE_UNICODE_WCHAR
+    std::wstring numAttrStr = std::to_wstring( numAttributes );
+#else
+    std::string numAttrStr = std::to_string( numAttributes );
+#endif
+
+    aNode->AddAttribute( c_numAttributes, numAttrStr );
 
     wxString paramName = wxT( "attr" );
-    paramName << numAttributes;
+    paramName << numAttrStr;
 
     aNode->AddAttribute( paramName, aValue );
 }
@@ -2574,9 +2582,16 @@ bool CADSTAR_ARCHIVE_PARSER::IsValidAttribute( wxXmlAttribute* aAttribute )
 wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString( XNODE* aNode, unsigned int aID,
                                                           bool aIsRequired )
 {
-    wxString attrName, retVal;
-    attrName = "attr";
-    attrName << aID;
+#if wxUSE_UNICODE_WCHAR
+    std::wstring idStr = std::to_wstring( aID );
+#else
+    std::string idStr = std::to_string( aID );
+#endif
+
+    wxString attrName = wxS( "attr" );
+    attrName << idStr;
+
+    wxString retVal;
 
     if( !aNode->GetAttribute( attrName, &retVal ) )
     {
