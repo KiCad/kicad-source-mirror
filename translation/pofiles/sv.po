@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-09-21 15:08+0000\n"
+"PO-Revision-Date: 2023-11-10 23:33+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1690,7 +1690,7 @@ msgstr "Webbplats för utvecklare - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Official KiCad library repositories - "
-msgstr "Officiella arkiv för KiCad-bibliotek - "
+msgstr "Officiella mjukvaruförråd för KiCad-bibliotek - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Bug tracker"
@@ -20154,7 +20154,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Hantera nedladdningsbara paket från KiCad och 3:e parts repositories"
+msgstr "Hantera nedladdningsbara paket från KiCad och 3:e parts mjukvaruförråd"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -24747,7 +24747,7 @@ msgstr "Mönsterkortsinställningar"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:54
 msgid "Import Settings from Another Board..."
-msgstr "Importera inställningar från ett annat kort ..."
+msgstr "Importera inställningar från ett annat mönsterkort..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:77
 msgid "Board Stackup"
@@ -24795,7 +24795,7 @@ msgstr "Fördefinierade storlekar"
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
 #: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:2322
 msgid "Custom Rules"
-msgstr "Anpassade regler"
+msgstr "Användardefinierade regler"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:187
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -25270,7 +25270,7 @@ msgstr "Avfasning"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
 msgid "Fillet"
-msgstr "Filea"
+msgstr "Avrundning"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 msgid "Electrical Properties"
@@ -29613,7 +29613,7 @@ msgid ""
 "is violating the DRC rules."
 msgstr ""
 "(Endast i läge markera kollisioner) - tillåter att ledare skapas även om det "
-"bryter mot DRC-reglerna."
+"bryter mot designreglerna."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Suggest track finish"
@@ -29832,7 +29832,7 @@ msgstr "Områdets namn:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Ett unikt namn för detta regelområde för användning i DRC-regler"
+msgstr "Ett unikt namn för detta regelområde för användning i designregler"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
@@ -30580,7 +30580,7 @@ msgid ""
 msgstr ""
 "Minsta isolationsavstånd mellan kopparelement som inte hör till samma nät. "
 "Om angivet är detta ett absolut minimum som inte kan underskridas av "
-"nätklasser, anpassade regler, eller andra inställningar."
+"nätklasser, användardefinierade regler, eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -30592,7 +30592,8 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta ledarbredd. Om angiven är detta ett absolut minimum som inte kan "
-"underskridas av nätklasser, anpassade regler, eller andra inställningar."
+"underskridas av nätklasser, användardefinierade regler, eller andra "
+"inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 msgid "Minimum connection width:"
@@ -30612,7 +30613,8 @@ msgid ""
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta bredd för årsringar. Om angiven är detta ett absolut minimum som inte "
-"kan underskridas av nätklasser, anpassade regler, eller andra inställningar."
+"kan underskridas av nätklasser, användardefinierade regler, eller andra "
+"inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -30624,7 +30626,8 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta via-diameter. Om angiven är detta ett absolut minimum som inte kan "
-"underskridas av nätklasser, anpassade regler, eller andra inställningar."
+"underskridas av nätklasser, användardefinierade regler, eller andra "
+"inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
@@ -30637,8 +30640,8 @@ msgid ""
 "other settings."
 msgstr ""
 "Minsta frigång mellan ett hål och ett oförknippat kopparelement. Om angivet "
-"är detta ett absolut minimum som inte kan underskridas av anpassade regler "
-"eller andra inställningar."
+"är detta ett absolut minimum som inte kan underskridas av "
+"användardefinierade regler eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
@@ -30651,8 +30654,8 @@ msgid ""
 "settings."
 msgstr ""
 "Minsta frigång mellan mönsterkortets kant och kopparelement. Om angivet är "
-"detta ett absolut minimum som inte kan underskridas av anpassade regler "
-"eller andra inställningar."
+"detta ett absolut minimum som inte kan underskridas av användarderinierade "
+"regler eller andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -30668,8 +30671,8 @@ msgid ""
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
 "Minsta diameter för genomgående hål. Om angiven är detta ett absolut minimum "
-"som inte kan underskridas av nätklasser, anpassade regler eller andra "
-"inställningar."
+"som inte kan underskridas av nätklasser, användardefinierade regler eller "
+"andra inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
@@ -30682,7 +30685,7 @@ msgid ""
 "(Note: does not apply to milled holes.)"
 msgstr ""
 "Minsta frigång mellan två borrade hål. Om angivet är detta ett absolut "
-"minimum som inte kan underskridas av anpassade regler eller andra "
+"minimum som inte kan underskridas av användardefinierade regler eller andra "
 "inställningar. (Obs: detta gäller inte frästa hål.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
@@ -30699,7 +30702,7 @@ msgid ""
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Minsta diameter för mikrovior.  Om angiven är denna ett absolut minimum som "
-"inte kan underskridas av nätklasser, anpassade regler, eller andra "
+"inte kan underskridas av nätklasser, användardefinierade regler, eller andra "
 "inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
@@ -30711,8 +30714,8 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Minsta storlek för micro-vior. Om angiven är detta ett absolut minimum som "
-"inte kan underskridas av nätklasser, anpassade regler eller andra "
+"Minsta storlek för mikrovior. Om angiven är detta ett absolut minimum som "
+"inte kan underskridas av nätklasser, användardefinierade regler eller andra "
 "inställningar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
@@ -31532,7 +31535,7 @@ msgstr "Designregler kan inte läggas till utan ett projekt"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:22
 msgid "DRC rules:"
-msgstr "DRC-regler:"
+msgstr "Designregler:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:76
 msgid "Check rule syntax"
@@ -32695,7 +32698,7 @@ msgstr "Ledarens ända saknar anslutning"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "Brott mot hålröjning"
+msgstr "Otillräcklig frigång för hål"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -32715,7 +32718,7 @@ msgstr "Ledarbredd"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Annular width"
-msgstr "Ringformad bredd"
+msgstr "Kragbredd"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Drill out of range"
@@ -32739,19 +32742,19 @@ msgstr "Gårdsplanerna överlappar varandra"
 
 #: pcbnew/drc/drc_item.cpp:145
 msgid "Footprint has no courtyard defined"
-msgstr "Fotavtryck har ingen innergård definierad"
+msgstr "Fotavtryck har ingen gårdsplan definierad"
 
 #: pcbnew/drc/drc_item.cpp:149
 msgid "Footprint has malformed courtyard"
-msgstr "Fotavtrycket har missformat innergården"
+msgstr "Fotavtrycket har missformad gårdsplan"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "PTH inside courtyard"
-msgstr "PTH inne på gården"
+msgstr "Genompläterat hål inom gårdsplan"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "NPTH inside courtyard"
-msgstr "NPTH inne på gården"
+msgstr "Opläterat hål inom gårdsplan"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Item on a disabled copper layer"
@@ -32812,11 +32815,11 @@ msgstr "Överlappande anvisningstryck"
 
 #: pcbnew/drc/drc_item.cpp:221
 msgid "Text height out of range"
-msgstr "Texthöjd utanför intervall"
+msgstr "Texthöjd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:225
 msgid "Text thickness out of range"
-msgstr "Texttjocklek utanför intervall"
+msgstr "Texttjocklek utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:229
 msgid "Trace length out of range"
@@ -32824,7 +32827,7 @@ msgstr "Ledarlängd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Skew between traces out of range"
-msgstr "Skjuvning mellan ledare utanför intervall"
+msgstr "Längdskillnad mellan ledare utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Too many vias on a connection"
@@ -32832,7 +32835,7 @@ msgstr "För många vior på en anslutning"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Differential pair gap out of range"
-msgstr "Differentialparavstånd utanför intervallet"
+msgstr "Differentialpars isolationsavstånd utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Differential uncoupled length too long"
@@ -33079,7 +33082,7 @@ msgstr "(nät %s och %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
-msgstr "Kontrollerar innergårdens definitioner ..."
+msgstr "Kontrollerar fotavtrycks gårdsplaners definitioner..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:90
 msgid "Gathering footprint courtyards..."
@@ -33607,7 +33610,7 @@ msgstr "Otillräckliga behörigheter för att spara filen '%s'."
 #: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
 #, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr "Fel under sparning av fil för anpassade regler '%s'."
+msgstr "Fel när fil '%s' för användardefinierade regler sparades."
 
 #: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
 #, c-format
@@ -35184,7 +35187,7 @@ msgstr "Ändra designregler"
 
 #: pcbnew/pcb_edit_frame.cpp:2328
 msgid "Could not compile custom design rules."
-msgstr "Kunde inte kompilera anpassade designregler."
+msgstr "Kunde inte kompilera användardefinierade designregler."
 
 #: pcbnew/pcb_edit_frame.cpp:2366
 msgid "Export Hyperlynx Layout"
@@ -35215,7 +35218,7 @@ msgstr "Footprint gård är inte en enda, stängd form."
 
 #: pcbnew/pcb_expr_functions.cpp:459
 msgid "Footprint has no front courtyard."
-msgstr "Fotavtryck har ingen innergård."
+msgstr "Fotavtryck har ingen gårdsplan på framsidan."
 
 #: pcbnew/pcb_expr_functions.cpp:474
 msgid "Footprint has no back courtyard."
@@ -35359,7 +35362,7 @@ msgstr "Genom Via"
 #: pcbnew/pcb_track.cpp:956
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr "Min ringformad bredd: %s"
+msgstr "Minsta kragbredd: %s"
 
 #: pcbnew/pcb_track.cpp:972
 msgid "NetCode"
@@ -35955,7 +35958,7 @@ msgstr ""
 "inställning har ingen KiCad-ekvivalent, så den har ignorerats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
@@ -35975,7 +35978,7 @@ msgstr ""
 "så denna inställning ignorerades."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1904
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
 "Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not distinguish "
@@ -36154,6 +36157,7 @@ msgstr ""
 "har importerats för alla nät)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3998
+#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -36908,8 +36912,8 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Denna zon kan inte hanteras av spårlayoutverktyget.\n"
-"Kontrollera att det inte är en självkorsande polygon."
+"Denna zon kan inte hanteras av ledardragningsverktyget.\n"
+"Kontrollera att den inte är en självkorsande polygon."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1962 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
@@ -37950,7 +37954,7 @@ msgstr "Diameterbegränsningar: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1196
 msgid "Via Annular Width"
-msgstr "Via ringformad bredd"
+msgstr "Kragbredd för via"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1206
 #, c-format
@@ -38318,7 +38322,7 @@ msgstr "Klistra in lödytans egenskaper"
 
 #: pcbnew/tools/pad_tool.cpp:274
 msgid "Push Pad Settings"
-msgstr "Push Pad-inställningar"
+msgstr "Klona lödyteinställningar"
 
 #: pcbnew/tools/pad_tool.cpp:342
 #, c-format
@@ -40156,7 +40160,7 @@ msgstr "Fyll zon (er)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:139 pcbnew/tools/zone_filler_tool.cpp:226
 msgid "Show DRC rules"
-msgstr "Visa DRC-regler"
+msgstr "Visa designregler"
 
 #: pcbnew/tools/zone_filler_tool.cpp:146 pcbnew/tools/zone_filler_tool.cpp:233
 msgid "Rules"
@@ -40164,7 +40168,7 @@ msgstr "Regler"
 
 #: pcbnew/tools/zone_filler_tool.cpp:152 pcbnew/tools/zone_filler_tool.cpp:239
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
-msgstr "Zonfyllningar kan vara felaktiga. DRC-regler innehåller fel."
+msgstr "Zonfyllningar kan vara felaktiga. Designregler innehåller fel."
 
 #: pcbnew/tools/zone_filler_tool.cpp:250
 #, c-format
