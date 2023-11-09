@@ -332,18 +332,27 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
 
 void FP_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem )
 {
+    static const wxString c_previewName = wxS( "fpHoverPreview" );
+
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, /* void */ );
 
-    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
-    aParent->SetSizer( mainSizer );
+    FOOTPRINT_PREVIEW_PANEL* preview = dynamic_cast<FOOTPRINT_PREVIEW_PANEL*>(
+            wxWindow::FindWindowByName( c_previewName, aParent ) );
 
-    FOOTPRINT_PREVIEW_PANEL* preview = FOOTPRINT_PREVIEW_PANEL::New( &m_frame->Kiway(), aParent,
-                                                                     m_frame );
-    preview->GetGAL()->SetAxesEnabled( false );
+    if( !preview )
+    {
+        wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+        aParent->SetSizer( mainSizer );
 
-    mainSizer->Add( preview, 1, wxEXPAND|wxALL, 1 );
-    aParent->Layout();
+        preview = FOOTPRINT_PREVIEW_PANEL::New( &m_frame->Kiway(), aParent, m_frame );
+
+        preview->SetName( c_previewName );
+        preview->GetGAL()->SetAxesEnabled( false );
+
+        mainSizer->Add( preview, 1, wxEXPAND | wxALL, 1 );
+        aParent->Layout();
+    }
 
     preview->DisplayFootprint( node->m_LibId );
 }

@@ -378,29 +378,38 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem 
 }
 
 
-void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem )
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow*             aParent,
+                                                     const wxDataViewItem& aItem )
 {
+    static const wxString c_previewName = wxS( "symHoverPreview" );
+
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, /* void */ );
 
-    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
-    aParent->SetSizer( mainSizer );
+    SYMBOL_PREVIEW_WIDGET* preview = dynamic_cast<SYMBOL_PREVIEW_WIDGET*>(
+            wxWindow::FindWindowByName( c_previewName, aParent ) );
 
-    WX_PANEL* panel = new WX_PANEL( aParent );
-    panel->SetBorders( true, true, true, true );
-    panel->SetBorderColor( KIGFX::COLOR4D::BLACK );
+    if( !preview )
+    {
+        wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+        aParent->SetSizer( mainSizer );
 
-    wxBoxSizer* panelSizer = new wxBoxSizer( wxVERTICAL );
-    panel->SetSizer( panelSizer );
+        WX_PANEL* panel = new WX_PANEL( aParent );
+        panel->SetBorders( true, true, true, true );
+        panel->SetBorderColor( KIGFX::COLOR4D::BLACK );
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_frame->GetCanvas()->GetBackend();
-    SYMBOL_PREVIEW_WIDGET*       preview = new SYMBOL_PREVIEW_WIDGET( panel, &m_frame->Kiway(),
-                                                                      false, backend );
-    preview->SetLayoutDirection( wxLayout_LeftToRight );
+        wxBoxSizer* panelSizer = new wxBoxSizer( wxVERTICAL );
+        panel->SetSizer( panelSizer );
 
-    panelSizer->Add( preview, 1, wxEXPAND|wxALL, 1 );
-    mainSizer->Add( panel, 1, wxEXPAND, 0 );
-    aParent->Layout();
+        EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_frame->GetCanvas()->GetBackend();
+        preview = new SYMBOL_PREVIEW_WIDGET( panel, &m_frame->Kiway(), false, backend );
+        preview->SetName( c_previewName );
+        preview->SetLayoutDirection( wxLayout_LeftToRight );
+
+        panelSizer->Add( preview, 1, wxEXPAND | wxALL, 1 );
+        mainSizer->Add( panel, 1, wxEXPAND, 0 );
+        aParent->Layout();
+    }
 
     preview->DisplaySymbol( node->m_LibId, node->m_Unit );
 }

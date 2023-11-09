@@ -208,6 +208,7 @@ protected:
 
     void showPreview( wxDataViewItem aItem );
     void hidePreview();
+    void destroyPreview();
 
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );

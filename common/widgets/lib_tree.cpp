@@ -254,7 +254,7 @@ LIB_TREE::~LIB_TREE()
         m_details_ctrl->Unbind( wxEVT_HTML_LINK_CLICKED, &LIB_TREE::onDetailsLink, this );
 
     m_hoverTimer.Stop();
-    hidePreview();
+    destroyPreview();
 }
 
 
@@ -643,16 +643,19 @@ void LIB_TREE::showPreview( wxDataViewItem aItem )
 
         wxWindow* topLevelParent = wxGetTopLevelParent( m_parent );
 
-        m_previewWindow = new wxPopupWindow( topLevelParent );
-        m_previewWindow->SetPosition( wxPoint( m_tree_ctrl->GetScreenRect().GetRight() - 10,
-                                               wxGetMousePosition().y - PREVIEW_SIZE.y / 2 ) );
+        if( !m_previewWindow )
+            m_previewWindow = new wxPopupWindow( topLevelParent );
+
+        bool wasShown = m_previewWindow->IsShown();
+
         m_previewWindow->SetSize( PREVIEW_SIZE );
 
-        m_previewWindow->Freeze();
-        m_previewWindow->Show();
-
         m_adapter->ShowPreview( m_previewWindow, aItem );
-        m_previewWindow->Thaw();
+
+        m_previewWindow->SetPosition( wxPoint( m_tree_ctrl->GetScreenRect().GetRight() - 10,
+                                               wxGetMousePosition().y - PREVIEW_SIZE.y / 2 ) );
+
+        m_previewWindow->Show();
     }
 }
 
@@ -664,6 +667,16 @@ void LIB_TREE::hidePreview()
     if( m_previewWindow )
     {
         m_previewWindow->Hide();
+    }
+}
+
+
+void LIB_TREE::destroyPreview()
+{
+    hidePreview();
+
+    if( m_previewWindow )
+    {
         m_previewWindow->Destroy();
         m_previewWindow = nullptr;
     }
@@ -686,9 +699,6 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
 
     if( m_tree_ctrl->IsShownOnScreen() )
         mouseOverWindow |= m_tree_ctrl->GetScreenRect().Contains( screenPos );
-
-    if( m_previewWindow && m_previewWindow->IsShownOnScreen() )
-        mouseOverWindow |= m_previewWindow->GetScreenRect().Contains( screenPos );
 
     if( m_previewDisabled || topLevelFocus != topLevelParent || !mouseOverWindow )
     {
@@ -718,10 +728,7 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
         }
 
         if( item != m_previewItem )
-        {
-            hidePreview();
             showPreview( item );
-        }
 
         return;
     }
