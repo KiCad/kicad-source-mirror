@@ -27,6 +27,7 @@
 #include <advanced_config.h>
 #include <limits>
 #include <kiplatform/ui.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -1733,6 +1734,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     VECTOR2I  refPt = selection.GetReferencePoint();
     EDA_ANGLE rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
+
+    if( frame()->GetCanvas()->GetView()->GetGAL()->IsFlippedX() )
+        rotateAngle = -rotateAngle;
 
     // Calculate view bounding box
     BOX2I viewBBox = selection.Front()->ViewBBox();
