@@ -55,8 +55,6 @@ private:
 
     bool getSelectedItem( wxListCtrl* aList, wxListItem& aInfo );
 
-    void updateButtons();
-
     std::vector<wxString> m_availableItems;
     std::vector<wxString> m_enabledItems;
 

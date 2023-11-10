@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/std_bitmap_button.h"
 
 #include "eda_reorderable_list_dialog_base.h"
 
@@ -11,7 +13,7 @@
 
 EDA_REORDERABLE_LIST_DIALOG_BASE::EDA_REORDERABLE_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( 320,220 ), wxDefaultSize );
 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -19,63 +21,71 @@ EDA_REORDERABLE_LIST_DIALOG_BASE::EDA_REORDERABLE_LIST_DIALOG_BASE( wxWindow* pa
 	wxBoxSizer* bTop;
 	bTop = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bLeftSide;
-	bLeftSide = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizer1->AddGrowableCol( 0 );
+	fgSizer1->AddGrowableCol( 2 );
+	fgSizer1->AddGrowableRow( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_availableListLabel = new wxStaticText( this, wxID_ANY, _("Available:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_availableListLabel->Wrap( -1 );
-	bLeftSide->Add( m_availableListLabel, 0, wxALL, 5 );
-
-	m_availableListBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES|wxBORDER_SIMPLE|wxVSCROLL );
-	m_availableListBox->SetMinSize( wxSize( 280,150 ) );
-
-	bLeftSide->Add( m_availableListBox, 0, wxALL, 5 );
+	fgSizer1->Add( m_availableListLabel, 0, 0, 5 );
 
 
-	bTop->Add( bLeftSide, 1, wxEXPAND, 5 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_enabledListLabel = new wxStaticText( this, wxID_ANY, _("Enabled:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_enabledListLabel->Wrap( -1 );
+	fgSizer1->Add( m_enabledListLabel, 0, 0, 5 );
+
+	m_availableListBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxBORDER_SIMPLE|wxVSCROLL );
+	m_availableListBox->SetMinSize( wxSize( 140,20 ) );
+
+	fgSizer1->Add( m_availableListBox, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bMiddleButtons;
 	bMiddleButtons = new wxBoxSizer( wxVERTICAL );
 
-	m_btnAdd = new wxButton( this, wxID_ANY, _(">>"), wxDefaultPosition, wxSize( 48,-1 ), 0 );
-	bMiddleButtons->Add( m_btnAdd, 0, wxALL, 5 );
+	m_btnAdd = new wxButton( this, wxID_ANY, _(">"), wxDefaultPosition, wxSize( 24,24 ), 0 );
+	bMiddleButtons->Add( m_btnAdd, 0, wxBOTTOM, 10 );
 
-	m_btnRemove = new wxButton( this, wxID_ANY, _("<<"), wxDefaultPosition, wxSize( 48,-1 ), 0 );
-	bMiddleButtons->Add( m_btnRemove, 0, wxALL, 5 );
+	m_btnRemove = new wxButton( this, wxID_ANY, _("<"), wxDefaultPosition, wxSize( 24,24 ), 0 );
+	bMiddleButtons->Add( m_btnRemove, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL, 20 );
 
 
-	bTop->Add( bMiddleButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( bMiddleButtons, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
-	wxBoxSizer* bRightSide;
-	bRightSide = new wxBoxSizer( wxVERTICAL );
+	m_enabledListBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxBORDER_SIMPLE|wxVSCROLL );
+	m_enabledListBox->SetMinSize( wxSize( 140,20 ) );
 
-	m_enabledListLabel = new wxStaticText( this, wxID_ANY, _("Enabled:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_enabledListLabel->Wrap( -1 );
-	bRightSide->Add( m_enabledListLabel, 0, wxALL, 5 );
+	fgSizer1->Add( m_enabledListBox, 3, wxEXPAND, 5 );
 
-	m_enabledListBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES|wxBORDER_SIMPLE|wxVSCROLL );
-	m_enabledListBox->SetMinSize( wxSize( 280,150 ) );
 
-	bRightSide->Add( m_enabledListBox, 3, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btnUp = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnUp = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnUp->SetToolTip( _("Move up") );
 
-	bSizer4->Add( m_btnUp, 0, wxALL, 5 );
+	bSizer4->Add( m_btnUp, 0, 0, 5 );
 
-	m_btnDown = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_btnDown = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnDown->SetToolTip( _("Move down") );
 
-	bSizer4->Add( m_btnDown, 0, wxALL, 5 );
+	bSizer4->Add( m_btnDown, 0, wxLEFT, 5 );
 
 
-	bRightSide->Add( bSizer4, 1, wxEXPAND, 5 );
+	fgSizer1->Add( bSizer4, 0, wxEXPAND, 5 );
 
 
-	bTop->Add( bRightSide, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bTop->Add( fgSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	bSizerMain->Add( bTop, 1, wxEXPAND, 5 );
@@ -97,7 +107,6 @@ EDA_REORDERABLE_LIST_DIALOG_BASE::EDA_REORDERABLE_LIST_DIALOG_BASE( wxWindow* pa
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

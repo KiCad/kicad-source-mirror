@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,6 +21,7 @@
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <dialogs/eda_reorderable_list_dialog.h>
+#include <widgets/std_bitmap_button.h>
 
 
 static int DEFAULT_SINGLE_COL_WIDTH = 260;
@@ -122,7 +123,10 @@ void EDA_REORDERABLE_LIST_DIALOG::onAddItem( wxCommandEvent& aEvent )
     wxListItem info;
 
     if( !getSelectedItem( m_availableListBox, info ) )
+    {
+        wxBell();
         return;
+    }
 
     m_availableItems.erase( m_availableItems.begin() + info.m_itemId );
     m_availableListBox->DeleteItem( m_selectedAvailable );
@@ -134,8 +138,6 @@ void EDA_REORDERABLE_LIST_DIALOG::onAddItem( wxCommandEvent& aEvent )
 
     m_enabledItems.insert( m_enabledItems.begin() + pos, info.m_text );
     m_enabledListBox->InsertItem( info );
-
-    updateButtons();
 }
 
 
@@ -144,7 +146,10 @@ void EDA_REORDERABLE_LIST_DIALOG::onRemoveItem( wxCommandEvent& aEvent )
     wxListItem info;
 
     if( !getSelectedItem( m_enabledListBox, info ) || info.m_itemId == 0 )
+    {
+        wxBell();
         return;
+    }
 
     m_enabledItems.erase( m_enabledItems.begin() + info.m_itemId );
     m_enabledListBox->DeleteItem( m_selectedEnabled );
@@ -160,8 +165,6 @@ void EDA_REORDERABLE_LIST_DIALOG::onRemoveItem( wxCommandEvent& aEvent )
 
     m_availableItems.insert( m_availableItems.begin() + pos, info.m_text );
     m_availableListBox->InsertItem( info );
-
-    updateButtons();
 }
 
 
@@ -170,7 +173,10 @@ void EDA_REORDERABLE_LIST_DIALOG::onMoveUp( wxCommandEvent& aEvent )
     wxListItem info;
 
     if( !getSelectedItem( m_enabledListBox, info ) || info.m_itemId == 0 )
+    {
+        wxBell();
         return;
+    }
 
     auto current = m_enabledItems.begin() + info.m_itemId;
     auto prev    = m_enabledItems.begin() + info.m_itemId - 1;
@@ -179,7 +185,6 @@ void EDA_REORDERABLE_LIST_DIALOG::onMoveUp( wxCommandEvent& aEvent )
 
     m_selectedEnabled--;
 
-    updateButtons();
     updateItems();
 }
 
@@ -191,6 +196,7 @@ void EDA_REORDERABLE_LIST_DIALOG::onMoveDown( wxCommandEvent& aEvent )
     if( !getSelectedItem( m_enabledListBox, info )
         || info.m_itemId == static_cast<long>( m_enabledItems.size() ) - 1 )
     {
+        wxBell();
         return;
     }
 
@@ -201,7 +207,6 @@ void EDA_REORDERABLE_LIST_DIALOG::onMoveDown( wxCommandEvent& aEvent )
 
     m_selectedEnabled++;
 
-    updateButtons();
     updateItems();
 }
 
@@ -235,7 +240,6 @@ void EDA_REORDERABLE_LIST_DIALOG::onEnabledListItemSelected( wxListEvent& event 
     }
 
     m_selectedEnabled = info.m_itemId;
-    updateButtons();
 }
 
 
@@ -250,15 +254,5 @@ void EDA_REORDERABLE_LIST_DIALOG::onAvailableListItemSelected( wxListEvent& even
     }
 
     m_selectedAvailable = info.m_itemId;
-    updateButtons();
 }
 
-
-void EDA_REORDERABLE_LIST_DIALOG::updateButtons()
-{
-    m_btnUp->Enable( !m_enabledItems.empty() && m_selectedEnabled > 0 );
-    m_btnDown->Enable( !m_enabledItems.empty() && m_selectedEnabled > 0 &&
-                       m_selectedEnabled < static_cast<int>( m_enabledItems.size() ) - 1 );
-    m_btnAdd->Enable( !m_availableItems.empty() && m_selectedAvailable >= 0 );
-    m_btnRemove->Enable( !m_enabledItems.empty() && m_selectedEnabled > 0 );
-}

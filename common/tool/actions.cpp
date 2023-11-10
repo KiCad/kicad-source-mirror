@@ -748,7 +748,7 @@ TOOL_ACTION ACTIONS::updatePreferences( TOOL_ACTION_ARGS()
 TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
         .Name( "common.Control.selectColumns" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Select Columns" ) ) );
+        .FriendlyName( _( "Select Columns..." ) ) );
 
 TOOL_ACTION ACTIONS::toggleUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.toggleUnits" )
