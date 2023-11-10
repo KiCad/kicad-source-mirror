@@ -1,4 +1,4 @@
-(kicad_sch (version 20230409) (generator eeschema)
+(kicad_sch (version 20230819) (generator eeschema)
 
   (uuid 5972e2f7-2ae5-4e2b-9014-46961391c60b)
 
@@ -11,7 +11,7 @@
   )
 
   (lib_symbols
-    (symbol "kit-coldfire_schlib:+3.3V" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:+3.3V" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 -1.016 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -23,6 +23,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "+3.3V_0_0"
         (pin power_in line (at 0 0 90) (length 0) hide
@@ -46,7 +49,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:74LS125" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:74LS125" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)) (justify left bottom))
       )
@@ -58,6 +61,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "74LS125_0_0"
         (pin power_in line (at -3.81 3.81 270) (length 0) hide
@@ -146,7 +152,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 0 2.54 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -158,6 +164,9 @@
       )
       (property "Datasheet" "" (at 0 2.54 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "SM* C? C1-1" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -191,7 +200,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CONN_1" (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CONN_1" (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 2.032 0 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -203,6 +212,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_1_0_1"
         (circle (center 0 0) (radius 0.7874)
@@ -217,7 +229,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CONN_2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CONN_2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at -1.27 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -229,6 +241,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_2_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
@@ -247,7 +262,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CONN_2X2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CONN_2X2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 0 3.81 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -259,6 +274,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_2X2_0_1"
         (rectangle (start -2.54 2.54) (end 2.54 -2.54)
@@ -285,7 +303,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CONN_3" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CONN_3" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "K" (at -1.27 0 90)
         (effects (font (size 1.27 1.27)))
       )
@@ -297,6 +315,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_3_0_1"
         (rectangle (start -2.54 3.81) (end 2.54 -3.81)
@@ -319,7 +340,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CONN_30X2" (pin_names (offset 0.254) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CONN_30X2" (pin_names (offset 0.254) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 0 39.37 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -331,6 +352,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_30X2_0_1"
         (rectangle (start -2.54 38.1) (end 2.54 -38.1)
@@ -581,7 +605,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CONN_4X2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CONN_4X2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "P" (at 0 6.35 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -593,6 +617,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "CONN_4X2_0_1"
         (rectangle (start -2.54 5.08) (end 2.54 -5.08)
@@ -635,7 +662,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "C" (at 1.27 2.54 0)
         (effects (font (size 1.016 1.016)) (justify left))
       )
@@ -647,6 +674,9 @@
       )
       (property "Datasheet" "" (at 1.27 2.54 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "CP* SM*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -678,7 +708,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:DB9" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:DB9" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at 0 13.97 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -690,6 +720,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "DB9*" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -939,7 +972,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:DIODE" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:DIODE" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -952,10 +985,10 @@
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_keywords" "diode" (at 0 0 0)
+      (property "Description" "Diode, alternativ symbol" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
-      (property "ki_description" "Diode, alternativ symbol" (at 0 0 0)
+      (property "ki_keywords" "diode" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "TO-???* *SingleDiode *_Diode_* *SingleDiode* D_*" (at 0 0 0)
@@ -1000,7 +1033,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:FUSE" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:FUSE" (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "F" (at 2.54 1.27 0)
         (effects (font (size 1.016 1.016)))
       )
@@ -1012,6 +1045,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "FUSE_0_1"
         (arc (start 0 0) (mid -1.905 1.8967) (end -3.81 0)
@@ -1034,7 +1070,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:GND" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 0.762 0.762)) hide)
       )
@@ -1046,6 +1082,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GND_0_1"
         (polyline
@@ -1066,7 +1105,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:GNDA" (power) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:GNDA" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "#PWR" (at 0 0 0)
         (effects (font (size 1.016 1.016)) hide)
       )
@@ -1078,6 +1117,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "GNDA_0_1"
         (polyline
@@ -1098,7 +1140,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:JACK_2P" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:JACK_2P" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at -8.89 -5.08 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1110,6 +1152,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "JACK_2P_0_1"
         (rectangle (start -11.43 3.81) (end -10.16 -2.54)
@@ -1196,7 +1241,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:JUMPER" (pin_names (offset 0.762) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:JUMPER" (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "JP" (at 0 3.81 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1208,6 +1253,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "JUMPER_0_1"
         (circle (center -2.54 0) (radius 0.889)
@@ -1232,7 +1280,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:LED" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:LED" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "D" (at 0 2.54 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -1244,6 +1292,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "LED-3MM LED-5MM LED-10MM LED-0603 LED-0805 LED-1206 LEDV" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1296,7 +1347,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:LT1129_QPACK" (pin_names (offset 0.762)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:LT1129_QPACK" (pin_names (offset 0.762)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 6.35 11.43 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1308,6 +1359,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "LT1129_QPACK_0_1"
         (rectangle (start -12.7 -10.16) (end 12.7 10.16)
@@ -1338,7 +1392,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:MAX202" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:MAX202" (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 0 21.59 0)
         (effects (font (size 1.778 1.778)))
       )
@@ -1350,6 +1404,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "MAX202_0_0"
         (text "RS232" (at 2.032 -13.462 900)
@@ -1450,7 +1507,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:PCA82C251" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:PCA82C251" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at 3.81 11.43 0)
         (effects (font (size 1.524 1.524)))
       )
@@ -1462,6 +1519,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "PCA82C251_0_1"
         (rectangle (start -5.08 10.16) (end 5.08 -7.62)
@@ -1608,7 +1668,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "R" (at 2.032 0 90)
         (effects (font (size 1.016 1.016)))
       )
@@ -1620,6 +1680,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 0.762 0.762)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (property "ki_fp_filters" "R? SM0603 SM0805 R?-* SM1206" (at 0 0 0)
         (effects (font (size 1.27 1.27)) hide)
@@ -1641,7 +1704,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:SWITCH_INV" (pin_numbers hide) (pin_names (offset 0)) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:SWITCH_INV" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "SW" (at -5.08 3.81 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -1653,6 +1716,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "SWITCH_INV_0_0"
         (circle (center -3.81 0) (radius 1.27)
@@ -1693,7 +1759,7 @@
         )
       )
     )
-    (symbol "kit-coldfire_schlib:SW_PUSH" (pin_numbers hide) (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
+    (symbol "kit-coldfire_schlib:SW_PUSH" (pin_numbers hide) (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
       (property "Reference" "SW" (at 3.81 2.794 0)
         (effects (font (size 1.27 1.27)))
       )
@@ -1705,6 +1771,9 @@
       )
       (property "Datasheet" "" (at 0 0 0)
         (effects (font (size 1.524 1.524)))
+      )
+      (property "Description" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
       )
       (symbol "SW_PUSH_0_1"
         (rectangle (start -4.318 1.27) (end 4.318 1.524)
@@ -3735,7 +3804,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_30X2") (at 332.74 74.93 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a4fb)
     (property "Reference" "MCU_PORT201" (at 332.74 115.57 0)
       (effects (font (size 1.524 1.524)))
@@ -3748,6 +3817,9 @@
     )
     (property "Datasheet" "" (at 332.74 74.93 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 332.74 74.93 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid c59f6343-8073-4abd-af27-e6d5aea98253))
     (pin "10" (uuid 5f3dd6c9-f7e3-49ff-a18f-874502d4b9dc))
@@ -3819,7 +3891,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 344.17 104.14 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a67a)
     (property "Reference" "#PWR0218" (at 344.17 104.14 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3833,6 +3905,9 @@
     (property "Datasheet" "" (at 344.17 104.14 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 344.17 104.14 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 083022e5-e14d-42f0-b949-7906b95dd2b2))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -3844,7 +3919,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 321.31 111.76 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a6b1)
     (property "Reference" "#PWR0222" (at 322.326 111.76 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3858,6 +3933,9 @@
     (property "Datasheet" "" (at 321.31 111.76 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 321.31 111.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 99fca30b-0554-46aa-9646-6a746bde26ae))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -3869,7 +3947,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GNDA") (at 344.17 106.68 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a71a)
     (property "Reference" "#PWR0219" (at 344.17 106.68 0)
       (effects (font (size 1.016 1.016)) hide)
@@ -3883,6 +3961,9 @@
     (property "Datasheet" "" (at 344.17 106.68 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 344.17 106.68 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0ff1fd88-0ac8-4fa5-a329-3d6bc41c3401))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -3894,7 +3975,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 322.58 40.64 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a9b5)
     (property "Reference" "#PWR0206" (at 322.58 40.64 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3908,6 +3989,9 @@
     (property "Datasheet" "" (at 322.58 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 322.58 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1c1192ed-3975-4e83-8409-effbd59f3faa))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -3919,7 +4003,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:JUMPER") (at 312.42 30.48 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a9c4)
     (property "Reference" "VX_EN201" (at 312.42 26.67 0)
       (effects (font (size 1.524 1.524)))
@@ -3933,6 +4017,9 @@
     (property "Datasheet" "" (at 312.42 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0e579fd0-6ec3-426d-a09a-7baecb6dc38a))
     (pin "2" (uuid ff16966b-b95f-49af-ac36-cb9e5d19ccae))
     (instances
@@ -3945,7 +4032,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 331.47 30.48 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a9d3)
     (property "Reference" "C201" (at 331.47 24.13 90)
       (effects (font (size 1.27 1.27)))
@@ -3959,6 +4046,9 @@
     (property "Datasheet" "" (at 331.47 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 331.47 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid aaf00a86-1522-4036-8d81-2d7bf36dc2fe))
     (pin "2" (uuid 12c63eea-0298-4899-ab8f-22c78aa16a8a))
     (instances
@@ -3971,7 +4061,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 337.82 30.48 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a9eb)
     (property "Reference" "#PWR0202" (at 337.82 30.48 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -3985,6 +4075,9 @@
     (property "Datasheet" "" (at 337.82 30.48 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 337.82 30.48 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d313653a-da2b-442c-9f1e-c6986a494847))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -3996,7 +4089,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 302.26 29.21 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652a9f1)
     (property "Reference" "#PWR0201" (at 302.26 30.226 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4010,6 +4103,9 @@
     (property "Datasheet" "" (at 302.26 29.21 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 302.26 29.21 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 09f9f802-9d6b-499c-834c-55a8679aeffb))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4021,7 +4117,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:74LS125") (at 199.39 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b019)
     (property "Reference" "U201" (at 199.39 48.26 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -4034,6 +4130,9 @@
     )
     (property "Datasheet" "" (at 199.39 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 199.39 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 467f0b5a-f189-4fd5-8dc5-74078d1e60ff))
     (pin "7" (uuid 123d1943-6f4f-4920-a20f-fd224f483fbd))
@@ -4059,7 +4158,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:74LS125") (at 199.39 64.77 0) (unit 2)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b02e)
     (property "Reference" "U201" (at 199.39 62.23 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -4072,6 +4171,9 @@
     )
     (property "Datasheet" "" (at 199.39 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 199.39 64.77 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 4e247a0f-f643-4c55-a70c-d532176bd278))
     (pin "7" (uuid 516d0894-eb16-4413-940c-20476cb3610e))
@@ -4097,7 +4199,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:74LS125") (at 199.39 92.71 0) (unit 3)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b035)
     (property "Reference" "U201" (at 199.39 90.17 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -4110,6 +4212,9 @@
     )
     (property "Datasheet" "" (at 199.39 92.71 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 199.39 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid be342e59-38e7-4f9b-8a9a-03b72fca63cb))
     (pin "7" (uuid 7af739ed-02dd-49ea-ae92-6eea5a62fda7))
@@ -4135,7 +4240,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:74LS125") (at 199.39 78.74 0) (unit 4)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b03e)
     (property "Reference" "U201" (at 199.39 76.2 0)
       (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -4148,6 +4253,9 @@
     )
     (property "Datasheet" "" (at 199.39 78.74 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 199.39 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "14" (uuid 025480f4-ff28-4ab8-be24-122bf188c90f))
     (pin "7" (uuid 54171de3-89d2-4029-804f-47cde6ec3e59))
@@ -4173,7 +4281,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 217.17 50.8 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b061)
     (property "Reference" "R202" (at 217.17 52.832 90)
       (effects (font (size 1.27 1.27)))
@@ -4187,6 +4295,9 @@
     (property "Datasheet" "" (at 217.17 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 217.17 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 178b740c-6756-43dc-b7f6-b8095cad2167))
     (pin "2" (uuid eaa71ab9-fb60-49c0-9aae-dd41261a6fee))
     (instances
@@ -4199,7 +4310,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 217.17 64.77 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b067)
     (property "Reference" "R203" (at 217.17 66.802 90)
       (effects (font (size 1.27 1.27)))
@@ -4213,6 +4324,9 @@
     (property "Datasheet" "" (at 217.17 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 217.17 64.77 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid dc2fc53d-ac09-4b3a-9d65-848f60e57dd1))
     (pin "2" (uuid 06960203-9f3e-479a-b825-0afdc0e1445e))
     (instances
@@ -4225,7 +4339,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 217.17 78.74 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b069)
     (property "Reference" "R204" (at 217.17 80.772 90)
       (effects (font (size 1.27 1.27)))
@@ -4239,6 +4353,9 @@
     (property "Datasheet" "" (at 217.17 78.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 217.17 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 76048ea9-5e9a-4b0f-be1d-72f9fa22bf9e))
     (pin "2" (uuid f641424e-44c8-489d-b5d0-22575e00ab23))
     (instances
@@ -4251,7 +4368,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 217.17 92.71 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b06a)
     (property "Reference" "R206" (at 217.17 94.742 90)
       (effects (font (size 1.27 1.27)))
@@ -4265,6 +4382,9 @@
     (property "Datasheet" "" (at 217.17 92.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 217.17 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b298c625-9952-490c-b67a-420ab5e332aa))
     (pin "2" (uuid fdd5644b-d675-4487-aec2-69c1647eabbe))
     (instances
@@ -4277,7 +4397,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:LED") (at 228.6 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b0ae)
     (property "Reference" "LED201" (at 228.6 48.26 0)
       (effects (font (size 1.27 1.27)))
@@ -4291,6 +4411,9 @@
     (property "Datasheet" "" (at 228.6 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 228.6 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3843fb0d-7219-4916-b382-2df53a405544))
     (pin "2" (uuid 4d28cc62-c038-43c8-b8b3-878826adc18d))
     (instances
@@ -4303,7 +4426,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:LED") (at 228.6 64.77 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b0b7)
     (property "Reference" "LED202" (at 228.6 62.23 0)
       (effects (font (size 1.27 1.27)))
@@ -4317,6 +4440,9 @@
     (property "Datasheet" "" (at 228.6 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 228.6 64.77 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1aef5642-5f21-4b2a-8b4e-d486ef47ac01))
     (pin "2" (uuid 6c6f6ef9-c1fa-4f4b-ba61-c22283633af0))
     (instances
@@ -4329,7 +4455,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:LED") (at 228.6 78.74 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b0bb)
     (property "Reference" "LED203" (at 228.6 76.2 0)
       (effects (font (size 1.27 1.27)))
@@ -4343,6 +4469,9 @@
     (property "Datasheet" "" (at 228.6 78.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 228.6 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6cfed7ce-23b4-4a93-bb82-54a3960266e4))
     (pin "2" (uuid 73ac6609-ad4e-4461-a994-a1cf048a8714))
     (instances
@@ -4355,7 +4484,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:LED") (at 228.6 92.71 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b0bc)
     (property "Reference" "LED204" (at 228.6 90.17 0)
       (effects (font (size 1.27 1.27)))
@@ -4369,6 +4498,9 @@
     (property "Datasheet" "" (at 228.6 92.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 228.6 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid de9d9742-a58e-4750-ad2e-76e354594ea1))
     (pin "2" (uuid 5a3b9246-f0c0-4d89-a977-0edffe29ebb3))
     (instances
@@ -4381,7 +4513,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:JUMPER") (at 180.34 100.33 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b108)
     (property "Reference" "JP201" (at 180.34 96.52 0)
       (effects (font (size 1.524 1.524)))
@@ -4395,6 +4527,9 @@
     (property "Datasheet" "" (at 180.34 100.33 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 180.34 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8cd2d8af-b1e8-4837-bef0-f82c2da2f0e9))
     (pin "2" (uuid cf163a37-5ada-4c78-bed2-7a1bd66b5182))
     (instances
@@ -4407,7 +4542,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 190.5 41.91 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b111)
     (property "Reference" "R201" (at 186.69 36.83 0)
       (effects (font (size 1.27 1.27)))
@@ -4421,6 +4556,9 @@
     (property "Datasheet" "" (at 190.5 41.91 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 190.5 41.91 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid efef17ca-6d35-4196-bfc9-97e0de8c6a68))
     (pin "2" (uuid 29d68923-e66e-42b2-b039-0c26a54a544d))
     (instances
@@ -4433,7 +4571,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 190.5 34.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b12e)
     (property "Reference" "#PWR0204" (at 190.5 35.306 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4447,6 +4585,9 @@
     (property "Datasheet" "" (at 190.5 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 190.5 34.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0dba79db-5607-438e-9779-13df3dc5704f))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4458,7 +4599,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 172.72 100.33 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b136)
     (property "Reference" "#PWR0217" (at 172.72 100.33 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4472,6 +4613,9 @@
     (property "Datasheet" "" (at 172.72 100.33 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 172.72 100.33 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9c916417-084e-4c11-985a-f76a68a61e2b))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4483,7 +4627,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 234.95 50.8 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b1e8)
     (property "Reference" "#PWR0209" (at 234.95 50.8 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4497,6 +4641,9 @@
     (property "Datasheet" "" (at 234.95 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 234.95 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8ab9b5e1-0df1-438f-97de-8afd050c8fab))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4508,7 +4655,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 234.95 64.77 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b1ed)
     (property "Reference" "#PWR0211" (at 234.95 64.77 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4522,6 +4669,9 @@
     (property "Datasheet" "" (at 234.95 64.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 234.95 64.77 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a0ea1ace-33db-4dab-b7c3-51dc138036ca))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4533,7 +4683,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 234.95 78.74 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b1ee)
     (property "Reference" "#PWR0213" (at 234.95 78.74 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4547,6 +4697,9 @@
     (property "Datasheet" "" (at 234.95 78.74 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 234.95 78.74 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e495b97a-4b34-4e1d-8a10-5ab82a55a58b))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4558,7 +4711,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 234.95 92.71 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b1f0)
     (property "Reference" "#PWR0215" (at 234.95 92.71 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4572,6 +4725,9 @@
     (property "Datasheet" "" (at 234.95 92.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 234.95 92.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 00236eac-29c7-4d25-a0be-f83ab0b0d498))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4583,7 +4739,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:MAX202") (at 82.55 63.5 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b22b)
     (property "Reference" "U202" (at 82.55 41.91 0)
       (effects (font (size 1.778 1.778)))
@@ -4596,6 +4752,9 @@
     )
     (property "Datasheet" "" (at 82.55 63.5 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 82.55 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid a1319052-5ba3-4716-acbc-2cb2203e8a0e))
     (pin "10" (uuid 95b8eee5-df7a-4d48-a373-ab25863c306f))
@@ -4623,7 +4782,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:DB9") (at 26.67 58.42 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b26d)
     (property "Reference" "UARTCAN201" (at 26.67 72.39 0)
       (effects (font (size 1.778 1.778)))
@@ -4636,6 +4795,9 @@
     )
     (property "Datasheet" "" (at 26.67 58.42 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 26.67 58.42 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 241b8ba5-08e8-4abe-b5ac-72d9221655a9))
     (pin "2" (uuid ea3da1f3-b049-403d-a0da-da7fbe0a18b0))
@@ -4656,7 +4818,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_4X2") (at 123.19 77.47 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b289)
     (property "Reference" "UART_EN201" (at 123.19 71.12 0)
       (effects (font (size 1.27 1.27)))
@@ -4669,6 +4831,9 @@
     )
     (property "Datasheet" "" (at 123.19 77.47 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 123.19 77.47 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid d357be98-38b5-4791-9245-162033de6a75))
     (pin "2" (uuid dac7fdb0-e3a2-44c8-9d64-8e577193629e))
@@ -4688,7 +4853,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 58.42 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b33b)
     (property "Reference" "C204" (at 59.69 48.26 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4702,6 +4867,9 @@
     (property "Datasheet" "" (at 58.42 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 58.42 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5873c85e-1b09-45f6-a20b-da47d76c5166))
     (pin "2" (uuid 8db4c413-a655-490a-a21f-d9bcc3b95b3c))
     (instances
@@ -4714,7 +4882,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 106.68 50.8 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b354)
     (property "Reference" "C205" (at 107.95 48.26 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4728,6 +4896,9 @@
     (property "Datasheet" "" (at 106.68 50.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 106.68 50.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ce308695-ce51-45dc-8eb6-08a659b02ee4))
     (pin "2" (uuid ea1e5818-3a78-40e6-8916-2ae1ed34d1f5))
     (instances
@@ -4740,7 +4911,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 106.68 63.5 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b35b)
     (property "Reference" "C206" (at 107.95 60.96 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4754,6 +4925,9 @@
     (property "Datasheet" "" (at 106.68 63.5 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 106.68 63.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid ca9f5857-944f-403f-88a3-216deccbddff))
     (pin "2" (uuid df5fd11d-a748-486c-aaa5-bc1f9a5f5abe))
     (instances
@@ -4766,7 +4940,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 50.8 43.18 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b365)
     (property "Reference" "C203" (at 50.8 39.37 90)
       (effects (font (size 1.27 1.27)))
@@ -4780,6 +4954,9 @@
     (property "Datasheet" "" (at 50.8 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 50.8 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2a4e163c-dce1-4428-a4b1-12e4447b7bda))
     (pin "2" (uuid 51cd1bed-0810-43b4-82ba-8e0290cc2368))
     (instances
@@ -4792,7 +4969,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 59.69 93.98 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b389)
     (property "Reference" "#PWR0216" (at 59.69 93.98 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4806,6 +4983,9 @@
     (property "Datasheet" "" (at 59.69 93.98 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 59.69 93.98 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 971279bb-b666-4465-b6c9-9f0603ecb1fa))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4817,7 +4997,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 39.37 68.58 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b392)
     (property "Reference" "#PWR0212" (at 39.37 68.58 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4831,6 +5011,9 @@
     (property "Datasheet" "" (at 39.37 68.58 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 39.37 68.58 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 452cd79e-f58c-4c34-a3fb-f37d1e9d5791))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4842,7 +5025,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 59.69 87.63 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b486)
     (property "Reference" "C207" (at 60.96 85.09 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4856,6 +5039,9 @@
     (property "Datasheet" "" (at 59.69 87.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 59.69 87.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2dc918e2-298d-494a-8f1e-3a8c63eb8a25))
     (pin "2" (uuid 52845f58-4a25-4e38-95fb-b5f7ad5ea368))
     (instances
@@ -4868,7 +5054,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 60.96 60.96 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b49a)
     (property "Reference" "#PWR0210" (at 60.96 60.96 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4882,6 +5068,9 @@
     (property "Datasheet" "" (at 60.96 60.96 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 60.96 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 274565fd-fd94-408f-958e-7487c3810c6f))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4893,7 +5082,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 44.45 43.18 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4aa)
     (property "Reference" "#PWR0207" (at 44.45 43.18 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -4907,6 +5096,9 @@
     (property "Datasheet" "" (at 44.45 43.18 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 44.45 43.18 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 720ef3bb-8513-49e3-85d8-ae1de7926134))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -4918,7 +5110,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:MAX202") (at 82.55 130.81 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c1)
     (property "Reference" "U203" (at 82.55 109.22 0)
       (effects (font (size 1.778 1.778)))
@@ -4931,6 +5123,9 @@
     )
     (property "Datasheet" "" (at 82.55 130.81 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 82.55 130.81 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid fcc48000-2669-4f77-89ab-b57c9b93a19d))
     (pin "10" (uuid 4fc2ab64-d14c-4660-9c61-9765b414dfaf))
@@ -4958,7 +5153,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:DB9") (at 26.67 125.73 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c2)
     (property "Reference" "UARTCAN202" (at 26.67 139.7 0)
       (effects (font (size 1.778 1.778)))
@@ -4971,6 +5166,9 @@
     )
     (property "Datasheet" "" (at 26.67 125.73 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 26.67 125.73 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 474d9a00-4151-4510-90e2-02eb030e3551))
     (pin "2" (uuid 93c859b6-35b6-4534-a619-85972313a5d5))
@@ -4991,7 +5189,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_4X2") (at 124.46 144.78 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c3)
     (property "Reference" "UART_EN202" (at 124.46 138.43 0)
       (effects (font (size 1.27 1.27)))
@@ -5004,6 +5202,9 @@
     )
     (property "Datasheet" "" (at 124.46 144.78 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 124.46 144.78 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 6b5bcb4e-54ef-4032-a5b8-4e3298506ec0))
     (pin "2" (uuid b381f688-4e7a-4435-9055-5a71af3055af))
@@ -5023,7 +5224,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 58.42 118.11 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c4)
     (property "Reference" "C209" (at 59.69 115.57 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5037,6 +5238,9 @@
     (property "Datasheet" "" (at 58.42 118.11 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 58.42 118.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0ea8332c-3f66-44db-939c-5dfa5d55744b))
     (pin "2" (uuid f18d73e6-4dfb-4181-8ba3-a3d01e545053))
     (instances
@@ -5049,7 +5253,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 106.68 118.11 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c5)
     (property "Reference" "C210" (at 107.95 115.57 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5063,6 +5267,9 @@
     (property "Datasheet" "" (at 106.68 118.11 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 106.68 118.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 82aa7960-8130-43da-a98c-969a11112c3b))
     (pin "2" (uuid bc689b80-132c-4c5c-90e0-853ec5f98e1f))
     (instances
@@ -5075,7 +5282,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 106.68 130.81 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c6)
     (property "Reference" "C211" (at 107.95 128.27 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5089,6 +5296,9 @@
     (property "Datasheet" "" (at 106.68 130.81 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 106.68 130.81 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f70cec69-f9a3-413b-8976-52bb248af23b))
     (pin "2" (uuid 82738edb-b6d5-4027-a655-a6c137edd700))
     (instances
@@ -5101,7 +5311,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 50.8 110.49 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c7)
     (property "Reference" "C208" (at 50.8 106.68 90)
       (effects (font (size 1.27 1.27)))
@@ -5115,6 +5325,9 @@
     (property "Datasheet" "" (at 50.8 110.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 50.8 110.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid cfc9b789-04de-4f3a-bb57-c307ea60ba0f))
     (pin "2" (uuid cf0084c2-6c39-4a28-89b9-d47d85e508c9))
     (instances
@@ -5127,7 +5340,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 59.69 161.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c8)
     (property "Reference" "#PWR0234" (at 59.69 161.29 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5141,6 +5354,9 @@
     (property "Datasheet" "" (at 59.69 161.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 59.69 161.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 18d3677d-5b4b-4798-ace5-6b5c75ee4b56))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5152,7 +5368,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 39.37 135.89 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4c9)
     (property "Reference" "#PWR0225" (at 39.37 135.89 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5166,6 +5382,9 @@
     (property "Datasheet" "" (at 39.37 135.89 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 39.37 135.89 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 20c12e83-4887-4302-9d39-13faf4bd9840))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5177,7 +5396,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 59.69 154.94 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4ca)
     (property "Reference" "C214" (at 60.96 152.4 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5191,6 +5410,9 @@
     (property "Datasheet" "" (at 59.69 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 59.69 154.94 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b1dbb3c8-0240-4e0c-a863-d1d4dae554c2))
     (pin "2" (uuid b9c03b93-4fa1-4e80-aa78-c08ca1b4d0d8))
     (instances
@@ -5203,7 +5425,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 60.96 128.27 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4cb)
     (property "Reference" "#PWR0224" (at 60.96 128.27 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5217,6 +5439,9 @@
     (property "Datasheet" "" (at 60.96 128.27 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 60.96 128.27 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid fdb4502f-0f72-40a0-9070-6a65caa0edcf))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5228,7 +5453,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 44.45 110.49 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4cc)
     (property "Reference" "#PWR0221" (at 44.45 110.49 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5242,6 +5467,9 @@
     (property "Datasheet" "" (at 44.45 110.49 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 44.45 110.49 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 72889abe-e4e2-435d-84d4-d9a9e1824574))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5253,7 +5481,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:MAX202") (at 106.68 198.12 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d3)
     (property "Reference" "U204" (at 106.68 176.53 0)
       (effects (font (size 1.778 1.778)))
@@ -5266,6 +5494,9 @@
     )
     (property "Datasheet" "" (at 106.68 198.12 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 106.68 198.12 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid d480fbc8-9c60-48e2-a4eb-30b70361a6d0))
     (pin "10" (uuid ae32db75-4d2b-4c52-a228-ab467f5ca667))
@@ -5293,7 +5524,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:DB9") (at 26.67 193.04 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d4)
     (property "Reference" "UARTCAN203" (at 26.67 207.01 0)
       (effects (font (size 1.778 1.778)))
@@ -5306,6 +5537,9 @@
     )
     (property "Datasheet" "" (at 26.67 193.04 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 26.67 193.04 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 7c129088-932f-4dae-a908-d5f8a901d641))
     (pin "2" (uuid a126e286-ad40-4132-8881-55ce4259fbc7))
@@ -5326,7 +5560,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_4X2") (at 148.59 212.09 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d5)
     (property "Reference" "UART_EN203" (at 148.59 205.74 0)
       (effects (font (size 1.27 1.27)))
@@ -5339,6 +5573,9 @@
     )
     (property "Datasheet" "" (at 148.59 212.09 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 148.59 212.09 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid a6435e75-bf59-47a8-88e1-dbe2fca4f976))
     (pin "2" (uuid ef825abe-ce64-488b-bf11-c0ef64779635))
@@ -5358,7 +5595,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 81.28 185.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d6)
     (property "Reference" "C217" (at 82.55 182.88 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5372,6 +5609,9 @@
     (property "Datasheet" "" (at 81.28 185.42 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 81.28 185.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9e51d4a5-685f-4b81-9099-38b265500dd4))
     (pin "2" (uuid e2a9c75f-7d44-44df-b009-c6cc6876d1ba))
     (instances
@@ -5384,7 +5624,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 132.08 185.42 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d7)
     (property "Reference" "C218" (at 133.35 182.88 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5398,6 +5638,9 @@
     (property "Datasheet" "" (at 132.08 185.42 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 132.08 185.42 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a3f8e1a5-d77c-4c17-bb81-f5555050d01c))
     (pin "2" (uuid 9d7c4987-5b77-42d5-befa-8ce8ff12a496))
     (instances
@@ -5410,7 +5653,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 132.08 198.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d8)
     (property "Reference" "C220" (at 133.35 195.58 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5424,6 +5667,9 @@
     (property "Datasheet" "" (at 132.08 198.12 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 132.08 198.12 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 26b84e85-a280-4e81-9e89-9d56781f7c2a))
     (pin "2" (uuid 290866b8-7043-43b5-96b9-c143fdf81b88))
     (instances
@@ -5436,7 +5682,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 73.66 177.8 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4d9)
     (property "Reference" "C216" (at 73.66 173.99 90)
       (effects (font (size 1.27 1.27)))
@@ -5450,6 +5696,9 @@
     (property "Datasheet" "" (at 73.66 177.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 73.66 177.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid dbfc3adf-4519-4872-8eca-f67c022832ab))
     (pin "2" (uuid 60fcf659-a879-4ab9-9ff9-9780383a0174))
     (instances
@@ -5462,7 +5711,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 83.82 228.6 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4da)
     (property "Reference" "#PWR0253" (at 83.82 228.6 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5476,6 +5725,9 @@
     (property "Datasheet" "" (at 83.82 228.6 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 228.6 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 07f508d4-a28f-4caf-93a8-4842c009b1e3))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5487,7 +5739,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 39.37 203.2 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4db)
     (property "Reference" "#PWR0242" (at 39.37 203.2 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5501,6 +5753,9 @@
     (property "Datasheet" "" (at 39.37 203.2 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 39.37 203.2 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a8d1032d-5dff-4a8d-a9c9-efdce0e326b3))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5512,7 +5767,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 83.82 222.25 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4dc)
     (property "Reference" "C221" (at 85.09 219.71 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -5526,6 +5781,9 @@
     (property "Datasheet" "" (at 83.82 222.25 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 83.82 222.25 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6a9b0ec8-8da0-4b89-93ea-5357f7aef667))
     (pin "2" (uuid 05b87dcf-75d0-448a-8223-21a1e32e8b8d))
     (instances
@@ -5538,7 +5796,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 85.09 195.58 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4dd)
     (property "Reference" "#PWR0241" (at 85.09 195.58 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5552,6 +5810,9 @@
     (property "Datasheet" "" (at 85.09 195.58 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 85.09 195.58 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4742df3b-b848-41ef-a848-1db43cd7ea20))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5563,7 +5824,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 67.31 177.8 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b4de)
     (property "Reference" "#PWR0238" (at 67.31 177.8 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5577,6 +5838,9 @@
     (property "Datasheet" "" (at 67.31 177.8 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 67.31 177.8 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e9343c39-7f97-4419-84ec-0e8ba4071eaa))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5588,7 +5852,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 139.7 223.52 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b5f4)
     (property "Reference" "R215" (at 139.7 225.552 90)
       (effects (font (size 1.27 1.27)))
@@ -5602,6 +5866,9 @@
     (property "Datasheet" "" (at 139.7 223.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 139.7 223.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3fcaa095-de57-4ad7-89dc-d8f555e6915d))
     (pin "2" (uuid b374682d-c651-43fd-8766-f07537e140bf))
     (instances
@@ -5614,7 +5881,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 147.32 223.52 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b9bf)
     (property "Reference" "#PWR0252" (at 147.32 223.52 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5628,6 +5895,9 @@
     (property "Datasheet" "" (at 147.32 223.52 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 147.32 223.52 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 23e486f2-8a2a-48f5-9081-e25d1b0fb3dd))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5639,7 +5909,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 115.57 154.94 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b9cc)
     (property "Reference" "R208" (at 115.57 156.972 90)
       (effects (font (size 1.27 1.27)))
@@ -5653,6 +5923,9 @@
     (property "Datasheet" "" (at 115.57 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 115.57 154.94 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 5bbbfccb-209d-482b-b0bc-d417d9085446))
     (pin "2" (uuid 9e9e5801-5940-4e6c-beb6-622724ce7608))
     (instances
@@ -5665,7 +5938,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 123.19 154.94 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b9cd)
     (property "Reference" "#PWR0229" (at 123.19 154.94 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5679,6 +5952,9 @@
     (property "Datasheet" "" (at 123.19 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 123.19 154.94 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 10bd2c98-196c-401d-ab47-25dfa93e954a))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5690,7 +5966,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 114.3 88.9 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b9d5)
     (property "Reference" "R205" (at 114.3 90.932 90)
       (effects (font (size 1.27 1.27)))
@@ -5704,6 +5980,9 @@
     (property "Datasheet" "" (at 114.3 88.9 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 114.3 88.9 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2e462772-570a-4aec-87da-647853c5e114))
     (pin "2" (uuid e775cc47-6f51-4e62-ab68-b027435536a7))
     (instances
@@ -5716,7 +5995,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 121.92 88.9 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652b9d6)
     (property "Reference" "#PWR0214" (at 121.92 88.9 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5730,6 +6009,9 @@
     (property "Datasheet" "" (at 121.92 88.9 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 121.92 88.9 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 17e1831d-84be-47a5-b927-e8145c4ee3e0))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5741,7 +6023,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_3") (at 59.69 175.26 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652ba65)
     (property "Reference" "COM_SEL201" (at 59.69 171.45 90)
       (effects (font (size 1.27 1.27)))
@@ -5754,6 +6036,9 @@
     )
     (property "Datasheet" "" (at 59.69 175.26 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 59.69 175.26 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 5f767730-ea7c-479f-afc1-6bdc64f80416))
     (pin "2" (uuid 162588ed-09cb-4745-9085-e5bd090f3d33))
@@ -5768,7 +6053,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_3") (at 59.69 203.2 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bad4)
     (property "Reference" "COM_SEL202" (at 59.69 199.39 90)
       (effects (font (size 1.27 1.27)))
@@ -5781,6 +6066,9 @@
     )
     (property "Datasheet" "" (at 59.69 203.2 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 59.69 203.2 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 7d40c9ef-5d1b-4e51-9da7-43ade2ded7c7))
     (pin "2" (uuid f2698a1b-392d-4055-9600-782a1fad5588))
@@ -5795,7 +6083,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_3") (at 59.69 224.79 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652badd)
     (property "Reference" "COM_SEL203" (at 59.69 220.98 90)
       (effects (font (size 1.27 1.27)))
@@ -5808,6 +6096,9 @@
     )
     (property "Datasheet" "" (at 59.69 224.79 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 59.69 224.79 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid a0a01746-5ab9-4404-8b24-9560c3adbd45))
     (pin "2" (uuid 91e3530c-0410-4ca2-ae6c-6d9b1f895586))
@@ -5822,7 +6113,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 57.15 213.36 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bb1a)
     (property "Reference" "#PWR0250" (at 57.15 213.36 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5836,6 +6127,9 @@
     (property "Datasheet" "" (at 57.15 213.36 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 57.15 213.36 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 98ebec4e-ca51-449a-851e-eb1a3f722874))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5847,7 +6141,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 62.23 40.64 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bbf3)
     (property "Reference" "#PWR0205" (at 62.23 41.656 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5861,6 +6155,9 @@
     (property "Datasheet" "" (at 62.23 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 62.23 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 45a688df-0311-4e2d-803a-f2a1e1d1e382))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5872,7 +6169,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 62.23 109.22 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bbfe)
     (property "Reference" "#PWR0220" (at 62.23 110.236 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5886,6 +6183,9 @@
     (property "Datasheet" "" (at 62.23 109.22 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 62.23 109.22 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7e55fbbf-28f6-4501-bb88-314d43a67713))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5897,7 +6197,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 86.36 176.53 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bc04)
     (property "Reference" "#PWR0237" (at 86.36 177.546 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -5911,6 +6211,9 @@
     (property "Datasheet" "" (at 86.36 176.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 86.36 176.53 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e79292d7-73c6-48e3-9f30-3413ece4577c))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -5922,7 +6225,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_4X2") (at 218.44 226.06 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf26)
     (property "Reference" "PULUPEN201" (at 218.44 219.71 0)
       (effects (font (size 1.27 1.27)))
@@ -5935,6 +6238,9 @@
     )
     (property "Datasheet" "" (at 218.44 226.06 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 218.44 226.06 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 717cd0ab-148d-461e-9bfa-67801d35c0fb))
     (pin "2" (uuid 6fe04820-9c83-458c-a4bc-0ad99039435c))
@@ -5954,7 +6260,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 233.68 214.63 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf48)
     (property "Reference" "R211" (at 235.712 214.63 90)
       (effects (font (size 1.27 1.27)))
@@ -5968,6 +6274,9 @@
     (property "Datasheet" "" (at 233.68 214.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 233.68 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d5967e58-d32e-45c5-99b9-12b9962f70eb))
     (pin "2" (uuid 095bf889-f296-47aa-9784-d7c9f7506e74))
     (instances
@@ -5980,7 +6289,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 238.76 214.63 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf5c)
     (property "Reference" "R212" (at 240.792 214.63 90)
       (effects (font (size 1.27 1.27)))
@@ -5994,6 +6303,9 @@
     (property "Datasheet" "" (at 238.76 214.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 238.76 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 96e5e360-d589-4f81-a758-fef10277ea8c))
     (pin "2" (uuid da88f4ed-7539-424b-ad21-ede09fed64bd))
     (instances
@@ -6006,7 +6318,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 243.84 214.63 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf62)
     (property "Reference" "R213" (at 245.872 214.63 90)
       (effects (font (size 1.27 1.27)))
@@ -6020,6 +6332,9 @@
     (property "Datasheet" "" (at 243.84 214.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 243.84 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 1f61eecb-9e59-48c2-87e5-724ea1959023))
     (pin "2" (uuid 03370349-9af7-4c5d-9bf6-e9493b71d07c))
     (instances
@@ -6032,7 +6347,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 248.92 214.63 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf65)
     (property "Reference" "R214" (at 250.952 214.63 90)
       (effects (font (size 1.27 1.27)))
@@ -6046,6 +6361,9 @@
     (property "Datasheet" "" (at 248.92 214.63 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 248.92 214.63 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c5fe2ba9-abaf-4bee-ad3b-ec32d0d90aaf))
     (pin "2" (uuid 5585cb5e-dffd-4baf-b574-012ce300a8d4))
     (instances
@@ -6058,7 +6376,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 233.68 208.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf88)
     (property "Reference" "#PWR0243" (at 233.68 209.296 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6072,6 +6390,9 @@
     (property "Datasheet" "" (at 233.68 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 233.68 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a7c021f0-829d-4dc8-a749-fd81ae7146fd))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6083,7 +6404,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 238.76 208.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf8b)
     (property "Reference" "#PWR0244" (at 238.76 209.296 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6097,6 +6418,9 @@
     (property "Datasheet" "" (at 238.76 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 238.76 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 15612b64-9ac1-4653-949c-936037bc2a0d))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6108,7 +6432,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 243.84 208.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf8c)
     (property "Reference" "#PWR0245" (at 243.84 209.296 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6122,6 +6446,9 @@
     (property "Datasheet" "" (at 243.84 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 243.84 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d3bf5600-7626-4849-909f-d2a82d0d2b02))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6133,7 +6460,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 248.92 208.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bf8d)
     (property "Reference" "#PWR0246" (at 248.92 209.296 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6147,6 +6474,9 @@
     (property "Datasheet" "" (at 248.92 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 248.92 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c70f0f6d-48b8-46a5-a37f-4d354c3bcc9e))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6158,7 +6488,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_2X2") (at 297.18 224.79 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652bff1)
     (property "Reference" "CAN_EN201" (at 297.18 220.98 0)
       (effects (font (size 1.27 1.27)))
@@ -6171,6 +6501,9 @@
     )
     (property "Datasheet" "" (at 297.18 224.79 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 297.18 224.79 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 018aa861-2205-47c6-8f06-fe0e94a6fcff))
     (pin "2" (uuid c16e5ab3-50a6-4bbd-aff5-0ca9f404bad4))
@@ -6186,7 +6519,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:SW_PUSH") (at 111.76 251.46 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652dddf)
     (property "Reference" "SW201" (at 115.57 248.666 0)
       (effects (font (size 1.27 1.27)))
@@ -6200,6 +6533,9 @@
     (property "Datasheet" "" (at 111.76 251.46 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 111.76 251.46 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid eb550ddd-1a60-4fcd-8004-d768b56a501d))
     (pin "2" (uuid 5386d011-e318-4306-81f7-c3d03442eb1c))
     (instances
@@ -6212,7 +6548,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:SW_PUSH") (at 111.76 261.62 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652dde7)
     (property "Reference" "SW202" (at 115.57 258.826 0)
       (effects (font (size 1.27 1.27)))
@@ -6226,6 +6562,9 @@
     (property "Datasheet" "" (at 111.76 261.62 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 111.76 261.62 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 23ac4603-c945-4660-80f6-30a638905bd3))
     (pin "2" (uuid 2ad02529-bb7b-4f04-9244-18f9c7a2f7cc))
     (instances
@@ -6238,7 +6577,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 121.92 262.89 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004652de09)
     (property "Reference" "#PWR0254" (at 121.92 262.89 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6252,6 +6591,9 @@
     (property "Datasheet" "" (at 121.92 262.89 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 121.92 262.89 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 253e0bc3-4a2b-4fa4-848f-b17b9db01455))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6263,7 +6605,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 307.34 173.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530574)
     (property "Reference" "#PWR0236" (at 307.34 173.99 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6277,6 +6619,9 @@
     (property "Datasheet" "" (at 307.34 173.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 307.34 173.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 8b83c322-49c6-4d64-aef8-dc26147aab7e))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6288,7 +6633,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CP") (at 331.47 154.94 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465305fe)
     (property "Reference" "C215" (at 332.74 152.4 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6302,6 +6647,9 @@
     (property "Datasheet" "" (at 331.47 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 331.47 154.94 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 65fab9e2-7eef-4175-ac34-53befade7de5))
     (pin "2" (uuid cd03d4ae-9eb5-41d8-b3ac-5871e894c018))
     (instances
@@ -6314,7 +6662,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 331.47 160.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530616)
     (property "Reference" "#PWR0233" (at 331.47 160.02 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6328,6 +6676,9 @@
     (property "Datasheet" "" (at 331.47 160.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 331.47 160.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 81b86a43-6235-4569-8130-e69f5ba4a84e))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6339,7 +6690,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 341.63 147.32 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530638)
     (property "Reference" "R207" (at 341.63 149.352 90)
       (effects (font (size 1.27 1.27)))
@@ -6353,6 +6704,9 @@
     (property "Datasheet" "" (at 341.63 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 341.63 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4b37ec2b-58ba-4a4d-8ef2-203a5c4da530))
     (pin "2" (uuid 75f7f890-54b1-4d69-85b8-12c137787265))
     (instances
@@ -6365,7 +6719,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:LED") (at 353.06 147.32 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530639)
     (property "Reference" "LED205" (at 353.06 144.78 0)
       (effects (font (size 1.27 1.27)))
@@ -6379,6 +6733,9 @@
     (property "Datasheet" "" (at 353.06 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 353.06 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9634688e-fd66-4832-9b2e-0ac80f6d7061))
     (pin "2" (uuid 657baea2-3cb4-4e66-b817-1018de9a5e2f))
     (instances
@@ -6391,7 +6748,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 358.14 147.32 90) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653063a)
     (property "Reference" "#PWR0228" (at 358.14 147.32 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6405,6 +6762,9 @@
     (property "Datasheet" "" (at 358.14 147.32 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 358.14 147.32 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 19e9c917-a2b3-4ced-ac33-a85a5bc50bc6))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6416,7 +6776,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 331.47 143.51 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653065b)
     (property "Reference" "#PWR0226" (at 331.47 144.526 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6430,6 +6790,9 @@
     (property "Datasheet" "" (at 331.47 143.51 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 331.47 143.51 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 98a6be7b-d0fc-4c47-99cb-f50e8ac41aa3))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6441,7 +6804,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CP") (at 260.35 153.67 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465306b1)
     (property "Reference" "C212" (at 261.62 151.13 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6455,6 +6818,9 @@
     (property "Datasheet" "" (at 260.35 153.67 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 260.35 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a9b589ce-7787-48d3-a7bf-2c6819e136ec))
     (pin "2" (uuid 6b2f2115-627f-4e8f-9c3f-004052d72c82))
     (instances
@@ -6467,7 +6833,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 260.35 160.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465306b2)
     (property "Reference" "#PWR0231" (at 260.35 160.02 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6481,6 +6847,9 @@
     (property "Datasheet" "" (at 260.35 160.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 260.35 160.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7fa42357-edeb-4b08-9e90-f3bd617f3c39))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6492,7 +6861,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:DIODE") (at 246.38 153.67 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465306c8)
     (property "Reference" "D201" (at 240.03 154.94 90)
       (effects (font (size 1.27 1.27)))
@@ -6506,6 +6875,9 @@
     (property "Datasheet" "" (at 246.38 153.67 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 246.38 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 32c18a77-3ef4-4981-b0aa-d613fa69d391))
     (pin "2" (uuid 23bda64c-9ad1-45bc-8bd7-f023dba97507))
     (instances
@@ -6518,7 +6890,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 246.38 160.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465306ea)
     (property "Reference" "#PWR0230" (at 246.38 160.02 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6532,6 +6904,9 @@
     (property "Datasheet" "" (at 246.38 160.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 246.38 160.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 9fdd6ac7-5b09-4665-9964-49a00147dcb6))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6543,7 +6918,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 270.51 153.67 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465306f6)
     (property "Reference" "C213" (at 271.78 151.13 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -6557,6 +6932,9 @@
     (property "Datasheet" "" (at 270.51 153.67 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 270.51 153.67 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid e2b8a7cf-f96f-4daa-b9be-397dc611dca9))
     (pin "2" (uuid 42ac79f6-5097-44e8-856c-9562d4f5fad5))
     (instances
@@ -6569,7 +6947,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 270.51 160.02 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530706)
     (property "Reference" "#PWR0232" (at 270.51 160.02 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6583,6 +6961,9 @@
     (property "Datasheet" "" (at 270.51 160.02 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 270.51 160.02 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a8b24a57-1ade-41e5-b382-3b923e2fc6e1))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6594,7 +6975,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:FUSE") (at 275.59 139.7 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530747)
     (property "Reference" "F201" (at 278.13 138.43 0)
       (effects (font (size 1.016 1.016)))
@@ -6608,6 +6989,9 @@
     (property "Datasheet" "" (at 275.59 139.7 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 275.59 139.7 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 561a4df4-28a7-4b2b-b904-0cf6500e062d))
     (pin "2" (uuid d9c9411c-1d0b-4f73-96fc-2a08fb15ad43))
     (instances
@@ -6620,7 +7004,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:SWITCH_INV") (at 254 139.7 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530763)
     (property "Reference" "SW_ONOFF201" (at 259.08 143.51 0)
       (effects (font (size 1.27 1.27)))
@@ -6633,6 +7017,9 @@
     )
     (property "Datasheet" "" (at 254 139.7 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 254 139.7 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 0253ede3-334c-4e09-a0c4-fbcb8379b94c))
     (pin "2" (uuid 61b7e0a1-4ef0-4088-ab16-28a2f6214bdc))
@@ -6647,7 +7034,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:JACK_2P") (at 222.25 140.97 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465307c6)
     (property "Reference" "J201" (at 213.36 146.05 0)
       (effects (font (size 1.524 1.524)))
@@ -6660,6 +7047,9 @@
     )
     (property "Datasheet" "" (at 222.25 140.97 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 222.25 140.97 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 854d9ea6-447a-4efd-b2f3-ea9df00aec54))
     (pin "2" (uuid a07330c2-6148-4cc9-9bee-0f4673b32270))
@@ -6674,7 +7064,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 236.22 146.05 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465307da)
     (property "Reference" "#PWR0227" (at 236.22 146.05 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6688,6 +7078,9 @@
     (property "Datasheet" "" (at 236.22 146.05 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 236.22 146.05 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 49a6dfbd-ff84-4f74-bfbc-36c6da86aa0f))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6699,7 +7092,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_2") (at 224.79 165.1 0) (mirror y) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046530806)
     (property "Reference" "TB201" (at 226.06 165.1 90)
       (effects (font (size 1.016 1.016)))
@@ -6713,6 +7106,9 @@
     (property "Datasheet" "" (at 224.79 165.1 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 224.79 165.1 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 429c437a-72bc-479c-97ab-91913c3ec79b))
     (pin "2" (uuid 64952582-cb1f-40b0-b77e-0507f57be296))
     (instances
@@ -6725,7 +7121,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 236.22 168.91 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653080f)
     (property "Reference" "#PWR0235" (at 236.22 168.91 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6739,6 +7135,9 @@
     (property "Datasheet" "" (at 236.22 168.91 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 236.22 168.91 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0e197289-ff62-48b8-a854-38f93c9c3c6b))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6750,7 +7149,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:PCA82C251") (at 297.18 201.93 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653ff97)
     (property "Reference" "U205" (at 297.18 187.96 0)
       (effects (font (size 1.524 1.524)))
@@ -6763,6 +7162,9 @@
     )
     (property "Datasheet" "" (at 297.18 201.93 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 297.18 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 0683980e-f47d-4e92-8a90-095aecd5e4be))
     (pin "2" (uuid 6ce3638d-b79b-45ae-b775-df67e5bf4c71))
@@ -6782,7 +7184,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 312.42 208.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653fff3)
     (property "Reference" "#PWR0247" (at 312.42 208.28 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6796,6 +7198,9 @@
     (property "Datasheet" "" (at 312.42 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 312.42 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 6c07dfdf-ba60-4c2d-91e4-c96ecb91364d))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6807,7 +7212,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 285.75 189.23 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653fff7)
     (property "Reference" "#PWR0239" (at 285.75 190.246 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6821,6 +7226,9 @@
     (property "Datasheet" "" (at 285.75 189.23 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 285.75 189.23 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 4ec29cf7-f8ca-4b31-8d88-7bf8d0f6eed1))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6832,7 +7240,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 278.13 190.5 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004653fffe)
     (property "Reference" "C219" (at 278.13 186.69 90)
       (effects (font (size 1.27 1.27)))
@@ -6846,6 +7254,9 @@
     (property "Datasheet" "" (at 278.13 190.5 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 278.13 190.5 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 57290742-b586-4a22-b765-cf2b1770e516))
     (pin "2" (uuid ad8c1809-cd5f-4455-b00b-d1f5ec244c60))
     (instances
@@ -6858,7 +7269,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 273.05 191.77 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046540007)
     (property "Reference" "#PWR0240" (at 273.05 191.77 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6872,6 +7283,9 @@
     (property "Datasheet" "" (at 273.05 191.77 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 273.05 191.77 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid f09d200b-074f-40ee-8bcd-bee686ed0872))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6883,7 +7297,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_1") (at 316.23 194.31 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004654003d)
     (property "Reference" "VREF201" (at 316.23 191.77 0)
       (effects (font (size 1.016 1.016)))
@@ -6897,6 +7311,9 @@
     (property "Datasheet" "" (at 316.23 194.31 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 316.23 194.31 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 433ca697-9181-4a3b-8b21-acab94660914))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6908,7 +7325,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 271.78 212.09 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046540063)
     (property "Reference" "R210" (at 269.24 207.01 0)
       (effects (font (size 1.27 1.27)))
@@ -6922,6 +7339,9 @@
     (property "Datasheet" "" (at 271.78 212.09 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 271.78 212.09 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 673ca18b-fed9-4d7b-b4d8-38e092528d1b))
     (pin "2" (uuid 6fa151fd-3fc5-4871-82b5-faf11cfe9567))
     (instances
@@ -6934,7 +7354,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 271.78 219.71 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004654006d)
     (property "Reference" "#PWR0251" (at 271.78 219.71 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -6948,6 +7368,9 @@
     (property "Datasheet" "" (at 271.78 219.71 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 271.78 219.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid b24ae7f6-c960-4a48-838a-671c30d454ef))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6959,7 +7382,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:CONN_1") (at 266.7 201.93 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004654007f)
     (property "Reference" "RS201" (at 264.668 201.93 0)
       (effects (font (size 1.016 1.016)))
@@ -6973,6 +7396,9 @@
     (property "Datasheet" "" (at 266.7 201.93 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 266.7 201.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid cc1d27c0-e074-4ace-ab72-a272eea16c6a))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -6984,7 +7410,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:JUMPER") (at 342.9 200.66 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046540159)
     (property "Reference" "CAN_TERM201" (at 342.9 196.85 0)
       (effects (font (size 1.524 1.524)))
@@ -6998,6 +7424,9 @@
     (property "Datasheet" "" (at 342.9 200.66 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 342.9 200.66 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 384afda0-d936-4f3b-83fb-3e6ca0381b04))
     (pin "2" (uuid b81df29b-741e-40e0-958d-5c2dc9d837ba))
     (instances
@@ -7010,7 +7439,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 356.87 200.66 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046540164)
     (property "Reference" "R209" (at 356.87 202.692 90)
       (effects (font (size 1.27 1.27)))
@@ -7024,6 +7453,9 @@
     (property "Datasheet" "" (at 356.87 200.66 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 356.87 200.66 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 2df4762f-f8f8-40cc-85cb-d71462c36636))
     (pin "2" (uuid 27d88176-c72d-421e-a1c9-dcc5d52e8e17))
     (instances
@@ -7036,7 +7468,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 341.63 208.28 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046540184)
     (property "Reference" "RCAN201" (at 341.63 210.312 90)
       (effects (font (size 1.27 1.27)))
@@ -7050,6 +7482,9 @@
     (property "Datasheet" "" (at 341.63 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 341.63 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 3656adca-5174-40ab-b5ab-db099c721a77))
     (pin "2" (uuid 73dbf639-d6cc-4fa0-939f-800cd821afeb))
     (instances
@@ -7062,7 +7497,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:R") (at 369.57 208.28 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00004654018b)
     (property "Reference" "RCAN202" (at 369.57 210.312 90)
       (effects (font (size 1.27 1.27)))
@@ -7076,6 +7511,9 @@
     (property "Datasheet" "" (at 369.57 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 369.57 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid d6558160-d5eb-4082-ac84-ab27818b2428))
     (pin "2" (uuid b9cdbd99-3ca3-414c-839a-2195ae7e04c2))
     (instances
@@ -7088,7 +7526,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 347.98 210.82 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465401b2)
     (property "Reference" "#PWR0249" (at 347.98 210.82 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -7102,6 +7540,9 @@
     (property "Datasheet" "" (at 347.98 210.82 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 347.98 210.82 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid be0c9e31-c865-405b-9b8e-c0c6036133e7))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -7113,7 +7554,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 377.19 208.28 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-0000465401bf)
     (property "Reference" "#PWR0248" (at 377.19 209.296 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -7127,6 +7568,9 @@
     (property "Datasheet" "" (at 377.19 208.28 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 377.19 208.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid a11b8ccb-5121-47bb-87c3-122e96ba2b7a))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -7138,7 +7582,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 175.26 46.99 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046546ca5)
     (property "Reference" "#PWR0208" (at 175.26 46.99 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -7152,6 +7596,9 @@
     (property "Datasheet" "" (at 175.26 46.99 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 175.26 46.99 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 7f876bdb-7a0d-4094-8128-f012b353695f))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -7163,7 +7610,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:C") (at 175.26 40.64 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046546ca6)
     (property "Reference" "C202" (at 176.53 38.1 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -7177,6 +7624,9 @@
     (property "Datasheet" "" (at 175.26 40.64 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 175.26 40.64 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c857f784-31a7-4231-bf3b-68becf06b946))
     (pin "2" (uuid 399627c1-5c9f-493e-9248-994000e6a32f))
     (instances
@@ -7189,7 +7639,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:+3.3V") (at 175.26 34.29 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046546cad)
     (property "Reference" "#PWR0203" (at 175.26 35.306 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -7203,6 +7653,9 @@
     (property "Datasheet" "" (at 175.26 34.29 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "Description" "" (at 175.26 34.29 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 92bf4741-2d45-4ae2-ac8a-eee9a7a126ca))
     (instances
       (project "kit-dev-coldfire-xilinx_5213"
@@ -7214,7 +7667,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:LT1129_QPACK") (at 307.34 154.94 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000046603376)
     (property "Reference" "VR201" (at 307.34 140.97 0)
       (effects (font (size 1.524 1.524)))
@@ -7227,6 +7680,9 @@
     )
     (property "Datasheet" "" (at 307.34 154.94 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 307.34 154.94 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid f37e7816-8c6d-4159-b970-d97fbdd6cac8))
     (pin "2" (uuid b3b8de4e-535d-4d99-8890-d375104a7c1e))
@@ -7243,7 +7699,7 @@
   )
 
   (symbol (lib_id "kit-coldfire_schlib:GND") (at 344.17 113.03 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000048d5174c)
     (property "Reference" "#PWR0223" (at 344.17 113.03 0)
       (effects (font (size 0.762 0.762)) hide)
@@ -7256,6 +7712,9 @@
     )
     (property "Datasheet" "" (at 344.17 113.03 0)
       (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "Description" "" (at 344.17 113.03 0)
+      (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid e9c80c83-9ea6-4fcf-869c-6eba15114064))
     (instances
