@@ -41,17 +41,18 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
 class PGPROPERTY_DISTANCE
 {
 public:
-    PGPROPERTY_DISTANCE( const wxString& aRegEx,
-            ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD );
+    PGPROPERTY_DISTANCE( EDA_DRAW_FRAME* aParentFrame, const wxString& aRegEx,
+                         ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType );
     virtual ~PGPROPERTY_DISTANCE() = 0;
 
-    void SetCoordType( ORIGIN_TRANSFORMS::COORD_TYPES_T aType ) { m_coordType = aType; }
     ORIGIN_TRANSFORMS::COORD_TYPES_T CoordType() const { return m_coordType; }
 
 protected:
     bool StringToDistance( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const;
     wxString DistanceToString( wxVariant& aVariant, int aArgFlags = 0 ) const;
 
+protected:
+    EDA_DRAW_FRAME*                  m_parentFrame;
     std::unique_ptr<REGEX_VALIDATOR> m_regExValidator;
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 };
@@ -60,8 +61,7 @@ protected:
 class PGPROPERTY_SIZE : public wxUIntProperty, public PGPROPERTY_DISTANCE
 {
 public:
-    PGPROPERTY_SIZE( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-                     long aValue = 0 );
+    PGPROPERTY_SIZE( EDA_DRAW_FRAME* aParentFrame );
 
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override
@@ -81,9 +81,7 @@ public:
 class PGPROPERTY_COORD : public wxIntProperty, public PGPROPERTY_DISTANCE
 {
 public:
-    PGPROPERTY_COORD( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-                      long aValue = 0,
-                      ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType = ORIGIN_TRANSFORMS::NOT_A_COORD );
+    PGPROPERTY_COORD( EDA_DRAW_FRAME* aParentFrame, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType );
 
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override
@@ -104,9 +102,9 @@ public:
 class PGPROPERTY_ANGLE : public wxFloatProperty
 {
 public:
-    PGPROPERTY_ANGLE( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-            double aValue = 0 )
-        : wxFloatProperty( aLabel, aName, aValue ), m_scale( 1.0 )
+    PGPROPERTY_ANGLE() :
+            wxFloatProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
+            m_scale( 1.0 )
     {
     }
 
@@ -134,9 +132,8 @@ protected:
 class PGPROPERTY_COLORENUM : public wxEnumProperty
 {
 public:
-    PGPROPERTY_COLORENUM( const wxString& aLabel, const wxString& aName, wxPGChoices* aChoices,
-                          int aValue = 0 ) :
-            wxEnumProperty( aLabel, aName, *aChoices, aValue ),
+    PGPROPERTY_COLORENUM( wxPGChoices* aChoices ) :
+            wxEnumProperty( wxPG_LABEL, wxPG_LABEL, *aChoices, 0 ),
             m_colorFunc( []( int aDummy ) { return wxNullColour; } )
     {
         SetFlag( wxPG_PROP_CUSTOMIMAGE );
@@ -164,9 +161,8 @@ protected:
 class PGPROPERTY_STRING : public wxStringProperty
 {
 public:
-    PGPROPERTY_STRING( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-                       const wxString& aValue = wxEmptyString ) :
-            wxStringProperty( aLabel, aName, aValue )
+    PGPROPERTY_STRING() :
+            wxStringProperty( wxPG_LABEL, wxPG_LABEL, wxEmptyString )
     {}
 
     virtual ~PGPROPERTY_STRING() = default;

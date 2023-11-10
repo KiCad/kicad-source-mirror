@@ -135,8 +135,7 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
             boardLayerIDs.push_back( canonicalLayers.GetValue( ii ) );
         }
 
-        auto ret = new PGPROPERTY_COLORENUM( wxPG_LABEL, wxPG_LABEL,
-                                             new wxPGChoices( boardLayerNames, boardLayerIDs ) );
+        auto ret = new PGPROPERTY_COLORENUM( new wxPGChoices( boardLayerNames, boardLayerIDs ) );
 
         ret->SetColorFunc(
                 [&]( int aValue ) -> wxColour

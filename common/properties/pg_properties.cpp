@@ -123,13 +123,12 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
     switch( display )
     {
     case PROPERTY_DISPLAY::PT_SIZE:
-        ret = new PGPROPERTY_SIZE();
+        ret = new PGPROPERTY_SIZE( aFrame );
         ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
         break;
 
     case PROPERTY_DISPLAY::PT_COORD:
-        ret = new PGPROPERTY_COORD();
-        static_cast<PGPROPERTY_COORD*>( ret )->SetCoordType( aProperty->CoordType() );
+        ret = new PGPROPERTY_COORD( aFrame, aProperty->CoordType() );
         ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
         break;
 
@@ -209,8 +208,9 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
 }
 
 
-PGPROPERTY_DISTANCE::PGPROPERTY_DISTANCE( const wxString& aRegEx,
+PGPROPERTY_DISTANCE::PGPROPERTY_DISTANCE( EDA_DRAW_FRAME* aParentFrame, const wxString& aRegEx,
                                           ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
+        m_parentFrame( aParentFrame ),
         m_coordType( aCoordType )
 {
     m_regExValidator.reset( new REGEX_VALIDATOR( aRegEx ) );
@@ -236,22 +236,21 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
 
     long distanceIU = aVariant.GetLong();
 
-    ORIGIN_TRANSFORMS* transforms = PROPERTY_MANAGER::Instance().GetTransforms();
-    const EDA_IU_SCALE* iuScale   = PROPERTY_MANAGER::Instance().GetIuScale();
+    ORIGIN_TRANSFORMS&  transforms = m_parentFrame->GetOriginTransforms();
+    const EDA_IU_SCALE& iuScale    = m_parentFrame->GetIuScale();
 
-    if( transforms )
-        distanceIU = transforms->ToDisplay( static_cast<long long int>( distanceIU ), m_coordType );
+    distanceIU = transforms.ToDisplay( static_cast<long long int>( distanceIU ), m_coordType );
 
-    switch( PROPERTY_MANAGER::Instance().GetUnits() )
+    switch( m_parentFrame->GetUserUnits() )
     {
         case EDA_UNITS::INCHES:
-            return wxString::Format( wxS( "%g in" ), iuScale->IUToMils( distanceIU ) / 1000.0 );
+            return wxString::Format( wxS( "%g in" ), iuScale.IUToMils( distanceIU ) / 1000.0 );
 
         case EDA_UNITS::MILS:
-            return wxString::Format( wxS( "%d mils" ), iuScale->IUToMils( distanceIU ) );
+            return wxString::Format( wxS( "%d mils" ), iuScale.IUToMils( distanceIU ) );
 
         case EDA_UNITS::MILLIMETRES:
-            return wxString::Format( wxS( "%g mm" ), iuScale->IUTomm( distanceIU ) );
+            return wxString::Format( wxS( "%g mm" ), iuScale.IUTomm( distanceIU ) );
 
         case EDA_UNITS::UNSCALED:
             return wxString::Format( wxS( "%li" ), distanceIU );
@@ -266,9 +265,9 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
 }
 
 
-PGPROPERTY_SIZE::PGPROPERTY_SIZE( const wxString& aLabel, const wxString& aName,
-        long aValue )
-    : wxUIntProperty( aLabel, aName, aValue ), PGPROPERTY_DISTANCE( REGEX_UNSIGNED_DISTANCE )
+PGPROPERTY_SIZE::PGPROPERTY_SIZE( EDA_DRAW_FRAME* aParentFrame ) :
+        wxUIntProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
+        PGPROPERTY_DISTANCE( aParentFrame, REGEX_UNSIGNED_DISTANCE, ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
 }
 
@@ -279,10 +278,10 @@ wxValidator* PGPROPERTY_SIZE::DoGetValidator() const
 }
 
 
-PGPROPERTY_COORD::PGPROPERTY_COORD( const wxString& aLabel, const wxString& aName,
-                                    long aValue, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
-        wxIntProperty( aLabel, aName, aValue ),
-        PGPROPERTY_DISTANCE( REGEX_SIGNED_DISTANCE, aCoordType )
+PGPROPERTY_COORD::PGPROPERTY_COORD( EDA_DRAW_FRAME* aParentFrame,
+                                    ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
+        wxIntProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
+        PGPROPERTY_DISTANCE( aParentFrame, REGEX_SIGNED_DISTANCE, aCoordType )
 {
 }
 

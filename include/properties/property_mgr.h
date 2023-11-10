@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -230,22 +230,6 @@ public:
      */
     bool IsOfType( TYPE_ID aDerived, TYPE_ID aBase ) const;
 
-    EDA_UNITS GetUnits() const
-    {
-        return m_units;
-    }
-
-    void SetUnits( EDA_UNITS aUnits )
-    {
-        m_units = aUnits;
-    }
-
-    ORIGIN_TRANSFORMS* GetTransforms() const { return m_originTransforms; }
-    void SetTransforms( ORIGIN_TRANSFORMS* aTransforms ) { m_originTransforms = aTransforms; }
-
-    const EDA_IU_SCALE* GetIuScale() const { return m_iuScale; }
-    void SetIuScale( const EDA_IU_SCALE* aScale ) { m_iuScale = aScale; }
-
     /**
      * Rebuild the list of all registered properties. Needs to be called
      * once before GetProperty()/GetProperties() are used.
@@ -267,10 +251,7 @@ public:
 
 private:
     PROPERTY_MANAGER() :
-            m_dirty( false ),
-            m_units( EDA_UNITS::MILLIMETRES ),
-            m_originTransforms( nullptr ),
-            m_iuScale( &pcbIUScale )
+            m_dirty( false )
     {
     }
 
@@ -343,12 +324,6 @@ private:
 
     /// Flag indicating that the list of properties needs to be rebuild (RebuildProperties())
     bool m_dirty;
-
-    EDA_UNITS m_units;
-
-    ORIGIN_TRANSFORMS* m_originTransforms;
-
-    const EDA_IU_SCALE* m_iuScale;
 };
 
 

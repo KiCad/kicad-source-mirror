@@ -166,13 +166,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
     wxCHECK( !types.empty(), /* void */ );
 
-    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-    propMgr.SetUnits( m_frame->GetUserUnits() );
-    propMgr.SetIuScale( &m_frame->GetIuScale() );
-    propMgr.SetTransforms( &m_frame->GetOriginTransforms() );
-
+    PROPERTY_MANAGER&        propMgr = PROPERTY_MANAGER::Instance();
     std::set<PROPERTY_BASE*> commonProps;
-    const PROPERTY_LIST& allProperties = propMgr.GetProperties( *types.begin() );
+    const PROPERTY_LIST&     allProperties = propMgr.GetProperties( *types.begin() );
+
     copy( allProperties.begin(), allProperties.end(), inserter( commonProps, commonProps.begin() ) );
 
     PROPERTY_DISPLAY_ORDER displayOrder = propMgr.GetDisplayOrder( *types.begin() );
@@ -346,11 +343,8 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection,
                                                    wxVariant& aValue, bool& aWritable )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-    propMgr.SetUnits( m_frame->GetUserUnits() );
-    propMgr.SetTransforms( &m_frame->GetOriginTransforms() );
-
-    bool different = false;
-    wxVariant commonVal;
+    bool              different = false;
+    wxVariant         commonVal;
 
     aWritable = true;
 
