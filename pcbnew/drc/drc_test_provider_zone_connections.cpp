@@ -147,6 +147,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             BOX2I             padBBox( item_bbox );
             int               spokes = 0;
             int               ignoredSpokes = 0;
+            VECTOR2I          ignoredSpokePos;
 
             for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
             {
@@ -157,10 +158,18 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                 // If we connect to an island that only connects to a single item then we *are*
                 // that item.  Thermal spokes to this (otherwise isolated) island don't provide
                 // electrical connectivity to anything, so we don't count them.
-                if( alg::contains( isolatedIslands.m_SingleConnectionOutlines, jj ) )
-                    ignoredSpokes += (int) intersections.size() / 2;
-                else
-                    spokes += (int) intersections.size() / 2;
+                if( intersections.size() >= 2 )
+                {
+                    if( alg::contains( isolatedIslands.m_SingleConnectionOutlines, jj ) )
+                    {
+                        ignoredSpokes += (int) intersections.size() / 2;
+                        ignoredSpokePos = ( intersections[0].p + intersections[1].p ) / 2;
+                    }
+                    else
+                    {
+                        spokes += (int) intersections.size() / 2;
+                    }
+                }
             }
 
             if( spokes == 0 && ignoredSpokes == 0 )     // Not connected at all
@@ -194,12 +203,14 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( spokes < minCount )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
+                VECTOR2I                  pos;
 
                 if( ignoredSpokes )
                 {
                     msg = wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
                                             board->GetLayerName( aLayer ),
                                             ignoredSpokes );
+                    pos = ignoredSpokePos;
                 }
                 else
                 {
@@ -208,13 +219,14 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
                                             constraint.GetName(),
                                             minCount,
                                             spokes );
+                    pos = pad->GetPosition();
                 }
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aZone, pad );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, pad->GetPosition(), aLayer );
+                reportViolation( drce, pos, aLayer );
             }
         }
     }
