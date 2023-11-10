@@ -345,7 +345,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         {
             const PAD* pad = static_cast<const PAD*>( item );
 
-            if( !pad->FlashLayer( primary ) )
+            if( pad->IsOnLayer( primary ) && !pad->FlashLayer( primary ) )
             {
                 isActive = false;
 
