@@ -644,9 +644,9 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
             bool        lockedDescendant = false;
 
             boardItem->RunOnDescendants(
-                    [&]( BOARD_ITEM* item )
+                    [&]( BOARD_ITEM* curr_item )
                     {
-                        if( item->IsLocked() )
+                        if( curr_item->IsLocked() )
                             lockedDescendant = true;
                     } );
 
