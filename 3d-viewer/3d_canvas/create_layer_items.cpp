@@ -620,6 +620,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             case PCB_TEXTBOX_T:
                 addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+
+                if( static_cast<PCB_TEXTBOX*>( item )->IsBorderEnabled() )
                     addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 

@@ -580,9 +580,8 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
 
         const SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
 
-        for( int ii = 0; ii < poly.PointCount(); ++ii )
-            aBuffer.Append( poly.GetPoint( ii ) );
-
+        // build the polygon outline as a list of segmemts
+        // (The polygon is not filled).
         if( m_borderEnabled && width > 0 )
         {
             for( int ii = 0; ii < poly.SegmentCount(); ++ii )
