@@ -769,7 +769,11 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
                                         "(.([0-9])?([a-zA-Z]*))?"
                                         "$" ) );
 
-    if( !Schematic() )
+    wxCHECK( aPath, false );
+
+    SCHEMATIC* schematic = Schematic();
+
+    if( !schematic )
         return false;
 
     if( operatingPoint.Matches( *token ) )
@@ -788,14 +792,14 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         *token = wxS( "?" );
 
         if( connection )
-            *token = Schematic()->GetOperatingPoint( connection->Name( false ), precision, range );
+            *token = schematic->GetOperatingPoint( connection->Name( false ), precision, range );
 
         return true;
     }
 
     if( token->Contains( ':' ) )
     {
-        if( Schematic()->ResolveCrossReference( token, aDepth + 1 ) )
+        if( schematic->ResolveCrossReference( token, aDepth + 1 ) )
             return true;
     }
 
@@ -852,7 +856,10 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
-        if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+        SCH_SHEET_PATH path = *aPath;
+        path.push_back( sheet );
+
+        if( sheet->ResolveTextVar( &path, token, aDepth + 1 ) )
             return true;
     }
     else if( aPath && aPath->Last() )
@@ -860,7 +867,7 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
-    else if( SCH_SHEET* sheet = Schematic()->CurrentSheet().Last() )
+    else if( SCH_SHEET* sheet = schematic->CurrentSheet().Last() )
     {
         if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
@@ -1769,13 +1776,20 @@ void SCH_GLOBALLABEL::SetSpinStyle( SPIN_STYLE aSpinStyle )
 bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                                       int aDepth ) const
 {
-    if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) && Schematic() )
-    {
-        SCHEMATIC_SETTINGS& settings = Schematic()->Settings();
-        wxString            ref;
-        auto                it = Schematic()->GetPageRefsMap().find( GetText() );
+    wxCHECK( aPath, false );
 
-        if( it == Schematic()->GetPageRefsMap().end() )
+    SCHEMATIC* schematic = Schematic();
+
+    if( !schematic )
+        return false;
+
+    if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) )
+    {
+        SCHEMATIC_SETTINGS& settings = schematic->Settings();
+        wxString            ref;
+        auto                it = schematic->GetPageRefsMap().find( GetText() );
+
+        if( it == schematic->GetPageRefsMap().end() )
         {
             ref = "?";
         }
@@ -1788,11 +1802,11 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
 
             if( !settings.m_IntersheetRefsListOwnPage )
             {
-                int currentPage = Schematic()->CurrentSheet().GetVirtualPageNumber();
+                int currentPage = schematic->CurrentSheet().GetVirtualPageNumber();
                 alg::delete_matching( pageListCopy, currentPage );
             }
 
-            std::map<int, wxString> sheetPages = Schematic()->GetVirtualPageToSheetPagesMap();
+            std::map<int, wxString> sheetPages = schematic->GetVirtualPageToSheetPagesMap();
 
             if( ( settings.m_IntersheetRefsFormatShort ) && ( pageListCopy.size() > 2 ) )
             {

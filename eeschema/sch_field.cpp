@@ -191,20 +191,26 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_SYMBOL*>( m_parent )->ResolveTextVar( aPath, token, aDepth + 1 );
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+                return symbol->ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
     std::function<bool( wxString* )> sheetResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_SHEET*>( m_parent )->ResolveTextVar( token, aDepth + 1 );
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+
+                SCH_SHEET_PATH path = *aPath;
+                path.push_back( sheet );
+
+                return sheet->ResolveTextVar( &path, token, aDepth + 1 );
             };
 
     std::function<bool( wxString* )> labelResolver =
             [&]( wxString* token ) -> bool
             {
-                return static_cast<SCH_LABEL_BASE*>( m_parent )->ResolveTextVar( aPath, token,
-                                                                                 aDepth + 1 );
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
+                return label->ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );

@@ -349,7 +349,9 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
     {
         SCH_SHEET* refSheet = static_cast<SCH_SHEET*>( refItem );
 
-        if( refSheet->ResolveTextVar( &remainder, aDepth + 1 ) )
+        sheetPath.push_back( refSheet );
+
+        if( refSheet->ResolveTextVar( &sheetPath, &remainder, aDepth + 1 ) )
             *token = remainder;
 
         return true;    // Cross-reference is resolved whether or not the actual textvar was

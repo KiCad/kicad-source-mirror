@@ -236,12 +236,16 @@ void SCH_SHEET::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const
 {
-    if( !Schematic() )
+    wxCHECK( aPath, false );
+
+    SCHEMATIC* schematic = Schematic();
+
+    if( !schematic )
         return false;
 
     if( token->Contains( ':' ) )
     {
-        if( Schematic()->ResolveCrossReference( token, aDepth + 1 ) )
+        if( schematic->ResolveCrossReference( token, aDepth + 1 ) )
             return true;
     }
 
@@ -263,8 +267,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
         }
     }
 
-    SCH_SHEET_PATH sheetPath = aPath ? *aPath : findSelf();
-    PROJECT*       project = &Schematic()->Prj();
+    PROJECT* project = &schematic->Prj();
 
     // We cannot resolve text variables initially on load as we need to first load the screen and
     // then parse the hierarchy.  So skip the resolution if the screen isn't set yet
@@ -275,33 +278,34 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
     if( token->IsSameAs( wxT( "#" ) ) )
     {
-        *token = wxString::Format( "%s", sheetPath.GetPageNumber() );
+        *token = wxString::Format( "%s", aPath->GetPageNumber() );
         return true;
     }
     else if( token->IsSameAs( wxT( "##" ) ) )
     {
-        SCH_SHEET_LIST sheetList = Schematic()->GetSheets();
+        SCH_SHEET_LIST sheetList = schematic->GetSheets();
         *token = wxString::Format( wxT( "%d" ), (int) sheetList.size() );
         return true;
     }
     else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
     {
-        *token = sheetPath.PathHumanReadable();
+        *token = aPath->PathHumanReadable();
         return true;
     }
 
     // See if parent can resolve it (these will recurse to ancestors)
 
-    if( sheetPath.size() >= 2 )
+    if( aPath->size() >= 2 )
     {
-        sheetPath.pop_back();
+        SCH_SHEET_PATH path = *aPath;
+        path.pop_back();
 
-        if( sheetPath.Last()->ResolveTextVar( &sheetPath, token, aDepth + 1 ) )
+        if( path.Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
     else
     {
-        if( Schematic()->ResolveTextVar( token, aDepth + 1 ) )
+        if( schematic->ResolveTextVar( token, aDepth + 1 ) )
             return true;
     }
 

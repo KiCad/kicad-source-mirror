@@ -292,15 +292,13 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
 
     if( aPath )
         sheet = aPath->Last();
-    else if( Schematic() )
-        sheet = Schematic()->CurrentSheet().Last();
 
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
                 if( sheet )
                 {
-                    if( sheet->ResolveTextVar( token, aDepth + 1 ) )
+                    if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
                         return true;
                 }
 
@@ -320,7 +318,7 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
     if( !font )
         font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
 
-    VECTOR2D size = GetEnd() - GetStart();
+    VECTOR2I size = GetEnd() - GetStart();
     int      colWidth = GetTextAngle() == ANGLE_HORIZONTAL ? size.x : size.y;
 
     colWidth = abs( colWidth ) - GetTextMargin() * 2;

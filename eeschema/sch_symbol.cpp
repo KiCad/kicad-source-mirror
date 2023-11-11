@@ -1274,10 +1274,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
                                         "(.([0-9])?([a-zA-Z]*))?"  // format
                                         "$" ) );
 
+    wxCHECK( aPath, false );
+
     SCHEMATIC* schematic = Schematic();
 
-    // SCH_SYMBOL object has no context outside a schematic and the instance on a path.
-    if( !schematic || !aPath )
+    if( !schematic )
         return false;
 
     if( operatingPoint.Matches( *token ) )
