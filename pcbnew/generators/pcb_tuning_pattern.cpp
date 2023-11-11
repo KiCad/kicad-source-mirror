@@ -129,16 +129,12 @@ public:
         m_end += aMoveVector;
 
         PCB_GROUP::Move( aMoveVector );
-
-        if( m_baseLine )
-            m_baseLine->Move( aMoveVector );
-
-        if( m_baseLineCoupled )
-            m_baseLineCoupled->Move( aMoveVector );
     }
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override
     {
+        // Not supported for tuning patterns
+#if 0
         RotatePoint( m_origin, aRotCentre, aAngle );
         RotatePoint( m_end, aRotCentre, aAngle );
         PCB_GROUP::Rotate( aRotCentre, aAngle );
@@ -147,7 +143,8 @@ public:
             m_baseLine->Rotate( aAngle, aRotCentre );
 
         if( m_baseLineCoupled )
-            m_baseLineCoupled->Rotate( aAngle, aRotCentre );
+            m_baseLineCoupled->Rotate( aAngle, aRotCentre );*/
+#endif
     }
 
     const BOX2I GetBoundingBox() const override
