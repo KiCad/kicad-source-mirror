@@ -374,7 +374,7 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
     // This is an approximation of the text bounds (in IUs)
     int tw = returnPostscriptTextWidth( aText, aSize.x, aItalic, aWidth );
     int th = aSize.y;
-    int dx, dy;
+    int dx = 0, dy = 0;
 
     switch( aH_justify )
     {
@@ -401,7 +401,7 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
     *wideningFactor = sz_dev.x / sz_dev.y;
 
     // Mirrored texts must be plotted as mirrored!
-    if( m_plotMirror )
+    if( m_plotMirror ^ aMirror )
         *wideningFactor = -*wideningFactor;
 
     // The CTM transformation matrix
