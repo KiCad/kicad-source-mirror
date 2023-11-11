@@ -262,7 +262,8 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
         }
     }
 
-    PROJECT *project = &Schematic()->Prj();
+    SCH_SHEET_PATH sheetPath = aPath ? *aPath : findSelf();
+    PROJECT*       project = &Schematic()->Prj();
 
     // We cannot resolve text variables initially on load as we need to first load the screen and
     // then parse the hierarchy.  So skip the resolution if the screen isn't set yet
@@ -273,7 +274,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
     if( token->IsSameAs( wxT( "#" ) ) )
     {
-        *token = wxString::Format( "%s", findSelf().GetPageNumber() );
+        *token = wxString::Format( "%s", sheetPath.GetPageNumber() );
         return true;
     }
     else if( token->IsSameAs( wxT( "##" ) ) )
@@ -284,13 +285,11 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     }
     else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
     {
-        *token = findSelf().PathHumanReadable();
+        *token = sheetPath.PathHumanReadable();
         return true;
     }
 
     // See if parent can resolve it (these will recurse to ancestors)
-
-    SCH_SHEET_PATH sheetPath = aPath ? *aPath : findSelf();
 
     if( sheetPath.size() >= 2 )
     {
