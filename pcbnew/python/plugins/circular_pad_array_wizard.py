@@ -119,12 +119,19 @@ class circular_pad_array_wizard(FootprintWizardBase.FootprintWizard):
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Circle(0, 0, body_radius + outline['margin'])
 
-        # Text size
-
+        # Text (reference and value) size
         text_size = self.GetTextSize()  # IPC nominal
         thickness = self.GetTextThickness()
         textposy = body_radius + self.draw.GetLineThickness()/2 + self.GetTextSize()/2 + thickness + + outline['margin']
         self.draw.Value( 0, textposy, text_size )
         self.draw.Reference( 0, -textposy, text_size )
+
+        # Add a extra text (${REFERENCE}) on the F_Fab layer
+        extra_text = pcbnew.PCB_TEXT( self.module )
+        extra_text.SetLayer( pcbnew.F_Fab )
+        extra_text.SetPosition( pcbnew.VECTOR2I( 0, 0) )
+        extra_text.SetTextSize( pcbnew.VECTOR2I( text_size, text_size ) )
+        extra_text.SetText( "${REFERENCE}" )
+        self.module.Add( extra_text )
 
 circular_pad_array_wizard().register()
