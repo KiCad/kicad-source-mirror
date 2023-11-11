@@ -1409,10 +1409,11 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     double wideningFactor, heightFactor;
 
     VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
+    bool     textMirrored = aSize.x < 0;
 
-    computeTextParameters( aPos, aText, aOrient, t_size, m_plotMirror, aH_justify,
-                           aV_justify, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
-                           &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+    computeTextParameters( aPos, aText, aOrient, t_size, textMirrored, aH_justify, aV_justify,
+                           aWidth, aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d,
+                           &ctm_e, &ctm_f, &heightFactor );
 
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
@@ -1424,6 +1425,10 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
         aFont = KIFONT::FONT::GetFont();
 
     VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic ) );
+
+    if( textMirrored )
+        full_box.x *= -1;
+
     VECTOR2I box_x( full_box.x, 0 );
     VECTOR2I box_y( 0, full_box.y );
 
@@ -1444,13 +1449,17 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     {
         wxString word = str_tok.GetNextToken();
 
-        computeTextParameters( pos, word, aOrient, t_size, m_plotMirror, GR_TEXT_H_ALIGN_LEFT,
-                               GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
-                               &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+        computeTextParameters( pos, word, aOrient, t_size, textMirrored, GR_TEXT_H_ALIGN_LEFT,
+                               GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
+                               &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
         // Extract the changed width and rotate by the orientation to get the offset for the
         // next word
         VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth, aBold, aItalic ).x, 0 );
+
+        if( textMirrored )
+            bbox.x *= -1;
+
         RotatePoint( bbox, aOrient );
         pos += bbox;
 
