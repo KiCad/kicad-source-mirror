@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-11-03 17:32+0000\n"
-"Last-Translator: Phạm Minh Tấn <masterminhtan@gmail.com>\n"
+"PO-Revision-Date: 2023-11-11 17:57+0000\n"
+"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
 "\n"
 "Language: vi\n"
@@ -26,7 +26,7 @@ msgstr "Tất cả Tập tin"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:322
 msgid "Build board outline"
-msgstr "Dựng đường bao bo mạch"
+msgstr "Xây dựng đường bao ngoài bo mạch"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:530
 msgid "Create layers"
@@ -88,16 +88,15 @@ msgid "Build Tech layers"
 msgstr "Xây dựng các lớp ghi chú kỹ thuật"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Dựng lớp Tech %d"
+msgstr "Dựng lớp kỹ thuật %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1062
 msgid "Build BVH for holes and vias"
 msgstr "Xây dựng BVH cho lỗ xuyên và vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
-#, fuzzy
 msgid "OpenGL context creation error"
 msgstr "Lỗi tạo môi trường đồ họa OpenGL"
 
@@ -9510,9 +9509,8 @@ msgid "-- leave unchanged --"
 msgstr "- không thay đổi --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:260
-#, fuzzy
 msgid "H Align:"
-msgstr "Căn chỉnh H"
+msgstr "Căn chỉnh ngang:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:270
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:280
@@ -9523,9 +9521,8 @@ msgid "(fields only)"
 msgstr "Hiển thị (chỉ các trường)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:284
-#, fuzzy
 msgid "V Align:"
-msgstr "Căn chỉnh V"
+msgstr "Căn chỉnh dọc:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:326
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:354
@@ -10611,73 +10608,61 @@ msgid "&Y position:"
 msgstr "& Vị trí Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:76
-#, fuzzy
 msgid "&Pin length:"
-msgstr "Đường thẳng, chiều dài %s"
+msgstr "&Độ dài chân pin:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
-#, fuzzy
 msgid "N&ame text size:"
-msgstr "Tên kích thước văn bản"
+msgstr "Kích thước tên chữ:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
-#, fuzzy
 msgid "Number text si&ze:"
-msgstr "Kích thước chữ số"
+msgstr "Kích thước tên số:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
-#, fuzzy
 msgid "Electrical type:"
-msgstr "Loại điện"
+msgstr "Kiểu tín hiệu điện:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
 msgid "Used by the ERC."
-msgstr ""
+msgstr "Được dùng bởi ERC."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:106
-#, fuzzy
 msgid "Graphic style:"
-msgstr "Phong cách Đồ họa"
+msgstr "Kiểu Đồ họa:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
-#, fuzzy
 msgid "&Visible"
-msgstr "Hiển thị"
+msgstr "&Nhìn thấy"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:192
-#, fuzzy
 msgid "Preview:"
-msgstr "Xem trước"
+msgstr "Xem trước:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin definitions"
-msgstr "Định nghĩa chân pin thay thế phải có tên."
+msgstr "Định nghĩa chân pin thay phiên"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
-#, fuzzy
 msgid "Pin Properties"
-msgstr "Thuộc tính nhãn"
+msgstr "Thuộc tính chân pin"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:74
-#, fuzzy
 msgid "Plot All Pages"
-msgstr "Tất cả các trang"
+msgstr "Vẽ sơ đồ tất cả các trang"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:75
-#, fuzzy
 msgid "Plot Current Page"
-msgstr "Phím hiện tại:"
+msgstr "Vẽ sơ đồ trang hiện tại"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:178
 #: pcbnew/dialogs/dialog_export_svg.cpp:203
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:200
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:552
 #: pcbnew/dialogs/dialog_gendrill.cpp:301 pcbnew/dialogs/dialog_plot.cpp:522
-#, fuzzy
 msgid "Select Output Directory"
-msgstr "Chọn một tệp tin"
+msgstr "Chọn thư mục để lưu"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:195
 #: pcbnew/dialogs/dialog_gendrill.cpp:310 pcbnew/dialogs/dialog_plot.cpp:539
@@ -10686,6 +10671,8 @@ msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
+"Bạn có muốn dùng đường dẫn liên quan với\n"
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:197
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
@@ -10695,46 +10682,40 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:312
 #: pcbnew/dialogs/dialog_gendrill.cpp:321 pcbnew/dialogs/dialog_plot.cpp:541
 msgid "Plot Output Directory"
-msgstr ""
+msgstr "Thư mục chứa bản vẽ"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:240
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:60
-#, fuzzy
 msgid "Schematic size"
-msgstr "Sơ đồ mạch đã được lưu"
+msgstr "Kích thước sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:246
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:76
-#, fuzzy
 msgid "A5"
-msgstr "5"
+msgstr "A5"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:247
 #: eeschema/dialogs/dialog_plot_schematic.cpp:262
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:60
 #, fuzzy
 msgid "A4"
-msgstr "4"
+msgstr "A4"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:248
-#, fuzzy
 msgid "A3"
-msgstr "3"
+msgstr "A3"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:249
-#, fuzzy
 msgid "A2"
-msgstr "2"
+msgstr "A2"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:250
-#, fuzzy
 msgid "A1"
-msgstr "1"
+msgstr "A1"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:251
-#, fuzzy
 msgid "A0"
-msgstr "0"
+msgstr "A0"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:252
 #: eeschema/dialogs/dialog_plot_schematic.cpp:263
@@ -10747,29 +10728,28 @@ msgstr "0"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:286
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:253
-#, fuzzy
 msgid "B"
-msgstr "MB"
+msgstr "B"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:254
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:255
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:256
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:414
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Quay lại đường dẫn người dùng tại '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:442
 #: eeschema/dialogs/dialog_plot_schematic.cpp:480
@@ -10778,65 +10758,63 @@ msgid "Cannot normalize path '%s%s'."
 msgstr "Không thể mở tệp '%s'"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:467
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Xuất sang các trang khác"
+msgstr "Không có dự án hoặc đường dẫn được chỉ rõ cho sơ đồ mạch hiện tại."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: kicad/cli/command_export_pcb_base.cpp:43
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:25
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:27
 #: pcbnew/dialogs/dialog_plot_base.cpp:37
-#, fuzzy
 msgid "Output directory:"
-msgstr "Chế độ xuất:"
+msgstr "Thư mục đầu ra:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:30
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
+"Thư mục đầu ra cho các tệp bản vẽ. Có thể là tuyệt đối hoặc tương đối với vị "
+"trí tệp chính của sơ đồ mạch."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
-#, fuzzy
 msgid "Postscript"
-msgstr "Tệp PostScript"
+msgstr "Postscript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#, fuzzy
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 #, fuzzy
 msgid "SVG"
-msgstr "HSV"
+msgstr "SVG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "DXF"
-msgstr ""
+msgstr "DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
-#, fuzzy
 msgid "Page size:"
-msgstr "Các file Ảnh"
+msgstr "Kích thước Trang vẽ:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:66
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "User.Drawings"
+msgstr "Xuất trang bản vẽ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
 #, fuzzy
@@ -10845,9 +10823,8 @@ msgstr "In viền và khối tiêu đề"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:77
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
-#, fuzzy
 msgid "Black and White"
-msgstr "Đen trắng"
+msgstr "Đen và trắng"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 #, fuzzy
@@ -10856,62 +10833,59 @@ msgstr "Màu sắc nền, ở trên cùng"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "Xuất màu nền bản vẽ nếu định dạng đầu ra có hỗ trợ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:20
-#, fuzzy
 msgid "Color theme:"
-msgstr "Thêm chủ đề màu sắc"
+msgstr "Màu chủ đề:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:95
 msgid "Select the color theme to use for plotting"
-msgstr ""
+msgstr "Chọn màu chủ đề để dùng xuất bản vẽ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:99
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:111
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:183
-#, fuzzy
 msgid "Default line width:"
-msgstr "Mặc định"
+msgstr "Độ dày đường mặc định:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:104
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
 msgstr ""
+"Việc chọn độ dày mũi bút mặc định được dùng để vẽ các thành phần, khi đó độ "
+"dày của chúng được cài là 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:123
 #: pcbnew/dialogs/dialog_plot_base.cpp:246
-#, fuzzy
 msgid "HPGL Options"
-msgstr "Tuỳ chọn"
+msgstr "HPGL Chọn"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
-#, fuzzy
 msgid "Position and units:"
-msgstr "Vị trí X:"
+msgstr "Vị trí và đơn vị:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Bên trái phía dưới cùng, đơn vị Bản vẽ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Centered, plotter units"
-msgstr ""
+msgstr "Trung tâm, đơn vị bản vẽ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Page fit, user units"
-msgstr ""
+msgstr "Trang vừa vặn, đơn vị do người dùng"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:134
 msgid "Content fit, user units"
-msgstr ""
+msgstr "Nội dung vừa vặn, đơn vị do người dùng"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:140
-#, fuzzy
 msgid "Pen width:"
-msgstr "Chiều rộng đường kẻ:"
+msgstr "Độ dày mũi bút:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:159
 #, fuzzy
@@ -10928,40 +10902,35 @@ msgid "Open output file with associated application after successful plot"
 msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:89
-#, fuzzy
 msgid "Plot Schematic Options"
-msgstr "Gán Chú thích hoàn tất."
+msgstr "Lựa chọn xuất bản vẽ sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:396
-#, fuzzy
 msgid "Print Schematic"
-msgstr "Lưu vào Sơ đồ mạch"
+msgstr "In sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:403
-#, fuzzy
 msgid "An error occurred attempting to print the schematic."
-msgstr "Gặp lỗi khi khởi tạo thông tin máy in."
+msgstr "Lỗi đã xảy ra khi in sơ đồ mạch."
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Print page %d"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "In trang %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
-#, fuzzy
 msgid "Print (or not) the Frame references."
-msgstr "In khung tài liệu tham khảo."
+msgstr "In (hoặc không) Viền khung giới hạn."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:46
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
-#, fuzzy
 msgid "Print background color"
-msgstr "Màu sắc nền, ở trên cùng"
+msgstr "In với màu nền"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
 msgid "Use a different color theme for printing:"
-msgstr ""
+msgstr "Dùng một Bộ màu chủ đề khác đề in:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:101
 msgid ""
@@ -10972,11 +10941,16 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"Sơ đồ mạch này được vẽ với các thư viện symbol cũ có thể phá vỡ sơ đồ mạch "
+"này..  vài symbol có thể cần được liên kết với một symbol có tên khác.  vài "
+"symbol có thể cần được \"cứu trợ\" (được sao chép hoặc đổi tên) vào một thư "
+"viện mới.\n"
+"\n"
+"Sự thay đổi này được khuyến cáo để cập nhật dự án."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:108
-#, fuzzy
 msgid "Accept"
-msgstr "Chấp nhận tên"
+msgstr "Đồng Ý"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:122
 #, fuzzy
@@ -11442,7 +11416,7 @@ msgstr "Thuộc tính Văn bản"
 
 #: eeschema/dialogs/dialog_signal_list.h:45 eeschema/sch_plotter.cpp:547
 msgid "Done"
-msgstr ""
+msgstr "Hoàn tất"
 
 #: eeschema/dialogs/dialog_signal_list_base.cpp:27
 #, fuzzy
@@ -13688,16 +13662,14 @@ msgstr "Schematic Field"
 #: eeschema/fields_grid_table.cpp:253 eeschema/fields_grid_table.cpp:613
 #: eeschema/fields_grid_table.cpp:791
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
-#, fuzzy
 msgid "Horizontal"
-msgstr "Văn bản trên Footprint"
+msgstr "Ngang"
 
 #: eeschema/fields_grid_table.cpp:254 eeschema/fields_grid_table.cpp:615
 #: eeschema/fields_grid_table.cpp:793
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
-#, fuzzy
 msgid "Vertical"
-msgstr "Vertical Justification"
+msgstr "Dọc"
 
 #: eeschema/fields_grid_table.cpp:353
 msgid "Allow Autoplacement"
@@ -14561,9 +14533,8 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-#, fuzzy
 msgid "Schematic"
-msgstr "Văn bản Sơ đồ mạch"
+msgstr "Sơ đồ mạch"
 
 #: eeschema/sch_edit_frame.cpp:1118
 #, fuzzy
@@ -14799,7 +14770,7 @@ msgstr "Không tải được thư viện kiface \"%s\"."
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:126
 msgid "Done."
-msgstr ""
+msgstr "Xong."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
 #: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:896
@@ -22479,9 +22450,8 @@ msgid "Max height:"
 msgstr "Chiều cao:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
-#, fuzzy
 msgid "Set to 0 to use default values"
-msgstr "Đặt lại về Mặc định"
+msgstr "Cài đặt 0 để dùng về giá trị Mặc định"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:233
 #, fuzzy
