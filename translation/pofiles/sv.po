@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-09 22:53+0000\n"
+"PO-Revision-Date: 2023-11-13 17:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -3380,9 +3380,8 @@ msgid "SSH Key Password"
 msgstr "Lösenord för SSH-nyckel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Rotation"
+msgstr "Plats"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
 msgid "Connection Type"
@@ -3393,9 +3392,8 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "Lokal fil"
+msgstr "Lokal"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
 msgid "SSH Private Key"
@@ -3419,7 +3417,7 @@ msgstr "Git-förvar"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Byte av Git-gren"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
@@ -16314,9 +16312,8 @@ msgid "Hierarchical Label '%s'"
 msgstr "Hierarkisk etikett '%s'"
 
 #: eeschema/sch_label.cpp:2148
-#, fuzzy
 msgid "Pin length"
-msgstr "Stiftlängd:"
+msgstr "Stiftlängd"
 
 #: eeschema/sch_line.cpp:99
 msgid "Graphic Line"
@@ -24742,7 +24739,7 @@ msgstr "Det gick inte hitta gren '%s': %s"
 #: kicad/project_tree_pane.cpp:1745
 #, fuzzy, c-format
 msgid "Failed to find branch head for '%s'"
-msgstr "Det gick inte att hitta en visare för '%s'."
+msgstr "Det gick inte att hitta en visare för '%s'"
 
 #: kicad/project_tree_pane.cpp:1756
 #, c-format
@@ -34420,7 +34417,7 @@ msgstr "Fördefinierade ledar- och viadimensioner"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
 #, fuzzy
 msgid "Target skew: "
-msgstr "Snedvridning:"
+msgstr "Snedvridning: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:85
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1598
@@ -38719,7 +38716,7 @@ msgstr "Längdjustering"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 #, fuzzy
 msgid "Tune Skew"
-msgstr "Avstämning: skevhet "
+msgstr "Justera skevhet"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 msgid "Target skew:"
@@ -38834,18 +38831,16 @@ msgid "Initial side"
 msgstr "Sida att börja på"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1922
-#, fuzzy
 msgid "Min spacing"
-msgstr "Minsta mellanrum:"
+msgstr "Minsta mellanrum"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1928
 msgid "Corner radius %"
 msgstr "Hörnradie %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
-#, fuzzy
 msgid "Target length"
-msgstr "Mållängd:"
+msgstr "Mållängd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1959
 #, fuzzy
