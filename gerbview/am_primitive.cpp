@@ -92,6 +92,7 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
                                                SHAPE_POLY_SET& aShapeBuffer )
 {
     // Draw the primitive shape for flashed items.
+    // Note: rotation of primitives inside a macro must be always done around the macro origin.
     // Create a static buffer to avoid a lot of memory reallocation.
     static std::vector<VECTOR2I> polybuffer;
     polybuffer.clear();
@@ -218,15 +219,17 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
         for( int ii = 0; ii < 4; ii++ )
         {
             polybuffer = subshape_poly;
-            EDA_ANGLE sub_rotation = rotation + ANGLE_90 * ii;
+            EDA_ANGLE sub_rotation = ANGLE_90 * ii;
 
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
                 RotatePoint( polybuffer[jj], -sub_rotation );
 
-            // Move to center position given by the tool:
+            // Move to center position given by the tool, and rotate the full shape around
+            // the center position (origin of the macro):
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
             {
                 polybuffer[jj] += center;
+                RotatePoint( polybuffer[jj], -rotation );
             }
 
             aShapeBuffer.NewOutline();
@@ -264,6 +267,8 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
         VECTOR2I center( mapPt( m_Params[0].GetValueFromMacro( aApertMacro ),
                          m_Params[1].GetValueFromMacro( aApertMacro ), m_GerbMetric ) );
 
+        EDA_ANGLE rotation( m_Params[8].GetValueFromMacro( aApertMacro ), DEGREES_T );
+
         // adjust outerDiam by this on each nested circle
         int diamAdjust = ( gap + penThickness ) * 2;
 
@@ -272,17 +277,21 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
             if( outerDiam <= 0 )
                 break;
 
+            // calculate the rotated position of the center:
+            VECTOR2I circle_center = center;
+            RotatePoint( circle_center, -rotation );
+
             // Note: outerDiam is the outer diameter of the ring.
             // the ring graphic diameter is (outerDiam - penThickness)
             if( outerDiam <= penThickness )
             {   // No room to draw a ring (no room for the hole):
                 // draw a circle instead (with no hole), with the right diameter
-                TransformCircleToPolygon( aShapeBuffer, center, outerDiam / 2, arc_to_seg_error,
+                TransformCircleToPolygon( aShapeBuffer, circle_center, outerDiam / 2, arc_to_seg_error,
                                           ERROR_INSIDE );
             }
             else
             {
-                TransformRingToPolygon( aShapeBuffer, center, ( outerDiam - penThickness ) / 2,
+                TransformRingToPolygon( aShapeBuffer, circle_center, ( outerDiam - penThickness ) / 2,
                                         penThickness, arc_to_seg_error, ERROR_INSIDE );
             }
         }
@@ -290,13 +299,11 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
         // Draw the cross:
         ConvertShapeToPolygon( aApertMacro, polybuffer );
 
-        EDA_ANGLE rotation( m_Params[8].GetValueFromMacro( aApertMacro ), DEGREES_T );
-
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             // move crossair shape to center and rotate shape:
-            RotatePoint( polybuffer[ii], -rotation );
             polybuffer[ii] += center;
+            RotatePoint( polybuffer[ii], -rotation );
         }
 
         break;
@@ -375,13 +382,13 @@ void AM_PRIMITIVE::ConvertBasicShapeToPolygon( APERTURE_MACRO* aApertMacro,
         // Creates the shape:
         ConvertShapeToPolygon( aApertMacro, polybuffer );
 
-        // rotate polygon
+        // move and rotate polygonal shape
         EDA_ANGLE rotation( m_Params[5].GetValueFromMacro( aApertMacro ), DEGREES_T );
 
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
-            RotatePoint( polybuffer[ii], -rotation );
             polybuffer[ii] += curPos;
+            RotatePoint( polybuffer[ii], -rotation );
         }
 
         break;

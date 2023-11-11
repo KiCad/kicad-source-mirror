@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file rs274x.cpp
- */
 
 #include <base_units.h>
 #include <math/util.h>      // for KiROUND
@@ -1049,8 +1046,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             is_comment = true;
 
             // Skip comment
-            while( *aText && ( *aText != '*' ) )
-                aText++;
+            GetEndOfBlock( m_LineBuffer, GERBER_BUFZ, aText, m_Current_File );
 
             break;
 
