@@ -211,4 +211,7 @@ void STATUS_MIN_MAX_POPUP::SetCurrent( double aCurrent, const wxString& aLabel )
 
     m_topSizer->Layout();
     updateSize();
+
+    Refresh();
+    Update();
 }
