@@ -48,10 +48,10 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelNotConnected, ERC_REGRESSION_TEST_FIXTURE )
 
     std::vector<std::pair<wxString, int>> tests =
     {
-        { "erc_pin_not_connected_basic",  2  },
-        { "issue7203",                    3  },
-        { "issue11926",                   2  },
-        { "issue10430",                   8  }
+        { "erc_pin_not_connected_basic",   2  },
+        { "issue7203",                     3  },
+        { "issue11926",                    2  },
+        { "issue10430",                    8  }
     };
 
     for( const std::pair<wxString, int>& test : tests )
@@ -73,6 +73,7 @@ BOOST_FIXTURE_TEST_CASE( ERCLabelNotConnected, ERC_REGRESSION_TEST_FIXTURE )
         tester.TestNoConnectPins();
         tester.TestPinToPin();
         tester.TestSimilarLabels();
+        tester.TestTextVars( nullptr );
 
         errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 

@@ -44,8 +44,12 @@ BOOST_FIXTURE_TEST_CASE( ERCHierarchicalSchematics, ERC_REGRESSION_TEST_FIXTURE 
 
     // Check not-connected ERC errors
 
-    std::vector<std::pair<wxString, int>> tests = { { "issue10926_1", 3 },
-                                                    { "issue12814", 0 } };
+    std::vector<std::pair<wxString, int>> tests =
+            {
+                { "issue10926_1",                  3 },
+                { "issue12814",                    0 },
+                { "ERC_dynamic_power_symbol_test", 5 }
+            };
 
     for( const std::pair<wxString, int>& test : tests )
     {
@@ -66,6 +70,7 @@ BOOST_FIXTURE_TEST_CASE( ERCHierarchicalSchematics, ERC_REGRESSION_TEST_FIXTURE 
         tester.TestNoConnectPins();
         tester.TestPinToPin();
         tester.TestSimilarLabels();
+        tester.TestTextVars( nullptr );
 
         errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 
