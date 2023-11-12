@@ -235,10 +235,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     // TODO(JE) should we keep these LIB_SYMBOL:: things around?
     m_params.emplace_back( new PARAM<int>( "subpart_id_separator",
-            LIB_SYMBOL::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
+            &m_SubpartIdSeparator, 0, 0, 126 ) );
 
     m_params.emplace_back( new PARAM<int>( "subpart_first_id",
-            LIB_SYMBOL::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
+            &m_SubpartFirstId, 'A', '1', 'z' ) );
 
     m_params.emplace_back( new PARAM<int>( "annotate_start_num",
             &m_AnnotateStartNum, 0 ) );
@@ -268,4 +268,23 @@ SCHEMATIC_SETTINGS::~SCHEMATIC_SETTINGS()
         m_parent->ReleaseNestedSettings( this );
         m_parent = nullptr;
     }
+}
+
+
+wxString SCHEMATIC_SETTINGS::SubReference( int aUnit, bool aAddSeparator ) const
+{
+    wxString subRef;
+
+    if( aUnit < 1 )
+        return subRef;
+
+    if( m_SubpartIdSeparator != 0 && aAddSeparator )
+        subRef << wxChar( m_SubpartIdSeparator );
+
+    if( m_SubpartFirstId >= '0' && m_SubpartFirstId <= '9' )
+        subRef << aUnit;
+    else
+        subRef << LIB_SYMBOL::LetterSubReference( aUnit, m_SubpartFirstId );
+
+    return subRef;
 }

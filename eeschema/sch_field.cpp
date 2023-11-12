@@ -249,7 +249,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
             // For more than one part per package, we must add the part selection
             // A, B, ... or 1, 2, .. to the reference.
             if( parentSymbol->GetUnitCount() > 1 )
-                text << LIB_SYMBOL::SubReference( parentSymbol->GetUnit() );
+                text << parentSymbol->SubReference( parentSymbol->GetUnitSelection( aPath ) );
         }
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
@@ -652,13 +652,14 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
         // symbols with multiple parts.
         if( aAuxData )
         {
-            text = parentSymbol->GetRef( (SCH_SHEET_PATH*) aAuxData );
+            SCH_SHEET_PATH* sheet = (SCH_SHEET_PATH*) aAuxData;
+            text = parentSymbol->GetRef( sheet );
 
             if( SCH_ITEM::Matches( text, aSearchData ) )
                 return true;
 
             if( parentSymbol->GetUnitCount() > 1 )
-                text << LIB_SYMBOL::SubReference( parentSymbol->GetUnit() );
+                text << parentSymbol->SubReference( parentSymbol->GetUnitSelection( sheet ) );
         }
     }
 

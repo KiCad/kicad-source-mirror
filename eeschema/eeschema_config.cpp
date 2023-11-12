@@ -63,10 +63,6 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     GetRenderSettings()->SetDashLengthRatio( settings.m_DashedLineDashRatio );
     GetRenderSettings()->SetGapLengthRatio( settings.m_DashedLineGapRatio );
 
-    // Verify some values, because the config file can be edited by hand, and have bad values:
-    LIB_SYMBOL::SetSubpartIdNotation( LIB_SYMBOL::GetSubpartIdSeparator(),
-                                      LIB_SYMBOL::GetSubpartFirstId() );
-
     BASE_SCREEN::m_DrawingSheetFileName = settings.m_SchDrawingSheetFileName;
 
     // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.

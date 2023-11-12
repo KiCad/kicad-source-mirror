@@ -699,7 +699,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)" ),
                         m_flatList[ii].GetRef(),
                         tmp,
-                        LIB_SYMBOL::SubReference( m_flatList[ii].m_unit ),
+                        m_flatList[ii].GetSymbol()->SubReference( m_flatList[ii].GetUnit() ),
                         m_flatList[ii].m_unit,
                         m_flatList[ii].GetLibPart()->GetUnitCount() );
 
@@ -738,8 +738,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Duplicate items %s%s%s\n" ),
                         first.GetRef(),
                         tmp,
-                        first.GetLibPart()->GetUnitCount() > 1 ?
-                            LIB_SYMBOL::SubReference( first.m_unit ) : wxString( wxT( "" ) ) );
+                        first.GetLibPart()->GetUnitCount() > 1 ? first.GetSymbol()->SubReference( first.GetUnit() )
+                                                               : wxString( wxT( "" ) ) );
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &m_flatList[ii+1] );
             error++;
@@ -761,12 +761,12 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                 tmp2 = wxT( "?" );
 
             msg.Printf( _( "Differing unit counts for item %s%s%s and %s%s%s\n" ),
-                    first.GetRef(),
-                    tmp,
-                    LIB_SYMBOL::SubReference( first.m_unit ),
-                    second.GetRef(),
-                    tmp2,
-                    LIB_SYMBOL::SubReference( second.m_unit )  );
+                        first.GetRef(),
+                        tmp,
+                        first.GetSymbol()->SubReference( first.GetUnit() ),
+                        second.GetRef(),
+                        tmp2,
+                        first.GetSymbol()->SubReference( second.GetUnit() )  );
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &second );
             error++;
@@ -779,11 +779,11 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         first.GetRef(),
                         first.m_numRef,
-                        LIB_SYMBOL::SubReference( first.m_unit ),
+                        first.GetSymbol()->SubReference( first.GetUnit() ),
                         first.m_value,
                         second.GetRef(),
                         second.m_numRef,
-                        LIB_SYMBOL::SubReference( second.m_unit ),
+                        first.GetSymbol()->SubReference( second.GetUnit() ),
                         second.m_value );
 
             aHandler( ERCE_DIFFERENT_UNIT_VALUE, msg, &first, &second );

@@ -52,6 +52,9 @@ public:
 
     virtual ~SCHEMATIC_SETTINGS();
 
+    wxString SubReference( int aUnit, bool aAddSeparator = true ) const;
+
+public:
     // Default sizes are all stored in IU here, and in mils in the JSON file
 
     int       m_DefaultLineWidth;
@@ -66,6 +69,11 @@ public:
     int       m_ConnectionGridSize;     // usually 50mils (IU internally; mils in the JSON file)
 
     int       m_AnnotateStartNum;       // Starting value for annotation
+    int       m_SubpartIdSeparator;     // the separator char between the subpart id and the
+                                        //   reference like U1A, U1.A or U1-A
+    int       m_SubpartFirstId;         // the ASCII char value to calculate the subpart symbol
+                                        //   id from the symbol number: only 'A', 'a' or '1' can
+                                        //   be used, other values have no sense.
 
     bool      m_IntersheetRefsShow;
     bool      m_IntersheetRefsListOwnPage;

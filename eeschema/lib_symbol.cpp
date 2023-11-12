@@ -37,16 +37,6 @@
 
 #include <memory>
 
-// the separator char between the subpart id and the reference
-// 0 (no separator) or '.' or some other character
-int LIB_SYMBOL::m_subpartIdSeparator = 0;
-
-// the ascii char value to calculate the subpart symbol id from the part number:
-// 'A' or '1' usually. (to print U1.A or U1.1)
-// if this a digit, a number is used as id symbol
-int LIB_SYMBOL::m_subpartFirstId = 'A';
-
-
 std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 {
     std::vector<SEARCH_TERM> terms;
@@ -548,7 +538,7 @@ LIB_SYMBOL_SPTR LIB_SYMBOL::GetRootSymbol() const
 
 wxString LIB_SYMBOL::GetUnitReference( int aUnit )
 {
-    return LIB_SYMBOL::SubReference( aUnit, false );
+    return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
 }
 
 
@@ -767,44 +757,28 @@ void LIB_SYMBOL::SetNormal()
 }
 
 
-wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
+wxString LIB_SYMBOL::LetterSubReference( int aUnit, int aFirstId )
 {
-    wxString subRef;
+    // use letters as notation. To allow more than 26 units, the sub ref
+    // use one letter if letter = A .. Z or a ... z, and 2 letters otherwise
+    // first letter is expected to be 'A' or 'a' (i.e. 26 letters are available)
+    int      u;
+    wxString suffix;
 
-    if( aUnit < 1 )
-        return subRef;
-
-    if( m_subpartIdSeparator != 0 && aAddSeparator )
-        subRef << wxChar( m_subpartIdSeparator );
-
-    if( m_subpartFirstId >= '0' && m_subpartFirstId <= '9' )
+    do
     {
-        subRef << aUnit;
-    }
-    else
-    {
-        // use letters as notation. To allow more than 26 units, the sub ref
-        // use one letter if letter = A .. Z or a ... z, and 2 letters otherwise
-        // first letter is expected to be 'A' or 'a' (i.e. 26 letters are available)
-        int u;
-        wxString suffix;
+        u = ( aUnit - 1 ) % 26;
+        suffix = wxChar( aFirstId + u ) + suffix;
+        aUnit = ( aUnit - u ) / 26;
+    } while( aUnit > 0 );
 
-        do
-        {
-            u = ( aUnit - 1 ) % 26;
-            suffix = wxChar( m_subpartFirstId + u ) + suffix;
-            aUnit = ( aUnit - u ) / 26;
-        } while( aUnit > 0 );
-
-        subRef << suffix;
-    }
-
-    return subRef;
+    return suffix;
 }
 
 
 void LIB_SYMBOL::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                        int aUnit, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed )
+                                  int aUnit, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts,
+                                  bool aDimmed )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -1737,19 +1711,6 @@ void LIB_SYMBOL::SetConversion( bool aSetConvert, bool aDuplicatePins )
     }
 
     m_drawings.sort();
-}
-
-
-void LIB_SYMBOL::SetSubpartIdNotation( int aSep, int aFirstId )
-{
-    m_subpartFirstId = 'A';
-    m_subpartIdSeparator = 0;
-
-    if( aSep == '.' || aSep == '-' || aSep == '_' )
-        m_subpartIdSeparator = aSep;
-
-    if( aFirstId == '1' && aSep != 0 )
-        m_subpartFirstId = aFirstId;
 }
 
 

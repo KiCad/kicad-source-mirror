@@ -52,7 +52,7 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     if( m_unit == 0 )
         msg = _( "All" );
     else
-        msg = LIB_SYMBOL::SubReference( m_unit, false );
+        msg = LIB_SYMBOL::LetterSubReference( m_unit, 'A' );
 
     aList.emplace_back( _( "Unit" ), msg );
 

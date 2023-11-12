@@ -484,7 +484,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
             if( m_symbol->HasUnitDisplayName( ii ) )
                 m_unitChoice->Append( m_symbol->GetUnitDisplayName( ii ) );
             else
-                m_unitChoice->Append( LIB_SYMBOL::SubReference( ii, false ) );
+                m_unitChoice->Append( m_symbol->SubReference( ii, false ) );
         }
 
         if( m_symbol->GetUnit() <= ( int )m_unitChoice->GetCount() )

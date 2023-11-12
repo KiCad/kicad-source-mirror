@@ -481,7 +481,7 @@ int SCH_SYMBOL::GetUnitCount() const
 
 wxString SCH_SYMBOL::GetUnitDisplayName( int aUnit )
 {
-    wxCHECK( m_part, ( wxString::Format( _( "Unit %s" ), LIB_SYMBOL::SubReference( aUnit ) ) ) );
+    wxCHECK( m_part, ( wxString::Format( _( "Unit %s" ), SubReference( aUnit ) ) ) );
 
     return m_part->GetUnitDisplayName( aUnit );
 }
@@ -739,7 +739,7 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
         if( instance.m_Path == path )
         {
             ref = instance.m_Reference;
-            subRef = LIB_SYMBOL::SubReference( instance.m_Unit );
+            subRef = SubReference( instance.m_Unit );
             break;
         }
     }
@@ -844,6 +844,15 @@ void SCH_SYMBOL::UpdatePrefix()
 
     if( !prefix.IsEmpty() )
         SetPrefix( prefix );
+}
+
+
+wxString SCH_SYMBOL::SubReference( int aUnit, bool aAddSeparator ) const
+{
+    if( SCHEMATIC* schematic = Schematic() )
+        return schematic->Settings().SubReference( aUnit, aAddSeparator );
+
+    return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
 }
 
 
@@ -1362,9 +1371,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
     else if( token->IsSameAs( wxT( "UNIT" ) ) )
     {
-        int unit = GetUnitSelection( aPath );
-
-        *token = LIB_SYMBOL::SubReference( unit );
+        *token = SubReference( GetUnitSelection( aPath ) );
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_LIBRARY" ) ) )

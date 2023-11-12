@@ -598,41 +598,7 @@ public:
      */
     bool IsMulti() const { return m_unitCount > 1; }
 
-    /**
-     * @return the sub reference for symbol having multiple units per symbol.
-     * The sub reference identify the symbol (or unit)
-     * @param aUnit = the symbol identifier ( 1 to max count)
-     * @param aAddSeparator = true (default) to prepend the sub ref
-     *    by the separator symbol (if any)
-     * Note: this is a static function.
-     */
-    static wxString SubReference( int aUnit, bool aAddSeparator = true );
-
-    // Accessors to sub ref parameters
-    static int GetSubpartIdSeparator() { return m_subpartIdSeparator; }
-
-    /**
-     * Return a reference to m_subpartIdSeparator, only for read/save setting functions.
-     */
-    static int* SubpartIdSeparatorPtr() { return &m_subpartIdSeparator; }
-    static int GetSubpartFirstId() { return m_subpartFirstId; }
-
-    /**
-     * Return a reference to m_subpartFirstId, only for read/save setting functions.
-     */
-    static int* SubpartFirstIdPtr() { return &m_subpartFirstId; }
-
-    /**
-     * Set the separator char between the subpart id and the reference
-     * 0 (no separator) or '.' , '-' and '_'
-     * and the ascii char value to calculate the subpart symbol id from the symbol number:
-     * 'A' or '1' only are allowed. (to print U1.A or U1.1)
-     * if this is a digit, a number is used as id symbol
-     * Note also if the subpart symbol is a digit, the separator cannot be null.
-     * @param aSep = the separator symbol (0 (no separator) or '.' , '-' and '_')
-     * @param aFirstId = the Id of the first symbol ('A' or '1')
-     */
-    static void SetSubpartIdNotation( int aSep, int aFirstId );
+    static wxString LetterSubReference( int aUnit, int aFirstId );
 
     /**
      * Set or clear the alternate body style (DeMorgan) for the symbol.
@@ -804,12 +770,6 @@ private:
     wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the
                                             ///<  symbol (wild card names accepted).
 
-    static int  m_subpartIdSeparator;       ///< the separator char between
-                                            ///< the subpart id and the reference like U1A
-                                            ///< ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
-    static int  m_subpartFirstId;           ///< the ASCII char value to calculate the subpart
-                                            ///< symbol id from the symbol number: only 'A', 'a'
-                                            ///< or '1' can be used, other values have no sense.
     std::map<int, wxString> m_unitDisplayNames;
 };
 

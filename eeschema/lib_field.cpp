@@ -418,7 +418,7 @@ wxString LIB_FIELD::GetFullText( int unit ) const
     wxCHECK( GetParent(), text );
 
     if( GetParent()->IsMulti() )
-        text << LIB_SYMBOL::SubReference( unit );
+        text << LIB_SYMBOL::LetterSubReference( unit, 'A' );
 
     return text;
 }

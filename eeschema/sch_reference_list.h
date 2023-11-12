@@ -175,7 +175,7 @@ public:
             refNum << m_numRef;
 
         if( GetSymbol()->GetUnitCount() > 1 )
-            return GetRef() + refNum + LIB_SYMBOL::SubReference( GetUnit() );
+            return GetRef() + refNum + GetSymbol()->SubReference( GetUnit() );
         else
             return GetRef() + refNum;
     }

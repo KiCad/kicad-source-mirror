@@ -278,6 +278,8 @@ public:
      */
     void UpdatePrefix();
 
+    wxString SubReference( int aUnit, bool aAddSeparator = true ) const;
+
     TRANSFORM& GetTransform() { return m_transform; }
     const TRANSFORM& GetTransform() const { return m_transform; }
 

@@ -346,11 +346,6 @@ BOOST_AUTO_TEST_CASE( SubReference )
             false,
             "AAZ",
         },
-        { // haven't configured a separator, so should be nothing
-            1,
-            true,
-            "A",
-        },
     };
 
     for( const auto& c : cases )
@@ -358,7 +353,7 @@ BOOST_AUTO_TEST_CASE( SubReference )
         BOOST_TEST_CONTEXT(
                 "Subref: " << c.m_index << ", " << c.m_addSep << " -> '" << c.m_expSubRef << "'" )
         {
-            const auto subref = m_part_no_data.SubReference( c.m_index, c.m_addSep );
+            const auto subref = LIB_SYMBOL::LetterSubReference( c.m_index, 'A' );
             BOOST_CHECK_EQUAL( subref, c.m_expSubRef );
         }
     }

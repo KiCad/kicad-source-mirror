@@ -220,7 +220,7 @@ public:
 
             case COL_UNIT:
                 if( pin->GetUnit() )
-                    val = LIB_SYMBOL::SubReference( pin->GetUnit(), false );
+                    val = LIB_SYMBOL::LetterSubReference( pin->GetUnit(), 'A' );
                 else
                     val = UNITS_ALL;
                 break;
@@ -426,7 +426,7 @@ public:
                 {
                     for( int i = 1; i <= m_symbol->GetUnitCount(); i++ )
                     {
-                        if( value == LIB_SYMBOL::SubReference( i, false ) )
+                        if( value == LIB_SYMBOL::LetterSubReference( i, 'A' ) )
                         {
                             pin->SetUnit( i );
                             break;
@@ -773,7 +773,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     unitNames.push_back( UNITS_ALL );
 
     for( int i = 1; i <= aSymbol->GetUnitCount(); i++ )
-        unitNames.push_back( LIB_SYMBOL::SubReference( i, false ) );
+        unitNames.push_back( LIB_SYMBOL::LetterSubReference( i, 'A' ) );
 
     attr->SetEditor( new GRID_CELL_COMBOBOX( unitNames ) );
     m_grid->SetColAttr( COL_UNIT, attr );

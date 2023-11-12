@@ -277,7 +277,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         {
             if( DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item ) )
             {
-                if( text->GetShownText( &sheet, true ).Matches( wxS( "*${*}*" ) ) )
+                if( text->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
