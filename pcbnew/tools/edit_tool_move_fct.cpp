@@ -230,17 +230,11 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
         if( doMoveSelection( aEvent, &localCommit ) )
         {
-            if( PCB_GENERATOR* genItem = dynamic_cast<PCB_GENERATOR*>( localCommit.GetFirst() ) )
-                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &localCommit, genItem );
-            else
-                localCommit.Push( _( "Move" ) );
+            localCommit.Push( _( "Move" ) );
         }
         else
         {
-            if( PCB_GENERATOR* genItem = dynamic_cast<PCB_GENERATOR*>( localCommit.GetFirst() ) )
-                m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, &localCommit, genItem );
-            else
-                localCommit.Revert();
+            localCommit.Revert();
         }
     }
 
@@ -590,15 +584,15 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                         else
                         {
                             aCommit->Modify( item );
-
-                            item->SetFlags( IS_MOVING );
-
-                            static_cast<BOARD_ITEM*>( item )->RunOnDescendants(
-                                    [&]( BOARD_ITEM* bItem )
-                                    {
-                                        item->SetFlags( IS_MOVING );
-                                    } );
                         }
+
+                        item->SetFlags( IS_MOVING );
+
+                        static_cast<BOARD_ITEM*>( item )->RunOnDescendants(
+                                [&]( BOARD_ITEM* bItem )
+                                {
+                                    item->SetFlags( IS_MOVING );
+                                } );
                     }
                 }
 
@@ -789,8 +783,22 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     // items.
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-    if( !restore_state )
+    if( restore_state )
     {
+        if( sel_items.size() == 1 && sel_items.back()->Type() == PCB_GENERATOR_T )
+        {
+            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genRevertEdit, aCommit,
+                                             static_cast<PCB_GENERATOR*>( sel_items.back() ) );
+        }
+    }
+    else
+    {
+        if( sel_items.size() == 1 && sel_items.back()->Type() == PCB_GENERATOR_T )
+        {
+            m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, aCommit,
+                                             static_cast<PCB_GENERATOR*>( sel_items.back() ) );
+        }
+
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
         m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &oItems );
     }

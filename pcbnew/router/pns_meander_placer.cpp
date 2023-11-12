@@ -199,10 +199,24 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
     }
 
     m_finalShape.Clear();
-    m_finalShape.Append( pre );
-    m_finalShape.Append( tuned );
-    m_finalShape.Append( post );
-    m_finalShape.Simplify();
+
+    if( m_settings.m_keepEndpoints )
+    {
+        pre.Simplify();
+        tuned.Simplify();
+        post.Simplify();
+
+        m_finalShape.Append( pre );
+        m_finalShape.Append( tuned );
+        m_finalShape.Append( post );
+    }
+    else
+    {
+        m_finalShape.Append( pre );
+        m_finalShape.Append( tuned );
+        m_finalShape.Append( post );
+        m_finalShape.Simplify();
+    }
 
     return true;
 }

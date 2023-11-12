@@ -85,6 +85,7 @@ public:
         m_singleSided = false;
         m_initialSide = MEANDER_SIDE_LEFT;
         m_lengthTolerance = 0;
+        m_keepEndpoints = false;
     }
 
     void SetTargetLength( long long int aOpt )
@@ -160,6 +161,9 @@ public:
 
     ///< Allowable tuning error.
     int m_lengthTolerance;
+
+    ///< Keep vertices between pre, tuned and post parts of the line.
+    bool m_keepEndpoints;
 };
 
 /**

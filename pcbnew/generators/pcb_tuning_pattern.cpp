@@ -128,23 +128,32 @@ public:
         m_origin += aMoveVector;
         m_end += aMoveVector;
 
-        PCB_GROUP::Move( aMoveVector );
+        if( !this->HasFlag( IN_EDIT ) )
+        {
+            PCB_GROUP::Move( aMoveVector );
+
+            if( m_baseLine )
+                m_baseLine->Move( aMoveVector );
+
+            if( m_baseLineCoupled )
+                m_baseLineCoupled->Move( aMoveVector );
+        }
     }
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override
     {
-        // Not supported for tuning patterns
-#if 0
-        RotatePoint( m_origin, aRotCentre, aAngle );
-        RotatePoint( m_end, aRotCentre, aAngle );
-        PCB_GROUP::Rotate( aRotCentre, aAngle );
+        if( !this->HasFlag( IN_EDIT ) )
+        {
+            RotatePoint( m_origin, aRotCentre, aAngle );
+            RotatePoint( m_end, aRotCentre, aAngle );
+            PCB_GROUP::Rotate( aRotCentre, aAngle );
 
-        if( m_baseLine )
-            m_baseLine->Rotate( aAngle, aRotCentre );
+            if( m_baseLine )
+                m_baseLine->Rotate( aAngle, aRotCentre );
 
-        if( m_baseLineCoupled )
-            m_baseLineCoupled->Rotate( aAngle, aRotCentre );*/
-#endif
+            if( m_baseLineCoupled )
+                m_baseLineCoupled->Rotate( aAngle, aRotCentre );
+        }
     }
 
     const BOX2I GetBoundingBox() const override
@@ -510,7 +519,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
             aCommit->Modify( this );
     }
 
-    SetFlags( IS_MOVING );
+    SetFlags( IN_EDIT );
 
     int          layer = GetLayer();
     PNS::ROUTER* router = aTool->Router();
@@ -1007,6 +1016,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 
     PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
+    m_settings.m_keepEndpoints = true; // Required for re-grouping
     placer->UpdateSettings( m_settings );
     router->Move( m_end, nullptr );
 
@@ -1038,6 +1048,8 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                    PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit,
                                    const wxString& aCommitMsg, int aCommitFlags )
 {
+    ClearFlags( IN_EDIT );
+
     PNS::ROUTER*      router = aTool->Router();
     SHAPE_LINE_CHAIN  bounds = getRectShape();
     PICKED_ITEMS_LIST groupUndoList;
@@ -1066,13 +1078,14 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
         for( BOARD_ITEM* item : routerAddedItems )
         {
-            PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
-
-            if( track && bounds.PointInside( track->GetPosition(), epsilon )
-                      && bounds.PointInside( track->GetEnd(), epsilon ) )
+            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
             {
-                AddItem( item );
-                groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+                if( bounds.PointInside( track->GetPosition(), epsilon )
+                    && bounds.PointInside( track->GetEnd(), epsilon ) )
+                {
+                    AddItem( item );
+                    groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+                }
             }
 
             aCommit->Add( item );
@@ -1091,6 +1104,8 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                      PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
 {
+    ClearFlags( IN_EDIT );
+
     for( BOARD_ITEM* item : m_removedItems )
         aFrame->GetCanvas()->GetView()->Hide( item, false );
 
@@ -1299,19 +1314,21 @@ void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         return;
 
     KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
+
     int size = KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) * 0.8 );
+    size = std::max( size, pcbIUScale.mmToIU( 0.05 ) );
 
     if( m_baseLine )
     {
         for( int i = 0; i < m_baseLine->SegmentCount(); i++ )
         {
             SEG seg = m_baseLine->CSegment( i );
-            ctx.DrawLine( seg.A, seg.B, false );
+            ctx.DrawLineDashed( seg.A, seg.B, size, size / 6, true );
         }
     }
     else
     {
-        ctx.DrawLine( m_origin, m_end, false );
+        ctx.DrawLineDashed( m_origin, m_end, size, size / 6, false );
     }
 
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
@@ -1319,7 +1336,7 @@ void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         for( int i = 0; i < m_baseLineCoupled->SegmentCount(); i++ )
         {
             SEG seg = m_baseLineCoupled->CSegment( i );
-            ctx.DrawLine( seg.A, seg.B, false );
+            ctx.DrawLineDashed( seg.A, seg.B, size, size / 6, true );
         }
     }
 

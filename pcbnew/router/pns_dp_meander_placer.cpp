@@ -352,16 +352,38 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     }
 
     m_finalShapeP.Clear();
-    m_finalShapeP.Append( preP );
-    m_finalShapeP.Append( tunedP );
-    m_finalShapeP.Append( postP );
-    m_finalShapeP.Simplify();
-
     m_finalShapeN.Clear();
-    m_finalShapeN.Append( preN );
-    m_finalShapeN.Append( tunedN );
-    m_finalShapeN.Append( postN );
-    m_finalShapeN.Simplify();
+
+    if( m_settings.m_keepEndpoints )
+    {
+        preP.Simplify();
+        tunedP.Simplify();
+        postP.Simplify();
+
+        m_finalShapeP.Append( preP );
+        m_finalShapeP.Append( tunedP );
+        m_finalShapeP.Append( postP );
+
+        preN.Simplify();
+        tunedN.Simplify();
+        postN.Simplify();
+
+        m_finalShapeN.Append( preN );
+        m_finalShapeN.Append( tunedN );
+        m_finalShapeN.Append( postN );
+    }
+    else
+    {
+        m_finalShapeP.Append( preP );
+        m_finalShapeP.Append( tunedP );
+        m_finalShapeP.Append( postP );
+        m_finalShapeP.Simplify();
+
+        m_finalShapeN.Append( preN );
+        m_finalShapeN.Append( tunedN );
+        m_finalShapeN.Append( postN );
+        m_finalShapeN.Simplify();
+    }
 
     return true;
 }

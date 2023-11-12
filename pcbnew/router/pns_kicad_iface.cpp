@@ -1163,7 +1163,7 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack
 
     if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aTrack->GetParentGroup() ) )
     {
-        if( !generator->IsMoving() )
+        if( !generator->HasFlag( IN_EDIT ) )
             segment->Mark( PNS::MK_LOCKED );
     }
 
@@ -1185,7 +1185,7 @@ std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
 
     if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aArc->GetParentGroup() ) )
     {
-        if( !generator->IsMoving() )
+        if( !generator->HasFlag( IN_EDIT ) )
             arc->Mark( PNS::MK_LOCKED );
     }
 
@@ -1212,7 +1212,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
 
     if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aVia->GetParentGroup() ) )
     {
-        if( !generator->IsMoving() )
+        if( !generator->HasFlag( IN_EDIT ) )
             via->Mark( PNS::MK_LOCKED );
     }
 
