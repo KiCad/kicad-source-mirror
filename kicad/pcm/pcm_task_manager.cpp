@@ -380,7 +380,7 @@ PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::InstallFromFile( wxWindow*       aPar
     }
 
     if( !package.versions[0].compatible
-        && wxMessageBox( _( "This package version is incompatible with your kicad version or "
+        && wxMessageBox( _( "This package version is incompatible with your KiCad version or "
                             "platform. Are you sure you want to install it anyway?" ),
                          _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO, aParent )
                    == wxNO )
