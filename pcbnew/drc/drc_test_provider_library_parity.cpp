@@ -352,6 +352,27 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
 
 bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
 {
+    // Preliminary test: if a shape is a rectangle and the other is a polygon,
+    // try to convert the polygon to a rectangle for comparison, because some transforms
+    // ( and especially PCB_SHAPE::Normalize() ) can convert a polygon to a rectangle
+    // So a poly and a rectangle can be in fact the same shape
+    if( a->GetShape() == SHAPE_T::POLY && b->GetShape() == SHAPE_T::RECTANGLE )
+    {
+        PCB_SHAPE rect_test( *a );
+        rect_test.Normalize();
+
+        if( rect_test.GetShape() == SHAPE_T::RECTANGLE )
+            return shapeNeedsUpdate( &rect_test, b );
+    }
+    else if( a->GetShape() == SHAPE_T::RECTANGLE && b->GetShape() == SHAPE_T::POLY )
+    {
+        PCB_SHAPE rect_test( *b );
+        rect_test.Normalize();
+
+        if( rect_test.GetShape() == SHAPE_T::RECTANGLE )
+            return shapeNeedsUpdate( a, &rect_test );
+    }
+
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
