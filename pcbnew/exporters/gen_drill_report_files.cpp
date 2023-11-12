@@ -33,6 +33,7 @@
 #include <math/util.h>      // for KiROUND
 
 #include <board.h>
+#include <footprint.h>
 
 #include <pcbnew.h>
 #include <pcbplot.h>
@@ -255,6 +256,31 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
         default:
             break;
+        }
+    }
+
+    // Plot edge cuts in footprints
+    for( const FOOTPRINT* footprint : m_pcb->Footprints() )
+    {
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        {
+            if( item-> GetLayer() != Edge_Cuts )
+                continue;
+
+            switch( item->Type() )
+            {
+            case PCB_FP_SHAPE_T:
+                {
+                PCB_SHAPE dummy_shape( *static_cast<PCB_SHAPE*>( item ) );
+                dummy_shape.SetLayer( Dwgs_User );
+                dummy_shape.SetParentGroup( nullptr );      // Remove group association, not needed for plotting
+                itemplotter.PlotPcbShape( &dummy_shape );
+                }
+                break;
+
+            default:
+                break;
+            }
         }
     }
 
