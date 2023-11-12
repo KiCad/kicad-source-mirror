@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-02 03:01+0000\n"
+"PO-Revision-Date: 2023-11-13 17:03+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -776,7 +776,7 @@ msgstr "基板外のシルクスクリーン"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "基板外形でシルクレイヤーをクリップしない"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "3D Axis"
@@ -3728,7 +3728,7 @@ msgstr "小"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "小さなアイコンをツールバーに使用する"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:802
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1208
@@ -3744,7 +3744,7 @@ msgstr "標準"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "デフォルトのサイズのアイコンをツールバーに使用する"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3753,7 +3753,7 @@ msgstr "大"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "大きなアイコンをツールバーに使用する"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
@@ -5856,11 +5856,11 @@ msgstr "マージを解析できません"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "不正なHEADです。  マージできません。"
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "リポジトリのheadを取得できません"
 
 #: common/git/git_pull_handler.cpp:187
 #, fuzzy, c-format
@@ -5869,7 +5869,7 @@ msgstr "IBISモデル '%s' が見つかりません"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:45
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "チェックアウトに失敗しました。"
 
 #: common/git/git_pull_handler.cpp:212
 msgid "Could not lookup commit '{}'"
@@ -5911,7 +5911,7 @@ msgstr "リモートにプッシュできません"
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "%u/%u のオブジェクトを取得"
 
 #: common/git/kicad_git_common.cpp:442
 #, fuzzy, c-format
@@ -5926,7 +5926,7 @@ msgstr "ゾーン %s %s"
 #: common/git/kicad_git_common.cpp:466
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "オブジェクトを書き込み: %d%% (%d/%d), %d バイト"
 
 #: common/git/kicad_git_common.cpp:481
 #, fuzzy, c-format
@@ -5962,7 +5962,7 @@ msgstr "リモートリポジトリが見つかりません。"
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "リモートリポジトリの認証に失敗しました。"
 
 #: common/git/kicad_git_errors.cpp:40
 #, fuzzy
@@ -5984,11 +5984,11 @@ msgstr ""
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "マージで衝突が発生しました。"
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "リベースで衝突が発生しました。"
 
 #: common/git/kicad_git_errors.cpp:53
 #, fuzzy
@@ -6002,7 +6002,7 @@ msgstr "ローカルに保存された repository.json の解析に失敗しま�
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "アップストリーム ブランチが設定されていません。"
 
 #: common/git/kicad_git_errors.cpp:56
 #, fuzzy
@@ -6143,7 +6143,7 @@ msgstr "ジェスチャー"
 
 #: common/http_lib/http_lib_connection.cpp:74
 msgid "KiCad received an empty response!"
-msgstr ""
+msgstr "空の応答を受信しました!"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:155
@@ -6159,7 +6159,7 @@ msgstr "エラー: %s"
 #: common/http_lib/http_lib_connection.cpp:350
 #, c-format
 msgid "API Response:  %s"
-msgstr ""
+msgstr "APIのレスポンス:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:372
 #, c-format
@@ -6712,7 +6712,7 @@ msgstr "通知"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "通知はありません"
 
 #: common/pgm_base.cpp:205
 msgid "No default editor found, you must choose one."
@@ -7791,7 +7791,7 @@ msgstr "バグをレポート"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr ""
+msgstr "スタンドアロン モードではプロジェクト マネージャに切り替えられません。"
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -13167,7 +13167,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:252
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "無効のレンジは空白のままにします。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
 msgid "Keep tabs"
@@ -17218,31 +17218,35 @@ msgstr ""
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:415
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr ""
+msgstr "0, 1, 2, 3, 4 を期待しています"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "NORMAL か WIDE を期待しています"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:447
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr ""
+msgstr "I, O, B, IN, OUT, BIDIR を期待しています"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "R0, R90, R18, R270, M0, M90, M180, M270 を期待しています"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:490
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM "
+"を期待しています"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:512
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
+"NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT, VRIGHT "
+"を期待しています"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
@@ -18644,11 +18648,11 @@ msgstr "振幅"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "ノイズ (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "ノイズ (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 #, fuzzy
@@ -18795,7 +18799,7 @@ msgstr "距離を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "フーリエ解析を実行..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:731
@@ -19789,7 +19793,7 @@ msgstr "\"%s\" のラベルを \"%s\" に変更します。"
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "フィールド '%s' を値 '%s' として追加しました。"
 
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
@@ -20616,7 +20620,7 @@ msgstr "未実装"
 
 #: eeschema/tools/ee_actions.cpp:958
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "未実装の属性を設定"
 
 #: eeschema/tools/ee_actions.cpp:963
 #, fuzzy
@@ -20625,7 +20629,7 @@ msgstr "未実装"
 
 #: eeschema/tools/ee_actions.cpp:964
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "未実装の属性をクリア"
 
 #: eeschema/tools/ee_actions.cpp:969
 msgid "Toggle do not populate"
@@ -21094,7 +21098,7 @@ msgstr "現在のシートを別の場所または名前で保存"
 
 #: eeschema/tools/ee_actions.cpp:1428
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "新しい解析タブ..."
 
 #: eeschema/tools/ee_actions.cpp:1436
 msgid "Open Workbook..."
@@ -23768,7 +23772,7 @@ msgstr "Eagle プロジェクト ファイルをインポート"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "EasyEDA Std Backup をインポート"
 
 #: kicad/import_project.cpp:149
 #, fuzzy
@@ -23786,7 +23790,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "GLB (バイナリ GLTF)をエクスポート"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
@@ -23896,7 +23900,7 @@ msgstr "EAGLE CAD XML 回路図と基板図をインポートします"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "EasyEDA(JLCEDA) Std Backup..."
 
 #: kicad/menubar.cpp:117
 #, fuzzy
@@ -24651,19 +24655,19 @@ msgstr "プロジェクト (&P)..."
 
 #: kicad/project_tree_pane.cpp:926 kicad/project_tree_pane.cpp:940
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "ローカル リポジトリに変更をコミット"
 
 #: kicad/project_tree_pane.cpp:929
 msgid "Push"
-msgstr ""
+msgstr "プッシュ"
 
 #: kicad/project_tree_pane.cpp:930
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "コミットされたローカル リポジトリの変更をリモート リポジトリにプッシュ"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Pull"
-msgstr ""
+msgstr "プル"
 
 #: kicad/project_tree_pane.cpp:934
 #, fuzzy
@@ -24725,7 +24729,7 @@ msgstr "選択したディレクトリはすでにgitプロジェクトです。
 
 #: kicad/project_tree_pane.cpp:1534
 msgid "Failed to initialize git project."
-msgstr ""
+msgstr "git プロジェクトの初期化に失敗しました。"
 
 #: kicad/project_tree_pane.cpp:1546
 #, fuzzy
@@ -33092,7 +33096,7 @@ msgstr "端面スルーホール パッド (スルーホールのみ)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 msgid "Board contains legacy teardrops."
-msgstr ""
+msgstr "基盤に古いティアドロップがあります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
@@ -43741,7 +43745,7 @@ msgstr "ポリゴン"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "選択したポリゴンを一つのポリゴンにマージ"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 #, fuzzy
@@ -45058,7 +45062,7 @@ msgstr "配線の角度を制限することなく最も近い接続点に配線
 
 #: pcbnew/tools/pcb_actions.cpp:2397
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "全ての調整パターンを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:2398
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
@@ -45162,7 +45166,7 @@ msgstr "すべてのレイヤー"
 
 #: pcbnew/tools/pcb_control.cpp:1392
 msgid "Object Snapping"
-msgstr ""
+msgstr "オブジェクトのスナッピング"
 
 #: pcbnew/tools/pcb_control.cpp:1468
 #, c-format
