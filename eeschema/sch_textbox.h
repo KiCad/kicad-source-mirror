@@ -27,6 +27,7 @@
 
 #include <eda_text.h>
 #include <sch_shape.h>
+#include <schematic.h>
 
 
 class HTML_MESSAGE_BOX;
@@ -63,7 +64,12 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
     {
-        return GetShownText( nullptr, aAllowExtraText, aDepth );
+        SCHEMATIC* schematic = Schematic();
+
+        if( schematic )
+            return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+        else
+            return GetText();
     }
 
     bool IsHypertext() const override

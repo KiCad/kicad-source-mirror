@@ -862,14 +862,9 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
         if( sheet->ResolveTextVar( &path, token, aDepth + 1 ) )
             return true;
     }
-    else if( aPath && aPath->Last() )
+    else
     {
         if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
-            return true;
-    }
-    else if( SCH_SHEET* sheet = schematic->CurrentSheet().Last() )
-    {
-        if( sheet->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 
@@ -1437,7 +1432,8 @@ const BOX2I SCH_LABEL::GetBodyBoundingBox() const
 
 wxString SCH_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Label '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Label '%s'" ),
+                             KIUI::EllipsizeMenuText( GetShownText( false ) ) );
 }
 
 
@@ -1706,7 +1702,7 @@ wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
     {
         return wxString::Format( _( "Directive Label [%s %s]" ),
                                  UnescapeString( m_fields[0].GetName() ),
-                                 KIUI::EllipsizeMenuText( m_fields[0].GetText() ) );
+                                 KIUI::EllipsizeMenuText( m_fields[0].GetShownText( false ) ) );
     }
 }
 
@@ -1914,7 +1910,8 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 
 wxString SCH_GLOBALLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Global Label '%s'" ), KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( _( "Global Label '%s'" ),
+                             KIUI::EllipsizeMenuText( GetShownText( false ) ) );
 }
 
 
@@ -2048,7 +2045,7 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 wxString SCH_HIERLABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "Hierarchical Label '%s'" ),
-                             KIUI::EllipsizeMenuText( GetText() ) );
+                             KIUI::EllipsizeMenuText( GetShownText( false ) ) );
 }
 
 

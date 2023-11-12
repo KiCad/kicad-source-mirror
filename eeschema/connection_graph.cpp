@@ -332,31 +332,39 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     {
     case SCH_PIN_T:
     {
-        bool forceNoConnect = m_no_connect != nullptr;
         SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
+        bool     forceNoConnect = m_no_connect != nullptr;
+
         return pin->GetDefaultNetName( m_sheet, forceNoConnect );
-        break;
     }
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
+    {
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
+
         // NB: any changes here will need corresponding changes in SCH_LABEL_BASE::cacheShownText()
-        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( &m_sheet, false ),
-                             CTX_NETNAME );
+        return EscapeString( label->GetShownText( &m_sheet, false ), CTX_NETNAME );
+    }
 
     case SCH_SHEET_PIN_T:
-        // Sheet pins need to use their parent sheet as their starting sheet or they will
-        // resolve variables on the current sheet first
-        return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( nullptr, false ),
-                             CTX_NETNAME );
+    {
+        // Sheet pins need to use their parent sheet as their starting sheet or they will resolve
+        // variables on the current sheet first
+        SCH_SHEET_PIN* sheetPin = static_cast<SCH_SHEET_PIN*>( aItem );
+        SCH_SHEET_PATH path = m_sheet;
+
+        if( path.Last() != sheetPin->GetParent() )
+            path.push_back( sheetPin->GetParent() );
+
+        return EscapeString( sheetPin->GetShownText( &path, false ), CTX_NETNAME );
+    }
 
     default:
         wxFAIL_MSG( wxS( "Unhandled item type in GetNameForDriver" ) );
-        break;
+        return wxEmptyString;
     }
-
-    return wxEmptyString;
 }
 
 
@@ -2688,7 +2696,8 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( !subgraph->m_driver )
             continue;
 
-        SCH_CONNECTION* connection = subgraph->m_driver->Connection( &subgraph->m_sheet );
+        SCH_SHEET_PATH* sheet = &subgraph->m_sheet;
+        SCH_CONNECTION* connection = subgraph->m_driver->Connection( sheet );
 
         if( !connection->IsBus() )
             continue;
@@ -2698,11 +2707,11 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( labels.size() > 1 )
         {
             bool different = false;
-            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText( false );
+            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetShownText( sheet, false );
 
             for( unsigned i = 1; i < labels.size(); ++i )
             {
-                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( false ) != first )
+                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetShownText( sheet, false ) != first )
                 {
                     different = true;
                     break;
@@ -2945,6 +2954,8 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
 
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
                 ercItem->SetItems( aSubgraph->m_driver, driver );
+                ercItem->SetSheetSpecificPath( aSubgraph->GetSheet() );
+                ercItem->SetItemsSheetPaths( aSubgraph->GetSheet(), aSubgraph->m_sheet );
                 ercItem->SetErrorMessage( msg );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, driver->GetPosition() );
@@ -2961,8 +2972,9 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
 
 bool CONNECTION_GRAPH::ercCheckNetclassConflicts( const std::vector<CONNECTION_SUBGRAPH*>& subgraphs )
 {
-    wxString  firstNetclass;
-    SCH_ITEM* firstNetclassDriver = nullptr;
+    wxString              firstNetclass;
+    SCH_ITEM*             firstNetclassDriver = nullptr;
+    const SCH_SHEET_PATH* firstNetclassDriverSheet = nullptr;
 
     for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
     {
@@ -2979,11 +2991,14 @@ bool CONNECTION_GRAPH::ercCheckNetclassConflicts( const std::vector<CONNECTION_S
                 {
                     firstNetclass = netclass;
                     firstNetclassDriver = item;
+                    firstNetclassDriverSheet = &subgraph->GetSheet();
                     continue;
                 }
 
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NETCLASS_CONFLICT );
                 ercItem->SetItems( firstNetclassDriver, item );
+                ercItem->SetSheetSpecificPath( subgraph->GetSheet() );
+                ercItem->SetItemsSheetPaths( *firstNetclassDriverSheet, subgraph->GetSheet() );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
                 subgraph->m_sheet.LastScreen()->Append( marker );
@@ -3016,6 +3031,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
                 bus_item = ( !bus_item ) ? item : bus_item;
             else
                 net_item = ( !net_item ) ? item : net_item;
+
             break;
         }
 
@@ -3025,12 +3041,14 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
-            conn.ConfigureFromLabel( EscapeString( text->GetShownText( false ), CTX_NETNAME ) );
+            conn.ConfigureFromLabel( EscapeString( text->GetShownText( &sheet, false ),
+                                                   CTX_NETNAME ) );
 
             if( conn.IsBus() )
                 bus_item = ( !bus_item ) ? item : bus_item;
             else
                 net_item = ( !net_item ) ? item : net_item;
+
             break;
         }
 
@@ -3614,15 +3632,15 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
             if( allPins == 1 && !has_nc )
             {
-                reportError( text,
-                        type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL
+                                                              : ERCE_LABEL_NOT_CONNECTED );
                 ok = false;
             }
 
             if( allPins == 0 )
             {
-                reportError( text,
-                        type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED );
+                reportError( text, type == SCH_GLOBAL_LABEL_T ? ERCE_GLOBLABEL
+                                                              : ERCE_LABEL_NOT_CONNECTED );
                 ok = false;
             }
         }
@@ -3640,12 +3658,12 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 
     for( const SCH_SHEET_PATH& sheet : m_sheetList )
     {
-        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SHEET_T ) )
         {
-            if( item->Type() != SCH_SHEET_T )
-                continue;
-
             SCH_SHEET* parentSheet = static_cast<SCH_SHEET*>( item );
+            SCH_SHEET_PATH parentSheetPath = sheet;
+
+            parentSheetPath.push_back( parentSheet );
 
             std::map<wxString, SCH_SHEET_PIN*> pins;
             std::map<wxString, SCH_HIERLABEL*> labels;
@@ -3653,7 +3671,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
             for( SCH_SHEET_PIN* pin : parentSheet->GetPins() )
             {
                 if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL ) )
-                    pins[pin->GetText()] = pin;
+                    pins[ pin->GetShownText( &parentSheetPath, false ) ] = pin;
 
                 if( pin->IsDangling() && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
                 {
@@ -3676,11 +3694,12 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     if( subItem->Type() == SCH_HIER_LABEL_T )
                     {
                         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( subItem );
+                        wxString       labelText = label->GetShownText( &parentSheetPath, false );
 
-                        if( !pins.count( label->GetText() ) )
-                            labels[label->GetText()] = label;
+                        if( !pins.count( labelText ) )
+                            labels[ labelText ] = label;
                         else
-                            matchedPins.insert( label->GetText() );
+                            matchedPins.insert( labelText );
                     }
                 }
 
@@ -3710,9 +3729,6 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     wxString msg = wxString::Format( _( "Hierarchical label %s has no matching "
                                                         "sheet pin in the parent sheet" ),
                                                      UnescapeString( unmatched.first ) );
-
-                    SCH_SHEET_PATH parentSheetPath = sheet;
-                    parentSheetPath.push_back( parentSheet );
 
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
                     ercItem->SetItems( unmatched.second );

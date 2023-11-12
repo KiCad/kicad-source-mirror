@@ -30,6 +30,7 @@
 #include <sch_item.h>
 #include <sch_field.h>
 #include <sch_connection.h>   // for CONNECTION_TYPE
+#include <schematic.h>
 
 
 class HTML_MESSAGE_BOX;
@@ -59,7 +60,12 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
     {
-        return GetShownText( nullptr, aAllowExtraText, aDepth );
+        SCHEMATIC* schematic = Schematic();
+
+        if( schematic )
+            return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+        else
+            return GetText();
     }
 
     int GetSchTextSize() const { return GetTextWidth(); }

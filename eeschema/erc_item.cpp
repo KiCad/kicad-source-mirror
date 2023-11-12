@@ -304,8 +304,12 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
 
                 if( aSheet != curSheet )
                 {
+                    schEditFrame->SetCurrentSheet( aSheet );
                     aSheet.UpdateAllScreenReferences();
-                    desc = aCurrItem->GetItemDescription( m_editFrame );
+                    {
+                        desc = aCurrItem->GetItemDescription( m_editFrame );
+                    }
+                    schEditFrame->SetCurrentSheet( curSheet );
                     curSheet.UpdateAllScreenReferences();
                 }
                 else

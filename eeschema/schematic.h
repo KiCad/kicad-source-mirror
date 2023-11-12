@@ -128,7 +128,7 @@ public:
 
     void GetContextualTextVars( wxArrayString* aVars ) const;
 
-    bool ResolveTextVar( wxString* token, int aDepth ) const;
+    bool ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* token, int aDepth ) const;
 
     /// Helper to retrieve the filename from the root sheet screen
     wxString GetFileName() const override;

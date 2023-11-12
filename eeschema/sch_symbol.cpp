@@ -947,10 +947,10 @@ SCH_FIELD* SCH_SYMBOL::GetFieldById( int aFieldId )
 
 SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName )
 {
-    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    for( SCH_FIELD& field : m_fields )
     {
-        if( m_fields[ii].GetName() == aFieldName )
-            return &m_fields[ii];
+        if( field.GetName() == aFieldName )
+            return &field;
     }
 
     return nullptr;
@@ -959,25 +959,13 @@ SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName )
 
 const SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName ) const
 {
-    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    for( const SCH_FIELD& field : m_fields )
     {
-        if( m_fields[ii].GetName() == aFieldName )
-            return &m_fields[ii];
+        if( field.GetName() == aFieldName )
+            return &field;
     }
 
     return nullptr;
-}
-
-
-wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName ) const
-{
-    for( const SCH_FIELD& field : m_fields )
-    {
-        if( aFieldName == field.GetName() || aFieldName == field.GetCanonicalName() )
-            return field.GetText();
-    }
-
-    return wxEmptyString;
 }
 
 
@@ -987,7 +975,7 @@ void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly 
     {
         if( aVisibleOnly )
         {
-            if( !field.IsVisible() || field.GetShownText( nullptr, true ).IsEmpty() )
+            if( !field.IsVisible() || field.GetText().IsEmpty() )
                 continue;
         }
 
@@ -998,10 +986,8 @@ void SCH_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly 
 
 SCH_FIELD* SCH_SYMBOL::AddField( const SCH_FIELD& aField )
 {
-    int newNdx = m_fields.size();
-
     m_fields.push_back( aField );
-    return &m_fields[newNdx];
+    return &m_fields.back();
 }
 
 

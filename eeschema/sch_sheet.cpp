@@ -253,7 +253,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     {
         if( token->IsSameAs( m_fields[i].GetCanonicalName().Upper() ) )
         {
-            *token = m_fields[i].GetShownText( nullptr, false, aDepth + 1 );
+            *token = m_fields[i].GetShownText( aPath, false, aDepth + 1 );
             return true;
         }
     }
@@ -262,7 +262,7 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
     {
         if( token->IsSameAs( m_fields[i].GetName() ) )
         {
-            *token = m_fields[i].GetShownText( nullptr, false, aDepth + 1 );
+            *token = m_fields[i].GetShownText( aPath, false, aDepth + 1 );
             return true;
         }
     }
@@ -300,12 +300,12 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
         SCH_SHEET_PATH path = *aPath;
         path.pop_back();
 
-        if( path.Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+        if( path.Last()->ResolveTextVar( &path, token, aDepth + 1 ) )
             return true;
     }
     else
     {
-        if( schematic->ResolveTextVar( token, aDepth + 1 ) )
+        if( schematic->ResolveTextVar( aPath, token, aDepth + 1 ) )
             return true;
     }
 

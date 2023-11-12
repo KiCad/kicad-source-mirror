@@ -153,45 +153,45 @@ void SCHEMATIC::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
+bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* token,
+                                int aDepth ) const
 {
-    if( !CurrentSheet().empty() )
-    {
-        if( token->IsSameAs( wxT( "#" ) ) )
-        {
-            *token = CurrentSheet().GetPageNumber();
-            return true;
-        }
-        else if( token->IsSameAs( wxT( "##" ) ) )
-        {
-            *token = wxString::Format( "%i", Root().CountSheets() );
-            return true;
-        }
-        else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
-        {
-            *token = CurrentSheet().PathHumanReadable();
-            return true;
-        }
-        else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
-        {
-            *token = CurrentSheet().Last()->GetName();
-            return true;
-        }
-        else if( token->IsSameAs( wxT( "FILENAME" ) ) )
-        {
-            wxFileName fn( GetFileName() );
-            *token = fn.GetFullName();
-            return true;
-        }
-        else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) )
-        {
-            *token = Prj().GetProjectName();
-            return true;
-        }
+    wxCHECK( aSheetPath, false );
 
-        if( CurrentSheet().LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
-            return true;
+    if( token->IsSameAs( wxT( "#" ) ) )
+    {
+        *token = aSheetPath->GetPageNumber();
+        return true;
     }
+    else if( token->IsSameAs( wxT( "##" ) ) )
+    {
+        *token = wxString::Format( "%i", Root().CountSheets() );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
+    {
+        *token = aSheetPath->PathHumanReadable();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SHEETNAME" ) ) )
+    {
+        *token = aSheetPath->Last()->GetName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "FILENAME" ) ) )
+    {
+        wxFileName fn( GetFileName() );
+        *token = fn.GetFullName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) )
+    {
+        *token = Prj().GetProjectName();
+        return true;
+    }
+
+    if( aSheetPath->LastScreen()->GetTitleBlock().TextVarResolver( token, m_project ) )
+        return true;
 
     if( Prj().TextVarResolver( token ) )
         return true;

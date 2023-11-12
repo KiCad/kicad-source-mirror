@@ -1225,11 +1225,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
     // Create output directory if it does not exist (also transform it in absolute form).
     // Bail if it fails.
 
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
-        return m_parent->Schematic().ResolveTextVar( token, 0 );
-    };
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                SCHEMATIC& schematic = m_parent->Schematic();
+
+                // Handles m_board->GetTitleBlock() *and* m_board->GetProject()
+                return schematic.ResolveTextVar( &schematic.CurrentSheet(), token, 0 );
+            };
 
     wxString path = m_outputFileName->GetValue();
 

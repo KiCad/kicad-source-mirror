@@ -254,7 +254,12 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
     {
-        return GetShownText( nullptr, aAllowExtraText, aDepth );
+        SCHEMATIC* schematic = Schematic();
+
+        if( schematic )
+            return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+        else
+            return GetText();
     }
 
     bool HasCachedDriverName() const override;

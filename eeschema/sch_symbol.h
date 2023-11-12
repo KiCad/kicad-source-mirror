@@ -402,13 +402,6 @@ public:
     const SCH_FIELD* GetFieldByName( const wxString& aFieldName ) const;
 
     /**
-     * Search for a field named \a aFieldName and returns text associated with this field.
-     *
-     * @param aFieldName is the name of the field
-     */
-    wxString GetFieldText( const wxString& aFieldName ) const;
-
-    /**
      * Populate a std::vector with SCH_FIELDs.
      *
      * @param aVector is the vector to populate.

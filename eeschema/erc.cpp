@@ -196,12 +196,8 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         wsItems.BuildDrawItemsList( aDrawingSheet->GetPageInfo(), aDrawingSheet->GetTitleBlock() );
     }
 
-    SCH_SHEET_PATH  savedCurrentSheet = m_schematic->CurrentSheet();
-    SCH_SHEET_LIST  sheets = m_schematic->GetSheets();
-
-    for( SCH_SHEET_PATH& sheet : sheets )
+    for( SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
     {
-        m_schematic->SetCurrentSheet( sheet );
         SCH_SCREEN* screen = sheet.LastScreen();
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_LOCATE_ANY_T ) )
@@ -212,10 +208,9 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_FIELD& field : symbol->GetFields() )
                 {
-                    if( unresolved( field.GetShownText( true ) ) )
+                    if( unresolved( field.GetShownText( &sheet, true ) ) )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
@@ -229,10 +224,9 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
                 for( SCH_FIELD& field : subSheet->GetFields() )
                 {
-                    if( unresolved( field.GetShownText( true ) ) )
+                    if( unresolved( field.GetShownText( &sheet, true ) ) )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
@@ -240,12 +234,14 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     }
                 }
 
-                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                SCH_SHEET_PATH subSheetPath = sheet;
+                subSheetPath.push_back( subSheet );
+
+                for( SCH_SHEET_PIN* pin : subSheet->GetPins() )
                 {
-                    if( pin->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
+                    if( pin->GetShownText( &subSheetPath, true ).Matches( wxS( "*${*}*" ) ) )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem =
-                                ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                        auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( pin );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
@@ -255,10 +251,9 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( item ) )
             {
-                if( text->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
+                if( text->GetShownText( &sheet, true ).Matches( wxS( "*${*}*" ) ) )
                 {
-                    std::shared_ptr<ERC_ITEM> ercItem =
-                            ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
@@ -267,10 +262,9 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
             else if( SCH_TEXTBOX* textBox = dynamic_cast<SCH_TEXTBOX*>( item ) )
             {
-                if( textBox->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
+                if( textBox->GetShownText( &sheet, true ).Matches( wxS( "*${*}*" ) ) )
                 {
-                    std::shared_ptr<ERC_ITEM> ercItem =
-                            ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
+                    auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( textBox );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, textBox->GetPosition() );
@@ -283,7 +277,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
         {
             if( DS_DRAW_ITEM_TEXT* text = dynamic_cast<DS_DRAW_ITEM_TEXT*>( item ) )
             {
-                if( text->GetShownText( true ).Matches( wxS( "*${*}*" ) ) )
+                if( text->GetShownText( &sheet, true ).Matches( wxS( "*${*}*" ) ) )
                 {
                     std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
@@ -294,8 +288,6 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
             }
         }
     }
-
-    m_schematic->SetCurrentSheet( savedCurrentSheet );
 }
 
 
@@ -881,6 +873,8 @@ int ERC_TESTER::TestSimilarLabels()
     {
         for( CONNECTION_SUBGRAPH* subgraph : net.second )
         {
+            const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
+
             for( SCH_ITEM* item : subgraph->GetItems() )
             {
                 switch( item->Type() )
@@ -891,23 +885,26 @@ int ERC_TESTER::TestSimilarLabels()
                 {
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
-                    wxString normalized = label->GetShownText( false ).Lower();
+                    wxString normalized = label->GetShownText( &sheet, false ).Lower();
 
                     if( !labelMap.count( normalized ) )
                     {
-                        labelMap[normalized] = std::make_pair( label, subgraph->GetSheet() );
+                        labelMap[normalized] = std::make_pair( label, sheet );
+                        break;
                     }
-                    else if( labelMap.at( normalized ).first->GetShownText( false )
-                             != label->GetShownText( false ) )
+
+                    auto& [ otherLabel, otherSheet ] = labelMap.at( normalized );
+
+                    if( otherLabel->GetShownText( &otherSheet, false )
+                            != label->GetShownText( &sheet, false ) )
                     {
                         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
                         ercItem->SetItems( label, labelMap.at( normalized ).first );
-                        ercItem->SetSheetSpecificPath( subgraph->GetSheet() );
-                        ercItem->SetItemsSheetPaths( subgraph->GetSheet(),
-                                                     labelMap.at( normalized ).second );
+                        ercItem->SetSheetSpecificPath( sheet );
+                        ercItem->SetItemsSheetPaths( sheet, labelMap.at( normalized ).second );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
-                        subgraph->GetSheet().LastScreen()->Append( marker );
+                        sheet.LastScreen()->Append( marker );
                         errors += 1;
                     }
 

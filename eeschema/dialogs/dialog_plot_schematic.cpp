@@ -421,7 +421,8 @@ wxString DIALOG_PLOT_SCHEMATIC::getOutputPath()
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool
             {
-                return m_parent->Schematic().ResolveTextVar( token, 0 );
+                SCHEMATIC& schematic = m_parent->Schematic();
+                return schematic.ResolveTextVar( &schematic.CurrentSheet(), token, 0 );
             };
 
     wxString path = m_outputDirectoryName->GetValue();
