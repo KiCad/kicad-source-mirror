@@ -605,3 +605,11 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     return true;
 }
+
+wxString GetLanguage()
+{
+    if( s_PcbEditFrame )
+        return GetSettingsManager()->GetCommonSettings()->m_System.language;
+    else
+        return "";
+}

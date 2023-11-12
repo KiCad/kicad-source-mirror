@@ -209,4 +209,11 @@ bool IsActionRunning();
 bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
                      bool aReportAllTrackErrors );
 
+/**
+ * Get the language string from COMMON_SETTINGS.
+ *
+ * @return the current language string.
+ */
+wxString GetLanguage();
+
 #endif      // __PCBNEW_SCRIPTING_HELPERS_H
