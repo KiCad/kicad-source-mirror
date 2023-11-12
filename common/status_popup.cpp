@@ -37,6 +37,8 @@ STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
         wxPopupWindow( aParent ),
         m_expireTimer( this )
 {
+    SetDoubleBuffered( true );
+
     m_panel = new wxPanel( this, wxID_ANY );
     m_topSizer = new wxBoxSizer( wxHORIZONTAL );
     m_panel->SetSizer( m_topSizer );
