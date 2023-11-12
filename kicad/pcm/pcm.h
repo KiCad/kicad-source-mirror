@@ -342,6 +342,16 @@ public:
      */
     void ReadEnvVar();
 
+    /**
+     * @brief Parses version strings and calculates compatibility
+     *
+     * This should be called after loading package metadata from repository or from
+     * installation entries
+     *
+     * @param aPackage package metadata object
+     */
+    static void PreparePackage( PCM_PACKAGE& aPackage );
+
 private:
     ///< Default download limit of 10 Mb to not use too much memory
     static constexpr size_t DEFAULT_DOWNLOAD_MEM_LIMIT = 10 * 1024 * 1024;
@@ -377,16 +387,6 @@ private:
      * @param aRepositoryId
      */
     void updateInstalledPackagesMetadata( const wxString& aRepositoryId );
-
-    /**
-     * @brief Parses version strings and calculates compatibility
-     *
-     * This should be called after loading package metadata from repository or from
-     * installation entries
-     *
-     * @param aPackage package metadata object
-     */
-    static void preparePackage( PCM_PACKAGE& aPackage );
 
     ///< Returns current UTC timestamp
     time_t getCurrentTimestamp() const;

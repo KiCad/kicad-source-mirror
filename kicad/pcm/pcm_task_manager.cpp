@@ -371,10 +371,20 @@ PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::InstallFromFile( wxWindow*       aPar
     }
 
     PCM_PACKAGE package = metadata.get<PCM_PACKAGE>();
+    PLUGIN_CONTENT_MANAGER::PreparePackage( package );
 
     if( package.versions.size() != 1 )
     {
         wxLogError( _( "Archive metadata must have a single version defined" ) );
+        return PCM_TASK_MANAGER::STATUS::FAILED;
+    }
+
+    if( !package.versions[0].compatible
+        && wxMessageBox( _( "This package version is incompatible with your kicad version or "
+                            "platform. Are you sure you want to install it anyway?" ),
+                         _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO, aParent )
+                   == wxNO )
+    {
         return PCM_TASK_MANAGER::STATUS::FAILED;
     }
 

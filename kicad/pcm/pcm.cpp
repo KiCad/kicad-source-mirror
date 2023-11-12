@@ -179,7 +179,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
     std::for_each( m_installed.begin(), m_installed.end(),
                    [&]( std::pair<const wxString, PCM_INSTALLATION_ENTRY>& entry )
                    {
-                       preparePackage( entry.second.package );
+                       PreparePackage( entry.second.package );
                    } );
 }
 
@@ -442,7 +442,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 
                 for( size_t i = 0; i < saved_repo.package_list.size(); i++ )
                 {
-                    preparePackage( saved_repo.package_list[i] );
+                    PreparePackage( saved_repo.package_list[i] );
                     saved_repo.package_map[saved_repo.package_list[i].identifier] = i;
                 }
 
@@ -472,7 +472,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 
         for( size_t i = 0; i < current_repo.package_list.size(); i++ )
         {
-            preparePackage( current_repo.package_list[i] );
+            PreparePackage( current_repo.package_list[i] );
             current_repo.package_map[current_repo.package_list[i].identifier] = i;
         }
 
@@ -612,7 +612,7 @@ void PLUGIN_CONTENT_MANAGER::updateInstalledPackagesMetadata( const wxString& aR
 }
 
 
-void PLUGIN_CONTENT_MANAGER::preparePackage( PCM_PACKAGE& aPackage )
+void PLUGIN_CONTENT_MANAGER::PreparePackage( PCM_PACKAGE& aPackage )
 {
     // Parse package version strings
     for( PACKAGE_VERSION& ver : aPackage.versions )
