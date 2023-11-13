@@ -3015,8 +3015,13 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
 
         TEST( dwgA->GetShape(), dwgB->GetShape() );
 
-        TEST_PT( dwgA->GetStart(), dwgB->GetStart() );
-        TEST_PT( dwgA->GetEnd(), dwgB->GetEnd() );
+        // GetStart() and GetEnd() have no meaning with polygons.
+        // We cannot use them for sorting polygons
+        if( dwgA->GetShape() != SHAPE_T::POLY )
+        {
+            TEST_PT( dwgA->GetStart(), dwgB->GetStart() );
+            TEST_PT( dwgA->GetEnd(), dwgB->GetEnd() );
+        }
 
         if( dwgA->GetShape() == SHAPE_T::ARC )
         {
