@@ -1840,7 +1840,7 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 
     if( pageType == PAGE_INFO::Custom )
     {
-        int width = parseDouble( "width" );
+        double width = parseDouble( "width" );
 
         // Perform some controls to avoid crashes if the size is edited by hands
         if( width < MIN_PAGE_SIZE_MM )
@@ -1848,7 +1848,7 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
         else if( width > MAX_PAGE_SIZE_EESCHEMA_MM )
             width = MAX_PAGE_SIZE_EESCHEMA_MM;
 
-        int height = parseDouble( "height" );
+        double height = parseDouble( "height" );
 
         if( height < MIN_PAGE_SIZE_MM )
             height = MIN_PAGE_SIZE_MM;
