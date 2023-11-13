@@ -98,9 +98,60 @@ bool SCH_EDIT_FRAME::checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet )
 
 void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename )
 {
-    aSheet->SetScreen( new SCH_SCREEN( &Schematic() ) );
+    SCH_SCREEN* newScreen = new SCH_SCREEN( &Schematic() );
+    aSheet->SetScreen( newScreen );
     aSheet->GetScreen()->SetContentModified();
     aSheet->GetScreen()->SetFileName( aNewFilename );
+
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+    wxCHECK( cfg, /* void */ );
+
+    if( cfg->m_PageSettings.export_paper )
+        newScreen->SetPageSettings( GetScreen()->GetPageSettings() );
+
+    const TITLE_BLOCK& tb1 = GetScreen()->GetTitleBlock();
+    TITLE_BLOCK        tb2 = newScreen->GetTitleBlock();
+
+    if( cfg->m_PageSettings.export_revision )
+        tb2.SetRevision( tb1.GetRevision() );
+
+    if( cfg->m_PageSettings.export_date )
+        tb2.SetDate( tb1.GetDate() );
+
+    if( cfg->m_PageSettings.export_title )
+        tb2.SetTitle( tb1.GetTitle() );
+
+    if( cfg->m_PageSettings.export_company )
+        tb2.SetCompany( tb1.GetCompany() );
+
+    if( cfg->m_PageSettings.export_comment1 )
+        tb2.SetComment( 0, tb1.GetComment( 0 ) );
+
+    if( cfg->m_PageSettings.export_comment2 )
+        tb2.SetComment( 1, tb1.GetComment( 1 ) );
+
+    if( cfg->m_PageSettings.export_comment3 )
+        tb2.SetComment( 2, tb1.GetComment( 2 ) );
+
+    if( cfg->m_PageSettings.export_comment4 )
+        tb2.SetComment( 3, tb1.GetComment( 3 ) );
+
+    if( cfg->m_PageSettings.export_comment5 )
+        tb2.SetComment( 4, tb1.GetComment( 4 ) );
+
+    if( cfg->m_PageSettings.export_comment6 )
+        tb2.SetComment( 5, tb1.GetComment( 5 ) );
+
+    if( cfg->m_PageSettings.export_comment7 )
+        tb2.SetComment( 6, tb1.GetComment( 6 ) );
+
+    if( cfg->m_PageSettings.export_comment8 )
+        tb2.SetComment( 7, tb1.GetComment( 7 ) );
+
+    if( cfg->m_PageSettings.export_comment9 )
+        tb2.SetComment( 8, tb1.GetComment( 8 ) );
+
+    newScreen->SetTitleBlock( tb2 );
 }
 
 
