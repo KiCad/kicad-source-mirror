@@ -350,40 +350,26 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
 }
 
 
-bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
+bool shapeNeedsUpdate( const PCB_SHAPE* aShapeA, const PCB_SHAPE* aShapeB )
 {
-    // Preliminary test: if a shape is a rectangle and the other is a polygon,
-    // try to convert the polygon to a rectangle for comparison, because some transforms
-    // ( and especially PCB_SHAPE::Normalize() ) can convert a polygon to a rectangle
-    // So a poly and a rectangle can be in fact the same shape
-    if( a->GetShape() == SHAPE_T::POLY && b->GetShape() == SHAPE_T::RECTANGLE )
-    {
-        PCB_SHAPE rect_test( *a );
-        rect_test.Normalize();
-
-        if( rect_test.GetShape() == SHAPE_T::RECTANGLE )
-            return shapeNeedsUpdate( &rect_test, b );
-    }
-    else if( a->GetShape() == SHAPE_T::RECTANGLE && b->GetShape() == SHAPE_T::POLY )
-    {
-        PCB_SHAPE rect_test( *b );
-        rect_test.Normalize();
-
-        if( rect_test.GetShape() == SHAPE_T::RECTANGLE )
-            return shapeNeedsUpdate( a, &rect_test );
-    }
+    // Ensure the 2 shapes to compare are normalized,
+    // i.e. have similar internal representation
+    PCB_SHAPE curr_shape = *aShapeA;
+    curr_shape.Normalize();
+    PCB_SHAPE ref_shape = *aShapeB;
+    ref_shape.Normalize();
 
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
-    TEST( a->GetShape(), b->GetShape(), "" );
+    TEST( curr_shape.GetShape(), ref_shape.GetShape(), "" );
 
-    switch( a->GetShape() )
+    switch( curr_shape.GetShape() )
     {
     case SHAPE_T::RECTANGLE:
     {
-        BOX2I aRect( a->GetStart(), a->GetEnd() - a->GetStart() );
-        BOX2I bRect( b->GetStart(), b->GetEnd() - b->GetStart() );
+        BOX2I aRect( curr_shape.GetStart(), curr_shape.GetEnd() - curr_shape.GetStart() );
+        BOX2I bRect( ref_shape.GetStart(), ref_shape.GetEnd() - ref_shape.GetStart() );
 
         aRect.Normalize();
         bRect.Normalize();
@@ -395,46 +381,46 @@ bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
 
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-        TEST_PT( a->GetStart(), b->GetStart(), "" );
-        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( curr_shape.GetStart(), ref_shape.GetStart(), "" );
+        TEST_PT( curr_shape.GetEnd(), ref_shape.GetEnd(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST_PT( a->GetStart(), b->GetStart(), "" );
-        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
+        TEST_PT( curr_shape.GetStart(), ref_shape.GetStart(), "" );
+        TEST_PT( curr_shape.GetEnd(), ref_shape.GetEnd(), "" );
 
         // Arc center is calculated and so may have round-off errors when parents are
         // differentially rotated.
-        if( ( a->GetCenter() - b->GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
+        if( ( curr_shape.GetCenter() - ref_shape.GetCenter() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
             return true;
 
         break;
 
     case SHAPE_T::BEZIER:
-        TEST_PT( a->GetStart(), b->GetStart(), "" );
-        TEST_PT( a->GetEnd(), b->GetEnd(), "" );
-        TEST_PT( a->GetBezierC1(), b->GetBezierC1(), "" );
-        TEST_PT( a->GetBezierC2(), b->GetBezierC2(), "" );
+        TEST_PT( curr_shape.GetStart(), ref_shape.GetStart(), "" );
+        TEST_PT( curr_shape.GetEnd(), ref_shape.GetEnd(), "" );
+        TEST_PT( curr_shape.GetBezierC1(), ref_shape.GetBezierC1(), "" );
+        TEST_PT( curr_shape.GetBezierC2(), ref_shape.GetBezierC2(), "" );
         break;
 
     case SHAPE_T::POLY:
-        TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
+        TEST( curr_shape.GetPolyShape().TotalVertices(), ref_shape.GetPolyShape().TotalVertices(), "" );
 
-        for( int ii = 0; ii < a->GetPolyShape().TotalVertices(); ++ii )
-            TEST_PT( a->GetPolyShape().CVertex( ii ), b->GetPolyShape().CVertex( ii ), "" );
+        for( int ii = 0; ii < curr_shape.GetPolyShape().TotalVertices(); ++ii )
+            TEST_PT( curr_shape.GetPolyShape().CVertex( ii ), ref_shape.GetPolyShape().CVertex( ii ), "" );
 
         break;
 
     default:
-        UNIMPLEMENTED_FOR( a->SHAPE_T_asString() );
+        UNIMPLEMENTED_FOR( curr_shape.SHAPE_T_asString() );
     }
 
-    if( a->IsOnCopperLayer() )
-        TEST( a->GetStroke(), b->GetStroke(), "" );
+    if( curr_shape.IsOnCopperLayer() )
+        TEST( curr_shape.GetStroke(), ref_shape.GetStroke(), "" );
 
-    TEST( a->IsFilled(), b->IsFilled(), "" );
+    TEST( curr_shape.IsFilled(), ref_shape.IsFilled(), "" );
 
-    TEST( a->GetLayer(), b->GetLayer(), "" );
+    TEST( curr_shape.GetLayer(), ref_shape.GetLayer(), "" );
 
     return diff;
 }
