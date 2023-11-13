@@ -646,8 +646,6 @@ void LIB_TREE::showPreview( wxDataViewItem aItem )
         if( !m_previewWindow )
             m_previewWindow = new wxPopupWindow( topLevelParent );
 
-        bool wasShown = m_previewWindow->IsShown();
-
         m_previewWindow->SetSize( PREVIEW_SIZE );
 
         m_adapter->ShowPreview( m_previewWindow, aItem );

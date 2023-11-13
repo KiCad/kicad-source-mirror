@@ -345,8 +345,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 // Pick the symbol to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
-                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibrary(
-                        &filter, *historyList, alreadyPlaced, footprintPreviews );
+                PICKED_SYMBOL sel = m_frame->PickSymbolFromLibrary( &filter, *historyList,
+                                                                    alreadyPlaced,
+                                                                    footprintPreviews );
 
                 LIB_SYMBOL* libSymbol = sel.LibId.IsValid() ? m_frame->GetLibSymbol( sel.LibId )
                                                             : nullptr;
