@@ -350,15 +350,9 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
 }
 
 
-bool shapeNeedsUpdate( const PCB_SHAPE* aShapeA, const PCB_SHAPE* aShapeB )
+bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
 {
-    // Ensure the 2 shapes to compare are normalized,
-    // i.e. have similar internal representation
-    PCB_SHAPE curr_shape = *aShapeA;
-    curr_shape.Normalize();
-    PCB_SHAPE ref_shape = *aShapeB;
-    ref_shape.Normalize();
-
+    // curr_shape and ref_shape are expected to be normalized, for a more reliable test.
     REPORTER* aReporter = nullptr;
     bool      diff = false;
 
@@ -520,32 +514,32 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
     bool diff = false;
 
     // To avoid issues when comparing the footprint on board and the footprint in library
-    // use a footprint not flipped, not rotated and at position 0,0.
-    // Otherwise one can see differences when comparing coordinates of some items
-    if( IsFlipped() || GetPosition() != VECTOR2I( 0, 0 ) || GetOrientation() != ANGLE_0 )
-    {
-        std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( Clone() ) );
-        temp->SetParentGroup( nullptr );
+    // use the footprint from lib flipped, rotated and at same position as this.
+    // And using the footprint from lib with same changes as this minimize the issues
+    // due to rounding and shape modifications
 
-        if( IsFlipped() )
-            temp->Flip( {0,0}, false );
+    std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( aLibFP->Clone() ) );
+    temp->SetParentGroup( nullptr );
 
-        if( GetPosition() != VECTOR2I( 0, 0 ) )
-            temp->SetPosition( { 0, 0 } );
+    temp->SetParent( GetBoard() );  // Needed to know the copper layer count;
 
-        if( GetOrientation() != ANGLE_0 )
-            temp->SetOrientation( ANGLE_0 );
+    if( IsFlipped() != temp->IsFlipped() )
+        temp->Flip( { 0, 0 }, false );
 
-        for( BOARD_ITEM* item : temp->GraphicalItems() )
-            item->Normalize();
+    if( GetOrientation() != temp->GetOrientation() )
+        temp->SetOrientation( GetOrientation() );
 
-        diff = temp->FootprintNeedsUpdate( aLibFP, aReporter );
+    if( GetPosition() != temp->GetPosition() )
+        temp->SetPosition( GetPosition() );
 
-        // This temporary footprint must not have a parent when it goes out of scope because it
-        // must not trigger the IncrementTimestamp call in ~FOOTPRINT.
-        temp->SetParent( nullptr );
-        return diff;
-    }
+    for( BOARD_ITEM* item : temp->GraphicalItems() )
+        item->Normalize();
+
+    // This temporary footprint must not have a parent when it goes out of scope because it
+    // must not trigger the IncrementTimestamp call in ~FOOTPRINT.
+    temp->SetParent( nullptr );
+
+    aLibFP = temp.get();
 
     TEST( GetLibDescription(), aLibFP->GetLibDescription(), _( "Footprint descriptions differ." ) );
     TEST( GetKeywords(), aLibFP->GetKeywords(), _( "Footprint keywords differ." ) );
@@ -618,6 +612,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
                   {
                       return item->Type() == PCB_SHAPE_T;
                   } );
+
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> bShapes;
     std::copy_if( aLibFP->GraphicalItems().begin(), aLibFP->GraphicalItems().end(),
                   std::inserter( bShapes, bShapes.begin() ),
@@ -635,7 +630,12 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
     {
         for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
         {
-            if( shapeNeedsUpdate( static_cast<PCB_SHAPE*>( *aIt ), static_cast<PCB_SHAPE*>( *bIt ) ) )
+            // aShapes are the tested footprint PCB_SHAPE. Normalize them
+            // bShapes are from the footprint model: they are already normalized.
+            PCB_SHAPE curr_shape = *static_cast<PCB_SHAPE*>( *aIt );
+            curr_shape.Normalize();
+
+            if( shapeNeedsUpdate( curr_shape, *static_cast<PCB_SHAPE*>( *bIt ) ) )
             {
                 diff = true;
                 REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
