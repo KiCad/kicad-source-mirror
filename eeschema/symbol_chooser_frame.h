@@ -61,7 +61,7 @@ public:
      *                see SCH_BASE_FRAME::SelectSymbolFromLibrary() for details.
      *                if aFilter == NULL, remove all filtering.
      */
-    void SetFilter(  std::function<bool( LIB_TREE_NODE& aNode )>* aFilter  );
+    void SetFilter( std::function<bool( LIB_TREE_NODE& aNode )>* aFilter );
 
 private:
     void OnPaint( wxPaintEvent& aEvent );

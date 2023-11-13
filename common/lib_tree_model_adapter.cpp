@@ -669,11 +669,21 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
     // If still no matches expand a single library if there is only one
     if( !firstMatch )
     {
+        int libraries = 0;
+
+        for( const std::unique_ptr<LIB_TREE_NODE>& child : m_tree.m_Children )
+        {
+            if( !child->m_Name.StartsWith( "-- " ) )
+                 libraries++;
+        }
+
+        if( libraries != 1 )
+            return nullptr;
+
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
-                    if( n->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM
-                            && n->m_Parent->m_Parent->m_Children.size() == 1 )
+                    if( n->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM )
                     {
                         firstMatch = n;
                         m_widget->ExpandAncestors( ToItem( n ) );
