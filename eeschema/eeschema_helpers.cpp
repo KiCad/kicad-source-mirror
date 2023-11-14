@@ -126,9 +126,12 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
 
     SCHEMATIC* schematic = new SCHEMATIC( project );
 
+    wxFileName schFile = aFileName;
+    schFile.MakeAbsolute();
+
     try
     {
-        schematic->SetRoot( pi->LoadSchematicFile( aFileName, schematic ) );
+        schematic->SetRoot( pi->LoadSchematicFile( schFile.GetFullPath(), schematic ) );
     }
     catch( ... )
     {
