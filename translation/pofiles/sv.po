@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-13 17:03+0000\n"
+"PO-Revision-Date: 2023-11-16 10:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -5839,19 +5839,19 @@ msgid "Could not clone repository '%s'"
 msgstr "Det gick inte att klona förvaret '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Det gick inte att slå upp fjärr '%s'"
+msgstr "Lyckades inte slå upp fjärrförvar '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Kunde inte ansluta till fjärr '%s'"
+msgstr "Kunde inte ansluta till fjärrförvar '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Kunde inte hämta data från fjärr '%s'"
+msgstr "Kunde inte hämta data från fjärrförvar '%s'"
 
 #: common/git/git_pull_handler.cpp:90
 msgid "Could not read 'FETCH_HEAD'"
@@ -5908,14 +5908,12 @@ msgid "Added"
 msgstr "Tillagd"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Kunde inte slå upp fjärr"
+msgstr "Kunde inte slå upp fjärrförvar"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Kunde inte ansluta till fjärr"
+msgstr "Kunde inte ansluta till fjärrförvar"
 
 #: common/git/git_push_handler.cpp:68
 msgid "Could not push to remote"
@@ -7996,9 +7994,8 @@ msgstr ""
 "hårdvaruacceleration)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Visa"
+msgstr "Rutnätsvisning"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -11797,9 +11794,8 @@ msgid "PDF Options"
 msgstr "PDF-alternativ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Skapa popuprutor för baksidans fotavtrycks egenskaper"
+msgstr "Skapa popuprutor för egenskaper"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -14072,9 +14068,8 @@ msgid "Largest"
 msgstr "Största"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Anslutningssträng:"
+msgstr "Anslutningsrutnät:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14880,9 +14875,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "Duplikat av arknamn inom ett visst ark"
 
 #: eeschema/erc_item.cpp:51
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "Symbolstift eller ledningsända ej på rutnätet"
+msgstr "Symbolstift eller ledningsända ej på anslutningsrutnätet"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
@@ -15203,14 +15197,14 @@ msgstr ""
 "Vill du spara det aktuella dokumentet innan du fortsätter?"
 
 #: eeschema/files-io.cpp:630
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Denna åtgärd skriver över innehållet i det nuvarande projektet.\n"
+"Denna åtgärd skriver över innehållet i det nuvarande kretsschemat, som "
+"kommer att gå permanent förlorat.\n"
 "\n"
 "Vill du fortsätta?"
 
@@ -15280,9 +15274,8 @@ msgid "Failed to save %s."
 msgstr "Lyckades inte spara %s."
 
 #: eeschema/files-io.cpp:1065
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "Modellskalevarning"
+msgstr "Varning för låst fil"
 
 #: eeschema/files-io.cpp:1067
 msgid ""
@@ -15420,7 +15413,6 @@ msgstr "Fötter"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:201
 #: pcbnew/tools/drawing_tool.cpp:1555 pcbnew/tools/drawing_tool.cpp:1646
-#, fuzzy
 msgid "Import Graphics"
 msgstr "Importera grafik"
 
@@ -24716,11 +24708,11 @@ msgstr "Lyckades inte initialisera git-projekt."
 
 #: kicad/project_tree_pane.cpp:1546
 msgid "Set default remote"
-msgstr "Ställ in standardfjärr"
+msgstr "Ställ in standardfjärrförvar"
 
 #: kicad/project_tree_pane.cpp:1596
 msgid "Failed to set default remote."
-msgstr "Lyckades inte ställa in standardfjärr."
+msgstr "Lyckades inte ställa in standardfjärrförvar."
 
 #: kicad/project_tree_pane.cpp:1608 kicad/project_tree_pane.cpp:1645
 #: kicad/project_tree_pane.cpp:1665
@@ -24793,9 +24785,9 @@ msgid "Failed to lookup tree: %s"
 msgstr "Det gick inte att ta bort '%s'"
 
 #: kicad/project_tree_pane.cpp:2164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Kunde inte flytta katalog %s"
+msgstr "Kunde inte hämta HEAD-pekare: %s"
 
 #: kicad/project_tree_pane.cpp:2171
 #, c-format
@@ -29756,7 +29748,7 @@ msgstr "Avstånd mellan kolumner"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "Grid Spacing Modifiers"
-msgstr ""
+msgstr "Modifierare för rutnätsdelning"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal offset:"
@@ -29904,12 +29896,10 @@ msgstr ""
 "som definierar den cirkulära ytan som ska skapas"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
 msgstr "Centrerposition X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
-#, fuzzy
 msgid "Center pos Y:"
 msgstr "Centrerposition Y:"
 
@@ -35213,9 +35203,9 @@ msgid "Apply board defaults to footprint text"
 msgstr "Tillämpa mönsterkortsförinställningar på fotavtryckstext"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:64
-#, fuzzy
 msgid "Apply board defaults to non-copper footprint shapes"
-msgstr "Tillämpa mönsterkortsförinställningar på fotavtrycks grafik"
+msgstr ""
+"Tillämpa mönsterkortsförinställningar på icke-koppar-former i fotavtryck"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -39959,9 +39949,8 @@ msgid "Marker (%s)"
 msgstr "Markör (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
-#, fuzzy
 msgid "Associated Layer"
-msgstr "Aktivt lager"
+msgstr "Associerat lager"
 
 #: pcbnew/pcb_reference_image.cpp:358
 msgid "Greyscale"
@@ -40840,13 +40829,13 @@ msgstr ""
 "inställning har ingen KiCad-ekvivalent, så den har ignorerats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
 "CADSTAR-mallen '%s' har inställningen 'Automatic Repour' aktiverad. Denna "
-"inställning har ingen KiCad-ekvivalent, så den har ignorerats."
+"inställning har ingen KiCad-ekvivalent, varför den har ignorerats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1944
 #, c-format
@@ -40860,17 +40849,17 @@ msgstr ""
 "så denna inställning ignorerades."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1954
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
 "Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not distinguish "
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR-mallen '%s' har olika inställningar för 'Behåll häll koppar - ojämn' "
-"och 'Behåll häll koppar - isolerad'. KiCad skiljer inte mellan dessa två "
-"inställningar. Inställningen för separerad koppar har tillämpats som det "
-"minsta öområdet i KiCad Zone."
+"CADSTAR-mallen '%s' har olika inställningar för 'Behåll kopparfyllning - "
+"separerad' och 'Behåll kopparfyllning - isolerad'. KiCad skiljer inte mellan "
+"dessa två inställningar. Inställningen för separerad koppar har tillämpats "
+"som minsta area för kopparö i KiCad-zonen."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2005
 #, c-format
@@ -41039,7 +41028,6 @@ msgstr ""
 "har importerats för alla nät)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3986
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -41047,9 +41035,9 @@ msgid ""
 "this."
 msgstr ""
 "CADSTAR-designen innehåller nät med en 'Avståndsklass' tilldelad. KiCad har "
-"inte motsvarande CADSTAR: s avståndsklass så dessa element importerades "
-"inte. Vänligen granska designreglerna eftersom kopparhällar påverkas av "
-"detta."
+"inte som motsvarar CADSTAR:s avståndsklass varför dessa element inte "
+"importerades. Vänligen granska designreglerna eftersom kopparzoner påverkas "
+"av detta."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_plugin.h:45
 msgid "CADSTAR PCB Archive files"
@@ -42673,9 +42661,8 @@ msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
 msgstr "Åsidosatt av större fysisk frigång för hål från %s; frigång: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:852
-#, fuzzy
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "Objekt tillhör samma nät. Clearance är 0."
+msgstr "Objekten tillhör samma nät. Minsta isolationsavstånd är 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:867
 msgid "Min clearance is 0."
@@ -42739,7 +42726,7 @@ msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1284
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
 msgstr "Tog reda på begränsningar för diameter: min %s; opt %s; max %s."
 
@@ -42748,22 +42735,22 @@ msgid "Via Annular Width"
 msgstr "Kragbredd för via"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
 msgstr "Tog reda på begränsningar för kragbredd: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1322
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
+msgstr "Tog reda på begränsningar för hålstorlek: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1341
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
+msgstr "Tog reda på begränsningar för höjd: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1357
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
 msgstr "Tog reda på begränsningar för tjocklek: min %s; opt %s; max %s."
 
@@ -42996,9 +42983,8 @@ msgid "Positioning Tools"
 msgstr "Placeringsverktyg"
 
 #: pcbnew/tools/edit_tool.cpp:119
-#, fuzzy
 msgid "Shape Modification"
-msgstr "Ändra form"
+msgstr "Modifiera form"
 
 #: pcbnew/tools/edit_tool.cpp:530
 #, c-format
