@@ -664,6 +664,11 @@ else()
     set( KICAD_DEMOS demos
         CACHE PATH "Location of KiCad demo files." FORCE )
 
+    # Required to run from build folder
+    if( PYTHON_FRAMEWORK )
+        list(APPEND CMAKE_BUILD_RPATH ${PYTHON_FRAMEWORK} )
+    endif()
+
     # RPATH settings for building shared libraries
     set( CMAKE_MACOSX_RPATH FALSE )
 endif()
