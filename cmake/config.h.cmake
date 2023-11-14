@@ -83,6 +83,8 @@
 /// Allows scripts install directory to be referenced by the program code.
 #define PYTHON_DEST                     "@PYTHON_DEST@"
 
+#define PYTHON_SITE_PACKAGE_PATH        "@PYTHON_SITE_PACKAGE_PATH@"
+
 /// Allows scripts install directory to be referenced by the program code.
 #define KICAD_DATA                      "@KICAD_DATA@"
 
