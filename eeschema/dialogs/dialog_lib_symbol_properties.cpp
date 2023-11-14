@@ -44,8 +44,8 @@
 
 
 int DIALOG_LIB_SYMBOL_PROPERTIES::m_lastOpenedPage = 0;
-DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT
-    DIALOG_LIB_SYMBOL_PROPERTIES::m_lastLayout = DIALOG_LIB_SYMBOL_PROPERTIES::NONE;
+DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT DIALOG_LIB_SYMBOL_PROPERTIES::m_lastLayout =
+        DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::NONE;
 
 
 DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
@@ -104,17 +104,19 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
                      wxGridEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging ),
                      nullptr, this );
 
-    if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::NONE )
+    if( m_lastLayout != DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::NONE )
     {
-        if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::ALIAS && aLibEntry->IsRoot() )
-          || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::PARENT && aLibEntry->IsAlias() ) )
+        if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS
+              && aLibEntry->IsRoot() )
+            || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT
+                 && aLibEntry->IsAlias() ) )
         {
             resetSize();
         }
     }
 
-    m_lastLayout = ( aLibEntry->IsAlias() ) ? DIALOG_LIB_SYMBOL_PROPERTIES::ALIAS
-                                            : DIALOG_LIB_SYMBOL_PROPERTIES::PARENT;
+    m_lastLayout = ( aLibEntry->IsAlias() ) ? DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::ALIAS
+                                            : DIALOG_LIB_SYMBOL_PROPERTIES::LAST_LAYOUT::PARENT;
 
     m_grid->GetParent()->Layout();
     syncControlStates( m_libEntry->IsAlias() );

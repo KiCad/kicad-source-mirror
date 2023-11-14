@@ -95,7 +95,7 @@ public:
 private:
     static int m_lastOpenedPage;    // To remember the last notebook selection
 
-    enum LAST_LAYOUT {
+    enum class LAST_LAYOUT {
         NONE,
         ALIAS,
         PARENT
