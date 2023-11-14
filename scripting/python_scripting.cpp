@@ -289,6 +289,11 @@ bool SCRIPTING::scriptingSetup()
     pyhome += Pgm().GetExecutablePath() +
               wxT( "Contents/Frameworks/Python.framework/Versions/Current" );
 
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        pyhome = wxString( wxT( PYTHON_SITE_PACKAGE_PATH ) ) + wxT( "/../../../" );
+    }
+
     // set $PYTHONHOME
     wxSetEnv( wxT( "PYTHONHOME" ), pyhome );
 #else
