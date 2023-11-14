@@ -83,7 +83,7 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCRE
         group->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
-                    COMMIT::Stage( child, aChangeType );
+                    Stage( child, aChangeType );
                 } );
     }
 
