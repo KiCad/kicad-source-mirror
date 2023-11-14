@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-13 17:03+0000\n"
+"PO-Revision-Date: 2023-11-16 10:05+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -43736,7 +43736,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid "Extend lines to meet each other"
-msgstr ""
+msgstr "他の線と交差するまで線を延長"
 
 #: pcbnew/tools/pcb_actions.cpp:636
 #, fuzzy
@@ -45075,7 +45075,7 @@ msgstr "ジェネレーターを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:2406
 msgid "Rebuilds geometry of all generators"
-msgstr ""
+msgstr "すべてのジェネレーターの形状を再生成"
 
 #: pcbnew/tools/pcb_actions.cpp:2413
 #, fuzzy
@@ -45084,7 +45084,7 @@ msgstr "ジェネレーターを削除"
 
 #: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr ""
+msgstr "選択したジェネレーターの形状を再生成"
 
 #: pcbnew/tools/pcb_actions.cpp:2446
 #, fuzzy
@@ -45093,7 +45093,7 @@ msgstr "ジェネレーター ニックネーム:"
 
 #: pcbnew/tools/pcb_actions.cpp:2447
 msgid "Show a manager dialog for Generator objects"
-msgstr ""
+msgstr "ジェネレーターオブジェクトの管理ダイアログを表示"
 
 #: pcbnew/tools/pcb_control.cpp:232
 msgid "Don't show again"
