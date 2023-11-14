@@ -281,6 +281,13 @@ bool SCRIPTING::scriptingSetup()
         pypath = wxString( wxGetenv( wxT( "PYTHONPATH" ) ) ) + wxT( ":" ) + pypath;
     }
 
+    // Hack for run from build dir option
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        pypath = wxString( wxT( PYTHON_SITE_PACKAGE_PATH ) ) + wxT( "/../:" )
+                 + wxT( PYTHON_SITE_PACKAGE_PATH ) + wxT( ":" ) + wxT( PYTHON_DEST );
+    }
+
     // set $PYTHONPATH
     wxSetEnv( wxT( "PYTHONPATH" ), pypath );
 
