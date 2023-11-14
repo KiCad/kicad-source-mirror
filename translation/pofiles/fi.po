@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-13 17:03+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2023-11-16 10:05+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -5846,19 +5846,19 @@ msgid "Could not clone repository '%s'"
 msgstr "Ei voitu kloonata arkistoa '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, c-format
+#, c-format, fuzzy
 msgid "Could not lookup remote '%s'"
-msgstr "Ei voitu etsiä etänä '%s'"
+msgstr "Ei voitu etsiä etätietovarastoa '%s'"
 
 #: common/git/git_pull_handler.cpp:59
 #, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Ei voitu muodostaa yhteyttä etäkohteeseen '%s'"
+msgstr "Ei voitu muodostaa yhteyttä etätietovarastoon '%s'"
 
 #: common/git/git_pull_handler.cpp:69
 #, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Tietoja ei voitu noutaa etäkohteesta '%s'"
+msgstr "Tietoja ei voitu noutaa etätietovarastosta '%s'"
 
 #: common/git/git_pull_handler.cpp:90
 msgid "Could not read 'FETCH_HEAD'"
@@ -5914,16 +5914,17 @@ msgid "Added"
 msgstr "Lisätty"
 
 #: common/git/git_push_handler.cpp:44
+#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Etähaku ei onnistunut"
+msgstr "Etätietovaraston nimihaku ei onnistunut"
 
 #: common/git/git_push_handler.cpp:58
 msgid "Could not connect to remote"
-msgstr "Ei saatu yhteyttä etänä"
+msgstr "Ei saatu yhteyttä etätietovarastoon"
 
 #: common/git/git_push_handler.cpp:68
 msgid "Could not push to remote"
-msgstr "Ei voitu päivittää etäpalvelimelle"
+msgstr "Ei voitu työntää etätietovarastoon"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
@@ -5973,11 +5974,11 @@ msgstr "Arkiston kloonaaminen epäonnistui."
 
 #: common/git/kicad_git_errors.cpp:36
 msgid "Remote repository not found."
-msgstr "Etäarkistoa ei löydy."
+msgstr "Etätietovarastoa ei löydy."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr "Etävaraston todennus epäonnistui."
+msgstr "Etätietovaraston todennus epäonnistui."
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Branch not found."
@@ -6005,11 +6006,11 @@ msgstr "Rebase-ristiriita havaittiin."
 
 #: common/git/kicad_git_errors.cpp:53
 msgid "Failed to pull changes from remote repository."
-msgstr "Muutosten vetäminen etävarastosta epäonnistui."
+msgstr "Muutosten vetäminen etätietovarastosta epäonnistui."
 
 #: common/git/kicad_git_errors.cpp:54
 msgid "Failed to push changes to remote repository."
-msgstr "Muutosten työntäminen etävarastoon epäonnistui."
+msgstr "Muutosten työntäminen etätietovarastoon epäonnistui."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "No upstream branch configured."
@@ -6017,7 +6018,7 @@ msgstr "Yhtään lähetyshaaraa ei ole määritetty."
 
 #: common/git/kicad_git_errors.cpp:56
 msgid "Failed to establish connection with remote repository."
-msgstr "Yhteyden muodostaminen etävarastoon epäonnistui."
+msgstr "Yhteyden muodostaminen etätietovarastoon epäonnistui."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Tag not found."
@@ -24631,7 +24632,7 @@ msgstr "Työnnä"
 
 #: kicad/project_tree_pane.cpp:930
 msgid "Push committed local changes to remote repository"
-msgstr "Lähetä tehdyt paikalliset muutokset etävarastoon"
+msgstr "Lähetä tehdyt paikalliset muutokset etätietovarastoon"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Pull"
@@ -24639,7 +24640,7 @@ msgstr "Vedä"
 
 #: kicad/project_tree_pane.cpp:934
 msgid "Pull changes from remote repository into local"
-msgstr "Vedä muutokset etävarastosta paikalliseen"
+msgstr "Vedä muutokset etätietovarastosta paikalliseen"
 
 #: kicad/project_tree_pane.cpp:939
 msgid "Commit File..."
@@ -24695,17 +24696,18 @@ msgid "Failed to initialize git project."
 msgstr "Git-projektin alustaminen epäonnistui."
 
 #: kicad/project_tree_pane.cpp:1546
+#, fuzzy
 msgid "Set default remote"
-msgstr "Aseta etäoletus"
+msgstr "Aseta etätietovaraston oletus"
 
 #: kicad/project_tree_pane.cpp:1596
 msgid "Failed to set default remote."
-msgstr "Etäoletuksen asettaminen epäonnistui."
+msgstr "Etätietovaraston oletuksen asettaminen epäonnistui."
 
 #: kicad/project_tree_pane.cpp:1608 kicad/project_tree_pane.cpp:1645
 #: kicad/project_tree_pane.cpp:1665
 msgid "Fetching Remote"
-msgstr "Noudetaan etävarastosta"
+msgstr "Noudetaan etätietovarastosta"
 
 #: kicad/project_tree_pane.cpp:1671
 msgid "Failed to push project"
