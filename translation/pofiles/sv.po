@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-11-10 23:33+0000\n"
+"PO-Revision-Date: 2023-11-16 10:04+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -35958,13 +35958,13 @@ msgstr ""
 "inställning har ingen KiCad-ekvivalent, så den har ignorerats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
 "CADSTAR-mallen '%s' har inställningen 'Automatic Repour' aktiverad. Denna "
-"inställning har ingen KiCad-ekvivalent, så den har ignorerats."
+"inställning har ingen KiCad-ekvivalent, varför den har ignorerats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1894
 #, c-format
@@ -35978,17 +35978,17 @@ msgstr ""
 "så denna inställning ignorerades."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1904
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
 "Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not distinguish "
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR-mallen '%s' har olika inställningar för 'Behåll häll koppar - ojämn' "
-"och 'Behåll häll koppar - isolerad'. KiCad skiljer inte mellan dessa två "
-"inställningar. Inställningen för separerad koppar har tillämpats som det "
-"minsta öområdet i KiCad Zone."
+"CADSTAR-mallen '%s' har olika inställningar för 'Behåll kopparfyllning - "
+"separerad' och 'Behåll kopparfyllning - isolerad'. KiCad skiljer inte mellan "
+"dessa två inställningar. Inställningen för separerad koppar har tillämpats "
+"som minsta area för kopparö i KiCad-zonen."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1955
 #, c-format
@@ -36157,7 +36157,6 @@ msgstr ""
 "har importerats för alla nät)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3998
-#, fuzzy
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -36165,9 +36164,9 @@ msgid ""
 "this."
 msgstr ""
 "CADSTAR-designen innehåller nät med en 'Avståndsklass' tilldelad. KiCad har "
-"inte motsvarande CADSTAR: s avståndsklass så dessa element importerades "
-"inte. Vänligen granska designreglerna eftersom kopparhällar påverkas av "
-"detta."
+"inte som motsvarar CADSTAR:s avståndsklass varför dessa element inte "
+"importerades. Vänligen granska designreglerna eftersom kopparzoner påverkas "
+"av detta."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:323
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:200
