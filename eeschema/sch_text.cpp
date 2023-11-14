@@ -88,24 +88,18 @@ void SCH_TEXT::FlipHJustify()
 void SCH_TEXT::MirrorHorizontally( int aCenter )
 {
     if( GetTextAngle() == ANGLE_HORIZONTAL )
-    {
         FlipHJustify();
 
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT || GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
-    }
+    SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
 }
 
 
 void SCH_TEXT::MirrorVertically( int aCenter )
 {
     if( GetTextAngle() == ANGLE_VERTICAL )
-    {
         FlipHJustify();
 
-        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT || GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-            SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
-    }
+    SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
 }
 
 
