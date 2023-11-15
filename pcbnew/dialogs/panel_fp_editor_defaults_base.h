@@ -21,12 +21,12 @@ class WX_GRID;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/grid.h>
+#include <wx/sizer.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,11 +40,12 @@ class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
+		wxStaticText* defaultFieldPropertiesLabel;
+		WX_GRID* m_fieldPropsGrid;
 		wxStaticText* defaultTextItemsLabel;
 		WX_GRID* m_textItemsGrid;
 		STD_BITMAP_BUTTON* m_bpAdd;
 		STD_BITMAP_BUTTON* m_bpDelete;
-		wxStaticText* m_staticTextInfo;
 		WX_GRID* m_graphicsGrid;
 
 		// Virtual event handlers, override them in your derived class

@@ -120,7 +120,6 @@ WX_GRID::~WX_GRID()
         DestroyTable( GetTable() );
 
     Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
-
 }
 
 

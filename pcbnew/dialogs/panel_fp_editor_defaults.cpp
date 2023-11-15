@@ -25,7 +25,7 @@
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
 #include <widgets/wx_grid.h>
-#include <widgets/paged_dialog.h>
+#include <template_fieldnames.h>
 #include <widgets/std_bitmap_button.h>
 #include <grid_tricks.h>
 #include <eda_base_frame.h>
@@ -36,10 +36,12 @@
 
 class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
 {
+    bool                        m_forFieldProps;
     std::vector<TEXT_ITEM_INFO> m_items;
 
 public:
-    TEXT_ITEMS_GRID_TABLE()
+    TEXT_ITEMS_GRID_TABLE( bool aForFieldProps ) :
+            m_forFieldProps( aForFieldProps )
     { }
 
     int GetNumberRows() override { return m_items.size(); }
@@ -49,7 +51,7 @@ public:
     {
         switch( aCol )
         {
-        case 0: return _( "Text Items" );
+        case 0: return m_forFieldProps ? _( "Value" ) : _( "Text Items" );
         case 1: return _( "Show" );
         case 2: return _( "Layer" );
         default: return wxEmptyString;
@@ -174,13 +176,30 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
                                                     UNITS_PROVIDER* aUnitsProvider ) :
         PANEL_FP_EDITOR_DEFAULTS_BASE( aParent )
 {
+    m_fieldPropsGrid->SetDefaultRowSize( m_fieldPropsGrid->GetDefaultRowSize() + 4 );
+
+    m_fieldPropsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( true ), true );
+    m_fieldPropsGrid->PushEventHandler( new GRID_TRICKS( m_fieldPropsGrid ) );
+    m_fieldPropsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_fieldPropsGrid->SetColAttr( 1, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new GRID_CELL_LAYER_RENDERER( nullptr ) );
+    attr->SetEditor( new GRID_CELL_LAYER_SELECTOR( nullptr, {} ) );
+    m_fieldPropsGrid->SetColAttr( 2, attr );
+
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
 
-    m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
+    m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( false ), true );
     m_textItemsGrid->PushEventHandler( new GRID_TRICKS( m_textItemsGrid ) );
     m_textItemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
     attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
     attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
@@ -205,14 +224,13 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
     m_graphicsGrid->DeleteRows( m_graphicsGrid->GetNumberRows() - 1, 1 );
 
     m_graphicsGrid->PushEventHandler( new GRID_TRICKS( m_graphicsGrid ) );
-
-    m_staticTextInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }
 
 
 PANEL_FP_EDITOR_DEFAULTS::~PANEL_FP_EDITOR_DEFAULTS()
 {
     // destroy GRID_TRICKS before grids.
+    m_fieldPropsGrid->PopEventHandler( true );
     m_textItemsGrid->PopEventHandler( true );
     m_graphicsGrid->PopEventHandler( true );
 }
@@ -256,16 +274,28 @@ void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     }
 
     // Footprint defaults
-    m_textItemsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
-    m_textItemsGrid->GetTable()->AppendRows( aCfg->m_DesignSettings.m_DefaultFPTextItems.size() );
+    m_fieldPropsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
+    m_fieldPropsGrid->GetTable()->AppendRows( 2 );
 
-    for( size_t i = 0; i < aCfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
+    for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
     {
         TEXT_ITEM_INFO item = aCfg->m_DesignSettings.m_DefaultFPTextItems[i];
 
-        m_textItemsGrid->GetTable()->SetValue( i, 0, item.m_Text );
-        m_textItemsGrid->GetTable()->SetValueAsBool( i, 1, item.m_Visible );
-        m_textItemsGrid->GetTable()->SetValueAsLong( i, 2, item.m_Layer );
+        m_fieldPropsGrid->GetTable()->SetValue( i, 0, item.m_Text );
+        m_fieldPropsGrid->GetTable()->SetValueAsBool( i, 1, item.m_Visible );
+        m_fieldPropsGrid->GetTable()->SetValueAsLong( i, 2, item.m_Layer );
+    }
+
+    m_textItemsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
+    m_textItemsGrid->GetTable()->AppendRows( aCfg->m_DesignSettings.m_DefaultFPTextItems.size() - 2 );
+
+    for( int i = 2; i < (int) aCfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
+    {
+        TEXT_ITEM_INFO item = aCfg->m_DesignSettings.m_DefaultFPTextItems[i];
+
+        m_textItemsGrid->GetTable()->SetValue( i - 2, 0, item.m_Text );
+        m_textItemsGrid->GetTable()->SetValueAsBool( i - 2, 1, item.m_Visible );
+        m_textItemsGrid->GetTable()->SetValueAsLong( i - 2, 2, item.m_Layer );
     }
 
     for( int col = 0; col < m_graphicsGrid->GetNumberCols(); col++ )
@@ -342,8 +372,20 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
     }
 
     // Footprint defaults
-    wxGridTableBase* table = m_textItemsGrid->GetTable();
     cfg.m_DefaultFPTextItems.clear();
+
+    wxGridTableBase* table = m_fieldPropsGrid->GetTable();
+
+    for( int i : { REFERENCE_FIELD, VALUE_FIELD } )
+    {
+        wxString text = table->GetValue( i, 0 );
+        bool     visible = table->GetValueAsBool( i, 1 );
+        int      layer = (int) table->GetValueAsLong( i, 2 );
+
+        cfg.m_DefaultFPTextItems.emplace_back( text, visible, layer );
+    }
+
+    table = m_textItemsGrid->GetTable();
 
     for( int i = 0; i < m_textItemsGrid->GetNumberRows(); ++i )
     {
