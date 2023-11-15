@@ -326,9 +326,16 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         // mark modified libs with bold font
         aAttr.SetBold( m_libMgr->IsLibraryModified( node->m_Name ) );
 
-        // mark the current library with background color
+        // mark the current library if it's collapsed
         if( curSymbol && curSymbol->GetLibId().GetLibNickname() == node->m_LibId.GetLibNickname() )
         {
+#if 1
+            if( !m_widget->IsExpanded( ToItem( node ) ) )
+            {
+                // LIB_TREE_RENDERER uses strikethrough as a proxy for is-canvas-item
+                aAttr.SetStrikethrough( true );
+            }
+#else
 #ifdef __WXGTK__
             // The native wxGTK+ impl ignores background colour, so set the text colour instead.
             // This works reasonably well in dark themes, and quite poorly in light ones....
@@ -336,6 +343,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 #else
             aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT  ) );
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
+#endif
 #endif
         }
         break;
@@ -347,9 +355,13 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         // mark aliases with italic font
         aAttr.SetItalic( !node->m_IsRoot );
 
-        // mark the current part with background color
+        // mark the current (on-canvas) part
         if( curSymbol && curSymbol->GetLibId() == node->m_LibId )
         {
+#if 1
+            // LIB_TREE_RENDERER uses strikethrough as a proxy for is-canvas-item
+            aAttr.SetStrikethrough( true );
+#else
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.
         // This works reasonably well in dark themes, and quite poorly in light ones....
@@ -357,6 +369,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 #else
             aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
+#endif
 #endif
         }
         break;

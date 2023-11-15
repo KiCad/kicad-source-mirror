@@ -405,6 +405,8 @@ protected:
     std::map<unsigned, wxString> m_colIdxMap;
     std::vector<wxString>        m_availableColumns;
 
+    wxDataViewCtrl*              m_widget;
+
 private:
     EDA_BASE_FRAME*              m_parent;
 
@@ -413,8 +415,6 @@ private:
     LIB_ID                       m_preselect_lib_id;
     int                          m_preselect_unit;
     int                          m_freeze;
-
-    wxDataViewCtrl*              m_widget;
 
     std::function<bool( LIB_TREE_NODE& aNode )>* m_filter;
 

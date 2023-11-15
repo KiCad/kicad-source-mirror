@@ -29,10 +29,79 @@
 #include <widgets/ui_common.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
+#include <wx/settings.h>
 #include <string_utils.h>
 
 
 static const int kDataViewIndent = 20;
+
+
+class LIB_TREE_RENDERER : public wxDataViewCustomRenderer
+{
+public:
+    LIB_TREE_RENDERER() :
+            m_canvasItem( false )
+    {}
+
+    wxSize GetSize() const override
+    {
+        return wxSize( GetOwner()->GetWidth(), GetTextExtent( m_text ).y );
+    }
+
+    bool GetValue( wxVariant& aValue ) const override
+    {
+        aValue = m_text;
+        return true;
+    }
+
+    bool SetValue( const wxVariant& aValue ) override
+    {
+        m_text = aValue.GetString();
+        return true;
+    }
+
+    void SetAttr( const wxDataViewItemAttr& aAttr ) override
+    {
+        // Use strikethrough as a proxy for is-canvas-item
+        m_canvasItem = aAttr.GetStrikethrough();
+
+        wxDataViewItemAttr realAttr = aAttr;
+        realAttr.SetStrikethrough( false );
+
+        wxDataViewCustomRenderer::SetAttr( realAttr );
+    }
+
+    bool Render( wxRect aRect, wxDC *dc, int aState ) override
+    {
+        RenderBackground( dc, aRect );
+
+        if( m_canvasItem )
+        {
+            wxPoint points[6];
+            points[0] = aRect.GetTopLeft();
+            points[1] = aRect.GetTopRight() + wxPoint( -4, 0 );
+            points[2] = aRect.GetTopRight() + wxPoint( 0, aRect.GetHeight() / 2 );
+            points[3] = aRect.GetBottomRight() + wxPoint( -4, 1 );
+            points[4] = aRect.GetBottomLeft() + wxPoint( 0, 1 );
+            points[5] = aRect.GetTopLeft();
+            dc->DrawLines( 6, points );
+        }
+
+        // We should be able to pass wxDATAVIEW_CELL_SELECTED into RenderText() and have it do
+        // the right thing -- but it picks wxSYS_COLOUR_HIGHLIGHTTEXT on MacOS and GTK (instead
+        // of wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT).
+        if ( aState & wxDATAVIEW_CELL_SELECTED )
+            dc->SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
+
+        aRect.Deflate( 1 );
+        RenderText( m_text, 0, aRect, dc, 0 );
+        return true;
+    }
+
+private:
+    bool     m_canvasItem;
+    wxString m_text;
+};
 
 
 wxDataViewItem LIB_TREE_MODEL_ADAPTER::ToItem( const LIB_TREE_NODE* aNode )
@@ -49,12 +118,12 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                 const wxString& aPinnedKey ) :
+        m_widget( nullptr ),
         m_parent( aParent ),
         m_sort_mode( BEST_MATCH ),
         m_show_units( true ),
         m_preselect_unit( 0 ),
         m_freeze( 0 ),
-        m_widget( nullptr ),
         m_filter( nullptr )
 {
     // Default column widths.  Do not translate these names.
@@ -305,18 +374,20 @@ wxDataViewColumn* LIB_TREE_MODEL_ADAPTER::doAddColumn( const wxString& aHeader, 
     if( !m_colWidths.count( aHeader ) || m_colWidths[aHeader] < headerMinWidth.x )
         m_colWidths[aHeader] = headerMinWidth.x;
 
-    int index = m_columns.size();
+    int index = (int) m_columns.size();
 
-    wxDataViewColumn* ret = m_widget->AppendTextColumn( translatedHeader, index,
-                                                        wxDATAVIEW_CELL_INERT,
-                                                        m_colWidths[aHeader] );
-    ret->SetMinWidth( headerMinWidth.x );
+    wxDataViewColumn* col = new wxDataViewColumn( translatedHeader, new LIB_TREE_RENDERER(),
+                                                  index, m_colWidths[aHeader], wxALIGN_NOT,
+                                                  wxDATAVIEW_CELL_INERT );
+    m_widget->AppendColumn( col );
 
-    m_columns.emplace_back( ret );
-    m_colNameMap[aHeader] = ret;
+    col->SetMinWidth( headerMinWidth.x );
+
+    m_columns.emplace_back( col );
+    m_colNameMap[aHeader] = col;
     m_colIdxMap[m_columns.size() - 1] = aHeader;
 
-    return ret;
+    return col;
 }
 
 
