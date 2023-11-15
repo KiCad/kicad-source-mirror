@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-10-30 16:41+0000\n"
-"Last-Translator: Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2023-11-16 10:05+0000\n"
+"Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -83,9 +83,8 @@ msgid "Build Tech layer %d"
 msgstr "Bouw technische laag %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "Vereenvoudig polygonen op koperlaag"
+msgstr "Polygonen op koperlagen vereenvoudigen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1032
 msgid "Calculating plated copper"
@@ -3372,9 +3371,8 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Rechtvaardiging"
+msgstr "Inlogmethode"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
 #, fuzzy
@@ -5684,14 +5682,14 @@ msgstr "Zichtbaar"
 
 #: common/eda_text.cpp:1173 eeschema/sch_label.cpp:2156
 msgid "Horizontal Justification"
-msgstr "Horizontale rechtvaardiging"
+msgstr "Horizontale uitlijning"
 
 #: common/eda_text.cpp:1178 eeschema/sch_label.cpp:2157
 #: pcbnew/pcb_dimension.cpp:1523 pcbnew/pcb_dimension.cpp:1559
 #: pcbnew/pcb_dimension.cpp:1600 pcbnew/pcb_dimension.cpp:1645
 #: pcbnew/pcb_dimension.cpp:1682
 msgid "Vertical Justification"
-msgstr "Verticale rechtvaardiging"
+msgstr "Verticale uitlijning"
 
 #: common/eda_units.cpp:437 common/status_popup.cpp:152
 #, fuzzy
@@ -6862,9 +6860,8 @@ msgid "Dismiss"
 msgstr ""
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Rechtvaardiging"
+msgstr "Meldingen"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -14228,7 +14225,7 @@ msgstr "A & plaats automatisch symboolvelden"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:269
 msgid "A&llow field autoplace to change justification"
-msgstr "A & llow veld automatisch plaatsen om de rechtvaardiging te wijzigen"
+msgstr "Sta automatische veldplaatsing toe om uit&lijning te wijzigen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:272
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
@@ -14241,11 +14238,11 @@ msgstr "Herhaalde items"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:296
 msgid "&Horizontal pitch:"
-msgstr "& Horizontale toonhoogte:"
+msgstr "&Horizontale afstand:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:307
 msgid "&Vertical pitch:"
-msgstr "& Verticale toonhoogte:"
+msgstr "&Verticale afstand:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:318
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:130
@@ -16678,7 +16675,7 @@ msgstr "Hiërarchische bladpin"
 
 #: eeschema/sch_label.cpp:1223 eeschema/sch_text.cpp:439
 msgid "Justification"
-msgstr "Rechtvaardiging"
+msgstr "Uitlijning"
 
 #: eeschema/sch_label.cpp:1311 eeschema/sch_line.cpp:898
 #: pcbnew/board_connected_item.cpp:173
