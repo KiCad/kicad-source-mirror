@@ -124,9 +124,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
 
         // remove the non-selected pages if we are in plot pages mode
         if( aPlotSettings.m_plotPages.size() > 0 )
-        {
             sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
-        }
     }
     else
     {
@@ -153,6 +151,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
+        wxString    sheetName = sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText( false );
 
         if( i == 0 )
         {
@@ -180,7 +179,11 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
 
                 // Open the plotter and do the first page
                 setupPlotPagePDF( plotter, screen, aPlotSettings );
-                plotter->StartPlot( sheetList[i].GetPageNumber(), _( "Root" ) );
+
+                if( sheetList.size() > 1 )
+                    plotter->StartPlot( sheetList[i].GetPageNumber(), _( "Root" ) );
+                else
+                    plotter->StartPlot( sheetList[i].GetPageNumber(), sheetName );
             }
             catch( const IO_ERROR& e )
             {
@@ -201,8 +204,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
              *  reconfigure, and then start a new one */
             plotter->ClosePage();
             setupPlotPagePDF( plotter, screen, aPlotSettings );
-            plotter->StartPage( sheetList[i].GetPageNumber(),
-                                sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText( false ) );
+            plotter->StartPage( sheetList[i].GetPageNumber(), sheetName );
         }
 
         plotOneSheetPDF( plotter, screen, aPlotSettings );
