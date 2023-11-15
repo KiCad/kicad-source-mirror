@@ -449,6 +449,46 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         for( wxString fieldName : aBomJob->m_fieldsOrdered )
         {
+            // Handle wildcard. We allow the wildcard anywhere in the list, but it needs to respect
+            // fields that come before and after the wildcard.
+            if( fieldName == _( "*" ) )
+            {
+                for( const BOM_FIELD& modelField : dataModel.GetFieldsOrdered() )
+                {
+                    struct BOM_FIELD field;
+
+                    field.name = modelField.name;
+                    field.show = true;
+                    field.groupBy = false;
+                    field.label = field.name;
+
+                    bool fieldAlreadyPresent = false;
+                    for( BOM_FIELD& presetField : preset.fieldsOrdered )
+                    {
+                        if( presetField.name == field.name )
+                        {
+                            fieldAlreadyPresent = true;
+                            break;
+                        }
+                    }
+
+                    bool fieldLaterInList = false;
+                    for( const wxString& fieldInList : aBomJob->m_fieldsOrdered )
+                    {
+                        if( fieldInList == field.name )
+                        {
+                            fieldLaterInList = true;
+                            break;
+                        }
+                    }
+
+                    if( !fieldAlreadyPresent && !fieldLaterInList )
+                        preset.fieldsOrdered.emplace_back( field );
+                }
+
+                continue;
+            }
+
             struct BOM_FIELD field;
 
             field.name = fieldName;
