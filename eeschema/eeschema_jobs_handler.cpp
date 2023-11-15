@@ -451,7 +451,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         {
             // Handle wildcard. We allow the wildcard anywhere in the list, but it needs to respect
             // fields that come before and after the wildcard.
-            if( fieldName == _( "*" ) )
+            if( fieldName == wxS( "*" ) )
             {
                 for( const BOM_FIELD& modelField : dataModel.GetFieldsOrdered() )
                 {

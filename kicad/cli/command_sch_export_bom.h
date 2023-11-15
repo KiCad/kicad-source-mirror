@@ -53,7 +53,8 @@ namespace CLI
 
 //Options for controlling the fields and the grouping
 #define ARG_FIELDS "--fields"
-#define ARG_FIELDS_DESC "An ordered list of fields to export. Supports * and ${} substitutions."
+#define ARG_FIELDS_DESC                                                                            \
+    "An ordered list of fields to export. See documentation for special substitutions."
 
 #define ARG_LABELS "--labels"
 #define ARG_LABELS_DESC "An ordered list of labels to apply the exported fields."
