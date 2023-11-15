@@ -27,6 +27,7 @@
 #include <config.h>
 #include <build_version.h>
 #include <macros.h>
+#include <wx_filename.h>
 
 // lowercase or pretty case depending on platform
 #if defined( __WXMAC__ ) || defined( __WXMSW__ )
@@ -532,6 +533,7 @@ const wxString& PATHS::GetExecutablePath()
         // bundle directory, e.g., /Applications/kicad.app/
 
         wxFileName fn( bin_dir );
+        WX_FILENAME::ResolvePossibleSymlinks( fn );
 
         if( fn.GetName() == wxT( "kicad" ) || fn.GetName() == wxT( "kicad-cli" ) )
         {
