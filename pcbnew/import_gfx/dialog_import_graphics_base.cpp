@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -125,6 +125,8 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_setLayerCheckbox = new wxCheckBox( this, wxID_ANY, _("Set layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setLayerCheckbox->SetToolTip( _("If checked, use the selected layer in this dialog\nIf unchecked, use the Board Editor active layer") );
+
 	gbSizer2->Add( m_setLayerCheckbox, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
@@ -138,6 +140,19 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 6 );
+
+	wxBoxSizer* bSizerGroupOpt;
+	bSizerGroupOpt = new wxBoxSizer( wxVERTICAL );
+
+	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group imported items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbGroupItems->SetValue(true);
+	bSizerGroupOpt->Add( m_cbGroupItems, 0, wxALL, 5 );
+
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerGroupOpt->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+
+
+	bSizerMain->Add( bSizerGroupOpt, 0, wxEXPAND|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -159,7 +174,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	bSizer11->Add( m_toleranceUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( bSizer11, 0, wxEXPAND|wxALL, 10 );
+	bSizerMain->Add( bSizer11, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
 	bSizerMain->Add( 0, 3, 1, wxEXPAND, 5 );

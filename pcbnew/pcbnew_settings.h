@@ -234,7 +234,11 @@ public:
     struct DIALOG_IMPORT_GRAPHICS
     {
         int         layer;
+        bool        use_dlg_layer_selection;
         bool        interactive_placement;
+        bool        group_items;
+        bool        fix_discontinuities;
+        double      tolerance;
         wxString    last_file;
         double      dxf_line_width;
         int         dxf_line_width_units;

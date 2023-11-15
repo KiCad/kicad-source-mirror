@@ -65,6 +65,11 @@ public:
      */
     int GetTolerance() { return m_tolerance.GetValue(); }
 
+    /**
+     * @return true if imported items must be placed in a new PCB_GROUP.
+     */
+    bool ShouldGroupItems() { return m_cbGroupItems->IsChecked(); }
+
     bool TransferDataFromWindow() override;
 
 private:
@@ -83,6 +88,7 @@ private:
     UNIT_BINDER          m_defaultLineWidth;
     UNIT_BINDER          m_tolerance;
 
+    static bool          s_useDlgLayerSelection;
     static bool          s_shouldGroupItems;
     static bool          s_placementInteractive;
     static bool          s_fixDiscontinuities;

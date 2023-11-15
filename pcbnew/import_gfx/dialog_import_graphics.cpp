@@ -41,9 +41,11 @@
 #include <memory>
 
 // Static members of DIALOG_IMPORT_GRAPHICS, to remember the user's choices during the session
+bool   DIALOG_IMPORT_GRAPHICS::s_useDlgLayerSelection = true;
 bool   DIALOG_IMPORT_GRAPHICS::s_placementInteractive = true;
+bool   DIALOG_IMPORT_GRAPHICS::s_shouldGroupItems     = true;
 bool   DIALOG_IMPORT_GRAPHICS::s_fixDiscontinuities   = true;
-int    DIALOG_IMPORT_GRAPHICS::s_toleranceValue       = pcbIUScale.mmToIU( 1 );
+int    DIALOG_IMPORT_GRAPHICS::s_toleranceValue       = pcbIUScale.mmToIU( 0.01 );
 double DIALOG_IMPORT_GRAPHICS::s_importScale = 1.0; // Do not change the imported items size
 
 
@@ -74,7 +76,14 @@ DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
+    s_shouldGroupItems = cfg->m_ImportGraphics.group_items;
+    s_fixDiscontinuities = cfg->m_ImportGraphics.fix_discontinuities;
+    s_toleranceValue = cfg->m_ImportGraphics.tolerance * pcbIUScale.IU_PER_MM;
+    s_useDlgLayerSelection = cfg->m_ImportGraphics.use_dlg_layer_selection;
+
     s_placementInteractive = cfg->m_ImportGraphics.interactive_placement;
+    m_cbGroupItems->SetValue( s_shouldGroupItems );
+    m_setLayerCheckbox->SetValue( s_useDlgLayerSelection );
 
     m_xOrigin.SetValue( cfg->m_ImportGraphics.origin_x * pcbIUScale.IU_PER_MM );
     m_yOrigin.SetValue( cfg->m_ImportGraphics.origin_y * pcbIUScale.IU_PER_MM );
@@ -124,6 +133,8 @@ DIALOG_IMPORT_GRAPHICS::~DIALOG_IMPORT_GRAPHICS()
     s_placementInteractive = !m_placeAtCheckbox->GetValue();
     s_fixDiscontinuities = m_rbFixDiscontinuities->GetValue();
     s_toleranceValue = m_tolerance.GetIntValue();
+    s_shouldGroupItems = m_cbGroupItems->IsChecked();
+    s_useDlgLayerSelection = m_setLayerCheckbox->IsChecked();
 
     PCBNEW_SETTINGS* cfg = nullptr;
 
@@ -139,16 +150,19 @@ DIALOG_IMPORT_GRAPHICS::~DIALOG_IMPORT_GRAPHICS()
 	if( cfg )
     {
         cfg->m_ImportGraphics.layer = m_SelLayerBox->GetLayerSelection();
+        cfg->m_ImportGraphics.use_dlg_layer_selection = s_useDlgLayerSelection;
         cfg->m_ImportGraphics.interactive_placement = s_placementInteractive;
         cfg->m_ImportGraphics.last_file = m_textCtrlFileName->GetValue();
         cfg->m_ImportGraphics.dxf_line_width = pcbIUScale.IUTomm( m_defaultLineWidth.GetIntValue() );
         cfg->m_ImportGraphics.origin_x = pcbIUScale.IUTomm( m_xOrigin.GetIntValue() );
         cfg->m_ImportGraphics.origin_y = pcbIUScale.IUTomm( m_yOrigin.GetIntValue() );
         cfg->m_ImportGraphics.dxf_units = m_dxfUnitsChoice->GetSelection();
+        cfg->m_ImportGraphics.group_items = s_shouldGroupItems;
+        cfg->m_ImportGraphics.fix_discontinuities = s_fixDiscontinuities;
+        cfg->m_ImportGraphics.tolerance =  pcbIUScale.IUTomm( s_toleranceValue );
     }
 
     s_importScale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
-    s_toleranceValue = m_tolerance.GetIntValue();
 
     m_textCtrlFileName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
                                     wxCommandEventHandler( DIALOG_IMPORT_GRAPHICS::onFilename ),

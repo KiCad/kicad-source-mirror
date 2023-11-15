@@ -425,8 +425,20 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "import_graphics.layer",
             &m_ImportGraphics.layer, Dwgs_User ) );
 
+    m_params.emplace_back( new PARAM<bool>( "import_graphics.use_dlg_layer_selection",
+            &m_ImportGraphics.use_dlg_layer_selection, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "import_graphics.group_items",
+            &m_ImportGraphics.group_items, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "import_graphics.fix_discontinuities",
+            &m_ImportGraphics.fix_discontinuities, false ) );
+
+    m_params.emplace_back( new PARAM<double>( "import_graphics.tolerance",
+            &m_ImportGraphics.tolerance, 0.01, 0.0, 10.0 ) );
 
     m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
             &m_ImportGraphics.dxf_line_width_units, 0 ) );

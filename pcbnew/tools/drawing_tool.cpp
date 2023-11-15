@@ -1509,11 +1509,15 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     PICKED_ITEMS_LIST        groupUndoList;
     PCB_LAYER_ID             layer = F_Cu;
 
-    PCB_GROUP* group = new PCB_GROUP( m_frame->GetModel() );
+    PCB_GROUP* group = dlg.ShouldGroupItems() ? new PCB_GROUP( m_frame->GetModel() )
+                                              : nullptr;
 
-    newItems.push_back( group );
-    selectedItems.push_back( group );
-    preview.Add( group );
+    if( group )
+    {
+        newItems.push_back( group );
+        selectedItems.push_back( group );
+        preview.Add( group );
+    }
 
     if( dlg.ShouldFixDiscontinuities() )
     {
@@ -1541,7 +1545,12 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         wxCHECK2( item, continue );
 
         newItems.push_back( item );
-        group->AddItem( item );
+
+        if( group )
+            group->AddItem( item );
+        else
+            selectedItems.push_back( item );
+
         groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
 
         preview.Add( item );
