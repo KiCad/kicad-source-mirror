@@ -30,6 +30,7 @@
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 #include <wx/settings.h>
+#include <wx/dc.h>
 #include <string_utils.h>
 
 
