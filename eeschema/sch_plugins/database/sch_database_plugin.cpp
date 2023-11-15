@@ -499,8 +499,17 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
             continue;
         }
 
-        wxString value( std::any_cast<std::string>( aRow.at( mapping.column ) ).c_str(),
-                        wxConvUTF8 );
+        std:: string strValue;
+
+        try
+        {
+            strValue = std::any_cast<std::string>( aRow.at( mapping.column ) );
+        }
+        catch( std::bad_any_cast& e )
+        {
+        }
+
+        wxString value( strValue.c_str(), wxConvUTF8 );
 
         if( mapping.name == wxT( "Value" ) )
         {

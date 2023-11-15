@@ -444,7 +444,16 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
             case SQL_DECIMAL:
             case SQL_NUMERIC:
             {
-                aResult[column] = fmt::format( "{:G}", results.get<double>( i ) );
+                try
+                {
+                    aResult[column] = fmt::format( "{:G}", results.get<double>( i ) );
+                }
+                catch( nanodbc::null_access_error& e )
+                {
+                    // Column was empty (null)
+                    aResult[column] = std::string();
+                }
+
                 break;
             }
 
@@ -540,43 +549,92 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
 
     timer.Stop();
 
-    try
-    {
-        while( results.next() )
-        {
-            ROW result;
-
-            for( short j = 0; j < results.columns(); ++j )
+    auto handleException =
+            [&]( std::runtime_error& aException, const std::string& aExtraContext = "" )
             {
-                std::string column = toUTF8( results.column_name( j ) );
+                m_lastError = aException.what();
+                std::string extra = aExtraContext.empty() ? "" : ": " + aExtraContext;
+                wxLogTrace( traceDatabase,
+                            wxT( "Exception while parsing result %d from SelectAll: %s%s" ),
+                            aResults.size(), m_lastError, extra );
+            };
 
-                switch( results.column_datatype( j ) )
-                {
-                case SQL_DOUBLE:
-                case SQL_FLOAT:
-                case SQL_REAL:
-                case SQL_DECIMAL:
-                case SQL_NUMERIC:
+    while( results.next() )
+    {
+        short columnCount = 0;
+        ROW result;
+
+        try
+        {
+            columnCount = results.columns();
+        }
+        catch( nanodbc::database_error& e )
+        {
+            handleException( e );
+            return false;
+        }
+
+        for( short j = 0; j < columnCount; ++j )
+        {
+            std::string column;
+            std::string columnExtraDbgInfo;
+            int datatype = SQL_UNKNOWN_TYPE;
+
+            try
+            {
+                column = toUTF8( results.column_name( j ) );
+                datatype = results.column_datatype( j );
+                columnExtraDbgInfo = fmt::format( "column index {}, name '{}', type {}", j, column,
+                                                  datatype );
+            }
+            catch( nanodbc::index_range_error& e )
+            {
+                handleException( e, columnExtraDbgInfo );
+                return false;
+            }
+
+            switch( datatype )
+            {
+            case SQL_DOUBLE:
+            case SQL_FLOAT:
+            case SQL_REAL:
+            case SQL_DECIMAL:
+            case SQL_NUMERIC:
+            {
+                try
                 {
                     result[column] = fmt::format( "{:G}", results.get<double>( j ) );
-                    break;
                 }
+                catch( nanodbc::null_access_error& e )
+                {
+                    // Column was empty (null)
+                    result[column] = std::string();
+                }
+                catch( std::runtime_error& e )
+                {
+                    handleException( e, columnExtraDbgInfo );
+                    return false;
+                }
+                break;
+            }
 
-                default:
+            default:
+            {
+                try
+                {
                     result[column] = toUTF8( results.get<nanodbc::string>( j,
                                                                            NANODBC_TEXT( "" ) ) );
                 }
+                catch( std::runtime_error& e )
+                {
+                    handleException( e, columnExtraDbgInfo );
+                    return false;
+                }
             }
-
-            aResults.emplace_back( std::move( result ) );
+            }
         }
-    }
-    catch( nanodbc::database_error& e )
-    {
-        m_lastError = e.what();
-        wxLogTrace( traceDatabase, wxT( "Exception while parsing results from SelectAll: %s" ),
-                    m_lastError );
-        return false;
+
+        aResults.emplace_back( std::move( result ) );
     }
 
     wxLogTrace( traceDatabase, wxT( "SelectAll from %s completed in %0.1f ms" ), aTable,
