@@ -158,6 +158,13 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
             convertStringList( From_UTF8( m_argParser.get<std::string>( ARG_FIELDS ).c_str() ) );
     bomJob->m_fieldsLabels =
             convertStringList( From_UTF8( m_argParser.get<std::string>( ARG_LABELS ).c_str() ) );
+
+    // We only apply the default labels if the default fields are used
+    if( m_argParser.is_used( ARG_FIELDS ) && !m_argParser.is_used( ARG_LABELS ) )
+    {
+        bomJob->m_fieldsLabels.clear();
+    }
+
     bomJob->m_fieldsGroupBy =
             convertStringList( From_UTF8( m_argParser.get<std::string>( ARG_GROUP_BY ).c_str() ) );
     bomJob->m_sortField = From_UTF8( m_argParser.get<std::string>( ARG_SORT_FIELD ).c_str() );

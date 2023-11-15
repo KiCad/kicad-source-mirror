@@ -456,10 +456,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
             field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(),
                                        aBomJob->m_fieldsGroupBy.end(), field.name )
                             != aBomJob->m_fieldsGroupBy.end();
-            field.label = ( ( aBomJob->m_fieldsLabels.size() > i )
-                            && !aBomJob->m_fieldsLabels[i].IsEmpty() )
-                                  ? aBomJob->m_fieldsLabels[i]
-                                  : field.name;
+            if( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
+                field.label = aBomJob->m_fieldsLabels[i];
+            else if( IsTextVar( field.name ) )
+                field.label = GetTextVars( field.name );
+            else
+                field.label = field.name;
 
             preset.fieldsOrdered.emplace_back( field );
             i++;
