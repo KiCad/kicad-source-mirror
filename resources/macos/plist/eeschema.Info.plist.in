@@ -12,7 +12,7 @@
                         <string>kicad_sch</string>
                     </array>
                 <key>CFBundleTypeIconFile</key>     <string>eeschema_doc.icns</string>
-                <key>CFBundleTypeName</key>         <string>eeschema document</string>
+                <key>CFBundleTypeName</key>         <string>KiCad schematic document</string>
                 <key>LSHandlerRank</key>            <string>Owner</string>
             </dict>
         </array>
@@ -23,7 +23,7 @@
     <key>CFBundleIdentifier</key>                   <string>org.kicad.eeschema</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
     <key>CFBundleLongVersionString</key>            <string>@KICAD_VERSION_FULL@</string>
-    <key>CFBundleName</key>                         <string>Eeschema</string>
+    <key>CFBundleName</key>                         <string>Schematic Editor</string>
     <key>CFBundlePackageType</key>                  <string>APPL</string>
     <key>CFBundleShortVersionString</key>           <string>@KICAD_VERSION@</string>
     <key>CFBundleSignature</key>                    <string>????</string>

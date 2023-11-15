@@ -10,7 +10,7 @@
     <key>CFBundleIdentifier</key>             <string>org.kicad.bitmap2component</string>
     <key>CFBundleInfoDictionaryVersion</key>  <string>6.0</string>
     <key>CFBundleLongVersionString</key>      <string>@KICAD_VERSION_FULL@</string>
-    <key>CFBundleName</key>                   <string>Bitmap2Component</string>
+    <key>CFBundleName</key>                   <string>Image Converter</string>
     <key>CFBundlePackageType</key>            <string>APPL</string>
     <key>CFBundleShortVersionString</key>     <string>@KICAD_VERSION@</string>
     <key>CFBundleSignature</key>              <string>????</string>
