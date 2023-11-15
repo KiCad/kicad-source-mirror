@@ -125,6 +125,14 @@ std::vector<SYMBOL_ASYNC_LOADER::LOADED_PAIR> SYMBOL_ASYNC_LOADER::worker()
             std::lock_guard<std::mutex> lock( m_errorMutex );
             m_errors += msg;
         }
+        catch( std::exception& e )
+        {
+            wxString msg = wxString::Format( _( "Error loading symbol library %s.\n\n%s\n" ),
+                                             nickname, e.what() );
+
+            std::lock_guard<std::mutex> lock( m_errorMutex );
+            m_errors += msg;
+        }
     }
 
     return ret;
