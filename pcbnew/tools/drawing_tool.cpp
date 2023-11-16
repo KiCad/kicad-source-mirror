@@ -1544,14 +1544,17 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.release() );
         wxCHECK2( item, continue );
 
-        newItems.push_back( item );
-
         if( group )
             group->AddItem( item );
         else
+        {
+            newItems.push_back( item );
             selectedItems.push_back( item );
+        }
 
         groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+
+        layer = item->GetLayer();
 
         preview.Add( item );
     }
@@ -1568,8 +1571,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
         return 0;
     }
-
-    layer = newItems.front()->GetLayer();
 
     m_view->Add( &preview );
 
