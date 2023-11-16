@@ -922,9 +922,22 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
     case SHAPE_T::POLY:
         if( IsFilled() )
-            return m_poly.Collide( aPosition, maxdist );
+        {
+            if( !m_poly.COutline( 0 ).IsClosed() )
+            {
+                SHAPE_POLY_SET copy( m_poly );
+                copy.Outline( 0 ).Append( copy.Outline( 0 ).CPoint( 0 ) );
+                return copy.Collide( aPosition, maxdist );
+            }
+            else
+            {
+                return m_poly.Collide( aPosition, maxdist );
+            }
+        }
         else
+        {
             return m_poly.CollideEdge( aPosition, nullptr, maxdist );
+        }
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
