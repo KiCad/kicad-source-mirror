@@ -31,9 +31,11 @@
 #define OPENGL_INCLUDES_H
 
 #ifdef __APPLE__
+#ifndef GL_SILENCE_DEPRECATION
 // Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
 // Luckily we can silence warnings about its deprecation.
 #define GL_SILENCE_DEPRECATION 1
+#endif
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
