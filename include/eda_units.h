@@ -49,6 +49,8 @@ enum class EDA_UNITS
     DEGREES     = 3,
     PERCENT     = 4,
     MILS        = 5,
+    MICROMETRES = 6, //The S is because MILLIMETRES already has an S at the end. But it is
+    CENTIMETRES = 7, //micrometre and centimetre and not micrometre (or cm) times second.
 };
 
 namespace EDA_UNIT_UTILS
