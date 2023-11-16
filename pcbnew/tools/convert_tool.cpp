@@ -321,6 +321,7 @@ bool CONVERT_TOOL::Init()
 
 int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 {
+    BOARD_DESIGN_SETTINGS&      bds = m_frame->GetBoard()->GetDesignSettings();
     std::vector<SHAPE_POLY_SET> polys;
     PCB_LAYER_ID                destLayer = m_frame->GetActiveLayer();
     FOOTPRINT*                  parentFootprint = nullptr;
@@ -348,16 +349,17 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
                 polySet.Append( makePolysFromChainedSegs( selection.GetItems(), cfg.m_Strategy ) );
 
                 if( cfg.m_Strategy == BOUNDING_HULL )
-                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), cfg.m_Gap ) );
-
-                if( polySet.IsEmpty() )
-                    return false;
-
-                if( cfg.m_Strategy == BOUNDING_HULL )
                 {
                     polySet.ClearArcs();
                     polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
+                    polySet.Inflate( cfg.m_Gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, bds.m_MaxError,
+                                     ERROR_OUTSIDE );
+
+                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), cfg.m_Gap ) );
                 }
+
+                if( polySet.IsEmpty() )
+                    return false;
 
                 for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
                 {
@@ -380,9 +382,8 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
         parentFootprint = item->GetParentFootprint();
 
-    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-    PCB_LAYER_ID           layer = m_frame->GetActiveLayer();
-    BOARD_COMMIT           commit( m_frame );
+    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+    BOARD_COMMIT commit( m_frame );
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
     {
