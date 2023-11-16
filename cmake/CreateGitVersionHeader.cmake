@@ -67,11 +67,14 @@ macro( create_git_version_header _git_src_path )
     # to KiCadVersion.cmake as the revision level.
     if( _git_describe_result EQUAL 0 )
         set( KICAD_VERSION "${_git_DESCRIBE}" )
+    else()
+        message( STATUS "git describe returned error ${_git_describe_result}: ${_git_describe_error}" )
     endif()
 
     if( _git_rev_parse_head_result EQUAL 0 )
         set( KICAD_COMMIT_HASH "${_git_REV_PARSE_HEAD}" )
     else()
+        message( STATUS "git rev-parse returned error ${_git_rev_parse_head_result}: ${_git_rev_parse_head_error}" )
         # placeholder if we can't get a real hash
         set( KICAD_COMMIT_HASH "0000000000000000000000000000000000000000" )
     endif()
@@ -84,6 +87,7 @@ macro( create_git_version_header _git_src_path )
             set( KICAD_GIT_REV "0" )
         endif ()
     else()
+        message( STATUS "git rev-list --count returned error ${_git_rev_count_result}: ${_git_rev_count_error}" )
         # Incase the command failed, we can just default to 0, only a problem in CI right now
         set( KICAD_GIT_REV "0" )
     endif()
