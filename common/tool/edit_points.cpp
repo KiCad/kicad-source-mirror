@@ -260,18 +260,18 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     if( brightness > 0.5 )
     {
-        borderColor = drawColor.Darkened( 0.3 ).WithAlpha( 0.8 );
-        highlightColor = drawColor.Brightened( 0.6 ).WithAlpha( 0.8 );
+        borderColor = drawColor.Darkened( 0.7 ).WithAlpha( 0.8 );
+        highlightColor = drawColor.Darkened( 0.5 ).WithAlpha( 0.8 );
     }
     else if( brightness > 0.2 )
     {
-        borderColor = drawColor.Darkened( 0.6 ).WithAlpha( 0.8 );
+        borderColor = drawColor.Brightened( 0.4 ).WithAlpha( 0.8 );
         highlightColor = drawColor.Brightened( 0.3 ).WithAlpha( 0.8 );
     }
     else
     {
-        borderColor = drawColor.Brightened( 0.3 ).WithAlpha( 0.8 );
-        highlightColor = drawColor.Brightened( 0.6 ).WithAlpha( 0.8 );
+        borderColor = drawColor.Brightened( 0.7 ).WithAlpha( 0.8 );
+        highlightColor = drawColor.Brightened( 0.5 ).WithAlpha( 0.8 );
     }
 
     gal->SetFillColor( drawColor );
