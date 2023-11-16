@@ -58,6 +58,8 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_lineWidthLabel = new wxStaticText( this, wxID_ANY, _("DXF default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
+	m_lineWidthLabel->SetToolTip( _("Used when the DXF items in file have no line thickness set") );
+
 	fgSizer3->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_lineWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -69,6 +71,8 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_dxfUnitsLabel = new wxStaticText( this, wxID_ANY, _("DXF default units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dxfUnitsLabel->Wrap( -1 );
+	m_dxfUnitsLabel->SetToolTip( _("Used when the DXF file has no unit set") );
+
 	fgSizer3->Add( m_dxfUnitsLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString m_dxfUnitsChoiceChoices;
@@ -87,8 +91,14 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_placeAtCheckbox = new wxCheckBox( this, wxID_ANY, _("Place at X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_placeAtCheckbox = new wxCheckBox( this, wxID_ANY, _("Place at:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_placeAtCheckbox->SetToolTip( _("If not checked: use interactive placement.") );
+
 	gbSizer2->Add( m_placeAtCheckbox, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_xLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_xLabel->Wrap( -1 );
+	gbSizer2->Add( m_xLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_xCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -101,11 +111,11 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	#endif
 	m_xCtrl->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
 
-	gbSizer2->Add( m_xCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer2->Add( m_xCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
-	gbSizer2->Add( m_yLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 18 );
+	gbSizer2->Add( m_yLabel, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 18 );
 
 	m_yCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -118,23 +128,24 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	#endif
 	m_yCtrl->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
 
-	gbSizer2->Add( m_yCtrl, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizer2->Add( m_yCtrl, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_yUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yUnits->Wrap( -1 );
-	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_setLayerCheckbox = new wxCheckBox( this, wxID_ANY, _("Set layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setLayerCheckbox = new wxCheckBox( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_setLayerCheckbox->SetValue(true);
 	m_setLayerCheckbox->SetToolTip( _("If checked, use the selected layer in this dialog\nIf unchecked, use the Board Editor active layer") );
 
 	gbSizer2->Add( m_setLayerCheckbox, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer2->Add( m_SelLayerBox, wxGBPosition( 1, 1 ), wxGBSpan( 1, 4 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_SelLayerBox, wxGBPosition( 1, 2 ), wxGBSpan( 1, 3 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer2->AddGrowableCol( 1 );
-	gbSizer2->AddGrowableCol( 3 );
+	gbSizer2->AddGrowableCol( 2 );
+	gbSizer2->AddGrowableCol( 4 );
 
 	bSizerMain->Add( gbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
@@ -146,6 +157,8 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_cbGroupItems = new wxCheckBox( this, wxID_ANY, _("Group imported items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbGroupItems->SetValue(true);
+	m_cbGroupItems->SetToolTip( _("Add all imported items to a new group") );
+
 	bSizerGroupOpt->Add( m_cbGroupItems, 0, wxALL, 5 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );

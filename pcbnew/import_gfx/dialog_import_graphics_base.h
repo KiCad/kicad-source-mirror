@@ -58,6 +58,7 @@ class DIALOG_IMPORT_GRAPHICS_BASE : public DIALOG_SHIM
 		wxChoice* m_dxfUnitsChoice;
 		wxStaticLine* m_staticline2;
 		wxCheckBox* m_placeAtCheckbox;
+		wxStaticText* m_xLabel;
 		wxTextCtrl* m_xCtrl;
 		wxStaticText* m_yLabel;
 		wxTextCtrl* m_yCtrl;
