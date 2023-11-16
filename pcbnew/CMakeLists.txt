@@ -578,12 +578,13 @@ set_source_files_properties( dialogs/panel_setup_rules.cpp
 
 if( APPLE )
     # setup bundle
-    set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
-        )
-    set_source_files_properties( "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns" PROPERTIES
-        MACOSX_PACKAGE_LOCATION Resources
+    set( PCBNEW_RESOURCES pcbnew.icns pcbnew_doc.icns fpedit.icns fpedit_doc.icns )
+    set_source_files_properties(
+        "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew.icns"
+        "${CMAKE_CURRENT_SOURCE_DIR}/pcbnew_doc.icns"
+        "${CMAKE_CURRENT_SOURCE_DIR}/fpedit.icns"
+        "${CMAKE_CURRENT_SOURCE_DIR}/fpedit_doc.icns"
+        PROPERTIES MACOSX_PACKAGE_LOCATION Resources
         )
     set( MACOSX_BUNDLE_ICON_FILE pcbnew.icns )
     set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad.kicad )

@@ -11,8 +11,17 @@
                                                             <string>pro</string>
                                                             <string>kicad_pro</string>
                                                         </array>
-                <key>CFBundleTypeName</key>             <string>kicad project files</string>
+                <key>CFBundleTypeName</key>             <string>KiCad project file</string>
                 <key>LSHandlerRank</key>                <string>Owner</string>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>         <string>None</string>
+                <key>CFBundleTypeExtensions</key>
+                    <array>
+                        <string>kicad_mod</string>
+                    </array>
+                <key>CFBundleTypeName</key>         <string>KiCad project local settings</string>
+                <key>LSHandlerRank</key>            <string>None</string>
             </dict>
         </array>
     <key>CFBundleDevelopmentRegion</key>            <string>English</string>
@@ -20,7 +29,7 @@
     <key>CFBundleGetInfoString</key>                <string></string>
     <key>CFBundleIconFile</key>                     <string>kicad.icns</string>
     <key>CFBundleIdentifier</key>                   <string>org.kicad.kicad</string>
-    <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
+    <key>CFBundleInfoDictionaryVersion</key>        <string>7.0</string>
     <key>CFBundleLongVersionString</key>            <string>@KICAD_VERSION_FULL@</string>
     <key>CFBundleName</key>                         <string>KiCad</string>
     <key>CFBundlePackageType</key>                  <string>APPL</string>
