@@ -412,7 +412,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
 
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.line_width",
-            &aWindow->grid.line_width, 1.0 ) );
+            &aWindow->grid.line_width, 2.0 ) );
 
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.min_spacing",
             &aWindow->grid.min_spacing, 10 ) );
