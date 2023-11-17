@@ -45,7 +45,9 @@ wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal,
     // nanometre
     switch( aUnits )
     {
+    case EDA_UNITS::MICROMETRES: fmtStr = wxT( "%.1f" ); break;  // 0.1um
     case EDA_UNITS::MILLIMETRES: fmtStr = wxT( "%.3f" ); break;  // 1um
+    case EDA_UNITS::CENTIMETRES: fmtStr = wxT( "%.4f" ); break;  // 1um
     case EDA_UNITS::MILS:        fmtStr = wxT( "%.1f" ); break;  // 0.1mil
     case EDA_UNITS::INCHES:      fmtStr = wxT( "%.4f" ); break;  // 0.1mil
     case EDA_UNITS::DEGREES:     fmtStr = wxT( "%.1f" ); break;  // 0.1deg
