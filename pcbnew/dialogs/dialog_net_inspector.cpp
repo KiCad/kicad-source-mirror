@@ -848,7 +848,7 @@ protected:
             const wxString& s1 = i1.GetNetName();
             const wxString& s2 = i2.GetNetName();
 
-            int res = aAsc ? s1.Cmp( s2 ) : s2.Cmp( s1 );
+            int res = aAsc ? ValueStringCompare( s1, s2 ) : ValueStringCompare( s2, s1 );
 
             if( res != 0 )
                 return res;
