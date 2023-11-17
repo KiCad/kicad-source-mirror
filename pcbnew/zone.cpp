@@ -1232,39 +1232,50 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     //
     // After smoothing, we'll subtract back out everything outside of our zone.
     std::vector<ZONE*> sameNetCollidingZones;
-    std::vector<ZONE*> otherNetIntersectingZones;
-    GetInteractingZones( aLayer, &sameNetCollidingZones, &otherNetIntersectingZones );
+    std::vector<ZONE*> diffNetIntersectingZones;
+    GetInteractingZones( aLayer, &sameNetCollidingZones, &diffNetIntersectingZones );
 
     for( ZONE* sameNetZone : sameNetCollidingZones )
     {
-        BOX2I          sameNetBoundingBox = sameNetZone->GetBoundingBox();
+        BOX2I sameNetBoundingBox = sameNetZone->GetBoundingBox();
+
+        // Note: a two-pass algorithm could use sameNetZone's actual fill instead of its outline.
+        // This would obviate the need for the below wrinkles, in addition to fixing both issues
+        // in #16095.
+        // (And we wouldn't need to collect all the diffNetIntersectingZones either.)
+
         SHAPE_POLY_SET sameNetPoly = sameNetZone->Outline()->CloneDropTriangulation();
-
         SHAPE_POLY_SET diffNetPoly;
-        SHAPE_POLY_SET sumPoly = Outline()->CloneDropTriangulation();
-
-        sameNetPoly.ClearArcs();
 
         // Of course there's always a wrinkle.  The same-net intersecting zone *might* get knocked
         // out along the border by a higher-priority, different-net zone.  #12797
-        for( ZONE* otherNetZone : otherNetIntersectingZones )
+        for( ZONE* diffNetZone : diffNetIntersectingZones )
         {
-            if( otherNetZone->HigherPriority( sameNetZone )
-                    && otherNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
+            if( diffNetZone->HigherPriority( sameNetZone )
+                    && diffNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
             {
-                diffNetPoly.BooleanAdd( *otherNetZone->Outline(), SHAPE_POLY_SET::PM_FAST );
+                diffNetPoly.BooleanAdd( *diffNetZone->Outline(), SHAPE_POLY_SET::PM_FAST );
             }
         }
 
-        // Second wrinkle.  After unioning the higher priority, different net zones together,
-        // we need to check to see if they completely enclose our zone.  If they do, then
-        // we need to treat the enclosed zone as isolated, not connected to the outer zone
-        // #13915
-        if( diffNetPoly.OutlineCount() )
-            sumPoly.BooleanSubtract( diffNetPoly, SHAPE_POLY_SET::PM_FAST );
+        // Second wrinkle.  After unioning the higher priority, different net zones together, we
+        // need to check to see if they completely enclose our zone.  If they do, then we need to
+        // treat the enclosed zone as isolated, not connected to the outer zone.  #13915
+        bool isolated = false;
 
-        if( sumPoly.OutlineCount() )
+        if( diffNetPoly.OutlineCount() )
+        {
+            SHAPE_POLY_SET thisPoly = Outline()->CloneDropTriangulation();
+
+            thisPoly.BooleanSubtract( diffNetPoly, SHAPE_POLY_SET::PM_FAST );
+            isolated = thisPoly.OutlineCount() == 0;
+        }
+
+        if( !isolated )
+        {
+            sameNetPoly.ClearArcs();
             aSmoothedPoly.BooleanAdd( sameNetPoly, SHAPE_POLY_SET::PM_FAST );
+        }
     }
 
     if( aBoardOutline )
