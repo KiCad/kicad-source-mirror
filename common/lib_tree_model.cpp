@@ -160,6 +160,23 @@ LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
 }
 
 
+void LIB_TREE_NODE_UNIT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+{
+    // aMatcher test results are inherited from parent
+    if( aMatcher )
+        m_Score = m_Parent->m_Score;
+
+    // aFilter test is subtractive
+    if( aFilter && !(*aFilter)(*this) )
+        m_Score = 0;
+
+    // show all nodes if no search/filter/etc. criteria are given
+    if( !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
+        m_Score = 1;
+}
+
+
 LIB_TREE_NODE_LIB_ITEM::LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
 {
     m_Type = LIB_ITEM;
@@ -233,6 +250,9 @@ void LIB_TREE_NODE_LIB_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const 
     // show all nodes if no search/filter/etc. criteria are given
     if( !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
         m_Score = 1;
+
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+        child->UpdateScore( aMatcher, aLib, aFilter );
 }
 
 
@@ -260,13 +280,10 @@ LIB_TREE_NODE_LIB_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    if( m_Children.size() )
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
     {
-        for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        {
-            child->UpdateScore( aMatcher, aLib, aFilter );
-            m_Score = std::max( m_Score, child->m_Score );
-        }
+        child->UpdateScore( aMatcher, aLib, aFilter );
+        m_Score = std::max( m_Score, child->m_Score );
     }
 
     // aLib test is additive

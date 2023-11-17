@@ -173,12 +173,8 @@ public:
      */
     LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem, int aUnit );
 
-
-    /**
-     * Do nothing, units just take the parent's score
-     */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override {}
+    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
 
@@ -217,8 +213,8 @@ public:
     /**
      * Perform the actual search.
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
+    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 
 protected:
     /**
@@ -259,8 +255,8 @@ public:
      */
     LIB_TREE_NODE_LIB_ITEM& AddItem( LIB_TREE_ITEM* aItem );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
+    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
 
@@ -287,8 +283,8 @@ public:
      */
     LIB_TREE_NODE_LIBRARY& AddLib( wxString const& aName, wxString const& aDesc );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                              std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
+    void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };
 
 
