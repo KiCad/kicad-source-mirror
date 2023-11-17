@@ -69,7 +69,6 @@ PROJECT_TREE::~PROJECT_TREE()
 void PROJECT_TREE::LoadIcons()
 {
     delete m_imageList;
-    delete m_statusImageList;
 
     int size = 24;
 
@@ -114,6 +113,7 @@ void PROJECT_TREE::LoadIcons()
 
     wxBitmap blank_bitmap( size, size );
 
+    delete m_statusImageList;
     m_statusImageList = new wxImageList( size, size, true,
                                          static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
 
