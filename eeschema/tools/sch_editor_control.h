@@ -42,7 +42,8 @@ public:
             EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
             m_probingPcbToSch( false ),
             m_pickerItem( nullptr ),
-            m_duplicateIsHoverSelection( false )
+            m_duplicateIsHoverSelection( false ),
+            m_highlightBusMembers( false )
     { }
 
     ~SCH_EDITOR_CONTROL() { }
@@ -164,6 +165,13 @@ public:
                                  bool aSearchHierarchy, SCH_SEARCH_T aSearchType,
                                  const wxString& aSearchText );
 
+    void SetHighlightBusMembers( bool aHighlightBusMembers )
+    {
+        m_highlightBusMembers = aHighlightBusMembers;
+    }
+
+    bool GetHighlightBusMembers() const { return m_highlightBusMembers; }
+
 private:
     ///< copy selection to clipboard or to m_duplicateClipboard
     bool doCopy( bool aUseDuplicateClipboard = false );
@@ -217,6 +225,8 @@ private:
 
     std::string m_duplicateClipboard;       // Temporary storage for Duplicate action
     bool        m_duplicateIsHoverSelection;
+
+    bool        m_highlightBusMembers;
 
     // A map of sheet filename --> screens for the clipboard contents.  We use these to hook up
     // cut/paste operations for unsaved sheet content.
