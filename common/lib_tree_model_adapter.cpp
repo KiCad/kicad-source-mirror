@@ -418,7 +418,7 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
 
     if( node->m_Type == LIB_TREE_NODE::TYPE::ROOT
             || node->m_Type == LIB_TREE_NODE::LIBRARY
-            || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM ) )
+            || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::ITEM ) )
     {
         for( std::unique_ptr<LIB_TREE_NODE> const& child: node->m_Children )
         {
@@ -592,7 +592,7 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    if( node->m_Type == LIB_TREE_NODE::LIB_ITEM )
+    if( node->m_Type == LIB_TREE_NODE::ITEM )
     {
         if( !node->m_IsRoot && aCol == 0 )
         {
@@ -626,7 +626,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
     recursiveDescent( m_tree,
             [&]( const LIB_TREE_NODE* n )
             {
-                if( n->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM && n->m_Score > 1 )
+                if( n->m_Type == LIB_TREE_NODE::TYPE::ITEM && n->m_Score > 1 )
                 {
                     if( !firstMatch )
                         firstMatch = n;
@@ -645,7 +645,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
-                    if( n->m_Type == LIB_TREE_NODE::LIB_ITEM
+                    if( n->m_Type == LIB_TREE_NODE::ITEM
                               && ( n->m_Children.empty() || !m_preselect_unit )
                               && m_preselect_lib_id == n->m_LibId )
                     {
@@ -683,7 +683,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
-                    if( n->m_Type == LIB_TREE_NODE::TYPE::LIB_ITEM )
+                    if( n->m_Type == LIB_TREE_NODE::TYPE::ITEM )
                     {
                         firstMatch = n;
                         m_widget->ExpandAncestors( ToItem( n ) );

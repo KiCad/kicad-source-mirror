@@ -113,7 +113,7 @@ public:
     {
         ROOT,
         LIBRARY,
-        LIB_ITEM,
+        ITEM,
         UNIT,
         INVALID
     };
@@ -181,15 +181,15 @@ public:
 /**
  * Node type: #LIB_ID.
  */
-class LIB_TREE_NODE_LIB_ITEM : public LIB_TREE_NODE
+class LIB_TREE_NODE_ITEM : public LIB_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE_LIB_ITEM const& _ ) = delete;
-    void operator=( LIB_TREE_NODE_LIB_ITEM const& _ ) = delete;
+    LIB_TREE_NODE_ITEM( LIB_TREE_NODE_ITEM const& _ ) = delete;
+    void operator=( LIB_TREE_NODE_ITEM const& _ ) = delete;
 
     /**
      * Construct a #LIB_ID node.
@@ -203,7 +203,7 @@ public:
      * @param aParent   parent node, should be a CMP_TREE_NODE_LIB
      * @param aItem     LIB_COMPONENT to populate the node.
      */
-    LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem );
+    LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem );
 
     /**
      * Update the node using data from a LIB_ALIAS object.
@@ -253,7 +253,7 @@ public:
      *
      * @param aItem    LIB_COMPONENT to provide data
      */
-    LIB_TREE_NODE_LIB_ITEM& AddItem( LIB_TREE_ITEM* aItem );
+    LIB_TREE_NODE_ITEM& AddItem( LIB_TREE_ITEM* aItem );
 
     void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;

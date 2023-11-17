@@ -177,9 +177,9 @@ void LIB_TREE_NODE_UNIT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxSt
 }
 
 
-LIB_TREE_NODE_LIB_ITEM::LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
+LIB_TREE_NODE_ITEM::LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem )
 {
-    m_Type = LIB_ITEM;
+    m_Type = ITEM;
     m_Parent = aParent;
 
     m_LibId.SetLibNickname( aItem->GetLibNickname() );
@@ -204,7 +204,7 @@ LIB_TREE_NODE_LIB_ITEM::LIB_TREE_NODE_LIB_ITEM( LIB_TREE_NODE* aParent, LIB_TREE
 }
 
 
-LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ITEM::AddUnit( LIB_TREE_ITEM* aItem, int aUnit )
+LIB_TREE_NODE_UNIT& LIB_TREE_NODE_ITEM::AddUnit( LIB_TREE_ITEM* aItem, int aUnit )
 {
     LIB_TREE_NODE_UNIT* unit = new LIB_TREE_NODE_UNIT( this, aItem, aUnit );
     m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( unit ) );
@@ -212,7 +212,7 @@ LIB_TREE_NODE_UNIT& LIB_TREE_NODE_LIB_ITEM::AddUnit( LIB_TREE_ITEM* aItem, int a
 }
 
 
-void LIB_TREE_NODE_LIB_ITEM::Update( LIB_TREE_ITEM* aItem )
+void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
 {
     m_LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
     m_LibId.SetLibItemName( aItem->GetName() );
@@ -232,8 +232,8 @@ void LIB_TREE_NODE_LIB_ITEM::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
-                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
+void LIB_TREE_NODE_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
+                                      std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     // aMatcher test is additive
     if( aMatcher )
@@ -269,9 +269,9 @@ LIB_TREE_NODE_LIBRARY::LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, wxString c
 }
 
 
-LIB_TREE_NODE_LIB_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
+LIB_TREE_NODE_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 {
-    LIB_TREE_NODE_LIB_ITEM* item = new LIB_TREE_NODE_LIB_ITEM( this, aItem );
+    LIB_TREE_NODE_ITEM* item = new LIB_TREE_NODE_ITEM( this, aItem );
     m_Children.push_back( std::unique_ptr<LIB_TREE_NODE>( item ) );
     return *item;
 }

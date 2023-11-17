@@ -181,7 +181,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
             {
                 // alias exists both in the symbol tree and the library manager,
                 // update only the node data.
-                static_cast<LIB_TREE_NODE_LIB_ITEM*>( nodeIt->get() )->Update( *aliasIt );
+                static_cast<LIB_TREE_NODE_ITEM*>( nodeIt->get() )->Update( *aliasIt );
                 aliases.erase( aliasIt );
                 ++nodeIt;
             }
@@ -250,7 +250,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
             if( m_libMgr->IsLibraryModified( node->m_Name ) )
                 aVariant = aVariant.GetString() + " *";
         }
-        else if( node->m_Type == LIB_TREE_NODE::LIB_ITEM )
+        else if( node->m_Type == LIB_TREE_NODE::ITEM )
         {
             if( m_libMgr->IsSymbolModified( node->m_Name, node->m_Parent->m_Name ) )
                 aVariant = aVariant.GetString() + " *";
@@ -340,7 +340,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         }
         break;
 
-    case LIB_TREE_NODE::LIB_ITEM:
+    case LIB_TREE_NODE::ITEM:
         // mark modified part with bold font
         aAttr.SetBold( m_libMgr->IsSymbolModified( node->m_Name, node->m_Parent->m_Name ) );
 
@@ -374,7 +374,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem 
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    return node->m_Type == LIB_TREE_NODE::LIB_ITEM && node->m_LibId != m_frame->GetTargetLibId();
+    return node->m_Type == LIB_TREE_NODE::ITEM && node->m_LibId != m_frame->GetTargetLibId();
 }
 
 

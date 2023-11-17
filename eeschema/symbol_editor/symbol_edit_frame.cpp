@@ -1145,7 +1145,7 @@ void SYMBOL_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, LIB_
     if( aTreeItem.IsOk() )   // Can be not found in tree if the current footprint is imported
                              // from file therefore not yet in tree.
     {
-        static_cast<LIB_TREE_NODE_LIB_ITEM*>( aTreeItem.GetID() )->Update( aSymbol );
+        static_cast<LIB_TREE_NODE_ITEM*>( aTreeItem.GetID() )->Update( aSymbol );
         m_treePane->GetLibTree()->RefreshLibTree();
     }
 }

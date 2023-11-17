@@ -148,7 +148,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aLibNo
         {
             // footprint exists both in the lib tree and the footprint info list; just
             // update the node data
-            static_cast<LIB_TREE_NODE_LIB_ITEM*>( nodeIt->get() )->Update( *footprintIt );
+            static_cast<LIB_TREE_NODE_ITEM*>( nodeIt->get() )->Update( *footprintIt );
             footprints.erase( footprintIt );
             ++nodeIt;
         }
@@ -295,7 +295,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
         }
         break;
 
-    case LIB_TREE_NODE::LIB_ITEM:
+    case LIB_TREE_NODE::ITEM:
         if( node->m_LibId == m_frame->GetLoadedFPID() )
         {
 #ifdef __WXGTK__
@@ -326,7 +326,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    return node->m_Type == LIB_TREE_NODE::LIB_ITEM && node->m_LibId != m_frame->GetLoadedFPID();
+    return node->m_Type == LIB_TREE_NODE::ITEM && node->m_LibId != m_frame->GetLoadedFPID();
 }
 
 
