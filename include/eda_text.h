@@ -165,6 +165,14 @@ public:
     void SetKeepUpright( bool aKeepUpright );
     bool IsKeepUpright() const                  { return m_attributes.m_KeepUpright; }
 
+    void FlipHJustify()
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        else if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+            SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+    }
+
     /**
      * Set the text attributes from another instance.
      */

@@ -106,7 +106,6 @@ public:
         EDA_TEXT::Offset( aMoveVector );
     }
 
-    void FlipHJustify();
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter ) override;

@@ -526,19 +526,8 @@ void SCH_LABEL_BASE::MirrorHorizontally( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        switch( field.GetHorizJustify() )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            break;
-
-        case GR_TEXT_H_ALIGN_CENTER:
-            break;
-
-        case GR_TEXT_H_ALIGN_RIGHT:
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            break;
-        }
+        if( field.GetTextAngle() == ANGLE_HORIZONTAL )
+            field.FlipHJustify();
 
         VECTOR2I pos = field.GetTextPos();
         VECTOR2I delta = old_pos - pos;
@@ -556,6 +545,9 @@ void SCH_LABEL_BASE::MirrorVertically( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
+        if( field.GetTextAngle() == ANGLE_VERTICAL )
+            field.FlipHJustify();
+
         VECTOR2I pos = field.GetTextPos();
         VECTOR2I delta = old_pos - pos;
         pos.y = GetPosition().y + delta.y;
