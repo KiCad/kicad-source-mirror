@@ -806,18 +806,20 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
     }
 
-    wxString connectionName = ( conn ) ? conn->Name() : wxS( "" );
+    wxString connectionName = ( conn ) ? conn->Name() : wxString( wxS( "" ) );
 
     if( !conn || connectionName == editFrame->GetHighlightedConnection() )
     {
         editFrame->SetStatusText( wxT( "" ) );
         editFrame->SendCrossProbeClearHighlight();
         editFrame->SetHighlightedConnection( wxEmptyString );
+        editorControl->SetHighlightBusMembers( false );
     }
     else
     {
         editFrame->SetCrossProbeConnection( conn );
         editFrame->SetHighlightedConnection( connectionName );
+        editorControl->SetHighlightBusMembers( false );
     }
 
     editFrame->UpdateNetHighlightStatus();
@@ -1014,155 +1016,193 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
+    wxCHECK( m_frame, 0 );
+
+    const SCH_SHEET_PATH&  sheetPath = m_frame->GetCurrentSheet();
     SCH_SCREEN*            screen = m_frame->GetCurrentSheet().LastScreen();
     CONNECTION_GRAPH*      connectionGraph = m_frame->Schematic().ConnectionGraph();
+    wxString               selectedName = m_frame->GetHighlightedConnection();
+
+    std::set<wxString>     connNames;
     std::vector<EDA_ITEM*> itemsToRedraw;
 
     wxCHECK( screen && connectionGraph, 0 );
 
-    bool     selectedIsBus = false;
-    wxString selectedName  = m_frame->GetHighlightedConnection();
-
-    bool                 selectedIsNoNet  = false;
-    CONNECTION_SUBGRAPH* selectedSubgraph = nullptr;
-
-    for( SCH_ITEM* item : screen->Items() )
+    if( !selectedName.IsEmpty() )
     {
-        bool redraw    = item->IsBrightened();
-        bool highlight = false;
+        connNames.emplace( selectedName );
 
-        if( !selectedName.IsEmpty() )
+        if( m_highlightBusMembers )
         {
-            SCH_CONNECTION* itemConn  = nullptr;
-            SCH_SYMBOL*     symbol    = nullptr;
+            CONNECTION_SUBGRAPH* sg = connectionGraph->FindSubgraphByName( selectedName,
+                                                                           sheetPath );
 
-            if( item->Type() == SCH_SYMBOL_T )
-                symbol = static_cast<SCH_SYMBOL*>( item );
+            wxCHECK( sg, 0 );
 
-            if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
-                itemConn = symbol->Connection();
-            else
-                itemConn = item->Connection();
-
-            if( itemConn && ( selectedName == itemConn->Name() ) )
+            for( const SCH_ITEM* item : sg->GetItems() )
             {
-                selectedIsBus = itemConn->IsBus();
+                wxCHECK2( item, continue );
 
-                if( itemConn->Driver() == nullptr )
-                {
-                    selectedIsNoNet = true;
-                    selectedSubgraph = connectionGraph->GetSubgraphForItem( itemConn->Parent() );
-                }
+                SCH_CONNECTION* connection = item->Connection();
 
-                if( selectedIsNoNet && selectedSubgraph )
+                wxCHECK2( connection, continue );
+
+                for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
                 {
-                    for( SCH_ITEM* subgraphItem : selectedSubgraph->GetItems() )
-                    {
-                        if( item == subgraphItem )
-                        {
-                            highlight = true;
-                            break;
-                        }
-                    }
-                }
-                else if( selectedIsBus && itemConn && itemConn->IsNet() )
-                {
-                    for( const std::shared_ptr<SCH_CONNECTION>& member : itemConn->Members() )
-                    {
-                        if( member->Name() == itemConn->Name() )
-                        {
-                            highlight = true;
-                            break;
-                        }
-                        else if( member->IsBus() )
-                        {
-                            for( const std::shared_ptr<SCH_CONNECTION>& bus_member :
-                                 member->Members() )
-                            {
-                                if( bus_member->Name() == itemConn->Name() )
-                                {
-                                    highlight = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                else if( !selectedName.IsEmpty() && itemConn
-                       && ( selectedName == itemConn->Name() ) )
-                {
-                    highlight = true;
+                    if( member )
+                        connNames.emplace( member->Name() );
                 }
             }
         }
+    }
 
-        if( highlight )
-            item->SetBrightened();
-        else
-            item->ClearBrightened();
+    for( SCH_ITEM* item : screen->Items() )
+    {
+        wxCHECK2( item, continue );
 
-        redraw |= item->IsBrightened();
+        if( !item->IsConnectable() )
+            continue;
+
+        SCH_ITEM* redrawItem = nullptr;
 
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            redraw |= symbol->HasBrightenedPins();
-
-            symbol->ClearBrightenedPins();
+            wxCHECK2( symbol, continue );
 
             for( SCH_PIN* pin : symbol->GetPins() )
             {
                 SCH_CONNECTION* pin_conn = pin->Connection();
 
-                if( pin_conn && pin_conn->Name() == selectedName )
+                wxCHECK2( pin_conn, continue );
+
+                if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
                 {
                     pin->SetBrightened();
-                    redraw = true;
+                    redrawItem = symbol;
+                }
+                else if( pin->IsBrightened() && !connNames.count( pin_conn->Name() ) )
+                {
+                    pin->ClearBrightened();
+                    redrawItem = symbol;
                 }
             }
 
-            if( symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
+            if( symbol->IsPower() )
             {
+                wxCHECK2( symbol->GetPins().size(), continue );
+
+                SCH_CONNECTION* pinConn = symbol->GetPins()[0]->Connection();
+
+                wxCHECK2( pinConn, continue );
+
                 std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
                 for( int id : { REFERENCE_FIELD, VALUE_FIELD } )
                 {
-                    if( item->IsBrightened() && fields[id].IsVisible() )
+                    if( !fields[id].IsVisible() )
+                        continue;
+
+                    if( !item->IsBrightened() && connNames.count( pinConn->Name() ) )
+                    {
                         fields[id].SetBrightened();
-                    else
+                        redrawItem = symbol;
+                    }
+                    else if( item->IsBrightened() && !connNames.count( pinConn->Name() ) )
+                    {
                         fields[id].ClearBrightened();
+                        redrawItem = symbol;
+                    }
                 }
             }
         }
         else if( item->Type() == SCH_SHEET_T )
         {
-            for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            wxCHECK2( sheet, continue );
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
+                wxCHECK2( pin, continue );
+
                 SCH_CONNECTION* pin_conn = pin->Connection();
-                bool            redrawPin = pin->IsBrightened();
 
-                if( pin_conn && pin_conn->Name() == selectedName )
+                wxCHECK2( pin_conn, continue );
+
+                if( !pin->IsBrightened() && connNames.count( pin_conn->Name() ) )
+                {
                     pin->SetBrightened();
-                else
+                    redrawItem = sheet;
+                }
+                else if( pin->IsBrightened() && !connNames.count( pin_conn->Name() ) )
+                {
                     pin->ClearBrightened();
+                    redrawItem = sheet;
+                }
+            }
+        }
+        else
+        {
+            SCH_CONNECTION* itemConn = item->Connection();
 
-                redrawPin ^= pin->IsBrightened();
-                redraw    |= redrawPin;
+            wxCHECK2( itemConn, continue );
+
+            bool selectedIsNoNet = false;
+            CONNECTION_SUBGRAPH* selectedSubgraph = nullptr;
+
+            if( itemConn->Driver() == nullptr )
+            {
+                selectedIsNoNet = true;
+                selectedSubgraph = connectionGraph->GetSubgraphForItem( itemConn->Parent() );
+            }
+
+            if( selectedIsNoNet && selectedSubgraph )
+            {
+                for( SCH_ITEM* subgraphItem : selectedSubgraph->GetItems() )
+                {
+                    if( !item->IsBrightened() && ( item == subgraphItem ) )
+                    {
+                        item->SetBrightened();
+                        redrawItem = item;
+                    }
+                    else if( item->IsBrightened() && ( item != subgraphItem ) )
+                    {
+                        item->ClearBrightened();
+                        redrawItem = item;
+                    }
+                }
+            }
+            else
+            {
+                if( !item->IsBrightened() && connNames.count( itemConn->Name() ) )
+                {
+                    item->SetBrightened();
+                    redrawItem = item;
+                }
+                else if( item->IsBrightened() && !connNames.count( itemConn->Name() ) )
+                {
+                    item->ClearBrightened();
+                    redrawItem = item;
+                }
             }
         }
 
-        if( redraw )
-            itemsToRedraw.push_back( item );
+        if( redrawItem )
+            itemsToRedraw.push_back( redrawItem );
     }
 
-    // Be sure highlight change will be redrawn
-    KIGFX::VIEW* view = getView();
+    if( itemsToRedraw.size() )
+    {
+        // Be sure highlight change will be redrawn
+        KIGFX::VIEW* view = getView();
 
-    for( EDA_ITEM* redrawItem : itemsToRedraw )
-        view->Update( (KIGFX::VIEW_ITEM*)redrawItem, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
+        for( EDA_ITEM* redrawItem : itemsToRedraw )
+            view->Update( (KIGFX::VIEW_ITEM*)redrawItem, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
 
-    m_frame->GetCanvas()->Refresh();
+        m_frame->GetCanvas()->Refresh();
+    }
 
     return 0;
 }
