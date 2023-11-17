@@ -130,6 +130,7 @@ BOARD* ALTIUM_DESIGNER_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aApp
     return m_board;
 }
 
+
 long long ALTIUM_DESIGNER_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
     // File hasn't been loaded yet.
@@ -150,74 +151,31 @@ long long ALTIUM_DESIGNER_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryP
     }
 }
 
-void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames,
-                                                 const wxString& aLibraryPath, bool aBestEfforts,
-                                                 const STRING_UTF8_MAP* aProperties )
+
+void ALTIUM_DESIGNER_PLUGIN::loadAltiumLibrary( const wxString& aLibraryPath )
 {
-    ALTIUM_COMPOUND_FILE* altiumLibFile = nullptr;
-    auto it = m_fplibFiles.find( aLibraryPath );
-
-    if( it == m_fplibFiles.end() )
-    {
-        auto new_it = m_fplibFiles.emplace( aLibraryPath, std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
-        altiumLibFile = new_it.first->second.get();
-    }
-    else
-    {
-        altiumLibFile = it->second.get();
-    }
-
     try
     {
-        // Map code-page-dependent names to unicode names
-        std::map<wxString, wxString> patternMap = altiumLibFile->ListLibFootprints();
+        auto it = m_fplibFiles.find( aLibraryPath );
 
-        const std::vector<std::string>  streamName = { "Library", "Data" };
-        const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile->FindStream( streamName );
+        if( it != m_fplibFiles.end() )
+            return; // Already loaded
 
-        if( libraryData == nullptr )
+        if( aLibraryPath.Lower().EndsWith( wxS( ".pcblib" ) ) )
         {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "File not found: '%s'." ), FormatPath( streamName ) ) );
+            m_fplibFiles[aLibraryPath].emplace_back(
+                    std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
         }
-
-        ALTIUM_PARSER parser( *altiumLibFile, libraryData );
-
-        std::map<wxString, wxString> properties = parser.ReadProperties();
-
-        uint32_t numberOfFootprints = parser.Read<uint32_t>();
-        aFootprintNames.Alloc( numberOfFootprints );
-
-        for( size_t i = 0; i < numberOfFootprints; i++ )
+        else if( aLibraryPath.Lower().EndsWith( wxS( ".intlib" ) ) )
         {
-            parser.ReadAndSetSubrecordLength();
+            std::unique_ptr<ALTIUM_COMPOUND_FILE> intCom =
+                    std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath );
 
-            wxScopedCharBuffer charBuffer = parser.ReadCharBuffer();
-            wxString           fpPattern( charBuffer, wxConvISO8859_1 );
+            std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> pcbLibFiles =
+                    intCom->EnumDir( L"PCBLib" );
 
-            auto it = patternMap.find( fpPattern );
-            if( it != patternMap.end() )
-            {
-                aFootprintNames.Add( it->second ); // Proper unicode name
-            }
-            else
-            {
-                THROW_IO_ERROR( wxString::Format( "Component name not found: '%s'", fpPattern ) );
-            }
-
-            parser.SkipSubrecord();
-        }
-
-        if( parser.HasParsingError() )
-        {
-            THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly",
-                                              FormatPath( streamName ) ) );
-        }
-
-        if( parser.GetRemainingBytes() != 0 )
-        {
-            THROW_IO_ERROR(
-                    wxString::Format( "%s stream is not fully parsed", FormatPath( streamName ) ) );
+            for( const auto& [pcbLibName, pcbCfe] : pcbLibFiles )
+                m_fplibFiles[aLibraryPath].push_back( intCom->DecodeIntLibStream( *pcbCfe ) );
         }
     }
     catch( CFB::CFBException& exception )
@@ -226,31 +184,114 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
     }
 }
 
-FOOTPRINT* ALTIUM_DESIGNER_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
-                                                  const wxString& aFootprintName, bool aKeepUUID,
-                                                  const STRING_UTF8_MAP* aProperties )
+
+void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames,
+                                                 const wxString& aLibraryPath, bool aBestEfforts,
+                                                 const STRING_UTF8_MAP* aProperties )
 {
-    ALTIUM_COMPOUND_FILE* altiumLibFile = nullptr;
+    loadAltiumLibrary( aLibraryPath );
+
     auto it = m_fplibFiles.find( aLibraryPath );
 
     if( it == m_fplibFiles.end() )
-    {
-        auto new_it = m_fplibFiles.emplace( aLibraryPath, std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
-        altiumLibFile = new_it.first->second.get();
-    }
-    else
-    {
-        altiumLibFile = it->second.get();
-    }
+        return; // No footprint libraries in file, ignore.
 
     try
     {
-        // Parse File
-        ALTIUM_PCB pcb( m_board, nullptr );
-        return pcb.ParseFootprint( *altiumLibFile, aFootprintName );
+        for( auto& altiumLibFile : it->second )
+        {
+            // Map code-page-dependent names to unicode names
+            std::map<wxString, wxString> patternMap = altiumLibFile->ListLibFootprints();
+
+            const std::vector<std::string>  streamName = { "Library", "Data" };
+            const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile->FindStream( streamName );
+
+            if( libraryData == nullptr )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ),
+                                                  FormatPath( streamName ) ) );
+            }
+
+            ALTIUM_PARSER parser( *altiumLibFile, libraryData );
+
+            std::map<wxString, wxString> properties = parser.ReadProperties();
+
+            uint32_t numberOfFootprints = parser.Read<uint32_t>();
+            aFootprintNames.Alloc( numberOfFootprints );
+
+            for( size_t i = 0; i < numberOfFootprints; i++ )
+            {
+                parser.ReadAndSetSubrecordLength();
+
+                wxScopedCharBuffer charBuffer = parser.ReadCharBuffer();
+                wxString           fpPattern( charBuffer, wxConvISO8859_1 );
+
+                auto it = patternMap.find( fpPattern );
+                if( it != patternMap.end() )
+                {
+                    aFootprintNames.Add( it->second ); // Proper unicode name
+                }
+                else
+                {
+                    THROW_IO_ERROR(
+                            wxString::Format( "Component name not found: '%s'", fpPattern ) );
+                }
+
+                parser.SkipSubrecord();
+            }
+
+            if( parser.HasParsingError() )
+            {
+                THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly",
+                                                  FormatPath( streamName ) ) );
+            }
+
+            if( parser.GetRemainingBytes() != 0 )
+            {
+                THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed",
+                                                  FormatPath( streamName ) ) );
+            }
+        }
     }
     catch( CFB::CFBException& exception )
     {
         THROW_IO_ERROR( exception.what() );
     }
+}
+
+
+FOOTPRINT* ALTIUM_DESIGNER_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                                  const wxString& aFootprintName, bool aKeepUUID,
+                                                  const STRING_UTF8_MAP* aProperties )
+{
+    loadAltiumLibrary( aLibraryPath );
+
+    auto it = m_fplibFiles.find( aLibraryPath );
+
+    if( it == m_fplibFiles.end() )
+        THROW_IO_ERROR( _( "No footprints in library" ) );
+
+    try
+    {
+        for( auto& altiumLibFile : it->second )
+        {
+            auto [dirName, fpCfe] = altiumLibFile->FindLibFootprintDirName( aFootprintName );
+
+            if( dirName.IsEmpty() )
+                continue;
+
+            // Parse File
+            ALTIUM_PCB pcb( m_board, nullptr );
+            return pcb.ParseFootprint( *altiumLibFile, aFootprintName );
+        }
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
+
+    THROW_IO_ERROR(
+            wxString::Format( _( "Footprint directory not found: '%s'." ), aFootprintName ) );
+
+    return nullptr;
 }

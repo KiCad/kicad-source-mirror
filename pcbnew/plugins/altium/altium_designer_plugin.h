@@ -46,7 +46,8 @@ public:
 
     PLUGIN_FILE_DESC GetFootprintLibDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Altium PCB footprint library files" ), { "PcbLib" } );
+        return PLUGIN_FILE_DESC( _HKI( "Altium PCB Library or Integrated Library" ),
+                                 { "PcbLib", "IntLib" } );
     }
 
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
@@ -82,7 +83,9 @@ private:
     const STRING_UTF8_MAP* m_props;
     BOARD*                 m_board;
 
-    std::map<wxString, std::unique_ptr<ALTIUM_COMPOUND_FILE>> m_fplibFiles;
+    std::map<wxString, std::vector<std::unique_ptr<ALTIUM_COMPOUND_FILE>>> m_fplibFiles;
+
+    void loadAltiumLibrary( const wxString& aLibraryPath );
 };
 
 #endif // ALTIUM_DESIGNER_PLUGIN_H_

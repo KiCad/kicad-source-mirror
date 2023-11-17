@@ -60,11 +60,23 @@ public:
      * @param aFilePath path to file to open
      */
     ALTIUM_COMPOUND_FILE( const wxString& aFilePath );
+
+    /**
+     * Load a CFB file from memory. Constructor might throw an IO_ERROR.
+     * Data is copied.
+     *
+     * @param aBuffer data buffer
+     * @param aLen data length
+     */
+    ALTIUM_COMPOUND_FILE( const void* aBuffer, size_t aLen );
+
     ALTIUM_COMPOUND_FILE( const ALTIUM_COMPOUND_FILE& temp_obj ) = delete;
     ALTIUM_COMPOUND_FILE& operator=( const ALTIUM_COMPOUND_FILE& temp_obj ) = delete;
     ~ALTIUM_COMPOUND_FILE() = default;
 
     const CFB::CompoundFileReader& GetCompoundFileReader() const { return *m_reader; }
+
+    std::unique_ptr<ALTIUM_COMPOUND_FILE> DecodeIntLibStream( const CFB::COMPOUND_FILE_ENTRY& cfe );
 
     std::map<wxString, wxString> ListLibFootprints();
 
@@ -77,6 +89,8 @@ public:
     const CFB::COMPOUND_FILE_ENTRY* FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
                                                            const std::string               aName,
                                                            const bool aIsStream ) const;
+
+    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> EnumDir( const std::wstring& aDir ) const;
 
     std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const;
 

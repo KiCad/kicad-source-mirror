@@ -3748,61 +3748,65 @@ void SCH_ALTIUM_PLUGIN::ParseImplementationList( int aIndex,
 
 
 void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>& aProperties,
-                                             std::vector<LIB_SYMBOL*>&           aSymbol  )
+                                             std::vector<LIB_SYMBOL*>&           aSymbol )
 {
     ASCH_IMPLEMENTATION elem( aProperties );
 
-    // Only get footprint, currently assigned only
-    if( ( elem.type == "PCBLIB" ) && ( elem.isCurrent ) )
+    if( elem.type != wxS( "PCBLIB" ) )
+        return;
+
+    // For schematic files, we need to check if the model is current.
+    if( aSymbol.size() == 0 && !elem.isCurrent )
+        return;
+
+    // For IntLibs we want to use the same lib name for footprints
+    wxString libName = m_isIntLib ? m_libName : elem.libname;
+
+    wxArrayString fpFilters;
+    fpFilters.Add( wxString::Format( wxS( "*%s*" ), elem.name ) );
+
+    // Parse the footprint fields for the library symbol
+    if( !aSymbol.empty() )
     {
-        // Parse the footprint fields for the library symbol
-        if( !aSymbol.empty() )
+        for( LIB_SYMBOL* symbol : aSymbol )
         {
-            for( LIB_SYMBOL* symbol : aSymbol )
-            {
-                LIB_ID fpLibId = AltiumToKiCadLibID( elem.libname, elem.name );
+            LIB_ID fpLibId = AltiumToKiCadLibID( libName, elem.name );
 
-                wxString txt;
-                txt.Printf( "*%s*", elem.name );
-
-                symbol->SetFPFilters( wxArrayString( 1, &txt ));
-                LIB_FIELD& footprintField = symbol->GetFootprintField();
-                footprintField.SetText( fpLibId.Format() );
-            }
-
-            return;
+            symbol->SetFPFilters( fpFilters );
+            LIB_FIELD& footprintField = symbol->GetFootprintField();
+            footprintField.SetText( fpLibId.Format() );
         }
 
-        const auto& implementationOwnerIt = m_altiumImplementationList.find( elem.ownerindex );
-
-        if( implementationOwnerIt == m_altiumImplementationList.end() )
-        {
-            m_reporter->Report( wxString::Format( wxT( "Implementation's owner (%d) not found." ),
-                                                  elem.ownerindex ),
-                                RPT_SEVERITY_DEBUG );
-            return;
-        }
-
-        const auto& libSymbolIt = m_libSymbols.find( implementationOwnerIt->second );
-
-        if( libSymbolIt == m_libSymbols.end() )
-        {
-            m_reporter->Report( wxString::Format( wxT( "Footprint's owner (%d) not found." ),
-                                                  implementationOwnerIt->second ),
-                                RPT_SEVERITY_DEBUG );
-            return;
-        }
-
-        LIB_ID        fpLibId = AltiumToKiCadLibID( elem.libname, elem.name );
-        wxArrayString fpFilters;
-        fpFilters.Add( fpLibId.Format() );
-
-        libSymbolIt->second->SetFPFilters( fpFilters ); // TODO: not ideal as we overwrite it
-
-        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
-
-        symbol->SetFootprintFieldText( fpLibId.Format() );
+        return;
     }
+
+    const auto& implementationOwnerIt = m_altiumImplementationList.find( elem.ownerindex );
+
+    if( implementationOwnerIt == m_altiumImplementationList.end() )
+    {
+        m_reporter->Report( wxString::Format( wxT( "Implementation's owner (%d) not found." ),
+                                              elem.ownerindex ),
+                            RPT_SEVERITY_DEBUG );
+        return;
+    }
+
+    const auto& libSymbolIt = m_libSymbols.find( implementationOwnerIt->second );
+
+    if( libSymbolIt == m_libSymbols.end() )
+    {
+        m_reporter->Report( wxString::Format( wxT( "Footprint's owner (%d) not found." ),
+                                              implementationOwnerIt->second ),
+                            RPT_SEVERITY_DEBUG );
+        return;
+    }
+
+    LIB_ID fpLibId = AltiumToKiCadLibID( libName, elem.name );
+
+    libSymbolIt->second->SetFPFilters( fpFilters ); // TODO: not ideal as we overwrite it
+
+    SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+
+    symbol->SetFootprintFieldText( fpLibId.Format() );
 }
 
 
@@ -4017,7 +4021,7 @@ long long SCH_ALTIUM_PLUGIN::getLibraryTimestamp( const wxString& aLibraryPath )
 }
 
 
-void SCH_ALTIUM_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath,
+void SCH_ALTIUM_PLUGIN::ensureLoadedLibrary( const wxString&        aLibraryPath,
                                              const STRING_UTF8_MAP* aProperties )
 {
     if( m_libCache.count( aLibraryPath ) )
@@ -4028,15 +4032,41 @@ void SCH_ALTIUM_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath,
             return;
     }
 
-    ALTIUM_COMPOUND_FILE altiumSchFile( aLibraryPath );
+    std::vector<std::unique_ptr<ALTIUM_COMPOUND_FILE>> compoundFiles;
 
     wxFileName fileName( aLibraryPath );
     m_libName = fileName.GetName();
 
     try
     {
-        std::map<wxString, LIB_SYMBOL*> ret = ParseLibFile( altiumSchFile );
-        m_libCache[aLibraryPath] = ret;
+        if( aLibraryPath.Lower().EndsWith( wxS( ".schlib" ) ) )
+        {
+            m_isIntLib = false;
+
+            compoundFiles.push_back( std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
+        }
+        else if( aLibraryPath.Lower().EndsWith( wxS( ".intlib" ) ) )
+        {
+            m_isIntLib = true;
+
+            std::unique_ptr<ALTIUM_COMPOUND_FILE> intCom =
+                    std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath );
+
+            std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> schLibFiles =
+                    intCom->EnumDir( L"SchLib" );
+
+            for( const auto& [schLibName, cfe] : schLibFiles )
+                compoundFiles.push_back( intCom->DecodeIntLibStream( *cfe ) );
+        }
+
+        std::map<wxString, LIB_SYMBOL*>& cacheMapRef = m_libCache[aLibraryPath];
+
+        for( auto& altiumSchFilePtr : compoundFiles )
+        {
+            std::map<wxString, LIB_SYMBOL*> parsed = ParseLibFile( *altiumSchFilePtr );
+            cacheMapRef.insert( parsed.begin(), parsed.end() );
+        }
+
         m_timestamps[aLibraryPath] = getLibraryTimestamp( aLibraryPath );
     }
     catch( const CFB::CFBException& exception )
@@ -4045,7 +4075,8 @@ void SCH_ALTIUM_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath,
     }
     catch( const std::exception& exc )
     {
-        wxLogDebug( wxT( "Unhandled exception in Altium schematic parsers: %s." ), exc.what() );
+        wxFAIL_MSG( wxString::Format( wxT( "Unhandled exception in Altium schematic parsers: %s." ),
+                                      exc.what() ) );
         throw;
     }
 }

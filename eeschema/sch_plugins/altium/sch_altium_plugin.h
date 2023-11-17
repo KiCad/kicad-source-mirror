@@ -66,7 +66,8 @@ public:
 
     const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Altium schematic library files" ), { "SchLib" } );
+        return PLUGIN_FILE_DESC( _HKI( "Altium Schematic Library or Integrated Library" ),
+                                 { "SchLib", "IntLib" } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
@@ -189,6 +190,7 @@ private:
     SCH_SHEET_PATH m_sheetPath;
     SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded
     wxString   m_libName;        // Library name to save symbols
+    bool       m_isIntLib;       // Flag to indicate Integrated Library
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;                // Plugin to create KiCad symbol library.
     std::unique_ptr<STRING_UTF8_MAP>     m_properties;        // Library plugin properties.

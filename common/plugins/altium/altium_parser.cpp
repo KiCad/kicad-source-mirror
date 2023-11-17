@@ -89,6 +89,65 @@ ALTIUM_COMPOUND_FILE::ALTIUM_COMPOUND_FILE( const wxString& aFilePath )
 }
 
 
+ALTIUM_COMPOUND_FILE::ALTIUM_COMPOUND_FILE( const void* aBuffer, size_t aLen )
+{
+    m_buffer.resize( aLen );
+    memcpy( m_buffer.data(), aBuffer, aLen );
+
+    try
+    {
+        m_reader = std::make_unique<CFB::CompoundFileReader>( m_buffer.data(), m_buffer.size() );
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
+}
+
+
+std::unique_ptr<ALTIUM_COMPOUND_FILE>
+ALTIUM_COMPOUND_FILE::DecodeIntLibStream( const CFB::COMPOUND_FILE_ENTRY& cfe )
+{
+    wxCHECK( cfe.size >= 1, nullptr );
+
+    size_t         streamSize = cfe.size;
+    wxMemoryBuffer buffer( streamSize );
+    buffer.SetDataLen( streamSize );
+
+    // read file into buffer
+    GetCompoundFileReader().ReadFile( &cfe, 0, reinterpret_cast<char*>( buffer.GetData() ),
+                                      streamSize );
+
+    // 0x02: compressed stream, 0x00: uncompressed
+    if( buffer[0] == 0x02 )
+    {
+        wxMemoryInputStream memoryInputStream( buffer.GetData(), streamSize );
+        memoryInputStream.SeekI( 1, wxFromStart );
+
+        wxZlibInputStream    zlibInputStream( memoryInputStream );
+        wxMemoryOutputStream decodedPcbLibStream;
+        decodedPcbLibStream << zlibInputStream;
+
+        wxStreamBuffer* outStream = decodedPcbLibStream.GetOutputStreamBuffer();
+
+        return std::make_unique<ALTIUM_COMPOUND_FILE>( outStream->GetBufferStart(),
+                                                       outStream->GetIntPosition() );
+    }
+    else if( buffer[0] == 0x00 )
+    {
+        return std::make_unique<ALTIUM_COMPOUND_FILE>(
+                reinterpret_cast<uint8_t*>( buffer.GetData() ) + 1, streamSize - 1 );
+    }
+    else
+    {
+        wxFAIL_MSG( wxString::Format( "Altium IntLib unknown header: %02x %02x %02x %02x %02x",
+                                      buffer[0], buffer[1], buffer[2], buffer[3], buffer[4] ) );
+    }
+
+    return nullptr;
+}
+
+
 std::map<wxString, wxString> ALTIUM_COMPOUND_FILE::ListLibFootprints()
 {
     if( m_libFootprintDirNameCache.empty() )
@@ -177,6 +236,51 @@ ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) co
     } );
 
     return folders;
+}
+
+
+std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*>
+ALTIUM_COMPOUND_FILE::EnumDir( const std::wstring& aDir ) const
+{
+    const CFB::COMPOUND_FILE_ENTRY* root = m_reader->GetRootEntry();
+
+    if( !root )
+        return {};
+
+    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> files;
+
+    m_reader->EnumFiles(
+            root, 1,
+            [&]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string& dir,
+                 int level ) -> int
+            {
+                if( m_reader->IsStream( tentry ) )
+                    return 0;
+
+                std::wstring dirName = UTF16ToWstring( tentry->name, tentry->nameLen );
+
+                if( dirName != aDir )
+                    return 0;
+
+                m_reader->EnumFiles(
+                        tentry, 1,
+                        [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&,
+                             int ) -> int
+                        {
+                            if( m_reader->IsStream( entry ) )
+                            {
+                                std::wstring fileName =
+                                        UTF16ToWstring( entry->name, entry->nameLen );
+
+                                files[fileName] = entry;
+                            }
+
+                            return 0;
+                        } );
+                return 0;
+            } );
+
+    return files;
 }
 
 
