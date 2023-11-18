@@ -88,6 +88,7 @@ void Prettify( std::string& aSource, char aQuoteChar )
     bool inQuote = false;
     bool hasInsertedSpace = false;
     bool inMultiLineList = false;
+    bool inXY = false;
     int  column = 0;
 
     auto isWhitespace = []( const char aChar )
@@ -135,7 +136,7 @@ void Prettify( std::string& aSource, char aQuoteChar )
                 && next != ')'              // Remove extra space before end of list
                 && next != '(' )            // Remove extra space before newline
             {
-                if( column < consecutiveTokenWrapThreshold )
+                if( inXY || column < consecutiveTokenWrapThreshold )
                 {
                     // Note that we only insert spaces here, no matter what kind of whitespace is in
                     // the input.  Newlines will be inserted as needed by the logic below.
@@ -159,16 +160,19 @@ void Prettify( std::string& aSource, char aQuoteChar )
 
             if( *cursor == '(' && !inQuote )
             {
+                bool currentIsXY = isXY( cursor );
+
                 if( listDepth == 0 )
                 {
                     formatted.push_back( '(' );
                     column++;
                 }
-                else if( isXY( cursor ) && column < xySpecialCaseColumnLimit )
+                else if( inXY && currentIsXY && column < xySpecialCaseColumnLimit )
                 {
                     // List-of-points special case
                     formatted += " (";
                     column += 2;
+                    inXY = true;
                 }
                 else
                 {
@@ -177,6 +181,7 @@ void Prettify( std::string& aSource, char aQuoteChar )
                     column = listDepth * indentSize + 1;
                 }
 
+                inXY = currentIsXY;
                 listDepth++;
             }
             else if( *cursor == ')' && !inQuote )
