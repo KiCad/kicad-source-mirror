@@ -79,6 +79,7 @@ void ARRAY_CREATOR::Invoke()
     for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
     {
         PCB_SELECTION items_for_this_block;
+        std::set<FOOTPRINT*> fpDeDupe;
 
         for ( int i = 0; i < m_selection.Size(); ++i )
         {
@@ -87,10 +88,24 @@ void ARRAY_CREATOR::Invoke()
             if( !item )
                 continue;
 
-            if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
+            FOOTPRINT* parentFootprint = dynamic_cast<FOOTPRINT*>( item->GetParentFootprint() );
+
+            // If it is not the footprint editor, then duplicate the parent footprint instead.
+            // This check assumes that the footprint child objects are correctly parented, if
+            // they are not, this will segfault.
+            if( !m_isFootprintEditor && parentFootprint )
             {
-                // If it is not the footprint editor, then duplicate the parent footprint instead
-                item = item->GetParentFootprint();
+                // It is possible to select multiple footprint child objects in the board editor.
+                // Do not create multiple copies of the same footprint when this occurs.
+                if( fpDeDupe.count( parentFootprint ) == 0 )
+                {
+                    fpDeDupe.emplace( parentFootprint );
+                    item = parentFootprint;
+                }
+                else
+                {
+                    continue;
+                }
             }
 
             BOARD_ITEM* this_item = nullptr;
