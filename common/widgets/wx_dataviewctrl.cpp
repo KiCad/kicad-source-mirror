@@ -32,7 +32,9 @@ wxDataViewItem WX_DATAVIEWCTRL::GetPrevItem( wxDataViewItem const& aItem )
     {
         wxDataViewItemArray children;
         GetModel()->GetChildren( prevItem, children );
-        prevItem = children[children.size() - 1];
+
+        if( children.size() )
+            prevItem = children[children.size() - 1];
     }
 
     return prevItem;
