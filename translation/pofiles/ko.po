@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-11-10 23:33+0000\n"
+"PO-Revision-Date: 2023-11-21 22:03+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -7619,9 +7619,8 @@ msgid "Delete all associations?"
 msgstr "모든 관련성을 삭제하시겠습니까?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "보고서 파일 '%s을 만들 수 없음"
+msgstr "풋프린트 뷰어 프레임을 만들 수 없음"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -12581,9 +12580,9 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "플로팅 심볼 '%s' 단위 %d ~ '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "'%s'에서 '%s'로 심볼 플로팅\n"
+msgstr "'%s'을(를) '%s'로 심볼 작성\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:382
 #, c-format
@@ -13035,15 +13034,14 @@ msgstr ""
 "진행하기 전에 현재 문서를 저장하시겠습니까?"
 
 #: eeschema/files-io.cpp:595
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current project.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"이 작업을 취소할 수 없습니다.\n"
+"이 작업은 현재 프로젝트의 내용을 대체합니다.\n"
 "\n"
-"진행하기 전에 현재 문서를 저장하시겠습니까?"
+"계속하시겠습니까?"
 
 #: eeschema/files-io.cpp:632 pcbnew/files.cpp:178
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
@@ -13135,9 +13133,9 @@ msgid "Abort Project Save"
 msgstr "프로젝트 저장 중단"
 
 #: eeschema/files-io.cpp:1243
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "회로도 '%s'이(가) 이미 열려 있습니다."
+msgstr "회로도 '%s'는 이미 '%s'에 의해 '%s'에서 열려 있습니다."
 
 #: eeschema/files-io.cpp:1256
 msgid "Importing Schematic"
@@ -16138,9 +16136,9 @@ msgid "Voltage (measured)"
 msgstr "전압 (측정됨)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "폴더 '%s'을(를) 만들 수 없습니다."
+msgstr "%s에서 sim 모델을 생성할 수 없음"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19527,9 +19525,8 @@ msgid "Malformed expression"
 msgstr "잘못된 식"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "파일 %s이(가) 이미 존재합니다."
+msgstr "잠금 파일이 이미 존재함"
 
 #: include/lockfile.h:124
 msgid "Failed to access lock file"
@@ -19600,9 +19597,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "유효한 옵션: 십진수, 선행 억제, 후행 억제, 유지."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "유효한 옵션: 절대, 플롯"
+msgstr "유효한 옵션: 라우트, 대체입니다.."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19653,9 +19649,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "제로 형식이 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "맵 형식이 잘못 지정됨\n"
+msgstr "타원형 드릴 형식이 잘못 지정됨\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -19732,9 +19727,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "거버 좌표의 정밀도, 유효한 옵션: 5 또는 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Protel 파일 이름 확장자 사용"
+msgstr "KiCad 거버 파일 확장자 사용"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -19754,16 +19748,15 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "보드 미러링 (하단 레이어를 표시하는 데 유용)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
+msgstr "사용할 색상 테마(PCB 편집기 설정이 기본값임)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "패드/비아 드릴 모양 옵션 설정(0 = 모양 없음, 1 = 작은 모양, 2 = 실제 모양)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -32730,9 +32723,8 @@ msgid "Checking pads..."
 msgstr "패드 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "구리 영역 클리어런스 확인 중..."
+msgstr "구리 영역 간격을 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -33252,9 +33244,9 @@ msgstr ""
 "른 채움 결과를 내보낼 것입니다."
 
 #: pcbnew/files.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "PCB '%s'은(는) 이미 열려 있습니다."
+msgstr "PCB '%s'은(는) '%s'에 의해 '%s'에서 이미 열려 있습니다."
 
 #: pcbnew/files.cpp:639
 msgid "The current PCB has been modified.  Save changes?"
@@ -34771,49 +34763,40 @@ msgid "Dimension '%s' on %s"
 msgstr "치수 '%s' (%s 위)"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (밀리미터)"
+msgstr "1234.0 (밀리미터)"
 
 #: pcbnew/pcb_dimension.cpp:1374
-#, fuzzy
 msgid "Units Format"
-msgstr "단위 형식:"
+msgstr "단위 형식"
 
 #: pcbnew/pcb_dimension.cpp:1382
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "뒷자리 0 표시하지 않음"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "커서 오른쪽으로"
+msgstr "크로스바 높이"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "연장선 옵셋 :"
+msgstr "연장선 초과"
 
 #: pcbnew/pcb_dimension.cpp:1498
-#, fuzzy
 msgid "Leader Length"
-msgstr "비아 길이"
+msgstr "지시선 길이"
 
 #: pcbnew/pcb_dimension.cpp:1547
-#, fuzzy
 msgid "Text Frame"
-msgstr "텍스트 프레임:"
+msgstr "텍스트 프레임"
 
 #: pcbnew/pcb_edit_frame.cpp:204
 msgid "KiCad PCB Editor"
@@ -35220,9 +35203,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s'은(는) 완전히 파싱되지 않았습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "풋프린트 라이브러리를 찾을 수 없습니다."
+msgstr "풋프린트 디렉토리를 찾을 수 없음: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -35870,10 +35853,9 @@ msgstr ""
 "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시합니다"
+msgstr "레이어 '%s'(%d)에서 다각형 무시: 윤곽선 개수가 1이 아님"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1796
 #, c-format
@@ -37950,13 +37932,13 @@ msgid "Pack footprints"
 msgstr "풋프린트 잠금"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"클릭하여 배치 %s(항목 %ld의 %ld)\n"
-"<esc> 모두 취소; 완료는 더블클릭"
+"클릭하여 배치 %s(항목 %zu 의 %zu)\n"
+"모두 취소는 <esc> ; 완료는 더블클릭"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:373
 #, c-format
@@ -38468,14 +38450,12 @@ msgid "Import footprint from file"
 msgstr "파일에서 풋프린트 가져오기"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "풋프린트"
+msgstr "풋프린트 내보내기..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "파일로 풋프린트 내보내기"
+msgstr "풋프린트를 파일로 내보내기"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
