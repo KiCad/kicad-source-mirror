@@ -56,6 +56,7 @@
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
+#include <build_version.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
 // base64 code. Needed for PCB_REFERENCE_IMAGE
@@ -323,7 +324,8 @@ void PCB_PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     m_out = &formatter;     // no ownership
 
-    m_out->Print( 0, "(kicad_pcb (version %d) (generator pcbnew)\n", SEXPR_BOARD_FILE_VERSION );
+    m_out->Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n",
+                  SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     Format( aBoard, 1 );
 
@@ -1111,7 +1113,8 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     }
 
     if( !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
-        m_out->Print( 0, " (version %d) (generator pcbnew)\n ", SEXPR_BOARD_FILE_VERSION );
+        m_out->Print( 0, " (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n ",
+                      SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     if( aFootprint->IsLocked() )
         m_out->Print( 0, " locked" );

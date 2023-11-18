@@ -27,6 +27,7 @@
 #include <wx/log.h>
 
 #include <board.h>
+#include <build_version.h>
 #include <core/ignore.h>
 #include <pad.h>
 #include <pcb_group.h>
@@ -192,8 +193,8 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         // This means we also need layers and nets
         LOCALE_IO io;
 
-        m_formatter.Print( 0, "(kicad_pcb (version %d) (generator pcbnew)\n",
-                           SEXPR_BOARD_FILE_VERSION );
+        m_formatter.Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n",
+                           SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
         m_formatter.Print( 0, "\n" );
 
@@ -344,7 +345,7 @@ void CLIPBOARD_IO::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     m_out = &formatter;
 
-    m_out->Print( 0, "(kicad_pcb (version %d) (generator pcbnew)\n", SEXPR_BOARD_FILE_VERSION );
+    m_out->Print( 0, "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n", SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     Format( aBoard, 1 );
 

@@ -22,6 +22,7 @@
 #include <set>
 #include <wx/regex.h>
 
+#include <build_version.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
 #include <dialogs/dialog_plugin_options.h>
 #include <project.h>
@@ -942,8 +943,8 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, const 
         // Write a stub file; SaveSymbol() expects something to be there already.
         FILE_OUTPUTFORMATTER* formatter = new FILE_OUTPUTFORMATTER( aNewFilepath );
 
-        formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_converter))",
-                          SEXPR_SYMBOL_LIB_FILE_VERSION );
+        formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_converter) (generator_version \"%s\")",
+                          SEXPR_SYMBOL_LIB_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
         // This will write the file
         delete formatter;

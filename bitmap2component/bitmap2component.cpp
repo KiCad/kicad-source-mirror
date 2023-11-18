@@ -32,6 +32,7 @@
 #include <vector>
 #include <kiid.h>
 
+#include <build_version.h>
 #include <layer_ids.h>
 
 #include <locale_io.h>
@@ -215,9 +216,9 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
     case PCBNEW_KICAD_MOD:
         // fields text size = 1.5 mm
         // fields text thickness = 1.5 / 5 = 0.3mm
-        strbuf = fmt::format( "(footprint \"{}\" (version 20221018) (generator bitmap2component)\n"
+        strbuf = fmt::format( "(footprint \"{}\" (version 20221018) (generator \"bitmap2component\") (generator_version \"{}\")\n"
                               "  (layer \"F.Cu\")\n",
-                              m_CmpName.c_str() );
+                              m_CmpName.c_str(), GetMajorMinorVersion().ToStdString() );
 
         m_Data += strbuf;
         strbuf = fmt::format(
@@ -240,7 +241,7 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         break;
 
     case KICAD_WKS_LOGO:
-        m_Data += "(kicad_wks (version 20220228) (generator bitmap2component)\n";
+        m_Data += fmt::format("(kicad_wks (version 20220228) (generator \"bitmap2component\") (generator_version \"{}\")\n", GetMajorMinorVersion().ToStdString() );
         m_Data += "  (setup (textsize 1.5 1.5)(linewidth 0.15)(textlinewidth 0.15)\n";
         m_Data += "  (left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n";
         m_Data += "  (polygon (name \"\") (pos 0 0) (linewidth 0.01)\n";
@@ -252,9 +253,9 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         Ypos += fieldSize / 2;
         // snprintf( strbuf, sizeof(strbuf), "# pixmap size w = %d, h = %d\n#\n", m_PixmapWidth, m_PixmapHeight );
         strbuf = fmt::format(
-                  "(kicad_symbol_lib (version 20220914) (generator bitmap2component)\n"
+                  "(kicad_symbol_lib (version 20220914) (generator \"bitmap2component\") (generator_version \"{}\")\n"
                   "  (symbol \"{}\" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)\n",
-                  m_CmpName.c_str() );
+                GetMajorMinorVersion().ToStdString(), m_CmpName.c_str() );
         m_Data += strbuf;
 
         strbuf = fmt::format(

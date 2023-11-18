@@ -501,7 +501,7 @@ void GBR_TO_PCB_EXPORTER::writePcbFilledCircle( const VECTOR2I& aCenterPosition,
 
 void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
 {
-    fprintf( m_fp, "(kicad_pcb (version 4) (generator gerbview)\n\n" );
+    fprintf( m_fp, "(kicad_pcb (version 4) (generator \"gerbview\") (generator_version \"%s\")\n\n", GetMajorMinorVersion().c_str().AsChar() );
 
     // Write layers section
     fprintf( m_fp, "  (layers \n" );

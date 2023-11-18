@@ -21,6 +21,7 @@
 
 #include <wx/log.h>
 #include <base_units.h>
+#include <build_version.h>
 #include <lib_shape.h>
 #include <lib_symbol.h>
 #include <lib_text.h>
@@ -92,8 +93,8 @@ void SCH_SEXPR_PLUGIN_CACHE::Save( const std::optional<bool>& aOpt )
 
     auto formatter = std::make_unique<FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
 
-    formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_symbol_editor)\n",
-                      SEXPR_SYMBOL_LIB_FILE_VERSION );
+    formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") (generator_version \"%s\")\n",
+                      SEXPR_SYMBOL_LIB_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     std::vector<LIB_SYMBOL*> orderedSymbols;
 

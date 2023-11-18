@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <build_version.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <math/vector2d.h>
@@ -160,8 +161,8 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aModel, std::vector<DS_DATA_ITEM*>
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( 0, "(kicad_wks (version %d) (generator pl_editor)\n",
-                  SEXPR_WORKSHEET_FILE_VERSION );
+    m_out->Print( 0, "(kicad_wks (version %d) (generator \"pl_editor\") (generator_version \"%s\")\n",
+                  SEXPR_WORKSHEET_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     for( DS_DATA_ITEM* item : aItemsList )
         Format( aModel, item, 1 );
@@ -201,8 +202,8 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aSheet ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( 0, "(kicad_wks (version %d) (generator pl_editor)\n",
-                  SEXPR_WORKSHEET_FILE_VERSION );
+    m_out->Print( 0, "(kicad_wks (version %d) (generator \"pl_editor\") (generator_version \"%s\")\n",
+                  SEXPR_WORKSHEET_FILE_VERSION, GetMajorMinorVersion() );
 
     // Setup
     int nestLevel = 1;

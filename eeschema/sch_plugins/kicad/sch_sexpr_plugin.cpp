@@ -30,6 +30,7 @@
 #include <wx/mstream.h>
 #include <advanced_config.h>
 #include <base_units.h>
+#include <build_version.h>
 #include <trace_helpers.h>
 #include <locale_io.h>
 #include <sch_bitmap.h>
@@ -366,8 +367,8 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
 
     wxCHECK( screen, /* void */ );
 
-    m_out->Print( 0, "(kicad_sch (version %d) (generator eeschema)\n\n",
-                  SEXPR_SCHEMATIC_FILE_VERSION );
+    m_out->Print( 0, "(kicad_sch (version %d) (generator \"eeschema\") (generator_version \"%s\")\n\n",
+                  SEXPR_SCHEMATIC_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     m_out->Print( 1, "(uuid %s)\n\n", TO_UTF8( screen->m_uuid.AsString() ) );
 
