@@ -101,6 +101,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     bool nets = false;
     int  net = 0;
+    bool tracksMatchNetclassValues = true;
+    bool viasMatchNetclassValues = true;
     bool hasLocked = false;
     bool hasUnlocked = false;
 
@@ -174,6 +176,16 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                     if( track_selection_layer != t->GetLayer() )
                         track_selection_layer = UNDEFINED_LAYER;
+                }
+
+                if( tracksMatchNetclassValues )
+                {
+                    MINOPTMAX<int> constraint = t->GetWidthConstraint();
+
+                    if( constraint.HasOpt() )
+                        tracksMatchNetclassValues &= constraint.Opt() == t->GetWidth();
+                    else if( constraint.Min() > 0 )
+                        tracksMatchNetclassValues &= constraint.Min() == t->GetWidth();
                 }
 
                 if( t->IsLocked() )
@@ -273,6 +285,23 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     }
                 }
 
+                if( viasMatchNetclassValues )
+                {
+                    MINOPTMAX<int> constraint = v->GetWidthConstraint();
+
+                    if( constraint.HasOpt() )
+                        viasMatchNetclassValues &= constraint.Opt() == v->GetWidth();
+                    else if( constraint.Min() > 0 )
+                        viasMatchNetclassValues &= constraint.Min() == v->GetWidth();
+
+                    constraint = v->GetDrillConstraint();
+
+                    if( constraint.HasOpt() )
+                        viasMatchNetclassValues &= constraint.Opt() == v->GetDrillValue();
+                    else if( constraint.Min() > 0 )
+                        viasMatchNetclassValues &= constraint.Min() == v->GetDrillValue();
+                }
+
                 if( v->IsLocked() )
                     hasLocked = true;
                 else
@@ -349,26 +378,39 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_DesignRuleViasUnit->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
 
-        int viaSelection = wxNOT_FOUND;
-
-        // 0 is the netclass place-holder
-        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+        if( viasMatchNetclassValues )
         {
-            VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
-            wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
-                                    + wxT( " / " )
-                                    + m_frame->StringFromValue( viaDimension->m_Drill );
-            m_DesignRuleViasCtrl->Append( msg, viaDimension );
+            m_viaDesignRules->SetValue( true );
 
-            if( viaSelection == wxNOT_FOUND
-                && m_viaDiameter.GetValue() == viaDimension->m_Diameter
-                && m_viaDrill.GetValue() == viaDimension->m_Drill )
-            {
-                viaSelection = ii - 1;
-            }
+            m_DesignRuleVias->Enable( false );
+            m_DesignRuleViasCtrl->Enable( false );
+            m_DesignRuleViasUnit->Enable( false );
+            m_viaDiameter.Enable( false );
+            m_viaDrill.Enable( false );
         }
+        else
+        {
+            int viaSelection = wxNOT_FOUND;
 
-        m_DesignRuleViasCtrl->SetSelection( viaSelection );
+            // 0 is the netclass place-holder
+            for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+            {
+                VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
+                wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
+                                        + wxT( " / " )
+                                        + m_frame->StringFromValue( viaDimension->m_Drill );
+                m_DesignRuleViasCtrl->Append( msg, viaDimension );
+
+                if( viaSelection == wxNOT_FOUND
+                    && m_viaDiameter.GetValue() == viaDimension->m_Diameter
+                    && m_viaDrill.GetValue() == viaDimension->m_Drill )
+                {
+                    viaSelection = ii - 1;
+                }
+            }
+
+            m_DesignRuleViasCtrl->SetSelection( viaSelection );
+        }
 
         m_ViaTypeChoice->Enable();
 
@@ -396,20 +438,32 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     {
         m_DesignRuleWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
 
-        int widthSelection = wxNOT_FOUND;
-
-        // 0 is the netclass place-holder
-        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+        if( tracksMatchNetclassValues )
         {
-            int      width = aParent->GetDesignSettings().m_TrackWidthList[ii];
-            wxString msg = m_frame->StringFromValue( width );
-            m_DesignRuleWidthsCtrl->Append( msg );
+            m_trackDesignRules->SetValue( true );
 
-            if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
-                widthSelection = ii - 1;
+            m_DesignRuleWidths->Enable( false );
+            m_DesignRuleWidthsCtrl->Enable( false );
+            m_DesignRuleWidthsUnits->Enable( false );
+            m_trackWidth.Enable( false );
         }
+        else
+        {
+            int widthSelection = wxNOT_FOUND;
 
-        m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
+            // 0 is the netclass place-holder
+            for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+            {
+                int      width = aParent->GetDesignSettings().m_TrackWidthList[ii];
+                wxString msg = m_frame->StringFromValue( width );
+                m_DesignRuleWidthsCtrl->Append( msg );
+
+                if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
+                    widthSelection = ii - 1;
+            }
+
+            m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
+        }
     }
     else
     {

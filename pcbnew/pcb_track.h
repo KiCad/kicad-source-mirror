@@ -197,7 +197,7 @@ public:
      */
     int GetLocalClearance( wxString* aSource ) const override;
 
-    MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const;
+    virtual MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
@@ -417,6 +417,7 @@ public:
 
     std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
 
+    MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const override;
     MINOPTMAX<int> GetDrillConstraint( wxString* aSource = nullptr ) const;
 
     bool IsTented() const override;
@@ -556,7 +557,7 @@ public:
     int GetDrill() const                    { return m_drill; }
 
     /**
-     * Calculate the drill value for vias (m-Drill if > 0, or default drill value for the board.
+     * Calculate the drill value for vias (m_drill if > 0, or default drill value for the board).
      *
      * @return the calculated drill value.
      */

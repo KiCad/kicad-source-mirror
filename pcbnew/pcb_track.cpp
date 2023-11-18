@@ -320,6 +320,24 @@ MINOPTMAX<int> PCB_TRACK::GetWidthConstraint( wxString* aSource ) const
 }
 
 
+MINOPTMAX<int> PCB_VIA::GetWidthConstraint( wxString* aSource ) const
+{
+    DRC_CONSTRAINT constraint;
+
+    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    {
+        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+
+        constraint = bds.m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, this, nullptr, m_layer );
+    }
+
+    if( aSource )
+        *aSource = constraint.GetName();
+
+    return constraint.Value();
+}
+
+
 MINOPTMAX<int> PCB_VIA::GetDrillConstraint( wxString* aSource ) const
 {
     DRC_CONSTRAINT constraint;
