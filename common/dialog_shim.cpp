@@ -81,6 +81,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
             m_useCalculatedSize( false ),
             m_firstPaintEvent( true ),
             m_initialFocusTarget( nullptr ),
+            m_isClosing( false ),
             m_qmodal_loop( nullptr ),
             m_qmodal_showing( false ),
             m_qmodal_parent_disabler( nullptr ),
@@ -140,6 +141,8 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 
 DIALOG_SHIM::~DIALOG_SHIM()
 {
+    m_isClosing = true;
+
     Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Unbind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
     Unbind( wxEVT_PAINT, &DIALOG_SHIM::OnPaint, this );
@@ -151,14 +154,14 @@ DIALOG_SHIM::~DIALOG_SHIM()
             if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
             {
                 textCtrl->Disconnect( wxEVT_SET_FOCUS,
-                                      wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ), nullptr,
-                                      this );
+                                      wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                                      nullptr, this );
             }
             else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
             {
                 scintilla->Disconnect( wxEVT_SET_FOCUS,
-                                       wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ), nullptr,
-                                       this );
+                                       wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
+                                       nullptr, this );
             }
             else
             {
@@ -618,10 +621,13 @@ void DIALOG_SHIM::onChildSetFocus( wxFocusEvent& aEvent )
 {
     // When setting focus to a text control reset the before-edit value.
 
-    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aEvent.GetEventObject() ) )
-        m_beforeEditValues[ textCtrl ] = textCtrl->GetValue();
-    else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aEvent.GetEventObject() ) )
-        m_beforeEditValues[ scintilla ] = scintilla->GetText();
+    if( !m_isClosing )
+    {
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aEvent.GetEventObject() ) )
+            m_beforeEditValues[ textCtrl ] = textCtrl->GetValue();
+        else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aEvent.GetEventObject() ) )
+            m_beforeEditValues[ scintilla ] = scintilla->GetText();
+    }
 
     aEvent.Skip();
 }

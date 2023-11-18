@@ -213,6 +213,7 @@ protected:
     // the initial-focus SetFocus() call to the first paint event.
     bool                   m_firstPaintEvent;
     wxWindow*              m_initialFocusTarget;
+    bool                   m_isClosing;
 
     WX_EVENT_LOOP*         m_qmodal_loop;  // points to nested event_loop, NULL means not qmodal
                                            // and dismissed
