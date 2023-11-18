@@ -808,7 +808,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     wxString connectionName = ( conn ) ? conn->Name() : wxString( wxS( "" ) );
 
-    if( !conn || connectionName == editFrame->GetHighlightedConnection() )
+    if( !conn )
     {
         editFrame->SetStatusText( wxT( "" ) );
         editFrame->SendCrossProbeClearHighlight();
@@ -817,9 +817,16 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     }
     else
     {
-        editFrame->SetCrossProbeConnection( conn );
-        editFrame->SetHighlightedConnection( connectionName );
-        editorControl->SetHighlightBusMembers( false );
+        if( connectionName != editFrame->GetHighlightedConnection() )
+        {
+            editorControl->SetHighlightBusMembers( false );
+            editFrame->SetCrossProbeConnection( conn );
+            editFrame->SetHighlightedConnection( connectionName );
+        }
+        else
+        {
+            editorControl->SetHighlightBusMembers( !editorControl->GetHighlightBusMembers() );
+        }
     }
 
     editFrame->UpdateNetHighlightStatus();
