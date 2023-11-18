@@ -86,7 +86,7 @@ public:
     {
         try
         {
-            m_fileout = new FILE_OUTPUTFORMATTER( aFilename );
+            m_fileout = new PRETTIFIED_FILE_OUTPUTFORMATTER( aFilename );
             m_out = m_fileout;
         }
         catch( const IO_ERROR& ioe )
@@ -101,7 +101,7 @@ public:
     }
 
 private:
-    FILE_OUTPUTFORMATTER* m_fileout;
+    PRETTIFIED_FILE_OUTPUTFORMATTER* m_fileout;
 };
 
 
@@ -203,7 +203,7 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aSheet ) const
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
     m_out->Print( 0, "(kicad_wks (version %d) (generator \"pl_editor\") (generator_version \"%s\")\n",
-                  SEXPR_WORKSHEET_FILE_VERSION, GetMajorMinorVersion() );
+                  SEXPR_WORKSHEET_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     // Setup
     int nestLevel = 1;

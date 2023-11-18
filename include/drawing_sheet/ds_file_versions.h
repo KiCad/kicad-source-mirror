@@ -32,4 +32,5 @@
 
 //#define SEXPR_WORKSHEET_FILE_VERSION 20210606 // Initial version.
 //#define SEXPR_WORKSHEET_FILE_VERSION 20220228 // Font support.
-#define SEXPR_WORKSHEET_FILE_VERSION 20230607 // Save images as base64.
+//#define SEXPR_WORKSHEET_FILE_VERSION 20230607 // Save images as base64.
+#define SEXPR_WORKSHEET_FILE_VERSION   20231118 // Generator version; V8 file format cleanup
