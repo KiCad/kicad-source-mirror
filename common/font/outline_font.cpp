@@ -349,13 +349,13 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
     hb_buffer_guess_segment_properties( buf );  // guess direction, script, and language based on
                                                 // contents
 
-    unsigned int         glyphCount;
-    hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
-    hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
-
     hb_font_t* referencedFont = hb_ft_font_create_referenced( face );
     hb_ft_font_set_funcs( referencedFont );
     hb_shape( referencedFont, buf, nullptr, 0 );
+
+    unsigned int         glyphCount;
+    hb_glyph_info_t*     glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
+    hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
 
     VECTOR2D scaleFactor( glyphSize.x / faceSize(), -glyphSize.y / faceSize() );
     scaleFactor = scaleFactor * m_outlineFontSizeCompensation;
