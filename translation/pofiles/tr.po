@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-10-30 05:02+0000\n"
-"Last-Translator: Mert Gülsoy <mgulsoy@gmail.com>\n"
+"PO-Revision-Date: 2023-11-21 22:03+0000\n"
+"Last-Translator: Erkan <erkankarakas@outlook.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -5300,7 +5300,7 @@ msgstr "Yardımcı öğeler"
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Grid"
-msgstr "Kılavuz"
+msgstr "Kullanıcı Kılavuzları"
 
 #: common/layer_id.cpp:144
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
@@ -9138,7 +9138,7 @@ msgstr "Metin ve Grafik Özelliklerini Düzenle"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:32
 msgid "symbol"
-msgstr "simge"
+msgstr "sembol"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:61
 #, fuzzy, c-format
