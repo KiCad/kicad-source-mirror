@@ -958,6 +958,9 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 cutArgs.Append( shape );
 
                 BRepAlgoAPI_Cut cut;
+
+                // This helps cutting circular holes in zones where a hole is already cut in Clipper
+                cut.SetFuzzyValue( 0.0005 );
                 cut.SetArguments( cutArgs );
 
                 cut.SetTools( holelist );
