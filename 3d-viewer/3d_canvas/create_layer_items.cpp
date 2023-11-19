@@ -604,9 +604,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 break;
 
             case PCB_TEXTBOX_T:
-                addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
-                if( static_cast<PCB_TEXTBOX*>( item )->IsBorderEnabled() )
-                    addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+                addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 
             case PCB_DIM_ALIGNED_T:
@@ -924,7 +922,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 break;
 
             case PCB_TEXTBOX_T:
-                addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 

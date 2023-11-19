@@ -49,6 +49,7 @@
 #include <dialogs/dialog_color_picker.h>
 
 class COLOR_SETTINGS;
+class PCB_TEXTBOX;
 
 /// A type that stores a container of 2d objects for each layer id
 typedef std::map<PCB_LAYER_ID, BVH_CONTAINER_2D*> MAP_CONTAINER_2D_BASE;
@@ -354,6 +355,9 @@ private:
                    const BOARD_ITEM* aOwner );
 
     void addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aDstContainer,
+                   const BOARD_ITEM* aOwner );
+
+    void addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aContainer,
                    const BOARD_ITEM* aOwner );
 
     void addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* aDstContainer,

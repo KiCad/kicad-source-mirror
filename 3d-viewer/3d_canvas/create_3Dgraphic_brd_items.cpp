@@ -44,6 +44,7 @@
 #include <pcb_painter.h>        // for PCB_RENDER_SETTINGS
 #include <zone.h>
 #include <fp_text.h>
+#include <pcb_textbox.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <geometry/shape_segment.h>
@@ -768,6 +769,32 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
         for( SHAPE* shape : shapes )
             delete shape;
+    }
+}
+
+
+void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aContainer,
+                              const BOARD_ITEM* aOwner )
+{
+    addText( aTextBox, aContainer, aOwner );
+
+    if( !aTextBox->IsBorderEnabled() )
+        return;
+
+    // We cannot use PCB_TEXTBOX::TransformShapeToPolygon because it convert the textbox
+    // as filled polygon even if there's no background colour.
+    // So for polygon, we use PCB_SHAPE::TransformShapeToPolygon
+
+    if( aTextBox->GetShape() == SHAPE_T::RECT )
+        addShape( static_cast<const PCB_SHAPE*>( aTextBox ), aContainer, aOwner );
+    else
+    {
+        SHAPE_POLY_SET polyList;
+
+        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0,
+                                                      ARC_HIGH_DEF, ERROR_INSIDE );
+
+        ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
     }
 }
 
