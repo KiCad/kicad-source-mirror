@@ -135,7 +135,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
             wxT( "*.wrl" ),
             wxT( "*.g?" ), wxT( "*.g??" ),          // Gerber files
-            wxT( "*.gm??" ), wxT( "*.gbrjob" ),
+            wxT( "*.gbrjob" ),                      // Gerber job files
             wxT( "*.pos" ), wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab files
             wxT( "*.d356" ), wxT( "*.rpt" ),
             wxT( "*.net" ), wxT( "*.py" ),
