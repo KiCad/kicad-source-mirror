@@ -410,9 +410,14 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
                                                &aWindow->grid.override_graphics_idx, 15 ) );
     }
 
+#ifdef __WXMAC__
+    #define DEFAULT_GRID_THICKNESS 2.0
+#else
+    #define DEFAULT_GRID_THICKNESS 1.0
+#endif
 
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.line_width",
-            &aWindow->grid.line_width, 2.0 ) );
+            &aWindow->grid.line_width, DEFAULT_GRID_THICKNESS ) );
 
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.min_spacing",
             &aWindow->grid.min_spacing, 10 ) );
