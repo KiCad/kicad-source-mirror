@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-01-29 22:21+0000\n"
+"PO-Revision-Date: 2023-11-20 15:37+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -2100,12 +2100,11 @@ msgstr "KiCad на сајту"
 
 #: common/dialog_about/AboutDialog_main.cpp:133
 msgid "The official KiCad website - "
-msgstr "Официјални KiCad вебсајт -"
+msgstr "Официјални KiCad вебсајт - "
 
 #: common/dialog_about/AboutDialog_main.cpp:137
-#, fuzzy
 msgid "Developer website - "
-msgstr "Програмери"
+msgstr "Вебсајт за девелопере - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 #, fuzzy
@@ -2524,9 +2523,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Create an empty global %s library table"
-msgstr "Грешка: "
+msgstr "Направи празну глобалну %s табелу за библиотеку"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:64
 #, c-format
@@ -3278,9 +3277,8 @@ msgid "There was a problem printing."
 msgstr "Био је проблем у штампању."
 
 #: common/dialogs/dialog_print_generic.cpp:351
-#, fuzzy
 msgid "An error occurred initializing the printer information."
-msgstr "Грешка: "
+msgstr "Грешка је настала током иницијализовања информација о штампачу."
 
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:74
@@ -3526,9 +3524,9 @@ msgid "Connection successful"
 msgstr "Нема конекције"
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Отвори"
+msgstr "Немогуће се повезати са '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
 #, fuzzy, c-format
@@ -5996,9 +5994,8 @@ msgid "The given path does not exist"
 msgstr ""
 
 #: common/filename_resolver.cpp:476
-#, fuzzy
 msgid "Alias: "
-msgstr "Псеудоним од"
+msgstr "Алијас: "
 
 #: common/filename_resolver.cpp:479
 #, fuzzy
@@ -6472,9 +6469,9 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:155
 #: common/http_lib/http_lib_connection.cpp:278
 #: common/http_lib/http_lib_connection.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Грешка: "
+msgstr "Грешка: %s"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:155
@@ -6590,9 +6587,8 @@ msgid ""
 msgstr ""
 
 #: common/kiway.cpp:488
-#, fuzzy
 msgid "Error loading editor."
-msgstr "Грешка: "
+msgstr "Грешка у учитавању едитора."
 
 #: common/kiway.cpp:600
 #, c-format
@@ -8408,14 +8404,12 @@ msgid "space"
 msgstr ""
 
 #: common/validators.cpp:421
-#, fuzzy
 msgid " or "
-msgstr "%s или %s"
+msgstr " или "
 
 #: common/validators.cpp:426
-#, fuzzy
 msgid ", or "
-msgstr "%s или %s"
+msgstr ", или "
 
 #: common/validators.cpp:438
 #, fuzzy, c-format
@@ -10285,12 +10279,15 @@ msgid "Invalid symbol library identifier"
 msgstr "Библиотека није дефинисана!"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol %s from library %s.\n"
 "\n"
 "%s"
-msgstr "Грешка: "
+msgstr ""
+"Грешка у учитавању симбола %s из библиотеке %s.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
@@ -10667,9 +10664,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:601
-#, fuzzy
 msgid "permission denied"
-msgstr "Грешка: "
+msgstr "онемогућен приступ"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:742
 #, fuzzy
@@ -15272,9 +15268,8 @@ msgid "Symbol library '%s' failed to load."
 msgstr "Симбол"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:557
-#, fuzzy
 msgid "Error Loading Library"
-msgstr "Грешка: "
+msgstr "Грешка у учитавању библиотеке"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:612
 #, fuzzy
@@ -16314,9 +16309,9 @@ msgstr "Име симбола:"
 #: eeschema/widgets/panel_symbol_chooser.cpp:480
 #: eeschema/widgets/panel_symbol_chooser.cpp:539
 #: eeschema/widgets/symbol_preview_widget.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "Грешка: "
+msgstr "Грешка у учитавању симбола %s из библиотеке '%s'."
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:643
@@ -16393,9 +16388,8 @@ msgstr "Унеси"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:127
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:49
-#, fuzzy
 msgid "Import scale:"
-msgstr "Унеси "
+msgstr "Унеси скалирање:"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:147
 #, fuzzy
@@ -17536,9 +17530,9 @@ msgstr "Попуњавање зона"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3351
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3370
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Грешка: "
+msgstr "Грешка у учитавању слике %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3363
 #, fuzzy, c-format
@@ -19059,14 +19053,12 @@ msgid "No extra argument was expected"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Непозната метода"
+msgstr "Непозната кључна ријеч у "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid " context: "
-msgstr "X:"
+msgstr " Контекст: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 #, fuzzy
@@ -19147,9 +19139,8 @@ msgid "Internal Error while reading Enable"
 msgstr "фајл не постоји"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2014
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Додај поље"
+msgstr "Непознат поларитет "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2051
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -20481,9 +20472,8 @@ msgstr "Грешка: "
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:109
 #: eeschema/symbol_viewer_frame.cpp:306
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr "Грешка: "
+msgstr "Грешка у учитавању симбола:"
 
 #: eeschema/symbol_library_manager.cpp:162
 #, fuzzy, c-format
@@ -22314,15 +22304,13 @@ msgstr "фајл не постоји"
 #: eeschema/tools/ee_inspection_tool.cpp:281
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
 #: pcbnew/tools/board_inspection_tool.cpp:1487
-#, fuzzy
 msgid "Library: "
-msgstr "Библиотека:"
+msgstr "Библиотека: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #: pcbnew/tools/board_inspection_tool.cpp:1488
-#, fuzzy
 msgid "Library item: "
-msgstr "Библиотека:"
+msgstr "Елемент библиотеке: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1506
@@ -25487,9 +25475,8 @@ msgid "Package identifier: "
 msgstr "Библиотека није дефинисана!"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
-#, fuzzy
 msgid "License: "
-msgstr "Лиценца"
+msgstr "Лиценца: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
@@ -25685,9 +25672,8 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:510
-#, fuzzy
 msgid "Downloading resources"
-msgstr "Учитавање  "
+msgstr "Преузимање ресурса"
 
 #: kicad/pcm/pcm.cpp:530
 msgid ""
@@ -25850,9 +25836,8 @@ msgid "Rename File"
 msgstr "Преименуј фајл"
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Unable to rename file ... "
-msgstr "Преименуј фајл"
+msgstr "Немогуће преименовати датотеку ... "
 
 #: kicad/project_tree_item.cpp:142
 #, fuzzy
@@ -32682,9 +32667,8 @@ msgid "Search net names"
 msgstr "Име:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:99
-#, fuzzy
 msgid "Restart Search"
-msgstr "почетак "
+msgstr "Поново покрени претрагу"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 #, fuzzy
@@ -37529,9 +37513,8 @@ msgid "CrtYd_Back"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:655
-#, fuzzy
 msgid "Pcb_Edges"
-msgstr "Стави  "
+msgstr "Pcb_Edges"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:658
 #, fuzzy
@@ -40232,9 +40215,8 @@ msgid "exclude from BOM"
 msgstr "Чисто"
 
 #: pcbnew/footprint.cpp:1314
-#, fuzzy
 msgid "Status: "
-msgstr "Статус"
+msgstr "Статус: "
 
 #: pcbnew/footprint.cpp:1314
 #, fuzzy
@@ -40683,14 +40665,12 @@ msgid "Tune Length"
 msgstr "Дужина"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1018
-#, fuzzy
 msgid "too long"
-msgstr "Предуго: "
+msgstr "предуго"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1019
-#, fuzzy
 msgid "too short"
-msgstr "Прекратко: "
+msgstr "прекратко"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1020
 msgid "tuned"
@@ -40848,9 +40828,8 @@ msgid "DXF default units:"
 msgstr "Дужина линије:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:90
-#, fuzzy
 msgid "Place at X:"
-msgstr "Стави  "
+msgstr "Стави на X:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:127
 #, fuzzy
@@ -42363,9 +42342,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_circuit_maker_plugin.cpp:62
-#, fuzzy
 msgid "Altium Circuit Maker PCB files"
-msgstr "Учитавање  "
+msgstr "Altium Circuit Maker PCB датотеке"
 
 #: pcbnew/plugins/altium/altium_circuit_studio_plugin.cpp:62
 #, fuzzy
@@ -43131,9 +43109,8 @@ msgid "Fabmaster PCB files"
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:84
-#, fuzzy
 msgid "Could not read file "
-msgstr "Отвори"
+msgstr "Немогуће учитати датотеку "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:249
 #, c-format
