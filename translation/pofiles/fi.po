@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-16 10:05+0000\n"
+"PO-Revision-Date: 2023-11-20 15:37+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -6398,7 +6398,7 @@ msgstr "Lehtien tiedostonimet"
 #: common/layer_id.cpp:136
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
 msgid "Sheet pins"
-msgstr "Lehtien nastat"
+msgstr "Sivujen nastat"
 
 #: common/layer_id.cpp:137
 msgid "No-connect symbols"
@@ -9615,7 +9615,7 @@ msgstr "Päivitä/nollaa symbolien määritteet"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:101
 msgid "Update Symbols from Library"
-msgstr "Päivitä kirjaston symbolit"
+msgstr "Päivitä symbolit kirjastosta"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
@@ -9879,7 +9879,7 @@ msgstr "Rikkomuksia ei tarkisteta eikä niistä ilmoiteta"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Muokkaa pin-to-pin konfliktikarttaa ..."
+msgstr "Muokkaa nastojen konfliktitaulukkoa..."
 
 #: eeschema/dialogs/dialog_erc.cpp:636 pcbnew/dialogs/dialog_drc.cpp:658
 msgid "Edit violation severities..."
@@ -11251,11 +11251,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
-msgstr "Kiinnitä tekstiasetukset"
+msgstr "Nastojen tekstiasetukset"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:215
 msgid "Show pin number"
-msgstr "Näytä PIN-numero"
+msgstr "Näytä nastan numero"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:217
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:179
@@ -11264,16 +11264,16 @@ msgstr "Näytä tai piilota nastan numerot"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Show pin name"
-msgstr "Näytä PIN-koodi"
+msgstr "Näytä nastan nimi"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:223
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:185
 msgid "Show or hide pin names"
-msgstr "Näytä tai piilota nastan nimet"
+msgstr "Näytä tai piilota nastojen nimet"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:230
 msgid "Place pin names inside"
-msgstr "Aseta nastanimet sisään"
+msgstr "Aseta nastanimet sisäpuolelle"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:232
 msgid ""
@@ -20362,7 +20362,7 @@ msgstr "Määritä kirjastosta erilaisia symboleja"
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Update Symbols from Library..."
-msgstr "Päivitä kirjaston symbolit ..."
+msgstr "Päivitä symbolit kirjastosta..."
 
 #: eeschema/tools/ee_actions.cpp:712
 msgid "Update symbols to include any changes from the library"
