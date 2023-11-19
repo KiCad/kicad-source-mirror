@@ -76,12 +76,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextboxStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_lastAutoLabelRotateOnPlacement( false ),
-        m_inPlaceSymbol( false ),
-        m_inDrawShape( false ),
-        m_inPlaceImage( false ),
-        m_inSingleClickPlace( false ),
-        m_inTwoClickPlace( false ),
-        m_inDrawSheet( false )
+        m_inDrawingTool( false )
 {
 }
 
@@ -112,10 +107,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
     EE_GRID_HELPER              grid( m_toolMgr );
 
-    if( m_inPlaceSymbol )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inPlaceSymbol );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     // First we need to get all instances of this sheet so we can annotate
     // whatever symbols we place on all copies
@@ -473,10 +468,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     bool             ignorePrimePosition = false;
     COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
 
-    if( m_inPlaceImage )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inPlaceImage );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -709,10 +704,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     SCH_ITEM*             previewItem;
     bool                  loggedInfoBarError = false;
 
-    if( m_inSingleClickPlace )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inSingleClickPlace );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
     {
@@ -1129,10 +1124,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
     SCH_SHEET*            sheet = nullptr;
 
-    if( m_inTwoClickPlace )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inTwoClickPlace );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     bool isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
     bool isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
@@ -1520,10 +1515,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     bool                isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
     SHAPE_T             type = aEvent.Parameter<SHAPE_T>();
 
-    if( m_inDrawShape )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inDrawShape );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -1739,10 +1734,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     SCH_SHEET* sheet = nullptr;
 
-    if( m_inDrawSheet )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inDrawSheet );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
