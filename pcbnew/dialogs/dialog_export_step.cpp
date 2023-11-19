@@ -116,16 +116,16 @@ private:
     int                m_originUnits;    // remember last units for User Origin
     bool               m_noUnspecified;  // remember last preference for No Unspecified Component
     bool               m_noDNP;          // remember last preference for No DNP Component
-    static bool        m_exportTracks;   // remember last preference to export tracks
-                                         // (stored only for the session)
-    static bool        m_exportZones;    // remember last preference to export tracks
-                                         // (stored only for the session)
+    static bool        m_optimizeStep;   // remember last preference for Optimize STEP file (stored only for the session)
+    static bool        m_exportTracks;   // remember last preference to export tracks (stored only for the session)
+    static bool        m_exportZones;    // remember last preference to export tracks (stored only for the session)
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
 
 
 int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
+bool DIALOG_EXPORT_STEP::m_optimizeStep = true;
 bool DIALOG_EXPORT_STEP::m_exportTracks = false;
 bool DIALOG_EXPORT_STEP::m_exportZones = false;
 
@@ -177,6 +177,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_noUnspecified = cfg->m_ExportStep.no_unspecified;
     m_noDNP       = cfg->m_ExportStep.no_dnp;
 
+    m_cbOptimizeStep->SetValue( m_optimizeStep );
     m_cbExportTracks->SetValue( m_exportTracks );
     m_cbExportZones->SetValue( m_exportZones );
     m_cbRemoveUnspecified->SetValue( m_noUnspecified );
@@ -271,6 +272,7 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
     }
 
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+    m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportTracks = m_cbExportTracks->GetValue();
     m_exportZones = m_cbExportZones->GetValue();
 }
@@ -369,6 +371,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
+    m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportTracks = m_cbExportTracks->GetValue();
     m_exportZones = m_cbExportZones->GetValue();
 
@@ -452,6 +455,9 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( GetSubstOption() )
         cmdK2S.Append( wxT( " --subst-models" ) );
+
+    if( !m_optimizeStep )
+        cmdK2S.Append( wxT( " --no-optimize-step" ) );
 
     if( m_exportTracks )
         cmdK2S.Append( wxT( " --include-tracks" ) );

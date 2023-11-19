@@ -524,7 +524,7 @@ bool EXPORTER_STEP::Export()
 
         bool success = true;
         if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::STEP )
-            success = m_pcbModel->WriteSTEP( m_outputFile );
+            success = m_pcbModel->WriteSTEP( m_outputFile, m_params.m_optimizeStep );
         else if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::GLB )
             success = m_pcbModel->WriteGLTF( m_outputFile );
 

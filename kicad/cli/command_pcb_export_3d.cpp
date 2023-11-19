@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,6 +39,7 @@
 #define ARG_BOARD_ONLY "--board-only"
 #define ARG_INCLUDE_TRACKS "--include-tracks"
 #define ARG_INCLUDE_ZONES "--include-zones"
+#define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
 #define ARG_FORMAT "--format"
 #define ARG_VRML_UNITS "--units"
 #define ARG_VRML_MODELS_DIR "--models-dir"
@@ -122,6 +123,14 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .metavar( "MIN_DIST" );
     }
 
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
+    {
+        m_argParser.add_argument( ARG_NO_OPTIMIZE_STEP )
+                .help( UTF8STDSTR( _( "Do not optimize STEP file (enables writing parametric curves)" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+    }
+
     m_argParser.add_argument( ARG_USER_ORIGIN )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm)" ) ) );
@@ -160,6 +169,11 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
         step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
         step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
+    }
+
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
+    {
+        step->m_optimizeStep = !m_argParser.get<bool>( ARG_NO_OPTIMIZE_STEP );
     }
 
     step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -132,16 +132,21 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbOverwriteFile = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOtherOptions->Add( m_cbOverwriteFile, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_cbOptimizeStep = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Optimize STEP file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOptimizeStep->SetToolTip( _("Disables writing parametric curves. Optimizes file size and write/read times, but may reduce compatibility with other software.") );
+
+	sbOtherOptions->Add( m_cbOptimizeStep, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_staticline1 = new wxStaticLine( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbOtherOptions->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_cbExportTracks = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export tracks (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external copper layers.\nWarning: this is *extremely* time consuming.") );
+	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external copper layers.") );
 
 	sbOtherOptions->Add( m_cbExportTracks, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbExportZones = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export zones (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportZones->SetToolTip( _("Export zones on external copper layers.\nWarning: this is *extremely* time consuming.") );
+	m_cbExportZones->SetToolTip( _("Export zones on external copper layers.") );
 
 	sbOtherOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT, 5 );
 

@@ -31,6 +31,7 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
     m_includeUnspecified( false ),
     m_includeDNP( false ),
     m_substModels( false ),
+    m_optimizeStep( false ),
     m_filename(),
     m_outputFile(),
     m_xOrigin( 0.0 ),

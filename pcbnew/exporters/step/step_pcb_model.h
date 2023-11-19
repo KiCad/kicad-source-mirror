@@ -166,7 +166,7 @@ public:
 #endif
 
     // write the assembly model in STEP format
-    bool WriteSTEP( const wxString& aFileName );
+    bool WriteSTEP( const wxString& aFileName, bool aOptimize );
 
     /**
      * Write the assembly in binary GLTF Format

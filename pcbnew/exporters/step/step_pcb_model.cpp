@@ -1079,7 +1079,7 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
 #endif
 
 
-bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName )
+bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
 {
     if( !isBoardOutlineValid() )
     {
@@ -1102,6 +1102,11 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName )
     // UTF8 should be ok from ISO 10303-21:2016, but... older stuff? use boring ascii
     if( !Interface_Static::SetCVal( "write.step.product.name", fn.GetName().ToAscii() ) )
         ReportMessage( wxT( "Failed to set step product name, but will attempt to continue." ) );
+
+    // Setting write.surfacecurve.mode to 0 reduces file size and write/read times.
+    // But there are reports that this mode might be less compatible in some cases.
+    if( !Interface_Static::SetIVal( "write.surfacecurve.mode", aOptimize ? 0 : 1 ) )
+        ReportMessage( wxT( "Failed to set surface curve mode, but will attempt to continue." ) );
 
     if( Standard_False == writer.Transfer( m_doc, STEPControl_AsIs ) )
         return false;
