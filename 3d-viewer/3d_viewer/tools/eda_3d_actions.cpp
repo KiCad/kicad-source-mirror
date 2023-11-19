@@ -152,15 +152,6 @@ TOOL_ACTION EDA_3D_ACTIONS::homeView( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( VIEW3D_TYPE::VIEW3D_FIT_SCREEN ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::resetView( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.resetView" )
-        .Scope( AS_ACTIVE )
-        .DefaultHotkey( 'R' )
-        .FriendlyName( _( "Reset View" ) )
-        .Tooltip( _( "Reset view" ) )
-        .Flags( AF_NONE )
-        .Parameter( VIEW3D_TYPE::VIEW3D_RESET ) );
-
 TOOL_ACTION EDA_3D_ACTIONS::flipView( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.flipView" )
         .Scope( AS_ACTIVE )

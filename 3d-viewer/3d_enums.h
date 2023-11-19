@@ -83,7 +83,6 @@ enum class VIEW3D_TYPE
     VIEW3D_RIGHT,
     VIEW3D_FRONT,
     VIEW3D_BACK,
-    VIEW3D_RESET,
     VIEW3D_FLIP,
 
     // Movement commands

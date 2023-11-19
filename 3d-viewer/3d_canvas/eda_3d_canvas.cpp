@@ -982,13 +982,6 @@ bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
 
         return true;
 
-    case VIEW3D_TYPE::VIEW3D_RESET:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
-        return true;
-
     case VIEW3D_TYPE::VIEW3D_RIGHT:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
