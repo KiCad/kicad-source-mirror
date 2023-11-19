@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,11 @@ public:
 
     virtual wxDirTraverseResult OnFile( const wxString& filename ) override
     {
-        if( !filename.StartsWith( m_exclude ) )
+        wxFileName fn( filename );
+
+        bool exclude = filename.StartsWith( m_exclude ) || fn.GetName().StartsWith( wxS( "." ) );
+
+        if( !exclude )
             m_files.emplace_back( wxFileName( filename ) );
 
         return wxDIR_CONTINUE;
@@ -89,7 +93,12 @@ public:
 
     virtual wxDirTraverseResult OnDir( const wxString& dirname ) override
     {
-        if( !dirname.StartsWith( m_exclude ) )
+        wxFileName fn( dirname, wxEmptyString );
+        wxArrayString dirs = fn.GetDirs();
+        wxString lastDir = dirs[ fn.GetDirCount() - 1 ];
+        bool exclude = dirname.StartsWith( m_exclude ) || lastDir.StartsWith( wxS( "." ) );
+
+        if( !exclude )
             m_files.emplace_back( wxFileName::DirName( dirname ) );
 
         return wxDIR_CONTINUE;
