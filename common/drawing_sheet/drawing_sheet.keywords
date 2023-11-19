@@ -51,3 +51,5 @@ repeat
 incrx
 incry
 incrlabel
+generator
+generator_version

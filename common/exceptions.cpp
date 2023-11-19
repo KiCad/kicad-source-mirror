@@ -94,22 +94,36 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
 }
 
 
-void FUTURE_FORMAT_ERROR::init( const wxString& aRequiredVersion )
+void FUTURE_FORMAT_ERROR::init( const wxString& aRequiredVersion,
+                                const wxString& aRequiredGenerator )
 {
     requiredVersion = aRequiredVersion;
+    requiredGenerator = aRequiredGenerator;
 
-    problem.Printf( _( "KiCad was unable to open this file because it was created with a more "
-                       "recent version than the one you are running.\n\n"
-                       "To open it you will need to upgrade KiCad to a version dated %s or "
-                       "later." ),
-                    aRequiredVersion );
+    if( requiredGenerator.IsEmpty() )
+    {
+        problem.Printf( _( "KiCad was unable to open this file because it was created with a more "
+                           "recent version than the one you are running.\n\n"
+                           "To open it you will need to upgrade KiCad to a version dated %s or "
+                           "later." ),
+                        aRequiredVersion );
+    }
+    else
+    {
+        problem.Printf( _( "KiCad was unable to open this file because it was created with a more "
+                           "recent version than the one you are running.\n\n"
+                           "To open it you will need to upgrade KiCad to version %s or "
+                           "later (file format dated %s or later)." ),
+                        aRequiredGenerator, aRequiredVersion );
+    }
 }
 
 
-FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion ) :
+FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion,
+                                          const wxString& aRequiredGenerator ) :
         PARSE_ERROR()
 {
-    init( aRequiredVersion );
+    init( aRequiredVersion, aRequiredGenerator );
 
     lineNumber = 0;
     byteIndex = 0;
@@ -117,17 +131,19 @@ FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion ) :
 
 
 FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
-                                          const wxString& aRequiredVersion ) :
+                                          const wxString& aRequiredVersion,
+                                          const wxString& aRequiredGenerator ) :
         PARSE_ERROR()
 {
     if( const FUTURE_FORMAT_ERROR* ffe = dynamic_cast<const FUTURE_FORMAT_ERROR*>( &aParseError ) )
     {
         requiredVersion = ffe->requiredVersion;
+        requiredGenerator = ffe->requiredGenerator;
         problem = ffe->Problem();
     }
     else
     {
-        init( aRequiredVersion );
+        init( aRequiredVersion, aRequiredGenerator );
 
         if( !aParseError.Problem().IsEmpty() )
             problem += wxS( "\n\n" ) + _( "Full error text:" ) + wxS( "\n" ) + aParseError.Problem();

@@ -31,6 +31,7 @@
 #include <charconv>
 #include <confirm.h>
 #include <macros.h>
+#include <fmt/format.h>
 #include <title_block.h>
 #include <trigo.h>
 
@@ -877,6 +878,16 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
     parseHeader();
 
+    auto checkVersion =
+            [&]()
+            {
+                if( m_requiredVersion > SEXPR_BOARD_FILE_VERSION )
+                {
+                    throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ),
+                                               m_generatorVersion );
+                }
+            };
+
     std::vector<BOARD_ITEM*> bulkAddedItems;
     BOARD_ITEM* item = nullptr;
 
@@ -911,7 +922,23 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             NeedRIGHT();
             break;
 
+        case T_generator_version:
+        {
+            NeedSYMBOL();
+            m_generatorVersion = FromUTF8();
+            NeedRIGHT();
+
+            // If the format includes a generator version, by this point we have enough info to
+            // do the version check here
+            checkVersion();
+
+            break;
+        }
+
         case T_general:
+            // Do another version check here, for older files that do not include generator_version
+            checkVersion();
+
             parseGeneralSection();
             break;
 
@@ -1248,15 +1275,15 @@ void PCB_PARSER::parseHeader()
     if( tok == T_version )
     {
         m_requiredVersion = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
-        m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
         NeedRIGHT();
     }
     else
     {
         m_requiredVersion = 20201115;   // Last version before we started writing version #s
                                         // in footprint files as well as board files.
-        m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
     }
+
+    m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
 
     m_board->SetFileFormatVersionAtLoad( m_requiredVersion );
 }
@@ -3866,6 +3893,16 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                                           CurSource(), CurLineNumber(), CurOffset() ) );
     }
 
+    auto checkVersion =
+            [&]()
+            {
+                if( m_requiredVersion > SEXPR_BOARD_FILE_VERSION )
+                {
+                    throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ),
+                                               m_generatorVersion );
+                }
+            };
+
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token == T_LEFT )
@@ -3892,6 +3929,19 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             NeedSYMBOL();
             NeedRIGHT();
             break;
+
+        case T_generator_version:
+        {
+            NeedSYMBOL();
+            m_generatorVersion = FromUTF8();
+            NeedRIGHT();
+
+            // If the format includes a generator version, by this point we have enough info to
+            // do the version check here
+            checkVersion();
+
+            break;
+        }
 
         case T_locked:
             footprint->SetLocked( true );

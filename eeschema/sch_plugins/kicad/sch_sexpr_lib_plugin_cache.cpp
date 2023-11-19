@@ -91,7 +91,7 @@ void SCH_SEXPR_PLUGIN_CACHE::Save( const std::optional<bool>& aOpt )
     // Write through symlinks, don't replace them.
     wxFileName fn = GetRealFile();
 
-    auto formatter = std::make_unique<FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
+    auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
 
     formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") (generator_version \"%s\")\n",
                       SEXPR_SYMBOL_LIB_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );

@@ -174,13 +174,17 @@ protected:
  */
 struct KICOMMON_API FUTURE_FORMAT_ERROR : public PARSE_ERROR
 {
-    wxString requiredVersion;   ///< version or date of KiCad required to open file
+    wxString requiredVersion;   ///< Date of KiCad file format required to open file
+    wxString requiredGenerator; ///< Version of KiCad required to open file
 
-    FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion );
-    FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const wxString& aRequiredVersion );
+    FUTURE_FORMAT_ERROR( const wxString& aRequiredVersion,
+                         const wxString& aRequiredGenerator = wxEmptyString );
+    FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const wxString& aRequiredVersion,
+                         const wxString& aRequiredGenerator = wxEmptyString );
     ~FUTURE_FORMAT_ERROR() throw () {}
 
-    void init( const wxString& aRequiredVersion );
+    void init( const wxString& aRequiredVersion,
+               const wxString& aRequiredGenerator = wxEmptyString );
 };
 
 /** @} exception_types */

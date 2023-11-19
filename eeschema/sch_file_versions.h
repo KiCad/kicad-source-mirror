@@ -48,7 +48,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331   // Text colors.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Symbol unit display names.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Don't save property ID
-#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20230620   // ki_description -> Description Field
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20230620   // ki_description -> Description Field
+#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20231120   // generator_version; V8 cleanups
 
 /**
  * Schematic file version.
@@ -100,4 +101,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230409  // Add exclude_from_sim markup
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230620  // ki_description -> Description Field
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230808  // Move Sim.Enable field to exclude_from_sim attr
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20230819  // Allow multiple library symbol inheritance depth.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20230819  // Allow multiple library symbol inheritance depth.
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20231120  // generator_version; V8 cleanups

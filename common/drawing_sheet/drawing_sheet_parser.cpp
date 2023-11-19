@@ -24,6 +24,7 @@
  */
 
 #include <charconv>
+#include <fmt/format.h>
 #include <wx/base64.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
@@ -53,6 +54,7 @@ public:
 
 private:
     int m_requiredVersion;
+    wxString m_generatorVersion;
 
     /**
      * Parse the data specified at the very beginning of the file, like version and the
@@ -209,6 +211,16 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
     parseHeader( token );
     aLayout->SetFileFormatVersionAtLoad( m_requiredVersion );
 
+    auto checkVersion =
+            [&]()
+            {
+                if( m_requiredVersion > SEXPR_WORKSHEET_FILE_VERSION )
+                {
+                    throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ),
+                                               m_generatorVersion );
+                }
+            };
+
     for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
         if( token == T_LEFT )
@@ -216,7 +228,22 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
 
         switch( token )
         {
+        case T_generator:
+            // (generator "genname"); we don't care about it at the moment.
+            NeedSYMBOL();
+            NeedRIGHT();
+            break;
+
+        case T_generator_version:
+            NextTok();
+            m_generatorVersion = FromUTF8();
+            NeedRIGHT();
+            break;
+
         case T_setup:   // Defines default values for graphic items
+            // Check the version here, because the generator and generator_version (if available)
+            // will have been parsed by now given the order the formatter writes them in
+            checkVersion();
             parseSetup( aLayout );
             break;
 
@@ -285,21 +312,12 @@ void DRAWING_SHEET_PARSER::parseHeader( T aHeaderType )
         {
             m_requiredVersion = parseInt();
 
-            if( m_requiredVersion > SEXPR_WORKSHEET_FILE_VERSION )
-                throw FUTURE_FORMAT_ERROR( FromUTF8() );
-
             NeedRIGHT();
         }
         else
         {
             Expecting( T_version );
         }
-
-        // Ignore generator info.
-        NeedLEFT();
-        NeedSYMBOL();
-        NeedSYMBOL();
-        NeedRIGHT();
     }
     else
     {

@@ -42,11 +42,14 @@ fill
 font
 footprint
 free
+generator
+generator_version
 global_label
 hide
 hierarchical_label
 hint_alt_swap
 hint_pin_swap
+host
 href
 id
 image

@@ -29,6 +29,7 @@
 // base64 code.
 #include <charconv>
 
+#include <fmt/format.h>
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 #include <wx/mstream.h>
@@ -141,6 +142,20 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
     NextTok();
     parseHeader( T_kicad_symbol_lib, SEXPR_SYMBOL_LIB_FILE_VERSION );
 
+    bool versionChecked = false;
+
+    auto checkVersion =
+            [&]()
+            {
+                if( !versionChecked && m_requiredVersion > SEXPR_SYMBOL_LIB_FILE_VERSION )
+                {
+                    throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ),
+                                               m_generatorVersion );
+                }
+
+                versionChecked = true;
+            };
+
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
@@ -148,16 +163,53 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 
         token = NextTok();
 
-        if( token == T_symbol )
+        switch( token )
         {
+        case T_generator:
+            // (generator "genname"); we don't care about it at the moment.
+            NeedSYMBOL();
+            NeedRIGHT();
+            break;
+
+        case T_host:
+        {
+            // (host eeschema ["5.99"]); old version of generator token
+            NeedSYMBOL();
+
+            // Really old versions also included a host version
+            if( m_requiredVersion < 20200827 )
+                NeedSYMBOL();
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_generator_version:
+        {
+            NextTok();
+            m_generatorVersion = FromUTF8();
+            NeedRIGHT();
+
+            // If the format includes a generator version, by this point we have enough info to
+            // do the version check here
+            checkVersion();
+            break;
+        }
+
+        case T_symbol:
+        {
+            // By the time we get to the first symbol, we can check the version
+            checkVersion();
+
             m_unit = 1;
             m_convert = 1;
             LIB_SYMBOL* symbol = parseLibSymbol( aSymbolLibMap );
             aSymbolLibMap[symbol->GetName()] = symbol;
+            break;
         }
-        else
-        {
-            Expecting( "symbol" );
+
+        default:
+            Expecting( "symbol, generator, or generator_version" );
         }
     }
 }
@@ -740,30 +792,11 @@ void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersio
     if( tok == T_version )
     {
         m_requiredVersion = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
-
-        if( m_requiredVersion > aFileVersion )
-            throw FUTURE_FORMAT_ERROR( FromUTF8() );
-
-        NeedRIGHT();
-
-        // Skip the host name and host build version information.
-        NeedLEFT();
-        NeedSYMBOL();
-        NeedSYMBOL();
-
-        if( m_requiredVersion < 20200827 )
-            NeedSYMBOL();
-
         NeedRIGHT();
     }
     else
     {
         m_requiredVersion = aFileVersion;
-
-        // Skip the host name and host build version information.
-        NeedSYMBOL();
-        NeedSYMBOL();
-        NeedRIGHT();
     }
 }
 
@@ -2379,6 +2412,16 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
 
     bool fileHasUuid = false;
 
+    auto checkVersion =
+            [&]()
+            {
+                if( m_requiredVersion > SEXPR_SCHEMATIC_FILE_VERSION )
+                {
+                    throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ),
+                                               m_generatorVersion );
+                }
+            };
+
     T token;
 
     if( !aIsCopyableOnly )
@@ -2395,6 +2438,10 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         // to generate one for the root schematic for instance paths.
         if( m_requiredVersion < 20210406 )
             m_rootUuid = screen->GetUuid();
+
+        // Prior to version 20231120, generator_version was not present, so check the date here
+        if( m_requiredVersion < 20231120 )
+            checkVersion();
     }
 
     screen->SetFileFormatVersionAtLoad( m_requiredVersion );
@@ -2416,6 +2463,32 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
 
         switch( token )
         {
+        case T_generator:
+            // (generator "genname"); we don't care about it at the moment.
+            NeedSYMBOL();
+            NeedRIGHT();
+            break;
+
+        case T_host:
+        {
+            // (host eeschema ["5.99"]); old version of generator token
+            NeedSYMBOL();
+
+            // Really old versions also included a host version
+            if( m_requiredVersion < 20200827 )
+                NeedSYMBOL();
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_generator_version:
+            NextTok();
+            m_generatorVersion = FromUTF8();
+            NeedRIGHT();
+            checkVersion();
+            break;
+
         case T_uuid:
             NeedSYMBOL();
             screen->m_uuid = parseKIID();
