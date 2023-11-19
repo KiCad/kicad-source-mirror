@@ -1,20 +1,21 @@
 # Djamel Dellaa <d2jamel@gmail.com>, 2023.
+# Ahmed Elswah <janelswah2010@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-07-18 08:06+0000\n"
-"Last-Translator: Djamel Dellaa <d2jamel@gmail.com>\n"
-"Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/master-"
-"source/ar/>\n"
+"PO-Revision-Date: 2023-11-20 15:37+0000\n"
+"Last-Translator: Ahmed Elswah <janelswah2010@gmail.com>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/"
+"master-source/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.2\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -22,7 +23,7 @@ msgstr "جميع الملفات"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr ""
+msgstr "تحديد حجم البورده"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:534
 msgid "Create layers"
@@ -38,14 +39,16 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"مخطط الفوت برنت مفقود أو مشوه. قم بتشغيل مدقق الفوت برنت للحصول على تحليل "
+"كامل."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:900
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "حجم اللوحة مفقود أو مشوه. قم بتشغيل DCRللحصول على تحليل كامل."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "انشاء مسارات"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:691
 msgid "Create zones"
@@ -53,7 +56,7 @@ msgstr "إنشاء مناطق"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:775
 msgid "Build Tech layers"
-msgstr ""
+msgstr "بناء طبقات تكنولوجيه"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
 #, c-format
