@@ -96,15 +96,7 @@ private:
     wxString                   m_mruPath;
     bool                       m_lastAutoLabelRotateOnPlacement;
 
-    ///< Re-entrancy guards
-    bool                       m_inPlaceSymbol;
-    bool                       m_inDrawShape;
-    bool                       m_inPlaceImage;
-    bool                       m_inImportGraphics;
-    bool                       m_inSingleClickPlace;
-    bool                       m_inTwoClickPlace;
-    bool                       m_inDrawSheet;
-
+    bool                               m_inDrawingTool;     // Re-entrancy guard
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };
 

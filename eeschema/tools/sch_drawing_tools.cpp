@@ -83,13 +83,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextboxStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_lastAutoLabelRotateOnPlacement( false ),
-        m_inPlaceSymbol( false ),
-        m_inDrawShape( false ),
-        m_inPlaceImage( false ),
-        m_inImportGraphics( false ),
-        m_inSingleClickPlace( false ),
-        m_inTwoClickPlace( false ),
-        m_inDrawSheet( false )
+        m_inDrawingTool( false )
 {
 }
 
@@ -120,10 +114,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
     SCH_SCREEN*                 screen = m_frame->GetScreen();
 
-    if( m_inPlaceSymbol )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inPlaceSymbol );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
@@ -526,10 +520,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     bool             ignorePrimePosition = false;
     COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
 
-    if( m_inPlaceImage )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inPlaceImage );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     EE_GRID_HELPER        grid( m_toolMgr );
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -766,10 +760,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::SchImportGraphics( const TOOL_EVENT& aEvent )
 {
-    if( m_inImportGraphics )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inImportGraphics );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     // Note: PlaceImportedGraphics() will convert PCB_SHAPE_T and PCB_TEXT_T to footprint
     // items if needed
@@ -929,10 +923,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     SCH_SCREEN*           screen = m_frame->GetScreen();
     bool                  allowRepeat = false;  // Set to true to allow new item repetition
 
-    if( m_inSingleClickPlace )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inSingleClickPlace );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
     {
@@ -1372,10 +1366,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     SCH_SHEET*            sheet = nullptr;
     wxString              description;
 
-    if( m_inTwoClickPlace )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inTwoClickPlace );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     bool isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
     bool isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
@@ -1733,10 +1727,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     SHAPE_T             type = aEvent.Parameter<SHAPE_T>();
     wxString            description;
 
-    if( m_inDrawShape )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inDrawShape );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
@@ -1966,10 +1960,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     SCH_SHEET* sheet = nullptr;
 
-    if( m_inDrawSheet )
+    if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD guard( &m_inDrawSheet );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
