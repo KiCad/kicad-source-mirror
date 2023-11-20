@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-16 10:05+0000\n"
+"PO-Revision-Date: 2023-11-20 15:37+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -431,13 +431,12 @@ msgid "Move board Down"
 msgstr "Flytta mönsterkortet neråt"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
 msgstr "Hemvy"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:151
 msgid "Home view"
-msgstr "Hemvy"
+msgstr "Hemvy, återställer vy till utgångsposition, -rotation och -zoom"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
 msgid "Reset View"
@@ -445,7 +444,7 @@ msgstr "Återställ vy"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:160
 msgid "Reset view"
-msgstr "Återställ vy"
+msgstr "Återställ vy till utgångsläget; ekvivalent till \"Hemvy\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:168
 msgid "Flip Board"
@@ -2344,9 +2343,8 @@ msgstr ""
 "KiCad har körts för första gången med hjälp av den nya %sbibliotekstabellen "
 "för\n"
 "åtkomst till bibliotek. För att KiCad ska få åtkomst till %sbibliotek,\n"
-"måste du konfigurera din globala bibliotekstabell för %s. Välj bland ett\n"
-"av alternativen nedan. Om du inte är säker på vilket alternativ du ska "
-"välja,\n"
+"måste du konfigurera din globala bibliotekstabell för %s. Välj ett av\n"
+"alternativen nedan. Om du inte är säker på vilket alternativ du ska välja,\n"
 "använd standardvalet."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:50
@@ -7138,7 +7136,7 @@ msgstr "Spara alla ändringar"
 
 #: common/tool/actions.cpp:108
 msgid "Throw away changes"
-msgstr "Kasta bort ändringar"
+msgstr "Kasta bort ändringar gjorda efter att kretsschemat senast sparats"
 
 #: common/tool/actions.cpp:113
 msgid "Page Settings..."
@@ -8191,7 +8189,6 @@ msgid "Edit..."
 msgstr "Redigera..."
 
 #: common/widgets/widget_hotkey_list.cpp:421
-#, fuzzy
 msgid "Edit Alternate..."
 msgstr "Redigera alternativ..."
 
@@ -13375,8 +13372,8 @@ msgid ""
 "symbols."
 msgstr ""
 "Detta kretsschema använder för närvarande projektets symbolbibliotekslista "
-"som uppslagsmetod för att ladda bibliotekssymboler. KiCad kommer att försöka "
-"mappa om de befintliga symbolerna till att använda den nya "
+"som uppslagsmetod för att läsa in bibliotekssymboler. KiCad kommer att "
+"försöka mappa om de befintliga symbolerna till att använda den nya "
 "symbolbibliotekstabellen. Ommappning ändrar vissa projektfiler och "
 "kretsscheman är kanske inte längre kompatibla med äldre versioner av KiCad. "
 "Alla filer som ändras säkerhetskopieras till mappen \"rescue_backup\" i "
@@ -14588,7 +14585,7 @@ msgstr "Fel vid inläsning av ritningsark."
 #: pcbnew/pcbnew_jobs_handler.cpp:1060
 #, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Fel vid inläsning av ritblad '%s'."
+msgstr "Fel vid inläsning av ritningsark '%s'."
 
 #: eeschema/eeschema_jobs_handler.cpp:142
 #: eeschema/eeschema_jobs_handler.cpp:241
@@ -16712,8 +16709,8 @@ msgid ""
 "revert to the original 1:1 scale."
 msgstr ""
 "Symbolen '%s' skalas i det ursprungliga CADSTAR-schemat, men detta stöds "
-"inte i KiCad. När symbolen laddas om från biblioteket kommer den återgå till "
-"den ursprungliga 1:1 storleken."
+"inte i KiCad. När symbolen läses in på nytt från biblioteket kommer den att "
+"återgå till den ursprungliga 1:1 storleken."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1468
 #, c-format
@@ -19485,7 +19482,7 @@ msgstr "Håll symbol"
 #: pcbnew/footprint_libraries_utils.cpp:1157
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "Återställ '%s' till den senast sparade versionen ?"
+msgstr "Återställ '%s' till den senast sparade versionen?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, c-format
@@ -20687,7 +20684,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1025
 msgid "Edit Sheet Page Number..."
-msgstr "Ändra bladets sidnummer..."
+msgstr "Ändra arkets sidnummer..."
 
 #: eeschema/tools/ee_actions.cpp:1026
 msgid "Edit the page number of the current or selected sheet"
@@ -21080,13 +21077,13 @@ msgstr "Justera element till rutnät"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Current Sheet Copy As..."
-msgstr "Spara en kopia av aktuellt blad som..."
+msgstr "Spara en kopia av aktuellt ark som..."
 
 #: eeschema/tools/ee_actions.cpp:1414
 msgid "Save a copy of the current sheet to another location or name"
 msgstr ""
-"Spara en kopia av det aktuella bladet till en annan plats eller med ett "
-"annat namn"
+"Spara en kopia av det aktuella ritningsarket till en annan plats eller med "
+"ett annat namn"
 
 #: eeschema/tools/ee_actions.cpp:1428
 msgid "New Analysis Tab..."
@@ -21322,7 +21319,7 @@ msgstr "Rita %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2024
 msgid "Press <ESC> to cancel sheet creation."
-msgstr "Tryck på <ESC> för att avbryta blad."
+msgstr "Tryck på <ESC> för att avbryta skapande av ritningsark."
 
 #: eeschema/tools/sch_edit_tool.cpp:77
 msgid "Symbol Unit"
@@ -21423,7 +21420,7 @@ msgstr "Ange sidnummer för arkväg %s"
 #: eeschema/tools/sch_edit_tool.cpp:2599
 #: eeschema/widgets/hierarchy_pane.cpp:288
 msgid "Edit Sheet Page Number"
-msgstr "Ändra bladets sidnummer"
+msgstr "Ändra arkets sidnummer"
 
 #: eeschema/tools/sch_edit_tool.cpp:2660
 msgid "Set Attribute"
@@ -21441,8 +21438,7 @@ msgstr "Växla attribut"
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr ""
-"Återställ '%s' (och alla underordnade ark) till den senast sparade "
-"versionen ?"
+"Återställ '%s' (och alla underordnade ark) till den senast sparade versionen?"
 
 #: eeschema/tools/sch_editor_control.cpp:403
 #, c-format
@@ -21473,9 +21469,9 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"Det inklistrade bladet '%s'\n"
-"släpptes eftersom destinationen redan har bladet eller ett av dess underblad "
-"som förälder."
+"Det inklistrade arket '%s'\n"
+"släpptes eftersom destinationen redan har detta ritningsark eller ett av "
+"dess underark som förälder."
 
 #: eeschema/tools/sch_editor_control.cpp:2005
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -25119,11 +25115,11 @@ msgstr "Dessa inbyggda nyckelord är alltid tillgängliga:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "(sheet number)"
-msgstr "(bladnummer)"
+msgstr "(ark nummer)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "(sheet count)"
-msgstr "(bladantal)"
+msgstr "(antal ark)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(paper size)"
@@ -25341,7 +25337,7 @@ msgstr "Ny ritningsarksfil är inte sparad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:923
 msgid "Drawing sheet changes are unsaved"
-msgstr "Ändringar i ritbladet är inte sparade"
+msgstr "Ändringar i ritningsarket är inte sparade"
 
 #: pagelayout_editor/pl_editor_frame.cpp:967
 msgid "Page Width"
@@ -34669,7 +34665,7 @@ msgstr "Nätlinjens linjebredd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
 msgid "Draw an outline to show the sheet size."
-msgstr "Rita en kontur för att visa bladstorlek."
+msgstr "Rita en kontur för att visa ritningsarkets storlek."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:378
 msgid "Show courtyard collisions when moving/dragging"
