@@ -34,6 +34,7 @@
 #include <string_utils.h>
 #include <fmt/chrono.h>
 #include <wx/regex.h>
+#include "locale_io.h"
 
 
 /**
@@ -882,7 +883,8 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 
 bool ApplyModifier( double& value, const wxString& aString )
 {
-    static const wxString modifiers( wxT( "pnumkKM" ) );
+    /// Although the two 'μ's look the same, they are U+03BC and U+00B5
+    static const wxString modifiers( wxT( "pnuµμmkKM" ) );
 
     if( !aString.length() )
         return false;
@@ -907,13 +909,15 @@ bool ApplyModifier( double& value, const wxString& aString )
             && !units.CmpNoCase( wxT( "W" ) )
             && !units.CmpNoCase( wxT( "V" ) )
             && !units.CmpNoCase( wxT( "H" ) ) )
+    {
         return false;
+    }
 
     if( modifier == 'p' )
         value *= 1.0e-12;
     if( modifier == 'n' )
         value *= 1.0e-9;
-    else if( modifier == 'u' )
+    else if( modifier == 'u' || modifier == wxS( "µ" )[0] || modifier == wxS( "μ" )[0] )
         value *= 1.0e-6;
     else if( modifier == 'm' )
         value *= 1.0e-3;
@@ -923,6 +927,125 @@ bool ApplyModifier( double& value, const wxString& aString )
         value *= 1.0e6;
     else if( modifier == 'G' )
         value *= 1.0e9;
+
+    return true;
+}
+
+
+bool convertSeparators( wxString* value )
+{
+    // Note: fetching the decimal separtor from the current locale isn't a silver bullet because
+    // it assumes the current computer's locale is the same as the locale the schematic was
+    // authored in -- something that isn't true, for instance, when sharing designs through
+    // DIYAudio.com.
+    //
+    // Some values are self-describing: multiple instances of a single separator character must be
+    // thousands separators; a single instance of each character must be a thousands separator
+    // followed by a decimal separator; etc.
+    //
+    // Only when presented with an ambiguous value do we fall back on the current locale.
+
+    value->Replace( wxS( " " ), wxEmptyString );
+
+    wxChar ambiguousSeparator = '?';
+    wxChar thousandsSeparator = '?';
+    bool   thousandsSeparatorFound = false;
+    wxChar decimalSeparator = '?';
+    bool   decimalSeparatorFound = false;
+    int    digits = 0;
+
+    for( int ii = (int) value->length() - 1; ii >= 0; --ii )
+    {
+        wxChar c = value->GetChar( ii );
+
+        if( c >= '0' && c <= '9' )
+        {
+            digits += 1;
+        }
+        else if( c == '.' || c == ',' )
+        {
+            if( decimalSeparator != '?' || thousandsSeparator != '?' )
+            {
+                // We've previously found a non-ambiguous separator...
+
+                if( c == decimalSeparator )
+                {
+                    if( thousandsSeparatorFound )
+                        return false;       // decimal before thousands
+                    else if( decimalSeparatorFound )
+                        return false;       // more than one decimal
+                    else
+                        decimalSeparatorFound = true;
+                }
+                else if( c == thousandsSeparator )
+                {
+                    if( digits != 3 )
+                        return false;       // thousands not followed by 3 digits
+                    else
+                        thousandsSeparatorFound = true;
+                }
+            }
+            else if( ambiguousSeparator != '?' )
+            {
+                // We've previously found a separator, but we don't know for sure which...
+
+                if( c == ambiguousSeparator )
+                {
+                    // They both must be thousands separators
+                    thousandsSeparator = ambiguousSeparator;
+                    thousandsSeparatorFound = true;
+                    decimalSeparator = c == '.' ? ',' : '.';
+                }
+                else
+                {
+                    // The first must have been a decimal, and this must be a thousands.
+                    decimalSeparator = ambiguousSeparator;
+                    decimalSeparatorFound = true;
+                    thousandsSeparator = c;
+                    thousandsSeparatorFound = true;
+                }
+            }
+            else
+            {
+                // This is the first separator...
+
+                // If it's preceeded by a '0' (only), or if it's followed by some number of
+                // digits not equal to 3, then it -must- be a decimal separator.
+                //
+                // In all other cases we don't really know what it is yet.
+
+                if( ( ii == 1 && value->GetChar( 0 ) == '0' ) || digits != 3 )
+                {
+                    decimalSeparator = c;
+                    decimalSeparatorFound = true;
+                    thousandsSeparator = c == '.' ? ',' : '.';
+                }
+                else
+                {
+                    ambiguousSeparator = c;
+                }
+            }
+
+            digits = 0;
+        }
+        else
+        {
+            digits = 0;
+        }
+    }
+
+    // If we found nothing difinitive then we have to look at the current locale
+    if( decimalSeparator == '?' && thousandsSeparator == '?' )
+    {
+        const struct lconv* lc = localeconv();
+
+        decimalSeparator = lc->decimal_point[0];
+        thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
+    }
+
+    // Convert to C-locale
+    value->Replace( thousandsSeparator, wxEmptyString );
+    value->Replace( decimalSeparator, '.' );
 
     return true;
 }
@@ -959,6 +1082,11 @@ int ValueStringCompare( const wxString& strFWord, const wxString& strSWord )
         double lFirstNumber  = 0;
         double lSecondNumber = 0;
         bool   endingIsModifier = false;
+
+        convertSeparators( &strFWordMid );
+        convertSeparators( &strSWordMid );
+
+        LOCALE_IO toggle;    // toggles on, then off, the C locale.
 
         strFWordMid.ToDouble( &lFirstNumber );
         strSWordMid.ToDouble( &lSecondNumber );

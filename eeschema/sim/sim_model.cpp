@@ -1259,18 +1259,21 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
                         {
                             // This is the first separator...
 
-                            // If it's followed by 3 digits then it could be either.
-                            // Otherwise it -must- be a decimal separator (and the thousands
-                            // separator must be the other).
-                            if( digits == 3 )
-                            {
-                                ambiguousSeparator = c;
-                            }
-                            else
+                            // If it's preceeded by a '0' (only), or if it's followed by some
+                            // number of digits not equal to 3, then it -must- be a decimal
+                            // separator.
+                            //
+                            // In all other cases we don't really know what it is yet.
+
+                            if( ( ii == 1 && mantissa->GetChar( 0 ) == '0' ) || digits != 3 )
                             {
                                 decimalSeparator = c;
                                 decimalSeparatorFound = true;
                                 thousandsSeparator = c == '.' ? ',' : '.';
+                            }
+                            else
+                            {
+                                ambiguousSeparator = c;
                             }
                         }
 
