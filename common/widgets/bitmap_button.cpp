@@ -338,21 +338,23 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
     {
         dc.SetFont( m_badgeFont );
 
-        wxSize box_size = dc.GetTextExtent( m_badgeText );
+        wxSize text_padding( 3, 1 );
+
+        if( m_padding )
+            text_padding *= 2;
+
+        wxSize box_size = dc.GetTextExtent( m_badgeText ) + text_padding;
         wxSize box_offset = box_size;
-        wxSize text_offset = box_offset;
+
         if( m_padding != 0 )
-        {
-            box_offset += wxSize( m_padding - 2, m_padding );
-            text_offset -= wxSize( 3, 1 );
-        }
+            box_offset += wxSize( m_padding / 3, m_padding / 3 );
 
         dc.SetPen( wxPen( m_badgeColor ) );
         dc.SetBrush( wxBrush( m_badgeColor ) );
         dc.DrawRoundedRectangle( rect.GetRightBottom() - box_offset, box_size, -0.25 );
 
         dc.SetTextForeground( m_badgeTextColor );
-        dc.DrawText( m_badgeText, rect.GetRightBottom() - text_offset );
+        dc.DrawText( m_badgeText, rect.GetRightBottom() - box_offset + ( text_padding / 2 ) );
     }
 }
 
