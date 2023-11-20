@@ -189,7 +189,6 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_mergeOCCMaxDist = OCC_MAX_DISTANCE_TO_MERGE_POINTS;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
-    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
     m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
 }
 
@@ -328,7 +327,6 @@ void STEP_PCB_MODEL::OCCSetMergeMaxDistance( double aDistance )
 {
     // Ensure a minimal value (in mm)
     m_mergeOCCMaxDist = aDistance;
-    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
 }
 
 
