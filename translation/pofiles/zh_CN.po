@@ -23,13 +23,14 @@
 # wh201906 <wh201906@yandex.com>, 2023.
 # Hubert Hu <qinghan.hu@gmail.com>, 2023.
 # Li Yidong <alenks@foxmail.com>, 2023.
+# 欠陥電気 <Misaka13514@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-09-27 16:00+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2023-11-20 15:37+0000\n"
+"Last-Translator: 欠陥電気 <Misaka13514@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -37,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -95,7 +96,7 @@ msgstr "简化铜层多边形"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1032
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "计算镀铜"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1106
 #, c-format
@@ -828,7 +829,7 @@ msgstr "丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "不使用板轮廓裁剪丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 #, fuzzy
@@ -1381,6 +1382,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"显示或隐藏板主体\n"
+"如果隐藏，则仅显示铜层和丝印层。"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -2535,6 +2538,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"此工程文件包含多个 PCB+原理图的组合。\n"
+"请选择一个导入 KiCad。"
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 #, fuzzy
@@ -3320,22 +3325,22 @@ msgstr "连接"
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "基本"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "测试"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
@@ -3351,7 +3356,7 @@ msgstr "基名称"
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
 #, fuzzy
@@ -3375,7 +3380,7 @@ msgstr "元件：名称不能为空。"
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:370
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "请输入 SSH 密钥的密码"
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
 #, fuzzy
@@ -3446,7 +3451,7 @@ msgstr "连接名称"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #, fuzzy
@@ -3479,19 +3484,19 @@ msgstr "仓库"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "切换 Git 分支"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "选择或输入一个分支名称："
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "分支"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "最后提交"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 #, fuzzy
@@ -3511,7 +3516,7 @@ msgstr "添加"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Git 提交数据"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
 #, fuzzy
@@ -3733,13 +3738,14 @@ msgstr "如果将鼠标光标移到原理图或 PCB 编辑器窗口的画布上�
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "当使用快捷键切换设置时显示弹出式指示器"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
-msgstr ""
+msgstr "启用时，循环切换设置的某些快捷键将显示一个弹出式指示器，以简要指示设置的变更"
+"。"
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -3789,7 +3795,7 @@ msgstr "小"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "在工具栏中使用紧凑型图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:802
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1208
@@ -3805,7 +3811,7 @@ msgstr "正常"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "在工具栏中使用默认的 KiCad 图标大小"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3814,7 +3820,7 @@ msgstr "较大"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "在工具栏中使用更大的图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
@@ -4173,7 +4179,7 @@ msgstr "比例"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
 #, fuzzy
@@ -4421,6 +4427,8 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"网络类在设置对话框外已被更改。\n"
+"您想重新加载它们吗？"
 
 #: common/dialogs/panel_setup_netclasses.cpp:465
 msgid "Netclass must have a name."
@@ -4598,12 +4606,16 @@ msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"违规严重程度在设置对话框外已被更改。\n"
+"您想重新加载它们吗？"
 
 #: common/dialogs/panel_text_variables.cpp:103
 msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"文本变量在设置对话框外已被更改。\n"
+"您想重新加载它们吗？"
 
 #: common/dialogs/panel_text_variables.cpp:157
 #: common/dialogs/panel_text_variables.cpp:185
@@ -5839,7 +5851,7 @@ msgstr "无法复制文件 '%s'。"
 
 #: common/gestfich.cpp:308
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "无效的目录名称，无法移除根目录"
 
 #: common/gestfich.cpp:316
 #, fuzzy, c-format
@@ -5898,11 +5910,11 @@ msgstr "无法读取文件 "
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "无效的 HEAD。  无法合并。"
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "无法获取存储库的 HEAD"
 
 #: common/git/git_pull_handler.cpp:187
 #, fuzzy, c-format
@@ -5911,7 +5923,7 @@ msgstr "找不到带参数 '%s' 的 Spice 项目"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:45
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "执行检出操作失败。"
 
 #: common/git/git_pull_handler.cpp:212
 #, fuzzy
@@ -5940,7 +5952,7 @@ msgstr "更改"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "已添加"
 
 #: common/git/git_push_handler.cpp:44
 #, fuzzy
@@ -5960,7 +5972,7 @@ msgstr "无法使用 OpenGL"
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "接收了 %u 个对象，共 %u 个"
 
 #: common/git/kicad_git_common.cpp:442
 #, fuzzy, c-format
@@ -5975,7 +5987,7 @@ msgstr "%s 上的敷铜%s"
 #: common/git/kicad_git_common.cpp:466
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "正在写入对象：%d%%（%d/%d），%d 字节"
 
 #: common/git/kicad_git_common.cpp:481
 #, fuzzy, c-format
@@ -6014,7 +6026,7 @@ msgstr "仓库"
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "远程存储库的身份验证失败。"
 
 #: common/git/kicad_git_errors.cpp:40
 #, fuzzy
@@ -6033,15 +6045,15 @@ msgstr "无法删除 '%s'"
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "在检出操作中未找到文件。"
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "遇到合并冲突。"
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "遇到变基冲突。"
 
 #: common/git/kicad_git_errors.cpp:53
 #, fuzzy
@@ -6055,7 +6067,7 @@ msgstr "无法解析本地存储的仓库.json."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "未配置上游分支。"
 
 #: common/git/kicad_git_errors.cpp:56
 #, fuzzy
@@ -6199,7 +6211,7 @@ msgstr "手势"
 
 #: common/http_lib/http_lib_connection.cpp:74
 msgid "KiCad received an empty response!"
-msgstr ""
+msgstr "KiCad 收到了一个空响应！"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:155
@@ -6215,12 +6227,12 @@ msgstr "错误： "
 #: common/http_lib/http_lib_connection.cpp:350
 #, c-format
 msgid "API Response:  %s"
-msgstr ""
+msgstr "API 响应：  %s"
 
 #: common/http_lib/http_lib_connection.cpp:372
 #, c-format
 msgid "API responded with error code: %s"
-msgstr ""
+msgstr "API 响应出现错误代码：%s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
@@ -6764,7 +6776,7 @@ msgstr "详情"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "忽略"
 
 #: common/notifications_manager.cpp:155
 #, fuzzy
@@ -6773,7 +6785,7 @@ msgstr "齐行"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "没有通知"
 
 #: common/pgm_base.cpp:205
 msgid "No default editor found, you must choose one."
@@ -7449,7 +7461,7 @@ msgstr "撤销"
 
 #: common/tool/actions.cpp:476 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
+msgstr "将缩放返回到上一次缩放操作前的级别"
 
 #: common/tool/actions.cpp:482 common/widgets/mathplot.cpp:1448
 #, fuzzy
@@ -7458,7 +7470,7 @@ msgstr "重做最后撤消操作"
 
 #: common/tool/actions.cpp:483 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "将缩放返回到上一次撤销缩放操作前的级别"
 
 #: common/tool/actions.cpp:500
 msgid "Cursor Up"
@@ -7585,7 +7597,7 @@ msgstr "在编辑窗口中显示背景网格"
 
 #: common/tool/actions.cpp:697
 msgid "Enables item-specific grids that override the current grid"
-msgstr ""
+msgstr "启用项目特定的网格，覆盖当前的网格设置"
 
 #: common/tool/actions.cpp:704
 #, fuzzy
@@ -7859,7 +7871,7 @@ msgstr "报告 Bug"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr ""
+msgstr "无法在独立模式下切换到工程管理器。"
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -8148,7 +8160,7 @@ msgstr "选择路径"
 
 #: common/widgets/lib_tree.cpp:98
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "按最佳匹配排序"
 
 #: common/widgets/lib_tree.cpp:99
 #, fuzzy
@@ -8455,13 +8467,13 @@ msgstr "KiCad 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:297
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "EasyEDA（嘉立创 EDA）标准版备份压缩包"
 
 #: common/wildcards_and_files_ext.cpp:303
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_plugin.h:54
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:53
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "EasyEDA（嘉立创 EDA）专业版文件"
 
 #: common/wildcards_and_files_ext.cpp:309 pcbnew/plugins/kicad/pcb_plugin.h:286
 msgid "KiCad printed circuit board files"
@@ -9680,16 +9692,15 @@ msgstr "加载符号库"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "新名称："
+msgstr "用户名："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "密码："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 #, fuzzy
@@ -9737,7 +9748,7 @@ msgstr "缓存符号："
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
+msgstr "数据库查询将被缓存的秒数"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 #, fuzzy
@@ -11256,23 +11267,30 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "为包含多个单元的元件输入单元数量"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:183
+#, fuzzy
 msgid ""
 "Check this option when all symbol units have the same function.\n"
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
+"当所有符号单元具有相同的功能时，请选中此选项。\n"
+"例如，对于四输入与非门，应该选中此选项，而对于双三极管（其中单元 C "
+"是灯丝）则不应选中。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "Has alternate body style (De Morgan)"
 msgstr "存在备用主体样式（德摩根）"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
+#, fuzzy
 msgid ""
 "Check this option if the symbol has an alternate body style for a De Morgan "
 "logic equivalence.\n"
 "For instance, this should be checked for a NAND gate to provide an alternate "
 "representation as an OR gate with inverted inputs."
 msgstr ""
+"如果符号具有 De Morgan 逻辑等价的替代主体样式，请选中此选项。\n"
+"例如，对于与非门，应该选中此选项以提供作为具有反转输入的或门的替代表示。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Define as power symbol"
@@ -12350,16 +12368,18 @@ msgid "OP"
 msgstr "有机可焊性保护剂(OSP)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
+#, fuzzy
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
+#, fuzzy
 msgid "NOISE"
-msgstr ""
+msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #, fuzzy
@@ -12558,12 +12578,13 @@ msgid "Noise source:"
 msgstr "噪音源"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
+#, fuzzy
 msgid "Save contributions from all noise generators"
-msgstr ""
+msgstr "保存所有噪声发生器的生成的内容"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:519
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "计算噪声电流相关矩阵"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:534
 msgid "Spice directives:"
@@ -12580,11 +12601,11 @@ msgstr "转换功能"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:564
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "（输出电压）/（输入电压）"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:564
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "（输出电压）/（输入电流）"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:570
 #, fuzzy
@@ -12594,7 +12615,7 @@ msgstr "输入"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:579
 #: eeschema/dialogs/dialog_sim_command_base.cpp:597
 msgid "Ref:"
-msgstr ""
+msgstr "参考："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:588
 #, fuzzy
@@ -12617,8 +12638,9 @@ msgid "Poles"
 msgstr "孔"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
+#, fuzzy
 msgid "Zeros"
-msgstr ""
+msgstr "零"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:636
 msgid "Add full path for .include library directives"
@@ -12662,13 +12684,13 @@ msgstr "仿真命令"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:755
 #, c-format
 msgid "Fixed %s scale"
-msgstr ""
+msgstr "固定的 %s 比例"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:690
 #: eeschema/dialogs/dialog_sim_command_base.cpp:729
 #: eeschema/dialogs/dialog_sim_command_base.cpp:766
 msgid "Min:"
-msgstr ""
+msgstr "最小："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
@@ -12678,7 +12700,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:184
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:319
 msgid "Max:"
-msgstr ""
+msgstr "最大："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:795
 msgid "Show grid"
@@ -13041,7 +13063,7 @@ msgstr "数量"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:619
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:648
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:739
@@ -13157,6 +13179,8 @@ msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 msgstr ""
+"默认预设无法被修改。\n"
+"请使用一个不同的名称。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:64
 #, fuzzy
@@ -13218,7 +13242,7 @@ msgstr "mm"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
 msgid ","
-msgstr ""
+msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
 #, fuzzy
@@ -13227,7 +13251,7 @@ msgstr "起始值："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
 msgid "\""
-msgstr ""
+msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
 #, fuzzy
@@ -13246,7 +13270,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:252
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "留空以禁用范围。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
 #, fuzzy
@@ -13639,7 +13663,7 @@ msgstr "其他页面字段"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
-msgstr ""
+msgstr "从封装更新符号的所有其它字段"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:584
@@ -15262,7 +15286,7 @@ msgstr "导入原理图"
 #: eeschema/files-io.cpp:719
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "没有加载器可以读取指定的文件：'%s'。"
 
 #: eeschema/files-io.cpp:787
 #, c-format
@@ -15760,7 +15784,7 @@ msgstr "封装关键字有差异。"
 
 #: eeschema/lib_symbol.cpp:463
 msgid "Symbol pin name offsets differ."
-msgstr ""
+msgstr "符号引脚名称偏移有差异。"
 
 #: eeschema/lib_symbol.cpp:474
 #, fuzzy
@@ -16599,7 +16623,7 @@ msgstr "在 “文件头” 部分找到了未知或意外的记录 id %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4073
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "Altium 原理图库文件应为 5.0 版本"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:64
 msgid "Altium schematic files"
@@ -16619,14 +16643,14 @@ msgstr "文件 '%s' 似乎不是有效的原理图文件."
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
-msgstr ""
+msgstr "无法找到符号 %s，其被元件 %s 引用。该元件未被加载。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
-msgstr ""
+msgstr "符号 %s 中的引脚数量与元件 %s 中定义的不一致。该元件未被加载。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:367
 #, c-format
@@ -16687,7 +16711,7 @@ msgstr ""
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
-msgstr ""
+msgstr "所选文件是 CADSTAR 符号库。它不包含原理图设计，因此无法以此方式导入/打开。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:587
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -16812,6 +16836,8 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"与此 CADSTAR 元件库相关的 CADSTAR 原理图存档（*."
+"csa）文件的路径。如果没有指定，则假定它位于相同文件夹中的 'symbol.csa'。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:234
 msgid ""
@@ -16819,6 +16845,8 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"与此库中符号相关的封装库的名称。您应该在封装库表中为 CADSTAR PCB 存档（*."
+"cpa）文件创建一个单独的条目。如果未指定，则假定为 'cadstarpcblib'。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:278
 #, fuzzy, c-format
@@ -16858,7 +16886,7 @@ msgstr "KiCad 数据库库文件"
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr ""
+msgstr "'%s' 是 Eagle 二进制格式文件；只有 Eagle XML 格式文件可以被导入。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:648
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3133
@@ -16921,7 +16949,7 @@ msgstr "加载原理图 '%s' 时出错。"
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.h:59
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.h:42
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "EasyEDA（嘉立创 EDA）标准版文件"
 
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_parser.cpp:73
@@ -16930,8 +16958,9 @@ msgid "Failed to parse value: '%s'"
 msgstr "未能存档文件 \"%s\"。"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:58
+#, fuzzy
 msgid "httplib plugin missing library table handle!"
-msgstr ""
+msgstr "httplib 插件缺少库表句柄！"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:83
 #, fuzzy, c-format
@@ -16946,7 +16975,7 @@ msgstr "无法加载数据库库：设置文件 %s 丢失或无效"
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:227
 #, c-format
 msgid "HTTP library settings file %s is missing the API version number!"
-msgstr ""
+msgstr "HTTP 库设置文件 %s 缺少 API 版本号！"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:236
 #, c-format
@@ -23375,7 +23404,7 @@ msgstr "要使用的颜色主题（默认使用PCB编辑器设置）"
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "设置焊盘/过孔钻孔形状选项（0 = 无形状，1 = 小形状，2 = 实际形状）"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -25804,7 +25833,7 @@ msgstr "线性阻抗："
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "100% s趋肤深度的频率："
+msgstr "100% 趋肤深度的频率："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
@@ -27143,10 +27172,11 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"你可以使用这个计算器来检查一个小导线是否能在短时间内处理大电流。\n"
+"你可以使用这个计算器来检查一个小导线是否能在短时间内处理大电流。<br>\n"
 "这个工具允许你设计一个导线保险丝，但仅应用作估算值。\n"
 "\n"
-"该计算器估计了将导线加热到熔点所需的能量以及相位变化所需的能量。\n"
+"该计算器估计了将导线加热到熔点所需的能量，<br>\n"
+"以及相位变化所需的能量。<br>\n"
 "然后将这些能量与导线电阻所耗散的能量进行比较。"
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
@@ -30660,9 +30690,8 @@ msgid "Export STEP / GLTF"
 msgstr "导出 STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:218
-#, fuzzy
 msgid "Command line:\n"
-msgstr "命令行："
+msgstr "命令行：\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -31198,7 +31227,7 @@ msgid ""
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
 "这是以此封装的焊盘宽度和高度的百分比形式应用的局部间隙比率。\n"
-"值为 10 表示水平间距值是焊盘宽度的 10% o，垂直间距值是焊盘高度的 10% o。\n"
+"值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
 "该值可由焊盘局部值替代。\n"
 "最终间距值是该值与绝对间距值之和。\n"
 "负值表示阻焊尺寸小于焊盘尺寸。"
@@ -40203,9 +40232,9 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "没有找到文件：'%s'。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "封装库没有找到。"
+msgstr "未找到封装目录：'%s'。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:755
 #, c-format
@@ -41285,23 +41314,21 @@ msgstr ""
 "偏移：%d。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5885
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "不再支持旧式敷铜填充策略。\n"
-"是否将敷铜转换为平滑的多边形填充？"
+"区域填充将尽最大努力被进行转换。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5915
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "不再支持旧的线段填充模式。\n"
-"是否将敷铜转换为光滑的多边形填充？"
+"区域填充将尽最大努力被进行转换。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:92
 #, c-format
@@ -42633,7 +42660,7 @@ msgstr "Loss Tangent（损耗角正切）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
 msgid "Dielectric"
-msgstr "电介质"
+msgstr "介电"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
 msgid "Insert board stackup table"
