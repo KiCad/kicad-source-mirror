@@ -1147,6 +1147,12 @@ TOOL_ACTION PCB_ACTIONS::drillOrigin( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::set_origin )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::drillResetOrigin( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.drillResetOrigin" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Reset Drill Origin" )
+        .FriendlyName( _( "Reset Drill Origin" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::toggleLock( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.toggleLock" )
         .Scope( AS_GLOBAL )

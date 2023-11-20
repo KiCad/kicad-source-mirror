@@ -528,6 +528,7 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION measureTool;
     static TOOL_ACTION drillOrigin;
+    static TOOL_ACTION drillResetOrigin;
     static TOOL_ACTION placeFileOrigin;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;

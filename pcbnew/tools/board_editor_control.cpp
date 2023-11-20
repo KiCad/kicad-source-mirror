@@ -1598,6 +1598,13 @@ void BOARD_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME*
 
 int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
+    if( aEvent.IsAction( &PCB_ACTIONS::drillResetOrigin ) )
+    {
+        m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UNDO_REDO::GRIDORIGIN );
+        DoSetDrillOrigin( getView(), m_frame, m_placeOrigin.get(), VECTOR2D( 0, 0 ) );
+        return 0;
+    }
+
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -1662,6 +1669,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     // Placing tools
     Go( &BOARD_EDITOR_CONTROL::PlaceFootprint,         PCB_ACTIONS::placeFootprint.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillResetOrigin.MakeEvent() );
 
     Go( &BOARD_EDITOR_CONTROL::EditFpInFpEditor,       PCB_ACTIONS::editFpInFpEditor.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::EditFpInFpEditor,       PCB_ACTIONS::editLibFpInFpEditor.MakeEvent() );

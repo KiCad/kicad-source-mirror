@@ -313,11 +313,15 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawTextBox );
 
     placeMenu->AppendSeparator();
-    placeMenu->Add( PCB_ACTIONS::drawAlignedDimension );
-    placeMenu->Add( PCB_ACTIONS::drawOrthogonalDimension );
-    placeMenu->Add( PCB_ACTIONS::drawCenterDimension );
-    placeMenu->Add( PCB_ACTIONS::drawRadialDimension );
-    placeMenu->Add( PCB_ACTIONS::drawLeader );
+    ACTION_MENU* dimensionSubmenu = new ACTION_MENU( false, selTool );
+    dimensionSubmenu->SetTitle( _( "Add Dimension" ) );
+    dimensionSubmenu->SetIcon( BITMAPS::add_aligned_dimension );
+    dimensionSubmenu->Add( PCB_ACTIONS::drawAlignedDimension );
+    dimensionSubmenu->Add( PCB_ACTIONS::drawOrthogonalDimension );
+    dimensionSubmenu->Add( PCB_ACTIONS::drawCenterDimension );
+    dimensionSubmenu->Add( PCB_ACTIONS::drawRadialDimension );
+    dimensionSubmenu->Add( PCB_ACTIONS::drawLeader );
+    placeMenu->Add( dimensionSubmenu );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::placeCharacteristics );
@@ -325,12 +329,11 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drillOrigin );
+    placeMenu->Add( PCB_ACTIONS::drillResetOrigin );
     placeMenu->Add( ACTIONS::gridSetOrigin );
-    placeMenu->AppendSeparator();
     placeMenu->Add( ACTIONS::gridResetOrigin );
 
     placeMenu->AppendSeparator();
-
     ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false, selTool );
     autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
     autoplaceSubmenu->SetIcon( BITMAPS::mode_module );
