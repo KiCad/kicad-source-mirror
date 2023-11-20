@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-10 23:34+0000\n"
+"PO-Revision-Date: 2023-11-20 15:37+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -101,7 +101,6 @@ msgid "Build Tech layer %d"
 msgstr "기술 레이어 생성 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
-#, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "동박층 다각형 단순화"
 
@@ -168,9 +167,9 @@ msgid "Load OpenGL: layers"
 msgstr "OpenGL 불러오기: 레이어"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "OpenGL 레이어 %d 불러오기"
+msgstr "OpenGL 레이어 %s 불러오기"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -323,16 +322,14 @@ msgstr "형상"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "PCB 편집기"
+msgstr "PCB 편집기 따르기"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "설정 필터링"
+msgstr "PCB 플롯 설정 따르기"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
 #, fuzzy
@@ -3409,9 +3406,9 @@ msgid "Connection successful"
 msgstr "파일 생성 성공."
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "보관된 파일을 열 수 없음."
+msgstr "'%s'에 연결할 수 없음 "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
 #, fuzzy, c-format
@@ -5934,9 +5931,8 @@ msgid "Could not fetch data from remote '%s'"
 msgstr "IBIS 모델을 찾을 수 없습니다’ %s‘"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "파일을 읽을 수 없음 "
+msgstr "'FETCH_HEAD'를 읽을 수 없음"
 
 #: common/git/git_pull_handler.cpp:98
 #, fuzzy
@@ -5944,9 +5940,8 @@ msgid "Could not lookup commit"
 msgstr "CvPcb를 열 수 없습니다"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "파일을 읽을 수 없음 "
+msgstr "병합을 분석할 수 없음"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -5971,9 +5966,8 @@ msgid "Could not lookup commit '{}'"
 msgstr "'%s'에서 이미지를 불러올 수 없습니다."
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "파일을 읽을 수 없음 "
+msgstr "커밋을 병합할 수 없음"
 
 #: common/git/git_pull_handler.cpp:257
 #, fuzzy
@@ -6989,13 +6983,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "'%s'에 대한 숫자가 필요함"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
 "find project.json."
 msgstr ""
-"파일 '%s'은(는)\n"
-"유효한 KiCad 프로젝트 파일이 아닌 것 같습니다."
+"'%s'은(는) 유효한 EasyEDA (JLCEDA) Pro 프로젝트 파일이 아닙니다. "
+"project.json을 찾을 수 없습니다."
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:180
 #, fuzzy, c-format
@@ -9095,9 +9089,8 @@ msgid "Delete all associations?"
 msgstr "모든 관련성을 삭제하시겠습니까?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "보고서 파일 '%s을 만들 수 없음"
+msgstr "풋프린트 뷰어 프레임을 만들 수 없음"
 
 #: eeschema/annotate.cpp:155
 msgid "Delete Annotation"
@@ -14792,9 +14785,9 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "플로팅 심볼 '%s' 단위 %d ~ '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:690
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "'%s'에서 '%s'로 심볼 플로팅\n"
+msgstr "'%s'을(를) '%s'로 심볼 작성\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:771
 #: eeschema/eeschema_jobs_handler.cpp:841 pcbnew/pcbnew_jobs_handler.cpp:747
@@ -15208,9 +15201,9 @@ msgid "Allow Autoplacement"
 msgstr "자동 배치 허용"
 
 #: eeschema/files-io.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "회로도 '%s'이(가) 이미 열려 있습니다."
+msgstr "회로도 '%s'는 이미 '%s'에 의해 '%s'에서 열려 있습니다."
 
 #: eeschema/files-io.cpp:133
 #, c-format
@@ -17361,7 +17354,7 @@ msgstr "Ltspice 회로도 파일"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:220
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
-msgstr ""
+msgstr "'%s'의 파일이 무시되었습니다. '%s'에서 이전에 찾은 파일을 대신 사용합니다."
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:360
 #, c-format
@@ -18601,11 +18594,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "비트 전송률이 상승/하강 에지에 비해 너무 높을 수 있음"
 
 #: eeschema/sim/legacy_workbook.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"보드 파일 불러오기 오류:\n"
-"%s"
+msgstr "통합 문서 로드 중 오류: %d 줄: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:133
 #, fuzzy
@@ -18654,7 +18645,7 @@ msgstr "잘못된 핀 이름 정의"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "측정 형식 정의 요구"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
 #, c-format
@@ -18810,11 +18801,11 @@ msgstr "진폭:"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "노이즈 (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "노이즈 (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 #, fuzzy
@@ -18897,7 +18888,8 @@ msgstr ""
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
-msgstr ""
+msgstr "먼저 TRAN 시뮬레이션을 실행해야 합니다. 그 결과는 고속 푸리에 변환에 "
+"사용됩니다."
 
 #: eeschema/sim/simulator_frame.cpp:409
 msgid ""
@@ -18967,7 +18959,7 @@ msgstr "측정 노드"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "푸리에 분석 수행..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:731
@@ -18983,7 +18975,7 @@ msgstr "%s의 푸리에 분석"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "다중 신호의 푸리에 해석"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
 #, fuzzy
@@ -19009,7 +19001,7 @@ msgstr "세그먼트 삭제"
 #: eeschema/sim/simulator_frame_ui.cpp:964
 #, c-format
 msgid "Analysis %u - "
-msgstr ""
+msgstr "분석 %u - "
 
 #: eeschema/sim/simulator_frame_ui.cpp:589
 #: eeschema/sim/simulator_frame_ui.cpp:596
@@ -19088,9 +19080,9 @@ msgid "Format"
 msgstr "형식"
 
 #: eeschema/sim/spice_library_parser.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "폴더 '%s'을(를) 만들 수 없습니다."
+msgstr "%s에서 sim 모델을 생성할 수 없음"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -19119,7 +19111,7 @@ msgstr "과도 해석"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr ""
+msgstr "소신호 왜곡 분석"
 
 #: eeschema/sim/spice_simulator.cpp:62
 #, fuzzy
@@ -19203,6 +19195,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"SPICE 함수:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -19814,12 +19841,9 @@ msgstr "라이브러리 '%s'을(를) 열거할 수 없습니다."
 
 #: eeschema/symbol_library_manager.cpp:842
 #: eeschema/symbol_library_manager.cpp:847
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"전역 라이브러리 테이블 저장 오류 :\n"
-"\n"
-"%s"
+msgstr "라이브러리 버퍼 업데이트 오류 발생: %s"
 
 #: eeschema/symbol_library_manager.cpp:852
 #, fuzzy
@@ -19980,7 +20004,7 @@ msgstr "설정 (&P)"
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "'%s' 필드를 '%s' 값으로 추가합니다."
 
 #: eeschema/tools/backannotate.cpp:563
 #, fuzzy, c-format
@@ -20745,7 +20769,7 @@ msgstr "래츠네스트에서 네트 보기"
 
 #: eeschema/tools/ee_actions.cpp:889
 msgid "Toggle the net navigator panel visibility"
-msgstr ""
+msgstr "네트 탐색기 패널 표시 여부 전환"
 
 #: eeschema/tools/ee_actions.cpp:896
 msgid "Edit with Symbol Editor"
@@ -21314,7 +21338,7 @@ msgstr "현재 시트의 복사본을 다른 경로나 이름으로 저장"
 
 #: eeschema/tools/ee_actions.cpp:1428
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "새 분석 탭..."
 
 #: eeschema/tools/ee_actions.cpp:1436
 msgid "Open Workbook..."
@@ -23125,7 +23149,7 @@ msgstr "파일 확장자로 레이어 정렬"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:184
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "레이어 표시 매개변수: 오프셋 및 회전"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:189
 msgid "Move Current Layer Up"
@@ -23169,9 +23193,8 @@ msgid "Malformed expression"
 msgstr "잘못된 식"
 
 #: include/lockfile.h:106
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "파일 %s이(가) 이미 존재합니다."
+msgstr "잠금 파일이 이미 존재함"
 
 #: include/lockfile.h:125
 msgid "Failed to access lock file"
@@ -23224,7 +23247,7 @@ msgstr "출력 파일:"
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
-msgstr ""
+msgstr "도면 시트의 경로를 사용하면 기존 프로젝트 정의 시트를 재정의함"
 
 #: kicad/cli/command.cpp:176
 msgid ""
@@ -23232,6 +23255,9 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"프로젝트 변수를 재정의하거나 추가하며, 여러 변수를 선언하는 데 여러 번 "
+"사용할 수 있습니다.\n"
+"'--define-var key=value' 또는 '-D key=value' 형식으로 사용하세요"
 
 #: kicad/cli/command.h:32
 #, fuzzy
@@ -23283,11 +23309,11 @@ msgstr "풋프린트 라이브러리가 없거나 액세스할 수 없습니다.
 
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
-msgstr ""
+msgstr "PCB에서 DRC(설계 규칙 검사)를 실행하고 보고서를 생성함"
 
 #: kicad/cli/command_pcb_drc.cpp:50 kicad/cli/command_sch_erc.cpp:49
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "출력 파일 형식, 옵션: json, 보고서"
 
 #: kicad/cli/command_pcb_drc.cpp:54 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -23302,29 +23328,29 @@ msgstr "출력 단위, 유효한 옵션: mm, in"
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "모든 DRC 위반을 보고하는 것은 다른 모든 심각도 인수를 포함하는 것과 동일함"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "모든 DRC 오류 수준 위반을 보고하며, 다른 심각도 인수와 결합할 수 있음"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "모든 DRC 경고 수준 위반을 신고하면 다른 심각도 인수와 결합할 수 있음"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "제외된 모든 DRC 위반을 보고하면 다른 심각도 인수와 결합할 수 있음"
 
 #: kicad/cli/command_pcb_drc.cpp:84 kicad/cli/command_sch_erc.cpp:77
 msgid "Return a exit code depending on whether or not violations exist"
-msgstr ""
+msgstr "위반이 존재하는지 여부에 따라 종료 코드를 반환함"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:200
 #: kicad/cli/command_pcb_export_drill.cpp:149
@@ -23340,11 +23366,11 @@ msgstr "잘못된 형식\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "내보내기 유틸리티(거버, 드릴, 위치 파일 등)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:65
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "출력 파일 형식, 옵션: step, glb(바이너리 glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:69
 msgid "Overwrite output file"
@@ -23406,11 +23432,12 @@ msgstr "출력 단위; ASCII 또는 CSV 형식만 해당; 유효한 옵션: in,m
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported vrml file"
-msgstr ""
+msgstr "3D 모델을 생성하고 저장할 폴더 이름, 지정하지 않거나 비어 있는 경우 모델은 "
+"내보낸 기본 vrml 파일에 포함됨"
 
 #: kicad/cli/command_pcb_export_3d.cpp:143
 msgid "Used with --models-dir to output relative paths in the resulting file"
-msgstr ""
+msgstr "결과 파일에 상대 경로를 출력하려면 --models-dir과 함께 사용함"
 
 #: kicad/cli/command_pcb_export_3d.cpp:181
 #, fuzzy
@@ -23450,9 +23477,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "유효한 옵션: 십진수, 선행 억제, 후행 억제, 유지."
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "유효한 옵션: 절대, 플롯"
+msgstr "유효한 옵션: 라우트, 대체입니다.."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Output units, valid options:in,mm"
@@ -23498,9 +23524,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "제로 형식이 잘못 지정됨\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:189
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "맵 형식이 잘못 지정됨\n"
+msgstr "타원형 드릴 형식이 잘못 지정됨\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:217
 msgid "Invalid map format specified\n"
@@ -23517,7 +23542,7 @@ msgstr "거버 좌표 정밀도는 5 또는 6이어야 함\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "레이어 목록에서 DXF 생성하기"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -23597,7 +23622,8 @@ msgstr "Protel 파일 이름 확장자 사용"
 msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
-msgstr ""
+msgstr "저장된 보드 플롯 설정을 사용하는 기능을 포함하여 PCB에 대해 여러 거버를 "
+"플롯함"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:51
 msgid ""
@@ -23623,16 +23649,15 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "보드 미러링 (하단 레이어를 표시하는 데 유용)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:77
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
+msgstr "사용할 색상 테마(PCB 편집기 설정이 기본값임)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:81
 #: kicad/cli/command_pcb_export_svg.cpp:81
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "패드/비아 드릴 모양 옵션 설정(0 = 모양 없음, 1 = 작은 모양, 2 = 실제 모양)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -23697,7 +23722,7 @@ msgstr "면이 잘못 지정됨\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "지정된 레이어 목록의 SVG 출력 생성"
 
 #: kicad/cli/command_pcb_export_svg.cpp:55
 #, fuzzy
@@ -23725,35 +23750,35 @@ msgstr "회로도"
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
-msgstr ""
+msgstr "회로도에서 ERC(전기 규칙 검사)를 실행하고 보고서를 생성함"
 
 #: kicad/cli/command_sch_erc.cpp:57
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "모든 ERC 위반을 보고, 이것은 다른 모든 심각도 인수를 포함하는 것과 동일함"
 
 #: kicad/cli/command_sch_erc.cpp:62
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "모든 DRC 오류 수준 위반을 보고하며, 다른 심각도 인수와 결합할 수 있음"
 
 #: kicad/cli/command_sch_erc.cpp:67
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "모든 ERC 경고 수준 위반을 보고, 이것은 다른 심각도 인수와 결합될 수 있음"
 
 #: kicad/cli/command_sch_erc.cpp:72
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "제외된 모든 ERC 위반을 보고, 이것은 다른 심각도 인수와 결합될 수 있음"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "내보내기 유틸리티(네트리스트, PDF, BOM 등)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
 #, fuzzy
@@ -23797,7 +23822,8 @@ msgstr "배경색 설정 금지(테마 상관없음)"
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
-msgstr ""
+msgstr "인쇄할 쉼표로 구분된 페이지 번호 목록(공백 또는 미지정)은 모든 페이지와 "
+"동일함"
 
 #: kicad/cli/command_sch_export_plot.cpp:93
 #, fuzzy
@@ -24912,9 +24938,8 @@ msgid "Commit File..."
 msgstr "필드 편집"
 
 #: kicad/project_tree_pane.cpp:954
-#, fuzzy
 msgid "Switch to branch "
-msgstr "내부 레이어 1로 스위치"
+msgstr "브랜치로 전환 "
 
 #: kicad/project_tree_pane.cpp:959
 #, fuzzy
@@ -34603,9 +34628,8 @@ msgid "Track and Via Dimensions"
 msgstr "배선 및 비아 치수"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:57
-#, fuzzy
 msgid "Target skew: "
-msgstr "타겟 스큐:"
+msgstr "대상 편향: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:85
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1598
@@ -37499,9 +37523,8 @@ msgid "Checking pads..."
 msgstr "패드 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "구리 영역 클리어런스 확인 중..."
+msgstr "구리 영역 간격을 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -38396,9 +38419,9 @@ msgstr ""
 "른 채움 결과를 내보낼 것입니다."
 
 #: pcbnew/files.cpp:510
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "PCB '%s'은(는) 이미 열려 있습니다."
+msgstr "PCB '%s'은(는) '%s'에 의해 '%s'에서 이미 열려 있습니다."
 
 #: pcbnew/files.cpp:521
 msgid "The current PCB has been modified.  Save changes?"
@@ -38935,9 +38958,8 @@ msgid "Tuning"
 msgstr "경고"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
-#, fuzzy
 msgid "Tune Skew"
-msgstr "조정됨: 스큐 "
+msgstr "왜곡 조정"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:456
 msgid "Target skew:"
@@ -38950,19 +38972,16 @@ msgid "Tune Length"
 msgstr "다이 길이"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1018
-#, fuzzy
 msgid "too long"
-msgstr "너무 긺: "
+msgstr "매우 김"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1019
-#, fuzzy
 msgid "too short"
-msgstr "너무 짧음: "
+msgstr "매우 짧음"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1020
-#, fuzzy
 msgid "tuned"
-msgstr "조정됨: "
+msgstr "조정됨"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1078
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
@@ -39979,16 +39998,12 @@ msgid "Thermal Relief Gap"
 msgstr "단열판 간격"
 
 #: pcbnew/pcb_base_frame.cpp:1222
-#, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
 msgstr ""
-"도면 시트 파일 이름이 변경되었습니다.\n"
-"다음의 경우에 상대 경로로:\n"
-"\"%s\"\n"
-"대신에\n"
-"\"%s\"을(를) 사용하시겠습니까?"
+"현재 풋프린트가 포함된 라이브러리가 변경되었습니다.\n"
+"풋프린트를 다시 로드하시겠습니까?"
 
 #: pcbnew/pcb_dimension.cpp:397 pcbnew/pcb_dimension.cpp:1448
 msgid "Prefix"
@@ -40008,49 +40023,40 @@ msgid "Dimension '%s' on %s"
 msgstr "치수 '%s' (%s 위)"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1416
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1417
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (밀리미터)"
+msgstr "1234.0 (밀리미터)"
 
 #: pcbnew/pcb_dimension.cpp:1470
-#, fuzzy
 msgid "Units Format"
-msgstr "단위 형식:"
+msgstr "단위 형식"
 
 #: pcbnew/pcb_dimension.cpp:1478
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "뒷자리 0 표시하지 않음"
 
 #: pcbnew/pcb_dimension.cpp:1507
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "커서 오른쪽으로"
+msgstr "크로스바 높이"
 
 #: pcbnew/pcb_dimension.cpp:1511
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "연장선 옵셋 :"
+msgstr "연장선 초과"
 
 #: pcbnew/pcb_dimension.cpp:1588
-#, fuzzy
 msgid "Leader Length"
-msgstr "비아 길이"
+msgstr "지시선 길이"
 
 #: pcbnew/pcb_dimension.cpp:1634
-#, fuzzy
 msgid "Text Frame"
-msgstr "텍스트 프레임:"
+msgstr "텍스트 프레임"
 
 #: pcbnew/pcb_edit_frame.cpp:213
 msgid "KiCad PCB Editor"
@@ -40634,9 +40640,9 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "파일을 찾지 못했습니다: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "풋프린트 라이브러리를 찾을 수 없습니다."
+msgstr "풋프린트 디렉토리를 찾을 수 없음: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:755
 #, c-format
@@ -41313,10 +41319,9 @@ msgstr ""
 "Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시합니다"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Eagle 레이어 '%s' (%d) 이(가) 매핑되지 않았기 때문에 다각형을 무시합니다"
+msgstr "레이어 '%s'(%d)에서 다각형 무시: 윤곽선 개수가 1이 아님"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1819
 #, c-format
@@ -41374,11 +41379,9 @@ msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:266
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"기판 불러오기 중 오류.\n"
-"%s"
+msgstr "보드 '%s' 로드 오류: %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
@@ -43390,13 +43393,13 @@ msgid "Pack footprints"
 msgstr "풋프린트 잠금"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"클릭하여 배치 %s(항목 %ld의 %ld)\n"
-"<esc> 모두 취소; 완료는 더블클릭"
+"클릭하여 배치 %s(항목 %zu 의 %zu)\n"
+"모두 취소는 <esc> ; 완료는 더블클릭"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:376
 #, c-format
