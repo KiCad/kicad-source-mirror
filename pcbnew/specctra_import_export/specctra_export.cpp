@@ -79,7 +79,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 
     try
     {
-        ExportBoardToSpecctraFile( GetBoard(), aFullFilename );
+        DSN::ExportBoardToSpecctraFile( GetBoard(), aFullFilename );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -101,6 +101,9 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 
     return ok;
 }
+
+namespace DSN
+{
 
 
 void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
@@ -137,8 +140,6 @@ void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
     }
 }
 
-
-namespace DSN {
 
 // "specctra reported units" are what we tell the external router that our exported lengths are in
 
@@ -1836,4 +1837,4 @@ void SPECCTRA_DB::RevertFOOTPRINTs( BOARD* aBoard )
     m_footprintsAreFlipped = false;
 }
 
-}       // namespace DSN
+} // namespace DSN

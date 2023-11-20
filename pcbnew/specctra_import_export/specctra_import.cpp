@@ -50,28 +50,23 @@
 
 using namespace DSN;
 
-
 bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
 {
     // To avoid issues with undo/redo lists (dangling pointers) clear the lists
     // todo: use undo/redo feature
     ClearUndoRedoList();
 
-    // Remove existing tracks from view. They will be readded later after loading new tracks.
     if( GetCanvas() )    // clear view:
     {
         for( PCB_TRACK* track : GetBoard()->Tracks() )
             GetCanvas()->GetView()->Remove( track );
     }
 
-    SPECCTRA_DB     db;
-    LOCALE_IO       toggle;
-
     try
     {
-        db.LoadSESSION( fullFileName );
-        db.FromSESSION( GetBoard() );
+        DSN::ImportSpecctraSession( GetBoard(), fullFileName );
     }
+
     catch( const IO_ERROR& ioe )
     {
         wxString msg = _( "Board may be corrupted, do not save it.\n Fix problem and try again" );
@@ -82,20 +77,16 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         return false;
     }
 
-    GetBoard()->GetConnectivity()->ClearRatsnest();
-    GetBoard()->BuildConnectivity();
-
     OnModify();
 
     if( GetCanvas() )    // Update view:
     {
         // Update footprint positions
-        GetCanvas()->GetView()->RecacheAllItems();
 
         // add imported tracks (previous tracks are removed, therefore all are new)
         for( auto track : GetBoard()->Tracks() )
             GetCanvas()->GetView()->Add( track );
-   }
+    }
 
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );
 
@@ -545,4 +536,17 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 }
 
 
+bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName )
+{
+    SPECCTRA_DB db;
+    LOCALE_IO   toggle;
+
+    db.LoadSESSION( fullFileName );
+    db.FromSESSION( aBoard );
+
+    aBoard->GetConnectivity()->ClearRatsnest();
+    aBoard->BuildConnectivity();
+
+    return true;
+}
 } // namespace DSN

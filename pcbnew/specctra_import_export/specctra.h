@@ -49,15 +49,6 @@ typedef DSN::T  DSN_T;
 
 
 /**
- * @brief Helper method to export board to DSN file
- *
- * @param aBoard board object
- * @param aFullFilename specctra file name
- */
-void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename );
-
-
-/**
  * This source file implements export and import capabilities to the
  * specctra dsn file format.  The grammar for that file format is documented
  * fairly well.  There are classes for each major type of descriptor in the
@@ -83,6 +74,14 @@ namespace DSN {
 
 
 class SPECCTRA_DB;
+
+
+/**
+ * @brief Helper method to export board to DSN file
+ * @param aBoard board object
+ * @param aFullFilename specctra file name
+ */
+void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename );
 
 
 /**
@@ -4003,6 +4002,14 @@ private:
     int               m_bot_via_layer;
 };
 
+/**
+ * @brief Helper method to import SES file to a board
+ *
+ * @param aBoard board object
+ * @param aFullFilename specctra file name
+ */
+
+bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName );
 
 }           // namespace DSN
 

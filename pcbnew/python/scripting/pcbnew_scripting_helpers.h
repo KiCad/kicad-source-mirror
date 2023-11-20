@@ -138,6 +138,17 @@ bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aExpo
 bool ImportSpecctraSES( wxString& aFullFilename );
 
 /**
+ * Import a specctra *.ses file and use it to relocate MODULEs and to replace all vias and
+ * Unlike first overload doesn't need a valid PCB_EDIT_FRAME set and can be used
+ * in a standalone python script.
+ *
+ * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the specification.
+ *
+ * @return true if OK
+ */
+bool ImportSpecctraSES( BOARD* aBoard, wxString& aFullFilename );
+
+/**
  * Save footprints in a library:
  *
  * @param aStoreInNewLib set to true to save footprints in a existing lib. Existing footprints

@@ -359,7 +359,7 @@ bool ExportSpecctraDSN( BOARD* aBoard, wxString& aFullFilename )
 {
     try
     {
-        ExportBoardToSpecctraFile( aBoard, aFullFilename );
+        DSN::ExportBoardToSpecctraFile( aBoard, aFullFilename );
     }
     catch( ... )
     {
@@ -397,6 +397,20 @@ bool ImportSpecctraSES( wxString& aFullFilename )
     {
         return false;
     }
+}
+
+bool ImportSpecctraSES( BOARD* aBoard, wxString& aFullFilename )
+{
+    try
+    {
+        DSN::ImportSpecctraSession( aBoard, aFullFilename );
+    }
+    catch( ... )
+    {
+        return false;
+    }
+
+    return true;
 }
 
 
