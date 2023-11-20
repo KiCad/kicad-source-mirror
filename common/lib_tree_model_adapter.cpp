@@ -91,7 +91,7 @@ public:
         // We should be able to pass wxDATAVIEW_CELL_SELECTED into RenderText() and have it do
         // the right thing -- but it picks wxSYS_COLOUR_HIGHLIGHTTEXT on MacOS and GTK (instead
         // of wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT).
-        if ( aState & wxDATAVIEW_CELL_SELECTED )
+        if( aState & wxDATAVIEW_CELL_SELECTED )
             dc->SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
 
         aRect.Deflate( 1 );

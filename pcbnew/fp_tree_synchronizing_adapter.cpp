@@ -280,14 +280,12 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
     case LIB_TREE_NODE::LIBRARY:
         if( node->m_Name == m_frame->GetLoadedFPID().GetLibNickname() )
         {
-#ifdef __WXGTK__
-            // The native wxGTK+ impl ignores background colour, so set the text colour
-            // instead.  Works reasonably well in dark themes, less well in light ones....
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-#else
-            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
-#endif
+            // mark the current library if it's collapsed
+            if( !m_widget->IsExpanded( ToItem( node ) ) )
+            {
+                aAttr.SetStrikethrough( true );   // LIB_TREE_RENDERER uses strikethrough as a
+                                                  // proxy for "is canvas item"
+            }
 
             // mark modified libs with bold font
             if( m_frame->GetScreen()->IsContentModified() && !m_frame->IsCurrentFPFromBoard() )
@@ -298,14 +296,9 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
     case LIB_TREE_NODE::ITEM:
         if( node->m_LibId == m_frame->GetLoadedFPID() )
         {
-#ifdef __WXGTK__
-            // The native wxGTK+ impl ignores background colour, so set the text colour
-            // instead.  Works reasonably well in dark themes, less well in light ones....
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-#else
-            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
-#endif
+            // mark the current (on-canvas) part
+            aAttr.SetStrikethrough( true );     // LIB_TREE_RENDERER uses strikethrough as a
+                                                // proxy for "is canvas item"
 
             // mark modified part with bold font
             if( m_frame->GetScreen()->IsContentModified() && !m_frame->IsCurrentFPFromBoard() )
