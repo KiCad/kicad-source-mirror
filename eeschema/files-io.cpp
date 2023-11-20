@@ -238,7 +238,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( ( aCtl & KICTL_REVERT ) )
         {
-            DeleteAutoSaveFile( fullFileName );
+            DeleteAutoSaveFile( autoSaveFn );
         }
         else
         {
