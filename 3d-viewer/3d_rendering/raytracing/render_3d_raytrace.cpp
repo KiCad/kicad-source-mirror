@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ RENDER_3D_RAYTRACE::~RENDER_3D_RAYTRACE()
 
 int RENDER_3D_RAYTRACE::GetWaitForEditingTimeOut()
 {
-    return 1000; // ms
+    return 200; // ms
 }
 
 
