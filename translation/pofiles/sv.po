@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-20 15:37+0000\n"
+"PO-Revision-Date: 2023-11-21 22:05+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -16563,7 +16563,7 @@ msgstr ""
 "lästes inte in."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
@@ -42632,9 +42632,9 @@ msgid "Thermal-relief min spoke count resolution for:"
 msgstr "Tar reda på termiskt avlastningsgap för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "Tog reda på minsta antal ekrar för termisk avlastning: %d."
+msgstr "Fastställt minsta antal ekrar för termisk avlastning: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:778
 #: pcbnew/tools/board_inspection_tool.cpp:826
@@ -42685,9 +42685,8 @@ msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:908
-#, fuzzy
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Tar reda på max okopplad längd för differentiellt par:"
+msgstr "Tar reda på maximal okopplad längd för differentiellt par:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:914
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -42717,9 +42716,9 @@ msgid "Select an item for a constraints resolution report."
 msgstr "Välj ett objekt för en begränsningsupplösningsrapport."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1264
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "Tog reda på begränsningar för mellanrum: min %s; opt %s max %s."
+msgstr "Fastställda begränsningar för ledarbredd: min %s; opt %s max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1284
 #, c-format
