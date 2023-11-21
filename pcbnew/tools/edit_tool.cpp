@@ -2034,6 +2034,81 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
+{
+    if( isRouterActive() )
+    {
+        wxBell();
+        return 0;
+    }
+
+    BOARD_COMMIT  localCommit( this );
+    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+            },
+            !m_dragging /* prompt user regarding locked items */ );
+
+    if( selection.Empty() )
+        return 0;
+
+    auto setJustify =
+            [&]( EDA_TEXT* aTextItem )
+            {
+                if( aEvent.Matches( ACTIONS::leftJustify.MakeEvent() ) )
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                else if( aEvent.Matches( ACTIONS::centerJustify.MakeEvent() ) )
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                else
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            };
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
+        {
+            if( !item->IsNew() && !item->IsMoving() )
+                commit->Modify( item );
+
+            setJustify( static_cast<PCB_TEXT*>( item ) );
+        }
+        else if( item->Type() == PCB_TEXTBOX_T )
+        {
+            if( !item->IsNew() && !item->IsMoving() )
+                commit->Modify( item );
+
+            setJustify( static_cast<PCB_TEXTBOX*>( item ) );
+        }
+    }
+
+    if( !localCommit.Empty() )
+    {
+        if( aEvent.Matches( ACTIONS::leftJustify.MakeEvent() ) )
+            localCommit.Push( _( "Left Justify" ) );
+        else if( aEvent.Matches( ACTIONS::centerJustify.MakeEvent() ) )
+            localCommit.Push( _( "Center Justify" ) );
+        else
+            localCommit.Push( _( "Right Justify" ) );
+    }
+
+    if( selection.IsHover() && !m_dragging )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    if( m_dragging )
+        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
+
+    return 0;
+}
+
+
 int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -2871,6 +2946,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::subtractPolygons.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::intersectPolygons.MakeEvent() );
+    Go( &EDIT_TOOL::JustifyText,           ACTIONS::leftJustify.MakeEvent() );
+    Go( &EDIT_TOOL::JustifyText,           ACTIONS::centerJustify.MakeEvent() );
+    Go( &EDIT_TOOL::JustifyText,           ACTIONS::rightJustify.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );

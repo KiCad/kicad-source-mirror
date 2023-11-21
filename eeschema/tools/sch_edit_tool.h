@@ -69,6 +69,8 @@ public:
      */
     int ChangeTextType( const TOOL_EVENT& aEvent );
 
+    int JustifyText( const TOOL_EVENT& aEvent );
+
     int BreakWire( const TOOL_EVENT& aEvent );
 
     int CleanupSheetPins( const TOOL_EVENT& aEvent );

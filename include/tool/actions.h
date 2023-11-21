@@ -74,6 +74,9 @@ public:
     static TOOL_ACTION duplicate;
     static TOOL_ACTION doDelete;        // sadly 'delete' is a reserved word
     static TOOL_ACTION deleteTool;
+    static TOOL_ACTION leftJustify;
+    static TOOL_ACTION centerJustify;
+    static TOOL_ACTION rightJustify;
 
     // Find and Replace
     static TOOL_ACTION showSearch;

@@ -104,6 +104,11 @@ public:
     static const std::vector<KICAD_T> MirrorableItems;
 
     /**
+     * Set the justification on any text items (or fields) in the current selection.
+     */
+    int JustifyText( const TOOL_EVENT& aEvent );
+
+    /**
      * Swap currently selected items' positions. Changes position of each item to the next.
      */
     int Swap( const TOOL_EVENT& aEvent );

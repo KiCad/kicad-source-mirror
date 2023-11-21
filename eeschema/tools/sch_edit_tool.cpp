@@ -2347,6 +2347,102 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
+{
+    static std::vector<KICAD_T> justifiableItems = {
+        SCH_FIELD_T,
+        SCH_TEXT_T,
+        SCH_TEXTBOX_T,
+        SCH_LABEL_T
+    };
+
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( justifiableItems );
+
+    if( selection.GetSize() == 0 )
+        return 0;
+
+    SCH_ITEM*   item = static_cast<SCH_ITEM*>( selection.Front() );
+    bool        moving = item->IsMoving();
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
+    auto setJustify =
+            [&]( EDA_TEXT* aTextItem )
+            {
+                if( aEvent.Matches( ACTIONS::leftJustify.MakeEvent() ) )
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                else if( aEvent.Matches( ACTIONS::centerJustify.MakeEvent() ) )
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                else
+                    aTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            };
+
+    for( EDA_ITEM* edaItem : selection )
+    {
+        item = static_cast<SCH_ITEM*>( edaItem );
+
+        if( !moving )
+            commit->Modify( item, m_frame->GetScreen() );
+
+        if( item->Type() == SCH_FIELD_T )
+        {
+            setJustify( static_cast<SCH_FIELD*>( item ) );
+
+            // Now that we're re-justifying a field, they're no longer autoplaced.
+            static_cast<SCH_ITEM*>( item->GetParent() )->ClearFieldsAutoplaced();
+        }
+        else if( item->Type() == SCH_TEXT_T )
+        {
+            setJustify( static_cast<SCH_TEXT*>( item ) );
+        }
+        else if( item->Type() == SCH_TEXTBOX_T )
+        {
+            setJustify( static_cast<SCH_TEXTBOX*>( item ) );
+        }
+        else if( item->Type() == SCH_LABEL_T )
+        {
+            SCH_LABEL* label = static_cast<SCH_LABEL*>( item );
+
+            if( label->GetTextAngle() == ANGLE_HORIZONTAL )
+                setJustify( label );
+        }
+
+        m_frame->UpdateItem( item, false, true );
+    }
+
+    // Update R-Tree for modified items
+    for( EDA_ITEM* selected : selection )
+        updateItem( selected, true );
+
+    if( item->IsMoving() )
+    {
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    }
+    else
+    {
+        EE_SELECTION selectionCopy = selection;
+
+        if( selection.IsHover() )
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+        if( !localCommit.Empty() )
+        {
+            if( aEvent.Matches( ACTIONS::leftJustify.MakeEvent() ) )
+                localCommit.Push( _( "Left Justify" ) );
+            else if( aEvent.Matches( ACTIONS::centerJustify.MakeEvent() ) )
+                localCommit.Push( _( "Center Justify" ) );
+            else
+                localCommit.Push( _( "Right Justify" ) );
+        }
+    }
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
     bool          isSlice   = aEvent.Matches( EE_ACTIONS::slice.MakeEvent() );
@@ -2659,6 +2755,9 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toCLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toText.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toTextBox.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::leftJustify.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::centerJustify.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::JustifyText,        ACTIONS::rightJustify.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
     Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::slice.MakeEvent() );

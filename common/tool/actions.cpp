@@ -277,6 +277,27 @@ TOOL_ACTION ACTIONS::deleteTool( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::delete_cursor )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION ACTIONS::leftJustify( TOOL_ACTION_ARGS()
+        .Name( "common.Control.leftJustify" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Left Justify" ) )
+        .Tooltip( _( "Left-justify fields and text items" ) )
+        .Icon( BITMAPS::text_align_left ) );
+
+TOOL_ACTION ACTIONS::centerJustify( TOOL_ACTION_ARGS()
+        .Name( "common.Control.centerJustify" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Center Justify" ) )
+        .Tooltip( _( "Center-justify fields and text items" ) )
+        .Icon( BITMAPS::text_align_center ) );
+
+TOOL_ACTION ACTIONS::rightJustify( TOOL_ACTION_ARGS()
+        .Name( "common.Control.rightJustify" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Right Justify" ) )
+        .Tooltip( _( "Right-justify fields and text items" ) )
+        .Icon( BITMAPS::text_align_right ) );
+
 TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.activatePointEditor" )
         .Scope( AS_GLOBAL ) );
