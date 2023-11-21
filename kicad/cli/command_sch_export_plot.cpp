@@ -57,15 +57,17 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
     addDrawingSheetArg();
     addDefineArg();
 
-    m_argParser.add_argument( "-t", ARG_THEME )
-            .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to schematic settings)" ) ) )
-            .metavar( "THEME_NAME" );
-
-    m_argParser.add_argument( "-b", ARG_BLACKANDWHITE )
-            .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+    if( aPlotFormat != SCH_PLOT_FORMAT::HPGL )
+    {
+        m_argParser.add_argument( "-t", ARG_THEME )
+                .default_value( std::string() )
+                .help( UTF8STDSTR( _( "Color theme to use (will default to schematic settings)" ) ) )
+                .metavar( "THEME_NAME" );
+        m_argParser.add_argument( "-b", ARG_BLACKANDWHITE )
+                .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
+                .implicit_value( true )
+                .default_value( false );
+    }
 
     m_argParser.add_argument( "-e", ARG_EXCLUDE_DRAWING_SHEET )
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
@@ -80,10 +82,15 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                 .default_value( false );
     }
 
-    m_argParser.add_argument( "-n", ARG_NO_BACKGROUND_COLOR )
-            .help( UTF8STDSTR( _( "Avoid setting a background color (regardless of theme)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+    if( aPlotFormat == SCH_PLOT_FORMAT::PDF
+            || aPlotFormat == SCH_PLOT_FORMAT::POST
+            || aPlotFormat == SCH_PLOT_FORMAT::SVG )
+    {
+        m_argParser.add_argument( "-n", ARG_NO_BACKGROUND_COLOR )
+                .help( UTF8STDSTR( _( "Avoid setting a background color (regardless of theme)" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+    }
 
     m_argParser.add_argument( "-p", ARG_PAGES )
             .default_value( std::string() )
@@ -130,10 +137,21 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 
     plotJob->m_plotPages = pages;
     plotJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
-    plotJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     plotJob->m_pageSizeSelect = JOB_PAGE_SIZE::PAGE_SIZE_AUTO;
-    plotJob->m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
-    plotJob->m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+
+    if( m_plotFormat == SCH_PLOT_FORMAT::PDF
+            || m_plotFormat == SCH_PLOT_FORMAT::POST
+            || m_plotFormat == SCH_PLOT_FORMAT::SVG )
+    {
+        plotJob->m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
+    }
+
+    if ( m_plotFormat != SCH_PLOT_FORMAT::HPGL )
+    {
+        plotJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
+        plotJob->m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    }
+
     if( m_outputArgExpectsDir )
         plotJob->m_outputDirectory = m_argOutput;
     else
