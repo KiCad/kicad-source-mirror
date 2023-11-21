@@ -67,15 +67,18 @@ void SCH_SEARCH_HANDLER::FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET
 
 void SCH_SEARCH_HANDLER::Sort( int aCol, bool aAscending )
 {
+    int col = std::max( 0, aCol );  // Provide a stable order by sorting on first column if no
+                                    // sort column provided.
+
     std::sort( m_hitlist.begin(), m_hitlist.end(),
             [&]( const SCH_SEARCH_HIT& a, const SCH_SEARCH_HIT& b ) -> bool
             {
                 // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
                 // to get the opposite sort.  i.e. ~(a<b) != (a>b)
                 if( aAscending )
-                    return StrNumCmp( getResultCell( a, aCol ), getResultCell( b, aCol ), true ) < 0;
+                    return StrNumCmp( getResultCell( a, col ), getResultCell( b, col ), true ) < 0;
                 else
-                    return StrNumCmp( getResultCell( b, aCol ), getResultCell( a, aCol ), true ) < 0;
+                    return StrNumCmp( getResultCell( b, col ), getResultCell( a, col ), true ) < 0;
             } );
 }
 

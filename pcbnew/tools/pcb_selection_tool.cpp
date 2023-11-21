@@ -1223,8 +1223,12 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
     for( const EDA_ITEM* item : m_selection.GetItems() )
     {
-        if( item->Type() == PCB_FOOTPRINT_T || BOARD_CONNECTED_ITEM::ClassOf( item ) )
+        if( item->Type() == PCB_FOOTPRINT_T ||
+            ( BOARD_CONNECTED_ITEM::ClassOf( item )
+              && static_cast<const BOARD_CONNECTED_ITEM*>( item )->IsConnected() ) )
+        {
             initialCount++;
+        }
     }
 
     if( initialCount == 0 )

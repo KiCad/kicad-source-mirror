@@ -329,22 +329,11 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         // mark the current library if it's collapsed
         if( curSymbol && curSymbol->GetLibId().GetLibNickname() == node->m_LibId.GetLibNickname() )
         {
-#if 1
             if( !m_widget->IsExpanded( ToItem( node ) ) )
             {
-                // LIB_TREE_RENDERER uses strikethrough as a proxy for is-canvas-item
-                aAttr.SetStrikethrough( true );
+                aAttr.SetStrikethrough( true );   // LIB_TREE_RENDERER uses strikethrough as a
+                                                  // proxy for "is canvas item"
             }
-#else
-#ifdef __WXGTK__
-            // The native wxGTK+ impl ignores background colour, so set the text colour instead.
-            // This works reasonably well in dark themes, and quite poorly in light ones....
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-#else
-            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT  ) );
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
-#endif
-#endif
         }
         break;
 
@@ -358,19 +347,8 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         // mark the current (on-canvas) part
         if( curSymbol && curSymbol->GetLibId() == node->m_LibId )
         {
-#if 1
-            // LIB_TREE_RENDERER uses strikethrough as a proxy for is-canvas-item
-            aAttr.SetStrikethrough( true );
-#else
-#ifdef __WXGTK__
-        // The native wxGTK+ impl ignores background colour, so set the text colour instead.
-        // This works reasonably well in dark themes, and quite poorly in light ones....
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-#else
-            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
-#endif
-#endif
+            aAttr.SetStrikethrough( true );   // LIB_TREE_RENDERER uses strikethrough as a
+                                              // proxy for "is canvas item"
         }
         break;
 

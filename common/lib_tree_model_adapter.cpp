@@ -23,6 +23,7 @@
 #include <eda_base_frame.h>
 #include <eda_pattern_match.h>
 #include <kiface_base.h>
+#include <kiplatform/ui.h>
 #include <lib_tree_model_adapter.h>
 #include <project/project_file.h>
 #include <settings/app_settings.h>
@@ -85,13 +86,15 @@ public:
             points[3] = aRect.GetBottomRight() + wxPoint( -4, 1 );
             points[4] = aRect.GetBottomLeft() + wxPoint( 0, 1 );
             points[5] = aRect.GetTopLeft();
+
+            dc->SetPen( KIPLATFORM::UI::IsDarkTheme() ? *wxWHITE_PEN : *wxBLACK_PEN );
             dc->DrawLines( 6, points );
         }
 
         // We should be able to pass wxDATAVIEW_CELL_SELECTED into RenderText() and have it do
         // the right thing -- but it picks wxSYS_COLOUR_HIGHLIGHTTEXT on MacOS and GTK (instead
         // of wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT).
-        if ( aState & wxDATAVIEW_CELL_SELECTED )
+        if( aState & wxDATAVIEW_CELL_SELECTED )
             dc->SetTextForeground( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT ) );
 
         aRect.Deflate( 1 );

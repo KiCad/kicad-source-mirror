@@ -203,7 +203,6 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_mergeOCCMaxDist = OCC_MAX_DISTANCE_TO_MERGE_POINTS;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
-    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
     m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
 }
 
@@ -473,7 +472,6 @@ void STEP_PCB_MODEL::OCCSetMergeMaxDistance( double aDistance )
 {
     // Ensure a minimal value (in mm)
     m_mergeOCCMaxDist = aDistance;
-    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
 }
 
 
@@ -907,13 +905,21 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         }
     }
 
+    Bnd_Box brdBndBox;
+
+    for( const TopoDS_Shape& brdShape : m_board_outlines )
+        BRepBndLib::Add( brdShape, brdBndBox );
+
     // subtract cutouts (if any)
     if( m_cutouts.size() )
     {
         ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
                                          (int) m_cutouts.size() ) );
 
-        Bnd_BoundSortBox bsb;
+        // We need to encompass every location we'll need to test in the global bbox,
+        // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
+        Bnd_Box          brdWithHolesBndBox = brdBndBox;
+        Bnd_BoundSortBox bsbHoles;
 
         Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, m_cutouts.size() - 1 );
 
@@ -921,10 +927,11 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         {
             Bnd_Box bbox;
             BRepBndLib::Add( m_cutouts[i], bbox );
+            brdWithHolesBndBox.Add( bbox );
             ( *holeBoxSet )[i] = bbox;
         }
 
-        bsb.Initialize( holeBoxSet );
+        bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
 
         auto subtractShapes = [&]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList )
         {
@@ -935,7 +942,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 Bnd_Box shapeBbox;
                 BRepBndLib::Add( shape, shapeBbox );
 
-                const TColStd_ListOfInteger& indices = bsb.Compare( shapeBbox );
+                const TColStd_ListOfInteger& indices = bsbHoles.Compare( shapeBbox );
 
                 TopTools_ListOfShape holelist;
 
@@ -1493,7 +1500,7 @@ bool STEP_PCB_MODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fnam
 
     // set other translation options
     reader.SetColorMode( true );  // use model colors
-    reader.SetNameMode( false );  // don't use label names
+    reader.SetNameMode( true );  // use label names
     reader.SetLayerMode( false ); // ignore LAYER data
 
     if( !reader.Transfer( doc ) )
@@ -1545,10 +1552,17 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
 
     while( id <= nshapes )
     {
-        TopoDS_Shape shape = s_assy->GetShape( frshapes.Value( id ) );
+        const TDF_Label& s_shapeLabel = frshapes.Value( id );
+        TopoDS_Shape     shape = s_assy->GetShape( s_shapeLabel );
 
         if( !shape.IsNull() )
         {
+            Handle( TDataStd_Name ) s_nameAttr;
+            s_shapeLabel.FindAttribute( TDataStd_Name::GetID(), s_nameAttr );
+
+            TCollection_ExtendedString s_labelName =
+                    s_nameAttr ? s_nameAttr->Get() : TCollection_ExtendedString();
+
             TopoDS_Shape scaled_shape( shape );
 
             if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
@@ -1567,7 +1581,13 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
                 }
             }
 
-            TDF_Label niulab = d_assy->AddComponent( component, scaled_shape, Standard_False );
+            TDF_Label d_shapeLabel = d_assy->AddShape( scaled_shape, Standard_False );
+
+            if( s_labelName.Length() > 0 )
+                TDataStd_Name::Set( d_shapeLabel, s_labelName );
+
+            TDF_Label niulab =
+                    d_assy->AddComponent( component, d_shapeLabel, scaled_shape.Location() );
 
             // check for per-surface colors
             stop.Init( shape, TopAbs_FACE );

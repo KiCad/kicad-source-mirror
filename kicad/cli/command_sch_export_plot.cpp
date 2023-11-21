@@ -72,10 +72,13 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( ARG_EXCLUDE_PDF_PROPERTY_POPUPS )
-            .help( UTF8STDSTR( _( "Do not generate property popups in PDF" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+    if( aPlotFormat == SCH_PLOT_FORMAT::PDF )
+    {
+        m_argParser.add_argument( ARG_EXCLUDE_PDF_PROPERTY_POPUPS )
+                .help( UTF8STDSTR( _( "Do not generate property popups in PDF" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+    }
 
     m_argParser.add_argument( "-n", ARG_NO_BACKGROUND_COLOR )
             .help( UTF8STDSTR( _( "Avoid setting a background color (regardless of theme)" ) ) )

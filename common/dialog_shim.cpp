@@ -292,6 +292,14 @@ bool DIALOG_SHIM::Show( bool show )
                          std::max( wxDialog::GetSize().y, savedDialogRect.GetSize().y ),
                          0 );
             }
+#ifdef __WXMAC__
+            if( m_parent != nullptr )
+            {
+                if( wxDisplay::GetFromPoint( m_parent->GetPosition() )
+                    != wxDisplay::GetFromPoint( savedDialogRect.GetPosition() ) )
+                    Centre();
+            }
+#endif
         }
         else if( m_initialSize != wxDefaultSize )
         {

@@ -268,6 +268,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
         }
 
         m_openFileAfterPlot->Enable( fmt == PLOT_FORMAT::PDF );
+        m_plotPDFPropertyPopups->Enable( fmt == PLOT_FORMAT::PDF );
 
         m_paperSizeOption->Set( paperSizes );
         m_paperSizeOption->SetSelection( selection );

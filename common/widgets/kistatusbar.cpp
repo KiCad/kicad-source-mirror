@@ -56,6 +56,7 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
     SetFieldsCount( aNumberFields + ExtraFields );
 
     int* widths = new int[aNumberFields + ExtraFields];
+
     for( int i = 0; i < aNumberFields; i++ )
         widths[i] = -1;
 
@@ -65,7 +66,7 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
     widths[aNumberFields + FIELD_OFFSET_NOTIFICATION_BUTTON] = 20; // notifications button
 #ifdef __WXOSX__
     // offset from the right edge
-    widths[aNumberFields + ExtraFields] = 15;
+    widths[aNumberFields + ExtraFields - 1] = 10;
 #endif
 
     SetStatusWidths( aNumberFields + ExtraFields, widths );
@@ -79,15 +80,13 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
     SetStatusStyles( aNumberFields + ExtraFields, styles );
     delete[] styles;
 
-    m_backgroundTxt =
-            new wxStaticText( this, wxID_ANY, wxT( "" ), wxDefaultPosition, wxDefaultSize );
-
+    m_backgroundTxt = new wxStaticText( this, wxID_ANY, wxT( "" ) );
 
     m_backgroundProgressBar = new wxGauge( this, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize,
                                            wxGA_HORIZONTAL | wxGA_SMOOTH );
 
-    m_backgroundStopButton =
-            new wxButton( this, wxID_ANY, "X", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+    m_backgroundStopButton = new wxButton( this, wxID_ANY, "X", wxDefaultPosition, wxDefaultSize,
+                                           wxBU_EXACTFIT );
 
     m_notificationsButton = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
                                                wxDefaultSize, wxBU_EXACTFIT );

@@ -213,20 +213,50 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
 
     if( selection.GetSize() == 1 )
-        mirrorPoint = item->GetPosition();
-    else
-        mirrorPoint = m_frame->GetNearestHalfGridPosition( mapCoords( selection.GetCenter() ) );
-
-    for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
-        item = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
+        mirrorPoint = item->GetPosition();
 
-        if( xAxis )
-            item->MirrorVertical( mirrorPoint );
-        else
-            item->MirrorHorizontal( mirrorPoint );
+        switch( item->Type() )
+        {
+        case LIB_FIELD_T:
+        {
+            LIB_FIELD* field = static_cast<LIB_FIELD*>( item );
+
+            if( xAxis )
+                field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
+            else
+                field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
+
+            break;
+        }
+
+        default:
+            if( xAxis )
+                item->MirrorVertical( mirrorPoint );
+            else
+                item->MirrorHorizontal( mirrorPoint );
+
+            break;
+        }
+
 
         m_frame->UpdateItem( item, false, true );
+    }
+    else
+    {
+        mirrorPoint = m_frame->GetNearestHalfGridPosition( mapCoords( selection.GetCenter() ) );
+
+        for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
+        {
+            item = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
+
+            if( xAxis )
+                item->MirrorVertical( mirrorPoint );
+            else
+                item->MirrorHorizontal( mirrorPoint );
+
+            m_frame->UpdateItem( item, false, true );
+        }
     }
 
     if( item->IsMoving() )
