@@ -1491,7 +1491,7 @@ bool STEP_PCB_MODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fnam
 
     // set other translation options
     reader.SetColorMode( true );  // use model colors
-    reader.SetNameMode( false );  // don't use label names
+    reader.SetNameMode( true );  // use label names
     reader.SetLayerMode( false ); // ignore LAYER data
 
     if( !reader.Transfer( doc ) )
@@ -1543,10 +1543,17 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
 
     while( id <= nshapes )
     {
-        TopoDS_Shape shape = s_assy->GetShape( frshapes.Value( id ) );
+        const TDF_Label& s_shapeLabel = frshapes.Value( id );
+        TopoDS_Shape     shape = s_assy->GetShape( s_shapeLabel );
 
         if( !shape.IsNull() )
         {
+            Handle( TDataStd_Name ) s_nameAttr;
+            s_shapeLabel.FindAttribute( TDataStd_Name::GetID(), s_nameAttr );
+
+            TCollection_ExtendedString s_labelName =
+                    s_nameAttr ? s_nameAttr->Get() : TCollection_ExtendedString();
+
             TopoDS_Shape scaled_shape( shape );
 
             if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
@@ -1565,7 +1572,13 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
                 }
             }
 
-            TDF_Label niulab = d_assy->AddComponent( component, scaled_shape, Standard_False );
+            TDF_Label d_shapeLabel = d_assy->AddShape( scaled_shape, Standard_False );
+
+            if( s_labelName.Length() > 0 )
+                TDataStd_Name::Set( d_shapeLabel, s_labelName );
+
+            TDF_Label niulab =
+                    d_assy->AddComponent( component, d_shapeLabel, scaled_shape.Location() );
 
             // check for per-surface colors
             stop.Init( shape, TopAbs_FACE );
