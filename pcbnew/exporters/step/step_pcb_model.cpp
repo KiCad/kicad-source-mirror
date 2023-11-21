@@ -905,13 +905,21 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         }
     }
 
+    Bnd_Box brdBndBox;
+
+    for( const TopoDS_Shape& brdShape : m_board_outlines )
+        BRepBndLib::Add( brdShape, brdBndBox );
+
     // subtract cutouts (if any)
     if( m_cutouts.size() )
     {
         ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
                                          (int) m_cutouts.size() ) );
 
-        Bnd_BoundSortBox bsb;
+        // We need to encompass every location we'll need to test in the global bbox,
+        // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
+        Bnd_Box          brdWithHolesBndBox = brdBndBox;
+        Bnd_BoundSortBox bsbHoles;
 
         Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, m_cutouts.size() - 1 );
 
@@ -919,10 +927,11 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         {
             Bnd_Box bbox;
             BRepBndLib::Add( m_cutouts[i], bbox );
+            brdWithHolesBndBox.Add( bbox );
             ( *holeBoxSet )[i] = bbox;
         }
 
-        bsb.Initialize( holeBoxSet );
+        bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
 
         auto subtractShapes = [&]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList )
         {
@@ -933,7 +942,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 Bnd_Box shapeBbox;
                 BRepBndLib::Add( shape, shapeBbox );
 
-                const TColStd_ListOfInteger& indices = bsb.Compare( shapeBbox );
+                const TColStd_ListOfInteger& indices = bsbHoles.Compare( shapeBbox );
 
                 TopTools_ListOfShape holelist;
 
