@@ -135,7 +135,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
             wxT( "*.wrl" ),
             wxT( "*.g?" ), wxT( "*.g??" ),          // Gerber files
-            wxT( "*.gbrjob" ),                      // Gerber job files
+            wxT( "*.gm??" ), wxT( "*.gbrjob" ),
             wxT( "*.pos" ), wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab files
             wxT( "*.d356" ), wxT( "*.rpt" ),
             wxT( "*.net" ), wxT( "*.py" ),
@@ -177,8 +177,16 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
 
     unsigned long uncompressedBytes = 0;
 
+    // Our filename collector can store duplicate filenames. for instance *.gm2
+    // matches both *.g?? and *.gm??.
+    // So skip duplicate filenames (they are sorted, so it is easy).
+    wxString lastStoredFile;
+
     for( unsigned ii = 0; ii < files.GetCount(); ii++ )
     {
+        if( lastStoredFile == files[ii] )   // duplicate name: already stored
+            continue;
+
         wxFileSystem fsfile;
 
         wxFileName curr_fn( files[ii] );
