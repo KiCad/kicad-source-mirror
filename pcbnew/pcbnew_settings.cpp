@@ -567,6 +567,13 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_report_file_name",
             &m_Reannotate.report_file_name, "" ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "net_inspector_dialog.group_by_text",
+            &m_NetInspector.group_by_text, "" ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_dialog.group_by",
+            &m_NetInspector.group_by, false ) );
+    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.group_by_kind",
+            &m_NetInspector.group_by_kind, 0 ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json
             {

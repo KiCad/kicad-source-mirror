@@ -301,6 +301,13 @@ public:
         wxString report_file_name;
     };
 
+    struct DIALOG_NET_INSPECTOR
+    {
+        wxString group_by_text;
+        bool group_by;
+        int group_by_kind;
+    };
+
     struct FOOTPRINT_CHOOSER
     {
         int  width;
@@ -379,6 +386,8 @@ public:
     DIALOG_PLOT m_Plot;
 
     DIALOG_REANNOTATE m_Reannotate;
+
+    DIALOG_NET_INSPECTOR m_NetInspector;
 
     FOOTPRINT_CHOOSER m_FootprintChooser;
 

@@ -40,6 +40,9 @@
 #include <validators.h>
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
+#include "pcbnew_settings.h"
+#include <settings/settings_manager.h>
+#include <pgm_base.h>
 
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>
@@ -1086,8 +1089,17 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
 
     m_textCtrlFilter->SetValue( g_settings.filter_string );
     m_cbShowZeroPad->SetValue( g_settings.show_zero_pad_nets );
+
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+    g_settings.group_by_text = app_settings->m_NetInspector.group_by_text;
+    g_settings.group_by = app_settings->m_NetInspector.group_by;
+    g_settings.group_by_kind = app_settings->m_NetInspector.group_by_kind;
+
     m_groupBy->SetValue( g_settings.group_by );
     m_groupByKind->SetSelection( g_settings.group_by_kind );
+
     m_groupByText->SetValue( g_settings.group_by_text );
 
     m_filter_change_no_rebuild = false;
@@ -1149,6 +1161,12 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
                                     static_cast<int>( sorting_column->GetModelColumn() ) : -1;
     g_settings.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
     g_settings.column_order       = column_order;
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+    app_settings->m_NetInspector.group_by_text = g_settings.group_by_text;
+    app_settings->m_NetInspector.group_by = g_settings.group_by;
+    app_settings->m_NetInspector.group_by_kind = g_settings.group_by_kind;
 
     // the displayed list elements are going to be deleted before the list view itself.
     // in some cases it might still do queries on the data model, which would crash
