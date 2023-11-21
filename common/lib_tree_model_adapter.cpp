@@ -23,6 +23,7 @@
 #include <eda_base_frame.h>
 #include <eda_pattern_match.h>
 #include <kiface_base.h>
+#include <kiplatform/ui.h>
 #include <lib_tree_model_adapter.h>
 #include <project/project_file.h>
 #include <settings/app_settings.h>
@@ -85,6 +86,8 @@ public:
             points[3] = aRect.GetBottomRight() + wxPoint( -4, 1 );
             points[4] = aRect.GetBottomLeft() + wxPoint( 0, 1 );
             points[5] = aRect.GetTopLeft();
+
+            dc->SetPen( KIPLATFORM::UI::IsDarkTheme() ? *wxWHITE_PEN : *wxBLACK_PEN );
             dc->DrawLines( 6, points );
         }
 
