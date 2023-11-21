@@ -27,10 +27,10 @@ namespace CLI
 {
 // Options for selecting presets of the export, e.g. GroupedByValue and CSV
 #define ARG_PRESET "--preset"
-#define ARG_PRESET_DESC "Use a named BOM preset settings from the schematic, e.g. \"Grouped By Value\"."
+#define ARG_PRESET_DESC "Use a named BOM preset setting from the schematic, e.g. \"Grouped By Value\"."
 
 #define ARG_FMT_PRESET "--format-preset"
-#define ARG_FMT_PRESET_DESC "Use a named BOM format preset settings from the schematic, e.g. CSV."
+#define ARG_FMT_PRESET_DESC "Use a named BOM format preset setting from the schematic, e.g. CSV."
 
 // Options for setting the format of the export, e.g. CSV
 #define ARG_FIELD_DELIMITER "--field-delimiter"

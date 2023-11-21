@@ -81,7 +81,7 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXIT_CODE_VIOLATIONS )
-            .help( UTF8STDSTR( _( "Return a exit code depending on whether or not violations exist" ) ) )
+            .help( UTF8STDSTR( _( "Return a nonzero exit code if DRC violations exist" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

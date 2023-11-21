@@ -74,7 +74,7 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
             .default_value( false );
 
     m_argParser.add_argument( ARG_EXIT_CODE_VIOLATIONS )
-            .help( UTF8STDSTR( _( "Return a exit code depending on whether or not violations exist" ) ) )
+            .help( UTF8STDSTR( _( "Return a nonzero exit code if ERC violations exist" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

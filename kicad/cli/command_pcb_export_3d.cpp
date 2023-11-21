@@ -140,13 +140,13 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_argParser.add_argument( ARG_VRML_UNITS )
                 .default_value( std::string( "in" ) )
                 .help( UTF8STDSTR(
-                        _( "Output units; ascii or csv format only; valid options: mm, m, in, tenths" ) ) );
+                        _( "Output units; valid options: mm, m, in, tenths" ) ) );
 
         m_argParser.add_argument( ARG_VRML_MODELS_DIR )
                 .default_value( std::string( "" ) )
                 .help( UTF8STDSTR(
                         _( "Name of folder to create and store 3d models in, if not specified or "
-                           "empty, the models will be embedded in main exported vrml file" ) ) );
+                           "empty, the models will be embedded in main exported VRML file" ) ) );
 
         m_argParser.add_argument( ARG_VRML_MODELS_RELATIVE )
                 .help( UTF8STDSTR( _( "Used with --models-dir to output relative paths in the resulting file" ) ) )
