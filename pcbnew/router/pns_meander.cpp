@@ -216,10 +216,8 @@ int MEANDER_SHAPE::MinAmplitude() const
 
 int MEANDER_SHAPE::cornerRadius() const
 {
-    // TODO: fix diff-pair meandering so we can use non-100% radii
-    int rPercent = m_dual ? 100 : Settings().m_cornerRadiusPercentage;
-
-    int optCr = (int64_t) spacing() * rPercent / 200;
+    int rPercent = Settings().m_cornerRadiusPercentage;
+    int optCr = static_cast<int>( static_cast<SEG::ecoord>( spacing() ) * rPercent / 200 );
     int minCr = std::abs( m_baselineOffset );
     int maxCr = std::min( m_amplitude / 2, spacing() / 2 );
 

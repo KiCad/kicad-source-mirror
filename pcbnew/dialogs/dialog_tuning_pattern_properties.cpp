@@ -49,7 +49,6 @@ DIALOG_TUNING_PATTERN_PROPERTIES::DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDI
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR:
         m_legend->SetBitmap( KiBitmapBundle( BITMAPS::tune_diff_pair_length_legend ) );
-        m_r.Enable( false );
         break;
 
     case PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW:
