@@ -24,13 +24,14 @@
 # Hubert Hu <qinghan.hu@gmail.com>, 2023.
 # Li Yidong <alenks@foxmail.com>, 2023.
 # 欠陥電気 <Misaka13514@gmail.com>, 2023.
+# Pinpang Liao <pinpang@aliyun.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-20 15:37+0000\n"
-"Last-Translator: 欠陥電気 <Misaka13514@gmail.com>\n"
+"PO-Revision-Date: 2023-11-23 20:04+0000\n"
+"Last-Translator: Pinpang Liao <pinpang@aliyun.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -38,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.2.1-rc\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7624,7 +7625,7 @@ msgstr "使用 inch 作为单位"
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:53
 #: pcbnew/pcb_dimension.cpp:1421
 msgid "Mils"
-msgstr "Mils"
+msgstr "密尔"
 
 #: common/tool/actions.cpp:726
 msgid "Use mils"
@@ -26496,7 +26497,7 @@ msgstr "所需电阻："
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:148
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:162
 msgid "kOhm"
-msgstr "kOhm"
+msgstr "千欧"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
 msgid "Exclude value 1:"
@@ -27926,7 +27927,7 @@ msgstr "锁定"
 #: pcbnew/board_stackup_manager/board_stackup.cpp:303
 #, c-format
 msgid "Dielectric %d"
-msgstr "Dielectric %d"
+msgstr "介质%d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
 msgid "Top Silk Screen"
