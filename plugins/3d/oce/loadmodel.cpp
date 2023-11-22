@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -804,10 +804,11 @@ bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
                    std::vector< SGNODE* >* items )
 {
     TDF_Label label;
-    data.hasSolid = true;
     std::string partID;
     Quantity_ColorRGBA col;
     Quantity_ColorRGBA* lcolor = nullptr;
+
+    data.hasSolid = shape.ShapeType() == TopAbs_SOLID;
 
     wxLogTrace( MASK_OCE, wxT( "Processing solid" ) );
 
