@@ -60,15 +60,16 @@ grouped = net.groupComponents()
 # Output all of the component information
 for group in grouped:
     refs = ""
+    refs_l = []
 
     # Add the reference of every component in the group and keep a reference
     # to the component so that the other data can be filled in once per group
     for component in group:
-        if refs != "":
-            refs += ", "
-        refs += fromNetlistText( component.getRef() )
+        refs_l.append( fromNetlistText( component.getRef() ) )
         c = component
-
+    
+    refs = ", ".join(refs_l)
+    
     # Fill in the component groups common data
     out.writerow([refs, len(group),
         fromNetlistText( c.getValue() ),
