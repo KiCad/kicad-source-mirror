@@ -2608,13 +2608,10 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 {
     bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
 
-    // Don't paint shadows for invisible markers.
+    // Don't paint invisible markers.
     // It would be nice to do this through layer dependencies but we can't do an "or" there today
-    if( isShadow && aMarker->GetBoard()
-            && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
-    {
+    if( aMarker->GetBoard() && !aMarker->GetBoard()->IsElementVisible( aMarker->GetColorLayer() ) )
         return;
-    }
 
     const_cast<PCB_MARKER*>( aMarker )->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
 
