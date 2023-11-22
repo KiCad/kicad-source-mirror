@@ -8,13 +8,14 @@
 # Christiaan Nieuwlaat <krizzje@gmail.com>, 2023.
 # Tom Niesse <tomniesse@gmail.com>, 2023.
 # johanneswilkens <wilkensjohannes@gmail.com>, 2023.
+# Ranforingus <ranforingus@hotmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-16 10:05+0000\n"
-"Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
+"PO-Revision-Date: 2023-11-23 20:04+0000\n"
+"Last-Translator: Ranforingus <ranforingus@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.2.1-rc\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -6171,14 +6172,12 @@ msgid "Unknown error."
 msgstr "Onbekende fout"
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "No error."
-msgstr " fout!"
+msgstr "Geen fout."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr " fout!"
+msgstr "Geen fout"
 
 #: common/grid_tricks.cpp:353 common/tool/actions.cpp:193
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:117
@@ -13183,9 +13182,9 @@ msgstr "Voeding symbool"
 #: eeschema/symbol_chooser_frame.cpp:98
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:55
 #: pcbnew/footprint_chooser_frame.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Kies symbool (%d items geladen)"
+msgstr " (%d items geladen)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:70
 msgid "Place repeated copies"
@@ -19285,9 +19284,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:846
 #: eeschema/sim/simulator_frame_ui.cpp:1008
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Omvang:"
+msgstr " (amplitude)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, fuzzy, c-format
@@ -46308,9 +46306,8 @@ msgid "Rebuilds geometry of all generators"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2413
-#, fuzzy
 msgid "Rebuild Selected Generators"
-msgstr " Selecteer algemene opties"
+msgstr "Geselecteerde generatoren opnieuw opbouwen"
 
 #: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Rebuilds geometry of selected generator(s)"
