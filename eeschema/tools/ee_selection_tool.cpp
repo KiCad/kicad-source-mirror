@@ -2214,6 +2214,9 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
                     {
                         aChild->ClearBrightened();
                     }
+
+                    if( aGroup )
+                        aGroup->Remove( aChild );
                 } );
     }
 
