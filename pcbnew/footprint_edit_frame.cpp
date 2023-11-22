@@ -152,9 +152,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // footprint or pad mask expansions settings should be shown.
     GetBoard()->GetDesignSettings().m_SolderMaskExpansion = 0;
 
-    // restore the last footprint from the project, if any
-    restoreLastFootprint();
-
     // Ensure all layers and items are visible:
     // In footprint editor, some layers have no meaning or cannot be used, but we show all of
     // them, at least to be able to edit a bad layer
@@ -172,6 +169,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
+
+    // restore the last footprint from the project, if any, after the library has been init'ed
+    restoreLastFootprint();
 
     ReCreateMenuBar();
     ReCreateHToolbar();
