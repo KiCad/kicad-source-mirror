@@ -69,8 +69,9 @@ enum class CSV_COLUMN_DESC : int
 struct DIALOG_NET_INSPECTOR::COLUMN_DESC
 {
     COLUMN_DESC( unsigned aNum, PCB_LAYER_ID aLayer, const wxString& aDisp, const wxString& aCsv,
-                 CSV_COLUMN_DESC aFlags ) :
-        num( aNum ), layer( aLayer ), display_name( aDisp ), csv_name( aCsv ), csv_flags( aFlags )
+                 CSV_COLUMN_DESC aFlags, bool aHasUnits ) :
+        num( aNum ), layer( aLayer ), display_name( aDisp ), csv_name( aCsv ), csv_flags( aFlags ),
+        has_units( aHasUnits )
     {}
 
     unsigned int num;
@@ -78,6 +79,7 @@ struct DIALOG_NET_INSPECTOR::COLUMN_DESC
     wxString     display_name;
     wxString     csv_name;
     CSV_COLUMN_DESC csv_flags;
+    bool has_units;
 
     operator unsigned int() const
     {
@@ -975,21 +977,21 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
         m_frame( aParent )
 {
     m_columns.emplace_back( 0u, UNDEFINED_LAYER, _( "Net" ), _( "Net Code" ),
-                            CSV_COLUMN_DESC::CSV_NONE  );
+                            CSV_COLUMN_DESC::CSV_NONE, false  );
     m_columns.emplace_back( 1u, UNDEFINED_LAYER, _( "Name" ), _( "Net Name" ),
-                            CSV_COLUMN_DESC::CSV_QUOTE );
+                            CSV_COLUMN_DESC::CSV_QUOTE, false );
     m_columns.emplace_back( 2u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ),
-                            CSV_COLUMN_DESC::CSV_NONE );
+                            CSV_COLUMN_DESC::CSV_NONE, false );
     m_columns.emplace_back( 3u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ),
-                            CSV_COLUMN_DESC::CSV_NONE );
+                            CSV_COLUMN_DESC::CSV_NONE, false );
     m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Via Length" ), _( "Via Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE );
+                            CSV_COLUMN_DESC::CSV_NONE, true );
     m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Track Length" ), _( "Track Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE );
+                            CSV_COLUMN_DESC::CSV_NONE, true );
     m_columns.emplace_back( 6u, UNDEFINED_LAYER, _( "Die Length" ), _( "Die Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE );
+                            CSV_COLUMN_DESC::CSV_NONE, true );
     m_columns.emplace_back( 7u, UNDEFINED_LAYER, _( "Total Length" ), _( "Net Length" ),
-                            CSV_COLUMN_DESC::CSV_NONE );
+                            CSV_COLUMN_DESC::CSV_NONE, true );
 
     m_brd = aParent->GetBoard();
 
@@ -1074,7 +1076,7 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
             continue;
 
         m_columns.emplace_back( m_columns.size(), layer, m_brd->GetLayerName( layer ),
-                                m_brd->GetLayerName( layer ), CSV_COLUMN_DESC::CSV_NONE );
+                                m_brd->GetLayerName( layer ), CSV_COLUMN_DESC::CSV_NONE, true );
 
         m_netsList->AppendTextColumn( m_brd->GetLayerName( layer ), m_columns.back(),
                                       wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
@@ -1313,7 +1315,8 @@ wxString DIALOG_NET_INSPECTOR::formatCount( unsigned int aValue ) const
 
 wxString DIALOG_NET_INSPECTOR::formatLength( int64_t aValue ) const
 {
-    return m_frame->MessageTextFromValue( static_cast<long long int>( aValue ) );
+    return m_frame->MessageTextFromValue( static_cast<long long int>( aValue ),
+                                          !m_in_reporting /* Don't include unit label in the string when reporting */ );
 }
 
 
@@ -2252,9 +2255,24 @@ void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 
     wxString txt;
 
+    m_in_reporting = true;
+
     // Print Header:
     for( auto&& col : m_columns )
-        txt += '"' + col.csv_name + wxT( "\";" );
+    {
+        txt += '"';
+
+        if( col.has_units )
+        {
+            txt += wxString::Format( _( "%s (%s)" ), col.csv_name,
+                                     EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+        }
+        else
+        {
+            txt += col.csv_name;
+        }
+        txt += wxT( "\";" );
+    }
 
     f.AddLine( txt );
 
@@ -2280,6 +2298,8 @@ void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 
         f.AddLine( txt );
     }
+
+    m_in_reporting = false;
 
     f.Write();
     f.Close();
