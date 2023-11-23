@@ -129,10 +129,15 @@ True if any part of `A` lies within the given zone's outline.
 <br><br>
 
     A.enclosedByArea('<zone_name>')
-True if all of `A` lies within the given zone's outline.  
+True if all of `A` lies within the given zone's outline.
 
-NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()` 
+NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()`
 where possible.
+<br><br>
+
+    A.getField('<field_name>')
+The value of the given field. Only footprints have fields, so a field is only returned if
+`A` is a footprint.
 <br><br>
 
     A.isPlated()
@@ -157,6 +162,10 @@ Includes nested membership.
     A.memberOfFootprint('<footprint_reference>')
 True if `A` is a member of a footprint matching the given reference designator.  The
 reference can contain wildcards.
+<br><br>
+
+    A.memberOfSheet('<sheet_path>')
+True if `A` is a member of the given schematic sheet. The sheet path can contain wildcards.
 <br><br>
 
     A.existsOnLayer('<layer_name>')
