@@ -1120,12 +1120,12 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                     if( !fields[id].IsVisible() )
                         continue;
 
-                    if( !item->IsBrightened() && connNames.count( pinConn->Name() ) )
+                    if( !fields[id].IsBrightened() && connNames.count( pinConn->Name() ) )
                     {
                         fields[id].SetBrightened();
                         redrawItem = symbol;
                     }
-                    else if( item->IsBrightened() && !connNames.count( pinConn->Name() ) )
+                    else if( fields[id].IsBrightened() && !connNames.count( pinConn->Name() ) )
                     {
                         fields[id].ClearBrightened();
                         redrawItem = symbol;
