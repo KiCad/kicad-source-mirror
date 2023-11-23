@@ -1320,7 +1320,7 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getRectShape() const
 
 void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    if( !IsSelected() )
+    if( !IsSelected() && !IsNew() )
         return;
 
     KIGFX::PREVIEW::DRAW_CONTEXT ctx( *aView );
