@@ -40,7 +40,7 @@
 #include <panel_hotkeys_editor.h>
 #include <paths.h>
 #include <confirm.h>
-#include <panel_pcm_settings.h>
+#include <panel_packages_and_updates.h>
 #include <pgm_base.h>
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
@@ -1203,8 +1203,8 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
         book->AddLazyPage(
                 []( wxWindow* aParent ) -> wxWindow*
                 {
-                    return new PANEL_PCM_SETTINGS( aParent );
-                }, _( "Plugin and Content Manager" ) );
+                    return new PANEL_PACKAGES_AND_UPDATES( aParent );
+                }, _( "Packages and Updates" ) );
     }
     catch( ... )
     {

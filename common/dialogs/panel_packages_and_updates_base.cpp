@@ -5,18 +5,41 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_pcm_settings_base.h"
+#include "panel_packages_and_updates_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_PCM_SETTINGS_BASE::PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_PACKAGES_AND_UPDATES_BASE::PANEL_PACKAGES_AND_UPDATES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
 	m_generalLabel = new wxStaticText( this, wxID_ANY, _("General"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_generalLabel->Wrap( -1 );
-	bSizer1->Add( m_generalLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+	bSizer1->Add( m_generalLabel, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
+
+
+	bSizer1->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer1->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxVERTICAL );
+
+	m_cbKicadUpdate = new wxCheckBox( this, wxID_ANY, _("Check for KiCad updates on startup"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbKicadUpdate->SetValue(true);
+	bSizer41->Add( m_cbKicadUpdate, 0, wxLEFT, 5 );
+
+
+	bSizer1->Add( bSizer41, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+
+
+	bSizer1->Add( 0, 20, 0, wxEXPAND, 5 );
+
+	m_pcmLabel = new wxStaticText( this, wxID_ANY, _("Plugin and Content Manager"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pcmLabel->Wrap( -1 );
+	bSizer1->Add( m_pcmLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
 
 
 	bSizer1->Add( 0, 3, 0, wxEXPAND, 5 );
@@ -27,9 +50,9 @@ PANEL_PCM_SETTINGS_BASE::PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_updateCheck = new wxCheckBox( this, wxID_ANY, _("Check for package updates on startup"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_updateCheck->SetValue(true);
-	bSizer4->Add( m_updateCheck, 0, wxLEFT, 5 );
+	m_cbPcmUpdate = new wxCheckBox( this, wxID_ANY, _("Check for package updates on startup"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPcmUpdate->SetValue(true);
+	bSizer4->Add( m_cbPcmUpdate, 0, wxLEFT, 5 );
 
 
 	bSizer1->Add( bSizer4, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
@@ -39,7 +62,7 @@ PANEL_PCM_SETTINGS_BASE::PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Library package handling"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	bSizer1->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+	bSizer1->Add( m_staticText4, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
 
 
 	bSizer1->Add( 0, 3, 0, wxEXPAND, 5 );
@@ -80,6 +103,6 @@ PANEL_PCM_SETTINGS_BASE::PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID i
 	bSizer1->Fit( this );
 }
 
-PANEL_PCM_SETTINGS_BASE::~PANEL_PCM_SETTINGS_BASE()
+PANEL_PACKAGES_AND_UPDATES_BASE::~PANEL_PACKAGES_AND_UPDATES_BASE()
 {
 }

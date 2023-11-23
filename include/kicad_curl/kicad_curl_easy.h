@@ -100,6 +100,14 @@ public:
     bool SetPostFields( const std::vector<std::pair<std::string, std::string>>& aFields );
 
     /**
+     * Set the post content body to the string, usually used for json rather than the typical key/value pair
+     *
+     * @param aField is the string body to send
+     * @return True if successful, false if not.
+     */
+    bool SetPostFields( const std::string& aField );
+
+    /**
      * Set the request URL.
      *
      * @param aURL is the URL.
@@ -140,6 +148,7 @@ public:
 
     CURL* GetCurl() { return m_CURL; }
 
+    int GetResponseStatusCode();
 
 private:
     /**

@@ -251,6 +251,15 @@ bool KICAD_CURL_EASY::SetPostFields(
 }
 
 
+bool KICAD_CURL_EASY::SetPostFields( const std::string& aField )
+{
+    if( setOption<const char*>( CURLOPT_COPYPOSTFIELDS, aField.c_str() ) != CURLE_OK )
+        return false;
+
+    return true;
+}
+
+
 bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
 {
     if( setOption<const char*>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
@@ -339,4 +348,13 @@ int KICAD_CURL_EASY::GetTransferTotal( uint64_t& aDownloadedBytes ) const
     aDownloadedBytes = static_cast<uint64_t>( dl );
 #endif
     return result;
+}
+
+
+int KICAD_CURL_EASY::GetResponseStatusCode()
+{
+    long http_code = 0;
+    curl_easy_getinfo( m_CURL, CURLINFO_RESPONSE_CODE, &http_code );
+
+    return static_cast<int>( http_code );
 }

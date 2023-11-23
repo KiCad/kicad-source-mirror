@@ -86,6 +86,9 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_NonImmediateActions;
 		wxStaticText* m_staticText24;
 		wxStaticLine* m_staticline5;
+		wxCheckBox* m_cbUpdateCheck;
+		wxStaticText* m_staticText241;
+		wxStaticLine* m_staticline51;
 		wxCheckBox* m_cbRememberOpenFiles;
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;

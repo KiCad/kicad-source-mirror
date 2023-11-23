@@ -42,7 +42,13 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
     m_params.emplace_back(
             new PARAM_LIST<wxString>( "system.open_projects", &m_OpenProjects, {} ) );
 
-    m_params.emplace_back( new PARAM<int>( "system.check_for_updates", &m_updateCheck, 0 ) );
+    m_params.emplace_back(
+            new PARAM<wxString>( "system.last_update_check_time", &m_lastUpdateCheckTime, "" ) );
+
+    m_params.emplace_back(
+            new PARAM<wxString>( "system.last_received_update", &m_lastReceivedUpdate, "" ) );
+
+    m_params.emplace_back( new PARAM<bool>( "system.check_for_kicad_updates", &m_KiCadUpdateCheck, true ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",

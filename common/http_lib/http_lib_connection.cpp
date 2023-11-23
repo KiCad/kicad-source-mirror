@@ -362,15 +362,11 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
 
 bool HTTP_LIB_CONNECTION::checkServerResponse( std::unique_ptr<KICAD_CURL_EASY>& aCurl )
 {
-
-    long http_code = 0;
-
-    curl_easy_getinfo( aCurl->GetCurl(), CURLINFO_RESPONSE_CODE, &http_code );
-
-    if( http_code != 200 )
+    int statusCode = aCurl->GetResponseStatusCode();
+    if( statusCode != 200 )
     {
         m_lastError += wxString::Format( _( "API responded with error code: %s" ) + "\n",
-                                         httpErrorCodeDescription( http_code ) );
+                                         httpErrorCodeDescription( statusCode ) );
         return false;
     }
 

@@ -22,14 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "panel_pcm_settings.h"
+#include "panel_packages_and_updates.h"
 
 #include <pgm_base.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/ui_common.h>
 
-PANEL_PCM_SETTINGS::PANEL_PCM_SETTINGS( wxWindow* parent ) : PANEL_PCM_SETTINGS_BASE( parent )
+PANEL_PACKAGES_AND_UPDATES::PANEL_PACKAGES_AND_UPDATES( wxWindow* parent ) :
+        PANEL_PACKAGES_AND_UPDATES_BASE( parent )
 {
     wxSize minSize = m_libPrefix->GetMinSize();
     int    minWidth = m_libPrefix->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
@@ -38,12 +39,13 @@ PANEL_PCM_SETTINGS::PANEL_PCM_SETTINGS( wxWindow* parent ) : PANEL_PCM_SETTINGS_
 }
 
 
-bool PANEL_PCM_SETTINGS::TransferDataToWindow()
+bool PANEL_PACKAGES_AND_UPDATES::TransferDataToWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-    m_updateCheck->SetValue( settings->m_PcmUpdateCheck );
+    m_cbKicadUpdate->SetValue( settings->m_KiCadUpdateCheck );
+    m_cbPcmUpdate->SetValue( settings->m_PcmUpdateCheck );
     m_libAutoAdd->SetValue( settings->m_PcmLibAutoAdd );
     m_libAutoRemove->SetValue( settings->m_PcmLibAutoRemove );
     m_libPrefix->SetValue( settings->m_PcmLibPrefix );
@@ -52,12 +54,13 @@ bool PANEL_PCM_SETTINGS::TransferDataToWindow()
 }
 
 
-bool PANEL_PCM_SETTINGS::TransferDataFromWindow()
+bool PANEL_PACKAGES_AND_UPDATES::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-    settings->m_PcmUpdateCheck = m_updateCheck->GetValue();
+    settings->m_KiCadUpdateCheck = m_cbKicadUpdate->GetValue();
+    settings->m_PcmUpdateCheck = m_cbPcmUpdate->GetValue();
     settings->m_PcmLibAutoAdd = m_libAutoAdd->GetValue();
     settings->m_PcmLibAutoRemove = m_libAutoRemove->GetValue();
     settings->m_PcmLibPrefix = m_libPrefix->GetValue();

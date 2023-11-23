@@ -292,12 +292,34 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	rightSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Session"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Update Check"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
 	rightSizer->Add( m_staticText24, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
 	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	rightSizer->Add( m_staticline5, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxBoxSizer* bUpdateSizer;
+	bUpdateSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_cbUpdateCheck = new wxCheckBox( this, wxID_ANY, _("Check for KiCad updates on launch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateCheck->SetValue(true);
+	m_cbUpdateCheck->SetToolTip( _("If checked, launching a project will also launch tools such as the schematic and board editors with previously open files") );
+
+	bUpdateSizer->Add( m_cbUpdateCheck, 0, wxALL, 5 );
+
+
+	rightSizer->Add( bUpdateSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+
+
+	rightSizer->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	m_staticText241 = new wxStaticText( this, wxID_ANY, _("Session"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText241->Wrap( -1 );
+	rightSizer->Add( m_staticText241, 0, wxLEFT|wxRIGHT|wxTOP, 13 );
+
+	m_staticline51 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	rightSizer->Add( m_staticline51, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxBoxSizer* bSessionSizer;
 	bSessionSizer = new wxBoxSizer( wxVERTICAL );

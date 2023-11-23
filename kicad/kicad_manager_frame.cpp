@@ -34,6 +34,7 @@
 #include <bitmaps.h>
 #include <build_version.h>
 #include <dialogs/panel_kicad_launcher.h>
+#include <dialogs/dialog_update_check_prompt.h>
 #include <eda_base_frame.h>
 #include <executable_names.h>
 #include <file_history.h>
@@ -66,6 +67,7 @@
 #include <wx/dnd.h>
 #include <wx/process.h>
 #include <atomic>
+#include <update_manager.h>
 
 
 #include <../pcbnew/plugins/kicad/pcb_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
@@ -944,20 +946,12 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
 
     KICAD_SETTINGS* settings = kicadSettings();
 
-    if( settings->m_updateCheck == KICAD_SETTINGS::UPDATE_CHECK::UNINITIALIZED )
+    if( !Pgm().GetCommonSettings()->m_DoNotShowAgain.update_check_prompt )
     {
-        if( wxMessageBox( _( "Would you like to automatically check for plugin updates on startup?" ),
-                          _( "Check for updates" ), wxICON_QUESTION | wxYES_NO, this )
-            == wxYES )
-        {
-            settings->m_updateCheck = KICAD_SETTINGS::UPDATE_CHECK::ALLOWED;
-            settings->m_PcmUpdateCheck = true;
-        }
-        else
-        {
-            settings->m_updateCheck = KICAD_SETTINGS::UPDATE_CHECK::NOT_ALLOWED;
-            settings->m_PcmUpdateCheck = false;
-        }
+        auto prompt = new DIALOG_UPDATE_CHECK_PROMPT( this );
+        prompt->ShowModal();
+
+        Pgm().GetCommonSettings()->m_DoNotShowAgain.update_check_prompt = true;
     }
 
     if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::PBOOL::DISABLED
@@ -967,6 +961,12 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
             CreatePCM();
 
         m_pcm->RunBackgroundUpdate();
+    }
+
+    if( !m_updateManager && settings->m_KiCadUpdateCheck )
+    {
+        m_updateManager = std::make_unique<UPDATE_MANAGER>();
+        m_updateManager->CheckForUpdate();
     }
 }
 

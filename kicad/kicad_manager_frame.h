@@ -35,6 +35,7 @@ class PANEL_KICAD_LAUNCHER;
 class PLUGIN_CONTENT_MANAGER;
 class PROJECT_TREE;
 class PROJECT_TREE_PANE;
+class UPDATE_MANAGER;
 
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
@@ -206,6 +207,7 @@ private:
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;
     BITMAP_BUTTON*                          m_pcmButton;
     int                                     m_pcmUpdateCount;
+    std::unique_ptr<UPDATE_MANAGER>         m_updateManager;
 };
 
 

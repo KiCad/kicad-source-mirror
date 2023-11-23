@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,18 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PANEL_PCM_SETTINGS_H_
-#define PANEL_PCM_SETTINGS_H_
+#ifndef DIALOG_UPDATE_CHECK_PROMPT_H
+#define DIALOG_UPDATE_CHECK_PROMPT_H
 
-#include "panel_pcm_settings_base.h"
+#include <dialogs/dialog_update_check_prompt_base.h>
 
-class PANEL_PCM_SETTINGS : public PANEL_PCM_SETTINGS_BASE
+class DIALOG_UPDATE_CHECK_PROMPT : public DIALOG_UPDATE_CHECK_PROMPT_BASE
 {
 public:
-    PANEL_PCM_SETTINGS( wxWindow* parent );
+    DIALOG_UPDATE_CHECK_PROMPT( wxWindow* aParent );
 
-    bool TransferDataToWindow() override;
+protected:
     bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 };
 
-#endif // PANEL_PCM_SETTINGS_H_
+#endif

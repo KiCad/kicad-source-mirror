@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,44 +10,41 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/textctrl.h>
-#include <wx/panel.h>
+#include <wx/button.h>
+#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_PCM_SETTINGS_BASE
+/// Class DIALOG_UPDATE_CHECK_PROMPT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCM_SETTINGS_BASE : public wxPanel
+class DIALOG_UPDATE_CHECK_PROMPT_BASE : public DIALOG_SHIM
 {
 	private:
 
 	protected:
-		wxStaticText* m_generalLabel;
-		wxStaticLine* m_staticline1;
-		wxCheckBox* m_updateCheck;
-		wxStaticText* m_staticText4;
-		wxStaticLine* m_staticline2;
-		wxCheckBox* m_libAutoAdd;
-		wxCheckBox* m_libAutoRemove;
-		wxStaticText* m_staticText1;
-		wxTextCtrl* m_libPrefix;
+		wxStaticText* m_messageLine1;
+		wxCheckBox* m_cbKiCadUpdates;
+		wxCheckBox* m_cbPCMUpdates;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 
 	public:
 
-		PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		DIALOG_UPDATE_CHECK_PROMPT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Check for Updates"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 
-		~PANEL_PCM_SETTINGS_BASE();
+		~DIALOG_UPDATE_CHECK_PROMPT_BASE();
 
 };
 

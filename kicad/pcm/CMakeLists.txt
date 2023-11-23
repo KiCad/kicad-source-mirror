@@ -8,11 +8,6 @@ include_directories( BEFORE ${INC_BEFORE} )
 
 add_compile_definitions( PCM )
 
-set ( PCM_SETTINGS_SRCS
-    dialogs/panel_pcm_settings_base.cpp
-    dialogs/panel_pcm_settings.cpp
-)
-
 set ( PCM_DLG_SRCS
     dialogs/dialog_manage_repositories_base.cpp
     dialogs/dialog_manage_repositories.cpp
@@ -46,24 +41,6 @@ target_link_libraries( pcm
     common
     picosha2
     nlohmann_json_schema_validator
-)
-
-add_library( pcm_settings STATIC
-    ${PCM_SETTINGS_SRCS}
-)
-
-# This is a circular dependency but it's not a problem for static libs.
-# Refactoring this would need separating kicad_settings, settings manager
-# and pgm_base out of common.
-target_link_libraries( pcm_settings
-    common
-    core
-)
-
-target_include_directories(
-    pcm_settings
-    PUBLIC dialogs
-    PRIVATE $<TARGET_PROPERTY:common,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 # Copy the schema to the build directory when building outside the source tree

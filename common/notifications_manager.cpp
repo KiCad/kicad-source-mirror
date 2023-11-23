@@ -222,6 +222,10 @@ public:
             panel->Destroy();
 
             m_panelMap.erase( it );
+
+            // ensure the window contents get shifted as needed
+            m_scrolledWindow->Layout();
+            Layout();
         }
 
         if( m_panelMap.size() == 0 )

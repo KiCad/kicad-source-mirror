@@ -56,8 +56,7 @@ add_custom_target(
 add_library( singletop STATIC EXCLUDE_FROM_ALL
     eda_doc.cpp
     kiway.cpp
-    kiway_holder.cpp
-    )
+    kiway_holder.cpp )
 
 
 # A shared library used by multiple *.kiface files and one or two program
@@ -265,6 +264,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_grid_settings_base.cpp
     dialogs/panel_mouse_settings.cpp
     dialogs/panel_mouse_settings_base.cpp
+    dialogs/panel_packages_and_updates.cpp
+    dialogs/panel_packages_and_updates_base.cpp
     dialogs/panel_setup_netclasses.cpp
     dialogs/panel_setup_netclasses_base.cpp
     dialogs/panel_setup_severities.cpp
@@ -618,7 +619,6 @@ target_link_libraries( common
     nlohmann_json
     pybind11::embed
     compoundfilereader
-    pcm_settings
     Boost::headers
     # Database support needs these two
     nanodbc # for now; maybe hoist out of common
