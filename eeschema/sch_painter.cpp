@@ -144,7 +144,7 @@ COLOR4D SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
 bool SCH_RENDER_SETTINGS::GetShowPageLimits() const
 {
-    return eeconfig() && eeconfig()->m_Appearance.show_page_limits;
+    return eeconfig() && eeconfig()->m_Appearance.show_page_limits && !IsPrinting();
 }
 
 
@@ -1358,6 +1358,9 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
     if( !aPin->IsVisible() )
     {
+        if( m_schSettings.IsPrinting() )
+            return;
+
         if( !m_schematic || eeconfig()->m_Appearance.show_hidden_pins )
         {
             color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );

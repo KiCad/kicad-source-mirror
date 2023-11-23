@@ -325,11 +325,6 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         VECTOR2I sheetSizeIU = aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
         BOX2I    drawingAreaBBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
 
-        // When printing the board without worksheet items, move board center to the
-        // drawing area center.
-        //if( !m_settings.PrintBorderAndTitleBlock() )
-        //    drawingAreaBBox = getBoundingBox();
-
         // Enable all layers and use KIGFX::TARGET_NONCACHED to force update drawings
         // for printing with current GAL instance
         for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
@@ -340,27 +335,16 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
         view->SetLayerVisible( LAYER_DRAWINGSHEET, printDrawingSheet );
 
-    #if 0
-        // Fit to page (drawingAreaBBox)
-        if( m_settings.m_scale <= 0.0 )
-        {
-            if( drawingAreaBBox.GetWidth() == 0 || drawingAreaBBox.GetHeight() == 0 )
-            {
-                // Nothing to print (empty board and no worksheet)
-                m_settings.m_scale = 1.0;
-            }
-            else
-            {
-                double scaleX = (double) pageSizeIU.x / drawingAreaBBox.GetWidth();
-                double scaleY = (double) pageSizeIU.y / drawingAreaBBox.GetHeight();
-                m_settings.m_scale = std::min( scaleX, scaleY );
-            }
-        }
-    #endif
-        //setupGal( gal );
+        // When is the actual paper size does not match the schematic page size,
+        // we need to adjust the print scale to fit the selected paper size (pageSizeIU)
+        double scaleX = (double) pageSizeIU.x / drawingAreaBBox.GetWidth();
+        double scaleY = (double) pageSizeIU.y / drawingAreaBBox.GetHeight();
+
+        double print_scale = std::min( scaleX, scaleY );
+
         galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
         gal->SetLookAtPoint( drawingAreaBBox.Centre() );
-        gal->SetZoomFactor( 1.0);//m_settings.m_scale );
+        gal->SetZoomFactor( print_scale );
         gal->SetClearColor( dstSettings->GetBackgroundColor() );
         gal->ClearScreen();
 
