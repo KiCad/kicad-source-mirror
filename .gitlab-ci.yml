@@ -13,6 +13,7 @@ include:
   - local: '/.gitlab/Fedora-Linux-CI.yml'
   - local: '/.gitlab/Ubuntu-20.04-CI.yml'
   - local: '/.gitlab/Windows-CI.yml'
+  - local: '/.gitlab/macOS-CI.yml'
   - local: '/.gitlab/coverity.yml'
   - local: '/.gitlab/linux-metadata-validate.yml'
   - local: '/.gitlab/doxygen.yml'
