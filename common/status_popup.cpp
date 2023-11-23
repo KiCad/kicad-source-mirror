@@ -191,6 +191,15 @@ void STATUS_MIN_MAX_POPUP::SetMinMax( double aMin, double aMax )
 }
 
 
+void STATUS_MIN_MAX_POPUP::ClearMinMax()
+{
+    m_min = 0;
+    m_minText->SetLabel( wxT( "---" ) );
+    m_max = std::numeric_limits<double>::max();
+    m_maxText->SetLabel( wxT( "---" ) );
+}
+
+
 void STATUS_MIN_MAX_POPUP::SetCurrent( double aCurrent, const wxString& aLabel )
 {
     m_currentLabel->SetLabel( aLabel );

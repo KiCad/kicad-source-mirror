@@ -98,7 +98,7 @@ public:
 
     static PCB_TUNING_PATTERN* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                           BOARD_CONNECTED_ITEM* aStartItem,
-                                          LENGTH_TUNING_MODE aMode );
+                                          LENGTH_TUNING_MODE aMode, bool aAllowGUI = true );
 
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override;
@@ -272,6 +272,7 @@ protected:
     VECTOR2I              m_end;
 
     PNS::MEANDER_SETTINGS m_settings;
+    bool                  m_unconstrained;
 
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
     std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
@@ -390,6 +391,7 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 PCB_TUNING_PATTERN::PCB_TUNING_PATTERN( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
                                         LENGTH_TUNING_MODE aMode ) :
         PCB_GENERATOR( aParent, aLayer ),
+        m_unconstrained( false ),
         m_trackWidth( 0 ),
         m_diffPairGap( 0 ),
         m_tuningMode( aMode ),
@@ -449,7 +451,7 @@ bool PCB_TUNING_PATTERN::baselineValid()
 PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
                                                    PCB_BASE_EDIT_FRAME* aFrame,
                                                    BOARD_CONNECTED_ITEM* aStartItem,
-                                                   LENGTH_TUNING_MODE aMode )
+                                                   LENGTH_TUNING_MODE aMode, bool aAllowGUI )
 {
     BOARD*                       board = aStartItem->GetBoard();
     std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
@@ -465,7 +467,12 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
     if( aMode == DIFF_PAIR_SKEW )
     {
-        if( constraint.IsNull() )
+        if( !constraint.IsNull() )
+        {
+            pattern->m_settings.SetTargetSkew( constraint.GetValue() );
+            pattern->m_settings.m_overrideCustomRules = false;
+        }
+        else if( aAllowGUI )
         {
             WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Skew" ), _( "Target skew:" ), 0 );
 
@@ -477,13 +484,17 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         }
         else
         {
-            pattern->m_settings.SetTargetSkew( constraint.GetValue() );
-            pattern->m_settings.m_overrideCustomRules = false;
+            pattern->m_unconstrained = true;
         }
     }
     else
     {
-        if( constraint.IsNull() )
+        if( !constraint.IsNull() )
+        {
+            pattern->m_settings.SetTargetLength( constraint.GetValue() );
+            pattern->m_settings.m_overrideCustomRules = false;
+        }
+        else if( aAllowGUI )
         {
             WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Length" ), _( "Target length:" ),
                                       100 * PCB_IU_PER_MM );
@@ -496,8 +507,7 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         }
         else
         {
-            pattern->m_settings.SetTargetLength( constraint.GetValue() );
-            pattern->m_settings.m_overrideCustomRules = false;
+            pattern->m_unconstrained = true;
         }
     }
 
@@ -1490,17 +1500,24 @@ void PCB_TUNING_PATTERN::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAM
     if( !placer )
         return;
 
-    if( m_tuningMode == DIFF_PAIR_SKEW )
+    if( m_unconstrained )
+    {
+        aPopup->ClearMinMax();
+    }
+    else if( m_tuningMode == DIFF_PAIR_SKEW )
     {
         aPopup->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
-        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current skew" ) );
     }
     else
     {
         aPopup->SetMinMax( (double) m_settings.m_targetLength.Min(),
                            (double) m_settings.m_targetLength.Max() );
-        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current length" ) );
     }
+
+    if( m_tuningMode == DIFF_PAIR_SKEW )
+        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current skew" ) );
+    else
+        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current length" ) );
 }
 
 
@@ -1691,6 +1708,34 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 controls->ShowCursor( true );
             };
 
+    auto updateHoverStatus =
+            [&]()
+            {
+                std::unique_ptr<PCB_TUNING_PATTERN> dummyPattern;
+
+                if( m_pickerItem )
+                {
+                    dummyPattern.reset( PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
+                                                                       m_pickerItem, mode, false ) );
+                }
+
+                if( dummyPattern )
+                {
+                    m_statusPopup->Popup();
+                    canvas()->SetStatusPopup( m_statusPopup.get() );
+
+                    dummyPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
+                    dummyPattern->Update( generatorTool, m_board, m_frame, nullptr );
+
+                    dummyPattern->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
+                    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+                }
+                else
+                {
+                    m_statusPopup->Hide();
+                }
+            };
+
     auto updateTuningPattern =
             [&]()
             {
@@ -1757,6 +1802,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
                     generatorTool->UpdateHighlightedNets( m_pickerItem );
                 }
+
+                updateHoverStatus();
             }
             else
             {

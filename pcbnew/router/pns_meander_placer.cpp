@@ -296,7 +296,10 @@ int MEANDER_PLACER::CurrentLayer() const
 
 long long int MEANDER_PLACER::TuningResult() const
 {
-    return m_lastLength;
+    if( m_lastLength )
+        return m_lastLength;
+    else
+        return origPathLength();
 }
 
 

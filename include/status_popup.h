@@ -115,6 +115,7 @@ public:
     virtual ~STATUS_MIN_MAX_POPUP() {}
 
     void SetMinMax( double aMin, double aMax );
+    void ClearMinMax();
 
     void SetCurrent( double aCurrent, const wxString& aLabel );
 
