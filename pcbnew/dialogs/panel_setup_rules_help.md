@@ -227,8 +227,8 @@ Deprecated; use `intersectsArea()` instead.
 
 
     (rule "clearance-to-1mm-cutout"
-        (constraint clearance (min 0.8mm))
-        (condition "A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm"))
+        (constraint edge_clearance (min 0.8mm))
+        (condition "A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm"))
 
 
     (rule "Max Drill Hole Size Mechanical"
