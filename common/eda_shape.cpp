@@ -1925,7 +1925,8 @@ static struct EDA_SHAPE_DESC
                     _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),
-                    &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ) );
+                    &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ) )
+                .SetIsHiddenFromRulesEditor();
 
         auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
                     NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle,
@@ -1966,6 +1967,7 @@ static struct EDA_SHAPE_DESC
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Fill Color" ),
                     &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ) )
-                .SetAvailableFunc( fillAvailable );
+                .SetAvailableFunc( fillAvailable )
+                .SetIsHiddenFromRulesEditor();
     }
 } _EDA_SHAPE_DESC;

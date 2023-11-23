@@ -744,12 +744,14 @@ static struct PCB_SHAPE_DESC
                                                             &PCB_SHAPE::SetIsProxyItem,
                                                             &PCB_SHAPE::IsProxyItem ),
                              groupPadPrimitives )
-                .SetAvailableFunc( showNumberBoxProperty );
+                .SetAvailableFunc( showNumberBoxProperty )
+                .SetIsHiddenFromRulesEditor();
 
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Thermal Spoke Template" ),
                                                             &PCB_SHAPE::SetIsProxyItem,
                                                             &PCB_SHAPE::IsProxyItem ),
                              groupPadPrimitives )
-                .SetAvailableFunc( showSpokeTemplateProperty );
+                .SetAvailableFunc( showSpokeTemplateProperty )
+                .SetIsHiddenFromRulesEditor();
     }
 } _PCB_SHAPE_DESC;
