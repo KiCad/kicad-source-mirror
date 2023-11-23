@@ -272,13 +272,13 @@ static struct BOARD_CONNECTED_ITEM_DESC
         curvePts->SetAvailableFunc( supportsTeardrops );
         propMgr.AddProperty( curvePts, groupTeardrops );
 
-        auto preferZones = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Prefer zone connections" ),
+        auto preferZones = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Prefer Zone Connections" ),
                          &BOARD_CONNECTED_ITEM::SetTeardropPreferZoneConnections,
                          &BOARD_CONNECTED_ITEM::GetTeardropPreferZoneConnections );
         preferZones->SetAvailableFunc( supportsTeardropPreferZoneSetting );
         propMgr.AddProperty( preferZones, groupTeardrops );
 
-        auto twoTracks = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Allow teardrops to span two tracks" ),
+        auto twoTracks = new PROPERTY<BOARD_CONNECTED_ITEM, bool>( _HKI( "Allow Teardrops To Span Two Tracks" ),
                          &BOARD_CONNECTED_ITEM::SetTeardropAllowSpanTwoTracks,
                          &BOARD_CONNECTED_ITEM::GetTeardropAllowSpanTwoTracks );
         twoTracks->SetAvailableFunc( supportsTeardrops );

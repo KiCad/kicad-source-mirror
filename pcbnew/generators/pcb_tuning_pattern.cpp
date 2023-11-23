@@ -2070,39 +2070,39 @@ static struct PCB_TUNING_PATTERN_DESC
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, LENGTH_TUNING_MODE>(
-                                     _HKI( "Tuning mode" ),
+                                     _HKI( "Tuning Mode" ),
                                      NO_SETTER( PCB_TUNING_PATTERN, LENGTH_TUNING_MODE ),
                                      &PCB_TUNING_PATTERN::GetTuningMode ),
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
-                                     _HKI( "Min amplitude" ),
+                                     _HKI( "Min Amplitude" ),
                                      &PCB_TUNING_PATTERN::SetMinAmplitude,
                                      &PCB_TUNING_PATTERN::GetMinAmplitude,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
-                                     _HKI( "Max amplitude" ),
+                                     _HKI( "Max Amplitude" ),
                                      &PCB_TUNING_PATTERN::SetMaxAmplitude,
                                      &PCB_TUNING_PATTERN::GetMaxAmplitude,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TUNING_PATTERN, PNS::MEANDER_SIDE>(
-                                     _HKI( "Initial side" ),
+                                     _HKI( "Initial Side" ),
                                      &PCB_TUNING_PATTERN::SetInitialSide,
                                      &PCB_TUNING_PATTERN::GetInitialSide ),
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
-                                     _HKI( "Min spacing" ), &PCB_TUNING_PATTERN::SetSpacing,
+                                     _HKI( "Min Spacing" ), &PCB_TUNING_PATTERN::SetSpacing,
                                      &PCB_TUNING_PATTERN::GetSpacing, PROPERTY_DISPLAY::PT_SIZE,
                                      ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab );
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
-                                     _HKI( "Corner radius %" ),
+                                     _HKI( "Corner Radius %" ),
                                      &PCB_TUNING_PATTERN::SetCornerRadiusPercentage,
                                      &PCB_TUNING_PATTERN::GetCornerRadiusPercentage,
                                      PROPERTY_DISPLAY::PT_DEFAULT, ORIGIN_TRANSFORMS::NOT_A_COORD ),
@@ -2124,7 +2124,7 @@ static struct PCB_TUNING_PATTERN_DESC
                 };
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, long long int>(
-                                     _HKI( "Target length" ),
+                                     _HKI( "Target Length" ),
                                      &PCB_TUNING_PATTERN::SetTargetLength,
                                      &PCB_TUNING_PATTERN::GetTargetLength,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
@@ -2133,7 +2133,7 @@ static struct PCB_TUNING_PATTERN_DESC
 
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
-                                     _HKI( "Target skew" ), &PCB_TUNING_PATTERN::SetTargetSkew,
+                                     _HKI( "Target Skew" ), &PCB_TUNING_PATTERN::SetTargetSkew,
                                      &PCB_TUNING_PATTERN::GetTargetSkew,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
                              groupTab )
@@ -2141,7 +2141,7 @@ static struct PCB_TUNING_PATTERN_DESC
 
 
         propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, bool>(
-                                     _HKI( "Override custom rules" ),
+                                     _HKI( "Override Custom Rules" ),
                                      &PCB_TUNING_PATTERN::SetOverrideCustomRules,
                                      &PCB_TUNING_PATTERN::GetOverrideCustomRules ),
                              groupTab );

@@ -3407,10 +3407,10 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetValue, &FOOTPRINT::GetValueAsString ),
                     groupFootprint );
 
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library link" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Link" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ),
                     groupFootprint );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library description" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Description" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetLibDescription ),
                     groupFootprint );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
@@ -3419,22 +3419,22 @@ static struct FOOTPRINT_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in schematic" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Not in Schematic" ),
                     &FOOTPRINT::SetBoardOnly, &FOOTPRINT::IsBoardOnly ), groupAttributes );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from position files" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude From Position Files" ),
                     &FOOTPRINT::SetExcludedFromPosFiles, &FOOTPRINT::IsExcludedFromPosFiles ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude from bill of materials" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Exclude From Bill of Materials" ),
                     &FOOTPRINT::SetExcludedFromBOM, &FOOTPRINT::IsExcludedFromBOM ),
                     groupAttributes );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Do not populate" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>( _HKI( "Do not Populate" ),
                     &FOOTPRINT::SetDNP, &FOOTPRINT::IsDNP ),
                     groupAttributes );
 
         const wxString groupOverrides = _HKI( "Overrides" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, bool>(
-                    _HKI( "Exempt from courtyard requirement" ),
+                    _HKI( "Exempt From Courtyard Requirement" ),
                     &FOOTPRINT::SetAllowMissingCourtyard, &FOOTPRINT::AllowMissingCourtyard ),
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Clearance Override" ),

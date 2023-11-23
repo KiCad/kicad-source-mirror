@@ -2592,16 +2592,16 @@ static struct SCH_SYMBOL_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from board" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Board" ),
                 &SCH_SYMBOL::SetExcludedFromBoard, &SCH_SYMBOL::GetExcludedFromBoard ),
                 groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from simulation" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
                 &SCH_SYMBOL::SetExcludedFromSim, &SCH_SYMBOL::GetExcludedFromSim ),
                 groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from bill of materials" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
                 &SCH_SYMBOL::SetExcludedFromBOM, &SCH_SYMBOL::GetExcludedFromBOM ),
                 groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not populate" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do Not Populate" ),
                 &SCH_SYMBOL::SetDNP, &SCH_SYMBOL::GetDNP ),
                 groupAttributes );
     }

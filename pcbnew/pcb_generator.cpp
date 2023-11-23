@@ -162,7 +162,7 @@ void PCB_GENERATOR::SetProperties( const STRING_ANY_MAP& aProps )
 std::vector<std::pair<wxString, wxVariant>> PCB_GENERATOR::GetRowData()
 {
 #ifdef GENERATOR_ORDER
-    return { { _HKI( "Update order" ), wxString::FromCDouble( GetUpdateOrder() ) } };
+    return { { _HKI( "Update Order" ), wxString::FromCDouble( GetUpdateOrder() ) } };
 #else
     return { {} };
 #endif
@@ -199,7 +199,7 @@ static struct PCB_GENERATOR_DESC
 
         const wxString groupTab = _HKI( "Generator Properties" );
 
-        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR, int>( _HKI( "Update order" ),
+        propMgr.AddProperty( new PROPERTY<PCB_GENERATOR, int>( _HKI( "Update Order" ),
                                                                &PCB_GENERATOR::SetUpdateOrder,
                                                                &PCB_GENERATOR::GetUpdateOrder ),
                              groupTab );
