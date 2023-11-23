@@ -217,6 +217,8 @@ static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 
 static const wxChar EnableGit[] = wxT( "EnableGit" );
 
+static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
+
 /**
  * The time in milliseconds to wait before displaying a disambiguation menu.
  */
@@ -348,6 +350,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowPropertiesPanel       = false;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
+    m_EnableEeschemaPrintCairo  = false;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
@@ -524,7 +527,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGit,
                                                 &m_EnableGit, m_EnableGit ) );
 
-
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
+                                                &m_EnableEeschemaPrintCairo, m_EnableEeschemaPrintCairo ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

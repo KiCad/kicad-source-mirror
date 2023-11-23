@@ -284,6 +284,10 @@ public:
      */
     bool m_EnableGit;
 
+    /**
+     * When true, enable Eeschema printing using Cairo
+     */
+    bool m_EnableEeschemaPrintCairo;
 ///@}
 
 

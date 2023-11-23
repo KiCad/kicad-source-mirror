@@ -33,10 +33,12 @@
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <sch_sheet_path.h>
-#include <dialog_print_using_printer_base.h>
+#include "dialog_print_using_printer_base.h"
 #include <sch_painter.h>
 #include <wx/print.h>
 #include <wx/printdlg.h>
+
+#include "sch_printout.h"
 
 
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
@@ -58,31 +60,6 @@ private:
 
     void SavePrintOptions();
 
-    SCH_EDIT_FRAME* m_parent;
-};
-
-
-
-/**
- * Custom print out for printing schematics.
- */
-class SCH_PRINTOUT : public wxPrintout
-{
-public:
-    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
-        wxPrintout( aTitle )
-    {
-        wxASSERT( aParent != nullptr );
-        m_parent = aParent;
-    }
-
-    bool OnPrintPage( int page ) override;
-    bool HasPage( int page ) override;
-    bool OnBeginDocument( int startPage, int endPage ) override;
-    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
-    void PrintPage( SCH_SCREEN* aScreen );
-
-private:
     SCH_EDIT_FRAME* m_parent;
 };
 
@@ -412,197 +389,6 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
     Pgm().m_Printing = false;
 
     return true;
-}
-
-
-bool SCH_PRINTOUT::OnPrintPage( int page )
-{
-    SCH_SHEET_LIST sheetList = m_parent->Schematic().GetSheets();
-
-    wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,
-                 wxT( "Cannot print invalid page number." ) );
-
-    wxCHECK_MSG( sheetList[ page - 1].LastScreen() != nullptr, false,
-                 wxT( "Cannot print page with NULL screen." ) );
-
-    wxString msg;
-    msg.Printf( _( "Print page %d" ), page );
-    m_parent->SetMsgPanel( msg, wxEmptyString );
-
-    SCH_SCREEN*     screen       = m_parent->GetScreen();
-    SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
-    m_parent->SetCurrentSheet( sheetList[ page - 1 ] );
-    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-    m_parent->SetSheetNumberAndCount();
-    m_parent->RecomputeIntersheetRefs();
-    screen = m_parent->GetCurrentSheet().LastScreen();
-    PrintPage( screen );
-    m_parent->SetCurrentSheet( oldsheetpath );
-    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-    m_parent->SetSheetNumberAndCount();
-
-    return true;
-}
-
-
-void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo )
-{
-    *minPage = *selPageFrom = 1;
-    *maxPage = *selPageTo   = m_parent->Schematic().Root().CountSheets();
-}
-
-
-bool SCH_PRINTOUT::HasPage( int pageNum )
-{
-    return m_parent->Schematic().Root().CountSheets() >= pageNum;
-}
-
-
-bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
-{
-    if( !wxPrintout::OnBeginDocument( startPage, endPage ) )
-        return false;
-
-    return true;
-}
-
-
-/*
- * This is the real print function: print the active screen
- */
-void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
-{
-    // Warning:
-    // When printing many pages, changes in the current wxDC will affect all next printings
-    // because all prints are using the same wxPrinterDC after creation
-    // So be careful and reinit parameters, especially when using offsets.
-
-    VECTOR2I tmp_startvisu;
-    wxSize   pageSizeIU;             // Page size in internal units
-    VECTOR2I old_org;
-    wxRect   fitRect;
-    wxDC*    dc = GetDC();
-
-    wxBusyCursor dummy;
-
-    // Save current offsets and clip box.
-    tmp_startvisu = aScreen->m_StartVisu;
-    old_org = aScreen->m_DrawOrg;
-
-    SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
-    COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
-
-    // Change scale factor and offset to print the whole page.
-    bool printDrawingSheet = cfg->m_Printing.title_block;
-
-    pageSizeIU = ToWxSize( aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS ) );
-    FitThisSizeToPaper( pageSizeIU );
-
-    fitRect = GetLogicalPaperRect();
-
-    // When is the actual paper size does not match the schematic page size, the drawing will
-    // not be centered on X or Y axis.  Give a draw offset to center the schematic page on the
-    // paper draw area.
-    int xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
-    int yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
-
-    // Using a wxAffineMatrix2D has a big advantage: it handles different pages orientations
-    //(PORTRAIT/LANDSCAPE), but the affine matrix is not always supported
-    if( dc->CanUseTransformMatrix() )
-    {
-        wxAffineMatrix2D matrix;    // starts from a unity matrix (the current wxDC default)
-
-        // Check for portrait/landscape mismatch:
-        if( ( fitRect.width > fitRect.height ) != ( pageSizeIU.x > pageSizeIU.y ) )
-        {
-            // Rotate the coordinates, and keep the draw coordinates inside the page
-            matrix.Rotate( M_PI_2 );
-            matrix.Translate( 0, -pageSizeIU.y );
-
-            // Recalculate the offsets and page sizes according to the page rotation
-            std::swap( pageSizeIU.x, pageSizeIU.y );
-            FitThisSizeToPaper( pageSizeIU );
-            fitRect = GetLogicalPaperRect();
-
-            xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
-            yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
-
-            // All the coordinates will be rotated 90 deg when printing,
-            // so the X,Y offset vector must be rotated -90 deg before printing
-            std::swap( xoffset, yoffset );
-            std::swap( fitRect.width, fitRect.height );
-            yoffset = -yoffset;
-        }
-
-        matrix.Translate( xoffset, yoffset );
-        dc->SetTransformMatrix( matrix );
-
-        fitRect.x -= xoffset;
-        fitRect.y -= yoffset;
-    }
-    else
-    {
-        SetLogicalOrigin( 0, 0 );   // Reset all offset settings made previously.
-                                    // When printing previous pages (all prints are using the same wxDC)
-        OffsetLogicalOrigin( xoffset, yoffset );
-    }
-
-    dc->SetLogicalFunction( wxCOPY );
-    GRResetPenAndBrush( dc );
-
-    COLOR4D savedBgColor = m_parent->GetDrawBgColor();
-    COLOR4D bgColor      = m_parent->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-    if( cfg->m_Printing.background )
-    {
-        if( cfg->m_Printing.use_theme && theme )
-            bgColor = theme->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-    }
-    else
-    {
-        bgColor = COLOR4D::WHITE;
-    }
-
-    m_parent->SetDrawBgColor( bgColor );
-
-    GRSFilledRect( dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(), fitRect.GetBottom(), 0,
-                   bgColor, bgColor );
-
-    if( cfg->m_Printing.monochrome )
-        GRForceBlackPen( true );
-
-    KIGFX::SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
-    renderSettings.SetPrintDC( dc );
-
-    if( cfg->m_Printing.use_theme && theme )
-        renderSettings.LoadColors( theme );
-
-    renderSettings.SetBackgroundColor( bgColor );
-
-    // The drawing-sheet-item print code is shared between PCBNew and Eeschema, so it's easier
-    // if they just use the PCB layer.
-    renderSettings.SetLayerColor( LAYER_DRAWINGSHEET,
-                                  renderSettings.GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET ) );
-
-    renderSettings.SetDefaultFont( cfg->m_Appearance.default_font );
-
-    if( printDrawingSheet )
-    {
-        m_parent->PrintDrawingSheet( &renderSettings, aScreen, aScreen->Schematic()->GetProperties(),
-                                     schIUScale.IU_PER_MILS, aScreen->GetFileName(), wxEmptyString );
-    }
-
-    renderSettings.SetIsPrinting( true );
-
-    aScreen->Print( &renderSettings );
-
-    m_parent->SetDrawBgColor( savedBgColor );
-
-    GRForceBlackPen( false );
-
-    aScreen->m_StartVisu = tmp_startvisu;
-    aScreen->m_DrawOrg   = old_org;
 }
 
 

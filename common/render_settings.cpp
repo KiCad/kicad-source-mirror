@@ -45,6 +45,7 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
     m_defaultPenWidth       = 0;
     m_minPenWidth           = 0;
     m_isPrinting            = false;
+    m_printBlackAndWite     = false;
 }
 
 

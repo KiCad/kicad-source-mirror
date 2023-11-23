@@ -119,8 +119,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_pin_properties_base.cpp
     dialogs/dialog_plot_schematic.cpp
     dialogs/dialog_plot_schematic_base.cpp
-    dialogs/dialog_print_using_printer.cpp
-    dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
     dialogs/dialog_sch_import_settings.cpp
@@ -286,6 +284,12 @@ set( EESCHEMA_IMPORT_GFX
     import_gfx/dialog_import_gfx_sch.cpp
     import_gfx/graphics_importer_lib_symbol.cpp
     import_gfx/graphics_importer_sch.cpp
+    )
+
+set( EESCHEMA_PRINTING
+    printing/dialog_print_using_printer.cpp
+    printing/dialog_print_using_printer_base.cpp
+    printing/sch_printout.cpp
     )
 
 set( EESCHEMA_SRCS
@@ -528,6 +532,7 @@ target_link_libraries( eeschema
 # the main Eeschema program, in DSO form.
 add_library( eeschema_kiface_objects OBJECT
     ${EESCHEMA_SRCS}
+    ${EESCHEMA_PRINTING}
     ${EESCHEMA_COMMON_SRCS}
     )
 

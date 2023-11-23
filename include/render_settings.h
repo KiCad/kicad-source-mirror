@@ -226,6 +226,17 @@ public:
     bool IsPrinting() const { return m_isPrinting; }
     void SetIsPrinting( bool isPrinting ) { m_isPrinting = isPrinting; }
 
+    bool IsPrintBlackAndWhite() const { return m_printBlackAndWite; }
+    void SetPrintBlackAndWhite( bool aPrintBlackAndWhite )
+    {
+        m_printBlackAndWite = aPrintBlackAndWhite;
+    }
+
+    bool PrintBlackAndWhiteReq() const
+    {
+        return m_printBlackAndWite && m_isPrinting;
+    }
+
     /**
      * Return current background color settings.
      */
@@ -340,7 +351,9 @@ protected:
 
     wxString      m_defaultFont;
 
-    bool          m_isPrinting;
+    bool          m_isPrinting;           // true when draw to a printer
+    bool          m_printBlackAndWite;    // true if black and white printing is requested: some
+                                          // backgrounds are not printed to avoid not visible items
     LSET          m_printLayers;
 
     wxDC*         m_printDC;              // This can go away once the drawing sheet is moved to

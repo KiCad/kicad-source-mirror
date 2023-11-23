@@ -971,7 +971,10 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
     }
     else if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
     {
-        if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+        // Do not fill the shape in B&W print mode, to avoid to visible items
+        // inside the shape
+        if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR
+            && !m_schSettings.PrintBlackAndWhiteReq() )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -1947,7 +1950,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
     if( drawingOP )
         return;
-
+color = COLOR4D( 0.0, 0.3, 0.2, 1.0 );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
@@ -2056,7 +2059,9 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
     }
     else if( aLayer == LAYER_NOTES_BACKGROUND )
     {
-        if( aShape->IsFilled() )
+       // Do not fill the shape in B&W print mode, to avoid to visible items
+        // inside the shape
+        if( aShape->IsFilled() && !m_schSettings.PrintBlackAndWhiteReq() )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -2296,7 +2301,9 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     }
     else if( aLayer == LAYER_NOTES_BACKGROUND )
     {
-        if( aTextBox->IsFilled() )
+        // Do not fill the shape in B&W print mode, to avoid to visible items
+        // inside the shape
+        if( aTextBox->IsFilled() && !m_schSettings.PrintBlackAndWhiteReq() )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -2922,11 +2929,16 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 
     if( aLayer == LAYER_SHEET_BACKGROUND )
     {
-        m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
+       // Do not fill the shape in B&W print mode, to avoid to visible items
+        // inside the shape
+        if( !m_schSettings.PrintBlackAndWhiteReq() )
+        {
+            m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
+            m_gal->SetIsFill( true );
+            m_gal->SetIsStroke( false );
 
-        m_gal->DrawRectangle( pos, pos + size );
+            m_gal->DrawRectangle( pos, pos + size );
+        }
     }
 
     if( aLayer == LAYER_SHEET || aLayer == LAYER_SELECTION_SHADOWS )
