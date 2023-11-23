@@ -2244,7 +2244,7 @@ void DIALOG_NET_INSPECTOR::onReport( wxCommandEvent& aEvent )
 {
     wxFileDialog dlg( this, _( "Save Report File" ), "", "",
                       _( "Report file" ) + AddFileExtListToFilter( { "csv" } ),
-                      wxFD_SAVE );
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
        return;
