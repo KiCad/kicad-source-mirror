@@ -904,10 +904,10 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     }
 
     if( IsBold() )
-        aFormatter->Print( 0, " bold" );
+        aFormatter->Print( 0, " (bold yes)" );
 
     if( IsItalic() )
-        aFormatter->Print( 0, " italic" );
+        aFormatter->Print( 0, " (italic yes)" );
 
     if( GetTextColor() != COLOR4D::UNSPECIFIED )
     {
@@ -938,7 +938,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     }
 
     if( !( aControlBits & CTL_OMIT_HIDE ) && !IsVisible() )
-        aFormatter->Print( 0, " hide" );
+        aFormatter->Print( 0, " (hide yes)" );
 
     if( HasHyperlink() )
     {

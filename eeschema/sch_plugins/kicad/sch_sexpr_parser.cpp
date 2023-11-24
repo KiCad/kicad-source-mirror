@@ -134,6 +134,40 @@ bool SCH_SEXPR_PARSER::parseBool()
 }
 
 
+/*
+ * e.g. "hide", "hide)", "(hide yes)"
+ */
+bool SCH_SEXPR_PARSER::parseMaybeAbsentBool( bool aDefaultValue )
+{
+    bool ret = aDefaultValue;
+
+    if( PrevTok() == T_LEFT )
+    {
+        T token = NextTok();
+
+        // "hide)"
+        if( static_cast<int>( token ) == DSN_RIGHT )
+            return aDefaultValue;
+
+        if( token == T_yes )
+            ret = true;
+        else if( token == T_no )
+            ret = false;
+        else
+            Expecting( "yes or no" );
+
+        NeedRIGHT();
+    }
+    else
+    {
+        // "hide"
+        return aDefaultValue;
+    }
+
+    return ret;
+}
+
+
 void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 {
     T token;
@@ -699,12 +733,18 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
                     break;
 
                 case T_bold:
-                    aText->SetBold( true );
+                {
+                    bool bold = parseMaybeAbsentBool( true );
+                    aText->SetBold( bold );
                     break;
+                }
 
                 case T_italic:
-                    aText->SetItalic( true );
+                {
+                    bool italic = parseMaybeAbsentBool( true );
+                    aText->SetItalic( italic );
                     break;
+                }
 
                 case T_color:
                     color.r = parseInt( "red" ) / 255.0;
@@ -770,8 +810,11 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
         break;
 
         case T_hide:
-            aText->SetVisible( false );
+        {
+            bool hide = parseMaybeAbsentBool( true );
+            aText->SetVisible( !hide );
             break;
+        }
 
         default:
             Expecting( "font, justify, hide or href" );
@@ -917,14 +960,18 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
             break;
 
         case T_show_name:
-            field->SetNameShown();
-            NeedRIGHT();
+        {
+            bool show = parseMaybeAbsentBool( true );
+            field->SetNameShown( show );
             break;
+        }
 
         case T_do_not_autoplace:
-            field->SetCanAutoplace( false );
-            NeedRIGHT();
+        {
+            bool doNotAutoplace = parseMaybeAbsentBool( true );
+            field->SetCanAutoplace( !doNotAutoplace );
             break;
+        }
 
         default:
             Expecting( "id, at, show_name, do_not_autoplace, or effects" );
@@ -2121,14 +2168,18 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
             break;
 
         case T_show_name:
-            field->SetNameShown();
-            NeedRIGHT();
+        {
+            bool show = parseMaybeAbsentBool( true );
+            field->SetNameShown( show );
             break;
+        }
 
         case T_do_not_autoplace:
-            field->SetCanAutoplace( false );
-            NeedRIGHT();
+        {
+            bool doNotAutoplace = parseMaybeAbsentBool( true );
+            field->SetCanAutoplace( !doNotAutoplace );
             break;
+        }
 
         default:
             Expecting( "id, at, show_name, do_not_autoplace or effects" );
@@ -2862,8 +2913,9 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         case T_fields_autoplaced:
-            symbol->SetFieldsAutoplaced();
-            NeedRIGHT();
+            if( parseMaybeAbsentBool( true ) )
+                symbol->SetFieldsAutoplaced();
+
             break;
 
         case T_uuid:
@@ -3225,8 +3277,9 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
         }
 
         case T_fields_autoplaced:
-            sheet->SetFieldsAutoplaced();
-            NeedRIGHT();
+            if( parseMaybeAbsentBool( true ) )
+                sheet->SetFieldsAutoplaced();
+
             break;
 
         case T_stroke:
@@ -3994,8 +4047,9 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
             break;
 
         case T_fields_autoplaced:
-            text->SetFieldsAutoplaced();
-            NeedRIGHT();
+            if( parseMaybeAbsentBool( true ) )
+                text->SetFieldsAutoplaced();
+
             break;
 
         case T_effects:

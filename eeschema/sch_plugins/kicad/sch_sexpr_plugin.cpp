@@ -735,7 +735,7 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
     m_out->Print( 0, " (dnp %s)", ( aSymbol->GetDNP() ) ? "yes" : "no" );
 
     if( aSymbol->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
-        m_out->Print( 0, " (fields_autoplaced)" );
+        m_out->Print( 0, " (fields_autoplaced yes)" );
 
     m_out->Print( 0, "\n" );
 
@@ -902,10 +902,10 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   EDA_UNIT_UTILS::FormatAngle( aField->GetTextAngle() ).c_str() );
 
     if( aField->IsNameShown() )
-        m_out->Print( 0, " (show_name)" );
+        m_out->Print( 0, " (show_name yes)" );
 
     if( !aField->CanAutoplace() )
-        m_out->Print( 0, " (do_not_autoplace)" );
+        m_out->Print( 0, " (do_not_autoplace yes)" );
 
     if( !aField->IsDefaultFormatting()
       || ( aField->GetTextHeight() != schIUScale.MilsToIU( DEFAULT_SIZE_TEXT ) ) )
@@ -990,7 +990,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                                                        aSheet->GetSize().y ).c_str() );
 
     if( aSheet->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
-        m_out->Print( 0, " (fields_autoplaced)" );
+        m_out->Print( 0, " (fields_autoplaced yes)" );
 
     m_out->Print( 0, "\n" );
 
@@ -1325,7 +1325,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
     }
 
     if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
-        m_out->Print( 0, " (fields_autoplaced)" );
+        m_out->Print( 0, " (fields_autoplaced yes)" );
 
     m_out->Print( 0, "\n" );
     aText->EDA_TEXT::Format( m_out, aNestLevel, 0 );
