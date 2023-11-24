@@ -25,13 +25,14 @@
 # Li Yidong <alenks@foxmail.com>, 2023.
 # 欠陥電気 <Misaka13514@gmail.com>, 2023.
 # Pinpang Liao <pinpang@aliyun.com>, 2023.
+# JasonTan <tfx2001@outlook.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-23 20:04+0000\n"
-"Last-Translator: Pinpang Liao <pinpang@aliyun.com>\n"
+"PO-Revision-Date: 2023-11-25 12:25+0000\n"
+"Last-Translator: JasonTan <tfx2001@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -91,7 +92,6 @@ msgid "Build Tech layer %d"
 msgstr "构造工艺层 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
-#, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "简化铜层多边形"
 
@@ -158,9 +158,9 @@ msgid "Load OpenGL: layers"
 msgstr "载入 OpenGL：层"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "载入 OpenGL 层 %d"
+msgstr "载入 OpenGL 层 %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -325,9 +325,8 @@ msgid "Follow PCB Plot Settings"
 msgstr "筛选设置"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
-#, fuzzy
 msgid "legacy colors"
-msgstr "使用颜色："
+msgstr "传统颜色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
@@ -415,7 +414,6 @@ msgid "Rotate Z Counterclockwise"
 msgstr "沿 Z 轴逆时针旋转"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
 msgstr "左移电路板"
 
@@ -424,7 +422,6 @@ msgid "Move board Left"
 msgstr "左移电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
 msgstr "右移电路板"
 
@@ -433,7 +430,6 @@ msgid "Move board Right"
 msgstr "右移电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
 msgstr "上移电路板"
 
@@ -442,7 +438,6 @@ msgid "Move board Up"
 msgstr "上移电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
 msgstr "下移电路板"
 
@@ -451,7 +446,6 @@ msgid "Move board Down"
 msgstr "下移电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
 msgstr "主视图"
 
@@ -460,7 +454,6 @@ msgid "Home view"
 msgstr "主视图"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
-#, fuzzy
 msgid "Reset View"
 msgstr "重置视图"
 
@@ -8113,9 +8106,8 @@ msgid "Min grid spacing:"
 msgstr "最小网格间距："
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "捕捉网格："
+msgstr "对齐网格："
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
