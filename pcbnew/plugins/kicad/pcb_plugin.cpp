@@ -1058,7 +1058,7 @@ void PCB_PLUGIN::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLevel ) co
     while( first < out.Length() )
     {
         m_out->Print( 0, "\n" );
-        m_out->Print( aNestLevel + 2, "%s", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        m_out->Print( aNestLevel + 2, "\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
         first += MIME_BASE64_LENGTH;
     }
 
