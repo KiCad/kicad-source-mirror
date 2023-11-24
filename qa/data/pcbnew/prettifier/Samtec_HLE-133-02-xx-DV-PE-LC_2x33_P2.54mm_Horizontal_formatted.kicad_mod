@@ -1,6 +1,7 @@
 (footprint "Samtec_HLE-133-02-xx-DV-PE-LC_2x33_P2.54mm_Horizontal"
 	(version 20231014)
-	(generator pcbnew)
+	(generator "pcbnew")
+	(generator_version "7.99")
 	(layer "F.Cu")
 	(descr "Samtec HLE .100\" Tiger Beam Cost-effective Single Beam Socket Strip, HLE-133-02-xx-DV-PE-LC, 33 Pins per row (http://suddendocs.samtec.com/prints/hle-1xx-02-xx-dv-xe-xx-mkt.pdf, http://suddendocs.samtec.com/prints/hle-thru.pdf), generated with kicad-footprint-generator")
 	(tags "connector Samtec HLE top entry")

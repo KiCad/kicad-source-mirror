@@ -1,6 +1,7 @@
 (footprint "Reverb_BTDR-1V"
 	(version 20231014)
-	(generator pcbnew)
+	(generator "pcbnew")
+	(generator_version "7.99")
 	(layer "F.Cu")
 	(descr "Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)")
 	(tags "audio belton reverb")
