@@ -555,6 +555,8 @@ int32_t ALTIUM_PARSER::ReadKicadUnit( const std::map<wxString, wxString>& aProps
         return 0;
     }
 
+    prefix.StartsWith( "+", &prefix );
+
     double mils;
 
     if( !prefix.ToCDouble( &mils ) )

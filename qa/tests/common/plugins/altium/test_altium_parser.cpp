@@ -193,7 +193,6 @@ static const std::vector<READ_KICAD_UNIT_CASE> read_kicad_unit_property = {
     { "100", 0 },
     { "100mils", 0 },
     // Incorrect prefix
-    { "+-100mil", 0 },
     { "a100mil", 0 },
 };
 
