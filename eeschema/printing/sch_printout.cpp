@@ -32,8 +32,6 @@
 #include <gal/painter.h>
 #include <zoom_defines.h>
 
-#include <advanced_config.h>
-
 void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo )
 {
     *minPage = *selPageFrom = 1;
@@ -96,7 +94,7 @@ int SCH_PRINTOUT::milsToIU( int aMils )
  */
 void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 {
-    if( !ADVANCED_CFG::GetCfg().m_EnableEeschemaPrintCairo )
+    if( !m_useCairo )
     {
         // Version using print to a wxDC
         // Warning:
@@ -236,6 +234,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         wxDC* dc = GetDC();
         m_view = m_parent->GetCanvas()->GetView();
         KIGFX::GAL_DISPLAY_OPTIONS options;
+        options.cairo_antialiasing_mode = KIGFX::CAIRO_ANTIALIASING_MODE::GOOD;
         std::unique_ptr<KIGFX::GAL_PRINT> galPrint = KIGFX::GAL_PRINT::Create( options, dc );
         KIGFX::GAL* gal = galPrint->GetGAL();
         KIGFX::PRINT_CONTEXT* printCtx = galPrint->GetPrintCtx();

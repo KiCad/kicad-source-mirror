@@ -38,6 +38,8 @@
 #include <wx/print.h>
 #include <wx/printdlg.h>
 
+#include <advanced_config.h>
+
 #include "sch_printout.h"
 
 
@@ -61,6 +63,7 @@ private:
     void SavePrintOptions();
 
     SCH_EDIT_FRAME* m_parent;
+    bool m_useCairo;
 };
 
 
@@ -118,6 +121,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
     m_parent( aParent )
 {
     wxASSERT( aParent );
+    m_useCairo = ADVANCED_CFG::GetCfg().m_EnableEeschemaPrintCairo;
 
     SetupStandardButtons( { { wxID_OK,     _( "Print" )         },
                             { wxID_APPLY,  _( "Print Preview" ) },
@@ -126,6 +130,12 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
 #ifdef __WXMAC__
     // Problems with modal on wx-2.9 - Anyway preview is standard for OSX
     m_sdbSizer1Apply->Hide();
+#endif
+#if defined(__WXGTK__)
+    // Preview using Cairo does not work on GTK,
+    // but this platform provide native print preview
+    if( m_useCairo )
+        m_sdbSizer1Apply->Hide();
 #endif
 
     m_sdbSizer1OK->SetFocus();
@@ -257,8 +267,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
-    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( m_parent, title ),
-                                                  new SCH_PRINTOUT( m_parent, title ),
+    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( m_parent, title, m_useCairo ),
+                                                  new SCH_PRINTOUT( m_parent, title, m_useCairo ),
                                                   &m_parent->GetPageSetupData().GetPrintData() );
 
     preview->SetZoom( 100 );
@@ -371,7 +381,7 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
-    SCH_PRINTOUT printout( m_parent, _( "Print Schematic" ) );
+    SCH_PRINTOUT printout( m_parent, _( "Print Schematic" ), m_useCairo );
 
     Pgm().m_Printing = true;
     {

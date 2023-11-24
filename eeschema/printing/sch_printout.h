@@ -38,11 +38,12 @@ class PAINTER;
 class SCH_PRINTOUT : public wxPrintout
 {
 public:
-    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle ) :
+    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo ) :
         wxPrintout( aTitle )
     {
         //wxASSERT( aParent != nullptr );
         m_parent = aParent;
+        m_useCairo = aUseCairo;
     }
 
     bool OnPrintPage( int page ) override;
@@ -55,6 +56,7 @@ private:
     SCH_EDIT_FRAME* m_parent;
     ///< Source VIEW object (note that actual printing only refers to this object)
     const KIGFX::VIEW* m_view;
+    bool m_useCairo;
 
     int milsToIU( int aMils );
 };
