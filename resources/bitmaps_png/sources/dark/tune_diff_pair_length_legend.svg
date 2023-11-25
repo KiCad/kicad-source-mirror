@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="250"
    height="190"
    viewBox="0 0 66.145832 50.270834"
    version="1.1"
    id="svg8"
-   inkscape:version="1.0.2 (1.0.2+r75+1)"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
    sodipodi:docname="tune_diff_pair_length_legend.svg"
-   shape-rendering="crispEdges">
+   shape-rendering="crispEdges"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <marker
@@ -284,21 +284,24 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="60.307063"
-     inkscape:cy="69.492144"
+     inkscape:cx="60.45763"
+     inkscape:cy="69.650019"
      inkscape:document-units="px"
      inkscape:current-layer="g9599"
      showgrid="true"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      units="px"
      showborder="true"
      inkscape:document-rotation="0"
      showguides="true"
-     inkscape:guide-bbox="true">
+     inkscape:guide-bbox="true"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid1261"
@@ -310,7 +313,8 @@
     <sodipodi:guide
        position="0,25.135417"
        orientation="0,-1"
-       id="guide1263" />
+       id="guide1263"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -320,7 +324,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
@@ -351,7 +355,7 @@
        transform="matrix(0.76520188,0,0,0.77883147,11.649057,67.693533)">
       <text
          xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:9.13948px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;stroke-width:0.34273;"
+         style="font-style:normal;font-weight:normal;font-size:9.13948px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;stroke-width:0.34273"
          x="-9.9487562"
          y="285.47281"
          id="text1103-0"
@@ -360,7 +364,7 @@
            id="tspan1101-4"
            x="-9.9487562"
            y="285.47281"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.13948px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';stroke-width:0.34273;fill:#e0e0e0;fill-opacity:1;">Amin</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.13948px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#e0e0e0;fill-opacity:1;stroke-width:0.34273">A</tspan></text>
       <g
          id="g9602"
          transform="matrix(0.98527321,0,0,0.98527321,-0.00861432,4.2599054)">
@@ -419,7 +423,7 @@
          style="fill:none;fill-rule:evenodd;stroke:#e0e0e0;stroke-width:0.359602;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow2Lstart-8);marker-end:url(#marker4484-0)" />
       <text
          xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:9.13948px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;stroke-width:0.34273;"
+         style="font-style:normal;font-weight:normal;font-size:9.13948px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;stroke-width:0.34273"
          x="-9.9487562"
          y="250.80675"
          id="text1103"
@@ -428,7 +432,7 @@
            id="tspan1101"
            x="-9.9487562"
            y="250.80675"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.13948px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';stroke-width:0.34273;fill:#e0e0e0;fill-opacity:1;">Amax</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:9.13948px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Bold';fill:#e0e0e0;fill-opacity:1;stroke-width:0.34273">A</tspan></text>
       <text
          xml:space="preserve"
          style="font-style:normal;font-weight:normal;font-size:9.13948px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;stroke-width:0.34273;"
