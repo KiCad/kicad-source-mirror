@@ -625,7 +625,7 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     width      = aReader.ReadKicadUnit();
     subpolyindex = aReader.Read<uint16_t>();
 
-    if( aReader.GetRemainingSubrecordBytes() >= 12 )
+    if( aReader.GetRemainingSubrecordBytes() >= 10 )
     {
         aReader.Skip( 9 );
         keepoutrestrictions = aReader.Read<uint8_t>();
@@ -897,7 +897,7 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     width = aReader.ReadKicadUnit();
     subpolyindex = aReader.Read<uint16_t>();
 
-    if( aReader.GetRemainingSubrecordBytes() >= 13 )
+    if( aReader.GetRemainingSubrecordBytes() >= 11 )
     {
         aReader.Skip( 10 );
         keepoutrestrictions = aReader.Read<uint8_t>();
