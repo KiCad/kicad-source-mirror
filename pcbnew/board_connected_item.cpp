@@ -27,6 +27,7 @@
 #include <board_connected_item.h>
 #include <board_design_settings.h>
 #include <connectivity/connectivity_data.h>
+#include <properties/property_validators.h>
 #include <string_utils.h>
 #include <i18n_utility.h>
 #include <netinfo.h>
@@ -243,6 +244,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
                          &BOARD_CONNECTED_ITEM::SetTeardropBestLengthRatio,
                          &BOARD_CONNECTED_ITEM::GetTeardropBestLengthRatio );
         bestLength->SetAvailableFunc( supportsTeardrops );
+        bestLength->SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator );
         propMgr.AddProperty( bestLength, groupTeardrops );
 
         auto maxLength = new PROPERTY<BOARD_CONNECTED_ITEM, int>( _HKI( "Max Length" ),
@@ -255,6 +257,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
                          &BOARD_CONNECTED_ITEM::SetTeardropBestWidthRatio,
                          &BOARD_CONNECTED_ITEM::GetTeardropBestWidthRatio );
         bestWidth->SetAvailableFunc( supportsTeardrops );
+        bestWidth->SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator );
         propMgr.AddProperty( bestWidth, groupTeardrops );
 
         auto maxWidth = new PROPERTY<BOARD_CONNECTED_ITEM, int>( _HKI( "Max Width" ),

@@ -47,8 +47,9 @@ public:
 
     wxString Format( UNITS_PROVIDER* aUnits ) const override
     {
+        bool addUnit = DataType != EDA_DATA_TYPE::UNITLESS;
         return wxString::Format( wxS( "Value must be less than or equal to %s" ),
-                                 aUnits->StringFromValue( Maximum, true ) );
+                                 aUnits->StringFromValue( Maximum, addUnit ) );
     }
 };
 
@@ -70,8 +71,9 @@ public:
 
     wxString Format( UNITS_PROVIDER* aUnits ) const override
     {
+        bool addUnit = DataType != EDA_DATA_TYPE::UNITLESS;
         return wxString::Format( wxS( "Value must be greater than or equal to %s" ),
-                                 aUnits->StringFromValue( Minimum, true ) );
+                                 aUnits->StringFromValue( Minimum, addUnit ) );
     }
 };
 
@@ -124,6 +126,26 @@ public:
 
         if( val < 0 )
             return std::make_unique<VALIDATION_ERROR_TOO_SMALL<int>>( val, 0 );
+
+        return std::nullopt;
+    }
+
+    static VALIDATOR_RESULT PositiveRatioValidator( const wxAny&& aValue, EDA_ITEM* aItem )
+    {
+        wxASSERT_MSG( aValue.CheckType<double>(), "Expecting double-containing value" );
+
+        double val = aValue.As<double>();
+
+        if( val > 1.0 )
+        {
+            return std::make_unique<VALIDATION_ERROR_TOO_LARGE<double>>( val, 1.0,
+                                                                         EDA_DATA_TYPE::UNITLESS );
+        }
+        else if( val < 0.0 )
+        {
+            return std::make_unique<VALIDATION_ERROR_TOO_SMALL<double>>( val, 0.0,
+                                                                         EDA_DATA_TYPE::UNITLESS );
+        }
 
         return std::nullopt;
     }

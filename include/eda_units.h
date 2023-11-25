@@ -38,7 +38,8 @@ enum class EDA_DATA_TYPE
 {
     DISTANCE = 0,
     AREA     = 1,
-    VOLUME   = 2
+    VOLUME   = 2,
+    UNITLESS = 3
 };
 
 enum class EDA_UNITS
