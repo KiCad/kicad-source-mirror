@@ -530,6 +530,21 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
     for( std::pair<const ALTIUM_LAYER, ZONE*>& zone : m_outer_plane )
         zone.second->SetAssignedPriority( 0 );
 
+    // Simplify and fracture zone fills in case we constructed them from tracks (hatched fill)
+    for( ZONE* zone : m_polygons )
+    {
+        if( !zone )
+            continue;
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            if( !zone->HasFilledPolysForLayer( layer ) )
+                continue;
+
+            zone->GetFilledPolysList( layer )->Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+    }
+
     // Altium doesn't appear to store either the dimension value nor the dimensioned object in
     // the dimension record.  (Yes, there is a REFERENCE0OBJECTID, but it doesn't point to the
     // dimensioned object.)  We attempt to plug this gap by finding a colocated arc or circle
@@ -2038,7 +2053,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
     {
-        if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
+        if( aElem.polygon == ALTIUM_POLYGON_NONE )
         {
             for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
                 ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, klayer );
@@ -2101,7 +2116,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
     {
-        if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
+        if( aElem.polygon == ALTIUM_POLYGON_NONE )
         {
             for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
             {
@@ -2309,28 +2324,22 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
 
     ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
-    for( ZONE* zone : m_polygons )
-    {
-        if( zone )
-            zone->UnFill(); // just to be sure
-    }
-
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
         AREGION6 elem( reader, false );
 
-        if( elem.subpolyindex != ALTIUM_POLYGON_NONE )
+        if( elem.polygon != ALTIUM_POLYGON_NONE )
         {
-            if( m_polygons.size() <= elem.subpolyindex )
+            if( m_polygons.size() <= elem.polygon )
             {
                 THROW_IO_ERROR(  wxString::Format( "Region stream tries to access polygon id %d "
                                                    "of %d existing polygons.",
-                                                   elem.subpolyindex,
+                                                  elem.polygon,
                                                    m_polygons.size() ) );
             }
 
-            ZONE *zone = m_polygons.at( elem.subpolyindex );
+            ZONE* zone = m_polygons.at( elem.polygon );
 
             if( zone == nullptr )
             {
@@ -2440,8 +2449,44 @@ void ALTIUM_PCB::ConvertArcs6ToPcbShape( const AARC6& aElem, PCB_SHAPE* aShape )
 
 void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimitiveIndex )
 {
-    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+    if( aElem.polygon != ALTIUM_POLYGON_NONE )
+    {
+        if( m_polygons.size() <= aElem.polygon )
+        {
+            THROW_IO_ERROR( wxString::Format( "Tracks stream tries to access polygon id %d "
+                                              "of %d existing polygons.",
+                                              aElem.polygon, m_polygons.size() ) );
+        }
+
+        ZONE* zone = m_polygons.at( aElem.polygon );
+
+        if( zone == nullptr )
+        {
+            return; // we know the zone id, but because we do not know the layer we did not
+                    // add it!
+        }
+
+        PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+        if( klayer == UNDEFINED_LAYER )
+            return; // Just skip it for now. Users can fill it themselves.
+
+        SHAPE_POLY_SET* fill = zone->GetFill( klayer );
+
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr );
+
+        ConvertArcs6ToPcbShape( aElem, &shape );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
+
+        shape.EDA_SHAPE::TransformShapeToPolygon( *fill, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+        // Will be simplified and fractured later
+
+        zone->SetIsFilled( true );
+        zone->SetNeedRefill( false );
+
         return;
+    }
 
     if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
         || IsAltiumLayerAPlane( aElem.layer ) )
@@ -2482,8 +2527,12 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
 void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6& aElem,
                                               const int aPrimitiveIndex, const bool aIsBoardImport )
 {
-    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+    if( aElem.polygon != ALTIUM_POLYGON_NONE )
+    {
+        wxFAIL_MSG( wxString::Format( "Altium: Unexpected footprint Arc with polygon id %d",
+                                      aElem.polygon ) );
         return;
+    }
 
     if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
         || IsAltiumLayerAPlane( aElem.layer ) )
@@ -3134,8 +3183,43 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 
 void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPrimitiveIndex )
 {
-    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+    if( aElem.polygon != ALTIUM_POLYGON_NONE )
+    {
+        if( m_polygons.size() <= aElem.polygon )
+        {
+            THROW_IO_ERROR( wxString::Format( "Tracks stream tries to access polygon id %d "
+                                              "of %d existing polygons.",
+                                              aElem.polygon, m_polygons.size() ) );
+        }
+
+        ZONE* zone = m_polygons.at( aElem.polygon );
+
+        if( zone == nullptr )
+        {
+            return; // we know the zone id, but because we do not know the layer we did not
+                    // add it!
+        }
+
+        PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+        if( klayer == UNDEFINED_LAYER )
+            return; // Just skip it for now. Users can fill it themselves.
+
+        SHAPE_POLY_SET* fill = zone->GetFill( klayer );
+
+        PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+        shape.SetStart( aElem.start );
+        shape.SetEnd( aElem.end );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
+
+        shape.EDA_SHAPE::TransformShapeToPolygon( *fill, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+        // Will be simplified and fractured later
+
+        zone->SetIsFilled( true );
+        zone->SetNeedRefill( false );
+
         return;
+    }
 
     if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
         || IsAltiumLayerAPlane( aElem.layer ) )
@@ -3177,8 +3261,12 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
                                                 const int  aPrimitiveIndex,
                                                 const bool aIsBoardImport )
 {
-    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+    if( aElem.polygon != ALTIUM_POLYGON_NONE )
+    {
+        wxFAIL_MSG( wxString::Format( "Altium: Unexpected footprint Track with polygon id %d",
+                                      aElem.polygon ) );
         return;
+    }
 
     if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
         || IsAltiumLayerAPlane( aElem.layer ) )

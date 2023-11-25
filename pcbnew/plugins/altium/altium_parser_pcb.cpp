@@ -615,7 +615,7 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     is_keepout     = flags2 == 2;
 
     net          = aReader.Read<uint16_t>();
-    subpolyindex = aReader.Read<uint16_t>();
+    polygon      = aReader.Read<uint16_t>();
     component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
     center     = aReader.ReadVector2IPos();
@@ -623,10 +623,11 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     startangle = aReader.Read<double>();
     endangle   = aReader.Read<double>();
     width      = aReader.ReadKicadUnit();
+    subpolyindex = aReader.Read<uint16_t>();
 
     if( aReader.GetRemainingSubrecordBytes() >= 12 )
     {
-        aReader.Skip( 11 );
+        aReader.Skip( 9 );
         keepoutrestrictions = aReader.Read<uint8_t>();
     }
     else
@@ -888,16 +889,17 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     is_keepout     = flags2 == 2;
 
     net          = aReader.Read<uint16_t>();
-    subpolyindex = aReader.Read<uint16_t>();
+    polygon      = aReader.Read<uint16_t>();
     component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
     start = aReader.ReadVector2IPos();
     end   = aReader.ReadVector2IPos();
     width = aReader.ReadKicadUnit();
+    subpolyindex = aReader.Read<uint16_t>();
 
     if( aReader.GetRemainingSubrecordBytes() >= 13 )
     {
-        aReader.Skip( 12 );
+        aReader.Skip( 10 );
         keepoutrestrictions = aReader.Read<uint8_t>();
     }
     else
@@ -1038,7 +1040,7 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     is_keepout     = flags2 == 2;
 
     net = aReader.Read<uint16_t>();
-    subpolyindex = aReader.Read<uint16_t>();
+    polygon = aReader.Read<uint16_t>();
     component = aReader.Read<uint16_t>();
     aReader.Skip( 5 );
     holecount = aReader.Read<uint16_t>();
@@ -1057,8 +1059,9 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
             ALTIUM_PARSER::ReadInt( properties, wxT( "KEEPOUTRESTRIC" ), 0x1F ) );
 
     // TODO: this can differ from the other subpolyindex?!
-    //subpolyindex = static_cast<uint16_t>(
-    //        ALTIUM_PARSER::ReadInt( properties, "SUBPOLYINDEX", ALTIUM_POLYGON_NONE ) );
+    // Note: "the other subpolyindex" is "polygon"
+    subpolyindex = static_cast<uint16_t>(
+            ALTIUM_PARSER::ReadInt( properties, "SUBPOLYINDEX", ALTIUM_POLYGON_NONE ) );
 
     switch( pkind )
     {

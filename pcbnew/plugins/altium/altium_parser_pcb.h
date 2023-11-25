@@ -549,6 +549,7 @@ struct AREGION6
     ALTIUM_LAYER layer;
     uint16_t     net;
     uint16_t     component;
+    uint16_t     polygon;
     uint16_t     subpolyindex;
     uint8_t      keepoutrestrictions;
     uint16_t     holecount;
@@ -570,6 +571,7 @@ struct AARC6
     ALTIUM_LAYER layer;
     uint16_t     net;
     uint16_t     component;
+    uint16_t     polygon;
     uint16_t     subpolyindex;
     uint8_t      keepoutrestrictions;
 
@@ -683,6 +685,7 @@ struct ATRACK6
     ALTIUM_LAYER layer;
     uint16_t     net;
     uint16_t     component;
+    uint16_t     polygon;
     uint16_t     subpolyindex;
     uint8_t      keepoutrestrictions;
 
