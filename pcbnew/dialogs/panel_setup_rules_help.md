@@ -178,26 +178,6 @@ of whether or not the rule is being evaluated for that layer.
 For the latter use a `(layer "layer_name")` clause in the rule.
 <br><br>
 
-    !!! A.memberOf('<group_name>') !!!
-Deprecated; use `memberOfGroup()` instead.
-<br><br>
-
-    !!! A.insideCourtyard('<footprint_refdes>') !!!
-Deprecated; use `intersectsCourtyard()` instead.
-<br><br>
-
-    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!
-Deprecated; use `intersectsFrontCourtyard()` instead.
-<br><br>
-
-    !!! A.insideBackCourtyard('<footprint_refdes>') !!!
-Deprecated; use `intersectsBackCourtyard()` instead.
-<br><br>
-
-    !!! A.insideArea('<zone_name>') !!!
-Deprecated; use `intersectsArea()` instead.
-<br><br><br>
-
 ### More Examples
 
     (rule "copper keepout"
