@@ -965,7 +965,7 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
     while( first < out.Length() )
     {
         m_out->Print( 0, "\n" );
-        m_out->Print( aNestLevel + 2, "%s", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        m_out->Print( aNestLevel + 2, "\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
         first += MIME_BASE64_LENGTH;
     }
 

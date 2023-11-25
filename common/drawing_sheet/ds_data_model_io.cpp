@@ -432,7 +432,7 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
     while( first < out.Length() )
     {
         m_out->Print( 0, "\n" );
-        m_out->Print( aNestLevel + 1, "%s", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        m_out->Print( aNestLevel + 1, "\"%s\"", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
         first += MIME_BASE64_LENGTH;
     }
 
