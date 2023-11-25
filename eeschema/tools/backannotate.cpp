@@ -185,8 +185,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
                         continue;
 
                     // Fields are of the format "(field (name "name") "12345")
-                    auto fieldName = field.second.get_child_optional( "name" );
-                    auto fieldValue = field.second.back().first;
+                    const auto fieldName = field.second.get_child_optional( "name" );
+                    const auto fieldValue = field.second.back().first;
 
                     if( !fieldName )
                         continue;

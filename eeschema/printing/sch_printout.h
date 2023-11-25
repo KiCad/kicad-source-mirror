@@ -38,13 +38,7 @@ class PAINTER;
 class SCH_PRINTOUT : public wxPrintout
 {
 public:
-    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo ) :
-        wxPrintout( aTitle )
-    {
-        //wxASSERT( aParent != nullptr );
-        m_parent = aParent;
-        m_useCairo = aUseCairo;
-    }
+    SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo );
 
     bool OnPrintPage( int page ) override;
     bool HasPage( int page ) override;

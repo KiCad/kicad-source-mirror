@@ -82,7 +82,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 void PCB_EDIT_FRAME::SwitchLayer( PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID curLayer = GetActiveLayer();
-    auto displ_opts = GetDisplayOptions();
+    const PCB_DISPLAY_OPTIONS& displ_opts = GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )

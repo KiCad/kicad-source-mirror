@@ -32,6 +32,17 @@
 #include <gal/painter.h>
 #include <zoom_defines.h>
 
+
+SCH_PRINTOUT::SCH_PRINTOUT( SCH_EDIT_FRAME* aParent, const wxString& aTitle, bool aUseCairo ) :
+        wxPrintout( aTitle )
+{
+    wxASSERT( aParent != nullptr );
+    m_parent = aParent;
+    m_useCairo = aUseCairo;
+    m_view = nullptr;
+}
+
+
 void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo )
 {
     *minPage = *selPageFrom = 1;
