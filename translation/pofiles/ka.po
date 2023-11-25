@@ -1,13 +1,19 @@
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-02-10 17:07+0200\n"
+"PO-Revision-Date: 2023-11-25 12:25+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.2.1-rc\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -617,9 +623,8 @@ msgid "Show adhesive"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "საზღვრის სტილი:"
+msgstr "სარჩილავი პასტა"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Show solder paste"
@@ -850,9 +855,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1608
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2009
 #: pcbnew/widgets/appearance_controls.cpp:2669
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "არსებული პროექტის გახსნა"
+msgstr "გადავაწერო არსებულ პრესეტს?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
@@ -1723,6 +1727,7 @@ msgstr ""
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
+"გარემოს ცვლადების განშლის შეცდომა: ver vipove '%c' პოზიციაზე %u '%s'-ში."
 
 #: common/common.cpp:358
 #, c-format
@@ -3904,9 +3909,8 @@ msgid "At least one grid size is required."
 msgstr ""
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "3D ბადე"
+msgstr "ბადეები:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
 #, fuzzy
@@ -3931,9 +3935,8 @@ msgid "Grid Overrides"
 msgstr ""
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "კავშირები"
+msgstr "დაკავშირებული ელემენტები:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
 msgid "Wires:"
@@ -4008,9 +4011,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "გადიდება"
+msgstr "მასშტაბი:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
@@ -4887,9 +4889,8 @@ msgid "Constrain to H, V, 45"
 msgstr ""
 
 #: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:703
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "%s-ის ჩასწორება"
+msgstr "ბადეების ჩასწორება..."
 
 #: common/eda_draw_frame.cpp:562
 msgid "Zoom Auto"
@@ -5116,7 +5117,7 @@ msgstr ""
 
 #: common/eda_shape.cpp:76 pcbnew/pad.cpp:1233
 msgid "Rect"
-msgstr "Rect"
+msgstr "მართკ"
 
 #: common/eda_shape.cpp:77 common/eda_shape.cpp:700 common/eda_shape.cpp:1858
 #: gerbview/gerber_draw_item.cpp:230
@@ -5664,9 +5665,9 @@ msgid "Directory '%s' does not exist"
 msgstr ""
 
 #: common/gestfich.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "გამოტანის საქაღალდე:"
+msgstr "'%s' საქაღალდე არაა"
 
 #: common/gestfich.cpp:338
 #, c-format
@@ -5790,53 +5791,45 @@ msgid "* [rejected] %s (%s)"
 msgstr ""
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "განახლდა"
+msgstr "[განახლდა] %s"
 
 #: common/git/kicad_git_errors.cpp:30
-#, fuzzy
 msgid "Invalid repository."
-msgstr "რეპოზიტორიის წაშლა"
+msgstr "არასწორი რეპოზიტორია."
 
 #: common/git/kicad_git_errors.cpp:31
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ცვლილებების გადაცემა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:32
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ბრენჩების შერწყმა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "რეპოზიტორიის წაშლა"
+msgstr "რეპოზიტორიის დაკლონვა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "რეპოზიტორიის წაშლა"
+msgstr "დაშორებული რეპოზიტორია ვერ ვიპოვე."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
 msgstr ""
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Branch not found."
-msgstr "%s ნაპოვნი არაა"
+msgstr "ბრენჩი ვერ ვიპოვე."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ბრენჩის შექმნა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ბრენჩის წაშლა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
@@ -5867,24 +5860,20 @@ msgid "Failed to establish connection with remote repository."
 msgstr ""
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s ნაპოვნი არაა"
+msgstr "ჭდე ვერ ვიპოვე."
 
 #: common/git/kicad_git_errors.cpp:60
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ჭდის შექმნა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ჭდის წაშლა ჩავარდა."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "უცნობი შეცდომა"
+msgstr "უცნობი შეცდომა."
 
 #: common/git/kicad_git_errors.cpp:64
 #, fuzzy
@@ -5892,9 +5881,8 @@ msgid "No error."
 msgstr "შეცდომების გარეშე."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "შეცდომების გარეშე."
+msgstr "შეცდომების გარეშე"
 
 #: common/grid_tricks.cpp:353 common/tool/actions.cpp:193
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:117
@@ -6009,9 +5997,9 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:155
 #: common/http_lib/http_lib_connection.cpp:278
 #: common/http_lib/http_lib_connection.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "შედომები"
+msgstr "შეცდომა: %s"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:155
@@ -7364,9 +7352,8 @@ msgid "Edit grid definitions"
 msgstr "რედაქტირების მორგება"
 
 #: common/tool/actions.cpp:710
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "ბადის მორგება"
+msgstr "ბადის წყარო..."
 
 #: common/tool/actions.cpp:711
 msgid "Set the grid origin point"
@@ -7859,9 +7846,8 @@ msgid "Min grid spacing:"
 msgstr ""
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "ბადის ჩვენება"
+msgstr "მიმაგრება ბადეზე:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -8961,9 +8947,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ფაილის შექმნა ჩავარდა."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -11585,9 +11570,8 @@ msgid "BOM Presets"
 msgstr "პრესეტები"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
-#, fuzzy
 msgid "BOM Format Presets"
-msgstr "აირჩიეთ პრესეტი:"
+msgstr "BOM ფორმატის პრესეტები"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -11923,7 +11907,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
 #: eeschema/dialogs/dialog_sim_command_base.cpp:472
 msgid "Octave"
-msgstr "Octave"
+msgstr "ოქტავა"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
@@ -12685,9 +12669,8 @@ msgid "Group symbols together based on common properties"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Scope:"
-msgstr "ფარგლები"
+msgstr "ფარგლები:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:167
 msgid "Entire project"
@@ -12716,9 +12699,8 @@ msgid "Edit"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "Field delimeter:"
-msgstr "მილიმეტრი"
+msgstr "ველის გამყოფი:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
@@ -13597,9 +13579,8 @@ msgid "Largest"
 msgstr "უდიდესი"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "კავშირი"
+msgstr "კავშირის ბადე:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14188,9 +14169,9 @@ msgid "Unable to save ERC report to %s\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:967
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "ანგარიშის ფაილში ჩაწერა"
+msgstr "ERC ანგარიში ჩაიწერა %s-ში\n"
 
 #: eeschema/eeschema_settings.cpp:70
 msgid "Net Navigator"
@@ -14735,9 +14716,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:1063
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "%s-ის შენახვა ჩავარდა."
 
 #: eeschema/files-io.cpp:1065
 msgid "Locked File Warning"
@@ -20725,14 +20706,12 @@ msgid "Active layer name:"
 msgstr "ფაილის სახელი:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
-#, fuzzy
 msgid "Offset X"
-msgstr "X-ის წანაცვლება:"
+msgstr "X-ის წანაცვლება"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:49
-#, fuzzy
 msgid "Offset Y"
-msgstr "Y-ის წანაცვლება:"
+msgstr "Y-ის წანაცვლება"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
 #, fuzzy
@@ -20981,7 +20960,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
 msgid "Page Size"
-msgstr "Page Size"
+msgstr "გვერდის ზომა"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Full size"
@@ -21942,23 +21921,20 @@ msgid "Failed to output data"
 msgstr ""
 
 #: kicad/cli/command.cpp:126
-#, fuzzy
 msgid "Input directory"
-msgstr "გამოტანის საქაღალდე:"
+msgstr "შეყვანის საქაღალდე"
 
 #: kicad/cli/command.cpp:132
 msgid "Input file"
 msgstr "შეყვანის ფაილი"
 
 #: kicad/cli/command.cpp:143
-#, fuzzy
 msgid "Output directory"
-msgstr "გამოტანის საქაღალდე:"
+msgstr "გამოტანის საქაღალდე"
 
 #: kicad/cli/command.cpp:150
-#, fuzzy
 msgid "Output file"
-msgstr "გამოტანის ფაილი:"
+msgstr "გამოტანის ფაილი"
 
 #: kicad/cli/command.cpp:163
 msgid ""
@@ -22140,9 +22116,8 @@ msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:181
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "მითითებული არაა"
+msgstr "მითითებული ფორმატი არასწორია\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:105
 #, c-format
@@ -23548,14 +23523,12 @@ msgid "Pull changes from remote repository into local"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:939
-#, fuzzy
 msgid "Commit File..."
-msgstr "ფაილის ჩასწორება"
+msgstr "ფაილის გადაცემა..."
 
 #: kicad/project_tree_pane.cpp:954
-#, fuzzy
 msgid "Switch to branch "
-msgstr "პროექტის მმართველი"
+msgstr "გადართვა ბრენჩზე "
 
 #: kicad/project_tree_pane.cpp:959
 msgid "Other..."
@@ -23611,9 +23584,8 @@ msgid "Set default remote"
 msgstr "ნაგულისხმები ფონტი"
 
 #: kicad/project_tree_pane.cpp:1596
-#, fuzzy
 msgid "Failed to set default remote."
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ნაგულისხმევი დაშორებულის დაყენება ჩავარდა."
 
 #: kicad/project_tree_pane.cpp:1608 kicad/project_tree_pane.cpp:1645
 #: kicad/project_tree_pane.cpp:1665
@@ -23667,19 +23639,19 @@ msgid "Failed to get repository index: %s"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2132
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ფაილის ინდექსში ჩამატება ჩავარდა: %s"
 
 #: kicad/project_tree_pane.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ინდექსის ჩაწერა ჩავარდა: %s"
 
 #: kicad/project_tree_pane.cpp:2147
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ხის ჩაწერა ჩავარდა: %s"
 
 #: kicad/project_tree_pane.cpp:2156
 #, c-format
@@ -23692,19 +23664,19 @@ msgid "Failed to get HEAD reference: %s"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2171
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "კომიტის მიღება ჩავარდა: %s"
 
 #: kicad/project_tree_pane.cpp:2187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "ავტორის ხელმოწერის შექმნა ჩავარდა: %s"
 
 #: kicad/project_tree_pane.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "ფაილის გახსნა შეუძლებელია"
+msgstr "კომიტის შექმნა ჩავარდა: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -25254,9 +25226,8 @@ msgid "Threshold voltage:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "მასალა"
+msgstr "მასალის სახელები:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 msgid "Chemical symbols"
@@ -27829,9 +27800,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:150
-#, fuzzy
 msgid "Tolerance:"
-msgstr "დაშვება"
+msgstr "დაშვება:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -28441,14 +28411,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
-msgstr "ცენტრი"
+msgstr "ცენტრ.მდებ. X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
-#, fuzzy
 msgid "Center pos Y:"
-msgstr "ცენტრი"
+msgstr "ცენტრ. მდებ. Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:365
 msgid ""
@@ -29148,9 +29116,8 @@ msgid "Binary GTLF files"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:347
-#, fuzzy
 msgid "STEP Output File"
-msgstr "გამოტანის ფაილი:"
+msgstr "STEP გამოტანის ფაილი"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:366
 msgid "No filename for output file"
@@ -36898,19 +36865,19 @@ msgid "(from tuning pattern properties)"
 msgstr ""
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1597
-#, fuzzy, c-format
+#, c-format
 msgid "Skew Constraints: %s"
-msgstr "შეზღუდვები"
+msgstr "სიგანის შეზღუდვები: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1610
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "ჯამური სიგრძე"
+msgstr "ჯამური სიგრძე: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1619
-#, fuzzy, c-format
+#, c-format
 msgid "Length Constraints: %s"
-msgstr "შეზღუდვები"
+msgstr "სიგრძის შეზღუდვები: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1784
 msgid "Tune"
@@ -36936,9 +36903,8 @@ msgid "Pattern Properties"
 msgstr "ობიექტის თვისებები"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1896
-#, fuzzy
 msgid "Tuning mode"
-msgstr "ნახაზის რეჟიმი:"
+msgstr "დეტალური მორგების რეჟიმი"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1902
 msgid "Min amplitude"
@@ -36958,9 +36924,8 @@ msgid "Min spacing"
 msgstr ""
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1928
-#, fuzzy
 msgid "Corner radius %"
-msgstr "კუთხის რადიუსი:"
+msgstr "კუთხის რადიუსის %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
 #, fuzzy
@@ -36995,14 +36960,12 @@ msgid "DXF default units:"
 msgstr "ნაგულისხმები ფონტი:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:90
-#, fuzzy
 msgid "Place at X:"
-msgstr "განლაგება"
+msgstr "ადგილი X-ზე:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:127
-#, fuzzy
 msgid "Set layer:"
-msgstr "ფენის მონიშვნა"
+msgstr "ფენის დაყენება:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:145
 msgid "Fix discontinuities"
@@ -38058,7 +38021,7 @@ msgstr "ფენის მონიშვნა"
 
 #: pcbnew/pcb_reference_image.cpp:358
 msgid "Greyscale"
-msgstr "Greyscale"
+msgstr "ნაცრისფერი"
 
 #: pcbnew/pcb_shape.cpp:471
 msgid "Drawing"
@@ -38111,9 +38074,8 @@ msgid "Border Properties"
 msgstr "ტექსტის თვისებები"
 
 #: pcbnew/pcb_textbox.cpp:659
-#, fuzzy
 msgid "Border Style"
-msgstr "საზღვრის სტილი:"
+msgstr "საზღვრის სტილი"
 
 #: pcbnew/pcb_track.cpp:139
 #, c-format
@@ -38143,9 +38105,9 @@ msgid "Segment Length"
 msgstr ""
 
 #: pcbnew/pcb_track.cpp:1096
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: %s"
-msgstr "შეზღუდვები"
+msgstr "სიგანის შეზღუდვები: %s"
 
 #: pcbnew/pcb_track.cpp:1108
 msgid "Micro Via"
@@ -40820,9 +40782,8 @@ msgid "Move Footprint Anchor"
 msgstr ""
 
 #: pcbnew/tools/drawing_tool.cpp:3012
-#, fuzzy
 msgid "Select Net:"
-msgstr "მონიშვნის მოხსნა"
+msgstr "აირჩიეთ ქსელი:"
 
 #: pcbnew/tools/drawing_tool.cpp:3184
 msgid "Via location violates DRC."
@@ -40923,9 +40884,8 @@ msgid "Heal Shapes"
 msgstr "მოხაზულობა"
 
 #: pcbnew/tools/edit_tool.cpp:1443
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "დაშვება"
+msgstr "დაშვების მნიშვნელობა:"
 
 #: pcbnew/tools/edit_tool.cpp:1480
 #, fuzzy
@@ -40995,9 +40955,9 @@ msgid "Regenerate All"
 msgstr "ყველას ჩანაცვლება"
 
 #: pcbnew/tools/generator_tool.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "განახლდა"
+msgstr "%s-ის განახლება"
 
 #: pcbnew/tools/generator_tool.cpp:199
 msgid "Regenerate Selected"
@@ -42946,9 +42906,9 @@ msgid "Object Snapping"
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1468
-#, fuzzy, c-format
+#, c-format
 msgid "DP Gap Constraints: %s"
-msgstr "შეზღუდვები"
+msgstr "სიგანის შეზღუდვები: მინ. %s"
 
 #: pcbnew/tools/pcb_control.cpp:1515
 msgid "Resolved clearance"
