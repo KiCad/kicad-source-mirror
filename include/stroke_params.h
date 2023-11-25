@@ -44,7 +44,7 @@ class RENDER_SETTINGS;
 /**
  * Dashed line types.
  */
-enum class PLOT_DASH_TYPE
+enum class LINE_STYLE
 {
     DEFAULT    = -1,
     SOLID      = 0,
@@ -57,7 +57,7 @@ enum class PLOT_DASH_TYPE
 };
 
 
-struct lineTypeStruct
+struct LINE_STYLE_DESC
 {
     wxString      name;
     const BITMAPS bitmap;
@@ -65,9 +65,9 @@ struct lineTypeStruct
 
 
 /*
- * Conversion map between PLOT_DASH_TYPE values and style names displayed
+ * Conversion map between LINE_STYLE values and style names displayed
  */
-extern const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames;
+extern const std::map<LINE_STYLE, struct LINE_STYLE_DESC> lineTypeNames;
 
 
 #define DEFAULT_STYLE _( "Default" )
@@ -80,10 +80,10 @@ extern const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames;
 class STROKE_PARAMS
 {
 public:
-    STROKE_PARAMS( int aWidth = 0, PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
+    STROKE_PARAMS( int aWidth = 0, LINE_STYLE aLineStyle = LINE_STYLE::DEFAULT,
                    const KIGFX::COLOR4D& aColor = KIGFX::COLOR4D::UNSPECIFIED ) :
             m_width( aWidth ),
-            m_plotstyle( aPlotStyle ),
+            m_lineStyle( aLineStyle ),
             m_color( aColor )
     {
     }
@@ -91,8 +91,8 @@ public:
     int GetWidth() const { return m_width; }
     void SetWidth( int aWidth ) { m_width = aWidth; }
 
-    PLOT_DASH_TYPE GetPlotStyle() const { return m_plotstyle; }
-    void SetPlotStyle( PLOT_DASH_TYPE aPlotStyle ) { m_plotstyle = aPlotStyle; }
+    LINE_STYLE GetLineStyle() const { return m_lineStyle; }
+    void       SetLineStyle( LINE_STYLE aLineStyle ) { m_lineStyle = aLineStyle; }
 
     KIGFX::COLOR4D GetColor() const { return m_color; }
     void SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
@@ -100,7 +100,7 @@ public:
     bool operator!=( const STROKE_PARAMS& aOther )
     {
         return m_width != aOther.m_width
-                || m_plotstyle != aOther.m_plotstyle
+                || m_lineStyle != aOther.m_lineStyle
                 || m_color != aOther.m_color;
     }
 
@@ -111,15 +111,15 @@ public:
 
     // Helper functions
 
-    static wxString GetLineStyleToken( PLOT_DASH_TYPE aStyle );
+    static wxString GetLineStyleToken( LINE_STYLE aStyle );
 
-    static void Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int aWidth,
+    static void Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWidth,
                         const KIGFX::RENDER_SETTINGS* aRenderSettings,
                         std::function<void( const VECTOR2I& a, const VECTOR2I& b )> aStroker );
 
 private:
     int            m_width;
-    PLOT_DASH_TYPE m_plotstyle;
+    LINE_STYLE     m_lineStyle;
     KIGFX::COLOR4D m_color;
 };
 

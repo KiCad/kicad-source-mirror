@@ -49,7 +49,7 @@ public:
     virtual void SetCurrentLineWidth( int aLineWidth, void* aData = nullptr ) override;
 
     // RS274X has no dashing, nor colors
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override
     {
     }
 

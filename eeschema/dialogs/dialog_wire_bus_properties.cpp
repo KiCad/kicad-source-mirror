@@ -52,8 +52,8 @@ DIALOG_WIRE_BUS_PROPERTIES::DIALOG_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     SetInitialFocus( m_lineWidth );
 
-    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
-        m_typeCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+    for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
+        m_typeCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
 
     m_typeCombo->Append( DEFAULT_STYLE );
 
@@ -119,10 +119,10 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataToWindow()
             [&]( const SCH_ITEM* item )
             {
                 return !item->HasLineStroke()
-                        || item->GetStroke().GetPlotStyle() == stroke.GetPlotStyle();
+                        || item->GetStroke().GetLineStyle() == stroke.GetLineStyle();
             } ) )
     {
-        int style = static_cast<int>( stroke.GetPlotStyle() );
+        int style = static_cast<int>( stroke.GetLineStyle() );
 
         if( style == -1 )
             m_typeCombo->SetStringSelection( DEFAULT_STYLE );
@@ -195,7 +195,7 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
 
             if( m_typeCombo->GetStringSelection() != INDETERMINATE_STYLE )
             {
-                PLOT_DASH_TYPE lineStyle = PLOT_DASH_TYPE::DEFAULT;
+                LINE_STYLE lineStyle = LINE_STYLE::DEFAULT;
 
                 size_t lineTypeSelection = m_typeCombo->GetSelection();
                 auto it = lineTypeNames.begin();

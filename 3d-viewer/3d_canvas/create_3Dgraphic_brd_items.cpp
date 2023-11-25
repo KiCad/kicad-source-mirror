@@ -598,9 +598,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 {
     // The full width of the lines to create
     const float    linewidth3DU = TO_3DU( aShape->GetWidth() );
-    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
+    LINE_STYLE     lineStyle = aShape->GetStroke().GetLineStyle();
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
         switch( aShape->GetShape() )
         {

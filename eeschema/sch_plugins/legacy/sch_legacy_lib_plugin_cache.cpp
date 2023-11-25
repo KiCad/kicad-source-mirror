@@ -845,7 +845,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
+                          LINE_STYLE::SOLID );
 
     arc->SetStroke( stroke );
 
@@ -921,7 +922,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
+                          LINE_STYLE::SOLID );
 
     circle->SetStroke( stroke );
 
@@ -1055,7 +1057,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
     rectangle->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
+                          LINE_STYLE::SOLID );
 
     rectangle->SetStroke( stroke );
 
@@ -1302,7 +1305,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& a
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
     polyLine->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
+                          LINE_STYLE::SOLID );
 
     polyLine->SetStroke( stroke );
 
@@ -1338,7 +1342,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSy
     bezier->SetUnit( parseInt( aReader, line, &line ) );
     bezier->SetConvert( parseInt( aReader, line, &line ) );
 
-    STROKE_PARAMS stroke ( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ), PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke ( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
+                          LINE_STYLE::SOLID );
 
     bezier->SetStroke( stroke );
 

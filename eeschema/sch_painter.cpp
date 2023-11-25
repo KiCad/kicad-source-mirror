@@ -885,9 +885,9 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
     if( !setDeviceColors( aShape, aLayer, aDimmed ) )
         return;
 
-    bool           drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
-    COLOR4D        color = getRenderColor( aShape, aLayer, drawingShadows, aDimmed );
+    bool       drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
+    COLOR4D    color = getRenderColor( aShape, aLayer, drawingShadows, aDimmed );
 
     auto drawShape =
             [&]( const LIB_SHAPE* shape )
@@ -992,7 +992,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
             m_gal->SetLineWidth( lineWidth );
             m_gal->SetStrokeColor( color );
 
-            if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+            if( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows )
             {
                 drawShape( aShape );
             }
@@ -1252,8 +1252,8 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
 
         if( borderWidth > 0 )
         {
-            COLOR4D        borderColor = aTextBox->GetStroke().GetColor();
-            PLOT_DASH_TYPE borderStyle = aTextBox->GetStroke().GetPlotStyle();
+            COLOR4D    borderColor = aTextBox->GetStroke().GetColor();
+            LINE_STYLE borderStyle = aTextBox->GetStroke().GetLineStyle();
 
             if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
                     || borderColor == COLOR4D::UNSPECIFIED )
@@ -1272,7 +1272,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
             m_gal->SetStrokeColor( borderColor );
             m_gal->SetLineWidth( borderWidth );
 
-            if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+            if( borderStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows )
             {
                 m_gal->DrawRectangle( mapCoords( aTextBox->GetPosition() ),
                                       mapCoords( aTextBox->GetEnd() ) );
@@ -1891,9 +1891,9 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     if( aLine->IsNew() && drawingDangling )
         return;
 
-    COLOR4D        color = getRenderColor( aLine, aLine->GetLayer(), drawingShadows );
-    float          width = getLineWidth( aLine, drawingShadows );
-    PLOT_DASH_TYPE lineStyle = aLine->GetEffectiveLineStyle();
+    COLOR4D    color = getRenderColor( aLine, aLine->GetLayer(), drawingShadows );
+    float      width = getLineWidth( aLine, drawingShadows );
+    LINE_STYLE lineStyle = aLine->GetEffectiveLineStyle();
 
     if( ( drawingDangling || drawingShadows ) && !aLine->IsNew() )
     {
@@ -1958,7 +1958,7 @@ color = COLOR4D( 0.0, 0.3, 0.2, 1.0 );
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows )
     {
         m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
     }
@@ -1982,9 +1982,9 @@ color = COLOR4D( 0.0, 0.3, 0.2, 1.0 );
 
 void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 {
-    bool           drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    PLOT_DASH_TYPE lineStyle = aShape->GetEffectiveLineStyle();
-    COLOR4D        color = getRenderColor( aShape, aLayer, drawingShadows );
+    bool       drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    LINE_STYLE lineStyle = aShape->GetEffectiveLineStyle();
+    COLOR4D    color = getRenderColor( aShape, aLayer, drawingShadows );
 
     if( drawingShadows && !( aShape->IsBrightened() || aShape->IsSelected() ) )
         return;
@@ -2084,7 +2084,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
             m_gal->SetLineWidth( lineWidth );
             m_gal->SetStrokeColor( color );
 
-            if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+            if( lineStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows )
             {
                 drawShape( aShape );
             }
@@ -2321,8 +2321,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
         if( borderWidth > 0 )
         {
-            COLOR4D        borderColor = aTextBox->GetStroke().GetColor();
-            PLOT_DASH_TYPE borderStyle = aTextBox->GetEffectiveLineStyle();
+            COLOR4D    borderColor = aTextBox->GetStroke().GetColor();
+            LINE_STYLE borderStyle = aTextBox->GetEffectiveLineStyle();
 
             if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
                     || borderColor == COLOR4D::UNSPECIFIED )
@@ -2335,7 +2335,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
             m_gal->SetStrokeColor( borderColor );
             m_gal->SetLineWidth( borderWidth );
 
-            if( borderStyle <= PLOT_DASH_TYPE::FIRST_TYPE || drawingShadows )
+            if( borderStyle <= LINE_STYLE::FIRST_TYPE || drawingShadows )
             {
                 m_gal->DrawRectangle( aTextBox->GetPosition(), aTextBox->GetEnd() );
             }

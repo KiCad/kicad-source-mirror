@@ -2560,7 +2560,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
     T                          token;
     VECTOR2I                   pt;
-    STROKE_PARAMS              stroke( 0, PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS              stroke( 0, LINE_STYLE::SOLID );
     std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aParent );
 
     switch( CurTok() )
@@ -3201,7 +3201,7 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 
     std::unique_ptr<PCB_TEXTBOX> textbox = std::make_unique<PCB_TEXTBOX>( aParent );
 
-    STROKE_PARAMS stroke( -1, PLOT_DASH_TYPE::SOLID );
+    STROKE_PARAMS stroke( -1, LINE_STYLE::SOLID );
     T token = NextTok();
 
     if( token == T_locked )

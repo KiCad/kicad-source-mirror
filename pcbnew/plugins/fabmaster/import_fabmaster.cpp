@@ -2105,7 +2105,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             line->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
                         }
 
-                        line->SetStroke( STROKE_PARAMS( lsrc->width, PLOT_DASH_TYPE::SOLID ) );
+                        line->SetStroke( STROKE_PARAMS( lsrc->width, LINE_STYLE::SOLID ) );
 
                         line->Rotate( { 0, 0 }, fp->GetOrientation() );
                         line->Move( fp->GetPosition() );
@@ -2149,7 +2149,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         arc->SetArcGeometry( lsrc->result.GetP0(),
                                              lsrc->result.GetArcMid(),
                                              lsrc->result.GetP1() );
-                        arc->SetStroke( STROKE_PARAMS( lsrc->width, PLOT_DASH_TYPE::SOLID ) );
+                        arc->SetStroke( STROKE_PARAMS( lsrc->width, LINE_STYLE::SOLID ) );
 
                         arc->Rotate( { 0, 0 }, fp->GetOrientation() );
                         arc->Move( fp->GetPosition() );
@@ -2654,7 +2654,7 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     else
     {
         new_poly->SetStroke( STROKE_PARAMS( ( *( aLine->segment.begin() ) )->width,
-                                            PLOT_DASH_TYPE::SOLID ) );
+                                            LINE_STYLE::SOLID ) );
 
         if( new_poly->GetWidth() == 0 )
             new_poly->SetStroke( defaultStroke );
@@ -2795,7 +2795,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             line->SetLayer( layer );
             line->SetStart( VECTOR2I( src->start_x, src->start_y ) );
             line->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-            line->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
+            line->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
 
             if( line->GetWidth() == 0 )
                 line->SetStroke( defaultStroke );
@@ -2829,7 +2829,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             arc->SetArcGeometry( src->result.GetP0(),
                                  src->result.GetArcMid(),
                                  src->result.GetP1() );
-            arc->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
 
             if( arc->GetWidth() == 0 )
                 arc->SetStroke( defaultStroke );
@@ -2930,7 +2930,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 line->SetLayer( layer );
                 line->SetStart( VECTOR2I( src->start_x, src->start_y ) );
                 line->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
-                line->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
+                line->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
 
                 aBoard->Add( line, ADD_MODE::APPEND );
                 break;
@@ -2958,7 +2958,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 arc->SetArcGeometry( src->result.GetP0(),
                                      src->result.GetArcMid(),
                                      src->result.GetP1() );
-                arc->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
+                arc->SetStroke( STROKE_PARAMS( src->width, LINE_STYLE::SOLID ) );
 
                 aBoard->Add( arc, ADD_MODE::APPEND );
                 break;

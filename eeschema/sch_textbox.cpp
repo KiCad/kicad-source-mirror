@@ -233,13 +233,13 @@ KIFONT::FONT* SCH_TEXTBOX::getDrawFont() const
 
 void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    wxDC*          DC = aSettings->GetPrintDC();
-    int            penWidth = GetPenWidth();
-    bool           blackAndWhiteMode = GetGRForceBlackPenState();
-    VECTOR2I       pt1 = GetStart();
-    VECTOR2I       pt2 = GetEnd();
-    COLOR4D        color = GetStroke().GetColor();
-    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
+    wxDC*      DC = aSettings->GetPrintDC();
+    int        penWidth = GetPenWidth();
+    bool       blackAndWhiteMode = GetGRForceBlackPenState();
+    VECTOR2I   pt1 = GetStart();
+    VECTOR2I   pt2 = GetEnd();
+    COLOR4D    color = GetStroke().GetColor();
+    LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
     if( GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
         GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
@@ -251,10 +251,10 @@ void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
         if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
             color = aSettings->GetLayerColor( m_layer );
 
-        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::SOLID;
+        if( lineStyle == LINE_STYLE::DEFAULT )
+            lineStyle = LINE_STYLE::SOLID;
 
-        if( lineStyle == PLOT_DASH_TYPE::SOLID )
+        if( lineStyle == LINE_STYLE::SOLID )
         {
             GRRect( DC, pt1, pt2, penWidth, color );
         }
@@ -385,7 +385,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground,
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     int              penWidth = GetPenWidth();
     COLOR4D          color = GetStroke().GetColor();
-    PLOT_DASH_TYPE   lineStyle = GetStroke().GetPlotStyle();
+    LINE_STYLE       lineStyle = GetStroke().GetLineStyle();
 
     if( penWidth > 0 )
     {
@@ -394,13 +394,13 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground,
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
             color = settings->GetLayerColor( m_layer );
 
-        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::SOLID;
+        if( lineStyle == LINE_STYLE::DEFAULT )
+            lineStyle = LINE_STYLE::SOLID;
 
         aPlotter->SetColor( color );
         aPlotter->SetDash( penWidth, lineStyle );
         aPlotter->Rect( m_start, m_end, FILL_T::NO_FILL, penWidth );
-        aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
+        aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
     }
 
     KIFONT::FONT* font = GetFont();

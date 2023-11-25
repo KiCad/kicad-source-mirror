@@ -81,8 +81,8 @@ public:
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
-    PLOT_DASH_TYPE GetLineStyle() const;
-    void SetLineStyle( PLOT_DASH_TYPE aStyle );
+    LINE_STYLE GetLineStyle() const;
+    void SetLineStyle( LINE_STYLE aStyle );
 
     COLOR4D GetBusEntryColor() const;
     void SetBusEntryColor( const COLOR4D& aColor );
@@ -150,9 +150,9 @@ protected:
     // If real-time connectivity gets disabled (due to being too slow on a particular
     // design), we can no longer rely on getting the NetClass to find netclass-specific
     // linestyles, linewidths and colors.
-    mutable PLOT_DASH_TYPE   m_lastResolvedLineStyle;
-    mutable int              m_lastResolvedWidth;
-    mutable COLOR4D          m_lastResolvedColor;
+    mutable LINE_STYLE m_lastResolvedLineStyle;
+    mutable int        m_lastResolvedWidth;
+    mutable COLOR4D    m_lastResolvedColor;
 };
 
 /**

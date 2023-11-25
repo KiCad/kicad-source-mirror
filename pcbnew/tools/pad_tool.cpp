@@ -897,7 +897,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun )
 
             PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
             shape->SetFilled( true );
-            shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
             shape->SetPolyShape( existingOutline );
             shape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
             shape->Move( - aPad->ShapePos() );

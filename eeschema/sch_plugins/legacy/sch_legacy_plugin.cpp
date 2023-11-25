@@ -820,13 +820,13 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
             parseUnquotedString( buf, aReader, line, &line );
 
             if( buf == wxT( "solid" ) )
-                wire->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+                wire->SetLineStyle( LINE_STYLE::SOLID );
             else if( buf == wxT( "dashed" ) )
-                wire->SetLineStyle( PLOT_DASH_TYPE::DASH );
+                wire->SetLineStyle( LINE_STYLE::DASH );
             else if( buf == wxT( "dash_dot" ) )
-                wire->SetLineStyle( PLOT_DASH_TYPE::DASHDOT );
+                wire->SetLineStyle( LINE_STYLE::DASHDOT );
             else if( buf == wxT( "dotted" ) )
-                wire->SetLineStyle( PLOT_DASH_TYPE::DOT );
+                wire->SetLineStyle( LINE_STYLE::DOT );
         }
         else    // should be the color parameter.
         {

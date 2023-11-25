@@ -96,21 +96,21 @@ static const struct
 };
 
 
-static const char* getDXFLineType( PLOT_DASH_TYPE aType )
+static const char* getDXFLineType( LINE_STYLE aType )
 {
     switch( aType )
     {
-    case PLOT_DASH_TYPE::DEFAULT:
-    case PLOT_DASH_TYPE::SOLID:
+    case LINE_STYLE::DEFAULT:
+    case LINE_STYLE::SOLID:
         return "CONTINUOUS";
-    case PLOT_DASH_TYPE::DASH:
+    case LINE_STYLE::DASH:
         return "DASHED";
-    case PLOT_DASH_TYPE::DOT:
+    case LINE_STYLE::DOT:
         return "DOTTED";
-    case PLOT_DASH_TYPE::DASHDOT:
+    case LINE_STYLE::DASHDOT:
         return "DASHDOT";
     default:
-        wxFAIL_MSG( "Unhandled PLOT_DASH_TYPE" );
+        wxFAIL_MSG( "Unhandled LINE_STYLE" );
         return "CONTINUOUS";
     }
 }
@@ -623,11 +623,11 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
     if( m_penLastpos != pos && plume == 'D' )
     {
-        wxASSERT( m_currentLineType >= PLOT_DASH_TYPE::FIRST_TYPE
-                  && m_currentLineType <= PLOT_DASH_TYPE::LAST_TYPE );
+        wxASSERT( m_currentLineType >= LINE_STYLE::FIRST_TYPE
+                  && m_currentLineType <= LINE_STYLE::LAST_TYPE );
         // DXF LINE
         wxString    cname = getDXFColorName( m_currentColor );
-        const char* lname = getDXFLineType( static_cast<PLOT_DASH_TYPE>( m_currentLineType ) );
+        const char* lname = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
         fprintf( m_outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%s\n20\n%s\n11\n%s\n21\n%s\n",
                  TO_UTF8( cname ), lname,
                  formatCoord( pen_lastpos_dev.x ).c_str(),
@@ -640,10 +640,10 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-void DXF_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
+void DXF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
-    wxASSERT( aLineStyle >= PLOT_DASH_TYPE::FIRST_TYPE
-                && aLineStyle <= PLOT_DASH_TYPE::LAST_TYPE );
+    wxASSERT( aLineStyle >= LINE_STYLE::FIRST_TYPE
+                && aLineStyle <= LINE_STYLE::LAST_TYPE );
 
     m_currentLineType = aLineStyle;
 }

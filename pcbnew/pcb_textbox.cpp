@@ -647,16 +647,16 @@ static struct PCB_TEXTBOX_DESC
 {
     PCB_TEXTBOX_DESC()
     {
-        ENUM_MAP<PLOT_DASH_TYPE>& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+        ENUM_MAP<LINE_STYLE>& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
         if( plotDashTypeEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
-                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
-                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
-                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
+                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -677,15 +677,15 @@ static struct PCB_TEXTBOX_DESC
 
         const wxString borderProps = _( "Border Properties" );
 
-        void ( PCB_TEXTBOX::*lineStyleSetter )( PLOT_DASH_TYPE ) = &PCB_TEXTBOX::SetLineStyle;
-        PLOT_DASH_TYPE ( PCB_TEXTBOX::*lineStyleGetter )() const = &PCB_TEXTBOX::GetLineStyle;
+        void ( PCB_TEXTBOX::*lineStyleSetter )( LINE_STYLE ) = &PCB_TEXTBOX::SetLineStyle;
+        LINE_STYLE ( PCB_TEXTBOX::*lineStyleGetter )() const = &PCB_TEXTBOX::GetLineStyle;
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool>( _HKI( "Border" ),
                                                               &PCB_TEXTBOX::SetBorderEnabled,
                                                               &PCB_TEXTBOX::IsBorderEnabled ),
                              borderProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TEXTBOX, PLOT_DASH_TYPE>( _HKI( "Border Style" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TEXTBOX, LINE_STYLE>( _HKI( "Border Style" ),
                                                                              lineStyleSetter,
                                                                              lineStyleGetter ),
                              borderProps );

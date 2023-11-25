@@ -449,7 +449,7 @@ void LTSPICE_SCH_PARSER::CreateWires( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, i
     SCH_LINE* segment = new SCH_LINE();
 
     segment->SetLineWidth( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ) );
-    segment->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+    segment->SetLineStyle( LINE_STYLE::SOLID );
 
     segment->SetStartPoint( aLTSymbol.Wires[aIndex].Start );
     segment->SetEndPoint( aLTSymbol.Wires[aIndex].End );
@@ -669,16 +669,16 @@ int LTSPICE_SCH_PARSER::getLineWidth( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineW
 }
 
 
-PLOT_DASH_TYPE LTSPICE_SCH_PARSER::getLineStyle( const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle )
+LINE_STYLE LTSPICE_SCH_PARSER::getLineStyle( const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle )
 {
     switch( aLineStyle )
     {
-    case LTSPICE_SCHEMATIC::LINESTYLE::SOLID:      return PLOT_DASH_TYPE::SOLID;
-    case LTSPICE_SCHEMATIC::LINESTYLE::DOT:        return PLOT_DASH_TYPE::DOT;
-    case LTSPICE_SCHEMATIC::LINESTYLE::DASHDOTDOT: return PLOT_DASH_TYPE::DASHDOTDOT;
-    case LTSPICE_SCHEMATIC::LINESTYLE::DASHDOT:    return PLOT_DASH_TYPE::DASHDOT;
-    case LTSPICE_SCHEMATIC::LINESTYLE::DASH:       return PLOT_DASH_TYPE::DASH;
-    default:                                       return PLOT_DASH_TYPE::SOLID;
+    case LTSPICE_SCHEMATIC::LINESTYLE::SOLID:      return LINE_STYLE::SOLID;
+    case LTSPICE_SCHEMATIC::LINESTYLE::DOT:        return LINE_STYLE::DOT;
+    case LTSPICE_SCHEMATIC::LINESTYLE::DASHDOTDOT: return LINE_STYLE::DASHDOTDOT;
+    case LTSPICE_SCHEMATIC::LINESTYLE::DASHDOT:    return LINE_STYLE::DASHDOT;
+    case LTSPICE_SCHEMATIC::LINESTYLE::DASH:       return LINE_STYLE::DASH;
+    default:                                       return LINE_STYLE::SOLID;
     }
 }
 
@@ -797,7 +797,7 @@ void LTSPICE_SCH_PARSER::CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aI
     SCH_LINE* segment = new SCH_LINE();
 
     segment->SetLineWidth( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ) );
-    segment->SetLineStyle( PLOT_DASH_TYPE::SOLID );
+    segment->SetLineStyle( LINE_STYLE::SOLID );
     segment->SetLayer( aLayer );
 
     segment->SetStartPoint( ToKicadCoords( aAscfile.Wires[aIndex].Start ) + m_originOffset );
@@ -822,7 +822,7 @@ SCH_SYMBOL* LTSPICE_SCH_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset, cons
     shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
 
     shape->SetStroke( STROKE_PARAMS( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ),
-                                     PLOT_DASH_TYPE::SOLID ) );
+                                     LINE_STYLE::SOLID ) );
 
     lib_symbol->AddDrawItem( shape );
     lib_symbol->SetPower();

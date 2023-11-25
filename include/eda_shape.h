@@ -110,8 +110,8 @@ public:
     virtual int GetWidth() const               { return m_stroke.GetWidth(); }
     virtual int GetEffectiveWidth() const      { return GetWidth(); }
 
-    void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
-    PLOT_DASH_TYPE GetLineStyle() const;
+    void       SetLineStyle( const LINE_STYLE aStyle );
+    LINE_STYLE GetLineStyle() const;
 
     void    SetLineColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }
     COLOR4D GetLineColor() const                  { return m_stroke.GetColor(); }
@@ -415,7 +415,7 @@ protected:
 
 #ifndef SWIG
 DECLARE_ENUM_TO_WXANY( SHAPE_T );
-DECLARE_ENUM_TO_WXANY( PLOT_DASH_TYPE );
+DECLARE_ENUM_TO_WXANY( LINE_STYLE );
 #endif
 
 #endif  // EDA_SHAPE_H

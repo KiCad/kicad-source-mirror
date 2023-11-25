@@ -158,13 +158,13 @@ public:
         }
     }
 
-    void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
-    void           SetLineStyle( const int aStyleId );
-    PLOT_DASH_TYPE GetLineStyle() const;
+    void       SetLineStyle( const LINE_STYLE aStyle );
+    void       SetLineStyle( const int aStyleId );
+    LINE_STYLE GetLineStyle() const;
 
     /// @return the style that the line should be drawn in
     /// this might be set on the line or inherited from the line's netclass
-    PLOT_DASH_TYPE GetEffectiveLineStyle() const;
+    LINE_STYLE GetEffectiveLineStyle() const;
 
     void SetLineColor( const COLOR4D& aColor );
 
@@ -188,12 +188,12 @@ public:
         if( m_stroke.GetColor() != aLine->GetStroke().GetColor() )
             return false;
 
-        PLOT_DASH_TYPE style_a = m_stroke.GetPlotStyle();
-        PLOT_DASH_TYPE style_b = aLine->GetStroke().GetPlotStyle();
+        LINE_STYLE style_a = m_stroke.GetLineStyle();
+        LINE_STYLE style_b = aLine->GetStroke().GetLineStyle();
 
         return style_a == style_b
-               || ( style_a == PLOT_DASH_TYPE::DEFAULT && style_b == PLOT_DASH_TYPE::SOLID )
-               || ( style_a == PLOT_DASH_TYPE::SOLID   && style_b == PLOT_DASH_TYPE::DEFAULT );
+               || ( style_a == LINE_STYLE::DEFAULT && style_b == LINE_STYLE::SOLID )
+               || ( style_a == LINE_STYLE::SOLID   && style_b == LINE_STYLE::DEFAULT );
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -345,21 +345,22 @@ private:
                                               const SCH_SHEET_PATH &aSheet ) const;
     bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
-    bool          m_startIsDangling;  ///< True if start point is not connected.
-    bool          m_endIsDangling;    ///< True if end point is not connected.
-    VECTOR2I      m_start;            ///< Line start point
-    VECTOR2I      m_end;              ///< Line end point
-    EDA_ANGLE     m_storedAngle;      ///< Stored angle
-    STROKE_PARAMS m_stroke;           ///< Line stroke properties.
+private:
+    bool               m_startIsDangling;  ///< True if start point is not connected.
+    bool               m_endIsDangling;    ///< True if end point is not connected.
+    VECTOR2I           m_start;            ///< Line start point
+    VECTOR2I           m_end;              ///< Line end point
+    EDA_ANGLE          m_storedAngle;      ///< Stored angle
+    STROKE_PARAMS      m_stroke;           ///< Line stroke properties.
 
     // If real-time connectivity gets disabled (due to being too slow on a particular
     // design), we can no longer rely on getting the NetClass to find netclass-specific
     // linestyles, linewidths and colors.
-    mutable PLOT_DASH_TYPE   m_lastResolvedLineStyle;
-    mutable int              m_lastResolvedWidth;
-    mutable COLOR4D          m_lastResolvedColor;
+    mutable LINE_STYLE m_lastResolvedLineStyle;
+    mutable int        m_lastResolvedWidth;
+    mutable COLOR4D    m_lastResolvedColor;
 
-    wxString                 m_operatingPoint;
+    wxString           m_operatingPoint;
 };
 
 

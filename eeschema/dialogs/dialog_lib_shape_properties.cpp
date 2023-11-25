@@ -50,8 +50,8 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
 
-    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
-        m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+    for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
+        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
 
@@ -113,7 +113,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
 
     m_borderColorSwatch->SetSwatchColor( m_shape->GetStroke().GetColor(), false );
 
-    int style = static_cast<int>( m_shape->GetStroke().GetPlotStyle() );
+    int style = static_cast<int>( m_shape->GetStroke().GetLineStyle() );
 
     if( style == -1 )
         m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
@@ -260,9 +260,9 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
     std::advance( it, m_borderStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        stroke.SetLineStyle( LINE_STYLE::DEFAULT );
     else
-        stroke.SetPlotStyle( it->first );
+        stroke.SetLineStyle( it->first );
 
     stroke.SetColor( m_borderColorSwatch->GetSwatchColor() );
 

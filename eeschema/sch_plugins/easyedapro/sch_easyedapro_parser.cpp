@@ -81,18 +81,18 @@ double SCH_EASYEDAPRO_PARSER::SizeToKi( wxString aValue )
 }
 
 
-static PLOT_DASH_TYPE ConvertStrokeStyle( int aStyle )
+static LINE_STYLE ConvertStrokeStyle( int aStyle )
 {
     if( aStyle == 0 )
-        return PLOT_DASH_TYPE::SOLID;
+        return LINE_STYLE::SOLID;
     else if( aStyle == 1 )
-        return PLOT_DASH_TYPE::DASH;
+        return LINE_STYLE::DASH;
     else if( aStyle == 2 )
-        return PLOT_DASH_TYPE::DOT;
+        return LINE_STYLE::DOT;
     else if( aStyle == 3 )
-        return PLOT_DASH_TYPE::DASHDOT;
+        return LINE_STYLE::DASHDOT;
 
-    return PLOT_DASH_TYPE::DEFAULT;
+    return LINE_STYLE::DEFAULT;
 }
 
 
@@ -208,7 +208,7 @@ void SCH_EASYEDAPRO_PARSER::ApplyLineStyle( const std::map<wxString, nlohmann::j
     if( style.at( 3 ).is_number() )
     {
         int dashStyle = style.at( 3 );
-        stroke.SetPlotStyle( ConvertStrokeStyle( dashStyle ) );
+        stroke.SetLineStyle( ConvertStrokeStyle( dashStyle ) );
     }
 
     if( style.at( 5 ).is_number() )

@@ -336,9 +336,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
         if( m_lineStyle->GetStringSelection() != INDETERMINATE_ACTION )
         {
             if( m_lineStyle->GetStringSelection() == DEFAULT_STYLE )
-                stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+                stroke.SetLineStyle( LINE_STYLE::DEFAULT );
             else
-                stroke.SetPlotStyle( (PLOT_DASH_TYPE) m_lineStyle->GetSelection() );
+                stroke.SetLineStyle( (LINE_STYLE) m_lineStyle->GetSelection() );
         }
 
         if( m_setColor->GetValue() )

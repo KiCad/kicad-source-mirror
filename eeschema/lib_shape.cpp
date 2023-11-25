@@ -158,10 +158,10 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
             cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
     }
 
-    int            penWidth;
-    COLOR4D        color = GetStroke().GetColor();
-    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
-    FILL_T         fill = m_fill;
+    int        penWidth;
+    COLOR4D    color = GetStroke().GetColor();
+    LINE_STYLE lineStyle = GetStroke().GetLineStyle();
+    FILL_T     fill = m_fill;
 
     if( aBackground )
     {
@@ -186,15 +186,15 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         }
 
         penWidth = 0;
-        lineStyle = PLOT_DASH_TYPE::SOLID;
+        lineStyle = LINE_STYLE::SOLID;
     }
     else
     {
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
             color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
 
-        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::SOLID;
+        if( lineStyle == LINE_STYLE::DEFAULT )
+            lineStyle = LINE_STYLE::SOLID;
 
         if( m_fill == FILL_T::FILLED_SHAPE )
             fill = m_fill;
@@ -249,7 +249,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 
-    aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
+    aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
 }
 
 
@@ -383,7 +383,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     if( penWidth > 0 )
     {
-        if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
+        if( GetEffectiveLineStyle() == LINE_STYLE::SOLID )
         {
             switch( GetShape() )
             {

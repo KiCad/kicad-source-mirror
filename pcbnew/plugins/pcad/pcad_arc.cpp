@@ -180,7 +180,7 @@ void PCAD_ARC::AddToBoard( FOOTPRINT* aFootprint )
     arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
     arc->SetArcAngleAndEnd( -m_Angle, true );
 
-    arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
+    arc->SetStroke( STROKE_PARAMS( m_Width, LINE_STYLE::SOLID ) );
     arc->SetLayer( m_KiCadLayer );
 
     if( aFootprint )

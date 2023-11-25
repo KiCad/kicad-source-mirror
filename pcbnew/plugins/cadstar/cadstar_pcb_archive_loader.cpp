@@ -2520,7 +2520,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
     {
         PCB_SHAPE* shape = getShapeFromVertex( prevEnd, v.Vertex );
         shape->SetLayer( getKiCadLayer( aCadstarRoute.LayerID ) );
-        shape->SetStroke( STROKE_PARAMS( getKiCadLength( v.RouteWidth ), PLOT_DASH_TYPE::SOLID ) );
+        shape->SetStroke( STROKE_PARAMS( getKiCadLength( v.RouteWidth ), LINE_STYLE::SOLID ) );
         shape->SetLocked( v.Fixed );
         shapes.push_back( shape );
         prevEnd = v.Vertex.End;
@@ -2794,7 +2794,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         shapePolys.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_STRICTLY_SIMPLE );
 
         shape->SetPolyShape( shapePolys );
-        shape->SetStroke( STROKE_PARAMS( aLineThickness, PLOT_DASH_TYPE::SOLID ) );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, LINE_STYLE::SOLID ) );
         shape->SetLayer( aKiCadLayer );
         aContainer->Add( shape, ADD_MODE::APPEND );
 
@@ -2844,7 +2844,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsShapes( const std::vector<
 
     for( PCB_SHAPE* shape : shapes )
     {
-        shape->SetStroke( STROKE_PARAMS( aLineThickness, PLOT_DASH_TYPE::SOLID ) );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, LINE_STYLE::SOLID ) );
         shape->SetLayer( aKiCadLayer );
         shape->SetParent( aContainer );
         aContainer->Add( shape, ADD_MODE::APPEND );

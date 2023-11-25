@@ -126,8 +126,8 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     for( size_t ii = 0; ii < m_OrientCtrl->GetCount() && ii < 4; ++ii )
         m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
-    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
-        m_borderStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+    for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
+        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
 
@@ -201,10 +201,10 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     if( m_textBox->IsBorderEnabled() )
         m_borderWidth.SetValue( stroke.GetWidth() );
 
-    PLOT_DASH_TYPE style = stroke.GetPlotStyle();
+    LINE_STYLE style = stroke.GetLineStyle();
 
-    if( style == PLOT_DASH_TYPE::DEFAULT )
-        style = PLOT_DASH_TYPE::SOLID;
+    if( style == LINE_STYLE::DEFAULT )
+        style = LINE_STYLE::SOLID;
 
     if( (int) style < (int) lineTypeNames.size() )
         m_borderStyleCombo->SetSelection( (int) style );
@@ -367,9 +367,9 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     std::advance( it, m_borderStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        stroke.SetLineStyle( LINE_STYLE::DEFAULT );
     else
-        stroke.SetPlotStyle( it->first );
+        stroke.SetLineStyle( it->first );
 
     m_textBox->SetStroke( stroke );
 

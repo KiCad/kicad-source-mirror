@@ -1689,10 +1689,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
-    COLOR4D        color = m_pcbSettings.GetColor( aShape, aLayer );
-    bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
-    int            thickness = getLineThickness( aShape->GetWidth() );
-    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
+    COLOR4D    color = m_pcbSettings.GetColor( aShape, aLayer );
+    bool       outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
+    int        thickness = getLineThickness( aShape->GetWidth() );
+    LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
 
     if( IsNetnameLayer( aLayer ) )
     {
@@ -1735,7 +1735,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
         switch( aShape->GetShape() )
         {
@@ -2134,7 +2134,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aTextBox, aLayer );
     int            thickness = getLineThickness( aTextBox->GetWidth() );
-    PLOT_DASH_TYPE lineStyle = aTextBox->GetStroke().GetPlotStyle();
+    LINE_STYLE     lineStyle = aTextBox->GetStroke().GetLineStyle();
     wxString       resolvedText( aTextBox->GetShownText( true ) );
 
     KIFONT::FONT* font = aTextBox->GetFont();
@@ -2178,7 +2178,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
     if( aTextBox->IsBorderEnabled() )
     {
-        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+        if( lineStyle <= LINE_STYLE::FIRST_TYPE )
         {
             if( thickness > 0 )
             {

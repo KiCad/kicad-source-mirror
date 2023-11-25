@@ -46,7 +46,7 @@ SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
     m_start           = pos;
     m_end             = pos;
     m_stroke.SetWidth( 0 );
-    m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
     m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
     switch( layer )
@@ -68,7 +68,7 @@ SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
     else
         m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
 
-    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedLineStyle = LINE_STYLE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -279,34 +279,34 @@ COLOR4D SCH_LINE::GetLineColor() const
 
 void SCH_LINE::SetLineStyle( const int aStyleId )
 {
-    SetLineStyle( static_cast<PLOT_DASH_TYPE>( aStyleId ) );
+    SetLineStyle( static_cast<LINE_STYLE>( aStyleId ) );
 }
 
 
-void SCH_LINE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
+void SCH_LINE::SetLineStyle( const LINE_STYLE aStyle )
 {
-    m_stroke.SetPlotStyle( aStyle );
+    m_stroke.SetLineStyle( aStyle );
     m_lastResolvedLineStyle = GetLineStyle();
 }
 
 
-PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
+LINE_STYLE SCH_LINE::GetLineStyle() const
 {
-    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-        return m_stroke.GetPlotStyle();
+    if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )
+        return m_stroke.GetLineStyle();
 
-    return PLOT_DASH_TYPE::SOLID;
+    return LINE_STYLE::SOLID;
 }
 
 
-PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
+LINE_STYLE SCH_LINE::GetEffectiveLineStyle() const
 {
-    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-        m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
+    if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )
+        m_lastResolvedLineStyle = m_stroke.GetLineStyle();
     else if( !IsConnectable() )
-        m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+        m_lastResolvedLineStyle = LINE_STYLE::SOLID;
     else if( !IsConnectivityDirty() )
-        m_lastResolvedLineStyle = (PLOT_DASH_TYPE) GetEffectiveNetClass()->GetLineStyle();
+        m_lastResolvedLineStyle = (LINE_STYLE) GetEffectiveNetClass()->GetLineStyle();
 
     return m_lastResolvedLineStyle;
 }
@@ -361,12 +361,12 @@ void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset )
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( GetLayer() );
 
-    VECTOR2I       start = m_start;
-    VECTOR2I       end = m_end;
-    PLOT_DASH_TYPE lineStyle = GetEffectiveLineStyle();
-    int            penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    VECTOR2I   start = m_start;
+    VECTOR2I   end = m_end;
+    LINE_STYLE lineStyle = GetEffectiveLineStyle();
+    int        penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
         GRLine( DC, start.x, start.y, end.x, end.y, penWidth, color );
     }
@@ -881,7 +881,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground,
     aPlotter->MoveTo( m_start );
     aPlotter->FinishTo( m_end );
 
-    aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
+    aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
 
     // Plot attributes to a hypertext menu
     std::vector<wxString> properties;
@@ -939,7 +939,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Line Type" ), msg );
 
-    PLOT_DASH_TYPE lineStyle = GetLineStyle();
+    LINE_STYLE lineStyle = GetLineStyle();
 
     if( GetEffectiveLineStyle() != lineStyle )
         aList.emplace_back( _( "Line Style" ), _( "from netclass" ) );
@@ -1004,7 +1004,7 @@ bool SCH_LINE::operator==( const SCH_ITEM& aOther ) const
     if( m_stroke.GetColor() != other.m_stroke.GetColor() )
         return false;
 
-    if( m_stroke.GetPlotStyle() != other.m_stroke.GetPlotStyle() )
+    if( m_stroke.GetLineStyle() != other.m_stroke.GetLineStyle() )
         return false;
 
     return true;
@@ -1038,7 +1038,7 @@ double SCH_LINE::Similarity( const SCH_ITEM& aOther ) const
     if( m_stroke.GetColor() != other.m_stroke.GetColor() )
         similarity *= 0.9;
 
-    if( m_stroke.GetPlotStyle() != other.m_stroke.GetPlotStyle() )
+    if( m_stroke.GetLineStyle() != other.m_stroke.GetLineStyle() )
         similarity *= 0.9;
 
     return similarity;
@@ -1049,25 +1049,25 @@ static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()
     {
-        ENUM_MAP<PLOT_DASH_TYPE>& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+        ENUM_MAP<LINE_STYLE>& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
         if( plotDashTypeEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
-                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
-                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
-                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
+                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_LINE );
         propMgr.InheritsAfter( TYPE_HASH( SCH_LINE ), TYPE_HASH( SCH_ITEM ) );
 
-        void ( SCH_LINE::*lineStyleSetter )( PLOT_DASH_TYPE ) = &SCH_LINE::SetLineStyle;
+        void ( SCH_LINE::*lineStyleSetter )( LINE_STYLE ) = &SCH_LINE::SetLineStyle;
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, PLOT_DASH_TYPE>( _HKI( "Line Style" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, LINE_STYLE>( _HKI( "Line Style" ),
                 lineStyleSetter, &SCH_LINE::GetLineStyle ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Line Width" ),

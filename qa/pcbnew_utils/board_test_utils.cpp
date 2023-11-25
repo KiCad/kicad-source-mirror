@@ -386,8 +386,8 @@ void CheckFpShape( const PCB_SHAPE* expected, const PCB_SHAPE* shape )
         BOOST_CHECK_EQUAL( expected->GetLayerSet(), shape->GetLayerSet() );
 
         BOOST_CHECK_EQUAL( expected->GetStroke().GetWidth(), shape->GetStroke().GetWidth() );
-        CHECK_ENUM_CLASS_EQUAL( expected->GetStroke().GetPlotStyle(),
-                                shape->GetStroke().GetPlotStyle() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetStroke().GetLineStyle(),
+                                shape->GetStroke().GetLineStyle() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), shape->GetFillMode() );
     }
 }

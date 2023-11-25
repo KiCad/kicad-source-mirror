@@ -32,16 +32,16 @@
 using namespace STROKEPARAMS_T;
 
 
-const std::map<PLOT_DASH_TYPE, struct lineTypeStruct> lineTypeNames = {
-    { PLOT_DASH_TYPE::SOLID, { _( "Solid" ), BITMAPS::stroke_solid } },
-    { PLOT_DASH_TYPE::DASH, { _( "Dashed" ), BITMAPS::stroke_dash } },
-    { PLOT_DASH_TYPE::DOT, { _( "Dotted" ), BITMAPS::stroke_dot } },
-    { PLOT_DASH_TYPE::DASHDOT, { _( "Dash-Dot" ), BITMAPS::stroke_dashdot } },
-    { PLOT_DASH_TYPE::DASHDOTDOT, { _( "Dash-Dot-Dot" ), BITMAPS::stroke_dashdotdot } }
+const std::map<LINE_STYLE, struct LINE_STYLE_DESC> lineTypeNames = {
+    { LINE_STYLE::SOLID, { _( "Solid" ), BITMAPS::stroke_solid } },
+    { LINE_STYLE::DASH, { _( "Dashed" ), BITMAPS::stroke_dash } },
+    { LINE_STYLE::DOT, { _( "Dotted" ), BITMAPS::stroke_dot } },
+    { LINE_STYLE::DASHDOT, { _( "Dash-Dot" ), BITMAPS::stroke_dashdot } },
+    { LINE_STYLE::DASHDOTDOT, { _( "Dash-Dot-Dot" ), BITMAPS::stroke_dashdotdot } }
 };
 
 
-void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int aWidth,
+void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWidth,
                             const KIGFX::RENDER_SETTINGS* aRenderSettings,
                             std::function<void( const VECTOR2I& a, const VECTOR2I& b )> aStroker )
 {
@@ -51,24 +51,24 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
 
     switch( aLineStyle )
     {
-    case PLOT_DASH_TYPE::DASH:
+    case LINE_STYLE::DASH:
         strokes[0] = aRenderSettings->GetDashLength( aWidth );
         strokes[1] = aRenderSettings->GetGapLength( aWidth );
         wrapAround = 2;
         break;
-    case PLOT_DASH_TYPE::DOT:
+    case LINE_STYLE::DOT:
         strokes[0] = aRenderSettings->GetDotLength( aWidth );
         strokes[1] = aRenderSettings->GetGapLength( aWidth );
         wrapAround = 2;
         break;
-    case PLOT_DASH_TYPE::DASHDOT:
+    case LINE_STYLE::DASHDOT:
         strokes[0] = aRenderSettings->GetDashLength( aWidth );
         strokes[1] = aRenderSettings->GetGapLength( aWidth );
         strokes[2] = aRenderSettings->GetDotLength( aWidth );
         strokes[3] = aRenderSettings->GetGapLength( aWidth );
         wrapAround = 4;
         break;
-    case PLOT_DASH_TYPE::DASHDOTDOT:
+    case LINE_STYLE::DASHDOTDOT:
         strokes[0] = aRenderSettings->GetDashLength( aWidth );
         strokes[1] = aRenderSettings->GetGapLength( aWidth );
         strokes[2] = aRenderSettings->GetDotLength( aWidth );
@@ -181,18 +181,18 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
 }
 
 
-wxString STROKE_PARAMS::GetLineStyleToken( PLOT_DASH_TYPE aStyle )
+wxString STROKE_PARAMS::GetLineStyleToken( LINE_STYLE aStyle )
 {
     wxString token;
 
     switch( aStyle )
     {
-    case PLOT_DASH_TYPE::DASH:       token = wxT( "dash" );         break;
-    case PLOT_DASH_TYPE::DOT:        token = wxT( "dot" );          break;
-    case PLOT_DASH_TYPE::DASHDOT:    token = wxT( "dash_dot" );     break;
-    case PLOT_DASH_TYPE::DASHDOTDOT: token = wxT( "dash_dot_dot" ); break;
-    case PLOT_DASH_TYPE::SOLID:      token = wxT( "solid" );        break;
-    case PLOT_DASH_TYPE::DEFAULT:    token = wxT( "default" );      break;
+    case LINE_STYLE::DASH:       token = wxT( "dash" );         break;
+    case LINE_STYLE::DOT:        token = wxT( "dot" );          break;
+    case LINE_STYLE::DASHDOT:    token = wxT( "dash_dot" );     break;
+    case LINE_STYLE::DASHDOTDOT: token = wxT( "dash_dot_dot" ); break;
+    case LINE_STYLE::SOLID:      token = wxT( "solid" );        break;
+    case LINE_STYLE::DEFAULT:    token = wxT( "default" );      break;
     }
 
     return token;
@@ -207,9 +207,9 @@ void STROKE_PARAMS::GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider,
     {
         wxString lineStyle = _( "Default" );
 
-        for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
+        for( const std::pair<const LINE_STYLE, LINE_STYLE_DESC>& typeEntry : lineTypeNames )
         {
-            if( typeEntry.first == GetPlotStyle() )
+            if( typeEntry.first == GetLineStyle() )
             {
                 lineStyle = typeEntry.second.name;
                 break;
@@ -233,13 +233,13 @@ void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, const EDA_IU_SCALE& aIu
     {
         aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s))",
                            EDA_UNIT_UTILS::FormatInternalUnits( aIuScale, GetWidth() ).c_str(),
-                           TO_UTF8( GetLineStyleToken( GetPlotStyle() ) ) );
+                           TO_UTF8( GetLineStyleToken( GetLineStyle() ) ) );
     }
     else
     {
         aFormatter->Print( aNestLevel, "(stroke (width %s) (type %s) (color %d %d %d %s))",
                            EDA_UNIT_UTILS::FormatInternalUnits( aIuScale, GetWidth() ).c_str(),
-                           TO_UTF8( GetLineStyleToken( GetPlotStyle() ) ),
+                           TO_UTF8( GetLineStyleToken( GetLineStyle() ) ),
                            KiROUND( GetColor().r * 255.0 ),
                            KiROUND( GetColor().g * 255.0 ),
                            KiROUND( GetColor().b * 255.0 ),
@@ -270,12 +270,12 @@ void STROKE_PARAMS_PARSER::ParseStroke( STROKE_PARAMS& aStroke )
 
             switch( token )
             {
-            case T_dash:         aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASH );       break;
-            case T_dot:          aStroke.SetPlotStyle( PLOT_DASH_TYPE::DOT );        break;
-            case T_dash_dot:     aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOT );    break;
-            case T_dash_dot_dot: aStroke.SetPlotStyle( PLOT_DASH_TYPE::DASHDOTDOT ); break;
-            case T_solid:        aStroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );      break;
-            case T_default:      aStroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );    break;
+            case T_dash: aStroke.SetLineStyle( LINE_STYLE::DASH );       break;
+            case T_dot: aStroke.SetLineStyle( LINE_STYLE::DOT );        break;
+            case T_dash_dot: aStroke.SetLineStyle( LINE_STYLE::DASHDOT );    break;
+            case T_dash_dot_dot: aStroke.SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
+            case T_solid: aStroke.SetLineStyle( LINE_STYLE::SOLID );      break;
+            case T_default: aStroke.SetLineStyle( LINE_STYLE::DEFAULT );    break;
             default:
                 Expecting( "solid, dash, dash_dot, dash_dot_dot, dot or default" );
             }

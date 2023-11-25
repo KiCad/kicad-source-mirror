@@ -279,7 +279,7 @@ public:
 private:
     int getLineWidth( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth );
 
-    PLOT_DASH_TYPE getLineStyle( const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle );
+    LINE_STYLE getLineStyle( const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle );
 
     STROKE_PARAMS getStroke( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth,
                              const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle );

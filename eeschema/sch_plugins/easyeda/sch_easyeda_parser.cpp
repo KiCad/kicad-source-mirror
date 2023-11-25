@@ -145,16 +145,16 @@ static LIB_ID EasyEdaToKiCadLibID( const wxString& aLibName, const wxString& aLi
 }
 
 
-static PLOT_DASH_TYPE ConvertStrokeStyle( const wxString& aStyle )
+static LINE_STYLE ConvertStrokeStyle( const wxString& aStyle )
 {
     if( aStyle == wxS( "0" ) )
-        return PLOT_DASH_TYPE::SOLID;
+        return LINE_STYLE::SOLID;
     else if( aStyle == wxS( "1" ) )
-        return PLOT_DASH_TYPE::DASH;
+        return LINE_STYLE::DASH;
     else if( aStyle == wxS( "2" ) )
-        return PLOT_DASH_TYPE::DOT;
+        return LINE_STYLE::DOT;
 
-    return PLOT_DASH_TYPE::DEFAULT;
+    return LINE_STYLE::DEFAULT;
 }
 
 
@@ -224,7 +224,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -50 ) } );
 
@@ -232,7 +232,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         {
             LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
             aKsymbol->AddDrawItem( circle );
-            circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), PLOT_DASH_TYPE::SOLID ) );
+            circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
             circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -75 ) } );
             circle->SetEnd( circle->GetPosition() + VECTOR2I( schIUScale.MilsToIU( 25 ), 0 ) );
         }
@@ -240,7 +240,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( -50 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
@@ -253,13 +253,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     {
         LIB_SHAPE* line = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line );
-        line->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line->AddPoint( { 0, 0 } );
         line->AddPoint( { 0, schIUScale.MilsToIU( -72 ) } );
 
         LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
         aKsymbol->AddDrawItem( bezier );
-        bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), PLOT_DASH_TYPE::SOLID ) );
+        bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
         bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
         bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
         bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
@@ -274,7 +274,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
 
@@ -282,25 +282,25 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
 
             LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
-            line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line3->AddPoint( { schIUScale.MilsToIU( -70 ), schIUScale.MilsToIU( -120 ) } );
             line3->AddPoint( { schIUScale.MilsToIU( 70 ), schIUScale.MilsToIU( -120 ) } );
 
             LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line4 );
-            line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line4->AddPoint( { schIUScale.MilsToIU( -40 ), schIUScale.MilsToIU( -140 ) } );
             line4->AddPoint( { schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( -140 ) } );
 
             LIB_SHAPE* line5 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line5 );
-            line5->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line5->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line5->AddPoint( { schIUScale.MilsToIU( -10 ), schIUScale.MilsToIU( -160 ) } );
             line5->AddPoint( { schIUScale.MilsToIU( 10 ), schIUScale.MilsToIU( -160 ) } );
         }
@@ -308,7 +308,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -160 ) } );
@@ -318,7 +318,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -150 ), schIUScale.MilsToIU( -200 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
@@ -326,7 +326,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
 
             LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line3 );
-            line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line3->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
             line3->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -200 ) } );
         }
@@ -334,7 +334,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         {
             LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
             aKsymbol->AddDrawItem( line2 );
-            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+            line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( -50 ) } );
@@ -349,25 +349,25 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -160 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -160 ) } );
         line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -160 ) } );
 
         LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line3 );
-        line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line3->AddPoint( { schIUScale.MilsToIU( -60 ), schIUScale.MilsToIU( -200 ) } );
         line3->AddPoint( { schIUScale.MilsToIU( 60 ), schIUScale.MilsToIU( -200 ) } );
 
         LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line4 );
-        line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line4->AddPoint( { schIUScale.MilsToIU( -20 ), schIUScale.MilsToIU( -240 ) } );
         line4->AddPoint( { schIUScale.MilsToIU( 20 ), schIUScale.MilsToIU( -240 ) } );
 
@@ -376,7 +376,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
 
         LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
         aKsymbol->AddDrawItem( circle );
-        circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -160 ) } );
         circle->SetEnd( circle->GetPosition() + VECTOR2I( schIUScale.MilsToIU( 120 ), 0 ) );
 
@@ -386,13 +386,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     {
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -200 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -200 ) } );
         line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -200 ) } );
 
@@ -408,13 +408,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
 
         LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line1 );
-        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
 
         LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
         aKsymbol->AddDrawItem( line2 );
-        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line2->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -100 ) } );
         line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( -100 ) } );
 
@@ -437,7 +437,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxArrayString  ptArr = wxSplit( arr[1], ' ', '\0' );
             wxString       strokeColor = arr[2];
             double         lineWidth = Convert( arr[3] );
-            PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[4] );
+            LINE_STYLE     strokeStyle = ConvertStrokeStyle( arr[4] );
             wxString       fillColor = arr[5].Lower();
             //bool           locked = arr[7] != wxS( "0" );
 
@@ -480,12 +480,12 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
         }
         else if( elType == wxS( "PT" ) )
         {
-            wxString       pointsData = arr[1];
-            wxString       strokeColor = arr[2];
-            double         lineWidth = Convert( arr[3] );
-            PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[4] );
-            wxString       fillColor = arr[5].Lower();
-            //bool           locked = arr[7] != wxS( "0" );
+            wxString   pointsData = arr[1];
+            wxString   strokeColor = arr[2];
+            double     lineWidth = Convert( arr[3] );
+            LINE_STYLE strokeStyle = ConvertStrokeStyle( arr[4] );
+            wxString   fillColor = arr[5].Lower();
+            //bool       locked = arr[7] != wxS( "0" );
 
              std::vector<SHAPE_LINE_CHAIN> lineChains =
                     ParseLineChains( pointsData, schIUScale.MilsToIU( 10 ) );
@@ -596,12 +596,12 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
         }
         else if( elType == wxS( "A" ) )
         {
-            wxString       data = arr[1];
-            wxString       strokeColor = arr[3];
-            double         lineWidth = Convert( arr[4] );
-            PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[5] );
-            wxString       fillColor = arr[6].Lower();
-            //bool           locked = arr[8] != wxS( "0" );
+            wxString   data = arr[1];
+            wxString   strokeColor = arr[3];
+            double     lineWidth = Convert( arr[4] );
+            LINE_STYLE strokeStyle = ConvertStrokeStyle( arr[5] );
+            wxString   fillColor = arr[6].Lower();
+            //bool       locked = arr[8] != wxS( "0" );
 
             VECTOR2D start, end;
             VECTOR2D rad( 10, 10 );
@@ -706,12 +706,12 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             cr.x = !arr[3].empty() ? Convert( arr[3] ) : 0,
             cr.y = !arr[4].empty() ? Convert( arr[4] ) : 0; // TODO: corner radius
 
-            VECTOR2D       size( Convert( arr[5] ), Convert( arr[6] ) );
-            wxString       strokeColor = arr[7];
-            double         lineWidth = Convert( arr[8] );
-            PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[9] );
-            wxString       fillColor = arr[10].Lower();
-            //bool           locked = arr[12] != wxS( "0" );
+            VECTOR2D   size( Convert( arr[5] ), Convert( arr[6] ) );
+            wxString   strokeColor = arr[7];
+            double     lineWidth = Convert( arr[8] );
+            LINE_STYLE strokeStyle = ConvertStrokeStyle( arr[9] );
+            wxString   fillColor = arr[10].Lower();
+            //bool       locked = arr[12] != wxS( "0" );
 
             //if( cr.x == 0 )
             {
@@ -743,13 +743,13 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             std::unique_ptr<LIB_SHAPE> circle =
                     std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::CIRCLE );
 
-            VECTOR2D       center( Convert( arr[1] ), Convert( arr[2] ) );
-            VECTOR2D       radius( Convert( arr[3] ), Convert( arr[4] ) ); // TODO: corner radius
-            wxString       strokeColor = arr[5];
-            double         lineWidth = Convert( arr[6] );
-            PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[7] );
-            wxString       fillColor = arr[8].Lower();
-            //bool           locked = arr[10] != wxS( "0" );
+            VECTOR2D   center( Convert( arr[1] ), Convert( arr[2] ) );
+            VECTOR2D   radius( Convert( arr[3] ), Convert( arr[4] ) ); // TODO: corner radius
+            wxString   strokeColor = arr[5];
+            double     lineWidth = Convert( arr[6] );
+            LINE_STYLE strokeStyle = ConvertStrokeStyle( arr[7] );
+            wxString   fillColor = arr[8].Lower();
+            //bool       locked = arr[10] != wxS( "0" );
 
             circle->SetCenter( RelPosSym( center ) );
             circle->SetEnd( RelPosSym( center + VECTOR2I( radius.x, 0 ) ) );
@@ -1309,12 +1309,12 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
         }
         else if( rootType == wxS( "W" ) )
         {
-            wxArrayString  ptArr = wxSplit( arr[1], ' ', '\0' );
-            wxString       strokeColor = arr[2];
-            //double         lineWidth = Convert( arr[3] );
-            //PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[4] );
-            wxString       fillColor = arr[5].Lower();
-            //bool           locked = arr[7] != wxS( "0" );
+            wxArrayString ptArr = wxSplit( arr[1], ' ', '\0' );
+            wxString      strokeColor = arr[2];
+            //double        lineWidth = Convert( arr[3] );
+            //LINE_STYLE    strokeStyle = ConvertStrokeStyle( arr[4] );
+            wxString      fillColor = arr[5].Lower();
+            //bool          locked = arr[7] != wxS( "0" );
 
             SHAPE_LINE_CHAIN chain;
 
@@ -1433,12 +1433,12 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             cr.x = !arr[3].empty() ? Convert( arr[3] ) : 0,
             cr.y = !arr[4].empty() ? Convert( arr[4] ) : 0; // TODO: corner radius
 
-            VECTOR2D       size( Convert( arr[5] ), Convert( arr[6] ) );
-            wxString       strokeColor = arr[7];
-            double         lineWidth = Convert( arr[8] );
-            PLOT_DASH_TYPE strokeStyle = ConvertStrokeStyle( arr[9] );
-            wxString       fillColor = arr[10].Lower();
-            //bool           locked = arr[12] != wxS( "0" );
+            VECTOR2D   size( Convert( arr[5] ), Convert( arr[6] ) );
+            wxString   strokeColor = arr[7];
+            double     lineWidth = Convert( arr[8] );
+            LINE_STYLE strokeStyle = ConvertStrokeStyle( arr[9] );
+            wxString   fillColor = arr[10].Lower();
+            //bool       locked = arr[12] != wxS( "0" );
 
             //if( cr.x == 0 )
             {

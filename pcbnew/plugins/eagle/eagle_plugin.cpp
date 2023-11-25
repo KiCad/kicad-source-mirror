@@ -704,7 +704,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
 
                 shape->SetLayer( layer );
-                shape->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+                shape->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             }
 
             m_xpath->pop();
@@ -890,7 +890,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     shape->SetLayer( layer );
                     shape->SetStart( VECTOR2I( kicad_x( c.x ), kicad_y( c.y ) ) );
                     shape->SetEnd( VECTOR2I( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
-                    shape->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+                    shape->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
                 }
             }
 
@@ -1871,7 +1871,7 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     }
 
     dwg->SetLayer( layer );
-    dwg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+    dwg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
     dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
     dwg->Move( aFootprint->GetPosition() );
 
@@ -2353,7 +2353,7 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
         }
 
         aFootprint->Add( gr );
-        gr->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+        gr->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
 
         switch( (int) layer )
         {

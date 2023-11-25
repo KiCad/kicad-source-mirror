@@ -145,7 +145,7 @@ bool SVG_IMPORT_PLUGIN::Import()
                 strokeColor = COLOR4D::UNSPECIFIED;
         }
 
-        PLOT_DASH_TYPE dashType = PLOT_DASH_TYPE::SOLID;
+        LINE_STYLE dashType = LINE_STYLE::SOLID;
 
         if( shape->strokeDashCount > 0 )
         {
@@ -165,13 +165,13 @@ bool SVG_IMPORT_PLUGIN::Import()
             }
 
             if( dotCount > 0 && dashCount == 0 )
-                dashType = PLOT_DASH_TYPE::DOT;
+                dashType = LINE_STYLE::DOT;
             else if( dotCount == 0 && dashCount > 0 )
-                dashType = PLOT_DASH_TYPE::DASH;
+                dashType = LINE_STYLE::DASH;
             else if( dotCount == 1 && dashCount == 1 )
-                dashType = PLOT_DASH_TYPE::DASHDOT;
+                dashType = LINE_STYLE::DASHDOT;
             else if( dotCount == 2 && dashCount == 1 )
-                dashType = PLOT_DASH_TYPE::DASHDOTDOT;
+                dashType = LINE_STYLE::DASHDOTDOT;
         }
 
         IMPORTED_STROKE stroke( lineWidth, dashType, strokeColor );

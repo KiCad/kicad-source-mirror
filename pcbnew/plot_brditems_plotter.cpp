@@ -406,7 +406,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
 
     PCB_SHAPE temp_item;
 
-    temp_item.SetStroke( STROKE_PARAMS( aDim->GetLineThickness(), PLOT_DASH_TYPE::SOLID ) );
+    temp_item.SetStroke( STROKE_PARAMS( aDim->GetLineThickness(), LINE_STYLE::SOLID ) );
     temp_item.SetLayer( aDim->GetLayer() );
 
     for( const std::shared_ptr<SHAPE>& shape : aDim->GetShapes() )
@@ -459,7 +459,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 
     temp_item.SetShape( SHAPE_T::CIRCLE );
     temp_item.SetFilled( false );
-    temp_item.SetStroke( STROKE_PARAMS( aMire->GetWidth(), PLOT_DASH_TYPE::SOLID ) );
+    temp_item.SetStroke( STROKE_PARAMS( aMire->GetWidth(), LINE_STYLE::SOLID ) );
     temp_item.SetLayer( aMire->GetLayer() );
     temp_item.SetStart( aMire->GetPosition() );
     radius = aMire->GetSize() / 3;
@@ -693,9 +693,9 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     if( !m_layerMask[aShape->GetLayer()] )
         return;
 
-    bool           sketch = GetPlotMode() == SKETCH;
-    int            thickness = aShape->GetWidth();
-    PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
+    bool       sketch = GetPlotMode() == SKETCH;
+    int        thickness = aShape->GetWidth();
+    LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
@@ -735,7 +735,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         }
     }
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
         switch( aShape->GetShape() )
         {

@@ -148,7 +148,7 @@ public:
 
     virtual void SetColor( const COLOR4D& color ) = 0;
 
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) = 0;
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) = 0;
 
     virtual void SetCreator( const wxString& aCreator ) { m_creator = aCreator; }
 

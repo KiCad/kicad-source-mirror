@@ -1523,7 +1523,7 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadPolyLine( wxXmlNode* aPolygonNode )
     }
 
     poly->SetLayer( kiCadLayer( epoly.layer ) );
-    poly->SetStroke( STROKE_PARAMS( epoly.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+    poly->SetStroke( STROKE_PARAMS( epoly.width.ToSchUnits(), LINE_STYLE::SOLID ) );
     poly->SetFillMode( FILL_T::FILLED_SHAPE );
 
     return poly.release();
@@ -1552,7 +1552,7 @@ SCH_ITEM* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode, SEG& endpoints )
         arc->SetStart( start );
         arc->SetArcAngleAndEnd( -EDA_ANGLE( *ewire.curve, DEGREES_T ), true ); // KiCad rotates the other way
         arc->SetLayer( kiCadLayer( ewire.layer ) );
-        arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+        arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), LINE_STYLE::SOLID ) );
 
         return arc.release();
     }
@@ -1563,7 +1563,7 @@ SCH_ITEM* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode, SEG& endpoints )
         line->SetStartPoint( start );
         line->SetEndPoint( end );
         line->SetLayer( kiCadLayer( ewire.layer ) );
-        line->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+        line->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), LINE_STYLE::SOLID ) );
 
         return line.release();
     }
@@ -1579,7 +1579,7 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadCircle( wxXmlNode* aCircleNode )
     circle->SetLayer( kiCadLayer( c.layer ) );
     circle->SetPosition( center );
     circle->SetEnd( VECTOR2I( center.x + c.radius.ToSchUnits(), center.y ) );
-    circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+    circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), LINE_STYLE::SOLID ) );
 
     return circle.release();
 }
@@ -2296,7 +2296,7 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSym
 
     circle->SetPosition( center );
     circle->SetEnd( VECTOR2I( center.x + c.radius.ToSchUnits(), center.y ) );
-    circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+    circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), LINE_STYLE::SOLID ) );
     circle->SetUnit( aGateNumber );
 
     return circle;
@@ -2363,12 +2363,12 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
             VECTOR2I centerStartVector = ( begin - center ) * ( ewire.width.ToSchUnits() / radius );
             begin = center + centerStartVector;
 
-            arc->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( 1, LINE_STYLE::SOLID ) );
             arc->SetFillMode( FILL_T::FILLED_SHAPE );
         }
         else
         {
-            arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), LINE_STYLE::SOLID ) );
         }
 
         arc->SetCenter( center );
@@ -2385,7 +2385,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
         poly->AddPoint( begin );
         poly->AddPoint( end );
         poly->SetUnit( aGateNumber );
-        poly->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+        poly->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), LINE_STYLE::SOLID ) );
 
         return poly;
     }
@@ -2426,7 +2426,7 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aS
         vertex = vertex->GetNext();
     }
 
-    poly->SetStroke( STROKE_PARAMS( epoly.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
+    poly->SetStroke( STROKE_PARAMS( epoly.width.ToSchUnits(), LINE_STYLE::SOLID ) );
     poly->SetFillMode( FILL_T::FILLED_SHAPE );
     poly->SetUnit( aGateNumber );
 

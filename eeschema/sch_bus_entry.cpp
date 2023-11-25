@@ -52,7 +52,7 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool
     m_size.y = schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE );
 
     m_stroke.SetWidth( 0 );
-    m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
     m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
     if( aFlipY )
@@ -61,7 +61,7 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool
     m_isDanglingStart = m_isDanglingEnd = true;
 
     m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
-    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedLineStyle = LINE_STYLE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -73,7 +73,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, bool aFlipY ) :
     m_connected_bus_item = nullptr;
 
     m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
-    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedLineStyle = LINE_STYLE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -94,7 +94,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, int aQuadrant ) :
     m_connected_bus_item = nullptr;
 
     m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
-    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedLineStyle = LINE_STYLE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -107,7 +107,7 @@ SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const VECTOR2I& pos, bool aFlipY ) :
     m_connected_bus_items[1] = nullptr;
 
     m_lastResolvedWidth = schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS );
-    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedLineStyle = LINE_STYLE::SOLID;
     m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
@@ -205,20 +205,20 @@ void SCH_BUS_ENTRY_BASE::SetBusEntryColor( const COLOR4D& aColor )
 }
 
 
-PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetLineStyle() const
+LINE_STYLE SCH_BUS_ENTRY_BASE::GetLineStyle() const
 {
-    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-        m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
+    if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )
+        m_lastResolvedLineStyle = m_stroke.GetLineStyle();
     else if( IsConnectable() && !IsConnectivityDirty() )
-        m_lastResolvedLineStyle = (PLOT_DASH_TYPE) GetEffectiveNetClass()->GetLineStyle();
+        m_lastResolvedLineStyle = (LINE_STYLE) GetEffectiveNetClass()->GetLineStyle();
 
     return m_lastResolvedLineStyle;
 }
 
 
-void SCH_BUS_ENTRY_BASE::SetLineStyle( PLOT_DASH_TYPE aStyle )
+void SCH_BUS_ENTRY_BASE::SetLineStyle( LINE_STYLE aStyle )
 {
-    m_stroke.SetPlotStyle( aStyle );
+    m_stroke.SetLineStyle( aStyle );
     m_lastResolvedLineStyle = aStyle;
 }
 
@@ -274,7 +274,7 @@ void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I
     VECTOR2I end = GetEnd() + aOffset;
     int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
-    if( GetLineStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( GetLineStyle() <= LINE_STYLE::FIRST_TYPE )
     {
         GRLine( DC, start.x, start.y, end.x, end.y, penWidth, color );
     }
@@ -490,7 +490,7 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
     aPlotter->MoveTo( m_pos );
     aPlotter->FinishTo( GetEnd() );
 
-    aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
+    aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
 }
 
 
@@ -630,23 +630,23 @@ static struct SCH_BUS_ENTRY_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_WIRE_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_BUS_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
 
-        ENUM_MAP<PLOT_DASH_TYPE>& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+        ENUM_MAP<LINE_STYLE>& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
         if( plotDashTypeEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
-                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
-                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
-                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
+                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         // TODO: Maybe SCH_BUS_ENTRY_BASE should inherit from or mix in with SCH_LINE
-        void ( SCH_BUS_ENTRY_BASE::*lineStyleSetter )( PLOT_DASH_TYPE ) =
+        void ( SCH_BUS_ENTRY_BASE::*lineStyleSetter )( LINE_STYLE ) =
                 &SCH_BUS_ENTRY_BASE::SetLineStyle;
 
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE, PLOT_DASH_TYPE>(
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE, LINE_STYLE>(
                 _HKI( "Line Style" ),
                 lineStyleSetter, &SCH_BUS_ENTRY_BASE::GetLineStyle ) );
 

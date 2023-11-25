@@ -137,8 +137,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
     }
 
-    for( const std::pair<const PLOT_DASH_TYPE, lineTypeStruct>& typeEntry : lineTypeNames )
-        m_lineStyleCombo->Append( typeEntry.second.name, KiBitmap( typeEntry.second.bitmap ) );
+    for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
+        m_lineStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
 
     m_lineStyleCombo->Append( DEFAULT_STYLE );
 
@@ -248,10 +248,10 @@ void DIALOG_SHAPE_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
     }
     else
     {
-        PLOT_DASH_TYPE style = m_item->GetStroke().GetPlotStyle();
+        LINE_STYLE style = m_item->GetStroke().GetLineStyle();
 
-        if( style == PLOT_DASH_TYPE::DEFAULT )
-            style = PLOT_DASH_TYPE::SOLID;
+        if( style == LINE_STYLE::DEFAULT )
+            style = LINE_STYLE::SOLID;
 
         if( (int) style < (int) lineTypeNames.size() )
             m_lineStyleCombo->SetSelection( (int) style );
@@ -325,7 +325,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
 
     m_thickness.SetValue( m_item->GetStroke().GetWidth() );
 
-    int style = static_cast<int>( m_item->GetStroke().GetPlotStyle() );
+    int style = static_cast<int>( m_item->GetStroke().GetLineStyle() );
 
     if( style == -1 )
         m_lineStyleCombo->SetStringSelection( DEFAULT_STYLE );
@@ -499,9 +499,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     std::advance( it, m_lineStyleCombo->GetSelection() );
 
     if( it == lineTypeNames.end() )
-        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        stroke.SetLineStyle( LINE_STYLE::DEFAULT );
     else
-        stroke.SetPlotStyle( it->first );
+        stroke.SetLineStyle( it->first );
 
     m_item->SetStroke( stroke );
 

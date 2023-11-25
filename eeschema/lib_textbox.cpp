@@ -228,11 +228,11 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     if( IsPrivate() )
         return;
 
-    bool           forceNoFill = static_cast<bool>( aData );
-    bool           blackAndWhiteMode = GetGRForceBlackPenState();
-    int            penWidth = GetEffectivePenWidth( aSettings );
-    COLOR4D        color = GetStroke().GetColor();
-    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
+    bool       forceNoFill = static_cast<bool>( aData );
+    bool       blackAndWhiteMode = GetGRForceBlackPenState();
+    int        penWidth = GetEffectivePenWidth( aSettings );
+    COLOR4D    color = GetStroke().GetColor();
+    LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
     wxDC*    DC = aSettings->GetPrintDC();
     VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
@@ -259,10 +259,10 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             color = color.Mix( bg, 0.5f );
         }
 
-        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::SOLID;
+        if( lineStyle == LINE_STYLE::DEFAULT )
+            lineStyle = LINE_STYLE::SOLID;
 
-        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+        if( lineStyle <= LINE_STYLE::FIRST_TYPE )
         {
             GRRect( DC, pt1, pt2, penWidth, color );
         }
@@ -405,17 +405,17 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
 
-    int            penWidth = GetEffectivePenWidth( renderSettings );
-    COLOR4D        color = GetStroke().GetColor();
-    PLOT_DASH_TYPE lineStyle = GetStroke().GetPlotStyle();
+    int        penWidth = GetEffectivePenWidth( renderSettings );
+    COLOR4D    color = GetStroke().GetColor();
+    LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
     if( penWidth > 0 )
     {
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
             color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
-        if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::DASH;
+        if( lineStyle == LINE_STYLE::DEFAULT )
+            lineStyle = LINE_STYLE::DASH;
 
         if( aDimmed )
         {
@@ -426,7 +426,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
         aPlotter->SetColor( color );
         aPlotter->SetDash( penWidth, lineStyle );
         aPlotter->Rect( start, end, FILL_T::NO_FILL, penWidth );
-        aPlotter->SetDash( penWidth, PLOT_DASH_TYPE::SOLID );
+        aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
     }
 
     KIFONT::FONT* font = GetFont();

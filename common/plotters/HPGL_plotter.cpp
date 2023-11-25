@@ -222,7 +222,7 @@ static const double PLUsPERDECIMIL = 0.1016;
 HPGL_PLOTTER::HPGL_PLOTTER() :
         m_arcTargetChordLength( 0 ),
         m_arcMinChordDegrees( 5.0, DEGREES_T ),
-        m_lineStyle( PLOT_DASH_TYPE::SOLID ),
+        m_lineStyle( LINE_STYLE::SOLID ),
         m_useUserCoords( false ),
         m_fitUserCoords( false ),
         m_current_item( nullptr )
@@ -305,10 +305,10 @@ bool HPGL_PLOTTER::EndPlot()
             }
         }
 
-        VECTOR2I       loc          = m_items.begin()->loc_start;
-        bool           pen_up       = true;
-        PLOT_DASH_TYPE current_dash = PLOT_DASH_TYPE::SOLID;
-        int            current_pen  = m_penNumber;
+        VECTOR2I   loc          = m_items.begin()->loc_start;
+        bool       pen_up       = true;
+        LINE_STYLE current_dash = LINE_STYLE::SOLID;
+        int        current_pen  = m_penNumber;
 
         for( HPGL_ITEM const& item : m_items )
         {
@@ -531,7 +531,7 @@ void HPGL_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-void HPGL_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
+void HPGL_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
     m_lineStyle = aLineStyle;
     flushItem();
@@ -906,15 +906,15 @@ void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
 }
 
 
-const char* HPGL_PLOTTER::lineStyleCommand( PLOT_DASH_TYPE aLineStyle )
+const char* HPGL_PLOTTER::lineStyleCommand( LINE_STYLE aLineStyle )
 {
     switch( aLineStyle )
     {
-    case PLOT_DASH_TYPE::DASH:       return "LT 2 4 1;";
-    case PLOT_DASH_TYPE::DOT:        return "LT 1 1 1;";
-    case PLOT_DASH_TYPE::DASHDOT:    return "LT 4 6 1;";
-    case PLOT_DASH_TYPE::DASHDOTDOT: return "LT 7 8 1;";
-    default:                         return "LT;";
+    case LINE_STYLE::DASH:       return "LT 2 4 1;";
+    case LINE_STYLE::DOT:        return "LT 1 1 1;";
+    case LINE_STYLE::DASHDOT:    return "LT 4 6 1;";
+    case LINE_STYLE::DASHDOTDOT: return "LT 7 8 1;";
+    default:                     return "LT;";
     }
 }
 

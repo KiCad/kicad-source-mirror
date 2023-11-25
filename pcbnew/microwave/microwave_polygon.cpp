@@ -386,7 +386,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
 
     // Set the polygon outline thickness to 0, only the polygonal shape is filled
     // without extra thickness.
-    shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+    shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
     g_PolyEdges.clear();
 
     editFrame.OnModify();

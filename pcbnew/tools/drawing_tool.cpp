@@ -173,7 +173,7 @@ DRAWING_TOOL::DRAWING_TOOL() :
         m_mode( MODE::NONE ),
         m_inDrawingTool( false ),
         m_layer( UNDEFINED_LAYER ),
-        m_stroke( 1, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_stroke( 1, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_pickerItem( nullptr ),
         m_tuningPattern( nullptr )
 {
@@ -289,7 +289,7 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 
     m_layer = m_frame->GetActiveLayer();
     m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
-    m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
     m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
     m_textAttrs.m_Size = bds.GetTextSize( m_layer );
@@ -1818,7 +1818,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     {
         m_layer = m_frame->GetActiveLayer();
         m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
-        m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
         m_textAttrs.m_Size = bds.GetTextSize( m_layer );
@@ -1933,7 +1933,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             {
                 m_layer = m_frame->GetActiveLayer();
                 m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
-                m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+                m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
                 m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
                 m_textAttrs.m_Size = bds.GetTextSize( m_layer );
@@ -2217,7 +2217,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     {
         m_layer = m_frame->GetActiveLayer();
         m_stroke.SetWidth( m_frame->GetDesignSettings().GetLineThickness( m_layer ) );
-        m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
 
@@ -2357,7 +2357,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             {
                 m_layer = m_frame->GetActiveLayer();
                 m_stroke.SetWidth( m_frame->GetDesignSettings().GetLineThickness( m_layer ) );
-                m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+                m_stroke.SetLineStyle( LINE_STYLE::DEFAULT );
                 m_stroke.SetColor( COLOR4D::UNSPECIFIED );
             }
 

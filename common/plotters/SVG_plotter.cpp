@@ -170,7 +170,7 @@ SVG_PLOTTER::SVG_PLOTTER()
     m_pen_rgb_color   = 0;          // current color value (black)
     m_brush_rgb_color = 0;          // current color value (black)
     m_brush_alpha     = 1.0;
-    m_dashed          = PLOT_DASH_TYPE::SOLID;
+    m_dashed          = LINE_STYLE::SOLID;
     m_precision       = 4;          // default: 4 digits in mantissa.
 }
 
@@ -262,31 +262,31 @@ void SVG_PLOTTER::setSVGPlotStyle( int aLineWidth, bool aIsGroup, const std::str
         //set any extra attributes for non-solid lines
         switch( m_dashed )
         {
-        case PLOT_DASH_TYPE::DASH:
+        case LINE_STYLE::DASH:
             fprintf( m_outputFile, "stroke-dasharray:%.*f,%.*f;", m_precision,
                      GetDashMarkLenIU( aLineWidth ), m_precision, GetDashGapLenIU( aLineWidth ) );
             break;
 
-        case PLOT_DASH_TYPE::DOT:
+        case LINE_STYLE::DOT:
             fprintf( m_outputFile, "stroke-dasharray:%f,%f;", GetDotMarkLenIU( aLineWidth ),
                      GetDashGapLenIU( aLineWidth ) );
             break;
 
-        case PLOT_DASH_TYPE::DASHDOT:
+        case LINE_STYLE::DASHDOT:
             fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f;", GetDashMarkLenIU( aLineWidth ),
                      GetDashGapLenIU( aLineWidth ), GetDotMarkLenIU( aLineWidth ),
                      GetDashGapLenIU( aLineWidth ) );
             break;
 
-        case PLOT_DASH_TYPE::DASHDOTDOT:
+        case LINE_STYLE::DASHDOTDOT:
             fprintf( m_outputFile, "stroke-dasharray:%f,%f,%f,%f,%f,%f;",
                      GetDashMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
                      GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ),
                      GetDotMarkLenIU( aLineWidth ), GetDashGapLenIU( aLineWidth ) );
             break;
 
-        case PLOT_DASH_TYPE::DEFAULT:
-        case PLOT_DASH_TYPE::SOLID:
+        case LINE_STYLE::DEFAULT:
+        case LINE_STYLE::SOLID:
         default:
             //do nothing
             break;
@@ -359,7 +359,7 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 }
 
 
-void SVG_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
+void SVG_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
     if( m_dashed != aLineStyle )
     {

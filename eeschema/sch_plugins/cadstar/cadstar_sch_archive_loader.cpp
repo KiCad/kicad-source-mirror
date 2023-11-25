@@ -1621,7 +1621,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
     {
         FIGURE         fig = figPair.second;
         int            lineThickness = getLineThickness( fig.LineCodeID );
-        PLOT_DASH_TYPE linestyle = getLineStyle( fig.LineCodeID );
+        LINE_STYLE     linestyle = getLineStyle( fig.LineCodeID );
 
         if( fig.Shape.Type == SHAPE_TYPE::OPENSHAPE )
         {
@@ -2050,7 +2050,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
         }
 
         shape->SetUnit( aGateNumber );
-        shape->SetStroke( STROKE_PARAMS( aLineThickness, PLOT_DASH_TYPE::SOLID ) );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, LINE_STYLE::SOLID ) );
         aSymbol->AddDrawItem( shape, false );
 
         prev = cur;
@@ -2379,7 +2379,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
                                                     const bool& aMirrorInvert )
 {
     int lineWidth = KiROUND( getLineThickness( aCadstarLineCodeID ) * aScalingFactor );
-    PLOT_DASH_TYPE lineStyle = getLineStyle( aCadstarLineCodeID );
+    LINE_STYLE lineStyle = getLineStyle( aCadstarLineCodeID );
 
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
@@ -2767,21 +2767,21 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLin
 }
 
 
-PLOT_DASH_TYPE CADSTAR_SCH_ARCHIVE_LOADER::getLineStyle( const LINECODE_ID& aCadstarLineCodeID )
+LINE_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getLineStyle( const LINECODE_ID& aCadstarLineCodeID )
 {
     wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
                      != Assignments.Codedefs.LineCodes.end(),
-             PLOT_DASH_TYPE::SOLID );
+             LINE_STYLE::SOLID );
 
     // clang-format off
     switch( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Style )
     {
-    case LINESTYLE::DASH:       return PLOT_DASH_TYPE::DASH;
-    case LINESTYLE::DASHDOT:    return PLOT_DASH_TYPE::DASHDOT;
-    case LINESTYLE::DASHDOTDOT: return PLOT_DASH_TYPE::DASHDOT; //TODO: update in future
-    case LINESTYLE::DOT:        return PLOT_DASH_TYPE::DOT;
-    case LINESTYLE::SOLID:      return PLOT_DASH_TYPE::SOLID;
-    default:                    return PLOT_DASH_TYPE::DEFAULT;
+    case LINESTYLE::DASH:       return LINE_STYLE::DASH;
+    case LINESTYLE::DASHDOT:    return LINE_STYLE::DASHDOT;
+    case LINESTYLE::DASHDOTDOT: return LINE_STYLE::DASHDOT; //TODO: update in future
+    case LINESTYLE::DOT:        return LINE_STYLE::DOT;
+    case LINESTYLE::SOLID:      return LINE_STYLE::SOLID;
+    default:                    return LINE_STYLE::DEFAULT;
     }
     // clang-format on
 }

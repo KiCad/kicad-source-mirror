@@ -137,7 +137,7 @@ void PCAD_LINE::AddToBoard( FOOTPRINT* aFootprint )
         segment->SetLayer( m_KiCadLayer );
         segment->SetStart( VECTOR2I( m_PositionX, m_PositionY ) );
         segment->SetEnd( VECTOR2I( m_ToX, m_ToY ) );
-        segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
+        segment->SetStroke( STROKE_PARAMS( m_Width, LINE_STYLE::SOLID ) );
 
         if( aFootprint )
         {

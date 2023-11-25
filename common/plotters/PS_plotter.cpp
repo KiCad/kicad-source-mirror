@@ -461,27 +461,27 @@ void PS_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 }
 
 
-void PS_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
+void PS_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
     switch( aLineStyle )
     {
-    case PLOT_DASH_TYPE::DASH:
+    case LINE_STYLE::DASH:
         fprintf( m_outputFile, "[%d %d] 0 setdash\n",
                  (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
-    case PLOT_DASH_TYPE::DOT:
+    case LINE_STYLE::DOT:
         fprintf( m_outputFile, "[%d %d] 0 setdash\n",
                  (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
-    case PLOT_DASH_TYPE::DASHDOT:
+    case LINE_STYLE::DASHDOT:
         fprintf( m_outputFile, "[%d %d %d %d] 0 setdash\n",
                  (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
                  (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) );
         break;
 
-    case PLOT_DASH_TYPE::DASHDOTDOT:
+    case LINE_STYLE::DASHDOTDOT:
         fprintf( m_outputFile, "[%d %d %d %d %d %d] 0 setdash\n",
                  (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
                  (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),

@@ -78,7 +78,7 @@ public:
     /**
      * HPGL supports dashed lines.
      */
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
     virtual void SetColor( const COLOR4D& color ) override {}
 
@@ -174,33 +174,33 @@ protected:
             lift_after( false ),
             pen_returns( false ),
             pen( 0 ),
-            dashType( PLOT_DASH_TYPE::SOLID ) {}
+            dashType( LINE_STYLE::SOLID ) {}
 
         /// Location the pen should start at
-        VECTOR2D       loc_start;
+        VECTOR2D   loc_start;
 
         /// Location the pen will be at when it finishes. If this is not known,
         /// leave it equal to loc_start and set lift_after.
-        VECTOR2D       loc_end;
+        VECTOR2D   loc_end;
 
         /// Bounding box of this item
-        BOX2D          bbox;
+        BOX2D      bbox;
 
         /// Whether the command should be executed with the pen lifted
-        bool           lift_before;
+        bool       lift_before;
 
         /// Whether the pen must be lifted after the command. If the location of the pen
         /// is not known, this must be set (so that another command starting at loc_end
         /// is not immediately executed with no lift).
-        bool           lift_after;
+        bool       lift_after;
 
         /// Whether the pen returns to its original state after the command. Otherwise,
         /// the pen is assumed to be down following the command.
-        bool           pen_returns;
+        bool       pen_returns;
 
-        int            pen;            /// Pen number for this command
-        PLOT_DASH_TYPE dashType;       /// Line style for this command
-        wxString       content;        /// Text of the command
+        int        pen;            /// Pen number for this command
+        LINE_STYLE dashType;       /// Line style for this command
+        wxString   content;        /// Text of the command
     };
 
     /// Sort a list of HPGL items to improve plotting speed on mechanical plotters.
@@ -209,7 +209,7 @@ protected:
     static void sortItems( std::list<HPGL_ITEM>& items );
 
     /// Return the plot command corresponding to a line type
-    static const char* lineStyleCommand( PLOT_DASH_TYPE aLineStyle );
+    static const char* lineStyleCommand( LINE_STYLE aLineStyle );
 
 protected:
     int                  m_penSpeed;
@@ -217,7 +217,7 @@ protected:
     double               m_penDiameter;
     double               m_arcTargetChordLength;
     EDA_ANGLE            m_arcMinChordDegrees;
-    PLOT_DASH_TYPE       m_lineStyle;
+    LINE_STYLE           m_lineStyle;
     bool                 m_useUserCoords;
     bool                 m_fitUserCoords;
 

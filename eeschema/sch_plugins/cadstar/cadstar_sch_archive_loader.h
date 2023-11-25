@@ -29,7 +29,7 @@
 #include <sch_plugins/cadstar/cadstar_sch_archive_parser.h>
 
 #include <layer_ids.h>          // SCH_LAYER_ID
-#include <plotters/plotter.h>   // PLOT_DASH_TYPE
+#include <plotters/plotter.h>   // LINE_STYLE
 #include <pin_type.h>           // ELECTRICAL_PINTYPE
 
 #include <memory>
@@ -247,7 +247,7 @@ private:
     bool      isAttributeVisible( const ATTRIBUTE_ID& aCadstarAttributeID );
 
     int            getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
-    PLOT_DASH_TYPE getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
+    LINE_STYLE     getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
     PART           getPart( const PART_ID& aCadstarPartID );
     ROUTECODE      getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID );
     TEXTCODE       getTextCode( const TEXTCODE_ID& aCadstarTextCodeID );

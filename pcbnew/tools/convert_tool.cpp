@@ -454,7 +454,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             }
 
             graphic->SetShape( SHAPE_T::POLY );
-            graphic->SetStroke( STROKE_PARAMS( resolvedSettings.m_LineWidth, PLOT_DASH_TYPE::SOLID,
+            graphic->SetStroke( STROKE_PARAMS( resolvedSettings.m_LineWidth, LINE_STYLE::SOLID,
                                                COLOR4D::UNSPECIFIED ) );
             graphic->SetFilled( resolvedSettings.m_Strategy == CENTERLINE );
             graphic->SetLayer( destLayer );

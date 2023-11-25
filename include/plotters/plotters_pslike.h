@@ -184,7 +184,7 @@ public:
     /**
      * PostScript supports dashed lines.
      */
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
@@ -303,7 +303,7 @@ public:
     /**
      * PDF supports dashed lines
      */
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
     /**
      * PDF can have multiple pages, so SetPageSettings can be called
@@ -542,7 +542,7 @@ public:
     /**
      * SVG supports dashed lines.
      */
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
@@ -641,21 +641,18 @@ protected:
      */
     void setFillMode( FILL_T fill );
 
-    FILL_T         m_fillMode;          // true if the current contour
-                                        // rect, arc, circle, polygon must be filled
-    long           m_pen_rgb_color;     // current rgb color value: each color has
-                                        // a value 0 ... 255, and the 3 colors are
-                                        // grouped in a 3x8 bits value
-                                        // (written in hex to svg files)
-    long           m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill
-                                        // some contours.
-    double         m_brush_alpha;
-    bool           m_graphics_changed;  // true if a pen/brush parameter is modified
-                                        // color, pen size, fill mode ...
-                                        // the new SVG stype must be output on file
-    PLOT_DASH_TYPE m_dashed;            // plot line style
-    unsigned       m_precision;         // How fine the step size is
-                                        // Use 3-6 (3 means um precision, 6 nm precision) in PcbNew
-                                        // 3-4 in other modules (avoid values >4 to avoid overflow)
-                                        // see also comment for m_useInch.
+    FILL_T     m_fillMode;          // true if the current contour rect, arc, circle, polygon must
+                                    // be filled
+    long       m_pen_rgb_color;     // current rgb color value: each color has a value 0 ... 255,
+                                    //   and the 3 colors are grouped in a 3x8 bits value (written
+                                    //   in hex to svg files)
+    long       m_brush_rgb_color;   // same as m_pen_rgb_color, used to fill some contours.
+    double     m_brush_alpha;
+    bool       m_graphics_changed;  // true if a pen/brush parameter is modified color, pen size,
+                                    //   fill mode ... the new SVG stype must be output on file
+    LINE_STYLE m_dashed;            // plot line style
+    unsigned   m_precision;         // How fine the step size is
+                                    // Use 3-6 (3 means um precision, 6 nm precision) in PcbNew
+                                    // 3-4 in other modules (avoid values >4 to avoid overflow)
+                                    // see also comment for m_useInch.
 };

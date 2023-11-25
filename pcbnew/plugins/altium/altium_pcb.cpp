@@ -1010,7 +1010,7 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
     HelperShapeLineChainFromAltiumVertices( lineChain, aVertices );
 
     STROKE_PARAMS stroke( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ),
-                          PLOT_DASH_TYPE::SOLID );
+                          LINE_STYLE::SOLID );
 
     for( int i = 0; i <= lineChain.PointCount() && i != -1; i = lineChain.NextShape( i ) )
     {
@@ -1427,7 +1427,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
             PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
             m_board->Add( shape, ADD_MODE::APPEND );
             shape->SetLayer( klayer );
-            shape->SetStroke( STROKE_PARAMS( aElem.linewidth, PLOT_DASH_TYPE::SOLID ) );
+            shape->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
             shape->SetStart( last );
             shape->SetEnd( aElem.referencePoint.at( i ) );
             last = aElem.referencePoint.at( i );
@@ -1448,7 +1448,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
                 PCB_SHAPE* shape1 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
                 m_board->Add( shape1, ADD_MODE::APPEND );
                 shape1->SetLayer( klayer );
-                shape1->SetStroke( STROKE_PARAMS( aElem.linewidth, PLOT_DASH_TYPE::SOLID ) );
+                shape1->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
                 shape1->SetStart( referencePoint0 );
                 shape1->SetEnd( referencePoint0 + arrVec );
 
@@ -1457,7 +1457,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
                 PCB_SHAPE* shape2 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
                 m_board->Add( shape2, ADD_MODE::APPEND );
                 shape2->SetLayer( klayer );
-                shape2->SetStroke( STROKE_PARAMS( aElem.linewidth, PLOT_DASH_TYPE::SOLID ) );
+                shape2->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
                 shape2->SetStart( referencePoint0 );
                 shape2->SetEnd( referencePoint0 + arrVec );
             }
@@ -1499,7 +1499,7 @@ void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
         PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
         m_board->Add( shape, ADD_MODE::APPEND );
         shape->SetLayer( klayer );
-        shape->SetStroke( STROKE_PARAMS( aElem.linewidth, PLOT_DASH_TYPE::SOLID ) );
+        shape->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
         shape->SetStart( aElem.referencePoint.at( i ) );
         // shape->SetEnd( /* TODO: seems to be based on TEXTY */ );
     }
@@ -2032,7 +2032,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         shape->SetPolyShape( linechain );
         shape->SetFilled( false );
         shape->SetLayer( klayer );
-        shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::DASH ) );
+        shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), LINE_STYLE::DASH ) );
 
         m_board->Add( shape, ADD_MODE::APPEND );
     }
@@ -2145,9 +2145,9 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         shape->SetLayer( klayer );
 
         if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
-            shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::DASH ) );
+            shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), LINE_STYLE::DASH ) );
         else
-            shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::SOLID ) );
+            shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), LINE_STYLE::SOLID ) );
 
         aFootprint->Add( shape, ADD_MODE::APPEND );
     }
@@ -2450,7 +2450,7 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
         PCB_SHAPE shape( nullptr );
 
         ConvertArcs6ToPcbShape( aElem, &shape );
-        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
 
         HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer, aElem.keepoutrestrictions );
     }
@@ -2470,7 +2470,7 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
             PCB_SHAPE* arc = new PCB_SHAPE( m_board );
 
             ConvertArcs6ToPcbShape( aElem, arc );
-            arc->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             arc->SetLayer( layerExpansionMask.first );
 
             m_board->Add( arc, ADD_MODE::APPEND );
@@ -2492,7 +2492,7 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
         PCB_SHAPE shape( nullptr );
 
         ConvertArcs6ToPcbShape( aElem, &shape );
-        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
 
         HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer,
                                                 aElem.keepoutrestrictions );
@@ -2523,7 +2523,7 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
             PCB_SHAPE* arc = new PCB_SHAPE( aFootprint );
 
             ConvertArcs6ToPcbShape( aElem, arc );
-            arc->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            arc->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             arc->SetLayer( layerExpansionMask.first );
 
             aFootprint->Add( arc, ADD_MODE::APPEND );
@@ -2564,7 +2564,7 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
         PCB_SHAPE* arc = new PCB_SHAPE( m_board );
 
         ConvertArcs6ToPcbShape( aElem, arc );
-        arc->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        arc->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
         arc->SetLayer( aLayer );
 
         m_board->Add( arc, ADD_MODE::APPEND );
@@ -2578,7 +2578,7 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, cons
     PCB_SHAPE* arc = new PCB_SHAPE( aFootprint );
 
     ConvertArcs6ToPcbShape( aElem, arc );
-    arc->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+    arc->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
     arc->SetLayer( aLayer );
 
     aFootprint->Add( arc, ADD_MODE::APPEND );
@@ -2929,7 +2929,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
             int offset = ( std::min( aElem.topsize.x, aElem.topsize.y ) * cornerradius ) / 200;
 
             aShape->SetLayer( aLayer );
-            aShape->SetStroke( STROKE_PARAMS( offset * 2, PLOT_DASH_TYPE::SOLID ) );
+            aShape->SetStroke( STROKE_PARAMS( offset * 2, LINE_STYLE::SOLID ) );
 
             if( cornerradius < 100 )
             {
@@ -2952,7 +2952,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
                 aShape->SetFilled( true );
                 aShape->SetStart( aElem.position );
                 aShape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
-                aShape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
+                aShape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, LINE_STYLE::SOLID ) );
             }
             else if( aElem.topsize.x < aElem.topsize.y )
             {
@@ -2982,7 +2982,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
             aShape->SetLayer( aLayer );
             aShape->SetStart( aElem.position );
             aShape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
-            aShape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
+            aShape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, LINE_STYLE::SOLID ) );
         }
         else
         {
@@ -2990,7 +2990,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLay
             aShape->SetShape( SHAPE_T::SEGMENT );
             aShape->SetLayer( aLayer );
             aShape->SetStroke( STROKE_PARAMS( std::min( aElem.topsize.x, aElem.topsize.y ),
-                                              PLOT_DASH_TYPE::SOLID ) );
+                                              LINE_STYLE::SOLID ) );
 
             if( aElem.topsize.x < aElem.topsize.y )
             {
@@ -3144,7 +3144,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
         PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
         shape.SetStart( aElem.start );
         shape.SetEnd( aElem.end );
-        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
 
         HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer, aElem.keepoutrestrictions );
     }
@@ -3164,7 +3164,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
 
             seg->SetStart( aElem.start );
             seg->SetEnd( aElem.end );
-            seg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            seg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             seg->SetLayer( layerExpansionMask.first );
 
             m_board->Add( seg, ADD_MODE::APPEND );
@@ -3187,7 +3187,7 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
         PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
         shape.SetStart( aElem.start );
         shape.SetEnd( aElem.end );
-        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
 
         HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer,
                                                 aElem.keepoutrestrictions );
@@ -3218,7 +3218,7 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
 
             seg->SetStart( aElem.start );
             seg->SetEnd( aElem.end );
-            seg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            seg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             seg->SetLayer( layerExpansionMask.first );
 
             aFootprint->Add( seg, ADD_MODE::APPEND );
@@ -3247,7 +3247,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAY
 
         seg->SetStart( aElem.start );
         seg->SetEnd( aElem.end );
-        seg->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        seg->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
         seg->SetLayer( aLayer );
 
         m_board->Add( seg, ADD_MODE::APPEND );
@@ -3262,7 +3262,7 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, co
 
     seg->SetStart( aElem.start );
     seg->SetEnd( aElem.end );
-    seg->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+    seg->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
     seg->SetLayer( aLayer );
 
     aFootprint->Add( seg, ADD_MODE::APPEND );
@@ -3470,7 +3470,7 @@ void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
         shape.SetStart( aElem.pos1 );
         shape.SetEnd( aElem.pos2 );
         shape.SetFilled( true );
-        shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+        shape.SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
 
         if( aElem.rotation != 0. )
         {
@@ -3501,7 +3501,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
         shape.SetStart( aElem.pos1 );
         shape.SetEnd( aElem.pos2 );
         shape.SetFilled( true );
-        shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+        shape.SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
 
         if( aElem.rotation != 0. )
         {

@@ -992,8 +992,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
 
     m_out->Print( 0, "\n" );
 
-    STROKE_PARAMS stroke( aSheet->GetBorderWidth(), PLOT_DASH_TYPE::SOLID,
-                          aSheet->GetBorderColor() );
+    STROKE_PARAMS stroke( aSheet->GetBorderWidth(), LINE_STYLE::SOLID, aSheet->GetBorderColor() );
 
     stroke.SetWidth( aSheet->GetBorderWidth() );
     stroke.Format( m_out, schIUScale, aNestLevel + 1 );

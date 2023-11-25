@@ -79,8 +79,8 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextboxFillStyle( FILL_T::NO_FILL ),
         m_lastFillColor( COLOR4D::UNSPECIFIED ),
         m_lastTextboxFillColor( COLOR4D::UNSPECIFIED ),
-        m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
-        m_lastTextboxStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_lastStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_lastTextboxStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_lastAutoLabelRotateOnPlacement( false ),
         m_inDrawingTool( false )

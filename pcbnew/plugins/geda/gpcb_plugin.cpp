@@ -425,7 +425,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             shape->SetEnd( VECTOR2I( parseInt( parameters[4], conv_unit ),
                                      parseInt( parameters[5], conv_unit ) ) );
             shape->SetStroke( STROKE_PARAMS( parseInt( parameters[6], conv_unit ),
-                                             PLOT_DASH_TYPE::SOLID ) );
+                                             LINE_STYLE::SOLID ) );
 
             shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
             shape->Move( footprint->GetPosition() );
@@ -483,7 +483,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             }
 
             shape->SetStroke( STROKE_PARAMS( parseInt( parameters[8], conv_unit ),
-                                             PLOT_DASH_TYPE::SOLID ) );
+                                             LINE_STYLE::SOLID ) );
 
             shape->Rotate( { 0, 0 }, footprint->GetOrientation() );
             shape->Move( footprint->GetPosition() );

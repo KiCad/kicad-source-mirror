@@ -204,7 +204,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground,
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
 
-        aPlotter->SetDash( pen_size, PLOT_DASH_TYPE::SOLID );
+        aPlotter->SetDash( pen_size, LINE_STYLE::SOLID );
     }
 }
 
@@ -371,7 +371,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     if( penWidth > 0 )
     {
-        if( GetEffectiveLineStyle() == PLOT_DASH_TYPE::SOLID )
+        if( GetEffectiveLineStyle() == LINE_STYLE::SOLID )
         {
             switch( GetShape() )
             {

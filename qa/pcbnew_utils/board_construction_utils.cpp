@@ -39,7 +39,7 @@ void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_
     seg->SetStart( aSeg.A );
     seg->SetEnd( aSeg.B );
 
-    seg->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
+    seg->SetStroke( STROKE_PARAMS( aWidth, LINE_STYLE::SOLID ) );
     seg->SetLayer( aLayer );
 
     seg->Rotate( { 0, 0 }, aFootprint.GetOrientation() );
@@ -68,7 +68,7 @@ void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aS
     arc->SetStart( aStart );
     arc->SetArcAngleAndEnd( aAngle );
 
-    arc->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
+    arc->SetStroke( STROKE_PARAMS( aWidth, LINE_STYLE::SOLID ) );
     arc->SetLayer( aLayer );
 
     arc->Rotate( { 0, 0 }, aFootprint.GetOrientation() );

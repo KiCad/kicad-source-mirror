@@ -55,7 +55,7 @@ void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aF
         item->SetShape( SHAPE_T::POLY );
         item->SetFilled( aFilled );
         item->SetPolyShape( poly_outline );
-        item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
+        item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
         item->SetParent( this );
         m_editPrimitives.emplace_back( item );
     }
@@ -69,7 +69,7 @@ void PAD::AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, 
     PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
+    item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();

@@ -291,7 +291,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         if( line.first != LAYER_NOTES )
         {
-            stroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );
+            stroke.SetLineStyle( LINE_STYLE::SOLID );
 
             if( line.first == LAYER_BUS )
                 stroke.SetWidth( schIUScale.MilsToIU( 12 ) );
@@ -379,7 +379,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         comp_body->SetUnit( 0 );
         comp_body->SetConvert( 0 );
-        comp_body->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), PLOT_DASH_TYPE::SOLID ) );
+        comp_body->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         comp_body->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
         comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );
         comp_body->AddPoint( MILS_POINT( p.x + 200, p.y ) );

@@ -54,7 +54,7 @@ SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
         m_lastFillStyle( FILL_T::NO_FILL ),
         m_lastFillColor( COLOR4D::UNSPECIFIED ),
-        m_lastStroke( 0, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_lastStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_drawSpecificConvert( true ),
         m_drawSpecificUnit( false ),
         m_inDrawShape( false ),

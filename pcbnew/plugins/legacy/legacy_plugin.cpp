@@ -1703,7 +1703,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     if( layer < FIRST_LAYER || layer > LAST_NON_COPPER_LAYER )
         layer = SILKSCREEN_N_FRONT;
 
-    dwg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+    dwg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
     dwg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
 
     dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
@@ -1867,7 +1867,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
             dseg->SetShape( static_cast<SHAPE_T>( shape ) );
             dseg->SetFilled( false );
-            dseg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
+            dseg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
 
             if( dseg->GetShape() == SHAPE_T::ARC )
             {

@@ -47,7 +47,7 @@ class EDA_ITEM;
 class IMPORTED_STROKE
 {
 public:
-    IMPORTED_STROKE( double aWidth = 0, PLOT_DASH_TYPE aPlotStyle = PLOT_DASH_TYPE::DEFAULT,
+    IMPORTED_STROKE( double aWidth = 0, LINE_STYLE aPlotStyle = LINE_STYLE::DEFAULT,
                      const KIGFX::COLOR4D& aColor = KIGFX::COLOR4D::UNSPECIFIED ) :
             m_width( aWidth ),
             m_plotstyle( aPlotStyle ), m_color( aColor )
@@ -57,15 +57,15 @@ public:
     double GetWidth() const { return m_width; }
     void   SetWidth( double aWidth ) { m_width = aWidth; }
 
-    PLOT_DASH_TYPE GetPlotStyle() const { return m_plotstyle; }
-    void           SetPlotStyle( PLOT_DASH_TYPE aPlotStyle ) { m_plotstyle = aPlotStyle; }
+    LINE_STYLE GetPlotStyle() const { return m_plotstyle; }
+    void       SetPlotStyle( LINE_STYLE aPlotStyle ) { m_plotstyle = aPlotStyle; }
 
     KIGFX::COLOR4D GetColor() const { return m_color; }
     void           SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
 
 private:
     double         m_width;
-    PLOT_DASH_TYPE m_plotstyle;
+    LINE_STYLE     m_plotstyle;
     KIGFX::COLOR4D m_color;
 };
 

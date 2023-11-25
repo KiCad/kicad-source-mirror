@@ -40,7 +40,7 @@
 EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_endsSwapped( false ),
         m_shape( aType ),
-        m_stroke( aLineWidth, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_stroke( aLineWidth, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_fill( aFill ),
         m_fillColor( COLOR4D::UNSPECIFIED ),
         m_rectangleHeight( 0 ),
@@ -1599,7 +1599,7 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
         TEST_PT( m_poly.CVertex( ii ), aOther->m_poly.CVertex( ii ) );
 
     TEST_E( m_stroke.GetWidth(), aOther->m_stroke.GetWidth() );
-    TEST( (int) m_stroke.GetPlotStyle(), (int) aOther->m_stroke.GetPlotStyle() );
+    TEST( (int) m_stroke.GetLineStyle(), (int) aOther->m_stroke.GetLineStyle() );
     TEST( (int) m_fill, (int) aOther->m_fill );
 
     return 0;
@@ -1718,18 +1718,18 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
 }
 
 
-void EDA_SHAPE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
+void EDA_SHAPE::SetLineStyle( const LINE_STYLE aStyle )
 {
-    m_stroke.SetPlotStyle( aStyle );
+    m_stroke.SetLineStyle( aStyle );
 }
 
 
-PLOT_DASH_TYPE EDA_SHAPE::GetLineStyle() const
+LINE_STYLE EDA_SHAPE::GetLineStyle() const
 {
-    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-        return m_stroke.GetPlotStyle();
+    if( m_stroke.GetLineStyle() != LINE_STYLE::DEFAULT )
+        return m_stroke.GetLineStyle();
 
-    return PLOT_DASH_TYPE::SOLID;
+    return LINE_STYLE::SOLID;
 }
 
 
@@ -1744,7 +1744,7 @@ bool EDA_SHAPE::operator==( const EDA_SHAPE& aOther ) const
     if( m_stroke.GetWidth() != aOther.m_stroke.GetWidth() )
         return false;
 
-    if( m_stroke.GetPlotStyle() != aOther.m_stroke.GetPlotStyle() )
+    if( m_stroke.GetLineStyle() != aOther.m_stroke.GetLineStyle() )
         return false;
 
     if( m_fillColor != aOther.m_fillColor )
@@ -1791,7 +1791,7 @@ double EDA_SHAPE::Similarity( const EDA_SHAPE& aOther ) const
     if( m_stroke.GetWidth() != aOther.m_stroke.GetWidth() )
         similarity *= 0.9;
 
-    if( m_stroke.GetPlotStyle() != aOther.m_stroke.GetPlotStyle() )
+    if( m_stroke.GetLineStyle() != aOther.m_stroke.GetLineStyle() )
         similarity *= 0.9;
 
     if( m_fillColor != aOther.m_fillColor )
@@ -1857,7 +1857,7 @@ double EDA_SHAPE::Similarity( const EDA_SHAPE& aOther ) const
 
 
 IMPLEMENT_ENUM_TO_WXANY( SHAPE_T )
-IMPLEMENT_ENUM_TO_WXANY( PLOT_DASH_TYPE )
+IMPLEMENT_ENUM_TO_WXANY( LINE_STYLE )
 
 
 static struct EDA_SHAPE_DESC
@@ -1872,16 +1872,16 @@ static struct EDA_SHAPE_DESC
                     .Map( SHAPE_T::POLY,      _HKI( "Polygon" ) )
                     .Map( SHAPE_T::BEZIER,    _HKI( "Bezier" ) );
 
-        auto& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+        auto& plotDashTypeEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
         if( plotDashTypeEnum.Choices().GetCount() == 0 )
         {
-            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
-                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
-                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
-                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
-                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+            plotDashTypeEnum.Map( LINE_STYLE::DEFAULT, _HKI( "Default" ) )
+                            .Map( LINE_STYLE::SOLID, _HKI( "Solid" ) )
+                            .Map( LINE_STYLE::DASH, _HKI( "Dashed" ) )
+                            .Map( LINE_STYLE::DOT, _HKI( "Dotted" ) )
+                            .Map( LINE_STYLE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( LINE_STYLE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -1920,8 +1920,8 @@ static struct EDA_SHAPE_DESC
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
-        void ( EDA_SHAPE::*lineStyleSetter )( PLOT_DASH_TYPE ) = &EDA_SHAPE::SetLineStyle;
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, PLOT_DASH_TYPE>(
+        void ( EDA_SHAPE::*lineStyleSetter )( LINE_STYLE ) = &EDA_SHAPE::SetLineStyle;
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>(
                     _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),

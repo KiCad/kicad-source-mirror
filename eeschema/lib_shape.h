@@ -62,12 +62,12 @@ public:
 
     int GetPenWidth() const override;
 
-    PLOT_DASH_TYPE GetEffectiveLineStyle() const
+    LINE_STYLE GetEffectiveLineStyle() const
     {
-        if( m_stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT )
-            return PLOT_DASH_TYPE::SOLID;
+        if( m_stroke.GetLineStyle() == LINE_STYLE::DEFAULT )
+            return LINE_STYLE::SOLID;
         else
-            return m_stroke.GetPlotStyle();
+            return m_stroke.GetLineStyle();
     }
 
     const BOX2I GetBoundingBox() const override;

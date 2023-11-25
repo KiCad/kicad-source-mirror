@@ -29,7 +29,7 @@ public:
     {
         m_textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
-        m_currentLineType = PLOT_DASH_TYPE::SOLID;
+        m_currentLineType = LINE_STYLE::SOLID;
         SetUnits( DXF_UNITS::INCHES );
     }
 
@@ -64,7 +64,7 @@ public:
         m_currentPenWidth = 0;
     }
 
-    virtual void SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle ) override;
+    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
     /**
      * The DXF exporter handles 'colors' as layers...
@@ -214,11 +214,11 @@ protected:
     void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                             const TEXT_ATTRIBUTES& aAttrs );
 
-    bool           m_textAsLines;
-    COLOR4D        m_currentColor;
-    PLOT_DASH_TYPE m_currentLineType;
+    bool         m_textAsLines;
+    COLOR4D      m_currentColor;
+    LINE_STYLE   m_currentLineType;
 
-    DXF_UNITS      m_plotUnits;
-    double         m_unitScalingFactor;
-    unsigned int   m_measurementDirective;
+    DXF_UNITS    m_plotUnits;
+    double       m_unitScalingFactor;
+    unsigned int m_measurementDirective;
 };
