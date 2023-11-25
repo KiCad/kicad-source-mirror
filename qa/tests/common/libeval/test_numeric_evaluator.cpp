@@ -148,6 +148,13 @@ static const std::vector<EVAL_CASE> eval_cases_valid = {
     { "x = 1; 1 + x", "2" },
     // Multiple set vars
     { "x = 1; y = 2; 10 + x - y", "9" },
+
+    // Unicode units - these currently fail
+//    { wxT( "1um" ), "0.001" },      // GREEK SMALL LETTER MU
+//    { wxT( "1µm" ), "0.001" },      // GREEK SMALL LETTER MU
+//    { wxT( "1 µm" ), "0.001" },     // GREEK SMALL LETTER MU
+//    { wxT( "1µm" ), "0.001" },      // MICRO SIGN
+//    { wxT( "1 µm" ), "0.001" },     // MICRO SIGN
 };
 
 
@@ -174,6 +181,31 @@ BOOST_AUTO_TEST_CASE( Results )
         }
     }
 }
+
+
+/**
+ * Test unicode parsing of the degree symbol
+ */
+BOOST_AUTO_TEST_CASE( UnicodeDegree )
+{
+    wxString degreeInput = wxT( "1\u00B0" );
+
+    // Set to degrees and make ready for input
+    m_eval.SetDefaultUnits( EDA_UNITS::DEGREES );
+    m_eval.Clear();
+
+    m_eval.Process( degreeInput );
+
+    // These are all valid
+    BOOST_CHECK_EQUAL( m_eval.IsValid(), true );
+
+// Currently disabled since the parser doesn't parse the unicode correctly
+    //BOOST_CHECK_EQUAL( m_eval.Result(), degreeInput );
+
+    // Does original text still match?
+    BOOST_CHECK_EQUAL( m_eval.OriginalText(), degreeInput );
+}
+
 
 struct EVAL_INVALID_CASE
 {

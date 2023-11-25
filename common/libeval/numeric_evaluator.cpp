@@ -279,7 +279,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             };
 
     // Lamda: Get unit for current token.
-    // Valid units are ", in, mm, mil and thou.  Returns Unit::Invalid otherwise.
+    // Valid units are ", in, um, cm, mm, mil and thou. Returns Unit::Invalid otherwise.
     auto checkUnit =
             [&]( double* siScaler ) -> Unit
             {
@@ -300,6 +300,15 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                 {
                     m_token.pos += 2;
                     return Unit::Degrees;
+                }
+
+                // Ideally we should also handle the unicode characters that can be used for micro,
+                // but unicode handling in this tokenizer doesn't work.
+                // (e.g. add support for μm (µ is MICRO SIGN), µm (µ is GREEK SMALL LETTER MU) later)
+                if( sizeLeft >= 2 && ch == 'u' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
+                {
+                    m_token.pos += 2;
+                    return Unit::UM;
                 }
 
                 if( sizeLeft >= 2 && ch == 'm' && cptr[ 1 ] == 'm' && !isalnum( cptr[ 2 ] ) )
@@ -387,6 +396,7 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
             {
             case Unit::Inch: retval.value.dValue = 25.4;          break;
             case Unit::Mil:  retval.value.dValue = 25.4 / 1000.0; break;
+            case Unit::UM:   retval.value.dValue = 1 / 1000.0;    break;
             case Unit::MM:   retval.value.dValue = 1.0;           break;
             case Unit::CM:   retval.value.dValue = 10.0;          break;
             default:
@@ -397,22 +407,24 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
         {
             switch( convertFrom )
             {
-            case Unit::Inch: retval.value.dValue = 1.0;          break;
-            case Unit::Mil:  retval.value.dValue = 1.0 / 1000.0; break;
-            case Unit::MM:   retval.value.dValue = 1.0 / 25.4;   break;
-            case Unit::CM:   retval.value.dValue = 1.0 / 2.54;   break;
+            case Unit::Inch: retval.value.dValue = 1.0;           break;
+            case Unit::Mil:  retval.value.dValue = 1.0 / 1000.0;  break;
+            case Unit::UM:   retval.value.dValue = 1.0 / 25400.0; break;
+            case Unit::MM:   retval.value.dValue = 1.0 / 25.4;    break;
+            case Unit::CM:   retval.value.dValue = 1.0 / 2.54;    break;
             default:
-            case Unit::Invalid:                                  break;
+            case Unit::Invalid:                                   break;
             }
         }
         else if( m_defaultUnits == Unit::Mil )
         {
             switch( convertFrom )
             {
-            case Unit::Inch: retval.value.dValue = 1.0 * 1000.0;  break;
-            case Unit::Mil:  retval.value.dValue = 1.0;           break;
-            case Unit::MM:   retval.value.dValue = 1000.0 / 25.4; break;
-            case Unit::CM:   retval.value.dValue = 1000.0 / 2.54; break;
+            case Unit::Inch: retval.value.dValue = 1.0 * 1000.0;   break;
+            case Unit::Mil:  retval.value.dValue = 1.0;            break;
+            case Unit::UM:   retval.value.dValue = 1.0 / 25.4;     break;
+            case Unit::MM:   retval.value.dValue = 1000.0 / 25.4;  break;
+            case Unit::CM:   retval.value.dValue = 1000.0 / 2.54;  break;
             default:
             case Unit::Invalid:                                   break;
             }
