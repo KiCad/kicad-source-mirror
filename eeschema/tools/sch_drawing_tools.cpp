@@ -45,6 +45,8 @@
 #include <sch_bus_entry.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
@@ -2025,6 +2027,212 @@ void SCH_DRAWING_TOOLS::initSharedInstancePageNumbers( const SCH_SHEET_PATH& aAd
 }
 
 
+int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
+{
+    SCHEMATIC* schematic = getModel<SCHEMATIC>();
+    SCH_TABLE* table = nullptr;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
+
+    // We might be running as the same shape in another co-routine.  Make sure that one
+    // gets whacked.
+    m_toolMgr->DeactivateTool();
+
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    m_frame->PushTool( aEvent );
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    auto cleanup =
+            [&] ()
+            {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+                m_view->ClearPreview();
+                delete table;
+                table = nullptr;
+            };
+
+    Activate();
+
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+
+    // Set initial cursor
+    setCursor();
+
+    if( aEvent.HasPosition() )
+        m_toolMgr->PrimeTool( aEvent.Position() );
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
+
+        // The tool hotkey is interpreted as a click when drawing
+        bool isSyntheticClick = table && evt->IsActivate() && evt->HasPosition()
+                                && evt->Matches( aEvent );
+
+        if( evt->IsCancelInteractive() || ( table && evt->IsAction( &ACTIONS::undo ) ) )
+        {
+            if( table )
+            {
+                cleanup();
+            }
+            else
+            {
+                m_frame->PopTool( aEvent );
+                break;
+            }
+        }
+        else if( evt->IsActivate() && !isSyntheticClick )
+        {
+            if( table && evt->IsMoveTool() )
+            {
+                // we're already drawing our own item; ignore the move tool
+                evt->SetPassEvent( false );
+                continue;
+            }
+
+            if( table )
+                cleanup();
+
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                m_frame->PopTool( aEvent );
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) && !table )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+            table = new SCH_TABLE( 0 );
+            table->SetColCount( 1 );
+            table->AddCell( new SCH_TABLECELL() );
+
+            table->SetParent( schematic );
+            table->SetFlags( IS_NEW );
+            table->SetPosition( cursorPos );
+
+            m_view->ClearPreview();
+            m_view->AddToPreview( table->Clone() );
+        }
+        else if( table && (   evt->IsClick( BUT_LEFT )
+                           || evt->IsDblClick( BUT_LEFT )
+                           || isSyntheticClick
+                           || evt->IsAction( &EE_ACTIONS::finishInteractive ) ) )
+        {
+            table->ClearEditFlags();
+            table->SetFlags( IS_NEW );
+            table->Normalize();
+
+            SCH_COMMIT commit( m_toolMgr );
+            commit.Add( table, m_frame->GetScreen() );
+            commit.Push( _( "Draw Table" ) );
+
+            m_selectionTool->AddItemToSel( table );
+            table = nullptr;
+
+            m_view->ClearPreview();
+            m_toolMgr->PostAction( ACTIONS::activatePointEditor );
+        }
+        else if( table && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            VECTOR2I gridSize = grid.GetGridSize( grid.GetItemGrid( table ) );
+            VECTOR2I origin( table->GetPosition() );
+            VECTOR2I requestedSize( cursorPos - origin );
+
+            int colCount = std::max( 1, requestedSize.x / ( gridSize.x * 24 ) );
+            int rowCount = std::max( 1, requestedSize.y / ( gridSize.y * 8  ) );
+
+            VECTOR2I cellSize( std::max( gridSize.x * 4, requestedSize.x / colCount ),
+                               std::max( gridSize.y * 2, requestedSize.y / rowCount ) );
+
+            cellSize.x = KiROUND( (double) cellSize.x / gridSize.x ) * gridSize.x;
+            cellSize.y = KiROUND( (double) cellSize.y / gridSize.y ) * gridSize.y;
+
+            table->ClearCells();
+            table->SetColCount( colCount );
+
+            for( int col = 0; col < colCount; ++col )
+                table->SetColWidth( col, cellSize.x );
+
+            for( int row = 0; row < rowCount; ++row )
+            {
+                table->SetRowHeight( row, cellSize.y );
+
+                for( int col = 0; col < colCount; ++col )
+                {
+                    SCH_TABLECELL* cell = new SCH_TABLECELL();
+                    cell->SetPosition( origin + VECTOR2I( col * cellSize.x, row * cellSize.y ) );
+                    cell->SetEnd( cell->GetPosition() + cellSize );
+                    table->AddCell( cell );
+                }
+            }
+
+            m_view->ClearPreview();
+            m_view->AddToPreview( table->Clone() );
+            m_frame->SetMsgPanel( table );
+        }
+        else if( evt->IsDblClick( BUT_LEFT ) && !table )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::properties );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // Warp after context menu only if dragging...
+            if( !table )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( table && evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+        // Enable autopanning and cursor capture only when there is a shape being drawn
+        getViewControls()->SetAutoPan( table != nullptr );
+        getViewControls()->CaptureCursor( table != nullptr );
+    }
+
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    return 0;
+}
+
+
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     SCH_SHEET* sheet = nullptr;
@@ -2280,6 +2488,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawTable,           EE_ACTIONS::drawTable.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );
 }

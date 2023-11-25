@@ -446,7 +446,8 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems,
+                                                                 true );
     bool          unselect = selection.IsHover();
 
     // Keep an original copy of the starting points for cleanup after the move

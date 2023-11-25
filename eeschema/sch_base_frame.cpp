@@ -380,7 +380,7 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
             GetCanvas()->GetView()->Update( aItem );
 
         // Some children are drawn from their parents.  Mark them for re-paint.
-        if( parent && parent->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T } ) )
+        if( parent && parent->IsType( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_LABEL_LOCATE_ANY_T, SCH_TABLE_T } ) )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 
@@ -446,7 +446,8 @@ void SCH_BASE_FRAME::AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     if( aScreen == nullptr )
         screen = GetScreen();
 
-    screen->Append( (SCH_ITEM*) aItem );
+    if( aItem->Type() != SCH_TABLECELL_T )
+        screen->Append( (SCH_ITEM*) aItem );
 
     if( screen == GetScreen() )
     {
@@ -466,7 +467,8 @@ void SCH_BASE_FRAME::RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
     if( screen == GetScreen() )
         GetCanvas()->GetView()->Remove( aItem );
 
-    screen->Remove( (SCH_ITEM*) aItem );
+    if( aItem->Type() != SCH_TABLECELL_T )
+        screen->Remove( (SCH_ITEM*) aItem );
 
     if( screen == GetScreen() )
         UpdateItem( aItem, true );           // handle any additional parent semantics

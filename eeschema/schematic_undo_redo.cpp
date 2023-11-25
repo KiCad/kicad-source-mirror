@@ -32,6 +32,7 @@
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <sch_sheet_pin.h>
+#include <sch_table.h>
 #include <tools/ee_selection_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/actions.h>
@@ -268,6 +269,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     std::vector<SCH_ITEM*> bulkAddedItems;
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> bulkChangedItems;
+    std::set<SCH_TABLE*>   changedTables;
     bool                   dirtyConnectivity = false;
     SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
 

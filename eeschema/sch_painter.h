@@ -45,6 +45,7 @@ class SCH_JUNCTION;
 class SCH_LABEL;
 class SCH_TEXT;
 class SCH_TEXTBOX;
+class SCH_TABLE;
 class SCH_HIERLABEL;
 class SCH_DIRECTIVE_LABEL;
 class SCH_GLOBALLABEL;
@@ -158,6 +159,7 @@ private:
     void draw( const SCH_SHAPE* aShape, int aLayer );
     void draw( const SCH_TEXTBOX* aTextBox, int aLayer );
     void draw( const SCH_TEXT* aText, int aLayer );
+    void draw( const SCH_TABLE* aTable, int aLayer );
     void draw( const SCH_LABEL* aText, int aLayer );
     void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer );
     void draw( const SCH_HIERLABEL* aLabel, int aLayer );

@@ -39,6 +39,8 @@
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
@@ -60,6 +62,7 @@
 #include <dialogs/dialog_shape_properties.h>
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
+#include <dialogs/dialog_tablecell_properties.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
@@ -301,6 +304,8 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_SHEET_PIN_T:
                 case SCH_TEXT_T:
                 case SCH_TEXTBOX_T:
+                case SCH_TABLE_T:
+                case SCH_TABLECELL_T:
                 case SCH_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
                 case SCH_HIER_LABEL_T:
@@ -612,6 +617,8 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
+    SCH_TABLE_T,
+    SCH_TABLECELL_T,    // will be promoted to parent table(s)
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -632,7 +639,7 @@ const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     bool          clockwise = ( aEvent.Matches( EE_ACTIONS::rotateCW.MakeEvent() ) );
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems, true );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -768,6 +775,19 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
             break;
 
+        case SCH_TABLE_T:
+        {
+            // Rotate the table on itself. Tables do not have an anchor point.
+            SCH_TABLE* table = static_cast<SCH_TABLE*>( head );
+            BOX2I      box( table->GetPosition(), table->GetEnd() - table->GetPosition() );
+            rotPoint = m_frame->GetNearestHalfGridPosition( box.GetCenter() );
+
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
+                head->Rotate( rotPoint );
+
+            break;
+        }
+
         case SCH_BITMAP_T:
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 head->Rotate( rotPoint );
@@ -778,10 +798,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
         {
+            // Rotate the sheet on itself. Sheets do not have an anchor point.
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( head );
             rotPoint = m_frame->GetNearestHalfGridPosition( sheet->GetRotationCenter() );
 
-            // Rotate the sheet on itself. Sheets do not have an anchor point.
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
                 sheet->Rotate( rotPoint );
 
@@ -1344,6 +1364,8 @@ static std::vector<KICAD_T> deletableItems =
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
+    SCH_TABLECELL_T,    // Clear contents
+    SCH_TABLE_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -1352,7 +1374,7 @@ static std::vector<KICAD_T> deletableItems =
     SCH_SHEET_T,
     SCH_SHEET_PIN_T,
     SCH_SYMBOL_T,
-    SCH_FIELD_T, // Will be hidden
+    SCH_FIELD_T,        // Will be hidden
     SCH_BITMAP_T
 };
 
@@ -1407,6 +1429,11 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         {
             commit.Modify( item, m_frame->GetScreen() );
             static_cast<SCH_FIELD*>( sch_item )->SetVisible( false );
+        }
+        else if( sch_item->Type() == SCH_TABLECELL_T )
+        {
+            commit.Modify( item, m_frame->GetScreen() );
+            static_cast<SCH_TABLECELL*>( sch_item )->SetText( wxEmptyString );
         }
         else
         {
@@ -1884,8 +1911,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // QuasiModal required for syntax help and Scintilla auto-complete
         if( dlg.ShowQuasiModal() == wxID_OK )
             m_frame->OnModify();
-    }
+
         break;
+    }
+
+    case SCH_TABLECELL_T:
+    {
+        DIALOG_TABLECELL_PROPERTIES dlg( m_frame, static_cast<SCH_TABLECELL*>( curr_item ) );
+
+        if( dlg.ShowModal() == wxID_OK )
+            m_frame->OnModify();
+
+        break;
+    }
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:

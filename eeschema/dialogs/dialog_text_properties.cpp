@@ -132,6 +132,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     m_hAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_align_center ) );
     m_hAlignRight->SetIsRadioButton();
     m_hAlignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
+
     m_separator3->SetIsSeparator();
 
     m_vAlignTop->SetIsRadioButton();

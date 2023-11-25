@@ -40,6 +40,7 @@ const std::vector<KICAD_T> EE_COLLECTOR::EditableItems = {
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
+    SCH_TABLECELL_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -67,6 +68,8 @@ const std::vector<KICAD_T> EE_COLLECTOR::MovableItems =
     SCH_SHAPE_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
+    SCH_TABLE_T,
+    SCH_TABLECELL_T,    // will be promoted to parent table(s)
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,

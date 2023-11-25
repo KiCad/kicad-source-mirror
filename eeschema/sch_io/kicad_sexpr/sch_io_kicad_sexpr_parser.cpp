@@ -50,6 +50,8 @@
 #include <sch_field.h>
 #include <sch_line.h>
 #include <sch_textbox.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_label.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
@@ -2729,6 +2731,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             screen->Append( parseSchTextBox() );
             break;
 
+        case T_table:
+            screen->Append( parseSchTable() );
+            break;
+
         case T_sheet_instances:
             parseSchSheetInstances( aSheet, screen );
             break;
@@ -4141,6 +4147,29 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
     wxCHECK_MSG( CurTok() == T_text_box, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text box." ) );
 
+    std::unique_ptr<SCH_TEXTBOX> textBox = std::make_unique<SCH_TEXTBOX>();
+
+    parseSchTextBoxContent( textBox.get() );
+
+    return textBox.release();
+}
+
+
+SCH_TABLECELL* SCH_IO_KICAD_SEXPR_PARSER::parseSchTableCell()
+{
+    wxCHECK_MSG( CurTok() == T_table_cell, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a table cell." ) );
+
+    std::unique_ptr<SCH_TABLECELL> cell = std::make_unique<SCH_TABLECELL>();
+
+    parseSchTextBoxContent( cell.get() );
+
+    return cell.release();
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
+{
     T             token;
     VECTOR2I      pos;
     VECTOR2I      end;
@@ -4149,11 +4178,10 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
     bool          foundSize = false;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS   fill;
-    std::unique_ptr<SCH_TEXTBOX> textBox = std::make_unique<SCH_TEXTBOX>();
 
     NeedSYMBOL();
 
-    textBox->SetText( FromUTF8() );
+    aTextBox->SetText( FromUTF8() );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -4165,7 +4193,7 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
         switch( token )
         {
         case T_exclude_from_sim:
-            textBox->SetExcludedFromSim( parseBool() );
+            aTextBox->SetExcludedFromSim( parseBool() );
             NeedRIGHT();
             break;
 
@@ -4182,7 +4210,7 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
 
         case T_at:
             pos = parseXY();
-            textBox->SetTextAngle( EDA_ANGLE( parseDouble( "textbox angle" ), DEGREES_T ) );
+            aTextBox->SetTextAngle( EDA_ANGLE( parseDouble( "textbox angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 
@@ -4192,24 +4220,34 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
             NeedRIGHT();
             break;
 
+        case T_span:
+            if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( aTextBox ) )
+            {
+                cell->SetColSpan( parseInt( "column span" ) );
+                cell->SetRowSpan( parseInt( "row span" ) );
+            }
+
+            NeedRIGHT();
+            break;
+
         case T_stroke:
             parseStroke( stroke );
-            textBox->SetStroke( stroke );
+            aTextBox->SetStroke( stroke );
             break;
 
         case T_fill:
             parseFill( fill );
-            textBox->SetFillMode( fill.m_FillType );
-            textBox->SetFillColor( fill.m_Color );
+            aTextBox->SetFillMode( fill.m_FillType );
+            aTextBox->SetFillColor( fill.m_Color );
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( textBox.get() ), false );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( aTextBox ), false );
             break;
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( textBox->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( aTextBox->m_Uuid ) = KIID( FromUTF8() );
             NeedRIGHT();
             break;
 
@@ -4218,16 +4256,150 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBox()
         }
     }
 
-    textBox->SetPosition( pos );
+    aTextBox->SetPosition( pos );
 
     if( foundEnd )
-        textBox->SetEnd( end );
+        aTextBox->SetEnd( end );
     else if( foundSize )
-        textBox->SetEnd( pos + size );
+        aTextBox->SetEnd( pos + size );
     else
         Expecting( "size" );
+}
 
-    return textBox.release();
+
+SCH_TABLE* SCH_IO_KICAD_SEXPR_PARSER::parseSchTable()
+{
+    wxCHECK_MSG( CurTok() == T_table, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a table." ) );
+
+    T             token;
+    int           defaultLineWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
+    STROKE_PARAMS borderStroke( defaultLineWidth, LINE_STYLE::DEFAULT );
+    STROKE_PARAMS separatorsStroke( defaultLineWidth, LINE_STYLE::DEFAULT );
+    std::unique_ptr<SCH_TABLE> table = std::make_unique<SCH_TABLE>( defaultLineWidth );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_column_count:
+            table->SetColCount( parseInt( "column count" ) );
+            NeedRIGHT();
+            break;
+
+        case T_column_widths:
+        {
+            int col = 0;
+
+            while( ( token = NextTok() ) != T_RIGHT )
+                table->SetColWidth( col++, parseInternalUnits() );
+
+            break;
+        }
+
+        case T_row_heights:
+        {
+            int row = 0;
+
+            while( ( token = NextTok() ) != T_RIGHT )
+                table->SetRowHeight( row++, parseInternalUnits() );
+
+            break;
+        }
+
+        case T_cells:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token != T_table_cell )
+                    Expecting( "table_cell" );
+
+                table->AddCell( parseSchTableCell() );
+            }
+
+            break;
+
+        case T_border:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_external:
+                    table->SetStrokeExternal( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_header:
+                    table->SetStrokeHeader( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_stroke:
+                    parseStroke( borderStroke );
+                    table->SetBorderStroke( borderStroke );
+                    break;
+
+                default:
+                    Expecting( "external, header or stroke" );
+                    break;
+                }
+            }
+
+            break;
+
+        case T_separators:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_rows:
+                    table->SetStrokeRows( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_cols:
+                    table->SetStrokeColumns( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_stroke:
+                    parseStroke( separatorsStroke );
+                    table->SetSeparatorsStroke( separatorsStroke );
+                    break;
+
+                default:
+                    Expecting( "rows, cols, or stroke" );
+                    break;
+                }
+            }
+
+            break;
+
+        default:
+            Expecting( "columns, col_widths, row_heights, border, separators, header or cells" );
+        }
+    }
+
+    return table.release();
 }
 
 

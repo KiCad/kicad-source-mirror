@@ -148,6 +148,8 @@ enum KICAD_T
     SCH_BITMAP_T,
     SCH_TEXTBOX_T,
     SCH_TEXT_T,
+    SCH_TABLE_T,
+    SCH_TABLECELL_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
@@ -382,6 +384,8 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_BITMAP_T:
     case SCH_TEXT_T:
     case SCH_TEXTBOX_T:
+    case SCH_TABLE_T:
+    case SCH_TABLECELL_T:
     case SCH_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
     case SCH_GLOBAL_LABEL_T:

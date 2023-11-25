@@ -28,6 +28,8 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_item.h>
 #include <sch_line.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <settings/app_settings.h>
@@ -416,11 +418,33 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
     switch( aItem->Type() )
     {
     case SCH_TEXT_T:
-    case SCH_TEXTBOX_T:
     case SCH_FIELD_T:
     {
         if( aIncludeText )
             addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+
+        break;
+    }
+
+    case SCH_TABLE_T:
+    {
+        if( aIncludeText )
+        {
+            addAnchor( aItem->GetPosition(), SNAPPABLE | CORNER, aItem );
+            addAnchor( static_cast<SCH_TABLE*>( aItem )->GetEnd(), SNAPPABLE | CORNER, aItem );
+        }
+
+        break;
+    }
+
+    case SCH_TEXTBOX_T:
+    case SCH_TABLECELL_T:
+    {
+        if( aIncludeText )
+        {
+            addAnchor( aItem->GetPosition(), SNAPPABLE | CORNER, aItem );
+            addAnchor( dynamic_cast<SCH_SHAPE*>( aItem )->GetEnd(), SNAPPABLE | CORNER, aItem );
+        }
 
         break;
     }

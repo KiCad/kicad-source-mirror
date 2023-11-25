@@ -76,6 +76,7 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_edit_tool.h>
+#include <tools/sch_edit_table_tool.h>
 #include <tools/sch_editor_conditions.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_line_wire_bus_tool.h>
@@ -477,6 +478,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_LINE_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
+    m_toolManager->RegisterTool( new SCH_EDIT_TABLE_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
@@ -731,6 +733,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::drawLines );
     CURRENT_TOOL( EE_ACTIONS::placeSchematicText );
     CURRENT_TOOL( EE_ACTIONS::drawTextBox );
+    CURRENT_TOOL( EE_ACTIONS::drawTable );
     CURRENT_TOOL( EE_ACTIONS::placeImage );
 
 #undef CURRENT_TOOL

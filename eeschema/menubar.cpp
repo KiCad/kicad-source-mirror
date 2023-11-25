@@ -259,6 +259,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->AppendSeparator();
     placeMenu->Add( EE_ACTIONS::placeSchematicText );
     placeMenu->Add( EE_ACTIONS::drawTextBox );
+    placeMenu->Add( EE_ACTIONS::drawTable );
     placeMenu->Add( EE_ACTIONS::drawRectangle );
     placeMenu->Add( EE_ACTIONS::drawCircle );
     placeMenu->Add( EE_ACTIONS::drawArc );

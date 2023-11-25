@@ -43,8 +43,8 @@
 using KIGFX::SCH_RENDER_SETTINGS;
 
 
-SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text ) :
-        SCH_SHAPE( SHAPE_T::RECTANGLE, aLineWidth, aFillType, SCH_TEXTBOX_T ),
+SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text, KICAD_T aType ) :
+        SCH_SHAPE( SHAPE_T::RECTANGLE, aLineWidth, aFillType, aType ),
         EDA_TEXT( schIUScale, text )
 {
     m_layer = LAYER_NOTES;

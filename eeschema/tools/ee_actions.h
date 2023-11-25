@@ -69,6 +69,19 @@ public:
     /// Selection synchronization (PCB -> SCH)
     static TOOL_ACTION syncSelection;
 
+    // Tables
+    static TOOL_ACTION selectRows;
+    static TOOL_ACTION selectColumns;
+    static TOOL_ACTION selectTable;
+    static TOOL_ACTION addRowAbove;
+    static TOOL_ACTION addRowBelow;
+    static TOOL_ACTION addColumnBefore;
+    static TOOL_ACTION addColumnAfter;
+    static TOOL_ACTION deleteRows;
+    static TOOL_ACTION deleteColumns;
+    static TOOL_ACTION mergeCells;
+    static TOOL_ACTION unmergeCells;
+
     // Locking
     static TOOL_ACTION toggleLock;
     static TOOL_ACTION lock;
@@ -92,6 +105,7 @@ public:
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawTextBox;
+    static TOOL_ACTION drawTable;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;

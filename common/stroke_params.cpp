@@ -205,18 +205,18 @@ void STROKE_PARAMS::GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider,
 {
     if( aIncludeStyle )
     {
-        wxString lineStyle = _( "Default" );
+        wxString msg = _( "Default" );
 
-        for( const std::pair<const LINE_STYLE, LINE_STYLE_DESC>& typeEntry : lineTypeNames )
+        for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
         {
-            if( typeEntry.first == GetLineStyle() )
+            if( lineStyle == GetLineStyle() )
             {
-                lineStyle = typeEntry.second.name;
+                msg = lineStyleDesc.name;
                 break;
             }
         }
 
-        aList.emplace_back( _( "Line Style" ), lineStyle );
+        aList.emplace_back( _( "Line Style" ), msg );
     }
 
     if( aIncludeWidth )

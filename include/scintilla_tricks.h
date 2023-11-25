@@ -58,7 +58,7 @@ protected:
 
     int firstNonWhitespace( int aLine, int* aWhitespaceCount = nullptr );
 
-    void onCharHook( wxKeyEvent& aEvent );
+    virtual void onCharHook( wxKeyEvent& aEvent );
     void onChar( wxStyledTextEvent& aEvent );
     void onModified( wxStyledTextEvent& aEvent );
     void onScintillaUpdateUI( wxStyledTextEvent& aEvent );

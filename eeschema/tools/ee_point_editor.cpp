@@ -39,6 +39,8 @@ using namespace std::placeholders;
 #include <sch_bitmap.h>
 #include <sch_sheet.h>
 #include <sch_textbox.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_shape.h>
 #include <sch_sheet_pin.h>
 #include <symbol_edit_frame.h>
@@ -70,6 +72,10 @@ enum RECTANGLE_LINES
     RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
 };
 
+enum TABLECELL_POINTS
+{
+    COL_WIDTH, ROW_HEIGHT
+};
 
 enum LINE_POINTS
 {
@@ -273,6 +279,14 @@ public:
             break;
         }
 
+        case SCH_TABLECELL_T:
+        {
+            SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( aItem );
+            points->AddPoint( cell->GetEnd() - VECTOR2I( 0, cell->GetRectangleHeight() / 2 ) );
+            points->AddPoint( cell->GetEnd() - VECTOR2I( cell->GetRectangleWidth() / 2, 0 ) );
+            break;
+        }
+
         case SCH_SHEET_T:
         {
             SCH_SHEET* sheet = (SCH_SHEET*) aItem;
@@ -448,6 +462,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     if( selection.Size() != 1 || !selection.Front()->IsType( { LIB_SHAPE_T, SCH_SHAPE_T,
                                                                LIB_TEXTBOX_T, SCH_TEXTBOX_T,
+                                                               SCH_TABLECELL_T,
                                                                SCH_SHEET_T,
                                                                SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
                                                                SCH_BITMAP_T } ) )
@@ -515,6 +530,13 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
                     if( connected.first )
                         commit.Modify( connected.first, m_frame->GetScreen() );
+                }
+                else if( m_editPoints->GetParent()->Type() == SCH_TABLECELL_T )
+                {
+                    SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( m_editPoints->GetParent() );
+                    SCH_TABLE*     table = static_cast<SCH_TABLE*>( cell->GetParent() );
+
+                    commit.Modify( table, m_frame->GetScreen() );
                 }
 
                 inDrag = true;
@@ -1016,6 +1038,39 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         break;
     }
 
+    case SCH_TABLECELL_T:
+    {
+        SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( item );
+        SCH_TABLE*     table = static_cast<SCH_TABLE*>( cell->GetParent() );
+
+        if( isModified( m_editPoints->Point( COL_WIDTH ) ) )
+        {
+            cell->SetEnd( VECTOR2I( m_editPoints->Point( 0 ).GetX(), cell->GetEndY() ) );
+
+            int colWidth = cell->GetRectangleWidth();
+
+            for( int ii = 0; ii < cell->GetColSpan() - 1; ++ii )
+                colWidth -= table->GetColWidth( cell->GetColumn() + ii );
+
+            table->SetColWidth( cell->GetColumn() + cell->GetColSpan() - 1, colWidth );
+            table->Normalize();
+        }
+        else if( isModified( m_editPoints->Point( ROW_HEIGHT ) ) )
+        {
+            cell->SetEnd( VECTOR2I( cell->GetEndX(), m_editPoints->Point( 1 ).GetY() ) );
+
+            int rowHeight = cell->GetRectangleHeight();
+
+            for( int ii = 0; ii < cell->GetRowSpan() - 1; ++ii )
+                rowHeight -= table->GetRowHeight( cell->GetRow() + ii );
+
+            table->SetRowHeight( cell->GetRow() + cell->GetRowSpan() - 1, rowHeight );
+            table->Normalize();
+        }
+
+        break;
+    }
+
     case SCH_BITMAP_T:
     {
         EE_GRID_HELPER gridHelper( m_toolMgr );
@@ -1347,6 +1402,17 @@ void EE_POINT_EDITOR::updatePoints()
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
         m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
         m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
+        break;
+    }
+
+    case SCH_TABLECELL_T:
+    {
+        SCH_TABLECELL* cell = static_cast<SCH_TABLECELL*>( item );
+
+        m_editPoints->Point( 0 ).SetPosition( cell->GetEndX(),
+                                              cell->GetEndY() - cell->GetRectangleHeight() / 2 );
+        m_editPoints->Point( 1 ).SetPosition( cell->GetEndX() - cell->GetRectangleWidth() / 2,
+                                              cell->GetEndY() );
         break;
     }
 

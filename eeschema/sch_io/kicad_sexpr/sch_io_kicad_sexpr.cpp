@@ -43,6 +43,8 @@
 #include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
@@ -484,6 +486,10 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
         case SCH_TEXTBOX_T:
             saveTextBox( static_cast<SCH_TEXTBOX*>( item ), 1 );
+            break;
+
+        case SCH_TABLE_T:
+            saveTable( static_cast<SCH_TABLE*>( item ), 1 );
             break;
 
         default:
@@ -1336,13 +1342,14 @@ void SCH_IO_KICAD_SEXPR::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
 {
     wxCHECK_RET( aTextBox != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(text_box %s\n",
+    m_out->Print( aNestLevel, "(%s %s\n",
+                  aTextBox->Type() == SCH_TABLECELL_T ? "table_cell" : "text_box",
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
 
     VECTOR2I pos = aTextBox->GetStart();
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
-    m_out->Print( aNestLevel + 1, "(exclude_from_sim %s) (at %s %s %s) (size %s %s)\n",
+    m_out->Print( aNestLevel + 1, "(exclude_from_sim %s) (at %s %s %s) (size %s %s)",
                   aTextBox->GetExcludedFromSim() ? "yes" : "no",
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
@@ -1350,8 +1357,17 @@ void SCH_IO_KICAD_SEXPR::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str() );
 
-    aTextBox->GetStroke().Format( m_out, schIUScale, aNestLevel + 1 );
+    if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( aTextBox ) )
+        m_out->Print( 0, " (span %d %d)", cell->GetColSpan(), cell->GetRowSpan() );
+
     m_out->Print( 0, "\n" );
+
+    if( aTextBox->Type() != SCH_TABLECELL_T )
+    {
+        aTextBox->GetStroke().Format( m_out, schIUScale, aNestLevel + 1 );
+        m_out->Print( 0, "\n" );
+    }
+
     formatFill( m_out, aNestLevel + 1, aTextBox->GetFillMode(), aTextBox->GetFillColor() );
     m_out->Print( 0, "\n" );
 
@@ -1361,6 +1377,69 @@ void SCH_IO_KICAD_SEXPR::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
         KICAD_FORMAT::FormatUuid( m_out, aTextBox->m_Uuid );
 
     m_out->Print( aNestLevel, ")\n" );
+}
+
+
+void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable, int aNestLevel )
+{
+    wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( aNestLevel, "(table (column_count %d)\n",
+                  aTable->GetColCount() );
+
+    m_out->Print( aNestLevel + 1, "(border (external %s) (header %s)",
+                  aTable->StrokeExternal() ? "yes" : "no",
+                  aTable->StrokeHeader() ? "yes" : "no" );
+
+    if( aTable->StrokeExternal() || aTable->StrokeHeader() )
+    {
+        m_out->Print( 0, " " );
+        aTable->GetBorderStroke().Format( m_out, schIUScale, 0 );
+    }
+
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel + 1, "(separators (rows %s) (cols %s)",
+                  aTable->StrokeRows() ? "yes" : "no",
+                  aTable->StrokeColumns() ? "yes" : "no" );
+
+    if( aTable->StrokeRows() || aTable->StrokeColumns() )
+    {
+        m_out->Print( 0, " " );
+        aTable->GetSeparatorsStroke().Format( m_out, schIUScale, 0 );
+    }
+
+    m_out->Print( 0, ")\n" );               // Close `separators` token.
+
+    m_out->Print( aNestLevel + 1, "(column_widths" );
+
+    for( int col = 0; col < aTable->GetColCount(); ++col )
+    {
+        m_out->Print( 0, " %s",
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aTable->GetColWidth( col ) ).c_str() );
+    }
+
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel + 1, "(row_heights" );
+
+    for( int row = 0; row < aTable->GetRowCount(); ++row )
+    {
+        m_out->Print( 0, " %s",
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aTable->GetRowHeight( row ) ).c_str() );
+    }
+
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel + 1, "(cells\n" );
+
+    for( SCH_TABLECELL* cell : aTable->GetCells() )
+        saveTextBox( cell, aNestLevel + 2 );
+
+    m_out->Print( aNestLevel + 1, ")\n" );  // Close `cells` token.
+    m_out->Print( aNestLevel, ")\n" );      // Close `table` token.
 }
 
 

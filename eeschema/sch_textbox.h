@@ -36,7 +36,7 @@ class SCH_TEXTBOX : public SCH_SHAPE, public EDA_TEXT
 {
 public:
     SCH_TEXTBOX( int aLineWidth = 0, FILL_T aFillType = FILL_T::NO_FILL,
-                 const wxString& aText = wxEmptyString );
+                 const wxString& aText = wxEmptyString, KICAD_T aType = SCH_TEXTBOX_T );
 
     SCH_TEXTBOX( const SCH_TEXTBOX& aText );
 

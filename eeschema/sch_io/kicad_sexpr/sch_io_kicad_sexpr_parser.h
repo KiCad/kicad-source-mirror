@@ -56,6 +56,8 @@ class SCH_SHEET;
 class SCH_SHEET_PIN;
 class SCH_TEXT;
 class SCH_TEXTBOX;
+class SCH_TABLE;
+class SCH_TABLECELL;
 class TITLE_BLOCK;
 
 
@@ -216,6 +218,9 @@ private:
     SCH_SHAPE* parseSchBezier();
     SCH_TEXT* parseSchText();
     SCH_TEXTBOX* parseSchTextBox();
+    void parseSchTextBoxContent( SCH_TEXTBOX* aTextBox );
+    SCH_TABLECELL* parseSchTableCell();
+    SCH_TABLE* parseSchTable();
     void parseBusAlias( SCH_SCREEN* aScreen );
 
 private:

@@ -159,6 +159,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_symbol_properties_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
+    dialogs/dialog_tablecell_properties.cpp
+    dialogs/dialog_tablecell_properties_base.cpp
     dialogs/dialog_text_properties.cpp
     dialogs/dialog_text_properties_base.cpp
     dialogs/dialog_update_from_pcb.cpp
@@ -380,6 +382,8 @@ set( EESCHEMA_SRCS
     sch_sheet_path.cpp
     sch_sheet_pin.cpp
     sch_symbol.cpp
+    sch_table.cpp
+    sch_tablecell.cpp
     sch_text.cpp
     sch_textbox.cpp
     sch_validators.cpp
@@ -419,6 +423,7 @@ set( EESCHEMA_SRCS
     tools/ee_selection.cpp
     tools/ee_selection_tool.cpp
     tools/sch_drawing_tools.cpp
+    tools/sch_edit_table_tool.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
     tools/sch_editor_conditions.cpp

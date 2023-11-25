@@ -51,6 +51,8 @@
 #include <sch_no_connect.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
+#include <sch_table.h>
+#include <sch_tablecell.h>
 #include <lib_shape.h>
 #include <schematic.h>
 #include <tool/tool_event.h>
@@ -216,8 +218,8 @@ bool EE_SELECTION_TOOL::Init()
                                                    SCH_ITEM_LOCATE_BUS_T } );
     auto connectedSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( connectedTypes );
     auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_SHEET_T } );
-    auto crossProbingSelection = E_C::MoreThan( 0 ) &&
-                                 E_C::HasTypes( { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T } );
+    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T } );
+    auto tableCellSelection =    E_C::MoreThan( 0 ) && E_C::OnlyTypes( { SCH_TABLECELL_T } );
 
     auto schEditSheetPageNumberCondition =
             [&] ( const SELECTION& aSel )
@@ -278,6 +280,10 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
 
+    menu.AddItem( EE_ACTIONS::selectColumns,      tableCellSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( EE_ACTIONS::selectRows,         tableCellSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( EE_ACTIONS::selectTable,        tableCellSelection && EE_CONDITIONS::Idle, 2 );
+
     menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::drawWire,           schEditCondition && EE_CONDITIONS::Empty, 100 );
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
@@ -292,7 +298,6 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 150 );
 
     menu.AddSeparator( 200 );
-    menu.AddItem( EE_ACTIONS::selectConnection,   connectedSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeClassLabel,    wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
@@ -540,7 +545,13 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
-            if( hasModifier() || drag_action == MOUSE_DRAG_ACTION::SELECT )
+            EE_COLLECTOR collector;
+
+            if( CollectHits( collector, evt->DragOrigin(), { SCH_TABLECELL_T } ) )
+            {
+                selectTableCells( static_cast<SCH_TABLE*>( collector[0]->GetParent() ) );
+            }
+            else if( hasModifier() || drag_action == MOUSE_DRAG_ACTION::SELECT )
             {
                 selectMultiple();
             }
@@ -1310,6 +1321,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
         LIB_SHAPE*  shape = dynamic_cast<LIB_SHAPE*>( item );
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
+        SCH_TABLE*  table = dynamic_cast<SCH_TABLE*>( item );
 
         // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".
         if( line || ( shape && shape->GetShape() == SHAPE_T::POLY )
@@ -1324,6 +1336,10 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         {
             if( symbol->GetBodyAndPinsBoundingBox().Contains( aPos ) )
                 exactHits.insert( item );
+        }
+        else if( table )
+        {
+            // Consider table cells exact, but not the table itself
         }
         else
         {
@@ -1468,8 +1484,12 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 }
 
 
-EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& aScanTypes )
+EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& aScanTypes,
+                                                   bool aPromoteCellSelections )
 {
+    bool anyUnselected = false;
+    bool anySelected = false;
+
     if( m_selection.Empty() )
     {
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
@@ -1482,7 +1502,6 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& a
     else        // Trim an existing selection by aFilterList
     {
         bool isMoving = false;
-        bool anyUnselected = false;
 
         for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
         {
@@ -1496,12 +1515,41 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& a
             }
         }
 
-        if( anyUnselected )
-            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-
         if( !isMoving )
             updateReferencePoint();
     }
+
+    if( aPromoteCellSelections )
+    {
+        std::set<EDA_ITEM*> parents;
+
+        for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
+        {
+            EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
+
+            if( item->Type() == SCH_TABLECELL_T )
+            {
+                parents.insert( item->GetParent() );
+                unselect( item );
+                anyUnselected = true;
+            }
+        }
+
+        for( EDA_ITEM* parent : parents )
+        {
+            if( !parent->IsSelected() )
+            {
+                select( parent );
+                anySelected = true;
+            }
+        }
+    }
+
+    if( anyUnselected )
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+    if( anySelected )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return m_selection;
 }
@@ -1773,6 +1821,112 @@ bool EE_SELECTION_TOOL::selectMultiple()
 }
 
 
+bool EE_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
+{
+    bool cancelled = false;     // Was the tool canceled while it was running?
+    m_multiple = true;          // Multiple selection mode is active
+
+    for( SCH_TABLECELL* cell : aTable->GetCells() )
+    {
+        if( cell->IsSelected() )
+            cell->SetFlags( CANDIDATE );
+        else
+            cell->ClearFlags( CANDIDATE );
+    }
+
+    auto wasSelected =
+            []( EDA_ITEM* aItem )
+            {
+                return ( aItem->GetFlags() & CANDIDATE ) > 0;
+            };
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            cancelled = true;
+            break;
+        }
+        else if( evt->IsDrag( BUT_LEFT ) )
+        {
+            getViewControls()->SetAutoPan( true );
+
+            BOX2I selectionRect( evt->DragOrigin(), evt->Position() - evt->DragOrigin() );
+            selectionRect.Normalize();
+
+            for( SCH_TABLECELL* cell : aTable->GetCells() )
+            {
+                bool doSelect = false;
+
+                if( cell->HitTest( selectionRect, false ) )
+                {
+                    if( m_subtractive )
+                        doSelect = false;
+                    else if( m_exclusive_or )
+                        doSelect = !wasSelected( cell );
+                    else
+                        doSelect = true;
+                }
+                else if( wasSelected( cell ) )
+                {
+                    doSelect = m_additive || m_subtractive || m_exclusive_or;
+                }
+
+                if( doSelect && !cell->IsSelected() )
+                    select( cell );
+                else if( !doSelect && cell->IsSelected() )
+                    unselect( cell );
+            }
+        }
+        else if( evt->IsMouseUp( BUT_LEFT ) )
+        {
+            m_selection.SetIsHover( false );
+
+            bool anyAdded = false;
+            bool anySubtracted = false;
+
+            for( SCH_TABLECELL* cell : aTable->GetCells() )
+            {
+                if( cell->IsSelected() && !wasSelected( cell ) )
+                    anyAdded = true;
+                else if( wasSelected( cell ) && !cell->IsSelected() )
+                    anySubtracted = true;
+            }
+
+            // Inform other potentially interested tools
+            if( anyAdded )
+                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+            if( anySubtracted )
+                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+            break;  // Stop waiting for events
+        }
+        else
+        {
+            // Allow some actions for navigation
+            for( int i = 0; allowedActions[i]; ++i )
+            {
+                if( evt->IsAction( allowedActions[i] ) )
+                {
+                    evt->SetPassEvent();
+                    break;
+                }
+            }
+        }
+    }
+
+    getViewControls()->SetAutoPan( false );
+
+    m_multiple = false;         // Multiple selection mode is inactive
+
+    if( !cancelled )
+        m_selection.ClearReferencePoint();
+
+    return cancelled;
+}
+
+
 EDA_ITEM* EE_SELECTION_TOOL::GetNode( const VECTOR2I& aPosition )
 {
     EE_COLLECTOR collector;
@@ -1846,6 +2000,105 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     }
 
     if( m_selection.GetSize() > 1 )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
+int EE_SELECTION_TOOL::SelectColumns( const TOOL_EVENT& aEvent )
+{
+    std::set<std::pair<SCH_TABLE*, int>> columns;
+    bool                                 added = false;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( item ) )
+        {
+            SCH_TABLE* table = static_cast<SCH_TABLE*>( cell->GetParent() );
+            columns.insert( std::make_pair( table, cell->GetColumn() ) );
+        }
+    }
+
+    for( auto& [ table, col ] : columns )
+    {
+        for( int row = 0; row < table->GetRowCount(); ++row )
+        {
+            SCH_TABLECELL* cell = table->GetCell( row, col );
+
+            if( !cell->IsSelected() )
+            {
+                select( table->GetCell( row, col ) );
+                added = true;
+            }
+        }
+    }
+
+    if( added )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
+int EE_SELECTION_TOOL::SelectRows( const TOOL_EVENT& aEvent )
+{
+    std::set<std::pair<SCH_TABLE*, int>> rows;
+    bool                                 added = false;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( item ) )
+        {
+            SCH_TABLE* table = static_cast<SCH_TABLE*>( cell->GetParent() );
+            rows.insert( std::make_pair( table, cell->GetRow() ) );
+        }
+    }
+
+    for( auto& [ table, row ] : rows )
+    {
+        for( int col = 0; col < table->GetRowCount(); ++col )
+        {
+            SCH_TABLECELL* cell = table->GetCell( row, col );
+
+            if( !cell->IsSelected() )
+            {
+                select( table->GetCell( row, col ) );
+                added = true;
+            }
+        }
+    }
+
+    if( added )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
+int EE_SELECTION_TOOL::SelectTable( const TOOL_EVENT& aEvent )
+{
+    std::set<SCH_TABLE*> tables;
+    bool                 added = false;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( item ) )
+            tables.insert( static_cast<SCH_TABLE*>( cell->GetParent() ) );
+    }
+
+    ClearSelection();
+
+    for( SCH_TABLE* table : tables )
+    {
+        if( !table->IsSelected() )
+        {
+            select( table );
+            added = true;
+        }
+    }
+
+    if( added )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
@@ -2115,7 +2368,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     case LIB_PIN_T:
         if( symEditFrame )
         {
-            LIB_ITEM* lib_item = (LIB_ITEM*) aItem;
+            const LIB_ITEM* lib_item = static_cast<const LIB_ITEM*>( aItem );
 
             if( lib_item->GetUnit() && lib_item->GetUnit() != symEditFrame->GetUnit() )
                 return false;
@@ -2128,6 +2381,16 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
 
     case SCH_MARKER_T:  // Always selectable
         return true;
+
+    case SCH_TABLECELL_T:
+    {
+        const SCH_TABLECELL* cell = static_cast<const SCH_TABLECELL*>( aItem );
+
+        if( cell->GetColSpan() == 0 || cell->GetRowSpan() == 0 )
+            return false;
+
+        break;
+    }
 
     default:            // Suppress warnings
         break;
@@ -2170,8 +2433,6 @@ void EE_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 
 void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
-    KICAD_T itemType = aItem->Type();
-
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
@@ -2202,7 +2463,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
     if( aGroup && aMode != BRIGHTENED )
         getView()->Hide( aItem, true );
 
-    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+    if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
         getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
     else
         getView()->Update( aItem, KIGFX::REPAINT );
@@ -2211,8 +2472,6 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 
 void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
-    KICAD_T itemType = aItem->Type();
-
     if( aMode == SELECTED )
     {
         aItem->ClearSelected();
@@ -2253,7 +2512,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
                 } );
     }
 
-    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+    if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
         getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
     else
         getView()->Update( aItem, KIGFX::REPAINT );
@@ -2286,6 +2545,10 @@ void EE_SELECTION_TOOL::setTransitions()
     Go( &EE_SELECTION_TOOL::Main,                EE_ACTIONS::selectionActivate.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectNode,          EE_ACTIONS::selectNode.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectConnection,    EE_ACTIONS::selectConnection.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectColumns,       EE_ACTIONS::selectColumns.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectRows,          EE_ACTIONS::selectRows.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectTable,         EE_ACTIONS::selectTable.MakeEvent() );
+
     Go( &EE_SELECTION_TOOL::ClearSelection,      EE_ACTIONS::clearSelection.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::AddItemToSel,        EE_ACTIONS::addItemToSel.MakeEvent() );

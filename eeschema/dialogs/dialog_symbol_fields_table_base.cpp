@@ -326,10 +326,10 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bButtonsSizer->Add( 0, 0, 9, wxEXPAND, 5 );
 
 	m_buttonExport = new wxButton( this, wxID_ANY, _("Export"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonExport, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bButtonsSizer->Add( m_buttonExport, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
 	m_buttonApply = new wxButton( this, wxID_ANY, _("Apply, Save Schematic && Continue"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonsSizer->Add( m_buttonApply, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bButtonsSizer->Add( m_buttonApply, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

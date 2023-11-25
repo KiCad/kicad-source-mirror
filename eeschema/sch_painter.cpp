@@ -32,7 +32,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <callback_gal.h>
 #include <geometry/shape_segment.h>
-#include <geometry/shape_simple.h>
+#include <geometry/shape_rect.h>
 #include <gr_text.h>
 #include <lib_shape.h>
 #include <lib_field.h>
@@ -55,6 +55,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
+#include <sch_table.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
 #include <view/view.h>
@@ -280,6 +281,9 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         case SCH_TEXTBOX_T:
             draw( static_cast<const SCH_TEXTBOX*>( aItem ), aLayer );
             break;
+        case SCH_TABLE_T:
+            draw( static_cast<const SCH_TABLE*>( aItem ), aLayer );
+            break;
         case SCH_LABEL_T:
             draw( static_cast<const SCH_LABEL*>( aItem ), aLayer );
             break;
@@ -432,9 +436,9 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         {
             color = static_cast<const SCH_FIELD*>( aItem )->GetFieldColor();
         }
-        else if( aItem->Type() == SCH_TEXTBOX_T )
+        else if( aItem->Type() == SCH_TEXTBOX_T || aItem->Type() == SCH_TABLECELL_T )
         {
-            const SCH_TEXTBOX* textBox = static_cast<const SCH_TEXTBOX*>( aItem );
+            const SCH_TEXTBOX* textBox = dynamic_cast<const SCH_TEXTBOX*>( aItem );
 
             if( aLayer == LAYER_NOTES_BACKGROUND )
                 color = textBox->GetFillColor();
@@ -556,6 +560,7 @@ float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem ) const
         break;
 
     case SCH_TEXTBOX_T:
+    case SCH_TABLECELL_T:
         pen = static_cast<const SCH_TEXTBOX*>( aItem )->GetEffectiveTextPenWidth( pen );
         break;
 
@@ -2285,6 +2290,14 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 {
+    if( aTextBox->Type() == SCH_TABLECELL_T )
+    {
+        const SCH_TABLECELL* cell = static_cast<const SCH_TABLECELL*>( aTextBox );
+
+        if( cell->GetColSpan() == 0 || cell->GetRowSpan() == 0 )
+            return;
+    }
+
     bool          drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( m_schSettings.IsPrinting() && drawingShadows )
@@ -2399,6 +2412,143 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                     delete shape;
             }
         }
+    }
+}
+
+
+void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer )
+{
+    const_cast<SCH_TABLE*>( aTable )->RunOnChildren(
+            [&]( SCH_ITEM* aChild )
+            {
+                draw( static_cast<SCH_TEXTBOX*>( aChild ), aLayer );
+            } );
+
+    if( aLayer == LAYER_SELECTION_SHADOWS )
+        return;
+
+    VECTOR2I pos = aTable->GetPosition();
+    VECTOR2I end = aTable->GetEnd();
+
+    int        lineWidth;
+    COLOR4D    color;
+    LINE_STYLE lineStyle;
+
+    auto setupStroke =
+            [&]( const STROKE_PARAMS& stroke )
+            {
+                lineWidth = stroke.GetWidth();
+                color = stroke.GetColor();
+                lineStyle = stroke.GetLineStyle();
+
+                if( lineWidth == 0 )
+                    lineWidth = m_schSettings.m_defaultPenWidth;
+
+                if( color == COLOR4D::UNSPECIFIED )
+                    color = m_schSettings.GetLayerColor( LAYER_NOTES );
+
+                if( lineStyle == LINE_STYLE::DEFAULT )
+                    lineStyle = LINE_STYLE::SOLID;
+
+                m_gal->SetIsFill( false );
+                m_gal->SetIsStroke( true );
+                m_gal->SetStrokeColor( color );
+                m_gal->SetLineWidth( lineWidth );
+            };
+
+    auto strokeShape =
+            [&]( const SHAPE& shape )
+            {
+                STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, &m_schSettings,
+                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        {
+                            // DrawLine has problem with 0 length lines so enforce minimum
+                            if( a == b )
+                                m_gal->DrawLine( a+1, b );
+                            else
+                                m_gal->DrawLine( a, b );
+                        } );
+            };
+
+    auto strokeLine =
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
+            {
+                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                {
+                    m_gal->DrawLine( ptA, ptB );
+                }
+                else
+                {
+                    SHAPE_SEGMENT seg( ptA, ptB );
+                    strokeShape( seg );
+                }
+            };
+
+    auto strokeRect =
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
+            {
+                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                {
+                    m_gal->DrawRectangle( ptA, ptB );
+                }
+                else
+                {
+                    SHAPE_RECT rect( BOX2I( ptA, ptB - ptA ) );
+                    strokeShape( rect );
+                }
+            };
+
+    if( aTable->GetSeparatorsStroke().GetWidth() >= 0 )
+    {
+        setupStroke( aTable->GetSeparatorsStroke() );
+
+        if( aTable->StrokeColumns() )
+        {
+            for( int col = 0; col < aTable->GetColCount() - 1; ++col )
+            {
+                for( int row = 0; row < aTable->GetRowCount(); ++row )
+                {
+                    SCH_TABLECELL* cell = aTable->GetCell( row, col );
+
+                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+                    {
+                        strokeLine( VECTOR2I( cell->GetEndX(), cell->GetStartY() ),
+                                    VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
+                    }
+                }
+            }
+        }
+
+        if( aTable->StrokeRows() )
+        {
+            for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
+            {
+                for( int col = 0; col < aTable->GetColCount(); ++col )
+                {
+                    SCH_TABLECELL* cell = aTable->GetCell( row, 0 );
+
+                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+                    {
+                        strokeLine( VECTOR2I( cell->GetStartX(), cell->GetEndY() ),
+                                    VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
+                    }
+                }
+            }
+        }
+    }
+
+    if( aTable->GetBorderStroke().GetWidth() >= 0 )
+    {
+        setupStroke( aTable->GetBorderStroke() );
+
+        if( aTable->StrokeHeader() )
+        {
+            SCH_TABLECELL* cell = aTable->GetCell( 0, 0 );
+            strokeLine( VECTOR2I( pos.x, cell->GetEndY() ), VECTOR2I( end.x, cell->GetEndY() ) );
+        }
+
+        if( aTable->StrokeExternal() )
+            strokeRect( pos, end );
     }
 }
 
