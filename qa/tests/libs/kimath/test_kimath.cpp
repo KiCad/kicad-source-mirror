@@ -29,6 +29,7 @@
 
 // Code under test
 #include <trigo.h>
+#include <geometry/shape_arc.h>
 
 
 /*
@@ -112,7 +113,7 @@ static const VECTOR2D Ref1CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D&
         if( aStart == aEnd )
         {
             // This is a special case for a 360 degrees arc.  In this case, the center is halfway between
-            // the midpoint and either end point
+            // the midpoint and either newEnd point
             center.x = ( aStart.x + aMid.x ) / 2.0;
             center.y = ( aStart.y + aMid.y ) / 2.0;
             return center;
@@ -212,13 +213,38 @@ BOOST_AUTO_TEST_CASE( TestCalcArcCenter3Pts )
             msg << "\nend: " << entry.iend.Format();
 
             {
-                msg << "\nCalculated center: " << wxString::Format( "%.15f", calcCenter.x ) << ","
+                msg << "\nCalculated center: " << wxString::Format( "%.15f", calcCenter.x ) << ", "
                     << wxString::Format( "%.15f", calcCenter.y );
 
                 msg << "\n  Avg radius: " << wxString::Format( "%.15f", cavg );
                 msg << "\nStart radius: " << wxString::Format( "%.15f", crs );
                 msg << "\n  Mid radius: " << wxString::Format( "%.15f", crm );
                 msg << "\n  End radius: " << wxString::Format( "%.15f", cre );
+                msg << "\n";
+
+                // Check mid/end points using the calculated center (like SHAPE_ARC)
+                EDA_ANGLE angStart( start - calcCenter );
+                EDA_ANGLE angMid( mid - calcCenter );
+                EDA_ANGLE angEnd( end - calcCenter );
+
+                EDA_ANGLE angCenter = angEnd - angStart;
+
+                VECTOR2D newMid = start;
+                VECTOR2D newEnd = start;
+
+                RotatePoint( newMid, calcCenter, -angCenter / 2.0 );
+                RotatePoint( newEnd, calcCenter, -angCenter );
+
+                msg << "\nNew mid: " << wxString::Format( "%.15f", newMid.x ) << ", "
+                    << wxString::Format( "%.15f", newMid.y );
+
+                msg << "\nNew end: " << wxString::Format( "%.15f", newEnd.x ) << ", "
+                    << wxString::Format( "%.15f", newEnd.y );
+                msg << "\n";
+
+                double endsDist = ( newEnd - end ).EuclideanNorm();
+
+                msg << "\nNew end is off by " << wxString::Format( "%.15f", endsDist );
                 msg << "\n";
             }
 
@@ -232,7 +258,7 @@ BOOST_AUTO_TEST_CASE( TestCalcArcCenter3Pts )
 
                 double r0_ravg = ( r0_rs + r0_rm + r0_rre ) / 3.0;
 
-                msg << "\nReference0 center: " << wxString::Format( "%.15f", ref0Center.x ) << ","
+                msg << "\nReference0 center: " << wxString::Format( "%.15f", ref0Center.x ) << ", "
                     << wxString::Format( "%.15f", ref0Center.y );
 
                 msg << "\nRef0   Avg radius: " << wxString::Format( "%.15f", r0_ravg );
@@ -251,7 +277,7 @@ BOOST_AUTO_TEST_CASE( TestCalcArcCenter3Pts )
 
                 double r1_ravg = ( r1_rs + r1_rm + r1_rre ) / 3.0;
 
-                msg << "\nReference1 center: " << wxString::Format( "%.15f", ref1Center.x ) << ","
+                msg << "\nReference1 center: " << wxString::Format( "%.15f", ref1Center.x ) << ", "
                     << wxString::Format( "%.15f", ref1Center.y );
 
                 msg << "\nRef1   Avg radius: " << wxString::Format( "%.15f", r1_ravg );
