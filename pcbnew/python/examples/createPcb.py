@@ -12,8 +12,8 @@ def fromUTF8Text( aText ):
         return aText
 
 def GenerateBoard():
-    size_0_6mm = wxSizeMM(0.6,0.6)
-    size_1_0mm = wxSizeMM(1.0,1.0)
+    size_0_6mm = VECTOR2I_MM(0.6,0.6)
+    size_1_0mm = VECTOR2I_MM(1.0,1.0)
 
     # create a blank board
     pcb = CreateEmptyBoard()
@@ -21,11 +21,11 @@ def GenerateBoard():
     # create a new footprint, it's parent is our previously created pcb
     footprint = FOOTPRINT(pcb)
     footprint.SetReference("M1")   # give it a reference name
-    footprint.Reference().SetPos0(wxPointMM(6,-2))
+    footprint.Reference().SetPos0(VECTOR2I_MM(3,-2))
     footprint.Reference().SetDrawCoord()
     pcb.Add(footprint)             # add it to our pcb
-    m_pos = wxPointMM(50,50)
-    footprint.SetPosition(m_pos)
+    mod_pos = VECTOR2I_MM(50,50)
+    footprint.SetPosition(mod_pos)
 
     # create a pad array and add it to the footprint
     n = 1
@@ -34,7 +34,7 @@ def GenerateBoard():
             pad = PAD(footprint)
             pad.SetDrillSize(size_0_6mm)
             pad.SetSize(size_1_0mm)
-            pt = wxPointMM(1.27*x,1.27*y)
+            pt = VECTOR2I_MM(1.27*x,1.27*y)
             pad.SetPos0(pt);
             pad.SetDrawCoord()
             pad.SetName(str(n))

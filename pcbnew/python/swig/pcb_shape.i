@@ -50,7 +50,7 @@
     %pythoncode
     %{
     def GetShapeStr(self):
-        return self.ShowShape(self.GetShape())
+        return self.ShowShape()
     %}
 }
 

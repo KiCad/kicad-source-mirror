@@ -25,19 +25,22 @@ print("List vias:")
 
 for item in pcb.GetTracks():
     if type(item) is PCB_VIA:
-
         pos = item.GetPosition()
         drill = item.GetDrillValue()
         width = item.GetWidth()
         print(" * Via:   %s - %f/%f " % (ToUnits(pos), ToUnits(drill), ToUnits(width)))
 
     elif type(item) is PCB_TRACK:
-
         start = item.GetStart()
         end = item.GetEnd()
         width = item.GetWidth()
-
         print(" * Track: %s to %s, width %f" % (ToUnits(start), ToUnits(end), ToUnits(width)))
+
+    elif type(item) is PCB_ARC:
+        start = item.GetStart()
+        end = item.GetEnd()
+        width = item.GetWidth()
+        print(" * Track arc: %s to %s, width %f" % (ToUnits(start), ToUnits(end), ToUnits(width)))
 
     else:
         print("Unknown type    %s" % type(item))
@@ -69,4 +72,4 @@ print("List zones:", pcb.GetAreaCount())
 
 for idx in range(0, pcb.GetAreaCount()):
     zone=pcb.GetArea(idx)
-    print("zone:", idx, "priority:", zone.GetPriority(), "netname", fromUTF8Text( zone.GetNetname() ) )
+    print("zone:", idx, "priority:", zone.GetAssignedPriority(), "netname", fromUTF8Text( zone.GetNetname() ) )
