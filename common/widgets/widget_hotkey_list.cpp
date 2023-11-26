@@ -29,6 +29,7 @@
 #include <tool/tool_event.h>
 #include <dialog_shim.h>
 
+#include <wx/button.h>
 #include <wx/log.h>
 #include <wx/dcclient.h>
 #include <wx/menu.h>
@@ -120,6 +121,11 @@ public:
         key_label_1->SetLabel( aCurrentKey );
         fgsizer->Add( key_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
+        fgsizer->AddStretchSpacer();
+
+        wxButton* resetButton = new wxButton( panel, wxID_ANY, _( "Clear assigned hotkey" ), wxDefaultPosition, wxDefaultSize, 0 );
+        fgsizer->Add( resetButton, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
+
         sizer->Add( fgsizer, 1, wxEXPAND );
 
         // Wrap the sizer in a second to give a larger border around the whole dialog
@@ -138,18 +144,33 @@ public:
         panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
         panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
         panel->Bind( wxEVT_KEY_UP, &HK_PROMPT_DIALOG::OnKeyUp, this );
+
+        // Also bind all the event handlers to the button because it is most likely to get focus and
+        // just having these bound to the panel doesn't register the event when that happens.
+        resetButton->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
+        resetButton->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
+        resetButton->Bind( wxEVT_KEY_UP, &HK_PROMPT_DIALOG::OnKeyUp, this );
+        resetButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &HK_PROMPT_DIALOG::onResetButton, this );
+
         SetInitialFocus( panel );
     }
 
-    static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
-                                    const wxString& aCurrentKey )
+    static std::optional<long> PromptForKey( wxWindow* aParent, const wxString& aName,
+                                             const wxString& aCurrentKey )
     {
         HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
 
         if( dialog.ShowModal() == wxID_OK )
-            return dialog.m_event;
+        {
+            if( dialog.m_resetkey )
+                return std::make_optional( 0 );
+            else
+                return std::make_optional( WIDGET_HOTKEY_LIST::MapKeypressToKeycode( dialog.m_event ) );
+        }
         else
-            return wxKeyEvent();
+        {
+            return std::nullopt;
+        }
     }
 
 protected:
@@ -209,7 +230,14 @@ protected:
         }
     }
 
+    void onResetButton( wxCommandEvent& aEvent )
+    {
+        m_resetkey = true;
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+    }
+
 private:
+    bool       m_resetkey = false;
     wxKeyEvent m_event;
 };
 
@@ -348,12 +376,12 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
     wxString    current_key =
             aEditId == ID_EDIT_HOTKEY ? GetItemText( aItem, 1 ) : GetItemText( aItem, 2 );
 
-    wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( this, name, current_key );
-    long key = MapKeypressToKeycode( key_event );
+    std::optional<long> key = HK_PROMPT_DIALOG::PromptForKey( this, name, current_key );
 
-    if( key )
+    // An empty optional means don't change the key
+    if( key.has_value() )
     {
-        auto it = m_reservedHotkeys.find( key );
+        auto it = m_reservedHotkeys.find( key.value() );
 
         if( it != m_reservedHotkeys.end() )
         {
@@ -365,7 +393,7 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
             return;
         }
 
-        changeHotkey( hkdata->GetChangedHotkey(), key, aEditId == ID_EDIT_ALT );
+        changeHotkey( hkdata->GetChangedHotkey(), key.value(), aEditId == ID_EDIT_ALT );
         updateFromClientData();
     }
 }
