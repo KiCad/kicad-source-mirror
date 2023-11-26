@@ -299,6 +299,10 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
 
     case EDA_DATA_TYPE::DISTANCE:
         value_to_print = ToUserUnit( aIuScale, aUnits, value_to_print );
+        break;
+
+    case EDA_DATA_TYPE::UNITLESS:
+        break;
     }
 
     char buf[50];
@@ -393,6 +397,10 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 
     case EDA_DATA_TYPE::DISTANCE:
         value = ToUserUnit( aIuScale, aUnits, value );
+        break;
+
+    case EDA_DATA_TYPE::UNITLESS:
+        break;
     }
 
     switch( aUnits )
@@ -639,6 +647,10 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
 
     case EDA_DATA_TYPE::DISTANCE:
         dtmp = FromUserUnit( aIuScale, aUnits, dtmp );
+        break;
+
+    case EDA_DATA_TYPE::UNITLESS:
+        break;
     }
 
     return dtmp;
