@@ -84,11 +84,20 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL );
 #endif
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    m_grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_RETURN );
+    m_grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_NUMPAD_ENTER );
+    m_grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_DOWN );
+    m_grid->AddActionTrigger( wxPGKeyboardActions::PrevProperty, WXK_UP );
+    m_grid->AddActionTrigger( wxPGKeyboardActions::Edit, WXK_SPACE );
+#else
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_DOWN );
     m_grid->AddActionTrigger( wxPG_ACTION_PREV_PROPERTY, WXK_UP );
     m_grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_SPACE );
+#endif
+
     m_grid->DedicateKey( WXK_RETURN );
     m_grid->DedicateKey( WXK_NUMPAD_ENTER );
     m_grid->DedicateKey( WXK_DOWN );

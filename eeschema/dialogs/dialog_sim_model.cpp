@@ -106,16 +106,22 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
     grid->Bind( wxEVT_SET_FOCUS, &DIALOG_SIM_MODEL::onParamGridSetFocus, this );
     grid->Bind( wxEVT_UPDATE_UI, &DIALOG_SIM_MODEL::onUpdateUI, this );
 
-    grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
     grid->DedicateKey( WXK_RETURN );
-    grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
-
-    grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_NUMPAD_ENTER );
     grid->DedicateKey( WXK_NUMPAD_ENTER );
-    grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
-
     grid->DedicateKey( WXK_UP );
     grid->DedicateKey( WXK_DOWN );
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    grid->AddActionTrigger( wxPGKeyboardActions::Edit, WXK_RETURN );
+    grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_RETURN );
+    grid->AddActionTrigger( wxPGKeyboardActions::Edit, WXK_NUMPAD_ENTER );
+    grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_NUMPAD_ENTER );
+#else
+    grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
+    grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
+    grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_NUMPAD_ENTER );
+    grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
+#endif
 
     m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
 
