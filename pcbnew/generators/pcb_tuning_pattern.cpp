@@ -1717,6 +1717,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 {
                     dummyPattern.reset( PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
                                                                        m_pickerItem, mode, false ) );
+                    dummyPattern->SetPosition( m_pickerItem->GetPosition() );
+                    dummyPattern->SetEnd( m_pickerItem->GetPosition() );
                 }
 
                 if( dummyPattern )
@@ -1729,6 +1731,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                     dummyPattern->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
                     m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+
+                    generatorTool->Router()->StopRouting();
                 }
                 else
                 {
