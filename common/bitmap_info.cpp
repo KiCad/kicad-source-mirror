@@ -4294,6 +4294,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::icon_bitmap2component_24].emplace_back( BITMAPS::icon_bitmap2component_24, wxT( "icon_bitmap2component_24_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_eeschema_24].emplace_back( BITMAPS::icon_eeschema_24, wxT( "icon_eeschema_24_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_gerbview_24].emplace_back( BITMAPS::icon_gerbview_24, wxT( "icon_gerbview_24_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::icon_kicad_24].emplace_back( BITMAPS::icon_kicad_24, wxT( "icon_kicad_24_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_libedit_24].emplace_back( BITMAPS::icon_libedit_24, wxT( "icon_libedit_24_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_modedit_24].emplace_back( BITMAPS::icon_modedit_24, wxT( "icon_modedit_24_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_pagelayout_editor_24].emplace_back( BITMAPS::icon_pagelayout_editor_24, wxT( "icon_pagelayout_editor_24_24.png" ), 24, wxT( "light" ) );
@@ -4302,6 +4303,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::icon_bitmap2component_24].emplace_back( BITMAPS::icon_bitmap2component_24, wxT( "icon_bitmap2component_24_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_eeschema_24].emplace_back( BITMAPS::icon_eeschema_24, wxT( "icon_eeschema_24_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_gerbview_24].emplace_back( BITMAPS::icon_gerbview_24, wxT( "icon_gerbview_24_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::icon_kicad_24].emplace_back( BITMAPS::icon_kicad_24, wxT( "icon_kicad_24_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_libedit_24].emplace_back( BITMAPS::icon_libedit_24, wxT( "icon_libedit_24_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_modedit_24].emplace_back( BITMAPS::icon_modedit_24, wxT( "icon_modedit_24_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_pagelayout_editor_24].emplace_back( BITMAPS::icon_pagelayout_editor_24, wxT( "icon_pagelayout_editor_24_dark_24.png" ), 24, wxT( "dark" ) );
