@@ -708,6 +708,11 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
             }
             else
             {
+                // If we are not performing a full recursion test, at least check if we are in
+                // a simple recursion scenario to prevent stack overflow crashes
+                wxCHECK2_MSG( sheet->GetFileName() != aSheet->GetFileName(), continue,
+                              wxT( "Recursion prevented in SCH_SHEET_LIST::BuildSheetList" ) );
+
                 BuildSheetList( sheet, false );
             }
         }
