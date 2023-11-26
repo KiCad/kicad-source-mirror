@@ -1119,7 +1119,28 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                      schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_y ) ) );
         }
 
+        // If cloning a sheet, check that we aren't going to create recursion
+        if( newItem->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET_PATH* currentSheet = &m_frame->GetCurrentSheet();
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( newItem );
+
+            if( m_frame->CheckSheetForRecursion( sheet, currentSheet ) )
+            {
+                // Clear out the filename so that the user can pick a new one
+                sheet->SetFileName( wxEmptyString );
+
+                if( !m_frame->EditSheetProperties( sheet, currentSheet, nullptr ) )
+                {
+                    // User canceled renaming the sheet; skip it
+                    delete newItem;
+                    continue;
+                }
+            }
+        }
+
         m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );
+
         newItem->SetFlags( IS_NEW );
         m_frame->AddToScreen( newItem, m_frame->GetScreen() );
         m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, appendUndo );
