@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_html_report_box.h"
 
 #include "panel_setup_rules_base.h"
@@ -72,7 +73,7 @@ PANEL_SETUP_RULES_BASE::PANEL_SETUP_RULES_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_compileButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 28,28 ), wxBU_AUTODRAW|0 );
+	m_compileButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 28,28 ), wxBU_AUTODRAW|0 );
 	m_compileButton->SetToolTip( _("Check rule syntax") );
 
 	bSizer5->Add( m_compileButton, 0, wxTOP|wxBOTTOM, 5 );

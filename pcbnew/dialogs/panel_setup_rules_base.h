@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_BOX;
 
 #include <wx/string.h>
@@ -45,7 +46,7 @@ class PANEL_SETUP_RULES_BASE : public wxPanel
 		wxHyperlinkCtrl* m_syntaxHelp;
 		wxBoxSizer* m_topMargin;
 		wxStyledTextCtrl* m_textEditor;
-		wxBitmapButton* m_compileButton;
+		STD_BITMAP_BUTTON* m_compileButton;
 		WX_HTML_REPORT_BOX* m_errorsReport;
 
 		// Virtual event handlers, override them in your derived class

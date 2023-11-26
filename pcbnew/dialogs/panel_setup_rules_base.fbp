@@ -350,7 +350,7 @@
                                         <property name="show">1</property>
                                         <property name="size">28,28</property>
                                         <property name="style"></property>
-                                        <property name="subclass">; ; forward_declare</property>
+                                        <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip">Check rule syntax</property>
                                         <property name="validator_data_type"></property>

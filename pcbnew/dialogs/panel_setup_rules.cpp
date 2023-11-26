@@ -23,6 +23,7 @@
 
 #include <bitmaps.h>
 #include <confirm.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
 #include <pcbexpr_evaluator.h>
