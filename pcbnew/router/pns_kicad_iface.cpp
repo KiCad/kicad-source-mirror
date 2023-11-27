@@ -224,6 +224,9 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aObstacle, const PNS:
     auto checkKeepout =
             []( const ZONE* aKeepout, const BOARD_ITEM* aOther )
             {
+                if( !aOther )
+                    return false;
+
                 if( aKeepout->GetDoNotAllowTracks() && aOther->IsType( { PCB_ARC_T, PCB_TRACE_T } ) )
                     return true;
 
