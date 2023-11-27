@@ -1953,7 +1953,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
     if( drawingOP )
         return;
-color = COLOR4D( 0.0, 0.3, 0.2, 1.0 );
+
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
