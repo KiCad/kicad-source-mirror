@@ -317,7 +317,7 @@ wxString HIERARCHY_PANE::getRootString()
     SCH_SHEET_PATH rootPath;
     rootPath.push_back( rootSheet );
 
-    return formatPageString ( _( "Root" ), rootPath.GetPageNumber() );
+    return formatPageString( rootSheet->GetShownName( false ), rootPath.GetPageNumber() );
 }
 
 

@@ -260,6 +260,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             {
                 wxBusyCursor busy;
                 Schematic().SetRoot( pi->LoadSchematicFile( fullFileName, &Schematic() ) );
+                // Make ${SHEETNAME} work on the root sheet until we properly support
+                // naming the root sheet
+                Schematic().Root().SetName( _( "Root" ) );
             }
 
             if( !pi->GetError().IsEmpty() )

@@ -180,10 +180,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
                 // Open the plotter and do the first page
                 setupPlotPagePDF( plotter, screen, aPlotSettings );
 
-                if( sheetList.size() > 1 )
-                    plotter->StartPlot( sheetList[i].GetPageNumber(), _( "Root" ) );
-                else
-                    plotter->StartPlot( sheetList[i].GetPageNumber(), sheetName );
+                plotter->StartPlot( sheetList[i].GetPageNumber(), sheetName );
             }
             catch( const IO_ERROR& e )
             {
