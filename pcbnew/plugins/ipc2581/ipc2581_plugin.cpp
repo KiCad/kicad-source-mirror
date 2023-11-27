@@ -1236,14 +1236,6 @@ void IPC2581_PLUGIN::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
 {
     switch( aLayer )
     {
-    case F_Cu ... B_Cu:
-        addAttribute( aNode,  "layerFunction", "CONDUCTOR" );
-        addAttribute( aNode,  "polarity", "POSITIVE" );
-        addAttribute( aNode, "side",
-                      aLayer == F_Cu   ? "TOP"
-                      : aLayer == B_Cu ? "BOTTOM"
-                                       : "INTERNAL" );
-        break;
     case F_Adhes:
     case B_Adhes:
         addAttribute( aNode,  "layerFunction", "GLUE" );
@@ -1305,6 +1297,16 @@ void IPC2581_PLUGIN::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
         break;
 
     default:
+        if( IsCopperLayer( aLayer ) )
+        {
+            addAttribute( aNode, "layerFunction", "CONDUCTOR" );
+            addAttribute( aNode, "polarity", "POSITIVE" );
+            addAttribute( aNode, "side",
+                          aLayer == F_Cu   ? "TOP"
+                          : aLayer == B_Cu ? "BOTTOM"
+                                           : "INTERNAL" );
+        }
+
         break; // Do not handle other layers
     }
 }
