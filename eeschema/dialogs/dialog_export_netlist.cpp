@@ -52,6 +52,7 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/regex.h>
+#include <wx/txtstrm.h>
 
 
 
@@ -565,47 +566,68 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 
         if( !commandLine.IsEmpty() )
         {
-            wxArrayString output;
-            wxArrayString errors;
-            wxExecute( commandLine, output, errors, wxEXEC_ASYNC );
+            wxProcess* process = new wxProcess( GetEventHandler(), wxID_ANY );
+            process->Redirect();
+            wxExecute( commandLine, wxEXEC_ASYNC, process );
 
             reporter.ReportHead( commandLine, RPT_SEVERITY_ACTION );
+            process->Activate();
 
-            if( output.GetCount() )
+            sleep( 1 ); // give the process time to start and output any data or errors
+
+            if( process->IsInputAvailable() )
             {
-                for( unsigned ii = 0; ii < output.GetCount(); ii++ )
-                    reporter.Report( output[ii], RPT_SEVERITY_INFO );
+                wxInputStream* in = process->GetInputStream();
+                wxTextInputStream textstream( *in );
+
+                while( in->CanRead() )
+                {
+                    wxString line = textstream.ReadLine();
+
+                    if( !line.IsEmpty() )
+                        reporter.Report( line, RPT_SEVERITY_INFO );
+                }
             }
 
-            if( errors.GetCount() )
+            if( process->IsErrorAvailable() )
             {
-                for( unsigned ii = 0; ii < errors.GetCount(); ii++ )
-                {
-                    // wxExecute returns -1 for all error conditions, so we've no choice but
-                    // to scrape the stderr messages for the error code(s).
+                wxInputStream* err = process->GetErrorStream();
+                wxTextInputStream textstream( *err );
 
-                    if( errors[ii].EndsWith( wxS( "failed with error 2!" ) ) )      // ENOENT
+                while( err->CanRead() )
+                {
+                    wxString line = textstream.ReadLine();
+
+                    if( !line.IsEmpty() )
                     {
-                        reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
-                        reporter.Report( _( "Note: command line is usually: "
-                                            "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
-                                         RPT_SEVERITY_INFO );
-                    }
-                    else if( errors[ii].EndsWith( wxS( "failed with error 8!" ) ) ) // ENOEXEC
-                    {
-                        reporter.Report( _( "external simulator has the wrong format or "
-                                            "architecture" ), RPT_SEVERITY_ERROR );
-                    }
-                    else if( errors[ii].EndsWith( "failed with error 13!" ) ) // EACCES
-                    {
-                        reporter.Report( _( "permission denied" ), RPT_SEVERITY_ERROR );
-                    }
-                    else
-                    {
-                        reporter.Report( errors[ii], RPT_SEVERITY_ERROR );
+                        if( line.EndsWith( wxS( "failed with error 2!" ) ) )      // ENOENT
+                        {
+                            reporter.Report( _( "external simulator not found" ), RPT_SEVERITY_ERROR );
+                            reporter.Report( _( "Note: command line is usually: "
+                                                "<tt>&lt;path to SPICE binary&gt; \"%I\"</tt>" ),
+                                            RPT_SEVERITY_INFO );
+                        }
+                        else if( line.EndsWith( wxS( "failed with error 8!" ) ) ) // ENOEXEC
+                        {
+                            reporter.Report( _( "external simulator has the wrong format or "
+                                                "architecture" ), RPT_SEVERITY_ERROR );
+                        }
+                        else if( line.EndsWith( "failed with error 13!" ) ) // EACCES
+                        {
+                            reporter.Report( _( "permission denied" ), RPT_SEVERITY_ERROR );
+                        }
+                        else
+                        {
+                            reporter.Report( line, RPT_SEVERITY_ERROR );
+                        }
                     }
                 }
             }
+
+            process->CloseOutput();
+            process->Detach();
+
+            // Do not delete process, it will delete itself when it terminates
         }
     }
 
