@@ -575,6 +575,6 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FIL
 void EXCELLON_WRITER::writeEXCELLONEndOfFile()
 {
     // add if minimal here
-    fputs( "T0\nM30\n", m_file );
+    fputs( "M30\n", m_file );
     fclose( m_file );
 }
