@@ -183,6 +183,10 @@ wxString IPC2581_PLUGIN::genString( const wxString& aStr, const char* aPrefix )
 
 wxString IPC2581_PLUGIN::floatVal( double aVal )
 {
+    // We don't want to output -0.0 as this value is just 0 for fabs
+    if( aVal == -0.0 )
+        aVal = 0.0;
+
     wxString str = wxString::FromCDouble( aVal, m_sigfig );
 
     // Remove all but the last trailing zeros from str
@@ -451,7 +455,7 @@ void IPC2581_PLUGIN::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 {
     wxCHECK_RET( aNode, "aNode is null" );
 
-    if( aWidth == 0 )
+    if( aWidth < 0 )
         return;
 
     wxXmlNode* entry_node = nullptr;
@@ -999,6 +1003,24 @@ void IPC2581_PLUGIN::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
 }
 
 
+void IPC2581_PLUGIN::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxString& aName )
+{
+    wxXmlNode* slotNode = appendNode( aNode, "SlotCavity" );
+    addAttribute( slotNode,  "name", aName );
+    addAttribute( slotNode,  "platingStatus", aPad.GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
+    addAttribute( slotNode,  "plusTol", "0.0" );
+    addAttribute( slotNode,  "minusTol", "0.0" );
+
+    if( m_version > 'B' )
+        addLocationNode( slotNode, 0.0, 0.0 );
+
+    SHAPE_POLY_SET poly_set;
+    aPad.GetEffectiveShape()->TransformToPolygon( poly_set, 0, ERROR_INSIDE );
+
+    addOutlineNode( slotNode, poly_set );
+}
+
+
 wxXmlNode* IPC2581_PLUGIN::generateLogisticSection()
 {
     wxXmlNode* logisticNode = appendNode( m_xml_root, "LogisticHeader" );
@@ -1065,6 +1087,8 @@ wxXmlNode* IPC2581_PLUGIN::generateBOMSection( wxXmlNode* aEcadNode )
         {
             m_refdes = new std::vector<REFDES>();
             m_props = new std::map<wxString, wxString>();
+            m_count = 0;
+            m_pads = 0;
         }
 
         ~BOM_ENTRY()
@@ -1398,7 +1422,9 @@ void IPC2581_PLUGIN::generateDrillLayers( wxXmlNode* aCadLayerNode )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->GetAttribute() == PAD_ATTRIB::PTH ||  pad->GetAttribute() == PAD_ATTRIB::NPTH )
+            if( pad->HasHole() && pad->GetDrillSizeX() != pad->GetDrillSizeY() )
+                m_slot_holes[std::make_pair( F_Cu, B_Cu )].push_back( pad );
+            else if( pad->HasHole() )
                 m_drill_layers[std::make_pair( F_Cu, B_Cu )].push_back( pad );
         }
     }
@@ -1410,6 +1436,22 @@ void IPC2581_PLUGIN::generateDrillLayers( wxXmlNode* aCadLayerNode )
                                                               m_board->GetLayerName( layer_pair.first ),
                                                               m_board->GetLayerName( layer_pair.second ) ), "DRILL" ) );
         addAttribute( drillNode,  "layerFunction", "DRILL" );
+        addAttribute( drillNode,  "polarity", "POSITIVE" );
+        addAttribute( drillNode,  "side", "ALL" );
+
+        wxXmlNode* spanNode = appendNode( drillNode, "Span" );
+        addAttribute( spanNode,  "fromLayer", genString( m_board->GetLayerName( layer_pair.first ), "LAYER" ) );
+        addAttribute( spanNode,  "toLayer", genString( m_board->GetLayerName( layer_pair.second ), "LAYER" ) );
+    }
+
+    for( const auto& [layer_pair, vec] : m_slot_holes )
+    {
+        wxXmlNode* drillNode = appendNode( aCadLayerNode, "Layer" );
+        drillNode->AddAttribute( "name", genString( wxString::Format( "%s_%s",
+                                                              m_board->GetLayerName( layer_pair.first ),
+                                                              m_board->GetLayerName( layer_pair.second ) ), "SLOT" ) );
+
+        addAttribute( drillNode,  "layerFunction", "ROUT" );
         addAttribute( drillNode,  "polarity", "POSITIVE" );
         addAttribute( drillNode,  "side", "ALL" );
 
@@ -1513,14 +1555,9 @@ void IPC2581_PLUGIN::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
     addAttribute( padStackDefNode,  "name", name );
     m_padstacks.push_back( padStackDefNode );
 
-    // IPC2581 doesn't handle slotted holes natively, so we store them for later
-    if( aPad->HasHole() && aPad->GetDrillSizeX() != aPad->GetDrillSizeY() )
-    {
-        std::shared_ptr<SHAPE_SEGMENT> hole = aPad->GetEffectiveHoleShape();
-        const SHAPE_SEGMENT& hole_shape = *hole;
-        m_slot_holes.push_back( hole_shape );
-    }
-    else if( aPad->HasHole() )
+    // Only handle round holes here because IPC2581 does not support non-round holes
+    // These will be handled in a slot layer
+    if( aPad->HasHole() && aPad->GetDrillSizeX() == aPad->GetDrillSizeY() )
     {
         wxXmlNode* padStackHoleNode = appendNode( padStackDefNode, "PadstackHoleDef" );
         padStackHoleNode->AddAttribute( "name", wxString::Format( "%s%d_%d",
@@ -1712,8 +1749,7 @@ bool IPC2581_PLUGIN::addOutlineNode( wxXmlNode* aParentNode, const SHAPE_POLY_SE
         return false;
     }
 
-    if( aWidth > 0 )
-        addLineDesc( outlineNode, aWidth, aDashType );
+    addLineDesc( outlineNode, aWidth, aDashType );
 
     return true;
 }
@@ -1830,7 +1866,7 @@ wxXmlNode* IPC2581_PLUGIN::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     if( !courtyard.OutlineCount() && !courtyard_back.OutlineCount() )
     {
         SHAPE_POLY_SET bbox = fp->GetBoundingHull();
-        addOutlineNode( packageNode, bbox, 1, LINE_STYLE::SOLID );
+        addOutlineNode( packageNode, bbox );
     }
 
     wxXmlNode* pickupPointNode = appendNode( packageNode, "PickupPoint" );
@@ -2005,7 +2041,7 @@ wxXmlNode* IPC2581_PLUGIN::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
 
             outline[0].Append( points );
             addPolygonNode( outlineNode, outline, FILL_T::NO_FILL, 0 );
-            addLineDesc( outlineNode, 1, LINE_STYLE::SOLID );
+            addLineDesc( outlineNode, 0, LINE_STYLE::SOLID );
         }
     }
 
@@ -2348,6 +2384,27 @@ void IPC2581_PLUGIN::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, pad->GetPosition() );
             }
+        }
+    }
+
+    hole_count = 1;
+    for( const auto& [layer_pair, vec] : m_slot_holes )
+    {
+        wxXmlNode* layerNode = appendNode( aLayerNode, "LayerFeature" );
+        layerNode->AddAttribute( "layerRef", genString(
+                                                wxString::Format( "%s_%s",
+                                                    m_board->GetLayerName( layer_pair.first ),
+                                                    m_board->GetLayerName( layer_pair.second ) ),
+                                                "SLOT" ) );
+
+        for( PAD* pad : vec )
+        {
+            wxXmlNode* padNode = appendNode( layerNode, "Set" );
+
+            if( pad->GetNetCode() > 0 )
+                addAttribute( padNode,  "net", genString( pad->GetNetname(), "NET" ) );
+
+            addSlotCavity( padNode, *pad, wxString::Format( "SLOT%d", hole_count++ )  );
         }
     }
 }

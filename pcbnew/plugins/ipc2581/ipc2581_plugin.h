@@ -231,6 +231,8 @@ private:
 
     void addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAYER_ID aLayer );
 
+    void addSlotCavity( wxXmlNode* aContentNode, const PAD& aPad, const wxString& aName );
+
     void addText( wxXmlNode* aContentNode, EDA_TEXT* aShape, const KIFONT::METRICS& aFontMetrics );
 
     void addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDashType, bool aForce = false );
@@ -309,17 +311,23 @@ private:
     std::vector<wxXmlNode*>    m_padstacks;         //<! Holding vector for padstacks.  These need to be inserted prior to the components
     wxXmlNode*                 m_last_padstack;     //<! Pointer to padstack list where we can insert the VIA padstacks once we process tracks
 
-    std::map<size_t, wxString> m_footprint_dict;    //<! Map between the footprint hash values and reference id string (<fpid>_##)
+    std::map<size_t, wxString>
+            m_footprint_dict; //<! Map between the footprint hash values and reference id string (<fpid>_##)
 
-    std::map<FOOTPRINT*, wxString> m_OEMRef_dict;   //<! Reverse map from the footprint pointer to the reference id string assigned for components
+    std::map<FOOTPRINT*, wxString>
+            m_OEMRef_dict; //<! Reverse map from the footprint pointer to the reference id string assigned for components
 
-    std::map<int, std::vector<std::pair<wxString, wxString>>> m_net_pin_dict;   //<! Map from netcode to the component/pin pairs in the net
+    std::map<int, std::vector<std::pair<wxString, wxString>>>
+            m_net_pin_dict; //<! Map from netcode to the component/pin pairs in the net
 
-    std::vector<SHAPE_SEGMENT> m_slot_holes;        //<! Storage vector of slotted holes that need to be output as cutouts
+    std::map<PCB_LAYER_ID, wxString>
+            m_layer_name_map; //<! Mapping layer name in 2581 to the internal layer id
 
-    std::map<PCB_LAYER_ID, wxString> m_layer_name_map;  //<! Mapping layer name in 2581 to the internal layer id
+    std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
+            m_drill_layers; //<! Drill sets are output as layers (to/from pairs)
 
-    std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>,std::vector<BOARD_ITEM*>> m_drill_layers;    //<! Drill sets are output as layers (to/from pairs)
+    std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<PAD*>>
+            m_slot_holes; //<! Storage vector of slotted holes that need to be output as cutouts
 
     PROGRESS_REPORTER*      m_progress_reporter;
 
