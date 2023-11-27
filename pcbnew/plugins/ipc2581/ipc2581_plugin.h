@@ -51,7 +51,25 @@ public:
      * @brief IPC2581_PLUGIN
      *
     */
-    IPC2581_PLUGIN(){}
+    IPC2581_PLUGIN()
+    {
+        m_show_layer_mapping_warnings = false;
+        m_total_bytes = 0;
+        m_scale = 1.0;
+        m_sigfig = 3;
+        m_version = 'B';
+        m_enterpriseNode = nullptr;
+        m_board = nullptr;
+        m_props = nullptr;
+        m_shape_user_node = nullptr;
+        m_shape_std_node = nullptr;
+        m_line_node = nullptr;
+        m_last_padstack = nullptr;
+        m_progress_reporter = nullptr;
+        m_xml_doc = nullptr;
+        m_xml_root = nullptr;
+    }
+
     ~IPC2581_PLUGIN() override;
 
     /**

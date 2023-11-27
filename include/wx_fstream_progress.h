@@ -48,7 +48,7 @@ public:
 
     void SetProgressCallback( std::function<void( size_t )> aCallback )
     {
-        m_callback = aCallback;
+        m_callback = std::move( aCallback );
     }
 
     virtual size_t OnSysWrite( const void* aBuffer, size_t aSize ) override
