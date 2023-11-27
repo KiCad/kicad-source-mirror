@@ -1313,6 +1313,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
     catch(const std::exception& e)
     {
         wxLogError( "Exception in IPC2581 generation: %s", e.what() );
+        GetScreen()->SetContentModified( false );
         return;
     }
 
@@ -1352,4 +1353,6 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
 
         SetMsgPanel( upperTxt, lowerTxt );
     }
+
+    GetScreen()->SetContentModified( false );
 }
