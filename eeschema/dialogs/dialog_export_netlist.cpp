@@ -54,6 +54,7 @@
 #include <wx/regex.h>
 #include <wx/txtstrm.h>
 
+#include <thread>
 
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
@@ -573,7 +574,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
             reporter.ReportHead( commandLine, RPT_SEVERITY_ACTION );
             process->Activate();
 
-            sleep( 1 ); // give the process time to start and output any data or errors
+            std::this_thread::sleep_for( std::chrono::seconds( 1 ) ); // give the process time to start and output any data or errors
 
             if( process->IsInputAvailable() )
             {
