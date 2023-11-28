@@ -632,6 +632,7 @@ enum class IBIS_PARSER_CONTINUE
     MATRIX,
     MODELSELECTOR,
     MODEL,
+    MODEL_SPEC,
     IV_TABLE,
     VT_TABLE,
     RAMP,
@@ -772,6 +773,7 @@ private:
     bool readMatrixSparse( std::string, IBIS_MATRIX_SPARSE& aDest );
     bool readRampdvdt( dvdtTypMinMax& aDest );
     bool readRamp();
+    bool readModelSpec();
     bool readWaveform( IbisWaveform* aDest, IBIS_WAVEFORM_TYPE aType );
     bool readString( std::string& aDest );
     bool storeString( std::string& aDest, bool aMultiline );
