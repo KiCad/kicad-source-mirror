@@ -677,11 +677,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     SCH_COMMIT  commit( GetParent() );
     SCH_SCREEN* currentScreen = GetParent()->GetScreen();
+    bool        replaceOnCurrentScreen;
     wxCHECK( currentScreen, false );
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
     // the schematic file.
-    currentScreen->Remove( m_symbol );
+    replaceOnCurrentScreen = currentScreen->Remove( m_symbol );
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_symbol->GetEditFlags() == 0 )
@@ -844,7 +845,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    currentScreen->Append( m_symbol );
+    if( replaceOnCurrentScreen )
+        currentScreen->Append( m_symbol );
 
     if( !commit.Empty() )
         commit.Push( _( "Edit Symbol Properties" ) );
