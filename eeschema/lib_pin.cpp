@@ -1245,16 +1245,11 @@ void LIB_PIN::validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxStri
     aCache->m_Font = aFont;
     aCache->m_FontSize = aSize;
 
-    // Get maximum height including ascenders and descenders
-    static wxString hText = wxT( "Xg" );
-
     VECTOR2D fontSize( aSize, aSize );
     int      penWidth = GetPenSizeForNormal( aSize );
 
-    aCache->m_Extents.x = aFont->StringBoundaryLimits( aText, fontSize, penWidth, false, false,
-                                                       GetFontMetrics() ).x;
-    aCache->m_Extents.y = aFont->StringBoundaryLimits( hText, fontSize, penWidth, false, false,
-                                                       GetFontMetrics() ).y;
+    aCache->m_Extents = aFont->StringBoundaryLimits( aText, fontSize, penWidth, false, false,
+                                                       GetFontMetrics() );
 }
 
 
@@ -1326,16 +1321,12 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
         minsizeV = std::max( TARGET_PIN_RADIUS, externalPinDecoSize( nullptr, *this ) );
 
-    // Attempt to mimic SCH_PAINTER's algorithm without actually knowing the schematic text
-    // offset ratio.
-    int PIN_TEXT_OFFSET = schIUScale.MilsToIU( 24 );
-
     // Calculate topLeft & bottomRight corner positions for the default pin orientation (PIN_RIGHT)
     if( pinNameOffset || !includeName )
     {
         // pin name is inside the body (or invisible)
         // pin number is above the line
-        begin.y = std::max( minsizeV, numberTextHeight + PIN_TEXT_OFFSET );
+        begin.y = std::max( minsizeV, numberTextHeight );
         begin.x = std::min( -typeTextLength, m_length - ( numberTextLength / 2 ) );
 
         end.x = m_length + nameTextLength;
@@ -1345,7 +1336,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
     {
         // pin name is above pin line
         // pin number is below line
-        begin.y = std::max( minsizeV, nameTextHeight + PIN_TEXT_OFFSET );
+        begin.y = std::max( minsizeV, nameTextHeight );
         begin.x = -typeTextLength;
         begin.x = std::min( begin.x, ( m_length - numberTextLength ) / 2 );
         begin.x = std::min( begin.x, ( m_length - nameTextLength ) / 2 );
@@ -1353,7 +1344,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
         end.x = m_length;
         end.x = std::max( end.x, ( m_length + nameTextLength ) / 2 );
         end.x = std::max( end.x, ( m_length + numberTextLength ) / 2 );
-        end.y = std::min( -minsizeV, -numberTextHeight - PIN_TEXT_OFFSET );
+        end.y = std::min( -minsizeV, -numberTextHeight );
     }
 
     // Now, calculate boundary box corners position for the actual pin orientation

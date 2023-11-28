@@ -190,7 +190,7 @@ public:
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
-    const BOX2I GetBoundingBox() const override { return GetBoundingBox( false, true, false ); }
+    const BOX2I GetBoundingBox() const override { return GetBoundingBox( false, true, true ); }
 
     /**
      * @param aIncludeInvisibles - if false, do not include labels for invisible pins
