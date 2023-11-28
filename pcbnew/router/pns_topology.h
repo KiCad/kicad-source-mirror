@@ -95,7 +95,7 @@ public:
 private:
     const int DP_PARALLELITY_THRESHOLD = 5;
 
-    bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited,
+    bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
                             const JOINT** aTerminalJoint = nullptr, bool aFollowLockedSegments = false );
 
     NODE *m_world;

@@ -197,23 +197,31 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( const JOINT* aStart, int* aAnchor, int a
 }
 
 
-bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
-                                  std::set<ITEM*>& aVisited, const JOINT** aTerminalJoint,
-                                  bool aFollowLockedSegments )
+bool TOPOLOGY::followTrivialPath( LINE* aLine2, bool aLeft, ITEM_SET& aSet,
+                                  const JOINT** aTerminalJoint, bool aFollowLockedSegments )
 {
-    assert( aLine->IsLinked() );
+    assert( aLine2->IsLinked() );
+    LINE*           curr_line = aLine2;
+    std::set<ITEM*> visited;
 
-    VECTOR2I     anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
-    LINKED_ITEM* last   = aLeft ? aLine->Links().front() : aLine->Links().back();
-    const JOINT* jt     = m_world->FindJoint( anchor, aLine );
-
-    assert( jt != nullptr );
-
-    aVisited.insert( last );
-
-    if( jt->IsNonFanoutVia() || jt->IsTraceWidthChange() )
+    while( true )
     {
-        ITEM* via = nullptr;
+        VECTOR2I     anchor = aLeft ? curr_line->CPoint( 0 ) : curr_line->CPoint( -1 );
+        LINKED_ITEM* last = aLeft ? curr_line->Links().front() : curr_line->Links().back();
+        const JOINT* jt = m_world->FindJoint( anchor, curr_line );
+
+        assert( jt != nullptr );
+
+        if( !visited.insert( last ).second
+            || ( !jt->IsNonFanoutVia() && !jt->IsTraceWidthChange() ) )
+        {
+            if( aTerminalJoint )
+                *aTerminalJoint = jt;
+
+            return false;
+        }
+
+        ITEM*    via = nullptr;
         SEGMENT* next_seg = nullptr;
 
         ITEM_SET links( jt->CLinks() );
@@ -222,7 +230,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
         {
             if( link->OfKind( ITEM::VIA_T ) )
                 via = link;
-            else if( aVisited.find( link ) == aVisited.end() )
+            else if( visited.insert( link ).second )
                 next_seg = static_cast<SEGMENT*>( link );
         }
 
@@ -234,8 +242,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
             return false;
         }
 
-        LINE l = m_world->AssembleLine( next_seg, nullptr, false, aFollowLockedSegments );
-
+        LINE     l = m_world->AssembleLine( next_seg, nullptr, false, aFollowLockedSegments );
         VECTOR2I nextAnchor = ( aLeft ? l.CLine().CPoint( -1 ) : l.CLine().CPoint( 0 ) );
 
         if( nextAnchor != anchor )
@@ -249,6 +256,7 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
                 aSet.Prepend( via );
 
             aSet.Prepend( l );
+            curr_line = static_cast<PNS::LINE*>( aSet[0] );
         }
         else
         {
@@ -256,15 +264,11 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
                 aSet.Add( via );
 
             aSet.Add( l );
+            curr_line = static_cast<PNS::LINE*>( aSet[aSet.Size() - 1] );
         }
 
-        return followTrivialPath( &l, aLeft, aSet, aVisited, aTerminalJoint, aFollowLockedSegments );
+        continue;
     }
-
-    if( aTerminalJoint )
-        *aTerminalJoint = jt;
-
-    return false;
 }
 
 
@@ -273,7 +277,6 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
                                               bool aFollowLockedSegments )
 {
     ITEM_SET        path;
-    std::set<ITEM*> visited;
     LINKED_ITEM*    seg = nullptr;
 
     if( aStart->Kind() == ITEM::VIA_T )
@@ -312,8 +315,8 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
     const JOINT* jointA = nullptr;
     const JOINT* jointB = nullptr;
 
-    followTrivialPath( &l, false, path, visited, &jointB, aFollowLockedSegments );
-    followTrivialPath( &l, true, path, visited, &jointA, aFollowLockedSegments );
+    followTrivialPath( &l, false, path, &jointB, aFollowLockedSegments );
+    followTrivialPath( &l, true, path, &jointA, aFollowLockedSegments );
 
     if( aTerminalJoints )
     {
