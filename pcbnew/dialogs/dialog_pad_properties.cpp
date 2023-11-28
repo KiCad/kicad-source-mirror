@@ -261,7 +261,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_nonCopperNote->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
-    m_minTrackWidthHint->SetFont( infoFont );
 
     updateHoleControls();
     updatePadSizeControls();
@@ -1670,12 +1669,18 @@ void DIALOG_PAD_PROPERTIES::updatePadSizeControls()
         m_sizeXLabel->SetLabel( _( "Diameter:" ) );
         m_sizeY.Show( false );
         m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
+        m_minTrackWidthHint->SetLabel( _( "d" ) );
+        m_stLenPercentHint->SetLabel( _( "d" ) );
+        m_stWidthPercentHint->SetLabel( _( "d" ) );
     }
     else
     {
         m_sizeXLabel->SetLabel( _( "Pad size X:" ) );
         m_sizeY.Show( true );
         m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_rect_sizes ) );
+        m_minTrackWidthHint->SetLabel( _( "w" ) );
+        m_stLenPercentHint->SetLabel( _( "w" ) );
+        m_stWidthPercentHint->SetLabel( _( "w" ) );
     }
 
     m_sizeXLabel->GetParent()->Layout();

@@ -42,11 +42,11 @@ private:
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
     UNIT_BINDER             m_teardropMaxLenRound;
-    UNIT_BINDER             m_teardropMaxHeightRound;
+    UNIT_BINDER             m_teardropMaxWidthRound;
     UNIT_BINDER             m_teardropMaxLenRect;
-    UNIT_BINDER             m_teardropMaxHeightRect;
-    UNIT_BINDER             m_teardropMaxLenTrack;
-    UNIT_BINDER             m_teardropMaxHeightTrack;
+    UNIT_BINDER             m_teardropMaxWidthRect;
+    UNIT_BINDER             m_teardropMaxLenT2T;
+    UNIT_BINDER             m_teardropMaxWidthT2T;
 };
 
 
