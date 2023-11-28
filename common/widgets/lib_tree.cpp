@@ -726,7 +726,14 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
         }
 
         if( item != m_previewItem )
+        {
+#ifdef __WXGTK__
+            // Hide the preview, because Wayland can't move windows.
+            if( wxGetDisplayInfo().type == wxDisplayType::wxDisplayWayland )
+                hidePreview();
+#endif
             showPreview( item );
+        }
 
         return;
     }
