@@ -1789,6 +1789,12 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 GENERAL_COLLECTOR collector;
                 collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+
+                if( m_frame->GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
+                    guide.SetIncludeSecondary( false );
+                else
+                    guide.SetIncludeSecondary( true );
+
                 collector.Collect( board, { PCB_TRACE_T, PCB_ARC_T }, cursorPos, guide );
 
                 if( collector.GetCount() > 1 )
