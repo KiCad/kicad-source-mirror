@@ -57,6 +57,7 @@
 #include <router/pns_kicad_iface.h>
 #include <router/pns_segment.h>
 #include <router/pns_arc.h>
+#include <router/pns_solid.h>
 #include <router/pns_topology.h>
 
 #include <dialogs/dialog_tuning_pattern_properties.h>
@@ -252,6 +253,8 @@ protected:
     }
 
     PNS::ROUTER_MODE toPNSMode();
+
+    bool recoverBaseline( PNS::ROUTER* aRouter );
 
     bool baselineValid();
 
@@ -534,7 +537,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
     int          layer = GetLayer();
     PNS::ROUTER* router = aTool->Router();
 
-    aTool->ClearRouterCommit();
+    aTool->ClearRouterCommits();
     router->SyncWorld();
 
     PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
@@ -699,21 +702,21 @@ static std::optional<PNS::LINE> getPNSLine( const VECTOR2I& aStart, const VECTOR
     PNS::LINKED_ITEM* startItem = pickSegment( router, aStart, layer, aStartOut );
     PNS::LINKED_ITEM* endItem = pickSegment( router, aEnd, layer, aEndOut );
 
-    wxASSERT( startItem );
-    wxASSERT( endItem );
+    //wxCHECK( startItem && endItem, std::nullopt );
 
-    if( !startItem || !endItem )
-        return std::nullopt;
+    for( PNS::LINKED_ITEM* testItem : { startItem, endItem } )
+    {
+        if( !testItem )
+            continue;
 
-    PNS::LINE        line = world->AssembleLine( startItem, nullptr, false, true );
-    SHAPE_LINE_CHAIN oldChain = line.CLine();
+        PNS::LINE        line = world->AssembleLine( testItem, nullptr, false, false );
+        SHAPE_LINE_CHAIN oldChain = line.CLine();
 
-    wxCHECK( line.ContainsLink( endItem ), std::nullopt );
+        if( oldChain.PointOnEdge( aStartOut, 1 ) && oldChain.PointOnEdge( aEndOut, 1 ) )
+            return line;
+    }
 
-    wxASSERT( oldChain.PointOnEdge( aStartOut, 1 ) );
-    wxASSERT( oldChain.PointOnEdge( aEndOut, 1 ) );
-
-    return line;
+    return std::nullopt;
 }
 
 
@@ -825,8 +828,8 @@ void PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
 }
 
 
-void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                 PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
+                                 BOARD_COMMIT* aCommit )
 {
     aTool->Router()->SyncWorld();
 
@@ -851,7 +854,7 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
     aCommit->Remove( this );
 
-    aTool->ClearRouterCommit();
+    aTool->ClearRouterCommits();
 
     if( baselineValid() )
     {
@@ -861,21 +864,32 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard,
             removeToBaseline( router, layer, *m_baseLineCoupled );
     }
 
-    std::set<BOARD_ITEM*> clearRouterRemovedItems = aTool->GetRouterCommitRemovedItems();
-    std::set<BOARD_ITEM*> clearRouterAddedItems = aTool->GetRouterCommitAddedItems();
+    const std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>& pnsCommits = aTool->GetRouterCommits();
 
-    for( BOARD_ITEM* item : clearRouterRemovedItems )
+    for( const GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT& pnsCommit : pnsCommits )
     {
-        item->ClearSelected();
-        aCommit->Remove( item );
-    }
+        const std::set<BOARD_ITEM*> routerRemovedItems = pnsCommit.removedItems;
+        const std::set<BOARD_ITEM*> routerAddedItems = pnsCommit.addedItems;
 
-    for( BOARD_ITEM* item : clearRouterAddedItems )
-    {
-        aCommit->Add( item );
-    }
+        /*std::cout << "Push commits << " << pnsCommits.size() << " routerRemovedItems "
+                  << routerRemovedItems.size() << " routerAddedItems " << routerAddedItems.size()
+                  << " m_removedItems " << m_removedItems.size() << std::endl;*/
 
-    aCommit->Push( "Remove Tuning Pattern", undoFlags );
+        for( BOARD_ITEM* item : routerRemovedItems )
+        {
+            item->ClearSelected();
+            aCommit->Remove( item );
+        }
+
+        for( BOARD_ITEM* item : routerAddedItems )
+        {
+            aCommit->Add( item );
+        }
+
+        aCommit->Push( "Remove Tuning Pattern", undoFlags );
+
+        undoFlags |= APPEND_UNDO;
+    }
 }
 
 
@@ -891,6 +905,66 @@ PNS::ROUTER_MODE PCB_TUNING_PATTERN::toPNSMode()
 }
 
 
+bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
+{
+    PNS::SOLID queryItem;
+
+    SHAPE_LINE_CHAIN* chain = static_cast<SHAPE_LINE_CHAIN*>( getRectShape().Clone() );
+    queryItem.SetShape( chain );
+    queryItem.SetLayer( m_layer );
+
+    PNS::NODE::OBSTACLES          obstacles;
+    PNS::COLLISION_SEARCH_OPTIONS opts;
+    opts.m_useClearanceEpsilon = false;
+
+    PNS::NODE* world = aRouter->GetWorld();
+    PNS::NODE* branch = world->Branch();
+
+    branch->QueryColliding( &queryItem, obstacles, opts );
+
+    for( const PNS::OBSTACLE& obs : obstacles )
+    {
+        PNS::ITEM* item = obs.m_item;
+
+        if( !item->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
+            continue;
+
+        if( chain->PointInside( item->Anchor( 0 ), 10 )
+            && chain->PointInside( item->Anchor( 1 ), 10 ) )
+        {
+            aRouter->GetInterface()->RemoveItem( item );
+            aRouter->GetWorld()->Remove( item );
+        }
+    }
+
+    if( baselineValid() )
+    {
+        int lineWidth = pcbIUScale.mmToIU( 0.1 ); // TODO
+
+        PNS::LINE recoverLine;
+        recoverLine.SetLayer( m_layer );
+        recoverLine.SetWidth( lineWidth );
+        recoverLine.Line() = *m_baseLine;
+        branch->Add( recoverLine, false );
+
+        if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
+        {
+            PNS::LINE recoverLineCoupled;
+            recoverLineCoupled.SetLayer( m_layer );
+            recoverLineCoupled.SetWidth( lineWidth );
+            recoverLineCoupled.Line() = *m_baseLineCoupled;
+            branch->Add( recoverLineCoupled, false );
+        }
+    }
+
+    aRouter->CommitRouting( branch );
+
+    //wxLogWarning( "PNS baseline recovered" );
+
+    return true;
+}
+
+
 bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
                                           PCB_BASE_EDIT_FRAME* aFrame, SHAPE_LINE_CHAIN& aBaseLine,
                                           bool aPrimary )
@@ -902,7 +976,14 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
                                                    aBaseLine.CPoint( -1 ), aRouter, aLayer,
                                                    startSnapPoint, endSnapPoint );
 
-    wxCHECK( pnsLine, false );
+    if( !pnsLine )
+    {
+        // TODO
+        //recoverBaseline( aRouter );
+        return true;
+    }
+
+    PNS::NODE* branch = world->Branch();
 
     SHAPE_LINE_CHAIN straightChain;
     {
@@ -920,15 +1001,15 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
         if( BOARD_ITEM* item = pnsItem->Parent() )
         {
             aFrame->GetCanvas()->GetView()->Hide( item, true, true );
-            m_removedItems.insert( item );
+            //m_removedItems.insert( item );
         }
     }
 
-    world->Remove( *pnsLine );
+    branch->Remove( *pnsLine );
 
     PNS::LINE straightLine( *pnsLine, straightChain );
 
-    world->Add( straightLine, false );
+    branch->Add( straightLine, false );
 
     if( aPrimary )
     {
@@ -962,6 +1043,8 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
         }
     }
 
+    aRouter->CommitRouting( branch );
+
     return true;
 }
 
@@ -993,7 +1076,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
         }
         else
         {
-            initBaseLines( router, layer, aBoard );
+            //initBaseLines( router, layer, aBoard );
             return false;
         }
 
@@ -1022,12 +1105,16 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
     router->SetMode( toPNSMode() );
 
     if( !router->StartRouting( startSnapPoint, startItem, layer ) )
+    {
+        //recoverBaseline( router );
         return false;
+    }
 
     PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
 
     m_settings.m_keepEndpoints = true; // Required for re-grouping
     placer->UpdateSettings( m_settings );
+
     router->Move( m_end, nullptr );
 
     m_trackWidth = router->Sizes().TrackWidth();
@@ -1069,17 +1156,26 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
     {
         router->FixRoute( m_end, nullptr, true );
         router->StopRouting();
+    }
 
-        std::set<BOARD_ITEM*> routerRemovedItems = aTool->GetRouterCommitRemovedItems();
-        std::set<BOARD_ITEM*> routerAddedItems = aTool->GetRouterCommitAddedItems();
+    for( BOARD_ITEM* item : m_removedItems )
+    {
+        aFrame->GetCanvas()->GetView()->Hide( item, false );
+        aCommit->Remove( item );
+    }
 
-        for( BOARD_ITEM* item : m_removedItems )
-        {
-            aFrame->GetCanvas()->GetView()->Hide( item, false );
-            aCommit->Remove( item );
-        }
+    m_removedItems.clear();
 
-        m_removedItems.clear();
+    const std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>& pnsCommits = aTool->GetRouterCommits();
+
+    for( const GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT& pnsCommit : pnsCommits )
+    {
+        const std::set<BOARD_ITEM*> routerRemovedItems = pnsCommit.removedItems;
+        const std::set<BOARD_ITEM*> routerAddedItems = pnsCommit.addedItems;
+
+        //std::cout << "Push commits << " << pnsCommits.size() << " routerRemovedItems "
+        //          << routerRemovedItems.size() << " routerAddedItems " << routerAddedItems.size()
+        //          << " m_removedItems " << m_removedItems.size() << std::endl;
 
         for( BOARD_ITEM* item : routerRemovedItems )
         {
@@ -1100,12 +1196,14 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
             aCommit->Add( item );
         }
-    }
 
-    if( aCommitMsg.IsEmpty() )
-        aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
-    else
-        aCommit->Push( aCommitMsg, aCommitFlags );
+        if( aCommitMsg.IsEmpty() )
+            aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
+        else
+            aCommit->Push( aCommitMsg, aCommitFlags );
+
+        aCommitFlags |= APPEND_UNDO;
+    }
 
     aFrame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
 }

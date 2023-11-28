@@ -227,7 +227,18 @@ public:
         if( !IsLineCorner( aAllowLockedSegs ) )
             return nullptr;
 
-        return static_cast<LINKED_ITEM*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
+        const std::vector<ITEM*>& citems = m_linkedItems.CItems();
+        const size_t              size = citems.size();
+
+        for( size_t i = 0; i < size; i++ )
+        {
+            ITEM* item = m_linkedItems[i];
+
+            if( item != aCurrent && item->Kind() != VIA_T )
+                return static_cast<LINKED_ITEM*>( item );
+        }
+
+        return nullptr;
     }
 
     VIA* Via() const

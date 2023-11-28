@@ -2376,7 +2376,8 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     {
         if( static_cast<PCB_GENERATOR*>( aItem )->GetItems().empty() )
         {
-            wxASSERT_MSG( false, "Tried to select an empty generator" );
+            if( !m_filter.otherItems )
+                return false;
         }
         else
         {

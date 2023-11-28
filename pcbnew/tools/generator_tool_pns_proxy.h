@@ -36,15 +36,20 @@ class BOARD_ITEM;
 class GENERATOR_TOOL_PNS_PROXY : public PNS::TOOL_BASE
 {
 public:
+    static struct PNS_COMMIT
+    {
+        std::set<BOARD_ITEM*> addedItems;
+        std::set<BOARD_ITEM*> removedItems;
+    };
+
     GENERATOR_TOOL_PNS_PROXY( const std::string& aToolName );
     ~GENERATOR_TOOL_PNS_PROXY();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    void                         ClearRouterCommit();
-    const std::set<BOARD_ITEM*>& GetRouterCommitAddedItems();
-    const std::set<BOARD_ITEM*>& GetRouterCommitRemovedItems();
+    void                                                     ClearRouterCommits();
+    const std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>& GetRouterCommits();
 };
 
 #endif // GENERATOR_TOOL_PNS_PROXY_H
