@@ -537,7 +537,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
     int          layer = GetLayer();
     PNS::ROUTER* router = aTool->Router();
 
-    aTool->ClearRouterCommits();
+    aTool->ClearRouterChanges();
     router->SyncWorld();
 
     PNS::RULE_RESOLVER* resolver = router->GetRuleResolver();
@@ -854,7 +854,7 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 
     aCommit->Remove( this );
 
-    aTool->ClearRouterCommits();
+    aTool->ClearRouterChanges();
 
     if( baselineValid() )
     {
@@ -864,14 +864,14 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
             removeToBaseline( router, layer, *m_baseLineCoupled );
     }
 
-    const std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>& pnsCommits = aTool->GetRouterCommits();
+    const std::vector<GENERATOR_PNS_CHANGES>& allPnsChanges = aTool->GetRouterChanges();
 
-    for( const GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT& pnsCommit : pnsCommits )
+    for( const GENERATOR_PNS_CHANGES& pnsChanges : allPnsChanges )
     {
-        const std::set<BOARD_ITEM*> routerRemovedItems = pnsCommit.removedItems;
-        const std::set<BOARD_ITEM*> routerAddedItems = pnsCommit.addedItems;
+        const std::set<BOARD_ITEM*> routerRemovedItems = pnsChanges.removedItems;
+        const std::set<BOARD_ITEM*> routerAddedItems = pnsChanges.addedItems;
 
-        /*std::cout << "Push commits << " << pnsCommits.size() << " routerRemovedItems "
+        /*std::cout << "Push commits << " << allPnsChanges.size() << " routerRemovedItems "
                   << routerRemovedItems.size() << " routerAddedItems " << routerAddedItems.size()
                   << " m_removedItems " << m_removedItems.size() << std::endl;*/
 
@@ -1166,14 +1166,14 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
     m_removedItems.clear();
 
-    const std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>& pnsCommits = aTool->GetRouterCommits();
+    const std::vector<GENERATOR_PNS_CHANGES>& pnsCommits = aTool->GetRouterChanges();
 
-    for( const GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT& pnsCommit : pnsCommits )
+    for( const GENERATOR_PNS_CHANGES& pnsCommit : pnsCommits )
     {
         const std::set<BOARD_ITEM*> routerRemovedItems = pnsCommit.removedItems;
         const std::set<BOARD_ITEM*> routerAddedItems = pnsCommit.addedItems;
 
-        //std::cout << "Push commits << " << pnsCommits.size() << " routerRemovedItems "
+        //std::cout << "Push commits << " << allPnsChanges.size() << " routerRemovedItems "
         //          << routerRemovedItems.size() << " routerAddedItems " << routerAddedItems.size()
         //          << " m_removedItems " << m_removedItems.size() << std::endl;
 

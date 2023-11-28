@@ -46,13 +46,13 @@ public:
 
     void Commit() override
     { //
-        m_commits.emplace_back();
+        m_changes.emplace_back();
     }
 
     void ClearCommits()
     {
-        m_commits.clear();
-        m_commits.emplace_back();
+        m_changes.clear();
+        m_changes.emplace_back();
     }
 
     void AddItem( PNS::ITEM* aItem ) override
@@ -64,7 +64,7 @@ public:
             aItem->SetParent( brdItem );
             brdItem->ClearFlags();
 
-            m_commits.back().addedItems.emplace( brdItem );
+            m_changes.back().addedItems.emplace( brdItem );
         }
     }
 
@@ -88,27 +88,26 @@ public:
 
         if( parent )
         {
-            m_commits.back().removedItems.emplace( parent );
+            m_changes.back().removedItems.emplace( parent );
         }
     }
 
-    std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>& Commits() { return m_commits; };
+    std::vector<GENERATOR_PNS_CHANGES>& Changes() { return m_changes; };
 
 private:
-    std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT> m_commits;
+    std::vector<GENERATOR_PNS_CHANGES> m_changes;
 };
 
 
-void GENERATOR_TOOL_PNS_PROXY::ClearRouterCommits()
+void GENERATOR_TOOL_PNS_PROXY::ClearRouterChanges()
 {
     static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->ClearCommits();
 }
 
 
-const std::vector<GENERATOR_TOOL_PNS_PROXY::PNS_COMMIT>&
-GENERATOR_TOOL_PNS_PROXY::GetRouterCommits()
+const std::vector<GENERATOR_PNS_CHANGES>& GENERATOR_TOOL_PNS_PROXY::GetRouterChanges()
 {
-    return static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->Commits();
+    return static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->Changes();
 }
 
 
