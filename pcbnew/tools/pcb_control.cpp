@@ -1044,7 +1044,7 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
         return 1;
 
     // Pick a file to append
-    if( !AskLoadBoardFileName( editFrame, &fileName, true ) )
+    if( !AskLoadBoardFileName( editFrame, &fileName, KICTL_KICAD_ONLY ) )
         return 1;
 
     IO_MGR::PCB_FILE_T pluginType =
