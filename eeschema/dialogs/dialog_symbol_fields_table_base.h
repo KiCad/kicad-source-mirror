@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,7 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class BITMAP_BUTTON;
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
@@ -66,18 +65,18 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxChoice* m_cbBomPresets;
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
-		BITMAP_BUTTON* m_separator1;
+		wxStaticLine* m_staticline31;
 		wxCheckBox* m_checkExcludeDNP;
-		BITMAP_BUTTON* m_separator2;
+		wxStaticLine* m_staticline32;
 		wxCheckBox* m_groupSymbolsBox;
-		BITMAP_BUTTON* m_separator3;
+		wxStaticLine* m_staticline3;
 		STD_BITMAP_BUTTON* m_bRefresh;
 		WX_GRID* m_grid;
 		wxStaticText* m_scopeLabel;
 		wxRadioButton* m_radioProject;
 		wxRadioButton* m_radioCurrentSheet;
 		wxRadioButton* m_radioRecursive;
-		BITMAP_BUTTON* m_separator11;
+		wxStaticLine* m_staticline311;
 		wxStaticText* m_crossProbeLabel;
 		wxRadioButton* m_radioHighlight;
 		wxRadioButton* m_radioSelect;
