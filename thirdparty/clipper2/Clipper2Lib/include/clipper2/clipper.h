@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  16 July 2023                                                    *
+* Date      :  18 November 2023                                                *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This module provides a simple interface to the Clipper Library  *
@@ -14,11 +14,11 @@
 #include <type_traits>
 #include <vector>
 
-#include "clipper.core.h"
-#include "clipper.engine.h"
-#include "clipper.offset.h"
-#include "clipper.minkowski.h"
-#include "clipper.rectclip.h"
+#include "clipper2/clipper.core.h"
+#include "clipper2/clipper.engine.h"
+#include "clipper2/clipper.offset.h"
+#include "clipper2/clipper.minkowski.h"
+#include "clipper2/clipper.rectclip.h"
 
 namespace Clipper2Lib {
 
@@ -341,6 +341,19 @@ namespace Clipper2Lib {
           details::OutlinePolyPathD(os, *pp.Child(i), i, preamble + "  ");
     }
 
+    template<typename T, typename U>
+    inline constexpr void MakePathGeneric(const T an_array, 
+      size_t array_size, std::vector<U>& result)
+    {
+      result.reserve(array_size / 2);
+      for (size_t i = 0; i < array_size; i +=2)
+#ifdef USINGZ
+        result.push_back( U{ an_array[i], an_array[i +1], 0} );
+#else
+        result.push_back( U{ an_array[i], an_array[i + 1]} );
+#endif
+    }
+
   } // end details namespace 
 
   inline std::ostream& operator<< (std::ostream& os, const PolyTree64& pp)
@@ -391,22 +404,6 @@ namespace Clipper2Lib {
     return true;
   }
 
-  namespace details {
-
-    template<typename T, typename U>
-    inline constexpr void MakePathGeneric(const T list, size_t size,
-      std::vector<U>& result)
-    {
-      for (size_t i = 0; i < size; ++i)
-#ifdef USINGZ
-        result[i / 2] = U{list[i], list[++i], 0};
-#else
-        result[i / 2] = U{list[i], list[++i]};
-#endif
-    }
-
-  } // end details namespace
-
   template<typename T,
     typename std::enable_if<
       std::is_integral<T>::value &&
@@ -417,7 +414,7 @@ namespace Clipper2Lib {
     const auto size = list.size() - list.size() % 2;
     if (list.size() != size)
       DoError(non_pair_error_i);  // non-fatal without exception handling
-    Path64 result(size / 2);      // else ignores unpaired value
+    Path64 result;
     details::MakePathGeneric(list, size, result);
     return result;
   }
@@ -431,7 +428,7 @@ namespace Clipper2Lib {
   {
     // Make the compiler error on unpaired value (i.e. no runtime effects).
     static_assert(N % 2 == 0, "MakePath requires an even number of arguments");
-    Path64 result(N / 2);
+    Path64 result;
     details::MakePathGeneric(list, N, result);
     return result;
   }
@@ -446,7 +443,7 @@ namespace Clipper2Lib {
     const auto size = list.size() - list.size() % 2;
     if (list.size() != size)
       DoError(non_pair_error_i);  // non-fatal without exception handling
-    PathD result(size / 2);       // else ignores unpaired value
+    PathD result;
     details::MakePathGeneric(list, size, result);
     return result;
   }
@@ -460,7 +457,7 @@ namespace Clipper2Lib {
   {
     // Make the compiler error on unpaired value (i.e. no runtime effects).
     static_assert(N % 2 == 0, "MakePath requires an even number of arguments");
-    PathD result(N / 2);
+    PathD result;
     details::MakePathGeneric(list, N, result);
     return result;
   }
@@ -653,7 +650,7 @@ namespace Clipper2Lib {
   }
 
   template <typename T>
-  inline Path<T> SimplifyPath(const Path<T> path, 
+  inline Path<T> SimplifyPath(const Path<T> &path, 
     double epsilon, bool isClosedPath = true)
   {
     const size_t len = path.size(), high = len -1;
@@ -662,7 +659,7 @@ namespace Clipper2Lib {
 
     std::vector<bool> flags(len);
     std::vector<double> distSqr(len);
-    size_t prior = high, curr = 0, start, next, prior2, next2;
+    size_t prior = high, curr = 0, start, next, prior2;
     if (isClosedPath)
     {
       distSqr[0] = PerpendicDistFromLineSqrd(path[0], path[high], path[1]);
@@ -692,26 +689,25 @@ namespace Clipper2Lib {
       next = GetNext(curr, high, flags);
       if (next == prior) break;
 
+      // flag for removal the smaller of adjacent 'distances'
       if (distSqr[next] < distSqr[curr])
       {
-        flags[next] = true;
-        next = GetNext(next, high, flags);
-        next2 = GetNext(next, high, flags);
-        distSqr[curr] = PerpendicDistFromLineSqrd(path[curr], path[prior], path[next]);
-        if (next != high || isClosedPath)
-          distSqr[next] = PerpendicDistFromLineSqrd(path[next], path[curr], path[next2]);
+        prior2 = prior;
+        prior = curr;
         curr = next;
+        next = GetNext(next, high, flags);
       }
       else
-      {
-        flags[curr] = true;
-        curr = next;
-        next = GetNext(next, high, flags);
         prior2 = GetPrior(prior, high, flags);
+        
+      flags[curr] = true;
+      curr = next;
+      next = GetNext(next, high, flags);
+
+      if (isClosedPath || ((curr != high) && (curr != 0)))
         distSqr[curr] = PerpendicDistFromLineSqrd(path[curr], path[prior], path[next]);
-        if (prior != 0 || isClosedPath)
-          distSqr[prior] = PerpendicDistFromLineSqrd(path[prior], path[prior2], path[curr]);
-      }
+      if (isClosedPath || ((prior != 0) && (prior != high)))
+        distSqr[prior] = PerpendicDistFromLineSqrd(path[prior], path[prior2], path[curr]);
     }
     Path<T> result;
     result.reserve(len);
@@ -721,7 +717,7 @@ namespace Clipper2Lib {
   }
 
   template <typename T>
-  inline Paths<T> SimplifyPaths(const Paths<T> paths, 
+  inline Paths<T> SimplifyPaths(const Paths<T> &paths, 
     double epsilon, bool isClosedPath = true)
   {
     Paths<T> result;

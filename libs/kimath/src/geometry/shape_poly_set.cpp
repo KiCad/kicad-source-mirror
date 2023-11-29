@@ -1217,11 +1217,11 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
         Paths64 paths;
         c.Execute( aAmount, paths );
 
-        Clipper2Lib::SimplifyPaths( paths, std::abs( aAmount ) * coeff, false );
+        Clipper2Lib::SimplifyPaths( paths, std::abs( aAmount ) * coeff, true );
 
         Clipper64 c2;
-        c2.PreserveCollinear = false;
-        c2.ReverseSolution = false;
+        c2.PreserveCollinear( false );
+        c2.ReverseSolution( false );
         c2.AddSubject( paths );
         c2.Execute(ClipType::Union, FillRule::Positive, tree);
     }
@@ -1317,8 +1317,8 @@ void SHAPE_POLY_SET::inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, i
         Clipper2Lib::SimplifyPaths( paths2, std::abs( aAmount ) * coeff, false );
 
         Clipper64 c2;
-        c2.PreserveCollinear = false;
-        c2.ReverseSolution = false;
+        c2.PreserveCollinear( false );
+        c2.ReverseSolution( false );
         c2.AddSubject( paths2 );
         c2.Execute( ClipType::Union, FillRule::Positive, tree );
     }

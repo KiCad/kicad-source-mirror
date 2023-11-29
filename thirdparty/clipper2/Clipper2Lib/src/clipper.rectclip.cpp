@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  6 August 2023                                                   *
+* Date      :  8 September 2023                                                *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  FAST rectangular clipping                                       *
@@ -24,11 +24,11 @@ namespace Clipper2Lib {
     for (const Point64& pt : path2)
     {
       PointInPolygonResult pip = PointInPolygon(pt, path1);
-      switch (pip) 
+      switch (pip)
       {
       case PointInPolygonResult::IsOutside: ++io_count; break;
-        case PointInPolygonResult::IsInside: --io_count; break;
-        default: continue;
+      case PointInPolygonResult::IsInside: --io_count; break;
+      default: continue;
       }
       if (std::abs(io_count) > 1) break;
     }
@@ -66,6 +66,56 @@ namespace Clipper2Lib {
     return true;
   }
 
+  inline bool IsHorizontal(const Point64& pt1, const Point64& pt2)
+  {
+    return pt1.y == pt2.y;
+  }
+
+  inline bool GetSegmentIntersection(const Point64& p1,
+    const Point64& p2, const Point64& p3, const Point64& p4, Point64& ip)
+  {
+    double res1 = CrossProduct(p1, p3, p4);
+    double res2 = CrossProduct(p2, p3, p4);
+    if (res1 == 0)
+    {
+      ip = p1;
+      if (res2 == 0) return false; // segments are collinear
+      else if (p1 == p3 || p1 == p4) return true;
+      //else if (p2 == p3 || p2 == p4) { ip = p2; return true; }
+      else if (IsHorizontal(p3, p4)) return ((p1.x > p3.x) == (p1.x < p4.x));
+      else return ((p1.y > p3.y) == (p1.y < p4.y));
+    }
+    else if (res2 == 0)
+    {
+      ip = p2;
+      if (p2 == p3 || p2 == p4) return true;
+      else if (IsHorizontal(p3, p4)) return ((p2.x > p3.x) == (p2.x < p4.x));
+      else return ((p2.y > p3.y) == (p2.y < p4.y));
+    }
+    if ((res1 > 0) == (res2 > 0)) return false;
+
+    double res3 = CrossProduct(p3, p1, p2);
+    double res4 = CrossProduct(p4, p1, p2);
+    if (res3 == 0)
+    {
+      ip = p3;
+      if (p3 == p1 || p3 == p2) return true;
+      else if (IsHorizontal(p1, p2)) return ((p3.x > p1.x) == (p3.x < p2.x));
+      else return ((p3.y > p1.y) == (p3.y < p2.y));
+    }
+    else if (res4 == 0)
+    {
+      ip = p4;
+      if (p4 == p1 || p4 == p2) return true;
+      else if (IsHorizontal(p1, p2)) return ((p4.x > p1.x) == (p4.x < p2.x));
+      else return ((p4.y > p1.y) == (p4.y < p2.y));
+    }
+    if ((res3 > 0) == (res4 > 0)) return false;
+
+    // segments must intersect to get here
+    return GetIntersectPoint(p1, p2, p3, p4, ip);
+  }
+
   inline bool GetIntersection(const Path64& rectPath,
     const Point64& p, const Point64& p2, Location& loc, Point64& ip)
   {
@@ -74,100 +124,84 @@ namespace Clipper2Lib {
     switch (loc)
     {
     case Location::Left:
-      if (SegmentsIntersect(p, p2, rectPath[0], rectPath[3], true))
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[3], ip);
-      else if (p.y < rectPath[0].y &&
-        SegmentsIntersect(p, p2, rectPath[0], rectPath[1], true))
+      if (GetSegmentIntersection(p, p2, rectPath[0], rectPath[3], ip)) return true;
+      else if ((p.y < rectPath[0].y) && GetSegmentIntersection(p, p2, rectPath[0], rectPath[1], ip))        
       {
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[1], ip);
         loc = Location::Top;
+        return true;
       }
-      else if (SegmentsIntersect(p, p2, rectPath[2], rectPath[3], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[2], rectPath[3], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[2], rectPath[3], ip);
         loc = Location::Bottom;
+        return true;
       }
       else return false;
-      break;
 
     case Location::Top:
-      if (SegmentsIntersect(p, p2, rectPath[0], rectPath[1], true))
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[1], ip);
-      else if (p.x < rectPath[0].x &&
-        SegmentsIntersect(p, p2, rectPath[0], rectPath[3], true))
+      if (GetSegmentIntersection(p, p2, rectPath[0], rectPath[1], ip)) return true;
+      else if ((p.x < rectPath[0].x) && GetSegmentIntersection(p, p2, rectPath[0], rectPath[3], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[3], ip);
         loc = Location::Left;
+        return true;
       }
-      else if (p.x > rectPath[1].x &&
-        SegmentsIntersect(p, p2, rectPath[1], rectPath[2], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[1], rectPath[2], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[1], rectPath[2], ip);
         loc = Location::Right;
+        return true;
       }
       else return false;
-      break;
 
     case Location::Right:
-      if (SegmentsIntersect(p, p2, rectPath[1], rectPath[2], true))
-        GetIntersectPoint(p, p2, rectPath[1], rectPath[2], ip);
-      else if (p.y < rectPath[0].y &&
-        SegmentsIntersect(p, p2, rectPath[0], rectPath[1], true))
+      if (GetSegmentIntersection(p, p2, rectPath[1], rectPath[2], ip)) return true;
+      else if ((p.y < rectPath[1].y) && GetSegmentIntersection(p, p2, rectPath[0], rectPath[1], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[1], ip);
         loc = Location::Top;
+        return true;
       }
-      else if (SegmentsIntersect(p, p2, rectPath[2], rectPath[3], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[2], rectPath[3], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[2], rectPath[3], ip);
         loc = Location::Bottom;
+        return true;
       }
       else return false;
-      break;
 
     case Location::Bottom:
-      if (SegmentsIntersect(p, p2, rectPath[2], rectPath[3], true))
-        GetIntersectPoint(p, p2, rectPath[2], rectPath[3], ip);
-      else if (p.x < rectPath[3].x &&
-        SegmentsIntersect(p, p2, rectPath[0], rectPath[3], true))
+      if (GetSegmentIntersection(p, p2, rectPath[2], rectPath[3], ip)) return true;
+      else if ((p.x < rectPath[3].x) && GetSegmentIntersection(p, p2, rectPath[0], rectPath[3], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[3], ip);
         loc = Location::Left;
+        return true;
       }
-      else if (p.x > rectPath[2].x &&
-        SegmentsIntersect(p, p2, rectPath[1], rectPath[2], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[1], rectPath[2], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[1], rectPath[2], ip);
         loc = Location::Right;
+        return true;
       }
       else return false;
-      break;
 
     default: // loc == rInside
-      if (SegmentsIntersect(p, p2, rectPath[0], rectPath[3], true))
+      if (GetSegmentIntersection(p, p2, rectPath[0], rectPath[3], ip)) 
       {
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[3], ip);
         loc = Location::Left;
+        return true;
       }
-      else if (SegmentsIntersect(p, p2, rectPath[0], rectPath[1], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[0], rectPath[1], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[0], rectPath[1], ip);
         loc = Location::Top;
+        return true;
       }
-      else if (SegmentsIntersect(p, p2, rectPath[1], rectPath[2], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[1], rectPath[2], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[1], rectPath[2], ip);
         loc = Location::Right;
+        return true;
       }
-      else if (SegmentsIntersect(p, p2, rectPath[2], rectPath[3], true))
+      else if (GetSegmentIntersection(p, p2, rectPath[2], rectPath[3], ip))
       {
-        GetIntersectPoint(p, p2, rectPath[2], rectPath[3], ip);
         loc = Location::Bottom;
+        return true;
       }
       else return false;
-      break;
     }
-    return true;
   }
 
   inline Location GetAdjacentLocation(Location loc, bool isClockwise)
