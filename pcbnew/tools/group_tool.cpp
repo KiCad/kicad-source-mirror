@@ -327,6 +327,8 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
             else
                 board->Remove( group );
 
+            canvas()->GetView()->Remove( group );
+
             undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::DELETED ) );
             m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
             group->SetSelected();
