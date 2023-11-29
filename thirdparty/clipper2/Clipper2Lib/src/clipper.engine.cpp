@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  27 August 2023                                                  *
+* Date      :  22 November 2023                                                *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -15,6 +15,7 @@
 #include <algorithm>
 
 #include "clipper2/clipper.engine.h"
+#include "clipper2/clipper.h"
 
 // https://github.com/AngusJohnson/Clipper2/discussions/334
 // #discussioncomment-4248602
@@ -1469,13 +1470,14 @@ namespace Clipper2Lib {
     e2.outrec->front_edge = nullptr;
     e2.outrec->back_edge = nullptr;
     e2.outrec->pts = nullptr;
-    SetOwner(e2.outrec, e1.outrec);
 
     if (IsOpenEnd(e1))
     {
       e2.outrec->pts = e1.outrec->pts;
       e1.outrec->pts = nullptr;
     }
+    else 
+      SetOwner(e2.outrec, e1.outrec);
 
     //and e1 and e2 are maxima and are about to be dropped from the Actives list.
     e1.outrec = nullptr;
@@ -1541,7 +1543,7 @@ namespace Clipper2Lib {
       //NB if preserveCollinear == true, then only remove 180 deg. spikes
       if ((CrossProduct(op2->prev->pt, op2->pt, op2->next->pt) == 0) &&
         (op2->pt == op2->prev->pt ||
-          op2->pt == op2->next->pt || !PreserveCollinear ||
+          op2->pt == op2->next->pt || !preserve_collinear_ ||
           DotProduct(op2->prev->pt, op2->pt, op2->next->pt) < 0))
       {
 
@@ -1706,6 +1708,28 @@ namespace Clipper2Lib {
     return op;
   }
 
+  inline void TrimHorz(Active& horzEdge, bool preserveCollinear)
+  {
+    bool wasTrimmed = false;
+    Point64 pt = NextVertex(horzEdge)->pt;
+    while (pt.y == horzEdge.top.y)
+    {
+      //always trim 180 deg. spikes (in closed paths)
+      //but otherwise break if preserveCollinear = true
+      if (preserveCollinear &&
+        ((pt.x < horzEdge.top.x) != (horzEdge.bot.x < horzEdge.top.x)))
+        break;
+
+      horzEdge.vertex_top = NextVertex(horzEdge);
+      horzEdge.top = pt;
+      wasTrimmed = true;
+      if (IsMaxima(horzEdge)) break;
+      pt = NextVertex(horzEdge)->pt;
+    }
+
+    if (wasTrimmed) SetDx(horzEdge); // +/-infinity
+  }
+
 
   inline void ClipperBase::UpdateEdgeIntoAEL(Active* e)
   {
@@ -1717,9 +1741,13 @@ namespace Clipper2Lib {
 
     if (IsJoined(*e)) Split(*e, e->bot);
 
-    if (IsHorizontal(*e)) return;
-    InsertScanline(e->top.y);
+    if (IsHorizontal(*e))
+    {
+      if (!IsOpen(*e)) TrimHorz(*e, preserve_collinear_);
+      return;
+    }
 
+    InsertScanline(e->top.y);
     CheckJoinLeft(*e, e->bot);
     CheckJoinRight(*e, e->bot, true); // (#500)
   }
@@ -2139,7 +2167,7 @@ namespace Clipper2Lib {
       horz_seg_list_.end(),
       [](HorzSegment& hs) { return UpdateHorzSegment(hs); });
     if (j < 2) return;
-    std::sort(horz_seg_list_.begin(), horz_seg_list_.end(), HorzSegSorter());
+    std::stable_sort(horz_seg_list_.begin(), horz_seg_list_.end(), HorzSegSorter());
 
     HorzSegmentList::iterator hs1 = horz_seg_list_.begin(), hs2;
     HorzSegmentList::iterator hs_end = hs1 +j;
@@ -2451,35 +2479,6 @@ namespace Clipper2Lib {
     }
   }
 
-  inline bool HorzIsSpike(const Active& horzEdge)
-  {
-    Point64 nextPt = NextVertex(horzEdge)->pt;
-    return (nextPt.y == horzEdge.bot.y) &&
-      (horzEdge.bot.x < horzEdge.top.x) != (horzEdge.top.x < nextPt.x);
-  }
-
-  inline void TrimHorz(Active& horzEdge, bool preserveCollinear)
-  {
-    bool wasTrimmed = false;
-    Point64 pt = NextVertex(horzEdge)->pt;
-    while (pt.y == horzEdge.top.y)
-    {
-      //always trim 180 deg. spikes (in closed paths)
-      //but otherwise break if preserveCollinear = true
-      if (preserveCollinear &&
-        ((pt.x < horzEdge.top.x) != (horzEdge.bot.x < horzEdge.top.x)))
-        break;
-
-      horzEdge.vertex_top = NextVertex(horzEdge);
-      horzEdge.top = pt;
-      wasTrimmed = true;
-      if (IsMaxima(horzEdge)) break;
-      pt = NextVertex(horzEdge)->pt;
-    }
-
-    if (wasTrimmed) SetDx(horzEdge); // +/-infinity
-  }
-
   void ClipperBase::DoHorizontal(Active& horz)
     /*******************************************************************************
         * Notes: Horizontal edges (HEs) at scanline intersections (ie at the top or    *
@@ -2505,10 +2504,10 @@ namespace Clipper2Lib {
     else
       vertex_max = GetCurrYMaximaVertex(horz);
 
-    // remove 180 deg.spikes and also simplify
-    // consecutive horizontals when PreserveCollinear = true
-    if (vertex_max && !horzIsOpen && vertex_max != horz.vertex_top)
-      TrimHorz(horz, PreserveCollinear);
+    //// remove 180 deg.spikes and also simplify
+    //// consecutive horizontals when PreserveCollinear = true
+    //if (!horzIsOpen && vertex_max != horz.vertex_top)
+    //  TrimHorz(horz, PreserveCollinear);
 
     int64_t horz_left, horz_right;
     bool is_left_to_right =
@@ -2536,6 +2535,9 @@ namespace Clipper2Lib {
         {
           if (IsHotEdge(horz) && IsJoined(*e))
             Split(*e, e->top);
+
+          //if (IsHotEdge(horz) != IsHotEdge(*e)) 
+          //  DoError(undefined_error_i);
 
           if (IsHotEdge(horz))
           {
@@ -2591,6 +2593,7 @@ namespace Clipper2Lib {
         {
           IntersectEdges(horz, *e, pt);
           SwapPositionsInAEL(horz, *e);
+          CheckJoinLeft(*e, pt);
           horz.curr_x = e->curr_x;
           e = horz.next_in_ael;
         }
@@ -2598,6 +2601,7 @@ namespace Clipper2Lib {
         {
           IntersectEdges(*e, horz, pt);
           SwapPositionsInAEL(*e, horz);
+          CheckJoinRight(*e, pt);
           horz.curr_x = e->curr_x;
           e = horz.prev_in_ael;
         }
@@ -2632,9 +2636,6 @@ namespace Clipper2Lib {
       if (IsHotEdge(horz))
         AddOutPt(horz, horz.top);
       UpdateEdgeIntoAEL(&horz);
-
-      if (PreserveCollinear && !horzIsOpen && HorzIsSpike(horz))
-        TrimHorz(horz, true);
 
       is_left_to_right =
         ResetHorzDirection(horz, vertex_max, horz_left, horz_right);
@@ -2872,7 +2873,7 @@ namespace Clipper2Lib {
     if (!outrec->bounds.IsEmpty()) return true;
     CleanCollinear(outrec);
     if (!outrec->pts || 
-      !BuildPath64(outrec->pts, ReverseSolution, false, outrec->path)){ 
+      !BuildPath64(outrec->pts, reverse_solution_, false, outrec->path)){ 
         return false;}
     outrec->bounds = GetBounds(outrec->path);
     return true;
@@ -2947,7 +2948,7 @@ namespace Clipper2Lib {
       Path64 path;
       if (solutionOpen && outrec->is_open)
       {
-        if (BuildPath64(outrec->pts, ReverseSolution, true, path))
+        if (BuildPath64(outrec->pts, reverse_solution_, true, path))
           solutionOpen->emplace_back(std::move(path));
       }
       else
@@ -2955,7 +2956,7 @@ namespace Clipper2Lib {
         // nb: CleanCollinear can add to outrec_list_
         CleanCollinear(outrec);
         //closed paths should always return a Positive orientation
-        if (BuildPath64(outrec->pts, ReverseSolution, false, path))
+        if (BuildPath64(outrec->pts, reverse_solution_, false, path))
           solutionClosed.emplace_back(std::move(path));
       }
     }
@@ -2978,7 +2979,7 @@ namespace Clipper2Lib {
       if (outrec->is_open)
       {
         Path64 path;
-        if (BuildPath64(outrec->pts, ReverseSolution, true, path))
+        if (BuildPath64(outrec->pts, reverse_solution_, true, path))
           open_paths.push_back(path);
         continue;
       }
@@ -3055,14 +3056,14 @@ namespace Clipper2Lib {
       PathD path;
       if (solutionOpen && outrec->is_open)
       {
-        if (BuildPathD(outrec->pts, ReverseSolution, true, path, invScale_))
+        if (BuildPathD(outrec->pts, reverse_solution_, true, path, invScale_))
           solutionOpen->emplace_back(std::move(path));
       }
       else
       {
         CleanCollinear(outrec);
         //closed paths should always return a Positive orientation
-        if (BuildPathD(outrec->pts, ReverseSolution, false, path, invScale_))
+        if (BuildPathD(outrec->pts, reverse_solution_, false, path, invScale_))
           solutionClosed.emplace_back(std::move(path));
       }
     }
@@ -3084,7 +3085,7 @@ namespace Clipper2Lib {
       if (outrec->is_open)
       {
         PathD path;
-        if (BuildPathD(outrec->pts, ReverseSolution, true, path, invScale_))
+        if (BuildPathD(outrec->pts, reverse_solution_, true, path, invScale_))
           open_paths.push_back(path);
         continue;
       }

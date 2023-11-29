@@ -499,7 +499,7 @@ bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
                 break;
 
             int index_diff = std::abs( firstSegment.Index() - secondSegment.Index() );
-            bool adjacent = ( index_diff == 1) || (index_diff == (segments.size() - 1) ); 
+            bool adjacent = ( index_diff == 1) || (index_diff == ((int)segments.size() - 1) );
 
             // Check whether the two segments built collide, only when they are not adjacent.
             if( !adjacent && firstSegment.Collide( secondSegment, 0 ) )
@@ -1009,28 +1009,27 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
     // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/JoinType.htm
     JoinType joinType = JoinType::Round;    // The way corners are offsetted
     double   miterLimit = 2.0;      // Smaller value when using jtMiter for joinType
-    JoinType miterFallback = JoinType::Square;
 
     switch( aCornerStrategy )
     {
-    case ALLOW_ACUTE_CORNERS:
+    case CORNER_STRATEGY::ALLOW_ACUTE_CORNERS:
         joinType = JoinType::Miter;
         miterLimit = 10;        // Allows large spikes
         break;
 
-    case CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
+    case CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS: // Acute angles are chamfered
         joinType = JoinType::Miter;
         break;
 
-    case ROUND_ACUTE_CORNERS:   // Acute angles are rounded
+    case CORNER_STRATEGY::ROUND_ACUTE_CORNERS: // Acute angles are rounded
         joinType = JoinType::Miter;
         break;
 
-    case CHAMFER_ALL_CORNERS:   // All angles are chamfered.
+    case CORNER_STRATEGY::CHAMFER_ALL_CORNERS: // All angles are chamfered.
         joinType = JoinType::Square;
         break;
 
-    case ROUND_ALL_CORNERS:     // All angles are rounded.
+    case CORNER_STRATEGY::ROUND_ALL_CORNERS: // All angles are rounded.
         joinType = JoinType::Round;
         break;
     }
@@ -1079,11 +1078,11 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
         Paths64 paths;
         c.Execute( aAmount, paths );
 
-        Clipper2Lib::SimplifyPaths( paths, std::abs( aAmount ) * coeff, false );
+        Clipper2Lib::SimplifyPaths( paths, std::abs( aAmount ) * coeff, true );
 
         Clipper64 c2;
-        c2.PreserveCollinear = false;
-        c2.ReverseSolution = false;
+        c2.PreserveCollinear( false );
+        c2.ReverseSolution( false );
         c2.AddSubject( paths );
         c2.Execute(ClipType::Union, FillRule::Positive, tree);
     }

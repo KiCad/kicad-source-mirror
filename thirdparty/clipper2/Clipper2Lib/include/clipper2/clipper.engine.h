@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  26 July 2023                                                    *
+* Date      :  22 November 2023                                                *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -9,8 +9,6 @@
 
 #ifndef CLIPPER_ENGINE_H
 #define CLIPPER_ENGINE_H
-
-constexpr auto CLIPPER2_VERSION = "1.2.2";
 
 #include <cstdlib>
 #include <stdint.h> //#541
@@ -21,12 +19,11 @@ constexpr auto CLIPPER2_VERSION = "1.2.2";
 #include <numeric>
 #include <memory>
 
-#include "clipper.core.h"
+#include "clipper2/clipper.core.h"
 
 #ifdef None
 #undef None
 #endif
-
 namespace Clipper2Lib {
 
 	struct Scanline;
@@ -268,6 +265,8 @@ namespace Clipper2Lib {
 		inline void CheckJoinRight(Active& e,
 			const Point64& pt, bool check_curr_x = false);
 	protected:
+		bool preserve_collinear_ = true;
+		bool reverse_solution_ = false;
 		int error_code_ = 0;
 		bool has_open_paths_ = false;
 		bool succeeded_ = true;
@@ -286,9 +285,11 @@ namespace Clipper2Lib {
 		void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
 	public:
 		virtual ~ClipperBase();
-		int ErrorCode() { return error_code_; };
-		bool PreserveCollinear = true;
-		bool ReverseSolution = false;
+		int ErrorCode() const { return error_code_; };
+		void PreserveCollinear(bool val) { preserve_collinear_ = val; };
+		bool PreserveCollinear() const { return preserve_collinear_;};
+		void ReverseSolution(bool val) { reverse_solution_ = val; };
+		bool ReverseSolution() const { return reverse_solution_; };
 		void Clear();
 		void AddReuseableData(const ReuseableDataContainer64& reuseable_data);
 #ifdef USINGZ
@@ -350,12 +351,12 @@ namespace Clipper2Lib {
 			childs_.resize(0);
 		}
 
-		const PolyPath64* operator [] (size_t index) const
+		PolyPath64* operator [] (size_t index) const
 		{
 			return childs_[index].get(); //std::unique_ptr
 		}
 
-		const PolyPath64* Child(size_t index) const
+		PolyPath64* Child(size_t index) const
 		{
 			return childs_[index].get();
 		}
@@ -407,12 +408,12 @@ namespace Clipper2Lib {
 			childs_.resize(0);
 		}
 
-		const PolyPathD* operator [] (size_t index) const
+		PolyPathD* operator [] (size_t index) const
 		{
 			return childs_[index].get();
 		}
 
-		const PolyPathD* Child(size_t index) const
+		PolyPathD* Child(size_t index) const
 		{
 			return childs_[index].get();
 		}
@@ -421,13 +422,22 @@ namespace Clipper2Lib {
 		PolyPathDList::const_iterator end() const { return childs_.cend(); }
 
 		void SetScale(double value) { scale_ = value; }
-		double Scale() { return scale_; }
+		double Scale() const { return scale_; }
+
 		PolyPathD* AddChild(const Path64& path) override
 		{
 			int error_code = 0;
 			auto p = std::make_unique<PolyPathD>(this);
 			PolyPathD* result = childs_.emplace_back(std::move(p)).get();
 			result->polygon_ = ScalePath<double, int64_t>(path, scale_, error_code);
+			return result;
+		}
+
+		PolyPathD* AddChild(const PathD& path)
+		{
+			auto p = std::make_unique<PolyPathD>(this);
+			PolyPathD* result = childs_.emplace_back(std::move(p)).get();
+			result->polygon_ = path;
 			return result;
 		}
 
