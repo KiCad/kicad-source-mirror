@@ -361,18 +361,20 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     STATUS_TEXT_POPUP statusPopup( frame() );
 
     // Callable lambda to construct the pad number string for the given value
-    const auto constructPadNumber = [&]( int aValue )
-    {
-        return wxString::Format( wxT( "%s%d" ), params->m_prefix.value_or( "" ), aValue );
-    };
+    const auto constructPadNumber =
+            [&]( int aValue )
+            {
+                return wxString::Format( wxT( "%s%d" ), params->m_prefix.value_or( "" ), aValue );
+            };
 
     // Callable lambda to set the popup text for the given pad value
-    const auto setPopupTextForValue = [&]( int aValue )
-    {
-        const wxString msg =
-                _( "Click on pad %s\nPress <esc> to cancel all; double-click to finish" );
-        statusPopup.SetText( wxString::Format( msg, constructPadNumber( aValue ) ) );
-    };
+    const auto setPopupTextForValue =
+            [&]( int aValue )
+            {
+                const wxString msg = _( "Click on pad %s\n"
+                                        "Press <esc> to cancel all; double-click to finish" );
+                statusPopup.SetText( wxString::Format( msg, constructPadNumber( aValue ) ) );
+            };
 
     setPopupTextForValue( seqPadNum );
     statusPopup.Popup();
@@ -629,7 +631,12 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         {
             BOARD_COMMIT commit( frame() );
             commit.Modify( pad->GetParentFootprint() );
-            RecombinePad( pad, false );
+
+            std::vector<PCB_SHAPE*> shapes = RecombinePad( pad, false );
+
+            for( PCB_SHAPE* shape : shapes )
+                commit.Remove( shape );
+
             commit.Push( _( "Edit Pad" ) );
         }
 
