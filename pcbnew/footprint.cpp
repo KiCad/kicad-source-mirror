@@ -2531,6 +2531,8 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, maxError, chainingEpsilon,
                                  true, aErrorHandler ) )
     {
+        int width = 0;
+
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
         m_courtyard_cache_front.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
@@ -2540,7 +2542,9 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
                                      {
                                          return a.second < b.second;
                                      } );
-        int width = max->first;
+
+        if( max != front_width_histogram.end() )
+            width = max->first;
 
         if( width == 0 )
             width = DEFAULT_COURTYARD_WIDTH;
@@ -2553,9 +2557,11 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         SetFlags( MALFORMED_F_COURTYARD );
     }
 
-    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, maxError, chainingEpsilon,
-                                 true, aErrorHandler ) )
+    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, maxError, chainingEpsilon, true,
+                                 aErrorHandler ) )
     {
+        int width = 0;
+
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
         m_courtyard_cache_back.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
@@ -2565,7 +2571,9 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
                                      {
                                          return a.second < b.second;
                                      } );
-        int width = max->first;
+
+        if( max != back_width_histogram.end() )
+            width = max->first;
 
         if( width == 0 )
             width = DEFAULT_COURTYARD_WIDTH;
