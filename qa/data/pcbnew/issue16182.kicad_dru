@@ -1,0 +1,52 @@
+(version 1)
+
+#Clearance for U101
+(rule "U101 clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideCourtyard('U101')"))
+
+#Clearance for U102
+(rule "U102 clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideCourtyard('U102')"))
+
+#Clearance for U201
+(rule "U201 clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideCourtyard('U201')"))
+
+#Clearance for U601
+(rule "U601 clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideCourtyard('U601')"))
+
+#Clearance for J202
+(rule "J202 clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideBackCourtyard('J202')"))
+
+#Clearance for J501
+(rule "J501 clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideCourtyard('J501')"))
+
+#Clearance for TVS diode arrays
+(rule "TVS_Array clearance"
+	(constraint clearance (min 0.127mm))
+	(condition "A.insideCourtyard('D6*') "))
+
+#Ignore silkscreen overlap violations in rule area(s) 'interlocking_terminals'
+(rule allow_silk_clearance_violation
+	(constraint silk_clearance (min -1mm))
+	(condition "A.insideArea('interlocking_terminals')"))
+
+#Ignore courtyard overlap violations in rule area(s) 'interlocking_terminals'
+#Doesn't seem to work, just exclude the violations for now..
+(rule allow_court_clearance_violation
+	(constraint courtyard_clearance (min -2mm))
+	(condition "A.insideArea('interlocking_terminals')"))
+
+#Maintain clearance for outer layer copper pours (else overriden by above)
+(rule "outer_pour clearance"
+	(constraint clearance (min 0.4mm))
+	(condition "A.Name == 'outer_pour'"))

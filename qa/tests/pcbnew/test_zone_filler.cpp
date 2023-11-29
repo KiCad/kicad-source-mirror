@@ -222,3 +222,51 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
     }
 }
 
+
+BOOST_FIXTURE_TEST_CASE( RegressionSliverZoneFillTests, ZONE_FILL_TEST_FIXTURE )
+{
+    std::vector<wxString> tests = { "issue16182"    // Slivers
+                                };
+
+    for( const wxString& relPath : tests )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        KI_TEST::FillZones( m_board.get() );
+
+        std::vector<DRC_ITEM> violations;
+
+        bds.m_DRCEngine->SetViolationHandler(
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+                {
+                    if( aItem->GetErrorCode() == DRCE_COPPER_SLIVER )
+                        violations.push_back( *aItem );
+                } );
+
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+
+        if( violations.empty() )
+        {
+            BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
+            BOOST_TEST_MESSAGE( (const char*)(wxString::Format( "Zone fill copper sliver regression: %s passed", relPath ).utf8_str()) );
+        }
+        else
+        {
+            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
+
+            std::map<KIID, EDA_ITEM*> itemMap;
+            m_board->FillItemMap( itemMap );
+
+            for( const DRC_ITEM& item : violations )
+            {
+                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
+                                                     itemMap ) );
+            }
+
+            BOOST_ERROR( (const char*)(wxString::Format( "Zone fill copper sliver regression: %s failed", relPath ).utf8_str()) );
+        }
+    }
+}
+
