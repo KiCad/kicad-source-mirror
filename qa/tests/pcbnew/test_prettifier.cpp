@@ -56,7 +56,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
     PCB_PLUGIN plugin;
 
     std::string tempLibPath = fmt::format( "{}/prettifier.pretty",
-                                           std::filesystem::temp_directory_path().c_str() );
+                                           std::filesystem::temp_directory_path().generic_string() );
     std::filesystem::remove_all( tempLibPath );
     std::filesystem::create_directory( tempLibPath );
 
