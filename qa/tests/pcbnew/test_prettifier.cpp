@@ -25,6 +25,7 @@
 #include <filesystem>
 #include <fstream>
 #include <fmt/format.h>
+#include <fmt/std.h>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -56,7 +57,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
     PCB_PLUGIN plugin;
 
     std::string tempLibPath = fmt::format( "{}/prettifier.pretty",
-                                           std::filesystem::temp_directory_path().generic_string() );
+                                           std::filesystem::temp_directory_path() );
     std::filesystem::remove_all( tempLibPath );
     std::filesystem::create_directory( tempLibPath );
 
