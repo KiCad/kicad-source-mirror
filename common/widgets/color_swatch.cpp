@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +33,6 @@ wxDEFINE_EVENT( COLOR_SWATCH_CHANGED, wxCommandEvent );
 using KIGFX::COLOR4D;
 
 
-// See selcolor.cpp:
-extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
-
-
 wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackground,
                                    const wxSize& aSize, const wxSize& aCheckerboardSize,
                                    const COLOR4D& aCheckerboardBackground )
@@ -57,66 +53,68 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
                                const wxSize&         aCheckerboardSize,
                                const KIGFX::COLOR4D& aCheckerboardBackground )
 {
-    wxBrush     brush;
-    wxPen       pen;
+    wxBrush brush;
+    wxPen   pen;
 
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
-    if( aColor == COLOR4D::UNSPECIFIED )
+    // Draw a checkerboard
+    COLOR4D white;
+    COLOR4D black;
+    bool    rowCycle;
+
+    if( aCheckerboardBackground.GetBrightness() > 0.4 )
     {
-        // Draw a checkerboard
-        COLOR4D white;
-        COLOR4D black;
-        bool    rowCycle;
-
-        if( aCheckerboardBackground.GetBrightness() > 0.4 )
-        {
-            white = COLOR4D::WHITE;
-            black = white.Darkened( 0.15 );
-            rowCycle = true;
-        }
-        else
-        {
-            black = COLOR4D::BLACK;
-            white = black.Brightened( 0.15 );
-            rowCycle = false;
-        }
-
-        for( int x = aRect.GetLeft(); x < aRect.GetRight(); x += aCheckerboardSize.x )
-        {
-            bool colCycle = rowCycle;
-
-            for( int y = aRect.GetTop(); y < aRect.GetBottom(); y += aCheckerboardSize.y )
-            {
-                COLOR4D color = colCycle ? black : white;
-                brush.SetColour( color.ToColour() );
-                pen.SetColour( color.ToColour() );
-
-                aDC->SetBrush( brush );
-                aDC->SetPen( pen );
-                aDC->DrawRectangle( x, y, aCheckerboardSize.x, aCheckerboardSize.y );
-
-                colCycle = !colCycle;
-            }
-
-            rowCycle = !rowCycle;
-        }
+        white = COLOR4D::WHITE;
+        black = white.Darkened( 0.15 );
+        rowCycle = true;
     }
     else
     {
-        brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
-        pen.SetColour( aBackground.WithAlpha(1.0).ToColour() );
+        black = COLOR4D::BLACK;
+        white = black.Brightened( 0.15 );
+        rowCycle = false;
+    }
 
-        aDC->SetBrush( brush );
-        aDC->SetPen( pen );
-        aDC->DrawRectangle( aRect );
+    for( int x = aRect.GetLeft(); x <= aRect.GetRight(); x += aCheckerboardSize.x )
+    {
+        bool colCycle = rowCycle;
 
-        brush.SetColour( aColor.ToColour() );
-        pen.SetColour( aColor.ToColour() );
+        for( int y = aRect.GetTop(); y <= aRect.GetBottom(); y += aCheckerboardSize.y )
+        {
+            COLOR4D color = colCycle ? black : white;
+            brush.SetColour( color.ToColour() );
+            pen.SetColour( color.ToColour() );
 
-        aDC->SetBrush( brush );
-        aDC->SetPen( pen );
-        aDC->DrawRectangle( aRect );
+            aDC->SetBrush( brush );
+            aDC->SetPen( pen );
+            aDC->DrawRectangle( x, y, aCheckerboardSize.x, aCheckerboardSize.y );
+
+            colCycle = !colCycle;
+        }
+
+        rowCycle = !rowCycle;
+    }
+
+    // Blend fg color with the checkerboard
+    wxColor fg = aColor.ToColour();
+
+    for( int y = aRect.GetTop(); y <= aRect.GetBottom(); y++ )
+    {
+        for( int x = aRect.GetLeft(); x <= aRect.GetRight(); x++ )
+        {
+            wxColor bg;
+            aDC->GetPixel( x, y, &bg );
+
+            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), aColor.a );
+            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), aColor.a );
+            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), aColor.a );
+
+            pen.SetColour( r, g, b );
+            aDC->SetPen( pen );
+
+            aDC->DrawPoint( x, y );
+        }
     }
 }
 
