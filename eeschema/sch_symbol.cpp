@@ -2601,7 +2601,7 @@ static struct SCH_SYMBOL_DESC
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
                 &SCH_SYMBOL::SetExcludedFromBOM, &SCH_SYMBOL::GetExcludedFromBOM ),
                 groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do Not Populate" ),
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not Populate" ),
                 &SCH_SYMBOL::SetDNP, &SCH_SYMBOL::GetDNP ),
                 groupAttributes );
     }
