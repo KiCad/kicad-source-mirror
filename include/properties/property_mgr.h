@@ -41,6 +41,7 @@ class PROPERTY_BASE;
 class TYPE_CAST_BASE;
 class ORIGIN_TRANSFORMS;
 class INSPECTABLE;
+class COMMIT;
 
 ///< Unique type identifier
 using TYPE_ID = size_t;
@@ -55,6 +56,16 @@ using PROPERTY_MAP = std::map<std::pair<size_t, wxString>, ValueType>;
 using PROPERTY_FUNCTOR_MAP = PROPERTY_MAP<std::function<bool( INSPECTABLE* )>>;
 
 using PROPERTY_DISPLAY_ORDER = std::map<PROPERTY_BASE*, int>;
+
+using PROPERTY_LISTENER = std::function<void( INSPECTABLE*, PROPERTY_BASE*, COMMIT* )>;
+
+class PROPERTY_COMMIT_HANDLER
+{
+public:
+    PROPERTY_COMMIT_HANDLER( COMMIT* aCommit );
+
+    ~PROPERTY_COMMIT_HANDLER();
+};
 
 /**
  * Provide class metadata. Each class handled by PROPERTY_MANAGER
@@ -249,11 +260,31 @@ public:
 
     std::vector<TYPE_ID> GetMatchingClasses( PROPERTY_BASE* aProperty );
 
+    /**
+     * Callback to alert the notification system that a property has changed
+     * @param aObject is the object whose property just changed
+     * @param aProperty is the property that changed
+     */
+    void PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aProperty );
+
+    /**
+     * Registers a listener for the given type
+     * @param aType is the type to add the listener for
+     * @param aListenerFunc will be called every time a property on aType is changed
+     */
+    void RegisterListener( TYPE_ID aType, PROPERTY_LISTENER aListenerFunc )
+    {
+        m_listeners[aType].emplace_back( aListenerFunc );
+    }
+
 private:
     PROPERTY_MANAGER() :
-            m_dirty( false )
+            m_dirty( false ),
+            m_managedCommit( nullptr )
     {
     }
+
+    friend class PROPERTY_COMMIT_HANDLER;
 
     ///< Structure holding type meta-data
     struct CLASS_DESC
@@ -324,6 +355,10 @@ private:
 
     /// Flag indicating that the list of properties needs to be rebuild (RebuildProperties())
     bool m_dirty;
+
+    std::map<TYPE_ID, std::vector<PROPERTY_LISTENER>> m_listeners;
+
+    COMMIT* m_managedCommit;
 };
 
 

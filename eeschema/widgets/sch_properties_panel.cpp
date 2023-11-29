@@ -192,6 +192,8 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     SCH_COMMIT changes( m_frame );
     SCH_SCREEN* screen = m_frame->GetScreen();
 
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
     for( EDA_ITEM* edaItem : selection )
     {
         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );

@@ -18,9 +18,11 @@
  */
 
 #include <bus_alias.h>
+#include <commit.h>
 #include <connection_graph.h>
 #include <core/ignore.h>
 #include <core/kicad_algo.h>
+#include <ee_collectors.h>
 #include <erc_settings.h>
 #include <sch_marker.h>
 #include <project.h>
@@ -44,6 +46,75 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
     m_connectionGraph = new CONNECTION_GRAPH( this );
 
     SetProject( aPrj );
+
+    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( SCH_FIELD ),
+            [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
+            {
+                // Special case: propagate value, footprint, and datasheet fields to other units
+                // of a given symbol if they aren't in the selection
+
+                SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem );
+
+                if( !field || !IsValid() )
+                    return;
+
+                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( field->GetParent() );
+
+                if( !symbol || aProperty->Name() != _HKI( "Text" ) )
+                    return;
+
+                // TODO(JE) This will need to get smarter to enable API access
+                SCH_SHEET_PATH sheetPath = CurrentSheet();
+
+                wxString newValue = aItem->Get<wxString>( aProperty );
+
+                wxString ref = symbol->GetRef( &sheetPath );
+                int      unit = symbol->GetUnit();
+                LIB_ID   libId = symbol->GetLibId();
+
+                for( SCH_SHEET_PATH& sheet : GetSheets() )
+                {
+                    std::vector<SCH_SYMBOL*> otherUnits;
+
+                    CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
+
+                    for( SCH_SYMBOL* otherUnit : otherUnits )
+                    {
+                        switch( field->GetId() )
+                        {
+                        case VALUE_FIELD:
+                        {
+                            if( aCommit )
+                                aCommit->Modify( otherUnit, sheet.LastScreen() );
+
+                            otherUnit->SetValueFieldText( newValue );
+                            break;
+                        }
+
+                        case FOOTPRINT_FIELD:
+                        {
+                            if( aCommit )
+                                aCommit->Modify( otherUnit, sheet.LastScreen() );
+
+                            otherUnit->SetFootprintFieldText( newValue );
+                            break;
+                        }
+
+                        case DATASHEET_FIELD:
+                        {
+                            if( aCommit )
+                                aCommit->Modify( otherUnit, sheet.LastScreen() );
+
+                            otherUnit->GetField( DATASHEET_FIELD )->SetText( newValue );
+                            break;
+                        }
+
+                        default:
+                            break;
+                        }
+                    }
+                }
+            } );
 }
 
 

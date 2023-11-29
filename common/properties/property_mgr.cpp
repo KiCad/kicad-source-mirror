@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <inspectable.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
 
@@ -426,4 +427,34 @@ PROPERTY_MANAGER::CLASSES_INFO PROPERTY_MANAGER::GetAllClasses()
     }
 
     return rv;
+}
+
+
+void PROPERTY_MANAGER::PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aProperty )
+{
+    auto listeners = m_listeners.find( TYPE_HASH( *aObject ) );
+
+    if( listeners == m_listeners.end() )
+        return;
+
+    for( const PROPERTY_LISTENER& listener : listeners->second )
+        listener( aObject, aProperty, m_managedCommit );
+}
+
+
+PROPERTY_COMMIT_HANDLER::PROPERTY_COMMIT_HANDLER( COMMIT* aCommit )
+{
+    wxCHECK2_MSG( PROPERTY_MANAGER::Instance().m_managedCommit == nullptr,
+                  return, "Can't have more than one managed commit at a time!" );
+
+    PROPERTY_MANAGER::Instance().m_managedCommit = aCommit;
+}
+
+
+PROPERTY_COMMIT_HANDLER::~PROPERTY_COMMIT_HANDLER()
+{
+    wxASSERT_MSG( PROPERTY_MANAGER::Instance().m_managedCommit != nullptr,
+                  "Something went wrong: m_managedCommit already null!" );
+
+    PROPERTY_MANAGER::Instance().m_managedCommit = nullptr;
 }

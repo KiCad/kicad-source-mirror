@@ -39,31 +39,41 @@ public:
     {
     }
 
-    bool Set( PROPERTY_BASE* aProperty, wxAny& aValue )
+    bool Set( PROPERTY_BASE* aProperty, wxAny& aValue, bool aNotify = true )
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
 
         if( object )
+        {
             aProperty->setter( object, aValue );
 
+            if( aNotify )
+                propMgr.PropertyChanged( this, aProperty );
+        }
+
         return object != nullptr;
     }
 
     template<typename T>
-    bool Set( PROPERTY_BASE* aProperty, T aValue )
+    bool Set( PROPERTY_BASE* aProperty, T aValue, bool aNotify = true )
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         void* object = propMgr.TypeCast( this, TYPE_HASH( *this ), aProperty->OwnerHash() );
 
         if( object )
+        {
             aProperty->set<T>( object, aValue );
+
+            if( aNotify )
+                propMgr.PropertyChanged( this, aProperty );
+        }
 
         return object != nullptr;
     }
 
     template<typename T>
-    bool Set( const wxString& aProperty, T aValue )
+    bool Set( const wxString& aProperty, T aValue, bool aNotify = true )
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         TYPE_ID thisType = TYPE_HASH( *this );
@@ -75,7 +85,12 @@ public:
             object = propMgr.TypeCast( this, thisType, prop->OwnerHash() );
 
             if( object )
+            {
                 prop->set<T>( object, aValue );
+
+                if( aNotify )
+                    propMgr.PropertyChanged( this, prop );
+            }
         }
 
         return object != nullptr;
