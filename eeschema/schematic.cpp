@@ -143,6 +143,7 @@ void SCHEMATIC::GetContextualTextVars( wxArrayString* aVars ) const
     add( wxT( "SHEETPATH" ) );
     add( wxT( "SHEETNAME" ) );
     add( wxT( "FILENAME" ) );
+    add( wxT( "FILEPATH" ) );
     add( wxT( "PROJECTNAME" ) );
 
     if( !CurrentSheet().empty() )
@@ -182,6 +183,12 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
     {
         wxFileName fn( GetFileName() );
         *token = fn.GetFullName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "FILEPATH" ) ) )
+    {
+        wxFileName fn( GetFileName() );
+        *token = fn.GetFullPath();
         return true;
     }
     else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) )

@@ -376,6 +376,9 @@ void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
             };
 
     add( wxT( "LAYER" ) );
+    add( wxT( "FILENAME" ) );
+    add( wxT( "FILEPATH" ) );
+    add( wxT( "PROJECTNAME" ) );
 
     GetTitleBlock().GetContextualTextVars( aVars );
 
@@ -405,6 +408,24 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
                 return true;
             }
         }
+    }
+
+    if( token->IsSameAs( wxT( "FILENAME" ) ) )
+    {
+        wxFileName fn( GetFileName() );
+        *token = fn.GetFullName();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "FILEPATH" ) ) )
+    {
+        wxFileName fn( GetFileName() );
+        *token = fn.GetFullPath();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) && GetProject() )
+    {
+        *token = GetProject()->GetProjectName();
+        return true;
     }
 
     wxString var = *token;

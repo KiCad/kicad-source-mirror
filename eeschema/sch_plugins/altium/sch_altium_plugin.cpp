@@ -1248,6 +1248,8 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
             { "CURRENTDATE",  "CURRENT_DATE" },
             { "COMPANYNAME",  "COMPANY"      },
             { "DOCUMENTNAME", "FILENAME"     },
+            { "DOCUMENTFULLPATHANDNAME",
+                              "FILEPATH"     },
             { "PROJECTNAME",  "PROJECTNAME"  },
         };
 

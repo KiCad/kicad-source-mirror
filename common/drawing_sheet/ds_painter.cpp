@@ -102,6 +102,8 @@ void DS_DRAW_ITEM_LIST::GetTextVars( wxArrayString* aVars )
     aVars->push_back( wxT( "SHEETNAME" ) );
     aVars->push_back( wxT( "SHEETPATH" ) );
     aVars->push_back( wxT( "FILENAME" ) );
+    aVars->push_back( wxT( "FILEPATH" ) );
+    aVars->push_back( wxT( "PROJECTNAME" ) );
     aVars->push_back( wxT( "PAPER" ) );
     aVars->push_back( wxT( "LAYER" ) );
     TITLE_BLOCK::GetContextualTextVars( aVars );
@@ -153,6 +155,17 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                     wxFileName fn( m_fileName );
                     *token = fn.GetFullName();
                     tokenUpdated = true;
+                }
+                else if( token->IsSameAs( wxT( "FILEPATH" ) ) )
+                {
+                    wxFileName fn( m_fileName );
+                    *token = fn.GetFullPath();
+                    return true;
+                }
+                else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) && m_project )
+                {
+                    *token = m_project->GetProjectName();
+                    return true;
                 }
                 else if( token->IsSameAs( wxT( "PAPER" ) ) )
                 {
