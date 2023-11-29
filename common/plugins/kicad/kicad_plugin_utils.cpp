@@ -104,6 +104,9 @@ void Prettify( std::string& aSource, char aQuoteChar )
                 while( seek != aSource.end() && isWhitespace( *seek ) )
                     seek++;
 
+                if( seek == aSource.end() )
+                    return (char)0;
+
                 return *seek;
             };
 
