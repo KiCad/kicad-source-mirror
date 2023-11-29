@@ -2590,11 +2590,13 @@ void OPENGL_GAL::blitCursor()
     VECTOR2D cursorEnd = m_cursorPosition + cursorSize / ( 2 * m_worldScale );
     VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;
 
-    const COLOR4D cColor = getCursorColor();
-    const COLOR4D color( cColor.r * cColor.a, cColor.g * cColor.a, cColor.b * cColor.a, 1.0 );
+    const COLOR4D color = getCursorColor();
 
     glActiveTexture( GL_TEXTURE0 );
     glDisable( GL_TEXTURE_2D );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
     glLineWidth( 1.0 );
     glColor4d( color.r, color.g, color.b, color.a );
 
