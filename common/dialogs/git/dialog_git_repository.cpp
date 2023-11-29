@@ -201,6 +201,7 @@ void DIALOG_GIT_REPOSITORY::OnLocationExit( wxFocusEvent& event )
 {
     updateURLData();
     updateAuthControls();
+    event.Skip();
 }
 
 
