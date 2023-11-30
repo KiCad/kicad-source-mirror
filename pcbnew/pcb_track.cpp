@@ -672,6 +672,9 @@ LSET PCB_VIA::GetLayerSet() const
 {
     LSET layermask;
 
+    if( m_layer < PCBNEW_LAYER_ID_START )
+        return layermask;
+
     if( GetViaType() == VIATYPE::THROUGH )
         layermask = LSET::AllCuMask();
     else
