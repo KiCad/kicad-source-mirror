@@ -53,10 +53,12 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
                                const wxSize&         aCheckerboardSize,
                                const KIGFX::COLOR4D& aCheckerboardBackground )
 {
-    wxBrush brush;
-    wxPen   pen;
+    wxColor fg = aColor.ToColour();
 
+    wxBrush brush;
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
+
+    aDC->SetPen( *wxTRANSPARENT_PEN );
 
     // Draw a checkerboard
     COLOR4D white;
@@ -82,39 +84,22 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
 
         for( int y = aRect.GetTop(); y <= aRect.GetBottom(); y += aCheckerboardSize.y )
         {
-            COLOR4D color = colCycle ? black : white;
-            brush.SetColour( color.ToColour() );
-            pen.SetColour( color.ToColour() );
+            wxColor bg = colCycle ? black.ToColour() : white.ToColour();
+
+            // Blend fg bg with the checkerboard
+            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), aColor.a );
+            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), aColor.a );
+            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), aColor.a );
+
+            brush.SetColour( r, g, b );
 
             aDC->SetBrush( brush );
-            aDC->SetPen( pen );
             aDC->DrawRectangle( x, y, aCheckerboardSize.x, aCheckerboardSize.y );
 
             colCycle = !colCycle;
         }
 
         rowCycle = !rowCycle;
-    }
-
-    // Blend fg color with the checkerboard
-    wxColor fg = aColor.ToColour();
-
-    for( int y = aRect.GetTop(); y <= aRect.GetBottom(); y++ )
-    {
-        for( int x = aRect.GetLeft(); x <= aRect.GetRight(); x++ )
-        {
-            wxColor bg;
-            aDC->GetPixel( x, y, &bg );
-
-            unsigned char r = wxColor::AlphaBlend( fg.Red(), bg.Red(), aColor.a );
-            unsigned char g = wxColor::AlphaBlend( fg.Green(), bg.Green(), aColor.a );
-            unsigned char b = wxColor::AlphaBlend( fg.Blue(), bg.Blue(), aColor.a );
-
-            pen.SetColour( r, g, b );
-            aDC->SetPen( pen );
-
-            aDC->DrawPoint( x, y );
-        }
     }
 }
 
