@@ -256,9 +256,11 @@ private:
 
     size_t shapeHash( const PCB_SHAPE& aShape );
 
-    wxString genString( const wxString& aStr, const char* aPrefix = nullptr );
+    wxString genString( const wxString& aStr, const char* aPrefix = nullptr ) const;
 
     wxString floatVal( double aVal );
+
+    wxString pinName( const PAD* aPad ) const;
 
     void addXY( wxXmlNode* aNode, const VECTOR2I& aVec, const char* aXName = nullptr,
                 const char* aYName = nullptr );

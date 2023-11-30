@@ -152,7 +152,7 @@ wxXmlNode* IPC2581_PLUGIN::appendNode( wxXmlNode* aParent, const wxString& aName
 }
 
 
-wxString IPC2581_PLUGIN::genString( const wxString& aStr, const char* aPrefix )
+wxString IPC2581_PLUGIN::genString( const wxString& aStr, const char* aPrefix ) const
 {
     wxString str;
 
@@ -181,6 +181,33 @@ wxString IPC2581_PLUGIN::genString( const wxString& aStr, const char* aPrefix )
     }
 
     return str;
+}
+
+
+wxString IPC2581_PLUGIN::pinName( const PAD* aPad ) const
+{
+    wxString name = aPad->GetNumber();
+
+    FOOTPRINT* fp = aPad->GetParentFootprint();
+    size_t ii = 0;
+
+    if( name.empty() && fp )
+    {
+        for( ii = 0; ii < fp->GetPadCount(); ++ii )
+        {
+            if( fp->Pads()[ii] == aPad )
+                break;
+        }
+    }
+
+    // Pins are required to have names, so if our pad doesn't have a name, we need to
+    // generate one that is unique
+    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
+        name = wxString::Format( "NPTH%zu", ii );
+    else if( name.empty() )
+        name = wxString::Format( "PAD%zu", ii );
+
+    return genString( name, "PIN" );
 }
 
 
@@ -1514,13 +1541,9 @@ void IPC2581_PLUGIN::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
     if( fp )
     {
         wxXmlNode* pinRefNode = appendNode( padNode, "PinRef" );
-        wxString name = aPad->GetNumber();
 
-        if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
-            name = wxString::Format( "NPTH_%d_%d", aPad->GetX(), aPad->GetY() );
-
-        addAttribute( pinRefNode,  "pin", genString( name, "PIN" ) );
-        addAttribute( pinRefNode,  "componentRef", genString( fp->GetReferenceAsString(), "CMP" ) );
+        addAttribute( pinRefNode,  "pin", pinName( aPad ) );
+        addAttribute( pinRefNode,  "componentRef", genString( fp->GetReference(), "CMP" ) );
     }
 }
 
@@ -2052,19 +2075,12 @@ wxXmlNode* IPC2581_PLUGIN::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     {
         PAD* pad = fp->Pads()[ii];
         wxXmlNode* pinNode = appendNode( packageNode, "Pin" );
-        wxString name = pad->GetNumber();
-
-        // Pins are required to have names, so if our pad doesn't have a name, we need to
-        // generate one that is unique
-        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-            name = wxString::Format( "NPTH%zu", ii );
-        else if( name.empty() )
-            name = wxString::Format( "PAD%zu", ii );
+        wxString name = pinName( pad );
 
         addAttribute( pinNode,  "number", name );
 
         m_net_pin_dict[pad->GetNetCode()].emplace_back(
-                genString( fp->GetReference(), "CMP" ), genString( name, "PIN" ) );
+                genString( fp->GetReference(), "CMP" ), name );
 
         if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
             addAttribute( pinNode,  "electricalType", "MECHANICAL" );
