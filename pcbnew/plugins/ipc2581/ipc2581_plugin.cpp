@@ -168,6 +168,9 @@ wxString IPC2581_PLUGIN::genString( const wxString& aStr, const char* aPrefix )
     }
     else
     {
+        if( aPrefix )
+            str = wxString::Format( "%s_", aPrefix );
+
         for( wxString::const_iterator iter = aStr.begin(); iter != aStr.end(); ++iter )
         {
             if( !m_acceptable_chars.count( *iter ) )
@@ -183,15 +186,15 @@ wxString IPC2581_PLUGIN::genString( const wxString& aStr, const char* aPrefix )
 
 wxString IPC2581_PLUGIN::floatVal( double aVal )
 {
-    // We don't want to output -0.0 as this value is just 0 for fabs
-    if( aVal == -0.0 )
-        aVal = 0.0;
-
     wxString str = wxString::FromCDouble( aVal, m_sigfig );
 
     // Remove all but the last trailing zeros from str
     while( str.EndsWith( wxT( "00" ) ) )
         str.RemoveLast();
+
+    // We don't want to output -0.0 as this value is just 0 for fabs
+    if( str == wxT( "-0.0" ) )
+        return wxT( "0.0" );
 
     return str;
 }
@@ -834,7 +837,7 @@ void IPC2581_PLUGIN::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
     {
     case SHAPE_T::CIRCLE:
     {
-        name = wxString::Format( "CIRCLE_%zu", m_user_shape_dict.size() + 1 );
+        name = wxString::Format( "UCIRCLE_%zu", m_user_shape_dict.size() + 1 );
         m_user_shape_dict.emplace( hash, name );
         int diameter = aShape.GetRadius() * 2.0;
         int width = aShape.GetStroke().GetWidth();
@@ -865,7 +868,7 @@ void IPC2581_PLUGIN::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
 
     case SHAPE_T::RECTANGLE:
     {
-        name = wxString::Format( "RECT_%zu", m_user_shape_dict.size() + 1 );
+        name = wxString::Format( "URECT_%zu", m_user_shape_dict.size() + 1 );
         m_user_shape_dict.emplace( hash, name );
 
         wxXmlNode* entry_node = appendNode( m_shape_user_node, "EntryUser" );
@@ -908,7 +911,7 @@ void IPC2581_PLUGIN::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
 
     case SHAPE_T::POLY:
     {
-        name = wxString::Format( "POLY_%zu", m_user_shape_dict.size() + 1 );
+        name = wxString::Format( "UPOLY_%zu", m_user_shape_dict.size() + 1 );
         m_user_shape_dict.emplace( hash, name );
 
         wxXmlNode* entry_node = appendNode( m_shape_user_node, "EntryUser" );
@@ -2003,7 +2006,7 @@ wxXmlNode* IPC2581_PLUGIN::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
                 case PCB_SHAPE_T:
                 {
                     if( !is_abs )
-                        addLocationNode( output_node, static_cast<PCB_SHAPE*>( item ) );
+                        addLocationNode( output_node, *static_cast<PCB_SHAPE*>( item ) );
 
                     addShape( output_node, *static_cast<PCB_SHAPE*>( item ) );
 
@@ -2134,7 +2137,7 @@ void IPC2581_PLUGIN::generateComponents( wxXmlNode* aStepNode )
         if( !m_OEMRef_dict.emplace( fp, name ).second )
             wxLogError( "Duplicate footprint pointers.  Please report this bug." );
 
-        addAttribute( componentNode,  "part", name );
+        addAttribute( componentNode,  "part", genString( name, "REF" ) );
         addAttribute( componentNode,  "layerRef", m_layer_name_map[fp->GetLayer()] );
 
         if( fp->GetAttributes() & FP_THROUGH_HOLE )
@@ -2241,17 +2244,8 @@ void IPC2581_PLUGIN::generateLayerFeatures( wxXmlNode* aStepNode )
             elements[item->GetLayer()][0].push_back( item );
     }
 
-    for( FOOTPRINT* it_fp : m_board->Footprints() )
+    for( FOOTPRINT* fp : m_board->Footprints() )
     {
-        std::unique_ptr<FOOTPRINT> fp( static_cast<FOOTPRINT*>( it_fp->Clone() ) );
-        fp->SetParentGroup( nullptr );
-        fp->SetPosition( { 0, 0 } );
-
-        if( fp->GetLayer() != F_Cu )
-            fp->Flip( fp->GetPosition(), false );
-
-        fp->SetOrientation( EDA_ANGLE::m_Angle0 );
-
         for( PCB_FIELD* field : fp->GetFields() )
             elements[field->GetLayer()][0].push_back( field );
 
@@ -2271,8 +2265,6 @@ void IPC2581_PLUGIN::generateLayerFeatures( wxXmlNode* aStepNode )
                     elements[layer][pad->GetNetCode()].push_back( pad );
             }
         }
-
-        footprints.push_back( std::move( fp ) );
     }
 
     for( PCB_LAYER_ID layer : layers )
@@ -2696,7 +2688,7 @@ wxXmlNode* IPC2581_PLUGIN::generateAvlSection()
             continue;
 
         wxXmlNode* part = appendNode( avl, "AvlItem" );
-        addAttribute( part,  "OEMDesignNumber", genString( name ) );
+        addAttribute( part,  "OEMDesignNumber", genString( name, "REF" ) );
 
         PCB_FIELD* nums[2] = { fp->GetFieldByName( m_mpn ), fp->GetFieldByName( m_distpn ) };
         PCB_FIELD* company[2] = { fp->GetFieldByName( m_mfg ), nullptr };
