@@ -1039,13 +1039,10 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     {
         connNames.emplace( selectedName );
 
-        if( m_highlightBusMembers )
+        CONNECTION_SUBGRAPH* sg = connectionGraph->FindSubgraphByName( selectedName, sheetPath );
+
+        if( sg && m_highlightBusMembers )
         {
-            CONNECTION_SUBGRAPH* sg = connectionGraph->FindSubgraphByName( selectedName,
-                                                                           sheetPath );
-
-            wxCHECK( sg, 0 );
-
             for( const SCH_ITEM* item : sg->GetItems() )
             {
                 wxCHECK2( item, continue );
@@ -1156,43 +1153,15 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 
             wxCHECK2( itemConn, continue );
 
-            bool selectedIsNoNet = false;
-            CONNECTION_SUBGRAPH* selectedSubgraph = nullptr;
-
-            if( itemConn->Driver() == nullptr )
+            if( !item->IsBrightened() && connNames.count( itemConn->Name() ) )
             {
-                selectedIsNoNet = true;
-                selectedSubgraph = connectionGraph->GetSubgraphForItem( itemConn->Parent() );
+                item->SetBrightened();
+                redrawItem = item;
             }
-
-            if( selectedIsNoNet && selectedSubgraph )
+            else if( item->IsBrightened() && !connNames.count( itemConn->Name() ) )
             {
-                for( SCH_ITEM* subgraphItem : selectedSubgraph->GetItems() )
-                {
-                    if( !item->IsBrightened() && ( item == subgraphItem ) )
-                    {
-                        item->SetBrightened();
-                        redrawItem = item;
-                    }
-                    else if( item->IsBrightened() && ( item != subgraphItem ) )
-                    {
-                        item->ClearBrightened();
-                        redrawItem = item;
-                    }
-                }
-            }
-            else
-            {
-                if( !item->IsBrightened() && connNames.count( itemConn->Name() ) )
-                {
-                    item->SetBrightened();
-                    redrawItem = item;
-                }
-                else if( item->IsBrightened() && !connNames.count( itemConn->Name() ) )
-                {
-                    item->ClearBrightened();
-                    redrawItem = item;
-                }
+                item->ClearBrightened();
+                redrawItem = item;
             }
         }
 
