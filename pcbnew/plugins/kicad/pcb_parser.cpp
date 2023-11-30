@@ -547,11 +547,17 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     break;
 
                 case T_bold:
-                    aText->SetBold( true );
+                {
+                    bool value = parseMaybeAbsentBool( true );
+                    aText->SetBold( value );
+                }
                     break;
 
                 case T_italic:
-                    aText->SetItalic( true );
+                {
+                    bool value = parseMaybeAbsentBool( true );
+                    aText->SetItalic( value );
+                }
                     break;
 
                 default:
