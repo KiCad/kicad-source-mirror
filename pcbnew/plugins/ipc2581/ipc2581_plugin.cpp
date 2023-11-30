@@ -2781,19 +2781,19 @@ void IPC2581_PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard,
         m_version = it->second.c_str()[0];
 
     if( auto it = aProperties->find( "OEMRef" ); it != aProperties->end() )
-        m_OEMRef = it->second;
+        m_OEMRef = it->second.wx_str();
 
     if( auto it = aProperties->find( "mpn" ); it != aProperties->end() )
-        m_mpn = it->second;
+        m_mpn = it->second.wx_str();
 
     if( auto it = aProperties->find( "mfg" ); it != aProperties->end() )
-        m_mfg = it->second;
+        m_mfg = it->second.wx_str();
 
     if( auto it = aProperties->find( "dist" ); it != aProperties->end() )
-        m_dist = it->second;
+        m_dist = it->second.wx_str();
 
     if( auto it = aProperties->find( "distpn" ); it != aProperties->end() )
-        m_distpn = it->second;
+        m_distpn = it->second.wx_str();
 
     if( m_version == 'B' )
     {
