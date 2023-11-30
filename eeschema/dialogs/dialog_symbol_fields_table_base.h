@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -72,11 +72,11 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline3;
 		STD_BITMAP_BUTTON* m_bRefresh;
 		WX_GRID* m_grid;
+		wxStaticLine* m_staticline7;
 		wxStaticText* m_scopeLabel;
 		wxRadioButton* m_radioProject;
 		wxRadioButton* m_radioCurrentSheet;
 		wxRadioButton* m_radioRecursive;
-		wxStaticLine* m_staticline311;
 		wxStaticText* m_crossProbeLabel;
 		wxRadioButton* m_radioHighlight;
 		wxRadioButton* m_radioSelect;
