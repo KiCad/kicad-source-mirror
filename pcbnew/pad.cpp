@@ -415,7 +415,7 @@ std::shared_ptr<SHAPE_SEGMENT> PAD::GetEffectiveHoleShape() const
 
 int PAD::GetBoundingRadius() const
 {
-    if( m_polyDirty )
+    if( m_polyDirty[ERROR_OUTSIDE] )
         BuildEffectivePolygon( ERROR_OUTSIDE );
 
     return m_effectiveBoundingRadius;
