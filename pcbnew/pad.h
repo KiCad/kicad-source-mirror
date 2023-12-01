@@ -33,6 +33,7 @@
 #include <geometry/shape_compound.h>
 #include <pad_shapes.h>
 #include <geometry/eda_angle.h>
+#include <geometry/geometry_utils.h>
 #include <core/arraydim.h>
 
 class PCB_SHAPE;
@@ -410,7 +411,7 @@ public:
      * @param ignoreLineWidth used for edge cuts where the line width is only for visualization.
      */
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                  int aMaxError, ERROR_LOC aErrorLoc,
+                                  int aMaxError, ERROR_LOC aErrorLoc = ERROR_INSIDE,
                                   bool ignoreLineWidth = false ) const override;
 
     /**
@@ -423,7 +424,7 @@ public:
      * @return false if the pad has no hole, true otherwise.
      */
     bool TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
-                                 ERROR_LOC aErrorLoc ) const;
+                                 ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     /**
      * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering
@@ -444,7 +445,7 @@ public:
     GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        FLASHING flashPTHPads = FLASHING::DEFAULT ) const override;
 
-    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( ERROR_LOC aErrorLoc ) const;
+    const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     /**
      * Return a SHAPE_SEGMENT object representing the pad's hole.
@@ -696,7 +697,7 @@ public:
      * the dirty bit.
      */
     void BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const;
-    void BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const;
+    void BuildEffectivePolygon( ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
