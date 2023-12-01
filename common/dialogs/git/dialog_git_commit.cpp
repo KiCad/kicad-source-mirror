@@ -38,68 +38,71 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
                                       const wxString&                defaultAuthorName,
                                       const wxString&                defaultAuthorEmail,
                                       const std::map<wxString, int>& filesToCommit ) :
-        DIALOG_SHIM( parent, wxID_ANY, "Commit Changes" )
+        DIALOG_SHIM( parent, wxID_ANY, _( "Commit Changes" ) )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
 
     // List Control for files to commit
-    m_listCtrl = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                wxLC_REPORT | wxLC_SINGLE_SEL  );
+    m_listCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                 wxLC_REPORT | wxLC_SINGLE_SEL );
 
     // Set up columns
     m_listCtrl->EnableCheckBoxes();
-    m_listCtrl->AppendColumn( "Filename" );
-    m_listCtrl->AppendColumn( "Placeholder" );
+    m_listCtrl->AppendColumn( _( "Filename" ) );
+    m_listCtrl->AppendColumn( _( "Status" ) );
 
     // Set column widths
-    m_listCtrl->SetColumnWidth(0, 200);
-    m_listCtrl->SetColumnWidth(1, 200);
+    m_listCtrl->SetColumnWidth( 0, 200 );
+    m_listCtrl->SetColumnWidth( 1, 200 );
 
     // Set up image list for icons
-    wxImageList* imageList = new wxImageList( 16, 16, true,
-                                         static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
+    wxImageList* imageList = new wxImageList(
+            16, 16, true, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
 
-    imageList->Add( KiBitmap( BITMAPS::git_good_check ) );   // PLACEHOLDER
-    imageList->Add( KiBitmap( BITMAPS::git_good_check ) );   // GIT_STATUS_CURRENT
-    imageList->Add( KiBitmap( BITMAPS::git_modified ) );     // GIT_STATUS_MODIFIED
-    imageList->Add( KiBitmap( BITMAPS::git_add ) );          // GIT_STATUS_ADDED
-    imageList->Add( KiBitmap( BITMAPS::git_delete ) );       // GIT_STATUS_DELETED
-    imageList->Add( KiBitmap( BITMAPS::git_out_of_date ) );  // GIT_STATUS_BEHIND
-    imageList->Add( KiBitmap( BITMAPS::git_changed_ahead ) );// GIT_STATUS_AHEAD
-    imageList->Add( KiBitmap( BITMAPS::git_conflict ) );     // GIT_STATUS_CONFLICTED
+    imageList->Add( KiBitmap( BITMAPS::git_good_check ) );    // PLACEHOLDER
+    imageList->Add( KiBitmap( BITMAPS::git_good_check ) );    // GIT_STATUS_CURRENT
+    imageList->Add( KiBitmap( BITMAPS::git_modified ) );      // GIT_STATUS_MODIFIED
+    imageList->Add( KiBitmap( BITMAPS::git_add ) );           // GIT_STATUS_ADDED
+    imageList->Add( KiBitmap( BITMAPS::git_delete ) );        // GIT_STATUS_DELETED
+    imageList->Add( KiBitmap( BITMAPS::git_out_of_date ) );   // GIT_STATUS_BEHIND
+    imageList->Add( KiBitmap( BITMAPS::git_changed_ahead ) ); // GIT_STATUS_AHEAD
+    imageList->Add( KiBitmap( BITMAPS::git_conflict ) );      // GIT_STATUS_CONFLICTED
 
     // Assign the image list to the list control
-    m_listCtrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
+    m_listCtrl->SetImageList( imageList, wxIMAGE_LIST_SMALL );
 
     // Populate list control with items
-    for ( auto& [filename, status] : filesToCommit )
+    for( auto& [filename, status] : filesToCommit )
     {
         int i = m_listCtrl->GetItemCount();
-        m_listCtrl->InsertItem(i, filename );
+        m_listCtrl->InsertItem( i, filename );
 
         if( status & ( GIT_STATUS_INDEX_NEW | GIT_STATUS_WT_NEW ) )
         {
-            m_listCtrl->SetItem( i, 1, "New" );
-            m_listCtrl->SetItemImage(i, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED ) );
+            m_listCtrl->SetItem( i, 1, _( "New" ) );
+            m_listCtrl->SetItemImage(
+                    i, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED ) );
         }
         else if( status & ( GIT_STATUS_INDEX_MODIFIED | GIT_STATUS_WT_MODIFIED ) )
         {
-            m_listCtrl->SetItem( i, 1, "Modified" );
-            m_listCtrl->SetItemImage(i, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED ) );
+            m_listCtrl->SetItem( i, 1, _( "Modified" ) );
+            m_listCtrl->SetItemImage(
+                    i, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED ) );
         }
         else if( status & ( GIT_STATUS_INDEX_DELETED | GIT_STATUS_WT_DELETED ) )
         {
-            m_listCtrl->SetItem( i, 1, "Deleted" );
-            m_listCtrl->SetItemImage(i, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED ) );
+            m_listCtrl->SetItem( i, 1, _( "Deleted" ) );
+            m_listCtrl->SetItemImage(
+                    i, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED ) );
         }
         else
         {
-            printf(" Unknown status: %d\n", status );
+            printf( " Unknown status: %d\n", status );
         }
     }
 
-    sizer->Add(m_listCtrl, 1, wxEXPAND | wxALL, 5);
+    sizer->Add( m_listCtrl, 1, wxEXPAND | wxALL, 5 );
 
     // Commit Message Text Control
     wxStaticText* commitMessageLabel = new wxStaticText( this, wxID_ANY, _( "Commit Message:" ) );
@@ -121,7 +124,7 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
     wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
 
     m_okButton = new wxButton( this, wxID_OK, _( "OK" ) );
-    wxButton*   cancelButton = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
+    wxButton* cancelButton = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     buttonSizer->Add( cancelButton, 0, wxALL, 5 );
     buttonSizer->Add( m_okButton, 0, wxALL, 5 );
     buttonSizer->Realize();
