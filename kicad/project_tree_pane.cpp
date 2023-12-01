@@ -182,6 +182,7 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
     m_selectedItem = nullptr;
     m_watcherNeedReset = false;
     m_lastGitStatusUpdate = wxDateTime::Now();
+    m_gitLastError = GIT_ERROR_NONE;
 
     m_watcher = nullptr;
     Connect( wxEVT_FSWATCHER,
@@ -1538,13 +1539,20 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         if( error != 0 )
         {
             git_repository_free( repo );
-            DisplayErrorMessage( this, _( "Failed to initialize git project." ),
-                                 git_error_last()->message );
+
+            if( m_gitLastError != git_error_last()->klass )
+            {
+                m_gitLastError = git_error_last()->klass;
+                DisplayErrorMessage( this, _( "Failed to initialize git project." ),
+                                     git_error_last()->message );
+            }
+
             return;
         }
         else
         {
             m_TreeProject->SetGitRepo( repo );
+            m_gitLastError = GIT_ERROR_NONE;
         }
     }
 
@@ -1600,10 +1608,17 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     if( error != GIT_OK )
     {
-        DisplayErrorMessage( this, _( "Failed to set default remote." ),
-                             git_error_last()->message );
+        if( m_gitLastError != git_error_last()->klass )
+        {
+            m_gitLastError = git_error_last()->klass;
+            DisplayErrorMessage( this, _( "Failed to set default remote." ),
+                                 git_error_last()->message );
+        }
+
         return;
     }
+
+    m_gitLastError = GIT_ERROR_NONE;
 
     GIT_PULL_HANDLER handler( repo );
 
@@ -1875,7 +1890,10 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     }
     else
     {
-        wxLogError( "Failed to lookup current branch: %s", giterr_last()->message );
+        if( giterr_last()->klass != m_gitLastError )
+            wxLogError( "Failed to lookup current branch: %s", giterr_last()->message );
+
+        m_gitLastError = giterr_last()->klass;
     }
 
     // Collect a map to easily set the state of each item
@@ -1912,6 +1930,7 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
     if( git_repository_index( &index, repo ) != GIT_OK )
     {
+        m_gitLastError = giterr_last()->klass;
         wxLogDebug( "Failed to get git index: %s", giterr_last()->message );
         return;
     }

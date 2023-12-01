@@ -292,6 +292,7 @@ private:
                                                 // (during an idle time for instance) after
                                                 // the main loop event handler is started
     wxDateTime              m_lastGitStatusUpdate;
+    int                     m_gitLastError;
 
     DECLARE_EVENT_TABLE()
 };
