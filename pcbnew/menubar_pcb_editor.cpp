@@ -166,10 +166,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     submenuFabOutputs->Add( PCB_ACTIONS::generateGerbers );
     submenuFabOutputs->Add( PCB_ACTIONS::generateDrillFiles );
-
-    if( ADVANCED_CFG::GetCfg().m_Enable2581 )
-        submenuFabOutputs->Add( PCB_ACTIONS::generateIPC2581File );
-
+    submenuFabOutputs->Add( PCB_ACTIONS::generateIPC2581File );
     submenuFabOutputs->Add( PCB_ACTIONS::generatePosFile );
     submenuFabOutputs->Add( PCB_ACTIONS::generateReportFile );
     submenuFabOutputs->Add( PCB_ACTIONS::generateD356File );
