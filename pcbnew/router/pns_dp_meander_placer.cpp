@@ -58,6 +58,12 @@ const LINE DP_MEANDER_PLACER::Trace() const
 }
 
 
+const DIFF_PAIR& DP_MEANDER_PLACER::GetOriginPair()
+{
+    return m_originPair;
+}
+
+
 NODE* DP_MEANDER_PLACER::CurrentNode( bool aLoopsRemoved ) const
 {
     if( !m_currentNode )

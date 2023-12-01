@@ -52,6 +52,7 @@
 #include <preview_items/draw_context.h>
 #include <view/view.h>
 
+#include <router/pns_dp_meander_placer.h>
 #include <router/pns_meander_placer_base.h>
 #include <router/pns_meander.h>
 #include <router/pns_kicad_iface.h>
@@ -264,7 +265,7 @@ protected:
 
     bool initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD* aBoard );
 
-    void removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& aBaseLine );
+    bool removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& aBaseLine );
 
     bool resetToBaseline( PNS::ROUTER* aRouter, int aLayer, PCB_BASE_EDIT_FRAME* aFrame,
                           SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary );
@@ -793,7 +794,7 @@ bool PCB_TUNING_PATTERN::initBaseLines( PNS::ROUTER* aRouter, int aLayer, BOARD*
     return true;
 }
 
-void PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
+bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
                                            SHAPE_LINE_CHAIN& aBaseLine )
 {
     VECTOR2I startSnapPoint, endSnapPoint;
@@ -801,7 +802,7 @@ void PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
     std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
                                                    aRouter, aLayer, startSnapPoint, endSnapPoint );
 
-    wxCHECK( pnsLine, /* void */ );
+    wxCHECK( pnsLine, false );
 
     SHAPE_LINE_CHAIN pre;
     SHAPE_LINE_CHAIN mid;
@@ -825,12 +826,16 @@ void PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
 
     for( PNS::LINKED_ITEM* li : straightLine.Links() )
         aRouter->GetInterface()->AddItem( li );
+
+    return true;
 }
 
 
 void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                                  BOARD_COMMIT* aCommit )
 {
+    SetFlags( IN_EDIT );
+
     aTool->Router()->SyncWorld();
 
     PNS::ROUTER* router = aTool->Router();
@@ -858,10 +863,15 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 
     if( baselineValid() )
     {
-        removeToBaseline( router, layer, *m_baseLine );
+        bool success = true;
+
+        success &= removeToBaseline( router, layer, *m_baseLine );
 
         if( m_tuningMode == DIFF_PAIR )
-            removeToBaseline( router, layer, *m_baseLineCoupled );
+            success &= removeToBaseline( router, layer, *m_baseLineCoupled );
+
+        if( !success )
+            recoverBaseline( router );
     }
 
     const std::vector<GENERATOR_PNS_CHANGES>& allPnsChanges = aTool->GetRouterChanges();
@@ -913,6 +923,8 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
     queryItem.SetShape( chain );
     queryItem.SetLayer( m_layer );
 
+    int lineWidth = 0;
+
     PNS::NODE::OBSTACLES          obstacles;
     PNS::COLLISION_SEARCH_OPTIONS opts;
     opts.m_useClearanceEpsilon = false;
@@ -929,18 +941,24 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
         if( !item->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
             continue;
 
+        if( PNS::LINKED_ITEM* li = dynamic_cast<PNS::LINKED_ITEM*>( item ) )
+        {
+            if( lineWidth == 0 || li->Width() < lineWidth )
+                lineWidth = li->Width();
+        }
+
         if( chain->PointInside( item->Anchor( 0 ), 10 )
             && chain->PointInside( item->Anchor( 1 ), 10 ) )
         {
-            aRouter->GetInterface()->RemoveItem( item );
-            aRouter->GetWorld()->Remove( item );
+            branch->Remove( item );
         }
     }
 
+    if( lineWidth == 0 )
+        lineWidth = pcbIUScale.mmToIU( 0.1 ); // Fallback
+
     if( baselineValid() )
     {
-        int lineWidth = pcbIUScale.mmToIU( 0.1 ); // TODO
-
         PNS::LINE recoverLine;
         recoverLine.SetLayer( m_layer );
         recoverLine.SetWidth( lineWidth );
@@ -1117,8 +1135,17 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 
     router->Move( m_end, nullptr );
 
-    m_trackWidth = router->Sizes().TrackWidth();
-    m_diffPairGap = router->Sizes().DiffPairGap();
+    if( PNS::DP_MEANDER_PLACER* dpPlacer = dynamic_cast<PNS::DP_MEANDER_PLACER*>( placer ) )
+    {
+        m_trackWidth = dpPlacer->GetOriginPair().Width();
+        m_diffPairGap = dpPlacer->GetOriginPair().Gap();
+    }
+    else
+    {
+        m_trackWidth = startItem->Width();
+        m_diffPairGap = router->Sizes().DiffPairGap();
+    }
+
     m_settings = placer->MeanderSettings();
     m_lastNetName = iface->GetNetName( startItem->Net() );
     m_tuningStatus = placer->TuningStatus();
@@ -1229,12 +1256,16 @@ void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
 bool PCB_TUNING_PATTERN::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const
 {
     VECTOR2I centerlineOffset;
+    VECTOR2I centerlineOffsetEnd;
 
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+    {
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+        centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
+    }
 
     points->AddPoint( m_origin + centerlineOffset );
-    points->AddPoint( m_end + centerlineOffset );
+    points->AddPoint( m_end + centerlineOffsetEnd );
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                             : SEG( m_origin, m_end );
@@ -1245,7 +1276,7 @@ bool PCB_TUNING_PATTERN::MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) c
     int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
     if( m_tuningMode == DIFF_PAIR )
-        amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
+        amplitude += m_trackWidth + m_diffPairGap;
 
     if( m_settings.m_initialSide == -1 )
         amplitude *= -1;
@@ -1269,9 +1300,13 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
                                                BOARD_COMMIT* aCommit )
 {
     VECTOR2I centerlineOffset;
+    VECTOR2I centerlineOffsetEnd;
 
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+    {
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+        centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
+    }
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                             : SEG( m_origin, m_end );
@@ -1280,7 +1315,7 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
     base.B += centerlineOffset;
 
     m_origin = aEditPoints->Point( 0 ).GetPosition() - centerlineOffset;
-    m_end = aEditPoints->Point( 1 ).GetPosition() - centerlineOffset;
+    m_end = aEditPoints->Point( 1 ).GetPosition() - centerlineOffsetEnd;
 
     if( aEditPoints->Point( 2 ).IsActive() )
     {
@@ -1291,7 +1326,7 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
         value -= KiROUND( m_trackWidth / 2.0 );
 
         if( m_tuningMode == DIFF_PAIR )
-            value -= KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
+            value -= m_trackWidth + m_diffPairGap;
 
         SetMaxAmplitude( KiROUND( value / pcbIUScale.mmToIU( 0.1 ) ) * pcbIUScale.mmToIU( 0.1 ) );
 
@@ -1320,9 +1355,13 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
 bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints )
 {
     VECTOR2I centerlineOffset;
+    VECTOR2I centerlineOffsetEnd;
 
     if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+    {
         centerlineOffset = ( m_baseLineCoupled->CPoint( 0 ) - m_origin ) / 2;
+        centerlineOffsetEnd = ( m_baseLineCoupled->CPoint( -1 ) - m_end ) / 2;
+    }
 
     SEG base = m_baseLine && m_baseLine->SegmentCount() > 0 ? m_baseLine->CSegment( 0 )
                                                             : SEG( m_origin, m_end );
@@ -1333,7 +1372,7 @@ bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoi
     int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
     if( m_tuningMode == DIFF_PAIR )
-        amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
+        amplitude += m_trackWidth + m_diffPairGap;
 
     if( m_settings.m_initialSide == -1 )
         amplitude *= -1;
@@ -1341,7 +1380,7 @@ bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoi
     VECTOR2I widthHandleOffset = ( base.B - base.A ).Perpendicular().Resize( amplitude );
 
     aEditPoints->Point( 0 ).SetPosition( m_origin + centerlineOffset );
-    aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffset );
+    aEditPoints->Point( 1 ).SetPosition( m_end + centerlineOffsetEnd );
 
     aEditPoints->Point( 2 ).SetPosition( base.A + widthHandleOffset );
 
@@ -1356,13 +1395,100 @@ bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoi
 
 SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getRectShape() const
 {
-    SHAPE_LINE_CHAIN chain;
-
     if( m_baseLine )
     {
+        bool singleSided = m_settings.m_singleSided;
+
+        if( singleSided )
+        {
+            SHAPE_LINE_CHAIN clBase = *m_baseLine;
+            SHAPE_LINE_CHAIN left, right;
+
+            if( m_tuningMode != DIFF_PAIR )
+            {
+                int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+
+                SHAPE_LINE_CHAIN chain;
+
+                if( clBase.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
+                                       left, right, true ) )
+                {
+                    chain.Append( m_settings.m_initialSide >= 0 ? right : left );
+                    chain.Append( clBase.Reverse() );
+                    chain.SetClosed( true );
+
+                    return chain;
+                }
+            }
+            else if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
+            {
+                int amplitude =
+                        m_settings.m_maxAmplitude + m_trackWidth + KiROUND( m_diffPairGap / 2.0 );
+
+                SHAPE_LINE_CHAIN clCoupled = *m_baseLineCoupled;
+                SHAPE_LINE_CHAIN chain1, chain2;
+
+                if( clBase.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
+                                       left, right, true ) )
+                {
+                    if( m_settings.m_initialSide >= 0 )
+                        chain1.Append( right );
+                    else
+                        chain1.Append( left );
+
+                    if( clBase.OffsetLine( KiROUND( m_trackWidth / 2.0 ),
+                                           CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left,
+                                           right, true ) )
+                    {
+                        if( m_settings.m_initialSide >= 0 )
+                            chain1.Append( left.Reverse() );
+                        else
+                            chain1.Append( right.Reverse() );
+                    }
+
+                    chain1.SetClosed( true );
+                }
+
+                if( clCoupled.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                          ARC_LOW_DEF, left, right, true ) )
+                {
+                    if( m_settings.m_initialSide >= 0 )
+                        chain2.Append( right );
+                    else
+                        chain2.Append( left );
+
+                    if( clCoupled.OffsetLine( KiROUND( m_trackWidth / 2.0 ),
+                                              CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, left,
+                                              right, true ) )
+                    {
+                        if( m_settings.m_initialSide >= 0 )
+                            chain2.Append( left.Reverse() );
+                        else
+                            chain2.Append( right.Reverse() );
+                    }
+
+                    chain2.SetClosed( true );
+                }
+
+                SHAPE_POLY_SET merged;
+                merged.BooleanAdd( chain1, chain2, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+                if( merged.OutlineCount() > 0 )
+                    return merged.Outline( 0 );
+            }
+        }
+
+        // Not single-sided / fallback
+        SHAPE_POLY_SET   poly;
         SHAPE_LINE_CHAIN cl = *m_baseLine;
 
-        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->SegmentCount() > 0 )
+        int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+
+        if( m_tuningMode == DIFF_PAIR )
+            amplitude += m_trackWidth + m_diffPairGap;
+
+        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled
+            && m_baseLineCoupled->SegmentCount() > 0 )
         {
             for( int i = 0; i < cl.PointCount() - 1 && i < m_baseLineCoupled->PointCount(); ++i )
                 cl.SetPoint( i, ( cl.CPoint( i ) + m_baseLineCoupled->CPoint( i ) ) / 2 );
@@ -1370,49 +1496,14 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getRectShape() const
             cl.SetPoint( -1, ( cl.CPoint( -1 ) + m_baseLineCoupled->CPoint( -1 ) ) / 2 );
         }
 
-        bool singleSided = m_settings.m_singleSided;
-        int  amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+        poly.OffsetLineChain( cl, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
+                              false );
 
-        if( m_tuningMode == DIFF_PAIR )
-        {
-            singleSided = false;
-            amplitude += KiROUND( m_diffPairGap * 1.5 ) + m_trackWidth;
-        }
-
-        if( singleSided )
-        {
-            SHAPE_LINE_CHAIN left, right;
-
-            if( cl.OffsetLine( amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
-                               left, right, true ) )
-            {
-                chain.Append( cl.CPoint( 0 ) );
-                chain.Append( m_settings.m_initialSide >= 0 ? right : left );
-                chain.Append( cl.CPoint( -1 ) );
-
-                return chain;
-            }
-            else
-            {
-                singleSided = false;
-            }
-        }
-
-        if( !singleSided )
-        {
-            SHAPE_POLY_SET poly;
-
-            poly.OffsetLineChain( cl, amplitude * 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                  ARC_LOW_DEF, false );
-
-            if( poly.OutlineCount() > 0 )
-            {
-                chain = poly.Outline( 0 );
-            }
-        }
+        if( poly.OutlineCount() > 0 )
+            return poly.Outline( 0 );
     }
 
-    return chain;
+    return SHAPE_LINE_CHAIN();
 }
 
 

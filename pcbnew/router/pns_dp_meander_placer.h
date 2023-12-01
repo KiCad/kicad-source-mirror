@@ -84,6 +84,8 @@ public:
 
     const LINE Trace() const;
 
+    const DIFF_PAIR& GetOriginPair();
+
     /**
      * Return the most recent world state.
      */

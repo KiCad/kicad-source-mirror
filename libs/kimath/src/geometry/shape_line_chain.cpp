@@ -2169,7 +2169,7 @@ bool SHAPE_LINE_CHAIN::OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy,
         return false;
 
     SHAPE_POLY_SET poly;
-    poly.OffsetLineChain( *this, aAmount * 2, aCornerStrategy, aMaxError, aSimplify );
+    poly.OffsetLineChain( *this, aAmount, aCornerStrategy, aMaxError, aSimplify );
 
     if( poly.OutlineCount() != 1 )
         return false;
