@@ -1222,6 +1222,39 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
 }
 
 
+void SCH_SHEET::RemoveInstance( const KIID_PATH& aInstancePath )
+{
+    // Search for an existing path and remove it if found (should not occur)
+    for( unsigned ii = 0; ii < m_instances.size(); ii++ )
+    {
+        if( m_instances[ii].m_Path == aInstancePath )
+        {
+            wxLogTrace( traceSchSheetPaths, "Removing sheet instance:\n"
+                                            "  sheet path %s\n"
+                                            "  page %s, from project %s.",
+                        aInstancePath.AsString(),
+                        m_instances[ii].m_PageNumber,
+                        m_instances[ii].m_ProjectName );
+
+            m_instances.erase( m_instances.begin() + ii );
+            ii--;
+        }
+    }
+}
+
+
+void SCH_SHEET::AddInstance( const SCH_SHEET_INSTANCE& aInstance )
+{
+    SCH_SHEET_INSTANCE oldInstance;
+
+    if( getInstance( oldInstance, aInstance.m_Path ) )
+        RemoveInstance( aInstance.m_Path );
+
+    m_instances.emplace_back( aInstance );
+
+}
+
+
 bool SCH_SHEET::addInstance( const SCH_SHEET_PATH& aSheetPath )
 {
     wxCHECK( aSheetPath.IsFullPath(), false );

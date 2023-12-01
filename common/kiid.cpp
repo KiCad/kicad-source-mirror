@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney@ieee.org>
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -324,8 +324,11 @@ bool KIID_PATH::MakeRelativeTo( const KIID_PATH& aPath )
 
     for( size_t i = 0; i < aPath.size(); ++i )
     {
-        if( copy.at( i ).AsString() != aPath.at( i ).AsString() )
+        if( copy.at( i ) != aPath.at( i ) )
+        {
+            *this = copy;
             return false; // this path is not contained within aPath
+        }
     }
 
     for( size_t i = aPath.size(); i < copy.size(); ++i )

@@ -1397,6 +1397,8 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
     wxString reference, value, footprint;
     int      unit;
 
+    clipItemPath.push_back( aSymbol->m_Uuid );
+
     if( m_clipboardSymbolInstances.count( clipItemPath ) > 0 )
     {
         SCH_SYMBOL_INSTANCE instance = m_clipboardSymbolInstances.at( clipItemPath );
@@ -1476,17 +1478,59 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
 }
 
 
-void SCH_EDITOR_CONTROL::setClipboardInstances( const SCH_SCREEN* aPastedScreen )
+void SCH_EDITOR_CONTROL::setPastedSheetInstances( const SCH_SHEET* aPastedSheet )
 {
-    m_clipboardSheetInstances.clear();
+    wxCHECK( aPastedSheet, /* void */ );
 
-    for( const SCH_SHEET_INSTANCE& sheet : aPastedScreen->GetSheetInstances() )
-        m_clipboardSheetInstances[sheet.m_Path] = sheet;
+    for( const SCH_SHEET_INSTANCE& sheetInstance : aPastedSheet->GetInstances() )
+    {
+        KIID_PATH pathWithSheet = sheetInstance.m_Path;
 
-    m_clipboardSymbolInstances.clear();
+        pathWithSheet.push_back( aPastedSheet->m_Uuid );
+        m_clipboardSheetInstances[pathWithSheet] = sheetInstance;
+    }
 
-    for( const SCH_SYMBOL_INSTANCE& symbol : aPastedScreen->GetSymbolInstances() )
-        m_clipboardSymbolInstances[symbol.m_Path] = symbol;
+    const SCH_SCREEN* screen = aPastedSheet->GetScreen();
+
+    wxCHECK( screen, /* void */ );
+
+    for( SCH_ITEM* item : screen->Items() )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            const SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            wxCHECK2( sheet, continue );
+
+            setPastedSheetInstances( sheet );
+        }
+    }
+}
+
+
+void SCH_EDITOR_CONTROL::setPastedSymbolInstances( SCH_SCREENS& aScreenList )
+{
+    for( SCH_SCREEN* screen = aScreenList.GetFirst(); screen; screen = aScreenList.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                wxCHECK2( symbol, continue );
+
+                for( const SCH_SYMBOL_INSTANCE& symbolInstance : symbol->GetInstanceReferences() )
+                {
+                    KIID_PATH pathWithSymbol = symbolInstance.m_Path;
+
+                    pathWithSymbol.push_back( symbol->m_Uuid );
+
+                    m_clipboardSymbolInstances[pathWithSymbol] = symbolInstance;
+                }
+            }
+        }
+    }
 }
 
 
@@ -1539,8 +1583,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         tempScreen->Append( text_item );
     }
 
-    // Save loaded screen instances to m_clipboardSheetInstances
-    setClipboardInstances( tempScreen );
+    SCH_SCREENS tempScreens( tempSheet );
+
+    m_clipboardSheetInstances.clear();
+    m_clipboardSymbolInstances.clear();
+
+    // Save pasted sheet and symbol instances.
+    setPastedSheetInstances( &tempSheet );
+    setPastedSymbolInstances( tempScreens );
 
     tempScreen->MigrateSimModels();
 

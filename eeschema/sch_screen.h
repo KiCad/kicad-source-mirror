@@ -545,6 +545,9 @@ public:
      */
     void MigrateSimModels();
 
+    void PruneOrphanedSymbolInstances( const wxString& aProjectName,
+                                       const SCH_SHEET_LIST& aValidSheetPaths );
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_SEXPR_PARSER;   // Only to load instance information from schematic file.
@@ -792,6 +795,9 @@ public:
      * Update the symbol value and footprint instance data for legacy designs.
      */
     void SetLegacySymbolInstanceData();
+
+    void PruneOrphanedSymbolInstances( const wxString& aProjectName,
+                                       const SCH_SHEET_LIST& aValidSheetPaths );
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

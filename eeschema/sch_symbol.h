@@ -146,6 +146,7 @@ public:
                       const KIID_PATH& aSheetPath, bool aTestFromEnd = false ) const;
 
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
+    void RemoveInstance( const KIID_PATH& aInstancePath );
 
     void RemoveAllInstances() { m_instanceReferences.clear(); }
 

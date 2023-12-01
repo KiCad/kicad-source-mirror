@@ -437,6 +437,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // to the s-expression format.
             schematic.ReplaceDuplicateTimeStamps();
 
+            schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(),
+                                                    Schematic().GetSheets() );
+
             // Allow the schematic to be saved to new file format without making any edits.
             OnModify();
         }

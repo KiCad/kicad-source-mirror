@@ -184,7 +184,8 @@ private:
                                       SCH_SHEET_LIST* aPastedSheetsSoFar,
                                       SCH_REFERENCE_LIST* aPastedSymbolsSoFar );
 
-    void setClipboardInstances( const SCH_SCREEN* aPastedScreen );
+    void setPastedSheetInstances( const SCH_SHEET* aPastedSheet );
+    void setPastedSymbolInstances( SCH_SCREENS& aScreenList );
 
     /**
      * Read the footprint info from each line in the stuff file by reference designator.
