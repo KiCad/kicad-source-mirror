@@ -408,6 +408,10 @@ public:
      */
     const SCH_SHEET_INSTANCE& GetRootInstance() const;
 
+    void RemoveInstance( const KIID_PATH& aInstancePath );
+
+    void AddInstance( const SCH_SHEET_INSTANCE& aInstance );
+
     /**
      * Compares page numbers of schematic sheets.
      *

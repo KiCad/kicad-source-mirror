@@ -147,6 +147,8 @@ public:
 
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
 
+    void RemoveInstance( const KIID_PATH& aInstancePath );
+
     void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
                                                  const SCH_SYMBOL_INSTANCE& aRhs ) );
 

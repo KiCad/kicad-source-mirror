@@ -150,7 +150,7 @@ private:
     void loadFile( const wxString& aFileName, SCH_SHEET* aSheet );
 
     void saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic, int aNestLevel,
-                     bool aForClipboard );
+                     bool aForClipboard, const SCH_SHEET_PATH* aRelativePath = nullptr );
     void saveField( SCH_FIELD* aField, int aNestLevel );
     void saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel );
     void saveSheet( SCH_SHEET* aSheet, int aNestLevel );

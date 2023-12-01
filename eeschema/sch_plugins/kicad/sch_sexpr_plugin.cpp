@@ -554,10 +554,6 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         m_out->Print( 0, ")\n\n" );
     }
 
-    // Store the selected sheets instance information
-    SCH_SHEET_LIST selectedSheets;
-    SCH_REFERENCE_LIST selectedSymbols;
-
     for( i = 0; i < aSelection->GetSize(); ++i )
     {
         item = (SCH_ITEM*) aSelection->GetItem( i );
@@ -565,10 +561,8 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         switch( item->Type() )
         {
         case SCH_SYMBOL_T:
-            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSchematic, 0, aForClipboard );
-
-            aSelectionPath->AppendSymbol( selectedSymbols, static_cast<SCH_SYMBOL*>( item ),
-                                          true, true );
+            saveSymbol( static_cast<SCH_SYMBOL*>( item ), aSchematic, 0, aForClipboard,
+                        aSelectionPath );
             break;
 
         case SCH_BITMAP_T:
@@ -577,15 +571,6 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
 
         case SCH_SHEET_T:
             saveSheet( static_cast< SCH_SHEET* >( item ), 0 );
-
-            {
-                SCH_SHEET_PATH subSheetPath = *aSelectionPath;
-                subSheetPath.push_back( static_cast<SCH_SHEET*>( item ) );
-
-                fullHierarchy.GetSheetsWithinPath( selectedSheets, subSheetPath );
-                fullHierarchy.GetSymbolsWithinPath( selectedSymbols, subSheetPath, true, true );
-            }
-
             break;
 
         case SCH_JUNCTION_T:
@@ -625,33 +610,12 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
             wxASSERT( "Unexpected schematic object type in SCH_SEXPR_PLUGIN::Format()" );
         }
     }
-
-    // Make all instance information relative to the selection path
-    KIID_PATH selectionPath = aSelectionPath->Path();
-
-    selectedSheets.SortByPageNumbers();
-    std::vector<SCH_SHEET_INSTANCE> sheetinstances = selectedSheets.GetSheetInstances();
-
-    for( SCH_SHEET_INSTANCE& sheetInstance : sheetinstances )
-    {
-        wxASSERT_MSG( sheetInstance.m_Path.MakeRelativeTo( selectionPath ),
-                      "Sheet is not inside the selection path?" );
-    }
-
-    selectionPath = aSelectionPath->Path();
-    selectedSymbols.SortByReferenceOnly();
-    std::vector<SCH_SYMBOL_INSTANCE> symbolInstances = selectedSymbols.GetSymbolInstances();
-
-    for( SCH_SYMBOL_INSTANCE& symbolInstance : symbolInstances )
-    {
-        wxASSERT_MSG( symbolInstance.m_Path.MakeRelativeTo( selectionPath ),
-                      "Symbol is not inside the selection path?" );
-    }
 }
 
 
 void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
-                                   int aNestLevel, bool aForClipboard )
+                                   int aNestLevel, bool aForClipboard,
+                                   const SCH_SHEET_PATH* aRelativePath )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
@@ -721,6 +685,14 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
                aSymbol->GetUnit() :
                aSymbol->GetInstanceReferences()[0].m_Unit;
 
+    if( aForClipboard && aRelativePath )
+    {
+        SCH_SYMBOL_INSTANCE unitInstance;
+
+        if( aSymbol->GetInstance( unitInstance, aRelativePath->Path() ) )
+            unit = unitInstance.m_Unit;
+    }
+
     m_out->Print( 0, " (unit %d)", unit );
 
     if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
@@ -764,6 +736,14 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
             {
                 field.SetText( aSymbol->GetField( FOOTPRINT_FIELD )->GetText() );
             }
+        }
+        else if( aForClipboard && aSymbol->GetInstanceReferences().size() && aRelativePath
+               && ( id == REFERENCE_FIELD ) )
+        {
+            SCH_SYMBOL_INSTANCE instance;
+
+            if( aSymbol->GetInstance( instance, aRelativePath->Path() ) )
+                field.SetText( instance.m_Reference );
         }
 
         try
@@ -845,7 +825,13 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
                 project_open = true;
             }
 
-            wxString path = aSymbol->GetInstanceReferences()[i].m_Path.AsString();
+            wxString path;
+            KIID_PATH tmp = aSymbol->GetInstanceReferences()[i].m_Path;
+
+            if( aForClipboard && aRelativePath )
+                tmp.MakeRelativeTo( aRelativePath->Path() );
+
+            path = tmp.AsString();
 
             m_out->Print( aNestLevel + 3, "(path %s\n",
                           m_out->Quotew( path ).c_str() );

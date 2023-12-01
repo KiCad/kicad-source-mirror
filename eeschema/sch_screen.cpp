@@ -36,6 +36,7 @@
 #include <project.h>
 #include <project_sch.h>
 #include <reporter.h>
+#include <trace_helpers.h>
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 
@@ -1637,6 +1638,55 @@ size_t SCH_SCREEN::getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol,
 }
 
 
+void SCH_SCREEN::PruneOrphanedSymbolInstances( const wxString& aProjectName,
+                                               const SCH_SHEET_LIST& aValidSheetPaths )
+{
+    wxCHECK( !aProjectName.IsEmpty(), /* void */ );
+
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        wxCHECK2( symbol, continue );
+
+        std::set<SCH_SHEET_PATH> pathsToPrune;
+        const std::vector<SCH_SYMBOL_INSTANCE> instances = symbol->GetInstanceReferences();
+
+        for( const SCH_SYMBOL_INSTANCE& instance : instances )
+        {
+            if( aProjectName != instance.m_ProjectName )
+                continue;
+
+            std::optional<SCH_SHEET_PATH> pathFound =
+                    aValidSheetPaths.GetSheetPathByKIIDPath( instance.m_Path );
+
+            // Check for paths from other projects.
+            if( !pathFound )
+            {
+                pathsToPrune.emplace( pathFound.value() );
+                continue;
+            }
+
+            // Check for paths that are in that are not valid for this screen.
+            for( const SCH_SHEET_PATH& path : aValidSheetPaths )
+            {
+                if( path.LastScreen() == this )
+                    continue;
+
+                 pathsToPrune.emplace( path );
+            }
+        }
+
+        for( const SCH_SHEET_PATH& sheetPath : pathsToPrune )
+        {
+            wxLogTrace( traceSchSheetPaths, wxS( "Pruning project '%s' symbol instance %s." ),
+                        aProjectName, sheetPath.Path().AsString() );
+            symbol->RemoveInstance( sheetPath );
+        }
+    }
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
@@ -2059,4 +2109,15 @@ void SCH_SCREEN::MigrateSimModels()
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
         SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( *symbol, &Schematic()->Prj() );
     }
+}
+
+
+void SCH_SCREENS::PruneOrphanedSymbolInstances( const wxString& aProjectName,
+
+                                                const SCH_SHEET_LIST& aValidSheetPaths )
+{
+    wxCHECK( !aProjectName.IsEmpty(), /* void */ );
+
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+        screen->PruneOrphanedSymbolInstances( aProjectName, aValidSheetPaths );
 }
