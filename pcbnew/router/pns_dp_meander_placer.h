@@ -93,6 +93,8 @@ public:
 
     const ITEM_SET Traces() override;
 
+    const ITEM_SET TunedPath() override;
+
     /// @copydoc PLACEMENT_ALGO::CurrentStart()
     const VECTOR2I& CurrentStart() const override;
 

@@ -301,8 +301,6 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
     m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
 
-    m_statusPopup = std::make_unique<STATUS_MIN_MAX_POPUP>( m_frame );
-
     UpdateStatusBar();
 }
 

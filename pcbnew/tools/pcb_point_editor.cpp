@@ -124,8 +124,6 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
     m_editPoints.reset();
     m_altConstraint.reset();
     getViewControls()->SetAutoPan( false );
-
-    m_statusPopup = std::make_unique<STATUS_MIN_MAX_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
 }
 
 
@@ -492,6 +490,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( !m_editPoints )
         return 0;
 
+    m_preview.FreeItems();
+    getView()->Add( &m_preview );
+
     getView()->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
@@ -582,11 +583,14 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ), { item } );
+                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ),
+                                                           { item } );
 
                     VECTOR2I last = m_editedPoint->GetPosition();
                     VECTOR2I delta = pos - last;
-                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, grid.GetItemGrid( item ), { item } );
+                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {},
+                                                                       grid.GetItemGrid( item ),
+                                                                       { item } );
 
                     if( abs( delta.x ) > grid.GetGrid().x / 2 )
                         pos.x = last.x + deltaGrid.x;
@@ -613,9 +617,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
             else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition(
-                        grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers,
-                                             grid.GetItemGrid( item ), { item } ) );
+                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
+                                                                 snapLayers,
+                                                                 grid.GetItemGrid( item ),
+                                                                 { item } ) );
             }
 
             updateItem( &commit );
@@ -649,8 +654,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             if( item->Type() == PCB_GENERATOR_T )
             {
-                m_statusPopup->Hide();
-
+                m_preview.FreeItems();
                 m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &commit,
                                                  static_cast<PCB_GENERATOR*>( item ) );
             }
@@ -695,6 +699,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
     }
+
+    m_preview.FreeItems();
+    getView()->Remove( &m_preview );
 
     if( m_editPoints )
     {
@@ -1499,9 +1506,14 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         generatorItem->UpdateFromEditPoints( m_editPoints, aCommit );
         m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit, generatorItem );
 
-        m_statusPopup->Popup();
-        generatorItem->UpdateStatus( generatorTool, frame(), m_statusPopup.get() );
-        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+        m_preview.FreeItems();
+
+        for( EDA_ITEM* previewItem : generatorItem->GetPreviewItems( generatorTool, frame(), true ) )
+            m_preview.Add( previewItem );
+
+        generatorTool->Router()->StopRouting();
+
+        getView()->Update( &m_preview );
         break;
     }
 

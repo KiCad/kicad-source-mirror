@@ -38,11 +38,13 @@
 using namespace KIGFX;
 
 
-ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* aView ) :
+ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* aView,
+                                          bool aIsHoverItem ) :
     EDA_ITEM( NOT_USED ),
     m_view( aView ),
     m_shape( nullptr ),
-    m_hole( nullptr )
+    m_hole( nullptr ),
+    m_isHoverItem( aIsHoverItem )
 {
     BOARD_ITEM* boardItem = aItem ? aItem->BoardItem() : nullptr;
 
@@ -94,6 +96,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aVie
     m_width = 0;
     m_depth = 0;
     m_isHeadTrace = false;
+    m_isHoverItem = false;
 }
 
 
@@ -175,6 +178,9 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 
     if( aItem->Marker() & PNS::MK_VIOLATION )
         m_color = COLOR4D( 0, 1, 0, 1 );
+
+    if( m_isHoverItem )
+        m_color = m_color.WithAlpha( 1.0 );
 }
 
 
@@ -501,33 +507,13 @@ const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer ) const
     COLOR4D color = settings->GetLayerColor( aLayer );
 
     if( m_isHeadTrace )
-    {
         return color.Saturate( 1.0 );
-    }
+    else if( m_isHoverItem )
+        return color.Brightened( 0.7 );
 
     return color;
 }
 
-
-const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
-{
-    COLOR4D color;
-
-    switch( aStyle )
-    {
-    case 0:  color = COLOR4D( 0, 1, 0, 1 );       break;
-    case 1:  color = COLOR4D( 1, 0, 0, 1 );       break;
-    case 2:  color = COLOR4D( 1, 1, 0, 1 );       break;
-    case 3:  color = COLOR4D( 0, 0, 1, 1 );       break;
-    case 4:  color = COLOR4D( 1, 1, 1, 1 );       break;
-    case 5:  color = COLOR4D( 1, 1, 0, 1 );       break;
-    case 6:  color = COLOR4D( 0, 1, 1, 1 );       break;
-    case 32: color = COLOR4D( 0, 0, 1, 1 );       break;
-    default: color = COLOR4D( 0.4, 0.4, 0.4, 1 ); break;
-    }
-
-    return color;
-}
 
 const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 10;
 const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 20;

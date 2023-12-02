@@ -63,6 +63,10 @@ public:
     virtual bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                          BOARD_COMMIT* aCommit );
 
+    virtual std::vector<EDA_ITEM*> GetPreviewItems( GENERATOR_TOOL* aTool,
+                                                    PCB_BASE_EDIT_FRAME* aFrame,
+                                                    bool aStatusOnly = false );
+
     virtual bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const;
 
     virtual bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
@@ -92,9 +96,6 @@ public:
     virtual std::vector<std::pair<wxString, wxVariant>> GetRowData();
 
     virtual void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) {};
-
-    virtual void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                               STATUS_MIN_MAX_POPUP* aPopup ) {};
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 

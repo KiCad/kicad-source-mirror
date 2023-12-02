@@ -184,7 +184,7 @@ private:
 
     ARC_EDIT_MODE                 m_arcEditMode;
 
-    std::unique_ptr<STATUS_MIN_MAX_POPUP>        m_statusPopup;
+    PCB_SELECTION                 m_preview;
 
     // Alternative constraint, enabled while a modifier key is held
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;

@@ -114,6 +114,8 @@ public:
 
     int GetTotalPadToDieLength( const LINE& aLine ) const;
 
+    virtual const ITEM_SET TunedPath() = 0;
+
 protected:
     /**
      * Take a set of meanders in \a aTuned and tunes their length to extend the original line

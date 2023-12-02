@@ -62,40 +62,20 @@ public:
     static const int PathOverlayDepth;
 
     ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr);
-    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr);
+    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr,
+                         bool aIsHoverItem = false );
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS::ITEM* aItem );
 
-    void SetColor( const KIGFX::COLOR4D& aColor )
-    {
-        m_color = aColor;
-    }
+    void SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
+    void SetDepth( double aDepth ) { m_depth = aDepth; }
+    void SetWidth( int aWidth ) { m_width = aWidth; }
 
-    void SetDepth( double aDepth )
-    {
-        m_depth = aDepth;
-    }
+    void SetClearance( int aClearance ) { m_clearance = aClearance; }
+    void ShowClearance( bool aEnabled ) { m_showClearance = aEnabled; }
 
-    void SetWidth( double aWidth )
-    {
-        m_width = aWidth;
-    }
-
-    void SetClearance( int aClearance )
-    {
-        m_clearance = aClearance;
-    }
-
-    void ShowClearance( bool aEnabled )
-    {
-        m_showClearance = aEnabled;
-    }
-
-    void SetIsHeadTrace( bool aIsHead )
-    {
-        m_isHeadTrace = aIsHead;
-    }
+    void SetIsHeadTrace( bool aIsHead )  { m_isHeadTrace = aIsHead; }
 
 #if defined(DEBUG)
     void Show( int aA, std::ostream& aB ) const override {}
@@ -124,23 +104,23 @@ public:
     void drawShape( const SHAPE* aShape, KIGFX::GAL* aGal ) const;
 
 private:
-    const KIGFX::COLOR4D assignColor( int aStyle ) const;
     const KIGFX::COLOR4D getLayerColor( int aLayer ) const;
 
 private:
-    KIGFX::VIEW* m_view;
+    KIGFX::VIEW*   m_view;
 
-    SHAPE*       m_shape;
-    SHAPE*       m_hole;
+    SHAPE*         m_shape;
+    SHAPE*         m_hole;
 
-    ITEM_TYPE    m_type;
+    ITEM_TYPE      m_type;
 
-    bool         m_isHeadTrace;
-    int          m_width;
-    int          m_layer;
-    int          m_originLayer;
-    int          m_clearance;
-    bool         m_showClearance;
+    bool           m_isHeadTrace;
+    bool           m_isHoverItem;
+    int            m_width;
+    int            m_layer;
+    int            m_originLayer;
+    int            m_clearance;
+    bool           m_showClearance;
 
     double         m_depth;
 

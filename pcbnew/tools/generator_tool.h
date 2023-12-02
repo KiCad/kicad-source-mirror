@@ -60,9 +60,6 @@ public:
     int RegenerateItem( const TOOL_EVENT& aEvent );
     int GenEditAction( const TOOL_EVENT& aEvent );
 
-    void HighlightNets( BOARD_CONNECTED_ITEM* aStartItem );
-    void UpdateHighlightedNets( BOARD_CONNECTED_ITEM* aStartItem );
-
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

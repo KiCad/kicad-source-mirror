@@ -105,31 +105,4 @@ protected:
 };
 
 
-/**
- * Extension of #STATUS_POPUP for displaying a value with min and max.
- */
-class STATUS_MIN_MAX_POPUP : public STATUS_POPUP
-{
-public:
-    STATUS_MIN_MAX_POPUP( EDA_DRAW_FRAME* aFrame );
-    virtual ~STATUS_MIN_MAX_POPUP() {}
-
-    void SetMinMax( double aMin, double aMax );
-    void ClearMinMax();
-
-    void SetCurrent( double aCurrent, const wxString& aLabel );
-
-protected:
-    EDA_DRAW_FRAME* m_frame;
-    double          m_min;
-    double          m_max;
-
-private:
-    wxStaticText*   m_currentLabel;
-    wxStaticText*   m_currentText;
-    wxStaticText*   m_minText;
-    wxStaticText*   m_maxText;
-    wxStaticBitmap* m_icon;
-};
-
 #endif /* __STATUS_POPUP_H_*/

@@ -73,6 +73,9 @@ public:
     /// @copydoc PLACEMENT_ALGO::Traces()
     const ITEM_SET Traces() override;
 
+    /// @copydoc PNS_MEANDER_PLACER_BASE::TunedPath()
+    const ITEM_SET TunedPath() override;
+
     /// @copydoc PLACEMENT_ALGO::CurrentStart()
     const VECTOR2I& CurrentStart() const override;
 

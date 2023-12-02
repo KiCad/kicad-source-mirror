@@ -358,9 +358,6 @@ private:
     BOARD_CONNECTED_ITEM*     m_pickerItem;
     PCB_TUNING_PATTERN*       m_tuningPattern;
 
-    std::unique_ptr<STATUS_MIN_MAX_POPUP>  m_statusPopup;
-
-
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
     static const unsigned int COORDS_PADDING;      // Padding from coordinates limits for this tool
 

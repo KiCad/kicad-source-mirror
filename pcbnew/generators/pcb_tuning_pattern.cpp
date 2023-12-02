@@ -29,10 +29,10 @@
 #include <magic_enum.hpp>
 
 #include <wx/debug.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_circle.h>
 #include <kiplatform/ui.h>
 #include <dialogs/dialog_unit_entry.h>
-#include <status_popup.h>
 #include <collectors.h>
 #include <scoped_set_reset.h>
 
@@ -50,6 +50,7 @@
 #include <tools/zone_filler_tool.h>
 
 #include <preview_items/draw_context.h>
+#include <preview_items/preview_utils.h>
 #include <view/view.h>
 
 #include <router/pns_dp_meander_placer.h>
@@ -60,6 +61,7 @@
 #include <router/pns_arc.h>
 #include <router/pns_solid.h>
 #include <router/pns_topology.h>
+#include <router/router_preview_item.h>
 
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
@@ -69,6 +71,112 @@ enum LENGTH_TUNING_MODE
     SINGLE,
     DIFF_PAIR,
     DIFF_PAIR_SKEW
+};
+
+
+class TUNING_STATUS_VIEW_ITEM : public EDA_ITEM
+{
+public:
+    TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
+            EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
+            m_frame( aFrame )
+    { }
+
+    wxString GetClass() const override { return wxT( "TUNING_STATUS" ); }
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const override {}
+#endif
+
+    VECTOR2I GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; };
+
+    void SetMinMax( double aMin, double aMax )
+    {
+        m_min = aMin;
+        m_minText = m_frame->MessageTextFromValue( m_min, false );
+        m_max = aMax;
+        m_maxText = m_frame->MessageTextFromValue( m_max, false );
+    }
+
+    void ClearMinMax()
+    {
+        m_min = 0.0;
+        m_minText = wxT( "---" );
+        m_max = std::numeric_limits<double>::max();
+        m_maxText = wxT( "---" );
+    }
+
+    void SetCurrent( double aCurrent, const wxString& aLabel )
+    {
+        m_current = aCurrent;
+        m_currentText = m_frame->MessageTextFromValue( aCurrent );
+        m_currentLabel = aLabel;
+    }
+
+    const BOX2I ViewBBox() const override
+    {
+        BOX2I tmp;
+
+        // this is an edit-time artefact; no reason to try and be smart with the bounding box
+        // (besides, we can't tell the text extents without a view to know what the scale is)
+        tmp.SetMaximum();
+        return tmp;
+    }
+
+    void ViewGetLayers( int aLayers[], int& aCount ) const override
+    {
+        aLayers[0] = LAYER_SELECT_OVERLAY;
+        aLayers[1] = LAYER_GP_OVERLAY;
+        aCount = 2;
+    }
+
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override
+    {
+        KIGFX::GAL*      gal = aView->GetGAL();
+        RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
+        bool             drawingDropShadows = ( aLayer == LAYER_GP_OVERLAY );
+
+        gal->PushDepth();
+        gal->SetLayerDepth( gal->GetMinDepth() );
+
+        if( drawingDropShadows )
+            gal->SetStrokeColor( KIGFX::PREVIEW::GetShadowColor( gal->GetStrokeColor() ) );
+        else
+            gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+
+        std::vector<wxString> strings;
+        wxString status;
+
+        if( m_current < m_min )
+            status = _( "(too short)" );
+        else if( m_current > m_max )
+            status = _( "(too long)" );
+
+        strings.push_back( wxString::Format( wxT( "%s: %s %s" ),
+                                             m_currentLabel,
+                                             m_currentText,
+                                             status ) );
+
+        strings.push_back( wxString::Format( _( "Min: %s" ), m_minText ) );
+        strings.push_back( wxString::Format( _( "Max: %s" ), m_maxText ) );
+
+        KIGFX::PREVIEW::DrawTextNextToCursor( aView, GetPosition(), { -1 , 1 }, strings,
+                                              drawingDropShadows );
+
+        gal->PopDepth();
+    }
+
+protected:
+    EDA_DRAW_FRAME* m_frame;
+    VECTOR2I        m_pos;
+    double          m_min;
+    double          m_max;
+    double          m_current;
+    wxString        m_currentLabel;
+    wxString        m_currentText;
+    wxString        m_minText;
+    wxString        m_maxText;
 };
 
 
@@ -240,8 +348,8 @@ public:
 
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
 
-    void UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                       STATUS_MIN_MAX_POPUP* aPopup ) override;
+    std::vector<EDA_ITEM*> GetPreviewItems( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
+                                            bool aStatusOnly = false ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -1681,32 +1789,49 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 }
 
 
-void PCB_TUNING_PATTERN::UpdateStatus( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                       STATUS_MIN_MAX_POPUP* aPopup )
+std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aTool,
+                                                            PCB_BASE_EDIT_FRAME* aFrame,
+                                                            bool aStatusOnly )
 {
-    auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() );
+    std::vector<EDA_ITEM*> previewItems;
+    KIGFX::VIEW*           view = aFrame->GetCanvas()->GetView();
 
-    if( !placer )
-        return;
+    if( auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() ) )
+    {
+        if( !aStatusOnly )
+        {
+            PNS::ITEM_SET items = placer->TunedPath();
 
-    if( m_unconstrained )
-    {
-        aPopup->ClearMinMax();
-    }
-    else if( m_tuningMode == DIFF_PAIR_SKEW )
-    {
-        aPopup->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
-    }
-    else
-    {
-        aPopup->SetMinMax( (double) m_settings.m_targetLength.Min(),
-                           (double) m_settings.m_targetLength.Max() );
+            for( PNS::ITEM* item : items )
+                previewItems.push_back( new ROUTER_PREVIEW_ITEM( item, view, true ) );
+        }
+
+        TUNING_STATUS_VIEW_ITEM* statusItem = new TUNING_STATUS_VIEW_ITEM( aFrame );
+
+        if( m_unconstrained )
+        {
+            statusItem->ClearMinMax();
+        }
+        else if( m_tuningMode == DIFF_PAIR_SKEW )
+        {
+            statusItem->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
+        }
+        else
+        {
+            statusItem->SetMinMax( (double) m_settings.m_targetLength.Min(),
+                                   (double) m_settings.m_targetLength.Max() );
+        }
+
+        if( m_tuningMode == DIFF_PAIR_SKEW )
+            statusItem->SetCurrent( (double) placer->TuningResult(), _( "Skew" ) );
+        else
+            statusItem->SetCurrent( (double) placer->TuningResult(), _( "Length" ) );
+
+        statusItem->SetPosition( aFrame->GetToolManager()->GetMousePosition() );
+        previewItems.push_back( statusItem );
     }
 
-    if( m_tuningMode == DIFF_PAIR_SKEW )
-        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current skew" ) );
-    else
-        aPopup->SetCurrent( (double) placer->TuningResult(), _( "current length" ) );
+    return previewItems;
 }
 
 
@@ -1912,20 +2037,22 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( dummyPattern )
                 {
-                    m_statusPopup->Popup();
-                    canvas()->SetStatusPopup( m_statusPopup.get() );
-
                     dummyPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
                     dummyPattern->Update( generatorTool, m_board, m_frame, nullptr );
 
-                    dummyPattern->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
-                    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
+                    m_preview.FreeItems();
+
+                    for( EDA_ITEM* item : dummyPattern->GetPreviewItems( generatorTool, m_frame ) )
+                        m_preview.Add( item );
 
                     generatorTool->Router()->StopRouting();
+
+                    m_view->Update( &m_preview );
                 }
                 else
                 {
-                    m_statusPopup->Hide();
+                    m_preview.FreeItems();
+                    m_view->Update( &m_preview );
                 }
             };
 
@@ -1937,13 +2064,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     m_tuningPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
                     m_tuningPattern->Update( generatorTool, m_board, m_frame, nullptr );
 
-                    m_statusPopup->Popup();
-                    canvas()->SetStatusPopup( m_statusPopup.get() );
-
                     m_view->Update( &m_preview );
-
-                    m_tuningPattern->UpdateStatus( generatorTool, m_frame, m_statusPopup.get() );
-                    m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
                 }
             };
 
@@ -1961,8 +2082,6 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 // First click already made; clean up tuning pattern preview
                 m_tuningPattern->EditRevert( generatorTool, m_board, m_frame, nullptr );
-
-                m_preview.Clear();
 
                 delete m_tuningPattern;
                 m_tuningPattern = nullptr;
@@ -1989,18 +2108,10 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 if( collector.GetCount() > 1 )
                     selectionTool->GuessSelectionCandidates( collector, cursorPos );
 
-                BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-                if( !m_pickerItem )
-                {
-                    m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                    generatorTool->HighlightNets( m_pickerItem );
-                }
+                if( collector.GetCount() == 1 )
+                    m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] );
                 else
-                {
-                    m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-                    generatorTool->UpdateHighlightedNets( m_pickerItem );
-                }
+                    m_pickerItem = nullptr;
 
                 updateHoverStatus();
             }
@@ -2018,7 +2129,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 // First click; create a tuning pattern
 
-                generatorTool->HighlightNets( nullptr );
+                m_preview.FreeItems();
 
                 m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
                 m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
@@ -2039,7 +2150,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                         m_tuningPattern->SetEnd( closestPt );
                     }
 
-                    m_preview.Add( m_tuningPattern );
+                    m_preview.Add( m_tuningPattern->Clone() );
                 }
             }
             else if( m_pickerItem && m_tuningPattern )
@@ -2107,12 +2218,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     controls->ShowCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    canvas()->SetStatusPopup( nullptr );
-    m_statusPopup->Hide();
-
-    generatorTool->HighlightNets( nullptr );
-
-    m_preview.Clear();
+    m_preview.FreeItems();
     m_view->Remove( &m_preview );
 
     m_frame->GetCanvas()->Refresh();

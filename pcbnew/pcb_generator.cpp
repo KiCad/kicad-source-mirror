@@ -71,6 +71,14 @@ bool PCB_GENERATOR::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_
 }
 
 
+std::vector<EDA_ITEM*> PCB_GENERATOR::GetPreviewItems( GENERATOR_TOOL* aTool,
+                                                       PCB_BASE_EDIT_FRAME* aFrame,
+                                                       bool aStatusOnly )
+{
+    return std::vector<EDA_ITEM*>();
+}
+
+
 bool PCB_GENERATOR::MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const
 {
     return true;

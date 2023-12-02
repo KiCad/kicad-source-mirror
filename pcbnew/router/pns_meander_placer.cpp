@@ -278,6 +278,11 @@ const ITEM_SET MEANDER_PLACER::Traces()
     return ITEM_SET( &m_currentTrace );
 }
 
+const ITEM_SET MEANDER_PLACER::TunedPath()
+{
+    return m_tunedPath;
+}
+
 const VECTOR2I& MEANDER_PLACER::CurrentStart() const
 {
     return m_currentStart;

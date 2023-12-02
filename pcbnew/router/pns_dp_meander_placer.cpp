@@ -464,6 +464,20 @@ const ITEM_SET DP_MEANDER_PLACER::Traces()
 }
 
 
+const ITEM_SET DP_MEANDER_PLACER::TunedPath()
+{
+    ITEM_SET lines;
+
+    for( ITEM* item : m_tunedPathN )
+        lines.Add( item );
+
+    for( ITEM* item : m_tunedPathP )
+        lines.Add( item );
+
+    return lines;
+}
+
+
 const VECTOR2I& DP_MEANDER_PLACER::CurrentStart() const
 {
     return m_currentStart;
