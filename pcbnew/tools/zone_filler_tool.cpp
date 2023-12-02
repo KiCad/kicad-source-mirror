@@ -197,7 +197,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
 
     for( ZONE* zone : board()->Zones() )
     {
-        if( m_dirtyZoneIDs.count( zone->m_Uuid ) )
+        if( !zone->IsFilled() || m_dirtyZoneIDs.count( zone->m_Uuid ) )
             toFill.push_back( zone );
     }
 
