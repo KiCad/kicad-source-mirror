@@ -81,8 +81,8 @@ public:
                       const wxString& aName, const wxString& aCurrentKey ) :
             DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
     {
-        wxPanel* panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
-        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+        wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+        SetSizer( mainSizer );
 
         /* Dialog layout:
          *
@@ -94,65 +94,58 @@ public:
          * key_label_0      key_label_1         /
          */
 
-        wxStaticText* inst_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
+        wxStaticText* inst_label = new wxStaticText( this, wxID_ANY, wxEmptyString,
                                                      wxDefaultPosition, wxDefaultSize,
                                                      wxALIGN_CENTRE_HORIZONTAL );
 
         inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to cancel..." ) );
-        sizer->Add( inst_label, 0, wxALL, 5 );
+        mainSizer->Add( inst_label, 0, wxALL, 10 );
 
-        sizer->Add( new wxStaticLine( panel ), 0, wxALL | wxEXPAND, 2 );
+        mainSizer->Add( new wxStaticLine( this ), 0, wxALL | wxEXPAND, 2 );
+
+        wxPanel* panelDisplayCurrent = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+        mainSizer->Add( panelDisplayCurrent, 0, wxALL | wxEXPAND, 5 );
 
         wxFlexGridSizer* fgsizer = new wxFlexGridSizer( 2 );
+        panelDisplayCurrent->SetSizer( fgsizer );
 
-        wxStaticText* cmd_label_0 = new wxStaticText( panel, wxID_ANY, _( "Command:" ) );
+        wxStaticText* cmd_label_0 = new wxStaticText( panelDisplayCurrent, wxID_ANY, _( "Command:" ) );
         fgsizer->Add( cmd_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-        wxStaticText* cmd_label_1 = new wxStaticText( panel, wxID_ANY, wxEmptyString );
+        wxStaticText* cmd_label_1 = new wxStaticText( panelDisplayCurrent, wxID_ANY, wxEmptyString );
         cmd_label_1->SetFont( cmd_label_1->GetFont().Bold() );
         cmd_label_1->SetLabel( aName );
         fgsizer->Add( cmd_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-        wxStaticText* key_label_0 = new wxStaticText( panel, wxID_ANY, _( "Current key:" ) );
+        wxStaticText* key_label_0 = new wxStaticText( panelDisplayCurrent, wxID_ANY, _( "Current key:" ) );
         fgsizer->Add( key_label_0, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
-        wxStaticText* key_label_1 = new wxStaticText( panel, wxID_ANY, wxEmptyString );
+        wxStaticText* key_label_1 = new wxStaticText( panelDisplayCurrent, wxID_ANY, wxEmptyString );
         key_label_1->SetFont( key_label_1->GetFont().Bold() );
         key_label_1->SetLabel( aCurrentKey );
         fgsizer->Add( key_label_1, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
 
         fgsizer->AddStretchSpacer();
 
-        wxButton* resetButton = new wxButton( panel, wxID_ANY, _( "Clear assigned hotkey" ), wxDefaultPosition, wxDefaultSize, 0 );
-        fgsizer->Add( resetButton, 0, wxALL | wxALIGN_CENTRE_VERTICAL, 5 );
+        wxButton* resetButton = new wxButton( this, wxID_ANY, _( "Clear assigned hotkey" ), wxDefaultPosition, wxDefaultSize, 0 );
 
-        sizer->Add( fgsizer, 1, wxEXPAND );
-
-        // Wrap the sizer in a second to give a larger border around the whole dialog
-        wxBoxSizer* outer_sizer = new wxBoxSizer( wxVERTICAL );
-        outer_sizer->Add( sizer, 0, wxALL | wxEXPAND, 10 );
-        panel->SetSizer( outer_sizer );
+        mainSizer->Add( resetButton, 0, wxALL | wxALIGN_CENTRE_HORIZONTAL, 5 );
 
         Layout();
-        outer_sizer->Fit( this );
+        mainSizer->Fit( this );
         Center();
 
         SetMinClientSize( GetClientSize() );
 
         // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events, including
         // specials like Tab and Return, are received, particularly on MSW.
-        panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
-        panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
-        panel->Bind( wxEVT_KEY_UP, &HK_PROMPT_DIALOG::OnKeyUp, this );
+        panelDisplayCurrent->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
+        panelDisplayCurrent->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
+        panelDisplayCurrent->Bind( wxEVT_KEY_UP, &HK_PROMPT_DIALOG::OnKeyUp, this );
 
-        // Also bind all the event handlers to the button because it is most likely to get focus and
-        // just having these bound to the panel doesn't register the event when that happens.
-        resetButton->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
-        resetButton->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
-        resetButton->Bind( wxEVT_KEY_UP, &HK_PROMPT_DIALOG::OnKeyUp, this );
         resetButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &HK_PROMPT_DIALOG::onResetButton, this );
 
-        SetInitialFocus( panel );
+        SetInitialFocus( panelDisplayCurrent );
     }
 
     static std::optional<long> PromptForKey( wxWindow* aParent, const wxString& aName,
@@ -165,7 +158,14 @@ public:
             if( dialog.m_resetkey )
                 return std::make_optional( 0 );
             else
-                return std::make_optional( WIDGET_HOTKEY_LIST::MapKeypressToKeycode( dialog.m_event ) );
+            {
+                long key = WIDGET_HOTKEY_LIST::MapKeypressToKeycode( dialog.m_event );
+
+                if( key )
+                    return std::make_optional( key );
+                else    // The ESC key was used to close the dialog
+                    return std::nullopt;
+            }
         }
         else
         {
