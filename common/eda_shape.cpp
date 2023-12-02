@@ -1409,7 +1409,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
     case SHAPE_T::ARC:
     {
-        int       radius = GetRadius();
+        double    radius = GetRadius();
         EDA_ANGLE lastAngle = GetArcAngle();
 
         // Edit state 0: drawing: place start
@@ -1427,7 +1427,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         case 1:
             m_end = aPosition;
-            radius = KiROUND( sqrt( sq( GetLineLength( m_start, m_end ) ) / 2.0 ) );
+            radius = sqrt( sq( GetLineLength( m_start, m_end ) ) / 2.0 );
             break;
 
         case 2:
@@ -1447,8 +1447,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
             if( ratio != 0 )
             {
-                radius = std::max( int( sqrt( sq( radius ) * ratio ) ) + 1,
-                                   int( sqrt( chordAfter ) / 2 ) + 1 );
+                radius = std::max( sqrt( sq( radius ) * ratio ), sqrt( chordAfter ) / 2 );
             }
         }
             break;
@@ -1457,7 +1456,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         {
             double radialA = GetLineLength( m_start, aPosition );
             double radialB = GetLineLength( m_end, aPosition );
-            radius = int( ( radialA + radialB ) / 2.0 ) + 1;
+            radius = ( radialA + radialB ) / 2.0;
         }
             break;
 
@@ -1470,15 +1469,15 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         //
         // Let 'l' be the length of the chord and 'm' the middle point of the chord
         double  l = GetLineLength( m_start, m_end );
-        VECTOR2I m = ( m_start + m_end ) / 2;
+        VECTOR2D m = ( m_start + m_end ) / 2;
 
         // Calculate 'd', the vector from the chord midpoint to the center
-        VECTOR2I d;
-        d.x = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_start.y - m_end.y ) / l );
-        d.y = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_end.x - m_start.x ) / l );
+        VECTOR2D d;
+        d.x = sqrt( sq( radius ) - sq( l / 2 ) ) * ( m_start.y - m_end.y ) / l;
+        d.y = sqrt( sq( radius ) - sq( l / 2 ) ) * ( m_end.x - m_start.x ) / l;
 
-        VECTOR2I c1 = m + d;
-        VECTOR2I c2 = m - d;
+        VECTOR2I c1 = KiROUND( m + d );
+        VECTOR2I c2 = KiROUND( m - d );
 
         // Solution gives us 2 centers; we need to pick one:
         switch( m_editState )
@@ -1486,7 +1485,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         case 1:
             // Keep arc clockwise while drawing i.e. arc angle = 90 deg.
             // it can be 90 or 270 deg depending on the arc center choice (c1 or c2)
-            m_arcCenter = c1;   // first trial
+            m_arcCenter = c1; // first trial
 
             if( GetArcAngle() > ANGLE_180 )
                 m_arcCenter = c2;

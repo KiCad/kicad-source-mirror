@@ -505,11 +505,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 inDrag = true;
             }
 
-            bool       snap = !evt->DisableGridSnapping();
-            EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( item );
-
-            if( shape && shape->GetShape() == SHAPE_T::ARC && getEditedPointIndex() == ARC_CENTER )
-                snap = false;
+            bool snap = !evt->DisableGridSnapping();
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
