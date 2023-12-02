@@ -116,7 +116,6 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 	m_groupByKind->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
 	m_netsList->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_NET_INSPECTOR_BASE::onSortingChanged ), NULL, this );
 	m_netsList->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_NET_INSPECTOR_BASE::onSelChanged ), NULL, this );
-	m_netsList->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_NET_INSPECTOR_BASE::onListSize ), NULL, this );
 	m_addNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onAddNet ), NULL, this );
 	m_renameNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onRenameNet ), NULL, this );
 	m_deleteNet->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onDeleteNet ), NULL, this );
@@ -134,7 +133,6 @@ DIALOG_NET_INSPECTOR_BASE::~DIALOG_NET_INSPECTOR_BASE()
 	m_groupByKind->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onFilterChange ), NULL, this );
 	m_netsList->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEventHandler( DIALOG_NET_INSPECTOR_BASE::onSortingChanged ), NULL, this );
 	m_netsList->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_NET_INSPECTOR_BASE::onSelChanged ), NULL, this );
-	m_netsList->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_NET_INSPECTOR_BASE::onListSize ), NULL, this );
 	m_addNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onAddNet ), NULL, this );
 	m_renameNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onRenameNet ), NULL, this );
 	m_deleteNet->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NET_INSPECTOR_BASE::onDeleteNet ), NULL, this );

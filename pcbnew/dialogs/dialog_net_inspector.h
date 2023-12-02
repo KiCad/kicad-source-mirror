@@ -55,7 +55,8 @@ public:
         int      sorting_column     = -1;
         bool     sort_order_asc     = true;
 
-        std::vector<int> column_order;
+        std::vector<int> col_order;
+        std::vector<int> col_widths;
     };
 
     DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent );
@@ -97,7 +98,6 @@ private:
     void onSelChanged();
     void onSortingChanged( wxDataViewEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
-    void onListSize( wxSizeEvent& event ) override;
     void onAddNet( wxCommandEvent& event ) override;
     void onRenameNet( wxCommandEvent& event ) override;
     void onDeleteNet( wxCommandEvent& event ) override;
@@ -107,6 +107,7 @@ private:
                                              const std::vector<CN_ITEM*>& aCNItems );
 
     void buildNetsList();
+    void setColumnWidths();
     void adjustListColumns();
 
     void onUnitsChanged( wxCommandEvent& event );

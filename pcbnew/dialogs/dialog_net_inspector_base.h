@@ -61,7 +61,6 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSortingChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void onListSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onAddNet( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRenameNet( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeleteNet( wxCommandEvent& event ) { event.Skip(); }

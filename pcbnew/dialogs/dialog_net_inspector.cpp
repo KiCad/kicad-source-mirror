@@ -70,16 +70,20 @@ struct DIALOG_NET_INSPECTOR::COLUMN_DESC
 {
     COLUMN_DESC( unsigned aNum, PCB_LAYER_ID aLayer, const wxString& aDisp, const wxString& aCsv,
                  CSV_COLUMN_DESC aFlags, bool aHasUnits ) :
-        num( aNum ), layer( aLayer ), display_name( aDisp ), csv_name( aCsv ), csv_flags( aFlags ),
-        has_units( aHasUnits )
+            num( aNum ),
+            layer( aLayer ),
+            display_name( aDisp ),
+            csv_name( aCsv ),
+            csv_flags( aFlags ),
+            has_units( aHasUnits )
     {}
 
-    unsigned int num;
-    PCB_LAYER_ID layer;
-    wxString     display_name;
-    wxString     csv_name;
+    unsigned int    num;
+    PCB_LAYER_ID    layer;
+    wxString        display_name;
+    wxString        csv_name;
     CSV_COLUMN_DESC csv_flags;
-    bool has_units;
+    bool            has_units;
 
     operator unsigned int() const
     {
@@ -1001,9 +1005,10 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
     std::vector<std::function<void( void )>> add_col{
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_NET].display_name, m_columns[COLUMN_NET],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_NET].display_name,
+                                          m_columns[COLUMN_NET],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_LEFT,
-                                          wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
@@ -1018,46 +1023,52 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
             m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_COUNT].display_name,
                                           m_columns[COLUMN_PAD_COUNT],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                          wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
             m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_COUNT].display_name,
                                           m_columns[COLUMN_VIA_COUNT],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                          wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
             m_netsList->AppendTextColumn( m_columns[COLUMN_VIA_LENGTH].display_name,
                                           m_columns[COLUMN_VIA_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                          wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
             m_netsList->AppendTextColumn( m_columns[COLUMN_BOARD_LENGTH].display_name,
                                           m_columns[COLUMN_BOARD_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                          wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
             m_netsList->AppendTextColumn( m_columns[COLUMN_CHIP_LENGTH].display_name,
                                           m_columns[COLUMN_CHIP_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                          wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
             m_netsList->AppendTextColumn( m_columns[COLUMN_TOTAL_LENGTH].display_name,
                                           m_columns[COLUMN_TOTAL_LENGTH],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                          wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                          wxDATAVIEW_COL_SORTABLE );
         }
     };
 
-    std::vector<int> col_order = g_settings.column_order;
+    std::vector<int> col_order = g_settings.col_order;
 
     if( col_order.size() != add_col.size() )
     {
@@ -1080,7 +1091,8 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
 
         m_netsList->AppendTextColumn( m_brd->GetLayerName( layer ), m_columns.back(),
                                       wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
-                                      wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_SORTABLE );
+                                      wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE |
+                                      wxDATAVIEW_COL_SORTABLE );
     }
 
     m_netsList->SetExpanderColumn( m_netsList->GetColumn( 0 ) );
@@ -1162,7 +1174,7 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
     g_settings.sorting_column     = sorting_column ?
                                     static_cast<int>( sorting_column->GetModelColumn() ) : -1;
     g_settings.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
-    g_settings.column_order       = column_order;
+    g_settings.col_order          = column_order;
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
@@ -1964,50 +1976,36 @@ void DIALOG_NET_INSPECTOR::onSortingChanged( wxDataViewEvent& aEvent )
 void DIALOG_NET_INSPECTOR::adjustListColumns()
 {
     wxWindowUpdateLocker locker( m_netsList );
-    std::vector<int> widths;
 
-    widths.reserve( m_columns.size() );
-
-    for( size_t ii = 0; ii < m_columns.size(); ++ii )
-        widths.push_back( GetTextExtent( m_columns[ii].display_name ).x );
-
-    int minValueWidth = GetTextExtent( wxT( "00000,000 mm" ) ).x;
-    int minNumberWidth = GetTextExtent( wxT( "000" ) ).x;
-    int minNameWidth = GetTextExtent( wxT( "MMMMMM" ) ).x;
-
-    // Considering left and right margins.
-    // For wxRenderGeneric it is 5px.
-    // Also account for the sorting arrow in the column header.
-    // Column 0 also needs space for any potential expander icons.
-    const int margins = 15;
-    const int extra_width = 30;
-
-    widths[0] = std::max( widths[0], minNumberWidth ) + extra_width;
-    widths[1] = std::max( widths[1], minNameWidth )   + margins;
-    widths[2] = std::max( widths[2], minNumberWidth ) + margins;
-    widths[3] = std::max( widths[3], minNumberWidth ) + margins;
-
-    for( size_t ii = 4; ii < widths.size(); ++ii )
+    if( g_settings.col_widths.size() < m_columns.size() )
     {
-        widths[ii] = std::max( widths[ii], minValueWidth ) + margins;
+        g_settings.col_widths.reserve( m_columns.size() );
+
+        for( DIALOG_NET_INSPECTOR::COLUMN_DESC& m_column : m_columns)
+            g_settings.col_widths.push_back( GetTextExtent( m_column.display_name ).x );
+
+        int minValueWidth = GetTextExtent( wxT( "00000,000 mm" ) ).x;
+        int minNumberWidth = GetTextExtent( wxT( "000" ) ).x;
+        int minNameWidth = GetTextExtent( wxT( "MMMMMM" ) ).x;
+
+        // Considering left and right margins.
+        // For wxRenderGeneric it is 5px.
+        // Also account for the sorting arrow in the column header.
+        // Column 0 also needs space for any potential expander icons.
+        const int margins = 15;
+        const int extra_width = 30;
+
+        g_settings.col_widths[0] = std::max( g_settings.col_widths[0], minNumberWidth ) + extra_width;
+        g_settings.col_widths[1] = std::max( g_settings.col_widths[1], minNameWidth )   + margins;
+        g_settings.col_widths[2] = std::max( g_settings.col_widths[2], minNumberWidth ) + margins;
+        g_settings.col_widths[3] = std::max( g_settings.col_widths[3], minNumberWidth ) + margins;
+
+        for( size_t ii = 4; ii < g_settings.col_widths.size(); ++ii )
+            g_settings.col_widths[ii] = std::max( g_settings.col_widths[ii], minValueWidth ) + margins;
     }
 
-    // the columns might have been reordered.  we work on the column model numbers though.
-    std::vector<int> column_order( m_data_model->columnCount() );
-
-    for( size_t i = 0; i < column_order.size(); ++i )
-    {
-        column_order[m_netsList->GetColumn( i )->GetModelColumn()] = i;
-        m_netsList->GetColumn( column_order[i] )->SetMinWidth( widths[i] );
-        m_netsList->GetColumn( column_order[i] )->SetWidth( widths[i] );
-    }
-
-    // At resizing of the list the width of middle column (Net Names) changes only.
-    int width = m_netsList->GetClientSize().x - 24;
-    int remaining = width - std::accumulate( widths.begin() + 2, widths.end(), widths[0] );
-
-    if( remaining > widths[1] )
-        m_netsList->GetColumn( column_order[1] )->SetWidth( remaining );
+    for( size_t ii = 0; ii < m_data_model->columnCount(); ++ii )
+        m_netsList->GetColumn( ii )->SetWidth( g_settings.col_widths[ii] );
 
     m_netsList->Refresh();
 
@@ -2017,20 +2015,6 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
     m_netsList->Move( pos.x, pos.y + 1 );
     m_netsList->Move( pos.x, pos.y );
 #endif
-}
-
-
-void DIALOG_NET_INSPECTOR::onListSize( wxSizeEvent& aEvent )
-{
-    auto new_size = aEvent.GetSize();
-
-    if( new_size != m_size )
-    {
-        m_size = new_size;
-        adjustListColumns();
-    }
-
-    aEvent.Skip();
 }
 
 

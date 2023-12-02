@@ -516,7 +516,6 @@
                         <property name="window_style"></property>
                         <event name="OnDataViewCtrlColumnSorted">onSortingChanged</event>
                         <event name="OnDataViewCtrlSelectionChanged">onSelChanged</event>
-                        <event name="OnSize">onListSize</event>
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
