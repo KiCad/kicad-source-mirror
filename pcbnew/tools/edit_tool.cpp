@@ -2135,17 +2135,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_GROUP_T:
-            if( parentFP )
-            {
-                commit.Modify( parentFP );
-                getView()->Remove( board_item );
-                parentFP->Remove( board_item );
-            }
-            else
-            {
-                commit.Remove( board_item );
-            }
-
+            commit.Remove( board_item );
             break;
 
         case PCB_PAD_T:
@@ -2159,48 +2149,38 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_ZONE_T:
-            if( parentFP )
+            // We process the zones special so that cutouts can be deleted when the delete
+            // tool is called from inside a cutout when the zone is selected.
+            // Only interact with cutouts when deleting and a single item is selected
+            if( !aIsCut && aItems.GetSize() == 1 )
             {
-                commit.Modify( parentFP );
-                getView()->Remove( board_item );
-                parentFP->Remove( board_item );
-            }
-            else
-            {
-                // We process the zones special so that cutouts can be deleted when the delete
-                // tool is called from inside a cutout when the zone is selected.
-                // Only interact with cutouts when deleting and a single item is selected
-                if( !aIsCut && aItems.GetSize() == 1 )
+                VECTOR2I curPos = getViewControls()->GetCursorPosition();
+                ZONE*    zone   = static_cast<ZONE*>( board_item );
+
+                int outlineIdx, holeIdx;
+
+                if( zone->HitTestCutout( curPos, &outlineIdx, &holeIdx ) )
                 {
-                    VECTOR2I curPos = getViewControls()->GetCursorPosition();
-                    ZONE*    zone   = static_cast<ZONE*>( board_item );
+                    // Remove the cutout
+                    commit.Modify( zone );
+                    zone->RemoveCutout( outlineIdx, holeIdx );
+                    zone->UnFill();
 
-                    int outlineIdx, holeIdx;
+                    // TODO Refill zone when KiCad supports auto re-fill
 
-                    if( zone->HitTestCutout( curPos, &outlineIdx, &holeIdx ) )
-                    {
-                        // Remove the cutout
-                        commit.Modify( zone );
-                        zone->RemoveCutout( outlineIdx, holeIdx );
-                        zone->UnFill();
+                    // Update the display
+                    zone->HatchBorder();
+                    canvas()->Refresh();
 
-                        // TODO Refill zone when KiCad supports auto re-fill
+                    // Restore the selection on the original zone
+                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, zone );
 
-                        // Update the display
-                        zone->HatchBorder();
-                        canvas()->Refresh();
-
-                        // Restore the selection on the original zone
-                        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, zone );
-
-                        break;
-                    }
+                    break;
                 }
-
-                // Remove the entire zone otherwise
-                commit.Remove( board_item );
             }
 
+            // Remove the entire zone otherwise
+            commit.Remove( board_item );
             break;
 
         case PCB_GENERATOR_T:
