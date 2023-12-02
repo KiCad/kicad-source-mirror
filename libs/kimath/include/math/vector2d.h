@@ -587,6 +587,12 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
 typedef VECTOR2<double>       VECTOR2D;
 typedef VECTOR2<int>          VECTOR2I;
 
+/* KiROUND specialization for vectors */
+inline VECTOR2I KiROUND( const VECTOR2D& vec )
+{
+    return VECTOR2I( KiROUND( vec.x ), KiROUND( vec.y ) );
+}
+
 /* STL specializations */
 namespace std
 {
