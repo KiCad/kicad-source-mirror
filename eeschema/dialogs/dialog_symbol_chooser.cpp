@@ -59,7 +59,7 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
     if( aPreselect && aPreselect->IsValid() )
         m_chooserPanel->SetPreselect( *aPreselect );
 
-    if( aFilter->GetFilterPowerSymbols() )
+    if( aFilter && aFilter->GetFilterPowerSymbols() )
         SetTitle( _( "Choose Power Symbol" ) );
 
     SetTitle( GetTitle() + wxString::Format( _( " (%d items loaded)" ),
