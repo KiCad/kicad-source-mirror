@@ -551,6 +551,18 @@ public:
      */
     void MigrateSimModels();
 
+    /**
+     * Remove all invalid symbol instance data in this screen object for the project defined
+     * by \a aProjectName and the list of \a aValidSheetPaths.
+     *
+     * @warning This method will assert and exit on debug builds when \a aProjectName is empty.
+     *
+     * @note This method does not affect instance data for any other projects.
+     *
+     * @param aProjectName is the name of the current project.
+     * @param aValidSheetPaths is the list of valid #SCH_SHEET_PATH objects for the current
+     *                         project.
+     */
     void PruneOrphanedSymbolInstances( const wxString& aProjectName,
                                        const SCH_SHEET_LIST& aValidSheetPaths );
 

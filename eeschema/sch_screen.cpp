@@ -1641,6 +1641,10 @@ size_t SCH_SCREEN::getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol,
 void SCH_SCREEN::PruneOrphanedSymbolInstances( const wxString& aProjectName,
                                                const SCH_SHEET_LIST& aValidSheetPaths )
 {
+    // The project name cannot be empty.  Projects older than 7.0 did not save project names
+    // when saving instance data.  Running this algorithm with an empty project name would
+    // clobber all instance data for projects other than the current one when a schematic
+    // file is shared across multiple projects.
     wxCHECK( !aProjectName.IsEmpty(), /* void */ );
 
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
@@ -1649,38 +1653,30 @@ void SCH_SCREEN::PruneOrphanedSymbolInstances( const wxString& aProjectName,
 
         wxCHECK2( symbol, continue );
 
-        std::set<SCH_SHEET_PATH> pathsToPrune;
+        std::set<KIID_PATH> pathsToPrune;
         const std::vector<SCH_SYMBOL_INSTANCE> instances = symbol->GetInstanceReferences();
 
         for( const SCH_SYMBOL_INSTANCE& instance : instances )
         {
+            // Ignore instance paths from other projects.
             if( aProjectName != instance.m_ProjectName )
                 continue;
 
             std::optional<SCH_SHEET_PATH> pathFound =
                     aValidSheetPaths.GetSheetPathByKIIDPath( instance.m_Path );
 
-            // Check for paths from other projects.
+            // Check for paths that do not exist in the current  project and paths that do
+            // not contain the current symbol.
             if( !pathFound )
-            {
-                pathsToPrune.emplace( pathFound.value() );
-                continue;
-            }
-
-            // Check for paths that are in that are not valid for this screen.
-            for( const SCH_SHEET_PATH& path : aValidSheetPaths )
-            {
-                if( path.LastScreen() == this )
-                    continue;
-
-                 pathsToPrune.emplace( path );
-            }
+                pathsToPrune.emplace( instance.m_Path );
+            else if( pathFound.value().LastScreen() != this )
+                pathsToPrune.emplace( pathFound.value().Path() );
         }
 
-        for( const SCH_SHEET_PATH& sheetPath : pathsToPrune )
+        for( const KIID_PATH& sheetPath : pathsToPrune )
         {
             wxLogTrace( traceSchSheetPaths, wxS( "Pruning project '%s' symbol instance %s." ),
-                        aProjectName, sheetPath.Path().AsString() );
+                        aProjectName, sheetPath.AsString() );
             symbol->RemoveInstance( sheetPath );
         }
     }

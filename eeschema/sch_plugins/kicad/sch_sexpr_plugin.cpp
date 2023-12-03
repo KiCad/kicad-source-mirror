@@ -791,6 +791,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
 
         for( size_t i = 0; i < aSymbol->GetInstanceReferences().size(); i++ )
         {
+            // Zero length KIID_PATH objects are not valid and will cause a crash below.
+            wxCHECK2( aSymbol->GetInstanceReferences()[i].m_Path.size(), continue );
+
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
             // current project from accumulating in the schematic files.
