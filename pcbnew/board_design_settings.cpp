@@ -289,7 +289,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
     // based on the edge cut thicknesses.
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_copper_edge_clearance",
-            &m_CopperEdgeClearance, pcbIUScale.mmToIU( LEGACY_COPPEREDGECLEARANCE ),
+            &m_CopperEdgeClearance, pcbIUScale.mmToIU( DEFAULT_COPPEREDGECLEARANCE ),
             pcbIUScale.mmToIU( -0.01 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
