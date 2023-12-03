@@ -158,7 +158,7 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
         if( !obs || handled.count( obs->m_item ) )
             break;
 
-        int clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine() );
+        int clearance = m_currentNode->GetClearance( obs->m_item, &m_currentTrace.PLine(), false );
 
         if( obs->m_item->Shape()->Collide( virtHead.Shape(), clearance, &force ) )
         {
