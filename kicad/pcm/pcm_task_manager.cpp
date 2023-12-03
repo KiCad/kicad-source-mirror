@@ -385,7 +385,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
                          _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO, aParent )
                    == wxNO )
     {
-        return PCM_TASK_MANAGER::STATUS::FAILED;
+        return;
     }
 
     bool isUpdate = false;
