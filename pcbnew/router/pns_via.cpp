@@ -32,7 +32,7 @@ namespace PNS {
 
 bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
 {
-    int      clearance = aNode->GetClearance( this, aOther );
+    int      clearance = aNode->GetClearance( this, aOther, false );
     VECTOR2I elementForces[4], force;
     size_t   nf = 0;
 
