@@ -29,7 +29,7 @@ static PASTE_MODE g_paste_mode = PASTE_MODE::UNIQUE_ANNOTATIONS;
 
 DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* aParent,
                                             PASTE_MODE* aMode,
-                                            wxString aReplacement ) :
+                                            const wxString& aReplacement ) :
     DIALOG_PASTE_SPECIAL_BASE( aParent ),
     m_mode( aMode )
 {
@@ -45,7 +45,7 @@ DIALOG_PASTE_SPECIAL::DIALOG_PASTE_SPECIAL( wxWindow* aParent,
                                                          "with '%s'." ),
                                                       aReplacement ) );
 
-    m_sdbSizerOK->SetFocus();
+    m_pasteOptions->SetFocus();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -63,4 +63,12 @@ bool DIALOG_PASTE_SPECIAL::TransferDataFromWindow()
 {
     g_paste_mode = *m_mode = static_cast<PASTE_MODE>( m_pasteOptions->GetSelection() );
     return true;
+}
+
+
+void DIALOG_PASTE_SPECIAL::onRadioBoxEvent( wxCommandEvent& event )
+{
+    event.Skip();
+
+    m_sdbSizerOK->SetFocus();
 }
