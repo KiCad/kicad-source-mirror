@@ -28,6 +28,7 @@
 #include <wx/tokenzr.h>
 #include <wx/clipbrd.h>
 #include <wx/log.h>
+#include <wx/stc/stc.h>
 #include <widgets/grid_readonly_text_helpers.h>
 
 
@@ -492,7 +493,13 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
                     stripped.Replace( ROW_SEP, " " );
                     stripped.Replace( ROW_SEP_R, " " );
                     stripped.Replace( COL_SEP, " " );
-                    paste_text( stripped );
+
+                    // Write to the CellEditControl if we can
+                    if( wxTextEntry* te = dynamic_cast<wxTextEntry*>( ev.GetEventObject() ) )
+                        te->WriteText( stripped );
+                    else
+                        paste_text( stripped );
+
                     handled = true;
                 }
             }
