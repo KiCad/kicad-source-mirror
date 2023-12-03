@@ -79,7 +79,10 @@ class TUNING_STATUS_VIEW_ITEM : public EDA_ITEM
 public:
     TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
             EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
-            m_frame( aFrame )
+            m_frame( aFrame ),
+            m_min( 0.0 ),
+            m_max( 0.0 ),
+            m_current( 0.0 )
     { }
 
     wxString GetClass() const override { return wxT( "TUNING_STATUS" ); }
@@ -2117,6 +2120,14 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 {
                     m_tuningPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
                     m_tuningPattern->Update( generatorTool, m_board, m_frame, nullptr );
+
+                    m_preview.FreeItems();
+
+                    for( EDA_ITEM* item : m_tuningPattern->GetPreviewItems( generatorTool, m_frame,
+                                                                            true ) )
+                    {
+                        m_preview.Add( item );
+                    }
 
                     m_view->Update( &m_preview );
                 }
