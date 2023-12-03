@@ -133,36 +133,90 @@ public:
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override
     {
-        KIGFX::GAL*      gal = aView->GetGAL();
-        RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
-        bool             drawingDropShadows = ( aLayer == LAYER_GP_OVERLAY );
+        KIGFX::GAL* gal = aView->GetGAL();
+        bool        viewFlipped = gal->IsFlippedX();
+        bool        drawingDropShadows = ( aLayer == LAYER_GP_OVERLAY );
 
         gal->PushDepth();
         gal->SetLayerDepth( gal->GetMinDepth() );
 
+        KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
+        KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -1 );
+        KIFONT::FONT*             font = KIFONT::FONT::GetFont();
+        const KIFONT::METRICS&    fontMetrics = KIFONT::METRICS::Default();
+        TEXT_ATTRIBUTES           textAttrs;
+
+        int      glyphWidth = textDims.GlyphSize.x;
+        VECTOR2I margin( glyphWidth / 2, glyphWidth );
+        VECTOR2I size( glyphWidth * 25 + margin.x * 2, headerDims.GlyphSize.y + textDims.GlyphSize.y );
+        VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
+
         if( drawingDropShadows )
-            gal->SetStrokeColor( KIGFX::PREVIEW::GetShadowColor( gal->GetStrokeColor() ) );
+        {
+            gal->SetIsFill( true );
+            gal->SetIsStroke( true );
+            gal->SetLineWidth( 1 );
+            gal->SetStrokeColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
+            gal->SetFillColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+
+            gal->DrawRectangle( GetPosition() + offset - margin,
+                                GetPosition() + offset + size + margin );
+            gal->PopDepth();
+            return;
+        }
+
+        COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+        COLOR4D normal = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT );
+        COLOR4D red;
+
+        // Choose a red with reasonable contrasting with the background
+        double  bg_h, bg_s, bg_l;
+        bg.ToHSL( bg_h, bg_s, bg_l );
+        red.FromHSL( 0, 1.0, bg_l < 0.5 ? 0.7 : 0.3 );
+
+        if( viewFlipped )
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
         else
-            gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
 
-        std::vector<wxString> strings;
-        wxString status;
+        gal->SetIsFill( false );
+        gal->SetIsStroke( true );
+        gal->SetStrokeColor( normal );
+        textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
 
-        if( m_current < m_min )
-            status = _( "(too short)" );
-        else if( m_current > m_max )
-            status = _( "(too long)" );
+        // Prevent text flipping when view is flipped
+        if( gal->IsFlippedX() )
+        {
+            textAttrs.m_Mirrored = true;
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
+        }
 
-        strings.push_back( wxString::Format( wxT( "%s: %s %s" ),
-                                             m_currentLabel,
-                                             m_currentText,
-                                             status ) );
+        textAttrs.m_Size = headerDims.GlyphSize;
+        textAttrs.m_StrokeWidth = headerDims.StrokeWidth;
 
-        strings.push_back( wxString::Format( _( "Min: %s" ), m_minText ) );
-        strings.push_back( wxString::Format( _( "Max: %s" ), m_maxText ) );
+        VECTOR2I textPos = GetPosition() + offset;
+        font->Draw( gal, m_currentLabel, textPos, textAttrs, KIFONT::METRICS::Default() );
 
-        KIGFX::PREVIEW::DrawTextNextToCursor( aView, GetPosition(), { -1 , 1 }, strings,
-                                              drawingDropShadows );
+        textPos.x += glyphWidth * 11 + margin.x;
+        font->Draw( gal, _( "min" ), textPos, textAttrs, fontMetrics );
+
+        textPos.x += glyphWidth * 7 + margin.x;
+        font->Draw( gal, _( "max" ), textPos, textAttrs, fontMetrics );
+
+        textAttrs.m_Size = textDims.GlyphSize;
+        textAttrs.m_StrokeWidth = textDims.StrokeWidth;
+
+        textPos = GetPosition() + offset;
+        textPos.y += KiROUND( headerDims.LinePitch * 1.2 );
+        font->Draw( gal, m_currentText, textPos, textAttrs, KIFONT::METRICS::Default() );
+
+        textPos.x += glyphWidth * 11 + margin.x;
+        gal->SetStrokeColor( m_current < m_min ? red : normal );
+        font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
+
+        textPos.x += glyphWidth * 7 + margin.x;
+        gal->SetStrokeColor( m_current > m_max ? red : normal );
+        font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
 
         gal->PopDepth();
     }
@@ -1823,9 +1877,9 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         }
 
         if( m_tuningMode == DIFF_PAIR_SKEW )
-            statusItem->SetCurrent( (double) placer->TuningResult(), _( "Skew" ) );
+            statusItem->SetCurrent( (double) placer->TuningResult(), _( "current skew" ) );
         else
-            statusItem->SetCurrent( (double) placer->TuningResult(), _( "Length" ) );
+            statusItem->SetCurrent( (double) placer->TuningResult(), _( "current length" ) );
 
         statusItem->SetPosition( aFrame->GetToolManager()->GetMousePosition() );
         previewItems.push_back( statusItem );
