@@ -1,0 +1,93 @@
+[IBIS Ver]      1.1  |Let's test a comment      
+[Comment char]  #_char 
+[File name]     ibis_v1_1.ibs 
+[File Rev]      1.0  #Let's test a comment  
+[Date]          26/08/2021 
+[Source]        This is the
+                source for the files
+[Notes]         We can have some
+                Notes 
+
+[Disclaimer] This is NOT a valid component.
+
+[Component]     Virtual
+[Manufacturer]  KiCad    
+[Package]     
+R_pkg           50m             40m             60m 
+L_pkg           2n              NA              NA
+C_pkg           10p             NA              NA
+
+[Pin]   signal_name     model_name      R_pin   L_pin   C_pin             
+  1     VCC             POWER           5mm      2n      NA            
+  2     GND             GND             55m      NA      NA               
+  3     X               Input           55m      NA      0.2p
+  4     Y               Output          55m      2n      0.2p
+
+[Model]         Input
+Model_type      Input
+Polarity        Non-Inverting
+Enable          Active-High
+Vinl = 0.8V                            
+Vinh = 2.0V                    
+C_comp          1.0pF          0.5pF          2.0pF 
+
+[Voltage range]         5.0V            4.5V            5.5V 
+
+[GND_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+
+[Model]         Output
+Model_type      Output
+Polarity        Non-Inverting
+Enable          Active-High
+C_comp          10.0pF          8.0pF          15.0pF 
+
+[Voltage range]         5.0V            4.5V            5.5V 
+[Pulldown]
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -50.0m     -40.0m     -60.0m 
+   0.0V      0         0         0
+   5.0V      500.0m     400.0m     600.0m 
+   10.0V     550.0m     440.0m     660.0m 
+[Pullup]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     50.0m      40.0m      60.0m 
+   0.0V      0         0         0
+   5.0V      -500.0m     -400.0m     -600.0m 
+   10.0V     -550.0m     -440.0m     -660.0m 
+[GND_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V    -500.0m     NA        NA
+   -0.7V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+# 
+#  Voltage   I(typ)    I(min)    I(max)
+# 
+   -5.0V     500.0m     NA        NA
+   -0.7V      0         NA        NA
+   5.0V      0         NA        NA
+
+[Ramp]
+# variable      typ              min              max 
+dV/dt_r         3.0/30n          2.8/30n          NA
+dV/dt_f         3.0/20n          2.8/20n          3.2/20n
+
+[END]
