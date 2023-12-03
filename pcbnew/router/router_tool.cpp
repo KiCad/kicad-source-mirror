@@ -821,7 +821,10 @@ static VIATYPE getViaTypeFromFlags( int aFlags )
 
 int ROUTER_TOOL::onLayerCommand( const TOOL_EVENT& aEvent )
 {
-    return handleLayerSwitch( aEvent, false );
+    handleLayerSwitch( aEvent, false );
+    UpdateMessagePanel();
+
+    return 0;
 }
 
 
@@ -839,6 +842,7 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         m_router->Move( m_endSnapPoint, m_endItem );
     }
 
+    UpdateMessagePanel();
     return 0;
 }
 
