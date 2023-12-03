@@ -236,11 +236,6 @@ public:
     bool m_AllowManualCanvasScale;
 
     /**
-     * Show the properties panel in applications that it hasn't been fully released for
-     */
-    bool m_ShowPropertiesPanel;
-
-    /**
      * 3D-Viewer, Raytracing
      * Bevel height of layer items. Controls the start of curvature normal on the edge.
      * Value is in micrometer. Good values should be around or less than the copper thickness.
