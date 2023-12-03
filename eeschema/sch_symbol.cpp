@@ -641,7 +641,8 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 void SCH_SYMBOL::SortInstances( bool (*aSortFunction)( const SCH_SYMBOL_INSTANCE& aLhs,
                                                        const SCH_SYMBOL_INSTANCE& aRhs ) )
 {
-    std::sort( m_instanceReferences.begin(), m_instanceReferences.end(), aSortFunction );
+    if( m_instanceReferences.size() > 1 )
+        std::sort( m_instanceReferences.begin(), m_instanceReferences.end(), aSortFunction );
 }
 
 

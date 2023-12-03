@@ -1936,6 +1936,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
+    // The copy operation creates instance paths that are not valid for the current project or
+    // saved as part of another project.  Prune them now so they do not accumulate in the saved
+    // schematic file.
+    SCH_SCREENS allScreens( m_frame->Schematic().Root() );
+
+    allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(),
+                                             m_frame->Schematic().GetSheets() );
+
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
