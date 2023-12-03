@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onOKButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRadioBoxEvent( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
