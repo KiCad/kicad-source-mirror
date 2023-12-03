@@ -47,6 +47,7 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
+#include <geometry/shape_poly_set.h>
 
 #include <wx/app.h>
 #include <wx/filedlg.h>
@@ -1140,21 +1141,15 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
 {
     fputs( "$BOARD\n", aFile );
 
-    // Extract the board edges
-    for( BOARD_ITEM* drawing : aPcb->Drawings() )
-    {
-        if( drawing->Type() == PCB_SHAPE_T )
-        {
-            PCB_SHAPE* drawseg = static_cast<PCB_SHAPE*>( drawing );
+    SHAPE_POLY_SET outline;
+    aPcb->GetBoardPolygonOutlines( outline );
 
-            if( drawseg->GetLayer() == Edge_Cuts )
-            {
-                // XXX GenCAD supports arc boundaries but I've seen nothing that reads them
-                fprintf( aFile, "LINE %g %g %g %g\n",
-                         MapXTo( drawseg->GetStart().x ), MapYTo( drawseg->GetStart().y ),
-                         MapXTo( drawseg->GetEnd().x ), MapYTo( drawseg->GetEnd().y ) );
-            }
-        }
+    for( auto seg1 = outline.IterateSegmentsWithHoles(); seg1; seg1++ )
+    {
+        SEG seg = *seg1;
+        fprintf( aFile, "LINE %g %g %g %g\n",
+                 MapXTo( seg.A.x ), MapYTo( seg.A.y ),
+                 MapXTo( seg.B.x ), MapYTo( seg.B.y ) );
     }
 
     fputs( "$ENDBOARD\n\n", aFile );
