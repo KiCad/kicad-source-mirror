@@ -191,22 +191,22 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
     if( wxFileExists( fullEditorName ) )
     {
         int i = 0;
-        const wchar_t* args[4];
+        std::vector<const wchar_t*> args;
 
-        args[i++] = fullEditorName.wc_str();
+        args.emplace_back( fullEditorName.wc_str() );
 
         if( !params.empty() )
         {
             for( const wxString& p : params )
-                args[i++] = p.wc_str();
+                args.emplace_back( p.wc_str() );
         }
 
         if( !aFileName.IsEmpty() )
-            args[i++] = aFileName.wc_str();
+            args.emplace_back( aFileName.wc_str() );
 
-        args[i] = nullptr;
+        args.emplace_back( nullptr );
 
-        return wxExecute( const_cast<wchar_t**>( args ), wxEXEC_ASYNC, aCallback );
+        return wxExecute( const_cast<wchar_t**>( args.data() ), wxEXEC_ASYNC, aCallback );
     }
 
     wxString msg;
