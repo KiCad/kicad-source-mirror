@@ -2298,7 +2298,7 @@ static double polygonArea( SHAPE_POLY_SET& aPolySet )
 
 double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLECTOR& aCollector  )
 {
-    int textMargin = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+    int            textMargin = aCollector.GetGuide()->Accuracy();
     SHAPE_POLY_SET poly;
 
     if( aItem->Type() == PCB_MARKER_T )
@@ -2381,7 +2381,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
 
 double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 {
-    int textMargin = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+    int textMargin = aCollector.GetGuide()->Accuracy();
 
     SHAPE_POLY_SET footprintRegion( GetBoundingHull() );
     SHAPE_POLY_SET coveredRegion;

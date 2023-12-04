@@ -335,7 +335,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in a footprint *is* sensitive to layer visibility but that was already handled.
 
-        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+        int accuracy = m_Guide->Accuracy();
 
         if( zone )
         {
@@ -408,7 +408,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in a footprint *is* sensitive to layer visibility but that was already handled.
 
-        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+        int accuracy = m_Guide->Accuracy();
 
         if( zone )
         {

@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <unordered_set>
+
 #include <trigo.h>
 #include <macros.h>
 
@@ -49,6 +51,21 @@
  * @ingroup trace_env_vars
  */
 const wxChar* traceBoardOutline = wxT( "KICAD_BOARD_OUTLINE" );
+
+
+static class SCOPED_FLAGS_CLEANER : public std::unordered_set<EDA_ITEM*>
+{
+    EDA_ITEM_FLAGS m_flagsToClear;
+
+public:
+    SCOPED_FLAGS_CLEANER( const EDA_ITEM_FLAGS& aFlagsToClear ) : m_flagsToClear( aFlagsToClear ) {}
+
+    ~SCOPED_FLAGS_CLEANER()
+    {
+        for( EDA_ITEM* item : *this )
+            item->ClearFlags( m_flagsToClear );
+    }
+};
 
 
 /**
@@ -192,6 +209,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
     VECTOR2I   prevPt;
 
     std::vector<SHAPE_LINE_CHAIN> contours;
+    SCOPED_FLAGS_CLEANER          cleaner( SKIP_STRUCT );
 
     for( PCB_SHAPE* shape : startCandidates )
         shape->ClearFlags( SKIP_STRUCT );
@@ -200,6 +218,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
     {
         graphic = (PCB_SHAPE*) *startCandidates.begin();
         graphic->SetFlags( SKIP_STRUCT );
+        cleaner.insert( graphic );
         startCandidates.erase( startCandidates.begin() );
 
         contours.emplace_back();
@@ -419,6 +438,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                     prevGraphic = graphic;
                     graphic = nextGraphic;
                     graphic->SetFlags( SKIP_STRUCT );
+                    cleaner.insert( graphic );
                     startCandidates.erase( graphic );
                     continue;
                 }

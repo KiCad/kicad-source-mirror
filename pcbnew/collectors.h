@@ -159,6 +159,8 @@ public:
      */
     virtual bool IgnoreZoneFills() const = 0;
 
+    virtual int Accuracy() const = 0;
+
     virtual double OnePixelInIU() const = 0;
 };
 
@@ -332,7 +334,7 @@ public:
     GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer,
                               KIGFX::VIEW* aView )
     {
-        VECTOR2I one( 1, 1 );
+        static const VECTOR2I one( 1, 1 );
 
         m_preferredLayer            = aPreferredLayer;
         m_visibleLayers             = aVisibleLayerMask;
@@ -363,7 +365,8 @@ public:
         m_ignoreTracks              = false;
         m_ignoreZoneFills           = true;
 
-        m_onePixelInIU              = abs( aView->ToWorld( one, false ).x );
+        m_onePixelInIU = abs( aView->ToWorld( one, false ).x );
+        m_accuracy = KiROUND( 5 * m_onePixelInIU );
     }
 
     /**
@@ -474,8 +477,10 @@ public:
     bool IgnoreZoneFills() const override { return m_ignoreZoneFills; }
     void SetIgnoreZoneFills( bool ignore ) { m_ignoreZoneFills = ignore; }
 
+    int  Accuracy() const override { return m_accuracy; }
+    void SetAccuracy( int aValue ) { m_accuracy = aValue; }
+
     double OnePixelInIU() const override { return m_onePixelInIU; }
-    void SetOnePixelInIU( double aValue ) { m_onePixelInIU = aValue; }
 
 private:
     // the storage architecture here is not important, since this is only
@@ -504,7 +509,8 @@ private:
     bool    m_ignoreTracks;
     bool    m_ignoreZoneFills;
 
-    double  m_onePixelInIU;
+    double m_onePixelInIU;
+    int    m_accuracy;
 };
 
 

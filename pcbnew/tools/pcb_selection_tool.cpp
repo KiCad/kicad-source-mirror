@@ -394,7 +394,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         []( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
                             PCB_SELECTION_TOOL* aTool )
                         {
-                            int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+                            int accuracy = aCollector.GetGuide()->Accuracy();
                             std::set<EDA_ITEM*> remove;
 
                             for( EDA_ITEM* item : aCollector )
@@ -1588,20 +1588,19 @@ void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>
     for( PCB_SHAPE* startItem : aStartItems )
         toSearch.push( startItem );
 
-    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
-    GENERAL_COLLECTOR          collector;
+    GENERAL_COLLECTOR        collector;
+    GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
 
-    auto searchPoint =
-            [&]( const VECTOR2I& aWhere )
-            {
-                collector.Collect( board(), { PCB_SHAPE_T }, aWhere, guide );
+    auto searchPoint = [&]( const VECTOR2I& aWhere )
+    {
+        collector.Collect( board(), { PCB_SHAPE_T }, aWhere, guide );
 
-                for( EDA_ITEM* item : collector )
-                {
-                    if( isExpandableGraphicShape( item ) )
-                        toSearch.push( static_cast<PCB_SHAPE*>( item ) );
-                }
-            };
+        for( EDA_ITEM* item : collector )
+        {
+            if( isExpandableGraphicShape( item ) )
+                toSearch.push( static_cast<PCB_SHAPE*>( item ) );
+        }
+    };
 
     while( !toSearch.empty() )
     {
@@ -1614,6 +1613,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>
         select( shape );
         shape->SetFlags( SKIP_STRUCT );
         toCleanup.insert( shape );
+
+        guide.SetLayerVisibleBits( shape->GetLayerSet() );
 
         searchPoint( shape->GetStart() );
         searchPoint( shape->GetEnd() );
