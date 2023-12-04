@@ -1021,7 +1021,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             }
         }
 
-        symbol->SetLibSymbol( libSymbol.release() );
+        if( libSymbol.get() )   // Only change the old link if the new link exists
+            symbol->SetLibSymbol( libSymbol.release() );
     }
 
     // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
