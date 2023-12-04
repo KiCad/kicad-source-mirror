@@ -53,7 +53,7 @@
 const wxChar* traceBoardOutline = wxT( "KICAD_BOARD_OUTLINE" );
 
 
-static class SCOPED_FLAGS_CLEANER : public std::unordered_set<EDA_ITEM*>
+class SCOPED_FLAGS_CLEANER : public std::unordered_set<EDA_ITEM*>
 {
     EDA_ITEM_FLAGS m_flagsToClear;
 
