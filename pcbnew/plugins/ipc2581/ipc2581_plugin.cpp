@@ -337,6 +337,9 @@ void IPC2581_PLUGIN::addLocationNode( wxXmlNode* aNode, const PAD& aPad, bool aR
     else
         pos = aPad.GetPosition();
 
+    if( aPad.GetOffset().x != 0 || aPad.GetOffset().y != 0 )
+        pos += aPad.GetOffset();
+
     addLocationNode( aNode, pos.x, pos.y );
 }
 
@@ -2540,7 +2543,7 @@ void IPC2581_PLUGIN::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
 
             addShape( tempFeature, *shape );
         }
-        else if( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::RECTANGLE )
+        else if( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::RECTANGLE || shape->GetShape() == SHAPE_T::POLY )
         {
             wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
 
