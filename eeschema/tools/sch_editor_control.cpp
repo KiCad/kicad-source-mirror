@@ -332,10 +332,12 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 {
+    bool savePowerSymbols = IsOK( m_frame, _( "Include power symbols in schematic to the library?" ) );
+
     bool createNew = aEvent.IsAction( &EE_ACTIONS::exportSymbolsToNewLibrary );
 
     SCH_REFERENCE_LIST symbols;
-    m_frame->Schematic().GetSheets().GetSymbols( symbols, false );
+    m_frame->Schematic().GetSheets().GetSymbols( symbols, savePowerSymbols );
 
     std::map<LIB_ID, LIB_SYMBOL*> libSymbols;
     std::map<LIB_ID, std::vector<SCH_SYMBOL*>> symbolMap;
@@ -430,7 +432,6 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
             LIB_ID id = it.first;
             id.SetLibNickname( targetLib );
 
-
             for( SCH_SYMBOL* symbol : symbolMap[it.first] )
             {
                 m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED, append, false);
@@ -487,6 +488,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         for( SCH_SHEET_PATH& sheet : sheets )
         {
             SCH_SCREEN* screen = sheet.LastScreen();
+
             if( processedScreens.find( ( screen ) ) == processedScreens.end() )
             {
                 processedScreens.insert( screen );
