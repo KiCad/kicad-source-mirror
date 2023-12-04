@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-12-04 10:07+0000\n"
+"PO-Revision-Date: 2023-12-05 11:04+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -3375,7 +3375,7 @@ msgstr "Δοκιμή"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
@@ -3402,8 +3402,9 @@ msgid "Author:"
 msgstr "Author:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
+#, fuzzy
 msgid "C&ommit"
-msgstr ""
+msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:150
 #, fuzzy
@@ -3413,7 +3414,7 @@ msgstr "Το όνομα του εξαρτήματος δεν μπορεί να �
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:370
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Εισαγωγή κωδικού για το κλειδί SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
 #, fuzzy
@@ -3485,7 +3486,7 @@ msgstr "Όνομα Σύνδεσης"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #, fuzzy
@@ -3517,20 +3518,22 @@ msgid "Git Repository"
 msgstr "Αποθετήριο"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
+#, fuzzy
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Αλλαγή Git Branch"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Επιλογή ή είσαγωγή ονόματος για το branch:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
+#, fuzzy
 msgid "Branch"
-msgstr ""
+msgstr "Branch"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Προηγούμενο Commit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 #, fuzzy
@@ -3550,8 +3553,9 @@ msgid "Add"
 msgstr "Προσθήκη"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
+#, fuzzy
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Δεδομένα του Git Commit"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
 #, fuzzy
@@ -3781,13 +3785,16 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "Οπτική ένδειξη αλλαγής ρυθμίσεων από συντομεύσεις πληκτρολογίου"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Όταν επιλεγεί, συντομεύσεις πληκτρολογίου που εναλλάσσουν την κατάσταση "
+"ρυθμίσεων του προγράμματος \n"
+"θα έχουν μια σύντομη οπτική ένδειξη κάποιας αλλαγής."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -4253,8 +4260,9 @@ msgid "Scale:"
 msgstr "Κλίμακα"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
+#, fuzzy
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
 #, fuzzy
@@ -6127,7 +6135,7 @@ msgstr "Αποθετήριο"
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Απέτυχε η αυθεντικοποίηση για το απομακρυσμένο αποθετήριο."
 
 #: common/git/kicad_git_errors.cpp:40
 #, fuzzy
@@ -6145,16 +6153,18 @@ msgid "Failed to delete branch."
 msgstr "Αποτυχία διαγραφής '%s'"
 
 #: common/git/kicad_git_errors.cpp:46
+#, fuzzy
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Δεν βρέθηκε αρχείο κατα το git checkout."
 
 #: common/git/kicad_git_errors.cpp:49
+#, fuzzy
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Προέκυψε git merge conflict."
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Προέκυψε git rebase conflict."
 
 #: common/git/kicad_git_errors.cpp:53
 #, fuzzy
@@ -6885,8 +6895,9 @@ msgid "View Details"
 msgstr "Λεπτομέρειες"
 
 #: common/notifications_manager.cpp:95
+#, fuzzy
 msgid "Dismiss"
-msgstr ""
+msgstr "Αποδέσμευση"
 
 #: common/notifications_manager.cpp:155
 #, fuzzy
@@ -6895,7 +6906,7 @@ msgstr "Στοίχιση"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Δεν υπάρχουν διαθέσιμες ειδοποιήσεις"
 
 #: common/pgm_base.cpp:205
 msgid "No default editor found, you must choose one."
@@ -12612,16 +12623,19 @@ msgid "OP"
 msgstr "OSP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
+#, fuzzy
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
+#, fuzzy
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
+#, fuzzy
 msgid "NOISE"
-msgstr ""
+msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #, fuzzy
