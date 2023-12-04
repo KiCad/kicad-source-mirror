@@ -120,11 +120,12 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
-    if( format == "excellon" )
+
+    if( format == wxS( "excellon" ) )
     {
         drillJob->m_format = JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON;
     }
-    else if( format == "gerber" )
+    else if( format == wxS( "gerber" ) )
     {
         drillJob->m_format = JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::GERBER;
     }
@@ -238,6 +239,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
     drillJob->m_excellonMinimalHeader = m_argParser.get<bool>( ARG_EXCELLON_MINIMALHEAD );
     drillJob->m_excellonCombinePTHNPTH = !m_argParser.get<bool>( ARG_EXCELLON_SEPARATE_TH );
     drillJob->m_generateMap = m_argParser.get<bool>( ARG_GENERATE_MAP );
+    drillJob->m_gerberPrecision = m_argParser.get<int>( ARG_GERBER_PRECISION );
 
     if( drillJob->m_gerberPrecision != 5 && drillJob->m_gerberPrecision != 6 )
     {
