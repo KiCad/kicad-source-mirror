@@ -1,10 +1,3 @@
-/**
- * @file plot_board_layers.cpp
- * @brief Functions to plot one board layer (silkscreen layers or other layers).
- * Silkscreen layers have specific requirement for pads (not filled) and texts
- * (with option to remove them from some copper areas (pads...)
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,6 +19,12 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @brief Functions to plot one board layer (silkscreen layers or other layers).
+ * Silkscreen layers have specific requirement for pads (not filled) and texts
+ * (with option to remove them from some copper areas (pads...)
  */
 
 
@@ -448,11 +447,12 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             case PAD_SHAPE::ROUNDRECT:
             {
-                // rounding is stored as a percent, but we have to change the new radius
-                // to initial_radius + clearance to have a inflated/deflated similar shape
-                int initial_radius = pad->GetRoundRectCornerRadius();
+                // rounding is stored as a percent, but we have to update this ratio
+                // to force recalculation of other values after size changing (we do not
+                // really change the rounding percent value)
+                double radius_ratio = pad->GetRoundRectRadiusRatio();
                 pad->SetSize( padPlotsSize );
-                pad->SetRoundRectCornerRadius( std::max( initial_radius + mask_clearance, 0 ) );
+                pad->SetRoundRectRadiusRatio( radius_ratio );
 
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
