@@ -463,12 +463,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         if( grid )
         {
             grid->SetSnap( !evt->Modifier( MD_SHIFT ) );
-            grid->SetUseGrid( getView()->GetGAL()->GetGridSnapping() &&
-                              !evt->DisableGridSnapping() );
-
-            cursorPos = grid->Align( controls->GetMousePosition(),
-                                     GRID_HELPER_GRIDS::GRID_GRAPHICS );
-            controls->ForceCursorPosition( true, cursorPos );
+            grid->SetUseGrid( getView()->GetGAL()->GetGridSnapping()
+                              && !evt->DisableGridSnapping() );
         }
         else
         {
@@ -506,6 +502,10 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             }
 
             bool snap = !evt->DisableGridSnapping();
+
+            cursorPos =
+                    grid->Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+            controls->ForceCursorPosition( true, cursorPos );
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
