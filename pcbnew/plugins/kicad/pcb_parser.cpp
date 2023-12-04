@@ -2957,11 +2957,12 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
                     break;
 
                 case T_none:
+                case T_no:
                     shape->SetFilled( false );
                     break;
 
                 default:
-                    Expecting( "yes, none, solid" );
+                    Expecting( "yes, no, solid, none" );
                 }
             }
 
