@@ -976,7 +976,7 @@ void GERBER_PLOTTER::PlotPolyAsRegion( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFi
 {
     // plot a filled polygon using Gerber region, therefore adding X2 attributes
     // to the solid polygon
-    if( aWidth )
+    if( aWidth || aFill == FILL_T::NO_FILL )
         PlotPoly( aPoly, FILL_T::NO_FILL, aWidth, aGbrMetadata );
 
     if( aFill != FILL_T::NO_FILL )
@@ -1034,7 +1034,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
         fputs( "G37*\n", m_outputFile );
     }
 
-    if( aWidth > 0 )    // Draw the polyline/polygon outline
+    if( aWidth > 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
     {
         SetCurrentLineWidth( aWidth, gbr_metadata );
 
@@ -1102,7 +1102,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T 
         fputs( "G37*\n", m_outputFile );
     }
 
-    if( aWidth > 0 )    // Draw the polyline/polygon outline
+    if( aWidth > 0 || aFill == FILL_T::NO_FILL )    // Draw the polyline/polygon outline
     {
         SetCurrentLineWidth( aWidth, gbr_metadata );
 
