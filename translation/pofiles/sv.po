@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-12-05 12:11+0000\n"
+"PO-Revision-Date: 2023-12-05 12:53+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -23538,9 +23538,9 @@ msgid "Zeven"
 msgstr "Zjämn"
 
 #: pcb_calculator/transline_ident.cpp:335
-#, fuzzy
 msgid "Even mode impedance (lines driven by common voltages)"
-msgstr "Jämnlägesimpedans (linjer som drivs av likfasiga spänningar)"
+msgstr ""
+"Jämn mod-impedans (för en linje i par som drivs av likfasiga spänningar)"
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
