@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-12-05 12:53+0000\n"
+"PO-Revision-Date: 2023-12-07 04:08+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -9915,7 +9915,7 @@ msgstr "enheter"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Attributes"
-msgstr "Egenskaper"
+msgstr "Attribut"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
@@ -34416,7 +34416,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:165
 msgid "Fabrication Outputs"
-msgstr "Tillverkningsutgångar"
+msgstr "Tillverkningsutmatning"
 
 #: pcbnew/menubar_pcb_editor.cpp:316
 msgid "Add Microwave Shape"
