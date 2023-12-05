@@ -83,7 +83,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
     m_argParser.add_argument( ARG_PRECISION )
             .help( UTF8STDSTR( _( "Precision of Gerber coordinates, valid options: 5 or 6" ) ) )
             .scan<'i', int>()
-            .default_value( 5 )
+            .default_value( 6 )
             .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_NO_PROTEL_EXTENSION )
