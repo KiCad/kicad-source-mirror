@@ -324,10 +324,10 @@ bool DIALOG_SHIM::Show( bool show )
 #endif
 
         ret = wxDialog::Show( show );
-    }
 
-    if( m_parent )
-        m_parent->SetFocus();
+        if( m_parent )
+            m_parent->SetFocus();
+    }
 
     return ret;
 }
