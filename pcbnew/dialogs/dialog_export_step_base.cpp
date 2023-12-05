@@ -132,23 +132,58 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbOverwriteFile = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOtherOptions->Add( m_cbOverwriteFile, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_staticline11_hidden = new wxStaticLine( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_staticline11_hidden->Hide();
+
+	sbOtherOptions->Add( m_staticline11_hidden, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
 	m_cbOptimizeStep = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Optimize STEP file"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbOptimizeStep->SetToolTip( _("Disables writing parametric curves. Optimizes file size and write/read times, but may reduce compatibility with other software.") );
 
 	sbOtherOptions->Add( m_cbOptimizeStep, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_cbFuseShapes_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Fuse shapes (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbFuseShapes_hidden->Hide();
+	m_cbFuseShapes_hidden->SetToolTip( _("Combine intersecting geometry into one shape.") );
+
+	sbOtherOptions->Add( m_cbFuseShapes_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportCompound_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export as Compound shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportCompound_hidden->Hide();
+	m_cbExportCompound_hidden->SetToolTip( _("Merges all shapes into a single Compound shape. Useful for external software that does de-duplication based on shape names.") );
+
+	sbOtherOptions->Add( m_cbExportCompound_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_staticline1 = new wxStaticLine( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbOtherOptions->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	m_cbExportTracks = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export tracks (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExportTracks->SetToolTip( _("Export tracks and vias on external copper layers.") );
+	m_cbExportTracks = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export tracks, pads and vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportTracks->SetToolTip( _("Export tracks, pads and vias on external copper layers.") );
 
 	sbOtherOptions->Add( m_cbExportTracks, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_cbExportZones = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export zones (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportZones = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportZones->SetToolTip( _("Export zones on external copper layers.") );
 
 	sbOtherOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportSilkscreen_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportSilkscreen_hidden->Hide();
+	m_cbExportSilkscreen_hidden->SetToolTip( _("Export silkscreen graphics.") );
+
+	sbOtherOptions->Add( m_cbExportSilkscreen_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportSoldermask_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportSoldermask_hidden->Hide();
+	m_cbExportSoldermask_hidden->SetToolTip( _("Export solder mask graphics.") );
+
+	sbOtherOptions->Add( m_cbExportSoldermask_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportSolderpaste_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export solder paste"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportSolderpaste_hidden->Hide();
+	m_cbExportSolderpaste_hidden->SetToolTip( _("Export solder paste graphics.") );
+
+	sbOtherOptions->Add( m_cbExportSolderpaste_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticTextTolerance = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTolerance->Wrap( -1 );

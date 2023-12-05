@@ -64,10 +64,16 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
+		wxStaticLine* m_staticline11_hidden;
 		wxCheckBox* m_cbOptimizeStep;
+		wxCheckBox* m_cbFuseShapes_hidden;
+		wxCheckBox* m_cbExportCompound_hidden;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_cbExportTracks;
 		wxCheckBox* m_cbExportZones;
+		wxCheckBox* m_cbExportSilkscreen_hidden;
+		wxCheckBox* m_cbExportSoldermask_hidden;
+		wxCheckBox* m_cbExportSolderpaste_hidden;
 		wxStaticText* m_staticTextTolerance;
 		wxChoice* m_choiceTolerance;
 		wxStdDialogButtonSizer* m_sdbSizer;
