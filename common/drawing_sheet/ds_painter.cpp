@@ -370,5 +370,6 @@ void KIGFX::DS_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor
     // Use a gray color for the border color
     m_gal->SetStrokeColor( m_renderSettings.m_pageBorderColor );
     m_gal->SetIsFill( false );
+    m_gal->SetLineWidth( m_renderSettings.GetDefaultPenWidth() );
     m_gal->DrawRectangle( origin, end );
 }
