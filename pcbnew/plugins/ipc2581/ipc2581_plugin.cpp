@@ -20,6 +20,7 @@
 #include "ipc2581_plugin.h"
 
 #include <base_units.h>
+#include <bezier_curves.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/stackup_predefined_prms.h>
@@ -991,7 +992,12 @@ void IPC2581_PLUGIN::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
     case SHAPE_T::BEZIER:
     {
         wxXmlNode* polyline_node = appendNode( aContentNode, "Polyline" );
-        const std::vector<VECTOR2I>& points = aShape.GetBezierPoints();
+        std::vector<VECTOR2I> ctrlPoints = { aShape.GetStart(), aShape.GetBezierC1(),
+                                             aShape.GetBezierC2(), aShape.GetEnd() };
+        BEZIER_POLY converter( ctrlPoints );
+        std::vector<VECTOR2I> points;
+        converter.GetPoly( points, aShape.GetStroke().GetWidth() );
+
         wxXmlNode* point_node = appendNode( polyline_node, "PolyBegin" );
         addXY( point_node, points[0] );
 
