@@ -581,6 +581,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 #ifdef PROFILE
     openFiles.Show();
 #endif
+    // Ensure all items are redrawn (especially the drawing-sheet items):
+    if( GetCanvas() )
+        GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
 
     return true;
 }
