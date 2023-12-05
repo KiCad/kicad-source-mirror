@@ -107,12 +107,12 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .default_value( false );
 
         m_argParser.add_argument( ARG_INCLUDE_TRACKS )
-                .help( UTF8STDSTR( _( "Export tracks (time consuming)" ) ) )
+                .help( UTF8STDSTR( _( "Export tracks" ) ) )
                 .implicit_value( true )
                 .default_value( false );
 
         m_argParser.add_argument( ARG_INCLUDE_ZONES )
-                .help( UTF8STDSTR( _( "Export zones (time consuming)" ) ) )
+                .help( UTF8STDSTR( _( "Export zones" ) ) )
                 .implicit_value( true )
                 .default_value( false );
 
