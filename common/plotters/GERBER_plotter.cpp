@@ -812,7 +812,8 @@ void GERBER_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, 
 
 void GERBER_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill, int aWidth )
 {
-    Arc( aCenter, ANGLE_0, ANGLE_360, aDiameter / 2, aFill, aWidth );
+    Arc( aCenter, ANGLE_0, ANGLE_180, aDiameter / 2, aFill, aWidth );
+    Arc( aCenter, ANGLE_180, ANGLE_180, aDiameter / 2, aFill, aWidth );
 }
 
 
