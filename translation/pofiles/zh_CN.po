@@ -26,13 +26,14 @@
 # 欠陥電気 <Misaka13514@gmail.com>, 2023.
 # Pinpang Liao <pinpang@aliyun.com>, 2023.
 # JasonTan <tfx2001@outlook.com>, 2023.
+# Zhen Sun <igoal@163.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-25 12:25+0000\n"
-"Last-Translator: JasonTan <tfx2001@outlook.com>\n"
+"PO-Revision-Date: 2023-12-08 06:43+0000\n"
+"Last-Translator: Zhen Sun <igoal@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -40,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2.1-rc\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -313,16 +314,14 @@ msgstr "外观"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "PCB 编辑器"
+msgstr "遵循PCB 编辑器"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "筛选设置"
+msgstr "遵循PCB绘图设置"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
 msgid "legacy colors"
@@ -374,9 +373,8 @@ msgid "Can't save file"
 msgstr "无法保存文件"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
-#, fuzzy
 msgid "Set Pivot"
-msgstr "层次原理图引脚"
+msgstr "设置旋转中心点"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 #, fuzzy
@@ -470,7 +468,6 @@ msgid "Flip the board view"
 msgstr "翻转电路板视图"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:177
-#, fuzzy
 msgid "Toggle Orthographic Projection"
 msgstr "切换正交投影"
 
@@ -559,63 +556,52 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "根据材质的漫反射颜色使用 CAD 颜色样式"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "切换直插通孔 3D 模型"
+msgstr "显示直插通孔 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "切换 '通孔' 型元件的 3D 模型"
+msgstr "显示 '通孔' 型元件封装的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "显示 3D 贴片模型"
+msgstr "显示 '表面贴装' 型元件3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "切换 '表面贴装' 型元件的 3D 模型"
+msgstr "显示 '表面贴装' 型元件封装的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "切换未指定的 3D 模型"
+msgstr "显示未指定的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "切换 '未指定' 类型的元件的 3D 模型"
+msgstr "显示 '未指定' 类型的元件封装的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "切换不在位置文件(pos)中的 3D 模型"
+msgstr "显示不在位置文件(pos)中的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "切换不在位置文件(pos)中的 3D 模型"
+msgstr "显示不在位置文件(*.pos)中的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "切换贴片(SMD) 3D 模型"
+msgstr "显示DNP型原件 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:346
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "排除“虚拟”属性元件的 3D 模型"
+msgstr "显示 3D 模型，即使它被标记为“请勿放置”"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
 msgid "Show Model Bounding Boxes"
 msgstr "显示模型边框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:354
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "显示模型边框"
+msgstr "显示 3D 模型边框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:361
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:362
@@ -633,9 +619,8 @@ msgid "Show/hide the appearance manager"
 msgstr "显示/隐藏外观管理器"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "电路板主体："
+msgstr "电路板主体"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -646,9 +631,8 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "铜/表面处理颜色..."
+msgstr "显示铜/表面处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
@@ -758,29 +742,24 @@ msgid "Through-hole Models"
 msgstr "通孔焊盘"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D 模型"
+msgstr "SMD模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "切换虚拟 3D 模型"
+msgstr "虚拟 3D 模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "切换不在位置文件(pos)中的 3D 模型"
+msgstr "模型不在文件(.pos)中"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "切换贴片(SMD) 3D 模型"
+msgstr "标记为 DNP 的模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "显示模型边框"
+msgstr "模型边框"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -817,38 +796,32 @@ msgid "Show all footprint text"
 msgstr "显示所有封装文本"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "丝印层"
+msgstr "板外丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
 msgstr "不使用板轮廓裁剪丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "X 轴"
+msgstr "3D 轴"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "背景顶部："
+msgstr "上部背景颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "背景渐变开始："
+msgstr "背景渐变开始颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "背景"
+msgstr "底部背景颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "背景渐变结束："
+msgstr "背景渐变结束颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, fuzzy, c-format
@@ -919,9 +892,8 @@ msgstr "保存层预设"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1608
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2009
 #: pcbnew/widgets/appearance_controls.cpp:2669
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "打开已有工程"
+msgstr "覆盖已有工程？"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
@@ -1085,14 +1057,12 @@ msgid "deg"
 msgstr "度"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "在移动时"
+msgstr "在移动时重绘"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
-#, fuzzy
 msgid "Redraw speed:"
-msgstr "重绘屏幕"
+msgstr "重绘速度:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1425,9 +1395,8 @@ msgid "Image Files"
 msgstr "图片文件"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "选择图纸文件"
+msgstr "创建图纸文件"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -1726,9 +1695,8 @@ msgid "Negative"
 msgstr "负片"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "放置导入的图形"
+msgstr "图形的 PCB 层"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -4985,7 +4953,7 @@ msgstr "光线追踪渲染器"
 #: gerbview/gerbview_frame.cpp:646 gerbview/gerbview_frame.cpp:670
 #: gerbview/menubar.cpp:159 kicad/tools/kicad_manager_actions.cpp:148
 msgid "Gerber Viewer"
-msgstr "Gerber 查看器"
+msgstr "Gerber 文件查看器"
 
 #: common/eda_base_frame.cpp:1183
 msgid "Excellon Options"
@@ -14989,7 +14957,7 @@ msgstr "标签未连接到任何对象"
 
 #: eeschema/erc_item.cpp:91
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "全局标签未连接到原理图中的任何其他位置"
+msgstr "全局标签未连接到原理图中的其他位置"
 
 #: eeschema/erc_item.cpp:95
 msgid "Labels are similar (lower/upper case difference only)"
@@ -21087,7 +21055,7 @@ msgstr "拖动所选项目"
 
 #: eeschema/tools/ee_actions.cpp:1405
 msgid "Align Elements to Grid"
-msgstr "将对象与网格对齐"
+msgstr "将元素与网格对齐"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Current Sheet Copy As..."
@@ -23217,9 +23185,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "有效的选项是：decimal、suppressleading、suppresstrailing、keep。"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "有效的选项是：absolute、plot"
+msgstr "有效的选项是：route,alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Output units, valid options:in,mm"
@@ -23265,9 +23232,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "指定的零格式无效\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:189
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "指定的地图格式无效\n"
+msgstr "指定的椭圆钻孔格式无效\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:217
 msgid "Invalid map format specified\n"
@@ -23390,7 +23356,7 @@ msgstr "镜像电路板（对尝试显示底部层有用）"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:77
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "要使用的颜色主题（默认使用PCB编辑器设置）"
+msgstr "要使用的颜色主题（默认为 PCB编辑器设置）"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:81
 #: kicad/cli/command_pcb_export_svg.cpp:81
@@ -28754,7 +28720,8 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
-"元件的位置将被四舍五入到该网格，然后再进行排序。\n"
+"元件的位置将被四舍五入到该网格，\n"
+"然后再进行排序。\n"
 "这有助于处理错位的部件。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:168
@@ -28823,7 +28790,9 @@ msgstr "删除顶层前缀"
 msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
-msgstr "如果选中，将删除顶层位号的前缀（如果存在）"
+msgstr ""
+"如果选中，将删除顶层位号的前缀\n"
+"（如果存在）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:240
 msgid "Remove back prefix"
@@ -28833,7 +28802,9 @@ msgstr "删除底层前缀"
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
-msgstr "如果选中，将删除底层位号的前缀（如果存在）"
+msgstr ""
+"如果选中，将删除底层位号的前缀\n"
+"（如果存在）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
 msgid "Front prefix:"
@@ -28869,7 +28840,9 @@ msgstr "排除位号："
 msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
-msgstr "不重新批注此类型位号（R 表示 R*）"
+msgstr ""
+"不要重新批注此类型参考值\n"
+"（R 表示 R*）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:293
 msgid "Reference Designators"
@@ -31208,7 +31181,7 @@ msgid "Solder paste relative clearance:"
 msgstr "焊膏相对间隙："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -31344,7 +31317,8 @@ msgid ""
 msgstr ""
 "这是该封装所有焊盘的局部网络间隙设置。\n"
 "如果为 0, 即使用 “网络类” 值。\n"
-"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，可以覆盖此值。"
+"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，\n"
+"可以覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid ""
@@ -31356,7 +31330,8 @@ msgid ""
 msgstr ""
 "这是该封装的焊盘与阻焊之间的局部间隙。\n"
 "如果为 0 时，使用全局设置值。\n"
-"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，可以覆盖此值。"
+"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，\n"
+"可以覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
 msgid ""
@@ -35570,7 +35545,7 @@ msgstr "电路板边框"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Margin"
-msgstr "Margin"
+msgstr "电路板电气边界层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 msgid "Edge_Cuts setback"
@@ -38258,7 +38233,7 @@ msgstr "KiCad 封装编辑器"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:232
 msgid "Inner layers"
-msgstr "Inner layers"
+msgstr "内部图层"
 
 #: pcbnew/footprint_edit_frame.cpp:241 pcbnew/footprint_edit_frame.cpp:901
 #: pcbnew/pcb_edit_frame.cpp:304 pcbnew/pcb_edit_frame.cpp:1579
@@ -38842,7 +38817,7 @@ msgstr "从其它应用程序中导入板文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "光绘 DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "GenCAD..."
@@ -40866,9 +40841,9 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
+msgstr "忽略图层“%s”（%d）上的多边形：轮廓计数不是 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1819
 #, c-format
@@ -43413,7 +43388,7 @@ msgstr "随参考点移动"
 
 #: pcbnew/tools/pcb_actions.cpp:469
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr "以指定的起点移动选定的项目。"
+msgstr "以指定的起点移动选定的项目"
 
 #: pcbnew/tools/pcb_actions.cpp:477
 msgid "Copy with Reference"
@@ -44175,7 +44150,7 @@ msgstr "网络颜色视图模式 (三种状态)"
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "在所有网络，仅飞线以及不显示3种状态下切换使用网络及网络类的颜色。"
+msgstr "在所有网络，仅飞线以及不显示3种状态下切换使用网络及网络类的颜色"
 
 #: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Sketch Tracks"
@@ -44453,7 +44428,7 @@ msgstr "按原理图符号关键字筛选封装列表"
 
 #: pcbnew/tools/pcb_actions.cpp:1888
 msgid "Geographical Reannotate..."
-msgstr "按位置重新批注..."
+msgstr "位置重新批注..."
 
 #: pcbnew/tools/pcb_actions.cpp:1889
 msgid "Reannotate PCB in geographical order"
