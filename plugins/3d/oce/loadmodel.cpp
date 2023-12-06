@@ -553,12 +553,22 @@ bool readIGES( Handle( TDocStd_Document ) & m_doc, const char* fname )
     reader.SetNameMode(false);  // don't use IGES label names
     reader.SetLayerMode(false); // ignore LAYER data
 
-    if ( !reader.Transfer( m_doc ) )
+    if( !reader.Transfer( m_doc ) )
+    {
+        if( m_doc->CanClose() == CDM_CCS_OK )
+            m_doc->Close();
+
         return false;
+    }
 
     // are there any shapes to translate?
     if( reader.NbShapes() < 1 )
+    {
+        if( m_doc->CanClose() == CDM_CCS_OK )
+            m_doc->Close();
+
         return false;
+    }
 
     return true;
 }
@@ -587,15 +597,22 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
     reader.SetNameMode( false );  // don't use label names
     reader.SetLayerMode( false ); // ignore LAYER data
 
-    if ( !reader.Transfer( m_doc ) )
+    if( !reader.Transfer( m_doc ) )
     {
-        m_doc->Close();
+        if( m_doc->CanClose() == CDM_CCS_OK )
+            m_doc->Close();
+
         return false;
     }
 
     // are there any shapes to translate?
     if( reader.NbRootsForTransfer() < 1 )
+    {
+        if( m_doc->CanClose() == CDM_CCS_OK )
+            m_doc->Close();
+
         return false;
+    }
 
     return true;
 }
@@ -685,34 +702,27 @@ SCENEGRAPH* LoadModel( char const* filename )
         data.renderBoth = true;
 
         if( !readIGES( data.m_doc, filename ) )
-        {
-            m_app->Close( data.m_doc );
             return nullptr;
-        }
 
         break;
 
     case FMT_STEP:
         if( !readSTEP( data.m_doc, filename ) )
-        {
-            m_app->Close( data.m_doc );
             return nullptr;
-        }
 
         break;
 
     case FMT_STPZ:
         if( !readSTEPZ( data.m_doc, filename ) )
-        {
-            m_app->Close( data.m_doc );
             return nullptr;
-        }
 
         break;
 
 
     default:
-        m_app->Close( data.m_doc );
+        if( m_app->CanClose( data.m_doc ) == CDM_CCS_OK )
+            m_app->Close( data.m_doc );
+
         return nullptr;
         break;
     }
@@ -749,7 +759,9 @@ SCENEGRAPH* LoadModel( char const* filename )
 
     if( !ret )
     {
-        m_app->Close( data.m_doc );
+        if( m_app->CanClose( data.m_doc ) == CDM_CCS_OK )
+            m_app->Close( data.m_doc );
+
         return nullptr;
     }
 
@@ -776,7 +788,9 @@ SCENEGRAPH* LoadModel( char const* filename )
     // set to NULL to prevent automatic destruction of the scene data
     data.scene = nullptr;
 
-    m_app->Close( data.m_doc );
+    if( m_app->CanClose( data.m_doc ) == CDM_CCS_OK )
+        m_app->Close( data.m_doc );
+
     return scene;
 }
 
