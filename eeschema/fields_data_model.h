@@ -98,7 +98,15 @@ public:
     void MoveColumn( int aCol, int aNewPos )
     {
         wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), "Invalid Column Number" );
-        std::swap( m_cols[aCol], m_cols[aNewPos] );
+
+        if( aCol == aNewPos )
+            return;
+        else if( aCol < aNewPos )
+            std::rotate( std::begin( m_cols ) + aCol, std::begin( m_cols ) + aCol + 1,
+                         std::begin( m_cols ) + aNewPos + 1 );
+        else
+            std::rotate( std::begin( m_cols ) + aNewPos, std::begin( m_cols ) + aCol,
+                         std::begin( m_cols ) + aCol + 1 );
     }
 
     int GetNumberRows() override { return (int) m_rows.size(); }
