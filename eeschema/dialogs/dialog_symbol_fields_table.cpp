@@ -927,6 +927,18 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
 {
     int origPos = aEvent.GetCol();
 
+    // Save column widths since the setup function uses the saved config values
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
+    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
+    {
+        if( m_grid->IsColShown( i ) )
+        {
+            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
+            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
+        }
+    }
+
     CallAfter(
             [origPos, this]()
             {
