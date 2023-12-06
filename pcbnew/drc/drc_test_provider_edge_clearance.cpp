@@ -218,6 +218,14 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     for( size_t ii = 0; ii < poly.GetSegmentCount(); ++ii )
                     {
                         SEG seg = poly.CSegment( ii );
+
+                        // The polygon iterator returns coordinates relative to the parent
+                        if( FOOTPRINT* fp = shape->GetParentFootprint() )
+                        {
+                            seg.A += fp->GetPosition();
+                            seg.B += fp->GetPosition();
+                        }
+
                         edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                         edges.back()->SetShape( SHAPE_T::SEGMENT );
                         edges.back()->SetStart( seg.A );
