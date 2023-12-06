@@ -47,6 +47,7 @@ private:
 
 private:
     bool m_firstShow = true;
+    UNITS_PROVIDER* m_unitProvider;
 };
 
 

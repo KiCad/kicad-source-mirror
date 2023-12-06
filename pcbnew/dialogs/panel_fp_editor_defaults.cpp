@@ -29,6 +29,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <grid_tricks.h>
 #include <eda_base_frame.h>
+#include <eda_text.h>
 #include <panel_fp_editor_defaults.h>
 #include <grid_layer_box_helpers.h>
 #include <bitmaps.h>
@@ -176,6 +177,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( wxWindow* aParent,
                                                     UNITS_PROVIDER* aUnitsProvider ) :
         PANEL_FP_EDITOR_DEFAULTS_BASE( aParent )
 {
+    m_unitProvider = aUnitsProvider;
     m_fieldPropsGrid->SetDefaultRowSize( m_fieldPropsGrid->GetDefaultRowSize() + 4 );
 
     m_fieldPropsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE( true ), true );
@@ -356,16 +358,88 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
     SETTINGS_MANAGER&      mgr = Pgm().GetSettingsManager();
     BOARD_DESIGN_SETTINGS& cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>()->m_DesignSettings;
 
+    // A minimal value for sizes and thickness:
+    const int minWidth = pcbIUScale.mmToIU( MINIMUM_LINE_WIDTH_MM );
+    const int maxWidth = pcbIUScale.mmToIU( MAXIMUM_LINE_WIDTH_MM );
+    const int minSize  = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
+    const int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    wxString errorsMsg;
+
     for( int i = 0; i < ROW_COUNT; ++i )
     {
-        cfg.m_LineThickness[ i ] = m_graphicsGrid->GetUnitValue( i, COL_LINE_THICKNESS );
+        bool badParam = false;
+
+        int lineWidth =  m_graphicsGrid->GetUnitValue( i, COL_LINE_THICKNESS );
+
+        if( lineWidth < minWidth || lineWidth > maxWidth )
+        {
+            if( !errorsMsg.IsEmpty() )
+                errorsMsg += wxT( "\n\n" );
+
+            errorsMsg += wxString::Format( _( "%s: Incorrect line width.\n"
+                                              "It must be between %s and %s" ),
+                                            m_graphicsGrid->GetRowLabelValue( i ),
+                                            m_unitProvider->StringFromValue( minWidth , true),
+                                            m_unitProvider->StringFromValue( maxWidth , true) );
+            badParam = true;
+        }
+
+        if( !badParam )
+            cfg.m_LineThickness[ i ] = lineWidth;
 
         if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
-        cfg.m_TextSize[i] = VECTOR2I( m_graphicsGrid->GetUnitValue( i, COL_TEXT_WIDTH ),
-                                      m_graphicsGrid->GetUnitValue( i, COL_TEXT_HEIGHT ) );
-        cfg.m_TextThickness[ i ] = m_graphicsGrid->GetUnitValue( i, COL_TEXT_THICKNESS );
+        badParam = false;
+        int textWidth =  m_graphicsGrid->GetUnitValue( i, COL_TEXT_WIDTH );
+        int textHeight = m_graphicsGrid->GetUnitValue( i, COL_TEXT_HEIGHT );
+        int textThickness = m_graphicsGrid->GetUnitValue( i, COL_TEXT_THICKNESS );
+
+        if( textWidth < minSize || textHeight < minSize
+                || textWidth > maxSize || textHeight > maxSize )
+        {
+            if( !errorsMsg.IsEmpty() )
+                errorsMsg += wxT( "\n\n" );
+
+            errorsMsg += wxString::Format( _( "%s: Text size is incorrect.\n"
+                                              "Size must be between %s and %s" ),
+                                            m_graphicsGrid->GetRowLabelValue( i ),
+                                            m_unitProvider->StringFromValue( minSize , true),
+                                            m_unitProvider->StringFromValue( maxSize , true) );
+            badParam = true;
+        }
+
+        // Text thickness cannot be > text size /4 to be readable
+        int textMinDim = std::min( textWidth, textHeight );
+        int textMaxThickness = std::min( maxWidth, textMinDim /4);
+
+        if( !badParam && ( textThickness < minWidth || textThickness > textMaxThickness ) )
+        {
+            if( !errorsMsg.IsEmpty() )
+                errorsMsg += wxT( "\n\n" );
+
+            if( textThickness > textMaxThickness )
+                errorsMsg += wxString::Format( _( "%s: Text thickness is too large.\n"
+                                                  "It will be truncated to %s" ),
+                                                m_graphicsGrid->GetRowLabelValue( i ),
+                                                m_unitProvider->StringFromValue( textMaxThickness , true) );
+
+            else if( textThickness < minWidth )
+                errorsMsg += wxString::Format( _( "%s: Text thickness is too small.\n"
+                                                  "It will be truncated to %s" ),
+                                                m_graphicsGrid->GetRowLabelValue( i ),
+                                                m_unitProvider->StringFromValue( minWidth , true ) );
+
+            textThickness = std::min( textThickness, textMaxThickness );
+            textThickness = std::max( textThickness, minWidth );
+            m_graphicsGrid->SetUnitValue( i, COL_TEXT_THICKNESS, textThickness );
+       }
+
+        if( !badParam )
+        {
+            cfg.m_TextSize[i] = VECTOR2I( textWidth, textHeight );
+            cfg.m_TextThickness[ i ] = textThickness;
+        }
 
         wxString msg = m_graphicsGrid->GetCellValue( i, COL_TEXT_ITALIC );
         cfg.m_TextItalic[ i ] = wxGridCellBoolEditor::IsTrueValue( msg );
@@ -396,7 +470,12 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
         cfg.m_DefaultFPTextItems.emplace_back( text, visible, layer );
     }
 
-    return true;
+    if( errorsMsg.IsEmpty() )
+        return true;
+
+    DisplayErrorMessage( this,errorsMsg, _( "Parameter error" ) );
+
+    return false;
 }
 
 
