@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-21 22:05+0000\n"
+"PO-Revision-Date: 2023-12-08 06:43+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -641,9 +641,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Darstellungsverwaltung ein-/ausblenden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "Platinenkörper:"
+msgstr "Platinenkörper"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -676,9 +675,8 @@ msgid "Show adhesive"
 msgstr "Kleberlagen anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Lötpaste:"
+msgstr "Lötpaste"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
@@ -833,29 +831,24 @@ msgid "Do not clip silk layers to board outline"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "X-Achse"
+msgstr "3D-Achse"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "Hintergrund"
+msgstr "Hintergrund Beginn"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Hintergrund-Farbverlauf Start:"
+msgstr "Farbe für Beginn des Hintergrund-Farbverlaufs"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Hintergrund"
+msgstr "Hintergrund Ende"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Hintergrund-Farbverlauf Ende:"
+msgstr "Farbe für Ende des Hintergrund-Farbverlaufs"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, fuzzy, c-format
@@ -928,9 +921,8 @@ msgstr "Lagen-Voreinstellung speichern"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1608
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2009
 #: pcbnew/widgets/appearance_controls.cpp:2669
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Ein vorhandenes Projekt öffnen"
+msgstr "Bestehende Voreinstellung überschreiben?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
@@ -1309,9 +1301,8 @@ msgid "3D Preview Options"
 msgstr "Vorschau-Einstellungen"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Platinen-Dicke: "
+msgstr "Platinen-Dicke:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -1416,7 +1407,6 @@ msgid "KiCad Image Converter"
 msgstr "KiCad Bildumwandler"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
 msgstr "Bilddateien"
 
@@ -1445,9 +1435,8 @@ msgid "Image Files"
 msgstr "Bilddateien"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Zeichnungsblattdatei auswählen"
+msgstr "Zeichnungsblattdatei erstellen"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -2548,11 +2537,8 @@ msgid "Hotkey List"
 msgstr "Liste der Tastaturbefehle"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Projektdatei:\n"
-"%s\n"
+msgstr "Projektname"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1047
@@ -3281,14 +3267,12 @@ msgid "MyLabel"
 msgstr "MeinBezeichner"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:79
-#, fuzzy
 msgid "X label:"
-msgstr "Bezeichner:"
+msgstr "X-Bezeichner:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:90
-#, fuzzy
 msgid "Y label:"
-msgstr "Bezeichner:"
+msgstr "Y-Bezeichner:"
 
 #: common/dialogs/dialog_unit_entry_base.h:45
 msgid "Title"
@@ -3395,15 +3379,13 @@ msgid "Authentication"
 msgstr "Ausrichtung"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Basisname"
+msgstr "Benutzername"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:437
-#, fuzzy
 msgid "Password"
-msgstr "Passwort:"
+msgstr "Passwort"
 
 #: common/dialogs/git/dialog_git_commit.cpp:105
 #, fuzzy
@@ -3411,9 +3393,8 @@ msgid "Commit Message:"
 msgstr "Meldungen:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
-#, fuzzy
 msgid "Author:"
-msgstr "Autor"
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:133
 msgid "C&ommit"
@@ -3430,19 +3411,17 @@ msgid "Enter the password for the SSH key"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_repository.cpp:322
-#, fuzzy
 msgid "Test connection"
-msgstr "Verbindung auswählen"
+msgstr "Verbindung testen"
 
 #: common/dialogs/git/dialog_git_repository.cpp:326
-#, fuzzy
 msgid "Connection successful"
-msgstr "Datei erfolgreich erstellt."
+msgstr "Verbindung erfolgreich"
 
 #: common/dialogs/git/dialog_git_repository.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Archivdatei kann nicht geöffnet werden."
+msgstr "Konnte nicht mit \"%s\" verbinden "
 
 #: common/dialogs/git/dialog_git_repository.cpp:349
 #, fuzzy, c-format
@@ -4133,9 +4112,9 @@ msgid "Reset Unique Id"
 msgstr "Eindeutige ID zurücksetzen"
 
 #: common/dialogs/panel_grid_settings.cpp:125 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Seite %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:244
 #, fuzzy, c-format
@@ -4148,9 +4127,8 @@ msgid "At least one grid size is required."
 msgstr "Die Standard-Netzklasse wird benötigt."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "Raster"
+msgstr "Raster:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
 #, fuzzy
@@ -5732,18 +5710,16 @@ msgid "Vertical Justification"
 msgstr "Vertikale Ausrichtung"
 
 #: common/eda_units.cpp:437 common/status_popup.cpp:152
-#, fuzzy
 msgid "min"
-msgstr "in"
+msgstr "min"
 
 #: common/eda_units.cpp:445
-#, fuzzy
 msgid "opt"
-msgstr "Oben"
+msgstr "opt"
 
 #: common/eda_units.cpp:453 common/status_popup.cpp:153
 msgid "max"
-msgstr ""
+msgstr "max"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -5968,14 +5944,14 @@ msgid "Invalid directory name, cannot remove root"
 msgstr ""
 
 #: common/gestfich.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "Einheit '%s' endet nicht auf 'mil'."
+msgstr "Verzeichnis \"%s\" existiert nicht"
 
 #: common/gestfich.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "\"%s\" wurde nicht korrekt geparst."
+msgstr "\"%s\" ist kein Verzeichnis"
 
 #: common/gestfich.cpp:338
 #, fuzzy, c-format
@@ -6060,13 +6036,12 @@ msgid "Could not get conflict iterator"
 msgstr "Die Konfigurationsdatei konnte nicht geöffnet werden"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Ändern"
+msgstr "Geändert"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Hinzugefügt"
 
 #: common/git/git_push_handler.cpp:44
 #, fuzzy
@@ -38169,9 +38144,9 @@ msgstr "Erweiterung der Lötstoppmaske überschrieben."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:204
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder paste clearance override."
-msgstr "Freiraum (absolut) für Lötpaste überschrieben."
+msgstr "%s überschreibt Freiraum für Lötpaste."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:209
 #, fuzzy, c-format
