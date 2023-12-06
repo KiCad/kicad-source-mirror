@@ -1295,6 +1295,12 @@ void IPC2581_PLUGIN::addCadHeader( wxXmlNode* aEcadNode )
 }
 
 
+bool IPC2581_PLUGIN::isValidLayerFor2581( PCB_LAYER_ID aLayer )
+{
+    return ( aLayer >= F_Cu && aLayer <= User_9 ) || aLayer == UNDEFINED_LAYER;
+}
+
+
 void IPC2581_PLUGIN::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
 {
     switch( aLayer )
@@ -1389,6 +1395,9 @@ void IPC2581_PLUGIN::generateCadLayers( wxXmlNode* aCadLayerNode )
     {
         BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
 
+        if( !isValidLayerFor2581( stackup_item->GetBrdLayerId() ) )
+            continue;
+
         for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
         {
             wxXmlNode* cadLayerNode = appendNode( aCadLayerNode, "Layer" );
@@ -1432,7 +1441,7 @@ void IPC2581_PLUGIN::generateCadLayers( wxXmlNode* aCadLayerNode )
 
     for( PCB_LAYER_ID layer : layer_seq )
     {
-        if( added_layers.find( layer ) != added_layers.end() )
+        if( added_layers.find( layer ) != added_layers.end() || !isValidLayerFor2581( layer ) )
             continue;
 
         wxString ly_name = genString( m_board->GetLayerName( layer ), "LAYER" );

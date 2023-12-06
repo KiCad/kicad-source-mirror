@@ -276,6 +276,8 @@ private:
     void insertNodeAfter( wxXmlNode* aPrev, wxXmlNode* aNode );
 
     void addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer );
+
+    bool isValidLayerFor2581( PCB_LAYER_ID aLayer );
 private:
     LAYER_MAPPING_HANDLER   m_layerMappingHandler;
     bool                    m_show_layer_mapping_warnings;
