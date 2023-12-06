@@ -1223,6 +1223,9 @@ wxXmlNode* IPC2581_PLUGIN::generateBOMSection( wxXmlNode* aEcadNode )
         }
     }
 
+    if( bom_entries.empty() )
+        return nullptr;
+
     wxFileName fn( m_board->GetFileName() );
 
     wxXmlNode* bomNode = new wxXmlNode( wxXML_ELEMENT_NODE, "Bom" );
