@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-12-05 12:53+0000\n"
+"PO-Revision-Date: 2023-12-08 06:43+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5109,7 +5109,7 @@ msgstr "Referensbild"
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:188
 #, fuzzy
 msgid "Generator"
-msgstr "Generera"
+msgstr "Generator"
 
 #: common/eda_item.cpp:349 common/eda_item.cpp:381
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:190
@@ -5868,8 +5868,9 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Ogiltig HEAS.  Kan inte slå samman."
 
 #: common/git/git_pull_handler.cpp:177
+#, fuzzy
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Kunde inte hämta kodförrådets head"
 
 #: common/git/git_pull_handler.cpp:187
 #, c-format
@@ -7025,7 +7026,7 @@ msgstr "Grupperad efter värde och fotavtryck"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 #: pcbnew/footprint.cpp:3248
 msgid "Attributes"
-msgstr "Egenskaper"
+msgstr "Attribut"
 
 #: common/settings/bom_settings.cpp:228
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
@@ -14011,9 +14012,8 @@ msgid "Default text size:"
 msgstr "Standardtextstorlek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Proportionell förskjutning av etikett:"
+msgstr "Proportionellt avstånd till överstreck:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -16912,8 +16912,9 @@ msgid "Failed to parse value: '%s'"
 msgstr "Kunde inte tolka värde: '%s'"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:58
+#, fuzzy
 msgid "httplib plugin missing library table handle!"
-msgstr ""
+msgstr "httplib-insticksmodulen saknar bibliotekstabells handle!"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:83
 #, c-format
@@ -21346,9 +21347,8 @@ msgid "no alternate pin functions defined"
 msgstr "inga alternativa stiftfunktioner definierade"
 
 #: eeschema/tools/sch_edit_tool.cpp:200
-#, fuzzy
 msgid "Pin Helpers"
-msgstr "Egenskaper för stift"
+msgstr "Hjälpmedel för stift"
 
 #: eeschema/tools/sch_edit_tool.cpp:459 eeschema/tools/sch_edit_tool.cpp:551
 #: eeschema/tools/sch_edit_tool.cpp:636
@@ -24727,7 +24727,7 @@ msgstr "Det gick inte hitta gren '%s': %s"
 #: kicad/project_tree_pane.cpp:1745
 #, fuzzy, c-format
 msgid "Failed to find branch head for '%s'"
-msgstr "Det gick inte att hitta en visare för '%s'"
+msgstr "Det gick inte att hitta grenhuvud för '%s'"
 
 #: kicad/project_tree_pane.cpp:1756
 #, c-format
@@ -24735,9 +24735,9 @@ msgid "Failed to switch to branch '%s'"
 msgstr "Lyckades inte byta till gren '%s'"
 
 #: kicad/project_tree_pane.cpp:1767
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
-msgstr "Lyckades inte läsa ut nummer från '%s'"
+msgstr "Lyckades inte uppdatera HEAD-referens för gren '%s'"
 
 #: kicad/project_tree_pane.cpp:1785
 msgid "Are you sure you want to remove git tracking from this project?"
@@ -24776,9 +24776,9 @@ msgid "Failed to write tree: %s"
 msgstr "Lyckades inte skriva träd: %s"
 
 #: kicad/project_tree_pane.cpp:2156
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Det gick inte att ta bort '%s'"
+msgstr "Lyckades inte slå upp kodförrådsträd: %s"
 
 #: kicad/project_tree_pane.cpp:2164
 #, c-format
@@ -31842,7 +31842,7 @@ msgstr "Generatorer A (%s)"
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
 msgid "Rebuild selected"
-msgstr "Ingen buss vald"
+msgstr "Återuppbygg vald(a)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
 #, fuzzy
@@ -39057,7 +39057,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:164
 msgid "Fabrication Outputs"
-msgstr "Tillverkningsutgångar"
+msgstr "Tillverkningsutmatning"
 
 #: pcbnew/menubar_pcb_editor.cpp:296
 msgid "Add Microwave Shape"
@@ -39904,9 +39904,8 @@ msgid "Update order"
 msgstr "Uppdateringsordning"
 
 #: pcbnew/pcb_generator.cpp:214
-#, fuzzy
 msgid "Generator Properties"
-msgstr "Generatorskriptsegenskaper"
+msgstr "Generatoregenskaper"
 
 #: pcbnew/pcb_group.cpp:384
 #, c-format
@@ -42483,9 +42482,8 @@ msgstr "Hålstorlek"
 
 #: pcbnew/tools/board_inspection_tool.cpp:418
 #: pcbnew/tools/board_inspection_tool.cpp:1313
-#, fuzzy
 msgid "Hole size resolution for:"
-msgstr "Tar reda på håldiameter för:"
+msgstr "Bestämmer håldiameter för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:426
 #, c-format
@@ -42522,9 +42520,9 @@ msgstr "Objekt tillhör samma nät. Clearance är 0."
 #: pcbnew/tools/board_inspection_tool.cpp:1111
 #: pcbnew/tools/board_inspection_tool.cpp:1140
 #: pcbnew/tools/board_inspection_tool.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min clearance: %s."
-msgstr "Tog reda på minsta avstånd: %s."
+msgstr "Fastställd minsta frigång: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:456
 #: pcbnew/tools/board_inspection_tool.cpp:1189
@@ -42607,9 +42605,8 @@ msgid "Zone connection resolution for:"
 msgstr "Tar reda på zonanslutning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:732
-#, fuzzy
 msgid "Thermal-relief gap resolution for:"
-msgstr "Tar reda på termiskt avlastningsgap för:"
+msgstr "Tar reda på termisk avlastnings gap för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:741
 #, c-format
@@ -42617,9 +42614,8 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Gap för termisk avlastning: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:746
-#, fuzzy
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Tar reda på termiskt avlastningsgap för:"
+msgstr "Tar reda på termisk avlastnings ekerbredd för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:755
 #, fuzzy, c-format
@@ -42627,9 +42623,8 @@ msgid "Resolved spoke width: %s."
 msgstr "Fastställd bredd för termisk avlastnings eker: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
-#, fuzzy
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Tar reda på termiskt avlastningsgap för:"
+msgstr "Fastställer minsta antal ekrar för termisk avlastning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 #, c-format
