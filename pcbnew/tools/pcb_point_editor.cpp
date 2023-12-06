@@ -1506,12 +1506,16 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         generatorItem->UpdateFromEditPoints( m_editPoints, aCommit );
         m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genUpdateEdit, aCommit, generatorItem );
 
+        // Note: POINT_EDITOR::m_preview holds only the canvas-draw status "popup"; the meanders
+        // themselves (ROUTER_PREVIEW_ITEMs) are owned by the router.
+
         m_preview.FreeItems();
 
-        for( EDA_ITEM* previewItem : generatorItem->GetPreviewItems( generatorTool, frame(), true ) )
+        for( EDA_ITEM* previewItem : generatorItem->GetPreviewItems( generatorTool, frame(),
+                                                                     STATUS_ITEMS_ONLY ) )
+        {
             m_preview.Add( previewItem );
-
-        generatorTool->Router()->StopRouting();
+        }
 
         getView()->Update( &m_preview );
         break;

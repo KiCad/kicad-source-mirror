@@ -63,14 +63,16 @@ public:
     virtual bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                          BOARD_COMMIT* aCommit );
 
+#define STATUS_ITEMS_ONLY true
+
     virtual std::vector<EDA_ITEM*> GetPreviewItems( GENERATOR_TOOL* aTool,
                                                     PCB_BASE_EDIT_FRAME* aFrame,
-                                                    bool aStatusOnly = false );
+                                                    bool aStatusItemsOnly = false );
 
     virtual bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints ) const;
 
     virtual bool UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints,
-                                       BOARD_COMMIT*                aCommit );
+                                       BOARD_COMMIT* aCommit );
 
     virtual bool UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoints );
 

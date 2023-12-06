@@ -406,7 +406,7 @@ public:
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
 
     std::vector<EDA_ITEM*> GetPreviewItems( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
-                                            bool aStatusOnly = false ) override;
+                                            bool aStatusItemsOnly = false ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -1848,14 +1848,14 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 
 std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aTool,
                                                             PCB_BASE_EDIT_FRAME* aFrame,
-                                                            bool aStatusOnly )
+                                                            bool aStatusItemsOnly )
 {
     std::vector<EDA_ITEM*> previewItems;
     KIGFX::VIEW*           view = aFrame->GetCanvas()->GetView();
 
     if( auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() ) )
     {
-        if( !aStatusOnly )
+        if( !aStatusItemsOnly )
         {
             PNS::ITEM_SET items = placer->TunedPath();
 
