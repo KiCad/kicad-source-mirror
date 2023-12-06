@@ -195,7 +195,8 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
 
 STEP_PCB_MODEL::~STEP_PCB_MODEL()
 {
-    m_doc->Close();
+    if( m_doc->CanClose() == CDM_CCS_OK )
+        m_doc->Close();
 }
 
 
@@ -1046,14 +1047,18 @@ bool STEP_PCB_MODEL::readIGES( Handle( TDocStd_Document )& doc, const char* fnam
 
     if( !reader.Transfer( doc ) )
     {
-        doc->Close();
+        if( doc->CanClose() == CDM_CCS_OK )
+            doc->Close();
+
         return false;
     }
 
     // are there any shapes to translate?
     if( reader.NbShapes() < 1 )
     {
-        doc->Close();
+        if( doc->CanClose() == CDM_CCS_OK )
+            doc->Close();
+
         return false;
     }
 
@@ -1084,14 +1089,18 @@ bool STEP_PCB_MODEL::readSTEP( Handle( TDocStd_Document )& doc, const char* fnam
 
     if( !reader.Transfer( doc ) )
     {
-        doc->Close();
+        if( doc->CanClose() == CDM_CCS_OK )
+            doc->Close();
+
         return false;
     }
 
     // are there any shapes to translate?
     if( reader.NbRootsForTransfer() < 1 )
     {
-        doc->Close();
+        if( doc->CanClose() == CDM_CCS_OK )
+            doc->Close();
+
         return false;
     }
 
