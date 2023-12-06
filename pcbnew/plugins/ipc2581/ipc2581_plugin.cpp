@@ -1231,7 +1231,7 @@ wxXmlNode* IPC2581_PLUGIN::generateBOMSection( wxXmlNode* aEcadNode )
 
     wxXmlNode* bomHeaderNode = appendNode( bomNode, "BomHeader" );
     addAttribute( bomHeaderNode,  "revision", "1.0" );
-    addAttribute( bomHeaderNode,  "assembly", wxString::Format( "%s", fn.GetName() ) );
+    addAttribute( bomHeaderNode,  "assembly", genString( fn.GetName() ) );
 
     wxXmlNode* stepRefNode = appendNode( bomHeaderNode, "StepRef" );
     addAttribute( stepRefNode,  "name", genString( fn.GetName(), "BOARD" ) );
