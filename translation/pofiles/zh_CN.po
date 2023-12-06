@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:43-0700\n"
-"PO-Revision-Date: 2023-11-25 18:03+0000\n"
-"Last-Translator: JasonTan <tfx2001@outlook.com>\n"
+"PO-Revision-Date: 2023-12-07 04:08+0000\n"
+"Last-Translator: Zhen Sun <igoal@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2.1-rc\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4123,7 +4123,7 @@ msgstr "光线追踪渲染器"
 #: gerbview/gerbview_frame.cpp:611 gerbview/gerbview_frame.cpp:635
 #: gerbview/menubar.cpp:160 kicad/tools/kicad_manager_actions.cpp:104
 msgid "Gerber Viewer"
-msgstr "Gerber 查看器"
+msgstr "Gerber 文件查看器"
 
 #: common/eda_base_frame.cpp:1145
 msgid "Excellon Options"
@@ -12671,7 +12671,7 @@ msgstr "标签未连接到任何对象"
 
 #: eeschema/erc_item.cpp:91
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "全局标签未连接到原理图中的任何其他位置"
+msgstr "全局标签未连接到原理图中的其他位置"
 
 #: eeschema/erc_item.cpp:95
 msgid "Labels are similar (lower/upper case difference only)"
@@ -12914,15 +12914,14 @@ msgstr ""
 "是否在执行该操作前保存当前原理图？"
 
 #: eeschema/files-io.cpp:595
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current project.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"此操作不可恢复\n"
+"此操作将替换当前项目的内容。\n"
 "\n"
-"是否在执行该操作前保存当前原理图？"
+"是否要继续？"
 
 #: eeschema/files-io.cpp:632 pcbnew/files.cpp:178
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
@@ -17785,7 +17784,7 @@ msgstr "符号移动激活"
 
 #: eeschema/tools/ee_actions.cpp:893
 msgid "Align Elements to Grid"
-msgstr "将对象与网格对齐"
+msgstr "将元素与网格对齐"
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save Current Sheet Copy As..."
@@ -19374,9 +19373,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "有效的选项是：decimal、suppressleading、suppresstrailing、keep。"
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "有效的选项是：absolute、plot"
+msgstr "有效的选项是：route,alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19427,9 +19425,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "指定的零格式无效\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "指定的地图格式无效\n"
+msgstr "指定的椭圆钻孔格式无效\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -19526,9 +19523,8 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "镜像电路板（对尝试显示底部层有用）"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "要使用的颜色主题（默认使用 pcbnew 设置）"
+msgstr "要使用的颜色主题（默认为 PCB编辑器设置）"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -24136,7 +24132,8 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
-"元件的位置将被四舍五入到该网格，然后再进行排序。\n"
+"元件的位置将被四舍五入到该网格，\n"
+"然后再进行排序。\n"
 "这有助于处理错位的部件。"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
@@ -24210,7 +24207,9 @@ msgstr "删除顶层前缀"
 msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
-msgstr "如果选中，将删除顶层位号的前缀（如果存在）"
+msgstr ""
+"如果选中，将删除顶层位号的前缀\n"
+"（如果存在）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:237
 msgid "Remove back prefix"
@@ -24220,7 +24219,9 @@ msgstr "删除底层前缀"
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
-msgstr "如果选中，将删除底层位号的前缀（如果存在）"
+msgstr ""
+"如果选中，将删除底层位号的前缀\n"
+"（如果存在）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
 msgid "Front prefix:"
@@ -24256,7 +24257,9 @@ msgstr "排除位号："
 msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
-msgstr "不重新批注此类型位号（R 表示 R*）"
+msgstr ""
+"不要重新批注此类型参考值\n"
+"（R 表示 R*）"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -26532,7 +26535,8 @@ msgid ""
 msgstr ""
 "这是该封装所有焊盘的局部网络间隙设置。\n"
 "如果为 0, 即使用 “网络类” 值。\n"
-"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，可以覆盖此值。"
+"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，\n"
+"可以覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 msgid ""
@@ -26544,7 +26548,8 @@ msgid ""
 msgstr ""
 "这是该封装的焊盘与阻焊之间的局部间隙。\n"
 "如果为 0 时，使用全局设置值。\n"
-"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，可以覆盖此值。"
+"在 “焊盘属性” 的 “局部间隙和设置” 选项卡中，\n"
+"可以覆盖此值。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:275
 msgid ""
@@ -30697,7 +30702,7 @@ msgstr "电路板边框"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Margin"
-msgstr "Margin"
+msgstr "电路板电气边界层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 msgid "Edge_Cuts setback"
@@ -33193,7 +33198,7 @@ msgstr "KiCad 封装编辑器"
 
 #: pcbnew/footprint_edit_frame.cpp:195 pcbnew/zone_settings.cpp:225
 msgid "Inner layers"
-msgstr "Inner layers"
+msgstr "内部图层"
 
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/footprint_edit_frame.cpp:867
 #: pcbnew/pcb_edit_frame.cpp:295 pcbnew/pcb_edit_frame.cpp:1521
@@ -33729,7 +33734,7 @@ msgstr "从其它应用程序中导入板文件"
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Specctra DSN..."
-msgstr "Specctra DSN..."
+msgstr "光绘 DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:131
 msgid "GenCAD..."
@@ -35516,9 +35521,9 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
+msgstr "忽略图层“%s”（%d）上的多边形：轮廓计数不是 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1796
 #, c-format
@@ -36108,7 +36113,7 @@ msgstr "结束布线"
 
 #: pcbnew/router/length_tuner_tool.cpp:52
 msgid "Stops laying the current meander."
-msgstr "停止当前的蛇形线布线"
+msgstr "停止当前的蛇形线布线。"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Increase Spacing"
@@ -37914,7 +37919,7 @@ msgstr "随参考点移动"
 
 #: pcbnew/tools/pcb_actions.cpp:282
 msgid "Moves the selected item(s) with a specified starting point"
-msgstr "以指定的起点移动选定的项目。"
+msgstr "以指定的起点移动选定的项目"
 
 #: pcbnew/tools/pcb_actions.cpp:287
 msgid "Copy with Reference"
@@ -38076,7 +38081,7 @@ msgstr "从文件导入封装"
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Export Footprint..."
-msgstr "导出封装... (&X)"
+msgstr "导出封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Export footprint to file"
@@ -38614,7 +38619,7 @@ msgstr "网络颜色视图模式 (三种状态)"
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "在所有网络，仅飞线以及不显示3种状态下切换使用网络及网络类的颜色。"
+msgstr "在所有网络，仅飞线以及不显示3种状态下切换使用网络及网络类的颜色"
 
 #: pcbnew/tools/pcb_actions.cpp:897
 msgid "Sketch Tracks"
@@ -38875,7 +38880,7 @@ msgstr "显示所选对象的约束解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Geographical Reannotate..."
-msgstr "按位置重新批注..."
+msgstr "位置重新批注..."
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Reannotate PCB in geographical order"
