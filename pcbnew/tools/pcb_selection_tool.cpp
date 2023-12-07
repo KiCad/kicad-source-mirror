@@ -2752,6 +2752,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
+    case PCB_REFERENCE_IMAGE_T:
         if( m_isFootprintEditor )
         {
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
