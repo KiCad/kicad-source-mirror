@@ -212,6 +212,42 @@ wxString IPC2581_PLUGIN::pinName( const PAD* aPad ) const
 }
 
 
+wxString IPC2581_PLUGIN::componentName( FOOTPRINT* aFootprint )
+{
+    auto tryInsert =
+            [&]( const wxString& aName )
+            {
+                if( m_footprint_refdes_dict.count( aName ) )
+                {
+                    if( m_footprint_refdes_dict.at( aName ) != aFootprint )
+                        return false;
+                }
+                else
+                {
+                    m_footprint_refdes_dict.insert( { aName, aFootprint } );
+                }
+
+                return true;
+            };
+
+    if( m_footprint_refdes_reverse_dict.count( aFootprint ) )
+        return m_footprint_refdes_reverse_dict.at( aFootprint );
+
+    wxString baseName = genString( aFootprint->GetReference(), "CMP" );
+    wxString name = baseName;
+    int      suffix = 1;
+
+    while( !tryInsert( name ) )
+    {
+        name = wxString::Format( "%s%d", name, suffix );
+    }
+
+    m_footprint_refdes_reverse_dict[aFootprint] = name;
+
+    return name;
+}
+
+
 wxString IPC2581_PLUGIN::floatVal( double aVal )
 {
     wxString str = wxString::FromCDouble( aVal, m_sigfig );
@@ -1564,7 +1600,7 @@ void IPC2581_PLUGIN::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
         wxXmlNode* pinRefNode = appendNode( padNode, "PinRef" );
 
         addAttribute( pinRefNode,  "pin", pinName( aPad ) );
-        addAttribute( pinRefNode,  "componentRef", genString( fp->GetReference(), "CMP" ) );
+        addAttribute( pinRefNode,  "componentRef", componentName( fp ) );
     }
 }
 
@@ -2147,7 +2183,7 @@ void IPC2581_PLUGIN::generateComponents( wxXmlNode* aStepNode )
     for( FOOTPRINT* fp : m_board->Footprints() )
     {
         wxXmlNode* componentNode = new wxXmlNode( wxXML_ELEMENT_NODE, "Component" );
-        addAttribute( componentNode,  "refDes", genString( fp->GetReference(), "CMP" ) );
+        addAttribute( componentNode,  "refDes", componentName( fp ) );
         wxXmlNode* pkg = addPackage( componentNode, fp );
 
         if( pkg )
@@ -2530,7 +2566,8 @@ void IPC2581_PLUGIN::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             if( FOOTPRINT* fp = zone->GetParentFootprint() )
             {
                 wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
-                addAttribute( tempSetNode,  "componentRef", genString( fp->GetReference(), "CMP" ) );
+                wxString refDes = componentName( zone->GetParentFootprint() );
+                addAttribute( tempSetNode,  "componentRef", refDes );
                 wxXmlNode* newFeatures = appendNode( tempSetNode, "Features" );
                 addLocationNode( newFeatures, 0.0, 0.0 );
                 zoneFeatureNode = appendNode( newFeatures, "UserSpecial" );
@@ -2554,7 +2591,7 @@ void IPC2581_PLUGIN::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             if( m_version > 'B' )
                 addAttribute( tempSetNode,  "geometryUsage", "GRAPHIC" );
 
-            addAttribute( tempSetNode,  "componentRef", genString( fp->GetReference(), "CMP" ) );
+            addAttribute( tempSetNode,  "componentRef", componentName( fp ) );
 
             wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
             addLocationNode( tempFeature, *shape );
@@ -2597,7 +2634,7 @@ void IPC2581_PLUGIN::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             addAttribute( tempSetNode,  "geometryUsage", "TEXT" );
 
         if( fp )
-            addAttribute( tempSetNode,  "componentRef", genString( fp->GetReference(), "CMP" ) );
+            addAttribute( tempSetNode, "componentRef", componentName( fp ) );
 
         wxXmlNode* nonStandardAttributeNode = appendNode( tempSetNode, "NonstandardAttribute" );
         addAttribute( nonStandardAttributeNode,  "name", "TEXT" );

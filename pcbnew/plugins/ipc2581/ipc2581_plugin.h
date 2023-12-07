@@ -262,6 +262,8 @@ private:
 
     wxString pinName( const PAD* aPad ) const;
 
+    wxString componentName( FOOTPRINT* aFootprint );
+
     void addXY( wxXmlNode* aNode, const VECTOR2I& aVec, const char* aXName = nullptr,
                 const char* aYName = nullptr );
 
@@ -317,6 +319,12 @@ private:
 
     std::map<size_t, wxString>
             m_footprint_dict; //<! Map between the footprint hash values and reference id string (<fpid>_##)
+
+    std::map<wxString, FOOTPRINT*>
+            m_footprint_refdes_dict; //<! Map between sanitized refdes and footprint pointer
+
+    std::map<FOOTPRINT*, wxString>
+            m_footprint_refdes_reverse_dict; //<! Reverse lookup for
 
     std::map<FOOTPRINT*, wxString>
             m_OEMRef_dict; //<! Reverse map from the footprint pointer to the reference id string assigned for components
