@@ -84,6 +84,7 @@ enum {
  */
 class SYMBOL_LIB_TABLE_GRID : public LIB_TABLE_GRID, public SYMBOL_LIB_TABLE
 {
+    friend class PANEL_SYM_LIB_TABLE;
     friend class SYMBOL_GRID_TRICKS;
 
 protected:
@@ -124,6 +125,19 @@ public:
                 pluginType = SCH_IO_MGR::SCH_KICAD;
 
             SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
+        }
+        // If plugin type is changed, update the filter string in the chooser dialog
+        else if( aCol == COL_TYPE )
+        {
+            wxGridCellEditor* editor = GetView()->GetCellEditor( aRow, COL_URI );
+
+            if( editor )
+            {
+                if( GRID_CELL_PATH_EDITOR* pathEditor = dynamic_cast<GRID_CELL_PATH_EDITOR*>( editor ) )
+                    pathEditor->UpdateFilterString();
+
+                editor->DecRef();
+            }
         }
     }
 
@@ -286,36 +300,26 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                 wxString fileFiltersStr;
                 wxString allWildcardsStr;
 
-                for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
-                {
-                    if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
-                        continue; // this is "Import non-KiCad schematic"
-
-                    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
-
-                    if( !pi )
-                        continue;
-
-                    const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
-
-                    if( desc.m_FileExtensions.empty() )
-                        continue;
-
-                    if( !fileFiltersStr.IsEmpty() )
-                        fileFiltersStr += wxChar( '|' );
-
-                    fileFiltersStr += desc.FileFilter();
-
-                    for( const std::string& ext : desc.m_FileExtensions )
-                        allWildcardsStr << wxT( "*." ) << formatWildcardExt( ext ) << wxT( ";" );
-                }
-
-                fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
-                                 + fileFiltersStr;
-
                 attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
-                                                            &cfg->m_lastSymbolLibDir, fileFiltersStr,
-                                                            true, m_project->GetProjectPath() ) );
+                                                            &cfg->m_lastSymbolLibDir,
+                                                            true, m_project->GetProjectPath(),
+                        []( WX_GRID* grid, int row ) -> wxString
+                        {
+                            auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
+                            auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
+
+                            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
+
+                            if( pi )
+                            {
+                                const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+
+                                if( desc.m_IsFile )
+                                    return desc.FileFilter();
+                            }
+
+                            return wxEmptyString;
+                        } ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
                 attr = new wxGridCellAttr;

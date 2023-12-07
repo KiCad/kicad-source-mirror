@@ -112,6 +112,8 @@ public:
             plugin->GetDefaultSymbolFields( aNames );
     }
 
+    SCH_IO_MGR::SCH_FILE_T GetFileType() { return type; }
+
 protected:
     SYMBOL_LIB_TABLE_ROW( const SYMBOL_LIB_TABLE_ROW& aRow ) :
         LIB_TABLE_ROW( aRow ),

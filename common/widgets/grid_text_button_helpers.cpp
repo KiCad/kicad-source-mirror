@@ -384,6 +384,11 @@ public:
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
 
+    void UpdateFileFilter( wxString* aFileFilter )
+    {
+        m_fileFilter = aFileFilter;
+    }
+
 protected:
     void DoSetPopupControl( wxComboPopup* popup ) override
     {
@@ -492,4 +497,19 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 #endif
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
+}
+
+
+void GRID_CELL_PATH_EDITOR::UpdateFilterString( const wxString& aFilterString )
+{
+    if( m_fileFilterFn )
+        m_fileFilter = m_fileFilterFn( m_grid, m_grid->GetGridCursorRow() );
+    else
+        m_fileFilter = aFilterString;
+
+    // Ensure that the control switches between files and directories properly
+    if( m_fileFilter.IsEmpty() )
+        static_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control )->UpdateFileFilter( nullptr );
+    else
+        static_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control )->UpdateFileFilter( &m_fileFilter );
 }

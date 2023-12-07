@@ -185,6 +185,35 @@ public:
     {
         m_rows = aTableToEdit.m_rows;
     }
+
+    void SetValue( int aRow, int aCol, const wxString &aValue ) override
+    {
+        LIB_TABLE_GRID::SetValue( aRow, aCol, aValue );
+
+        // If setting a filepath, attempt to auto-detect the format
+        if( aCol == COL_URI )
+        {
+            IO_MGR::PCB_FILE_T pluginType = IO_MGR::GuessPluginTypeFromLibPath( aValue );
+
+            if( pluginType == IO_MGR::UNKNOWN )
+                pluginType = IO_MGR::KICAD_SEXP;
+
+            SetValue( aRow, COL_TYPE, IO_MGR::ShowType( pluginType ) );
+        }
+        // If plugin type is changed, update the filter string in the chooser dialog
+        else if( aCol == COL_TYPE )
+        {
+            wxGridCellEditor* editor = GetView()->GetCellEditor( aRow, COL_URI );
+
+            if( editor )
+            {
+                if( GRID_CELL_PATH_EDITOR* pathEditor = dynamic_cast<GRID_CELL_PATH_EDITOR*>( editor ) )
+                    pathEditor->UpdateFilterString();
+
+                editor->DecRef();
+            }
+        }
+    }
 };
 
 
