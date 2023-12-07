@@ -71,9 +71,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_CircRotatationStep( false ),
             m_ArrayTypeTab( 0 ),                     // start on grid view
             m_FootprintKeepAnnotations( false ),
-            m_FootprintReannotate( true ),           // Assign unique by default
-            m_CenterByRadius( false ),
-            m_CenterByPosition( true )
+            m_FootprintReannotate( true )            // Assign unique by default
     {
     }
 
@@ -111,8 +109,6 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long      m_ArrayTypeTab;
     bool      m_FootprintKeepAnnotations;
     bool      m_FootprintReannotate;
-    bool      m_CenterByRadius;
-    bool      m_CenterByPosition;
 };
 
 // Persistent options settings
@@ -237,9 +233,6 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
 
     m_cfg_persister.Add( *m_radioBtnKeepRefs, s_arrayOptions.m_FootprintKeepAnnotations );
     m_cfg_persister.Add( *m_radioBtnUniqueRefs, s_arrayOptions.m_FootprintReannotate );
-
-    m_cfg_persister.Add( *m_radioBtnSetByPos, s_arrayOptions.m_CenterByPosition );
-    m_cfg_persister.Add( *m_radioBtnSetByRadius, s_arrayOptions.m_CenterByRadius );
 
     m_cfg_persister.RestoreConfigToControls();
 

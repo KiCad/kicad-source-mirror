@@ -86,8 +86,6 @@ private:
     UNIT_BINDER m_circRadius;
     UNIT_BINDER m_circCenterAngle;
     UNIT_BINDER m_circAngle;
-    bool m_CenterByRadius;
-    bool m_CenterByPosition;
 
     WIDGET_SAVE_RESTORE m_cfg_persister;
 };

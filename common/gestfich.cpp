@@ -194,7 +194,6 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 
     if( wxFileExists( fullEditorName ) )
     {
-        int i = 0;
         std::vector<const wchar_t*> args;
 
         args.emplace_back( fullEditorName.wc_str() );
