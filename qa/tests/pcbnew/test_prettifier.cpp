@@ -91,7 +91,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
             std::string goldenPath = fmt::format( "{}prettifier/{}_formatted.kicad_mod",
                                                   KI_TEST::GetPcbnewTestDataDir(),
                                                   footprint.ToStdString() );
-
+            {
             std::ifstream test( newPath );
             std::ifstream golden( goldenPath );
 
@@ -105,6 +105,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
                                                std::istreambuf_iterator<char>(),
                                                std::istreambuf_iterator<char>( golden.rdbuf() ) ),
                                    "Formatted footprints do not match!" );
+            }
 
             std::filesystem::remove( newPath );
         }
