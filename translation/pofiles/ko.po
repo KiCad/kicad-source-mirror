@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-11-20 15:37+0000\n"
+"PO-Revision-Date: 2023-12-08 06:43+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4226,7 +4226,7 @@ msgstr "이동 및 확대/축소"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
 msgid "Center and warp cursor on zoom"
-msgstr "줌의 중앙 및 워프 커서"
+msgstr "확대/축소 시 중심 및 커서 회전"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
@@ -4234,7 +4234,7 @@ msgstr "확대할 때 커서를 화면의 중앙에 표시합니다."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
 msgid "Automatically pan while moving object"
-msgstr "개체를 이동하는 동안 자동으로 팬"
+msgstr "객체를 이동하는 동안 자동으로 이동"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:44
 msgid ""
@@ -4250,7 +4250,7 @@ msgstr "줌 가속 사용"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:49
 msgid "Zoom faster when scrolling quickly"
-msgstr "빠르게 스크롤할 때 더 빠르게 줌"
+msgstr "빠르게 스크롤할 때 줌 속도 향상"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:55
 msgid "Zoom speed:"
@@ -4266,7 +4266,7 @@ msgstr "줌 속도 자동으로 선택"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:77
 msgid "Auto pan speed:"
-msgstr "자동 팬 속도:"
+msgstr "자동 이동 속도:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:82
 msgid "How fast to pan when moving an object off the edge of the screen"
@@ -4282,15 +4282,15 @@ msgstr "왼쪽 버튼 끌기:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Draw selection rectangle"
-msgstr "선택 사각형 그리기"
+msgstr "개체 선택 (사각형 범위)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr "선택한 개체를 드래그 합니다. 그렇지 않으면 선택 사각형을 그립니다"
+msgstr "선택한 개체 끌기; 개체 선택 하기"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag any object (selected or not)"
-msgstr "개체 드래그 (선택 여부)"
+msgstr "선택한 개체 드래그"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
@@ -4299,7 +4299,7 @@ msgstr "가운데 버튼 끌기:"
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
 msgid "Pan"
-msgstr "팬"
+msgstr "이동"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -4376,11 +4376,11 @@ msgstr "줌:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:248
 msgid "Pan up/down:"
-msgstr "팬 위/아래:"
+msgstr "이동 위/아래:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
 msgid "Pan left/right:"
-msgstr "팬 왼쪽/오른쪽:"
+msgstr "이동 왼쪽/오른쪽:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
 #, fuzzy
@@ -5108,7 +5108,7 @@ msgstr "사용자 그리드 편집 ..."
 
 #: common/eda_draw_frame.cpp:562
 msgid "Zoom Auto"
-msgstr "줌 자동"
+msgstr "자동 확대"
 
 #: common/eda_draw_frame.cpp:571
 #, c-format
