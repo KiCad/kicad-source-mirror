@@ -83,9 +83,6 @@ public:
     int UnfoldBus( const TOOL_EVENT& aEvent );
 
     // SELECTION_CONDITIONs:
-    static bool IsDrawingLine( const SELECTION& aSelection );
-    static bool IsDrawingWire( const SELECTION& aSelection );
-    static bool IsDrawingBus( const SELECTION& aSelection );
     static bool IsDrawingLineWireOrBus( const SELECTION& aSelection );
 
     /**

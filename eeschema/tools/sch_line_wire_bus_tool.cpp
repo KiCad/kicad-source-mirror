@@ -248,27 +248,6 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 }
 
 
-bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLine( const SELECTION& aSelection )
-{
-    return IsDrawingLineWireOrBus( aSelection )
-                && aSelection.Front()->IsType( { SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
-}
-
-
-bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire( const SELECTION& aSelection )
-{
-    return IsDrawingLineWireOrBus( aSelection )
-                && aSelection.Front()->IsType( { SCH_ITEM_LOCATE_WIRE_T } );
-}
-
-
-bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus( const SELECTION& aSelection )
-{
-    return IsDrawingLineWireOrBus( aSelection )
-                && aSelection.Front()->IsType( { SCH_ITEM_LOCATE_BUS_T } );
-}
-
-
 bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
 {
     // NOTE: for immediate hotkeys, it is NOT required that the line, wire or bus tool
