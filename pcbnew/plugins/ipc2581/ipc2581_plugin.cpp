@@ -578,6 +578,9 @@ void IPC2581_PLUGIN::addLineDesc( wxXmlNode* aNode, int aWidth, LINE_STYLE aDash
 
 void IPC2581_PLUGIN::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KIFONT::METRICS& aFontMetrics )
 {
+    if( !aText->IsVisible() )
+            return;
+
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = aText->GetFont();
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
@@ -2625,7 +2628,7 @@ void IPC2581_PLUGIN::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
         else if( PCB_TEXTBOX* tmp_text = dynamic_cast<PCB_TEXTBOX*>( text ) )
             text_item = static_cast<EDA_TEXT*>( tmp_text );
 
-        if( text_item->GetShownText( false ).empty() )
+        if( !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
             return;
 
         wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
