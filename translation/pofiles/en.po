@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-30 09:43-0700\n"
+"POT-Creation-Date: 2023-12-08 09:39-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -6233,6 +6233,9 @@ msgstr "Delete extra units from symbol?"
 msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Delete alternate body style (De Morgan) from symbol?"
 
+msgid "Symbol must have a name."
+msgstr "Symbol must have a name."
+
 #, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "Symbol name '%s' already in use in library '%s'."
@@ -10508,9 +10511,6 @@ msgstr "Failed to read a word."
 msgid "Number is not an integer"
 msgstr "Number is not an integer"
 
-msgid "Unable to read string, input is empty."
-msgstr "Unable to read string, input is empty."
-
 msgid "New comment character is invalid."
 msgstr "New comment character is invalid."
 
@@ -12498,6 +12498,9 @@ msgstr "Edit Sheet Page Number"
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Revert '%s' (and all sub-sheets) to last version saved?"
+
+msgid "Include power symbols in schematic to the library?"
+msgstr "Include power symbols in schematic to the library?"
 
 #, c-format
 msgid "Could not add library '%s'."
@@ -25075,6 +25078,9 @@ msgstr "Error creating svg file"
 msgid "Failed to plot to '%s'.\n"
 msgstr "Failed to plot to '%s'.\n"
 
+msgid "Failed to create output directory\n"
+msgstr "Failed to create output directory\n"
+
 msgid "Loading footprint library\n"
 msgstr "Loading footprint library\n"
 
@@ -29452,6 +29458,9 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Unable to read string, input is empty."
+#~ msgstr "Unable to read string, input is empty."
 
 #~ msgid "Snap to Grid:"
 #~ msgstr "Snap to Grid:"
