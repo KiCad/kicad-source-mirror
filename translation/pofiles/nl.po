@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-11-16 10:04+0000\n"
+"PO-Revision-Date: 2023-12-08 22:35+0000\n"
 "Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v7/nl/>\n"
 "Language: nl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2705,7 +2705,7 @@ msgstr "Vervang de referentie-aanduiding naar '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Unieke referenties koppelen aan de nieuwe symbolen"
+msgstr "Unieke referenties koppelen aan de geplakte symbolen"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
@@ -2713,15 +2713,15 @@ msgstr "Behoud bestaande annotaties, zelfs als ze gedupliceerd zijn"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Verwijder de referenties op alle nieuwe symbols"
+msgstr "Verwijder de referenties op alle geplakte symbolen"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr "Plak opties"
+msgstr "Plakopties"
 
 #: common/dialogs/dialog_paste_special_base.h:46
 msgid "Paste Special"
-msgstr "Plakken speciaal"
+msgstr "Aangepast plakken"
 
 #: common/dialogs/dialog_print_generic.cpp:95
 #: common/dialogs/dialog_print_generic.cpp:301
@@ -5977,12 +5977,11 @@ msgstr "Selecteer alle items op het scherm"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
-msgstr "Plakken speciaal ..."
+msgstr "Aangepast plakken ..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Plak item(s) van klembord met opties"
+msgstr "Plak item(s) van klembord met aantekeningsopties"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicate"
@@ -6929,7 +6928,7 @@ msgstr "Info's"
 #: eeschema/dialogs/dialog_erc_base.cpp:148
 #: pcbnew/dialogs/dialog_drc_base.cpp:198
 msgid "Save..."
-msgstr "Sparen..."
+msgstr "Opslaan..."
 
 #: common/wildcards_and_files_ext.cpp:201
 msgid "All files"
@@ -14703,7 +14702,7 @@ msgstr "'EELAYER END' ontbreekt"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:727
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:737
 msgid "unexpected end of file"
-msgstr "Onverwacht bestandseinde"
+msgstr "onverwacht bestandseinde"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:685
 msgid "Unexpected end of file"
@@ -19226,7 +19225,7 @@ msgstr "Bovenkant overlay"
 
 #: gerbview/files.cpp:211
 msgid "Bottom paste"
-msgstr "Onderkant pasta"
+msgstr "Onderkant soldeerpasta"
 
 #: gerbview/files.cpp:212
 msgid "Top paste"
@@ -24099,7 +24098,7 @@ msgstr "Top zeefdruk"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:542
 msgid "Top Solder Paste"
-msgstr "Top soldeerpasta"
+msgstr "Soldeerpasta bovenkant"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:550
 msgid "Top Solder Mask"
@@ -24111,7 +24110,7 @@ msgstr "Bodemsoldeermasker"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:602
 msgid "Bottom Solder Paste"
-msgstr "Bodem soldeerpasta"
+msgstr "Soldeerpasta onderkant"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:610
 msgid "Bottom Silk Screen"
@@ -25092,7 +25091,7 @@ msgstr "Afwerking bord"
 #: pcbnew/dialogs/dialog_board_setup.cpp:112
 #: pcbnew/dialogs/dialog_plot.cpp:1175
 msgid "Solder Mask/Paste"
-msgstr "Soldeermasker / plak"
+msgstr "Soldeermasker/-pasta"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:114
 msgid "Text & Graphics"
@@ -27307,7 +27306,7 @@ msgstr ""
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
-"Opmerking: soldeermasker- en pasta-waarden worden alleen gebruikt voor pads "
+"Opmerking: soldeermasker en -pastawaarden worden alleen gebruikt voor pads "
 "op koperlagen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:344
@@ -28376,7 +28375,7 @@ msgstr "Update fysieke stackup"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
-msgstr "Standaardinstellingen voor soldeermasker / plak"
+msgstr "Standaardinstellingen voor soldeermasker/-pasta"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
 #, fuzzy
@@ -28890,8 +28889,8 @@ msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
-"Waarschuwing: Negatieve solder-paste marges groter dan pad. Dan wordt er "
-"geen solder-paste masker aangemaakt."
+"Waarschuwing: Negatieve soldeerpastamarges groter dan pad. Er wordt geen "
+"soldeerpastamasker aangemaakt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1347
 msgid "Error: pad has no layer."
@@ -28916,12 +28915,11 @@ msgid "Error: Through hole pad has no hole."
 msgstr "Doorgaand pad heeft geen boor-gat"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
-"Fout: Connector paden hebben normaal geen soldeerpasta. Gebruik in plaats "
-"daarvan SMD-paden."
+"Fout: Connectorpads hebben normaalgesproken geen soldeerpasta. Gebruik in "
+"plaats daarvan SMD-pads."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1384
 #, fuzzy
@@ -29183,27 +29181,27 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513
 msgid "Front adhesive"
-msgstr "Voorzijde zelfklevend"
+msgstr "Lijm voorzijde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:516
 msgid "Back adhesive"
-msgstr "Achterkleefstof"
+msgstr "Lijm achterzijde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:519
 msgid "Front solder paste"
-msgstr "Voorzijde soldeerpasta"
+msgstr "Soldeerpasta voorzijde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:522
 msgid "Back solder paste"
-msgstr "Soldeerpasta aan de achterkant"
+msgstr "Soldeerpasta achterzijde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:528
 msgid "Back silk screen"
-msgstr "Terug zeefdruk"
+msgstr "Zeefdruk achterzijde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:534
 msgid "Back solder mask"
-msgstr "Terug soldeermasker"
+msgstr "Soldeermasker achterzijde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:537
 msgid "Drafting notes"
@@ -29291,8 +29289,8 @@ msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
-"Negatieve speling betekent een gebied dat kleiner is dan de pad "
-"(gebruikelijk voor speling van de pasta)."
+"Negatieve vrije afstand betekent een gebied dat kleiner is dan de pad ("
+"gebruikelijk voor vrije afstand van de soldeerpasta)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:603
 msgid ""
@@ -31370,7 +31368,7 @@ msgstr "niet op de print, fabricage"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:79
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Als u een lijm template wilt voor de voorkant van de PCB"
+msgstr "Als u een lijmtemplate wilt voor de voorkant van de PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:83
 msgid "Adhes_Front"
@@ -31388,9 +31386,8 @@ msgid "On-board, non-copper"
 msgstr "Op de print, niet koper"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "Als u een soldeerpasta laag wilt voor de voorkant van de PCB"
+msgstr "Als u een soldeerpastalaag wilt voor de voorkant van de PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:95
 msgid "SoldP_Front"
@@ -31749,7 +31746,7 @@ msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Als u een soldeerpasta laag wilt voor de achterkant van de PCB"
+msgstr "Als u een soldeerpastalaag wilt voor de achterkant van de PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:611
 msgid "SoldP_Back"
@@ -33894,7 +33891,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:2593 pcbnew/footprint.cpp:2606
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(SMD koperpad en soldeerpastalagen komen niet overeen)"
 
 #: pcbnew/footprint.cpp:2789
 #, c-format
@@ -33931,11 +33928,11 @@ msgstr "Vrije afstand"
 
 #: pcbnew/footprint.cpp:3116 pcbnew/pad.cpp:1900
 msgid "Solderpaste Margin Override"
-msgstr "Soldeer-pasta marge voorkeur"
+msgstr "Overschreven waarde voor soldeerpastamarge"
 
 #: pcbnew/footprint.cpp:3121 pcbnew/pad.cpp:1904
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Marge-ratio van soldeer-pasta voorkeur"
+msgstr "Overschreven waarde voor de verhouding van de soldeerpastamarge"
 
 #: pcbnew/footprint.cpp:3126 pcbnew/pad.cpp:1909
 #, fuzzy
@@ -36783,25 +36780,23 @@ msgstr ""
 "offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"De verouderde modus voor het opvullen van segmenten wordt niet langer "
+"De verouderde modus voor het opvullen van zones wordt niet langer "
 "ondersteund.\n"
-"Zones converteren naar polygoonvullingen?"
+"Zones zullen zo goed mogelijk worden omgezet."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"De verouderde modus voor het opvullen van segmenten wordt niet langer "
+"De verouderde modus voor het opvullen van segmentzones wordt niet langer "
 "ondersteund.\n"
-"Zones converteren naar polygoonvullingen?"
+"Zones zullen zo goed mogelijk worden omgezet."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -38605,7 +38600,7 @@ msgstr "Klik op nieuw lid ..."
 
 #: pcbnew/tools/pad_tool.cpp:159
 msgid "Paste Pad Properties"
-msgstr "Plak Pad-eigenschappen"
+msgstr "Eigenschappen van soldeerpasta-pad"
 
 #: pcbnew/tools/pad_tool.cpp:274
 msgid "Push Pad Settings"
@@ -39252,7 +39247,7 @@ msgstr "Kopieer de eigenschappen van het huidige pad"
 
 #: pcbnew/tools/pcb_actions.cpp:567
 msgid "Paste Default Pad Properties to Selected"
-msgstr "Plak de standaard pad-eigenschappen in Geselecteerd"
+msgstr "Plak de standaard pad-eigenschappen in de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Replace the current pad's properties with those copied earlier"
@@ -40353,6 +40348,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Waarschuwing: sommige geplakte items bevonden zich op lagen die niet bestaan "
+"in het huidige PCB.\n"
+"Deze items konden niet geplakt worden.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1032
 msgid "Invalid clipboard contents"
@@ -40961,19 +40959,19 @@ msgstr "Toon of verberg deze laag"
 
 #: pcbnew/widgets/appearance_controls.cpp:1623
 msgid "Adhesive on board's front"
-msgstr "Lijm op voorkant PCB"
+msgstr "Lijm op voorkant van het PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1624
 msgid "Adhesive on board's back"
-msgstr "Lijm op achterkant PCB"
+msgstr "Lijm op achterkant van het PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1625
 msgid "Solder paste on board's front"
-msgstr "Soldeer pasta op voorkant PCB"
+msgstr "Soldeerpasta op de voorkant van de PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1626
 msgid "Solder paste on board's back"
-msgstr "Soldeerpasta op achterkant PCB"
+msgstr "Soldeerpasta op de achterkant van de PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Silkscreen on board's front"
