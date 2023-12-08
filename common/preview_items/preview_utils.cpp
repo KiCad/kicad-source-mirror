@@ -68,8 +68,8 @@ KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::GetConstantGlyphHeight( KIGFX::GAL* aG
                                                                   int aRelativeSize )
 {
     constexpr double aspectRatio = 1.0;
-    constexpr double hdpiSizes[] = { 8, 9, 11, 13, 15 };
-    constexpr double sizes[] = { 10, 12, 14, 16, 18 };
+    constexpr double hdpiSizes[] = { 6,  8,  9,  11,  13, 14, 16 };
+    constexpr double sizes[] =     { 8, 10, 12,  14,  15, 16, 18 };
 
     double height;
     double thicknessFactor;
@@ -80,14 +80,14 @@ KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::GetConstantGlyphHeight( KIGFX::GAL* aG
 
     if( canvas && canvas->GetScaleFactor() > 1 )
     {
-        height = hdpiSizes[ 2 + aRelativeSize ];
+        height = hdpiSizes[ 3 + aRelativeSize ];
         thicknessFactor = 0.15;
         shadowFactor = 0.10;
         linePitchFactor = 1.7;
     }
     else
     {
-        height = sizes[ 2 + aRelativeSize ];
+        height = sizes[ 3 + aRelativeSize ];
         thicknessFactor = 0.20;
         shadowFactor = 0.15;
         linePitchFactor = 1.9;

@@ -143,14 +143,14 @@ public:
         gal->PushDepth();
         gal->SetLayerDepth( gal->GetMinDepth() );
 
-        KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
-        KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -1 );
+        KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -3 );
+        KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
         KIFONT::FONT*             font = KIFONT::FONT::GetFont();
         const KIFONT::METRICS&    fontMetrics = KIFONT::METRICS::Default();
         TEXT_ATTRIBUTES           textAttrs;
 
         int      glyphWidth = textDims.GlyphSize.x;
-        VECTOR2I margin( glyphWidth / 2, glyphWidth );
+        VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), KiROUND( glyphWidth * 0.9 ) );
         VECTOR2I size( glyphWidth * 25 + margin.x * 2, headerDims.GlyphSize.y + textDims.GlyphSize.y );
         VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
 
@@ -210,7 +210,7 @@ public:
         textAttrs.m_StrokeWidth = textDims.StrokeWidth;
 
         textPos = GetPosition() + offset;
-        textPos.y += KiROUND( headerDims.LinePitch * 1.2 );
+        textPos.y += KiROUND( headerDims.LinePitch * 1.3 );
         font->Draw( gal, m_currentText, textPos, textAttrs, KIFONT::METRICS::Default() );
 
         textPos.x += glyphWidth * 11 + margin.x;
