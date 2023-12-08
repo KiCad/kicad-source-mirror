@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-30 09:45-0700\n"
-"PO-Revision-Date: 2023-12-08 06:43+0000\n"
+"PO-Revision-Date: 2023-12-08 17:38+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -23843,7 +23843,8 @@ msgstr "HPGL 오리진 옵션은 0, 1, 2 또는 3이어야 함\n"
 msgid ""
 "Export the legacy bom xml format used in the schematic editor with python "
 "scripts"
-msgstr ""
+msgstr "파이썬 스크립트를 사용하여 회로도 편집기에서 사용되는 레거시 bom xml 형식을 "
+"내보내기"
 
 #: kicad/cli/command_sym.h:31
 #, fuzzy
@@ -24032,7 +24033,7 @@ msgstr "Eagle 프로젝트 파일 가져오기"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "EasyEDA 표준 백업 가져오기"
 
 #: kicad/import_project.cpp:149
 #, fuzzy
@@ -24050,7 +24051,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "GLB(바이너리 GLTF) 내보내기"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
@@ -24165,7 +24166,7 @@ msgstr "Eagle CAD XML 회로도와 기판 가져오기"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "EasyEDA (JLCEDA) 표준 백업..."
 
 #: kicad/menubar.cpp:117
 #, fuzzy
@@ -24757,7 +24758,7 @@ msgstr "파일 생성 성공."
 #: kicad/pcm/pcm_task_manager.cpp:663
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr ""
+msgstr "작업 %d개 중 %d개가 초기화되었지만 성공하지 못했습니다."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -24900,7 +24901,7 @@ msgstr "휴지통으로 이동"
 
 #: kicad/project_tree_pane.cpp:920
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "버전 관리에 프로젝트 추가..."
 
 #: kicad/project_tree_pane.cpp:921
 #, fuzzy
@@ -24914,23 +24915,23 @@ msgstr "프로젝트 (&P)"
 
 #: kicad/project_tree_pane.cpp:926 kicad/project_tree_pane.cpp:940
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "로컬 저장소에 변경 사항 커밋하기"
 
 #: kicad/project_tree_pane.cpp:929
 msgid "Push"
-msgstr ""
+msgstr "올리기(Push)"
 
 #: kicad/project_tree_pane.cpp:930
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "커밋된 로컬 변경 내용을 원격 저장소로 푸시하기"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Pull"
-msgstr ""
+msgstr "가져오기(Pull)"
 
 #: kicad/project_tree_pane.cpp:934
 msgid "Pull changes from remote repository into local"
-msgstr ""
+msgstr "원격 저장소의 변경 내용을 로컬로 가져오기"
 
 #: kicad/project_tree_pane.cpp:939
 #, fuzzy
