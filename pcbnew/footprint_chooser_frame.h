@@ -31,9 +31,14 @@
 #include <pcbnew_settings.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <lib_tree_model.h>
+#include <3d_canvas/board_adapter.h>
+#include <3d_rendering/track_ball.h>
 
 class PANEL_FOOTPRINT_CHOOSER;
 class wxCheckBox;
+class BITMAP_BUTTON;
+class BOARD;
+class CAMERA;
 
 namespace PCB { struct IFACE; }
 
@@ -77,6 +82,13 @@ private:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh ) const override;
+	void on3DviewReq( wxCommandEvent& event );
+	void onFpViewReq( wxCommandEvent& event );
+
+    // A command event sent by a PANEL_FOOTPRINT_CHOOSER will fire this event:
+	void onFpChanged( wxCommandEvent& event );
+
+    void build3DCanvas();
 
     DECLARE_EVENT_TABLE()
 
@@ -84,8 +96,17 @@ private:
 
 private:
     PANEL_FOOTPRINT_CHOOSER* m_chooserPanel;
+    bool                     m_showFpMode;   // True to show the footprint, false for 3D model
     wxCheckBox*              m_filterByPinCount;
     wxCheckBox*              m_filterByFPFilters;
+
+    BOARD_ADAPTER            m_boardAdapter;
+    EDA_3D_CANVAS*           m_preview3DCanvas;
+    CAMERA&                  m_currentCamera;
+    TRACK_BALL               m_trackBallCamera;
+    BOARD*                   m_dummyBoard;
+    BITMAP_BUTTON*           m_grButtonFpView;
+    BITMAP_BUTTON*           m_grButton3DView;
 
     int                                             m_pinCount;
     std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_fpFilters;

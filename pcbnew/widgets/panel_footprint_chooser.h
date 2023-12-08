@@ -31,9 +31,13 @@
 
 class wxTimer;
 class wxSplitterWindow;
+class wxBoxSizer;
 
 class PCB_BASE_FRAME;
 
+// When a new footprint is selected, a custom event is sent, for instance to update
+// 3D viewer. So declare a FP_SELECTION_EVENT event
+wxDECLARE_EVENT(FP_SELECTION_EVENT, wxCommandEvent);
 
 class PANEL_FOOTPRINT_CHOOSER : public wxPanel
 {
@@ -70,6 +74,13 @@ public:
     wxWindow* GetFocusTarget() const { return m_tree->GetFocusTarget(); }
 
     void Regenerate() { m_tree->Regenerate( true ); }
+
+    FOOTPRINT_PREVIEW_WIDGET* GetViewerPanel() const { return m_preview_ctrl; }
+
+    wxPanel* m_RightPanel;
+    wxBoxSizer* m_RightPanelSizer;
+
+    const FOOTPRINT* m_CurrFootprint;
 
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds

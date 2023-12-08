@@ -34,6 +34,9 @@
 #include <footprint_editor_settings.h>
 #include <footprint_chooser_frame.h>
 #include "wx/display.h"
+#include <3d_canvas/eda_3d_canvas.h>
+#include <project_pcb.h>
+#include <widgets/bitmap_button.h>
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -75,11 +78,15 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
                         FOOTPRINT_CHOOSER_FRAME_NAME ),
         m_filterByPinCount( nullptr ),
         m_filterByFPFilters( nullptr ),
+        m_boardAdapter(),
+        m_currentCamera( m_trackBallCamera ),
+        m_trackBallCamera( 2 * RANGE_SCALE_3D ),
         m_pinCount( 0 ),
         m_firstPaintEvent( true )
 {
     SetModal( true );
 
+    m_showFpMode = true;
     m_messagePanel->Hide();
 
     wxPanel*    bottomPanel = new wxPanel( this );
@@ -119,12 +126,32 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
 
+    build3DCanvas();    // must be called after creating m_chooserPanel
+    m_preview3DCanvas->Show( !m_showFpMode );
+
     wxBoxSizer* fpFilterSizer = new wxBoxSizer( wxVERTICAL );
-    fpFilterSizer->Add( m_filterByFPFilters, 0, wxTOP | wxEXPAND, 5 );
-    bottomSizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
+    fpFilterSizer->Add( m_filterByFPFilters, 0, wxLEFT | wxTOP | wxEXPAND, 5 );
 
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
-    buttonsSizer->Add( m_filterByPinCount, 0, wxLEFT | wxTOP | wxALIGN_TOP, 5 );
+    fpFilterSizer->Add( m_filterByPinCount, 0, wxLEFT | wxTOP | wxBOTTOM, 5 );
+    buttonsSizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
+
+    wxBoxSizer* grbuttSizer = new wxBoxSizer( wxHORIZONTAL );
+    m_grButton3DView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
+                                wxNullBitmap, wxDefaultPosition,
+                                wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
+    m_grButton3DView->SetIsRadioButton();
+    m_grButton3DView->SetBitmap( KiBitmapBundle( BITMAPS::shape_3d ) );
+    m_grButton3DView->Check( !m_showFpMode );
+	grbuttSizer->Add( m_grButton3DView, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_grButtonFpView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
+                                          wxNullBitmap, wxDefaultPosition,
+                                          wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
+    m_grButtonFpView->SetIsRadioButton();
+    m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
+    m_grButtonFpView->Check( m_showFpMode );
+	grbuttSizer->Add( m_grButtonFpView, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
@@ -134,6 +161,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
+    buttonsSizer->Add( grbuttSizer, 1, wxALL, 5 );
     buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
 
     bottomSizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
@@ -160,11 +188,31 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
             {
                 m_chooserPanel->Regenerate();
             } );
+
+    // Connect Events
+    m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
+                         wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
+                         NULL, this );
+    m_grButtonFpView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
+                             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
+                             NULL, this );
+
+    Connect( FP_SELECTION_EVENT,  // custom event fired by a PANEL_FOOTPRINT_CHOOSER
+             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), NULL, this );
 }
 
 
 FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 {
+    // Disconnect Events
+    m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                            wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ), NULL, this );
+    m_grButtonFpView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ), NULL, this );
+
+    Disconnect( FP_SELECTION_EVENT,
+                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), NULL, this );
+
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         cfg->m_FootprintChooser.use_fp_filters = m_filterByFPFilters->GetValue();
@@ -409,4 +457,84 @@ void FOOTPRINT_CHOOSER_FRAME::closeFootprintChooser( wxCommandEvent& aEvent )
     Close( false );
 }
 
+
+void FOOTPRINT_CHOOSER_FRAME::onFpChanged( wxCommandEvent& event )
+{
+    if( m_showFpMode )      // the 3D viewer is not activated
+        return;
+
+    on3DviewReq( event );
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
+{
+    // Create the dummy board used by the 3D canvas
+    m_dummyBoard = new BOARD();
+    m_dummyBoard->SetProject( &Prj(), true );
+
+    // This board will only be used to hold a footprint for viewing
+    m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
+
+    m_boardAdapter.SetBoard( m_dummyBoard );
+    m_boardAdapter.m_IsBoardView = false;
+    m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
+
+    EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    m_boardAdapter.m_Cfg = cfg;
+
+    // Build the 3D canvas
+    m_preview3DCanvas = new EDA_3D_CANVAS( m_chooserPanel->m_RightPanel,
+                                        OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+                                        m_boardAdapter, m_currentCamera,
+                                        PROJECT_PCB::Get3DCacheManager( &Prj() ) );
+
+    m_chooserPanel->m_RightPanelSizer->Add( m_preview3DCanvas, 1, wxEXPAND, 5 );
+    m_chooserPanel->m_RightPanel->Layout();
+
+    BOARD_DESIGN_SETTINGS& dummy_bds = m_dummyBoard->GetDesignSettings();
+    dummy_bds.SetBoardThickness( pcbIUScale.mmToIU( 1.6 ) );
+    dummy_bds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
+    BOARD_STACKUP& dummy_board_stackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
+    dummy_board_stackup.RemoveAll();
+    dummy_board_stackup.BuildDefaultStackupList( &dummy_bds, 2 );
+}
+
+
+
+void FOOTPRINT_CHOOSER_FRAME::on3DviewReq( wxCommandEvent& event )
+{
+    m_showFpMode = false;
+
+    m_grButtonFpView->Check( m_showFpMode );
+    m_grButton3DView->Check( !m_showFpMode );
+
+    FOOTPRINT_PREVIEW_WIDGET* viewFpPanel = m_chooserPanel->GetViewerPanel();
+    viewFpPanel->Show( m_showFpMode );
+    m_preview3DCanvas->Show( !m_showFpMode );
+    m_dummyBoard->DeleteAllFootprints();
+
+    if( m_chooserPanel->m_CurrFootprint )
+        m_dummyBoard->Add( (FOOTPRINT*)m_chooserPanel->m_CurrFootprint->Clone() );
+
+    m_preview3DCanvas->ReloadRequest();
+    m_preview3DCanvas->Request_refresh();
+    m_chooserPanel->m_RightPanel->Layout();
+    m_chooserPanel->m_RightPanel->Refresh();
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::onFpViewReq( wxCommandEvent& event )
+{
+    m_showFpMode = true;
+
+    m_grButtonFpView->Check( m_showFpMode );
+    m_grButton3DView->Check( !m_showFpMode );
+
+    FOOTPRINT_PREVIEW_WIDGET* viewFpPanel = m_chooserPanel->GetViewerPanel();
+    viewFpPanel->Show( m_showFpMode );
+    m_preview3DCanvas->Show( !m_showFpMode );
+    m_chooserPanel->m_RightPanel->Layout();
+    m_chooserPanel->m_RightPanel->Refresh();
+}
 

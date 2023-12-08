@@ -86,6 +86,8 @@ public:
      */
     void RefreshAll();
 
+    FOOTPRINT_PREVIEW_PANEL_BASE* GetPreviewPanel() { return m_prev_panel; }
+
 protected:
     FOOTPRINT_PREVIEW_PANEL_BASE* m_prev_panel;
 

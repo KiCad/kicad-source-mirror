@@ -25,10 +25,16 @@
 
 #include <lib_id.h>
 #include "dialog_shim.h"
-
+#include <3d_canvas/board_adapter.h>
+#include <3d_rendering/track_ball.h>
 
 class PCB_BASE_FRAME;
 class PANEL_FOOTPRINT_CHOOSER;
+class EDA_3D_CANVAS;
+class BOARD;
+class CAMERA;
+class TRACK_BALL;
+class BITMAP_BUTTON;
 
 
 class DIALOG_FOOTPRINT_CHOOSER : public DIALOG_SHIM
@@ -37,7 +43,7 @@ public:
     DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent, const LIB_ID& aPreselect,
                               const wxArrayString& aFootprintHistoryList );
 
-    ~DIALOG_FOOTPRINT_CHOOSER() {};
+    ~DIALOG_FOOTPRINT_CHOOSER();
 
     /**
      * To be called after this dialog returns from ShowModal().
@@ -47,7 +53,27 @@ public:
     LIB_ID GetSelectedLibId() const;
 
 protected:
+	void on3DviewReq( wxCommandEvent& event );
+	void onFpViewReq( wxCommandEvent& event );
+
+    // A command event sent by a PANEL_FOOTPRINT_CHOOSER will fire this event:
+	void onFpChanged( wxCommandEvent& event );
+
+    void build3DCanvas();
+
+protected:
     PANEL_FOOTPRINT_CHOOSER* m_chooserPanel;
+    bool    m_showFpMode;   // True to show the footprint, false for the 3D model
+
+private:
+    PCB_BASE_FRAME* m_parent;
+    BOARD_ADAPTER m_boardAdapter;
+    EDA_3D_CANVAS* m_preview3DCanvas;
+    CAMERA&     m_currentCamera;
+    TRACK_BALL  m_trackBallCamera;
+    BOARD*      m_dummyBoard;
+    BITMAP_BUTTON* m_grButtonFpView;
+    BITMAP_BUTTON* m_grButton3DView;
 };
 
 #endif /* DIALOG_FOOTPRINT_CHOOSER_H */
