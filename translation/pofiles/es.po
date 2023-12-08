@@ -40161,20 +40161,20 @@ msgid "Used when the DXF file has no unit set"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:94
-#, fuzzy
 msgid "Place at:"
-msgstr "Añadir vía"
+msgstr "Colocar en:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:95
-#, fuzzy
 msgid "If not checked: use interactive placement."
-msgstr "Emplazamiento interactivo"
+msgstr "Si no está marcada: utilizar colocación interactiva."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:139
 msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
+"Si está marcada, utiliza la capa seleccionada en este diálogo\n"
+"Si no está marcada, usa la capa activa del Editor de Tablero"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 #, fuzzy
@@ -41673,9 +41673,8 @@ msgid "File not found: '%s'."
 msgstr "Archivo no encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:272
-#, fuzzy
 msgid "No footprints in library"
-msgstr "Cargar huella desde librería"
+msgstr "Sin huellas en la biblioteca"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:294
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
