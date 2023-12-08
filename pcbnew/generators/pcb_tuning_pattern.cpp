@@ -265,7 +265,7 @@ public:
 
     static PCB_TUNING_PATTERN* CreateNew( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                           BOARD_CONNECTED_ITEM* aStartItem,
-                                          LENGTH_TUNING_MODE aMode, bool aAllowGUI = true );
+                                          LENGTH_TUNING_MODE aMode );
 
     void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
                     BOARD_COMMIT* aCommit ) override;
@@ -620,7 +620,7 @@ bool PCB_TUNING_PATTERN::baselineValid()
 PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
                                                    PCB_BASE_EDIT_FRAME* aFrame,
                                                    BOARD_CONNECTED_ITEM* aStartItem,
-                                                   LENGTH_TUNING_MODE aMode, bool aAllowGUI )
+                                                   LENGTH_TUNING_MODE aMode )
 {
     BOARD*                       board = aStartItem->GetBoard();
     std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
@@ -634,50 +634,20 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
     constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
-    if( aMode == DIFF_PAIR_SKEW )
+    if( !constraint.IsNull() )
     {
-        if( !constraint.IsNull() )
-        {
+        if( aMode == DIFF_PAIR_SKEW )
             pattern->m_settings.SetTargetSkew( constraint.GetValue() );
-            pattern->m_settings.m_overrideCustomRules = false;
-        }
-        else if( aAllowGUI )
-        {
-            WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Skew" ), _( "Target skew:" ), 0 );
-
-            if( dlg.ShowModal() != wxID_OK )
-                return nullptr;
-
-            pattern->m_settings.SetTargetSkew( dlg.GetValue() );
-            pattern->m_settings.m_overrideCustomRules = true;
-        }
         else
-        {
-            pattern->m_unconstrained = true;
-        }
+            pattern->m_settings.SetTargetLength( constraint.GetValue() );
+    }
+    else if( aMode == DIFF_PAIR_SKEW )
+    {
+        pattern->m_settings.SetTargetSkew( 0 );
     }
     else
     {
-        if( !constraint.IsNull() )
-        {
-            pattern->m_settings.SetTargetLength( constraint.GetValue() );
-            pattern->m_settings.m_overrideCustomRules = false;
-        }
-        else if( aAllowGUI )
-        {
-            WX_UNIT_ENTRY_DIALOG dlg( aFrame, _( "Tune Length" ), _( "Target length:" ),
-                                      100 * PCB_IU_PER_MM );
-
-            if( dlg.ShowModal() != wxID_OK )
-                return nullptr;
-
-            pattern->m_settings.SetTargetLength( dlg.GetValue() );
-            pattern->m_settings.m_overrideCustomRules = true;
-        }
-        else
-        {
-            pattern->m_unconstrained = true;
-        }
+        pattern->m_unconstrained = true;
     }
 
     pattern->SetFlags( IS_NEW );
@@ -2087,7 +2057,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 if( m_pickerItem )
                 {
                     dummyPattern.reset( PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
-                                                                       m_pickerItem, mode, false ) );
+                                                                       m_pickerItem, mode ) );
                     dummyPattern->SetPosition( m_pickerItem->GetPosition() );
                     dummyPattern->SetEnd( m_pickerItem->GetPosition() );
                 }
@@ -2200,23 +2170,20 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
                                                                  m_pickerItem, mode );
 
-                if( m_tuningPattern )
+                int      dummyDist;
+                int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                VECTOR2I closestPt;
+
+                // With an artificially-large clearance this can't *not* collide, but the
+                // if stmt keeps Coverity happy....
+                if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
+                                                                &dummyDist, &closestPt ) )
                 {
-                    int      dummyDist;
-                    int      dummyClearance = std::numeric_limits<int>::max() / 2;
-                    VECTOR2I closestPt;
-
-                    // With an artificially-large clearance this can't *not* collide, but the
-                    // if stmt keeps Coverity happy....
-                    if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
-                                                                    &dummyDist, &closestPt ) )
-                    {
-                        m_tuningPattern->SetPosition( closestPt );
-                        m_tuningPattern->SetEnd( closestPt );
-                    }
-
-                    m_preview.Add( m_tuningPattern->Clone() );
+                    m_tuningPattern->SetPosition( closestPt );
+                    m_tuningPattern->SetEnd( closestPt );
                 }
+
+                m_preview.Add( m_tuningPattern->Clone() );
             }
             else if( m_pickerItem && m_tuningPattern )
             {
