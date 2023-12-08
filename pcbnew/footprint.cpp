@@ -2547,7 +2547,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
             width = max->first;
 
         if( width == 0 )
-            width = DEFAULT_COURTYARD_WIDTH;
+            width = pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH );
 
         if( m_courtyard_cache_front.OutlineCount() > 0 )
             m_courtyard_cache_front.Outline( 0 ).SetWidth( width );
@@ -2576,7 +2576,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
             width = max->first;
 
         if( width == 0 )
-            width = DEFAULT_COURTYARD_WIDTH;
+            width = pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH );
 
         if( m_courtyard_cache_back.OutlineCount() > 0 )
             m_courtyard_cache_back.Outline( 0 ).SetWidth( width );
