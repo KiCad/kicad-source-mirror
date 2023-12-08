@@ -1626,12 +1626,18 @@ void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
 }
 
 
-void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit, bool aIsHeadTrace )
+void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit, int aFlags )
 {
     if( aItem->IsVirtual() )
         return;
 
-    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
+    if( ZONE* zone = dynamic_cast<ZONE*>( aItem->Parent() ) )
+    {
+        if( zone->GetIsRuleArea() )
+            aFlags |= PNS_SEMI_SOLID;
+    }
+
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view, aFlags );
 
     // Note: SEGMENT_T is used for placed tracks; LINE_T is used for the routing head
     static int tracks = PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T | PNS::ITEM::LINE_T;
@@ -1662,12 +1668,6 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
             pitem->ShowClearance( false );
             break;
         }
-    }
-
-    if( aIsHeadTrace )
-    {
-        pitem->SetIsHeadTrace( true );
-        pitem->Update( aItem );
     }
 
     m_previewItems->Add( pitem );

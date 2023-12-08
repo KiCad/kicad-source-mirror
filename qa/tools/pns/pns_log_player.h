@@ -69,7 +69,8 @@ public:
     ~PNS_LOG_PLAYER_KICAD_IFACE();
 
     void HideItem( PNS::ITEM* aItem ) override;
-    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) override;
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
+                      int aFlags = 0 ) override;
 
     int GetNetCode( PNS::NET_HANDLE aNet ) const override;
     wxString GetNetName( PNS::NET_HANDLE aNet ) const override;

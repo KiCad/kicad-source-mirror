@@ -23,15 +23,12 @@
 #include <memory>
 #include <vector>
 
-#include <view/view.h>
-#include <view/view_group.h>
 #include <gal/graphics_abstraction_layer.h>
 
 #include <advanced_config.h>
 #include <settings/settings_manager.h>
 
 #include <pcb_painter.h>
-#include <pcbnew_settings.h>
 #include <pad.h>
 #include <zone.h>
 
@@ -51,6 +48,7 @@
 #include "pns_meander_placer.h"
 #include "pns_meander_skew_placer.h"
 #include "pns_dp_meander_placer.h"
+#include "router_preview_item.h"
 
 namespace PNS {
 
@@ -757,7 +755,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
         const LINE* l = static_cast<const LINE*>( item );
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
 
-        m_iface->DisplayItem( l, clearance, false, true );
+        m_iface->DisplayItem( l, clearance, false, PNS_HEAD_TRACE );
 
         if( l->EndsWithVia() )
         {
@@ -774,7 +772,7 @@ bool ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
                     clearance = excessHoleClearance;
             }
 
-            m_iface->DisplayItem( &l->Via(), clearance, false, true );
+            m_iface->DisplayItem( &l->Via(), clearance, false, PNS_HEAD_TRACE );
         }
     }
 

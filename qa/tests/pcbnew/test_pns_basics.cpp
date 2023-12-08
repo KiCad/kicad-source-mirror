@@ -288,7 +288,7 @@ public:
 
     void HideItem( PNS::ITEM* aItem ) override {};
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
-                      bool aIsHeadTrace = false ) override {};
+                      int aFlags = 0 ) override {};
     PNS::RULE_RESOLVER* GetRuleResolver() override;
 
 private:

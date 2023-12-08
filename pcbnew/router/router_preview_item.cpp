@@ -38,13 +38,12 @@
 using namespace KIGFX;
 
 
-ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* aView,
-                                          bool aIsHoverItem ) :
-    EDA_ITEM( NOT_USED ),
-    m_view( aView ),
-    m_shape( nullptr ),
-    m_hole( nullptr ),
-    m_isHoverItem( aIsHoverItem )
+ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* aView, int aFlags ) :
+        EDA_ITEM( NOT_USED ),
+        m_view( aView ),
+        m_shape( nullptr ),
+        m_hole( nullptr ),
+        m_flags( aFlags )
 {
     BOARD_ITEM* boardItem = aItem ? aItem->BoardItem() : nullptr;
 
@@ -69,9 +68,8 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
     m_type = PR_SHAPE;
-    m_width = 0;
+    m_width = ( aFlags & PNS_SEMI_SOLID ) ? 1 : 0;
     m_depth = 0;
-    m_isHeadTrace = false;
 
     if( aItem )
         Update( aItem );
@@ -79,7 +77,8 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 
 
 ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView ) :
-    EDA_ITEM( NOT_USED )
+        EDA_ITEM( NOT_USED ),
+        m_flags( 0 )
 {
     m_view = aView;
 
@@ -95,8 +94,6 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aVie
     m_type = PR_SHAPE;
     m_width = 0;
     m_depth = 0;
-    m_isHeadTrace = false;
-    m_isHoverItem = false;
 }
 
 
@@ -169,17 +166,21 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 
     case PNS::ITEM::SOLID_T:
         m_type = PR_SHAPE;
-        m_width = 0;
         break;
 
     default:
         break;
     }
 
+    m_flags &= ~PNS_COLLISION;
+
     if( aItem->Marker() & PNS::MK_VIOLATION )
+        m_flags |= PNS_COLLISION;
+
+    if( m_flags & PNS_COLLISION )
         m_color = COLOR4D( 0, 1, 0, 1 );
 
-    if( m_isHoverItem )
+    if( m_flags & PNS_HOVER_ITEM )
         m_color = m_color.WithAlpha( 1.0 );
 }
 
@@ -484,6 +485,10 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         gal->SetIsStroke( m_width ? true : false );
         gal->SetIsFill( true );
 
+        // Semi-solids (ie: rule areas) which are not in collision are sketched (ie: outline only)
+        if( ( m_flags & PNS_SEMI_SOLID ) > 0 && ( m_flags & PNS_COLLISION ) == 0 )
+            gal->SetIsFill( false );
+
         if( m_shape->HasIndexableSubshapes() )
         {
             std::vector<const SHAPE*> subshapes;
@@ -506,9 +511,9 @@ const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer ) const
 
     COLOR4D color = settings->GetLayerColor( aLayer );
 
-    if( m_isHeadTrace )
+    if( m_flags & PNS_HEAD_TRACE )
         return color.Saturate( 1.0 );
-    else if( m_isHoverItem )
+    else if( m_flags & PNS_HOVER_ITEM )
         return color.Brightened( 0.7 );
 
     return color;

@@ -97,7 +97,8 @@ enum DRAG_MODE
     virtual bool IsItemVisible( const PNS::ITEM* aItem ) const = 0;
     virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const = 0;
     virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, const LAYER_RANGE& aLayer ) const = 0;
-    virtual void DisplayItem( const ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) = 0;
+    virtual void DisplayItem( const ITEM* aItem, int aClearance, bool aEdit = false,
+                                    int aFlags = 0 ) = 0;
     virtual void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) = 0;
     virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, NET_HANDLE aNetCode ) = 0;
     virtual void HideItem( ITEM* aItem ) = 0;

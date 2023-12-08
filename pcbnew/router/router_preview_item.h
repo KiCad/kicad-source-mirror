@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -45,6 +45,12 @@ class ROUTER;
 
 }
 
+#define PNS_HEAD_TRACE 1
+#define PNS_HOVER_ITEM 2
+#define PNS_SEMI_SOLID 4
+#define PNS_COLLISION  8
+
+
 class ROUTER_PREVIEW_ITEM : public EDA_ITEM
 {
 public:
@@ -63,7 +69,7 @@ public:
 
     ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr);
     ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr,
-                         bool aIsHoverItem = false );
+                         int aFlags = 0 );
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS::ITEM* aItem );
@@ -74,8 +80,6 @@ public:
 
     void SetClearance( int aClearance ) { m_clearance = aClearance; }
     void ShowClearance( bool aEnabled ) { m_showClearance = aEnabled; }
-
-    void SetIsHeadTrace( bool aIsHead )  { m_isHeadTrace = aIsHead; }
 
 #if defined(DEBUG)
     void Show( int aA, std::ostream& aB ) const override {}
@@ -114,8 +118,7 @@ private:
 
     ITEM_TYPE      m_type;
 
-    bool           m_isHeadTrace;
-    bool           m_isHoverItem;
+    int            m_flags;
     int            m_width;
     int            m_layer;
     int            m_originLayer;
