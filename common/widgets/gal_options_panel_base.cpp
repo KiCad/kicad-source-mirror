@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -88,7 +88,7 @@ GAL_OPTIONS_PANEL_BASE::GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id,
 	l_gridLineWidthUnits->Wrap( -1 );
 	gbGridSettings->Add( l_gridLineWidthUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	l_gridMinSpacing = new wxStaticText( this, wxID_ANY, _("Min grid spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridMinSpacing = new wxStaticText( this, wxID_ANY, _("Minimum grid spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	l_gridMinSpacing->Wrap( -1 );
 	gbGridSettings->Add( l_gridMinSpacing, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 

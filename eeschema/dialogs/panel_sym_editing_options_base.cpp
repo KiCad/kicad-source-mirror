@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,7 +44,7 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	m_lineWidthUnits->Wrap( -1 );
 	gbSizer1->Add( m_lineWidthUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_widthHelpText = new wxStaticText( this, wxID_ANY, _("Set to 0 to allow symbols to inherit line width properties\nfrom Schematic"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_widthHelpText = new wxStaticText( this, wxID_ANY, _("Set to 0 to allow symbols to inherit line width properties\nfrom schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthHelpText->Wrap( -1 );
 	gbSizer1->Add( m_widthHelpText, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxLEFT, 5 );
 

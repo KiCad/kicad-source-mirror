@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_track_minALabel = new wxStaticText( this, wxID_ANY, _("Amplitude (A) min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_track_minALabel = new wxStaticText( this, wxID_ANY, _("Minimum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_track_minALabel->Wrap( -1 );
 	fgSizer3->Add( m_track_minALabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -52,7 +52,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 
 	fgSizer3->Add( bSizer8, 1, wxEXPAND, 5 );
 
-	m_track_maxALabel = new wxStaticText( this, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_track_maxALabel = new wxStaticText( this, wxID_ANY, _("Maximum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_track_maxALabel->Wrap( -1 );
 	fgSizer3->Add( m_track_maxALabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
@@ -164,7 +164,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	fgSizer32->SetFlexibleDirection( wxBOTH );
 	fgSizer32->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_dp_minALabel = new wxStaticText( this, wxID_ANY, _("Amplitude (A) min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dp_minALabel = new wxStaticText( this, wxID_ANY, _("Minimum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dp_minALabel->Wrap( -1 );
 	fgSizer32->Add( m_dp_minALabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -181,7 +181,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 
 	fgSizer32->Add( bSizer81, 1, wxEXPAND, 5 );
 
-	m_dp_maxALabel = new wxStaticText( this, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dp_maxALabel = new wxStaticText( this, wxID_ANY, _("Maximum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dp_maxALabel->Wrap( -1 );
 	fgSizer32->Add( m_dp_maxALabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
@@ -299,7 +299,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 	fgSizer31->SetFlexibleDirection( wxBOTH );
 	fgSizer31->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_skew_minALabel = new wxStaticText( this, wxID_ANY, _("Amplitude (A) min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_skew_minALabel = new wxStaticText( this, wxID_ANY, _("Minimum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_skew_minALabel->Wrap( -1 );
 	fgSizer31->Add( m_skew_minALabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -316,7 +316,7 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 
 	fgSizer31->Add( bSizer82, 1, wxEXPAND, 5 );
 
-	m_skew_maxALabel = new wxStaticText( this, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_skew_maxALabel = new wxStaticText( this, wxID_ANY, _("Maximum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_skew_maxALabel->Wrap( -1 );
 	fgSizer31->Add( m_skew_maxALabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 

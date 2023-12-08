@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,7 +30,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	wxBoxSizer* bSizer61;
 	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Line Drawing Mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText24 = new wxStaticText( this, wxID_ANY, _("Line drawing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
 	bSizer61->Add( m_staticText24, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 

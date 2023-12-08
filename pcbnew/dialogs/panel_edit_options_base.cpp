@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -80,7 +80,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_trackMouseDragCtrl->SetSelection( 0 );
 	m_sizerBoardEdit->Add( m_trackMouseDragCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
-	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items left/right (default is top/bottom)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizerBoardEdit->Add( m_flipLeftRight, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_allowFreePads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Allow free pads"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -379,7 +379,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_cbCourtyardCollisions->SetValue(true);
 	sbSizerMisc->Add( m_cbCourtyardCollisions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_autoRefillZones = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("Auto-refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_autoRefillZones = new wxCheckBox( sbSizerMisc->GetStaticBox(), wxID_ANY, _("Automatically refill zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_autoRefillZones->SetValue(true);
 	m_autoRefillZones->SetToolTip( _("If checked, zones will be re-filled after each edit operation") );
 

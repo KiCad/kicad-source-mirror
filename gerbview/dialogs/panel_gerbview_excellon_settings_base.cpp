@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,13 +30,13 @@ PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE::PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wx
 
 	wxString m_rbUnitsChoices[] = { _("Inches"), _("mm") };
 	int m_rbUnitsNChoices = sizeof( m_rbUnitsChoices ) / sizeof( wxString );
-	m_rbUnits = new wxRadioBox( this, wxID_ANY, _("File units"), wxDefaultPosition, wxDefaultSize, m_rbUnitsNChoices, m_rbUnitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbUnits = new wxRadioBox( this, wxID_ANY, _("File Units"), wxDefaultPosition, wxDefaultSize, m_rbUnitsNChoices, m_rbUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbUnits->SetSelection( 0 );
 	bSizer5->Add( m_rbUnits, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_rbZeroFormatChoices[] = { _("No leading zeros (TZ format)"), _("No trailing zeros (LZ format)") };
 	int m_rbZeroFormatNChoices = sizeof( m_rbZeroFormatChoices ) / sizeof( wxString );
-	m_rbZeroFormat = new wxRadioBox( this, wxID_ANY, _("Zero format"), wxDefaultPosition, wxDefaultSize, m_rbZeroFormatNChoices, m_rbZeroFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbZeroFormat = new wxRadioBox( this, wxID_ANY, _("Zero Format"), wxDefaultPosition, wxDefaultSize, m_rbZeroFormatNChoices, m_rbZeroFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbZeroFormat->SetSelection( 0 );
 	m_rbZeroFormat->SetToolTip( _("Integers in files can have their zeros stripped.\nNo leading zeros format means the leading zeros are stripped\nNo trailing zeros  format means the trailing zeros are stripped") );
 

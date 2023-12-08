@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -89,7 +89,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer->Add( bSizer131, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxLen = new wxStaticText( this, wxID_ANY, _("Max length (L):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen = new wxStaticText( this, wxID_ANY, _("Maximum length (L):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLen->Wrap( -1 );
 	gbSizer->Add( m_stMaxLen, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -129,7 +129,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer->Add( bSizer13, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxWidthLabel = new wxStaticText( this, wxID_ANY, _("Max width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxWidthLabel = new wxStaticText( this, wxID_ANY, _("Maximum width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxWidthLabel->Wrap( -1 );
 	gbSizer->Add( m_stMaxWidthLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -150,7 +150,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_cbPreferZoneConnection = new wxCheckBox( this, wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer->Add( m_cbPreferZoneConnection, wxGBPosition( 1, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
-	m_stHDRatio = new wxStaticText( this, wxID_ANY, _("Max track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio = new wxStaticText( this, wxID_ANY, _("Maximum track width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio->Wrap( -1 );
 	m_stHDRatio->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
@@ -269,7 +269,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer1->Add( bSizer122, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxLen1 = new wxStaticText( this, wxID_ANY, _("Max length (L):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen1 = new wxStaticText( this, wxID_ANY, _("Maximum length (L):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLen1->Wrap( -1 );
 	gbSizer1->Add( m_stMaxLen1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -309,7 +309,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer1->Add( bSizer12, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxWidthLabel1 = new wxStaticText( this, wxID_ANY, _("Max width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxWidthLabel1 = new wxStaticText( this, wxID_ANY, _("Maximum width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxWidthLabel1->Wrap( -1 );
 	gbSizer1->Add( m_stMaxWidthLabel1, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -330,7 +330,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_cbPreferZoneConnection1 = new wxCheckBox( this, wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_cbPreferZoneConnection1, wxGBPosition( 1, 3 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
-	m_stHDRatio1 = new wxStaticText( this, wxID_ANY, _("Max track width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio1 = new wxStaticText( this, wxID_ANY, _("Maximum track width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio1->Wrap( -1 );
 	m_stHDRatio1->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
@@ -449,7 +449,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer2->Add( bSizer1211, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxLen2 = new wxStaticText( this, wxID_ANY, _("Max length (L):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen2 = new wxStaticText( this, wxID_ANY, _("Maximum length (L):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLen2->Wrap( -1 );
 	gbSizer2->Add( m_stMaxLen2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -489,7 +489,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	gbSizer2->Add( bSizer121, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxWidthLabel2 = new wxStaticText( this, wxID_ANY, _("Max width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxWidthLabel2 = new wxStaticText( this, wxID_ANY, _("Maximum width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxWidthLabel2->Wrap( -1 );
 	gbSizer2->Add( m_stMaxWidthLabel2, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -507,7 +507,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_curvePointsCtrl2 = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
 	gbSizer2->Add( m_curvePointsCtrl2, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stHDRatio2 = new wxStaticText( this, wxID_ANY, _("Max track width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHDRatio2 = new wxStaticText( this, wxID_ANY, _("Maximum track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio2->Wrap( -1 );
 	m_stHDRatio2->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,7 +34,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelValue( 0, _("Icon") );
-	m_grid->SetColLabelValue( 1, _("Show button") );
+	m_grid->SetColLabelValue( 1, _("Show Button") );
 	m_grid->SetColLabelValue( 2, _("Name") );
 	m_grid->SetColLabelValue( 3, _("Category") );
 	m_grid->SetColLabelValue( 4, _("Description") );
@@ -51,10 +51,10 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bGridSizer->Add( m_grid, 1, wxEXPAND|wxBOTTOM, 5 );
+	bGridSizer->Add( m_grid, 1, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( bGridSizer, 1, wxALIGN_LEFT|wxEXPAND, 0 );
+	bPanelSizer->Add( bGridSizer, 1, wxEXPAND, 0 );
 
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -88,7 +88,7 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	bButtonsSizer->Add( m_showErrorsButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxLEFT, 0 );
+	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
 	this->SetSizer( bPanelSizer );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -365,7 +365,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	fgSizer2->Add( 15, 0, 0, 0, 5 );
 
-	m_maxErrorTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Max allowed deviation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxErrorTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Maximum allowed deviation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxErrorTitle->Wrap( -1 );
 	m_maxErrorTitle->SetToolTip( _("This is the maximum distance between a circle and the polygonal shape that approximate it.\nThe error max defines the number of segments of this polygon.") );
 
@@ -417,7 +417,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_spokeBitmap = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer111->Add( m_spokeBitmap, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_minResolvedSpokesLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Min thermal relief spoke count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minResolvedSpokesLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum thermal relief spoke count:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minResolvedSpokesLabel->Wrap( -1 );
 	bSizer111->Add( m_minResolvedSpokesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 

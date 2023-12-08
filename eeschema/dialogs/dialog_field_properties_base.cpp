@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -100,7 +100,7 @@ DIALOG_FIELD_PROPERTIES_BASE::DIALOG_FIELD_PROPERTIES_BASE( wxWindow* parent, wx
 
 	bSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_cbAllowAutoPlace = new wxCheckBox( this, wxID_ANY, _("Allow autoplacement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAllowAutoPlace = new wxCheckBox( this, wxID_ANY, _("Allow automatic placement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbAllowAutoPlace->SetValue(true);
 	m_cbAllowAutoPlace->Hide();
 	m_cbAllowAutoPlace->SetToolTip( _("Allow automatic placement of this field in the schematic") );

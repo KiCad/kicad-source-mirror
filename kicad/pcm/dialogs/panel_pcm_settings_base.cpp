@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,7 +50,7 @@ PANEL_PCM_SETTINGS_BASE::PANEL_PCM_SETTINGS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-	m_libAutoAdd = new wxCheckBox( this, wxID_ANY, _("Automatically add installed libraries to global lib table"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_libAutoAdd = new wxCheckBox( this, wxID_ANY, _("Automatically add installed libraries to global library table"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libAutoAdd->SetValue(true);
 	bSizer3->Add( m_libAutoAdd, 0, wxALL, 5 );
 

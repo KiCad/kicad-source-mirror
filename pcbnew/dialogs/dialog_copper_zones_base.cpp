@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,7 +52,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 
 	bFilteringSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_hideAutoGenNetNamesOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Hide auto-generated net names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hideAutoGenNetNamesOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Hide automatically generated net names"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hideAutoGenNetNamesOpt->SetValue(true);
 	bFilteringSizer->Add( m_hideAutoGenNetNamesOpt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 

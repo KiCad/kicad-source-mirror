@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,7 +46,7 @@ DIALOG_TUNING_PATTERN_PROPERTIES_BASE::DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wx
 	m_sourceInfo->Wrap( -1 );
 	gbSizer1->Add( m_sourceInfo, wxGBPosition( 1, 1 ), wxGBSpan( 1, 6 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_track_minALabel = new wxStaticText( this, wxID_ANY, _("Amplitude (A) min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_track_minALabel = new wxStaticText( this, wxID_ANY, _("Minimum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_track_minALabel->Wrap( -1 );
 	gbSizer1->Add( m_track_minALabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
@@ -57,7 +57,7 @@ DIALOG_TUNING_PATTERN_PROPERTIES_BASE::DIALOG_TUNING_PATTERN_PROPERTIES_BASE( wx
 	m_minAUnits->Wrap( -1 );
 	gbSizer1->Add( m_minAUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_maxALabel = new wxStaticText( this, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxALabel = new wxStaticText( this, wxID_ANY, _("Maximum amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxALabel->Wrap( -1 );
 	gbSizer1->Add( m_maxALabel, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
