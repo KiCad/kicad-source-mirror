@@ -508,8 +508,8 @@ void GRID_CELL_PATH_EDITOR::UpdateFilterString( const wxString& aFilterString )
         m_fileFilter = aFilterString;
 
     // Ensure that the control switches between files and directories properly
-    if( m_fileFilter.IsEmpty() )
-        static_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control )->UpdateFileFilter( nullptr );
-    else
-        static_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control )->UpdateFileFilter( &m_fileFilter );
+    TEXT_BUTTON_FILE_BROWSER* button = dynamic_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control );
+
+    if( button )
+        button->UpdateFileFilter( m_fileFilter.IsEmpty() ? nullptr : &m_fileFilter );
 }
