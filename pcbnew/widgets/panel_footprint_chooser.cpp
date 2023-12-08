@@ -43,6 +43,9 @@
 #include <project_pcb.h>
 #include <kiface_base.h>
 
+// When a new footprint is selected, a custom event is sent, for instance to update
+// 3D viewer. So define a FP_SELECTION_EVENT event
+wxDEFINE_EVENT(FP_SELECTION_EVENT, wxCommandEvent);
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                                                   const wxArrayString& aFootprintHistoryList,
@@ -57,6 +60,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
         m_acceptHandler( std::move( aAcceptHandler ) ),
         m_escapeHandler( std::move( aEscapeHandler ) )
 {
+    m_CurrFootprint = nullptr;
     FP_LIB_TABLE*   fpTable = PROJECT_PCB::PcbFootprintLibs( &aFrame->Prj() );
 
     // Load footprint files:
@@ -134,18 +138,18 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
 
-    wxPanel*    rightPanel = new wxPanel( m_hsplitter );
-    wxBoxSizer* rightPanelSizer = new wxBoxSizer( wxVERTICAL );
+    m_RightPanel = new wxPanel( m_hsplitter );
+    m_RightPanelSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( rightPanel, m_frame->Kiway() );
+    m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( m_RightPanel, m_frame->Kiway() );
     m_preview_ctrl->SetUserUnits( m_frame->GetUserUnits() );
-    rightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND | wxALL, 5 );
+    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND | wxALL, 5 );
 
-    rightPanel->SetSizer( rightPanelSizer );
-    rightPanel->Layout();
-    rightPanelSizer->Fit( rightPanel );
+    m_RightPanel->SetSizer( m_RightPanelSizer );
+    m_RightPanel->Layout();
+    m_RightPanelSizer->Fit( m_RightPanel );
 
-    m_hsplitter->SplitVertically( m_tree, rightPanel );
+    m_hsplitter->SplitVertically( m_tree, m_RightPanel );
 
     m_dbl_click_timer = new wxTimer( this );
     m_open_libs_timer = new wxTimer( this );
@@ -314,7 +318,7 @@ void PANEL_FOOTPRINT_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     }
 }
 
-
+#include <footprint_preview_panel.h>
 void PANEL_FOOTPRINT_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 {
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
@@ -338,6 +342,14 @@ void PANEL_FOOTPRINT_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
         m_preview_ctrl->ClearStatus();
         m_preview_ctrl->DisplayFootprint( lib_id );
     }
+
+    m_CurrFootprint = static_cast<FOOTPRINT_PREVIEW_PANEL*>(m_preview_ctrl->GetPreviewPanel())->GetCurrentFootprint();
+
+    // Send a FP_SELECTION_EVENT event after a footprint change
+    wxCommandEvent event( FP_SELECTION_EVENT, GetId() );
+    event.SetEventObject( this );
+
+    ProcessWindowEvent( event );
 }
 
 

@@ -39,6 +39,7 @@ class FOOTPRINT;
 class KIWAY;
 class IO_MGR;
 class BOARD;
+class FOOTPRINT;
 
 
 /**
@@ -68,6 +69,7 @@ public:
 
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent,
                                          UNITS_PROVIDER* aUnitsProvider );
+    const FOOTPRINT* GetCurrentFootprint() const { return m_currentFootprint.get(); }
 
 private:
     /**
