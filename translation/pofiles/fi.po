@@ -17,15 +17,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-11-21 22:03+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-12-11 23:54+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -18275,9 +18275,8 @@ msgstr ""
 "Palautetaanko '%s' (ja kaikki välisivut) viimeksi tallennettuun versioon?"
 
 #: eeschema/tools/sch_editor_control.cpp:335
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Päivitetäänkö kytkentäkaavion symbolit viittaamaan uuteen kirjastoon?"
+msgstr "Sisällytetäänkö tehosymbolit kytkentäkaaviosta kirjastoon?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
 #, c-format
@@ -35421,9 +35420,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Piirtäminen kohteeseen %s epäonnistui.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Tulostushakemistoa ei voitu luoda!"
+msgstr "Tuloshakemiston luominen epäonnistui\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -39961,7 +39959,7 @@ msgstr "Säädä differentiaaliparin vinous"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
-msgstr "Siirtää nykyisen johtimen yhden osion taaksepäin."
+msgstr "Siirtää nykyisen johdinraidan yhden osion taaksepäin."
 
 #: pcbnew/tools/pcb_actions.cpp:1507
 msgid "Route From Other End"
@@ -40195,11 +40193,11 @@ msgstr ""
 #: pcbnew/tools/zone_filler_tool.cpp:250
 #, c-format
 msgid "Refill %d Zones"
-msgstr "Uudelleentäytä %d Vyöhykeet"
+msgstr "Uudelleentäytä %d vyöhykeet"
 
 #: pcbnew/tools/zone_filler_tool.cpp:259
 msgid "Auto-fill Zone(s)"
-msgstr "Auto-täyttö Alueet"
+msgstr "Autotäyttö alueet"
 
 #: pcbnew/tools/zone_filler_tool.cpp:270
 #: pcbnew/widgets/appearance_controls.cpp:3295
@@ -40216,51 +40214,51 @@ msgstr ""
 
 #: pcbnew/tools/zone_filler_tool.cpp:331
 msgid "Fill Zone"
-msgstr "Täytä Vyöhyke"
+msgstr "Täytä vyöhyke"
 
 #: pcbnew/tools/zone_filler_tool.cpp:375
 msgid "Unfill Zone"
-msgstr "Tyhjennä Vyöhyke"
+msgstr "Tyhjennä vyöhyke"
 
 #: pcbnew/tracks_cleaner.cpp:68
 msgid "Checking null tracks and vias..."
-msgstr "Tarkastetaan nollajohtimia ja läpivientejä.."
+msgstr "Tarkastetaan tyhjä johdinraitoja ja läpivientejä.."
 
 #: pcbnew/tracks_cleaner.cpp:70
 msgid "Removing null tracks and vias..."
-msgstr "Poistetaan nollajohtimia ja läpivientejä..."
+msgstr "Poistetaan tyhjiä johdinraitoja ja läpivientejä..."
 
 #: pcbnew/tracks_cleaner.cpp:81
 msgid "Checking redundant tracks..."
-msgstr "Tarkistetaan tarpeettomia johtimia..."
+msgstr "Tarkistetaan tarpeettomia johdinraitoja..."
 
 #: pcbnew/tracks_cleaner.cpp:83
 msgid "Removing redundant tracks..."
-msgstr "Poistetaan tarpeettomat johtimet..."
+msgstr "Poistetaan tarpeettomat johdinraidat.."
 
 #: pcbnew/tracks_cleaner.cpp:95
 msgid "Checking shorting tracks..."
-msgstr "Tarkistetaan oikosulkevat johtimet..."
+msgstr "Tarkistetaan oikosulkevat johdinraidat.."
 
 #: pcbnew/tracks_cleaner.cpp:97
 msgid "Removing shorting tracks..."
-msgstr "Poistetaan oikosulkevat johtimet..."
+msgstr "Poistetaan oikosulkevat johdinraidat..."
 
 #: pcbnew/tracks_cleaner.cpp:110
 msgid "Checking tracks in pads..."
-msgstr "Tarkastetaan anturoiden johtimet..."
+msgstr "Tarkastetaan anturoiden johdinraidat..."
 
 #: pcbnew/tracks_cleaner.cpp:112
 msgid "Removing tracks in pads..."
-msgstr "Poistetaan johtimet anturoista..."
+msgstr "Poistetaan johdinraidat anturoista..."
 
 #: pcbnew/tracks_cleaner.cpp:126
 msgid "Checking dangling tracks and vias..."
-msgstr "Tarkistetaan roikkuvia johtimia ja läpivientejä..."
+msgstr "Tarkistetaan roikkuvia johdinraitoja ja läpivientejä..."
 
 #: pcbnew/tracks_cleaner.cpp:131
 msgid "Removing dangling tracks..."
-msgstr "Postetaan roikkuvia johtimia..."
+msgstr "Postetaan roikkuvia johdinraitoja..."
 
 #: pcbnew/tracks_cleaner.cpp:134
 msgid "Removing dangling vias..."
@@ -40268,11 +40266,11 @@ msgstr "Poistetaan roikkuvia läpivientejä…"
 
 #: pcbnew/tracks_cleaner.cpp:148
 msgid "Checking collinear tracks..."
-msgstr "Tarkistetaan kollineaarisia johtimia..."
+msgstr "Tarkistetaan kollineaarisia johdinraitoja..."
 
 #: pcbnew/tracks_cleaner.cpp:150
 msgid "Merging collinear tracks..."
-msgstr "Yhdistetään kollineaariset johtimet..."
+msgstr "Yhdistetään kollineaariset johdinraidat..."
 
 #: pcbnew/undo_redo.cpp:581
 msgid "Incomplete undo/redo operation: some items not found"
@@ -40280,7 +40278,7 @@ msgstr "Keskeneräinen kumoa / tee uudelleen: joitain kohteita ei löydy"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
 msgid "Show tracks"
-msgstr "Näytä johtimet"
+msgstr "Näytä johdinraidat"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Show all vias"
@@ -40593,13 +40591,13 @@ msgstr "Korosta %s"
 #: pcbnew/widgets/appearance_controls.cpp:2315
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Valitse Johtimet ja Läpiviennit kohteessa %s"
+msgstr "Valitse johdinraidat ja läpiviennit kohteessa %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:926
 #: pcbnew/widgets/appearance_controls.cpp:2318
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Poista Johtimet ja Läpiviennit kohteessa %s"
+msgstr "Poista johdinraidat ja läpiviennit kohteessa %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:931
 msgid "Show All Nets"
