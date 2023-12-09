@@ -322,6 +322,8 @@ LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 
 void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
 {
+    m_Score = 0;
+
     // We need to score leaf nodes, which are usually (but not always) children.
 
     if( m_Children.size() )
