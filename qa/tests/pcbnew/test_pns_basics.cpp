@@ -249,6 +249,10 @@ public:
         return false;
     }
 
+    bool IsDrilledHole( const PNS::ITEM* aItem ) override { return false; }
+
+    bool IsNonPlatedSlot( const PNS::ITEM* aItem ) override { return false; }
+
     bool IsKeepout( const PNS::ITEM* aObstacle, const PNS::ITEM* aItem, bool* aEnforce ) override
     {
         return false;

@@ -151,7 +151,10 @@ public:
 
     virtual bool IsInNetTie( const ITEM* aA ) = 0;
     virtual bool IsNetTieExclusion( const ITEM* aItem, const VECTOR2I& aCollisionPos,
-                                    const ITEM* aCollidingItem )= 0;
+                                    const ITEM* aCollidingItem ) = 0;
+
+    virtual bool IsDrilledHole( const PNS::ITEM* aItem ) = 0;
+    virtual bool IsNonPlatedSlot( const PNS::ITEM* aItem ) = 0;
 
     /**
      * @return true if \a aObstacle is a keepout.  Set \a aEnforce if said keepout's rules

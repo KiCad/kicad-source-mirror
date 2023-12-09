@@ -201,8 +201,10 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
         // Note: we can't do castellation or net-tie processing in GetClearance() because they
         // depend on *where* the collision is.
 
-        bool checkCastellation = ( m_parent && m_parent->GetLayer() == Edge_Cuts );
-        bool checkNetTie = ( m_parent && aNode->GetRuleResolver()->IsInNetTie( this ) );
+        bool checkCastellation = ( m_parent && m_parent->GetLayer() == Edge_Cuts )
+                                   || aNode->GetRuleResolver()->IsNonPlatedSlot( this );
+
+        bool checkNetTie = aNode->GetRuleResolver()->IsInNetTie( this );
 
         if( checkCastellation || checkNetTie )
         {

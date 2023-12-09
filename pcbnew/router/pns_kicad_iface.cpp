@@ -120,6 +120,9 @@ public:
     bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
                             const PNS::ITEM* aCollidingItem ) override;
 
+    bool IsDrilledHole( const PNS::ITEM* aItem ) override;
+    bool IsNonPlatedSlot( const PNS::ITEM* aItem ) override;
+
     /**
      * @return true if \a aObstacle is a keepout.  Set \a aEnforce if said keepout's rules
      *         exclude \a aItem.
@@ -281,7 +284,18 @@ static bool isHole( const PNS::ITEM* aItem )
 }
 
 
-static bool isDrilledHole( const PNS::ITEM* aItem )
+static bool isEdge( const PNS::ITEM* aItem )
+{
+    if ( !aItem )
+        return false;
+
+    const PCB_SHAPE *parent = dynamic_cast<PCB_SHAPE*>( aItem->BoardItem() );
+
+    return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
+}
+
+
+bool PNS_PCBNEW_RULE_RESOLVER::IsDrilledHole( const PNS::ITEM* aItem )
 {
     if( !isHole( aItem ) )
         return false;
@@ -295,28 +309,30 @@ static bool isDrilledHole( const PNS::ITEM* aItem )
 }
 
 
-static bool isNonPlatedSlot( const PNS::ITEM* aItem )
+bool PNS_PCBNEW_RULE_RESOLVER::IsNonPlatedSlot( const PNS::ITEM* aItem )
 {
     if( !isHole( aItem ) )
         return false;
 
-    if( PAD* pad = dynamic_cast<PAD*>( aItem->Parent() ) )
-        return pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->GetDrillSizeX() != pad->GetDrillSizeY();
+    BOARD_ITEM* parent = aItem->Parent();
 
-    // Via holes are (currently) always round
+    if( !parent && aItem->ParentPadVia() )
+        parent = aItem->ParentPadVia()->Parent();
+
+    if( parent )
+    {
+        if( parent->Type() == PCB_PAD_T )
+        {
+            PAD* pad = static_cast<PAD*>( parent );
+
+            return pad->GetAttribute() == PAD_ATTRIB::NPTH
+                        && pad->GetDrillSizeX() != pad->GetDrillSizeY();
+        }
+
+        // Via holes are (currently) always round, and always plated
+    }
 
     return false;
-}
-
-
-static bool isEdge( const PNS::ITEM* aItem )
-{
-    if ( !aItem )
-        return false;
-
-    const PCB_SHAPE *parent = dynamic_cast<PCB_SHAPE*>( aItem->BoardItem() );
-
-    return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
 }
 
 
@@ -503,7 +519,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
-        if( isDrilledHole( aA ) && isDrilledHole( aB) )
+        if( IsDrilledHole( aA ) && IsDrilledHole( aB ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
             {
@@ -529,7 +545,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         }
 
         // No 'else'; non-plated milled holes get both HOLE_CLEARANCE and EDGE_CLEARANCE
-        if( isEdge( aA ) || isNonPlatedSlot( aA ) || isEdge( aB ) || isNonPlatedSlot( aB ) )
+        if( isEdge( aA ) || IsNonPlatedSlot( aA ) || isEdge( aB ) || IsNonPlatedSlot( aB ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
