@@ -436,6 +436,14 @@ void SCH_SYMBOL::UpdatePins()
             ++it1;
         }
     }
+
+    // If the symbol is selected, then its pins are selected.
+    if( IsSelected() )
+    {
+        for( std::unique_ptr<SCH_PIN>& pin : m_pins )
+            pin->SetSelected();
+    }
+
 }
 
 
