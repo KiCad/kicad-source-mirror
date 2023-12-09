@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-12-07 04:08+0000\n"
+"PO-Revision-Date: 2023-12-11 23:54+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -6185,7 +6185,7 @@ msgstr "Utför dubbelklick med vänster musknapp"
 
 #: common/tool/actions.cpp:419
 msgid "Pin Library"
-msgstr "Stift-bibliotek"
+msgstr "Fäst biblioteket överst"
 
 #: common/tool/actions.cpp:420
 msgid "Keep the library at the top of the list"
@@ -11155,7 +11155,7 @@ msgstr "Ladda direktiv från kretsschemat"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:424 pcbnew/pad.cpp:1762
 msgid "Custom"
-msgstr "Användardefinierat"
+msgstr "Användardefinierad"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:431
 msgid "Add full path for .include library directives"
@@ -11271,7 +11271,7 @@ msgstr "Inbyggd SPICE-modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
-msgstr "Enhet:"
+msgstr "Komponent:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
@@ -18259,10 +18259,8 @@ msgstr ""
 "Återställ '%s' (och alla underordnade ark) till den senast sparade versionen?"
 
 #: eeschema/tools/sch_editor_control.cpp:335
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr ""
-"Uppdatera symboler i kretsschemat så att de refererar till nytt bibliotek?"
+msgstr "Ta med strömförsörjningssymboler från kretsschemat till biblioteket?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
 #, c-format
@@ -26313,8 +26311,8 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Mönsterkortskant saknas eller är inte stängd med %.3f mm tolerans.\n"
-"Kör DRC för en fullständig analys."
+"Mönsterkortskontur saknas eller är inte stängd med %.3f mm tolerans.\n"
+"Utför designregelkontroll för en fullständig analys."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:357
 #: pcbnew/dialogs/dialog_export_step_process_base.h:44
@@ -33410,7 +33408,9 @@ msgstr "De har exporterats som ovala lödytor."
 #: pcbnew/exporters/step/exporter_step.cpp:251
 #: pcbnew/specctra_import_export/specctra_export.cpp:124
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "Mönsterkortets kontur är felaktig. Kör DRC för en fullständig analys."
+msgstr ""
+"Mönsterkortets kontur är felaktig. Utför desingregelkontroll för en "
+"fullständig analys."
 
 #: pcbnew/exporters/export_idf.cpp:655 pcbnew/exporters/export_idf.cpp:664
 #: pcbnew/exporters/export_idf.cpp:672
@@ -35431,9 +35431,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Det gick inte att plotta till '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Det går inte att skapa utmatningskatalogen '%s'."
+msgstr "Lyckades inte skapa utmatningskatalog\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -40678,7 +40677,7 @@ msgstr "Kortets omkretsdefinition"
 
 #: pcbnew/widgets/appearance_controls.cpp:1636
 msgid "Board's edge setback outline"
-msgstr "Mönsterkortets kantmarginals kontur"
+msgstr "Marginal från mönsterkortets kontur (kantmarginal)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1637
 msgid "Footprint courtyards on board's front"
