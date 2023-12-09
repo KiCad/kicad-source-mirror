@@ -407,6 +407,7 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <event name="OnKillFocus">onLibraryPathTextKillFocus</event>
+                                                                    <event name="OnText">onLibrarayPathText</event>
                                                                     <event name="OnTextEnter">onLibraryPathTextEnter</event>
                                                                 </object>
                                                             </object>
