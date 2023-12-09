@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-12-08 06:43+0000\n"
+"PO-Revision-Date: 2023-12-10 12:53+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3307,14 +3307,12 @@ msgid "Password"
 msgstr "Lösenord"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Ångra ändringar"
+msgstr "Överlämna ändringar"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Filnamn:"
+msgstr "Filnamn"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3328,19 +3326,16 @@ msgid "Status"
 msgstr "Status"
 
 #: common/dialogs/git/dialog_git_commit.cpp:83
-#, fuzzy
 msgid "New"
-msgstr "&Ny"
+msgstr "Ny"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Modifierad grupp"
+msgstr "Modifierad"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Radera"
+msgstr "Raderad"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Commit Message:"
@@ -5406,9 +5401,8 @@ msgid "Line Width"
 msgstr "Linjebredd"
 
 #: common/eda_shape.cpp:1941 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Line Color"
-msgstr "Linjefärg:"
+msgstr "Linjefärg"
 
 #: common/eda_shape.cpp:1978 eeschema/lib_shape.cpp:586
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5416,9 +5410,8 @@ msgid "Filled"
 msgstr "Fylld"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_shape.cpp:685
-#, fuzzy
 msgid "Fill Color"
-msgstr "Fyllningsfärg:"
+msgstr "Fyllningsfärg"
 
 #: common/eda_text.cpp:806 common/eda_text.cpp:1192
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -5743,7 +5736,7 @@ msgstr ""
 "senare."
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -5754,8 +5747,8 @@ msgstr ""
 "KiCad kunde inte öppna den här filen eftersom den skapades med en nyare "
 "version än den du kör.\n"
 "\n"
-"För att öppna den måste du uppgradera KiCad till en version daterad %s eller "
-"senare."
+"För att öppna den måste du uppgradera KiCad till version %s eller senare ("
+"filformatsdatum %s eller senare)."
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -6668,7 +6661,6 @@ msgid "Deactivate selected"
 msgstr "Deaktivera vald(a)"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
 msgstr "Sätt synlighetsflagga"
 
@@ -7218,14 +7210,12 @@ msgid "Cancel current tool"
 msgstr "Avbryt nuvarande verktyg"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "Slutför buss"
+msgstr "Slutför"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Avbryt nuvarande verktyg"
+msgstr "Avsluta nuvarande verktyg"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7501,7 +7491,7 @@ msgstr "Utför dubbelklick med vänster musknapp"
 
 #: common/tool/actions.cpp:597
 msgid "Pin Library"
-msgstr "Stift-bibliotek"
+msgstr "Fäst biblioteket överst"
 
 #: common/tool/actions.cpp:598
 msgid "Keep the library at the top of the list"
@@ -7623,9 +7613,8 @@ msgid "Use millimeters"
 msgstr "Använd millimeter"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Välj kolumner"
+msgstr "Välj kolumner..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -8241,7 +8230,6 @@ msgid "Current key:"
 msgstr "Aktuell tangent:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
 msgstr "Rensa tilldelad snabbtangent"
 
@@ -12347,15 +12335,15 @@ msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "SP"
@@ -12363,7 +12351,7 @@ msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25 pcbnew/pad.cpp:1884
 msgid "Custom"
-msgstr "Användardefinierat"
+msgstr "Användardefinierad"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
@@ -12895,12 +12883,11 @@ msgstr "Inbyggd SPICE-modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:109
 msgid "Device:"
-msgstr "Enhet:"
+msgstr "Komponent:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:118
-#, fuzzy
 msgid "Device type:"
-msgstr "Komponenttyp:"
+msgstr "Komponentvariant:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:145
 msgid "Page"
@@ -14813,9 +14800,9 @@ msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr "Symbolen %s har tvåvägs stift i enheter %s som inte placerats ut."
 
 #: eeschema/erc.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "Verktyg %d ej definierat"
+msgstr "Nätklass %s ej definierad"
 
 #: eeschema/erc.cpp:656
 msgid "Pin with 'no connection' type is connected"
@@ -14900,9 +14887,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Kontrollerar om stift eller ledningar missar rutnätet..."
 
 #: eeschema/erc.cpp:1256
-#, fuzzy
 msgid "Checking for undefined netclasses..."
-msgstr "Söker efter olösta variabler..."
+msgstr "Söker efter odefinierade nätklasser..."
 
 #: eeschema/erc_item.cpp:43
 msgid "Conflicts"
@@ -15006,9 +14992,8 @@ msgid "Unresolved text variable"
 msgstr "Oupplöst textvariabel"
 
 #: eeschema/erc_item.cpp:139
-#, fuzzy
 msgid "Undefined netclass"
-msgstr "Fastställd nätklass"
+msgstr "Odefinierad nätklass"
 
 #: eeschema/erc_item.cpp:143
 msgid "SPICE model issue"
@@ -15389,7 +15374,7 @@ msgstr ""
 "Vill du återställa de senast sparade ändringarna du gjort?"
 
 #: eeschema/files-io.cpp:1576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
@@ -15406,11 +15391,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Manuell återhämtning krävs för att återställa ovanstående fil(er)."
 
 #: eeschema/files-io.cpp:1641
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Det gick inte att ta bort autospar-filen '%s'!"
+msgstr ""
+"Det gick inte att ta bort autospar-filen '%s'.\n"
+"Den måste tas bort manuellt."
 
 #: eeschema/files-io.cpp:1675
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -15690,19 +15677,16 @@ msgid "Bezier Curve with %d points"
 msgstr "Bezierkurva med %d punkter"
 
 #: eeschema/lib_shape.cpp:593
-#, fuzzy
 msgid "Body outline color"
-msgstr "Fyll med färg för symbolens kontur"
+msgstr "Färg för symbolens kontur"
 
 #: eeschema/lib_shape.cpp:594
-#, fuzzy
 msgid "Body background color"
-msgstr "Plotta bakgrundsfärg"
+msgstr "Symbolkroppens bakgrundsfärg"
 
 #: eeschema/lib_shape.cpp:595
-#, fuzzy
 msgid "Fill color"
-msgstr "Fyllningsfärg:"
+msgstr "Fyllningsfärg"
 
 #: eeschema/lib_shape.cpp:601 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -16633,9 +16617,8 @@ msgid "Altium schematic files"
 msgstr "Altium kretsschemafiler"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:69
-#, fuzzy
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "Altium kretsschemabiblioteksfiler"
+msgstr "Altium kretsschemabibliotek eller integrerat bibliotek"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
@@ -17535,22 +17518,18 @@ msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2602
-#, fuzzy
 msgid "Exclude From Board"
 msgstr "Uteslut från mönsterkort"
 
 #: eeschema/sch_symbol.cpp:2605
-#, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Uteslut från simulering"
 
 #: eeschema/sch_symbol.cpp:2608 pcbnew/footprint.cpp:3435
-#, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Uteslut från komponentlistan"
 
 #: eeschema/sch_symbol.cpp:2611 pcbnew/footprint.cpp:3438
-#, fuzzy
 msgid "Do not Populate"
 msgstr "Monteras ej"
 
@@ -21495,10 +21474,8 @@ msgstr ""
 "Återställ '%s' (och alla underordnade ark) till den senast sparade versionen?"
 
 #: eeschema/tools/sch_editor_control.cpp:340
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr ""
-"Uppdatera symboler i kretsschemat så att de refererar till nytt bibliotek?"
+msgstr "Ta med strömförsörjningssymboler från kretsschemat till biblioteket?"
 
 #: eeschema/tools/sch_editor_control.cpp:405
 #, c-format
@@ -23174,15 +23151,13 @@ msgid "Only generate a board with no components"
 msgstr "Generera endast mönsterkort utan komponenter"
 
 #: kicad/cli/command_pcb_export_3d.cpp:110
-#, fuzzy
 msgid "Export tracks"
-msgstr "Inga ledare"
+msgstr "Exportera ledare"
 
 #: kicad/cli/command_pcb_export_3d.cpp:115
 #: pcbnew/dialogs/dialog_export_step_base.cpp:165
-#, fuzzy
 msgid "Export zones"
-msgstr "Måttenhet för export:"
+msgstr "Exportera kopparzoner"
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Minimum distance between points to treat them as separate ones"
@@ -23190,7 +23165,7 @@ msgstr "Minsta avstånd mellan punkter för att behandla dem som separata"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr ""
+msgstr "Optimera inte STEP-fil (aktiverar skrivning av parametriska kurvor)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:136
 msgid ""
@@ -24266,13 +24241,12 @@ msgstr "Spara nedladdad fil"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:610
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
 "Detta pakets version är inte kompatibel med din KiCad-version eller "
-"platform. Vill du installera det ändå?"
+"plattform. Är du säker på att du vill installera det ändå?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:612
 #: kicad/pcm/pcm_task_manager.cpp:385
@@ -28007,7 +27981,6 @@ msgid "Prefer Zone Connections"
 msgstr "Föredra anslutning till zon"
 
 #: pcbnew/board_connected_item.cpp:281
-#, fuzzy
 msgid "Allow Teardrops To Span Two Tracks"
 msgstr "Tillåt kragförstärkningar att sträcka sig över två ledarsegment"
 
@@ -30631,25 +30604,23 @@ msgstr "Uppdatera fotavtryck från biblioteket"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:71
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr ""
+msgstr "IPC-2581-filer (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:72
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr ""
+msgstr "Komprimerade IPC-2581-filer (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:74
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "Exportera till fil"
+msgstr "Exportera IPC-2581-fil"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:132
-#, fuzzy
 msgid "manufacturer"
-msgstr "Välj tillverkare"
+msgstr "tillverkare"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:140
 msgid "mfg"
-msgstr ""
+msgstr "tillv"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
@@ -30664,31 +30635,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:63
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:68
 msgid "The number of values following the decimal separator"
-msgstr ""
+msgstr "Antal siffror efter decimalkomma"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
-#, fuzzy
 msgid "Version:"
-msgstr "Version"
+msgstr "Version:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
-#, fuzzy
 msgid "Compress Output"
-msgstr "Tvinga utmatning på A4"
+msgstr "Komprimera utmatning"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
-msgstr ""
+msgstr "Komprimera utmatning i 'zip'-fil"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
-#, fuzzy
 msgid "BOM Columns"
-msgstr "Kolumner"
+msgstr "Komponentlistekolumner"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
-#, fuzzy
 msgid "Internal ID:"
-msgstr "Inre kopparlager"
+msgstr "Internt ID:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:103
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:111
@@ -30696,51 +30663,46 @@ msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
 msgstr ""
+"ID-nummer för komponent som används internt i designen.\n"
+"Detta nummer måste vara unikt för varje del."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
-#, fuzzy
 msgid "Generate Unique"
-msgstr "Rapportera varning"
+msgstr "Generera unik"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "Välj tillverkare"
+msgstr "Tillverkarens artikelnummer:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Column containing the manufacturer part number"
-msgstr "Komponent: tillverkare kan inte utelämnas."
+msgstr "Kolumn som innehåller tillverkarens artikelnummer"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Omit"
-msgstr "Utelämna nät"
+msgstr "Utelämna"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
-#, fuzzy
 msgid "Manufacturer:"
-msgstr "Välj tillverkare"
+msgstr "Tillverkare:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "Leverantörs art.nr.:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr ""
+msgstr "Kolumn som innehåller leverantörens artikelnummer"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#, fuzzy
 msgid "Distributor:"
-msgstr "Justera / fördela"
+msgstr "Leverantör:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.h:81
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "Exportera PS"
+msgstr "Exportera IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:173
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
@@ -30828,8 +30790,8 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Mönsterkortskant saknas eller är inte stängd med %.3f mm tolerans.\n"
-"Kör DRC för en fullständig analys."
+"Mönsterkortskontur saknas eller är inte stängd med %.3f mm tolerans.\n"
+"Utför designregelkontroll för en fullständig analys."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:412
 msgid "STEP/GLTF Export"
@@ -30897,84 +30859,72 @@ msgid "Overwrite old file"
 msgstr "Skriv över gammal fil"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
-#, fuzzy
 msgid "Optimize STEP file"
-msgstr "STEP-filer"
+msgstr "Optimera STEP-fil"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
 msgid ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
 msgstr ""
+"Deaktivera skrivning av parametriska kurvor. Optimerar filstorlek och skriv-/"
+"lästider, men kan minska kompatibilitet med annan mjukvara."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
-#, fuzzy
 msgid "Fuse shapes (time consuming)"
-msgstr "Exportera zoner (tidskrävande)"
+msgstr "Sammanfoga former (tidskrävande)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
-msgstr ""
+msgstr "Sammanfoga överlappande geometriska former till en form."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "Exportera komponent:"
+msgstr "Exportera som sammansatt form"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:153
 msgid ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
 msgstr ""
+"Sammanfoga alla former till en enda sammansatt form. Användbar för extern "
+"mjukvara som utför de-duplikation baserat på formernas namn."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid "Export tracks, pads and vias"
-msgstr "Skapa ledare och vior"
+msgstr "Exportera ledare, lödytor och vior"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
-#, fuzzy
 msgid "Export tracks, pads and vias on external copper layers."
-msgstr ""
-"Exportera ledare och vior på yttre kopparlager.\n"
-"Varning: Detta är *extremt* tidskrävande."
+msgstr "Exportera ledare, lödytor och vior på yttre kopparlager."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Export zones on external copper layers."
-msgstr ""
-"Exportera zoner på yttre kopparlager.\n"
-"Varning: Detta är *extremt* tidskrävande."
+msgstr "Exportera kopparzoner på yttre kopparlager."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
-#, fuzzy
 msgid "Export silkscreen"
-msgstr "Anvisningstryck framsida"
+msgstr "Exportera anvisningstryck"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:172
-#, fuzzy
 msgid "Export silkscreen graphics."
-msgstr "Visa lager för anvisningstryck"
+msgstr "Exportera grafik på lager för anvisningstryck."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:176
-#, fuzzy
 msgid "Export solder mask"
-msgstr "Lödmask framsida"
+msgstr "Exportera lödmask"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:178
-#, fuzzy
 msgid "Export solder mask graphics."
-msgstr "Lödmask framsida"
+msgstr "Exportera grafik på lödmasklager."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:182
-#, fuzzy
 msgid "Export solder paste"
-msgstr "Lodpasta på framsida"
+msgstr "Exportera lodpasta"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
-#, fuzzy
 msgid "Export solder paste graphics."
-msgstr "Lodpasta på framsida"
+msgstr "Exportera grafik på lager för lodpasta"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 msgid "Board outline chaining tolerance:"
@@ -31005,14 +30955,13 @@ msgid "Export STEP / GLTF"
 msgstr "Exportera STEP / glTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Process failed with exit code %d"
-msgstr "API svarade med felkod: %s"
+msgstr "Processen misslyckades med avslutningskod %d"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:192
-#, fuzzy
 msgid "Success"
-msgstr "Slutförd."
+msgstr "Slutförd"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:236
 msgid "Command line:\n"
@@ -32486,9 +32435,8 @@ msgid "Keep upright"
 msgstr "Håll dig upprätt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
-#, fuzzy
 msgid "Center on footprint"
-msgstr "förälders fotavtryck"
+msgstr "Centrera på fotavtryck"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
 msgid "Filter tracks by width:"
@@ -32680,12 +32628,10 @@ msgid "Teardrop defaults"
 msgstr "Kragförstärkningarnas standardinställningar"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Length-tuning pattern defaults"
-msgstr "Längdjusteringsmönster"
+msgstr "Förinställningar för längdjusteringsmönster"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Custom rules"
 msgstr "Användardefinierade regler"
 
@@ -32901,9 +32847,9 @@ msgid "Report file"
 msgstr "Rapportera filen"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2251
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
-msgstr "%s%s (%s)"
+msgstr "%s (%s)"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:30
 msgid "Net name filter:"
@@ -33138,9 +33084,8 @@ msgstr "Hålstorlek X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:79
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
-#, fuzzy
 msgid "d"
-msgstr "%d"
+msgstr "d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
@@ -33157,7 +33102,7 @@ msgstr "Lödytans storlek X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:479
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:530
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -33454,9 +33399,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:434
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:474
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:525
-#, fuzzy
 msgid "%("
-msgstr "%"
+msgstr "%("
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:657
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
@@ -33471,7 +33415,7 @@ msgstr "%"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:485
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:536
 msgid " )"
-msgstr ""
+msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
 msgid "Teardrop Shape"
@@ -33481,33 +33425,29 @@ msgstr "Kragförstärkningens form"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:63
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:243
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:423
-#, fuzzy
 msgid "Best length (L):"
-msgstr "Bästa längd:"
+msgstr "Optimal längd (L):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:732
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:92
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:452
-#, fuzzy
 msgid "Max length (L):"
-msgstr "Maximal längd:"
+msgstr "Maximal längd (L):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:103
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:283
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:463
-#, fuzzy
 msgid "Best width (W):"
-msgstr "Ledarbredd (W):"
+msgstr "Optimal bredd (W):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:780
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:132
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:312
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
-#, fuzzy
 msgid "Max width (W):"
-msgstr "Maximal bredd:"
+msgstr "Maximal bredd (W):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:833
 msgid "Pad connection:"
@@ -33648,7 +33588,6 @@ msgid "Select Fab Layers"
 msgstr "Välj Fab Layers"
 
 #: pcbnew/dialogs/dialog_plot.cpp:477
-#, fuzzy
 msgid "Select All Copper Layers"
 msgstr "Välj alla kopparlager"
 
@@ -33658,19 +33597,16 @@ msgid "Deselect All Copper Layers"
 msgstr "Avmarkera alla kopparlager"
 
 #: pcbnew/dialogs/dialog_plot.cpp:481 pcbnew/dialogs/dialog_plot.cpp:546
-#, fuzzy
 msgid "Select All Layers"
 msgstr "Välj alla lager"
 
 #: pcbnew/dialogs/dialog_plot.cpp:482 pcbnew/dialogs/dialog_plot.cpp:547
-#, fuzzy
 msgid "Deselect All Layers"
 msgstr "Avmarkera alla lager"
 
 #: pcbnew/dialogs/dialog_plot.cpp:550
-#, fuzzy
 msgid "Order as Board Stackup"
-msgstr "Mönsterkortets lageruppbyggnad"
+msgstr "Beställ enligt mönsterkortets lageruppbyggnad"
 
 #: pcbnew/dialogs/dialog_plot.cpp:949
 msgid "HPGL pen size constrained."
@@ -35030,45 +34966,48 @@ msgstr "Inre kopparlager"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:379
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Incorrect line width.\n"
 "It must be between %s and %s"
-msgstr "Textbredden måste vara mellan %s och %s."
+msgstr ""
+"%s: Fel linjebredd. \n"
+"Linjebredden måste vara mellan %s och %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:404
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text size is incorrect.\n"
 "Size must be between %s and %s"
-msgstr "Texthöjden måste vara mellan %s och %s."
+msgstr ""
+"%s: Textstorleken är felaktig. \n"
+"Storleken måste vara mellan %s och %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text thickness is too large.\n"
 "It will be truncated to %s"
 msgstr ""
-"Texttjockleken är för stor för textstorleken.\n"
+"%s: Textvikten är för stor. \n"
 "Den kommer att begränsas till %s."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:428
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text thickness is too small.\n"
 "It will be truncated to %s"
 msgstr ""
-"Texttjockleken är för stor för textstorleken.\n"
-"Den kommer att begränsas till %s."
+"%s: Textvikten är för liten. \n"
+"Den kommer att begränsas till %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:476
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:313
-#, fuzzy
 msgid "Parameter error"
-msgstr "Parameter"
+msgstr "Parameterfel"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:517
 msgid "Reference and value are mandatory."
@@ -38355,7 +38294,9 @@ msgstr "De har exporterats som ovala lödytor."
 #: pcbnew/exporters/step/exporter_step.cpp:378
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "Mönsterkortets kontur är felaktig. Kör DRC för en fullständig analys."
+msgstr ""
+"Mönsterkortets kontur är felaktig. Utför desingregelkontroll för en "
+"fullständig analys."
 
 #: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_idf.cpp:662
 #: pcbnew/exporters/export_idf.cpp:670
@@ -38453,8 +38394,7 @@ msgid ""
 "Check that the board has a valid outline and models."
 msgstr ""
 "Kunde inte skapa %s-fil.\n"
-"Kontrollera att mönserkortet har en giltig definition av kant och giltiga "
-"modeller."
+"Kontrollera att mönserkortet har en giltig kontur och giltiga modeller."
 
 #: pcbnew/exporters/step/exporter_step.cpp:567
 #, c-format
@@ -38634,29 +38574,28 @@ msgstr ""
 
 #: pcbnew/files.cpp:1243
 msgid "The board must be saved before generating IPC2581 file."
-msgstr ""
+msgstr "Mönsterkortet måste sparas innan IPC2581-fil skapas."
 
 #: pcbnew/files.cpp:1259
-#, fuzzy
 msgid "Generating IPC2581 file"
-msgstr "Skapa IPC-D-356 nätlistefil"
+msgstr "Skapar IPC-2581-fil"
 
 #: pcbnew/files.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Fel vid sparning av mönsterkortsfil '%s'.\n"
+"Fel vid generering av IPC2581-fil '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1346
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fel vid sparning av mönsterkortsfil '%s'.\n"
+"Fel vid generering av IPC2581-fil '%s'.\n"
 "Kunde inte byta namn på temporär fil '%s."
 
 #: pcbnew/footprint.cpp:952 pcbnew/footprint_libraries_utils.cpp:1191
@@ -38776,7 +38715,6 @@ msgid "Thermal reliefs for PTH"
 msgstr "Termiska avlastningar för genompläterade hål (PTH)"
 
 #: pcbnew/footprint.cpp:3418
-#, fuzzy
 msgid "Library Link"
 msgstr "Bibliotekslänk"
 
@@ -38785,12 +38723,10 @@ msgid "Library Description"
 msgstr "Biblioteksbeskrivning"
 
 #: pcbnew/footprint.cpp:3430
-#, fuzzy
 msgid "Not in Schematic"
 msgstr "Ej i kretsschemat"
 
 #: pcbnew/footprint.cpp:3432
-#, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Uteslut från positionsfiler"
 
@@ -39215,27 +39151,22 @@ msgid "Tuning Mode"
 msgstr "Justeringsläge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2308
-#, fuzzy
 msgid "Min Amplitude"
 msgstr "Minsta amplitud"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2315
-#, fuzzy
 msgid "Max Amplitude"
 msgstr "Största amplitud"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2322
-#, fuzzy
 msgid "Initial Side"
 msgstr "Sida att börja på"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2328
-#, fuzzy
 msgid "Min Spacing"
 msgstr "Minsta mellanrum"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2334
-#, fuzzy
 msgid "Corner Radius %"
 msgstr "Hörnradie %"
 
@@ -39250,7 +39181,6 @@ msgid "Target Skew"
 msgstr "Snedvridning:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2373
-#, fuzzy
 msgid "Override Custom Rules"
 msgstr "Åsidosätt användardefinierade regler"
 
@@ -39272,7 +39202,7 @@ msgstr "Förinställd linjebredd för DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:61
 msgid "Used when the DXF items in file have no line thickness set"
-msgstr ""
+msgstr "Används när DXF-objekten i filen inte har linjetjocklek definierad"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 msgid "DXF default units:"
@@ -39280,33 +39210,31 @@ msgstr "Standard måttenheter för DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:74
 msgid "Used when the DXF file has no unit set"
-msgstr ""
+msgstr "Används när DXF-filen inte har någon måttenhet definierad"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:94
-#, fuzzy
 msgid "Place at:"
-msgstr "Placera vid X:"
+msgstr "Placera vid:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:95
-#, fuzzy
 msgid "If not checked: use interactive placement."
-msgstr "Interaktiv placering"
+msgstr "Om ej markerad: Avnänd interaktiv placering."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:139
 msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
+"Om markerad, använd valt lager i denna dialog\n"
+"Om ej markerad, använd det aktiva lagret i mönsterkortsredigeraren"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
-#, fuzzy
 msgid "Group imported items"
-msgstr "Gruppföremål"
+msgstr "Gruppera importerade objekt"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:160
-#, fuzzy
 msgid "Add all imported items to a new group"
-msgstr "Lägg till alla importerade artiklar i en ny grupp"
+msgstr "Lägg till alla importerade objekt i en ny grupp"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Fix discontinuities"
@@ -39511,9 +39439,8 @@ msgid "Add Microwave Shape"
 msgstr "Lägg till mikrovågsform"
 
 #: pcbnew/menubar_pcb_editor.cpp:318
-#, fuzzy
 msgid "Add Dimension"
-msgstr "Måttsättning"
+msgstr "Lägg till måttsättning"
 
 #: pcbnew/menubar_pcb_editor.cpp:339
 msgid "Auto-Place Footprints"
@@ -40637,9 +40564,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Det gick inte att plotta till '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:544
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Kunde inte ta bort git-katalog"
+msgstr "Lyckades inte skapa utmatningskatalog\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734 pcbnew/pcbnew_jobs_handler.cpp:806
 msgid "Loading footprint library\n"
@@ -40755,9 +40681,8 @@ msgid "File not found: '%s'."
 msgstr "Filen hittades inte: '%s'."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:272
-#, fuzzy
 msgid "No footprints in library"
-msgstr "Nytt id för fotavtrycksbibliotek:"
+msgstr "Inga fotavtryck i biblioteket"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:294
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
@@ -40771,7 +40696,7 @@ msgstr "Altium Designer PCB-filer"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.h:49
 msgid "Altium PCB Library or Integrated Library"
-msgstr ""
+msgstr "Altium mönsterkortsbibliotek eller integrerat bibliotek"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
@@ -41810,49 +41735,42 @@ msgid "gEDA PCB footprint library directory"
 msgstr "gEDA PCB fotavtrycksbibliotekskatalog"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:311
-#, fuzzy
 msgid "Generating content section"
-msgstr "Testa anslutning"
+msgstr "Genererar innehållssektion"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:1126
-#, fuzzy
 msgid "Generating history section"
-msgstr "Nummerriktning"
+msgstr "Genererar historiksektion"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:1153
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2745
-#, fuzzy
 msgid "Generating BOM section"
-msgstr "Renderingsalternativ"
+msgstr "Genererar komponentlistesektion"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:1317
-#, fuzzy
 msgid "Generating CAD data"
-msgstr "Tar reda på data för mönsterkort\n"
+msgstr "Genererar CAD-data"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2358
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting Layer %s, Net %s"
-msgstr "Exportera en nätlista"
+msgstr "Exporterar lager %s, nät %s"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2902
-#, fuzzy
 msgid "Generating logistic section"
-msgstr "Skapa positionsfil"
+msgstr "Genererar logistiksektion"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2914
-#, fuzzy
 msgid "Saving file"
-msgstr "Spara fil"
+msgstr "Sparar fil"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2946
-#, fuzzy
 msgid "Failed to save file to buffer"
-msgstr "Lyckades inte lägga till fil till index: %s"
+msgstr "Lyckades inte spara fil till buffert"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.h:93
 msgid "IPC-2581 Production File"
-msgstr ""
+msgstr "IPC-2581 produktionsfil"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:281
 #, c-format
@@ -43618,9 +43536,8 @@ msgid "No footprint problems found."
 msgstr "Inga fotavtrycksproblem hittades."
 
 #: pcbnew/tools/generator_tool.cpp:137
-#, fuzzy
 msgid "Regenerate All"
-msgstr "Radera alla"
+msgstr "Återuppbygg alla"
 
 #: pcbnew/tools/generator_tool.cpp:144
 #, c-format
@@ -44600,12 +44517,11 @@ msgstr "Skapa rapport över alla fotavtryck från aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:1062
 msgid "IPC-2581 File (.xml)..."
-msgstr ""
+msgstr "IPC-2581-fil (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1063
-#, fuzzy
 msgid "Generate an IPC-2581 file"
-msgstr "Skapa IPC-D-356 nätlistefil"
+msgstr "Generera en IPC-2581-fil"
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "IPC-D-356 Netlist File..."
@@ -44688,9 +44604,8 @@ msgid "Place origin point for drill files and component placement files"
 msgstr "Placera origo för borr- och komponentplaceringsfiler"
 
 #: pcbnew/tools/pcb_actions.cpp:1161
-#, fuzzy
 msgid "Reset Drill Origin"
-msgstr "Återställ rutnätets origo"
+msgstr "Återställ borr-origo"
 
 #: pcbnew/tools/pcb_actions.cpp:1168
 msgid "Toggle Lock"
@@ -45546,18 +45461,16 @@ msgstr ""
 "begränsningar"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
-#, fuzzy
 msgid "Rebuild All Generators"
-msgstr "Ta bort generator"
+msgstr "Återuppbygg alla generatorer"
 
 #: pcbnew/tools/pcb_actions.cpp:2419
 msgid "Rebuilds geometry of all generators"
 msgstr "Bygger upp geometrier på nytt för alla generatorer"
 
 #: pcbnew/tools/pcb_actions.cpp:2426
-#, fuzzy
 msgid "Rebuild Selected Generators"
-msgstr "Ta bort generator"
+msgstr "Återuppbygg valda generatorer"
 
 #: pcbnew/tools/pcb_actions.cpp:2427
 msgid "Rebuilds geometry of selected generator(s)"
@@ -46246,7 +46159,7 @@ msgstr "Kortets omkretsdefinition"
 
 #: pcbnew/widgets/appearance_controls.cpp:1646
 msgid "Board's edge setback outline"
-msgstr "Mönsterkortets kantmarginals kontur"
+msgstr "Marginal från mönsterkortets kontur (kantmarginal)"
 
 #: pcbnew/widgets/appearance_controls.cpp:1647
 msgid "Footprint courtyards on board's front"
