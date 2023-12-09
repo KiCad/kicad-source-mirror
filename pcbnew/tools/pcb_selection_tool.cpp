@@ -2603,7 +2603,12 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_DIM_CENTER_T:
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
-        if( aItem->GetParentFootprint() )
+        if( m_isFootprintEditor )
+        {
+            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+        else if( aItem->GetParentFootprint() )
         {
             // Footprint dimension selections are only allowed in footprint editor mode.
             if( !checkVisibilityOnly )
