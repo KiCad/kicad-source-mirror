@@ -42,10 +42,15 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
             {
                 return true;
             },
-            // Close handler
+            // Accept handler
             [this]()
             {
                 EndModal( wxID_OK );
+            },
+            // Escape handler
+            [this]()
+            {
+                EndModal( wxID_CANCEL );
             } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );

@@ -99,11 +99,16 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
             {
                 return filterFootprint( aNode );
             },
-            // Close handler
+            // Accept handler
             [this]()
             {
                 wxCommandEvent dummy;
                 OnOK( dummy );
+            },
+            // Escape handler
+            [this]()
+            {
+                DismissModal( false );
             } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND | wxBOTTOM, 2 );

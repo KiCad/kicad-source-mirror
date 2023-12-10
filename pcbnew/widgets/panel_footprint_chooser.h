@@ -43,12 +43,14 @@ public:
      *
      * @param aFrame  the parent frame (usually a PCB_EDIT_FRAME or FOOTPRINT_CHOOSER_FRAME)
      * @param aParent the parent window (usually a DIALOG_SHIM or FOOTPRINT_CHOOSER_FRAME)
-     * @param aCloseHandler a handler to be called on double-click of a footprint
+     * @param aAcceptHandler a handler to be called on double-click of a footprint
+     * @param aEscapeHandler a handler to be called on <ESC>
      */
     PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
                              const wxArrayString& aFootprintHistoryList,
                              std::function<bool( LIB_TREE_NODE& )> aFilter,
-                             std::function<void()> aCloseHandler );
+                             std::function<void()> aAcceptHandler,
+                             std::function<void()> aEscapeHandler );
 
     ~PANEL_FOOTPRINT_CHOOSER();
 
@@ -72,6 +74,7 @@ public:
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds
 
+    void OnDetailsCharHook( wxKeyEvent& aEvt );
     void onCloseTimer( wxTimerEvent& aEvent );
 
     void onFootprintSelected( wxCommandEvent& aEvent );
@@ -93,10 +96,12 @@ protected:
 
     FOOTPRINT_PREVIEW_WIDGET*               m_preview_ctrl;
     LIB_TREE*                               m_tree;
+    HTML_WINDOW*                            m_details;
 
     PCB_BASE_FRAME*                         m_frame;
     std::function<bool( LIB_TREE_NODE& )>   m_filter;
-    std::function<void()>                   m_closeHandler;
+    std::function<void()>                   m_acceptHandler;
+    std::function<void()>                   m_escapeHandler;
 };
 
 #endif /* PANEL_FOOTPRINT_CHOOSER_H */
