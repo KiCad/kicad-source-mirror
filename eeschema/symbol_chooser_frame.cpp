@@ -81,7 +81,12 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                       {
                                           wxCommandEvent dummy;
                                           OnOK( dummy );
+                                      },
+                                      [this]()
+                                      {
+                                          DismissModal( false );
                                       } );
+
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
 

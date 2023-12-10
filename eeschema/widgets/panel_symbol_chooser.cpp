@@ -54,7 +54,8 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                                             std::vector<PICKED_SYMBOL>&  aHistoryList,
                                             std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
                                             bool aAllowFieldEdits, bool aShowFootprints,
-                                            std::function<void()> aCloseHandler ) :
+                                            std::function<void()> aAcceptHandler,
+                                            std::function<void()> aEscapeHandler ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_symbol_preview( nullptr ),
         m_hsplitter( nullptr ),
@@ -64,7 +65,8 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_tree( nullptr ),
         m_details( nullptr ),
         m_frame( aFrame ),
-        m_closeHandler( std::move( aCloseHandler ) ),
+        m_acceptHandler( std::move( aAcceptHandler ) ),
+        m_escapeHandler( std::move( aEscapeHandler ) ),
         m_showPower( false ),
         m_allow_field_edits( aAllowFieldEdits ),
         m_show_footprints( aShowFootprints )
@@ -170,7 +172,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         if( !adapter->AddLibraries( libNicknames, m_frame ) )
         {
             // loading cancelled by user
-            m_closeHandler();
+            m_acceptHandler();
         }
     }
 
@@ -260,9 +262,36 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
     if( m_details )
     {
-        m_details->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnCharHook ),
+        m_details->Connect( wxEVT_CHAR_HOOK,
+                            wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnDetailsCharHook ),
                             nullptr, this );
     }
+
+    Bind( wxEVT_CHAR_HOOK,
+            [&]( wxKeyEvent& aEvent )
+            {
+                if( aEvent.GetKeyCode() == WXK_ESCAPE )
+                {
+                    wxObject* eventSource = aEvent.GetEventObject();
+
+                    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
+                    {
+                        // First escape cancels search string value
+                        if( textCtrl->GetValue() == m_tree->GetSearchString()
+                                && !m_tree->GetSearchString().IsEmpty() )
+                        {
+                            m_tree->SetSearchString( wxEmptyString );
+                            return;
+                        }
+                    }
+
+                    m_escapeHandler();
+                }
+                else
+                {
+                    aEvent.Skip();
+                }
+            } );
 }
 
 
@@ -290,8 +319,8 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
     if( m_details )
     {
         m_details->Disconnect( wxEVT_CHAR_HOOK,
-                               wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnCharHook ), nullptr,
-                               this );
+                               wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnDetailsCharHook ),
+                               nullptr, this );
     }
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
@@ -410,7 +439,7 @@ void PANEL_SYMBOL_CHOOSER::FinishSetup()
 }
 
 
-void PANEL_SYMBOL_CHOOSER::OnCharHook( wxKeyEvent& e )
+void PANEL_SYMBOL_CHOOSER::OnDetailsCharHook( wxKeyEvent& e )
 {
     if( m_details && e.GetKeyCode() == 'C' && e.ControlDown() &&
         !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
@@ -459,7 +488,7 @@ void PANEL_SYMBOL_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     }
     else
     {
-        m_closeHandler();
+        m_acceptHandler();
     }
 }
 

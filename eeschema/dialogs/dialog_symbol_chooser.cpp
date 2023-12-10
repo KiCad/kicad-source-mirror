@@ -52,6 +52,10 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
                                                [this]()
                                                {
                                                    EndModal( wxID_OK );
+                                               },
+                                               [this]()
+                                               {
+                                                   EndModal( wxID_CANCEL );
                                                } );
 
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
@@ -97,6 +101,15 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
 
     SetInitialFocus( m_chooserPanel->GetFocusTarget() );
     SetupStandardButtons();
+
+    Bind( wxEVT_CHAR_HOOK,
+            [&]( wxKeyEvent& aEvent )
+            {
+                if( aEvent.GetKeyCode() == WXK_ESCAPE )
+                {
+                    m_chooserPanel->FinishSetup();
+                }
+            } );
 
     m_chooserPanel->FinishSetup();
     Layout();
