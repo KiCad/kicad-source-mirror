@@ -133,7 +133,15 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
             drce->SetViolatingRule( constraint.GetParentRule() );
 
             reportViolation( drce, pos, Edge_Cuts );
-            return false;       // don't report violations with multiple edges; one is enough
+
+            if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+            {
+                return m_drcEngine->GetReportAllTrackErrors();
+            }
+            else
+            {
+                return false;   // don't report violations with multiple edges; one is enough
+            }
         }
     }
 
