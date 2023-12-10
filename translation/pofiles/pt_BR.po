@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-10-30 16:42+0000\n"
+"PO-Revision-Date: 2023-12-11 23:54+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -9822,9 +9822,8 @@ msgstr ""
 "símbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "O campo deve ter um nome."
+msgstr "O símbolo deve ter um nome."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -18428,9 +18427,8 @@ msgstr ""
 "salva?"
 
 #: eeschema/tools/sch_editor_control.cpp:335
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Atualiza os símbolos no esquema dando referência à nova biblioteca?"
+msgstr "Incluir os símbolos de energia no esquema da biblioteca?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
 #, c-format
@@ -35714,9 +35712,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Houve uma falha ao plotar para '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Não foi possível criar a pasta de saída '%s'."
+msgstr "Houve uma falha ao criar o diretório de saída\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
