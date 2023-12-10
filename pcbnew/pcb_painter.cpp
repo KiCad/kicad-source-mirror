@@ -1655,7 +1655,9 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    // Note: on LAYER_LOCKED_ITEM_SHADOW always draw shadow shapes as continuous lines
+    // otherwise the look is very strange and ugly
+    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         switch( aShape->GetShape() )
         {
