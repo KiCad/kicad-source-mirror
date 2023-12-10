@@ -5954,7 +5954,7 @@
                         <property name="style"></property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
-                        <property name="tooltip">Max pad/via size to track width ratio to create a teardrop.&#x0A;100 always creates a teardrop.</property>
+                        <property name="tooltip">Max track width ratio to create a teardrop.&#x0A;100 always creates a teardrop.</property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>

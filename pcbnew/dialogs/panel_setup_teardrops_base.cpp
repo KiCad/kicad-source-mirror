@@ -509,7 +509,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_stHDRatio2 = new wxStaticText( this, wxID_ANY, _("Maximum track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHDRatio2->Wrap( -1 );
-	m_stHDRatio2->SetToolTip( _("Max pad/via size to track width ratio to create a teardrop.\n100 always creates a teardrop.") );
+	m_stHDRatio2->SetToolTip( _("Max track width ratio to create a teardrop.\n100 always creates a teardrop.") );
 
 	gbSizer2->Add( m_stHDRatio2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 40 );
 
