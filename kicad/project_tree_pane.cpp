@@ -755,8 +755,13 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_menu        = ADVANCED_CFG::GetCfg().m_EnableGit;
 
     // Check if the libgit2 library has been successfully initialized
+#if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
     int major, minor, rev;
     bool libgit_init = ( git_libgit2_version( &major, &minor, &rev ) == GIT_OK );
+#else
+    //Work around libgit2 API change for supporting older platforms
+    bool libgit_init = true;
+#endif
 
     vcs_menu &= libgit_init;
 
