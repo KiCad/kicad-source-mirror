@@ -86,7 +86,17 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     else if( legacyProject.Exists() )
         aSettingsManager.LoadProject( legacyProject.GetFullPath() );
 
-    aBoard = ReadBoardFromFileOrStream( boardPath );
+    BOOST_TEST_MESSAGE( "Loading board file: " << boardPath );
+
+    try {
+        aBoard = ReadBoardFromFileOrStream( boardPath );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        BOOST_TEST_ERROR( ioe.What() );
+    }
+
+    BOOST_REQUIRE( aBoard );
 
     if( projectFile.Exists() || legacyProject.Exists() )
         aBoard->SetProject( &aSettingsManager.Prj() );

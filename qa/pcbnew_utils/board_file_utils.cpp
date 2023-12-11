@@ -93,7 +93,7 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
 
 
 std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
-                                                          std::istream& aFallback )
+                                                  std::istream&      aFallback )
 {
     std::istream* in_stream = nullptr;
     std::ifstream file_stream;
@@ -106,6 +106,12 @@ std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
     else
     {
         file_stream.open( aFilename );
+
+        if( !file_stream.is_open() )
+        {
+            return nullptr;
+        }
+
         in_stream = &file_stream;
     }
 
@@ -127,6 +133,12 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFi
     else
     {
         file_stream.open( aFilename );
+
+        if( !file_stream.is_open() )
+        {
+            return nullptr;
+        }
+
         in_stream = &file_stream;
     }
 
