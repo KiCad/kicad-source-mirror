@@ -342,7 +342,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
         BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
         wxString svgPath = fn.GetFullPath();
 
-        m_printMaskLayer = aOnlyOneFile ? all_selected.SeqStackupBottom2Top() : LSEQ( { layer } );
+        m_printMaskLayer = aOnlyOneFile ? all_selected.SeqStackupForPlotting() : LSEQ( { layer } );
 
         if( m_checkboxEdgesOnAllPages->GetValue() )
             m_printMaskLayer.push_back( Edge_Cuts );

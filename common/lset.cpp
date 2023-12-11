@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -479,7 +479,88 @@ LSEQ LSET::Seq() const
 }
 
 
-LSEQ LSET::SeqStackupBottom2Top() const
+LSEQ LSET::SeqStackupTop2Bottom( PCB_LAYER_ID aSelectedLayer ) const
+{
+    static const PCB_LAYER_ID sequence[] = {
+        Edge_Cuts,
+        Margin,
+        Dwgs_User,
+        Cmts_User,
+        Eco1_User,
+        Eco2_User,
+        User_1,
+        User_2,
+        User_3,
+        User_4,
+        User_5,
+        User_6,
+        User_7,
+        User_8,
+        User_9,
+        F_Fab,
+        F_SilkS,
+        F_Paste,
+        F_Adhes,
+        F_Mask,
+        F_CrtYd,
+        F_Cu,
+        In1_Cu,
+        In2_Cu,
+        In3_Cu,
+        In4_Cu,
+        In5_Cu,
+        In6_Cu,
+        In7_Cu,
+        In8_Cu,
+        In9_Cu,
+        In10_Cu,
+        In11_Cu,
+        In12_Cu,
+        In13_Cu,
+        In14_Cu,
+        In15_Cu,
+        In16_Cu,
+        In17_Cu,
+        In18_Cu,
+        In19_Cu,
+        In20_Cu,
+        In21_Cu,
+        In22_Cu,
+        In23_Cu,
+        In24_Cu,
+        In25_Cu,
+        In26_Cu,
+        In27_Cu,
+        In28_Cu,
+        In29_Cu,
+        In30_Cu,
+        B_Cu,
+        B_CrtYd,
+        B_Mask,
+        B_Adhes,
+        B_Paste,
+        B_SilkS,
+        B_Fab,
+    };
+
+    LSEQ seq = Seq( sequence, arrayDim( sequence ) );
+
+    if( aSelectedLayer != UNDEFINED_LAYER )
+    {
+        auto it = std::find( seq.begin(), seq.end(), aSelectedLayer );
+
+        if( it != seq.end() )
+        {
+            seq.erase( it );
+            seq.insert( seq.begin(), aSelectedLayer );
+        }
+    }
+
+    return seq;
+}
+
+
+LSEQ LSET::SeqStackupForPlotting() const
 {
     // bottom-to-top stack-up layers
     // Note that the bottom technical layers are flipped so that when plotting a bottom-side view,

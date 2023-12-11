@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -781,10 +781,19 @@ public:
     LSEQ Seq() const;
 
     /**
+     * Generate a sequence of layers that represent a top to bottom stack of this set of layers.
+     *
+     * @param aSelectedLayer is the layer to put at the top of stack when defined.
+     *
+     * @return the top to bottom layer sequence.
+     */
+    LSEQ SeqStackupTop2Bottom( PCB_LAYER_ID aSelectedLayer = UNDEFINED_LAYER ) const;
+
+    /**
      * Return the sequence that is typical for a bottom-to-top stack-up.
      * For instance, to plot multiple layers in a single image, the top layers output last.
      */
-    LSEQ SeqStackupBottom2Top() const;
+    LSEQ SeqStackupForPlotting() const;
 
     /**
      * Return a hex string showing contents of this LSEQ.

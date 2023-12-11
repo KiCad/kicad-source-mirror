@@ -366,14 +366,14 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
     if( aGerberJob->m_useBoardPlotParams )
     {
-        aGerberJob->m_printMaskLayer = boardPlotOptions.GetLayerSelection().SeqStackupBottom2Top();
+        aGerberJob->m_printMaskLayer = boardPlotOptions.GetLayerSelection().SeqStackupForPlotting();
         aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection();
     }
     else
     {
         // default to the board enabled layers
         if( aGerberJob->m_printMaskLayer == 0 )
-            aGerberJob->m_printMaskLayer = brd->GetEnabledLayers().SeqStackupBottom2Top();
+            aGerberJob->m_printMaskLayer = brd->GetEnabledLayers().SeqStackupForPlotting();
 
         if( aGerberJob->m_layersIncludeOnAllSet )
             aGerberJob->m_layersIncludeOnAll = plotOnAllLayersSelection;

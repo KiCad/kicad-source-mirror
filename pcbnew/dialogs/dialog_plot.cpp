@@ -104,7 +104,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     std::vector<PCB_LAYER_ID> layersIdChoiceList;
     int                       textWidth = 0;
 
-    for( LSEQ seq = board->GetEnabledLayers().SeqStackupBottom2Top(); seq; ++seq )
+    for( LSEQ seq = board->GetEnabledLayers().SeqStackupForPlotting(); seq; ++seq )
     {
         PCB_LAYER_ID id = *seq;
         wxString     layerName = board->GetLayerName( id );
@@ -568,7 +568,7 @@ void DIALOG_PLOT::OnRightClickAllLayers( wxMouseEvent& event )
 
                 case ID_STACKUP_ORDER:
                 {
-                    LSEQ stackup = m_parent->GetBoard()->GetEnabledLayers().SeqStackupBottom2Top();
+                    LSEQ stackup = m_parent->GetBoard()->GetEnabledLayers().SeqStackupForPlotting();
                     arrangeAllLayersList( stackup );
                     m_plotAllLayersList->Select( -1 );
                     break;
