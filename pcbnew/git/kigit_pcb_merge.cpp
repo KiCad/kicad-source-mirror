@@ -63,6 +63,8 @@ void KIGIT_PCB_MERGE::findSetDifferences( const BOARD_ITEM_SET& aAncestorSet, co
         }
     }
 }
+
+
 KIGIT_PCB_MERGE_DIFFERENCES KIGIT_PCB_MERGE::compareBoards( BOARD* aAncestor, BOARD* aOther )
 {
     KIGIT_PCB_MERGE_DIFFERENCES differences;
@@ -75,9 +77,10 @@ KIGIT_PCB_MERGE_DIFFERENCES KIGIT_PCB_MERGE::compareBoards( BOARD* aAncestor, BO
     return differences;
 }
 
+
 int KIGIT_PCB_MERGE::Merge()
 {
-    git_repository* repo = git_merge_driver_source_repo( m_mergeDriver );
+    auto repo = const_cast<git_repository*>( git_merge_driver_source_repo( m_mergeDriver ) );
     const git_index_entry* ancestor = git_merge_driver_source_ancestor( m_mergeDriver );
     const git_index_entry* ours = git_merge_driver_source_ours( m_mergeDriver );
     const git_index_entry* theirs = git_merge_driver_source_theirs( m_mergeDriver );
@@ -177,4 +180,3 @@ std::unique_ptr<BOARD> readBoard( wxString& aFilename )
 
     return board;
 }
-
