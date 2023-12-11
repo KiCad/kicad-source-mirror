@@ -655,6 +655,7 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
     }
     else
     {
+        pattern->m_settings.SetTargetLength( std::numeric_limits<int>::max() );
         pattern->m_unconstrained = true;
     }
 
