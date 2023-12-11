@@ -2712,6 +2712,11 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
                     {
                         aCollector.Remove( item );
                     }
+                    else if( item->Type() == PCB_MARKER_T )
+                    {
+                        // Don't allow copying marker objects
+                        aCollector.Remove( item );
+                    }
                 }
             },
 

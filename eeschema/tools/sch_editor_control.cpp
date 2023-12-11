@@ -1305,6 +1305,11 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
             // and the field text is in it
             selection.Add( item->GetParent() );
         }
+        else if( item->Type() == SCH_MARKER_T )
+        {
+            // Don't let the markers be copied
+            selection.Remove( item );
+        }
     }
 
     STRING_FORMATTER formatter;
