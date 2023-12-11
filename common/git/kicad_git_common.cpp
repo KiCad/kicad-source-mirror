@@ -436,7 +436,11 @@ extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git
 
     git_oid_tostr( b_str, cstring_len, aSecond );
 
+#if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
     if( !git_oid_is_zero( aFirst ) )
+#else
+    if( !git_oid_iszero( aFirst ) )
+#endif
     {
         git_oid_tostr( a_str, cstring_len, aFirst );
         status = wxString::Format( _( "* [updated] %s..%s %s" ), a_str, b_str, aRefname );
