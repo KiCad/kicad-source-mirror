@@ -823,7 +823,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::duplicate ) )
         {
-            if( selection.Front()->IsNew() )
+            if( selection.Front() && selection.Front()->IsNew() )
             {
                 // This doesn't really make sense; we'll just end up dragging a stack of
                 // objects so we ignore the duplicate and just carry on.
