@@ -144,13 +144,15 @@ int BOARD_INSPECTION_TOOL::ShowBoardStatistics( const TOOL_EVENT& aEvent )
 }
 
 
-DRC_ENGINE BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompileError, bool* aCourtyardError )
+std::unique_ptr<DRC_ENGINE> BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompileError, 
+                                                                  bool* aCourtyardError )
 {
-    DRC_ENGINE engine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+    auto engine = std::make_unique<DRC_ENGINE>( m_frame->GetBoard(), 
+                                                &m_frame->GetBoard()->GetDesignSettings() );
 
     try
     {
-        engine.InitEngine( m_frame->GetDesignRulesPath() );
+        engine->InitEngine( m_frame->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& )
     {
@@ -290,9 +292,11 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     dialog->DeleteAllPages();
 
+    bool compileError = false;
+    bool courtyardError = false;
+    std::unique_ptr<DRC_ENGINE> drcEngine = makeDRCEngine( &compileError, &courtyardError );
+
     WX_HTML_REPORT_BOX* r = nullptr;
-    bool                compileError = false;
-    DRC_ENGINE          drcEngine = makeDRCEngine( &compileError );
     DRC_CONSTRAINT      constraint;
     int                 clearance = 0;
     wxString            clearanceStr;
@@ -315,7 +319,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( MAX_UNCOUPLED_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( MAX_UNCOUPLED_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
@@ -330,7 +334,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( TEXT_HEIGHT_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( TEXT_HEIGHT_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved height constraints: min %s; max %s." ),
@@ -345,7 +349,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( TEXT_THICKNESS_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( TEXT_THICKNESS_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved thickness constraints: min %s; max %s." ),
@@ -360,7 +364,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( TRACK_WIDTH_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved width constraints: min %s; max %s." ),
@@ -375,7 +379,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( CONNECTION_WIDTH_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( CONNECTION_WIDTH_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved min connection width: %s." ),
@@ -389,7 +393,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( VIA_DIAMETER_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved diameter constraints: min %s; max %s." ),
@@ -404,7 +408,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( ANNULAR_WIDTH_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved annular width constraints: min %s; max %s." ),
@@ -420,7 +424,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( HOLE_SIZE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, a, b, layer, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved hole size constraints: min %s; max %s." ),
@@ -442,7 +446,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         }
         else
         {
-            constraint = drcEngine.EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
             clearanceStr = m_frame->StringFromValue( clearance, true );
 
@@ -455,11 +459,11 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         r->Report( "" );
         reportHeader( _( "Physical hole clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
-        if( !drcEngine.HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
+        if( !drcEngine->HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
             r->Report( _( "No 'physical_hole_clearance' constraints defined." ) );
@@ -479,7 +483,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
+        constraint = drcEngine->EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
@@ -494,7 +498,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine.EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
@@ -545,7 +549,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         }
         else
         {
-            constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
             clearanceStr = m_frame->StringFromValue( clearance, true );
 
@@ -558,11 +562,11 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         r->Report( "" );
         reportHeader( _( "Physical clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
-        if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
+        if( !drcEngine->HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
             r->Report( _( "No 'physical_clearance' constraints defined." ) );
@@ -582,7 +586,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        drcEngine.ProcessAssertions( a, []( const DRC_CONSTRAINT* c ){}, r );
+        drcEngine->ProcessAssertions( a, []( const DRC_CONSTRAINT* c ){}, r );
         break;
 
     default:
@@ -705,11 +709,12 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     PAD*                  pad = dynamic_cast<PAD*>( b );
     FOOTPRINT*            aFP = dynamic_cast<FOOTPRINT*>( a );
     FOOTPRINT*            bFP = dynamic_cast<FOOTPRINT*>( b );
-
-    bool                  compileError = false;
-    DRC_ENGINE            drcEngine = makeDRCEngine( &compileError );
     DRC_CONSTRAINT        constraint;
     int                   clearance = 0;
+
+    bool compileError = false;
+    bool courtyardError = false;
+    std::unique_ptr<DRC_ENGINE> drcEngine = makeDRCEngine( &compileError, &courtyardError );
 
     if( copperIntersection.any() && zone && pad && zone->GetNetCode() == pad->GetNetCode() )
     {
@@ -723,7 +728,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         r = dialog->AddHTMLPage( _( "Zone" ) );
         reportHeader( _( "Zone connection resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalZoneConnection( pad, zone, layer, r );
+        constraint = drcEngine->EvalZoneConnection( pad, zone, layer, r );
 
         if( constraint.m_ZoneConnection == ZONE_CONNECTION::THERMAL )
         {
@@ -731,7 +736,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             reportHeader( _( "Thermal-relief gap resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
+            constraint = drcEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, zone, layer, r );
             int gap = constraint.m_Value.Min();
 
             if( compileError )
@@ -745,7 +750,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             reportHeader( _( "Thermal-relief spoke width resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, zone, layer, r );
+            constraint = drcEngine->EvalRules( THERMAL_SPOKE_WIDTH_CONSTRAINT, pad, zone, layer, r );
             int width = constraint.m_Value.Opt();
 
             if( compileError )
@@ -759,7 +764,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             reportHeader( _( "Thermal-relief min spoke count resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, zone, layer, r );
+            constraint = drcEngine->EvalRules( MIN_RESOLVED_SPOKES_CONSTRAINT, pad, zone, layer, r );
             int minSpokes = constraint.m_Value.Min();
 
             if( compileError )
@@ -782,7 +787,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( wxString::Format( _( "Zone clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );
 
-            constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, pad, zone, layer, r );
+            constraint = drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, pad, zone, layer, r );
 
             if( constraint.m_Value.Min() > clearance )
             {
@@ -797,7 +802,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             if( !pad->FlashLayer( layer ) )
             {
-                constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, pad, zone,
+                constraint = drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, pad, zone,
                                                   layer, r );
 
                 if( constraint.m_Value.Min() > clearance )
@@ -854,7 +859,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         else
         {
             // Different nets (or one or both unconnected)....
-            constraint = drcEngine.EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
@@ -894,7 +899,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r = dialog->AddHTMLPage( _( "Diff Pair" ) );
             reportHeader( _( "Diff-pair gap resolution for:" ), ac, bc, active, r );
 
-            constraint = drcEngine.EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, active, r );
+            constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, active, r );
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved gap constraints: min %s; opt %s; max %s." ),
@@ -908,14 +913,14 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             reportHeader( _( "Diff-pair max uncoupled length resolution for:" ), ac, bc,
                           active, r );
 
-            if( !drcEngine.HasRulesForConstraintType( MAX_UNCOUPLED_CONSTRAINT ) )
+            if( !drcEngine->HasRulesForConstraintType( MAX_UNCOUPLED_CONSTRAINT ) )
             {
                 r->Report( "" );
                 r->Report( _( "No 'diff_pair_uncoupled' constraints defined." ) );
             }
             else
             {
-                constraint = drcEngine.EvalRules( MAX_UNCOUPLED_CONSTRAINT, ac, bc, active, r );
+                constraint = drcEngine->EvalRules( MAX_UNCOUPLED_CONSTRAINT, ac, bc, active, r );
 
                 r->Report( "" );
                 r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
@@ -961,7 +966,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
             reportHeader( _( "Silkscreen clearance resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( SILK_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( SILK_CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
@@ -989,7 +994,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
             reportHeader( _( "Courtyard clearance resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
@@ -1033,7 +1038,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             reportHeader( _( "Hole clearance resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
@@ -1062,7 +1067,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             reportHeader( _( "Hole-to-hole clearance resolution for:" ), a, b, r );
 
-            constraint = drcEngine.EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
+            constraint = drcEngine->EvalRules( HOLE_TO_HOLE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
@@ -1101,7 +1106,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r = dialog->AddHTMLPage( layerName + wxS( " " ) + _( "Clearance" ) );
             reportHeader( _( "Edge clearance resolution for:" ), a, b, layer, r );
 
-            constraint = drcEngine.EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+            constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
@@ -1122,14 +1127,14 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             {
                 reportHeader( _( "Physical clearance resolution for:" ), a, b, aLayer, r );
 
-                constraint = drcEngine.EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, aLayer, r );
+                constraint = drcEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, a, b, aLayer, r );
                 clearance = constraint.m_Value.Min();
 
                 if( compileError )
                 {
                     reportCompileError( r );
                 }
-                else if( !drcEngine.HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
+                else if( !drcEngine->HasRulesForConstraintType( PHYSICAL_CLEARANCE_CONSTRAINT ) )
                 {
                     r->Report( "" );
                     r->Report( _( "No 'physical_clearance' constraints defined." ) );
@@ -1188,14 +1193,14 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         reportHeader( _( "Physical hole clearance resolution for:" ), a, b, layer, r );
 
-        constraint = drcEngine.EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        constraint = drcEngine->EvalRules( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, a, b, layer, r );
         clearance = constraint.m_Value.Min();
 
         if( compileError )
         {
             reportCompileError( r );
         }
-        else if( !drcEngine.HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
+        else if( !drcEngine->HasRulesForConstraintType( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT ) )
         {
             r->Report( "" );
             r->Report( _( "No 'physical_hole_clearance' constraints defined." ) );
@@ -1218,7 +1223,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 {
-#define EVAL_RULES( constraint, a, b, layer, r ) drcEngine.EvalRules( constraint, a, b, layer, r )
+#define EVAL_RULES( constraint, a, b, layer, r ) drcEngine->EvalRules( constraint, a, b, layer, r )
 
     wxCHECK( m_frame, 0 );
 
@@ -1241,10 +1246,11 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     dialog->DeleteAllPages();
 
     BOARD_ITEM*    item = dynamic_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
-    bool           compileError = false;
-    bool           courtyardError = false;
-    DRC_ENGINE     drcEngine = makeDRCEngine( &compileError, &courtyardError );
     DRC_CONSTRAINT constraint;
+
+    bool compileError = false;
+    bool courtyardError = false;
+    std::unique_ptr<DRC_ENGINE> drcEngine = makeDRCEngine( &compileError, &courtyardError );
 
     wxCHECK( item, 0 );
 
@@ -1403,7 +1409,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
                    + wxS( "</a>" ) );
     }
 
-    drcEngine.ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );
+    drcEngine->ProcessAssertions( item, []( const DRC_CONSTRAINT* c ){}, r );
     r->Flush();
 
     dialog->Raise();

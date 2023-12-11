@@ -120,7 +120,8 @@ private:
     ///< Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
-    DRC_ENGINE makeDRCEngine( bool* aCompileError, bool* aCourtyardError = nullptr );
+    std::unique_ptr<DRC_ENGINE> makeDRCEngine( bool* aCompileError,
+                                               bool* aCourtyardError = nullptr );
 
     wxString getItemDescription( BOARD_ITEM* aItem );
 
