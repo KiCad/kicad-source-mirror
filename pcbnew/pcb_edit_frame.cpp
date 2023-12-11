@@ -396,6 +396,16 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     setupUnits( config() );
 
+    // Ensure the DRC engine is initialized so that constraints can be resolved even before a
+    // board is loaded or saved
+    try
+    {
+        m_toolManager->GetTool<DRC_TOOL>()->GetDRCEngine()->InitEngine( wxFileName() );
+    }
+    catch( PARSE_ERROR& )
+    {
+    }
+
     // Ensure the Python interpreter is up to date with its environment variables
     PythonSyncEnvironmentVariables();
     PythonSyncProjectName();
