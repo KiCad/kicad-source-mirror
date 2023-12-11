@@ -131,7 +131,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue6879",  6 },
         { "issue6945",  2 },
         { "issue7241",  1 },
-        { "issue7267",  4 },
+        { "issue7267",  5 },
         { "issue7325",  4 },
         { "issue8003",  2 },
         { "issue9081",  2 },
