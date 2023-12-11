@@ -118,7 +118,8 @@ private:
     void onInspectClearanceDialogClosed( wxCommandEvent& aEvent );
     void onInspectConstraintsDialogClosed( wxCommandEvent& aEvent );
 
-    DRC_ENGINE makeDRCEngine( bool* aCompileError, bool* aCourtyardError = nullptr );
+    std::unique_ptr<DRC_ENGINE> makeDRCEngine( bool* aCompileError,
+                                               bool* aCourtyardError = nullptr );
 
     wxString getItemDescription( BOARD_ITEM* aItem );
 
