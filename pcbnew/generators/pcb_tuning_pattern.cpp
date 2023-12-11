@@ -1340,6 +1340,7 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
         for( BOARD_ITEM* item : routerRemovedItems )
         {
+            aFrame->GetCanvas()->GetView()->Hide( item, false );
             aCommit->Remove( item );
         }
 
