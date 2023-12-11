@@ -1878,6 +1878,7 @@ void PNS_KICAD_IFACE_BASE::AddItem( PNS::ITEM* aItem )
 BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* newBI = nullptr;
+    auto net = static_cast<NETINFO_ITEM*>( aItem->Net() );
 
     switch( aItem->Kind() )
     {
@@ -1887,7 +1888,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         PCB_ARC*  new_arc = new PCB_ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
         new_arc->SetWidth( arc->Width() );
         new_arc->SetLayer( ToLAYER_ID( arc->Layers().Start() ) );
-        new_arc->SetNet( static_cast<NETINFO_ITEM*>( arc->Net() ) );
+        new_arc->SetNet( net );
         newBI = new_arc;
         break;
     }
@@ -1901,7 +1902,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         track->SetEnd( VECTOR2I( s.B.x, s.B.y ) );
         track->SetWidth( seg->Width() );
         track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
-        track->SetNet( static_cast<NETINFO_ITEM*>( seg->Net() ) );
+        track->SetNet( net );
         newBI = track;
         break;
     }
@@ -1913,7 +1914,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );
         via_board->SetDrill( via->Drill() );
-        via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
+        via_board->SetNet( net );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
@@ -1932,6 +1933,13 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
     }
 
     default: break;
+    }
+
+    if( net->GetNetCode() <= 0 )
+    {
+        NETINFO_ITEM* newNetInfo = newBI->GetNet();
+        newNetInfo->SetParent( m_board );
+        newNetInfo->SetNetClass( m_board->GetDesignSettings().m_NetSettings->m_DefaultNetClass );
     }
 
     return newBI;

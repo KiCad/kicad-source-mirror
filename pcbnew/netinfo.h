@@ -164,6 +164,7 @@ public:
      */
     void Clear();
 
+    void SetParent( BOARD* aParent ) { m_parent = aParent; }
     BOARD* GetParent() const      // Replace EDA_ITEM::GetParent() with a more useful return-type
     {
         return m_parent;

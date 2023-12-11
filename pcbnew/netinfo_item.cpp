@@ -64,6 +64,7 @@ NETINFO_ITEM::~NETINFO_ITEM()
 
 void NETINFO_ITEM::Clear()
 {
+    wxCHECK( m_parent, /* void */ );
     m_netClass = m_parent->GetDesignSettings().m_NetSettings->m_DefaultNetClass;
 }
 
