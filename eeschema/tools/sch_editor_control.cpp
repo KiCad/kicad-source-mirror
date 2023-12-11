@@ -1387,21 +1387,19 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
                                              const KIID_PATH& aClipPath,
                                              bool aForceKeepAnnotations )
 {
-    wxCHECK( aSymbol && aPasteScreen, /* void */ );
+    wxCHECK( m_frame && aSymbol && aPasteScreen, /* void */ );
 
-    KIID_PATH clipItemPath = aClipPath;
+    SCH_SYMBOL_INSTANCE instance;
+    KIID_PATH pasteLookupPath = aClipPath;
 
-    wxString reference, value, footprint;
-    int      unit;
+    m_pastedSymbols.insert( aSymbol );
 
-    clipItemPath.push_back( aSymbol->m_Uuid );
+    // The pasted symbol look up paths include the symbol UUID.
+    pasteLookupPath.push_back( aSymbol->m_Uuid );
 
-    if( m_clipboardSymbolInstances.count( clipItemPath ) > 0 )
+    if( m_clipboardSymbolInstances.count( pasteLookupPath ) > 0 )
     {
-        SCH_SYMBOL_INSTANCE instance = m_clipboardSymbolInstances.at( clipItemPath );
-
-        unit = instance.m_Unit;
-        reference = instance.m_Reference;
+        instance = m_clipboardSymbolInstances.at( pasteLookupPath );
     }
     else
     {
@@ -1412,20 +1410,20 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
 
         // Pasted from notepad or an older instance of eeschema.  Use the values in the fields
         // instead.
-        reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
-        value = aSymbol->GetField( VALUE_FIELD )->GetText();
-        footprint = aSymbol->GetField( FOOTPRINT_FIELD )->GetText();
-        unit = aSymbol->GetUnit();
+        instance.m_Reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
+        instance.m_Unit = aSymbol->GetUnit();
     }
 
-    if( aForceKeepAnnotations && !reference.IsEmpty() )
-        aSymbol->SetRef( &aPastePath, reference );
-    else
+    instance.m_Path = aPastePath.Path() + aClipPath;
+    instance.m_ProjectName = m_frame->Prj().GetProjectName();
+
+    aSymbol->AddHierarchicalReference( instance );
+
+    if( !aForceKeepAnnotations )
         aSymbol->ClearAnnotation( &aPastePath, false );
 
     // We might clear annotations but always leave the original unit number from the paste.
-    aSymbol->SetUnitSelection( &aPastePath, unit );
-    aSymbol->SetUnit( unit );
+    aSymbol->SetUnit( instance.m_Unit );
 }
 
 
@@ -1531,6 +1529,29 @@ void SCH_EDITOR_CONTROL::setPastedSymbolInstances( SCH_SCREENS& aScreenList )
 }
 
 
+void SCH_EDITOR_CONTROL::prunePastedSymbolInstances()
+{
+    wxCHECK( m_frame, /* void */ );
+
+    for( SCH_SYMBOL* symbol : m_pastedSymbols )
+    {
+        wxCHECK2( symbol, continue );
+
+        std::vector<KIID_PATH> instancePathsToRemove;
+
+        for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstanceReferences() )
+        {
+            if( ( instance.m_ProjectName != m_frame->Prj().GetProjectName() )
+              || instance.m_Path.empty() )
+                instancePathsToRemove.emplace_back( instance.m_Path );
+        }
+
+        for( const KIID_PATH& path : instancePathsToRemove )
+            symbol->RemoveInstance( path );
+    }
+}
+
+
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
@@ -1581,6 +1602,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     SCH_SCREENS tempScreens( tempSheet );
 
+    m_pastedSymbols.clear();
     m_clipboardSheetInstances.clear();
     m_clipboardSymbolInstances.clear();
 
@@ -1933,6 +1955,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+
+    prunePastedSymbolInstances();
 
     // The copy operation creates instance paths that are not valid for the current project or
     // saved as part of another project.  Prune them now so they do not accumulate in the saved

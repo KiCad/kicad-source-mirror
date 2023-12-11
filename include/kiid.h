@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney@ieee.org>
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,6 +190,20 @@ public:
         }
 
         return false;
+    }
+
+    KIID_PATH& operator+=( const KIID_PATH& aRhs )
+    {
+        for( const KIID& kiid : aRhs )
+            emplace_back( kiid );
+
+        return *this;
+    }
+
+    friend KIID_PATH operator+( KIID_PATH aLhs, const KIID_PATH& aRhs )
+    {
+        aLhs += aRhs;
+        return aLhs;
     }
 };
 
