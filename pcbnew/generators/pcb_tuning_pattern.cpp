@@ -361,6 +361,19 @@ public:
 
     LENGTH_TUNING_MODE GetTuningMode() const { return m_tuningMode; }
 
+    PNS::ROUTER_MODE GetPNSMode()
+    {
+        switch( m_tuningMode )
+        {
+        case LENGTH_TUNING_MODE::SINGLE:         return PNS::PNS_MODE_TUNE_SINGLE;
+        case LENGTH_TUNING_MODE::DIFF_PAIR:      return PNS::PNS_MODE_TUNE_DIFF_PAIR;
+        case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW;
+        default:                                 return PNS::PNS_MODE_TUNE_SINGLE;
+        }
+    }
+
+    PNS::MEANDER_SETTINGS& GetSettings() { return m_settings; }
+
     int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
     void SetMinAmplitude( int aValue ) { m_settings.m_minAmplitude = aValue; }
 
@@ -417,8 +430,6 @@ protected:
 
         std::swap( *this, *static_cast<PCB_TUNING_PATTERN*>( aImage ) );
     }
-
-    PNS::ROUTER_MODE toPNSMode();
 
     bool recoverBaseline( PNS::ROUTER* aRouter );
 
@@ -1038,18 +1049,6 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 }
 
 
-PNS::ROUTER_MODE PCB_TUNING_PATTERN::toPNSMode()
-{
-    switch( m_tuningMode )
-    {
-    case LENGTH_TUNING_MODE::SINGLE:         return PNS::PNS_MODE_TUNE_SINGLE;
-    case LENGTH_TUNING_MODE::DIFF_PAIR:      return PNS::PNS_MODE_TUNE_DIFF_PAIR;
-    case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW;
-    default:                                 return PNS::PNS_MODE_TUNE_SINGLE;
-    }
-}
-
-
 bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 {
     PNS::SOLID queryItem;
@@ -1255,7 +1254,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
     if( !startItem || !endItem )
         return false;
 
-    router->SetMode( toPNSMode() );
+    router->SetMode( GetPNSMode() );
 
     if( !router->StartRouting( startSnapPoint, startItem, layer ) )
     {
@@ -1802,7 +1801,7 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
             settings.SetTargetLength( constraint.GetValue() );
     }
 
-    DIALOG_TUNING_PATTERN_PROPERTIES dlg( aEditFrame, settings, toPNSMode(), constraint );
+    DIALOG_TUNING_PATTERN_PROPERTIES dlg( aEditFrame, settings, GetPNSMode(), constraint );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -2026,13 +2025,15 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
     Activate();
 
-    LENGTH_TUNING_MODE       mode = fromPNSMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
+    BOARD*                       board = m_frame->GetBoard();
+    std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
+    GENERATOR_TOOL*              generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
+    PNS::ROUTER*                 router = generatorTool->Router();
+    LENGTH_TUNING_MODE           mode = fromPNSMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
+
     KIGFX::VIEW_CONTROLS*    controls = getViewControls();
-    BOARD*                   board = m_frame->GetBoard();
     PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-    GENERATOR_TOOL*          generatorTool = m_toolMgr->GetTool<GENERATOR_TOOL>();
-    PNS::ROUTER*             router = generatorTool->Router();
     SCOPED_DRAW_MODE         scopedDrawMode( m_mode, MODE::TUNING );
 
     m_pickerItem = nullptr;
@@ -2227,6 +2228,27 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
                 m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
                 updateTuningPattern();
+            }
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        {
+            if( m_tuningPattern )
+            {
+                DRC_CONSTRAINT constraint;
+
+                if( !m_tuningPattern->GetItems().empty() )
+                {
+                    BOARD_ITEM* startItem = *m_tuningPattern->GetItems().begin();
+
+                    constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr,
+                                                       startItem->GetLayer() );
+                }
+
+                DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, m_tuningPattern->GetSettings(),
+                                                      m_tuningPattern->GetPNSMode(), constraint );
+
+                if( dlg.ShowModal() == wxID_OK )
+                    updateTuningPattern();
             }
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
