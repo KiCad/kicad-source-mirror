@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-12-11 07:40+0000\n"
+"PO-Revision-Date: 2023-12-11 23:53+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -4388,7 +4388,7 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"Nätklasserna har ändrats utanför \"Setup\"-dialogrutan.\n"
+"Nätklasserna har ändrats utanför dialogrutan för inställningar.\n"
 "Vill du läsa in dem på nytt?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:465
@@ -23866,7 +23866,7 @@ msgstr "Redigerare"
 
 #: kicad/kicad_manager_frame.cpp:287
 msgid "PCM Updates Available"
-msgstr "Uppdateringar tillgängliga för insticksprogram"
+msgstr "Uppdateringar för insticksprogram"
 
 #: kicad/kicad_manager_frame.cpp:288
 #, c-format
