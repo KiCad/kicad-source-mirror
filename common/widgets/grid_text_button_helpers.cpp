@@ -503,9 +503,18 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 void GRID_CELL_PATH_EDITOR::UpdateFilterString( const wxString& aFilterString )
 {
     if( m_fileFilterFn )
-        m_fileFilter = m_fileFilterFn( m_grid, m_grid->GetGridCursorRow() );
+    {
+        int row = m_grid->GetGridCursorRow();
+
+        // When closing the window, the cursor position could be negative if no rows were selected,
+        // so don't try to update a filter for a non-existent row
+        if( row >= 0 )
+            m_fileFilter = m_fileFilterFn( m_grid, row );
+    }
     else
+    {
         m_fileFilter = aFilterString;
+    }
 
     // Ensure that the control switches between files and directories properly
     TEXT_BUTTON_FILE_BROWSER* button = dynamic_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control );
