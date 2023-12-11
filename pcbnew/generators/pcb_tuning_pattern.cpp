@@ -466,9 +466,6 @@ protected:
     wxString              m_tuningInfo;
 
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
-
-    // Temp storage during editing
-    std::set<BOARD_ITEM*> m_removedItems;
 };
 
 
@@ -669,8 +666,6 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
 {
-    m_removedItems.clear();
-
     if( aCommit )
     {
         if( IsNew() )
@@ -1319,14 +1314,6 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
         router->StopRouting();
     }
 
-    for( BOARD_ITEM* item : m_removedItems )
-    {
-        aFrame->GetCanvas()->GetView()->Hide( item, false );
-        aCommit->Remove( item );
-    }
-
-    m_removedItems.clear();
-
     const std::vector<GENERATOR_PNS_CHANGES>& pnsCommits = aTool->GetRouterChanges();
 
     for( const GENERATOR_PNS_CHANGES& pnsCommit : pnsCommits )
@@ -1376,10 +1363,13 @@ void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
 {
     ClearFlags( IN_EDIT );
 
-    for( BOARD_ITEM* item : m_removedItems )
-        aFrame->GetCanvas()->GetView()->Hide( item, false );
+    const std::vector<GENERATOR_PNS_CHANGES>& pnsCommits = aTool->GetRouterChanges();
 
-    m_removedItems.clear();
+    for( const GENERATOR_PNS_CHANGES& pnsCommit : aTool->GetRouterChanges() )
+    {
+        for( BOARD_ITEM* item : pnsCommit.removedItems )
+            aFrame->GetCanvas()->GetView()->Hide( item, false );
+    }
 
     aTool->Router()->StopRouting();
 
