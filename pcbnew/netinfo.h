@@ -182,6 +182,10 @@ public:
         return 0.0;
     }
 
+protected:
+    // Hide base SetParent method to make the BOARD* method the prefered method for this class
+    using EDA_ITEM::SetParent;
+
 private:
     friend class NETINFO_LIST;
 
