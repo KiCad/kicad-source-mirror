@@ -262,7 +262,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     // Footprint Fields
     for( PCB_FIELD* field : m_footprint->GetFields() )
-        m_fields->push_back( field );
+        m_fields->push_back( *field );
 
     // notify the grid
     wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
@@ -359,10 +359,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
     // Validate texts.
     for( size_t i = 0; i < m_fields->size(); ++i )
     {
-        PCB_FIELD* field = m_fields->at( i );
+        PCB_FIELD& field = m_fields->at( i );
 
         // Check for missing field names.
-        if( field->GetName( false ).IsEmpty() )
+        if( field.GetName( false ).IsEmpty() )
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Fields must have a name." ) );
@@ -432,9 +432,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         }
 
         // Test for acceptable values for thickness and size and clamp if fails
-        int maxPenWidth = Clamp_Text_PenSize( field->GetTextThickness(), field->GetTextSize() );
+        int maxPenWidth = Clamp_Text_PenSize( field.GetTextThickness(), field.GetTextSize() );
 
-        if( field->GetTextThickness() > maxPenWidth )
+        if( field.GetTextThickness() > maxPenWidth )
         {
             wxString clamped = m_frame->StringFromValue( maxPenWidth, true );
 
@@ -483,7 +483,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     {
         // copy grid table entries till we run out, then delete any remaining texts
         if( i < m_fields->size() )
-            field = m_fields->at( i++ );
+            *field = m_fields->at( i++ );
         else
             field->DeleteStructure();
     }
@@ -491,7 +491,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     // if there are still grid table entries, create new fields for them
     while( i < m_fields->size() )
     {
-        view->Add( m_footprint->AddField( *m_fields->at( i++ ) ) );
+        view->Add( m_footprint->AddField( m_fields->at( i++ ) ) );
     }
 
     // Initialize masks clearances
@@ -582,14 +582,14 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
         return;
 
     int        fieldId = (int) m_fields->size();
-    PCB_FIELD* newField =
-            new PCB_FIELD( m_footprint, m_fields->size(),
-                           TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
+    PCB_FIELD  newField =
+            PCB_FIELD( m_footprint, m_fields->size(),
+                       TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
 
-    newField->SetVisible( false );
-    newField->SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
-    newField->SetFPRelativePosition( { 0, 0 } );
-    newField->StyleFromSettings( m_frame->GetDesignSettings() );
+    newField.SetVisible( false );
+    newField.SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+    newField.SetFPRelativePosition( { 0, 0 } );
+    newField.StyleFromSettings( m_frame->GetDesignSettings() );
 
     m_fields->push_back( newField );
 

@@ -53,7 +53,7 @@ enum FP_TEXT_COL_ORDER
 };
 
 
-class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD*>
+class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD>
 {
 public:
     FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog );

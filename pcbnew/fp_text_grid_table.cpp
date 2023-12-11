@@ -257,7 +257,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 {
     wxGrid*         grid = GetView();
-    const PCB_FIELD* field = this->at( (size_t) aRow );
+    const PCB_FIELD& field = this->at( (size_t) aRow );
 
     if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
             && grid->IsCellEditControlShown() )
@@ -270,35 +270,27 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 
     switch( aCol )
     {
-    case FPT_NAME:
-        return field->GetName();
+    case FPT_NAME: return field.GetName();
 
-    case FPT_VALUE:
-        return field->GetText();
+    case FPT_VALUE: return field.GetText();
 
-    case FPT_WIDTH:
-        return m_frame->StringFromValue( field->GetTextWidth(), true );
+    case FPT_WIDTH: return m_frame->StringFromValue( field.GetTextWidth(), true );
 
-    case FPT_HEIGHT:
-        return m_frame->StringFromValue( field->GetTextHeight(), true );
+    case FPT_HEIGHT: return m_frame->StringFromValue( field.GetTextHeight(), true );
 
-    case FPT_THICKNESS:
-        return m_frame->StringFromValue( field->GetTextThickness(), true );
+    case FPT_THICKNESS: return m_frame->StringFromValue( field.GetTextThickness(), true );
 
-    case FPT_LAYER:
-        return field->GetLayerName();
+    case FPT_LAYER: return field.GetLayerName();
 
     case FPT_ORIENTATION:
     {
-        EDA_ANGLE angle = field->GetTextAngle() - field->GetParentFootprint()->GetOrientation();
+        EDA_ANGLE angle = field.GetTextAngle() - field.GetParentFootprint()->GetOrientation();
         return m_frame->StringFromValue( angle, true );
     }
 
-    case FPT_XOFFSET:
-        return m_frame->StringFromValue( field->GetFPRelativePosition().x, true );
+    case FPT_XOFFSET: return m_frame->StringFromValue( field.GetFPRelativePosition().x, true );
 
-    case FPT_YOFFSET:
-        return m_frame->StringFromValue( field->GetFPRelativePosition().y, true );
+    case FPT_YOFFSET: return m_frame->StringFromValue( field.GetFPRelativePosition().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -310,14 +302,14 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 
 bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
-    PCB_FIELD* field = this->at( (size_t) aRow );
+    PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_SHOWN:    return field->IsVisible();
-    case FPT_ITALIC:   return field->IsItalic();
-    case FPT_UPRIGHT:  return field->IsKeepUpright();
-    case FPT_KNOCKOUT: return field->IsKnockout();
+    case FPT_SHOWN:    return field.IsVisible();
+    case FPT_ITALIC:   return field.IsItalic();
+    case FPT_UPRIGHT:  return field.IsKeepUpright();
+    case FPT_KNOCKOUT: return field.IsKnockout();
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
@@ -328,11 +320,11 @@ bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 
 long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 {
-    PCB_FIELD* field = this->at( (size_t) aRow );
+    PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_LAYER:    return field->GetLayer();
+    case FPT_LAYER: return field.GetLayer();
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a long value" ), aCol ) );
@@ -343,7 +335,7 @@ long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 
 void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
-    PCB_FIELD* field = this->at( (size_t) aRow );
+    PCB_FIELD& field = this->at( (size_t) aRow );
     VECTOR2I  pos;
     wxString  value = aValue;
 
@@ -370,41 +362,31 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
     switch( aCol )
     {
-    case FPT_NAME:
-        field->SetName( value );
-        break;
+    case FPT_NAME: field.SetName( value ); break;
 
-    case FPT_VALUE:
-        field->SetText( value );
-        break;
+    case FPT_VALUE: field.SetText( value ); break;
 
-    case FPT_WIDTH:
-        field->SetTextWidth( m_frame->ValueFromString( value ) );
-        break;
+    case FPT_WIDTH: field.SetTextWidth( m_frame->ValueFromString( value ) ); break;
 
-    case FPT_HEIGHT:
-        field->SetTextHeight( m_frame->ValueFromString( value ) );
-        break;
+    case FPT_HEIGHT: field.SetTextHeight( m_frame->ValueFromString( value ) ); break;
 
-    case FPT_THICKNESS:
-        field->SetTextThickness( m_frame->ValueFromString( value ) );
-        break;
+    case FPT_THICKNESS: field.SetTextThickness( m_frame->ValueFromString( value ) ); break;
 
     case FPT_ORIENTATION:
-        field->SetTextAngle( m_frame->AngleValueFromString( value )
-                            + field->GetParentFootprint()->GetOrientation() );
+        field.SetTextAngle( m_frame->AngleValueFromString( value )
+                            + field.GetParentFootprint()->GetOrientation() );
         break;
 
     case FPT_XOFFSET:
     case FPT_YOFFSET:
-        pos = field->GetFPRelativePosition();
+        pos = field.GetFPRelativePosition();
 
         if( aCol == FPT_XOFFSET )
             pos.x = m_frame->ValueFromString( value );
         else
             pos.y = m_frame->ValueFromString( value );
 
-        field->SetFPRelativePosition( pos );
+        field.SetFPRelativePosition( pos );
         break;
 
     default:
@@ -418,25 +400,17 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
 void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
-    PCB_FIELD* field = this->at( (size_t) aRow );
+    PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
-    case FPT_SHOWN:
-        field->SetVisible( aValue );
-        break;
+    case FPT_SHOWN: field.SetVisible( aValue ); break;
 
-    case FPT_ITALIC:
-        field->SetItalic( aValue );
-        break;
+    case FPT_ITALIC: field.SetItalic( aValue ); break;
 
-    case FPT_UPRIGHT:
-        field->SetKeepUpright( aValue );
-        break;
+    case FPT_UPRIGHT: field.SetKeepUpright( aValue ); break;
 
-    case FPT_KNOCKOUT:
-        field->SetIsKnockout( aValue );
-        break;
+    case FPT_KNOCKOUT: field.SetIsKnockout( aValue ); break;
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
@@ -447,13 +421,13 @@ void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 
 void FP_TEXT_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
 {
-    PCB_FIELD* field = this->at( (size_t) aRow );
+    PCB_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
     case FPT_LAYER:
-        field->SetLayer( ToLAYER_ID( (int) aValue ) );
-        field->SetMirrored( IsBackLayer( field->GetLayer() ) );
+        field.SetLayer( ToLAYER_ID( (int) aValue ) );
+        field.SetMirrored( IsBackLayer( field.GetLayer() ) );
         break;
 
     default:

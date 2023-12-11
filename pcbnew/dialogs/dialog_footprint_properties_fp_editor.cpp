@@ -282,7 +282,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     // Footprint Fields
     for( PCB_FIELD* field : m_footprint->GetFields() )
-        m_fields->push_back( field );
+        m_fields->push_back( *field );
 
     // Notify the grid
     wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
@@ -412,10 +412,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
     // Check for valid field text properties
     for( size_t i = 0; i < m_fields->size(); ++i )
     {
-        PCB_FIELD* field = m_fields->at( i );
+        PCB_FIELD& field = m_fields->at( i );
 
         // Check for missing field names.
-        if( field->GetName( false ).IsEmpty() )
+        if( field.GetName( false ).IsEmpty() )
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "Fields must have a name." ) );
@@ -428,7 +428,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
         int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
         int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
 
-        if( field->GetTextWidth() < minSize || field->GetTextWidth() > maxSize )
+        if( field.GetTextWidth() < minSize || field.GetTextWidth() > maxSize )
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "The text width must be between %s and %s." ),
@@ -440,7 +440,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
             return false;
         }
 
-        if( field->GetTextHeight() < minSize || field->GetTextHeight() > maxSize )
+        if( field.GetTextHeight() < minSize || field.GetTextHeight() > maxSize )
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "The text height must be between %s and %s." ),
@@ -453,9 +453,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
         }
 
         // Test for acceptable values for thickness and size and clamp if fails
-        int maxPenWidth = Clamp_Text_PenSize( field->GetTextThickness(), field->GetTextSize() );
+        int maxPenWidth = Clamp_Text_PenSize( field.GetTextThickness(), field.GetTextSize() );
 
-        if( field->GetTextThickness() > maxPenWidth )
+        if( field.GetTextThickness() > maxPenWidth )
         {
             m_itemsGrid->SetCellValue( i, FPT_THICKNESS,
                                        m_frame->StringFromValue( maxPenWidth, true ) );
@@ -510,14 +510,14 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
     // Update fields
 
-    std::vector<PCB_TEXT*> items_to_remove;
+    std::vector<PCB_FIELD*> items_to_remove;
     size_t              i = 0;
 
     for( PCB_FIELD* field : m_footprint->GetFields() )
     {
         // copy grid table entries till we run out, then delete any remaining texts
         if( i < m_fields->size() )
-            field = m_fields->at( i++ );
+            *field = m_fields->at( i++ );
         else
             items_to_remove.push_back( field );
     }
@@ -536,7 +536,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     // if there are still grid table entries, create new fields for them
     while( i < m_fields->size() )
     {
-        view->Add( m_footprint->AddField( *m_fields->at( i++ ) ) );
+        view->Add( m_footprint->AddField( m_fields->at( i++ ) ) );
     }
 
     LSET privateLayers;
@@ -634,19 +634,19 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
 
     int                          fieldId = (int) m_fields->size();
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    PCB_FIELD*                   newField =
-            new PCB_FIELD( m_footprint, m_fields->size(),
-                           TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
+    PCB_FIELD                    newField =
+            PCB_FIELD( m_footprint, m_fields->size(),
+                       TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
-        newField->SetLayer( m_frame->GetActiveLayer() );
+        newField.SetLayer( m_frame->GetActiveLayer() );
     else
-        newField->SetLayer( m_fields->at( m_fields->size() - 1 )->GetLayer() );
+        newField.SetLayer( m_fields->at( m_fields->size() - 1 ).GetLayer() );
 
-    newField->SetTextSize( dsnSettings.GetTextSize( newField->GetLayer() ) );
-    newField->SetTextThickness( dsnSettings.GetTextThickness( newField->GetLayer() ) );
-    newField->SetItalic( dsnSettings.GetTextItalic( newField->GetLayer() ) );
+    newField.SetTextSize( dsnSettings.GetTextSize( newField.GetLayer() ) );
+    newField.SetTextThickness( dsnSettings.GetTextThickness( newField.GetLayer() ) );
+    newField.SetItalic( dsnSettings.GetTextItalic( newField.GetLayer() ) );
 
     m_fields->push_back( newField );
 
