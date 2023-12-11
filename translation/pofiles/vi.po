@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-11-11 17:57+0000\n"
-"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"PO-Revision-Date: 2023-12-11 23:53+0000\n"
+"Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -865,15 +865,15 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:485
 #: pcbnew/widgets/appearance_controls.cpp:2166
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Hiển thị hoặc ẩn tên pin"
+msgstr "Hiện hoặc ẩn%s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:537
 #: pcbnew/widgets/appearance_controls.cpp:2509
 #, fuzzy, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Net name"
+msgstr "Giá trị đặt trước (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:551
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1464
@@ -936,9 +936,9 @@ msgstr "net đã chọn:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:754
 #: pcbnew/widgets/appearance_controls.cpp:2804
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Net name"
+msgstr "Chế độ xem (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:763
 #: pcbnew/widgets/appearance_controls.cpp:2813
@@ -1857,7 +1857,7 @@ msgstr "Không thể Mở rộng biến môi trường : thiếu '%c' ở vị t
 #: common/common.cpp:358
 #, fuzzy, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Không thể làm cho đường dẫn \"%s\" tuyệt đối đối với \"%s\"."
+msgstr "Không thể làm cho đường dẫn '%s' tuyệt đối đối với '%s'."
 
 #: common/common.cpp:377
 #, fuzzy, c-format
@@ -2804,7 +2804,6 @@ msgid "Paper"
 msgstr "Trang Giấy"
 
 #: common/dialogs/dialog_page_settings.cpp:113
-#, fuzzy
 msgid "Title Block"
 msgstr "Khối Tiêu đề"
 
@@ -3095,7 +3094,7 @@ msgstr ""
 #: common/dialogs/dialog_paste_special.cpp:44
 #, fuzzy, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
+msgstr "Thay thế các chỉ định tham chiếu bằng'%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -3129,7 +3128,7 @@ msgstr ""
 #: common/dialogs/dialog_plugin_options.cpp:52
 #, fuzzy, c-format
 msgid "Options for Library '%s'"
-msgstr "Đang tải thư viện symbol"
+msgstr "Options for Library '%s'"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
 #, fuzzy
@@ -3561,14 +3560,14 @@ msgid "Connection successful"
 msgstr "Chiều rộng Track"
 
 #: common/dialogs/git/dialog_git_repository.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Không thể mở tệp lưu trữ\n"
+msgstr "Không thể kết nối với '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Không thể mở tệp lưu trữ\n"
+msgstr "Không thể mở khóa riêng tư'%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
 #, fuzzy
@@ -3581,9 +3580,9 @@ msgid "The selected file is not a valid SSH private key"
 msgstr "Tệp đã chọn không hợp lệ hoặc có thể bị hỏng!"
 
 #: common/dialogs/git/dialog_git_repository.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể mở khóa công cộng '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:405
 #: common/dialogs/git/dialog_git_repository.cpp:411
@@ -4239,14 +4238,14 @@ msgid "Reset Unique Id"
 msgstr "Thiết lập góc nhìn mặc định"
 
 #: common/dialogs/panel_grid_settings.cpp:125 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Lưới: %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Kích thước lưới '%s' đã tồn tại."
 
 #: common/dialogs/panel_grid_settings.cpp:263
 #, fuzzy
@@ -5335,9 +5334,9 @@ msgid "Zoom %.2f"
 msgstr "Thu phóng %.2f"
 
 #: common/eda_draw_frame.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Trục lưới"
+msgstr "lưới %s"
 
 #: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:751
 msgid "inches"
@@ -6074,21 +6073,17 @@ msgid "from %s : %s() line:%d"
 msgstr "từ %s: %s () dòng: %d"
 
 #: common/exceptions.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad không thể mở tệp này vì nó được tạo bằng\n"
-"phiên bản gần đây cao hơn phiên bản bạn đang chạy.\n"
-"Để mở nó, bạn cần nâng cấp KiCad lên phiên bản mới hơn.\n"
+"KiCad không thể mở tệp này vì nó được tạo bằng phiên bản mới hơn phiên bản "
+"bạn đang chạy.\n"
 "\n"
-"Ngày của phiên bản KiCad được yêu cầu (hoặc mới hơn): %s\n"
-"\n"
-"Toàn bộ văn bản lỗi:\n"
-"%s"
+"Để mở nó, bạn cần nâng cấp KiCad lên phiên bản %s trở lên."
 
 #: common/exceptions.cpp:113
 #, fuzzy, c-format
@@ -6163,9 +6158,9 @@ msgstr ""
 "%s"
 
 #: common/font/fontconfig.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Không tìm thấy phông chữ '%s'; thay thế '%s'."
 
 #: common/footprint_info.cpp:119 cvpcb/cvpcb_mainframe.cpp:962
 #: eeschema/symbol_library_manager.cpp:82
@@ -6245,7 +6240,7 @@ msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
 #: common/gestfich.cpp:337
 #, fuzzy, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Không thể mở tệp '%s'"
+msgstr "Lỗi xóa thư mục '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
 #, fuzzy, c-format
@@ -6255,22 +6250,22 @@ msgstr "Không thể tạo thư mục đầu ra \"%s\".\n"
 #: common/git/git_clone_handler.cpp:66
 #, fuzzy, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể sao chép kho lưu trữ '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tra cứu từ xa '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể kết nối với điều khiển từ xa '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm nạp dữ liệu từ xa '%s'"
 
 #: common/git/git_pull_handler.cpp:90
 #, fuzzy
@@ -6359,9 +6354,9 @@ msgid "* [updated] %s..%s %s"
 msgstr "Đã cập nhật %s từ %s thành %s"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Zone"
+msgstr "* [mới] %s %s"
 
 #: common/git/kicad_git_common.cpp:466
 #, c-format
@@ -6374,9 +6369,9 @@ msgid "* [rejected] %s (%s)"
 msgstr "Lưới: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Đã cập nhật"
+msgstr "[đã cập nhật] %s"
 
 #: common/git/kicad_git_errors.cpp:30
 #, fuzzy
@@ -6610,9 +6605,9 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:155
 #: common/http_lib/http_lib_connection.cpp:278
 #: common/http_lib/http_lib_connection.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Lỗi: "
+msgstr "Lỗi: %s"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:155
@@ -6638,9 +6633,9 @@ msgid "Invalid spline definition encountered"
 msgstr "Tên tín hiệu không hợp lệ"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "Phản chiếu cho trục Y chưa được hỗ trợ"
+msgstr "%s không được hỗ trợ."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
@@ -7293,9 +7288,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Tệp ngôn ngữ KiCad cho ngôn ngữ này không được cài đặt."
 
 #: common/plotters/PDF_plotter.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "Trang%s"
 
 #: common/plotters/PDF_plotter.cpp:881
 #, fuzzy, c-format
@@ -7303,16 +7298,16 @@ msgid "%s (Page %s)"
 msgstr "Lưới: %s (%s)"
 
 #: common/plotters/PDF_plotter.cpp:1358
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "Hiện Trang %s"
 
 #: common/plotters/PDF_plotter.cpp:1369
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:847
 #: eeschema/tools/sch_navigate_tool.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr "OpenGL"
+msgstr "Mở %s"
 
 #: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:121
 #, fuzzy, c-format
@@ -7353,9 +7348,8 @@ msgstr "Không thể mở tệp '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2491
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2823
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "Nhập tệp bị hủy bởi người dùng."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2509
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2532
@@ -7423,19 +7417,19 @@ msgid "Cannot read ZIP archive '%s'"
 msgstr "Không thể mở tệp '%s'"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi JSON khi đọc '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi khi đọc '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:223
 #, fuzzy, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể phân tích dòng JSON %d trong '%s': %s"
 
 #: common/project.cpp:374 common/project.cpp:379 pcbnew/project_pcb.cpp:69
 #, fuzzy
@@ -8502,37 +8496,37 @@ msgstr ""
 #: common/validators.cpp:438
 #, fuzzy, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
+msgstr "Bộ chỉ định tham chiếu không được chứa (các) ký tự %s."
 
 #: common/validators.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường giá trị không được chứa (các) ký tự %s."
 
 #: common/validators.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường footprint không thể chứa (các) ký tự %s."
 
 #: common/validators.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường datasheet không được chứa (các) ký tự %s."
 
 #: common/validators.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Tên sheet không được chứa (các) ký tự %s."
 
 #: common/validators.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Tên tệp sheet không được chứa (các) ký tự %s."
 
 #: common/validators.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường này không thể chứa (các) ký tự %s."
 
 #: common/validators.cpp:468
 msgid "The reference designator cannot contain text variable references"
@@ -8771,9 +8765,9 @@ msgid "Open Preferences Directory"
 msgstr "&Tùy chỉnh"
 
 #: common/widgets/paged_dialog.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Đặt lại về Mặc định"
+msgstr "Đặt lại %s về Mặc định"
 
 #: common/widgets/properties_panel.cpp:74
 #: common/widgets/properties_panel.cpp:165
@@ -8782,9 +8776,9 @@ msgid "No objects selected"
 msgstr "Không có symbol nào được chọn"
 
 #: common/widgets/properties_panel.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Không có symbol nào được chọn"
+msgstr "%d đối tượng được chọn"
 
 #: common/widgets/properties_panel.cpp:296
 #, fuzzy
@@ -9297,9 +9291,9 @@ msgid "Filtered by %s"
 msgstr "Được lọc bởi %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Footprint"
+msgstr ": %i footprint phù hợp"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -10238,9 +10232,9 @@ msgid "Connected to database successfully"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "Kết nối cơ sở dữ liệu thất bại: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
 #, fuzzy
@@ -10442,11 +10436,11 @@ msgstr "Lỗi, Cảnh báo và Loại trừ"
 #: eeschema/dialogs/dialog_erc.cpp:433
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d (các) biểu tượng yêu cầu chú thích. <br> <br>"
+msgstr "%d (các) biểu tượng yêu cầu chú thích.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:437
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "-------- ERC bị hủy bởi người dùng.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:439 pcbnew/dialogs/dialog_drc.cpp:326
 msgid "Done.<br><br>"
@@ -10604,9 +10598,9 @@ msgstr "Nhấp vào các mục để nỗi bật chúng trên bảng."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:90
 #: pcbnew/dialogs/dialog_drc_base.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Vi phạm"
+msgstr "Vi phạm (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:98
 #: pcbnew/dialogs/dialog_drc_base.cpp:148
@@ -10616,9 +10610,9 @@ msgstr "Chỉnh sửa mức độ vi phạm ..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:108
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Kiểm tra bị Bỏ qua (%d)"
+msgstr "Các kiểm tra bị Bỏ qua (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:148
 #: pcbnew/dialogs/dialog_drc_base.cpp:198
@@ -11795,9 +11789,9 @@ msgstr "Thông thường với tất cả các kiểu và body (De Morgan)"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:89
 #: eeschema/dialogs/dialog_shape_properties_base.h:77
 #: pcbnew/dialogs/dialog_shape_properties_base.h:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Thuộc tính Văn bản"
+msgstr "%s Thuộc tính"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:246
 #: eeschema/dialogs/dialog_symbol_properties.cpp:636
@@ -11835,7 +11829,7 @@ msgstr "Trường phải có tên."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
 #, fuzzy, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
+msgstr "Tên biểu tượng '%s' đã được sử dụng trong thư viện '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:341
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:346
@@ -12384,7 +12378,7 @@ msgstr "Quay lại đường dẫn người dùng tại '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:486
 #, fuzzy, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể bình thường hóa đường dẫn '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:473
 msgid "No project or path defined for the current schematic."
@@ -12838,9 +12832,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "&Sửa đổi"
+msgstr "Sửa %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
@@ -12927,9 +12921,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:480
 #: kicad/tools/kicad_manager_control.cpp:647
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "'%s' đã tồn tại."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:483
 #, c-format
@@ -13553,9 +13547,9 @@ msgid "P"
 msgstr "Pin"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Định dạng"
+msgstr "Định dạng %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:222
 #, fuzzy
@@ -13724,7 +13718,7 @@ msgstr "Biểu tượng nguồn điện"
 #: pcbnew/footprint_chooser_frame.cpp:131
 #, fuzzy, c-format
 msgid " (%d items loaded)"
-msgstr "Không có footprint nào được nhập vào."
+msgstr " (%d các mục đã được tải)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:70
 msgid "Place repeated copies"
@@ -13854,9 +13848,9 @@ msgid "No filename specified in exporter"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể mở/tạo đường dẫn '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1274
 #, fuzzy, c-format
@@ -14014,9 +14008,8 @@ msgstr "Chế độ xuất:"
 #: pcbnew/dialogs/dialog_export_step.cpp:140
 #: pcbnew/dialogs/dialog_export_svg.cpp:88
 #: pcbnew/menubar_footprint_editor.cpp:73 pcbnew/menubar_pcb_editor.cpp:126
-#, fuzzy
 msgid "Export"
-msgstr "%s Xuất"
+msgstr "Xuất"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:139
 #, fuzzy
@@ -14212,7 +14205,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, fuzzy, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
+msgstr "Đang thêm thư viện '%s', tệp '%s' vào bảng thư viện ký hiệu dự án."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:224
 #: eeschema/dialogs/panel_sym_lib_table.cpp:884
@@ -14226,7 +14219,9 @@ msgstr "không tìm thấy tệp tin \"%s\"."
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
-msgstr "Lỗi tải bảng thư viện footprint trong dự án"
+msgstr ""
+"Lỗi ghi bảng thư viện ký hiệu dự án.\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:245
 #, fuzzy
@@ -14241,7 +14236,7 @@ msgstr "\"%s\" không phải là định dạng số nhận dạng thư viện h
 #: eeschema/dialogs/dialog_symbol_remap.cpp:276
 #, fuzzy, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Ký hiệu %s được ánh xạ tới thư viện ký hiệu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:285
 #, fuzzy
@@ -14276,9 +14271,9 @@ msgstr "Cứu hộ"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:462
 #: eeschema/dialogs/dialog_symbol_remap.cpp:478
 #: eeschema/dialogs/dialog_symbol_remap.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
+msgstr "Đang sao lưu tệp '%s' vào '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:389
 #: eeschema/dialogs/dialog_symbol_remap.cpp:431
@@ -15227,7 +15222,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 #, fuzzy, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Tìm thấy ký tự bất hợp pháp trong tên thư viện lô-gic"
+msgstr "Ký tự không hợp lệ '%c' trong biệt hiệu '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:473
 #: eeschema/dialogs/panel_sym_lib_table.cpp:523
@@ -15246,9 +15241,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:559 eeschema/symbol_library.cpp:576
 #, fuzzy, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Không tải được thư viện symbol\"%s\". \n"
-"Lỗi: %s"
+msgstr "Không tải được thư viện biểu tượng '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:562
 #, fuzzy
@@ -15583,19 +15576,19 @@ msgid "Running ERC...\n"
 msgstr "Chạy ERC"
 
 #: eeschema/eeschema_jobs_handler.cpp:989 pcbnew/pcbnew_jobs_handler.cpp:998
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Bỏ qua tất cả các vi phạm '%s'"
+msgstr "Đã tìm thấy %d vi phạm\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
+msgstr "Không thể lưu báo cáo ERC vào %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Lưu Báo cáo vào Tệp tin"
+msgstr "Đã lưu Báo cáo ERC vào %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 #, fuzzy
@@ -18019,9 +18012,8 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2423
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:221
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:507
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "Mở bị hủy bởi người dùng."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:270
 #, fuzzy, c-format
@@ -18467,8 +18459,9 @@ msgid "Simulation"
 msgstr "Chỉnh sửa Mô hình Spice..."
 
 #: eeschema/sch_symbol.cpp:1826
+#, fuzzy
 msgid "BOM"
-msgstr ""
+msgstr "BOM"
 
 #: eeschema/sch_symbol.cpp:1838 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
@@ -19811,7 +19804,7 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:1008
 #, fuzzy
 msgid " (amplitude)"
-msgstr "Kiểu dáng đường kẻ:"
+msgstr " (biên độ)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, c-format
@@ -19913,7 +19906,11 @@ msgid ""
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Chỉnh sửa Mô hình Spice..."
+msgstr ""
+"\n"
+"\n"
+"Kết quả mô phỏng:\n"
+"\n"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
 #, fuzzy
@@ -20517,9 +20514,8 @@ msgid "Body"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1284
-#, fuzzy
 msgid "Power Symbol"
-msgstr "Biểu tượng nguồn điện"
+msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1291
 msgid "Datasheet"
@@ -20751,9 +20747,8 @@ msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Tạo BOM đòi hỏi một sơ đồ mạch được chú thích đầy đủ."
 
 #: eeschema/tools/backannotate.cpp:356
-#, fuzzy
 msgid "Footprint re-linking cancelled by user."
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "Liên kết lại footprint bị hủy bởi người dùng."
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "true"
@@ -23455,12 +23450,9 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "<b>Không được tải:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:45
 #, fuzzy, c-format
@@ -23589,9 +23581,9 @@ msgid "Skipped file '%s' (gerber job file)."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: gerbview/files.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "<b>Không thể tạo tệp tạm thời '%s'.</b>"
 
 #: gerbview/files.cpp:551
 #, fuzzy, c-format
@@ -25079,7 +25071,9 @@ msgstr "Tệp dự án KiCad"
 msgid ""
 "\n"
 "Open '%s'\n"
-msgstr "OpenGL"
+msgstr ""
+"\n"
+"Mở '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -26258,9 +26252,8 @@ msgid "New Project..."
 msgstr "Chủ đề Mới..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
-#, fuzzy
 msgid "Create new blank project"
-msgstr "Tạo tài liệu mới trong trình soạn thảo"
+msgstr "Tạo dự án trống mới"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
@@ -30059,11 +30052,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "ID footprint \"%s\" không hợp lệ."
+msgstr ""
+"\n"
+"%s footprints sẽ được chú thích lại."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:332
 #, c-format
@@ -31528,7 +31523,7 @@ msgstr "Các Tùy chọn Render"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:480
 #, fuzzy
 msgid "Initial Pad Number:"
-msgstr "Số"
+msgstr "Số Pad ban đầu:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:484
 #, fuzzy
@@ -31919,9 +31914,8 @@ msgid "Show design rules."
 msgstr "Chỉnh sửa tập tin"
 
 #: pcbnew/dialogs/dialog_drc.cpp:324
-#, fuzzy
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "-------- DRC bị hủy bởi người dùng.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:599
 #, fuzzy, c-format
@@ -33016,7 +33010,7 @@ msgstr "Các Pad xuyên lỗ"
 #: pcbnew/footprint_libraries_utils.cpp:1191 pcbnew/pad.cpp:1248
 #: pcbnew/pad.cpp:1873
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -39256,7 +39250,7 @@ msgstr "Các hành động"
 #: pcbnew/drc/drc_item.cpp:201
 #, fuzzy
 msgid "Copper sliver"
-msgstr "Màu sắc lớp Đồng"
+msgstr "Mảnh đồng"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -45315,9 +45309,8 @@ msgid "Loss Tangent"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
-#, fuzzy
 msgid "Dielectric"
-msgstr "Sự Phản chiếu"
+msgstr "Điện môi"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
 #, fuzzy
@@ -49065,15 +49058,13 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Quản lý dự án"
+msgstr "Quản lý dự án;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Thoát khỏi KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -49089,9 +49080,8 @@ msgid "KiCad PCB Calculator"
 msgstr "Trình chỉnh sửa Ảnh"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "PCB;Máy tính;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 #, fuzzy
