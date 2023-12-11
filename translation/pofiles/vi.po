@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-11-11 17:57+0000\n"
-"Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/"
-">\n"
+"PO-Revision-Date: 2023-12-11 23:54+0000\n"
+"Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -282,9 +282,9 @@ msgstr "&Tùy chọn"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2779
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Net name"
+msgstr "Chế độ xem (%s+Tab):"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2788
@@ -1560,7 +1560,7 @@ msgstr "Không thể Mở rộng biến môi trường : thiếu '%c' ở vị t
 #: common/common.cpp:340
 #, fuzzy, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Không thể làm cho đường dẫn \"%s\" tuyệt đối đối với \"%s\"."
+msgstr "Không thể làm cho đường dẫn '%s' tuyệt đối đối với '%s'."
 
 #: common/common.cpp:359
 #, fuzzy, c-format
@@ -2531,7 +2531,6 @@ msgid "Paper"
 msgstr "Trang Giấy"
 
 #: common/dialogs/dialog_page_settings.cpp:112
-#, fuzzy
 msgid "Title Block"
 msgstr "Khối Tiêu đề"
 
@@ -2815,7 +2814,7 @@ msgstr ""
 #: common/dialogs/dialog_paste_special.cpp:44
 #, fuzzy, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
+msgstr "Thay thế các chỉ định tham chiếu bằng'%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
@@ -4482,9 +4481,9 @@ msgid "Zoom %.2f"
 msgstr "Thu phóng %.2f"
 
 #: common/eda_draw_frame.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Trục lưới"
+msgstr "lưới %s"
 
 #: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -5160,21 +5159,17 @@ msgid "from %s : %s() line:%d"
 msgstr "từ %s: %s () dòng: %d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad không thể mở tệp này vì nó được tạo bằng\n"
-"phiên bản gần đây cao hơn phiên bản bạn đang chạy.\n"
-"Để mở nó, bạn cần nâng cấp KiCad lên phiên bản mới hơn.\n"
+"KiCad không thể mở tệp này vì nó được tạo bằng phiên bản mới hơn phiên bản "
+"bạn đang chạy.\n"
 "\n"
-"Ngày của phiên bản KiCad được yêu cầu (hoặc mới hơn): %s\n"
-"\n"
-"Toàn bộ văn bản lỗi:\n"
-"%s"
+"Để mở nó, bạn cần nâng cấp KiCad lên phiên bản %s trở lên."
 
 #: common/exceptions.cpp:133
 msgid "Full error text:"
@@ -5230,9 +5225,9 @@ msgstr ""
 "%s"
 
 #: common/font/fontconfig.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Không tìm thấy phông chữ '%s'; thay thế '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:975
 #: eeschema/symbol_library_manager.cpp:81
@@ -5969,9 +5964,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Tệp ngôn ngữ KiCad cho ngôn ngữ này không được cài đặt."
 
 #: common/plotters/PDF_plotter.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "Trang%s"
 
 #: common/plotters/PDF_plotter.cpp:862
 #, fuzzy, c-format
@@ -5979,16 +5974,16 @@ msgid "%s (Page %s)"
 msgstr "Lưới: %s (%s)"
 
 #: common/plotters/PDF_plotter.cpp:1228
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Hiển thị các lớp solder mask"
+msgstr "Hiện Trang %s"
 
 #: common/plotters/PDF_plotter.cpp:1239
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:812
 #: eeschema/tools/sch_navigate_tool.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr "OpenGL"
+msgstr "Mở %s"
 
 #: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:120
 #, fuzzy, c-format
@@ -6029,9 +6024,8 @@ msgstr "Không thể mở tệp '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2467
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2781
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "Nhập tệp bị hủy bởi người dùng."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2485
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2508
@@ -7181,9 +7175,9 @@ msgid "Reset to Defaults"
 msgstr "Đặt lại về Mặc định"
 
 #: common/widgets/paged_dialog.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Đặt lại về Mặc định"
+msgstr "Đặt lại %s về Mặc định"
 
 #: common/widgets/properties_panel.cpp:68
 #: common/widgets/properties_panel.cpp:145
@@ -7192,9 +7186,9 @@ msgid "No objects selected"
 msgstr "Không có symbol nào được chọn"
 
 #: common/widgets/properties_panel.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Không có symbol nào được chọn"
+msgstr "%d đối tượng được chọn"
 
 #: common/widgets/properties_panel.cpp:274
 #, fuzzy
@@ -8854,11 +8848,11 @@ msgstr "Lỗi, Cảnh báo và Loại trừ"
 #: eeschema/dialogs/dialog_erc.cpp:419
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d (các) biểu tượng yêu cầu chú thích. <br> <br>"
+msgstr "%d (các) biểu tượng yêu cầu chú thích.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:423
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "-------- ERC bị hủy bởi người dùng.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:425 pcbnew/dialogs/dialog_drc.cpp:312
 msgid "Done.<br><br>"
@@ -9043,15 +9037,15 @@ msgstr "Nhấp vào các mục để nỗi bật chúng trên bảng."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Vi phạm"
+msgstr "Vi phạm (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Kiểm tra bị Bỏ qua (%d)"
+msgstr "Các kiểm tra bị Bỏ qua (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:189
@@ -10233,7 +10227,7 @@ msgstr "Trường phải có tên."
 #: eeschema/tools/symbol_editor_control.cpp:345
 #, fuzzy, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
+msgstr "Tên biểu tượng '%s' đã được sử dụng trong thư viện '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:511
 #, c-format
@@ -10760,7 +10754,7 @@ msgstr "Quay lại đường dẫn người dùng tại '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:480
 #, fuzzy, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể bình thường hóa đường dẫn '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:467
 msgid "No project or path defined for the current schematic."
@@ -11245,9 +11239,9 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "Đặt màu trong suốt để sử dụng màu Trình soạn thảo Sơ đồ."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:77
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Thuộc tính Văn bản"
+msgstr "%s Thuộc tính"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 #, fuzzy
@@ -11327,9 +11321,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:499
 #: kicad/tools/kicad_manager_control.cpp:660
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "'%s' đã tồn tại."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:502
 #, c-format
@@ -12173,7 +12167,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:214
 #, fuzzy, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
+msgstr "Đang thêm thư viện '%s', tệp '%s' vào bảng thư viện ký hiệu dự án."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:223
 #: eeschema/dialogs/panel_sym_lib_table.cpp:763
@@ -12186,7 +12180,9 @@ msgstr "không tìm thấy tệp tin \"%s\"."
 msgid ""
 "Error writing project symbol library table.\n"
 "  %s"
-msgstr "Lỗi tải bảng thư viện footprint trong dự án"
+msgstr ""
+"Lỗi ghi bảng thư viện ký hiệu dự án.\n"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:244
 #, fuzzy
@@ -12201,7 +12197,7 @@ msgstr "\"%s\" không phải là định dạng số nhận dạng thư viện h
 #: eeschema/dialogs/dialog_symbol_remap.cpp:275
 #, fuzzy, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Ký hiệu %s được ánh xạ tới thư viện ký hiệu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:284
 #, fuzzy
@@ -12236,9 +12232,9 @@ msgstr "Cứu hộ"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:461
 #: eeschema/dialogs/dialog_symbol_remap.cpp:477
 #: eeschema/dialogs/dialog_symbol_remap.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
+msgstr "Đang sao lưu tệp '%s' vào '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:388
 #: eeschema/dialogs/dialog_symbol_remap.cpp:430
@@ -13026,7 +13022,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #, fuzzy, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Tìm thấy ký tự bất hợp pháp trong tên thư viện lô-gic"
+msgstr "Ký tự không hợp lệ '%c' trong biệt hiệu '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:391
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
@@ -13045,9 +13041,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:465 eeschema/symbol_library.cpp:534
 #, fuzzy, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Không tải được thư viện symbol\"%s\". \n"
-"Lỗi: %s"
+msgstr "Không tải được thư viện biểu tượng '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:468
 #, fuzzy
@@ -14177,9 +14171,8 @@ msgstr "Symbol : chỉ định Footprint"
 #: pcbnew/dialogs/dialog_export_step.cpp:124
 #: pcbnew/dialogs/dialog_export_svg.cpp:93
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:127
-#, fuzzy
 msgid "Export"
-msgstr "%s Xuất"
+msgstr "Xuất"
 
 #: eeschema/menubar.cpp:126
 #, fuzzy
@@ -15661,37 +15654,37 @@ msgstr ""
 #: eeschema/sch_validators.cpp:163
 #, fuzzy, c-format
 msgid "The reference designator cannot contain %s character(s)."
-msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
+msgstr "Bộ chỉ định tham chiếu không được chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "The value field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường giá trị không được chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường footprint không thể chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "The datasheet field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường datasheet không được chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet name cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Tên sheet không được chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "The sheet filename cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Tên tệp sheet không được chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "The field cannot contain %s character(s)."
-msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
+msgstr "Trường này không thể chứa (các) ký tự %s."
 
 #: eeschema/sch_validators.cpp:193
 msgid "The reference designator cannot contain text variable references"
@@ -16723,7 +16716,11 @@ msgid ""
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Chỉnh sửa Mô hình Spice..."
+msgstr ""
+"\n"
+"\n"
+"Kết quả mô phỏng:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:2039
 #, fuzzy
@@ -17409,9 +17406,8 @@ msgid "Body"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1266
-#, fuzzy
 msgid "Power Symbol"
-msgstr "Biểu tượng nguồn điện"
+msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:54
 #, fuzzy
@@ -17642,9 +17638,8 @@ msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr "Tạo BOM đòi hỏi một sơ đồ mạch được chú thích đầy đủ."
 
 #: eeschema/tools/backannotate.cpp:306
-#, fuzzy
 msgid "Footprint re-linking cancelled by user."
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "Liên kết lại footprint bị hủy bởi người dùng."
 
 #: eeschema/tools/backannotate.cpp:329
 #, fuzzy, c-format
@@ -19816,12 +19811,9 @@ msgid "<b>No more available layers</b> in GerbView to load files"
 msgstr ""
 
 #: gerbview/files.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "<b>Không được tải:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:45
 #, fuzzy, c-format
@@ -19950,9 +19942,9 @@ msgid "Skipped file '%s' (gerber job file)."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: gerbview/files.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "<b>Không thể tạo tệp tạm thời '%s'.</b>"
 
 #: gerbview/files.cpp:551
 #, fuzzy, c-format
@@ -21150,7 +21142,9 @@ msgstr "Tệp dự án KiCad"
 msgid ""
 "\n"
 "Open '%s'\n"
-msgstr "OpenGL"
+msgstr ""
+"\n"
+"Mở '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -22055,9 +22049,8 @@ msgid "New Project..."
 msgstr "Chủ đề Mới..."
 
 #: kicad/tools/kicad_manager_actions.cpp:41
-#, fuzzy
 msgid "Create new blank project"
-msgstr "Tạo tài liệu mới trong trình soạn thảo"
+msgstr "Tạo dự án trống mới"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "New Project from Template..."
@@ -25481,11 +25474,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "%s footprints will be reannotated."
-msgstr "ID footprint \"%s\" không hợp lệ."
+msgstr ""
+"\n"
+"%s footprints sẽ được chú thích lại."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:315
 #, c-format
@@ -26863,7 +26858,7 @@ msgstr "Các Tùy chọn Render"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:295
 #, fuzzy
 msgid "Initial Pad Number:"
-msgstr "Số"
+msgstr "Số Pad ban đầu:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 #, fuzzy
@@ -27246,9 +27241,8 @@ msgid "Show design rules."
 msgstr "Chỉnh sửa tập tin"
 
 #: pcbnew/dialogs/dialog_drc.cpp:310
-#, fuzzy
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "-------- DRC bị hủy bởi người dùng.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:587
 #, fuzzy, c-format
@@ -28116,7 +28110,7 @@ msgstr "Các Pad xuyên lỗ"
 #: pcbnew/footprint_libraries_utils.cpp:1260 pcbnew/pad.cpp:1268
 #: pcbnew/pad.cpp:1751
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:198
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -28455,7 +28449,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:63
 #, fuzzy, c-format
 msgid "Options for Library '%s'"
-msgstr "Đang tải thư viện symbol"
+msgstr "Options for Library '%s'"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:26
 #, fuzzy
@@ -34026,7 +34020,7 @@ msgstr "Các hành động"
 #: pcbnew/drc/drc_item.cpp:201
 #, fuzzy
 msgid "Copper sliver"
-msgstr "Màu sắc lớp Đồng"
+msgstr "Mảnh đồng"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -36943,9 +36937,8 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2420
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:213
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:443
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "-------- ERC bị hủy bởi người dùng. <br> <br>"
+msgstr "Mở bị hủy bởi người dùng."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:513
 #, fuzzy, c-format
@@ -39408,9 +39401,8 @@ msgid "Loss Tangent"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
-#, fuzzy
 msgid "Dielectric"
-msgstr "Sự Phản chiếu"
+msgstr "Điện môi"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 #, fuzzy
@@ -42510,9 +42502,9 @@ msgid "Show Only Back Assembly Layers"
 msgstr "Hiển thị các lớp solder mask"
 
 #: pcbnew/widgets/appearance_controls.cpp:2152
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Hiển thị hoặc ẩn tên pin"
+msgstr "Hiện hoặc ẩn%s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2193
 #, c-format
@@ -42547,7 +42539,7 @@ msgstr "Hiển thị hoặc ẩn tên pin"
 #: pcbnew/widgets/appearance_controls.cpp:2498
 #, fuzzy, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Net name"
+msgstr "Giá trị đặt trước (%s+Tab):"
 
 #: pcbnew/widgets/appearance_controls.cpp:2520
 #, fuzzy
@@ -42890,9 +42882,8 @@ msgstr "Xem trước"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Thoát khỏi KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
@@ -42931,9 +42922,8 @@ msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-#, fuzzy
 msgid "pcbnew"
-msgstr "Pcbnew"
+msgstr "pcb mới"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
