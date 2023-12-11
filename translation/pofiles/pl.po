@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-10-30 05:02+0000\n"
+"PO-Revision-Date: 2023-12-11 23:54+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -6040,7 +6040,7 @@ msgstr "Znajdź"
 
 #: common/tool/actions.cpp:216
 msgid "Find text"
-msgstr "Wyszujuje tekst"
+msgstr "Wyszukaj tekst"
 
 #: common/tool/actions.cpp:222 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
@@ -6376,7 +6376,7 @@ msgstr "Przeglądarka bibliotek symboli"
 
 #: common/tool/actions.cpp:595
 msgid "Browse symbol libraries"
-msgstr "Przegląda biblioteki smboli"
+msgstr "Przeglądaj biblioteki symboli"
 
 #: common/tool/actions.cpp:600
 msgid "Create, delete and edit symbols"
@@ -18353,9 +18353,8 @@ msgstr ""
 "wersji?"
 
 #: eeschema/tools/sch_editor_control.cpp:335
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Uaktualnić symbole na schemacie by odnosiły się do nowej biblioteki?"
+msgstr "Dołączyć porty zasilania znajdujące się na schemacie do biblioteki?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
 #, c-format
@@ -35571,9 +35570,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Nie można wyrysować do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć folderu wyjściowego\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
