@@ -13,17 +13,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-11-02 03:01+0000\n"
+"PO-Revision-Date: 2023-12-11 07:40+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3313,14 +3313,12 @@ msgid "Password"
 msgstr "Hasło"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Wprowadzanie zmian..."
+msgstr "Wprowadź zmiany"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Nazwa pliku:"
+msgstr "Nazwa pliku"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3338,14 +3336,12 @@ msgid "New"
 msgstr "Nowa"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Grupa zmodyfikowana"
+msgstr "Zmodyfikowano"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Usuń"
+msgstr "Usunięto"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Commit Message:"
@@ -5415,9 +5411,8 @@ msgid "Line Width"
 msgstr "Szerokość linii"
 
 #: common/eda_shape.cpp:1941 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Line Color"
-msgstr "Kolor linii:"
+msgstr "Kolor linii"
 
 #: common/eda_shape.cpp:1978 eeschema/lib_shape.cpp:586
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5425,9 +5420,8 @@ msgid "Filled"
 msgstr "Wypełniony"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_shape.cpp:685
-#, fuzzy
 msgid "Fill Color"
-msgstr "Kolor wypełnienia:"
+msgstr "Kolor wypełnienia"
 
 #: common/eda_text.cpp:806 common/eda_text.cpp:1192
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -5754,7 +5748,7 @@ msgstr ""
 "datowanej na %s lub późniejszej."
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -5766,7 +5760,7 @@ msgstr ""
 "wersji programu niż ta, która została uruchomiona. \n"
 "\n"
 "By otworzyć ten plik, potrzebna jest aktualizacja programu KiCad do wersji "
-"datowanej na %s lub późniejszej."
+"%s lub późniejszej (format pliku datowany na %s lub późniejszy)."
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -7228,14 +7222,12 @@ msgid "Cancel current tool"
 msgstr "Anuluj bieżące narzędzie"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "Suomi (Fiński)"
+msgstr "Zakończ"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Anuluj bieżące narzędzie"
+msgstr "Zakończ pracę bieżącego narzędzia"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7632,9 +7624,8 @@ msgid "Use millimeters"
 msgstr "Używa milimetrów do określania odległości lub wielkości"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Wybierz kolumny"
+msgstr "Wybierz kolumny..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -7726,7 +7717,7 @@ msgstr "Przeglądarka bibliotek symboli"
 
 #: common/tool/actions.cpp:873
 msgid "Browse symbol libraries"
-msgstr "Przegląda biblioteki smboli"
+msgstr "Przeglądaj biblioteki symboli"
 
 #: common/tool/actions.cpp:882
 msgid "Create, delete and edit symbols"
@@ -8255,7 +8246,6 @@ msgid "Current key:"
 msgstr "Bieżący skrót:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
 msgstr "Wyczyść przypisany skrót"
 
@@ -14863,9 +14853,9 @@ msgstr ""
 "umieszczone."
 
 #: eeschema/erc.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "Narzędzie %d nie zostało zdefiniowane"
+msgstr "Klasa sieci %s nie została zdefiniowana"
 
 #: eeschema/erc.cpp:656
 msgid "Pin with 'no connection' type is connected"
@@ -14950,9 +14940,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Sprawdzanie czy piny lub połączenia nie znajdują się poza siatką..."
 
 #: eeschema/erc.cpp:1256
-#, fuzzy
 msgid "Checking for undefined netclasses..."
-msgstr "Sprawdzanie w poszukiwaniu nierozwiązanych zmiennych..."
+msgstr "Sprawdzanie w poszukiwaniu niezdefiniowanych klas sieci..."
 
 #: eeschema/erc_item.cpp:43
 msgid "Conflicts"
@@ -15062,9 +15051,8 @@ msgid "Unresolved text variable"
 msgstr "Nierozwiązana zmienna tekstowa"
 
 #: eeschema/erc_item.cpp:139
-#, fuzzy
 msgid "Undefined netclass"
-msgstr "Przeanalizowane klasy sieci"
+msgstr "Niezdefiniowane klasy sieci"
 
 #: eeschema/erc_item.cpp:143
 msgid "SPICE model issue"
@@ -15446,12 +15434,12 @@ msgstr ""
 "zapisane poprawnie.  Czy chcesz przywrócić ostatnie zapisane zmiany?"
 
 #: eeschema/files-io.cpp:1576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
-"Plik '%s' nie mógł być otwarty.\n"
+"Plik '%s' nie może zostać otwarty.\n"
 "Wymagane jest ręczne odzyskanie pliku z automatycznie zapisanych plików."
 
 #: eeschema/files-io.cpp:1626
@@ -15464,11 +15452,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Aby przywrócić powyższe pliki, wymagane będzie ich ręczne odzyskanie."
 
 #: eeschema/files-io.cpp:1641
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Plik autozapisu '%s' nie może zostać usunięty!"
+msgstr ""
+"Plik autozapisu '%s' nie może zostać usunięty.\n"
+"Wymagane jest ręczne usunięcie pliku."
 
 #: eeschema/files-io.cpp:1675
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -15750,19 +15740,16 @@ msgid "Bezier Curve with %d points"
 msgstr "Krzywa Beziera złożona z %d punktów"
 
 #: eeschema/lib_shape.cpp:593
-#, fuzzy
 msgid "Body outline color"
-msgstr "Wypełnij kolorem wypełnienia pierwszoplanowego"
+msgstr "Kolor konturu ciała"
 
 #: eeschema/lib_shape.cpp:594
-#, fuzzy
 msgid "Body background color"
-msgstr "Rysuj kolor tła"
+msgstr "Kolor tła ciała"
 
 #: eeschema/lib_shape.cpp:595
-#, fuzzy
 msgid "Fill color"
-msgstr "Kolor wypełnienia:"
+msgstr "Kolor wypełnienia"
 
 #: eeschema/lib_shape.cpp:601 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -16702,9 +16689,9 @@ msgid "Altium schematic files"
 msgstr "Pliki schematu programu Altium"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:69
-#, fuzzy
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "Pliki bibliotek schematowych programu Altium"
+msgstr ""
+"Pliki bibliotek schematowych lub biblioteki zintegrowane programu Altium"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
@@ -17613,22 +17600,18 @@ msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2602
-#, fuzzy
 msgid "Exclude From Board"
 msgstr "Wyklucz z płytki"
 
 #: eeschema/sch_symbol.cpp:2605
-#, fuzzy
 msgid "Exclude From Simulation"
 msgstr "Wyłącz z symulacji"
 
 #: eeschema/sch_symbol.cpp:2608 pcbnew/footprint.cpp:3435
-#, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "Wyklucz z listy materiałowej"
 
 #: eeschema/sch_symbol.cpp:2611 pcbnew/footprint.cpp:3438
-#, fuzzy
 msgid "Do not Populate"
 msgstr "Nie obsadzony"
 
@@ -21593,9 +21576,8 @@ msgstr ""
 "wersji?"
 
 #: eeschema/tools/sch_editor_control.cpp:340
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Uaktualnić symbole na schemacie by odnosiły się do nowej biblioteki?"
+msgstr "Dołączyć porty zasilania znajdujące się na schemacie do biblioteki?"
 
 #: eeschema/tools/sch_editor_control.cpp:405
 #, c-format
@@ -23278,15 +23260,13 @@ msgid "Only generate a board with no components"
 msgstr "Generuj tylko płytkę bez komponentów"
 
 #: kicad/cli/command_pcb_export_3d.cpp:110
-#, fuzzy
 msgid "Export tracks"
-msgstr "Bez ścieżek"
+msgstr "Eksportuj ścieżki"
 
 #: kicad/cli/command_pcb_export_3d.cpp:115
 #: pcbnew/dialogs/dialog_export_step_base.cpp:165
-#, fuzzy
 msgid "Export zones"
-msgstr "Eksportuj jednostki:"
+msgstr "Eksportuj strefy"
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Minimum distance between points to treat them as separate ones"
@@ -23295,6 +23275,8 @@ msgstr "Minimalna odległość między punktami by traktować je jako oddzielne"
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid "Do not optimize STEP file (enables writing parametric curves)"
 msgstr ""
+"Nie optymalizuj pliku STEP (włącza możliwość zapisywania krzywych "
+"parametrycznych)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:136
 msgid ""
@@ -24357,7 +24339,6 @@ msgstr "Zachowaj pobrany plik"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:610
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
@@ -28093,12 +28074,10 @@ msgid "Curve Points"
 msgstr "Punkty krzywej"
 
 #: pcbnew/board_connected_item.cpp:275
-#, fuzzy
 msgid "Prefer Zone Connections"
 msgstr "Preferowane połączenia ze strefą"
 
 #: pcbnew/board_connected_item.cpp:281
-#, fuzzy
 msgid "Allow Teardrops To Span Two Tracks"
 msgstr "Zezwól na rozlanie się łezki na dwa segmenty ścieżki"
 
@@ -30725,26 +30704,23 @@ msgstr "Uaktualnij footprinty z biblioteki"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:71
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr ""
+msgstr "Pliki IPC-2581 (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:72
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr ""
+msgstr "Skompresowane pliki IPC-2581 (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:74
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "Eksportuj do pliku"
+msgstr "Eksportuj plik IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:132
-#, fuzzy
 msgid "manufacturer"
-msgstr "Wybierz producenta"
+msgstr "producent"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:140
-#, fuzzy
 msgid "mfg"
-msgstr "meg"
+msgstr "prod"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
@@ -30759,31 +30735,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:63
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:68
 msgid "The number of values following the decimal separator"
-msgstr ""
+msgstr "Liczba wartości po separatorze dziesiętnym"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
-#, fuzzy
 msgid "Version:"
-msgstr "Wersja"
+msgstr "Wersja:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
-#, fuzzy
 msgid "Compress Output"
-msgstr "Wymuś format A4"
+msgstr "Kompresuj dane"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
-msgstr ""
+msgstr "Kompresuje dane wyjściowe do pliku 'zip'"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
-#, fuzzy
 msgid "BOM Columns"
-msgstr "Kolumnami"
+msgstr "Kolumny BOM"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
-#, fuzzy
 msgid "Internal ID:"
-msgstr "Wewnętrzne warstwy"
+msgstr "Wewnętrzny ID:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:103
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:111
@@ -30791,51 +30763,46 @@ msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
 msgstr ""
+"Numer identyfikacyjny części używany wewnętrznie w czasie projektowania.\n"
+"Numer ten musi być unikalny dla każdej części."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
-#, fuzzy
 msgid "Generate Unique"
-msgstr "Generuj ostrzeżenie"
+msgstr "Generuj unikalny"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "Wybierz producenta"
+msgstr "P/N producenta:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Column containing the manufacturer part number"
-msgstr "Komponent: Nazwa producenta nie może być pusta."
+msgstr "Kolumna zawierająca numer części nadany przez producenta"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Omit"
-msgstr "Pomiń sieci"
+msgstr "Pomiń"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
-#, fuzzy
 msgid "Manufacturer:"
-msgstr "Wybierz producenta"
+msgstr "Producent:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "P/N dystrybutora:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr ""
+msgstr "Kolumna zawierająca numer części nadany przez dystrybutora"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#, fuzzy
 msgid "Distributor:"
-msgstr "Wyrównywanie/rozkładanie"
+msgstr "Dystrybutor:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.h:81
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "Eksportuj PS"
+msgstr "Eksportuj IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:173
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
@@ -30994,47 +30961,48 @@ msgid "Overwrite old file"
 msgstr "Nadpisz starszy plik"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
-#, fuzzy
 msgid "Optimize STEP file"
-msgstr "Pliki STEP"
+msgstr "Optymalizuj plik STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
 msgid ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
 msgstr ""
+"Wyłącza zapisywanie krzywych parametrycznych. Optymalizuje rozmiar pliku i "
+"czas zapisu/odczytu, ale może zmniejszyć kompatybilność z innym "
+"oprogramowaniem."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
-#, fuzzy
 msgid "Fuse shapes (time consuming)"
-msgstr "Eksportuj strefy (powolne)"
+msgstr "Połącz kształty (powolne)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
-msgstr ""
+msgstr "Połącz przecinające się geometrie w jeden kształt."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "Eksportuj jako płytkę programu KiCad"
+msgstr "Eksportuj jako kształt złożony"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:153
 msgid ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
 msgstr ""
+"Łączy wszystkie kształty w jeden kształt złożony. Przydatne w przypadku "
+"zewnętrznego oprogramowania wykonującego deduplikację na podstawie nazw "
+"kształtów."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid "Export tracks, pads and vias"
-msgstr "Tworzenie ścieżek i przelotek"
+msgstr "Eksport ścieżek, pól lutowniczych i przelotek"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
-#, fuzzy
 msgid "Export tracks, pads and vias on external copper layers."
 msgstr ""
-"Eksportuje ścieżki i przelotki na zewnętrznych warstwach sygnałowych.\n"
-"Ostrzeżenie: Operacja jest *niezwykle* czasochłonna."
+"Eksportuje ścieżki, pola lutownicze i przelotki na zewnętrznych warstwach "
+"sygnałowych."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 #, fuzzy
@@ -41250,9 +41218,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Nie można wyrysować do '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:544
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Nie można usunąć folderu Git"
+msgstr "Nie można utworzyć folderu wyjściowego\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734 pcbnew/pcbnew_jobs_handler.cpp:806
 msgid "Loading footprint library\n"
@@ -41367,9 +41334,8 @@ msgid "File not found: '%s'."
 msgstr "Nie znaleziono pliku: '%s'."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:272
-#, fuzzy
 msgid "No footprints in library"
-msgstr "Nowy identyfikator biblioteki footprintu:"
+msgstr "Nie znaleziono footprintów w bibliotece"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:294
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
@@ -42473,9 +42439,8 @@ msgid "Generating BOM section"
 msgstr "Opcje renderingu"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:1317
-#, fuzzy
 msgid "Generating CAD data"
-msgstr "Określanie danych PCB\n"
+msgstr "Tworzenie danych CAD"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2358
 #, fuzzy, c-format
@@ -42488,9 +42453,8 @@ msgid "Generating logistic section"
 msgstr "Generowanie plików położeń footprintów"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2914
-#, fuzzy
 msgid "Saving file"
-msgstr "Odczyt pliku "
+msgstr "Zapis pliku"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2946
 #, fuzzy
