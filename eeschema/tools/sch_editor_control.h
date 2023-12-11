@@ -188,6 +188,16 @@ private:
     void setPastedSymbolInstances( SCH_SCREENS& aScreenList );
 
     /**
+     * Remove all pasted symbol instances that do not belong to the current project.
+     *
+     * @warning This should **only** be called when cleaning up after a paste.  Otherwise it
+     *          could clobber symbol instances for schematics shared across projects.  Use
+     *          SCH_SCREENS::PruneOrphanedSymbolInstances() to clean up invalid instance for
+     *          the current project.
+     */
+    void prunePastedSymbolInstances();
+
+    /**
      * Read the footprint info from each line in the stuff file by reference designator.
      *
      * The footprint link file (.cmp) entries created by CvPcb:
@@ -231,6 +241,8 @@ private:
 
     // A map of KIID_PATH --> sheet instances for the clipboard contents.
     std::map<KIID_PATH, SCH_SHEET_INSTANCE>  m_clipboardSheetInstances;
+
+    std::set<SCH_SYMBOL*>                    m_pastedSymbols;
 };
 
 
