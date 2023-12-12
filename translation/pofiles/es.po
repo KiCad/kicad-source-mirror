@@ -11,21 +11,22 @@
 # ferdymercury <fernando.hueso@uv.es>, 2021.
 # Jose Perez <mirror.k2@gmail.com>, 2022.
 # Gabriel Martinez <hijopayaso@gmail.com>, 2023.
+# Ulices <hasecilu@tuta.io>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-06-06 01:50+0000\n"
-"Last-Translator: Gabriel Martinez <hijopayaso@gmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2023-12-12 09:44+0000\n"
+"Last-Translator: Ulices <hasecilu@tuta.io>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2409,7 +2410,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:50
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Copiar tabla de librerías %s global predeterminada (recomendado)"
+msgstr "Copiar tabla de bibliotecas %s global predeterminada (recomendado)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:52
 #, c-format
@@ -2443,13 +2444,13 @@ msgstr "Crear una tabla de bibliotecas global %s vacía"
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Seleccione esta opción para definir librerías %s en las tablas específicas "
+"Seleccione esta opción para definir bibliotecas %s en las tablas específicas "
 "del proyecto"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:68
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Seleccionar archivo de tabla global de librerías %s:"
+msgstr "Seleccionar archivo de tabla global de bibliotecas %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2508,7 +2509,7 @@ msgstr "Seleccionar archivo"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
 msgid "Configure Global Library Table"
-msgstr "Configurar tabla global de librerías"
+msgstr "Configurar tabla global de bibliotecas"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
 #, fuzzy
@@ -3479,7 +3480,7 @@ msgstr "¡El archivo seleccionado no es válido o podría estar corrupto!"
 #: common/dialogs/git/dialog_git_repository.cpp:387
 #, fuzzy, c-format
 msgid "Could not open public key '%s'"
-msgstr "No pudo encontrarse el archivo de librería '%s'"
+msgstr "No pudo encontrarse el archivo de biblioteca '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:405
 #: common/dialogs/git/dialog_git_repository.cpp:411
@@ -5208,11 +5209,11 @@ msgstr "Unidades"
 
 #: common/eda_draw_frame.cpp:1094 pcbnew/footprint_libraries_utils.cpp:1374
 msgid "Select Library"
-msgstr "Seleccionar librería"
+msgstr "Seleccionar biblioteca"
 
 #: common/eda_draw_frame.cpp:1094
 msgid "New Library"
-msgstr "Nueva librería"
+msgstr "Nueva biblioteca"
 
 #: common/eda_item.cpp:342
 msgid "Screen"
@@ -5768,7 +5769,7 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"La ruta base de las librerías de huellas instaladas localmente (carpetas ."
+"La ruta base de las bibliotecas de huellas instaladas localmente (carpetas ."
 "pretty)."
 
 #: common/env_vars.cpp:74
@@ -5777,7 +5778,7 @@ msgstr "La ruta base del sistema de los modelos 3D (carpetas .3Dshapes)."
 
 #: common/env_vars.cpp:76
 msgid "The base path of the locally installed symbol libraries."
-msgstr "La ruta base de las librerías de huellas instaladas localmente."
+msgstr "La ruta base de las bibliotecas de huellas instaladas localmente."
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
@@ -5797,7 +5798,7 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
-"Una carpeta que contiene complementos, librerías y otro contenido "
+"Una carpeta que contiene complementos, bibliotecas y otro contenido "
 "descargable de terceros."
 
 #: common/env_vars.cpp:86
@@ -5812,7 +5813,7 @@ msgstr ""
 "absoluta del proyecto activo. Esta variable de entorno puede utilizarse para "
 "definir archivos y rutas relativas al proyecto activo. Por ejemplo, "
 "${KIPRJMOD}/libs/footprints.pretty puede definirse como una carpeta que "
-"contiene una librería de huellas específica al proyecto, de nombre "
+"contiene una biblioteca de huellas específica al proyecto, de nombre "
 "footprints.pretty."
 
 #: common/env_vars.cpp:92
@@ -5949,13 +5950,13 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Se ha encontrado un apodo de librería duplicado '%s' en la línea %d del "
-"archivo de la tabla de librerías de huellas."
+"Se ha encontrado un apodo de biblioteca duplicado '%s' en la línea %d del "
+"archivo de la tabla de bibliotecas de huellas."
 
 #: common/fp_lib_table.cpp:329
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr "La tabla fp-lib-table no contienen la librería de nombre '%s'."
+msgstr "La tabla fp-lib-table no contienen la biblioteca de nombre '%s'."
 
 #: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:599
 msgid "Added by Plugin and Content Manager"
@@ -5964,7 +5965,7 @@ msgstr "Añadido por el Administrador de complementos y contenido"
 #: common/fp_lib_table.cpp:581 eeschema/symbol_lib_table.cpp:627
 #, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "No se puede crear la ruta '%s' de la tabla global de librerías."
+msgstr "No se puede crear la ruta '%s' de la tabla global de bibliotecas."
 
 #: common/gestfich.cpp:216
 #, c-format
@@ -6151,7 +6152,7 @@ msgstr "No puede crearse el archivo '%s'."
 #: common/git/kicad_git_errors.cpp:32
 #, fuzzy
 msgid "Failed to merge branches."
-msgstr "No ha podido guardarse la librería recuperada %s."
+msgstr "No ha podido guardarse la biblioteca recuperada %s."
 
 #: common/git/kicad_git_errors.cpp:35
 #, fuzzy
@@ -6442,18 +6443,18 @@ msgstr "Actualmente no se soporta la marcara de compilación."
 #: common/kiway.cpp:243
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "No ha podido verificar la firma de librería kiface '%s'."
+msgstr "No ha podido verificar la firma de biblioteca kiface '%s'."
 
 #: common/kiway.cpp:283
 #, c-format
 msgid "Failed to load kiface library '%s'."
-msgstr "No ha podido cargarse la librería kiface '%s'."
+msgstr "No ha podido cargarse la biblioteca kiface '%s'."
 
 #: common/kiway.cpp:291
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"No se puede leer el nombre de instancia ni la versión desde la librería "
+"No se puede leer el nombre de instancia ni la versión desde la biblioteca "
 "kiface '%s'."
 
 #: common/kiway.cpp:347
@@ -6473,7 +6474,7 @@ msgstr "No se encuentra.\n"
 
 #: common/kiway.cpp:353
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "Quizá falte una librería compartida (.dll o .so).\n"
+msgstr "Quizá falte una biblioteca compartida (.dll o .so).\n"
 
 #: common/kiway.cpp:355
 msgid ""
@@ -6816,7 +6817,8 @@ msgstr "Sombra de colisión de patio"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in logical library name"
-msgstr "Se ha encontrado un carácter ilegal en el nombre de la librería lógica"
+msgstr ""
+"Se ha encontrado un carácter ilegal en el nombre de la biblioteca lógica"
 
 #: common/lib_table_grid_tricks.cpp:32
 #, fuzzy
@@ -7130,7 +7132,7 @@ msgstr "No se puede encontrar %s pin '%s'."
 
 #: common/project.cpp:374 common/project.cpp:379 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
-msgstr "Error al cargar la tabla de librerías de huellas del proyecto."
+msgstr "Error al cargar la tabla de bibliotecas de huellas del proyecto."
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:117
 msgid "This is the default net class."
@@ -7310,19 +7312,19 @@ msgstr "Crear un nuevo documento en el editor"
 #: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:618
 #: pcbnew/footprint_libraries_utils.cpp:1004
 msgid "New Library..."
-msgstr "Nueva librería..."
+msgstr "Nueva biblioteca..."
 
 #: common/tool/actions.cpp:53
 msgid "Create a new library folder"
-msgstr "Crear nueva carpeta de librería"
+msgstr "Crear nueva carpeta de biblioteca"
 
 #: common/tool/actions.cpp:59
 msgid "Add Library..."
-msgstr "Añadir librería..."
+msgstr "Añadir biblioteca..."
 
 #: common/tool/actions.cpp:60
 msgid "Add an existing library folder"
-msgstr "Añadir una carpeta de librería existente"
+msgstr "Añadir una carpeta de biblioteca existente"
 
 #: common/tool/actions.cpp:68
 msgid "Open..."
@@ -7684,19 +7686,19 @@ msgstr "Ejecuta doble clic de botón izquierdo"
 
 #: common/tool/actions.cpp:597
 msgid "Pin Library"
-msgstr "Fijar librería"
+msgstr "Fijar biblioteca"
 
 #: common/tool/actions.cpp:598
 msgid "Keep the library at the top of the list"
-msgstr "Mantener la librería al comienzo de la lista"
+msgstr "Mantener la biblioteca al comienzo de la lista"
 
 #: common/tool/actions.cpp:603
 msgid "Unpin Library"
-msgstr "No fijar librería"
+msgstr "No fijar biblioteca"
 
 #: common/tool/actions.cpp:604
 msgid "No longer keep the library at the top of the list"
-msgstr "Dejar de mantener la librería al comienzo de la lista"
+msgstr "Dejar de mantener la biblioteca al comienzo de la lista"
 
 #: common/tool/actions.cpp:610
 msgid "Pan Up"
@@ -7900,11 +7902,11 @@ msgstr "Mostrar ventana de visor 3D"
 #: common/tool/actions.cpp:872 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:1104
 msgid "Symbol Library Browser"
-msgstr "Explorador de librerías de símbolos"
+msgstr "Explorador de bibliotecas de símbolos"
 
 #: common/tool/actions.cpp:873
 msgid "Browse symbol libraries"
-msgstr "Explorar librerías de símbolos"
+msgstr "Explorar bibliotecas de símbolos"
 
 #: common/tool/actions.cpp:882
 msgid "Create, delete and edit symbols"
@@ -7913,11 +7915,11 @@ msgstr "Crear, eliminar y editar símbolos"
 #: common/tool/actions.cpp:890 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1024
 msgid "Footprint Library Browser"
-msgstr "Explorador de librerías de huellas"
+msgstr "Explorador de bibliotecas de huellas"
 
 #: common/tool/actions.cpp:891
 msgid "Browse footprint libraries"
-msgstr "Explorar librerías de huellas"
+msgstr "Explorar bibliotecas de huellas"
 
 #: common/tool/actions.cpp:900
 msgid "Create, delete and edit footprints"
@@ -7966,19 +7968,19 @@ msgstr "Editar las variables de entorno de configuración rutas"
 
 #: common/tool/actions.cpp:947
 msgid "Manage Symbol Libraries..."
-msgstr "Gestionar librerías de símbolos..."
+msgstr "Gestionar bibliotecas de símbolos..."
 
 #: common/tool/actions.cpp:948
 msgid "Edit the global and project symbol library lists"
-msgstr "Editar las listas de librerías de símbolos globales y de proyecto"
+msgstr "Editar las listas de bibliotecas de símbolos globales y de proyecto"
 
 #: common/tool/actions.cpp:954
 msgid "Manage Footprint Libraries..."
-msgstr "Gestionar librerías de huellas..."
+msgstr "Gestionar bibliotecas de huellas..."
 
 #: common/tool/actions.cpp:955
 msgid "Edit the global and project footprint library lists"
-msgstr "Editar las listas de librerías de símbolos globales y del proyecto"
+msgstr "Editar las listas de bibliotecas de símbolos globales y del proyecto"
 
 #: common/tool/actions.cpp:961
 msgid "Getting Started with KiCad"
@@ -8212,7 +8214,7 @@ msgstr "No se ha encontrado la huella."
 #: pcbnew/footprint_edit_frame.cpp:1006
 #: pcbnew/widgets/panel_footprint_chooser.cpp:60
 msgid "Loading Footprint Libraries"
-msgstr "Cargando librerías de huellas"
+msgstr "Cargando bibliotecas de huellas"
 
 #: common/widgets/footprint_select_widget.cpp:148
 msgid "No default footprint"
@@ -8593,7 +8595,7 @@ msgstr "Todos los archivos"
 #: common/wildcards_and_files_ext.cpp:218
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.h:84
 msgid "KiCad symbol library files"
-msgstr "Archivos de librería de símbolos de kiCad"
+msgstr "Archivos de biblioteca de símbolos de kiCad"
 
 #: common/wildcards_and_files_ext.cpp:225
 msgid "KiCad project files"
@@ -8662,7 +8664,7 @@ msgstr "Archivos de huellas de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:323
 msgid "KiCad footprint library paths"
-msgstr "Rutas de librerías de huellas de KiCad"
+msgstr "Rutas de bibliotecas de huellas de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:330
 msgid "Drawing sheet files"
@@ -8731,7 +8733,7 @@ msgstr "Archivo de comprobación de reglas eléctricas"
 
 #: common/wildcards_and_files_ext.cpp:431
 msgid "Spice library file"
-msgstr "Archivo de librería Spice"
+msgstr "Archivo de biblioteca Spice"
 
 #: common/wildcards_and_files_ext.cpp:437
 msgid "SPICE netlist file"
@@ -8815,8 +8817,8 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
-"Componente %s: no se ha encontrado la huella %s en ninguna de las librerías "
-"del proyecto."
+"Componente %s: no se ha encontrado la huella %s en ninguna de las "
+"bibliotecas del proyecto."
 
 #: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
@@ -8834,19 +8836,19 @@ msgid ""
 "more information."
 msgstr ""
 "Es la primera vez que se ejecuta CvPcb utilizando el nuevo método basado en "
-"la tabla de librerías para encontrar de huellas. \n"
+"la tabla de bibliotecas para encontrar de huellas. \n"
 "CvPcb ha copiado la tabla por defecto o ha creado una tabla vacía en su "
 "carpeta de usuario.\n"
-"Debe configurar primero la tabla de librerías para incluir aquellas no "
+"Debe configurar primero la tabla de bibliotecas para incluir aquellas no "
 "incluídas con KiCad.\n"
-"Vea la sección \"Tabla de librerías de huellas\" de la documentación de "
+"Vea la sección \"Tabla de bibliotecas de huellas\" de la documentación de "
 "CvPcb para mayor información."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
-"Ha ocurrido un error al intentar cargar la tabla global de librerías de "
+"Ha ocurrido un error al intentar cargar la tabla global de bibliotecas de "
 "huellas."
 
 #: cvpcb/cvpcb_mainframe.cpp:65 cvpcb/cvpcb_mainframe.cpp:81
@@ -8924,16 +8926,16 @@ msgstr "Descripción: %s;  palabras clave: %s"
 #: cvpcb/cvpcb_mainframe.cpp:876
 #, c-format
 msgid "Library location: %s"
-msgstr "Localización de la librería: %s"
+msgstr "Localización de la biblioteca: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:878
 msgid "Library location: unknown"
-msgstr "Localización de la librería: desconocida"
+msgstr "Localización de la biblioteca: desconocida"
 
 #: cvpcb/cvpcb_mainframe.cpp:891
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr "No hay librerías de huellas en la tabla de huellas activa."
+msgstr "No hay bibliotecas de huellas en la tabla de huellas activa."
 
 #: cvpcb/cvpcb_mainframe.cpp:892
 msgid "Configuration Error"
@@ -9067,8 +9069,8 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Algunas de las librerías asignadas son entradas obsoletas que no disponen de "
-"nombre. ¿Desea que KiCad intente convertirlas al nuevo formato requerido "
+"Algunas de las bibliotecas asignadas son entradas obsoletas que no disponen "
+"de nombre. ¿Desea que KiCad intente convertirlas al nuevo formato requerido "
 "LIB_ID? (Si su respuesta es negativa, esas asignaciones serán eliminadas y "
 "deberá reasignar esas huellas manualmente.)"
 
@@ -9077,22 +9079,22 @@ msgstr ""
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
 msgstr ""
 "Para el componente '%s' <b>no se ha encontrado</b> la huella '%s' en ninguna "
-"librería.\n"
+"biblioteca.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:156
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
 msgstr ""
 "Para el componente '%s' se ha encontrado la huella '%s' en <b>varias</b> "
-"librerías.\n"
+"bibliotecas.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:169
 msgid "First check your footprint library table entries."
-msgstr "Verifique primero las entradas de la tabla de librerías de huellas."
+msgstr "Verifique primero las entradas de la tabla de bibliotecas de huellas."
 
 #: cvpcb/readwrite_dlgs.cpp:171
 msgid "Problematic Footprint Library Tables"
-msgstr "Tablas de librerías de huellas problemáticas"
+msgstr "Tablas de bibliotecas de huellas problemáticas"
 
 #: cvpcb/readwrite_dlgs.cpp:179
 msgid ""
@@ -9230,11 +9232,11 @@ msgstr "Filtrar número de pines"
 
 #: cvpcb/tools/cvpcb_actions.cpp:175
 msgid "Filter by library"
-msgstr "Filtrar por librería"
+msgstr "Filtrar por biblioteca"
 
 #: cvpcb/tools/cvpcb_actions.cpp:176
 msgid "Filter footprint list by library"
-msgstr "Filtrar por librería"
+msgstr "Filtrar por biblioteca"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
@@ -9736,7 +9738,7 @@ msgstr "Cambiar los símbolos con el valor:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr "Cambiar los símbolos con el identificador de librería:"
+msgstr "Cambiar los símbolos con el identificador de biblioteca:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
@@ -9847,7 +9849,7 @@ msgstr "Actualizar los símbolos con el identificador:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:73
 msgid "New library identifier:"
-msgstr "Nuevo identificador de librería:"
+msgstr "Nuevo identificador de biblioteca:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -9867,7 +9869,7 @@ msgstr "Actualizar opciones"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 msgid "Remove fields if not in library symbol"
-msgstr "Eliminar campos si no aparecen en el símbolo de la librería"
+msgstr "Eliminar campos si no aparecen en el símbolo de la biblioteca"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
@@ -9879,7 +9881,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:125
 msgid "Reset fields if empty in library symbol"
-msgstr "Reiniciar campos si están vacíos en el símbolo de la librería"
+msgstr "Reiniciar campos si están vacíos en el símbolo de la biblioteca"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:131
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
@@ -9907,7 +9909,7 @@ msgstr "Actualizar/restablecer los atributos de los símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:101
 msgid "Update Symbols from Library"
-msgstr "Actualizar símbolos desde la librería"
+msgstr "Actualizar símbolos desde la biblioteca"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 #, fuzzy
@@ -9927,7 +9929,7 @@ msgstr "Conexión pad a zonas:"
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 #, fuzzy, c-format
 msgid "Loaded %zu libraries"
-msgstr "Cargando librerías de símbolos"
+msgstr "Cargando bibliotecas de símbolos"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
@@ -9993,7 +9995,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 #, fuzzy
 msgid "Database Library Settings"
-msgstr "Archivos de librería de base de datos de KiCad"
+msgstr "Archivos de biblioteca de base de datos de KiCad"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:546
 #, c-format
@@ -10022,7 +10024,7 @@ msgstr "Se han resuelto todos los enlaces %u"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:691
 msgid "Invalid symbol library identifier"
-msgstr "Identificador de librería de símbolos no válido"
+msgstr "Identificador de biblioteca de símbolos no válido"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:742
 #, c-format
@@ -10031,7 +10033,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al cargar el símbolo %s desde la librería %s.\n"
+"Ha ocurrido un error al cargar el símbolo %s desde la biblioteca %s.\n"
 "\n"
 "%s"
 
@@ -10043,11 +10045,11 @@ msgstr "Símbolos"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr "Referencia de la librería activa"
+msgstr "Referencia de la biblioteca activa"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr "Nueva referencia de librería"
+msgstr "Nueva referencia de biblioteca"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
@@ -10061,7 +10063,7 @@ msgid ""
 msgstr ""
 "Si algunos componentes son huérfanos (no se encuentra el símbolo enlazado),\n"
 "intente encontrar un candidato con el mismo nombre en alguna de las "
-"librerías de símbolos cargadas."
+"bibliotecas de símbolos cargadas."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -10078,7 +10080,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr "Referencias de librería de símbolo"
+msgstr "Referencias de biblioteca de símbolo"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Run ERC"
@@ -10685,7 +10687,7 @@ msgstr "Filtrar elementos por designador de referencia principal:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
-msgstr "Filtrar elementos por ID de librería de símbolos padre:"
+msgstr "Filtrar elementos por ID de biblioteca de símbolos padre:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Filter items by parent symbol type:"
@@ -10805,12 +10807,12 @@ msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"Error al crear la tabla de librería de símbolos '%s'.\n"
+"Error al crear la tabla de biblioteca de símbolos '%s'.\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:75
 msgid "Please select a symbol library table file."
-msgstr "Seleccione un archivo de tabla de librería de símbolos."
+msgstr "Seleccione un archivo de tabla de biblioteca de símbolos."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:84
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:83
@@ -10825,13 +10827,13 @@ msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"Error al cargar la tabla de librerías de símbolos '%s'.\n"
+"Error al cargar la tabla de bibliotecas de símbolos '%s'.\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
 #, c-format
 msgid "Cannot create global library table '%s'."
-msgstr "No se puede crear la tabla global de librerías '%s'."
+msgstr "No se puede crear la tabla global de bibliotecas '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:117
 #, c-format
@@ -11283,7 +11285,7 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
-"Seleccione el símbolo en la librería actual como símbolo padre.\n"
+"Seleccione el símbolo en la biblioteca actual como símbolo padre.\n"
 "\n"
 "Esto se conocía antes como \"alias\". No seleccione\n"
 "un símbolo existente para crear un nuevo símbolo raíz."
@@ -11458,7 +11460,7 @@ msgstr "El campo debe tener un nombre."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
 #, c-format
 msgid "Symbol name '%s' already in use in library '%s'."
-msgstr "El nombre de símbolo '%s' ya está en uso en la librería '%s'."
+msgstr "El nombre de símbolo '%s' ya está en uso en la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:341
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:346
@@ -11669,7 +11671,7 @@ msgstr "Editar modelo de simulación..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:116
 msgid "Library Symbol Properties"
-msgstr "Propiedades del símbolo de librería"
+msgstr "Propiedades del símbolo de biblioteca"
 
 #: eeschema/dialogs/dialog_lib_text_properties.cpp:231
 #: eeschema/dialogs/dialog_text_properties.cpp:445
@@ -12153,10 +12155,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Este esquema ha sido realizado con librerías de símbolos antiguas que pueden "
-"inutilizar el esquema. Puede ser necesario vincular algunos símbolos a "
-"símbolos de nombre diferente. Puede que algunos símbolos necesiten ser "
-"\"recuperados\" (copiados y renombrados) a una nueva librería.\n"
+"Este esquema ha sido realizado con bibliotecas de símbolos antiguas que "
+"pueden inutilizar el esquema. Puede ser necesario vincular algunos símbolos "
+"a símbolos de nombre diferente. Puede que algunos símbolos necesiten ser "
+"\"recuperados\" (copiados y renombrados) a una nueva biblioteca.\n"
 "\n"
 "Se recomiendan los siguientes cambios para actualizar el proyecto."
 
@@ -12215,7 +12217,7 @@ msgstr "Símbolo en caché:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:78
 msgid "Library Symbol:"
-msgstr "Símbolo de librería:"
+msgstr "Símbolo de biblioteca:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:102
 msgid "Never Show Again"
@@ -12899,7 +12901,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:643
 msgid "Add full path for .include library directives"
-msgstr "Añadir ruta completa a directivas de librería .include"
+msgstr "Añadir ruta completa a directivas de biblioteca .include"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:659
 msgid "Compatibility mode:"
@@ -13124,7 +13126,7 @@ msgstr "<desconocido>"
 #: eeschema/dialogs/dialog_sim_model.cpp:232
 #, c-format
 msgid "No model named '%s' in library."
-msgstr "No hay un modelo llamado '%s' en la librería."
+msgstr "No hay un modelo llamado '%s' en la biblioteca."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:313
 msgid "Failed to read simulation model from fields."
@@ -13674,7 +13676,7 @@ msgstr "No rellenar"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:229
 msgid "Update Symbol from Library..."
-msgstr "Actualizar símbolo desde la librería..."
+msgstr "Actualizar símbolo desde la biblioteca..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
 #: eeschema/tools/ee_actions.cpp:703
@@ -13688,7 +13690,7 @@ msgstr "Editar símbolo..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:241
 #: eeschema/tools/ee_actions.cpp:961
 msgid "Edit Library Symbol..."
-msgstr "Editar símbolo de librería..."
+msgstr "Editar símbolo de biblioteca..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
 #: eeschema/lib_pin.cpp:1658 eeschema/sch_pin.cpp:467
@@ -13707,7 +13709,7 @@ msgstr "Uniones"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
 msgid "Library link:"
-msgstr "Enlace de librería:"
+msgstr "Enlace de biblioteca:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:328
 msgid "Simulation Model..."
@@ -13740,7 +13742,7 @@ msgid ""
 msgstr ""
 "Este esquema utiliza actualmente el método de búsqueda de listas de "
 "bibliotecas de símbolos para cargar símbolos esquemáticos. KiCad intentará "
-"asignar los símbolos existentes para usar la nueva tabla de librerías de "
+"asignar los símbolos existentes para usar la nueva tabla de bibliotecas de "
 "símbolos. La reasignación cambiará algunos archivos del proyecto y los "
 "esquemas pueden no ser compatibles con versiones anteriores de KiCad. Se "
 "realizarán copias de seguridad de todos los archivos modificados a la "
@@ -13752,15 +13754,15 @@ msgstr ""
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Añadiendo la librería '%s', archivo '%s' a la tabla de librerías de símbolos "
-"del proyecto."
+"Añadiendo la biblioteca '%s', archivo '%s' a la tabla de bibliotecas de "
+"símbolos del proyecto."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:224
 #: eeschema/dialogs/panel_sym_lib_table.cpp:884
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:843
 #, c-format
 msgid "Library '%s' not found."
-msgstr "No se ha encontrado la librería '%s'."
+msgstr "No se ha encontrado la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:241
 #, c-format
@@ -13773,22 +13775,22 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:245
 msgid "Created project symbol library table.\n"
-msgstr "Se ha creado la tabla de librerías de símbolos del proyecto.\n"
+msgstr "Se ha creado la tabla de bibliotecas de símbolos del proyecto.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, c-format
 msgid "No symbol %s found in symbol library table."
 msgstr ""
-"No se ha encontrado el símbolo %s en la tabla de librerías de símbolos."
+"No se ha encontrado el símbolo %s en la tabla de bibliotecas de símbolos."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:276
 #, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "El símbolo %s está ligado a la librería de símbolos '%s'."
+msgstr "El símbolo %s está ligado a la biblioteca de símbolos '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:285
 msgid "Symbol library table mapping complete!"
-msgstr "¡Se ha completado el mapeado de la tabla de librerías de símbolos!"
+msgstr "¡Se ha completado el mapeado de la tabla de bibliotecas de símbolos!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:355
 #, c-format
@@ -14700,17 +14702,17 @@ msgstr "&Paso de los pines repetidos:"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:438
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:546
 msgid "A library table row nickname and path cells are empty."
-msgstr "Un alias de fila de tabla de librería y celdas de ruta están vacías."
+msgstr "Un alias de fila de tabla de biblioteca y celdas de ruta están vacías."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:548
 msgid "A library table row nickname cell is empty."
-msgstr "Un alias de fila de tabla de librería está vacío."
+msgstr "Un alias de fila de tabla de biblioteca está vacío."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
 msgid "A library table row path cell is empty."
-msgstr "Una celda de ruta de fila de tabla de librería está vacío."
+msgstr "Una celda de ruta de fila de tabla de biblioteca está vacío."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:552
@@ -14746,7 +14748,7 @@ msgstr "Carácter ilegal '%c' en el apodo: '%s'"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:581
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:627
 msgid "Library Nickname Error"
-msgstr "Editor de apodo de librería"
+msgstr "Editor de apodo de biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:512
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:615
@@ -14757,11 +14759,11 @@ msgstr "No puede haber más de una biblioteca con el mismo apodo ('%s')."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:559 eeschema/symbol_library.cpp:576
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "No se ha podido cargar la librería de símbolos '%s'."
+msgstr "No se ha podido cargar la biblioteca de símbolos '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:562
 msgid "Error Loading Library"
-msgstr "Error al cargar la librería"
+msgstr "Error al cargar la biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:607 eeschema/files-io.cpp:691
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
@@ -14775,7 +14777,7 @@ msgstr "Todos los formatos admitidos"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:617
 #, fuzzy
 msgid "Add Library"
-msgstr "&Añadir librería"
+msgstr "&Añadir biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:631
 msgid "Warning: Duplicate Nickname"
@@ -14785,13 +14787,13 @@ msgstr "Atención: Alias duplicado"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Ya existe una librería de apodo '%s'."
+msgstr "Ya existe una biblioteca de apodo '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:633
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
-"Uno de los apodos tendrá que ser cambiado después de añadir esta librería."
+"Uno de los apodos tendrá que ser cambiado después de añadir esta biblioteca."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:651 eeschema/sch_base_frame.cpp:284
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1035
@@ -14810,7 +14812,7 @@ msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"Seleccione una o más filas de la tabla que contengan librerías en formato "
+"Seleccione una o más filas de la tabla que contengan bibliotecas en formato "
 "heredado (*.lib) para guardarlas en el formato actual (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:860
@@ -14828,7 +14830,7 @@ msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"¿Guardar %d librerías de formato heredado en el formato actual de KiCad (*."
+"¿Guardar %d bibliotecas de formato heredado en el formato actual de KiCad (*."
 "kicad_sym) y reemplazar las entradas heredadas en la tabla?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:894
@@ -14840,13 +14842,13 @@ msgstr "El archivo %s ya existe. ¿Desea sobreescribirlo?"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:897
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
 msgid "Migrate Library"
-msgstr "Migrar librería"
+msgstr "Migrar biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:924 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
 #, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "No se ha podido guardar el archivo de librería de símbolos '%s'."
+msgstr "No se ha podido guardar el archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1154
 msgid ""
@@ -14871,7 +14873,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Error al guardar la tabla global de librerías:\n"
+"Error al guardar la tabla global de bibliotecas:\n"
 "\n"
 "%s"
 
@@ -14895,7 +14897,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Error al guardar la tabla de librerías específica del proyecto:\n"
+"Error al guardar la tabla de bibliotecas específica del proyecto:\n"
 "\n"
 "%s"
 
@@ -14914,13 +14916,13 @@ msgstr "Apodo"
 #: include/lib_table_grid.h:191 pcbnew/dialogs/panel_fp_lib_table_base.cpp:47
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:96
 msgid "Library Path"
-msgstr "Ruta de la librería"
+msgstr "Ruta de la biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:48
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:98
 #: include/lib_table_grid.h:194 pcbnew/dialogs/panel_fp_lib_table_base.cpp:48
 msgid "Library Format"
-msgstr "Formato de librería"
+msgstr "Formato de biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:70
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:69
@@ -14939,17 +14941,17 @@ msgstr "Añadir fila vacía a la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
-msgstr "Añadir librería existente a la tabla"
+msgstr "Añadir biblioteca existente a la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:149
 msgid "Remove library from table"
-msgstr "Eliminar librería de la tabla"
+msgstr "Eliminar biblioteca de la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
 msgid "Migrate Libraries"
-msgstr "Migrar librerías"
+msgstr "Migrar bibliotecas"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:197
@@ -14984,9 +14986,9 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"Ha ocurrido un error al intentar cargar la tabla global de librerías de "
+"Ha ocurrido un error al intentar cargar la tabla global de bibliotecas de "
 "símbolos.\n"
-"Por favor, edite la tabla global de librerías de símbolos en el menú "
+"Por favor, edite la tabla global de bibliotecas de símbolos en el menú "
 "Preferencias."
 
 #: eeschema/eeschema.cpp:508
@@ -15228,7 +15230,7 @@ msgstr "El pin %s está conectado tanto a %s como a %s"
 #: eeschema/erc.cpp:953
 #, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "La configuración actual no incluye la librería '%s'"
+msgstr "La configuración actual no incluye la biblioteca '%s'"
 
 #: eeschema/erc.cpp:964
 #, c-format
@@ -15238,12 +15240,12 @@ msgstr "La biblioteca '%s' no está habilitada en la configuración actual"
 #: eeschema/erc.cpp:979
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "No se ha encontrado el símbolo '%s' en la librería de símbolos '%s'"
+msgstr "No se ha encontrado el símbolo '%s' en la biblioteca de símbolos '%s'"
 
 #: eeschema/erc.cpp:995
 #, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "El símbolo '%s' se ha modificado en la librería '%s'"
+msgstr "El símbolo '%s' se ha modificado en la biblioteca '%s'"
 
 #: eeschema/erc.cpp:1141
 msgid "Checking sheet names..."
@@ -15415,7 +15417,7 @@ msgstr "Hilos no conectados a nada"
 
 #: eeschema/erc_item.cpp:151
 msgid "Library symbol issue"
-msgstr "Problema de librería de símbolos"
+msgstr "Problema de biblioteca de símbolos"
 
 #: eeschema/erc_item.cpp:155
 msgid "Symbol is not annotated"
@@ -15567,7 +15569,7 @@ msgstr ""
 #: eeschema/files-io.cpp:389
 msgid "Illegal entry found in project file symbol library list."
 msgstr ""
-"Se ha encontrado una entrada ilegal en el listado de librerías de símbolos "
+"Se ha encontrado una entrada ilegal en el listado de bibliotecas de símbolos "
 "del proyecto."
 
 #: eeschema/files-io.cpp:390
@@ -15595,7 +15597,8 @@ msgstr "No mostrar este diálogo de nuevo."
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
 msgstr ""
-"No se encontró el archivo de caché de librería de símbolos del proyecto '%s'."
+"No se encontró el archivo de caché de biblioteca de símbolos del proyecto "
+"'%s'."
 
 #: eeschema/files-io.cpp:428
 msgid ""
@@ -15609,7 +15612,7 @@ msgstr ""
 "esquema no tiene símbolos faltantes al abrirse, guárdalo inmediatamente "
 "antes de hacer cualquier cambio para evitar pérdida de datos. Si faltan "
 "símbolos, se requiere la recuperación manual del esquema, o la recuperación "
-"del archivo de caché de símbolos de librería y recargar el esquema."
+"del archivo de caché de símbolos de biblioteca y recargar el esquema."
 
 #: eeschema/files-io.cpp:439
 msgid "Load Without Cache File"
@@ -15835,7 +15838,7 @@ msgstr "Derivado de"
 #: eeschema/widgets/symbol_preview_widget.cpp:201
 #, c-format
 msgid "Error loading symbol %s from library '%s'."
-msgstr "Ha ocurrido un error al cargar el símbolo %s desde la librería '%s'."
+msgstr "Ha ocurrido un error al cargar el símbolo %s desde la biblioteca '%s'."
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:643
@@ -16239,7 +16242,7 @@ msgstr "Alto de caja"
 #: eeschema/libarch.cpp:77
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Fallo al añadir el símbolo %s al archivo de librería '%s'."
+msgstr "Fallo al añadir el símbolo %s al archivo de biblioteca '%s'."
 
 #: eeschema/libarch.cpp:86
 msgid "Unexpected exception occurred."
@@ -16248,12 +16251,12 @@ msgstr "Ha ocurrido una excepción inesperada."
 #: eeschema/libarch.cpp:101
 #, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr "No se ha encontrado el símbolo %s en ninguna librería."
+msgstr "No se ha encontrado el símbolo %s en ninguna biblioteca."
 
 #: eeschema/libarch.cpp:117
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr "Error al crear la librería de símbolos %s."
+msgstr "Error al crear la biblioteca de símbolos %s."
 
 #: eeschema/menubar.cpp:97
 msgid "Insert Schematic Sheet Content..."
@@ -16300,11 +16303,11 @@ msgstr "Lista de redes..."
 
 #: eeschema/menubar.cpp:129
 msgid "Symbols to Library..."
-msgstr "Símbolos a librería..."
+msgstr "Símbolos a biblioteca..."
 
 #: eeschema/menubar.cpp:131
 msgid "Symbols to New Library..."
-msgstr "Símbolos a nueva librería..."
+msgstr "Símbolos a nueva biblioteca..."
 
 #: eeschema/menubar.cpp:318
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:172
@@ -16411,7 +16414,7 @@ msgstr "No se ha podido abrir el archivo '%s' para escribir el modelo IBIS"
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:529
 #, c-format
 msgid "Could not find library file '%s'"
-msgstr "No pudo encontrarse el archivo de librería '%s'"
+msgstr "No pudo encontrarse el archivo de biblioteca '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:152
 #, c-format
@@ -16436,7 +16439,7 @@ msgstr "Cambiar Orientación"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
 "No se ha encontrado un cuerpo alternativo para el símbolo '%s' en la "
-"librería '%s'."
+"biblioteca '%s'."
 
 #: eeschema/picksymbol.cpp:161
 #, fuzzy
@@ -16490,14 +16493,14 @@ msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
 "No se puede recuperar el símbolo %s por no está disponible en ninguna "
-"librería on en la caché."
+"biblioteca on en la caché."
 
 #: eeschema/project_rescue.cpp:322 eeschema/project_rescue.cpp:498
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
 msgstr ""
-"Se ha recuperado el símbolo %s encontrado únicamente en la librería caché a "
-"%s."
+"Se ha recuperado el símbolo %s encontrado únicamente en la biblioteca caché "
+"a %s."
 
 #: eeschema/project_rescue.cpp:325 eeschema/project_rescue.cpp:504
 #, c-format
@@ -16516,18 +16519,18 @@ msgstr "No se ha recuperado ningún símbolo."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:227
 #, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "No ha podido crearse el archivo de librería de símbolos '%s'."
+msgstr "No ha podido crearse el archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/project_rescue.cpp:874
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "No ha podido guardarse la librería recuperada %s."
+msgstr "No ha podido guardarse la biblioteca recuperada %s."
 
 #: eeschema/project_rescue.cpp:897
 msgid "Error occurred saving project specific symbol library table."
 msgstr ""
-"Ha ocurrido un error al guardar la tabla de librerías de símbolos específica "
-"del proyecto."
+"Ha ocurrido un error al guardar la tabla de bibliotecas de símbolos "
+"específica del proyecto."
 
 #: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:129
 msgid "Not Found"
@@ -16535,12 +16538,12 @@ msgstr "No encontrado"
 
 #: eeschema/project_sch.cpp:115
 msgid "The following libraries were not found:"
-msgstr "No se han encontrado las siguientes librerías:"
+msgstr "No se han encontrado las siguientes bibliotecas:"
 
 #: eeschema/project_sch.cpp:168 eeschema/sheet.cpp:391
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "Error al cargar la tabla de librerías de símbolos '%s'."
+msgstr "Error al cargar la tabla de bibliotecas de símbolos '%s'."
 
 #: eeschema/sch_base_frame.cpp:230
 #, c-format
@@ -16548,7 +16551,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al guardar la tabla global de librerías de símbolos:\n"
+"Ha ocurrido un error al guardar la tabla global de bibliotecas de símbolos:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:246
@@ -16557,8 +16560,8 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Ha ocurrido un error al guardar la tabla de librerías de símbolos específica "
-"del proyecto:\n"
+"Ha ocurrido un error al guardar la tabla de bibliotecas de símbolos "
+"específica del proyecto:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:265 pcbnew/footprint_libraries_utils.cpp:410
@@ -16575,19 +16578,19 @@ msgstr "Global"
 
 #: eeschema/sch_base_frame.cpp:279 pcbnew/footprint_libraries_utils.cpp:424
 msgid "Choose the Library Table to add the library to:"
-msgstr "Seleccione la Tabla de librerías a la que añadir la librería:"
+msgstr "Seleccione la Tabla de bibliotecas a la que añadir la biblioteca:"
 
 #: eeschema/sch_base_frame.cpp:280 pcbnew/footprint_libraries_utils.cpp:425
 msgid "Add To Library Table"
-msgstr "Añadir a la aabla de librerías"
+msgstr "Añadir a la aabla de bibliotecas"
 
 #: eeschema/sch_base_frame.cpp:563
 msgid "No symbol libraries are loaded."
-msgstr "No se ha cargado ninguna librería de símbolos."
+msgstr "No se ha cargado ninguna biblioteca de símbolos."
 
 #: eeschema/sch_base_frame.cpp:608
 msgid "Select Symbol Library"
-msgstr "Seleccionar librería de símbolos"
+msgstr "Seleccionar biblioteca de símbolos"
 
 #: eeschema/sch_base_frame.cpp:723
 msgid ""
@@ -16728,7 +16731,7 @@ msgstr "Añadir símbolo en el esquema"
 #: eeschema/sch_edit_frame.cpp:2217 eeschema/tools/ee_actions.cpp:63
 #, fuzzy
 msgid "Diff Symbol with Library"
-msgstr "Nueva librería de símbolos"
+msgstr "Nueva biblioteca de símbolos"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -17242,7 +17245,7 @@ msgid ""
 msgstr ""
 "El símbolo '%s' se escala en el esquema CADSTAR original, pero esto no es "
 "soportado en KiCad. Cuando el símbolo sea cargado de nuevo desde la "
-"librería, volverá a la escala 1:1 original."
+"biblioteca, volverá a la escala 1:1 original."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1468
 #, c-format
@@ -17325,7 +17328,7 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:299
 #, fuzzy, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "No se puede crear la librería de huellas '%s'."
+msgstr "No se puede crear la biblioteca de huellas '%s'."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:63
 msgid "CADSTAR Schematic Archive files"
@@ -17345,19 +17348,19 @@ msgstr "Error al leer la tabla de base de datos %s: %s"
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
-"No se ha cargado la librería de base de datos: el archivo de configuración "
+"No se ha cargado la biblioteca de base de datos: el archivo de configuración "
 "%s falta o es inválido"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:273
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
-"No se ha podido cargar la librería de base de datos: no se ha podido "
+"No se ha podido cargar la biblioteca de base de datos: no se ha podido "
 "conectar a la base de datos %s (%s)"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.h:54
 msgid "KiCad database library files"
-msgstr "Archivos de librería de base de datos de KiCad"
+msgstr "Archivos de biblioteca de base de datos de KiCad"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:640
 #, c-format
@@ -17384,7 +17387,7 @@ msgstr ""
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1776
 #, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "No se pudo encontrar '%s' en la librería importada."
+msgstr "No se pudo encontrar '%s' en la biblioteca importada."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.h:100
 msgid "Eagle XML schematic files"
@@ -17393,7 +17396,7 @@ msgstr "Archivos XML de esquema de Eagle"
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.h:105
 #, fuzzy
 msgid "Eagle XML library files"
-msgstr "Archivos XML de librería de Eagle ver. 6.x"
+msgstr "Archivos XML de biblioteca de Eagle ver. 6.x"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:152
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:302
@@ -17410,7 +17413,7 @@ msgstr "No se puede leer el archivo de datos '%s'."
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:478
 #, fuzzy, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "Error al cargar el símbolo %s desde la librería '%s'. (%s)"
+msgstr "Error al cargar el símbolo %s desde la biblioteca '%s'. (%s)"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:399
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:404
@@ -17418,7 +17421,7 @@ msgstr "Error al cargar el símbolo %s desde la librería '%s'. (%s)"
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:446
 #, fuzzy, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Error al crear la librería de símbolos '%s'."
+msgstr "Error al crear la biblioteca de símbolos '%s'."
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:537
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:542
@@ -17444,13 +17447,13 @@ msgstr ""
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:83
 #, fuzzy, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr "Error al cargar la huella %s desde la librería '%s'."
+msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:218
 #, fuzzy, c-format
 msgid "HTTP library settings file %s missing or invalid"
 msgstr ""
-"No se ha cargado la librería de base de datos: el archivo de configuración "
+"No se ha cargado la biblioteca de base de datos: el archivo de configuración "
 "%s falta o es inválido"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:227
@@ -17483,19 +17486,19 @@ msgstr ""
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.h:51
 #, fuzzy
 msgid "KiCad HTTP library files"
-msgstr "Archivos de librería de símbolos de kiCad"
+msgstr "Archivos de biblioteca de símbolos de kiCad"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:55
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:71
 #, c-format
 msgid "Library file '%s' not found."
-msgstr "No se ha encontrado el archivo de librería '%s'."
+msgstr "No se ha encontrado el archivo de biblioteca '%s'."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:511
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1896
 #, c-format
 msgid "library %s does not contain a symbol named %s"
-msgstr "la librería %s no contiene un símbolo denominado %s"
+msgstr "la biblioteca %s no contiene un símbolo denominado %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:101
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:309
@@ -17532,7 +17535,7 @@ msgstr "El símbolo %s contiene el carácter inválido '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:333
 msgid "Invalid library identifier"
-msgstr "Identificador de librería inválido"
+msgstr "Identificador de biblioteca inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:394
 msgid "Invalid parent symbol name"
@@ -17626,11 +17629,11 @@ msgstr "Nombre de pin de hoja vacío"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2806
 msgid "Invalid symbol library name"
-msgstr "Nombre de librería de símbolos inválido"
+msgstr "Nombre de biblioteca de símbolos inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2847
 msgid "Invalid symbol library ID"
-msgstr "ID de librería de símbolos inválido"
+msgstr "ID de biblioteca de símbolos inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:215
 #, c-format
@@ -17645,13 +17648,13 @@ msgstr ""
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2185
 #, c-format
 msgid "Symbol library '%s' already exists."
-msgstr "La librería de símbolos '%s' ya existe."
+msgstr "La biblioteca de símbolos '%s' ya existe."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1570
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2211
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "No puede eliminarse la librería de símbolos '%s'."
+msgstr "No puede eliminarse la biblioteca de símbolos '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:85
 msgid "Unexpected end of file."
@@ -17660,11 +17663,11 @@ msgstr "Fin de archivo inesperado."
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:182
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "Permisos insuficientes para leer la librería '%s'."
+msgstr "Permisos insuficientes para leer la biblioteca '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:191
 msgid "symbol document library file is empty"
-msgstr "el documento de librería de símbolos está vacío"
+msgstr "el documento de biblioteca de símbolos está vacío"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:562
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:597
@@ -17814,7 +17817,7 @@ msgstr "Valores diferentes para %s%d%s (%s) y %s%d%s (%s)"
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr ""
-"Fijando el identificador de librería del símbolo de esquema '%s %s' a '%s'."
+"Fijando el identificador de biblioteca del símbolo de esquema '%s %s' a '%s'."
 
 #: eeschema/sch_screen.cpp:930
 #, c-format
@@ -17823,7 +17826,7 @@ msgid ""
 "link library symbol."
 msgstr ""
 "El identificador de biblioteca de la referencia de símbolo de esquema '%s' "
-"es inválido. No se pudo vincular el símbolo de librería."
+"es inválido. No se pudo vincular el símbolo de biblioteca."
 
 #: eeschema/sch_screen.cpp:946
 #, c-format
@@ -17831,13 +17834,13 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"Librería de símbolos '%s' no encontrada y no hay una librería de reserva "
-"disponible. No se pudo vincular el símbolo de librería."
+"Librería de símbolos '%s' no encontrada y no hay una biblioteca de reserva "
+"disponible. No se pudo vincular el símbolo de biblioteca."
 
 #: eeschema/sch_screen.cpp:965
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "Error de I/O %s al resolver el símbolo de librería %s"
+msgstr "Error de I/O %s al resolver el símbolo de biblioteca %s"
 
 #: eeschema/sch_screen.cpp:985
 #, c-format
@@ -17848,7 +17851,7 @@ msgstr "Recurriendo a la caché para definir el símbolo '%s:%s' enlace '%s'."
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
-"No se ha encontrado el símbolo de librería para el símbolo de esquema '%s "
+"No se ha encontrado el símbolo de biblioteca para el símbolo de esquema '%s "
 "%s'."
 
 #: eeschema/sch_shape.cpp:437
@@ -17970,7 +17973,7 @@ msgstr "<Desconocido>"
 
 #: eeschema/sch_symbol.cpp:1917
 msgid "No library defined!"
-msgstr "¡No se ha definido una librería!"
+msgstr "¡No se ha definido una biblioteca!"
 
 #: eeschema/sch_symbol.cpp:1919
 #, c-format
@@ -18320,8 +18323,8 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"El esquema '%s' no ha tenido sus enlaces de librerías de símbolos "
-"reasignados a la tabla de librerías de símbolos. El proyecto al que "
+"El esquema '%s' no ha tenido sus enlaces de bibliotecas de símbolos "
+"reasignados a la tabla de bibliotecas de símbolos. El proyecto al que "
 "pertenece este esquema primero debe reasignarse antes de que pueda "
 "importarse al proyecto actual."
 
@@ -18365,7 +18368,7 @@ msgstr ""
 "anterior del archivo, resultando en datos de instancia de símbolo faltantes. "
 "Esto resultará en que todos los símbolos del esquema cargado usen o la "
 "configuración predeterminada de la instancia, o la configuración de la "
-"librería de símbolos. Cargar el proyecto que usa este archivo de esquema y "
+"biblioteca de símbolos. Cargar el proyecto que usa este archivo de esquema y "
 "guardar a la última versión resolverá este problema\n"
 "\n"
 "¿Desea continuar?"
@@ -18384,8 +18387,8 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Hay nombres de biblioteca en el esquema seleccionado que faltan en la tabla "
-"de librerías del proyecto actual. Esto puede resultar en referencias de "
-"librería de símbolos inválidas para el esquema cargado.\n"
+"de bibliotecas del proyecto actual. Esto puede resultar en referencias de "
+"biblioteca de símbolos inválidas para el esquema cargado.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -18399,7 +18402,7 @@ msgid ""
 msgstr ""
 "El archivo seleccionado fue creado como parte de un proyecto distinto. "
 "Enlazar el archivo a este proyecto puede resultar en referencias de "
-"librerías de símbolos faltantes o incorrectas.\n"
+"bibliotecas de símbolos faltantes o incorrectas.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -18411,9 +18414,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Hay nombres de librerías de símbolos en el esquema seleccionado que faltan "
-"en la tabla de librerías del proyecto del esquema seleccionado. Esto puede "
-"resultar en referencias de librerías de símbolos inválidas.\n"
+"Hay nombres de bibliotecas de símbolos en el esquema seleccionado que faltan "
+"en la tabla de bibliotecas del proyecto del esquema seleccionado. Esto puede "
+"resultar en referencias de bibliotecas de símbolos inválidas.\n"
 "\n"
 "¿Desea continuar?"
 
@@ -18425,9 +18428,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Existe un nombre de librería duplicado, que hace referencia a una librería "
-"diferente, en la tabla de librerías activa. Este conflicto no se puede "
-"resolver y puede resultar en referencias de librerías de símbolos "
+"Existe un nombre de biblioteca duplicado, que hace referencia a una "
+"biblioteca diferente, en la tabla de bibliotecas activa. Este conflicto no "
+"se puede resolver y puede resultar en referencias de bibliotecas de símbolos "
 "inválidas.\n"
 "\n"
 "¿Desea continuar?"
@@ -19067,7 +19070,7 @@ msgstr "No se encontró la biblioteca de modelos de simulación en '%s' o '%s'"
 #: eeschema/sim/sim_lib_mgr.cpp:316
 #, c-format
 msgid "Error loading simulation model library '%s': %s"
-msgstr "Error al cargar la librería de modelos de simulación '%s': %s"
+msgstr "Error al cargar la biblioteca de modelos de simulación '%s': %s"
 
 #: eeschema/sim/sim_lib_mgr.cpp:325
 #, c-format
@@ -19092,7 +19095,7 @@ msgid ""
 "'%s'"
 msgstr ""
 "Error al cargar el modelo de simulación: no se ha podido encontrar el modelo "
-"base '%s' en la librería '%s'"
+"base '%s' en la biblioteca '%s'"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:76
 #, c-format
@@ -19612,7 +19615,7 @@ msgstr ""
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
 msgid "Loading library %s..."
-msgstr "Cargando librería %s..."
+msgstr "Cargando biblioteca %s..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
 #, c-format
@@ -19621,7 +19624,7 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
-"Error al cargar la librería de símbolos %s.\n"
+"Error al cargar la biblioteca de símbolos %s.\n"
 "\n"
 "%s\n"
 
@@ -19632,7 +19635,7 @@ msgid ""
 "if saved in a symbol library"
 msgstr ""
 "<b>Advertencia: prefijo de referencia</b><br>la terminación de prefijo '%s' "
-"puede crear problemas si se guarda en una librería de símbolos"
+"puede crear problemas si se guarda en una biblioteca de símbolos"
 
 #: eeschema/symbol_checker.cpp:118
 #, c-format
@@ -19788,7 +19791,7 @@ msgstr "Comprobador de símbolos"
 #: eeschema/symbol_diff_frame.cpp:62
 #, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "Visor de librerías de símbolos de KiCad"
+msgstr "Visor de bibliotecas de símbolos de KiCad"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 msgid ""
@@ -19807,9 +19810,9 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"No se han podido cargar todas las librerías. Utilice el diálogo Administrar "
-"librerías de símbolos\n"
-"para corregir la ruta y añadir o eliminar la librerías."
+"No se han podido cargar todas las bibliotecas. Utilice el diálogo "
+"Administrar bibliotecas de símbolos\n"
+"para corregir la ruta y añadir o eliminar la bibliotecas."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:68
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
@@ -19827,7 +19830,7 @@ msgstr "Símbolo como SVG..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:86
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:102
 msgid "Library Editor"
-msgstr "Editor de librerías"
+msgstr "Editor de bibliotecas"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:116
 msgid "KiCad Symbol Editor"
@@ -19838,7 +19841,7 @@ msgstr "Editor de símbolos de KiCad"
 #: eeschema/symbol_library.cpp:517 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:274
 msgid "Loading Symbol Libraries"
-msgstr "Cargando librerías de símbolos"
+msgstr "Cargando bibliotecas de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:244
 msgid "Library changes are unsaved"
@@ -19846,7 +19849,7 @@ msgstr "Los cambios en la biblioteca no se han guardado"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:255
 msgid "Symbol library loading was cancelled by user."
-msgstr "La carga de librería de símbolos fue cancelada por el usuario."
+msgstr "La carga de biblioteca de símbolos fue cancelada por el usuario."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:803
 #, c-format
@@ -19879,7 +19882,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:393
 #, c-format
 msgid "Library '%s' already exists."
-msgstr "La librería '%s' ya existe."
+msgstr "La biblioteca '%s' ya existe."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:930
 #, c-format
@@ -19887,7 +19890,7 @@ msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"No se pudo crear el archivo de librería '%s'.\n"
+"No se pudo crear el archivo de biblioteca '%s'.\n"
 "Compruebe que tiene permisos de escritura e intente de nuevo."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:941
@@ -19899,7 +19902,7 @@ msgstr "No puede abrirse el archivo de biblioteca."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1072
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "Cargando la librería '%s'..."
+msgstr "Cargando la biblioteca '%s'..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1166
 #, c-format
@@ -19912,12 +19915,12 @@ msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"La configuración actual no incluye la librería de símbolos '%s'.\n"
-"Utilice 'Administrar librerías de símbolos' para editar la configuración."
+"La configuración actual no incluye la biblioteca de símbolos '%s'.\n"
+"Utilice 'Administrar bibliotecas de símbolos' para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1406
 msgid "Library not found in symbol library table."
-msgstr "No se ha encontrado la librería la tabla de librerías de símbolos."
+msgstr "No se ha encontrado la biblioteca la tabla de bibliotecas de símbolos."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1414
 #, c-format
@@ -19925,8 +19928,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"No se ha activado la librería '%s' en la configuración actual.\n"
-"Utilice 'Administrar librerías de símbolos' para editar la configuración."
+"No se ha activado la biblioteca '%s' en la configuración actual.\n"
+"Utilice 'Administrar bibliotecas de símbolos' para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1417
 msgid "Symbol library not enabled."
@@ -19935,12 +19938,12 @@ msgstr "No se activó la biblioteca de símbolos."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1722
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1774
 msgid "Error saving global library table."
-msgstr "Error al guardar la tabla global de librerías."
+msgstr "Error al guardar la tabla global de bibliotecas."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1723
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1775
 msgid "Error saving project library table."
-msgstr "Error al guardar la tabla de librerías del proyecto."
+msgstr "Error al guardar la tabla de bibliotecas del proyecto."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:65
 msgid "[from schematic]"
@@ -19967,7 +19970,7 @@ msgstr "No hay un esquema actualmente abierto."
 #: eeschema/tools/symbol_editor_control.cpp:310
 #, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "La librería de símbolos '%s' no es escribible."
+msgstr "La biblioteca de símbolos '%s' no es escribible."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:129
 #: eeschema/symbol_editor/symbol_editor.cpp:523
@@ -19995,7 +19998,7 @@ msgstr "El campo debe tener un nombre."
 #: eeschema/tools/symbol_editor_control.cpp:375
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "El símbolo '%s' ya existe en la librería '%s'."
+msgstr "El símbolo '%s' ya existe en la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:399
 #: eeschema/symbol_editor/symbol_editor.cpp:703
@@ -20019,19 +20022,19 @@ msgstr "Guardar símbolo como"
 #: eeschema/symbol_editor/symbol_editor.cpp:607
 #: pcbnew/footprint_libraries_utils.cpp:989
 msgid "Save in library:"
-msgstr "Guardar en la librería:"
+msgstr "Guardar en la biblioteca:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:686
 #: pcbnew/footprint_libraries_utils.cpp:1072
 #, fuzzy
 msgid "A library must be specified."
-msgstr "No se ha especificado una librería."
+msgstr "No se ha especificado una biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:713
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Los símbolos derivados deben guardarse en la misma librería que su símbolo "
+"Los símbolos derivados deben guardarse en la misma biblioteca que su símbolo "
 "padre."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:762
@@ -20046,7 +20049,7 @@ msgid ""
 "Do you want to remove it from the library?"
 msgstr ""
 "El símbolo '%s' ya sido modificado.\n"
-"¿Desea eliminarlo de la librería?"
+"¿Desea eliminarlo de la biblioteca?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:812
 #, c-format
@@ -20079,30 +20082,30 @@ msgstr "¿Revertir '%s' a la última versión guardada?"
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "No se ha encontrado el símbolo '%s' en la librería '%s'."
+msgstr "No se ha encontrado el símbolo '%s' en la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1065
 msgid "No library specified."
-msgstr "No se ha especificado una librería."
+msgstr "No se ha especificado una biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1084
 #, c-format
 msgid "Save Library '%s' As..."
-msgstr "Guardar librería '%s' como..."
+msgstr "Guardar biblioteca '%s' como..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1124
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "Fallo al guardar los cambios al archivo de librería de símbolos '%s'."
+msgstr "Fallo al guardar los cambios al archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1126
 msgid "Error Saving Library"
-msgstr "Error al guardar la librería"
+msgstr "Error al guardar la biblioteca"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1168
 #, c-format
 msgid "Symbol library file '%s' saved."
-msgstr "Se ha guardado al archivo de librería de símbolos '%s'."
+msgstr "Se ha guardado al archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1267
 msgid "Undefined!"
@@ -20142,18 +20145,18 @@ msgstr "No se ha podido encontrar un visor de PDF para '%s'."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #, c-format
 msgid "Cannot import symbol library '%s'."
-msgstr "No puede importarse la librería de símbolos '%s'."
+msgstr "No puede importarse la biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:117
 #, c-format
 msgid "Symbol library file '%s' is empty."
-msgstr "El archivo de librería de símbolos '%s' está vacío."
+msgstr "El archivo de biblioteca de símbolos '%s' está vacío."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:129
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "El símbolo '%s' ya existe en la librería '%s'."
+msgstr "El símbolo '%s' ya existe en la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
 msgid "Export Symbol"
@@ -20162,35 +20165,35 @@ msgstr "Exportar símbolo"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:186
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
-msgstr "Error al intentar cargar el archivo de librería de símbolos '%s'."
+msgstr "Error al intentar cargar el archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:209
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr "Permisos insuficientes para guardar la librería '%s'."
+msgstr "Permisos insuficientes para guardar la biblioteca '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:229
 #, c-format
 msgid "Error creating symbol library '%s'."
-msgstr "Error al crear la librería de símbolos '%s'."
+msgstr "Error al crear la biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:236
 #, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "El símbolo '%s' ha sido guardado en la librería '%s'."
+msgstr "El símbolo '%s' ha sido guardado en la biblioteca '%s'."
 
 #: eeschema/symbol_lib_table.cpp:278
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Apodo de librería '%s' duplicado en la línea %d de la tabla de librerías de "
-"símbolos"
+"Apodo de biblioteca '%s' duplicado en la línea %d de la tabla de bibliotecas "
+"de símbolos"
 
 #: eeschema/symbol_library.cpp:598 eeschema/symbol_tree_model_adapter.cpp:216
 #, c-format
 msgid "Error loading symbol library '%s'."
-msgstr "Error al cargar la librería de símbolos '%s'."
+msgstr "Error al cargar la biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_library_manager.cpp:84
 #: eeschema/symbol_tree_model_adapter.cpp:109
@@ -20202,7 +20205,8 @@ msgstr "Error al cargar los símbolos:"
 #, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
 msgstr ""
-"No se ha encontrado la librería '%s' en la tabla de librerías de símbolos."
+"No se ha encontrado la biblioteca '%s' en la tabla de bibliotecas de "
+"símbolos."
 
 #: eeschema/symbol_library_manager.cpp:413
 msgid "Symbol not found."
@@ -20211,31 +20215,31 @@ msgstr "No se ha encontrado el símbolo."
 #: eeschema/symbol_library_manager.cpp:621
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
-msgstr "No se puede cargar el símbolo '%s' desde la librería '%s'."
+msgstr "No se puede cargar el símbolo '%s' desde la biblioteca '%s'."
 
 #: eeschema/symbol_library_manager.cpp:780
 #, c-format
 msgid "Cannot enumerate library '%s'."
-msgstr "No se puede enumerar la librería '%s'."
+msgstr "No se puede enumerar la biblioteca '%s'."
 
 #: eeschema/symbol_library_manager.cpp:842
 #: eeschema/symbol_library_manager.cpp:847
 #, fuzzy, c-format
 msgid "Error updating library buffer: %s"
 msgstr ""
-"Error al guardar la tabla global de librerías:\n"
+"Error al guardar la tabla global de bibliotecas:\n"
 "\n"
 "%s"
 
 #: eeschema/symbol_library_manager.cpp:852
 #, fuzzy
 msgid "Error updating library buffer."
-msgstr "Error al guardar la tabla global de librerías."
+msgstr "Error al guardar la tabla global de bibliotecas."
 
 #: eeschema/symbol_library_manager.cpp:992
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
-msgstr "Error al guardar el símbolo %s a la librería '%s'."
+msgstr "Error al guardar el símbolo %s a la biblioteca '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:273
 msgid "(failed to load)"
@@ -20244,12 +20248,12 @@ msgstr "(fallo al cargarse)"
 #: eeschema/symbol_viewer_frame.cpp:110
 #, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Explorador de librerías de símbolos"
+msgstr "Explorador de bibliotecas de símbolos"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021
 msgid "[no library selected]"
-msgstr "[librería no seleccionada]"
+msgstr "[biblioteca no seleccionada]"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -20469,11 +20473,11 @@ msgstr "Seleccionar conexión completa"
 
 #: eeschema/tools/ee_actions.cpp:161
 msgid "Save Library As..."
-msgstr "Guardar librería como..."
+msgstr "Guardar biblioteca como..."
 
 #: eeschema/tools/ee_actions.cpp:162
 msgid "Save the current library to a new file."
-msgstr "Guardar la librería actual en un nuevo archivo."
+msgstr "Guardar la biblioteca actual en un nuevo archivo."
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "New Symbol..."
@@ -20524,11 +20528,11 @@ msgstr "Guardar copia como..."
 #: eeschema/tools/ee_actions.cpp:204
 #, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "Guardar el símbolo actual a una librería distinta."
+msgstr "Guardar el símbolo actual a una biblioteca distinta."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
-msgstr "Eliminar símbolo seleccionado de su librería"
+msgstr "Eliminar símbolo seleccionado de su biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:229
 msgid "Paste Symbol"
@@ -20540,7 +20544,7 @@ msgstr "Importar símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Import a symbol to the current library"
-msgstr "Importar un símbolo a la librería activa"
+msgstr "Importar un símbolo a la biblioteca activa"
 
 #: eeschema/tools/ee_actions.cpp:242
 msgid "Export..."
@@ -20548,7 +20552,7 @@ msgstr "Exportar..."
 
 #: eeschema/tools/ee_actions.cpp:243
 msgid "Export a symbol to a new library file"
-msgstr "Exportar un símbolo a una nueva librería"
+msgstr "Exportar un símbolo a una nueva biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:249
 msgid "Update Symbol Fields..."
@@ -20965,19 +20969,19 @@ msgstr "Cambiar símbolos..."
 
 #: eeschema/tools/ee_actions.cpp:690
 msgid "Assign different symbols from the library"
-msgstr "Asignar diferentes símbolos desde la librería"
+msgstr "Asignar diferentes símbolos desde la biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:696
 msgid "Update Symbols from Library..."
-msgstr "Actualizar símbolos desde la librería..."
+msgstr "Actualizar símbolos desde la biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:697
 msgid "Update symbols to include any changes from the library"
-msgstr "Actualizar símbolos para incluir cualquier cambio desde la librería"
+msgstr "Actualizar símbolos para incluir cualquier cambio desde la biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Assign a different symbol from the library"
-msgstr "Asignar una símbolo diferente desde la librería"
+msgstr "Asignar una símbolo diferente desde la biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:710
 msgid "Update Symbol..."
@@ -20985,7 +20989,7 @@ msgstr "Actualizar símbolo..."
 
 #: eeschema/tools/ee_actions.cpp:711
 msgid "Update symbol to include any changes from the library"
-msgstr "Actualizar símbolos para incluir cualquier cambio desde la librería"
+msgstr "Actualizar símbolos para incluir cualquier cambio desde la biblioteca"
 
 # Pendiente
 #: eeschema/tools/ee_actions.cpp:717 pcbnew/tools/pcb_actions.cpp:1121
@@ -21269,7 +21273,7 @@ msgstr "Mostrar modelos 3D con atributo \"Virtual\""
 
 #: eeschema/tools/ee_actions.cpp:962
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "Abrir el símbolo de librería en el Editor de símbolos"
+msgstr "Abrir el símbolo de biblioteca en el Editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:968
 msgid "Edit Symbol Fields..."
@@ -21281,11 +21285,11 @@ msgstr "Editar en masa los campos de todos los símbolos en el esquema"
 
 #: eeschema/tools/ee_actions.cpp:975
 msgid "Edit Symbol Library Links..."
-msgstr "Editar referencias de librerías de símbolos..."
+msgstr "Editar referencias de bibliotecas de símbolos..."
 
 #: eeschema/tools/ee_actions.cpp:976
 msgid "Edit links between schematic and library symbols"
-msgstr "Editar enlaces entre símbolos de esquema y de librería"
+msgstr "Editar enlaces entre símbolos de esquema y de biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:982
 msgid "Assign Footprints..."
@@ -21342,15 +21346,15 @@ msgstr "Buscar símbolos antiguos en el proyecto y renombrarlos/recuperarlos"
 
 #: eeschema/tools/ee_actions.cpp:1023
 msgid "Remap Legacy Library Symbols..."
-msgstr "Reasignar símbolos de librería de legado..."
+msgstr "Reasignar símbolos de biblioteca de legado..."
 
 #: eeschema/tools/ee_actions.cpp:1024
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Reasignar referencias de símbolos de librerías en esquemas de legado a la "
-"tabla de librerías de símbolos"
+"Reasignar referencias de símbolos de bibliotecas en esquemas de legado a la "
+"tabla de bibliotecas de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:1030
 msgid "Export Drawing to Clipboard"
@@ -21398,27 +21402,27 @@ msgstr "Generar una lista de materiales para el esquema actual"
 
 #: eeschema/tools/ee_actions.cpp:1065
 msgid "Export Symbols to Library..."
-msgstr "Exportar símbolos a librería..."
+msgstr "Exportar símbolos a biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:1066
 msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Añadir símbolos usadas en el esquema a una librería de símbolos existente\n"
-"(no elimina otros símbolos de esta librería)"
+"Añadir símbolos usadas en el esquema a una biblioteca de símbolos existente\n"
+"(no elimina otros símbolos de esta biblioteca)"
 
 #: eeschema/tools/ee_actions.cpp:1073
 msgid "Export Symbols to New Library..."
-msgstr "Exportar símbolos a nueva librería..."
+msgstr "Exportar símbolos a nueva biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:1074
 msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Crear una nueva librería de símbolos usando los símbolos en el esquema\n"
-"(si la librería ya existe, será remplazada)"
+"Crear una nueva biblioteca de símbolos usando los símbolos en el esquema\n"
+"(si la biblioteca ya existe, será remplazada)"
 
 #: eeschema/tools/ee_actions.cpp:1081
 msgid "Select on PCB"
@@ -21826,7 +21830,7 @@ msgstr ""
 #: eeschema/tools/ee_inspection_tool.cpp:279
 #, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "Editor de librerías."
+msgstr "Editor de bibliotecas."
 
 #: eeschema/tools/ee_inspection_tool.cpp:281
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
@@ -21839,7 +21843,7 @@ msgstr "Librería:"
 #: pcbnew/tools/board_inspection_tool.cpp:1488
 #, fuzzy
 msgid "Library item: "
-msgstr "Flitro de librerías:"
+msgstr "Flitro de bibliotecas: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1506
@@ -21851,7 +21855,7 @@ msgstr "La biblioteca '%s' no está habilitada en la configuración actual."
 #: eeschema/tools/ee_inspection_tool.cpp:300
 #, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "Gestionar librerías de símbolos..."
+msgstr "Gestionar bibliotecas de símbolos..."
 
 #: eeschema/tools/ee_inspection_tool.cpp:298
 #: pcbnew/tools/board_inspection_tool.cpp:1514
@@ -22089,17 +22093,17 @@ msgstr "¿Revertir '%s' (y todas sus sub-hojas) a la última versión guardada?"
 #, fuzzy
 msgid "Include power symbols in schematic to the library?"
 msgstr ""
-"¿Actualizar los símbolos en el esquema para referirse a la nueva librería?"
+"¿Actualizar los símbolos en el esquema para referirse a la nueva biblioteca?"
 
 #: eeschema/tools/sch_editor_control.cpp:405
 #, c-format
 msgid "Could not add library '%s'."
-msgstr "No se pudo añadir la librería '%s'."
+msgstr "No se pudo añadir la biblioteca '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:418
 msgid "Update symbols in schematic to refer to new library?"
 msgstr ""
-"¿Actualizar los símbolos en el esquema para referirse a la nueva librería?"
+"¿Actualizar los símbolos en el esquema para referirse a la nueva biblioteca?"
 
 #: eeschema/tools/sch_editor_control.cpp:784
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -22128,7 +22132,7 @@ msgstr ""
 #: eeschema/tools/sch_editor_control.cpp:2073
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
-"Los símbolos con enlaces de librería de símbolos inválidos no pueden ser "
+"Los símbolos con enlaces de biblioteca de símbolos inválidos no pueden ser "
 "editados."
 
 #: eeschema/tools/sch_editor_control.cpp:2442
@@ -22227,7 +22231,7 @@ msgstr "Archivo de lista de redes de SPICE"
 
 #: eeschema/tools/symbol_editor_control.cpp:181
 msgid "No symbol library selected."
-msgstr "No se ha seleccionado ninguna librería de símbolos."
+msgstr "No se ha seleccionado ninguna biblioteca de símbolos."
 
 #: eeschema/tools/symbol_editor_control.cpp:301
 #: eeschema/widgets/panel_symbol_chooser.cpp:604
@@ -22333,19 +22337,19 @@ msgstr "Cambiar propiedad"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
-msgstr "No actualizar las tablas de librerías"
+msgstr "No actualizar las tablas de bibliotecas"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:35
 msgid "Update existing library table entry"
-msgstr "Actualizar una entrada existente de la tabla de librerías"
+msgstr "Actualizar una entrada existente de la tabla de bibliotecas"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:37
 msgid "Add new global library table entry"
-msgstr "Agregar entrada a la tabla global de librerías"
+msgstr "Agregar entrada a la tabla global de bibliotecas"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:39
 msgid "Add new project library table entry"
-msgstr "Agregar una entrada a la tabla de librerías del proyecto"
+msgstr "Agregar una entrada a la tabla de bibliotecas del proyecto"
 
 #: eeschema/widgets/tuner_slider.cpp:58 eeschema/widgets/tuner_slider.cpp:114
 #, fuzzy, c-format
@@ -23661,7 +23665,7 @@ msgstr ""
 #: kicad/cli/command_fp.h:31
 #, fuzzy
 msgid "Footprint and Footprint Libraries"
-msgstr "Cargando librerías de huellas"
+msgstr "Cargando bibliotecas de huellas"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 #, fuzzy
@@ -23671,7 +23675,7 @@ msgstr "Exportar unidades:"
 #: kicad/cli/command_fp_export_svg.cpp:37
 #, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr "Actualizar la huella desde la librería"
+msgstr "Actualizar la huella desde la biblioteca"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #, fuzzy
@@ -24263,12 +24267,12 @@ msgstr ""
 #: kicad/cli/command_sym.h:31
 #, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Cargando librerías de símbolos"
+msgstr "Cargando bibliotecas de símbolos"
 
 #: kicad/cli/command_sym_export_svg.cpp:41
 #, fuzzy
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Exportar un símbolo a una nueva librería"
+msgstr "Exportar un símbolo a una nueva biblioteca"
 
 #: kicad/cli/command_sym_export_svg.cpp:45
 #, fuzzy
@@ -24346,7 +24350,7 @@ msgstr "Editar el esquema del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Editar las librerías de símbolos de esquema globales y/o del proyecto"
+msgstr "Editar las bibliotecas de símbolos de esquema globales y/o del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
@@ -24354,7 +24358,7 @@ msgstr "Editar el diseño de placa del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "Editar las librerías de huellas de placas globales y/o del proyecto"
+msgstr "Editar las bibliotecas de huellas de placas globales y/o del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
@@ -24956,7 +24960,7 @@ msgstr "Buscar actualizaciones de paquetes al inicio"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:40
 msgid "Library package handling"
-msgstr "Manejo de paquetes de librerías"
+msgstr "Manejo de paquetes de bibliotecas"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:53
 msgid "Automatically add installed libraries to global lib table"
@@ -31086,7 +31090,7 @@ msgstr "Resolución de restricciones..."
 #: pcbnew/dialogs/dialog_drc.cpp:639
 #, fuzzy
 msgid "Run Inspect > Diff Footprint with Library"
-msgstr "Cambiar huellas con ID de librería:"
+msgstr "Cambiar huellas con ID de biblioteca:"
 
 #: pcbnew/dialogs/dialog_drc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:655
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -31196,7 +31200,7 @@ msgstr "Cambiar huellas que coincidan con el valor:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints with library id:"
-msgstr "Cambiar huellas con ID de librería:"
+msgstr "Cambiar huellas con ID de biblioteca:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Update text layers and visibilities"
@@ -31224,7 +31228,7 @@ msgstr ""
 "Actualizar/Reiniciar cadenas: hay dos casos que las descripciones tienen que "
 "cubrir: las modificaciones que un usuario hizo a una huella en la placa y "
 "quiere eliminar, o los cambios que un usuario hizo a la huella de la "
-"librería y quiere propagarlos a la placa."
+"biblioteca y quiere propagarlos a la placa."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:354
 #, c-format
@@ -31238,7 +31242,7 @@ msgstr "Huella %s cambiada de '%s' a '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
 msgid "*** library footprint not found ***"
-msgstr "*** no se ha encontrado la huella de librería ***"
+msgstr "*** no se ha encontrado la huella de biblioteca ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:390
 msgid ": (no changes)"
@@ -31266,16 +31270,16 @@ msgstr "Actualizar huellas que coincidan con el valor:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:45
 msgid "Update footprints with library id:"
-msgstr "Actualizar huellas con ID de librería:"
+msgstr "Actualizar huellas con ID de biblioteca:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:74
 msgid "New footprint library id:"
-msgstr "Nueva ID de librería de huella:"
+msgstr "Nueva ID de biblioteca de huella:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Remove text items which are not in library footprint"
 msgstr ""
-"Eliminar los elementos de texto que no se encuentran en la librería de "
+"Eliminar los elementos de texto que no se encuentran en la biblioteca de "
 "huellas"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:102
@@ -31296,7 +31300,7 @@ msgstr "Actualizar/Reiniciar modelos 3D"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:87
 msgid "Update Footprints from Library"
-msgstr "Actualizar huellas desde la librería"
+msgstr "Actualizar huellas desde la biblioteca"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:71
 #, fuzzy
@@ -31487,7 +31491,7 @@ msgstr "Archivos STEP"
 #: pcbnew/dialogs/dialog_export_step.cpp:342
 #, fuzzy
 msgid "Binary GTLF files"
-msgstr "Archivos de librería:"
+msgstr "Archivos de biblioteca:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy
@@ -32133,7 +32137,7 @@ msgstr "No generará las infracciones de DRC de \"patio faltante\""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:230
 msgid "Update Footprint from Library..."
-msgstr "Actualizar huella desde la librería..."
+msgstr "Actualizar huella desde la biblioteca..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:233
 #: pcbnew/tools/pcb_actions.cpp:810
@@ -32143,7 +32147,7 @@ msgstr "Cambiar huella..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:242
 #: pcbnew/tools/pcb_actions.cpp:430
 msgid "Edit Library Footprint..."
-msgstr "Editar huella de la librería..."
+msgstr "Editar huella de la biblioteca..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:235
@@ -33195,7 +33199,7 @@ msgstr "Línea de dimensión"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "Filter items by parent footprint library id:"
-msgstr "Filtrar elementos por id de librería de huella padre:"
+msgstr "Filtrar elementos por id de biblioteca de huella padre:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:112
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -33244,21 +33248,21 @@ msgstr "huella"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
 #, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "Error al escribir una tabla de librerías de huellas vacía '%s'."
+msgstr "Error al escribir una tabla de bibliotecas de huellas vacía '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:74
 msgid "Please select a footprint library table file."
-msgstr "Seleccione un archivo de tabla de librería de huellas."
+msgstr "Seleccione un archivo de tabla de biblioteca de huellas."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:96
 #, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr "'%s' no es una tabla de librerías de huellas válida."
+msgstr "'%s' no es una tabla de bibliotecas de huellas válida."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:107
 #, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "No se puede crear la ruta '%s' de la tabla librerías."
+msgstr "No se puede crear la ruta '%s' de la tabla bibliotecas."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:115
 #, c-format
@@ -33268,14 +33272,14 @@ msgid ""
 "to:\n"
 "%s."
 msgstr ""
-"No se puede copiar la tabla de librerías de huellas de:\n"
+"No se puede copiar la tabla de bibliotecas de huellas de:\n"
 "%s\n"
 "a:\n"
 "%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:134
 msgid "Error loading footprint library table."
-msgstr "Error al cargar la tabla de librerías de huellas."
+msgstr "Error al cargar la tabla de bibliotecas de huellas."
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
 msgid "Modified group"
@@ -35885,7 +35889,7 @@ msgstr "Carácter ilegal '%c' en el apodo: '%s'."
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
-"Seleccione una o más filas de la tabla que contengan librerías en formato "
+"Seleccione una o más filas de la tabla que contengan bibliotecas en formato "
 "heredado (*.lib) para guardarlas en el formato actual (* .kicad_sym)."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:819
@@ -35899,7 +35903,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
-"¿Guardar %d librerías de formato heredado en el formato actual de KiCad (*."
+"¿Guardar %d bibliotecas de formato heredado en el formato actual de KiCad (*."
 "kicad_sym) y reemplazar las entradas heredadas en la tabla?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:855
@@ -35911,12 +35915,12 @@ msgstr "El archivo %s ya existe. ¿Desea sobreescribirlo?"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:885
 #, fuzzy, c-format
 msgid "Failed to save footprint library file '%s'."
-msgstr "No se ha podido guardar el archivo de librería de símbolos '%s'."
+msgstr "No se ha podido guardar el archivo de biblioteca de símbolos '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:960
 #, c-format
 msgid "Select %s Library"
-msgstr "Seleccionar librería %s"
+msgstr "Seleccionar biblioteca %s"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1015
 msgid "Warning: Duplicate Nicknames"
@@ -35925,7 +35929,7 @@ msgstr "Advertencia: Sobrenombres duplicados"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
 #, fuzzy
 msgid "LIbrary Format"
-msgstr "Formato de librería"
+msgstr "Formato de biblioteca"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:397
 msgid "No filename entered"
@@ -38944,7 +38948,7 @@ msgstr "Comprobando las huellas de la placa con las de la biblioteca..."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:746
 #, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "La configuración actual no incluye la librería '%s'."
+msgstr "La configuración actual no incluye la biblioteca '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:760
 #, c-format
@@ -39432,12 +39436,12 @@ msgstr "Se agotó la memoria al cargar la placa '%s'"
 #: pcbnew/files.cpp:819
 #, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "Error al guardar la huella %s a la librería específica del proyecto."
+msgstr "Error al guardar la huella %s a la biblioteca específica del proyecto."
 
 #: pcbnew/files.cpp:850
 msgid "Error saving project specific footprint library table."
 msgstr ""
-"Error al guardar la tabla de librerías de huellas específicas del proyecto."
+"Error al guardar la tabla de bibliotecas de huellas específicas del proyecto."
 
 #: pcbnew/files.cpp:942 pcbnew/files.cpp:1081 pcbnew/files.cpp:1249
 #: pcbnew/footprint_libraries_utils.cpp:268
@@ -39714,7 +39718,7 @@ msgstr "[huella no cargada]"
 
 #: pcbnew/footprint_edit_frame.cpp:1034
 msgid "Updating Footprint Libraries"
-msgstr "Actualizando librerías de huellas"
+msgstr "Actualizando bibliotecas de huellas"
 
 #: pcbnew/footprint_edit_frame.cpp:1357
 msgid "No footprint selected."
@@ -39730,12 +39734,12 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"La configuración actual no incluye una librería de nombre '%s'.\n"
-"Utilice administrar librerías de huellas para editar la configuración."
+"La configuración actual no incluye una biblioteca de nombre '%s'.\n"
+"Utilice administrar bibliotecas de huellas para editar la configuración."
 
 #: pcbnew/footprint_editor_utils.cpp:329
 msgid "Library not found in footprint library table."
-msgstr "No se encontró la librería en la tabla de librerías de huellas."
+msgstr "No se encontró la biblioteca en la tabla de bibliotecas de huellas."
 
 #: pcbnew/footprint_editor_utils.cpp:338
 #, c-format
@@ -39743,8 +39747,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"No se ha habilitado la librería '%s' en la configuración actual.\n"
-"Utilice administrar librerías de huellas para editar la configuración."
+"No se ha habilitado la biblioteca '%s' en la configuración actual.\n"
+"Utilice administrar bibliotecas de huellas para editar la configuración."
 
 #: pcbnew/footprint_editor_utils.cpp:341
 msgid "Footprint library not enabled."
@@ -39752,7 +39756,7 @@ msgstr "Librería de huellas no habilitada."
 
 #: pcbnew/footprint_info_impl.cpp:124
 msgid "Fetching footprint libraries..."
-msgstr "Recolectando librerías de huellas..."
+msgstr "Recolectando bibliotecas de huellas..."
 
 #: pcbnew/footprint_info_impl.cpp:155
 msgid "Loading footprints..."
@@ -39765,10 +39769,10 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"No se permite escribir/modificar librerías de legado (archivos .mod)\n"
-"Por favor, guarde la librería actual en el nuevo formato .pretty\n"
-"y actualice su tabla de librerías de huellas\n"
-"para guardar la huella (un archivo .kicad_mod) en la carpeta de librería ."
+"No se permite escribir/modificar bibliotecas de legado (archivos .mod)\n"
+"Por favor, guarde la biblioteca actual en el nuevo formato .pretty\n"
+"y actualice su tabla de bibliotecas de huellas\n"
+"para guardar la huella (un archivo .kicad_mod) en la carpeta de biblioteca ."
 "pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:69
@@ -39778,9 +39782,9 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"No se permite modificar librerías antiguas (archivos .mod)\n"
-"Por favor, guarde la librería activa en el nuevo formato .pretty\n"
-"y actualice su tabla de librerías de huellas\n"
+"No se permite modificar bibliotecas antiguas (archivos .mod)\n"
+"Por favor, guarde la biblioteca activa en el nuevo formato .pretty\n"
+"y actualice su tabla de bibliotecas de huellas\n"
 "antes de eliminar la huella"
 
 #: pcbnew/footprint_libraries_utils.cpp:122
@@ -39808,12 +39812,12 @@ msgstr "Huella exportada al archivo '%s'."
 #: pcbnew/footprint_libraries_utils.cpp:368
 #, c-format
 msgid "Library %s is read only."
-msgstr "La librería '%s' es de solo lectura."
+msgstr "La biblioteca '%s' es de solo lectura."
 
 #: pcbnew/footprint_libraries_utils.cpp:374
 #, c-format
 msgid "Library %s already exists."
-msgstr "La librería %s ya existe."
+msgstr "La biblioteca %s ya existe."
 
 #: pcbnew/footprint_libraries_utils.cpp:542
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:960
@@ -39821,17 +39825,17 @@ msgstr "La librería %s ya existe."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2727
 #, c-format
 msgid "Library '%s' is read only."
-msgstr "La librería '%s' es de solo lectura."
+msgstr "La biblioteca '%s' es de solo lectura."
 
 #: pcbnew/footprint_libraries_utils.cpp:548
 #, c-format
 msgid "Delete footprint '%s' from library '%s'?"
-msgstr "¿Eliminar la huella '%s' de la librería '%s'?"
+msgstr "¿Eliminar la huella '%s' de la biblioteca '%s'?"
 
 #: pcbnew/footprint_libraries_utils.cpp:565
 #, c-format
 msgid "Footprint '%s' deleted from library '%s'"
-msgstr "Huella '%s' eliminada de la librería '%s'"
+msgstr "Huella '%s' eliminada de la biblioteca '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:580
 msgid "No footprints to export!"
@@ -39845,7 +39849,7 @@ msgstr "¿Actualizar las huellas en la placa para referirse a %s?"
 #: pcbnew/footprint_libraries_utils.cpp:649
 msgid "Update footprints on board to refer to new library?"
 msgstr ""
-"¿Actualizar las huellas en la placa para referirse a la nueva librería?"
+"¿Actualizar las huellas en la placa para referirse a la nueva biblioteca?"
 
 #: pcbnew/footprint_libraries_utils.cpp:840
 #: pcbnew/footprint_viewer_frame.cpp:744
@@ -39901,7 +39905,7 @@ msgstr "El nombre de huella '%s' ya está usado en la biblioteca '%s'."
 #: pcbnew/footprint_viewer_frame.cpp:116
 #, fuzzy
 msgid "KiCad Footprint Library Browser"
-msgstr "Explorador de librerías de huellas"
+msgstr "Explorador de bibliotecas de huellas"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -39961,7 +39965,7 @@ msgstr "Documentación"
 #: pcbnew/generate_footprint_info.cpp:81
 #, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr "Error al cargar la huella %s desde la librería '%s'."
+msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:253
 #: pcbnew/generators/pcb_tuning_pattern.cpp:258
@@ -40232,7 +40236,7 @@ msgstr "Huella '%s' guardada."
 #: pcbnew/load_select_footprint.cpp:376
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Se ha guardado la librería de huellas '%s' como '%s'."
+msgstr "Se ha guardado la biblioteca de huellas '%s' como '%s'."
 
 #: pcbnew/menubar_footprint_editor.cpp:67
 #: pcbnew/menubar_footprint_editor.cpp:76
@@ -40353,28 +40357,28 @@ msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid "Footprints to Library..."
-msgstr "Huellas a librería..."
+msgstr "Huellas a biblioteca..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Añadir huellas usadas en la placa a una librería existente\n"
-"(no elimina otras huellas de la librería)"
+"Añadir huellas usadas en la placa a una biblioteca existente\n"
+"(no elimina otras huellas de la biblioteca)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid "Footprints to New Library..."
-msgstr "Huellas a nueva librería..."
+msgstr "Huellas a nueva biblioteca..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Crear una nueva librería de huellas que contenga todas las huellas usadas en "
-"la placa\n"
-"(si la librería ya existe, será remplazada)"
+"Crear una nueva biblioteca de huellas que contenga todas las huellas usadas "
+"en la placa\n"
+"(si la biblioteca ya existe, será remplazada)"
 
 #: pcbnew/menubar_pcb_editor.cpp:164
 msgid "Fabrication Outputs"
@@ -40900,8 +40904,8 @@ msgstr "%s ID de huella '%s' es inválido."
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"No se ha encontrado %s huella '%s' en ninguna librería de la tabla de "
-"librerías de huellas."
+"No se ha encontrado %s huella '%s' en ninguna biblioteca de la tabla de "
+"bibliotecas de huellas."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, c-format
@@ -41227,7 +41231,7 @@ msgstr "Informe de restricciones"
 #: pcbnew/pcb_edit_frame.cpp:2522 pcbnew/tools/pcb_actions.cpp:1886
 #, fuzzy
 msgid "Diff Footprint with Library"
-msgstr "Huellas a librería..."
+msgstr "Huellas a biblioteca..."
 
 #: pcbnew/pcb_field.cpp:93
 #, fuzzy
@@ -41516,9 +41520,9 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"Ha ocurrido un error al intentar cargar la tabla global de librerías de "
+"Ha ocurrido un error al intentar cargar la tabla global de bibliotecas de "
 "huellas.\n"
-"Por favor, edite la tabla global de librerías de huellas en el menú "
+"Por favor, edite la tabla global de bibliotecas de huellas en el menú "
 "Preferencias."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:98 pcbnew/pcbnew_jobs_handler.cpp:202
@@ -41644,11 +41648,11 @@ msgstr ""
 msgid "User name for <b>login</b> to some special library server."
 msgstr ""
 "Nombre de usuario para el <b>login</b> en algún servidor especial de "
-"librerías."
+"bibliotecas."
 
 #: pcbnew/plugin.cpp:281
 msgid "Password for <b>login</b> to some special library server."
-msgstr "Clave para el <b>login</b> en algún servidor especial de librerías."
+msgstr "Clave para el <b>login</b> en algún servidor especial de bibliotecas."
 
 #: pcbnew/plugin.cpp:288
 msgid ""
@@ -41680,7 +41684,7 @@ msgstr "Sin huellas en la biblioteca"
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
 #, fuzzy, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "No se ha encontrado la librería de huellas."
+msgstr "No se ha encontrado la biblioteca de huellas."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.h:44
 msgid "Altium Designer PCB files"
@@ -42071,7 +42075,7 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"El área de CADSTAR '%s' en el componente de librería '%s' no tiene un "
+"El área de CADSTAR '%s' en el componente de biblioteca '%s' no tiene un "
 "equivalente de KiCad. El área no es ni una vía ni una área restringida de "
 "enrutado. El área no ha sido importada."
 
@@ -42177,14 +42181,14 @@ msgstr ""
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
-"No se puede encontrar el componente '%s' en la librería (ID de definición de "
-"símbolo: '%s')"
+"No se puede encontrar el componente '%s' en la biblioteca (ID de definición "
+"de símbolo: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1848
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
-"No se puede encontrar el símbolo de documentación en la librería (ID de "
+"No se puede encontrar el símbolo de documentación en la biblioteca (ID de "
 "definición de símbolo: '%s')"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1917
@@ -42438,12 +42442,12 @@ msgstr "No se puede leer el archivo '%s'"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1134
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
-msgstr "<paquete> '%s' duplicado en <librería> '%s'"
+msgstr "<paquete> '%s' duplicado en <biblioteca> '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1211
 #, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "No se encuentra el paquete '%s' en la librería '%s'."
+msgstr "No se encuentra el paquete '%s' en la biblioteca '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1444
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2263
@@ -42496,7 +42500,7 @@ msgstr "Archivos XML de PCB de Eagle ver. 6.x"
 
 #: pcbnew/plugins/eagle/eagle_plugin.h:141
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Archivos XML de librería de Eagle ver. 6.x"
+msgstr "Archivos XML de biblioteca de Eagle ver. 6.x"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:745
 #, fuzzy, c-format
@@ -42526,13 +42530,13 @@ msgstr "No se ha podido encontrar el índice de pad '%d' en la huella '%s'."
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
 #, fuzzy, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr "Error al cargar la huella %s desde la librería '%s'."
+msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
 #, fuzzy, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
-msgstr "Error al cargar la huella %s desde la librería '%s'."
+msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:334
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:384
@@ -42707,13 +42711,13 @@ msgstr "No se puede convertir '%s' a un entero."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:167
 #, c-format
 msgid "Footprint library '%s' not found."
-msgstr "No se ha encontrado la librería de huellas '%s'."
+msgstr "No se ha encontrado la biblioteca de huellas '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:228
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "La librería '%s' no tiene la huella '%s'."
+msgstr "La biblioteca '%s' no tiene la huella '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:854
@@ -42738,19 +42742,19 @@ msgstr "Permisos insuficientes para eliminar la carpeta '%s'."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2779
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "La carpeta de librerías '%s' tiene subcarpetas inesperadas."
+msgstr "La carpeta de bibliotecas '%s' tiene subcarpetas inesperadas."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1006
 #, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "Archivo inesperado '%s' encontrado en la librería '%s'."
+msgstr "Archivo inesperado '%s' encontrado en la biblioteca '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1025
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2816
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3260
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "No se puede eliminar la librería de huellas '%s'."
+msgstr "No se puede eliminar la biblioteca de huellas '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.h:56
 #, fuzzy
@@ -42760,7 +42764,7 @@ msgstr "Añadir filtro de huellas"
 #: pcbnew/plugins/geda/gpcb_plugin.h:61
 #, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Archivos de librería de huellas de Altium"
+msgstr "Archivos de biblioteca de huellas de Altium"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:311
 #, fuzzy
@@ -42985,12 +42989,12 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "No se puede crear la librería de huellas '%s'."
+msgstr "No se puede crear la biblioteca de huellas '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:100
 #, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "La librería de huellas '%s' es de solo lectura."
+msgstr "La biblioteca de huellas '%s' es de solo lectura."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:141
 #, c-format
@@ -43172,7 +43176,7 @@ msgstr "Archivos ASCII de PCB de P-Cad 200x"
 
 #: pcbnew/plugins/pcad/pcad_via.cpp:92
 msgid "Unable to find library section."
-msgstr "No se puede encontrar la sección de librería."
+msgstr "No se puede encontrar la sección de biblioteca."
 
 #: pcbnew/plugins/pcad/pcad_via.cpp:107
 #, c-format
@@ -43181,7 +43185,7 @@ msgstr "No se puede encontrar viaStyleDef %s."
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
-msgstr "Error al cargar las librerías de huellas del proyecto."
+msgstr "Error al cargar las bibliotecas de huellas del proyecto."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:82
 msgid "Exception on python action plugin code"
@@ -44253,13 +44257,13 @@ msgstr "Seleccione un elemento para un informe de restricciones de resolución."
 #: pcbnew/tools/board_inspection_tool.cpp:1485
 #, fuzzy
 msgid "Board vs library diff for:"
-msgstr "Carpeta local de librerías:"
+msgstr "Carpeta local de bibliotecas:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1508
 #: pcbnew/tools/board_inspection_tool.cpp:1516
 #, fuzzy
 msgid "Manage Footprint Libraries"
-msgstr "Gestionar librerías de huellas..."
+msgstr "Gestionar bibliotecas de huellas..."
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Copy line width of first object"
@@ -45307,7 +45311,7 @@ msgstr "Renombra la huella seleccionada"
 
 #: pcbnew/tools/pcb_actions.cpp:731 pcbnew/tools/pcb_actions.cpp:732
 msgid "Delete Footprint from Library"
-msgstr "Eliminar huella de la librería"
+msgstr "Eliminar huella de la biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:738 pcbnew/tools/pcb_actions.cpp:739
 msgid "Cut Footprint"
@@ -45357,15 +45361,15 @@ msgstr "Actualizar huella..."
 
 #: pcbnew/tools/pcb_actions.cpp:790
 msgid "Update footprint to include any changes from the library"
-msgstr "Actualizar huella para incluir cualquier cambio desde la librería"
+msgstr "Actualizar huella para incluir cualquier cambio desde la biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:796
 msgid "Update Footprints from Library..."
-msgstr "Actualizar huellas desde la librería..."
+msgstr "Actualizar huellas desde la biblioteca..."
 
 #: pcbnew/tools/pcb_actions.cpp:797
 msgid "Update footprints to include any changes from the library"
-msgstr "Actualizar huellas para incluir cualquier cambio desde la librería"
+msgstr "Actualizar huellas para incluir cualquier cambio desde la biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:803
 msgid "Remove Unused Pads..."
@@ -45379,7 +45383,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:811
 msgid "Assign a different footprint from the library"
-msgstr "Asignar una huella diferente desde la librería"
+msgstr "Asignar una huella diferente desde la biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:817
 msgid "Change Footprints..."
@@ -45387,7 +45391,7 @@ msgstr "Cambiar huellas..."
 
 #: pcbnew/tools/pcb_actions.cpp:818
 msgid "Assign different footprints from the library"
-msgstr "Asignar diferentes huellas desde la librería"
+msgstr "Asignar diferentes huellas desde la biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:824
 msgid "Swap Layers..."
