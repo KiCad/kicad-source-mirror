@@ -358,7 +358,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     BOARD* brd = LoadBoard( aGerberJob->m_filename );
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
 
-    PCB_PLOT_PARAMS boardPlotOptions = brd->GetPlotOptions();
+    PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
     LSET                  plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
     GERBER_JOBFILE_WRITER jobfile_writer( brd );
 
@@ -366,7 +366,13 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
     if( aGerberJob->m_useBoardPlotParams )
     {
-        aGerberJob->m_printMaskLayer = boardPlotOptions.GetLayerSelection().SeqStackupForPlotting();
+        // The board plot options are saved with all copper layers enabled, even those that don't
+        // exist in the current stackup. This is done so the layers are automatically enabled in the plot
+        // dialog when the user enables them. We need to filter out these not-enabled layers here so
+        // we don't plot 32 layers when we only have 4, etc.
+        LSET plotLayers = ( boardPlotOptions.GetLayerSelection() & LSET::AllNonCuMask() )
+                          | ( brd->GetEnabledLayers() & LSET::AllCuMask() );
+        aGerberJob->m_printMaskLayer = plotLayers.SeqStackupForPlotting();
         aGerberJob->m_layersIncludeOnAll = boardPlotOptions.GetPlotOnAllLayersSelection();
     }
     else
