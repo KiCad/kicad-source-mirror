@@ -898,7 +898,7 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
     }
     else
     {
-        success = m_board->GetBoardPolygonOutlines( m_board_poly );
+        success = m_board->GetBoardPolygonOutlines( m_board_poly, nullptr, false, true );
 
         if( !success && aErrorMsg )
             *aErrorMsg = _( "Board outline is missing or malformed. Run DRC for a full analysis." );

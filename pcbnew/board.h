@@ -679,11 +679,15 @@ public:
      * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
      *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
      *  This is mainly for export to STEP files
+     * @param aIncludeNPTHAsOutlines = an optional option to include NPTH pad holes
+     * in board outlines. These holes can be seen like holes created by closed shapes
+     * drawn on edge cut layer inside the board main outline.
      * @return true if success, false if a contour is not valid
      */
     bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                   OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr,
-                                  bool aAllowUseArcsInPolygons = false );
+                                  bool aAllowUseArcsInPolygons = false,
+                                  bool aIncludeNPTHAsOutlines = false );
 
     /**
      * @return a epsilon value that is the max distance between 2 points to see them
