@@ -1979,10 +1979,9 @@ void PCB_PLUGIN::format( const PCB_GENERATOR* aGenerator, int aNestLevel ) const
     m_out->Print( aNestLevel + 1, "(layer %s)",
                   m_out->Quotew( LSET::Name( aGenerator->GetLayer() ) ).c_str() );
 
-    if( aGenerator->IsLocked() )
-        m_out->Print( 0, " (locked yes)" );
-
-    m_out->Print( 0, "\n" );
+    if( const bool locked = aGenerator->IsLocked() ) {
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", locked );
+    }
 
     for( const auto& [key, value] : aGenerator->GetProperties() )
     {
