@@ -1120,11 +1120,15 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( 0, " (version %d) (generator \"pcbnew\") (generator_version \"%s\")\n ",
                       SEXPR_BOARD_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
-    if( aFootprint->IsLocked() )
-        m_out->Print( 0, " locked" );
+    if( const bool locked = aFootprint->IsLocked() )
+    {
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", locked );
+    }
 
-    if( aFootprint->IsPlaced() )
-        m_out->Print( 0, " placed" );
+    if( const bool placed = aFootprint->IsPlaced() )
+    {
+        KICAD_FORMAT::FormatBool( m_out, 0, "placed", placed );
+    }
 
     formatLayer( aFootprint->GetLayer() );
 

@@ -3969,11 +3969,11 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         }
 
         case T_locked:
-            footprint->SetLocked( true );
+            footprint->SetLocked( parseMaybeAbsentBool( true ) );
             break;
 
         case T_placed:
-            footprint->SetIsPlaced( true );
+            footprint->SetIsPlaced( parseMaybeAbsentBool( true ) );
             break;
 
         case T_layer:
