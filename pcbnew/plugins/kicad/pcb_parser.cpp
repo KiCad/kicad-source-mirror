@@ -3099,8 +3099,26 @@ PCB_REFERENCE_IMAGE* PCB_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent )
             break;
         }
 
+        case T_locked:
+        {
+            // This has only ever been (locked yes) format
+            const bool locked = parseBool();
+            bitmap->SetLocked( locked );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_uuid:
+        {
+            NextTok();
+            const_cast<KIID&>( bitmap->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+        }
+
         default:
-            Expecting( "at, layer, scale, data" );
+            Expecting( "at, layer, scale, data, locked or uuid" );
         }
     }
 

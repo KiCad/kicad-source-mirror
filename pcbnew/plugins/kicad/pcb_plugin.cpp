@@ -1041,9 +1041,10 @@ void PCB_PLUGIN::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLevel ) co
     formatLayer( aBitmap->GetLayer() );
 
     if( aBitmap->GetImage()->GetScale() != 1.0 )
-        m_out->Print( 0, " (scale %g)", aBitmap->GetImage()->GetScale() );
+        m_out->Print( 0, "(scale %g)", aBitmap->GetImage()->GetScale() );
 
-    m_out->Print( 0, "\n" );
+    if( const bool locked = aBitmap->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, 0, "locked", locked );
 
     m_out->Print( aNestLevel + 1, "(data" );
 
@@ -1064,6 +1065,9 @@ void PCB_PLUGIN::format( const PCB_REFERENCE_IMAGE* aBitmap, int aNestLevel ) co
 
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel + 1, ")\n" );  // Closes data token.
+
+    KICAD_FORMAT::FormatUuid( m_out, aBitmap->m_Uuid, 0 );
+
     m_out->Print( aNestLevel, ")\n" );      // Closes image token.
 }
 

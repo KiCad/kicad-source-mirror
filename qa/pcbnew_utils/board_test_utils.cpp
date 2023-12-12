@@ -26,19 +26,21 @@
 #include <filesystem>
 
 #include <wx/filename.h>
-#include <board.h>
-#include <board_design_settings.h>
-#include <footprint.h>
-#include <pcb_shape.h>
-#include <zone.h>
-#include <pad.h>
-#include <settings/settings_manager.h>
-#include <pcbnew_utils/board_file_utils.h>
-#include <tool/tool_manager.h>
-#include <zone_filler.h>
 
 #include <boost/test/unit_test.hpp>
+
+#include <board.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
+#include <footprint.h>
+#include <kiid.h>
+#include <pad.h>
+#include <pcb_shape.h>
+#include <zone.h>
+#include <zone_filler.h>
+#include <pcbnew_utils/board_file_utils.h>
+#include <settings/settings_manager.h>
+#include <tool/tool_manager.h>
 
 #define CHECK_ENUM_CLASS_EQUAL( L, R )                                                             \
     BOOST_CHECK_EQUAL( static_cast<int>( L ), static_cast<int>( R ) )
@@ -111,6 +113,49 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
     aBoard->GetDesignSettings().m_DRCEngine = m_DRCEngine;
     aBoard->BuildListOfNets();
     aBoard->BuildConnectivity();
+}
+
+
+BOARD_ITEM& RequireBoardItemWithTypeAndId( const BOARD& aBoard, KICAD_T aItemType, const KIID& aID )
+{
+    BOARD_ITEM* item = aBoard.GetItem( aID );
+
+    BOOST_REQUIRE( item );
+    BOOST_REQUIRE( item->Type() == aItemType );
+
+    return *item;
+}
+
+
+void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
+                           std::function<void( BOARD& )> aBoardTestFunction )
+{
+    const std::string absBoardPath =
+            KI_TEST::GetPcbnewTestDataDir() + aRelativePath.ToStdString() + ".kicad_pcb";
+
+    BOOST_TEST_MESSAGE( "Loading board to test: " << absBoardPath );
+    std::unique_ptr<BOARD> board1 = KI_TEST::ReadBoardFromFileOrStream( absBoardPath );
+
+    // Should load - if it doesn't we're done for
+    BOOST_REQUIRE( board1 );
+
+    BOOST_TEST_MESSAGE( "Testing loaded board" );
+    aBoardTestFunction( *board1 );
+
+    if( aRoundtrip )
+    {
+        const auto savePath = std::filesystem::temp_directory_path()
+                              / ( aRelativePath.ToStdString() + ".kicad_pcb" );
+        KI_TEST::DumpBoardToFile( *board1, savePath.string() );
+
+        std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
+
+        // Should load again
+        BOOST_REQUIRE( board2 );
+
+        BOOST_TEST_MESSAGE( "Testing roundtripped (saved/reloaded) file" );
+        aBoardTestFunction( *board2 );
+    }
 }
 
 
