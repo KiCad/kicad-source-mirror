@@ -10,13 +10,14 @@
 # Ulices <ulicesah@gmail.com>, 2021, 2022.
 # Ulices <dev.n47os@aleeas.com>, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
+# Ulices <hasecilu@tuta.io>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-05-30 16:51+0000\n"
-"Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
+"PO-Revision-Date: 2023-12-12 09:44+0000\n"
+"Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
 "Language: es_MX\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -79,7 +80,6 @@ msgid "Build Tech layer %d"
 msgstr "Construir capa técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1022
-#, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "Simplificando polígonos de la capa de cobre"
 
@@ -147,9 +147,9 @@ msgid "Load OpenGL: layers"
 msgstr "Cargar OpenGL: capas"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Cargar capa OpenGL %d"
+msgstr "Cargar capa OpenGL %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -912,9 +912,8 @@ msgstr "Guardar ajuste por defecto de capa"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2022
 #: pcbnew/widgets/appearance_controls.cpp:2669
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Abrir un proyecto existente"
+msgstr "¿Sobreescribir preset existente?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1646
@@ -8264,7 +8263,6 @@ msgid "Min grid spacing:"
 msgstr "Espaciado mínimo de cuadrícula:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Ajustar a cuadrícula:"
 
@@ -9227,9 +9225,8 @@ msgid "Delete all associations?"
 msgstr "¿Borrar todas las asociaciones?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Imposible crear el archivo temporal"
+msgstr "Incapaz de crear el marco de visualización de la huella"
 
 #: eeschema/annotate.cpp:155
 msgid "Delete Annotation"
@@ -11422,9 +11419,8 @@ msgstr "¿Eliminar el estilo de cuerpo alternativo (De Morgan) del símbolo?"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:322
 #: eeschema/symbol_editor/symbol_editor.cpp:692
 #: eeschema/tools/symbol_editor_control.cpp:369
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "El campo debe tener un nombre."
+msgstr "El símbolo debe tener un nombre."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
 #, c-format
@@ -14719,7 +14715,7 @@ msgstr "Todos los formatos compatibles"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:617
 #, fuzzy
 msgid "Add Library"
-msgstr "&Añadir librería"
+msgstr "&Añadir biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:631
 msgid "Warning: Duplicate Nickname"
@@ -15443,9 +15439,9 @@ msgid "Allow Autoplacement"
 msgstr "Permitir autocolocación"
 
 #: eeschema/files-io.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "El esquema '%s' ya está abierto."
+msgstr "El esquema '%s' ya está abierto por '%s' en '%s'."
 
 #: eeschema/files-io.cpp:133
 #, c-format
@@ -16667,9 +16663,8 @@ msgid "Save Symbol to Schematic"
 msgstr "Añadir símbolo en el esquema"
 
 #: eeschema/sch_edit_frame.cpp:2217 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Diff Symbol with Library"
-msgstr "Nueva biblioteca de símbolos"
+msgstr "Diff símbolo con biblioteca"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -19405,9 +19400,9 @@ msgid "Format"
 msgstr "Formato"
 
 #: eeschema/sim/spice_library_parser.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "No puede crearse la carpeta '%s'."
+msgstr "No se puede crear modelo de sim de %s"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -21595,7 +21590,7 @@ msgstr "Arrastrar"
 
 #: eeschema/tools/ee_actions.cpp:1348
 msgid "Drags the selected item(s)"
-msgstr "Mueve el/los elemento/s seleccionado/s"
+msgstr "Arrastra el/los elemento/s seleccionado/s"
 
 #: eeschema/tools/ee_actions.cpp:1355
 msgid "Align Elements to Grid"
@@ -21728,9 +21723,8 @@ msgid "Summary"
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
-#, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "Editor de bibliotecas."
+msgstr "Diff de esquemático vs biblioteca para:"
 
 #: eeschema/tools/ee_inspection_tool.cpp:281
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
@@ -21988,11 +21982,8 @@ msgstr ""
 "¿Revertir '%s' (y todas las hojas secundarias) a la última versión guardada?"
 
 #: eeschema/tools/sch_editor_control.cpp:340
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr ""
-"¿Actualizar los símbolos en el esquema para que hagan referencia a la nueva "
-"biblioteca?"
+msgstr "¿Incluir símbolos de potencia en el esquemático a la biblioteca?"
 
 #: eeschema/tools/sch_editor_control.cpp:405
 #, c-format
@@ -23490,14 +23481,12 @@ msgid "Malformed expression"
 msgstr "Expresión malformada"
 
 #: include/lockfile.h:106
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Ya existe el archivo %s."
+msgstr "El archivo de bloqueo ya existe"
 
 #: include/lockfile.h:125
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Error al crear el archivo "
+msgstr "Error al accesar al archivo lock"
 
 #: include/panel_hotkeys_editor.h:57
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -23575,7 +23564,7 @@ msgstr "Exportar unidades:"
 #: kicad/cli/command_fp_export_svg.cpp:37
 #, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr "Actualizar la huella desde la librería"
+msgstr "Actualizar la huella desde la biblioteca"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #, fuzzy
@@ -23796,7 +23785,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_drill.cpp:66
 #, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Las opciones válidas son: absoluto,trazar"
+msgstr "Las opciones válidas son: ruta,alternar."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Output units, valid options:in,mm"
@@ -23842,9 +23831,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Formato de ceros inválido especificado\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:190
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Formato de mapa inválido especificado\n"
+msgstr "Formato de perforación ovalada especificado inválido\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:218
 msgid "Invalid map format specified\n"
@@ -23979,6 +23967,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Configurar la opción de forma de pad/via (0 = sin forma, 1 = pequeña forma, "
+"2 = forma real)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -26461,7 +26451,7 @@ msgid "Linear resistance:"
 msgstr "Resistencia lineal:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
 msgstr "Frecuencia para una profundidad pelicular de 100%:"
 
@@ -31392,7 +31382,7 @@ msgstr "Archivos STEP"
 #: pcbnew/dialogs/dialog_export_step.cpp:342
 #, fuzzy
 msgid "Binary GTLF files"
-msgstr "Archivos de librería:"
+msgstr "Archivos de biblioteca:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy
@@ -31607,9 +31597,8 @@ msgid "Success"
 msgstr "Éxito."
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:236
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Línea de comandos:"
+msgstr "Línea de comandos:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -32137,7 +32126,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Margen relativo de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32150,8 +32139,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el "
-"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "Este valor puede ser sustituido por un valor local del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
@@ -32321,7 +32310,7 @@ msgstr ""
 "la pestaña de Márgenes prioritarios y ajustes de las Propiedades del Pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32335,8 +32324,8 @@ msgid ""
 msgstr ""
 "Esta es la proporción de separación local aplicada como porcentaje entre el "
 "ancho y la altura del pad para esta huella.\n"
-"Un valor de 10 significa que el valor de la separación horizontal es el "
-"10% del ancho del pad y el valor de la separación vertical es el 10% de la "
+"Un valor de 10 significa que el valor de la separación horizontal es el 10% "
+"del ancho del pad y el valor de la separación vertical es el 10% de la "
 "altura del pad.\n"
 "La separación final es la suma de este valor y el valor de separación "
 "absoluta.\n"
@@ -38392,7 +38381,6 @@ msgid "Checking pads..."
 msgstr "Comprobando pads..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
 msgstr "Comprobando márgenes de zonas de cobres..."
 
@@ -38680,9 +38668,9 @@ msgid "%s keep out pads setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Eliminar pistas que conectan redes diferentes"
+msgstr "%s mantener fuera las pistas de configuración diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
@@ -39297,9 +39285,9 @@ msgstr ""
 "que usaban el ancho de línea del borde de la placa en la capa Edge.Cuts."
 
 #: pcbnew/files.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "La placa '%s' ya está abierta."
+msgstr "La placa '%s' ya está abierta por '%s' en '%s'."
 
 #: pcbnew/files.cpp:527
 msgid "The current PCB has been modified.  Save changes?"
@@ -41428,9 +41416,8 @@ msgid "Successfully exported VRML to %s"
 msgstr "Archivo svg creado exitosamente"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "¡Error al extraer el archivo!"
+msgstr "Error exportando VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:211
 msgid "Successfully created svg file"
@@ -41446,9 +41433,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Error al trazar a '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:544
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Fallo al eliminar la carpeta %s"
+msgstr "Error al crear directorio de salida\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:734 pcbnew/pcbnew_jobs_handler.cpp:806
 msgid "Loading footprint library\n"
@@ -41568,13 +41554,13 @@ msgstr "Archivo no encontrado: '%s'."
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:272
 #, fuzzy
 msgid "No footprints in library"
-msgstr "Cargar huella desde librería"
+msgstr "Cargar huella desde biblioteca"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:294
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "No se ha encontrado la biblioteca de huellas."
+msgstr "Directorio de huellas no encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.h:44
 msgid "Altium Designer PCB files"
@@ -42347,9 +42333,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorando un polígono ya que la capa de Eagle '%s' (%d) no fue mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1528
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorando un polígono ya que la capa de Eagle '%s' (%d) no fue mapeada"
+msgstr ""
+"Ignorando un polígono en la capa '%s' (%d): recuento de contorno no es 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1819
 #, c-format
@@ -42814,7 +42801,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Pad de tamaño cero no válida fijada en %s en\n"
+"Pad de tamaño cero inválido fijado a %s en\n"
 "archivo: %s\n"
 "línea: %d\n"
 "offset: %d"
@@ -42859,23 +42846,21 @@ msgstr ""
 "desplazamiento: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6060
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "La estrategia de relleno de zonas heredada ya no es compatible.\n"
-"Convertir zonas a rellenos de polígonos suavizados?"
+"Los rellenos de zona serán convertidos sobre la base del mejor esfuerzo."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6090
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "El modo de relleno de segmentos heredado ya no es compatible.\n"
-"¿Convertir zonas en rellenos de polígonos suavizados?"
+"Los rellenos de zona serán convertidos sobre la base del mejor esfuerzo."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -44482,12 +44467,12 @@ msgid "Pack footprints"
 msgstr "Agrupar huellas"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Haga clic para colocar %s (elemento %ld de %ld)\n"
+"Haga clic para colocar %s (elemento %zu de %zu)\n"
 "Presione <esc> para cancelar todo; haga doble clic para terminar"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:361
