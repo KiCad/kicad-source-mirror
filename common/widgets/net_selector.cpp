@@ -184,6 +184,9 @@ public:
         // Better to clear it.
         m_filterCtrl->Clear();
 
+        m_listBox->SetStringSelection( GetStringValue() );
+        m_filterCtrl->SetFocus();
+
         // The updateSize() call in GetAdjustedSize() leaves the height off-by-one for
         // some reason, so do it again.
         updateSize();
