@@ -114,45 +114,34 @@ public:
         else if( m_linkedItems.Size() > 2 && m_linkedItems.Count( SEGMENT_T | ARC_T ) == 2 )
         {
             if( !aAllowLockedSegs )
-            {
                 return false;
-            }
+
             // There will be multiple VVIAs on joints between two locked segments, because we
             // naively add a VVIA to each end of a locked segment.
-            else if( ( m_linkedItems.Size() - m_linkedItems.Count( SEGMENT_T | ARC_T ) )
-                     == m_linkedItems.Count( VIA_T ) )
+            const LINKED_ITEM* seg1 = nullptr;
+            const LINKED_ITEM* seg2 = nullptr;
+
+            for( const ITEM* item : m_linkedItems.CItems() )
             {
-                const LINKED_ITEM* seg1 = nullptr;
-                const LINKED_ITEM* seg2 = nullptr;
-                const VIA*         via = nullptr;
-                bool               hasNonVirtualVia = false;
+                if( item->IsVirtual() )
+                    continue;
 
-                for( const ITEM* item : m_linkedItems.CItems() )
+                if( item->Kind() == VIA_T )
                 {
-                    if( item->Kind() == VIA_T )
-                    {
-                        via = static_cast<const VIA*>( item );
-
-                        hasNonVirtualVia |= !via->IsVirtual();
-                    }
-                    else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
-                    {
-                        if( !seg1 )
-                            seg1 = static_cast<const LINKED_ITEM*>( item );
-                        else
-                            seg2 = static_cast<const LINKED_ITEM*>( item );
-                    }
-                }
-
-                if( !via || hasNonVirtualVia )
                     return false;
-
-                // This compiles away in release builds so we still need to check it below
-                // to prevent segfaults in release builds.
-                assert( seg1 && seg2 );
-
-                return ( seg1 && seg2 ) ? seg1->Width() == seg2->Width() : false;
+                }
+                else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
+                {
+                    if( !seg1 )
+                        seg1 = static_cast<const LINKED_ITEM*>( item );
+                    else
+                        seg2 = static_cast<const LINKED_ITEM*>( item );
+                }
             }
+
+            wxCHECK( seg1 && seg2, false );
+
+            return seg1->Width() == seg2->Width();
         }
 
         return false;
@@ -166,17 +155,13 @@ public:
 
         for( const ITEM* item : m_linkedItems.CItems() )
         {
-            if( item->Kind() == VIA_T )
-            {
-                if( static_cast<const VIA*>( item )->IsVirtual() )
-                    continue;
+            if( item->IsVirtual() )
+                continue;
 
+            if( item->Kind() == VIA_T )
                 vias++;
-            }
             else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
-            {
                 segs++;
-            }
 
             realItems++;
         }
@@ -191,14 +176,31 @@ public:
 
     bool IsTraceWidthChange() const
     {
-        if( m_linkedItems.Size() != 2 )
+        if( m_linkedItems.Count( SEGMENT_T ) != 2 )
             return false;
 
-        if( m_linkedItems.Count( SEGMENT_T ) != 2)
-            return false;
+        const LINKED_ITEM* seg1 = nullptr;
+        const LINKED_ITEM* seg2 = nullptr;
 
-        SEGMENT* seg1 = static_cast<SEGMENT*>( m_linkedItems[0] );
-        SEGMENT* seg2 = static_cast<SEGMENT*>( m_linkedItems[1] );
+        for( const ITEM* item : m_linkedItems.CItems() )
+        {
+            if( item->IsVirtual() )
+                continue;
+
+            if( item->Kind() == VIA_T )
+            {
+                return false;
+            }
+            else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
+            {
+                if( !seg1 )
+                    seg1 = static_cast<const LINKED_ITEM*>( item );
+                else
+                    seg2 = static_cast<const LINKED_ITEM*>( item );
+            }
+        }
+
+        wxCHECK( seg1 && seg2, false );
 
         return seg1->Width() != seg2->Width();
     }
