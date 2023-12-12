@@ -358,7 +358,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_IncrementalConnectivity   = false;
 
-    m_DisambiguationMenuDelay   = 500;
+    m_DisambiguationMenuDelay   = 300;
 
     loadFromConfigFile();
 }
