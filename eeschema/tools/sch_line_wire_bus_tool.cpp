@@ -937,6 +937,11 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                         m_view->AddToPreview( wire->Clone() );
                 }
             }
+            else if( evt->IsAction( &ACTIONS::undo ) )
+            {
+                // Dispatch as normal undo event
+                evt->SetPassEvent();
+            }
             else
             {
                 wxBell();
