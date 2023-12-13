@@ -287,7 +287,7 @@ TOOL_ACTION ACTIONS::cycleArcEditMode( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.cycleArcEditMode" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + ' ' )
-        .FriendlyName( _( "Cycle arc editing mode" ) )
+        .FriendlyName( _( "Cycle Arc Editing Mode" ) )
         .Tooltip( _( "Switch to a different method of editing arcs" ) ) );
 
 TOOL_ACTION ACTIONS::showSearch( TOOL_ACTION_ARGS()
