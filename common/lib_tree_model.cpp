@@ -91,6 +91,12 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
     {
         if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
         {
+            // Make sure -- Recently Used is always at the top
+            if( aNode1.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
+                return true;
+            else if( aNode2.m_Name.StartsWith( wxT( "-- Recently Used" ) ) )
+                return false;
+
             return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
         }
         else
