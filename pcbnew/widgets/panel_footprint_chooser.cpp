@@ -182,6 +182,11 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
                 }
                 else
                 {
+                    // aEvent.Skip() should be sufficient to allow the normal key events to be
+                    // generated (at least according to the wxWidgets documentation).  And yet,
+                    // here we are.
+                    aEvent.DoAllowNextEvent();
+
                     aEvent.Skip();
                 }
             } );

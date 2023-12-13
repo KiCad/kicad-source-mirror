@@ -289,6 +289,11 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                 }
                 else
                 {
+                    // aEvent.Skip() should be sufficient to allow the normal key events to be
+                    // generated (at least according to the wxWidgets documentation).  And yet,
+                    // here we are.
+                    aEvent.DoAllowNextEvent();
+
                     aEvent.Skip();
                 }
             } );
