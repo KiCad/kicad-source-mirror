@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 
 	bLowerSizer->SetMinSize( wxSize( 660,250 ) );
-	staticChangesLabel = new wxStaticText( this, wxID_ANY, _("Changes To Be Applied:"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticChangesLabel = new wxStaticText( this, wxID_ANY, _("Changes to be applied:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticChangesLabel->Wrap( -1 );
 	bLowerSizer->Add( staticChangesLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 

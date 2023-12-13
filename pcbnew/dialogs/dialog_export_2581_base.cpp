@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -79,7 +79,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_versionChoice->SetSelection( 1 );
 	fgSizer->Add( m_versionChoice, 0, wxALL|wxEXPAND, 5 );
 
-	m_cbCompress = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Compress Output"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCompress = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Compress output"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCompress->SetToolTip( _("Compress output into 'zip' file") );
 
 	fgSizer->Add( m_cbCompress, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
@@ -94,7 +94,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("BOM Columns") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -110,7 +110,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_oemRef->SetSelection( 0 );
 	m_oemRef->SetToolTip( _("Part ID number used internally during design.\nThis number must be unique to each part.") );
 
-	fgSizer4->Add( m_oemRef, 0, wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_oemRef, 0, wxEXPAND, 5 );
 
 	m_staticText6 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Manufacturer P/N:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
@@ -124,7 +124,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_choiceMPN->SetSelection( 0 );
 	m_choiceMPN->SetToolTip( _("Column containing the manufacturer part number") );
 
-	fgSizer4->Add( m_choiceMPN, 0, wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_choiceMPN, 0, wxEXPAND, 5 );
 
 	m_staticText7 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Manufacturer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
@@ -136,7 +136,7 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_choiceMfg->SetSelection( 0 );
 	m_choiceMfg->Enable( false );
 
-	fgSizer4->Add( m_choiceMfg, 0, wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_choiceMfg, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticText8 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Distributor P/N:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
@@ -148,20 +148,20 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_choiceDistPN->SetSelection( 0 );
 	m_choiceDistPN->SetToolTip( _("Column containing the distributor part number") );
 
-	fgSizer4->Add( m_choiceDistPN, 0, wxALL|wxEXPAND, 5 );
+	fgSizer4->Add( m_choiceDistPN, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_staticText9 = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Distributor:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	fgSizer4->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_textDistributor = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, _("N/A"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( m_textDistributor, 0, wxALL|wxEXPAND, 5 );
+	m_textDistributor = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, _("N/A"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	fgSizer4->Add( m_textDistributor, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	sbSizer2->Add( fgSizer4, 1, wxEXPAND, 5 );
+	sbSizer2->Add( fgSizer4, 1, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizer3->Add( sbSizer2, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
+	bSizer3->Add( sbSizer2, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 
 	bMainSizer->Add( bSizer3, 0, wxEXPAND, 5 );

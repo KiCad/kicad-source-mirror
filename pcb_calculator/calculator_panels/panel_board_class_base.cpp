@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,11 +71,11 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 	m_gridClassesValuesDisplay->SetRowSize( 4, 24 );
 	m_gridClassesValuesDisplay->EnableDragRowSize( false );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 0, _("Lines width") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 1, _("Min clearance") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 2, _("Via: (diam - drill)") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 3, _("Plated Pad: (diam - drill)") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 4, _("NP Pad: (diam - drill)") );
-	m_gridClassesValuesDisplay->SetRowLabelSize( 160 );
+	m_gridClassesValuesDisplay->SetRowLabelValue( 1, _("Minimum clearance") );
+	m_gridClassesValuesDisplay->SetRowLabelValue( 2, _("Via: (diameter - drill)") );
+	m_gridClassesValuesDisplay->SetRowLabelValue( 3, _("Plated Pad: (diameter - drill)") );
+	m_gridClassesValuesDisplay->SetRowLabelValue( 4, _("NP Pad: (diameter - drill)") );
+	m_gridClassesValuesDisplay->SetRowLabelSize( 200 );
 	m_gridClassesValuesDisplay->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance

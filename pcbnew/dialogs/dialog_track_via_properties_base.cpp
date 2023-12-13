@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -193,7 +193,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgViaPos->SetFlexibleDirection( wxBOTH );
 	fgViaPos->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_ViaXLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaXLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaXLabel->Wrap( -1 );
 	fgViaPos->Add( m_ViaXLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 1 );
 
@@ -466,7 +466,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_stLenPercentUnits->Wrap( -1 );
 	fgSizerRightCol->Add( m_stLenPercentUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxLen = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Max length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Maximum length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLen->Wrap( -1 );
 	fgSizerRightCol->Add( m_stMaxLen, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -497,7 +497,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_stHeightPercentUnits->Wrap( -1 );
 	fgSizerRightCol->Add( m_stHeightPercentUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stMaxHeight = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxHeight = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Maximum height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxHeight->Wrap( -1 );
 	fgSizerRightCol->Add( m_stMaxHeight, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 

@@ -84,7 +84,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_debounceTimer = new wxTimer( this );
 
-        search_sizer->Add( m_query_ctrl, 1, wxEXPAND, 5 );
+        search_sizer->Add( m_query_ctrl, 1, wxEXPAND | wxRIGHT, 5 );
 
         m_sort_ctrl = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition,
                                              wxDefaultSize, wxBU_AUTODRAW|0 );
@@ -118,9 +118,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                     }
                 } );
 
-        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND|wxALL, 1 );
+        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND | wxRIGHT, 5 );
 
-        sizer->Add( search_sizer, 0, wxEXPAND, 5 );
+        sizer->Add( search_sizer, 0, wxEXPAND | wxBOTTOM, 5 );
 
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
 
@@ -152,7 +152,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl = new WX_DATAVIEWCTRL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
     m_adapter->AttachTo( m_tree_ctrl );
 
-    sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 1 );
+    sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
 
     // Description panel
     if( aFlags & DETAILS )

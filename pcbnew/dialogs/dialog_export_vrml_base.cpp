@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -43,7 +43,7 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 
 	wxString m_rbCoordOriginChoices[] = { _("User defined origin"), _("Board center origin") };
 	int m_rbCoordOriginNChoices = sizeof( m_rbCoordOriginChoices ) / sizeof( wxString );
-	m_rbCoordOrigin = new wxRadioBox( this, wxID_ANY, _("Coordinate origin options:"), wxDefaultPosition, wxDefaultSize, m_rbCoordOriginNChoices, m_rbCoordOriginChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCoordOrigin = new wxRadioBox( this, wxID_ANY, _("Coordinate Origin Options"), wxDefaultPosition, wxDefaultSize, m_rbCoordOriginNChoices, m_rbCoordOriginChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbCoordOrigin->SetSelection( 0 );
 	bSizerOptions->Add( m_rbCoordOrigin, 1, wxALL|wxEXPAND, 5 );
 
@@ -108,7 +108,7 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 
 	wxString m_rbSelectUnitsChoices[] = { _("mm"), _("meter"), _("0.1 Inch"), _("Inch") };
 	int m_rbSelectUnitsNChoices = sizeof( m_rbSelectUnitsChoices ) / sizeof( wxString );
-	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("VRML Units for Output Files"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbSelectUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_rbSelectUnitsNChoices, m_rbSelectUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbSelectUnits->SetSelection( 0 );
 	bSizerOptions->Add( m_rbSelectUnits, 1, wxALL|wxEXPAND, 5 );
 

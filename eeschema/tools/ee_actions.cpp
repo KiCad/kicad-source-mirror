@@ -60,7 +60,7 @@ TOOL_ACTION EE_ACTIONS::checkSymbol( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::diffSymbol( TOOL_ACTION_ARGS()
         .Name( "eeschema.InspectionTool.diffSymbol" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Diff Symbol with Library" ) )
+        .FriendlyName( _( "Compare Symbol with Library" ) )
         .Tooltip( _( "Show differences between schematic symbol and its library equivalent" ) )
         .Icon( BITMAPS::library ) );
 

@@ -2529,7 +2529,7 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetFootprintDiffDialog()
 {
     if( !m_footprintDiffDlg )
         m_footprintDiffDlg = new DIALOG_BOOK_REPORTER( this, FOOTPRINT_DIFF_DIALOG_NAME,
-                                                       _( "Diff Footprint with Library" ) );
+                                                       _( "Compare Footprint with Library" ) );
 
     return m_footprintDiffDlg;
 }

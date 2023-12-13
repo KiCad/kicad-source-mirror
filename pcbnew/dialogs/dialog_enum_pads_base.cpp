@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,7 +53,7 @@ DIALOG_ENUM_PADS_BASE::DIALOG_ENUM_PADS_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_lblPadNumStep = new wxStaticText( this, wxID_ANY, _("Numbering step:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblPadNumStep->Wrap( -1 );
-	fgSizer->Add( m_lblPadNumStep, 0, wxALL, 5 );
+	fgSizer->Add( m_lblPadNumStep, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_padNumStep = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 999, 1 );
 	fgSizer->Add( m_padNumStep, 0, wxALL|wxEXPAND, 5 );

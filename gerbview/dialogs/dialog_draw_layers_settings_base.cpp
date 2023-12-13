@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_stOffsetX = new wxStaticText( this, wxID_ANY, _("Offset X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stOffsetX = new wxStaticText( this, wxID_ANY, _("Offset X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stOffsetX->Wrap( -1 );
 	fgSizer->Add( m_stOffsetX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -46,7 +46,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	m_stUnitX->Wrap( -1 );
 	fgSizer->Add( m_stUnitX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stOffsetY = new wxStaticText( this, wxID_ANY, _("Offset Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stOffsetY = new wxStaticText( this, wxID_ANY, _("Offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stOffsetY->Wrap( -1 );
 	fgSizer->Add( m_stOffsetY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -57,7 +57,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	m_stUnitY->Wrap( -1 );
 	fgSizer->Add( m_stUnitY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stLayerRot = new wxStaticText( this, wxID_ANY, _("Rotation CCW"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stLayerRot = new wxStaticText( this, wxID_ANY, _("Rotate counterclockwise:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLayerRot->Wrap( -1 );
 	fgSizer->Add( m_stLayerRot, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -101,6 +101,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 
 	this->SetSizer( m_namiSizer );
 	this->Layout();
+	m_namiSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_DRAW_LAYERS_SETTINGS_BASE::OnInitDlg ) );

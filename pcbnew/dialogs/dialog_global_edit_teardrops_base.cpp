@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	sbScope->Add( m_trackToTrack, 0, wxALL, 5 );
 
 
-	bSizerTop->Add( sbScope, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerTop->Add( sbScope, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbFilters;
 	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Items") ), wxVERTICAL );
@@ -103,7 +103,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	sbFilters->Add( m_selectedItemsFilter, 0, wxALL, 5 );
 
 
-	bSizerTop->Add( sbFilters, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerTop->Add( sbFilters, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bSizerTop, 0, wxEXPAND, 5 );
@@ -230,7 +230,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	m_stLenPercentUnits->Wrap( -1 );
 	fgSizerRightCol->Add( m_stLenPercentUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_stMaxLen = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Max length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxLen = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Maximum length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxLen->Wrap( -1 );
 	fgSizerRightCol->Add( m_stMaxLen, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -261,7 +261,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	m_stHeightPercentUnits->Wrap( -1 );
 	fgSizerRightCol->Add( m_stHeightPercentUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_stMaxHeight = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stMaxHeight = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Maximum height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stMaxHeight->Wrap( -1 );
 	fgSizerRightCol->Add( m_stMaxHeight, 0, wxALIGN_CENTER_VERTICAL, 10 );
 
@@ -307,7 +307,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	sbAction->Add( bSizerSpecifiedValues, 0, wxEXPAND|wxLEFT, 25 );
 
 
-	bMainSizer->Add( sbAction, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( sbAction, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

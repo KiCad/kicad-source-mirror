@@ -1883,7 +1883,7 @@ TOOL_ACTION PCB_ACTIONS::inspectConstraints( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::diffFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InspectionTool.DiffFootprint" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Diff Footprint with Library" ) )
+        .FriendlyName( _( "Compare Footprint with Library" ) )
         .Tooltip( _( "Show differences between board footprint and its library equivalent" ) )
         .Icon( BITMAPS::library ) );
 

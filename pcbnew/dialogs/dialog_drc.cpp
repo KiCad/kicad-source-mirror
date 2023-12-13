@@ -636,7 +636,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     }
     else if( rcItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
     {
-        menu.Append( 3, _( "Run Inspect > Diff Footprint with Library" ) );
+        menu.Append( 3, _( "Run Inspect > Compare Footprint with Library" ) );
     }
 
     menu.AppendSeparator();

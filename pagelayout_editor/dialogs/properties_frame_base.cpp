@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,21 +28,21 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
 
-	m_buttonHelp = new wxButton( m_swItemProperties, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizerButt->Add( m_buttonHelp, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	m_buttonHelp = new wxButton( m_swItemProperties, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButt->Add( m_buttonHelp, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxALL|wxEXPAND|wxRIGHT, 4 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( bSizerButt, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_SizerTextOptions = new wxBoxSizer( wxVERTICAL );
 
@@ -180,7 +180,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_textSizeYUnits->Wrap( -1 );
 	gbSizer11->Add( m_textSizeYUnits, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_constraintXLabel = new wxStaticText( m_swItemProperties, wxID_ANY, _("Max width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_constraintXLabel = new wxStaticText( m_swItemProperties, wxID_ANY, _("Maximum width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_constraintXLabel->Wrap( -1 );
 	m_constraintXLabel->SetToolTip( _("Set to 0 to disable this constraint") );
 
@@ -193,7 +193,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_constraintXUnits->Wrap( -1 );
 	gbSizer11->Add( m_constraintXUnits, wxGBPosition( 4, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_constraintYLabel = new wxStaticText( m_swItemProperties, wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_constraintYLabel = new wxStaticText( m_swItemProperties, wxID_ANY, _("Maximum height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_constraintYLabel->Wrap( -1 );
 	m_constraintYLabel->SetToolTip( _("Set to 0 to disable this constraint") );
 
@@ -537,7 +537,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	sbSizer1->Add( m_buttonDefault, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizerGeneralOpts->Add( sbSizer1, 0, wxEXPAND, 5 );
+	bSizerGeneralOpts->Add( sbSizer1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticBoxSizer* bSizerGeneraMargins;
 	bSizerGeneraMargins = new wxStaticBoxSizer( new wxStaticBox( m_swGeneralOpts, wxID_ANY, _("Page Margins") ), wxVERTICAL );
@@ -613,7 +613,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerGeneraMargins->Add( m_buttonGeneralOptsOK, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizerGeneralOpts->Add( bSizerGeneraMargins, 0, wxEXPAND|wxTOP, 10 );
+	bSizerGeneralOpts->Add( bSizerGeneraMargins, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	m_swGeneralOpts->SetSizer( bSizerGeneralOpts );

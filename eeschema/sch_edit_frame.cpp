@@ -2214,7 +2214,7 @@ DIALOG_BOOK_REPORTER* SCH_EDIT_FRAME::GetSymbolDiffDialog()
 {
     if( !m_diffSymbolDialog )
         m_diffSymbolDialog = new DIALOG_BOOK_REPORTER( this, DIFF_SYMBOLS_DIALOG_NAME,
-                                                       _( "Diff Symbol with Library" ) );
+                                                       _( "Compare Symbol with Library" ) );
 
     return m_diffSymbolDialog;
 }
