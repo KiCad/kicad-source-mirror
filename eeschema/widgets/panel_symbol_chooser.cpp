@@ -153,6 +153,14 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         }
     };
 
+    // Sort the already placed list since it is potentially from multiple sessions,
+    // but not the most recent list since we want this listed by most recent usage.
+    std::sort( aAlreadyPlaced.begin(), aAlreadyPlaced.end(),
+               []( PICKED_SYMBOL const& a, PICKED_SYMBOL const& b )
+               {
+                   return a.LibId.GetLibItemName() < b.LibId.GetLibItemName();
+               } );
+
     processList( aHistoryList, history_list_storage, history_list );
     processList( aAlreadyPlaced, already_placed_storage, already_placed );
 
