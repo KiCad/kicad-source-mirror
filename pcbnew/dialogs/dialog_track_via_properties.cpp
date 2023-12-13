@@ -376,41 +376,38 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             m_netSelector->Disable();
         }
 
-        m_DesignRuleViasUnit->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
-
         if( viasMatchNetclassValues )
         {
             m_viaDesignRules->SetValue( true );
 
-            m_DesignRuleVias->Enable( false );
-            m_DesignRuleViasCtrl->Enable( false );
-            m_DesignRuleViasUnit->Enable( false );
+            m_predefinedViaSizesLabel->Enable( false );
+            m_predefinedViaSizesCtrl->Enable( false );
+            m_predefinedViaSizesUnits->Enable( false );
             m_viaDiameter.Enable( false );
             m_viaDrill.Enable( false );
         }
-        else
+
+        int viaSelection = wxNOT_FOUND;
+
+        // 0 is the netclass place-holder
+        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
         {
-            int viaSelection = wxNOT_FOUND;
+            VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
+            wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
+                                    + wxT( " / " )
+                                    + m_frame->StringFromValue( viaDimension->m_Drill );
+            m_predefinedViaSizesCtrl->Append( msg, viaDimension );
 
-            // 0 is the netclass place-holder
-            for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+            if( viaSelection == wxNOT_FOUND
+                && m_viaDiameter.GetValue() == viaDimension->m_Diameter
+                && m_viaDrill.GetValue() == viaDimension->m_Drill )
             {
-                VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
-                wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
-                                        + wxT( " / " )
-                                        + m_frame->StringFromValue( viaDimension->m_Drill );
-                m_DesignRuleViasCtrl->Append( msg, viaDimension );
-
-                if( viaSelection == wxNOT_FOUND
-                    && m_viaDiameter.GetValue() == viaDimension->m_Diameter
-                    && m_viaDrill.GetValue() == viaDimension->m_Drill )
-                {
-                    viaSelection = ii - 1;
-                }
+                viaSelection = ii - 1;
             }
-
-            m_DesignRuleViasCtrl->SetSelection( viaSelection );
         }
+
+        m_predefinedViaSizesCtrl->SetSelection( viaSelection );
+        m_predefinedViaSizesUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
 
         m_ViaTypeChoice->Enable();
 
@@ -436,34 +433,31 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
-        m_DesignRuleWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
-
         if( tracksMatchNetclassValues )
         {
             m_trackDesignRules->SetValue( true );
 
-            m_DesignRuleWidths->Enable( false );
-            m_DesignRuleWidthsCtrl->Enable( false );
-            m_DesignRuleWidthsUnits->Enable( false );
+            m_predefinedTrackWidthsLabel->Enable( false );
+            m_predefinedTrackWidthsCtrl->Enable( false );
+            m_predefinedTrackWidthsUnits->Enable( false );
             m_trackWidth.Enable( false );
         }
-        else
+
+        int widthSelection = wxNOT_FOUND;
+
+        // 0 is the netclass place-holder
+        for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
-            int widthSelection = wxNOT_FOUND;
+            int      width = aParent->GetDesignSettings().m_TrackWidthList[ii];
+            wxString msg = m_frame->StringFromValue( width );
+            m_predefinedTrackWidthsCtrl->Append( msg );
 
-            // 0 is the netclass place-holder
-            for( unsigned ii = 1; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
-            {
-                int      width = aParent->GetDesignSettings().m_TrackWidthList[ii];
-                wxString msg = m_frame->StringFromValue( width );
-                m_DesignRuleWidthsCtrl->Append( msg );
-
-                if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
-                    widthSelection = ii - 1;
-            }
-
-            m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
+            if( widthSelection == wxNOT_FOUND && m_trackWidth.GetValue() == width )
+                widthSelection = ii - 1;
         }
+
+        m_predefinedTrackWidthsCtrl->SetSelection( widthSelection );
+        m_predefinedTrackWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
     }
     else
     {
@@ -504,9 +498,9 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
 {
     if( m_vias )
     {
-        int viaSel = m_DesignRuleViasCtrl->GetSelection();
+        int viaSel = m_predefinedViaSizesCtrl->GetSelection();
 
-        m_DesignRuleViasCtrl->Clear();
+        m_predefinedViaSizesCtrl->Clear();
 
         // 0 is the netclass place-holder
         for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
@@ -515,29 +509,29 @@ void DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged( wxCommandEvent& aEvent )
             wxString       msg = m_frame->StringFromValue( viaDimension->m_Diameter )
                                     + wxT( " / " )
                                     + m_frame->StringFromValue( viaDimension->m_Drill );
-            m_DesignRuleViasCtrl->Append( msg, viaDimension );
+            m_predefinedViaSizesCtrl->Append( msg, viaDimension );
         }
 
-        m_DesignRuleViasCtrl->SetSelection( viaSel );
-        m_DesignRuleViasUnit->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+        m_predefinedViaSizesCtrl->SetSelection( viaSel );
+        m_predefinedViaSizesUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
     }
 
     if( m_tracks )
     {
-        int trackSel = m_DesignRuleWidthsCtrl->GetSelection();
+        int trackSel = m_predefinedTrackWidthsCtrl->GetSelection();
 
-        m_DesignRuleWidthsCtrl->Clear();
+        m_predefinedTrackWidthsCtrl->Clear();
 
         // 0 is the netclass place-holder
         for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_TrackWidthList.size(); ii++ )
         {
             int      width = m_frame->GetDesignSettings().m_TrackWidthList[ii];
             wxString msg = m_frame->StringFromValue( width );
-            m_DesignRuleWidthsCtrl->Append( msg );
+            m_predefinedTrackWidthsCtrl->Append( msg );
         }
 
-        m_DesignRuleWidthsCtrl->SetSelection( trackSel );
-        m_DesignRuleWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
+        m_predefinedTrackWidthsCtrl->SetSelection( trackSel );
+        m_predefinedTrackWidthsUnits->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
     }
 
     aEvent.Skip();
@@ -894,9 +888,9 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTrackNetclassCheck( wxCommandEvent& aEvent )
 {
     bool enableNC = aEvent.IsChecked();
 
-    m_DesignRuleWidths->Enable( !enableNC );
-    m_DesignRuleWidthsCtrl->Enable( !enableNC );
-    m_DesignRuleWidthsUnits->Enable( !enableNC );
+    m_predefinedTrackWidthsLabel->Enable( !enableNC );
+    m_predefinedTrackWidthsCtrl->Enable( !enableNC );
+    m_predefinedTrackWidthsUnits->Enable( !enableNC );
 
     m_trackWidth.Enable( !enableNC );
 }
@@ -904,14 +898,14 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTrackNetclassCheck( wxCommandEvent& aEvent )
 
 void DIALOG_TRACK_VIA_PROPERTIES::onWidthSelect( wxCommandEvent& aEvent )
 {
-    m_TrackWidthCtrl->ChangeValue( m_DesignRuleWidthsCtrl->GetStringSelection() );
+    m_TrackWidthCtrl->ChangeValue( m_predefinedTrackWidthsCtrl->GetStringSelection() );
     m_TrackWidthCtrl->SelectAll();
 }
 
 
 void DIALOG_TRACK_VIA_PROPERTIES::onWidthEdit( wxCommandEvent& aEvent )
 {
-    m_DesignRuleWidthsCtrl->SetStringSelection( m_TrackWidthCtrl->GetValue() );
+    m_predefinedTrackWidthsCtrl->SetStringSelection( m_TrackWidthCtrl->GetValue() );
 }
 
 
@@ -919,9 +913,9 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaNetclassCheck( wxCommandEvent& aEvent )
 {
     bool enableNC = aEvent.IsChecked();
 
-    m_DesignRuleVias->Enable( !enableNC );
-    m_DesignRuleViasCtrl->Enable( !enableNC );
-    m_DesignRuleViasUnit->Enable( !enableNC );
+    m_predefinedViaSizesLabel->Enable( !enableNC );
+    m_predefinedViaSizesCtrl->Enable( !enableNC );
+    m_predefinedViaSizesUnits->Enable( !enableNC );
 
     m_viaDiameter.Enable( !enableNC );
     m_viaDrill.Enable( !enableNC );
@@ -956,7 +950,7 @@ int DIALOG_TRACK_VIA_PROPERTIES::getLayerDepth()
 
 void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
 {
-    m_DesignRuleViasCtrl->SetSelection( wxNOT_FOUND );
+    m_predefinedViaSizesCtrl->SetSelection( wxNOT_FOUND );
 
     if( m_vias )
     {

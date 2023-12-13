@@ -66,9 +66,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
 		wxCheckBox* m_trackDesignRules;
-		wxStaticText* m_DesignRuleWidths;
-		wxChoice* m_DesignRuleWidthsCtrl;
-		wxStaticText* m_DesignRuleWidthsUnits;
+		wxStaticText* m_predefinedTrackWidthsLabel;
+		wxChoice* m_predefinedTrackWidthsCtrl;
+		wxStaticText* m_predefinedTrackWidthsUnits;
 		wxStaticText* m_TrackWidthLabel;
 		wxTextCtrl* m_TrackWidthCtrl;
 		wxStaticText* m_TrackWidthUnit;
@@ -81,9 +81,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
 		wxCheckBox* m_viaDesignRules;
-		wxStaticText* m_DesignRuleVias;
-		wxChoice* m_DesignRuleViasCtrl;
-		wxStaticText* m_DesignRuleViasUnit;
+		wxStaticText* m_predefinedViaSizesLabel;
+		wxChoice* m_predefinedViaSizesCtrl;
+		wxStaticText* m_predefinedViaSizesUnits;
 		wxStaticText* m_ViaDiameterLabel;
 		wxTextCtrl* m_ViaDiameterCtrl;
 		wxStaticText* m_ViaDiameterUnit;
