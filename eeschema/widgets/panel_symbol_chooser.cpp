@@ -261,6 +261,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( EVT_LIBITEM_SELECTED, &PANEL_SYMBOL_CHOOSER::onSymbolSelected, this );
     Bind( EVT_LIBITEM_CHOSEN, &PANEL_SYMBOL_CHOOSER::onSymbolChosen, this );
+    Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, this );
 
     if( m_fp_sel_ctrl )
     {
@@ -274,37 +275,6 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                             wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnDetailsCharHook ),
                             nullptr, this );
     }
-
-    Bind( wxEVT_CHAR_HOOK,
-            [&]( wxKeyEvent& aEvent )
-            {
-                if( aEvent.GetKeyCode() == WXK_ESCAPE )
-                {
-                    wxObject* eventSource = aEvent.GetEventObject();
-
-                    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
-                    {
-                        // First escape cancels search string value
-                        if( textCtrl->GetValue() == m_tree->GetSearchString()
-                                && !m_tree->GetSearchString().IsEmpty() )
-                        {
-                            m_tree->SetSearchString( wxEmptyString );
-                            return;
-                        }
-                    }
-
-                    m_escapeHandler();
-                }
-                else
-                {
-                    // aEvent.Skip() should be sufficient to allow the normal key events to be
-                    // generated (at least according to the wxWidgets documentation).  And yet,
-                    // here we are.
-                    aEvent.DoAllowNextEvent();
-
-                    aEvent.Skip();
-                }
-            } );
 }
 
 
@@ -313,6 +283,7 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
     Unbind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onCloseTimer, this );
     Unbind( EVT_LIBITEM_SELECTED, &PANEL_SYMBOL_CHOOSER::onSymbolSelected, this );
     Unbind( EVT_LIBITEM_CHOSEN, &PANEL_SYMBOL_CHOOSER::onSymbolChosen, this );
+    Unbind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, this );
 
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_dbl_click_timer->Stop();
@@ -347,6 +318,32 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
             cfg->m_SymChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
 
         cfg->m_SymChooserPanel.sort_mode = m_tree->GetSortMode();
+    }
+}
+
+
+void PANEL_SYMBOL_CHOOSER::OnChar( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_ESCAPE )
+    {
+        wxObject* eventSource = aEvent.GetEventObject();
+
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
+        {
+            // First escape cancels search string value
+            if( textCtrl->GetValue() == m_tree->GetSearchString()
+                && !m_tree->GetSearchString().IsEmpty() )
+            {
+                m_tree->SetSearchString( wxEmptyString );
+                return;
+            }
+        }
+
+        m_escapeHandler();
+    }
+    else
+    {
+        aEvent.Skip();
     }
 }
 

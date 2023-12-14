@@ -102,17 +102,10 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
     SetInitialFocus( m_chooserPanel->GetFocusTarget() );
     SetupStandardButtons();
 
-    Bind( wxEVT_CHAR_HOOK,
-            [&]( wxKeyEvent& aEvent )
-            {
-                if( aEvent.GetKeyCode() == WXK_ESCAPE )
-                {
-                    m_chooserPanel->FinishSetup();
-                }
-            } );
-
     m_chooserPanel->FinishSetup();
     Layout();
+
+    Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
 }
 
 
