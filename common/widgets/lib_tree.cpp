@@ -801,17 +801,22 @@ void LIB_TREE::onTreeCharHook( wxKeyEvent& aKeyStroke )
 
 void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
+    if( m_tree_ctrl->IsFrozen() )
+        return;
+
     if( !m_inTimerEvent )
         updateRecentSearchMenu();
 
-    if( !m_tree_ctrl->IsFrozen() )
-        postPreselectEvent();
+    postPreselectEvent();
 }
 
 
 void LIB_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 {
     hidePreview();
+
+    if( !m_inTimerEvent )
+        updateRecentSearchMenu();
 
     if( !GetSelectedLibId().IsValid() )
         toggleExpand( m_tree_ctrl->GetSelection() );    // Expand library/part units subtree
