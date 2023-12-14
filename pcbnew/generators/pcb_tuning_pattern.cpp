@@ -1089,18 +1089,24 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 
     if( baselineValid() )
     {
-        PNS::LINE recoverLine;
+        NETINFO_ITEM* recoverNet = GetBoard()->FindNet( m_lastNetName );
+        PNS::LINE     recoverLine;
+
         recoverLine.SetLayer( m_layer );
         recoverLine.SetWidth( lineWidth );
         recoverLine.Line() = *m_baseLine;
+        recoverLine.SetNet( recoverNet );
         branch->Add( recoverLine, false );
 
         if( m_tuningMode == DIFF_PAIR || m_tuningMode == DIFF_PAIR_SKEW )
         {
+            NETINFO_ITEM* recoverCoupledNet = GetBoard()->DpCoupledNet( recoverNet );
             PNS::LINE recoverLineCoupled;
+
             recoverLineCoupled.SetLayer( m_layer );
             recoverLineCoupled.SetWidth( lineWidth );
             recoverLineCoupled.Line() = *m_baseLineCoupled;
+            recoverLineCoupled.SetNet( recoverCoupledNet );
             branch->Add( recoverLineCoupled, false );
         }
     }
@@ -1147,15 +1153,18 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
     for( PNS::LINKED_ITEM* pnsItem : pnsLine->Links() )
     {
         if( BOARD_ITEM* item = pnsItem->Parent() )
-        {
             aFrame->GetCanvas()->GetView()->Hide( item, true, true );
-            //m_removedItems.insert( item );
-        }
     }
 
     branch->Remove( *pnsLine );
 
-    PNS::LINE straightLine( *pnsLine, straightChain );
+    NETINFO_ITEM* net = GetBoard()->FindNet( m_lastNetName );
+    PNS::LINE     straightLine( *pnsLine, straightChain );
+
+    if( aPrimary )
+        straightLine.SetNet( net );
+    else
+        straightLine.SetNet( GetBoard()->DpCoupledNet( net ) );
 
     branch->Add( straightLine, false );
 
@@ -1363,8 +1372,6 @@ void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                      PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
 {
     ClearFlags( IN_EDIT );
-
-    const std::vector<GENERATOR_PNS_CHANGES>& pnsCommits = aTool->GetRouterChanges();
 
     for( const GENERATOR_PNS_CHANGES& pnsCommit : aTool->GetRouterChanges() )
     {
