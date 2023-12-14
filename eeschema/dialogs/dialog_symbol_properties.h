@@ -98,15 +98,14 @@ private:
     virtual void onUpdateEditSymbol( wxUpdateUIEvent& event ) override;
     virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) override;
 
-    void AdjustGridColumns( int aWidth );
-
 private:
     SCH_SYMBOL*                   m_symbol;
     LIB_SYMBOL*                   m_part;
 
     wxSize                        m_fieldsSize;
-    wxSize                        m_lastRequestedSize;
+    wxSize                        m_lastRequestedFieldsSize;
     wxSize                        m_pinsSize;
+    wxSize                        m_lastRequestedPinsSize;
     bool                          m_editorShown;
     std::bitset<64>               m_shownColumns;
 

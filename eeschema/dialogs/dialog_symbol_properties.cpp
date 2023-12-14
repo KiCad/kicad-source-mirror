@@ -313,7 +313,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_symbol( nullptr ),
         m_part( nullptr ),
         m_fieldsSize( 0, 0 ),
-        m_lastRequestedSize( 0, 0 ),
+        m_lastRequestedFieldsSize( 0, 0 ),
+        m_lastRequestedPinsSize( 0, 0 ),
         m_editorShown( false ),
         m_fields( nullptr ),
         m_dataModel( nullptr )
@@ -1187,7 +1188,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
 {
     wxSize new_size = event.GetSize();
 
-    if( ( !m_editorShown || m_lastRequestedSize != new_size ) && m_fieldsSize != new_size )
+    if( ( !m_editorShown || m_lastRequestedFieldsSize != new_size ) && m_fieldsSize != new_size )
     {
         m_fieldsSize = new_size;
 
@@ -1195,9 +1196,9 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
     }
 
     // We store this value to check whether the dialog is changing size.  This might indicate
-    // that the user is scaling the dialog with an editor shown.  Some editors do not close
-    // (at least on GTK) when the user drags a dialog corner
-    m_lastRequestedSize = new_size;
+    // that the user is scaling the dialog with a grid-cell-editor shown.  Some editors do not
+    // close (at least on GTK) when the user drags a dialog corner
+    m_lastRequestedFieldsSize = new_size;
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();
@@ -1208,12 +1209,17 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizePinsGrid( wxSizeEvent& event )
 {
     wxSize new_size = event.GetSize();
 
-    if( m_pinsSize != new_size )
+    if( ( !m_editorShown || m_lastRequestedPinsSize != new_size ) && m_pinsSize != new_size )
     {
         m_pinsSize = new_size;
 
         AdjustPinsGridColumns();
     }
+
+    // We store this value to check whether the dialog is changing size.  This might indicate
+    // that the user is scaling the dialog with a grid-cell-editor shown.  Some editors do not
+    // close (at least on GTK) when the user drags a dialog corner
+    m_lastRequestedPinsSize = new_size;
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();
