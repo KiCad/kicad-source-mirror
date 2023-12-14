@@ -194,8 +194,7 @@ void UPDATE_MANAGER::CheckForUpdate()
         requestContent.platform = "linux";
         requestContent.arch = "";
 #endif
-      //  requestContent.current_version = GetMajorMinorPatchVersion();
-        requestContent.current_version = "7.0.8";
+        requestContent.current_version = GetMajorMinorPatchVersion();
         requestContent.lang = Pgm().GetLanguageTag();
 
         KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
