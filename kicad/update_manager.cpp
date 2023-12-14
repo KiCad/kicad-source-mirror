@@ -36,7 +36,7 @@
 #include <kicad_curl/kicad_curl_easy.h>
 #include <progress_reporter.h>
 
-#include <nlohmann_json/nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 #include <core/json_serializers.h>
 
 #include <wx/log.h>
