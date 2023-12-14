@@ -27,6 +27,7 @@ import pytest
 import re
 from typing import List, Tuple
 from conftest import KiTestFixture
+import sys
 
 
 def get_generated_path(kitest: KiTestFixture,
@@ -90,8 +91,11 @@ def test_pcb_export_svg( kitest: KiTestFixture,
         svg_source_path = str( Path( input_file ).with_suffix( "" ) )
         svg_source_path += layer_name_fixed + ".svg"
 
-        # Comparison DPI = 1270 => 1px == 20um. I.e. allowable error of 60 um after eroding
-        assert utils.svgs_are_equivalent( str( generated_svg_path ), svg_source_path, 1270 )
+        # This test works only with Python >= 3.9 because it uses a pathlib function only existing
+        # in 3.9 and newer. So skip it for previous versions
+        if sys.hexversion >= 0x03090000 :
+            # Comparison DPI = 1270 => 1px == 20um. I.e. allowable error of 60 um after eroding
+            assert utils.svgs_are_equivalent( str( generated_svg_path ), svg_source_path, 1270 )
 
 
 @pytest.mark.skipif(not utils.is_gerbv_installed(), reason="Requires gerbv to be installed")
