@@ -1158,13 +1158,7 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
 
     branch->Remove( *pnsLine );
 
-    NETINFO_ITEM* net = GetBoard()->FindNet( m_lastNetName );
-    PNS::LINE     straightLine( *pnsLine, straightChain );
-
-    if( aPrimary )
-        straightLine.SetNet( net );
-    else
-        straightLine.SetNet( GetBoard()->DpCoupledNet( net ) );
+    PNS::LINE straightLine( *pnsLine, straightChain );
 
     branch->Add( straightLine, false );
 
