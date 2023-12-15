@@ -35,6 +35,7 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_target.h>
@@ -1246,28 +1247,25 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
         }
     }
 
-    bool modified = false;
-
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
         wxCHECK2( board_item, continue );
 
+        PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( board_item->GetParentGroup() );
+
+        if( generator )
+            commit.Modify( generator );
+
         commit.Modify( board_item );
 
         if( aMode == ON )
-        {
-            modified |= !board_item->IsLocked();
-            board_item->SetLocked( true );
-        }
+            board_item->SetLockedProperty( true );
         else
-        {
-            modified |= board_item->IsLocked();
-            board_item->SetLocked( false );
-        }
+            board_item->SetLockedProperty( false );
     }
 
-    if( modified )
+    if( !commit.Empty() )
     {
         commit.Push( aMode == ON ? _( "Lock" ) : _( "Unlock" ) );
 

@@ -297,6 +297,7 @@ public:
 
     virtual bool IsLocked() const;
     virtual void SetLocked( bool aLocked ) { m_isLocked = aLocked; }
+    virtual void SetLockedProperty( bool aLocked );
 
     virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) { }
 

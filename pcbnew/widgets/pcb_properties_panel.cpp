@@ -209,7 +209,12 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     for( EDA_ITEM* edaItem : selection )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
+        BOARD_ITEM*    item = static_cast<BOARD_ITEM*>( edaItem );
+        PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( item->GetParentGroup() );
+
+        if( generator )
+            changes.Modify( generator );
+
         changes.Modify( item );
         item->Set( property, newValue );
     }

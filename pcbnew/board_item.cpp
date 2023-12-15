@@ -32,6 +32,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <footprint.h>
 #include <font/font.h>
 
@@ -72,12 +73,23 @@ BOARD* BOARD_ITEM::GetBoard()
 
 bool BOARD_ITEM::IsLocked() const
 {
-    if( GetParentGroup() )
-        return GetParentGroup()->IsLocked();
+    if( GetParentGroup() && GetParentGroup()->IsLocked() )
+        return true;
 
     const BOARD* board = GetBoard();
 
     return board && board->GetBoardUse() != BOARD_USE::FPHOLDER && m_isLocked;
+}
+
+
+void BOARD_ITEM::SetLockedProperty( bool aLocked )
+{
+    PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( GetParentGroup() );
+
+    if( generator )
+        generator->SetLocked( aLocked );
+    else
+        SetLocked( aLocked );
 }
 
 
@@ -338,7 +350,7 @@ static struct BOARD_ITEM_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _HKI( "Locked" ),
-                    &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) )
+                    &BOARD_ITEM::SetLockedProperty, &BOARD_ITEM::IsLocked ) )
                .SetAvailableFunc(
                     [=]( INSPECTABLE* aItem ) -> bool
                     {
