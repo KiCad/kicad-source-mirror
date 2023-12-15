@@ -82,24 +82,6 @@ bool BOARD_ITEM::IsLocked() const
 }
 
 
-/**
- * A higher-level version of SetLocked() to be called from the property manager.  Handles
- * things like making sure a generator follows the locked state of its children.  This is a
- * huge hack because the property system won't let us pass a COMMIT through the calls, so
- * the caller has to ensure that the parent generator is added to the COMMIT (along with the
- * item itself).
- */
-void BOARD_ITEM::SetLockedProperty( bool aLocked )
-{
-    PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( GetParentGroup() );
-
-    if( generator )
-        generator->SetLocked( aLocked );
-    else
-        SetLocked( aLocked );
-}
-
-
 STROKE_PARAMS BOARD_ITEM::GetStroke() const
 {
     wxCHECK( false, STROKE_PARAMS( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) ) );
@@ -357,7 +339,7 @@ static struct BOARD_ITEM_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _HKI( "Locked" ),
-                    &BOARD_ITEM::SetLockedProperty, &BOARD_ITEM::IsLocked ) )
+                    &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) )
                .SetAvailableFunc(
                     [=]( INSPECTABLE* aItem ) -> bool
                     {

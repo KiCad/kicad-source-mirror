@@ -1801,10 +1801,12 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
         BOARD_COMMIT commit( aEditFrame );
         commit.Modify( this );
         m_settings = settings;
-        commit.Push( _( "Edit Tuning Pattern" ) );
-    }
 
-    aEditFrame->GetToolManager()->PostAction<PCB_GENERATOR*>( PCB_ACTIONS::regenerateItem, this );
+        GENERATOR_TOOL* generatorTool = aEditFrame->GetToolManager()->GetTool<GENERATOR_TOOL>();
+        EditStart( generatorTool, GetBoard(), aEditFrame, &commit );
+        Update( generatorTool, GetBoard(), aEditFrame, &commit );
+        EditPush( generatorTool, GetBoard(), aEditFrame, &commit );
+    }
 }
 
 

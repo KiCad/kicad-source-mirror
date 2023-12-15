@@ -2428,10 +2428,6 @@ TOOL_ACTION PCB_ACTIONS::regenerateSelected( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::refresh ) );
 
 
-TOOL_ACTION PCB_ACTIONS::regenerateItem( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Generator.regenerateItem" )
-        .Scope( AS_CONTEXT ) );
-
 TOOL_ACTION PCB_ACTIONS::genStartEdit( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Generator.genStartEdit" )
         .Scope( AS_CONTEXT ) );

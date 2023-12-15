@@ -207,28 +207,16 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     wxVariant newValue = aEvent.GetPropertyValue();
     BOARD_COMMIT changes( m_frame );
 
+    PROPERTY_COMMIT_HANDLER handler( &changes );
+
     for( EDA_ITEM* edaItem : selection )
     {
-        BOARD_ITEM*    item = static_cast<BOARD_ITEM*>( edaItem );
-        PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( item->GetParentGroup() );
-
-        if( generator )
-            changes.Modify( generator );
-
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( edaItem );
         changes.Modify( item );
         item->Set( property, newValue );
     }
 
     changes.Push( _( "Change property" ) );
-
-    for( EDA_ITEM* edaItem : selection )
-    {
-        if( edaItem->Type() == PCB_GENERATOR_T )
-        {
-            m_frame->GetToolManager()->RunAction<PCB_GENERATOR*>(
-                    PCB_ACTIONS::regenerateItem, static_cast<PCB_GENERATOR*>( edaItem ) );
-        }
-    }
 
     m_frame->Refresh();
 

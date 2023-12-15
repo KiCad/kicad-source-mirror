@@ -489,6 +489,44 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, &PCB_EDIT_FRAME::onCloseNetInspectorDialog, this );
     Bind( EDA_EVT_UNITS_CHANGED, &PCB_EDIT_FRAME::onUnitsChanged, this );
 
+    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( BOARD_ITEM ),
+            [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
+            {
+                // Special case: propagate lock from generated items to parent generator
+
+                BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+                if( item && aProperty->Name() == _HKI( "Locked" ) )
+                {
+                    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( item->GetParentGroup() ) )
+                    {
+                        if( aCommit->GetStatus( generator ) != CHT_MODIFY )
+                            aCommit->Modify( generator );
+
+                        // Must set generator to unlocked first or item->IsLocked() will just
+                        // return the parent's locked state.
+                        generator->SetLocked( false );
+                        generator->SetLocked( item->IsLocked() );
+                    }
+                }
+            } );
+
+    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( PCB_GENERATOR ),
+            [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
+            {
+                // Special case: regenerator generators when their properties change
+
+                if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aItem ) )
+                {
+                    BOARD_COMMIT*   commit = static_cast<BOARD_COMMIT*>( aCommit );
+                    GENERATOR_TOOL* generatorTool = GetToolManager()->GetTool<GENERATOR_TOOL>();
+
+                    generator->EditStart( generatorTool, GetBoard(), this, commit );
+                    generator->Update( generatorTool, GetBoard(), this, commit );
+                    generator->EditPush( generatorTool, GetBoard(), this, commit );
+                }
+            } );
+
     m_acceptedExts.emplace( KiCadPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     m_acceptedExts.emplace( LegacyPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     DragAcceptFiles( true );

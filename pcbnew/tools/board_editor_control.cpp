@@ -1254,15 +1254,22 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
         PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( board_item->GetParentGroup() );
 
-        if( generator )
+        if( generator && commit.GetStatus( generator ) != CHT_MODIFY )
+        {
             commit.Modify( generator );
+
+            if( aMode == ON )
+                generator->SetLocked( true );
+            else
+                generator->SetLocked( false );
+        }
 
         commit.Modify( board_item );
 
         if( aMode == ON )
-            board_item->SetLockedProperty( true );
+            board_item->SetLocked( true );
         else
-            board_item->SetLockedProperty( false );
+            board_item->SetLocked( false );
     }
 
     if( !commit.Empty() )

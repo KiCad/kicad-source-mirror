@@ -432,13 +432,24 @@ PROPERTY_MANAGER::CLASSES_INFO PROPERTY_MANAGER::GetAllClasses()
 
 void PROPERTY_MANAGER::PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aProperty )
 {
-    auto listeners = m_listeners.find( TYPE_HASH( *aObject ) );
+    auto callListeners =
+            [&]( TYPE_ID typeId )
+            {
+                auto listeners = m_listeners.find( typeId );
 
-    if( listeners == m_listeners.end() )
-        return;
+                if( listeners != m_listeners.end() )
+                {
+                    for( const PROPERTY_LISTENER& listener : listeners->second )
+                        listener( aObject, aProperty, m_managedCommit );
+                }
+            };
 
-    for( const PROPERTY_LISTENER& listener : listeners->second )
-        listener( aObject, aProperty, m_managedCommit );
+    CLASS_DESC& objectClass = getClass( TYPE_HASH( *aObject ) );
+
+    callListeners( objectClass.m_id );
+
+    for( CLASS_DESC& superClass : objectClass.m_bases )
+        callListeners( superClass.m_id );
 }
 
 

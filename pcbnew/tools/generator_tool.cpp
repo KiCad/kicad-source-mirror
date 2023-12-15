@@ -267,7 +267,6 @@ void GENERATOR_TOOL::setTransitions()
     Go( &GENERATOR_TOOL::RegenerateAllOfType,   PCB_ACTIONS::regenerateAllTuning.MakeEvent() );
     Go( &GENERATOR_TOOL::RegenerateAllOfType,   PCB_ACTIONS::regenerateAll.MakeEvent() );
     Go( &GENERATOR_TOOL::RegenerateSelected,    PCB_ACTIONS::regenerateSelected.MakeEvent() );
-    Go( &GENERATOR_TOOL::RegenerateItem,        PCB_ACTIONS::regenerateItem.MakeEvent() );
 
     Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genStartEdit.MakeEvent() );
     Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genUpdateEdit.MakeEvent() );
