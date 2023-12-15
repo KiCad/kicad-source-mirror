@@ -407,6 +407,32 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
 {
+    // always enable the library browser button -- it makes for fewer clicks if the user has a
+    // whole bunch of inferred passives that they want to specify library models for
+    m_browseButton->Enable();
+
+    // if we're in an undetermined state then enable everything for faster access
+    bool undetermined = !m_rbLibraryModel->GetValue() && !m_rbBuiltinModel->GetValue();
+    bool enableLibCtrls = m_rbLibraryModel->GetValue() || undetermined;
+    bool enableBuiltinCtrls = m_rbBuiltinModel->GetValue() || undetermined;
+
+    m_pathLabel->Enable( enableLibCtrls );
+    m_libraryPathText->Enable( enableLibCtrls );
+    m_modelNameLabel->Enable( enableLibCtrls );
+    m_modelNameChoice->Enable( enableLibCtrls );
+    m_pinLabel->Enable( enableLibCtrls );
+    m_pinCombobox->Enable( enableLibCtrls );
+    m_differentialCheckbox->Enable( enableLibCtrls );
+    m_pinModelLabel->Enable( enableLibCtrls );
+    m_pinModelCombobox->Enable( enableLibCtrls );
+    m_waveformLabel->Enable( enableLibCtrls );
+    m_waveformChoice->Enable( enableLibCtrls );
+
+    m_deviceLabel->Enable( enableBuiltinCtrls );
+    m_deviceChoice->Enable( enableBuiltinCtrls );
+    m_deviceTypeLabel->Enable( enableBuiltinCtrls );
+    m_deviceTypeChoice->Enable( enableBuiltinCtrls );
+
     SIM_MODEL* model = &curModel();
 
     updateIbisWidgets( model );
@@ -518,8 +544,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateBuiltinModelWidgets( SIM_MODEL* 
             }
         }
     }
-
-    m_deviceTypeChoice->Enable( !m_rbLibraryModel->GetValue() );
 
     if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel ) )
         m_modelNotebook->SetSelection( 1 );
@@ -1071,28 +1095,6 @@ int DIALOG_SIM_MODEL<T_symbol, T_field>::getModelPinIndex( const wxString& aMode
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent )
 {
-    if( m_rbLibraryModel->GetValue() )
-    {
-        m_deviceLabel->Enable( false );
-        m_deviceChoice->Enable( false );
-        m_deviceTypeLabel->Enable( false );
-    }
-    else if( m_rbBuiltinModel->GetValue() )
-    {
-        m_pathLabel->Enable( false );
-        m_libraryPathText->Enable( false );
-        m_browseButton->Enable( false );
-        m_modelNameLabel->Enable( false );
-        m_modelNameChoice->Enable( false );
-        m_pinLabel->Enable( false );
-        m_pinCombobox->Enable( false );
-        m_differentialCheckbox->Enable( false );
-        m_pinModelLabel->Enable( false );
-        m_pinModelCombobox->Enable( false );
-        m_waveformLabel->Enable( false );
-        m_waveformChoice->Enable( false );
-    }
-
     m_prevModel = nullptr;  // Ensure the Model panel will be rebuild after updating other params.
     updateWidgets();
 }
@@ -1102,9 +1104,7 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibrarayPathText( wxCommandEvent& aEvent )
 {
     m_rbLibraryModel->SetValue( true );
-    m_deviceLabel->Enable( false );
-    m_deviceChoice->Enable( false );
-    m_deviceTypeLabel->Enable( false );
+    updateWidgets();
 }
 
 
@@ -1158,9 +1158,6 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onBrowseButtonClick( wxCommandEvent& a
         return;
 
     m_rbLibraryModel->SetValue( true );
-    m_deviceLabel->Enable( false );
-    m_deviceChoice->Enable( false );
-    m_deviceTypeLabel->Enable( false );
 
     path = dlg.GetPath();
     wxFileName fn( path );
@@ -1194,6 +1191,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onModelNameChoice( wxCommandEvent& aEv
         m_pinModelCombobox->Set( emptyArray );
     }
 
+    m_rbLibraryModel->SetValue( true );
     updateWidgets();
 }
 
@@ -1268,18 +1266,6 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onDeviceTypeChoice( wxCommandEvent& aEvent )
 {
     m_rbBuiltinModel->SetValue( true );
-    m_pathLabel->Enable( false );
-    m_libraryPathText->Enable( false );
-    m_browseButton->Enable( false );
-    m_modelNameLabel->Enable( false );
-    m_modelNameChoice->Enable( false );
-    m_pinLabel->Enable( false );
-    m_pinCombobox->Enable( false );
-    m_differentialCheckbox->Enable( false );
-    m_pinModelLabel->Enable( false );
-    m_pinModelCombobox->Enable( false );
-    m_waveformLabel->Enable( false );
-    m_waveformChoice->Enable( false );
 
     for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
     {
