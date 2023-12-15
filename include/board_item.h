@@ -297,6 +297,15 @@ public:
 
     virtual bool IsLocked() const;
     virtual void SetLocked( bool aLocked ) { m_isLocked = aLocked; }
+
+    /**
+     * A higher-level version of SetLocked() to be called from the property manager.  Handles
+     * things like making sure a generator follows the locked state of its children.  This is a
+     * huge hack because the property system won't let us pass a COMMIT through the calls, so
+     * the caller has to ensure that the parent generator is added to the COMMIT (along with the
+     * item itself).
+     * @param aLocked
+     */
     virtual void SetLockedProperty( bool aLocked );
 
     virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) { }
