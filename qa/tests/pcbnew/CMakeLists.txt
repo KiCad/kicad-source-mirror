@@ -33,7 +33,9 @@ set( QA_PCBNEW_SRCS
     # test compilation units (start test_)
     test_array_pad_name_provider.cpp
     test_board_item.cpp
+    test_generator_load_save.cpp
     test_graphics_import_mgr.cpp
+    test_group_load_save.cpp
     test_footprint_load_save.cpp
     test_io_mgr.cpp
     test_lset.cpp

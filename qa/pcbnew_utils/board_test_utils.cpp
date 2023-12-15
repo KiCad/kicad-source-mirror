@@ -121,14 +121,15 @@ BOARD_ITEM& RequireBoardItemWithTypeAndId( const BOARD& aBoard, KICAD_T aItemTyp
     BOARD_ITEM* item = aBoard.GetItem( aID );
 
     BOOST_REQUIRE( item );
-    BOOST_REQUIRE( item->Type() == aItemType );
+    BOOST_REQUIRE_EQUAL( item->Type(), aItemType );
 
     return *item;
 }
 
 
 void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
-                           std::function<void( BOARD& )> aBoardTestFunction )
+                           std::function<void( BOARD& )> aBoardTestFunction,
+                           std::optional<int> aExpectedBoardVersion )
 {
     const std::string absBoardPath =
             KI_TEST::GetPcbnewTestDataDir() + aRelativePath.ToStdString() + ".kicad_pcb";
@@ -141,6 +142,13 @@ void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
 
     BOOST_TEST_MESSAGE( "Testing loaded board" );
     aBoardTestFunction( *board1 );
+
+    // If we care about the board version, check it now - but not after a roundtrip
+    // (as the version will be updated to the current version)
+    if( aExpectedBoardVersion )
+    {
+        BOOST_CHECK_EQUAL( board1->GetFileFormatVersionAtLoad(), *aExpectedBoardVersion );
+    }
 
     if( aRoundtrip )
     {

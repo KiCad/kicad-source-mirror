@@ -5037,7 +5037,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
 
         switch( token )
         {
+         // From formats [20200811, 20231215), 'id' was used instead of 'uuid'
         case T_id:
+        case T_uuid:
             NextTok();
             groupInfo.uuid = CurStrToKIID();
             NeedRIGHT();
@@ -5055,7 +5057,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
         }
 
         default:
-            Expecting( "id, locked, or members" );
+            Expecting( "uuid, locked, or members" );
         }
     }
 }
@@ -5078,8 +5080,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
     NeedLEFT();
     token = NextTok();
 
-    if( token != T_id )
-        Expecting( T_id );
+    // For formats [20231007, 20231215), 'id' was used instead of 'uuid'
+    if( token != T_uuid && token != T_id )
+        Expecting( T_uuid );
 
     NextTok();
     genInfo.uuid = CurStrToKIID();

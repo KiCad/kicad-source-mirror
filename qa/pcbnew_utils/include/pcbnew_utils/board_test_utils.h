@@ -25,10 +25,12 @@
 #ifndef QA_PCBNEW_BOARD_TEST_UTILS__H
 #define QA_PCBNEW_BOARD_TEST_UTILS__H
 
-#include <memory>
-#include <string>
-#include <mutex>
 #include <map>
+#include <memory>
+#include <mutex>
+#include <functional>
+#include <optional>
+#include <string>
 
 #include <wx/string.h>
 
@@ -198,9 +200,11 @@ BOARD_ITEM& RequireBoardItemWithTypeAndId( const BOARD& aBoard, KICAD_T aItemTyp
  * @param aRelativePath relative path of file to load
  * @param aRoundtrip true to save, reload and re-test
  * @param aBoardTestFunction the function that runs tests on the board
+ * @param aExpectedBoardVersion the expected board version, or nullopt to not check
  */
 void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
-                           std::function<void( BOARD& )> aBoardTestFunction );
+                           std::function<void( BOARD& )> aBoardTestFunction,
+                           std::optional<int> aExpectedBoardVersion = std::nullopt );
 
 void FillZones( BOARD* m_board );
 

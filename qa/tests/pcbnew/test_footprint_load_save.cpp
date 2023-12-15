@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <filesystem>
-
 #include <board.h>
 #include <kiid.h>
 #include <footprint.h>
@@ -42,8 +40,9 @@ struct FOOTPRINT_LOAD_TEST_FIXTURE
 
 struct FOOTPRINT_LOAD_TEST_CASE
 {
-    // Which footprint this is
+    // Which footprint to look at in the file
     KIID     m_footprintUuid;
+    // Expected values
     bool     m_expectedLocked;
     VECTOR2I m_expectedPos;
 };

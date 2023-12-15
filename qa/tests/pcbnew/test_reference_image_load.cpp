@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <filesystem>
-
 #include <board.h>
 #include <kiid.h>
 #include <pcb_reference_image.h>
@@ -42,8 +40,9 @@ struct REFERENCE_IMAGE_LOAD_TEST_FIXTURE
 
 struct REFERENCE_IMAGE_LOAD_TEST_CASE
 {
-    // Which
+    // Which one to look at in the file
     KIID     m_imageUuid;
+    // Expected values
     bool     m_expectedLocked;
     VECTOR2I m_expectedPos;
     double   m_expectedScale;

@@ -1943,9 +1943,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup, int aNestLevel ) const
     if( aGroup->GetItems().empty() )
         return;
 
-    m_out->Print( aNestLevel, "(group %s (id \"%s\")\n",
-                              m_out->Quotew( aGroup->GetName() ).c_str(),
-                              TO_UTF8( aGroup->m_Uuid.AsString() ) );
+    m_out->Print( aNestLevel, "(group %s\n", m_out->Quotew( aGroup->GetName() ).c_str() );
+
+    KICAD_FORMAT::FormatUuid( m_out, aGroup->m_Uuid );
 
     if( aGroup->IsLocked() )
         KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "locked", aGroup->IsLocked() );
@@ -1969,7 +1969,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 
 void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATOR* aGenerator, int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(generated (id %s)\n", TO_UTF8( aGenerator->m_Uuid.AsString() ) );
+    m_out->Print( aNestLevel, "(generated\n" );
+
+    KICAD_FORMAT::FormatUuid( m_out, aGenerator->m_Uuid );
 
     m_out->Print( aNestLevel + 1, "(type %s) (name %s)\n",
                   TO_UTF8( aGenerator->GetGeneratorType() ),
