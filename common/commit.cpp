@@ -55,14 +55,10 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
     switch( aChangeType & CHT_TYPE )
     {
     case CHT_ADD:
-        wxASSERT_MSG( m_changedItems.find( aItem ) == m_changedItems.end(),
-                      wxT( "Item already staged for commit" ) );
         makeEntry( aItem, CHT_ADD | flag, nullptr, aScreen );
         return *this;
 
     case CHT_REMOVE:
-        wxASSERT_MSG( m_deletedItems.find( aItem ) == m_deletedItems.end(),
-                      wxT( "Item already staged for deletion" ) );
         m_deletedItems.insert( aItem );
         makeEntry( aItem, CHT_REMOVE | flag, nullptr, aScreen );
         return *this;
