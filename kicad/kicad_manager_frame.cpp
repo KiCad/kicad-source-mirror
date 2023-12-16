@@ -966,7 +966,7 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
     if( !m_updateManager && settings->m_KiCadUpdateCheck )
     {
         m_updateManager = std::make_unique<UPDATE_MANAGER>();
-        m_updateManager->CheckForUpdate();
+        m_updateManager->CheckForUpdate( this );
     }
 }
 

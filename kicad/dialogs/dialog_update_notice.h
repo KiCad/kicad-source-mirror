@@ -22,25 +22,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/string.h>
-#include <atomic>
-#include <memory>
+#ifndef DIALOG_UPDATE_NOTICE_H
+#define DIALOG_UPDATE_NOTICE_H
 
-class PROGRESS_REPORTER;
-struct BACKGROUND_JOB;
+#include <dialogs/dialog_update_notice_base.h>
 
-class wxWindow;
-
-class UPDATE_MANAGER
+class DIALOG_UPDATE_NOTICE : public DIALOG_UPDATE_NOTICE_BASE
 {
 public:
-    UPDATE_MANAGER();
-
-    void CheckForUpdate( wxWindow* aNoticeParent );
-    int PostRequest( const wxString& aUrl, std::string aRequestBody, std::ostream* aOutput,
-                                           PROGRESS_REPORTER* aReporter, const size_t aSizeLimit );
+    DIALOG_UPDATE_NOTICE( wxWindow* aWindow,
+                          const wxString& aNewVersion,
+                          const wxString& aDetailsUrl,
+                          const wxString& aDownloadsUrl );
 
 private:
-    std::atomic<bool>               m_working;
-    std::shared_ptr<BACKGROUND_JOB> m_updateBackgroundJob;
+    virtual void OnSkipThisVersionClicked( wxCommandEvent& aEvent ) override;
+    virtual void OnBtnRemindMeClicked( wxCommandEvent& aEvent ) override;
+    virtual void OnBtnDetailsPageClicked( wxCommandEvent& aEvent ) override;
+    virtual void OnBtnDownloadsPageClicked( wxCommandEvent& aEvent ) override;
+
+    wxString m_detailsUrl;
+    wxString m_downloadsUrl;
 };
+
+#endif

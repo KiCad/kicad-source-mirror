@@ -36,6 +36,8 @@
 #include <kicad_curl/kicad_curl_easy.h>
 #include <progress_reporter.h>
 
+#include <dialogs/dialog_update_notice.h>
+
 #include <nlohmann/json.hpp>
 #include <core/json_serializers.h>
 
@@ -152,7 +154,7 @@ int UPDATE_MANAGER::PostRequest( const wxString& aUrl, std::string aRequestBody,
 }
 
 
-void UPDATE_MANAGER::CheckForUpdate()
+void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
 {
     if( m_working )
         return;
@@ -161,7 +163,7 @@ void UPDATE_MANAGER::CheckForUpdate()
 
     m_updateBackgroundJob = Pgm().GetBackgroundJobMonitor().Create( _( "Update Check" ) );
 
-    auto update_check = [&]() -> void
+    auto update_check = [aNoticeParent, this]() -> void
     {
         std::stringstream update_json_stream;
         std::stringstream request_json_stream;
@@ -221,15 +223,20 @@ void UPDATE_MANAGER::CheckForUpdate()
 
                 if( response.version != settings->m_lastReceivedUpdate )
                 {
-                    wxString notificationDesc =
-                            wxString::Format( _( "KiCad %s was released on %s" ), response.version,
-                                              response.release_date );
+                    aNoticeParent->CallAfter(
+                            [=]()
+                            {
+                                auto notice = new DIALOG_UPDATE_NOTICE(
+                                        aNoticeParent, response.version, response.details_url,
+                                        response.downloads_url );
 
-                    Pgm().GetNotificationsManager().CreateOrUpdate(
-                            wxS( "kicad_update" ), _( "Update Available" ), notificationDesc,
-                            response.details_url );
-
-                    settings->m_lastReceivedUpdate = response.version;
+                                int retCode = notice->ShowModal();
+                                if( retCode != wxID_RETRY )
+                                {
+                                    // basically saving the last received update prevents us from prompting again
+                                    settings->m_lastReceivedUpdate = response.version;
+                                }
+                            } );
                 }
             }
             catch( const std::exception& e )
