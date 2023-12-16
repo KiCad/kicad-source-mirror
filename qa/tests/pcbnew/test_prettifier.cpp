@@ -45,7 +45,7 @@ struct PRETTIFIER_TEST_FIXTURE
     SETTINGS_MANAGER       m_settingsManager;
 };
 
-
+#include <wx/log.h>
 BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
 {
     std::vector<wxString> footprints = {
@@ -83,6 +83,13 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
             // Hack around the fact that PAD::operator== compares footprint UUIDs, even though
             // these UUIDs cannot be preserved through a round-trip
             const_cast<KIID&>( converted->m_Uuid ) = original->m_Uuid;
+            // Note also m_fileFormatVersionAtLoad could create an issue
+            // So warn the user if happens
+            if( converted->GetFileFormatVersionAtLoad() != original->GetFileFormatVersionAtLoad() )
+            {
+                wxLogWarning( "Golden file has a old version id %d and need update (now %d)",
+                    original->GetFileFormatVersionAtLoad(),converted->GetFileFormatVersionAtLoad() );
+            }
 
             // File should parse the same way
             BOOST_REQUIRE( *original == *converted );

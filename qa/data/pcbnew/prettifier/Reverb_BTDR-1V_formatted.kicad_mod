@@ -1,5 +1,5 @@
 (footprint "Reverb_BTDR-1V"
-	(version 20231014)
+	(version 20231212)
 	(generator "pcbnew")
 	(generator_version "7.99")
 	(layer "F.Cu")
