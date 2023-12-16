@@ -1550,7 +1550,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             selectedItems.push_back( item );
         }
 
-        groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+        groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
 
         layer = item->GetLayer();
 
@@ -1562,10 +1562,10 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item : newItems )
             commit.Add( item );
 
-        commit.Push( _( "Import Graphics" ) );
-
         if( groupUndoList.GetCount() > 0 )
-            m_frame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
+            commit.Stage( groupUndoList );
+
+        commit.Push( _( "Import Graphics" ) );
 
         return 0;
     }
@@ -1651,10 +1651,10 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             for( BOARD_ITEM* item : newItems )
                 commit.Add( item );
 
-            commit.Push( _( "Import Graphics" ) );
-
             if( groupUndoList.GetCount() > 0 )
-                m_frame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
+                commit.Stage( groupUndoList );
+
+            commit.Push( _( "Import Graphics" ) );
 
             break;   // This is a one-shot command, not a tool
         }

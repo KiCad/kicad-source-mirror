@@ -159,6 +159,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     bool                     autofillZones = false;
     std::vector<BOARD_ITEM*> staleTeardropPadsAndVias;
     std::set<PCB_TRACK*>     staleTeardropTracks;
+    PCB_GROUP*               addedGroup = nullptr;
 
     if( Empty() )
         return;
@@ -269,6 +270,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 }
             }
 
+            if( boardItem->Type() == PCB_GROUP_T )
+                addedGroup = static_cast<PCB_GROUP*>( boardItem );
+
             if( autofillZones && boardItem->Type() != PCB_MARKER_T )
                 dirtyIntersectingZones( boardItem, changeType );
 
@@ -376,6 +380,23 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             break;
         }
+
+        case CHT_UNGROUP:
+            boardItem->SetParentGroup( nullptr );
+
+            if( !( aCommitFlags & SKIP_UNDO ) )
+                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::UNGROUP ) );
+
+            break;
+
+        case CHT_GROUP:
+            if( addedGroup )
+                addedGroup->AddItem( boardItem );
+
+            if( !( aCommitFlags & SKIP_UNDO ) )
+                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::GROUP ) );
+
+            break;
 
         case CHT_MODIFY:
         {

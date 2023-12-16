@@ -1343,10 +1343,11 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
                     AddItem( item );
-                    groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+                    groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
                 }
             }
 
+            aCommit->Stage( groupUndoList );
             aCommit->Add( item );
         }
 
@@ -1357,8 +1358,6 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
         aCommitFlags |= APPEND_UNDO;
     }
-
-    aFrame->AppendCopyToUndoList( groupUndoList, UNDO_REDO::REGROUP );
 }
 
 

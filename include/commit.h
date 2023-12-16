@@ -42,9 +42,11 @@ enum CHANGE_TYPE {
     CHT_ADD     = 1,
     CHT_REMOVE  = 2,
     CHT_MODIFY  = 4,
-    CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY,
+    CHT_GROUP   = 8,
+    CHT_UNGROUP = 16,
+    CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY | CHT_GROUP | CHT_UNGROUP,
 
-    CHT_DONE    = 8,             ///< Flag to indicate the change is already applied
+    CHT_DONE    = 32,             ///< Flag to indicate the change is already applied
     CHT_FLAGS   = CHT_DONE
 };
 

@@ -1194,14 +1194,14 @@ TOOL_ACTION PCB_ACTIONS::unlock( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::group( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.group" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Group" ) )
+        .FriendlyName( _( "Group Items" ) )
         .Tooltip( _( "Group the selected items so that they are treated as a single item" ) )
         .Icon( BITMAPS::group ) );
 
 TOOL_ACTION PCB_ACTIONS::ungroup( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.ungroup" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Ungroup" ) )
+        .FriendlyName( _( "Ungroup Items" ) )
         .Tooltip( _( "Ungroup any selected groups" ) )
         .Icon( BITMAPS::group_ungroup ) );
 
