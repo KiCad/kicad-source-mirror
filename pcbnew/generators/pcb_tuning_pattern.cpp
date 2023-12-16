@@ -267,21 +267,16 @@ public:
                                           BOARD_CONNECTED_ITEM* aStartItem,
                                           LENGTH_TUNING_MODE aMode );
 
-    void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                    BOARD_COMMIT* aCommit ) override;
+    void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 
-    bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                 BOARD_COMMIT* aCommit ) override;
+    bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 
-    void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                   BOARD_COMMIT* aCommit, const wxString& aCommitMsg = wxEmptyString,
-                   int aCommitFlags = 0 ) override;
+    void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
+                   const wxString& aCommitMsg = wxEmptyString, int aCommitFlags = 0 ) override;
 
-    void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                     BOARD_COMMIT* aCommit ) override;
+    void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 
-    void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                 BOARD_COMMIT* aCommit ) override;
+    void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit ) override;
 
     bool MakeEditPoints( std::shared_ptr<EDIT_POINTS> points ) const override;
 
@@ -443,8 +438,8 @@ protected:
 
     bool removeToBaseline( PNS::ROUTER* aRouter, int aLayer, SHAPE_LINE_CHAIN& aBaseLine );
 
-    bool resetToBaseline( PNS::ROUTER* aRouter, int aLayer, PCB_BASE_EDIT_FRAME* aFrame,
-                          SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary );
+    bool resetToBaseline( GENERATOR_TOOL* aTool, int aLayer, SHAPE_LINE_CHAIN& aBaseLine,
+                          bool aPrimary );
 
     SHAPE_LINE_CHAIN getRectShape() const;
 
@@ -664,8 +659,7 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
     return pattern;
 }
 
-void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                    PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     if( aCommit )
     {
@@ -705,7 +699,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                            &pnsItem, nullptr, layer, &constraint ) )
             {
                 m_settings.SetTargetLength( constraint.m_Value );
-                aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
             }
         }
         else
@@ -719,7 +713,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                                &pnsItem, &coupledItem, layer, &constraint ) )
                 {
                     m_settings.SetTargetLength( constraint.m_Value );
-                    aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                    aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
             else
@@ -728,7 +722,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard,
                                                &pnsItem, &coupledItem, layer, &constraint ) )
                 {
                     m_settings.m_targetSkew = constraint.m_Value;
-                    aFrame->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
+                    aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
         }
@@ -973,8 +967,7 @@ bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aLayer,
 }
 
 
-void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                                 BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     SetFlags( IN_EDIT );
 
@@ -982,21 +975,19 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 
     PNS::ROUTER* router = aTool->Router();
     int          layer = GetLayer();
-    int          undoFlags = 0;
 
     // Ungroup first so that undo works
     if( !GetItems().empty() )
     {
         PCB_GENERATOR*    group = this;
-        PICKED_ITEMS_LIST undoList;
+        PICKED_ITEMS_LIST ungroupList;
 
         for( BOARD_ITEM* member : group->GetItems() )
-            undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
+            ungroupList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
 
-        group->RemoveAll();
+        aCommit->Stage( ungroupList );
 
-        aFrame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
-        undoFlags |= APPEND_UNDO;
+        group->GetItems().clear();
     }
 
     aCommit->Remove( this );
@@ -1034,14 +1025,10 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
         }
 
         for( BOARD_ITEM* item : routerAddedItems )
-        {
             aCommit->Add( item );
-        }
-
-        aCommit->Push( "Remove Tuning Pattern", undoFlags );
-
-        undoFlags |= APPEND_UNDO;
     }
+
+    aCommit->Push( "Remove Tuning Pattern" );
 }
 
 
@@ -1119,16 +1106,16 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 }
 
 
-bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
-                                          PCB_BASE_EDIT_FRAME* aFrame, SHAPE_LINE_CHAIN& aBaseLine,
-                                          bool aPrimary )
+bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
+                                          SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
 {
-    PNS::NODE* world = aRouter->GetWorld();
-    VECTOR2I   startSnapPoint, endSnapPoint;
+    KIGFX::VIEW* view = aTool->GetManager()->GetView();
+    PNS::ROUTER* router = aTool->Router();
+    PNS::NODE*   world = router->GetWorld();
+    VECTOR2I     startSnapPoint, endSnapPoint;
 
-    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ),
-                                                   aBaseLine.CPoint( -1 ), aRouter, aLayer,
-                                                   startSnapPoint, endSnapPoint );
+    std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
+                                                   router, aLayer, startSnapPoint, endSnapPoint );
 
     if( !pnsLine )
     {
@@ -1150,10 +1137,13 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
         straightChain.Simplify();
     }
 
-    for( PNS::LINKED_ITEM* pnsItem : pnsLine->Links() )
+    if( view )
     {
-        if( BOARD_ITEM* item = pnsItem->Parent() )
-            aFrame->GetCanvas()->GetView()->Hide( item, true, true );
+        for( PNS::LINKED_ITEM* pnsItem : pnsLine->Links() )
+        {
+            if( BOARD_ITEM* item = pnsItem->Parent() )
+                view->Hide( item, true, true );
+        }
     }
 
     branch->Remove( *pnsLine );
@@ -1194,14 +1184,13 @@ bool PCB_TUNING_PATTERN::resetToBaseline( PNS::ROUTER* aRouter, int aLayer,
         }
     }
 
-    aRouter->CommitRouting( branch );
+    router->CommitRouting( branch );
 
     return true;
 }
 
 
-bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                                 BOARD_COMMIT* aCommit )
+bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     PNS::ROUTER*     router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
@@ -1220,7 +1209,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
     }
     else
     {
-        if( resetToBaseline( router, layer, aFrame, *m_baseLine, true ) )
+        if( resetToBaseline( aTool, layer, *m_baseLine, true ) )
         {
             m_origin = m_baseLine->CPoint( 0 );
             m_end = m_baseLine->CPoint( -1 );
@@ -1233,7 +1222,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
 
         if( m_tuningMode == DIFF_PAIR )
         {
-            if( !resetToBaseline( router, layer, aFrame, *m_baseLineCoupled, false ) )
+            if( !resetToBaseline( aTool, layer, *m_baseLineCoupled, false ) )
             {
                 initBaseLines( router, layer, aBoard );
                 return false;
@@ -1293,20 +1282,27 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_
     default:                                  statusMessage = _( "unknown" );   break;
     }
 
-    m_tuningInfo.Printf( wxS( "%s (%s)" ),
-                         aFrame->MessageTextFromValue( (double) placer->TuningResult() ),
-                         statusMessage );
+    wxString  result;
+    EDA_UNITS userUnits = EDA_UNITS::MILLIMETRES;
+
+    if( aTool->GetManager()->GetSettings() )
+        userUnits = static_cast<EDA_UNITS>( aTool->GetManager()->GetSettings()->m_System.units );
+
+    result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits,
+                                                       (double) placer->TuningResult() );
+
+    m_tuningInfo.Printf( wxS( "%s (%s)" ), result, statusMessage );
 
     return true;
 }
 
 
-void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                   PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit,
+void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
                                    const wxString& aCommitMsg, int aCommitFlags )
 {
     ClearFlags( IN_EDIT );
 
+    KIGFX::VIEW*      view = aTool->GetManager()->GetView();
     PNS::ROUTER*      router = aTool->Router();
     SHAPE_LINE_CHAIN  bounds = getRectShape();
     PICKED_ITEMS_LIST groupUndoList;
@@ -1331,7 +1327,9 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
 
         for( BOARD_ITEM* item : routerRemovedItems )
         {
-            aFrame->GetCanvas()->GetView()->Hide( item, false );
+            if( view )
+                view->Hide( item, false );
+
             aCommit->Remove( item );
         }
 
@@ -1350,26 +1348,26 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard,
             aCommit->Stage( groupUndoList );
             aCommit->Add( item );
         }
-
-        if( aCommitMsg.IsEmpty() )
-            aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
-        else
-            aCommit->Push( aCommitMsg, aCommitFlags );
-
-        aCommitFlags |= APPEND_UNDO;
     }
+
+    if( aCommitMsg.IsEmpty() )
+        aCommit->Push( _( "Edit Tuning Pattern" ), aCommitFlags );
+    else
+        aCommit->Push( aCommitMsg, aCommitFlags );
 }
 
 
-void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard,
-                                     PCB_BASE_EDIT_FRAME* aFrame, BOARD_COMMIT* aCommit )
+void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     ClearFlags( IN_EDIT );
 
-    for( const GENERATOR_PNS_CHANGES& pnsCommit : aTool->GetRouterChanges() )
+    if( KIGFX::VIEW* view = aTool->GetManager()->GetView() )
     {
-        for( BOARD_ITEM* item : pnsCommit.removedItems )
-            aFrame->GetCanvas()->GetView()->Hide( item, false );
+        for( const GENERATOR_PNS_CHANGES& pnsCommit : aTool->GetRouterChanges() )
+        {
+            for( BOARD_ITEM* item : pnsCommit.removedItems )
+                view->Hide( item, false );
+        }
     }
 
     aTool->Router()->StopRouting();
@@ -1802,9 +1800,9 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
         m_settings = settings;
 
         GENERATOR_TOOL* generatorTool = aEditFrame->GetToolManager()->GetTool<GENERATOR_TOOL>();
-        EditStart( generatorTool, GetBoard(), aEditFrame, &commit );
-        Update( generatorTool, GetBoard(), aEditFrame, &commit );
-        EditPush( generatorTool, GetBoard(), aEditFrame, &commit );
+        EditStart( generatorTool, GetBoard(), &commit );
+        Update( generatorTool, GetBoard(), &commit );
+        EditPush( generatorTool, GetBoard(), &commit );
     }
 }
 
@@ -2059,8 +2057,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( dummyPattern )
                 {
-                    dummyPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
-                    dummyPattern->Update( generatorTool, m_board, m_frame, nullptr );
+                    dummyPattern->EditStart( generatorTool, m_board, nullptr );
+                    dummyPattern->Update( generatorTool, m_board, nullptr );
 
                     m_preview.FreeItems();
 
@@ -2083,8 +2081,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 if( m_tuningPattern && m_tuningPattern->GetPosition() != m_tuningPattern->GetEnd() )
                 {
-                    m_tuningPattern->EditStart( generatorTool, m_board, m_frame, nullptr );
-                    m_tuningPattern->Update( generatorTool, m_board, m_frame, nullptr );
+                    m_tuningPattern->EditStart( generatorTool, m_board, nullptr );
+                    m_tuningPattern->Update( generatorTool, m_board, nullptr );
 
                     m_preview.FreeItems();
 
@@ -2111,7 +2109,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             if( m_tuningPattern )
             {
                 // First click already made; clean up tuning pattern preview
-                m_tuningPattern->EditRevert( generatorTool, m_board, m_frame, nullptr );
+                m_tuningPattern->EditRevert( generatorTool, m_board, nullptr );
 
                 delete m_tuningPattern;
                 m_tuningPattern = nullptr;
@@ -2185,9 +2183,9 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 // Second click; we're done
                 BOARD_COMMIT commit( m_frame );
 
-                m_tuningPattern->EditStart( generatorTool, m_board, m_frame, &commit );
-                m_tuningPattern->Update( generatorTool, m_board, m_frame, &commit );
-                m_tuningPattern->EditPush( generatorTool, m_board, m_frame, &commit, _( "Tune" ) );
+                m_tuningPattern->EditStart( generatorTool, m_board, &commit );
+                m_tuningPattern->Update( generatorTool, m_board, &commit );
+                m_tuningPattern->EditPush( generatorTool, m_board, &commit, _( "Tune" ) );
 
                 for( BOARD_ITEM* item : m_tuningPattern->GetItems() )
                     item->SetSelected();

@@ -37,6 +37,42 @@ GENERATOR_TOOL::GENERATOR_TOOL() :
         GENERATOR_TOOL_PNS_PROXY( "pcbnew.Generators" ),
         m_mgrDialog( nullptr )
 {
+    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( BOARD_ITEM ),
+            [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
+            {
+                // Special case: propagate lock from generated items to parent generator
+
+                BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+                if( item && aProperty->Name() == _HKI( "Locked" ) )
+                {
+                    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( item->GetParentGroup() ) )
+                    {
+                        if( aCommit->GetStatus( generator ) != CHT_MODIFY )
+                            aCommit->Modify( generator );
+
+                        // Must set generator to unlocked first or item->IsLocked() will just
+                        // return the parent's locked state.
+                        generator->SetLocked( false );
+                        generator->SetLocked( item->IsLocked() );
+                    }
+                }
+            } );
+
+    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( PCB_GENERATOR ),
+            [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
+            {
+                // Special case: regenerator generators when their properties change
+
+                if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aItem ) )
+                {
+                    BOARD_COMMIT* commit = static_cast<BOARD_COMMIT*>( aCommit );
+
+                    generator->EditStart( this, board(), commit );
+                    generator->Update( this, board(), commit );
+                    generator->EditPush( this, board(), commit );
+                }
+            } );
 }
 
 
@@ -143,9 +179,9 @@ int GENERATOR_TOOL::RegenerateAllOfType( const TOOL_EVENT& aEvent )
             if( commitMsg.IsEmpty() )
                 commitMsg.Printf( _( "Update %s" ), generator->GetPluralName() );
 
-            generator->EditStart( this, board(), frame(), &commit );
-            generator->Update( this, board(), frame(), &commit );
-            generator->EditPush( this, board(), frame(), &commit, commitMsg, commitFlags );
+            generator->EditStart( this, board(), &commit );
+            generator->Update( this, board(), &commit );
+            generator->EditPush( this, board(), &commit, commitMsg, commitFlags );
 
             commitFlags |= APPEND_UNDO;
         }
@@ -194,9 +230,9 @@ int GENERATOR_TOOL::RegenerateSelected( const TOOL_EVENT& aEvent )
 
     for( PCB_GENERATOR* gen : generators )
     {
-        gen->EditStart( this, board(), frame(), &commit );
-        gen->Update( this, board(), frame(), &commit );
-        gen->EditPush( this, board(), frame(), &commit, _( "Regenerate Selected" ), commitFlags );
+        gen->EditStart( this, board(), &commit );
+        gen->Update( this, board(), &commit );
+        gen->EditPush( this, board(), &commit, _( "Regenerate Selected" ), commitFlags );
 
         commitFlags |= APPEND_UNDO;
     }
@@ -213,9 +249,9 @@ int GENERATOR_TOOL::RegenerateItem( const TOOL_EVENT& aEvent )
 
     PCB_GENERATOR* gen = aEvent.Parameter<PCB_GENERATOR*>();
 
-    gen->EditStart( this, board(), frame(), &commit );
-    gen->Update( this, board(), frame(), &commit );
-    gen->EditPush( this, board(), frame(), &commit, _( "Regenerate Item" ), commitFlags );
+    gen->EditStart( this, board(), &commit );
+    gen->Update( this, board(), &commit );
+    gen->EditPush( this, board(), &commit, _( "Regenerate Item" ), commitFlags );
 
     frame()->RefreshCanvas();
     return 0;
@@ -232,27 +268,27 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::genStartEdit ) )
     {
-        gen->EditStart( this, board(), frame(), commit );
+        gen->EditStart( this, board(), commit );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genUpdateEdit ) )
     {
-        gen->Update( this, board(), frame(), commit );
+        gen->Update( this, board(), commit );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genPushEdit ) )
     {
-        gen->EditPush( this, board(), frame(), commit, wxEmptyString );
+        gen->EditPush( this, board(), commit, wxEmptyString );
 
         wxASSERT( commit->Empty() );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genRevertEdit ) )
     {
-        gen->EditRevert( this, board(), frame(), commit );
+        gen->EditRevert( this, board(), commit );
 
         wxASSERT( commit->Empty() );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::genRemove ) )
     {
-        gen->Remove( this, board(), frame(), commit );
+        gen->Remove( this, board(), commit );
     }
 
     return 0;

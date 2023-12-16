@@ -47,21 +47,16 @@ public:
 
     virtual ~PCB_GENERATOR();
 
-    virtual void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                            BOARD_COMMIT* aCommit );
+    virtual void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 
-    virtual void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                           BOARD_COMMIT* aCommit, const wxString& aCommitMsg = wxEmptyString,
-                           int aCommitFlags = 0 );
+    virtual void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
+                           const wxString& aCommitMsg = wxEmptyString, int aCommitFlags = 0 );
 
-    virtual void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                             BOARD_COMMIT* aCommit );
+    virtual void EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 
-    virtual void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                         BOARD_COMMIT* aCommit );
+    virtual void Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 
-    virtual bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, PCB_BASE_EDIT_FRAME* aFrame,
-                         BOARD_COMMIT* aCommit );
+    virtual bool Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 
 #define STATUS_ITEMS_ONLY true
 

@@ -57,6 +57,7 @@
 #include <project/project_local_settings.h>
 #include <ratsnest/ratsnest_data.h>
 #include <reporter.h>
+#include <tool/tool_manager.h>
 #include <tool/selection_conditions.h>
 #include <string_utils.h>
 #include <core/thread_pool.h>
