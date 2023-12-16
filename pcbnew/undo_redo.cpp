@@ -141,7 +141,7 @@ void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
         case UNDO_REDO::NEWITEM:
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
-        case UNDO_REDO::GROUP:
+        case UNDO_REDO::REGROUP:
         case UNDO_REDO::UNGROUP:
             break;
 
@@ -295,7 +295,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         UNDO_REDO status = aList->GetPickedItemStatus( ii );
 
         if( status != UNDO_REDO::DELETED
-                && status != UNDO_REDO::GROUP
+                && status != UNDO_REDO::REGROUP
                 && status != UNDO_REDO::UNGROUP
                 && status != UNDO_REDO::DRILLORIGIN     // origin markers never on board
                 && status != UNDO_REDO::GRIDORIGIN      // origin markers never on board
@@ -419,7 +419,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             break;
 
-        case UNDO_REDO::GROUP:
+        case UNDO_REDO::REGROUP:
             aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
@@ -428,7 +428,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             break;
 
         case UNDO_REDO::UNGROUP:
-            aList->SetPickedItemStatus( UNDO_REDO::GROUP, ii );
+            aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
             {

@@ -67,8 +67,8 @@ enum class UNDO_REDO {
     DRILLORIGIN,        // origin changed (like CHANGED, contains the origin and a copy)
     GRIDORIGIN,         // origin changed (like CHANGED, contains the origin and a copy)
     PAGESETTINGS,       // page settings or title block changes
-    GROUP,              // new group of items created (do not use GROUP to avoid collision
-                        // with an header on msys2)
+    REGROUP,            // new group of items created (NB: can't use GROUP because of collision
+                        // with a header on msys2)
     UNGROUP             // existing group destroyed (items not destroyed)
 };
 

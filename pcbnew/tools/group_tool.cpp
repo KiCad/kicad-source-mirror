@@ -274,7 +274,7 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* eda_item : selection )
     {
         if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
-            groupList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
+            groupList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
     }
 
     commit.Stage( groupList );

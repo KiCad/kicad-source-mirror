@@ -394,7 +394,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 addedGroup->AddItem( boardItem );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
-                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::GROUP ) );
+                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::REGROUP ) );
 
             break;
 

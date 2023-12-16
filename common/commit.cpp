@@ -189,7 +189,7 @@ CHANGE_TYPE COMMIT::convert( UNDO_REDO aType ) const
     {
     case UNDO_REDO::NEWITEM:        return CHT_ADD;
     case UNDO_REDO::DELETED:        return CHT_REMOVE;
-    case UNDO_REDO::GROUP:          return CHT_GROUP;
+    case UNDO_REDO::REGROUP:        return CHT_GROUP;
     case UNDO_REDO::UNGROUP:        return CHT_UNGROUP;
     case UNDO_REDO::CHANGED:        return CHT_MODIFY;
     default:   wxASSERT( false );   return CHT_MODIFY;
@@ -203,7 +203,7 @@ UNDO_REDO COMMIT::convert( CHANGE_TYPE aType ) const
     {
     case CHT_ADD:                   return UNDO_REDO::NEWITEM;
     case CHT_REMOVE:                return UNDO_REDO::DELETED;
-    case CHT_GROUP:                 return UNDO_REDO::GROUP;
+    case CHT_GROUP:                 return UNDO_REDO::REGROUP;
     case CHT_UNGROUP:               return UNDO_REDO::UNGROUP;
     case CHT_MODIFY:                return UNDO_REDO::CHANGED;
     default:   wxASSERT( false );   return UNDO_REDO::CHANGED;

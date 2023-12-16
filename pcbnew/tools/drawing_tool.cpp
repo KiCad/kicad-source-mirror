@@ -1550,7 +1550,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             selectedItems.push_back( item );
         }
 
-        groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
+        groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
 
         layer = item->GetLayer();
 

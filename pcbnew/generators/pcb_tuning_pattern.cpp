@@ -1341,7 +1341,7 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
                     AddItem( item );
-                    groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::GROUP ) );
+                    groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
                 }
             }
 
