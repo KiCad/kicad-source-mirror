@@ -1059,6 +1059,13 @@ TOOL_ACTION EE_ACTIONS::generateBOMLegacy( TOOL_ACTION_ARGS()
         .Tooltip( _( "Generate a bill of materials for the current schematic (Legacy Generator)" ) )
         );
 
+TOOL_ACTION EE_ACTIONS::generateBOMExternal( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.generateBOMExternal" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Generate Bill of Materials (External)..." ) )
+        .Tooltip( _( "Generate a bill of materials for the current schematic using external generator" ) )
+        );
+
 TOOL_ACTION EE_ACTIONS::exportSymbolsToLibrary( TOOL_ACTION_ARGS()
        .Name( "eeschema.EditorControl.exportSymbolsToLibrary" )
        .Scope( AS_GLOBAL )

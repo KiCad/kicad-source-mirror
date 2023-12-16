@@ -170,6 +170,7 @@ public:
     static TOOL_ACTION exportNetlist;
     static TOOL_ACTION generateBOM;
     static TOOL_ACTION generateBOMLegacy;
+    static TOOL_ACTION generateBOMExternal;
     static TOOL_ACTION addSymbolToSchematic;
     static TOOL_ACTION exportSymbolsToLibrary;
     static TOOL_ACTION exportSymbolsToNewLibrary;
