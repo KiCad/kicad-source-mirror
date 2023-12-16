@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-12-12 09:44+0000\n"
+"PO-Revision-Date: 2023-12-18 19:09+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.3\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -540,14 +540,12 @@ msgid "Show 3D models for 'Through hole' type footprints"
 msgstr "Chuyển đôii 3D cho loại 'linh kiện xuyên lỗ'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Chuyển đổi 3D cho 'linh kiện SMD'"
+msgstr "Hiện mô hình 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Chuyển đổi 3D cho 'Linh kiện dán'"
+msgstr "Hiện mô hình 3D cho kiểu footprint 'Linh kiện dán'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
 #, fuzzy
@@ -736,24 +734,20 @@ msgid "Through-hole Models"
 msgstr "Các Pad xuyên lỗ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "Mô hình 3D bởi"
+msgstr "Mô hình SMD"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Bật tắt mô hình 3D ảo"
+msgstr "Mô hình ảo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Chuyển đổi hiển thị 3D cho 'Linh kiện đặc biệt'"
+msgstr "Mô hình không có trong tệp POS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Chuyển đổi 3D cho 'linh kiện SMD'"
+msgstr "Mô hình được đánh dấu DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 #, fuzzy
@@ -776,7 +770,6 @@ msgstr "Hiện các giá trị footprint"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
-#, fuzzy
 msgid "References"
 msgstr "Tham chiếu"
 
@@ -832,17 +825,17 @@ msgid "Background gradient end color"
 msgstr "Lớp nền trên cùng:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Lưu và khôi phục hướng xem và thu phóng.\n"
+"Lưu và khôi phục sự kết hợp màu sắc và khả năng hiển thị.\n"
 "Sử dụng %s+Tab để kích hoạt bộ chọn.\n"
-"Các Tab liên tiếp trong khi nhấn giữ %s sẽ chuyển qua các khung nhìn trong "
-"cửa sổ bật lên."
+"Các Tab liên tiếp khi nhấn giữ %s sẽ chuyển qua các cài đặt trước trong cửa "
+"sổ bật lên."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 #, fuzzy, c-format
@@ -4266,9 +4259,8 @@ msgstr "Dây:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Bí danh: "
+msgstr "Via:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:143
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -5166,9 +5158,8 @@ msgstr "Giá trị mặc định"
 #: common/tool/common_tools.cpp:563 kicad/tools/kicad_manager_actions.cpp:126
 #: pcbnew/menubar_pcb_editor.cpp:185 pcbnew/pcb_edit_frame.cpp:187
 #: pcbnew/pcb_edit_frame.cpp:1672 pcbnew/tools/zone_filler_tool.cpp:281
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "Trình chỉnh sửa PCB"
 
 #: common/eda_base_frame.cpp:1158
 msgid "Action Plugins"
@@ -9002,7 +8993,7 @@ msgstr "Tệp bảng mạch in KiCad"
 
 #: common/wildcards_and_files_ext.cpp:317 pcbnew/plugins/kicad/pcb_plugin.h:298
 msgid "KiCad footprint files"
-msgstr "Tệp footprint  KiCad"
+msgstr "Tệp footprint KiCad"
 
 #: common/wildcards_and_files_ext.cpp:323
 msgid "KiCad footprint library paths"
@@ -12554,6 +12545,7 @@ msgid "Instances of this symbol (%d items):"
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
+#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -12561,11 +12553,15 @@ msgid ""
 "This setting can be changed from the \"Preferences\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
+"Dừng hiển thị công cụ này?\n"
+"Sẽ không có thay đổi nào được thực hiện.\n"
+"\n"
+"Cài đặt này có thể được thay đổi từ hộp thoại \"Tùy chọn\",\n"
+"và công cụ này có thể được kích hoạt thủ công từ menu \"Công cụ\"."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
-#, fuzzy
 msgid "Symbols to update:"
-msgstr "Tên ký hiệu:"
+msgstr "Các biểu tượng cần cập nhật:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:38
 msgid "Instances of this symbol:"
@@ -13862,9 +13858,8 @@ msgid "View presets:"
 msgstr "Xem trình chuyển đổi cài đặt trước"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
-#, fuzzy
 msgid "Exclude DNP"
-msgstr "Loại trừ "
+msgstr "Loại trừ DNP"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:106
 msgid "Group symbols"
@@ -16930,9 +16925,8 @@ msgid "Success."
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:207
-#, fuzzy
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "Cảnh báo: Số tỷ lệ co dãn xấu"
+msgstr "Lỗi: tên sheet trùng lặp. Tiếp tục?"
 
 #: eeschema/picksymbol.cpp:121
 #, fuzzy
@@ -17067,9 +17061,8 @@ msgid ""
 msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
 #: eeschema/sch_base_frame.cpp:265 pcbnew/footprint_libraries_utils.cpp:410
-#, fuzzy
 msgid "Add the library to the global library table?"
-msgstr "Chọn tệp tin bảng thư viện toàn cục %s:"
+msgstr "Thêm thư viện vào bảng thư viện chung?"
 
 #: eeschema/sch_base_frame.cpp:266 pcbnew/footprint_libraries_utils.cpp:411
 #, fuzzy
@@ -17102,11 +17095,12 @@ msgid "Select Symbol Library"
 msgstr "Tạo Thư viện Symbol"
 
 #: eeschema/sch_base_frame.cpp:723
-#, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
-msgstr "Không thể mở tệp cấu hình"
+msgstr ""
+"Thư viện chứa biểu tượng hiện tại đã thay đổi.\n"
+"Bạn có muốn tải lại thư viện không?"
 
 #: eeschema/sch_bus_entry.cpp:426
 #, fuzzy
@@ -18811,7 +18805,7 @@ msgstr "Tên tín hiệu không hợp lệ"
 #: eeschema/sim/kibis/ibis_parser.cpp:186
 #, fuzzy
 msgid "Checking pin "
-msgstr "Đang kiểm tra các pin..."
+msgstr "Đang kiểm tra các chân... "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:193
 #, fuzzy
@@ -18844,9 +18838,8 @@ msgid "Cpin is not valid."
 msgstr "ID footprint \"%s\" không hợp lệ."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:247
-#, fuzzy
 msgid "Checking component "
-msgstr "Đang tải..."
+msgstr "Đang kiểm tra linh kiện "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
 #, fuzzy
@@ -18901,9 +18894,8 @@ msgid "Model name cannot be empty"
 msgstr "Tên biến không được để trống."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
-#, fuzzy
 msgid "Checking model "
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Đang kiểm tra mô hình "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
 #, fuzzy
@@ -19010,9 +19002,8 @@ msgid "Package model name cannot be empty."
 msgstr "Tên biến không được để trống."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:678
-#, fuzzy
 msgid "Checking package model "
-msgstr "Chọn Ảnh"
+msgstr "Đang kiểm tra mô hình gói "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:685
 #, fuzzy
@@ -19063,19 +19054,18 @@ msgid "Inductance matrix is nullptr."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể mở tệp "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 #, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Không mong đợi %s"
+msgstr "Kết thúc tập tin không mong đợi. Thiếu [END]?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
 #, fuzzy
 msgid "Error on line "
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi khi tải trình chỉnh sửa "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 msgid "A line did not end properly."
@@ -19194,7 +19184,7 @@ msgstr "Lỗi giải nén tập tin!\n"
 #: eeschema/sim/kibis/ibis_parser.cpp:2008
 #, fuzzy
 msgid "Unknown Enable: "
-msgstr "Không xác định parent của thuộc tính"
+msgstr "Cho phép không xác định "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2015
 #: eeschema/sim/kibis/ibis_parser.cpp:2037
@@ -22349,15 +22339,14 @@ msgstr "Schematic Field"
 #: eeschema/tools/ee_inspection_tool.cpp:281
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
 #: pcbnew/tools/board_inspection_tool.cpp:1487
-#, fuzzy
 msgid "Library: "
-msgstr "Thư Viện"
+msgstr "Thư viện "
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #: pcbnew/tools/board_inspection_tool.cpp:1488
 #, fuzzy
 msgid "Library item: "
-msgstr "Thư Viện"
+msgstr "item Thư viện: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:292
 #: pcbnew/tools/board_inspection_tool.cpp:1506
@@ -22615,9 +22604,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:340
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Cập nhật các Symbol từ Thư viện"
+msgstr "Đưa các ký hiệu nguồn từ sơ đồ vào thư viện?"
 
 #: eeschema/tools/sch_editor_control.cpp:405
 #, fuzzy, c-format
@@ -22627,7 +22615,7 @@ msgstr "Không thể mở tệp cấu hình"
 #: eeschema/tools/sch_editor_control.cpp:418
 #, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
-msgstr "Cập nhật các Symbol từ Thư viện"
+msgstr "Cập nhật các ký hiệu trong sơ đồ để tham khảo thư viện mới?"
 
 #: eeschema/tools/sch_editor_control.cpp:784
 msgid "Error: duplicate sub-sheet names found in current sheet."
@@ -23425,12 +23413,9 @@ msgid "<b>Not loaded:</b> <i>%s</i>"
 msgstr "<b>Không được tải:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:45
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "<b>Bộ nhớ đã hết khi đọc:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:52 gerbview/files.cpp:202
 msgid "Gerber files"
@@ -24616,7 +24601,7 @@ msgstr "Giá trị chỉ định tham chiếu bất hợp pháp!"
 #: kicad/cli/command_pcb_export_pdf.cpp:56
 #, fuzzy
 msgid "Exclude the value text"
-msgstr "Loại trừ "
+msgstr "Loại trừ"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:56
 #: pcbnew/dialogs/dialog_plot_base.cpp:332
@@ -25524,14 +25509,12 @@ msgid "Metadata"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Mã định danh thư viện mới:"
+msgstr "Mã nhận dạng gói: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
-#, fuzzy
 msgid "License: "
-msgstr "Giấy phép"
+msgstr "Giấy phép: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
@@ -25895,9 +25878,8 @@ msgid "Rename File"
 msgstr "Đổi tên"
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Unable to rename file ... "
-msgstr "Không thể tạo tệp báo cáo '%s'"
+msgstr "Không thể đổi tên tệp ... "
 
 #: kicad/project_tree_item.cpp:142
 msgid "Permission error?"
@@ -26282,9 +26264,8 @@ msgid "Edit schematic symbols"
 msgstr "Tệp sơ đồ mạch Altium"
 
 #: kicad/tools/kicad_manager_actions.cpp:127
-#, fuzzy
 msgid "Edit PCB"
-msgstr "Đang tải "
+msgstr "Chỉnh sửa PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:138
 #, fuzzy
@@ -26391,12 +26372,8 @@ msgstr ""
 "%s"
 
 #: kicad/tools/kicad_manager_control.cpp:316
-#, fuzzy
 msgid "Overwriting files:"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Ghi đè tệp:"
 
 #: kicad/tools/kicad_manager_control.cpp:322
 msgid "Similar files already exist in the destination folder."
@@ -26460,9 +26437,9 @@ msgid "Create a new folder for the project"
 msgstr "Tạo tài liệu mới trong trình soạn thảo"
 
 #: libs/kiplatform/msw/environment.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Lỗi: "
+msgstr "Mã lỗi: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
 #, fuzzy
@@ -27960,7 +27937,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
 #, fuzzy
 msgid "Exclude value 1:"
-msgstr "Loại trừ "
+msgstr "Loại trừ giá trị 1:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:51
 #, fuzzy
@@ -30038,11 +30015,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:337
-#, fuzzy
 msgid ""
 "\n"
 "Locked footprints will not be annotated"
-msgstr "ID footprint \"%s\" không hợp lệ."
+msgstr ""
+"\n"
+"Footprint bị khóa sẽ không được chú thích"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:341
 #, c-format
@@ -30137,11 +30115,12 @@ msgid " will be ignored"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:563
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "Footprint"
+msgstr ""
+"\n"
+"Không có Footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:569
 #, c-format
@@ -30501,9 +30480,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:291 pcbnew/files.cpp:556
 #: pcbnew/tools/pcb_control.cpp:1303
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Đang tải "
+msgstr "Đang tải PCB"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:313
 #, fuzzy, c-format
@@ -36463,7 +36441,7 @@ msgstr "Kích thước được căn chỉnh"
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:56
 #, fuzzy
 msgid "Target skew: "
-msgstr "Mục tiêu"
+msgstr "Độ lệch mục tiêu: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:84
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1978
@@ -37858,7 +37836,7 @@ msgstr "Màu sắc thân Bo mạch"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Margin"
-msgstr "Margin"
+msgstr "Lề"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 #, fuzzy
@@ -40276,14 +40254,12 @@ msgid "Build %s data\n"
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:519
-#, fuzzy
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
 "\n"
-"%s"
+"** Lỗi xây dựng mô hình bảng STEP. Quá trình xuất bị hủy bỏ. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:523
 #, fuzzy, c-format
@@ -40291,14 +40267,13 @@ msgid "Writing %s file\n"
 msgstr "Tệp SVG"
 
 #: pcbnew/exporters/step/exporter_step.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
 "\n"
-"%s"
+"** Lỗi ghi tệp %s. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
 #, fuzzy, c-format
@@ -40329,11 +40304,13 @@ msgid "%s file has been created, but there are warnings."
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Thời gian tải lại %.3f s"
+msgstr ""
+"\n"
+"Thời gian xuất %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
 #, fuzzy, c-format
@@ -40395,9 +40372,9 @@ msgid "Recovery file '%s' not found."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: pcbnew/files.cpp:300
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "Không thể tạo tệp báo cáo '%s'"
+msgstr "OK để tải '%s' tệp khôi phục?"
 
 #: pcbnew/files.cpp:339
 #, c-format
@@ -40432,9 +40409,8 @@ msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr ""
 
 #: pcbnew/files.cpp:555
-#, fuzzy
 msgid "Creating PCB"
-msgstr "Đang tải "
+msgstr "Đang tạo PCB"
 
 #: pcbnew/files.cpp:648
 #, fuzzy
@@ -40583,9 +40559,8 @@ msgid "exclude from BOM"
 msgstr "Loại trừ khỏi bo mạch"
 
 #: pcbnew/footprint.cpp:1317
-#, fuzzy
 msgid "Status: "
-msgstr "Tình trạng"
+msgstr "Tình trạng: "
 
 #: pcbnew/footprint.cpp:1317
 msgid "Attributes:"
@@ -43522,9 +43497,8 @@ msgid "Fabmaster PCB files"
 msgstr "Tệp Fabmaster PCB"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:84
-#, fuzzy
 msgid "Could not read file "
-msgstr "Không thể mở tệp lưu trữ\n"
+msgstr "Không thể đọc tệp "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:249
 #, c-format
@@ -45289,14 +45263,12 @@ msgid "BOARD CHARACTERISTICS"
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:413
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Kiểu cách Đường thẳng"
+msgstr "Số lớp đồng: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:425
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Đặt kích thước lưới"
+msgstr "Kích thước tổng thể của bo: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
 #, fuzzy
@@ -45313,14 +45285,12 @@ msgid "Castellated pads: "
 msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:461
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Độ dày lưới:"
+msgstr "Độ dày của bo: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:475
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Đường kính lỗ Via mạ"
+msgstr "Đường kính lỗ tối thiểu "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:484
 msgid "Impedance Control: "
@@ -45333,7 +45303,7 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:500
 #, fuzzy
 msgid "Edge card connectors: "
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "Đầu nối thẻ cạnh: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:508
 msgid "Yes, Bevelled"
@@ -45722,7 +45692,7 @@ msgstr "Đặt tất cả các đơn vị"
 #: pcbnew/tools/pad_tool.cpp:640 pcbnew/tools/pad_tool.cpp:653
 #, fuzzy
 msgid "Edit Pad"
-msgstr "Đang tải "
+msgstr "Chỉnh sửa Pad"
 
 #: pcbnew/tools/pad_tool.cpp:730
 #, c-format
@@ -48980,7 +48950,7 @@ msgstr ""
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 #, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Bộ chuyển đổi Bitmap thành linh kiện"
+msgstr "Bộ chuyển đổi Bitmap thành linh kiện;Bitmap;Chuyển đổi;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
