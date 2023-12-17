@@ -43,7 +43,6 @@
 #include <invoke_pcb_dialog.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <board.h>
-#include <pcb_group.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <drawing_sheet/ds_proxy_view_item.h>

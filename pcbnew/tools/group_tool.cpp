@@ -337,23 +337,13 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
 
-    std::map<PCB_GROUP*, std::vector<BOARD_ITEM*>> groupMap;
-
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
         PCB_GROUP*  group = boardItem->GetParentGroup();
 
         if( group )
-            groupMap[ group ].push_back( boardItem );
-    }
-
-    for( std::pair<PCB_GROUP*, std::vector<BOARD_ITEM*>> pair : groupMap )
-    {
-        commit.Modify( pair.first );
-
-        for( BOARD_ITEM* item : pair.second )
-            pair.first->RemoveItem( item );
+            commit.Stage( boardItem, CHT_UNGROUP );
     }
 
     commit.Push( wxT( "Remove Group Items" ) );

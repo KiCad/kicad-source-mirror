@@ -382,26 +382,28 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         case CHT_UNGROUP:
-            if( !( aCommitFlags & SKIP_UNDO ) )
+            if( PCB_GROUP* group = boardItem->GetParentGroup() )
             {
-                ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
-
-                if( PCB_GROUP* group = boardItem->GetParentGroup() )
+                if( !( aCommitFlags & SKIP_UNDO ) )
+                {
+                    ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
                     itemWrapper.SetLink( group->Clone() );
+                    undoList.PushItem( itemWrapper );
+                }
 
-                undoList.PushItem( itemWrapper );
+                group->RemoveItem( boardItem );
             }
-
-            boardItem->SetParentGroup( nullptr );
 
             break;
 
         case CHT_GROUP:
             if( addedGroup )
+            {
                 addedGroup->AddItem( boardItem );
 
-            if( !( aCommitFlags & SKIP_UNDO ) )
-                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::REGROUP ) );
+                if( !( aCommitFlags & SKIP_UNDO ) )
+                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::REGROUP ) );
+            }
 
             break;
 

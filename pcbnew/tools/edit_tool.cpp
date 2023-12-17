@@ -2110,10 +2110,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         FOOTPRINT* parentFP = board_item->GetParentFootprint();
 
         if( PCB_GROUP* parentGroup = board_item->GetParentGroup() )
-        {
-            commit.Modify( parentGroup );
-            parentGroup->RemoveItem( board_item );
-        }
+            commit.Stage( board_item, CHT_UNGROUP );
 
         switch( item->Type() )
         {
@@ -2134,7 +2131,13 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
+            commit.Remove( board_item );
+            break;
+
         case PCB_GROUP_T:
+            for( BOARD_ITEM* member : static_cast<PCB_GROUP*>( board_item )->GetItems() )
+                commit.Stage( member, CHT_UNGROUP );
+
             commit.Remove( board_item );
             break;
 
@@ -2193,6 +2196,9 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             }
             else
             {
+                for( BOARD_ITEM* member : static_cast<PCB_GROUP*>( board_item )->GetItems() )
+                    commit.Stage( member, CHT_UNGROUP );
+
                 commit.Remove( board_item );
             }
 

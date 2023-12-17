@@ -34,7 +34,6 @@
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
-#include <pcb_group.h>
 #include <pcb_generator.h>
 #include <footprint.h>
 #include <pad.h>

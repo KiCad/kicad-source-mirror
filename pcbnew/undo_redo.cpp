@@ -423,9 +423,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 {
                     if( !aList->GetPickedItemLink( ii ) )
                         aList->SetPickedItemLink( group->Clone(), ii );
-                }
 
-                boardItem->SetParentGroup( nullptr );
+                    group->RemoveItem( boardItem );
+                }
             }
 
             break;

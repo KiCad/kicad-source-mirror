@@ -44,7 +44,6 @@
 #include <footprint_editor_settings.h>
 #include <fp_lib_table.h>
 #include <kiface_base.h>
-#include <pcb_group.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>
 #include <pcbnew_settings.h>
