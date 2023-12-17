@@ -254,7 +254,9 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
     }
 
     VECTOR2D dir_u( aDir );
-    VECTOR2D dir_v( aDir.Perpendicular( ) );
+    VECTOR2D dir_v( aDir.Perpendicular() );
+
+    VECTOR2D endPoint = aP + dir_u + dir_v * ( aSide ? -1.0 : 1.0 );
     VECTOR2D p = aP;
     lc.Append( ( int ) p.x, ( int ) p.y );
 
@@ -263,9 +265,11 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
     {
     case MEANDER_STYLE_ROUND:
     {
-        VECTOR2D center = aP + dir_v * ( aSide ? -1.0 : 1.0 );
+        VECTOR2I arcEnd( (int) endPoint.x, (int) endPoint.y );
 
-        lc.Append( SHAPE_ARC( center, aP, ( aSide ? -ANGLE_90 : ANGLE_90 ) ) );
+        SHAPE_ARC arc;
+        arc.ConstructFromStartEndAngle( aP, arcEnd, ( aSide ? -ANGLE_90 : ANGLE_90 ) );
+        lc.Append( arc );
         break;
     }
 
@@ -284,15 +288,15 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
         lc.Append( ( int ) p.x, ( int ) p.y );
         p = aP + dir_u + (dir_v + dir_cv) * ( aSide ? -1.0 : 1.0 );
         lc.Append( ( int ) p.x, ( int ) p.y );
+
+        p = endPoint;
+        lc.Append( (int) p.x, (int) p.y );
         break;
     }
 
     default:
         break;
     }
-
-    p = aP + dir_u + dir_v * ( aSide ? -1.0 : 1.0 );
-    lc.Append( ( int ) p.x, ( int ) p.y );
 
     return lc;
 }
