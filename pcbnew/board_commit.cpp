@@ -451,6 +451,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         boardItem->ClearEditFlags();
+        boardItem->RunOnDescendants(
+                [&]( BOARD_ITEM* item )
+                {
+                    item->ClearEditFlags();
+                } );
     }
 
     if( bulkAddedItems.size() > 0 )
