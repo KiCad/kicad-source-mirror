@@ -1694,7 +1694,7 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 void PNS_KICAD_IFACE::DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance )
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aLine, m_view );
-    pitem->SetDepth( ROUTER_PREVIEW_ITEM::PathOverlayDepth );
+    pitem->SetDepth( pitem->GetOriginDepth() - ROUTER_PREVIEW_ITEM::PathOverlayDepth );
 
     COLOR4D color;
 

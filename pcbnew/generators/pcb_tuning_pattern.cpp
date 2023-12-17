@@ -129,8 +129,8 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
-        aLayers[0] = LAYER_SELECT_OVERLAY;
-        aLayers[1] = LAYER_GP_OVERLAY;
+        aLayers[0] = LAYER_UI_START;
+        aLayers[1] = LAYER_UI_START + 1;
         aCount = 2;
     }
 
@@ -138,19 +138,19 @@ public:
     {
         KIGFX::GAL* gal = aView->GetGAL();
         bool        viewFlipped = gal->IsFlippedX();
-        bool        drawingDropShadows = ( aLayer == LAYER_GP_OVERLAY );
+        bool        drawingDropShadows = ( aLayer == LAYER_UI_START );
 
-        gal->PushDepth();
-        gal->SetLayerDepth( gal->GetMinDepth() );
+        gal->Save();
+        gal->Scale( { 1., 1. } );
 
-        KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -3 );
-        KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
+        KIGFX::PREVIEW::TEXT_DIMS headerDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -2 );
+        KIGFX::PREVIEW::TEXT_DIMS textDims = KIGFX::PREVIEW::GetConstantGlyphHeight( gal, -1 );
         KIFONT::FONT*             font = KIFONT::FONT::GetFont();
         const KIFONT::METRICS&    fontMetrics = KIFONT::METRICS::Default();
         TEXT_ATTRIBUTES           textAttrs;
 
         int      glyphWidth = textDims.GlyphSize.x;
-        VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), KiROUND( glyphWidth * 0.9 ) );
+        VECTOR2I margin( KiROUND( glyphWidth * 0.4 ), KiROUND( glyphWidth ) );
         VECTOR2I size( glyphWidth * 25 + margin.x * 2, headerDims.GlyphSize.y + textDims.GlyphSize.y );
         VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
 
@@ -158,13 +158,14 @@ public:
         {
             gal->SetIsFill( true );
             gal->SetIsStroke( true );
-            gal->SetLineWidth( 1 );
+            gal->SetLineWidth( gal->GetScreenWorldMatrix().GetScale().x * 2 );
             gal->SetStrokeColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
-            gal->SetFillColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+            KIGFX::COLOR4D bgColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+            gal->SetFillColor( bgColor.WithAlpha( 0.9 ) );
 
             gal->DrawRectangle( GetPosition() + offset - margin,
                                 GetPosition() + offset + size + margin );
-            gal->PopDepth();
+            gal->Restore();
             return;
         }
 
@@ -221,7 +222,7 @@ public:
         gal->SetStrokeColor( m_current > m_max ? red : normal );
         font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
 
-        gal->PopDepth();
+        gal->Restore();
     }
 
 protected:
@@ -2060,7 +2061,9 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     m_preview.FreeItems();
 
                     for( EDA_ITEM* item : dummyPattern->GetPreviewItems( generatorTool, m_frame ) )
+                    {
                         m_preview.Add( item );
+                    }
 
                     generatorTool->Router()->StopRouting();
 

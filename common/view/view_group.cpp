@@ -138,6 +138,9 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     for( const std::pair<const int, std::vector<VIEW_ITEM*>>& entry : layer_item_map )
         layers[ layers_count++ ] = entry.first;
 
+    if( layers_count == 0 )
+        return;
+
     aView->SortLayers( layers, layers_count );
 
     // Now draw the layers in sorted order

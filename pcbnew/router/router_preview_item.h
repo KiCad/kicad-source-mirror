@@ -61,13 +61,21 @@ public:
         PR_SHAPE
     };
 
-    // fixme: shouldn't this go to VIEW?
-    static const int ClearanceOverlayDepth;
-    static const int BaseOverlayDepth;
-    static const int ViaOverlayDepth;
-    static const int PathOverlayDepth;
+    /**
+     * We draw this item on a single layer, but we stack up all the layers from
+     * the various components that form this preview item.  In order to make this
+     * work, we need to map that layer stack onto fractional depths that are less
+     * than 1.0 so that this preview item doesn't draw on top of other overlays
+     * that are in front of it.
+     *
+     * This factor is chosen to be fairly small so that we can fit an entire
+     * GAL layer stack into the space of one view group sublayer (which is
+     * currently hard-coded via GAL::AdvanceDepth take a depth of 0.1)
+     */
+    static constexpr double LayerDepthFactor = 0.0001;
+    static constexpr double PathOverlayDepth = LayerDepthFactor * LAYER_ZONE_END;
 
-    ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr);
+    ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr );
     ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr,
                          int aFlags = 0 );
     ~ROUTER_PREVIEW_ITEM();
@@ -80,6 +88,8 @@ public:
 
     void SetClearance( int aClearance ) { m_clearance = aClearance; }
     void ShowClearance( bool aEnabled ) { m_showClearance = aEnabled; }
+
+    double GetOriginDepth() const { return m_originDepth; }
 
 #if defined(DEBUG)
     void Show( int aA, std::ostream& aB ) const override {}
@@ -125,6 +135,7 @@ private:
     int            m_clearance;
     bool           m_showClearance;
 
+    double         m_originDepth;
     double         m_depth;
 
     KIGFX::COLOR4D m_color;

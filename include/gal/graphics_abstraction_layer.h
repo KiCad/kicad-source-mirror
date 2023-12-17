@@ -363,8 +363,8 @@ public:
      */
     virtual void SetLayerDepth( double aLayerDepth )
     {
-        assert( aLayerDepth <= m_depthRange.y );
-        assert( aLayerDepth >= m_depthRange.x );
+        wxCHECK_MSG( aLayerDepth <= m_depthRange.y, /* void */, "SetLayerDepth: below minimum" );
+        wxCHECK_MSG( aLayerDepth >= m_depthRange.x, /* void */, "SetLayerDepth: above maximum" );
 
         m_layerDepth = aLayerDepth;
     }
@@ -931,7 +931,7 @@ public:
      */
     inline void AdvanceDepth()
     {
-        m_layerDepth -= 0.05;
+        m_layerDepth -= 0.1;
     }
 
     /**

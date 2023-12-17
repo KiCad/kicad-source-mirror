@@ -1923,7 +1923,7 @@ void OPENGL_GAL::Translate( const VECTOR2D& aVector )
 
 void OPENGL_GAL::Scale( const VECTOR2D& aScale )
 {
-    m_currentManager->Scale( aScale.x, aScale.y, 0.0f );
+    m_currentManager->Scale( aScale.x, aScale.y, 1.0f );
 }
 
 

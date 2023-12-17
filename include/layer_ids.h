@@ -174,6 +174,8 @@ enum NETNAMES_LAYER_ID: int
 /// Macro for obtaining netname layer for a given PCB layer
 #define NETNAMES_LAYER_INDEX( layer )   ( NETNAMES_LAYER_ID_START + layer )
 
+#define GAL_UI_LAYER_COUNT 10
+
 /**
  *  GAL layers are "virtual" layers, i.e. not tied into design data.
  *  Some layers here are shared between applications.
@@ -257,6 +259,10 @@ enum GAL_LAYER_ID: int
     /// Virtual layers for background images per board layer
     LAYER_BITMAP_START,
     LAYER_BITMAP_END = LAYER_BITMAP_START + PCB_LAYER_ID_COUNT,
+
+    // Layers for drawing on-canvas UI
+    LAYER_UI_START,
+    LAYER_UI_END = LAYER_UI_START + GAL_UI_LAYER_COUNT,
 
     GAL_LAYER_ID_END
 };

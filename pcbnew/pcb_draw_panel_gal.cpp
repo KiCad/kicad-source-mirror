@@ -57,9 +57,21 @@ using namespace std::placeholders;
 
 const int GAL_LAYER_ORDER[] =
 {
+    LAYER_UI_START + 9,
+    LAYER_UI_START + 8,
+    LAYER_UI_START + 7,
+    LAYER_UI_START + 6,
+    LAYER_UI_START + 5,
+    LAYER_UI_START + 4,
+    LAYER_UI_START + 3,
+    LAYER_UI_START + 2,
+    LAYER_UI_START + 1,
+    LAYER_UI_START,
+
     LAYER_GP_OVERLAY,
     LAYER_SELECT_OVERLAY,
     LAYER_CONFLICTS_SHADOW,
+
     LAYER_DRC_ERROR, LAYER_DRC_WARNING, LAYER_DRC_EXCLUSION, LAYER_MARKER_SHADOWS,
     LAYER_PAD_NETNAMES, LAYER_VIA_NETNAMES,
     Dwgs_User, ZONE_LAYER_FOR( Dwgs_User ),
@@ -358,6 +370,9 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         for( int i : layers )
             rSettings->SetLayerIsHighContrast( i );
 
+        for( int i = LAYER_UI_START; i < LAYER_UI_END; ++i )
+            rSettings->SetLayerIsHighContrast( i );
+
         // Pads should be shown too
         if( aLayer == B_Cu )
         {
@@ -395,6 +410,9 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     for( auto layer : layers )
         m_view->SetTopLayer( layer );
+
+    for( int i = LAYER_UI_START; i < LAYER_UI_END; i++ )
+        m_view->SetTopLayer( i );
 
     // Extra layers that are brought to the top if a F.* or B.* is selected
     const std::vector<int> frontLayers = {
@@ -481,6 +499,9 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
         m_view->SetLayerVisible( i, true );
 
     for( int i = LAYER_BITMAP_START; i < LAYER_BITMAP_END; i++ )
+        m_view->SetLayerVisible( i, true );
+
+    for( int i = LAYER_UI_START; i < LAYER_UI_END; i++ )
         m_view->SetLayerVisible( i, true );
 
     // Enable some layers that are GAL specific
@@ -583,10 +604,10 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
 
         // MW: Gross hack to make SetTopLayer bring the correct bitmap layer to
         // the top of the other bitmaps, but still below all the other layers
-        if( layer < LAYER_BITMAP_START )
-            m_view->SetLayerOrder( layer, i );
-        else
+        if( layer >= LAYER_BITMAP_START && layer < LAYER_BITMAP_END )
             m_view->SetLayerOrder( layer, i - KIGFX::VIEW::TOP_LAYER_MODIFIER );
+        else
+            m_view->SetLayerOrder( layer, i );
     }
 }
 
@@ -705,6 +726,12 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_DRAWINGSHEET, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ;
     m_view->SetLayerDisplayOnly( LAYER_GRID );
+
+    for( int i = LAYER_UI_START; i < LAYER_UI_END; ++i )
+    {
+        m_view->SetLayerTarget( i, KIGFX::TARGET_OVERLAY );
+        m_view->SetLayerDisplayOnly( i );
+    }
 }
 
 

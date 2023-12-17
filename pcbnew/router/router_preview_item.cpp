@@ -69,7 +69,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
     m_type = PR_SHAPE;
     m_width = ( aFlags & PNS_SEMI_SOLID ) ? 1 : 0;
-    m_depth = 0;
+    m_depth = m_originDepth = aView->GetLayerOrder( m_originLayer );
 
     if( aItem )
         Update( aItem );
@@ -86,14 +86,14 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aVie
     m_hole = nullptr;
 
     m_clearance = -1;
-    m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
+    m_originLayer = m_layer = LAYER_SELECT_OVERLAY;
 
     m_showClearance = false;
 
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
     m_type = PR_SHAPE;
     m_width = 0;
-    m_depth = 0;
+    m_depth = m_originDepth = aView->GetLayerOrder( m_originLayer );
 }
 
 
@@ -124,7 +124,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
     m_layer = m_originLayer;
     m_color = getLayerColor( m_originLayer );
     m_color.a = 0.8;
-    m_depth = BaseOverlayDepth - aItem->Layers().Start();
+    m_depth = m_originDepth - ( aItem->Layers().Start() * LayerDepthFactor );
 
     switch( aItem->Kind() )
     {
@@ -148,7 +148,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         m_type = PR_SHAPE;
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
-        m_depth = ViaOverlayDepth;
+        m_depth = m_originDepth - ( PCB_LAYER_ID_COUNT * LayerDepthFactor );
 
         delete m_shape;
         m_shape = nullptr;
@@ -477,7 +477,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         // N.B. The order of draw here is important
         // Cairo doesn't current support z-ordering, so we need
         // to draw the clearance first to ensure it is in the background
-        gal->SetLayerDepth( ClearanceOverlayDepth );
+        gal->SetLayerDepth( m_originDepth );
 
         //TODO(snh) Add configuration option for the color/alpha here
         gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.9 ) );
@@ -520,7 +520,7 @@ const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer ) const
 }
 
 
-const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 10;
-const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 20;
-const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 50;
-const int ROUTER_PREVIEW_ITEM::PathOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 55;
+//const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 10;
+//const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 20;
+//const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 50;
+//const int ROUTER_PREVIEW_ITEM::PathOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 55;
