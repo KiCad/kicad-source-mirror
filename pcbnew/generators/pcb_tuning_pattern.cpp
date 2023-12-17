@@ -1687,6 +1687,7 @@ const STRING_ANY_MAP PCB_TUNING_PATTERN::GetProperties() const
     props.set( "rounded", m_settings.m_cornerStyle == PNS::MEANDER_STYLE_ROUND );
 
     props.set_iu( "max_amplitude", m_settings.m_maxAmplitude );
+    props.set_iu( "min_amplitude", m_settings.m_minAmplitude );
     props.set_iu( "min_spacing", m_settings.m_spacing );
     props.set_iu( "target_length_min", m_settings.m_targetLength.Min() );
     props.set_iu( "target_length", m_settings.m_targetLength.Opt() );
@@ -1759,6 +1760,7 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
         m_settings.m_targetSkew.SetMax( int_val );
 
     aProps.get_to_iu( "max_amplitude", m_settings.m_maxAmplitude );
+    aProps.get_to_iu( "min_amplitude", m_settings.m_minAmplitude );
     aProps.get_to_iu( "min_spacing", m_settings.m_spacing );
     aProps.get_to_iu( "last_track_width", m_trackWidth );
     aProps.get_to_iu( "last_diff_pair_gap", m_diffPairGap );
