@@ -221,6 +221,8 @@ static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo"
  * The time in milliseconds to wait before displaying a disambiguation menu.
  */
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
+
+static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
 } // namespace KEYS
 
 
@@ -359,6 +361,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_IncrementalConnectivity   = false;
 
     m_DisambiguationMenuDelay   = 300;
+
+    m_PcbSelectionVisibilityRatio = 1.0;
 
     loadFromConfigFile();
 }
@@ -527,6 +531,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
                                                 &m_EnableEeschemaPrintCairo, m_EnableEeschemaPrintCairo ) );
 
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::PcbSelectionVisibilityRatio,
+                                                  &m_PcbSelectionVisibilityRatio,
+                                                  m_PcbSelectionVisibilityRatio, 0.0, 1.0 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

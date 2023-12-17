@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -421,6 +421,8 @@ private:
      * Event handler to update the selection VIEW_ITEM.
      */
     int updateSelection( const TOOL_EVENT& aEvent );
+
+    void pruneObscuredSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const;
 
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 

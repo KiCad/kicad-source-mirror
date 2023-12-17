@@ -74,6 +74,14 @@ using namespace std::placeholders;
 #include <math/vector2wx.h>
 
 
+struct LAYER_OPACITY_ITEM
+{
+    PCB_LAYER_ID      m_Layer;
+    double            m_Opacity;
+    const BOARD_ITEM* m_Item;;
+};
+
+
 class SELECT_MENU : public ACTION_MENU
 {
 public:
@@ -2548,6 +2556,7 @@ void PCB_SELECTION_TOOL::RebuildSelection()
 bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+    const PCB_DISPLAY_OPTIONS& options = frame()->GetDisplayOptions();
 
     auto visibleLayers =
             [&]()
@@ -2652,7 +2661,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     switch( aItem->Type() )
     {
     case PCB_ZONE_T:
-        if( !board()->IsElementVisible( LAYER_ZONES ) )
+        if( !board()->IsElementVisible( LAYER_ZONES ) || ( options.m_ZoneOpacity == 0.00 ) )
             return false;
 
         zone = static_cast<const ZONE*>( aItem );
@@ -2679,7 +2688,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
-        if( !board()->IsElementVisible( LAYER_TRACKS ) )
+        if( !board()->IsElementVisible( LAYER_TRACKS ) || ( options.m_TrackOpacity == 0.00 ) )
             return false;
 
         if( m_isFootprintEditor )
@@ -2696,7 +2705,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
 
     case PCB_VIA_T:
-        if( !board()->IsElementVisible( LAYER_VIAS ) )
+        if( !board()->IsElementVisible( LAYER_VIAS ) || ( options.m_ViaOpacity == 0.00 ) )
             return false;
 
         via = static_cast<const PCB_VIA*>( aItem );
@@ -2750,9 +2759,14 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
+    case PCB_REFERENCE_IMAGE_T:
+        if( options.m_ImageOpacity == 0.00 )
+            return false;
+
+        KI_FALLTHROUGH;
+
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
-    case PCB_REFERENCE_IMAGE_T:
         if( m_isFootprintEditor )
         {
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
@@ -2793,6 +2807,9 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
 
     case PCB_PAD_T:
+        if( options.m_PadOpacity == 0.00 )
+            return false;
+
         pad = static_cast<const PAD*>( aItem );
 
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
@@ -3068,6 +3085,153 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
 }
 
 
+void PCB_SELECTION_TOOL::pruneObscuredSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const
+{
+    wxCHECK( m_frame, /* void */ );
+
+    if( aCollector.GetCount() < 2 )
+        return;
+
+    const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+
+    wxCHECK( settings, /* void */ );
+
+    PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
+    LSET visibleLayers = m_frame->GetBoard()->GetVisibleLayers();
+    LSET enabledLayers = m_frame->GetBoard()->GetEnabledLayers();
+    LSEQ enabledLayerStack = enabledLayers.SeqStackupTop2Bottom( activeLayer );
+
+    wxCHECK( !enabledLayerStack.empty(), /* void */ );
+
+    auto isCopperPourKeepoutZone = []( const BOARD_ITEM* aItem ) -> bool
+                                   {
+                                       if( aItem->Type() == PCB_ZONE_T )
+                                       {
+                                           const ZONE* zone = static_cast<const ZONE*>( aItem );
+
+                                           wxCHECK( zone, false );
+
+                                           if( zone->GetIsRuleArea()
+                                             && zone->GetDoNotAllowCopperPour() )
+                                               return true;
+                                       }
+
+                                       return false;
+                                   };
+
+    std::vector<LAYER_OPACITY_ITEM> opacityStackup;
+
+    for( int i = 0; i < aCollector.GetCount(); i++ )
+    {
+        const BOARD_ITEM* item = aCollector[i];
+
+        LSET itemLayers = item->GetLayerSet() & enabledLayers & visibleLayers;
+        LSEQ itemLayerSeq = itemLayers.Seq( enabledLayerStack );
+
+        for( PCB_LAYER_ID layer : itemLayerSeq )
+        {
+            COLOR4D color = settings->GetColor( item, layer );
+
+            if( color.a == 0 )
+                continue;
+
+            LAYER_OPACITY_ITEM opacityItem;
+
+            opacityItem.m_Layer = layer;
+            opacityItem.m_Opacity = color.a;
+            opacityItem.m_Item = item;
+
+            if( isCopperPourKeepoutZone( item ) )
+                opacityItem.m_Opacity = 0.0;
+
+            opacityStackup.emplace_back( opacityItem );
+        }
+    }
+
+    std::sort( opacityStackup.begin(), opacityStackup.end(),
+               [&]( const LAYER_OPACITY_ITEM& aLhs, const LAYER_OPACITY_ITEM& aRhs ) -> bool
+               {
+                   int retv = enabledLayerStack.TestLayers( aLhs.m_Layer, aRhs.m_Layer );
+
+                   if( retv )
+                       return retv > 0;
+
+                   return aLhs.m_Opacity > aRhs.m_Opacity;
+               } );
+
+    std::set<const BOARD_ITEM*> visibleItems;
+    std::set<const BOARD_ITEM*> itemsToRemove;
+    double minAlphaLimit = ADVANCED_CFG::GetCfg().m_PcbSelectionVisibilityRatio;
+    double currentStackupOpacity = 0.0;
+    PCB_LAYER_ID lastVisibleLayer = PCB_LAYER_ID::UNDEFINED_LAYER;
+
+    for( const LAYER_OPACITY_ITEM& opacityItem : opacityStackup )
+    {
+        if( lastVisibleLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
+        {
+            currentStackupOpacity = opacityItem.m_Opacity;
+            lastVisibleLayer = opacityItem.m_Layer;
+            visibleItems.emplace( opacityItem.m_Item );
+            continue;
+        }
+
+        // Objects to ignore and fallback to the old selection behavior.
+        auto ignoreItem = [&]()
+                          {
+                              const BOARD_ITEM* item = opacityItem.m_Item;
+
+                              wxCHECK( item, false );
+
+                              // Check items that span multiple layers for visibility.
+                              if( visibleItems.count( item ) )
+                                  return true;
+
+                              // Don't prune child items of a footprint that is already visible.
+                              if( item->GetParent()
+                                && ( item->GetParent()->Type() == PCB_FOOTPRINT_T )
+                                && visibleItems.count( item->GetParent() ) )
+                                  return true;
+
+                              // Keepout zones are transparent but for some reason,
+                              // PCB_PAINTER::GetColor() returns the color of the zone it
+                              // prevents from filling.
+                              if( isCopperPourKeepoutZone( item ) )
+                                  return true;
+
+                              return false;
+                          };
+
+        // Everything on the currently selected layer is visible;
+        if( opacityItem.m_Layer == enabledLayerStack[0] )
+        {
+            visibleItems.emplace( opacityItem.m_Item );
+        }
+        else
+        {
+            double itemVisibility = opacityItem.m_Opacity * ( 1.0 - currentStackupOpacity );
+
+            if( ( itemVisibility <= minAlphaLimit ) && !ignoreItem() )
+                itemsToRemove.emplace( opacityItem.m_Item );
+            else
+                visibleItems.emplace( opacityItem.m_Item );
+        }
+
+        if( opacityItem.m_Layer != lastVisibleLayer )
+        {
+            currentStackupOpacity += opacityItem.m_Opacity * ( 1.0 - currentStackupOpacity );
+            currentStackupOpacity = std::min( currentStackupOpacity, 1.0 );
+            lastVisibleLayer = opacityItem.m_Layer;
+        }
+    }
+
+    for( const BOARD_ITEM* itemToRemove : itemsToRemove )
+    {
+        wxCHECK( aCollector.GetCount() > 1, /* void */ );
+        aCollector.Remove( itemToRemove );
+    }
+}
+
+
 // The general idea here is that if the user clicks directly on a small item inside a larger
 // one, then they want the small item.  The quintessential case of this is clicking on a pad
 // within a footprint, but we also apply it for text within a footprint, footprints within
@@ -3086,6 +3250,12 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 {
     static const LSET silkLayers( 2, B_SilkS, F_SilkS );
     static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
+
+    if( ADVANCED_CFG::GetCfg().m_PcbSelectionVisibilityRatio != 1.0 )
+        pruneObscuredSelectionCandidates( aCollector );
+
+    if( aCollector.GetCount() == 1 )
+        return;
 
     std::set<BOARD_ITEM*>  preferred;
     std::set<BOARD_ITEM*>  rejected;

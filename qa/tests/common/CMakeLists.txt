@@ -41,6 +41,7 @@ set( QA_COMMON_SRCS
     test_kicad_string.cpp
     test_kicad_stroke_font.cpp
     test_kiid.cpp
+    test_layer_ids.cpp
     test_property.cpp
     test_refdes_utils.cpp
     test_richio.cpp

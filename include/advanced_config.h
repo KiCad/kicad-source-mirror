@@ -284,6 +284,18 @@ public:
      */
     bool m_EnableEeschemaPrintCairo;
 
+    /**
+     * Board object selection visibility limit.
+     *
+     * This ratio is used to determine if an object in a selected object layer stack is
+     * visible.  All alpha ratios less or equal to this value are considered invisible
+     * to the user and will be pruned from the list of selections.  Valid values are
+     * between 0 and less than 1. A value of 1 disables this feature.  Reasonable values
+     * are between 0.01 and 0.03 depending on the layer colors.
+     *
+     * The setting name is "PcbSelectionVisibilityRatio".
+     */
+    double m_PcbSelectionVisibilityRatio;
 ///@}
 
 
