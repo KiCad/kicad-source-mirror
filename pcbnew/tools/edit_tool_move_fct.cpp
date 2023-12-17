@@ -229,14 +229,15 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         BOARD_COMMIT localCommit( this );
 
         if( doMoveSelection( aEvent, &localCommit ) )
-        {
             localCommit.Push( _( "Move" ) );
-        }
         else
-        {
             localCommit.Revert();
-        }
     }
+
+    // Notify point editor.  (While doMoveSelection() will re-select the items and post this
+    // event, it's done before the edit flags are cleared in BOARD_COMMIT::Push() so the point
+    // editor doesn't fire up.)
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
