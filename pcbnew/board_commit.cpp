@@ -382,10 +382,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         case CHT_UNGROUP:
-            boardItem->SetParentGroup( nullptr );
-
             if( !( aCommitFlags & SKIP_UNDO ) )
-                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::UNGROUP ) );
+            {
+                ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
+
+                if( PCB_GROUP* group = boardItem->GetParentGroup() )
+                    itemWrapper.SetLink( group->Clone() );
+
+                undoList.PushItem( itemWrapper );
+            }
+
+            boardItem->SetParentGroup( nullptr );
 
             break;
 

@@ -979,13 +979,10 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     // Ungroup first so that undo works
     if( !GetItems().empty() )
     {
-        PCB_GENERATOR*    group = this;
-        PICKED_ITEMS_LIST ungroupList;
+        PCB_GENERATOR*  group = this;
 
         for( BOARD_ITEM* member : group->GetItems() )
-            ungroupList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
-
-        aCommit->Stage( ungroupList );
+            aCommit->Stage( member, CHT_UNGROUP );
 
         group->GetItems().clear();
     }
@@ -1305,7 +1302,6 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
     KIGFX::VIEW*      view = aTool->GetManager()->GetView();
     PNS::ROUTER*      router = aTool->Router();
     SHAPE_LINE_CHAIN  bounds = getRectShape();
-    PICKED_ITEMS_LIST groupUndoList;
     int               epsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
 
     if( router->RoutingInProgress() )
@@ -1341,11 +1337,10 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
                     AddItem( item );
-                    groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+                    aCommit->Stage( item, CHT_GROUP );
                 }
             }
 
-            aCommit->Stage( groupUndoList );
             aCommit->Add( item );
         }
     }

@@ -273,15 +273,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     auto view = GetCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
 
-    PCB_GROUP* addedGroup = nullptr;
-
     GetBoard()->IncrementTimeStamp();   // clear caches
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
     // Restore changes in reverse order
-    for( int ii = aList->GetCount() - 1; ii >= 0 ; ii-- )
+    for( int ii = (int) aList->GetCount() - 1; ii >= 0 ; ii-- )
     {
         EDA_ITEM* eda_item = aList->GetPickedItem( (unsigned) ii );
 
@@ -414,26 +412,38 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Add( eda_item );
 
-            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( eda_item ) )
-                addedGroup = group;
-
             break;
 
-        case UNDO_REDO::REGROUP:
+        case UNDO_REDO::REGROUP:    /* grouped items are ungrouped */
             aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+            {
+                if( PCB_GROUP* group = boardItem->GetParentGroup() )
+                {
+                    if( !aList->GetPickedItemLink( ii ) )
+                        aList->SetPickedItemLink( group->Clone(), ii );
+                }
+
                 boardItem->SetParentGroup( nullptr );
+            }
 
             break;
 
-        case UNDO_REDO::UNGROUP:
+        case UNDO_REDO::UNGROUP:    /* ungrouped items are re-added to their previuos groups */
             aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
             {
-                if( addedGroup )
-                    addedGroup->AddItem( boardItem );
+                PCB_GROUP* group = nullptr;
+
+                // The link is just a clone of the original parent group; we need to look up
+                // the UUID in the document to find the real parent.
+                if( EDA_ITEM* link = aList->GetPickedItemLink( ii ) )
+                    group = dynamic_cast<PCB_GROUP*>( GetBoard()->GetItem( link->m_Uuid ) );
+
+                if( group )
+                    group->AddItem( boardItem );
             }
 
             break;

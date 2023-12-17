@@ -102,8 +102,8 @@ public:
     BASE_SCREEN* GetScreen() const { return m_screen; }
 
 private:
-    EDA_ITEM_FLAGS m_pickerFlags;      /* a copy of m_flags member. useful in mode/drag
-                                        * undo/redo commands */
+    EDA_ITEM_FLAGS m_pickerFlags;      /* A copy of m_flags member. Currently used only to flag
+                                        * transient items. */
     UNDO_REDO      m_undoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_ITEM*      m_pickedItem;       /* Pointer on the schematic or board item that is concerned
                                         * (picked), or in undo redo commands, the copy of an

@@ -1245,6 +1245,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
             else
             {
+                if( footprint->GetParentGroup() )
+                    m_commit.Stage( footprint, CHT_UNGROUP );
+
                 m_commit.Remove( footprint );
                 msg.Printf( _( "Removed unused footprint %s." ), footprint->GetReference() );
             }

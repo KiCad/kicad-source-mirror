@@ -269,15 +269,11 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     commit.Add( group );
 
-    PICKED_ITEMS_LIST groupList;
-
     for( EDA_ITEM* eda_item : selection )
     {
         if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
-            groupList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+            commit.Stage( item, CHT_GROUP );
     }
-
-    commit.Stage( groupList );
 
     commit.Push( _( "Group Items" ) );
 
@@ -309,15 +305,11 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
         if( group )
         {
-            PICKED_ITEMS_LIST ungroupList;
-
             for( BOARD_ITEM* member : group->GetItems() )
             {
-                ungroupList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
+                commit.Stage( member, CHT_UNGROUP );
                 toSelect.push_back( member );
             }
-
-            commit.Stage( ungroupList );
 
             group->GetItems().clear();
             group->SetSelected();
