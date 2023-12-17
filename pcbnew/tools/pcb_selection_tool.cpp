@@ -2919,7 +2919,10 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
         aItem->ClearBrightened();
 
     if( aUsingOverlay && aMode != BRIGHTENED )
-        view()->Hide( aItem, false );   // // Restore original item visibility
+    {
+        view()->Hide( aItem, false );   // Restore original item visibility...
+        view()->Update( aItem );        // ... and make sure it's redrawn un-selected
+    }
 
     if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
     {
