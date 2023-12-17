@@ -212,8 +212,6 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     ctxMenu.AddItem( EE_ACTIONS::clearHighlight,       haveHighlight && EE_CONDITIONS::Idle, 1 );
     ctxMenu.AddSeparator(                              haveHighlight && EE_CONDITIONS::Idle, 1 );
 
-    ctxMenu.AddItem( EE_ACTIONS::leaveSheet,           belowRootSheetCondition, 2 );
-
     ctxMenu.AddSeparator( 10 );
     ctxMenu.AddItem( EE_ACTIONS::drawWire,             wireOrBusTool && EE_CONDITIONS::Idle, 10 );
     ctxMenu.AddItem( EE_ACTIONS::drawBus,              wireOrBusTool && EE_CONDITIONS::Idle, 10 );
@@ -234,6 +232,8 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     ctxMenu.AddItem( EE_ACTIONS::breakWire,            wireOrBusTool && EE_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::slice,                ( wireOrBusTool || lineTool )
                                                                      && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::leaveSheet,           belowRootSheetCondition, 150 );
+
     ctxMenu.AddSeparator( 200 );
     ctxMenu.AddItem( EE_ACTIONS::selectNode,           wireOrBusTool && EE_CONDITIONS::Idle, 200 );
     ctxMenu.AddItem( EE_ACTIONS::selectConnection,     wireOrBusTool && EE_CONDITIONS::Idle, 200 );

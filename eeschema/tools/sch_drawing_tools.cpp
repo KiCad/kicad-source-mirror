@@ -99,7 +99,7 @@ bool SCH_DRAWING_TOOLS::Init()
             };
 
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
-    ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 2 );
+    ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 150 );
 
     return true;
 }

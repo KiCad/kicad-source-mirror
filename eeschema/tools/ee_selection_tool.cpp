@@ -274,16 +274,16 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
 
-    menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 2 );
-    menu.AddItem( EE_ACTIONS::selectOnPCB,        crossProbingSelection && EE_CONDITIONS::Idle, 2 );
-    menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 2 );
-
     menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::drawWire,           schEditCondition && EE_CONDITIONS::Empty, 100 );
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( 100 );
     menu.AddItem( ACTIONS::finishInteractive,     SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus, 100 );
+
+    menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 150 );
+    menu.AddItem( EE_ACTIONS::selectOnPCB,        crossProbingSelection && EE_CONDITIONS::Idle, 150 );
+    menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 150 );
 
     menu.AddSeparator( 200 );
     menu.AddItem( EE_ACTIONS::selectConnection,   connectedSelection && EE_CONDITIONS::Idle, 250 );
