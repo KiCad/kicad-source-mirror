@@ -164,7 +164,7 @@ TOOL_ACTION EE_ACTIONS::saveLibraryAs( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::newSymbol( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.newSymbol" )
         .Scope( AS_GLOBAL )
-        .DefaultHotkey( 'N' )
+        .DefaultHotkey( MD_CTRL + 'N' )
         .FriendlyName( _( "New Symbol..." ) )
         .Tooltip( _( "Create a new symbol" ) )
         .Icon( BITMAPS::new_component ) );
