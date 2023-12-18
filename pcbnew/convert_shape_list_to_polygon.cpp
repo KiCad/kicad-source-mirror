@@ -493,7 +493,7 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
                 parents.push_back( jj );
         }
 
-        contourToParentIndexesMap[ii] = parents;
+        contourToParentIndexesMap[ii] = std::move( parents );
     }
 
     // Next add those that are top-level outlines to the SHAPE_POLY_SET

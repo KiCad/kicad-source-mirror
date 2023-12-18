@@ -671,53 +671,54 @@ void SHAPE_POLY_SET::RebuildHolesFromContours()
 
     std::function<void( int, int, std::vector<int> )> process;
 
-    process = [&]( int myId, int parentOutlineId, std::vector<int> path )
-    {
-        std::set<int> relParents = childToParents[myId];
-
-        for( int pathId : path )
-        {
-            int erased = relParents.erase( pathId );
-            wxASSERT( erased > 0 );
-        }
-
-        wxASSERT( relParents.size() == 0 );
-
-        int myOutline = -1;
-
-        bool isOutline = path.size() % 2 == 0;
-
-        if( isOutline )
-        {
-            int outlineId = result.AddOutline( contours[myId] );
-            myOutline = outlineId;
-        }
-        else
-        {
-            wxASSERT( parentOutlineId != -1 );
-            result.AddHole( contours[myId], parentOutlineId );
-        }
-
-        auto it = parentToChildren.find( myId );
-        if( it != parentToChildren.end() )
-        {
-            std::vector<int> thisPath = path;
-            thisPath.emplace_back( myId );
-
-            std::set<int> thisPathSet;
-            thisPathSet.insert( thisPath.begin(), thisPath.end() );
-
-            for( int childId : it->second )
+    process =
+            [&]( int myId, int parentOutlineId, const std::vector<int>& path )
             {
-                const std::set<int>& childPathSet = childToParents[childId];
+                std::set<int> relParents = childToParents[myId];
 
-                if( thisPathSet != childPathSet )
-                    continue; // Only interested in immediate children
+                for( int pathId : path )
+                {
+                    int erased = relParents.erase( pathId );
+                    wxASSERT( erased > 0 );
+                }
 
-                process( childId, myOutline, thisPath );
-            }
-        }
-    };
+                wxASSERT( relParents.size() == 0 );
+
+                int myOutline = -1;
+
+                bool isOutline = path.size() % 2 == 0;
+
+                if( isOutline )
+                {
+                    int outlineId = result.AddOutline( contours[myId] );
+                    myOutline = outlineId;
+                }
+                else
+                {
+                    wxASSERT( parentOutlineId != -1 );
+                    result.AddHole( contours[myId], parentOutlineId );
+                }
+
+                auto it = parentToChildren.find( myId );
+                if( it != parentToChildren.end() )
+                {
+                    std::vector<int> thisPath = path;
+                    thisPath.emplace_back( myId );
+
+                    std::set<int> thisPathSet;
+                    thisPathSet.insert( thisPath.begin(), thisPath.end() );
+
+                    for( int childId : it->second )
+                    {
+                        const std::set<int>& childPathSet = childToParents[childId];
+
+                        if( thisPathSet != childPathSet )
+                            continue; // Only interested in immediate children
+
+                        process( childId, myOutline, thisPath );
+                    }
+                }
+            };
 
     for( int topParentId : topLevelParents )
     {
