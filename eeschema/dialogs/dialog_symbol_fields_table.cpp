@@ -2118,6 +2118,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPre
 
 void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
 {
+    bool modified = false;
+
     // Save our BOM presets
     std::vector<BOM_PRESET> presets;
 
@@ -2127,8 +2129,18 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
             presets.emplace_back( pair.second );
     }
 
-    m_schSettings.m_BomPresets = presets;
-    m_schSettings.m_BomSettings = m_dataModel->GetBomSettings();
+    if( m_schSettings.m_BomPresets != presets )
+    {
+        modified = true;
+        m_schSettings.m_BomPresets = presets;
+    }
+
+    if( m_schSettings.m_BomSettings != m_dataModel->GetBomSettings() )
+    {
+        modified = true;
+        m_schSettings.m_BomSettings = m_dataModel->GetBomSettings();
+    }
+
 
     // Save our BOM Format presets
     std::vector<BOM_FMT_PRESET> fmts;
@@ -2139,8 +2151,20 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
             fmts.emplace_back( pair.second );
     }
 
-    m_schSettings.m_BomFmtPresets = fmts;
-    m_schSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();
+    if( m_schSettings.m_BomFmtPresets != fmts )
+    {
+        modified = true;
+        m_schSettings.m_BomFmtPresets = fmts;
+    }
+
+    if( m_schSettings.m_BomFmtSettings != GetCurrentBomFmtSettings() )
+    {
+        modified = true;
+        m_schSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();
+    }
+
+    if( modified )
+        m_parent->OnModify();
 }
 
 
