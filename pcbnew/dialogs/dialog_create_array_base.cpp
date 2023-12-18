@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,7 +67,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelDx = new wxStaticText( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Horizontal spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelDx->Wrap( -1 );
-	m_labelDx->SetToolTip( _("Distance between rows") );
+	m_labelDx->SetToolTip( _("Distance between columns") );
 
 	fgSizerItemSpacing->Add( m_labelDx, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -80,7 +80,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelDy = new wxStaticText( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Vertical spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelDy->Wrap( -1 );
-	m_labelDy->SetToolTip( _("Distance between columns") );
+	m_labelDy->SetToolTip( _("Distance between rows") );
 
 	fgSizerItemSpacing->Add( m_labelDy, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 

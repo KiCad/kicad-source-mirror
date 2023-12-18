@@ -571,7 +571,7 @@
                                       <property name="style"></property>
                                       <property name="subclass"></property>
                                       <property name="toolbar_pane">0</property>
-                                      <property name="tooltip">Distance between rows</property>
+                                      <property name="tooltip">Distance between columns</property>
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
@@ -761,7 +761,7 @@
                                       <property name="style"></property>
                                       <property name="subclass"></property>
                                       <property name="toolbar_pane">0</property>
-                                      <property name="tooltip">Distance between columns</property>
+                                      <property name="tooltip">Distance between rows</property>
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
