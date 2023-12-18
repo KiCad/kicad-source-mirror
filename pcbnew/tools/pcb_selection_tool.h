@@ -218,7 +218,8 @@ public:
     /**
      * Drop footprints that are not directly selected
     */
-    void FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const;
+    void FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector,
+                                       const VECTOR2I& aWhere ) const;
 
 protected:
     KIGFX::PCB_VIEW* view() const
@@ -341,7 +342,8 @@ private:
                                    STOP_CONDITION aStopCondition );
 
     /**
-     * Selects all non-closed shapes that are graphically connected to the given start items.
+     * Select all non-closed shapes that are graphically connected to the given start items.
+     *
      * @param aStartItems is a list of one or more non-closed shapes
      */
     void selectAllConnectedShapes( const std::vector<PCB_SHAPE*>& aStartItems );
@@ -413,7 +415,7 @@ private:
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
     /**
-     * @return the distance from \a wWhere to \a aItem, up to and including \a aMaxDistance.
+     * @return the distance from \a aWhere to \a aItem, up to and including \a aMaxDistance.
      */
     int hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aItem, int aMaxDistance ) const;
 

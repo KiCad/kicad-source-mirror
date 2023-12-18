@@ -56,172 +56,52 @@ namespace AC_STACK
 /**
  * List of known keys for advanced configuration options.
  *
- * Set these options in the file `kicad_advanced` in the
- * KiCad config directory.
+ * Set these options in the file `kicad_advanced` in the KiCad configuration directory.
  */
 namespace AC_KEYS
 {
 
-/**
- * Should the schematic use the new incremental connectivity algorithm
- */
 static const wxChar IncrementalConnectivity[] = wxT( "IncrementalConnectivity" );
-
-/**
- * Decide whether to attempt usage of the 3DConnexion mouse
- */
 static const wxChar Use3DConnexionDriver[] = wxT( "3DConnexionDriver" );
-
-/**
- * When filling zones, we add an extra amount of clearance to each zone to ensure that rounding
- * errors do not overrun minimum clearance distances.  This is the extra in mm.
- */
 static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
-
-/**
- * A fudge factor for DRC.  Required to prevent false positives due to rounding errors, errors
- * in polygonalization, etc.
- * Previous versions hard-coded various values from 0.000005mm to 0.002mm.
- */
 static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
-
-/**
- * Angle and width tolerances for copper and solder mask sliver detection.
- */
 static const wxChar DRCSliverWidthTolerance[] = wxT( "DRCSliverWidthTolerance" );
 static const wxChar DRCSliverMinimumLength[] = wxT( "DRCSliverMinimumLength" );
 static const wxChar DRCSliverAngleTolerance[] = wxT( "DRCSliverAngleTolerance" );
-
-/**
- * Used to calculate the actual hole size from the finish hole size.
- * IPC-6012 says 0.015-0.018mm; Cadence says at least 0.020mm for a Class 2 board and at least
- * 0.025mm for Class 3.
- */
 static const wxChar HoleWallThickness[] = wxT( "HoleWallPlatingThickness" );
-
-/**
- * Configure the coroutine stack size in bytes.  This should be allocated in multiples of
- * the system page size (n*4096 is generally safe)
- */
 static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
-
-/**
- * Show PNS router debug graphics while routing
- */
 static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" );
-
-/**
- * Enable PNS router to dump state information for debug purpose (press `0` while routing)
- */
 static const wxChar EnableRouterDump[] = wxT( "EnableRouterDump" );
-
-/**
- * Slide the zoom steps over for debugging things "up close".
- */
 static const wxChar HyperZoom[] = wxT( "HyperZoom" );
-
-/**
- * When set to true, this will wrap polygon point sets at 4 points per line rather
- * than a single point per line.  Single point per line helps with version control systems
- */
 static const wxChar CompactFileSave[] = wxT( "CompactSave" );
-
-/**
- * For drawsegments - arcs.
- * Distance from an arc end point and the estimated end point,
- * when rotating from the start point to the end point.
- * 0 will not allow any approximate result, and the arc will not show.
- * Squared value for performances, in system unit.
- */
 static const wxChar DrawArcAccuracy[] = wxT( "DrawArcAccuracy" );
-
-/**
- * For drawsegments - arcs.
- * When drawing an arc, the angle ( center - start ) - ( start - end ),
- * can be limited to avoid extremely high radii.
- * The value is the tan( angle )
- */
 static const wxChar DrawArcCenterStartEndMaxAngle[] = wxT( "DrawArcCenterStartEndMaxAngle" );
-
-/**
- * For arc track interactive drag-resizing
- * Maximum angle between the tangent line of an arc track and a connected straight track
- * in order to commence arc dragging. Units are degrees.
- */
 static const wxChar MaxTangentTrackAngleDeviation[] = wxT( "MaxTangentTrackAngleDeviation" );
-
-/**
- * For arc track interactive drag-resizing
- * Maximum track length to keep after doing an arc track resizing operation. Units are mm.
- */
 static const wxChar MaxTrackLengthToKeep[] = wxT( "MaxTrackLengthToKeep" );
-
-/**
- * When true, GAL will stroke the triangulations (only used in OpenGL) with a visible color
- */
 static const wxChar StrokeTriangulation[] = wxT( "StrokeTriangulation" );
-
-/**
- * When true, a third zone-display-mode is included which strokes the filled areas and fracture
- * boundaries.
- */
 static const wxChar ExtraZoneDisplayModes[] = wxT( "ExtraZoneDisplayModes" );
-
-/**
- * Absolute minimum pen width to send to the plotter.  PDF seems happy enough with 0.0212mm
- * (which equates to 1px @ 1200dpi).
- */
 static const wxChar MinPlotPenWidth[] = wxT( "MinPlotPenWidth" );
-
 static const wxChar DebugZoneFiller[] = wxT( "DebugZoneFiller" );
-
 static const wxChar DebugPDFWriter[] = wxT( "DebugPDFWriter" );
-
-/**
- * The diameter of the drill marks on print and plot outputs (in mm),
- * when the "Drill marks" option is set to "Small mark"
- */
 static const wxChar SmallDrillMarkSize[] = wxT( "SmallDrillMarkSize" );
-
 static const wxChar HotkeysDumper[] = wxT( "HotkeysDumper" );
-
 static const wxChar DrawBoundingBoxes[] = wxT( "DrawBoundingBoxes" );
-
 static const wxChar ShowPcbnewExportNetlist[] = wxT( "ShowPcbnewExportNetlist" );
-
 static const wxChar Skip3DModelFileCache[] = wxT( "Skip3DModelFileCache" );
-
 static const wxChar Skip3DModelMemoryCache[] = wxT( "Skip3DModelMemoryCache" );
-
 static const wxChar HideVersionFromTitle[] = wxT( "HideVersionFromTitle" );
-
 static const wxChar TraceMasks[] = wxT( "TraceMasks" );
-
 static const wxChar ShowRepairSchematic[] = wxT( "ShowRepairSchematic" );
-
 static const wxChar ShowEventCounters[] = wxT( "ShowEventCounters" );
-
 static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
-
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
-
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
-
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
-
 static const wxChar UseClipper2[] = wxT( "UseClipper2" );
-
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
-
 static const wxChar EnableGit[] = wxT( "EnableGit" );
-
 static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
-
-/**
- * The time in milliseconds to wait before displaying a disambiguation menu.
- */
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
-
 static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
 } // namespace KEYS
 
@@ -394,7 +274,8 @@ void ADVANCED_CFG::loadFromConfigFile()
         return;
     }
 
-    wxLogTrace( AdvancedConfigMask, wxS( "Loading advanced config from: %s" ), k_advanced.GetFullPath() );
+    wxLogTrace( AdvancedConfigMask, wxS( "Loading advanced config from: %s" ),
+                k_advanced.GetFullPath() );
 
     wxFileConfig file_cfg( wxS( "" ), wxS( "" ), k_advanced.GetFullPath() );
     loadSettings( file_cfg );
@@ -406,32 +287,39 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     std::vector<PARAM_CFG*> configParams;
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
-                                                  &m_ExtraClearance, m_ExtraClearance, 0.0, 1.0 ) );
+                                                  &m_ExtraClearance,
+                                                  m_ExtraClearance, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCEpsilon,
                                                   &m_DRCEpsilon, m_DRCEpsilon, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverWidthTolerance,
-                                                  &m_SliverWidthTolerance, m_SliverWidthTolerance, 0.01, 0.25 ) );
+                                                  &m_SliverWidthTolerance, m_SliverWidthTolerance,
+                                                  0.01, 0.25 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverMinimumLength,
-                                                  &m_SliverMinimumLength, m_SliverMinimumLength, 1e-9, 10 ) );
+                                                  &m_SliverMinimumLength, m_SliverMinimumLength,
+                                                  1e-9, 10 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DRCSliverAngleTolerance,
-                                                  &m_SliverAngleTolerance, m_SliverAngleTolerance, 1.0, 90.0 ) );
+                                                  &m_SliverAngleTolerance, m_SliverAngleTolerance,
+                                                  1.0, 90.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::HoleWallThickness,
-                                                  &m_HoleWallThickness, m_HoleWallThickness, 0.0, 1.0 ) );
+                                                  &m_HoleWallThickness, m_HoleWallThickness,
+                                                  0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_CoroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::UpdateUIEventInterval,
-                                               &m_UpdateUIEventInterval, m_UpdateUIEventInterval, -1, 100000 ) );
+                                               &m_UpdateUIEventInterval, m_UpdateUIEventInterval,
+                                               -1, 100000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
-                                                &m_ShowRouterDebugGraphics, m_ShowRouterDebugGraphics ) );
+                                                &m_ShowRouterDebugGraphics,
+                                                m_ShowRouterDebugGraphics ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableRouterDump,
                                                 &m_EnableRouterDump, m_EnableRouterDump ) );
@@ -443,25 +331,32 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_CompactSave, m_CompactSave ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcAccuracy,
-                                                  &m_DrawArcAccuracy, m_DrawArcAccuracy, 0.0, 100000.0 ) );
+                                                  &m_DrawArcAccuracy, m_DrawArcAccuracy,
+                                                  0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
-                                                  &m_DrawArcCenterMaxAngle, m_DrawArcCenterMaxAngle, 0.0, 100000.0 ) );
+                                                  &m_DrawArcCenterMaxAngle,
+                                                  m_DrawArcCenterMaxAngle, 0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTangentTrackAngleDeviation,
-                                                  &m_MaxTangentAngleDeviation, m_MaxTangentAngleDeviation, 0.0, 90.0 ) );
+                                                  &m_MaxTangentAngleDeviation,
+                                                  m_MaxTangentAngleDeviation, 0.0, 90.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MaxTrackLengthToKeep,
-                                                  &m_MaxTrackLengthToKeep, m_MaxTrackLengthToKeep, 0.0, 1.0 ) );
+                                                  &m_MaxTrackLengthToKeep, m_MaxTrackLengthToKeep,
+                                                  0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ExtraZoneDisplayModes,
-                                                &m_ExtraZoneDisplayModes, m_ExtraZoneDisplayModes ) );
+                                                &m_ExtraZoneDisplayModes,
+                                                m_ExtraZoneDisplayModes ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
-                                                &m_DrawTriangulationOutlines, m_DrawTriangulationOutlines ) );
+                                                &m_DrawTriangulationOutlines,
+                                                m_DrawTriangulationOutlines ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::MinPlotPenWidth,
-                                                  &m_MinPlotPenWidth, m_MinPlotPenWidth, 0.0, 1.0 ) );
+                                                  &m_MinPlotPenWidth, m_MinPlotPenWidth,
+                                                  0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::DebugZoneFiller,
                                                 &m_DebugZoneFiller, m_DebugZoneFiller ) );
@@ -470,7 +365,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_DebugPDFWriter, m_DebugPDFWriter ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::SmallDrillMarkSize,
-                                                  &m_SmallDrillMarkSize, m_SmallDrillMarkSize, 0.0, 3.0 ) );
+                                                  &m_SmallDrillMarkSize, m_SmallDrillMarkSize,
+                                                  0.0, 3.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HotkeysDumper,
                                                 &m_HotkeysDumper, m_HotkeysDumper ) );
@@ -479,7 +375,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_DrawBoundingBoxes, m_DrawBoundingBoxes ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowPcbnewExportNetlist,
-                                                &m_ShowPcbnewExportNetlist, m_ShowPcbnewExportNetlist ) );
+                                                &m_ShowPcbnewExportNetlist,
+                                                m_ShowPcbnewExportNetlist ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Skip3DModelFileCache,
                                                 &m_Skip3DModelFileCache, m_Skip3DModelFileCache ) );
@@ -497,7 +394,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_ShowEventCounters, m_ShowEventCounters ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowManualCanvasScale,
-                                                &m_AllowManualCanvasScale, m_AllowManualCanvasScale ) );
+                                                &m_AllowManualCanvasScale,
+                                                m_AllowManualCanvasScale ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::V3DRT_BevelHeight_um,
                                                &m_3DRT_BevelHeight_um, m_3DRT_BevelHeight_um,
@@ -505,8 +403,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                AC_GROUPS::V3D_RayTracing ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::V3DRT_BevelExtentFactor,
-                                                  &m_3DRT_BevelExtentFactor, m_3DRT_BevelExtentFactor,
-                                                  0.0, 100.0,
+                                                  &m_3DRT_BevelExtentFactor,
+                                                  m_3DRT_BevelExtentFactor, 0.0, 100.0,
                                                   AC_GROUPS::V3D_RayTracing ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::UseClipper2,
@@ -516,11 +414,13 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_Use3DConnexionDriver, m_Use3DConnexionDriver ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::IncrementalConnectivity,
-                                                &m_IncrementalConnectivity, m_IncrementalConnectivity ) );
+                                                &m_IncrementalConnectivity,
+                                                m_IncrementalConnectivity ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::DisambiguationTime,
-                                                  &m_DisambiguationMenuDelay, m_DisambiguationMenuDelay,
-                                                  50, 10000 ) );
+                                               &m_DisambiguationMenuDelay,
+                                               m_DisambiguationMenuDelay,
+                                               50, 10000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
                                                 &m_EnableGenerators, m_EnableGenerators ) );
@@ -529,8 +429,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_EnableGit, m_EnableGit ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
-                                                &m_EnableEeschemaPrintCairo, m_EnableEeschemaPrintCairo ) );
-
+                                                &m_EnableEeschemaPrintCairo,
+                                                m_EnableEeschemaPrintCairo ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::PcbSelectionVisibilityRatio,
                                                   &m_PcbSelectionVisibilityRatio,
@@ -539,7 +439,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
     wxString traceMasks;
-    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, wxS( "" ) ) );
+    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks,
+                                                    wxS( "" ) ) );
 
     // Load the config from file
     wxConfigLoadSetups( &aCfg, configParams );

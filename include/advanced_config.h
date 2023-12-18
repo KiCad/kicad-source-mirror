@@ -77,210 +77,410 @@ public:
     /**
      * Distance from an arc end point and the estimated end point, when rotating from the
      * start point to the end point.
+     *
+     * Setting name: "DrawArcAccuracy"
+     * Valid values: 0 to 100000
+     * Default value: 10
      */
     double m_DrawArcAccuracy;
 
     /**
      * When drawing an arc, the angle ( center - start ) - ( start - end ) can be limited to
      * avoid extremely high radii.
+     *
+     * Setting name: "DrawArcCenterStartEndMaxAngle"
+     * Valid values: 0 to 100000
+     * Default value: 50
      */
     double m_DrawArcCenterMaxAngle;
 
     /**
      * Maximum angle between the tangent line of an arc track and a connected straight track
      * in order to commence arc dragging. Units are degrees.
+     *
+     * Setting name: "MaxTangentTrackAngleDeviation"
+     * Valid values: 0 to 90
+     * Default value: 1
      */
     double m_MaxTangentAngleDeviation;
 
     /**
      * Maximum track length to keep after doing an arc track resizing operation. Units are mm.
+     *
+     * Setting name: "MaxTrackLengthToKeep"
+     * Valid values: 0 to 1
+     * Default value: 0.0005
      */
     double m_MaxTrackLengthToKeep;
 
     /**
-     * Extra fill clearance for zone fills.  Note that for zone tests this is essentially
-     * additive with m_DRCEpsilon.  Units are mm.
+     * When filling zones, we add an extra amount of clearance to each zone to ensure that
+     * rounding errors do not overrun minimum clearance distances.
+     *
+     * This is the extra clearance in mm.
+     *
+     * Setting name: "ExtraFillMargin"
+     * Valid values: 0 to 1
+     * Default value: 0.0005
      */
     double m_ExtraClearance;
 
     /**
-     * Epsilon for DRC tests.  Note that for zone tests this is essentially additive with
-     * m_ExtraClearance.  Units are mm.
+     * Epsilon for DRC tests.
+     *
+     * @note Fo zone tests this is essentially additive with #m_ExtraClearance.  Units are mm.
+     *
+     * Setting name: "DRCEpsilon"
+     * Valid values: 0 to 1
+     * Default value: 0.0005
      */
     double m_DRCEpsilon;
 
     /**
-     * Sliver tolerances for DRC.  Units are mm and deg.
+     * Sliver width tolerance for DRC.
+     *
+     * Units are mm.
+     *
+     * Setting name: "DRCSliverWidthTolerance"
+     * Valid values: 0.01 to 0.25
+     * Default value: 0.08
      */
     double m_SliverWidthTolerance;
-    double m_SliverMinimumLength;
-    double m_SliverAngleTolerance;
 
     /**
-     * Hole wall plating thickness.  Used to determine actual hole size from finish hole size.
+     * Sliver length tolerance for DRC.
+     *
      * Units are mm.
+     *
+     * Setting name: "DRCSliverMinimumLength"
+     * Valid values: 1e-9 to 10
+     * Default value: 0.0008
+     */
+    double m_SliverMinimumLength;
+
+    /**
+     * Sliver angle to tolerance for DRC.
+     *
+     * Units are mm.
+     *
+     * Setting name: "DRCSliverAngleTolerance"
+     * Valid values: 1 to 90
+     * Default value: 20
+     */
+    double m_SliverAngleTolerance;
+
+
+    /**
+     * Dimension used to calculate the actual hole size from the finish hole size.
+     *
+     * @note IPC-6012 says 0.015-0.018mm; Cadence says at least 0.020mm for a Class 2 board and
+     *       at least 0.025mm for Class 3.  Units are mm.
+     *
+     * Setting name: "HoleWallPlatingThickness"
+     * Valid values: 1 to 90
+     * Default value: 0.02
      */
     double m_HoleWallThickness;
 
+
     /**
-     * Set the stack size for coroutines
+     * Configure the coroutine stack size in bytes.
+     *
+     * @note This should be allocated in multiples of the system page size (n*4096 is generally
+     *       safe)
+     *
+     * Setting name: "CoroutineStackSize"
+     * Valid values: 32 * 4096 to 4096 * 4096
+     * Default value: 256 * 4096
      */
     int m_CoroutineStackSize;
 
     /**
      * The update interval the wxWidgets sends wxUpdateUIEvents to windows.
      *
-     * The default is 0.  Setting this to -1 will disable all automatic UI events.  Any other
+     * Setting this to -1 will disable all automatic UI events.  Any other
      * value is the number of milliseconds between events.
      *
      * @see https://docs.wxwidgets.org/3.0/classwx_update_u_i_event.html#a24daac56f682b866baac592e761ccede.
+     *
+     * Setting name: "UpdateUIEventInterval"
+     * Valid values: -1 to 100000
+     * Default value: 0
      */
     int m_UpdateUIEventInterval;
 
     /**
-     * Show PNS router debug graphics
+     * Show PNS router debug graphics while routing
+     *
+     * Setting name: "ShowRouterDebugGraphics"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_ShowRouterDebugGraphics;
 
     /**
      * Enable PNS router to dump state information for debug purpose (press `0` while routing)
+     *
+     * Setting name: "EnableRouterDump"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_EnableRouterDump;
 
     /**
      * Slide the zoom steps over for debugging things "up close".
+     *
+     * Setting name: "EnableRouterDump"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_HyperZoom;
 
     /**
      * Save files in compact display mode
-     * When is is not specified, points are written one per line
+     *
+     * When set to true, this will wrap polygon point sets at 4 points per line rather
+     * than a single point per line.  Single point per line helps with version control systems.
+     *
+     * Setting name: "CompactSave"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_CompactSave;
 
     /**
-     * When true, strokes the triangulations with visible color
+     * Enable drawing the triangulation outlines with a visible color.
+     *
+     * @note This only affects the OpenGL GAL.
+     *
+     * Setting name: "StrokeTriangulation"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_DrawTriangulationOutlines;
 
     /**
      * When true, adds zone-display-modes for stroking the zone fracture boundaries and the zone
      * triangulation.
+     *
+     * Setting name: "ExtraZoneDisplayModes"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_ExtraZoneDisplayModes;
 
     /**
-     * Sets an absolute minimum pen width for plotting.  Some formats (PDF, for example) don't
-     * like ultra-thin lines.  Units are mm.
+     * Absolute minimum pen width for plotting.
+     *
+     * @note Some formats (PDF, for example) don't like ultra-thin lines.  PDF seems happy
+     *       enough with 0.0212mm which equates to 1px @ 1200dpi.  Units are mm.
+     *
+     * Setting name: "MinPlotPenWidth"
+     * Valid values: 0 to 1
+     * Default value: 0.0212
      */
     double m_MinPlotPenWidth;
 
     /**
      * A mode that dumps the various stages of a F_Cu fill into In1_Cu through In9_Cu.
+     *
+     * Setting name: "DebugZoneFiller"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_DebugZoneFiller;
 
     /**
      * A mode that writes PDFs without compression.
+     *
+     * Setting name: "DebugPDFWriter"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_DebugPDFWriter;
 
     /**
-     * The diameter of the drill marks on print and plot outputs (in mm),
-     * when the "Drill marks" option is set to "Small mark"
+     * The diameter of the drill marks on print and plot outputs (in mm) when the "Drill marks"
+     * option is set to "Small mark".
+     *
+     * Setting name: "SmallDrillMarkSize"
+     * Valid values: 0 to 3
+     * Default value: 0.35
      */
     double m_SmallDrillMarkSize;
 
     /**
-     * Enable the hotkeys dumper feature, used for generating documentation
+     * Enable the hotkeys dumper feature for generating documentation.
+     *
+     * Setting name: "HotkeysDumper"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_HotkeysDumper;
 
     /**
-     * Draw GAL bounding boxes in painters
+     * Draw GAL bounding boxes in painters.
+     *
+     * Setting name: "DrawBoundingBoxes"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_DrawBoundingBoxes;
 
     /**
      * Enable exporting board editor netlist to a file for troubleshooting purposes.
+     *
+     * Setting name: "ShowPcbnewExportNetlist"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_ShowPcbnewExportNetlist;
 
     /**
-     * Skip reading/writing 3d model file caches
-     * This does not prevent the models from being cached in memory meaning reopening the 3d viewer
-     * in the same project session will not reload model data from disk again.
+     * Skip reading/writing 3D model file caches.
+     *
+     * This does not prevent the models from being cached in memory meaning reopening the 3D
+     * viewer in the same project session will not reload model data from disk again.
+     *
+     * Setting name: "Skip3DModelFileCache"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_Skip3DModelFileCache;
 
     /**
-     * Skip reading/writing 3d model memory caches
-     * This ensures 3d models are always reloaded from disk even if we previously opened the 3d
+     * Skip reading/writing 3D model memory caches.
+     &
+     * This ensures 3D models are always reloaded from disk even if we previously opened the 3D
      * viewer.
+     *
+     * Setting name: "Skip3DModelMemoryCache"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_Skip3DModelMemoryCache;
 
     /**
-     * Hides the build version from the KiCad manager frame title.
+     * Hide the build version from the KiCad manager frame title.
+     *
      * Useful for making screenshots/videos of KiCad without pinning to a specific version.
+     *
+     * Setting name: "HideVersionFromTitle"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_HideVersionFromTitle;
 
+    /**
+     * Enable showing schematic repair output.
+     *
+     * Setting name: "ShowRepairSchematic"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
     bool m_ShowRepairSchematic;
 
     /**
      * Shows debugging event counters in various places.
+     *
+     * Setting name: "ShowEventCounters"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_ShowEventCounters;
 
+    /**
+     * Allow manual scaling of canvas.
+     *
+     * Setting name: "AllowManualCanvasScale"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
     bool m_AllowManualCanvasScale;
 
     /**
-     * 3D-Viewer, Raytracing
-     * Bevel height of layer items. Controls the start of curvature normal on the edge.
-     * Value is in micrometer. Good values should be around or less than the copper thickness.
+     * Set the bevel height of layer items in 3D viewer when ray tracing.
+     *
+     * Controls the start of curvature normal on the edge.  The value is in micrometer. Good
+     * values should be around or less than the copper thickness.
+     *
+     * Setting name: "V3DRT_BevelHeight_um"
+     * Valid values: 0 to std::numeric_limits<int>::max()
+     * Default value: 30
      */
     int m_3DRT_BevelHeight_um;
 
     /**
      * 3D-Viewer raytracing factor applied to Extent.z of the item layer.
      *
-     * This is  used on calculation of the bevel's height.
+     * This is used for calculating the bevel's height.
+     *
+     * Setting name: "V3DRT_BevelHeight_um"
+     * Valid values: 0 to 100
+     * Default value: 1/16
      */
     double m_3DRT_BevelExtentFactor;
 
     /**
-     * Use Clipper2 instead of Clipper1
+     * Use Clipper2 instead of Clipper1.
+     *
+     * Setting name: "UseClipper2"
+     * Valid values: 0 or 1
+     * Default value: 1
      */
     bool m_UseClipper2;
 
     /**
-     * Use the 3DConnexion Driver
+     * Use the 3DConnexion Driver.
+     *
+     * Setting name: "3DConnexionDriver"
+     * Valid values: 0 or 1
+     * Default value: 1
      */
     bool m_Use3DConnexionDriver;
 
     /**
-     * Use the new incremental netlister for realtime jobs
+     * Use the new incremental netlister for realtime jobs.
+     *
+     * Setting name: "IncrementalConnectivity"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_IncrementalConnectivity;
 
     /**
      * The number of milliseconds to wait in a click before showing a disambiguation menu.
+     *
+     * Setting name: "DisambiguationTime"
+     * Valid values: 50 or 10000
+     * Default value: 300
      */
     int m_DisambiguationMenuDelay;
 
     /**
-     * When true, enable support for generators
+     * Enable support for generators.
+     *
+     * Setting name: "EnableGenerators"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_EnableGenerators;
 
     /**
-     * When true, enable git integration
+     * Enable git integration.
+     *
+     * Setting name: "EnableGit"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_EnableGit;
 
     /**
-     * When true, enable Eeschema printing using Cairo
+     * Enable Eeschema printing using Cairo.
+     *
+     * Setting name: "EnableEeschemaPrintCairo"
+     * Valid values: 0 or 1
+     * Default value: 0
      */
     bool m_EnableEeschemaPrintCairo;
 
@@ -293,7 +493,9 @@ public:
      * between 0 and less than 1. A value of 1 disables this feature.  Reasonable values
      * are between 0.01 and 0.03 depending on the layer colors.
      *
-     * The setting name is "PcbSelectionVisibilityRatio".
+     * Setting name: "PcbSelectionVisibilityRatio"
+     * Valid values: 0.0 to 1.0
+     * Default value: 1
      */
     double m_PcbSelectionVisibilityRatio;
 ///@}

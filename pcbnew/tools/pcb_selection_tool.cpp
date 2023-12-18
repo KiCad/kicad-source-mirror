@@ -151,7 +151,8 @@ PCB_SELECTION_TOOL::~PCB_SELECTION_TOOL()
     getView()->Remove( &m_selection );
     getView()->Remove( &m_enteredGroupOverlay );
 
-    Disconnect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
+    Disconnect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ),
+                nullptr, this );
 }
 
 
@@ -212,7 +213,8 @@ bool PCB_SELECTION_TOOL::Init()
         frame->AddStandardSubMenus( m_menu );
 
     m_disambiguateTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_SELECTION_TOOL::onDisambiguationExpire ),
+             nullptr, this );
 
     return true;
 }
@@ -781,7 +783,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         }
         catch( const std::exception& exc )
         {
-            wxLogWarning( wxS( "Exception \"%s\" occurred attemption to guess selection "
+            wxLogWarning( wxS( "Exception \"%s\" occurred attempting to guess selection "
                                "candidates." ), exc.what() );
             return false;
         }
@@ -878,7 +880,7 @@ const TOOL_ACTION* allowedActions[] = { &ACTIONS::panUp,          &ACTIONS::panD
 
 bool PCB_SELECTION_TOOL::selectMultiple()
 {
-    bool cancelled = false;     // Was the tool cancelled while it was running?
+    bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
 
@@ -1131,6 +1133,7 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int PCB_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
 {
@@ -1909,7 +1912,8 @@ void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aIte
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_ITEM* item : conn->GetNetItems( netCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+        for( BOARD_ITEM* item : conn->GetNetItems( netCode,
+                                                   { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
             localConnectionList.insert( item );
     }
 
@@ -2029,7 +2033,8 @@ void PCB_SELECTION_TOOL::zoomFitSelection()
     BOX2I        selectionBox = m_selection.GetBoundingBox();
     KIGFX::VIEW* view = getView();
 
-    VECTOR2D     screenSize = view->ToWorld( ToVECTOR2D( m_frame->GetCanvas()->GetClientSize() ), false );
+    VECTOR2D     screenSize = view->ToWorld( ToVECTOR2D( m_frame->GetCanvas()->GetClientSize() ),
+                                             false );
     screenSize.x = std::max( 10.0, screenSize.x );
     screenSize.y = std::max( 10.0, screenSize.y );
 
@@ -2075,7 +2080,8 @@ void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
 
 #ifndef DEFAULT_PCBNEW_CODE // Do the scaled zoom
     auto bbSize = bbox.Inflate( KiROUND( bbox.GetWidth() * 0.2 ) ).GetSize();
-    VECTOR2D screenSize = view->ToWorld( ToVECTOR2D( m_frame->GetCanvas()->GetClientSize() ), false );
+    VECTOR2D screenSize = view->ToWorld( ToVECTOR2D( m_frame->GetCanvas()->GetClientSize() ),
+                                         false );
 
     // This code tries to come up with a zoom factor that doesn't simply zoom in
     // to the cross probed component, but instead shows a reasonable amount of the
@@ -2224,8 +2230,10 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 
             if( !screenRect.Contains( aItem->GetBoundingBox() ) )
             {
-                double scaleX = screenSize.x / static_cast<double>( aItem->GetBoundingBox().GetWidth() );
-                double scaleY = screenSize.y / static_cast<double>( aItem->GetBoundingBox().GetHeight() );
+                double scaleX = screenSize.x /
+                                static_cast<double>( aItem->GetBoundingBox().GetWidth() );
+                double scaleY = screenSize.y /
+                                static_cast<double>( aItem->GetBoundingBox().GetHeight() );
 
                 scaleX /= marginFactor;
                 scaleY /= marginFactor;
@@ -3269,7 +3277,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         {
             BOARD_ITEM* item = aCollector[i];
 
-            if( item->IsType( { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T, PCB_FOOTPRINT_T } )
+            if( item->IsType( { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T,
+                                PCB_FOOTPRINT_T } )
                 && item->IsOnLayer( activeLayer ) )
             {
                 preferred.insert( item );
@@ -3470,7 +3479,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 
         // If any element is a member of a group, replace those elements with the top containing
         // group.
-        if( PCB_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor ) )
+        if( PCB_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup,
+                                                       m_isFootprintEditor ) )
         {
             if( top != item )
             {
@@ -3538,7 +3548,9 @@ void PCB_SELECTION_TOOL::FilterCollectorForMarkers( GENERAL_COLLECTOR& aCollecto
     }
 }
 
-void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const
+
+void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector,
+                                                       const VECTOR2I& aWhere ) const
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
     BOX2D viewport = getView()->GetViewport();
