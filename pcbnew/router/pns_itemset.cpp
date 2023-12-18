@@ -61,7 +61,7 @@ ITEM_SET& ITEM_SET::FilterLayers( int aStart, int aEnd, bool aInvert )
             newItems.push_back( item );
     }
 
-    m_items = newItems;
+    m_items = std::move( newItems );
 
     return *this;
 }
@@ -77,7 +77,7 @@ ITEM_SET& ITEM_SET::FilterKinds( int aKindMask, bool aInvert )
             newItems.push_back( item );
     }
 
-    m_items = newItems;
+    m_items = std::move( newItems );
 
     return *this;
 }
@@ -93,7 +93,7 @@ ITEM_SET& ITEM_SET::FilterMarker( int aMarker, bool aInvert )
             newItems.push_back( item );
     }
 
-    m_items = newItems;
+    m_items = std::move( newItems );
 
     return *this;
 }
@@ -109,7 +109,7 @@ ITEM_SET& ITEM_SET::FilterNet( NET_HANDLE aNet, bool aInvert )
             newItems.push_back( item );
     }
 
-    m_items = newItems;
+    m_items = std::move( newItems );
 
     return *this;
 }
@@ -125,7 +125,7 @@ ITEM_SET& ITEM_SET::ExcludeItem( const ITEM* aItem )
             newItems.push_back( item );
     }
 
-    m_items = newItems;
+    m_items = std::move( newItems );
 
     return *this;
 }

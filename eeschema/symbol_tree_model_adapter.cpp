@@ -121,7 +121,7 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
         PROJECT_FILE&    project = aFrame->Prj().GetProjectFile();
 
         auto addFunc =
-                [&]( const wxString& aLibName, std::vector<LIB_SYMBOL*> aSymbolList,
+                [&]( const wxString& aLibName, const std::vector<LIB_SYMBOL*>& aSymbolList,
                      const wxString& aDescription )
                 {
                     std::vector<LIB_TREE_ITEM*> treeItems( aSymbolList.begin(), aSymbolList.end() );
