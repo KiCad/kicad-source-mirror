@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-12-12 09:44+0000\n"
+"PO-Revision-Date: 2023-12-19 16:32+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.3\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -85,7 +85,6 @@ msgid "Simplifying copper layer polygons"
 msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
-#, fuzzy
 msgid "Calculating plated copper"
 msgstr "Υπολογισμός χαλκού επιμετάλλωσης"
 
@@ -149,9 +148,9 @@ msgid "Load OpenGL: layers"
 msgstr "Φόρτωση OpenGL: επίπεδα"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Φόρτωση OpenGL επίπεδο %d"
+msgstr "Φόρτωση OpenGL επίπεδο %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -306,19 +305,18 @@ msgstr "Εμφάνιση"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 #, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Επεξεργαστής Σχεδίασης PCB"
+msgstr "Ακολουθήστε τον Επεξεργαστή Σχεδίασης PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Ρυθμίσεις Φίλτρου"
+msgstr "Ακολουθήστε τις Ρυθμίσεις Σχεδιογράφησης PCB"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
 #, fuzzy
 msgid "legacy colors"
-msgstr "Χρήση χρωμάτων:"
+msgstr "χρώματα παρακαταθήκης"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
@@ -368,7 +366,7 @@ msgstr "Αδυναμία αποθήκευσης αρχείου"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 #, fuzzy
 msgid "Set Pivot"
-msgstr "Ακροδέκτης Φύλλου"
+msgstr "Ρύθμιση Pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 #, fuzzy
@@ -406,45 +404,40 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Περιστροφή Ζ Αριστερόστροφα"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
-msgstr "Μετακίνηση πλακέτας Αριστερά"
+msgstr "Μετακίνηση Πλακέτας Αριστερά"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:111
 msgid "Move board Left"
 msgstr "Μετακίνηση πλακέτας Αριστερά"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
-msgstr "Μετακίνηση πλακέτας Δεξιά"
+msgstr "Μετακίνηση Πλακέτας Δεξιά"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:121
 msgid "Move board Right"
 msgstr "Μετακίνηση πλακέτας Δεξιά"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
-msgstr "Μετακίνηση πλακέτας Επάνω"
+msgstr "Μετακίνηση Πλακέτας Επάνω"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
 msgid "Move board Up"
 msgstr "Μετακίνηση πλακέτας Επάνω"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
-msgstr "Μετακίνηση πλακέτας Κάτω"
+msgstr "Μετακίνηση Πλακέτας Κάτω"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Move board Down"
 msgstr "Μετακίνηση πλακέτας Κάτω"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
-msgstr "Αρχική εικόνα"
+msgstr "Αρχική Προβολή"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:151
 msgid "Home view"
@@ -549,54 +542,46 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Χρήση χρωμάτων CAD, βασισμένα στο χρώμα διάχυσης του υλικού"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Εναλλαγή Προβολής 3Δ μοντέλων με διαμπερείς οπές"
+msgstr "Εμφάνιση 3Δ Μοντέλων με Διαμπερείς Οπές"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:301
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Εναλλαγή τρισδιάστατων μοντέλων για εξαρτήματα τύπου 'Through hole'"
+msgstr "Εμφάνιση 3Δ μοντέλων για εξαρτήματα τύπου 'Through hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Εμφάνιση 3Δ μοντέλων για SMD"
+msgstr "Εμφάνιση 3Δ Μοντέλων για SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Εναλλαγή 3Δ μοντέλων εξαρτήματα 'Surface mount'"
+msgstr "Εμφάνιση 3Δ μοντέλων εξαρτήματα 'Surface mount'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Εναλλαγή απροσδιόριστων 3Δ μοντέλων"
+msgstr "Προβολή Απροσδιόριστων 3Δ Μοντέλων"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Εναλλαγή 3Δ μοντέλων στα 'απροσδιόριστα' εξαρτήματα"
+msgstr "Εμφάνιση 3Δ μοντέλων για 'unspecified' εξαρτήματα"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Εναλλαγή 3Δ μοντέλων που λείπουν από το αρχείο θέσης"
+msgstr "Προβολή 3Δ μοντέλων που λείπουν από το αρχείο θέσης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Εναλλαγή 3Δ μοντέλων που λείπουν από το αρχείο θέσης"
+msgstr "Προβολή 3Δ μοντέλων που λείπουν από το αρχείο θέσης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
 #, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Εναλλαγή 3Δ μοντέλων για SMD"
+msgstr "Εμφάνιση 3Δ Μοντέλων με σημείωση DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
 #, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Εξαίρεση 3Δ μοντέλων εξαρτημάτων με xαρακτηριστικό 'εικονικό'"
+msgstr "Εμφάνιση 3Δ μοντέλων ακόμη και αν έχουν σημείωση 'Do Not Place'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
 msgid "Show Model Bounding Boxes"
@@ -623,9 +608,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Προβολή/απόκρυψη του διαχειριστή εμφάνισης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "Σώμα πλακέτας:"
+msgstr "Σώμα Πλακέτας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -636,23 +620,21 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Χρώμα Χαλκού/Επιφάνειας..."
+msgstr "Προβολή χρώματος χαλκού/επιφάνειας εμπρός..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Χρώμα Χαλκού/Επιφάνειας..."
+msgstr "Προβολή χρώματος χαλκού/επιφάνειας πίσω..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "Επίπεδο Επικόλλησης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
@@ -660,9 +642,8 @@ msgid "Show adhesive"
 msgstr "Εμφάνιση επιπέδων επικόλλησης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Πάστα συγκόλλησης:"
+msgstr "Πάστα Συγκόλλησης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
@@ -674,36 +655,32 @@ msgid "F.Silkscreen"
 msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Μπροστά Μεταξοτυπία"
+msgstr "Εμφάνιση μπροστά μεταξοτυπίας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
 msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Πίσω Μεταξοτυπία"
+msgstr "Εμφάνιση πίσω μεταξοτυπίας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Μπροστά μάσκα συγκόλλησης"
+msgstr "Εμφάνιση μπροστά μάσκας συγκόλλησης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Πίσω μάσκα συγκόλλησης"
+msgstr "Εμφάνιση πίσω μάσκας συγκόλλησης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 #, fuzzy
@@ -711,18 +688,16 @@ msgid "User.Drawings"
 msgstr "Σχέδια"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Εμφάνιση επιπέδων σχολίων και σχεδίων"
+msgstr "Εμφάνιση επιπέδων σχεδίων"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Εμφάνιση επιπέδων μάσκας συγκόλλησης"
+msgstr "Εμφάνιση επιπέδων σχολίων"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Eco1"
@@ -743,34 +718,30 @@ msgid "Show user ECO2 layer"
 msgstr "Εμφάνιση επιπέδων ECO"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Διαμπερής οπής έδρες"
+msgstr "Μοντέλα Διαμπερής οπής"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "3Δ Μοντέλα"
+msgstr "SMD Μοντέλα"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Εναλλαγή Εμφάνισης 3Δ εικονικών μοντέλων"
+msgstr "Εικονικά Μοντέλα"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 #, fuzzy
 msgid "Models not in POS File"
-msgstr "Εναλλαγή 3Δ μοντέλων που λείπουν από το αρχείο θέσης"
+msgstr "Μοντέλα που λείπουν από το αρχείο θέσης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 #, fuzzy
 msgid "Models marked DNP"
-msgstr "Εναλλαγή 3Δ μοντέλων για SMD"
+msgstr "Mοντέλα με σημείωση DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Εμφάνιση Πλαίσιου Οριοθέτησης Μοντέλων"
+msgstr "Πλαίσιο Οριοθέτησης Μοντέλου"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -807,41 +778,35 @@ msgid "Show all footprint text"
 msgstr "Εμφάνιση όλων των κειμένων του αποτυπώματος"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Μεταξοτυπία"
+msgstr "Μεταξοτυπία εκτός Πλακέτας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
 msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "Άξονας Χ"
+msgstr "Άξονας 3Δ"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "Παρασκήνιο"
+msgstr "Αρχή Παρασκηνίου"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Έναρξη βαθμίδας φόντου:"
+msgstr "Έναρξη βαθμίδας χρωματισμού φόντου"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Παρασκήνιο"
+msgstr "Τέλος Παρασκηνίου"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Λήξη βαθμίδας φόντου:"
+msgstr "Λήξη βαθμίδας χρωματισμού φόντου"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
@@ -854,20 +819,19 @@ msgstr ""
 "προεπιλογών στο αναδυόμενο παράθυρο."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Αποθήκευση και επαναφορά σημείου προβολής και ζουμ.\n"
+"Αποθήκευση και επαναφορά θέσης κάμερας και ζουμ.\n"
 "Χρησιμοποιήστε %s+Tab για να ενεργοποιήσετε τον επιλογέα.\n"
-"Οι διαδοχικές καρτέλες ενώ κρατάτε πατημένο το %s θα εναλλάσσους τις "
+"Οι διαδοχικές καρτέλες ενώ κρατάτε πατημένο το %s θα εναλλάσσουν τις "
 "προβολές στο αναδυόμενο παράθυρο."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
-#, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr "Αριστερό διπλό κλικ ή μεσαίο κλικ για αλλαγή χρώματος"
 
@@ -911,7 +875,6 @@ msgstr "Αποθήκευση Προεπιλογής Επιπέδου"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2022
 #: pcbnew/widgets/appearance_controls.cpp:2669
-#, fuzzy
 msgid "Overwrite existing preset?"
 msgstr "Αντικατάσταση υπάρχοντος προκαθορισμένου;"
 
@@ -1030,9 +993,8 @@ msgid "Show filled areas in zones"
 msgstr "Εμφάνιση γεμισμένων περιοχών σε ζώνες"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Χρήση χρώματος χαλκού για μη επιμεταλλωμένο χαλκό"
+msgstr "Χρήση χρώματος χαλκού για μη επιμεταλλωμένο χαλκό (αργό)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1285,9 +1247,8 @@ msgid "Light 8:"
 msgstr "Φως 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Επιλογές Gerbview"
+msgstr "Επιλογές Προεπισκόπησης 3Δ"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
 msgid "Board thickness:"
@@ -1427,9 +1388,8 @@ msgid "Image Files"
 msgstr "Αρχεία Εικόνας"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Επιλογή Αρχείου Φύλλου Σχεδίασης"
+msgstr "Δημιουργία Αρχείου Φύλλου Σχεδίασης"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -1732,7 +1692,7 @@ msgstr "Αρνητικό"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
 #, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "Τοποθέτηση Εισηγμένων Γραφικών"
+msgstr "Επίπεδο PCB για Γραφικά"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1752,12 +1712,11 @@ msgstr "Front_layer"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
 msgid "User layer drawings"
-msgstr "User.Drawings"
+msgstr "Επίπεδο γραφικών σχεδίων χρήστη"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "Επίπεδο χρήστη Eco1"
+msgstr "Επίπεδο σχολίων χρήστη"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1798,7 +1757,6 @@ msgid "Export to Clipboard"
 msgstr "Εξαγωγή στο Πρόχειρο"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
 msgstr "Διεργασίες Παρασκηνίου"
 
@@ -2558,9 +2516,8 @@ msgstr ""
 "Επιλέξτε έναν για εισαγωγή στο KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Κλείσιμο Έργου"
+msgstr "Επιλογή Έργου για Εισαγωγή"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -3266,14 +3223,12 @@ msgid "MyLabel"
 msgstr "ΕτικέταΜου"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "Ετικέτα:"
+msgstr "Χ Ετικέτα:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "Ετικέτα:"
+msgstr "Ψ Ετικέτα:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
@@ -3282,7 +3237,7 @@ msgstr "Τίτλος"
 #: common/dialogs/dialog_unit_entry_base.h:73
 #, fuzzy
 msgid "Move Point to Location"
-msgstr "τοποθεσία αποτυπώματος"
+msgstr "Μετακίνηση Σημείου σε Τοποθεσία"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:196 common/widgets/lib_tree.cpp:264
@@ -3351,9 +3306,8 @@ msgstr "Προβολή Προεπιλεγμένου Διακόπτη"
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Συνδέσεις"
+msgstr "Σύνδεση"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
@@ -3390,14 +3344,12 @@ msgid "Password"
 msgstr "Κωδικός"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Εγγραφή αλλαγών..."
+msgstr "Commit τις Αλλαγές"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Όνομα αρχείου:"
+msgstr "Όνομα αρχείου"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3417,12 +3369,12 @@ msgstr "Νέο"
 #: common/dialogs/git/dialog_git_commit.cpp:89
 #, fuzzy
 msgid "Modified"
-msgstr "Τροποποιημένη ομάδα"
+msgstr "Modified"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
 #, fuzzy
 msgid "Deleted"
-msgstr "Διαγραφή"
+msgstr "Deleted"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 #, fuzzy
@@ -3440,9 +3392,8 @@ msgid "C&ommit"
 msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Το όνομα του εξαρτήματος δεν μπορεί να είναι κενό."
+msgstr "Το μήνυμα του Commit δεν μπορεί να είναι κενό"
 
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:371
@@ -3450,105 +3401,91 @@ msgid "Enter the password for the SSH key"
 msgstr "Εισαγωγή κωδικού για το κλειδί SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:323
-#, fuzzy
 msgid "Test connection"
-msgstr "Επιλογή Σύνδεσης"
+msgstr "Έλεγχος σύνδεσης"
 
 #: common/dialogs/git/dialog_git_repository.cpp:327
-#, fuzzy
 msgid "Connection successful"
-msgstr "Αρχείο STEP δημιουργήθηκε με επιτυχία."
+msgstr "Επιτυχής σύνδεση"
 
 #: common/dialogs/git/dialog_git_repository.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Αδυναμία ανοίγματος συμπιεσμένου αρχείου."
+msgstr "Αδυναμία σύνδεσης σε '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:350
 #, fuzzy, c-format
 msgid "Could not open private key '%s'"
-msgstr "Αδυναμία ανοίγματος συμπιεσμένου αρχείου."
+msgstr "Αδυναμία φόρτωσης private key '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
 #, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Μη έγκυρη κλίμακα Ζ"
+msgstr "Εσφαλμένο private κλειδί SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
 #, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr ""
-"Το επιλεγμένο αρχείο δεν είναι έγκυρο ή ενδέχεται να είναι κατεστραμμένο!"
+msgstr "Το επιλεγμένο αρχείο δεν είναι έγκυρο SSH private κλειδί."
 
 #: common/dialogs/git/dialog_git_repository.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Αδυναμία εύρεσης αρχείου βιβλιοθήκης '%s'"
+msgstr "Αδυναμία φόρτωσης public κλειδιού '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:405
 #: common/dialogs/git/dialog_git_repository.cpp:411
-#, fuzzy
 msgid "Missing information"
-msgstr "Λείπει αποτύπωμα"
+msgstr "Ελλειπείς πληροφορίες"
 
 #: common/dialogs/git/dialog_git_repository.cpp:405
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Παρακαλώ εισάγετε πλήρως πιστοποιημένη διεύθυνση url αποθετηρίου"
+msgstr "Παρακαλώ εισάγετε όνομα αποθετηρίου"
 
 #: common/dialogs/git/dialog_git_repository.cpp:411
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Παρακαλώ εισάγετε πλήρως πιστοποιημένη διεύθυνση url αποθετηρίου"
+msgstr "Παρακαλώ εισάγετε διεύθυνση url αποθετηρίου"
 
 #: common/dialogs/git/dialog_git_repository.cpp:432
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Λέξεις κλειδιά"
+msgstr "Κωδικός κλειδιού SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Περιστροφή"
+msgstr "Τοποθεσία"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Όνομα Σύνδεσης"
+msgstr "Τύπος Σύνδεσης"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
 msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "Τοπικό αρχείο"
+msgstr "Τοπικό"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Ιδιωτικό"
+msgstr "Ιδιωτικό SSH Κλειδί"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Επιλέξτε αρχείο"
+msgstr "Επιλέξτε αρχείο private SSH κλειδιού"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Νέο όνομα:"
+msgstr "Όνομα χρήστη"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Αποθετήριο"
+msgstr "Αποθετήριο Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 #, fuzzy
@@ -3569,16 +3506,15 @@ msgid "Last Commit"
 msgstr "Προηγούμενο Commit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Ενημερωμένο"
+msgstr "Προηγούμενη Ενημέρωση"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
 #: common/dialogs/git/dialog_git_switch.cpp:213
 #, fuzzy
 msgid "Switch"
-msgstr "Αλλαγή μονάδων"
+msgstr "Switch"
 
 #: common/dialogs/git/dialog_git_switch.cpp:218 eeschema/sch_base_frame.cpp:285
 #: pcbnew/footprint_libraries_utils.cpp:430
@@ -3591,24 +3527,23 @@ msgid "Git Commit Data"
 msgstr "Δεδομένα του Git Commit"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Χρήση προκαθορισμένου ονόματος δικτύου"
+msgstr "Χρήση προκαθορισμένων τιμών"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
 #, fuzzy
 msgid "Author name:"
-msgstr "Όνομα περιοχής:"
+msgstr "Όνομα Author:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
 #, fuzzy
 msgid "Author e-mail:"
-msgstr "Συγγραφέας"
+msgstr "e-mail του Author:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
 #, fuzzy
 msgid "Git Repositories"
-msgstr "Διαχείριση Αποθετηρίων"
+msgstr "Διαχείριση Αποθετηρίων Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3619,19 +3554,17 @@ msgid "Active"
 msgstr "Ενεργό"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Προσθήκη αποθετηρίου"
+msgstr "Προσθήκη νέου αποθετηρίου"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Επεξεργασία ιδιοτήτων αποτυπώματος"
+msgstr "Επεξεργασία ιδιοτήτων αποθετηρίου"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
 #, fuzzy
 msgid "Remove Git Repository"
-msgstr "Αποθετήριο"
+msgstr "Αφαίρεση Αποθετηρίου Git"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
