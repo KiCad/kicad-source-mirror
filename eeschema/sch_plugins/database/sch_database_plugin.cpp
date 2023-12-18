@@ -557,7 +557,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         {
             strValue = std::any_cast<std::string>( aRow.at( mapping.column ) );
         }
-        catch( std::bad_any_cast& e )
+        catch( std::bad_any_cast& )
         {
         }
 
