@@ -90,17 +90,17 @@ public:
             m_max(),
             m_use_minmax( false ),
             m_ptr( aPtr ),
-            m_default( aDefault )
+            m_default( std::move( aDefault ) )
     { }
 
     PARAM( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault, ValueType aMin,
            ValueType aMax, bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
-            m_min( aMin ),
-            m_max( aMax ),
+            m_min( std::move( aMin ) ),
+            m_max( std::move( aMax ) ),
             m_use_minmax( true ),
             m_ptr( aPtr ),
-            m_default( aDefault )
+            m_default( std::move( aDefault ) )
     { }
 
     void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override

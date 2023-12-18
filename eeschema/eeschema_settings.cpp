@@ -770,7 +770,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
                 try
                 {
-                    js[key_utf] = value;
+                    js[ std::move( key_utf ) ] = value;
                 }
                 catch(...)
                 {
@@ -791,7 +791,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
                 try
                 {
-                    js[key_utf] = value;
+                    js[ std::move( key_utf ) ] = value;
                 }
                 catch(...)
                 {

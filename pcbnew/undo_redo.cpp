@@ -471,7 +471,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             DS_PROXY_UNDO_ITEM  alt_item( this );
             DS_PROXY_UNDO_ITEM* item = static_cast<DS_PROXY_UNDO_ITEM*>( eda_item );
             item->Restore( this );
-            *item = alt_item;
+            *item = std::move( alt_item );
             break;
         }
 

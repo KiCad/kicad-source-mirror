@@ -366,7 +366,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
 
                 std::string theFile( reinterpret_cast<char *>( file ) );
                 std::string theStyle( reinterpret_cast<char *>( style ) );
-                FONTINFO    fontInfo( theFile, theStyle, theFamily );
+                FONTINFO    fontInfo( std::move( theFile ), std::move( theStyle ), theFamily );
 
                 if( theFamily.length() > 0 && theFamily.front() == '.' )
                     continue;

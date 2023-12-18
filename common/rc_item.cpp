@@ -274,7 +274,7 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
 
     BeforeReset();
 
-    m_rcItemsProvider = aProvider;
+    m_rcItemsProvider = std::move( aProvider );
 
     if( aSeverities != m_severities )
         m_severities = aSeverities;

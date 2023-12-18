@@ -874,7 +874,7 @@ template<typename ResultType>
 ResultType JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
                                           ResultType aDefault )
 {
-    ResultType ret = aDefault;
+    ResultType ret = std::move( aDefault );
 
     try
     {

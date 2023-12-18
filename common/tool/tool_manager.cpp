@@ -807,9 +807,9 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                     // and transfer the previous view control settings to the new context
                     if( st->cofunc )
                     {
-                        auto vc = st->vcSettings;
+                        KIGFX::VC_SETTINGS viewControlSettings = st->vcSettings;
                         st->Push();
-                        st->vcSettings = vc;
+                        st->vcSettings = std::move( viewControlSettings );
                     }
 
                     st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );

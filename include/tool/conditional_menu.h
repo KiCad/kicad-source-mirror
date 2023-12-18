@@ -126,7 +126,7 @@ private:
                bool aCheckmark ) :
             m_type( ACTION ),
             m_icon( static_cast<BITMAPS>( 0 ) ),
-            m_condition( aCondition ),
+            m_condition( std::move( aCondition ) ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
         {
@@ -136,7 +136,7 @@ private:
         ENTRY( ACTION_MENU* aMenu, SELECTION_CONDITION aCondition, int aOrder ) :
             m_type( MENU ),
             m_icon( static_cast<BITMAPS>( 0 ) ),
-            m_condition( aCondition ),
+            m_condition( std::move( aCondition ) ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )
         {
@@ -147,7 +147,7 @@ private:
                SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
             m_type( WXITEM ),
             m_icon( aBitmap ),
-            m_condition( aCondition ),
+            m_condition( std::move( aCondition ) ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
         {
@@ -160,7 +160,7 @@ private:
             m_type( SEPARATOR ),
             m_icon( static_cast<BITMAPS>( 0 ) ),
             m_data(),
-            m_condition( aCondition ),
+            m_condition( std::move( aCondition ) ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )
         {

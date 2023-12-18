@@ -205,7 +205,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 for( const auto& [ netname, color ] : m_NetColorAssignments )
                 {
                     std::string key( netname.ToUTF8() );
-                    ret[key] = color;
+                    ret[ std::move( key ) ] = color;
                 }
 
                 return ret;
@@ -220,7 +220,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 for( const auto& pair : aJson.items() )
                 {
                     wxString key( pair.key().c_str(), wxConvUTF8 );
-                    m_NetColorAssignments[key] = pair.value().get<KIGFX::COLOR4D>();
+                    m_NetColorAssignments[ std::move( key ) ] = pair.value().get<KIGFX::COLOR4D>();
                 }
             },
             {} ) );
@@ -233,7 +233,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 for( const auto& [ netname, netclassName ] : m_NetClassLabelAssignments )
                 {
                     std::string key( netname.ToUTF8() );
-                    ret[key] = netclassName;
+                    ret[ std::move( key ) ] = netclassName;
                 }
 
                 return ret;
@@ -248,7 +248,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                 for( const auto& pair : aJson.items() )
                 {
                     wxString key( pair.key().c_str(), wxConvUTF8 );
-                    m_NetClassLabelAssignments[key] = pair.value().get<wxString>();
+                    m_NetClassLabelAssignments[ std::move( key ) ] = pair.value().get<wxString>();
                 }
             },
             {} ) );
@@ -265,7 +265,7 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
                         { "netclass", netclassName.ToUTF8() }
                     };
 
-                    ret.push_back( pattern_json );
+                    ret.push_back( std::move( pattern_json ) );
                 }
 
                 return ret;

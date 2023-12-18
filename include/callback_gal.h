@@ -53,7 +53,7 @@ public:
     {
         m_strokeCallback = std::move( aStrokeCallback );
         m_triangleCallback = []( const VECTOR2I&, const VECTOR2I&, const VECTOR2I& ) {};
-        m_outlineCallback = std::move( aOutlineCallback;
+        m_outlineCallback = std::move( aOutlineCallback );
         m_stroke = true;
         m_triangulate = false;
     }
