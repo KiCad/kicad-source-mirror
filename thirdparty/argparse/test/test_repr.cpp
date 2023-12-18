@@ -1,6 +1,14 @@
+#ifdef WITH_MODULE
+import argparse;
+import argparse.details;
+#else
 #include <argparse/argparse.hpp>
+#endif
 #include <doctest.hpp>
+
+#include <list>
 #include <set>
+#include <sstream>
 
 using doctest::test_suite;
 

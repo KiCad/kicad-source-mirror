@@ -1,4 +1,8 @@
+#ifdef WITH_MODULE
+import argparse;
+#else
 #include <argparse/argparse.hpp>
+#endif
 #include <doctest.hpp>
 #include <stdint.h>
 
@@ -108,6 +112,39 @@ TEST_CASE_TEMPLATE("Parse a hexadecimal integer argument" * test_suite("scan"),
     REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "0XFFFFFFFFFFFFFFFF1"}),
                       std::range_error);
   }
+
+  SUBCASE("with hex digit without prefix") {
+    program.parse_args({"test", "-n", "1a"});
+    REQUIRE(program.get<T>("-n") == 0x1a);
+  }
+
+  SUBCASE("minus sign without prefix produces an optional argument") {
+    REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "-1"}),
+                      std::invalid_argument);
+  }
+
+  SUBCASE("plus sign without prefix is not allowed") {
+    REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "+1a"}),
+                      std::invalid_argument);
+  }
+
+  SUBCASE("without prefix does not fit") {
+    REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "FFFFFFFFFFFFFFFF1"}),
+                      std::range_error);
+  }
+}
+
+TEST_CASE("Parse multiple hex numbers without prefix" * test_suite("scan")) {
+  argparse::ArgumentParser program("test");
+  program.add_argument("-x", "--hex")
+      .help("bytes in hex separated by spaces")
+      .nargs(1, std::numeric_limits<std::size_t>::max())
+      .scan<'x', uint8_t>();
+
+  REQUIRE_NOTHROW(
+      program.parse_args({"test", "-x", "f2", "b2", "10", "80", "64"}));
+  const auto &input_bytes = program.get<std::vector<uint8_t>>("-x");
+  REQUIRE((input_bytes == std::vector<uint8_t>{0xf2, 0xb2, 0x10, 0x80, 0x64}));
 }
 
 TEST_CASE_TEMPLATE("Parse integer argument of any format" * test_suite("scan"),
@@ -169,6 +206,49 @@ TEST_CASE_TEMPLATE("Parse integer argument of any format" * test_suite("scan"),
   SUBCASE("plus sign is not allowed") {
     REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "+670"}),
                       std::invalid_argument);
+  }
+}
+
+TEST_CASE_TEMPLATE("Parse a binary argument" * test_suite("scan"), T, uint8_t,
+                   uint16_t, uint32_t, uint64_t) {
+  argparse::ArgumentParser program("test");
+  program.add_argument("-n").scan<'b', T>();
+
+  SUBCASE("with binary digit") {
+    program.parse_args({"test", "-n", "0b101"});
+    REQUIRE(program.get<T>("-n") == 0b101);
+  }
+
+  SUBCASE("minus sign produces an optional argument") {
+    REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "-0b101"}),
+                      std::runtime_error);
+  }
+
+  SUBCASE("plus sign is not allowed") {
+    REQUIRE_THROWS_AS(program.parse_args({"test", "-n", "+0b101"}),
+                      std::invalid_argument);
+  }
+
+  SUBCASE("does not fit") {
+    REQUIRE_THROWS_AS(
+        program.parse_args(
+            {"test", "-n",
+             "0b111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "11111111111111111111111111111111111111111111111111111111111111111"
+             "1111111111111111111111111111111111111111111111111111111111111111"
+             "1"}),
+        std::range_error);
   }
 }
 

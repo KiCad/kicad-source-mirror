@@ -6,7 +6,7 @@
   <a href="https://github.com/p-ranav/argparse/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license"/>
   </a>
-  <img src="https://img.shields.io/badge/version-2.9-blue.svg?cacheSeconds=2592000" alt="version"/>
+  <img src="https://img.shields.io/badge/version-3.0-blue.svg?cacheSeconds=2592000" alt="version"/>
 </p>
 
 ## Highlights
@@ -25,6 +25,7 @@
           *    [Deciding if the value was given by the user](#deciding-if-the-value-was-given-by-the-user)
           *    [Joining values of repeated optional arguments](#joining-values-of-repeated-optional-arguments)
           *    [Repeating an argument to increase a value](#repeating-an-argument-to-increase-a-value)
+          *    [Mutually Exclusive Group](#mutually-exclusive-group)
      *    [Negative Numbers](#negative-numbers)
      *    [Combining Positional and Optional Arguments](#combining-positional-and-optional-arguments)
      *    [Printing Help](#printing-help)
@@ -45,6 +46,8 @@
      *    [Positional Arguments with Compound Toggle Arguments](#positional-arguments-with-compound-toggle-arguments)
      *    [Restricting the set of values for an argument](#restricting-the-set-of-values-for-an-argument)
      *    [Using `option=value` syntax](#using-optionvalue-syntax)
+*    [Developer Notes](#developer-notes)
+     *    [Copying and Moving](#copying-and-moving)
 *    [CMake Integration](#cmake-integration)
 *    [Building, Installing, and Testing](#building-installing-and-testing)
 *    [Supported Toolchains](#supported-toolchains)
@@ -95,7 +98,7 @@ int main(int argc, char *argv[]) {
   try {
     program.parse_args(argc, argv);
   }
-  catch (const std::runtime_error& err) {
+  catch (const std::exception& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -137,7 +140,7 @@ program.add_argument("--verbose")
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -157,6 +160,31 @@ Here's what's happening:
 * The program is written so as to display something when --verbose is specified and display nothing when not.
 * Since the argument is actually optional, no error is thrown when running the program without ```--verbose```. Note that by using ```.default_value(false)```, if the optional argument isn’t used, it's value is automatically set to false.
 * By using ```.implicit_value(true)```, the user specifies that this option is more of a flag than something that requires a value. When the user provides the --verbose option, it's value is set to true.
+
+#### Flag
+
+When defining flag arguments, you can use the shorthand `flag()` which is the same as `default_value(false).implicit_value(true)`. 
+
+```cpp
+argparse::ArgumentParser program("test");
+
+program.add_argument("--verbose")
+  .help("increase output verbosity")
+  .flag();
+
+try {
+  program.parse_args(argc, argv);
+}
+catch (const std::exception& err) {
+  std::cerr << err.what() << std::endl;
+  std::cerr << program;
+  std::exit(1);
+}
+
+if (program["--verbose"] == true) {
+  std::cout << "Verbosity enabled" << std::endl;
+}
+```
 
 #### Requiring optional arguments
 
@@ -203,7 +231,7 @@ program.add_argument("--color")
 try {
   program.parse_args(argc, argv);    // Example: ./main --color orange
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -226,7 +254,7 @@ program.add_argument("--color")
 try {
   program.parse_args(argc, argv);    // Example: ./main --color red --color green --color blue
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -255,6 +283,38 @@ program.parse_args(argc, argv);    // Example: ./main -VVVV
 std::cout << "verbose level: " << verbosity << std::endl;    // verbose level: 4
 ```
 
+#### Mutually Exclusive Group
+
+Create a mutually exclusive group using `program.add_mutually_exclusive_group(required = false)`. `argparse`` will make sure that only one of the arguments in the mutually exclusive group was present on the command line:
+
+```cpp
+auto &group = program.add_mutually_exclusive_group();
+group.add_argument("--first");
+group.add_argument("--second");
+```
+
+with the following usage will yield an error:
+
+```console
+foo@bar:/home/dev/$ ./main --first 1 --second 2
+Argument '--second VAR' not allowed with '--first VAR'
+```
+
+The `add_mutually_exclusive_group()` function also accepts a `required` argument, to indicate that at least one of the mutually exclusive arguments is required:
+
+```cpp
+auto &group = program.add_mutually_exclusive_group(true);
+group.add_argument("--first");
+group.add_argument("--second");
+```
+
+with the following usage will yield an error:
+
+```console
+foo@bar:/home/dev/$ ./main
+One of the arguments '--first VAR' or '--second VAR' is required
+```
+
 ### Negative Numbers
 
 Optional arguments start with ```-```. Can ```argparse``` handle negative numbers? The answer is yes!
@@ -274,7 +334,7 @@ program.add_argument("floats")
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -307,7 +367,7 @@ program.add_argument("--verbose")
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -388,7 +448,7 @@ Optional arguments:
   -h, --help    	shows help message and exits
   -v, --version 	prints version information and exits
   --member ALIAS	The alias for the member to pass to.
-  --verbose     	
+  --verbose
 
 Possible things include betingalw, chiz, and res.
 ```
@@ -407,7 +467,7 @@ program.add_argument("--input_files")
 try {
   program.parse_args(argc, argv);   // Example: ./main --input_files config.yml System.xml
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -436,7 +496,7 @@ program.add_argument("--query_point")
 try {
   program.parse_args(argc, argv); // Example: ./main --query_point 3.5 4.7 9.2
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -491,7 +551,7 @@ program.add_argument("-c")
 try {
   program.parse_args(argc, argv);                  // Example: ./main -abc 1.95 2.47
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -551,7 +611,7 @@ The grammar follows `std::from_chars`, but does not exactly duplicate it. For ex
 | 'g' or 'G' | general form (either fixed or scientific) |
 |            |                                           |
 | 'd'        | decimal                                   |
-| 'i'        | `std::from_chars` grammar with base == 0  |
+| 'i'        | `std::from_chars` grammar with base == 10 |
 | 'o'        | octal (unsigned)                          |
 | 'u'        | decimal (unsigned)                        |
 | 'x' or 'X' | hexadecimal (unsigned)                    |
@@ -604,7 +664,7 @@ program.add_argument("files")
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -651,7 +711,7 @@ program.add_argument("files")
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -777,7 +837,7 @@ int main(int argc, char *argv[]) {
   try {
     program.parse_args(argc, argv);
   }
-  catch (const std::runtime_error& err) {
+  catch (const std::exception& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -840,6 +900,39 @@ Subcommands:
 When a help message is requested from a subparser, only the help for that particular parser will be printed. The help message will not include parent parser or sibling parser messages.
 
 Additionally, every parser has the `.is_subcommand_used("<command_name>")` and `.is_subcommand_used(subparser)` member functions to check if a subcommand was used. 
+
+Sometimes there may be a need to hide part of the subcommands from the user
+by suppressing information about them in an help message. To do this,
+```ArgumentParser``` contains the method ```.set_suppress(bool suppress)```:
+
+```cpp
+argparse::ArgumentParser program("test");
+
+argparse::ArgumentParser hidden_cmd("hidden");
+hidden_cmd.add_argument("files").remaining();
+hidden_cmd.set_suppress(true);
+
+program.add_subparser(hidden_cmd);
+```
+
+```console
+foo@bar:/home/dev/$ ./main -h
+Usage: test [--help] [--version] {}
+
+Optional arguments:
+  -h, --help    shows help message and exits
+  -v, --version prints version information and exits
+
+foo@bar:/home/dev/$ ./main hidden -h
+Usage: hidden [--help] [--version] files
+
+Positional arguments:
+  files         [nargs: 0 or more]
+
+Optional arguments:
+  -h, --help    shows help message and exits
+  -v, --version prints version information and exits
+```
 
 ### Getting Argument and Subparser Instances
 
@@ -904,7 +997,7 @@ int main(int argc, char *argv[]) {
   try {
     program.parse_args(argc, argv);
   }
-  catch (const std::runtime_error& err) {
+  catch (const std::exception& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -952,7 +1045,7 @@ int main(int argc, char *argv[]) {
   try {
     program.parse_args(argc, argv);
   }
-  catch (const std::runtime_error& err) {
+  catch (const std::exception& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -993,7 +1086,7 @@ program.add_argument("config")
 try {
   program.parse_args({"./test", "config.json"});
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -1029,7 +1122,7 @@ program.add_argument("--files")
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -1060,18 +1153,12 @@ argparse::ArgumentParser program("test");
 
 program.add_argument("input")
   .default_value(std::string{"baz"})
-  .action([](const std::string& value) {
-    static const std::vector<std::string> choices = { "foo", "bar", "baz" };
-    if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
-      return value;
-    }
-    return std::string{ "baz" };
-  });
+  .choices("foo", "bar", "baz");
 
 try {
   program.parse_args(argc, argv);
 }
-catch (const std::runtime_error& err) {
+catch (const std::exception& err) {
   std::cerr << err.what() << std::endl;
   std::cerr << program;
   std::exit(1);
@@ -1083,10 +1170,37 @@ std::cout << input << std::endl;
 
 ```console
 foo@bar:/home/dev/$ ./main fex
-baz
+Invalid argument "fex" - allowed options: {foo, bar, baz}
 ```
 
-## Using `option=value` syntax
+Using choices also works with integer types, e.g.,
+
+```cpp
+argparse::ArgumentParser program("test");
+
+program.add_argument("input")
+  .default_value(0)
+  .choices(0, 1, 2, 3, 4, 5);
+
+try {
+  program.parse_args(argc, argv);
+}
+catch (const std::exception& err) {
+  std::cerr << err.what() << std::endl;
+  std::cerr << program;
+  std::exit(1);
+}
+
+auto input = program.get("input");
+std::cout << input << std::endl;
+```
+
+```console
+foo@bar:/home/dev/$ ./main 6
+Invalid argument "6" - allowed options: {0, 1, 2, 3, 4, 5}
+```
+
+### Using `option=value` syntax
 
 ```cpp
 #include "argparse.hpp"
@@ -1100,7 +1214,7 @@ int main(int argc, char *argv[]) {
   try {
     program.parse_args(argc, argv);
   }
-  catch (const std::runtime_error& err) {
+  catch (const std::exception& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -1121,6 +1235,12 @@ foo@bar:/home/dev/$ ./test --bar=BAR --foo
 --foo: true
 --bar: BAR
 ```
+
+## Developer Notes
+
+### Copying and Moving
+
+`argparse::ArgumentParser` is intended to be used in a single function - setup everything and parse arguments in one place. Attempting to move or copy invalidates internal references (issue #260). Thus, starting with v3.0, `argparse::ArgumentParser` copy and move constructors are marked as `delete`.
 
 ## CMake Integration 
 

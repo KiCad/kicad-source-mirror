@@ -1,5 +1,11 @@
+#ifdef WITH_MODULE
+import argparse;
+#else
 #include <argparse/argparse.hpp>
+#endif
 #include <doctest.hpp>
+
+#include <optional>
 #include <sstream>
 
 using doctest::test_suite;
@@ -76,39 +82,37 @@ TEST_CASE("Users can replace default -h/--help" * test_suite("help")) {
 
 TEST_CASE("Multiline help message alignment") {
   // '#' is used at the beginning of each help message line to simplify testing.
-  // It is important to ensure that this character doesn't appear elsewhere in the test case.
-  // Default arguments (e.g., -h/--help, -v/--version) are not included in this test.
+  // It is important to ensure that this character doesn't appear elsewhere in
+  // the test case. Default arguments (e.g., -h/--help, -v/--version) are not
+  // included in this test.
   argparse::ArgumentParser program("program");
-  program.add_argument("INPUT1")
-      .help(
-        "#This is the first line of help message.\n"
-        "#And this is the second line of help message."
-      );
-  program.add_argument("program_input2")
-      .help("#There is only one line.");
+  program.add_argument("INPUT1").help(
+      "#This is the first line of help message.\n"
+      "#And this is the second line of help message.");
+  program.add_argument("program_input2").help("#There is only one line.");
   program.add_argument("-p", "--prog_input3")
       .help(
-R"(#Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          R"(#Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 #Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-#accusantium doloremque laudantium, totam rem aperiam...)"
-      );
-  program.add_argument("--verbose").default_value(false).implicit_value(true);
+#accusantium doloremque laudantium, totam rem aperiam...)");
+  program.add_argument("--verbose").flag();
 
   std::ostringstream stream;
   stream << program;
   std::istringstream iss(stream.str());
 
-  int help_message_start = -1;
+  auto help_message_start = std::string::npos;
   std::string line;
   while (std::getline(iss, line)) {
-    // Find the position of '#', which indicates the start of the help message line
+    // Find the position of '#', which indicates the start of the help message
+    // line
     auto pos = line.find('#');
 
     if (pos == std::string::npos) {
       continue;
     }
 
-    if (help_message_start == -1) {
+    if (help_message_start == std::string::npos) {
       help_message_start = pos;
     } else {
       REQUIRE(pos == help_message_start);
