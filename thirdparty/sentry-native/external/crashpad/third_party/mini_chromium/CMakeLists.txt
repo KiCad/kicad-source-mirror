@@ -50,6 +50,8 @@ mc_append_sources(
     rand_util.h
     scoped_clear_last_error.h
     scoped_generic.h
+    strings/pattern.cc
+    strings/pattern.h
     strings/string_number_conversions.cc
     strings/string_number_conversions.h
     strings/string_piece.h
@@ -85,38 +87,37 @@ endif()
 if(APPLE AND NOT IOS)
     mc_append_sources(
         mac/close_nocancel.cc
-        mac/foundation_util.h
-        mac/foundation_util.mm
-        mac/mach_logging.cc
-        mac/mach_logging.h
-        mac/scoped_cftyperef.h
         mac/scoped_ioobject.h
         mac/scoped_launch_data.h
-        mac/scoped_mach_port.cc
-        mac/scoped_mach_port.h
-        mac/scoped_mach_vm.cc
-        mac/scoped_mach_vm.h
-        mac/scoped_nsautorelease_pool.h
-        mac/scoped_nsautorelease_pool.mm
-        mac/scoped_nsobject.h
-        mac/scoped_typeref.h
+	    apple/bridging.h
+        apple/foundation_util.h
+        apple/foundation_util.mm
+        apple/mach_logging.cc
+        apple/mach_logging.h
+        apple/scoped_cftyperef.h
+        apple/scoped_mach_port.cc
+        apple/scoped_mach_port.h
+        apple/scoped_mach_vm.cc
+        apple/scoped_mach_vm.h
+        apple/scoped_nsautorelease_pool.h
+        apple/scoped_nsautorelease_pool.mm
         strings/sys_string_conversions_mac.mm
     )
 elseif(IOS)
     mc_append_sources(
-        mac/foundation_util.h
-        mac/foundation_util.mm
-        mac/mach_logging.cc
-        mac/mach_logging.h
-        mac/scoped_cftyperef.h
-        mac/scoped_mach_port.cc
-        mac/scoped_mach_port.h
-        mac/scoped_mach_vm.cc
-        mac/scoped_mach_vm.h
-        mac/scoped_nsautorelease_pool.h
-        mac/scoped_nsautorelease_pool.mm
-        mac/scoped_nsobject.h
-        mac/scoped_typeref.h
+        apple/bridging.h
+        apple/foundation_util.h
+        apple/foundation_util.mm
+        apple/mach_logging.cc
+        apple/mach_logging.h
+        apple/scoped_cftyperef.h
+        apple/scoped_mach_port.cc
+        apple/scoped_mach_port.h
+        apple/scoped_mach_vm.cc
+        apple/scoped_mach_vm.h
+        apple/scoped_nsautorelease_pool.h
+        apple/scoped_nsautorelease_pool.mm
+        apple/scoped_typeref.h
         strings/sys_string_conversions_mac.mm
     )
 endif()
@@ -144,6 +145,9 @@ else()
     )
 endif()
 
+if(APPLE)
+    target_compile_options(mini_chromium PUBLIC -fobjc-arc -fno-objc-arc-exceptions)
+endif()
 if(APPLE AND NOT IOS)
     target_link_libraries(mini_chromium PUBLIC
         "-framework ApplicationServices"
@@ -181,7 +185,11 @@ target_link_libraries(mini_chromium
 if(WIN32)
     target_link_libraries(mini_chromium PRIVATE advapi32 kernel32)
     if(MSVC)
-        target_compile_options(mini_chromium PRIVATE "/wd4201" "/wd4996")
+        target_compile_options(mini_chromium PRIVATE
+            $<$<COMPILE_LANGUAGE:C,CXX>:/wd4201> # nonstandard extension used : nameless struct/union.
+            $<$<COMPILE_LANGUAGE:C,CXX>:/wd4244> # conversion from '__int64' to 'int32_t', possible loss of data.
+            $<$<COMPILE_LANGUAGE:C,CXX>:/wd4996> # 'X' was declared deprecated.
+        )
         target_compile_definitions(mini_chromium PRIVATE
             NOMINMAX
             UNICODE

@@ -26,7 +26,7 @@ jobs:
 
       - name: Build crashpad
         run: |
-          cmake -B cmake-build
+          cmake -B cmake-build -D CRASHPAD_BUILD_TOOLS=On
           cmake --build cmake-build --parallel
 
       - name: Build crashpad with client-side stack traces

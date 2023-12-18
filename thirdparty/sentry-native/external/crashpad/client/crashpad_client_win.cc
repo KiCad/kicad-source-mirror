@@ -63,7 +63,7 @@ HANDLE g_signal_exception = INVALID_HANDLE_VALUE;
 // Where we store the exception information that the crash handler reads.
 ExceptionInformation g_crash_exception_information;
 
-CrashpadClient::FirstChanceHandlerWin first_chance_handler_ = nullptr;
+CrashpadClient::FirstChanceHandler first_chance_handler_ = nullptr;
 
 // Guards multiple simultaneous calls to DumpWithoutCrash() in the client.
 base::Lock* g_non_crash_dump_lock = nullptr;
@@ -203,6 +203,15 @@ LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exception_pointers) {
   return EXCEPTION_CONTINUE_SEARCH;
 }
 
+LONG WINAPI HandleHeapCorruption(EXCEPTION_POINTERS* exception_pointers) {
+  if (exception_pointers->ExceptionRecord->ExceptionCode ==
+      STATUS_HEAP_CORRUPTION) {
+    return UnhandledExceptionHandler(exception_pointers);
+  }
+
+  return EXCEPTION_CONTINUE_SEARCH;
+}
+
 void HandleAbortSignal(int signum) {
   DCHECK_EQ(signum, SIGABRT);
 
@@ -331,6 +340,7 @@ struct BackgroundHandlerStartThreadData {
       const base::FilePath& database,
       const base::FilePath& metrics_dir,
       const std::string& url,
+      const std::string& http_proxy,
       const std::map<std::string, std::string>& annotations,
       const std::vector<std::string>& arguments,
       const std::vector<base::FilePath>& attachments,
@@ -340,6 +350,7 @@ struct BackgroundHandlerStartThreadData {
         database(database),
         metrics_dir(metrics_dir),
         url(url),
+        http_proxy(http_proxy),
         annotations(annotations),
         arguments(arguments),
         attachments(attachments),
@@ -350,6 +361,7 @@ struct BackgroundHandlerStartThreadData {
   base::FilePath database;
   base::FilePath metrics_dir;
   std::string url;
+  std::string http_proxy;
   std::map<std::string, std::string> annotations;
   std::vector<std::string> arguments;
   std::vector<base::FilePath> attachments;
@@ -403,6 +415,11 @@ bool StartHandlerProcess(
   if (!data->url.empty()) {
     AppendCommandLineArgument(
         FormatArgumentString("url", base::UTF8ToWide(data->url)),
+        &command_line);
+  }
+  if (!data->http_proxy.empty()) {
+    AppendCommandLineArgument(
+        FormatArgumentString("http-proxy", base::UTF8ToWide(data->http_proxy)),
         &command_line);
   }
   for (const auto& kv : data->annotations) {
@@ -595,6 +612,16 @@ void CommonInProcessInitialization() {
 void RegisterHandlers() {
   SetUnhandledExceptionFilter(&UnhandledExceptionHandler);
 
+  // Windows swallows heap corruption failures but we can intercept them with
+  // a vectored exception handler.
+#if defined(ADDRESS_SANITIZER)
+  // Let ASAN have first go.
+  bool go_first = false;
+#else
+  bool go_first = true;
+#endif
+  AddVectoredExceptionHandler(go_first, HandleHeapCorruption);
+
   // The Windows CRT's signal.h lists:
   // - SIGINT
   // - SIGILL
@@ -629,6 +656,7 @@ bool CrashpadClient::StartHandler(
     const base::FilePath& database,
     const base::FilePath& metrics_dir,
     const std::string& url,
+    const std::string& http_proxy,
     const std::map<std::string, std::string>& annotations,
     const std::vector<std::string>& arguments,
     bool restartable,
@@ -661,6 +689,7 @@ bool CrashpadClient::StartHandler(
                                                    database,
                                                    metrics_dir,
                                                    url,
+                                                   http_proxy,
                                                    annotations,
                                                    arguments,
                                                    attachments,
@@ -1119,7 +1148,7 @@ bool CrashpadClient::DumpAndCrashTargetProcess(HANDLE process,
 
 // static
 void CrashpadClient::SetFirstChanceExceptionHandler(
-    FirstChanceHandlerWin handler) {
+    FirstChanceHandler handler) {
   first_chance_handler_ = handler;
 }
 

@@ -123,7 +123,7 @@ if(NOT IOS)
     )
 endif()
 
-if(WIN32 AND CRASHPAD_WER_ENABLED)
+if(CRASHPAD_WER_ENABLED)
     add_library(crashpad_wer SHARED
         win/wer/crashpad_wer.cc
         win/wer/crashpad_wer.h

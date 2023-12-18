@@ -30,9 +30,9 @@
 #include <map>
 #include <utility>
 
+#include "base/apple/mach_logging.h"
 #include "base/check_op.h"
 #include "base/logging.h"
-#include "base/mac/mach_logging.h"
 #include "base/posix/eintr_wrapper.h"
 #include "base/strings/stringprintf.h"
 #include "build/build_config.h"
@@ -361,7 +361,7 @@ void ExpectSeveralThreads(ThreadMap* thread_map,
         // Non-main threads use the stack region to store thread data. See
         // macOS 12 libpthread-486.100.11 src/pthread.c _pthread_allocate().
 #if defined(ARCH_CPU_ARM64)
-        // arm64 has an additional offset for alignment. See macOS 12 
+        // arm64 has an additional offset for alignment. See macOS 12
         // libpthread-486.100.11 src/pthread.c _pthread_allocate() and
         // PTHREAD_T_OFFSET (defined in src/types_internal.h).
         expected_stack_region_end += sizeof(_opaque_pthread_t) + 0x3000;
@@ -666,7 +666,7 @@ void VerifyImageExistenceAndTimestamp(const char* path, time_t timestamp) {
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability"
-  if (_dyld_shared_cache_contains_path &&
+  if (&_dyld_shared_cache_contains_path &&
       _dyld_shared_cache_contains_path(path)) {
 #pragma clang diagnostic pop
     // The timestamp will either match the timestamp of the dyld_shared_cache
@@ -864,7 +864,7 @@ TEST(ProcessReaderMac, SelfModules) {
 
     bool expect_timestamp;
     if (index == 0 && MacOSVersionNumber() < 12'00'00) {
-      // Pre-dyld4, dyld didn’t set the main executable's timestamp, and it was 
+      // Pre-dyld4, dyld didn’t set the main executable's timestamp, and it was
       // reported as 0.
       EXPECT_EQ(modules[index].timestamp, 0);
     } else if (IsMalformedCLKernelsModule(modules[index].reader->FileType(),

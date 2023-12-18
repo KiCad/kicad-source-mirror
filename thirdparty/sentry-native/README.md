@@ -1,3 +1,5 @@
+[![Conan Center](https://shields.io/conan/v/sentry-native)](https://conan.io/center/recipes/sentry-native) [![nixpkgs unstable](https://repology.org/badge/version-for-repo/nix_unstable/sentry-native.svg)](https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/development/libraries/sentry-native/default.nix) [![vcpkg](https://shields.io/vcpkg/v/sentry-native)](https://vcpkg.link/ports/sentry-native)
+
 <p align="center">
   <a href="https://sentry.io/?utm_source=github&utm_medium=logo" target="_blank">
     <picture>
@@ -15,13 +17,10 @@ applications, optimized for C and C++. Sentry allows to add tags, breadcrumbs
 and arbitrary custom context to enrich error reports. Supports Sentry _20.6.0_
 and later.
 
-**Note**: This SDK is being actively developed and still in Beta. We recommend
-to check for updates regularly to benefit from latest features and bug fixes.
-Please see [Known Limitations](#known-limitations).
-
 ## Resources <!-- omit in toc -->
 
-- [Discord](https://discord.gg/ez5KZN7) server for project discussions.
+- [SDK Documentation](https://docs.sentry.io/platforms/native/)
+- [Discord](https://discord.gg/ez5KZN7) server for project discussions
 - Follow [@getsentry](https://twitter.com/getsentry) on Twitter for updates
 
 ## Table of Contents <!-- omit in toc -->

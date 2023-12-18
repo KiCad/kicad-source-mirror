@@ -44,10 +44,10 @@ deps = {
       'af29db7ec28d6df1c7f0f745186884091e602e07',
   'crashpad/third_party/lss/lss':
       Var('chromium_git') + '/linux-syscall-support.git@' +
-      'e1e7b0ad8ee99a875b272c8e33e308472e897660',
+      '9719c1e1e676814c456b55f5f070eabad6709d31',
   'crashpad/third_party/mini_chromium/mini_chromium':
       Var('chromium_git') + '/chromium/mini_chromium@' +
-      '4332ddb6963750e1106efdcece6d6e2de6dc6430',
+      '10f39a97650a0fe0b305415c15434443c0690a20',
   'crashpad/third_party/libfuzzer/src':
       Var('chromium_git') + '/chromium/llvm-project/compiler-rt/lib/fuzzer.git@' +
       'fda403cf93ecb8792cb1d061564d89a6553ca020',
@@ -59,7 +59,7 @@ deps = {
   'buildtools/linux64': {
     'packages': [
       {
-        'package': 'gn/gn/linux-amd64',
+        'package': 'gn/gn/linux-${{arch}}',
         'version': Var('gn_version'),
       }
     ],
@@ -116,10 +116,15 @@ deps = {
     'condition': 'checkout_fuchsia and host_os == "linux"',
     'dep_type': 'cipd'
   },
+  'crashpad/third_party/fuchsia-gn-sdk': {
+    'url': Var('chromium_git') + '/chromium/src/third_party/fuchsia-gn-sdk.git@' +
+           '0d6902558d92fe3d49ba9a8f638ddea829be595b',
+    'condition': 'checkout_fuchsia',
+  },
   'crashpad/third_party/fuchsia/sdk/mac-amd64': {
     'packages': [
       {
-        'package': 'fuchsia/sdk/gn/mac-amd64',
+        'package': 'fuchsia/sdk/core/mac-amd64',
         'version': 'latest'
       },
     ],
@@ -129,7 +134,7 @@ deps = {
   'crashpad/third_party/fuchsia/sdk/linux-amd64': {
     'packages': [
       {
-        'package': 'fuchsia/sdk/gn/linux-amd64',
+        'package': 'fuchsia/sdk/core/linux-amd64',
         'version': 'latest'
       },
     ],
@@ -247,6 +252,15 @@ hooks = [
     'condition': 'checkout_linux and pull_linux_clang',
     'action': [
       'crashpad/build/install_linux_sysroot.py',
+    ],
+  },
+  {
+    'name': 'Generate Fuchsia Build Definitions',
+    'pattern': '.',
+    'condition': 'checkout_fuchsia',
+    'action': [
+      'python3',
+      'crashpad/build/fuchsia/gen_build_defs.py'
     ],
   },
   {

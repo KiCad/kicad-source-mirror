@@ -6,7 +6,6 @@
 
 #include <ctype.h>
 
-#include "base/cxx17_backports.h"
 #include "base/logging.h"
 
 namespace base {
@@ -120,7 +119,7 @@ bool FilePath::operator!=(const FilePath& that) const {
 
 // static
 bool FilePath::IsSeparator(CharType character) {
-  for (size_t i = 0; i < size(FilePath::kSeparators) - 1; ++i) {
+  for (size_t i = 0; i < std::size(FilePath::kSeparators) - 1; ++i) {
     if (character == kSeparators[i]) {
       return true;
     }
@@ -143,9 +142,8 @@ FilePath FilePath::DirName() const {
   // resizes below using letter will still be valid.
   StringType::size_type letter = FindDriveLetter(new_path.path_);
 
-  StringType::size_type last_separator =
-      new_path.path_.find_last_of(kSeparators, StringType::npos,
-                                  size(kSeparators) - 1);
+  StringType::size_type last_separator = new_path.path_.find_last_of(
+      kSeparators, StringType::npos, std::size(kSeparators) - 1);
   if (last_separator == StringType::npos) {
     // path_ is in the current directory.
     new_path.path_.resize(letter + 1);
@@ -181,9 +179,8 @@ FilePath FilePath::BaseName() const {
 
   // Keep everything after the final separator, but if the pathname is only
   // one character and it's a separator, leave it alone.
-  StringType::size_type last_separator =
-      new_path.path_.find_last_of(kSeparators, StringType::npos,
-                                  size(kSeparators) - 1);
+  StringType::size_type last_separator = new_path.path_.find_last_of(
+      kSeparators, StringType::npos, std::size(kSeparators) - 1);
   if (last_separator != StringType::npos &&
       last_separator < new_path.path_.length() - 1) {
     new_path.path_.erase(0, last_separator + 1);
