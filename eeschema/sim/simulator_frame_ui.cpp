@@ -2776,6 +2776,9 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         for( const std::string& vec : simulator()->AllVectors() )
         {
             std::vector<double> val_list = simulator()->GetRealVector( vec, 1 );
+
+            wxCHECK2( !val_list.empty(), continue );
+
             wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
             wxString            signal;
             SIM_TRACE_TYPE      type = circuitModel()->VectorToSignal( vec, signal );
