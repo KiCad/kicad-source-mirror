@@ -57,7 +57,7 @@ private:
     long long int origPathLength() const override;
 
     DIFF_PAIR m_originPair;
-    ITEM_SET  m_tunedPath, m_tunedPathP, m_tunedPathN;
+    ITEM_SET  m_tunedPathP, m_tunedPathN;
 
     long long int m_coupledLength;
     int           m_padToDieP;
