@@ -44,7 +44,7 @@ public:
     void SetFromString( const std::string& aPath, ValueType aVal )
     {
         // Calls the overload below, which will convert from dotted string to JSON pointer
-        ( *this )[aPath] = aVal;
+        ( *this )[aPath] = std::move( aVal );
     }
 
     template<typename ValueType>

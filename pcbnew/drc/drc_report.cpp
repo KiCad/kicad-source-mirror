@@ -30,15 +30,15 @@
 #include <rc_json_schema.h>
 
 
-DRC_REPORT::DRC_REPORT(BOARD* aBoard, EDA_UNITS aReportUnits,
-    std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider,
-    std::shared_ptr<RC_ITEMS_PROVIDER> aRatsnestProvider,
-    std::shared_ptr<RC_ITEMS_PROVIDER> aFpWarningsProvider) :
+DRC_REPORT::DRC_REPORT( BOARD* aBoard, EDA_UNITS aReportUnits,
+                        std::shared_ptr<RC_ITEMS_PROVIDER> aMarkersProvider,
+                        std::shared_ptr<RC_ITEMS_PROVIDER> aRatsnestProvider,
+                        std::shared_ptr<RC_ITEMS_PROVIDER> aFpWarningsProvider) :
         m_board( aBoard ),
         m_reportUnits( aReportUnits ),
-        m_markersProvider( aMarkersProvider ),
-        m_ratsnestProvider( aRatsnestProvider ),
-        m_fpWarningsProvider( aFpWarningsProvider )
+        m_markersProvider( std::move( aMarkersProvider ) ),
+        m_ratsnestProvider( std::move( aRatsnestProvider ) ),
+        m_fpWarningsProvider( std::move( aFpWarningsProvider ) )
 {
 
 }

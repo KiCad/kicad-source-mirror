@@ -117,8 +117,9 @@ public:
         CALLABLE_BASED_HANDLER( CREATION_HANDLER     aCreationHandler,
                                 MODIFICATION_HANDLER aModificationHandler,
                                 DELETION_HANDLER     aDeletionHandler ) :
-                m_creationHandler( aCreationHandler ),
-                m_modificationHandler( aModificationHandler ), m_deletionHandler( aDeletionHandler )
+                m_creationHandler( std::move( aCreationHandler ) ),
+                m_modificationHandler( std::move( aModificationHandler ) ),
+                m_deletionHandler( std::move( aDeletionHandler ) )
         {
         }
 
@@ -152,7 +153,10 @@ public:
     };
 
     ITEM_MODIFICATION_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
-            m_board( aBoard ), m_handler( aHandler ), m_numSuccesses( 0 ), m_numFailures( 0 )
+            m_board( aBoard ),
+            m_handler( aHandler ),
+            m_numSuccesses( 0 ),
+            m_numFailures( 0 )
     {
     }
 

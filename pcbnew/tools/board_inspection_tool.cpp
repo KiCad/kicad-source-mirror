@@ -1770,7 +1770,7 @@ int BOARD_INSPECTION_TOOL::HighlightNet( const TOOL_EVENT& aEvent )
         settings->SetHighlight( m_lastHighlighted );
         m_toolMgr->GetView()->UpdateAllLayersColor();
         m_currentlyHighlighted = m_lastHighlighted;
-        m_lastHighlighted      = temp;
+        m_lastHighlighted      = std::move( temp );
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::toggleNetHighlight ) )
     {

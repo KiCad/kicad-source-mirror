@@ -202,7 +202,7 @@ void PROPERTY_MANAGER::OverrideAvailability( TYPE_ID aDerived, TYPE_ID aBase,
     wxASSERT_MSG( aDerived != aBase, "Class cannot override from itself" );
 
     CLASS_DESC& derived = getClass( aDerived );
-    derived.m_availabilityOverrides[std::make_pair( aBase, aName )] = aFunc;
+    derived.m_availabilityOverrides[std::make_pair( aBase, aName )] = std::move( aFunc );
     m_dirty = true;
 }
 
@@ -214,7 +214,7 @@ void PROPERTY_MANAGER::OverrideWriteability( TYPE_ID aDerived, TYPE_ID aBase,
     wxASSERT_MSG( aDerived != aBase, "Class cannot override from itself" );
 
     CLASS_DESC& derived = getClass( aDerived );
-    derived.m_writeabilityOverrides[std::make_pair( aBase, aName )] = aFunc;
+    derived.m_writeabilityOverrides[std::make_pair( aBase, aName )] = std::move( aFunc );
     m_dirty = true;
 }
 

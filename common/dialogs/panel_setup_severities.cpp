@@ -37,7 +37,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
                                                 RC_ITEM* aPinMapSpecialCase ) :
         wxPanel( aParentWindow ),
         m_severities( aSeverities ),
-        m_items( aItems ),
+        m_items( std::move( aItems ) ),
         m_pinMapSpecialCase( aPinMapSpecialCase )
 {
     wxString          severities[]  = { _( "Error" ), _( "Warning" ), _( "Ignore" ) };

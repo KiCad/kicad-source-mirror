@@ -123,7 +123,7 @@ void PANEL_SETUP_TUNING_PATTERNS::ImportSettingsFrom( BOARD* aBoard )
     m_skewSettings = aBoard->GetDesignSettings().m_skewMeanderSettings;
     TransferDataToWindow();
 
-    m_trackSettings = savedTrackSettings;
-    m_dpSettings = savedDPSettings;
-    m_skewSettings = savedSkewSettings;
+    m_trackSettings = std::move( savedTrackSettings );
+    m_dpSettings = std::move( savedDPSettings );
+    m_skewSettings = std::move( savedSkewSettings );
 }

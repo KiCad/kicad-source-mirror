@@ -102,7 +102,7 @@ bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow()
 
 void PANEL_SETUP_BOARD_FINISH::ImportSettingsFrom( BOARD* aBoard )
 {
-    BOARD* savedBrd = m_board;
+    BOARD*                 savedBrd = m_board;
     BOARD_DESIGN_SETTINGS* savedSettings = m_brdSettings;
     m_brdSettings = &aBoard->GetDesignSettings();
 

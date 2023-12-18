@@ -76,7 +76,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
         PANEL_SETUP_NETCLASSES_BASE( aParentWindow ),
         m_frame( aFrame ),
         m_isEEschema( aIsEEschema ),
-        m_netSettings( aNetSettings ),
+        m_netSettings( std::move( aNetSettings ) ),
         m_netNames( aNetNames ),
         m_lastCheckedTicker( 0 ),
         m_hoveredCol( -1 ),
@@ -788,7 +788,7 @@ void PANEL_SETUP_NETCLASSES::ImportSettingsFrom( const std::shared_ptr<NET_SETTI
     m_netclassGrid->ForceRefresh();
     m_assignmentGrid->ForceRefresh();
 
-    m_netSettings = savedSettings;
+    m_netSettings = std::move( savedSettings );
 }
 
 

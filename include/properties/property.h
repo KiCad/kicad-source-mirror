@@ -248,7 +248,7 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
      */
     PROPERTY_BASE& SetAvailableFunc( std::function<bool(INSPECTABLE*)> aFunc )
     {
-        m_availFunc = aFunc;
+        m_availFunc = std::move( aFunc );
         return *this;
     }
 
@@ -259,7 +259,7 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
 
     PROPERTY_BASE& SetWriteableFunc( std::function<bool(INSPECTABLE*)> aFunc )
     {
-        m_writeableFunc = aFunc;
+        m_writeableFunc = std::move( aFunc );
         return *this;
     }
 
