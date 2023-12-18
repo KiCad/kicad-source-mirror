@@ -238,7 +238,7 @@ void COAX::show_results()
 
         while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
-            sprintf( txt, "H(n,%d) ", m );
+            snprintf( txt, sizeof( text ), "H(n,%d) ", m );
             strcat( text, txt );
             m++;
             m_parameters[CUTOFF_FREQUENCY_PRM] =
@@ -262,7 +262,7 @@ void COAX::show_results()
 
         while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
-            sprintf( txt, "E(n,%d) ", m );
+            snprintf( txt, sizeof( text ), "E(n,%d) ", m );
             strcat( text, txt );
             m++;
             m_parameters[CUTOFF_FREQUENCY_PRM] =

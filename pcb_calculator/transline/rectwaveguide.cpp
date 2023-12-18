@@ -279,7 +279,7 @@ void RECTWAVEGUIDE::calcAnalyze()
 /*
  * synthesize - synthesis function
  * source: re-arrangment of calcAnalyze equation
- * TE10 (via fc(1,0) ) results in the b term not influencing the result, as long as 
+ * TE10 (via fc(1,0) ) results in the b term not influencing the result, as long as
  * 1) fc > f
  * 2) a > b
  */
@@ -400,7 +400,7 @@ void RECTWAVEGUIDE::show_results()
 
                 if( m_parameters[FREQUENCY_PRM] >= ( fc( m, n ) ) )
                 {
-                    sprintf( txt, "H(%d,%d) ", m, n );
+                    snprintf( txt, sizeof( txt ), "H(%d,%d) ", m, n );
                     if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
                     {
                         strcat( text, txt );
@@ -430,7 +430,7 @@ void RECTWAVEGUIDE::show_results()
             {
                 if( m_parameters[FREQUENCY_PRM] >= fc( m, n ) )
                 {
-                    sprintf( txt, "E(%d,%d) ", m, n );
+                    snprintf( txt, sizeof( txt ), "E(%d,%d) ", m, n );
                     if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
                     {
                         strcat( text, txt );
