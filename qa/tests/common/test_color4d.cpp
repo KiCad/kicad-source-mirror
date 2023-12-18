@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019, 2023 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2018-2023, 2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE( WithAlpha )
 
     for( const auto& c : cases )
     {
-        auto col = c.start;
+        auto& col = c.start;
 
         const auto with_alpha = col.WithAlpha( c.factor );
         BOOST_CHECK_EQUAL( with_alpha, c.expected );

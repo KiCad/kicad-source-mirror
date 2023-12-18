@@ -131,6 +131,7 @@ LIB_TREE_NODE::LIB_TREE_NODE()
       m_IntrinsicRank( 0 ),
       m_Score( 0 ),
       m_Pinned( false ),
+      m_PinCount( 0 ),
       m_Unit( 0 ),
       m_IsRoot( false )
 {}

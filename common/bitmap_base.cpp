@@ -60,6 +60,7 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
     m_isMirroredX = aSchBitmap.m_isMirroredX;
     m_isMirroredY = aSchBitmap.m_isMirroredY;
     m_rotation = aSchBitmap.m_rotation;
+    m_imageType = aSchBitmap.m_imageType;
 
     m_image = nullptr;
     m_bitmap = nullptr;

@@ -565,7 +565,7 @@ CADSTAR_PARTS_LIB_MODEL readCadstarHelper( INPUT_TYPE& aInput )
     }
     catch( const parse_error& e )
     {
-        const auto p = e.positions().front();
+        const auto& p = e.positions().front();
         std::cerr << "Error at line " << p.line << ", column " << p.column << std::endl
                   << aInput.line_at( p ) << std::endl
                   << std::setw( p.column ) << '^' << std::endl

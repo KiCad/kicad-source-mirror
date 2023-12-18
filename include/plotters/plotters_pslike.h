@@ -241,6 +241,8 @@ public:
     PDF_PLOTTER() :
             m_pageTreeHandle( 0 ),
             m_fontResDictHandle( 0 ),
+            m_imgResDictHandle( 0 ),
+            m_jsNamesHandle( 0 ),
             m_pageStreamHandle( 0 ),
             m_streamLengthHandle( 0 ),
             m_workFile( nullptr ),

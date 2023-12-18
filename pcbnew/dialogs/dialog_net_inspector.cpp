@@ -1177,10 +1177,23 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
     g_settings.col_order          = column_order;
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-    app_settings->m_NetInspector.group_by_text = g_settings.group_by_text;
-    app_settings->m_NetInspector.group_by = g_settings.group_by;
-    app_settings->m_NetInspector.group_by_kind = g_settings.group_by_kind;
+    PCBNEW_SETTINGS*  app_settings = nullptr;
+
+    try
+    {
+        app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+    }
+    catch( const std::runtime_error& err )
+    {
+        wxLogWarning( wxS( "%s" ), err.what() );
+    }
+
+    if( app_settings )
+    {
+        app_settings->m_NetInspector.group_by_text = g_settings.group_by_text;
+        app_settings->m_NetInspector.group_by = g_settings.group_by;
+        app_settings->m_NetInspector.group_by_kind = g_settings.group_by_kind;
+    }
 
     // the displayed list elements are going to be deleted before the list view itself.
     // in some cases it might still do queries on the data model, which would crash

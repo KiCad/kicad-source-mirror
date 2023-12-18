@@ -224,16 +224,18 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
                 if( response.version != settings->m_lastReceivedUpdate )
                 {
                     aNoticeParent->CallAfter(
-                            [=]()
+                            [&]()
                             {
                                 auto notice = new DIALOG_UPDATE_NOTICE(
                                         aNoticeParent, response.version, response.details_url,
                                         response.downloads_url );
 
                                 int retCode = notice->ShowModal();
+
                                 if( retCode != wxID_RETRY )
                                 {
-                                    // basically saving the last received update prevents us from prompting again
+                                    // basically saving the last received update prevents us from
+                                    // prompting again
                                     settings->m_lastReceivedUpdate = response.version;
                                 }
                             } );

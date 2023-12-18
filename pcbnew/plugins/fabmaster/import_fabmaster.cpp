@@ -361,18 +361,18 @@ size_t FABMASTER::processPadStackLayers( size_t aRow )
             continue;
         }
 
-        auto pad_name = row[pad_name_col];
-        auto pad_num = row[pad_num_col];
-        auto pad_layer = row[pad_lay_col];
-        auto pad_is_fixed = row[pad_fix_col];
-        auto pad_is_via = row[pad_via_col];
-        auto pad_shape = row[pad_shape_col];
-        auto pad_width = row[pad_width_col];
-        auto pad_height = row[pad_height_col];
-        auto pad_xoff = row[pad_xoff_col];
-        auto pad_yoff = row[pad_yoff_col];
-        auto pad_flash = row[pad_flash_col];
-        auto pad_shapename = row[pad_shape_name_col];
+        auto& pad_name = row[pad_name_col];
+        auto& pad_num = row[pad_num_col];
+        auto& pad_layer = row[pad_lay_col];
+        auto& pad_is_fixed = row[pad_fix_col];
+        auto& pad_is_via = row[pad_via_col];
+        auto& pad_shape = row[pad_shape_col];
+        auto& pad_width = row[pad_width_col];
+        auto& pad_height = row[pad_height_col];
+        auto& pad_xoff = row[pad_xoff_col];
+        auto& pad_yoff = row[pad_yoff_col];
+        auto& pad_flash = row[pad_flash_col];
+        auto& pad_shapename = row[pad_shape_name_col];
 
         // This layer setting seems to be unused
         if( pad_layer == "INTERNAL_PAD_DEF" || pad_layer == "internal_pad_def" )
@@ -444,18 +444,18 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             continue;
         }
 
-        auto pad_name = row[pad_name_col];
-        auto pad_num = row[pad_num_col];
-        auto pad_layer = row[pad_lay_col];
-        auto pad_is_fixed = row[pad_fix_col];
-        auto pad_is_via = row[pad_via_col];
-        auto pad_shape = row[pad_shape_col];
-        auto pad_width = row[pad_width_col];
-        auto pad_height = row[pad_height_col];
-        auto pad_xoff = row[pad_xoff_col];
-        auto pad_yoff = row[pad_yoff_col];
-        auto pad_flash = row[pad_flash_col];
-        auto pad_shapename = row[pad_shape_name_col];
+        auto& pad_name = row[pad_name_col];
+        auto& pad_num = row[pad_num_col];
+        auto& pad_layer = row[pad_lay_col];
+        auto& pad_is_fixed = row[pad_fix_col];
+        auto& pad_is_via = row[pad_via_col];
+        auto& pad_shape = row[pad_shape_col];
+        auto& pad_width = row[pad_width_col];
+        auto& pad_height = row[pad_height_col];
+        auto& pad_xoff = row[pad_xoff_col];
+        auto& pad_yoff = row[pad_yoff_col];
+        auto& pad_flash = row[pad_flash_col];
+        auto& pad_shapename = row[pad_shape_name_col];
 
         // This layer setting seems to be unused
         if( pad_layer == "INTERNAL_PAD_DEF" || pad_layer == "internal_pad_def" )
@@ -659,7 +659,7 @@ size_t FABMASTER::processSimpleLayers( size_t aRow )
      if( rownum >= rows.size() )
          return -1;
 
-     auto header = rows[aRow];
+     auto& header = rows[aRow];
      double scale_factor = processScaleFactor( aRow + 1 );
 
      if( scale_factor <= 0.0 )
@@ -803,7 +803,7 @@ size_t FABMASTER::processLayers( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    auto header = rows[aRow];
+    auto& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -835,14 +835,14 @@ size_t FABMASTER::processLayers( size_t aRow )
             continue;
         }
 
-        auto layer_sort = row[layer_sort_col];
-        auto layer_subclass = row[layer_subclass_col];
-        auto layer_art = row[layer_art_col];
-        auto layer_use = row[layer_use_col];
-        auto layer_cond = row[layer_cond_col];
-        auto layer_er = row[layer_er_col];
-        auto layer_rho = row[layer_rho_col];
-        auto layer_mat = row[layer_mat_col];
+        auto& layer_sort = row[layer_sort_col];
+        auto& layer_subclass = row[layer_subclass_col];
+        auto& layer_art = row[layer_art_col];
+        auto& layer_use = row[layer_use_col];
+        auto& layer_cond = row[layer_cond_col];
+        auto& layer_er = row[layer_er_col];
+        auto& layer_rho = row[layer_rho_col];
+        auto& layer_mat = row[layer_mat_col];
 
         if( layer_mat == "AIR" )
             continue;
@@ -878,7 +878,7 @@ size_t FABMASTER::processCustomPads( size_t aRow )
     if( rownum >= rows.size() )
         return -1;
 
-    auto header = rows[aRow];
+    auto& header = rows[aRow];
     double scale_factor = processScaleFactor( aRow + 1 );
 
     if( scale_factor <= 0.0 )
@@ -923,9 +923,9 @@ size_t FABMASTER::processCustomPads( size_t aRow )
             continue;
         }
 
-        auto pad_layer          = row[pad_subclass_col];
+        auto& pad_layer         = row[pad_subclass_col];
         auto pad_shape_name     = row[pad_shape_name_col];
-        auto pad_record_tag     = row[pad_record_tag_col];
+        auto& pad_record_tag    = row[pad_record_tag_col];
 
         GRAPHIC_DATA gr_data;
         gr_data.graphic_dataname = row[pad_grdata_name_col];
@@ -940,9 +940,9 @@ size_t FABMASTER::processCustomPads( size_t aRow )
         gr_data.graphic_data8 = row[pad_grdata8_col];
         gr_data.graphic_data9 = row[pad_grdata9_col];
 
-        auto pad_stack_name     = row[pad_stack_name_col];
-        auto pad_refdes         = row[pad_refdes_col];
-        auto pad_pin_num        = row[pad_pin_num_col];
+        auto& pad_stack_name     = row[pad_stack_name_col];
+        auto& pad_refdes         = row[pad_refdes_col];
+        auto& pad_pin_num        = row[pad_pin_num_col];
 
         // N.B. We get the FIGSHAPE records as "FIG_SHAPE name".  We only want "name"
         // and we don't process other pad shape records
@@ -1230,7 +1230,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
             continue;
         }
 
-        auto geo_tag = row[geo_tag_col];
+        auto& geo_tag = row[geo_tag_col];
 
         GRAPHIC_DATA gr_data;
         gr_data.graphic_dataname = row[geo_name_col];
@@ -1245,7 +1245,7 @@ size_t FABMASTER::processGeometry( size_t aRow )
         gr_data.graphic_data8 = row[geo_grdata8_col];
         gr_data.graphic_data9 = row[geo_grdata9_col];
 
-        auto geo_refdes = row[geo_refdes_col];
+        auto& geo_refdes = row[geo_refdes_col];
 
         // Grouped graphics are a series of records with the same record ID but incrementing
         // Sequence numbers.

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Modifications Copyright (C) 2018-2021 KiCad Developers
+ * Modifications Copyright (C) 2018-2023 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,8 @@ class PolygonTriangulation
 {
 public:
     PolygonTriangulation( SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult ) :
+        m_prefactor_x( 0.0 ),
+        m_prefactor_y( 0.0 ),
         m_result( aResult )
     {};
 
