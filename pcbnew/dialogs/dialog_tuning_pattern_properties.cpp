@@ -29,7 +29,6 @@ DIALOG_TUNING_PATTERN_PROPERTIES::DIALOG_TUNING_PATTERN_PROPERTIES( PCB_BASE_EDI
                                                                     PNS::ROUTER_MODE aMeanderType,
                                                                     const DRC_CONSTRAINT& aConstraint ) :
         DIALOG_TUNING_PATTERN_PROPERTIES_BASE( aFrame ),
-        m_frame( aFrame ),
         m_constraint( aConstraint ),
         m_targetLength( aFrame, m_targetLengthLabel, m_targetLengthCtrl, m_targetLengthUnits ),
         m_minA( aFrame, m_track_minALabel, m_minACtrl, m_minAUnits ),

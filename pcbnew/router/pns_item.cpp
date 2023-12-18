@@ -252,7 +252,6 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                     obs.m_clearance = clearance;
                     obs.m_distFirst = 0;
                     obs.m_maxFanoutWidth = 0;
-                    obs.m_violatingConstraint = CONSTRAINT_TYPE::CT_CLEARANCE;
                     aCtx->obstacles.insert( obs );
                 }
                 else

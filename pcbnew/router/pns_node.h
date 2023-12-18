@@ -93,8 +93,6 @@ struct OBSTACLE
     int              m_distFirst;      ///< ... and the distance thereof
     int              m_maxFanoutWidth; ///< worst case (largest) width of the tracks connected to the item
 
-    CONSTRAINT_TYPE  m_violatingConstraint;
-
     bool operator==(const OBSTACLE& other) const
     {
         return m_head == other.m_head && m_item == other.m_item;
