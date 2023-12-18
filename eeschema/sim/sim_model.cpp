@@ -1633,7 +1633,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             spiceModelInfo = FIELD_INFO( getSIValue( modelField ), modelField );
             aSymbol.RemoveField( modelField );
         }
-        else
+        else if( valueField )
         {
             spiceModelInfo = FIELD_INFO( getSIValue( valueField ), valueField );
             modelFromValueField = true;
