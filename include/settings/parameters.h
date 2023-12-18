@@ -285,9 +285,9 @@ public:
                   std::function<void( ValueType )> aSetter, ValueType aDefault,
                   bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
-            m_default( aDefault ),
-            m_getter( aGetter ),
-            m_setter( aSetter )
+            m_default( std::move( aDefault ) ),
+            m_getter( std::move( aGetter ) ),
+            m_setter( std::move( aSetter ) )
     { }
 
     void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
@@ -426,7 +426,7 @@ public:
                 std::vector<Type> aDefault, bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
             m_ptr( aPtr ),
-            m_default( aDefault )
+            m_default( std::move( aDefault ) )
     { }
 
     void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;

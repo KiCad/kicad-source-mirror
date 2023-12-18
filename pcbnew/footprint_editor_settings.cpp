@@ -376,7 +376,7 @@ bool FOOTPRINT_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                                                           { "", true, F_Fab }
                                                       } );
 
-    Set( "design_settings.default_footprint_text_items", textItems );
+    Set( "design_settings.default_footprint_text_items", std::move( textItems ) );
 
     ret &= fromLegacyString( aCfg, "FpEditorRefDefaultText",         "design_settings.default_footprint_text_items.0.0" );
     ret &= fromLegacy<bool>( aCfg, "FpEditorRefDefaultVisibility",   "design_settings.default_footprint_text_items.0.1" );

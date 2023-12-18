@@ -31,9 +31,9 @@ class FONTINFO
 {
 public:
     FONTINFO( std::string aFile, std::string aStyle, std::string aFamily ) :
-            m_file( aFile ),
-            m_style( aStyle ),
-            m_family( aFamily )
+            m_file( std::move( aFile ) ),
+            m_style( std::move( aStyle ) ),
+            m_family( std::move( aFamily ) )
     {
     }
 

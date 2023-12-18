@@ -587,7 +587,7 @@ template std::optional<wxAuiPaneInfo> JSON_SETTINGS::Get<wxAuiPaneInfo>( const s
 template<typename ValueType>
 void JSON_SETTINGS::Set( const std::string& aPath, ValueType aVal )
 {
-    m_internals->SetFromString( aPath, aVal );
+    m_internals->SetFromString( aPath, std::move( aVal ) );
 }
 
 
@@ -797,7 +797,7 @@ bool JSON_SETTINGS::fromLegacyColor( wxConfigBase* aConfig, const std::string& a
         try
         {
             nlohmann::json js = nlohmann::json::array( { color.r, color.g, color.b, color.a } );
-            ( *m_internals )[aDest] = js;
+            ( *m_internals )[aDest] = std::move( js );
         }
         catch( ... )
         {

@@ -833,7 +833,7 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
                 //@todo amend X,Y values to true intersection between arcs or arc and segment
             };
 
-    c.ZFillFunction( callback ); // register callback
+    c.ZFillFunction( std::move( callback ) ); // register callback
 
     c.Execute( aType, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero );
 

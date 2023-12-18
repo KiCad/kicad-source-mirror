@@ -236,7 +236,7 @@ struct VIEWPORT3D
 
     VIEWPORT3D( const wxString& aName, glm::mat4 aViewMatrix ) :
             name( aName ),
-            matrix( aViewMatrix )
+            matrix( std::move( aViewMatrix ) )
     { }
 
     wxString  name;

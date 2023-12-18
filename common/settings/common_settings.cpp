@@ -170,7 +170,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                                 var.GetKey(), value);
 
                     std::string key( var.GetKey().ToUTF8() );
-                    ret[key] = value;
+                    ret[ std::move( key ) ] = value;
                 }
 
                 return ret;

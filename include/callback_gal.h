@@ -38,8 +38,8 @@ public:
                                       const VECTOR2I& aPt3 )> aTriangleCallback ) :
         GAL( aDisplayOptions )
     {
-        m_strokeCallback = aStrokeCallback;
-        m_triangleCallback = aTriangleCallback;
+        m_strokeCallback = std::move( aStrokeCallback );
+        m_triangleCallback = std::move( aTriangleCallback );
         m_outlineCallback = []( const SHAPE_LINE_CHAIN& ) {};
         m_stroke = true;
         m_triangulate = true;
@@ -51,9 +51,9 @@ public:
                   std::function<void( const SHAPE_LINE_CHAIN& aPoly )> aOutlineCallback ) :
         GAL( aDisplayOptions )
     {
-        m_strokeCallback = aStrokeCallback;
+        m_strokeCallback = std::move( aStrokeCallback );
         m_triangleCallback = []( const VECTOR2I&, const VECTOR2I&, const VECTOR2I& ) {};
-        m_outlineCallback = aOutlineCallback;
+        m_outlineCallback = std::move( aOutlineCallback;
         m_stroke = true;
         m_triangulate = false;
     }
@@ -64,7 +64,7 @@ public:
     {
         m_strokeCallback = []( const VECTOR2I& aPt1, const VECTOR2I& aPt2 ) {};
         m_triangleCallback = []( const VECTOR2I&, const VECTOR2I&, const VECTOR2I& ) {};
-        m_outlineCallback = aOutlineCallback;
+        m_outlineCallback = std::move( aOutlineCallback );
         m_stroke = false;
         m_triangulate = false;
     }
