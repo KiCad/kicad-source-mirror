@@ -68,7 +68,7 @@ KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::GetConstantGlyphHeight( KIGFX::GAL* aG
                                                                   int aRelativeSize )
 {
     constexpr double aspectRatio = 1.0;
-    constexpr double hdpiSizes[] = { 6,  8,  9,  11,  13, 14, 16 };
+    constexpr double hdpiSizes[] = { 7,  8,  9,  11,  13, 14, 16 };
     constexpr double sizes[] =     { 8, 10, 12,  14,  15, 16, 18 };
 
     double height;
