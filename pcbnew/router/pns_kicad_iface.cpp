@@ -1932,7 +1932,8 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         return nullptr;
     }
 
-    default: break;
+    default:
+        return nullptr;
     }
 
     if( net->GetNetCode() <= 0 )
