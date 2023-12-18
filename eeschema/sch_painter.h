@@ -96,7 +96,7 @@ public:
         m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ] = aColor;
     }
 
-    float GetDanglineSymbolThickness() const
+    float GetDanglingIndicatorThickness() const
     {
         return (float) m_defaultPenWidth / 3.0F;
     }
@@ -169,10 +169,10 @@ private:
     void draw( const SCH_LINE* aLine, int aLayer );
     void draw( const SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
-    void drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor,
-                                bool aDrawingShadows, bool aBrightened );
-    void drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
-                             bool aDangling, bool aDrawingShadows, bool aBrightened );
+    void drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor,
+                                   bool aDrawingShadows, bool aBrightened );
+    void drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
+                                bool aDangling, bool aDrawingShadows, bool aBrightened );
 
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );

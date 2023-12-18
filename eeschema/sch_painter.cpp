@@ -1324,8 +1324,8 @@ int SCH_PAINTER::externalPinDecoSize( const LIB_PIN &aPin )
 
 
 // Draw the target (an open circle) for a pin which has no connection or is being moved.
-void SCH_PAINTER::drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor,
-                                         bool aDrawingShadows, bool aBrightened )
+void SCH_PAINTER::drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor,
+                                            bool aDrawingShadows, bool aBrightened )
 {
     // Dangling symbols must be drawn in a slightly different colour so they can be seen when
     // they overlap with a junction dot.
@@ -1334,7 +1334,7 @@ void SCH_PAINTER::drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aC
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth( aBrightened )
-                                         : m_schSettings.GetDanglineSymbolThickness() );
+                                         : m_schSettings.GetDanglingIndicatorThickness() );
 
     m_gal->DrawCircle( aPos, TARGET_PIN_RADIUS );
 }
@@ -1372,7 +1372,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
     if( drawingDangling )
     {
         if( isDangling )
-            drawPinDanglingSymbol( pos, color, drawingShadows, aPin->IsBrightened() );
+            drawPinDanglingIndicator( pos, color, drawingShadows, aPin->IsBrightened() );
 
         return;
     }
@@ -1831,8 +1831,8 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
 // Draw the target (an open square) for a wire or label which has no connection or is
 // being moved.
-void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
-                                      bool aDangling, bool aDrawingShadows, bool aBrightened )
+void SCH_PAINTER::drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
+                                         bool aDangling, bool aDrawingShadows, bool aBrightened )
 {
     int size = aDangling ? DANGLING_SYMBOL_SIZE : UNSELECTED_END_SIZE;
 
@@ -1848,7 +1848,7 @@ void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColo
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
     m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth( aBrightened )
-                                         : m_schSettings.GetDanglineSymbolThickness() );
+                                         : m_schSettings.GetDanglingIndicatorThickness() );
 
     m_gal->DrawRectangle( aPos - radius, aPos + radius );
 }
@@ -1902,10 +1902,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( STARTPOINT ) ) ? color.Inverted() : color;
-            drawDanglingSymbol( aLine->GetStartPoint(), danglingColor,
-                                KiROUND( getLineWidth( aLine, drawingShadows ) ),
-                                aLine->IsWire() && aLine->IsStartDangling(), drawingShadows,
-                                aLine->IsBrightened() );
+            drawDanglingIndicator( aLine->GetStartPoint(), danglingColor,
+                                   KiROUND( getLineWidth( aLine, drawingShadows ) ),
+                                   aLine->IsWire() && aLine->IsStartDangling(), drawingShadows,
+                                   aLine->IsBrightened() );
         }
 
         if( ( aLine->IsWire() && aLine->IsEndDangling() )
@@ -1913,10 +1913,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         {
             COLOR4D danglingColor =
                     ( drawingShadows && !aLine->HasFlag( ENDPOINT ) ) ? color.Inverted() : color;
-            drawDanglingSymbol( aLine->GetEndPoint(), danglingColor,
-                                KiROUND( getLineWidth( aLine, drawingShadows ) ),
-                                aLine->IsWire() && aLine->IsEndDangling(), drawingShadows,
-                                aLine->IsBrightened() );
+            drawDanglingIndicator( aLine->GetEndPoint(), danglingColor,
+                                   KiROUND( getLineWidth( aLine, drawingShadows ) ),
+                                   aLine->IsWire() && aLine->IsEndDangling(), drawingShadows,
+                                   aLine->IsBrightened() );
         }
     }
 
@@ -2714,9 +2714,9 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingSymbol( aLabel->GetTextPos(), color,
-                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                drawingShadows, aLabel->IsBrightened() );
+            drawDanglingIndicator( aLabel->GetTextPos(), color,
+                                   schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                   drawingShadows, aLabel->IsBrightened() );
         }
 
         return;
@@ -2773,9 +2773,9 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingSymbol( aLabel->GetTextPos(), color,
-                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                drawingShadows, aLabel->IsBrightened() );
+            drawDanglingIndicator( aLabel->GetTextPos(), color,
+                                   schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                   drawingShadows, aLabel->IsBrightened() );
         }
 
         return;
@@ -2808,9 +2808,9 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingSymbol( aLabel->GetTextPos(), color,
-                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                drawingShadows, aLabel->IsBrightened() );
+            drawDanglingIndicator( aLabel->GetTextPos(), color,
+                                   schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                   drawingShadows, aLabel->IsBrightened() );
         }
 
         return;
@@ -2871,9 +2871,9 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingSymbol( aLabel->GetTextPos(), color,
-                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                drawingShadows, aLabel->IsBrightened() );
+            drawDanglingIndicator( aLabel->GetTextPos(), color,
+                                   schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                   drawingShadows, aLabel->IsBrightened() );
         }
 
         return;
@@ -3010,8 +3010,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color.Brightened( 0.3 ) );
-        m_gal->SetLineWidth( drawingShadows ? getShadowWidth( aEntry->IsBrightened() )
-                                            : m_schSettings.GetDanglineSymbolThickness() );
+        m_gal->SetLineWidth( m_schSettings.GetDanglingIndicatorThickness() );
 
         if( aEntry->IsDanglingStart() )
         {
