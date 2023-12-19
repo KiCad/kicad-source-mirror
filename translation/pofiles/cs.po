@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:49-0800\n"
-"PO-Revision-Date: 2023-07-18 08:06+0000\n"
+"PO-Revision-Date: 2023-12-19 16:32+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.3\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -762,9 +762,8 @@ msgid "Show all footprint text"
 msgstr "Zobrazit všechny texty pouzder"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Potisk"
+msgstr "Potisk mimo desku"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
@@ -973,9 +972,8 @@ msgid "Show filled areas in zones"
 msgstr "Zobrazit vyplněné oblasti v zónách"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Pro nepokovenou měď použijte barvu holé mědi"
+msgstr "Pro nepokovenou měď použijte barvu holé mědi (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1020,9 +1018,8 @@ msgid "deg"
 msgstr "stupňů"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Vystředit při &přemísťování objektu"
+msgstr "Překreslit během přesunu"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
@@ -1334,9 +1331,8 @@ msgid "KiCad Image Converter"
 msgstr "KiCad převod obrázků"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:228
-#, fuzzy
 msgid "Image files"
-msgstr "Soubory obrázku"
+msgstr "Soubory obrázků"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:278 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:73 pagelayout_editor/menubar.cpp:63
@@ -1363,9 +1359,8 @@ msgid "Image Files"
 msgstr "Soubory obrázku"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:440
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Vybrat soubor výkresového listu"
+msgstr "Vytvořit soubor výkresového listu"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:457
 #: bitmap2component/bitmap2cmp_frame.cpp:493
@@ -2454,11 +2449,8 @@ msgid "Hotkey List"
 msgstr "Seznam kl. zkratek"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Název projektu:\n"
-"%s\n"
+msgstr "Název projektu"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1068
@@ -2480,9 +2472,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Zavřít projekt"
+msgstr "Zvolte projekt k importu"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -3277,7 +3268,7 @@ msgstr "Základní"
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
@@ -3287,34 +3278,29 @@ msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Adresa"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Zarovnání"
+msgstr "Autentizace"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Základní název"
+msgstr "Uživatelské jméno"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:438
-#, fuzzy
 msgid "Password"
-msgstr "Heslo:"
+msgstr "Heslo"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Odesílám změny..."
+msgstr "Odesílám změny"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Název souboru"
+msgstr "Soubor"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3332,63 +3318,55 @@ msgid "New"
 msgstr "Nový"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Upravená skupina"
+msgstr "Upraveno"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Smazat"
+msgstr "Smazáno"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Chybové zprávy:"
+msgstr "Zpráva comitu:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
-#, fuzzy
 msgid "Author:"
-msgstr "Autor"
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Součást: název nesmí být prázdný."
+msgstr "Zpráva comitu nemůže být prázdná"
 
 #: common/dialogs/git/dialog_git_repository.cpp:144
 #: common/dialogs/git/dialog_git_repository.cpp:371
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Zadejte heslo pro SSH klíč"
 
 #: common/dialogs/git/dialog_git_repository.cpp:323
-#, fuzzy
 msgid "Test connection"
-msgstr "Vyberte spojení"
+msgstr "Test spojení"
 
 #: common/dialogs/git/dialog_git_repository.cpp:327
-#, fuzzy
 msgid "Connection successful"
-msgstr "Generování souborů úspěšné."
+msgstr "Připojení bylo úspěšné"
 
 #: common/dialogs/git/dialog_git_repository.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Soubor archivu nelze otevřít."
+msgstr "Nemohu se připojit k '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Soubor archivu nelze otevřít."
+msgstr "Nelze otevřít soukromý klíč '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Neplatné měřítko Z"
+msgstr "Neplatný SSH klíč"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
 #, fuzzy
@@ -3434,7 +3412,7 @@ msgstr "Název připojení"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #, fuzzy
@@ -3456,18 +3434,16 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Uživatelské jméno:"
+msgstr "Uživatelské jméno"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Repositář"
+msgstr "Git repositář"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Přepnout Git větev"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
@@ -3475,11 +3451,11 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Větev"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Poslední změny"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 #, fuzzy
@@ -3502,24 +3478,20 @@ msgid "Git Commit Data"
 msgstr ""
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Použít výchozí název sítě"
+msgstr "Použít výchozí hodnoty"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Název oblasti:"
+msgstr "Jméno autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Autor"
+msgstr "E-mail autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Správa repozitářů"
+msgstr "Git repozitáře"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3530,19 +3502,16 @@ msgid "Active"
 msgstr "Aktivní"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Přidat repositář"
+msgstr "Přidat nový repositář"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Upravit vlastnosti pouzdra"
+msgstr "Upravit vlastnosti repozitáře"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Repositář"
+msgstr "Odebrat repozitář Git"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3775,7 +3744,7 @@ msgstr "Malý"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Použít kompaktní ikony v nástrojových lištách"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:805
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1202
@@ -3791,7 +3760,7 @@ msgstr "Normální"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "Použít výchozí velikost ikony KiCadu v nástrojových lištách"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3800,7 +3769,7 @@ msgstr "Velký"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Použít větší ikony v nástrojových lištách"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
@@ -4151,9 +4120,8 @@ msgstr ""
 "Jsi si jistý?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Měřítko"
+msgstr "Měřítko:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
@@ -4408,6 +4376,8 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Třídy spojů byly změněny mimo dialog Nastavení.\n"
+"Chcete je znovu načíst?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:465
 msgid "Netclass must have a name."
@@ -5635,19 +5605,16 @@ msgid "Hyperlink"
 msgstr "Hyperlynk"
 
 #: common/eda_units.cpp:476 pcbnew/generators/pcb_tuning_pattern.cpp:204
-#, fuzzy
 msgid "min"
-msgstr "v"
+msgstr "min"
 
 #: common/eda_units.cpp:484
-#, fuzzy
 msgid "opt"
-msgstr "Horní"
+msgstr "opt"
 
 #: common/eda_units.cpp:492 pcbnew/generators/pcb_tuning_pattern.cpp:207
-#, fuzzy
 msgid "max"
-msgstr "Max."
+msgstr "max"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -5875,17 +5842,17 @@ msgstr "Nelze kopírovat soubor '%s'."
 
 #: common/gestfich.cpp:307
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Neplatný název adresáře, nelze odstranit kořen"
 
 #: common/gestfich.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "Jednotka '%s' nekončí na \"mil\"."
+msgstr "Adresář '%s' neexistuje"
 
 #: common/gestfich.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' nebyl správně analyzován."
+msgstr "'%s' není adresář"
 
 #: common/gestfich.cpp:337
 #, fuzzy, c-format
@@ -5970,13 +5937,12 @@ msgid "Could not get conflict iterator"
 msgstr "Nelze otevřít konfigurační soubor"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Změnit"
+msgstr "Změněno"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Přidal"
 
 #: common/git/git_push_handler.cpp:44
 #, fuzzy
@@ -5996,17 +5962,17 @@ msgstr "Nelze použít OpenGL"
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Přijato %u z %u objektů"
 
 #: common/git/kicad_git_common.cpp:442
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Aktualizováno %s z %s na %s."
+msgstr "* [aktualizováno] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Zóna %s na %s"
+msgstr "* [nový] %s %s"
 
 #: common/git/kicad_git_common.cpp:466
 #, c-format
@@ -6014,19 +5980,18 @@ msgid "Writing objects: %d%% (%d/%d), %d bytes"
 msgstr ""
 
 #: common/git/kicad_git_common.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Mřížka: %s (%s)"
+msgstr "* [odmítnuto] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Aktualizováno"
+msgstr "[aktualizováno] %s"
 
 #: common/git/kicad_git_errors.cpp:30
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Neplatný formát\n"
+msgstr "Neplatný repozitář."
 
 #: common/git/kicad_git_errors.cpp:31
 #, fuzzy
@@ -8504,7 +8469,7 @@ msgstr ""
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_plugin.h:54
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:53
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro soubory"
 
 #: common/wildcards_and_files_ext.cpp:310 pcbnew/plugins/kicad/pcb_plugin.h:288
 msgid "KiCad printed circuit board files"
@@ -12942,7 +12907,7 @@ msgstr "Režim tisku"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
 msgid "Waveform:"
-msgstr ""
+msgstr "Průběh:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:100
 msgid "Built-in SPICE model"
@@ -24102,7 +24067,7 @@ msgstr "Import EAGLE CAD XML schéma a deska"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "Zálohování EasyEDA std (JLCEDA)..."
 
 #: kicad/menubar.cpp:117
 #, fuzzy
@@ -33533,7 +33498,7 @@ msgstr "%"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:485
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:536
 msgid " )"
-msgstr ""
+msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
 #, fuzzy
@@ -38524,11 +38489,9 @@ msgstr ""
 "** Chyba při zápisu do souboru STEP. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"Soubor STEP '%s' vytvořen.\n"
+msgstr "%s soubor '%s' vytvořen.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
@@ -38555,11 +38518,13 @@ msgid "%s file has been created, but there are warnings."
 msgstr "Soubor STEP byl vytvořen, ale jsou zde varování."
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Čas obnovení %.3f s"
+msgstr ""
+"\n"
+"Čas exportu %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
 #, fuzzy, c-format
@@ -38572,24 +38537,20 @@ msgid "Cutting %d/%d %s\n"
 msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:981
-#, fuzzy
 msgid "pads"
-msgstr "Bez plošek"
+msgstr "plošky"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:982
-#, fuzzy
 msgid "shapes"
-msgstr "tvar +"
+msgstr "tvary"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:983
-#, fuzzy
 msgid "tracks"
-msgstr "Spoje"
+msgstr "spoje"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:984
-#, fuzzy
 msgid "zones"
-msgstr "zóna"
+msgstr "zóny"
 
 #: pcbnew/files.cpp:147
 msgid "All KiCad Board Files"
@@ -41726,7 +41687,7 @@ msgstr "Pouzdro '%s' nenalezeno v knihovně '%s'."
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:43
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:48
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro projekt"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:56
 msgid "Fabmaster PCB files"
