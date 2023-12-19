@@ -138,7 +138,7 @@ public:
 
         void GetTriangle( int index, VECTOR2I& a, VECTOR2I& b, VECTOR2I& c ) const
         {
-            auto tri = m_triangles[ index ];
+            auto& tri = m_triangles[ index ];
             a = m_vertices[ tri.a ];
             b = m_vertices[ tri.b ];
             c = m_vertices[ tri.c ];

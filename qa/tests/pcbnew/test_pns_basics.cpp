@@ -364,7 +364,7 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
         dumpObstacles( obstacles );
 
         BOOST_CHECK_EQUAL( obstacles.size(), 1 );
-        const auto first = *obstacles.begin();
+        const auto& first = *obstacles.begin();
 
         BOOST_CHECK_EQUAL( first.m_head, v1 );
         BOOST_CHECK_EQUAL( first.m_item, v2 );
@@ -382,7 +382,7 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 
         BOOST_CHECK_EQUAL( obstacles.size(), 1 );
         auto iter = obstacles.begin();
-        const auto first = *iter++;
+        const auto& first = *iter++;
 
         BOOST_CHECK_EQUAL( first.m_head, v1->Hole() );
         BOOST_CHECK_EQUAL( first.m_item, v2->Hole() );
@@ -400,7 +400,7 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
 
         BOOST_CHECK_EQUAL( obstacles.size(), 2 );
         auto iter = obstacles.begin();
-        const auto first = *iter++;
+        const auto& first = *iter++;
 
         // There is no guarantee on what order the two collisions will be in...
         BOOST_CHECK( ( first.m_head == v1 && first.m_item == v2->Hole() )
