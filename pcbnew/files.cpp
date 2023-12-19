@@ -41,7 +41,6 @@
 #include <wx/snglinst.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <pcbnew_id.h>
-#include <io_mgr.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <board.h>
@@ -57,12 +56,13 @@
 #include <project_pcb.h>
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
-#include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
-#include <plugins/kicad/pcb_plugin.h>
+#include <io/common/plugin_common_choose_project.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <pcb_io/cadstar/cadstar_pcb_archive_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_imported_layers.h>
 #include <dialogs/dialog_import_choose_project.h>
-#include <plugins/common/plugin_common_choose_project.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
 #include <board_commit.h>
@@ -97,9 +97,9 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
 {
     std::vector<PLUGIN_FILE_DESC> descriptions;
 
-    for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+    for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
-        bool isKiCad = plugin.m_type == IO_MGR::KICAD_SEXP || plugin.m_type == IO_MGR::LEGACY;
+        bool isKiCad = plugin.m_type == PCB_IO_MGR::KICAD_SEXP || plugin.m_type == PCB_IO_MGR::LEGACY;
 
         if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
             continue;
@@ -108,7 +108,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
             continue;
 
         // release the PLUGIN even if an exception is thrown.
-        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+        PCB_IO::RELEASER pi( plugin.m_createFunc() );
         wxCHECK( pi, false );
 
         const PLUGIN_FILE_DESC& desc = pi->GetBoardFileDesc();
@@ -558,15 +558,15 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
 
-    IO_MGR::PCB_FILE_T pluginType = IO_MGR::KICAD_SEXP;
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::KICAD_SEXP;
 
     if( !is_new )
-        pluginType = IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
+        pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
 
-    if( pluginType == IO_MGR::FILE_TYPE_NONE )
+    if( pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
         return false;
 
-    bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD_SEXP;
+    bool converted =  pluginType != PCB_IO_MGR::LEGACY && pluginType != PCB_IO_MGR::KICAD_SEXP;
 
     // Loading a project should only be done under carefully considered circumstances.
 
@@ -607,10 +607,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     else
     {
         BOARD*           loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
+        PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( pluginType ) );
 
         LAYER_REMAPPABLE_PLUGIN* layerRemappablePlugin =
-            dynamic_cast< LAYER_REMAPPABLE_PLUGIN* >( (PLUGIN*) pi );
+            dynamic_cast< LAYER_REMAPPABLE_PLUGIN* >( (PCB_IO*) pi );
 
         if( layerRemappablePlugin )
         {
@@ -619,7 +619,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
-                dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (PLUGIN*) pi );
+                dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (PCB_IO*) pi );
 
         if( projectChooserPlugin )
         {
@@ -679,7 +679,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
 #if USE_INSTRUMENTATION
             unsigned stopTime = GetRunningMicroSecs();
-            printf( "PLUGIN::Load(): %u usecs\n", stopTime - startTime );
+            printf( "PCB_IO::Load(): %u usecs\n", stopTime - startTime );
 #endif
         }
         catch( const FUTURE_FORMAT_ERROR& ffe )
@@ -759,7 +759,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             loadedBoard->SetModified();
         }
 
-        // we should not ask PLUGINs to do these items:
+        // we should not ask PCB_IOs to do these items:
         loadedBoard->BuildListOfNets();
         ResolveDRCExclusions( true );
         m_toolManager->RunAction( PCB_ACTIONS::repairBoard, true);
@@ -769,8 +769,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         else
             GetScreen()->SetContentModified( false );
 
-        if( ( pluginType == IO_MGR::LEGACY )
-         || ( pluginType == IO_MGR::KICAD_SEXP
+        if( ( pluginType == PCB_IO_MGR::LEGACY )
+         || ( pluginType == PCB_IO_MGR::KICAD_SEXP
                 && loadedBoard->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION
                 && loadedBoard->GetGenerator().Lower() != wxT( "gerbview" ) ) )
         {
@@ -801,7 +801,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // which prompts the user to continue with overwrite or abort)
             if( newLibPath.Length() > 0 )
             {
-                PLUGIN::RELEASER piSexpr( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+                PCB_IO::RELEASER piSexpr( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
                 for( FOOTPRINT* footprint : loadedFootprints )
                 {
@@ -991,7 +991,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     try
     {
-        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+        PCB_IO::RELEASER    pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
         pi->SaveBoard( tempFile, GetBoard(), nullptr );
     }
@@ -1091,7 +1091,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     try
     {
-        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+        PCB_IO::RELEASER    pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
         wxASSERT( pcbFileName.IsAbsolute() );
 
@@ -1208,12 +1208,12 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 {
     m_importProperties = aProperties;
 
-    switch( (IO_MGR::PCB_FILE_T) aFileType )
+    switch( (PCB_IO_MGR::PCB_FILE_T) aFileType )
     {
-    case IO_MGR::CADSTAR_PCB_ARCHIVE:
-    case IO_MGR::EAGLE:
-    case IO_MGR::EASYEDA:
-    case IO_MGR::EASYEDAPRO:
+    case PCB_IO_MGR::CADSTAR_PCB_ARCHIVE:
+    case PCB_IO_MGR::EAGLE:
+    case PCB_IO_MGR::EASYEDA:
+    case PCB_IO_MGR::EASYEDAPRO:
         return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
                                  KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
 
@@ -1272,7 +1272,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
     {
         try
         {
-            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::IPC2581 ) );
+            PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
 
             pi->SaveBoard( tempFile, GetBoard(), &props, &reporter );
             return true;

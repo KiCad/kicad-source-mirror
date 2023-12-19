@@ -49,7 +49,7 @@ set( QA_EESCHEMA_SRCS
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_format_units.cpp
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_array_options.cpp
 
-    sch_plugins/altium/test_altium_parser_sch.cpp
+    sch_io/altium/test_altium_parser_sch.cpp
 
 	erc/test_erc_label_not_connected.cpp
 	erc/test_erc_stacking_pins.cpp

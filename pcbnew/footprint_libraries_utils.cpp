@@ -42,8 +42,8 @@
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <plugins/kicad/pcb_plugin.h>
-#include <plugins/legacy/legacy_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/legacy/legacy_plugin.h>
 #include <env_paths.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
@@ -88,9 +88,9 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         std::vector<std::string> allExtensions;
         std::set<wxString>       allWildcardsSet;
 
-        for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+        for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
         {
-            PLUGIN::RELEASER pi( plugin.m_createFunc() );
+            PCB_IO::RELEASER pi( plugin.m_createFunc() );
 
             if( !pi )
                 continue;
@@ -144,11 +144,11 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     m_mruPath = fn.GetPath();
 
-    IO_MGR::PCB_FILE_T fileType = IO_MGR::FILE_TYPE_NONE;
+    PCB_IO_MGR::PCB_FILE_T fileType = PCB_IO_MGR::FILE_TYPE_NONE;
 
-    for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+    for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
-        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+        PCB_IO::RELEASER pi( plugin.m_createFunc() );
 
         if( !pi )
             continue;
@@ -163,7 +163,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         }
     }
 
-    if( fileType == IO_MGR::FILE_TYPE_NONE )
+    if( fileType == PCB_IO_MGR::FILE_TYPE_NONE )
     {
         DisplayError( this, _( "Not a footprint file." ) );
         return nullptr;
@@ -174,7 +174,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     try
     {
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( fileType ) );
+        PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( fileType ) );
 
         footprint = pi->ImportFootprint( fn.GetFullPath(), footprintName);
 
@@ -340,13 +340,13 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
         }
     }
 
-    // We can save fp libs only using IO_MGR::KICAD_SEXP format (.pretty libraries)
-    IO_MGR::PCB_FILE_T piType  = IO_MGR::KICAD_SEXP;
+    // We can save fp libs only using PCB_IO_MGR::KICAD_SEXP format (.pretty libraries)
+    PCB_IO_MGR::PCB_FILE_T piType  = PCB_IO_MGR::KICAD_SEXP;
     wxString           libPath = fn.GetFullPath();
 
     try
     {
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( piType ) );
+        PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( piType ) );
 
         bool writable = false;
         bool exists   = false;
@@ -470,16 +470,16 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
     if( libName.IsEmpty() )
         return false;
 
-    IO_MGR::PCB_FILE_T lib_type = IO_MGR::GuessPluginTypeFromLibPath( libPath );
+    PCB_IO_MGR::PCB_FILE_T lib_type = PCB_IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
-    if( lib_type == IO_MGR::FILE_TYPE_NONE )
-        lib_type = IO_MGR::KICAD_SEXP;
+    if( lib_type == PCB_IO_MGR::FILE_TYPE_NONE )
+        lib_type = PCB_IO_MGR::KICAD_SEXP;
 
-    wxString type = IO_MGR::ShowType( lib_type );
+    wxString type = PCB_IO_MGR::ShowType( lib_type );
 
     // KiCad lib is our default guess.  So it might not have the .pretty extension
     // In this case, the extension is part of the library name
-    if( lib_type == IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
+    if( lib_type == PCB_IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
         libName = fn.GetFullName();
 
     // try to use path normalized to an environmental variable or project path
@@ -531,7 +531,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
     // So prompt the user if he try to delete a footprint from a legacy lib
     wxString libfullname = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( nickname )->GetFullURI();
 
-    if( IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == IO_MGR::LEGACY )
+    if( PCB_IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == PCB_IO_MGR::LEGACY )
     {
         DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_DELETE );
         return false;
@@ -656,8 +656,8 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 libNickname = row->GetNickName();
         }
 
-        IO_MGR::PCB_FILE_T piType = IO_MGR::KICAD_SEXP;
-        PLUGIN::RELEASER   pi( IO_MGR::PluginFind( piType ) );
+        PCB_IO_MGR::PCB_FILE_T piType = PCB_IO_MGR::KICAD_SEXP;
+        PCB_IO::RELEASER   pi( PCB_IO_MGR::PluginFind( piType ) );
 
         for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {
@@ -749,7 +749,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
         return false;
     }
 
-    if( IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == IO_MGR::LEGACY )
+    if( PCB_IO_MGR::GuessPluginTypeFromLibPath( libfullname ) == PCB_IO_MGR::LEGACY )
     {
         DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
         return false;
@@ -784,7 +784,7 @@ bool FOOTPRINT_EDIT_FRAME::DuplicateFootprint( FOOTPRINT* aFootprint )
     // So prompt the user if he try to add/replace a footprint in a legacy lib
     wxString libFullName = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( libraryName )->GetFullURI();
 
-    if( IO_MGR::GuessPluginTypeFromLibPath( libFullName ) == IO_MGR::LEGACY )
+    if( PCB_IO_MGR::GuessPluginTypeFromLibPath( libFullName ) == PCB_IO_MGR::LEGACY )
     {
         DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
         return false;
@@ -1083,9 +1083,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
                     // So prompt the user if he try to add/replace a footprint in a legacy lib
                     const FP_LIB_TABLE_ROW* row = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( newLib );
                     wxString                libPath = row->GetFullURI();
-                    IO_MGR::PCB_FILE_T      piType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
+                    PCB_IO_MGR::PCB_FILE_T      piType = PCB_IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
-                    if( piType == IO_MGR::LEGACY )
+                    if( piType == PCB_IO_MGR::LEGACY )
                     {
                         DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
                         return false;

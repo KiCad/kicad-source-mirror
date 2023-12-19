@@ -42,13 +42,13 @@
 #include <project_rescue.h>
 #include <project_sch.h>
 #include <dialog_HTML_reporter_base.h>
-#include <plugins/common/plugin_common_choose_project.h>
+#include <io/common/plugin_common_choose_project.h>
 #include <reporter.h>
 #include <richio.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
-#include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <sch_io/legacy/sch_legacy_plugin.h>
 #include <sch_file_versions.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
@@ -248,8 +248,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         SetScreen( nullptr );
 
-        SCH_PLUGIN* plugin = SCH_IO_MGR::FindPlugin( schFileType );
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
+        SCH_IO* plugin = SCH_IO_MGR::FindPlugin( schFileType );
+        SCH_IO::SCH_IO_RELEASER pi( plugin );
 
         pi->SetProgressReporter( &progressReporter );
 
@@ -669,7 +669,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
             continue; // this is "Import non-KiCad schematic"
 
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
             continue;
@@ -724,7 +724,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
             continue;
@@ -797,7 +797,7 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         pluginType = SCH_IO_MGR::SCH_KICAD;
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
+    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
     try
     {
@@ -1329,12 +1329,12 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
         try
         {
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
-            DIALOG_HTML_REPORTER            errorReporter( this );
-            WX_PROGRESS_REPORTER            progressReporter( this, _( "Importing Schematic" ), 1 );
+            SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+            DIALOG_HTML_REPORTER              errorReporter( this );
+            WX_PROGRESS_REPORTER              progressReporter( this, _( "Importing Schematic" ), 1 );
 
             PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
-                    dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (SCH_PLUGIN*) pi );
+                    dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (SCH_IO*) pi );
 
             if( projectChooserPlugin )
             {

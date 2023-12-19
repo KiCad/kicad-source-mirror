@@ -80,7 +80,7 @@ struct SUPPORTED_FILE_TYPE
     wxString m_FileFilter;             ///< Filter used for file pickers if m_IsFile is true
     wxString m_FolderSearchExtension;  ///< In case of folders it stands for extensions of files stored inside
     bool     m_IsFile;                 ///< Whether the library is a folder or a file
-    IO_MGR::PCB_FILE_T m_Plugin;
+    PCB_IO_MGR::PCB_FILE_T m_Plugin;
 };
 
 // clang-format on
@@ -193,12 +193,12 @@ public:
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
         {
-            IO_MGR::PCB_FILE_T pluginType = IO_MGR::GuessPluginTypeFromLibPath( aValue );
+            PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aValue );
 
-            if( pluginType == IO_MGR::UNKNOWN )
-                pluginType = IO_MGR::KICAD_SEXP;
+            if( pluginType == PCB_IO_MGR::UNKNOWN )
+                pluginType = PCB_IO_MGR::KICAD_SEXP;
 
-            SetValue( aRow, COL_TYPE, IO_MGR::ShowType( pluginType ) );
+            SetValue( aRow, COL_TYPE, PCB_IO_MGR::ShowType( pluginType ) );
         }
         // If plugin type is changed, update the filter string in the chooser dialog
         else if( aCol == COL_TYPE )
@@ -239,8 +239,8 @@ protected:
             wxString        result = options;
             STRING_UTF8_MAP choices;
 
-            IO_MGR::PCB_FILE_T pi_type = IO_MGR::EnumFromStr( row->GetType() );
-            PLUGIN::RELEASER   pi( IO_MGR::PluginFind( pi_type ) );
+            PCB_IO_MGR::PCB_FILE_T pi_type = PCB_IO_MGR::EnumFromStr( row->GetType() );
+            PCB_IO::RELEASER   pi( PCB_IO_MGR::PluginFind( pi_type ) );
             pi->FootprintLibOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
@@ -325,7 +325,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
     wxArrayString choices;
 
     for( auto& [fileType, desc] : m_supportedFpFiles )
-        choices.Add( IO_MGR::ShowType( fileType ) );
+        choices.Add( PCB_IO_MGR::ShowType( fileType ) );
 
 
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
@@ -364,7 +364,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
                         {
                             auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
                             auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
-                            IO_MGR::PCB_FILE_T fileType = tableRow->GetFileType();
+                            PCB_IO_MGR::PCB_FILE_T fileType = tableRow->GetFileType();
                             const PLUGIN_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
 
                             if( pluginDesc.m_IsFile )
@@ -461,7 +461,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     for( auto& [type, desc] : m_supportedFpFiles )
     {
-        wxString entryStr = IO_MGR::ShowType( type );
+        wxString entryStr = PCB_IO_MGR::ShowType( type );
 
         if( desc.m_IsFile && !desc.m_FileExtensions.empty() )
         {
@@ -512,9 +512,9 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
 
 void PANEL_FP_LIB_TABLE::populatePluginList()
 {
-    for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+    for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
-        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+        PCB_IO::RELEASER pi( plugin.m_createFunc() );
 
         if( !pi )
             continue;
@@ -797,7 +797,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         selectedRows.push_back( m_cur_grid->GetGridCursorRow() );
 
     wxArrayInt rowsToMigrate;
-    wxString   kicadType = IO_MGR::ShowType( IO_MGR::KICAD_SEXP );
+    wxString   kicadType = PCB_IO_MGR::ShowType( PCB_IO_MGR::KICAD_SEXP );
     wxString   msg;
 
     for( int row : selectedRows )
@@ -893,14 +893,14 @@ bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
                                          const wxString& aOldFilePath,
                                          const wxString& aNewFilePath)
 {
-    IO_MGR::PCB_FILE_T oldFileType = IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
+    PCB_IO_MGR::PCB_FILE_T oldFileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
 
-    if( oldFileType == IO_MGR::FILE_TYPE_NONE )
+    if( oldFileType == PCB_IO_MGR::FILE_TYPE_NONE )
         return false;
 
 
-    PLUGIN::RELEASER oldFilePI( IO_MGR::PluginFind( oldFileType ) );
-    PLUGIN::RELEASER kicadPI( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+    PCB_IO::RELEASER oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
+    PCB_IO::RELEASER kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 
@@ -933,21 +933,21 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
-    IO_MGR::PCB_FILE_T fileType = IO_MGR::FILE_TYPE_NONE;
+    PCB_IO_MGR::PCB_FILE_T fileType = PCB_IO_MGR::FILE_TYPE_NONE;
 
     // We are bound both to the menu and button with this one handler
     // So we must set the file type based on it
     if( event.GetEventType() == wxEVT_BUTTON )
     {
         // Let's default to adding a kicad footprint file for just the footprint
-        fileType = IO_MGR::KICAD_SEXP;
+        fileType = PCB_IO_MGR::KICAD_SEXP;
     }
     else
     {
-        fileType = static_cast<IO_MGR::PCB_FILE_T>( event.GetId() );
+        fileType = static_cast<PCB_IO_MGR::PCB_FILE_T>( event.GetId() );
     }
 
-    if( fileType == IO_MGR::FILE_TYPE_NONE )
+    if( fileType == PCB_IO_MGR::FILE_TYPE_NONE )
     {
         wxLogWarning( wxT( "File type selection event received but could not find the file type "
                            "in the table" ) );
@@ -957,7 +957,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     const PLUGIN_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
     PCBNEW_SETTINGS*        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    wxString title = wxString::Format( _( "Select %s Library" ), IO_MGR::ShowType( fileType ) );
+    wxString title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );
     wxString openDir = cfg->m_lastFootprintLibDir;
 
     if( m_cur_grid == m_project_grid )
@@ -1023,7 +1023,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
         bool       doAdd    = true;
 
-        if( fileType == IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
+        if( fileType == PCB_IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
             nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true ).wx_str();
 
         if( cur_model()->ContainsNickname( nickname ) )
@@ -1045,7 +1045,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
 
-            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( fileType ) );
+            m_cur_grid->SetCellValue( last_row, COL_TYPE, PCB_IO_MGR::ShowType( fileType ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );

@@ -41,33 +41,53 @@ include_directories(
     ./widgets
     )
 
-set( EESCHEMA_SCH_PLUGINS_ALTIUM
-    sch_plugins/altium/altium_parser_sch.cpp
-    sch_plugins/altium/sch_altium_plugin.cpp
-    )
+set( EESCHEMA_SCH_IO
+    sch_io/sch_lib_plugin_cache.cpp
 
+    sch_io/sch_io.cpp
+    sch_io/sch_io_mgr.cpp
 
-set( EESCHEMA_SCH_PLUGINS_CADSTAR
-    sch_plugins/cadstar/cadstar_sch_archive_loader.cpp
-    sch_plugins/cadstar/cadstar_sch_archive_parser.cpp
-    sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp
-    )
+    # KiCad IO plugin
+    sch_io/kicad/sch_sexpr_lib_plugin_cache.cpp
+    sch_io/kicad/sch_sexpr_plugin_common.cpp
+    sch_io/kicad/sch_sexpr_parser.cpp
+    sch_io/kicad/sch_sexpr_plugin.cpp
 
+    # Legacy IO plugin
+    sch_io/legacy/sch_legacy_lib_plugin_cache.cpp
+    sch_io/legacy/sch_legacy_plugin.cpp
+    sch_io/legacy/sch_legacy_plugin_helpers.cpp
 
-set( EESCHEMA_SCH_PLUGINS_LTSPICE
-    sch_plugins/ltspice/ltspice_schematic.cpp
-    sch_plugins/ltspice/ltspice_sch_parser.cpp
-    sch_plugins/ltspice/ltspice_sch_plugin.cpp
-    )
+    # HTTP IO plugin
+    sch_io/http_lib/sch_http_lib_plugin.cpp
 
-set( EESCHEMA_SCH_PLUGINS_EASYEDA
-    sch_plugins/easyeda/sch_easyeda_parser.cpp
-    sch_plugins/easyeda/sch_easyeda_plugin.cpp
-    )
+    # Database IO plugin
+    sch_io/database/sch_database_plugin.cpp
 
-set( EESCHEMA_SCH_PLUGINS_EASYEDAPRO
-    sch_plugins/easyedapro/sch_easyedapro_parser.cpp
-    sch_plugins/easyedapro/sch_easyedapro_plugin.cpp
+    # Eagle IO plugin
+    sch_io/eagle/sch_eagle_plugin.cpp
+
+    # Altium IO plugin
+    sch_io/altium/altium_parser_sch.cpp
+    sch_io/altium/sch_altium_plugin.cpp
+
+    # Cadstar IO plugin
+    sch_io/cadstar/cadstar_sch_archive_loader.cpp
+    sch_io/cadstar/cadstar_sch_archive_parser.cpp
+    sch_io/cadstar/cadstar_sch_archive_plugin.cpp
+
+    # LTSpice IO plugin
+    sch_io/ltspice/ltspice_schematic.cpp
+    sch_io/ltspice/ltspice_sch_parser.cpp
+    sch_io/ltspice/ltspice_sch_plugin.cpp
+
+    # EasyEDA IO plugin
+    sch_io/easyeda/sch_easyeda_parser.cpp
+    sch_io/easyeda/sch_easyeda_plugin.cpp
+
+    # EasyEDA Pro IO plugin
+    sch_io/easyedapro/sch_easyedapro_parser.cpp
+    sch_io/easyedapro/sch_easyedapro_plugin.cpp
     )
 
 set( EESCHEMA_DLGS
@@ -295,11 +315,7 @@ set( EESCHEMA_PRINTING
 set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
     ${EESCHEMA_LIBEDIT_SRCS}
-    ${EESCHEMA_SCH_PLUGINS_ALTIUM}
-    ${EESCHEMA_SCH_PLUGINS_CADSTAR}
-    ${EESCHEMA_SCH_PLUGINS_LTSPICE}
-    ${EESCHEMA_SCH_PLUGINS_EASYEDA}
-    ${EESCHEMA_SCH_PLUGINS_EASYEDAPRO}
+    ${EESCHEMA_SCH_IO}
     ${EESCHEMA_SIM_SRCS}
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_IMPORT_GFX}
@@ -347,7 +363,6 @@ set( EESCHEMA_SRCS
     sch_draw_panel.cpp
     sch_edit_frame.cpp
     sch_field.cpp
-    sch_io_mgr.cpp
     sch_item.cpp
     sch_junction.cpp
     sch_label.cpp
@@ -357,7 +372,6 @@ set( EESCHEMA_SRCS
     sch_painter.cpp
     sch_pin.cpp
     sch_plotter.cpp
-    sch_plugin.cpp
     sch_preview_panel.cpp
     sch_reference_list.cpp
     sch_screen.cpp
@@ -395,18 +409,6 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_spice_model.cpp
     netlist_exporters/netlist_exporter_xml.cpp
     netlist_exporters/netlist_generator.cpp
-
-    sch_plugins/sch_lib_plugin_cache.cpp
-    sch_plugins/eagle/sch_eagle_plugin.cpp
-    sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp
-    sch_plugins/kicad/sch_sexpr_plugin_common.cpp
-    sch_plugins/kicad/sch_sexpr_parser.cpp
-    sch_plugins/kicad/sch_sexpr_plugin.cpp
-    sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp
-    sch_plugins/legacy/sch_legacy_plugin.cpp
-    sch_plugins/legacy/sch_legacy_plugin_helpers.cpp
-    sch_plugins/database/sch_database_plugin.cpp
-    sch_plugins/http_lib/sch_http_lib_plugin.cpp
 
     tools/assign_footprints.cpp
     tools/backannotate.cpp

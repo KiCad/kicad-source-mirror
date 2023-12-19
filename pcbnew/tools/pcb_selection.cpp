@@ -44,7 +44,7 @@ using namespace std::placeholders;
 #include "pcb_selection_tool.h"
 #include "pcb_actions.h"
 
-#include "plugins/kicad/pcb_plugin.h"
+#include <pcb_io/kicad/pcb_plugin.h>
 
 
 

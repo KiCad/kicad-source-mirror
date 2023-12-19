@@ -32,7 +32,7 @@
 #include <footprint_preview_panel.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_painter.h>
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 #include <wx/treebook.h>
 
 

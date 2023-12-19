@@ -27,7 +27,7 @@
 #ifndef PCB_CONTROL_H
 #define PCB_CONTROL_H
 
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <memory>
 #include <tools/pcb_tool_base.h>
 #include <status_popup.h>
@@ -99,7 +99,7 @@ public:
     int InteractiveDelete( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
-    int AppendBoard( PLUGIN& pi, wxString& fileName );
+    int AppendBoard( PCB_IO& pi, wxString& fileName );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
     int FlipPcbView( const TOOL_EVENT& aEvent );

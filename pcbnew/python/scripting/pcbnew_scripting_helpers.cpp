@@ -42,7 +42,7 @@
 #include <drc/drc_item.h>
 #include <fp_lib_table.h>
 #include <core/ignore.h>
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <string_utils.h>
 #include <macros.h>
 #include <pcbnew_scripting_helpers.h>
@@ -87,12 +87,12 @@ void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 BOARD* LoadBoard( wxString& aFileName )
 {
     if( aFileName.EndsWith( KiCadPcbFileExtension ) )
-        return LoadBoard( aFileName, IO_MGR::KICAD_SEXP );
+        return LoadBoard( aFileName, PCB_IO_MGR::KICAD_SEXP );
     else if( aFileName.EndsWith( LegacyPcbFileExtension ) )
-        return LoadBoard( aFileName, IO_MGR::LEGACY );
+        return LoadBoard( aFileName, PCB_IO_MGR::LEGACY );
 
     // as fall back for any other kind use the legacy format
-    return LoadBoard( aFileName, IO_MGR::LEGACY );
+    return LoadBoard( aFileName, PCB_IO_MGR::LEGACY );
 }
 
 
@@ -134,7 +134,7 @@ PROJECT* GetDefaultProject()
 }
 
 
-BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
+BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
 {
     wxFileName pro = aFileName;
     pro.SetExt( ProjectFileExtension );
@@ -175,7 +175,7 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
         wxFprintf( stderr, _( "Error loading drawing sheet." ) );
 
-    BOARD* brd = IO_MGR::Load( aFormat, aFileName );
+    BOARD* brd = PCB_IO_MGR::Load( aFormat, aFileName );
 
     if( brd )
     {
@@ -257,7 +257,7 @@ BOARD* CreateEmptyBoard()
 }
 
 
-bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat, bool aSkipSettings )
+bool SaveBoard( wxString& aFileName, BOARD* aBoard, PCB_IO_MGR::PCB_FILE_T aFormat, bool aSkipSettings )
 {
     aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses( false );
@@ -268,7 +268,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat, 
 
     try
     {
-        IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
+        PCB_IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
     }
     catch( ... )
     {
@@ -290,7 +290,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat, 
 
 bool SaveBoard( wxString& aFileName, BOARD* aBoard, bool aSkipSettings )
 {
-    return SaveBoard( aFileName, aBoard, IO_MGR::KICAD_SEXP, aSkipSettings );
+    return SaveBoard( aFileName, aBoard, PCB_IO_MGR::KICAD_SEXP, aSkipSettings );
 }
 
 

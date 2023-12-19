@@ -41,7 +41,7 @@
 
 #include <string_utf8_map.h>
 #include <lib_symbol.h>
-#include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <sch_io/legacy/sch_legacy_plugin.h>
 #include <class_draw_panel_gal.h>
 
 

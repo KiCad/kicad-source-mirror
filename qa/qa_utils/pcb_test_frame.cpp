@@ -49,7 +49,9 @@
 
 #include <connectivity/connectivity_data.h>
 
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <pcb_io/kicad/pcb_plugin.h>
+
 #include <memory>
 
 #include <tool/actions.h>
@@ -57,7 +59,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_selection_tool.h>
-#include <plugins/kicad/pcb_plugin.h>
 
 #include "pcb_test_frame.h"
 

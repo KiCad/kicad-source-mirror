@@ -38,7 +38,7 @@
 #include <widgets/app_progress_dialog.h>
 
 #include <symbol_library.h>
-#include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <sch_io/legacy/sch_legacy_plugin.h>
 
 #include <wx/log.h>
 #include <wx/progdlg.h>

@@ -27,7 +27,7 @@
 
 #include <schematic.h>
 #include <settings/settings_manager.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
 #include <wx/filename.h>
 
 #include <connection_graph.h>
@@ -36,7 +36,6 @@
 #include <netlist_reader/netlist_reader.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <project.h>
-#include <sch_io_mgr.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
@@ -66,9 +65,9 @@ protected:
     virtual void LoadSchematic( const wxString& aRelativePath );
     virtual wxFileName GetSchematicPath( const wxString& aBaseName );
 
-    SCHEMATIC        m_schematic;
-    SCH_PLUGIN*      m_pi;
-    SETTINGS_MANAGER m_manager;
+    SCHEMATIC         m_schematic;
+    SCH_IO*           m_pi;
+    SETTINGS_MANAGER  m_manager;
 };
 
 

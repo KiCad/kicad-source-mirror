@@ -30,10 +30,10 @@
 #ifndef KICAD_CLIPBOARD_H
 #define KICAD_CLIPBOARD_H
 
-#include <plugins/kicad/pcb_plugin.h>
 #include <board_item.h>
 #include <footprint.h>
-#include <plugins/kicad/pcb_parser.h>
+#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_parser.h>
 #include <memory.h>
 #include <tools/pcb_selection.h>
 

@@ -32,8 +32,8 @@
 #include <wx/msgout.h>
 
 #include <board_item.h>
-#include <plugins/kicad/pcb_plugin.h>
-#include <plugins/kicad/pcb_parser.h>
+#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_parser.h>
 #include <richio.h>
 #include <qa_utils/stdstream_line_reader.h>
 

@@ -1,0 +1,272 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <wx/filename.h>
+#include <wx/uri.h>
+
+#include <config.h>
+#include <kiway_player.h>
+#include <wildcards_and_files_ext.h>
+
+#include <pcb_io/pcb_io_mgr.h>
+
+#include <pcb_io/eagle/eagle_plugin.h>
+#include <pcb_io/geda/gpcb_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/legacy/legacy_plugin.h>
+#include <pcb_io/pcad/pcad_plugin.h>
+#include <pcb_io/altium/altium_circuit_maker_plugin.h>
+#include <pcb_io/altium/altium_circuit_studio_plugin.h>
+#include <pcb_io/altium/altium_designer_plugin.h>
+#include <pcb_io/altium/solidworks_pcb_plugin.h>
+#include <pcb_io/cadstar/cadstar_pcb_archive_plugin.h>
+#include <pcb_io/fabmaster/fabmaster_plugin.h>
+#include <pcb_io/easyeda/pcb_easyeda_plugin.h>
+#include <pcb_io/easyedapro/pcb_easyedapro_plugin.h>
+#include <pcb_io/ipc2581/ipc2581_plugin.h>
+
+#define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
+#define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
+
+
+// Some day plugins might be in separate DLL/DSOs, simply because of numbers of them
+// and code size.  Until then, use the simplest method:
+
+// This implementation is one of two which could be done.
+// The other one would cater to DLL/DSO's.  But since it would be nearly
+// impossible to link a KICAD type DLL/DSO right now without pulling in all
+// ::Draw() functions, I forgo that option temporarily.
+
+// Some day it may be possible to have some built in AND some DLL/DSO
+// plugins coexisting.
+
+
+PCB_IO* PCB_IO_MGR::PluginFind( PCB_FILE_T aFileType )
+{
+    // This implementation is subject to change, any magic is allowed here.
+    // The public IO_MGR API is the only pertinent public information.
+
+    return PLUGIN_REGISTRY::Instance()->Create( aFileType );
+}
+
+
+void PCB_IO_MGR::PluginRelease( PCB_IO* aPlugin )
+{
+    // This function is a place holder for a future point in time where
+    // the plugin is a DLL/DSO.  It could do reference counting, and then
+    // unload the DLL/DSO when count goes to zero.
+
+    delete aPlugin;
+}
+
+
+const wxString PCB_IO_MGR::ShowType( PCB_FILE_T aType )
+{
+    const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( const auto& plugin : plugins )
+    {
+        if ( plugin.m_type == aType )
+        {
+            return plugin.m_name;
+        }
+    }
+
+    return wxString::Format( _( "UNKNOWN (%d)" ), aType );
+}
+
+
+PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::EnumFromStr( const wxString& aType )
+{
+    const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( const auto& plugin : plugins )
+    {
+        if ( plugin.m_name == aType )
+        {
+            return plugin.m_type;
+        }
+    }
+
+    return PCB_FILE_T( -1 );
+}
+
+
+// The KIWAY_PLAYER::OpenProjectFiles() API knows nothing about plugins, so
+// determine how to load the BOARD here
+PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::FindPluginTypeFromBoardPath( const wxString& aFileName, int aCtl )
+{
+    const auto& plugins = PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( const auto& plugin : plugins )
+    {
+        bool isKiCad = plugin.m_type == PCB_IO_MGR::KICAD_SEXP || plugin.m_type == PCB_IO_MGR::LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+
+        if( pi->CanReadBoard( aFileName ) )
+            return plugin.m_type;
+    }
+
+    return PCB_IO_MGR::FILE_TYPE_NONE;
+}
+
+
+PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
+{
+    const auto& plugins = PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( const auto& plugin : plugins )
+    {
+        bool isKiCad = plugin.m_type == PCB_IO_MGR::KICAD_SEXP || plugin.m_type == PCB_IO_MGR::LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+
+        if( pi->CanReadFootprintLib( aLibPath ) )
+            return plugin.m_type;
+    }
+
+    return PCB_IO_MGR::FILE_TYPE_NONE;
+}
+
+
+BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aAppendToMe,
+                     const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                     PROGRESS_REPORTER* aProgressReporter )
+{
+    // release the PLUGIN even if an exception is thrown.
+    PCB_IO::RELEASER pi( PluginFind( aFileType ) );
+
+    if( (PCB_IO*) pi )  // test pi->plugin
+    {
+        return pi->LoadBoard( aFileName, aAppendToMe, aProperties, aProject, aProgressReporter );
+    }
+
+    THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
+}
+
+
+void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
+                   const STRING_UTF8_MAP* aProperties )
+{
+    // release the PLUGIN even if an exception is thrown.
+    PCB_IO::RELEASER pi( PluginFind( aFileType ) );
+
+    if( (PCB_IO*) pi )  // test pi->plugin
+    {
+        pi->SaveBoard( aFileName, aBoard, aProperties );  // virtual
+        return;
+    }
+
+    THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
+}
+
+// These text strings are "truth" for identifying the plugins.  If you change the spellings,
+// you will obsolete library tables, so don't do it.  Additions are OK.
+
+// clang-format off
+static PCB_IO_MGR::REGISTER_PLUGIN registerKicadPlugin(
+        PCB_IO_MGR::KICAD_SEXP,
+        wxT( "KiCad" ),
+        []() -> PCB_IO* { return new PCB_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerLegacyPlugin(
+        PCB_IO_MGR::LEGACY,
+        wxT( "Legacy" ),
+        []() -> PCB_IO* { return new LEGACY_PLUGIN; } );
+
+// Keep non-KiCad plugins in alphabetical order
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin(
+        PCB_IO_MGR::ALTIUM_CIRCUIT_MAKER,
+        wxT( "Altium Circuit Maker" ),
+        []() -> PCB_IO* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin(
+        PCB_IO_MGR::ALTIUM_CIRCUIT_STUDIO,
+        wxT( "Altium Circuit Studio" ),
+        []() -> PCB_IO* { return new ALTIUM_CIRCUIT_STUDIO_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin(
+        PCB_IO_MGR::ALTIUM_DESIGNER,
+        wxT( "Altium Designer" ),
+        []() -> PCB_IO* { return new ALTIUM_DESIGNER_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin(
+        PCB_IO_MGR::CADSTAR_PCB_ARCHIVE,
+        wxT( "CADSTAR PCB Archive" ),
+        []() -> PCB_IO* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerEaglePlugin(
+        PCB_IO_MGR::EAGLE,
+        wxT( "Eagle" ),
+        []() -> PCB_IO* { return new EAGLE_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerEasyEDAPlugin(
+        PCB_IO_MGR::EASYEDA,
+        wxT( "EasyEDA / JLCEDA Std" ),
+	    []() -> PCB_IO* { return new EASYEDA_PLUGIN; });
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerEasyEDAProPlugin(
+        PCB_IO_MGR::EASYEDAPRO,
+        wxT( "EasyEDA / JLCEDA Pro" ),
+        []() -> PCB_IO* { return new EASYEDAPRO_PLUGIN; });
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin(
+        PCB_IO_MGR::FABMASTER,
+        wxT( "Fabmaster" ),
+        []() -> PCB_IO* { return new FABMASTER_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerGPCBPlugin(
+        PCB_IO_MGR::GEDA_PCB,
+        wxT( "GEDA/Pcb" ),
+        []() -> PCB_IO* { return new GPCB_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerPcadPlugin(
+        PCB_IO_MGR::PCAD,
+        wxT( "P-Cad" ),
+        []() -> PCB_IO* { return new PCAD_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin(
+        PCB_IO_MGR::SOLIDWORKS_PCB,
+        wxT( "Solidworks PCB" ),
+        []() -> PCB_IO* { return new SOLIDWORKS_PCB_PLUGIN; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerIPC2581Plugin(
+        PCB_IO_MGR::IPC2581,
+        wxT( "IPC-2581" ),
+        []() -> PCB_IO* { return new IPC2581_PLUGIN; } );
+// clang-format on

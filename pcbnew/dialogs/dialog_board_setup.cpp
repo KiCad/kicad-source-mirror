@@ -29,7 +29,8 @@
 #include <kiface_base.h>
 #include <drc/drc_item.h>
 #include <dialog_import_settings.h>
-#include <io_mgr.h>
+#include <pcb_io/pcb_io.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_rules.h>
 #include <dialogs/panel_setup_teardrops.h>
@@ -283,7 +284,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
 
     PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
 
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+    PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
     BOARD*           otherBoard = nullptr;
 
     try

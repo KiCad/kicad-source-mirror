@@ -55,10 +55,10 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_copper_sliver.cpp
     drc/test_solder_mask_bridging.cpp
 
-    plugins/altium/test_altium_rule_transformer.cpp
-    plugins/altium/test_altium_pcblib_import.cpp
-    plugins/cadstar/test_cadstar_footprints.cpp
-    plugins/eagle/test_eagle_lbr_import.cpp
+    pcb_io/altium/test_altium_rule_transformer.cpp
+    pcb_io/altium/test_altium_pcblib_import.cpp
+    pcb_io/cadstar/test_cadstar_footprints.cpp
+    pcb_io/eagle/test_eagle_lbr_import.cpp
 
     group_saveload.cpp
 )

@@ -22,7 +22,7 @@
 
 #include <panel_fp_lib_table_base.h>
 #include <widgets/wx_grid.h>
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 
 class FP_LIB_TABLE;
 class FP_LIB_TABLE_GRID;
@@ -67,7 +67,7 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
     void populatePluginList();
-    
+
     bool convertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
                          const wxString& aNewFilePath );
 
@@ -100,7 +100,7 @@ private:
     //< Transient (unsaved) last browsed folder when adding a project level library.
     wxString         m_lastProjectLibDir;
 
-    std::map<IO_MGR::PCB_FILE_T, PLUGIN_FILE_DESC> m_supportedFpFiles;
+    std::map<PCB_IO_MGR::PCB_FILE_T, PLUGIN_FILE_DESC> m_supportedFpFiles;
 };
 
 #endif    // PANEL_FP_LIB_TABLE_H

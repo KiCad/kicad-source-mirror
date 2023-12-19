@@ -22,7 +22,7 @@
 #define DIALOG_IMPORTED_LAYERS_H
 
 #include <dialog_imported_layers_base.h>
-#include <plugins/common/plugin_common_layer_mapping.h>
+#include <pcb_io/common/plugin_common_layer_mapping.h>
 
 
 class DIALOG_IMPORTED_LAYERS : public DIALOG_IMPORTED_LAYERS_BASE

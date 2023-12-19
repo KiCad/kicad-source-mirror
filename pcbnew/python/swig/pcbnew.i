@@ -83,11 +83,16 @@ wxArrayString GetFootprints(const wxString& aNickName);
 %}
 
 
+%include <pcb_io/pcb_io_mgr.h>
+%{
+#include <pcb_io/pcb_io_mgr.h>
+%}
+
 // ignore RELEASER as nested classes are still unsupported by swig
 %ignore IO_MGR::RELEASER;
-%include <io_mgr.h>
+%include <pcb_io/pcb_io.h>
 %{
-#include <io_mgr.h>
+#include <pcb_io/pcb_io.h>
 %}
 
 
@@ -106,9 +111,9 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintEnumerate)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintLoad)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintSave)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
-%include <plugins/kicad/pcb_plugin.h>
+%include <pcb_io/kicad/pcb_plugin.h>
 %{
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 %}
 
 

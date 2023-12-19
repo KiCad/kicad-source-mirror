@@ -1047,9 +1047,9 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
     if( !AskLoadBoardFileName( editFrame, &fileName, KICTL_KICAD_ONLY ) )
         return 1;
 
-    IO_MGR::PCB_FILE_T pluginType =
-            IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
+    PCB_IO_MGR::PCB_FILE_T pluginType =
+            PCB_IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
+    PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( pluginType ) );
 
     if( !pi )
         return 1;
@@ -1236,7 +1236,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 }
 
 
-int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
+int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
@@ -1684,8 +1684,8 @@ int PCB_CONTROL::DdAppendBoard( const TOOL_EVENT& aEvent )
         return 1;
 
     wxString filePath = fileName.GetFullPath();
-    IO_MGR::PCB_FILE_T pluginType = IO_MGR::FindPluginTypeFromBoardPath( filePath );
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( filePath );
+    PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( pluginType ) );
 
     if( !pi )
         return 1;

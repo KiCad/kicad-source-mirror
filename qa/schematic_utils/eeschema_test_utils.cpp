@@ -28,7 +28,7 @@
 #include <cstdlib>
 #include <memory>
 
-#include <eeschema/sch_io_mgr.h>
+#include <eeschema/sch_io/sch_io_mgr.h>
 #include <eeschema/sch_screen.h>
 #include <eeschema/schematic.h>
 #include <eeschema/connection_graph.h>

@@ -45,8 +45,8 @@
 #include <wx/filedlg.h>
 #include "dialog_pcm.h"
 #include <macros.h>
-#include <sch_io_mgr.h>
-#include <io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <import_proj.h>
 
 #include "widgets/filedlg_new_project.h"

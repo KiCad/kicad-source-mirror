@@ -58,7 +58,7 @@
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <pgm_base.h>
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
@@ -725,7 +725,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     return CLI::EXIT_CODES::OK;
 }
 
-extern FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
+extern FOOTPRINT* try_load_footprint( const wxFileName& aFileName, PCB_IO_MGR::PCB_FILE_T aFileType,
                                       const wxString& aName );
 
 

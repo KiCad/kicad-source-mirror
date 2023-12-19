@@ -35,8 +35,8 @@
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>
 
-#include <io_mgr.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 
 #include "kicad_manager_frame.h"
 #include <import_proj.h>
@@ -126,26 +126,26 @@ void KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import CADSTAR Archive Project Files" ),
                            CadstarArchiveFilesWildcard(), { "csa" }, { "cpa" },
-                           SCH_IO_MGR::SCH_CADSTAR_ARCHIVE, IO_MGR::CADSTAR_PCB_ARCHIVE );
+                           SCH_IO_MGR::SCH_CADSTAR_ARCHIVE, PCB_IO_MGR::CADSTAR_PCB_ARCHIVE );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import Eagle Project Files" ), EagleFilesWildcard(), { "sch" },
-                           { "brd" }, SCH_IO_MGR::SCH_EAGLE, IO_MGR::EAGLE );
+                           { "brd" }, SCH_IO_MGR::SCH_EAGLE, PCB_IO_MGR::EAGLE );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEasyEdaFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import EasyEDA Std Backup" ), EasyEdaArchiveWildcard(), { "INPUT" },
-                           { "INPUT" }, SCH_IO_MGR::SCH_EASYEDA, IO_MGR::EASYEDA );
+                           { "INPUT" }, SCH_IO_MGR::SCH_EASYEDA, PCB_IO_MGR::EASYEDA );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEasyEdaProFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import EasyEDA Pro Project" ), EasyEdaProFileWildcard(), { "INPUT" },
-                           { "INPUT" }, SCH_IO_MGR::SCH_EASYEDAPRO, IO_MGR::EASYEDAPRO );
+                           { "INPUT" }, SCH_IO_MGR::SCH_EASYEDAPRO, PCB_IO_MGR::EASYEDAPRO );
 }

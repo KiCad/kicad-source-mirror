@@ -32,12 +32,12 @@
 #include <pcb_edit_frame.h>
 #include <sch_edit_frame.h>
 
-#include <io_mgr.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 
-#include <plugins/easyedapro/easyedapro_import_utils.h>
-#include <plugins/easyedapro/easyedapro_parser.h>
-#include <plugins/common/plugin_common_choose_project.h>
+#include <io/easyedapro/easyedapro_import_utils.h>
+#include <io/easyedapro/easyedapro_parser.h>
+#include <io/common/plugin_common_choose_project.h>
 #include <dialogs/dialog_import_choose_project.h>
 
 
@@ -209,7 +209,7 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
     m_properties.clear();
 
     if( aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO
-        || aImportedPcbFileType == IO_MGR::EASYEDAPRO )
+        || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO )
     {
         EasyEDAProProjectHandler();
     }

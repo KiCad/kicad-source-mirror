@@ -56,10 +56,10 @@ bool FP_LIB_TABLE_ROW::operator==( const FP_LIB_TABLE_ROW& aRow ) const
 
 void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
 {
-    type = IO_MGR::EnumFromStr( aType );
+    type = PCB_IO_MGR::EnumFromStr( aType );
 
-    if( IO_MGR::PCB_FILE_T( -1 ) == type )
-        type = IO_MGR::KICAD_SEXP;
+    if( PCB_IO_MGR::PCB_FILE_T( -1 ) == type )
+        type = PCB_IO_MGR::KICAD_SEXP;
 
     plugin.release();
 }
@@ -303,7 +303,7 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
                                        bool aBestEfforts )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
     row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
                                      row->GetProperties() );
 }
@@ -312,7 +312,7 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
     row->plugin->PrefetchLib( row->GetFullURI( true ), row->GetProperties() );
 }
 
@@ -332,10 +332,10 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool a
     }
 
     // We've been 'lazy' up until now, but it cannot be deferred any longer,
-    // instantiate a PLUGIN of the proper kind if it is not already in this
+    // instantiate a PCB_IO of the proper kind if it is not already in this
     // FP_LIB_TABLE_ROW.
     if( !row->plugin )
-        row->setPlugin( IO_MGR::PluginFind( row->type ) );
+        row->setPlugin( PCB_IO_MGR::PluginFind( row->type ) );
 
     return row;
 }
@@ -369,7 +369,7 @@ const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname
                                                        const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
 
     return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
                                                 row->GetProperties() );
@@ -381,7 +381,7 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
     try
     {
         const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-        wxASSERT( (PLUGIN*) row->plugin );
+        wxASSERT( (PCB_IO*) row->plugin );
 
         return row->plugin->FootprintExists( row->GetFullURI( true ), aFootprintName,
                                              row->GetProperties() );
@@ -397,7 +397,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname,
                                         const wxString& aFootprintName, bool aKeepUUID )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
 
     FOOTPRINT* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
                                                  aKeepUUID, row->GetProperties() );
@@ -412,7 +412,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
                                                   const FOOTPRINT* aFootprint, bool aOverwrite )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
 
     if( !aOverwrite )
     {
@@ -438,7 +438,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
 void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
     return row->plugin->FootprintDelete( row->GetFullURI( true ), aFootprintName,
                                          row->GetProperties() );
 }
@@ -447,7 +447,7 @@ void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& a
 bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
     return row->plugin->IsFootprintLibWritable( row->GetFullURI( true ) );
 }
 
@@ -455,7 +455,7 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
     row->plugin->FootprintLibDelete( row->GetFullURI( true ), row->GetProperties() );
 }
 
@@ -463,7 +463,7 @@ void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PLUGIN*) row->plugin );
+    wxASSERT( (PCB_IO*) row->plugin );
     row->plugin->FootprintLibCreate( row->GetFullURI( true ), row->GetProperties() );
 }
 

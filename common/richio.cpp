@@ -30,7 +30,7 @@
 #include <core/ignore.h>
 #include <richio.h>
 #include <errno.h>
-#include <plugins/kicad/kicad_plugin_utils.h>
+#include <io/kicad/kicad_io_utils.h>
 
 #include <wx/file.h>
 #include <wx/translation.h>

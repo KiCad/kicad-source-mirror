@@ -6,8 +6,8 @@
 
 #include <pcbexpr_evaluator.h>
 
-#include <io_mgr.h>
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 
 #include <unordered_set>
 
@@ -25,8 +25,8 @@ bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool e
     context.SetItems( itemA, itemB );
 
     bool error = !compiler.Compile( expr, &ucode, &preflightContext );
-    
-    
+
+
     if( error )
     {
         if ( expectError )

@@ -29,7 +29,7 @@
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
 #include <plotters/plotter.h>
-#include <plugins/kicad/kicad_plugin_utils.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <settings/color_settings.h>
 
 

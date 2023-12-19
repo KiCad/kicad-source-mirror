@@ -39,7 +39,7 @@ using namespace std::placeholders;
 #include <footprint.h>
 #include <spread_footprints.h>
 #include <ratsnest/ratsnest_data.h>
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include "board_netlist_updater.h"
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

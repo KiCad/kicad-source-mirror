@@ -1,0 +1,66 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file pcad_plugin.h
+ * @brief Pcbnew PLUGIN for P-Cad 200x ASCII *.pcb format.
+ */
+
+#ifndef PCAD_PLUGIN_H_
+#define PCAD_PLUGIN_H_
+
+#include <pcb_io/pcb_io.h>
+#include <pcb_io/pcb_io_mgr.h>
+
+class PCAD_PLUGIN : public PCB_IO
+{
+public:
+    PCAD_PLUGIN();
+    ~PCAD_PLUGIN();
+
+    const wxString PluginName() const override { return wxT( "P-Cad" ); }
+
+    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
+    }
+
+    bool CanReadBoard( const wxString& aFileName ) const override;
+
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
+    {
+        // No support for libraries....
+        return 0;
+    }
+
+private:
+    const STRING_UTF8_MAP*   m_props;
+    BOARD*              m_board;
+};
+
+#endif    // PCAD_PLUGIN_H_

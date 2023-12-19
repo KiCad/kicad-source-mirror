@@ -21,7 +21,7 @@
 #define DIALOG_IMPORT_CHOOSE_PROJECT_H
 
 #include "dialog_import_choose_project_base.h"
-#include <plugins/common/plugin_common_choose_project.h>
+#include <io/common/plugin_common_choose_project.h>
 
 
 class DIALOG_IMPORT_CHOOSE_PROJECT : public DIALOG_IMPORT_CHOOSE_PROJECT_BASE

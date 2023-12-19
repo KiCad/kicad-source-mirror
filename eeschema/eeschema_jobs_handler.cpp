@@ -50,7 +50,7 @@
 #include <settings/settings_manager.h>
 
 #include <sch_file_versions.h>
-#include <sch_plugins/kicad/sch_sexpr_lib_plugin_cache.h>
+#include <sch_io/kicad/sch_sexpr_lib_plugin_cache.h>
 
 #include <netlist.h>
 #include <netlist_exporter_base.h>

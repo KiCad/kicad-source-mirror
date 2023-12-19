@@ -70,7 +70,7 @@
 #include <update_manager.h>
 
 
-#include <../pcbnew/plugins/kicad/pcb_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
+#include <../pcbnew/pcb_io/kicad/pcb_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
 
 
 #ifdef __WXMAC__

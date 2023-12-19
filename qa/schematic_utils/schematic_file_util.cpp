@@ -29,8 +29,8 @@
 #include <sch_screen.h>
 
 // For SCH parsing
-#include <sch_plugins/kicad/sch_sexpr_plugin.h>
-#include <sch_plugins/kicad/sch_sexpr_parser.h>
+#include <sch_io/kicad/sch_sexpr_plugin.h>
+#include <sch_io/kicad/sch_sexpr_parser.h>
 #include <richio.h>
 
 #include <qa_utils/stdstream_line_reader.h>

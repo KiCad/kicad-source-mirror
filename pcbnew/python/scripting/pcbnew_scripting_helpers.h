@@ -26,7 +26,7 @@
 #define __PCBNEW_SCRIPTING_HELPERS_H
 
 #include <deque>
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <layer_ids.h>
 
 class PCB_EDIT_FRAME;
@@ -49,7 +49,7 @@ void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPCBEdaFrame );
 // For Python scripts: return the current board.
 BOARD*  GetBoard();
 
-BOARD*  LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat );
+BOARD*  LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat );
 
 // Default LoadBoard() to load .kicad_pcb files:.
 BOARD*  LoadBoard( wxString& aFileName );

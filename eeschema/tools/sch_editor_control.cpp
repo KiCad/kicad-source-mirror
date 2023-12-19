@@ -45,7 +45,7 @@
 #include <project/net_settings.h>
 #include <project_sch.h>
 #include <sch_edit_frame.h>
-#include <sch_plugins/kicad/sch_sexpr_plugin.h>
+#include <sch_io/kicad/sch_sexpr_plugin.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
@@ -420,7 +420,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     SYMBOL_LIB_TABLE_ROW* row = mgr.GetLibrary( targetLib );
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( type ) );
+    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( type ) );
 
     wxFileName dest = row->GetFullURI( true );
     dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );

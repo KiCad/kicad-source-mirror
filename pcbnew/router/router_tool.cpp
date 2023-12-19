@@ -78,7 +78,7 @@ using namespace std::placeholders;
 
 #include <ratsnest/ratsnest_data.h>
 
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 
 using namespace KIGFX;
 

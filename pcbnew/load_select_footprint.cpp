@@ -37,7 +37,7 @@ using namespace std::placeholders;
 #include <footprint_tree_pane.h>
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
-#include <io_mgr.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <string_utils.h>
 #include <kiway.h>
 #include <lib_id.h>
@@ -329,16 +329,16 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
     wxBusyCursor dummy;
     wxString msg;
 
-    IO_MGR::PCB_FILE_T dstType = IO_MGR::GuessPluginTypeFromLibPath( dstLibPath );
-    IO_MGR::PCB_FILE_T curType = IO_MGR::GuessPluginTypeFromLibPath( curLibPath );
+    PCB_IO_MGR::PCB_FILE_T dstType = PCB_IO_MGR::GuessPluginTypeFromLibPath( dstLibPath );
+    PCB_IO_MGR::PCB_FILE_T curType = PCB_IO_MGR::GuessPluginTypeFromLibPath( curLibPath );
 
-    if( dstType == IO_MGR::FILE_TYPE_NONE )
-        dstType = IO_MGR::KICAD_SEXP;
+    if( dstType == PCB_IO_MGR::FILE_TYPE_NONE )
+        dstType = PCB_IO_MGR::KICAD_SEXP;
 
     try
     {
-        PLUGIN::RELEASER cur( IO_MGR::PluginFind( curType ) );
-        PLUGIN::RELEASER dst( IO_MGR::PluginFind( dstType ) );
+        PCB_IO::RELEASER cur( PCB_IO_MGR::PluginFind( curType ) );
+        PCB_IO::RELEASER dst( PCB_IO_MGR::PluginFind( dstType ) );
 
         if( !cur )
         {

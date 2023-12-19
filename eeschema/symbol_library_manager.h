@@ -33,13 +33,13 @@
 #include <set>
 #include <memory>
 #include <wx/arrstr.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
 #include <sch_screen.h>
 
 class LIB_SYMBOL;
 class SYMBOL_LIB;
 class PROGRESS_REPORTER;
-class SCH_PLUGIN;
+class SCH_IO;
 class SCH_BASE_FRAME;
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_ROW;
@@ -115,7 +115,7 @@ public:
     ///< Save stored modifications using a plugin. aBuffer decides whether the changes
     ///< should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
     bool SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf, const wxString& aFileName,
-                     SCH_PLUGIN* aPlugin, bool aBuffer );
+                     SCH_IO* aPlugin, bool aBuffer );
 
     ///< Return a symbol buffer with LIB_SYMBOL holding a symbolicular alias
     std::shared_ptr<SYMBOL_BUFFER> GetBuffer( const wxString& aAlias ) const;

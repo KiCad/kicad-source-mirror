@@ -36,7 +36,7 @@
 #include <core/kicad_algo.h>
 #include <symbol_viewer_frame.h>
 #include <project_rescue.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
 #include <sch_symbol.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>

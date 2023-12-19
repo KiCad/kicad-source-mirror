@@ -30,7 +30,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 #include <board.h>
 #include <footprint.h>
 #include <settings/settings_manager.h>

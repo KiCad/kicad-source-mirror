@@ -117,7 +117,7 @@ set( KICOMMON_SRCS
     trace_helpers.cpp
     wx_filename.cpp
 
-    plugins/kicad/kicad_plugin_utils.cpp    # needed by richio
+    io/kicad/kicad_io_utils.cpp    # needed by richio
     )
 
 add_library( kicommon SHARED
@@ -376,28 +376,28 @@ set( PLOTTERS_CONTROL_SRCS
     plotters/common_plot_functions.cpp
     )
 
-set( PLUGINS_ALTIUM_SRCS
-    plugins/altium/altium_parser.cpp
-    plugins/altium/altium_parser_utils.cpp
-    )
+set( COMMON_IO_SRCS
+    io/plugin_file_desc.cpp
+    io/io_utils.cpp
 
-set( PLUGINS_CADSTAR_SRCS
-    plugins/cadstar/cadstar_archive_parser.cpp
-    plugins/cadstar/cadstar_parts_lib_parser.cpp
-    )
+    # Altium
+    io/altium/altium_parser.cpp
+    io/altium/altium_parser_utils.cpp
 
-set( PLUGINS_EAGLE_SRCS
-    plugins/eagle/eagle_parser.cpp
-    )
+    # Cadstar
+    io/cadstar/cadstar_archive_parser.cpp
+    io/cadstar/cadstar_parts_lib_parser.cpp
 
-set( PLUGINS_EASYEDA_SRCS
-    plugins/easyeda/easyeda_parser_base.cpp
-    plugins/easyeda/easyeda_parser_structs.cpp
-    )
+    # Eagle
+    io/eagle/eagle_parser.cpp
 
-set( PLUGINS_EASYEDAPRO_SRCS
-    plugins/easyedapro/easyedapro_parser.cpp
-    plugins/easyedapro/easyedapro_import_utils.cpp
+    # EasyEDA
+    io/easyeda/easyeda_parser_base.cpp
+    io/easyeda/easyeda_parser_structs.cpp
+
+    # EasyEDA pro
+    io/easyedapro/easyedapro_parser.cpp
+    io/easyedapro/easyedapro_import_utils.cpp
     )
 
 set( COMMON_IMPORT_GFX_SRCS
@@ -430,11 +430,7 @@ set( COMMON_SRCS
     ${COMMON_DRAWING_SHEET_SRCS}
     ${COMMON_PREVIEW_ITEMS_SRCS}
     ${PLOTTERS_CONTROL_SRCS}
-    ${PLUGINS_ALTIUM_SRCS}
-    ${PLUGINS_CADSTAR_SRCS}
-    ${PLUGINS_EAGLE_SRCS}
-    ${PLUGINS_EASYEDA_SRCS}
-    ${PLUGINS_EASYEDAPRO_SRCS}
+    ${COMMON_IO_SRCS}
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
     ${COMMON_GIT_SRCS}
@@ -493,8 +489,6 @@ set( COMMON_SRCS
     notifications_manager.cpp
     origin_transforms.cpp
     page_info.cpp
-    plugin_file_desc.cpp
-    plugins/plugin_utils.cpp
     printout.cpp
     project.cpp
     ptree.cpp
@@ -702,28 +696,21 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_condition.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_test_provider.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/eagle/eagle_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/geda/gpcb_plugin.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/io_mgr.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/generators_mgr.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/kicad_clipboard.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/kicad_netlist_reader.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/kicad/pcb_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/legacy_netlist_reader.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/legacy/legacy_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/netlist_reader.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pad_custom_shape_functions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_draw_panel_gal.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netlist_reader/pcb_netlist.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_origin_transforms.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_painter.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/plugins/kicad/pcb_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_plot_params.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_screen.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_view.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcbnew_settings.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest/ratsnest_data.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/ratsnest/ratsnest_view_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/sel_layer.cpp
@@ -731,6 +718,15 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_utils.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/zone_settings.cpp
+
+    # IO files
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/pcb_io.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/pcb_io_mgr.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/legacy/legacy_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad/pcb_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad/pcb_parser.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/eagle/eagle_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/geda/gpcb_plugin.cpp
 
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_grid_helper.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp

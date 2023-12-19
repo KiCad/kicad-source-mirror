@@ -25,7 +25,7 @@
 #define EESCHEMA_HELPERS_H_
 
 #include <wx/string.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
 
 class SCHEMATIC;
 class SCH_EDIT_FRAME;

@@ -19,7 +19,7 @@
  */
 
 #include <dialogs/dialog_database_lib_settings.h>
-#include <sch_plugins/database/sch_database_plugin.h>
+#include <sch_io/database/sch_database_plugin.h>
 #include <database/database_lib_settings.h>
 
 

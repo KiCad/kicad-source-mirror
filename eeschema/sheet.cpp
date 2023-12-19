@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <project_sch.h>
 #include <sch_edit_frame.h>
-#include <sch_plugins/legacy/sch_legacy_plugin.h>
+#include <sch_io/legacy/sch_legacy_plugin.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>
@@ -169,7 +169,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     if( schFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         schFileType = SCH_IO_MGR::SCH_KICAD;
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
+    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
     std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &Schematic() );
 
     // This will cause the sheet UUID to be set to the UUID of the aSheet argument.  This is

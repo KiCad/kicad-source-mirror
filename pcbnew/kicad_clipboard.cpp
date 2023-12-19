@@ -37,9 +37,8 @@
 #include <zone.h>
 #include <locale_io.h>
 #include <netinfo.h>
-#include <plugins/kicad/pcb_parser.h>
-
-#include <plugins/kicad/pcb_plugin.h>
+#include <pcb_io/kicad/pcb_parser.h>
+#include <pcb_io/kicad/pcb_plugin.h>
 #include <kicad_clipboard.h>
 #include "confirm.h"
 

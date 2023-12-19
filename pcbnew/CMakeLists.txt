@@ -594,13 +594,13 @@ if( APPLE )
 endif()
 
 
-add_subdirectory( plugins/pcad )
-add_subdirectory( plugins/altium )
-add_subdirectory( plugins/cadstar )
-add_subdirectory( plugins/easyeda )
-add_subdirectory( plugins/easyedapro )
-add_subdirectory( plugins/fabmaster )
-add_subdirectory( plugins/ipc2581 )
+add_subdirectory( pcb_io/pcad )
+add_subdirectory( pcb_io/altium )
+add_subdirectory( pcb_io/cadstar )
+add_subdirectory( pcb_io/easyeda )
+add_subdirectory( pcb_io/easyedapro )
+add_subdirectory( pcb_io/fabmaster )
+add_subdirectory( pcb_io/ipc2581 )
 
 set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew easyeda easyedapro fabmaster ipc2581 CACHE INTERNAL "")
 

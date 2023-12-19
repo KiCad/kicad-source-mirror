@@ -26,7 +26,7 @@
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <schematic.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io_mgr.h>
 #include <locale_io.h>
 #include <wx/app.h>
 #include <sch_label.h>
@@ -121,8 +121,8 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
     if( !project )
         project = GetDefaultProject();
 
-    SCH_PLUGIN*                     plugin = SCH_IO_MGR::FindPlugin( aFormat );
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( plugin );
+    SCH_IO*                 plugin = SCH_IO_MGR::FindPlugin( aFormat );
+    SCH_IO::SCH_IO_RELEASER pi( plugin );
 
     SCHEMATIC* schematic = new SCHEMATIC( project );
 

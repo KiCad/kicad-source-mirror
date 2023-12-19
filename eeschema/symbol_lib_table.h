@@ -26,7 +26,8 @@
 #define _SYMBOL_LIB_TABLE_H_
 
 #include <lib_table_base.h>
-#include <sch_io_mgr.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
 #include <lib_id.h>
 
 //class LIB_SYMBOL;
@@ -36,7 +37,7 @@ class DIALOG_SYMBOL_LIB_TABLE;
 
 /**
  * Hold a record identifying a symbol library accessed by the appropriate symbol library
- * #SCH_PLUGIN object in the #SYMBOL_LIB_TABLE.
+ * #SCH_IO object in the #SYMBOL_LIB_TABLE.
  */
 class SYMBOL_LIB_TABLE_ROW : public LIB_TABLE_ROW
 {
@@ -95,7 +96,7 @@ public:
     void GetSubLibraryNames( std::vector<wxString>& aNames ) const;
 
     /**
-     * @see SCH_PLUGIN::GetAvailableSymbolFields
+     * @see SCH_IO::GetAvailableSymbolFields
      */
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) const
     {
@@ -104,7 +105,7 @@ public:
     }
 
     /**
-     * @see SCH_PLUGIN::GetDefaultSymbolFields
+     * @see SCH_IO::GetDefaultSymbolFields
      */
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) const
     {
@@ -130,13 +131,13 @@ private:
         return new SYMBOL_LIB_TABLE_ROW( *this );
     }
 
-    void setPlugin( SCH_PLUGIN* aPlugin )
+    void setPlugin( SCH_IO* aPlugin )
     {
         plugin.set( aPlugin );
     }
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER  plugin;
-    LIB_T                            type;
+    SCH_IO::SCH_IO_RELEASER plugin;
+    LIB_T                   type;
 };
 
 
@@ -166,7 +167,7 @@ public:
      * Return an SYMBOL_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained
      * fallBack table fragment.
      *
-     * The #SCH_PLUGIN is loaded and attached to the "plugin" fieldf the #SYMBOL_LIB_TABLE_ROW if
+     * The #SCH_IO is loaded and attached to the "plugin" fieldf the #SYMBOL_LIB_TABLE_ROW if
      * not already loaded.
      *
      * @param aNickName is the name of the row to find.

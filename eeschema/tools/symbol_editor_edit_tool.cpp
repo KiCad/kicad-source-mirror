@@ -38,7 +38,7 @@
 #include <dialogs/dialog_lib_symbol_properties.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <dialogs/dialog_update_symbol_fields.h>
-#include <sch_plugins/kicad/sch_sexpr_plugin.h>
+#include <sch_io/kicad/sch_sexpr_plugin.h>
 #include <lib_text.h>
 #include <lib_textbox.h>
 #include "symbol_editor_edit_tool.h"
