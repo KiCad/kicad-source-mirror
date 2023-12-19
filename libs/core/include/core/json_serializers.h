@@ -28,6 +28,26 @@
 #include <wx/string.h>
 #include <optional>
 
+NLOHMANN_JSON_NAMESPACE_BEGIN
+namespace detail
+{
+// silly hack to silence warnings about std::char_traits<wxUniChar> not being supported by the standard
+// nolhmann json internally has its own char_traits templated to support some exotic char traits
+template <>
+struct char_traits<wxUniChar> : std::char_traits<char>
+{
+    using char_type = wxUniChar;
+    using int_type = uint32_t;      // this is wxwidget's internal data type
+
+    // Redefine to_int_type function
+    static int_type to_int_type( char_type c ) noexcept { return static_cast<int_type>( c ); }
+
+    static char_type to_char_type( int_type i ) noexcept { return static_cast<char_type>( i ); }
+
+    static constexpr int_type eof() noexcept { return static_cast<int_type>( EOF ); }
+};
+} // namespace detail
+NLOHMANN_JSON_NAMESPACE_END
 
 namespace nlohmann
 {
