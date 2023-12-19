@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020, 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -191,7 +191,8 @@ private:
 
     static bool getLegacy3DHollerith( const std::string& aString, size_t& aIndex,
                                       wxString& aResult );
-    bool readLegacy3DResolverCfg( const wxString& aPath, std::vector<LEGACY_3D_SEARCH_PATH>& aSearchPaths );
+    bool readLegacy3DResolverCfg( const wxString& aPath,
+                                  std::vector<LEGACY_3D_SEARCH_PATH>& aSearchPaths );
 
 public:
     APPEARANCE m_Appearance;

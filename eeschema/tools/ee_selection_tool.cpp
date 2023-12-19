@@ -208,12 +208,16 @@ bool EE_SELECTION_TOOL::Init()
         m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
 
-    auto linesSelection =        E_C::MoreThan( 0 ) && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
-                                                                         SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
-    auto wireOrBusSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } );
+    auto linesSelection =        E_C::MoreThan( 0 ) &&
+                                 E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
+                                                   SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
+    auto wireOrBusSelection =    E_C::Count( 1 ) &&
+                                 E_C::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T,
+                                                   SCH_ITEM_LOCATE_BUS_T } );
     auto connectedSelection =    E_C::Count( 1 )    && E_C::OnlyTypes( connectedTypes );
     auto sheetSelection =        E_C::Count( 1 )    && E_C::OnlyTypes( { SCH_SHEET_T } );
-    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T } );
+    auto crossProbingSelection = E_C::MoreThan( 0 ) &&
+                                 E_C::HasTypes( { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T } );
 
     auto schEditSheetPageNumberCondition =
             [&] ( const SELECTION& aSel )
@@ -279,10 +283,12 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( 100 );
-    menu.AddItem( ACTIONS::finishInteractive,     SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus, 100 );
+    menu.AddItem( ACTIONS::finishInteractive,
+                  SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus, 100 );
 
     menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 150 );
-    menu.AddItem( EE_ACTIONS::selectOnPCB,        crossProbingSelection && EE_CONDITIONS::Idle, 150 );
+    menu.AddItem( EE_ACTIONS::selectOnPCB,
+                  crossProbingSelection && EE_CONDITIONS::Idle, 150 );
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 150 );
 
     menu.AddSeparator( 200 );
@@ -308,7 +314,8 @@ bool EE_SELECTION_TOOL::Init()
     m_frame->AddStandardSubMenus( m_menu );
 
     m_disambiguateTimer.SetOwner( this );
-    Connect( wxEVT_TIMER, wxTimerEventHandler( EE_SELECTION_TOOL::onDisambiguationExpire ), nullptr, this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( EE_SELECTION_TOOL::onDisambiguationExpire ),
+             nullptr, this );
 
     return true;
 }
@@ -649,10 +656,18 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         switch( pin->GetOrientation() )
                         {
-                        case PIN_ORIENTATION::PIN_LEFT:  stub = VECTOR2I( 1 * wireGrid.x, 0 ); break;
-                        case PIN_ORIENTATION::PIN_RIGHT: stub = VECTOR2I( -1 * wireGrid.x, 0 ); break;
-                        case PIN_ORIENTATION::PIN_UP:    stub = VECTOR2I( 0, 1 * wireGrid.y ); break;
-                        case PIN_ORIENTATION::PIN_DOWN:  stub = VECTOR2I( 0, -1 * wireGrid.y ); break;
+                        case PIN_ORIENTATION::PIN_LEFT:
+                            stub = VECTOR2I( 1 * wireGrid.x, 0 );
+                            break;
+                        case PIN_ORIENTATION::PIN_RIGHT:
+                            stub = VECTOR2I( -1 * wireGrid.x, 0 );
+                            break;
+                        case PIN_ORIENTATION::PIN_UP:
+                            stub = VECTOR2I( 0, 1 * wireGrid.y );
+                            break;
+                        case PIN_ORIENTATION::PIN_DOWN:
+                            stub = VECTOR2I( 0, -1 * wireGrid.y );
+                            break;
                         }
 
                         wire->SetEndPoint( pin->GetPosition() + stub );
@@ -747,7 +762,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     commit.Push( wxS( "Label Pins" ) );
 
-                    // Many users will want to drag these items to wire off of the pins, so pre-select them
+                    // Many users will want to drag these items to wire off of the pins, so
+                    // pre-select them.
                     ClearSelection();
                     AddItemsToSel( &newItems );
                 }
@@ -1127,7 +1143,8 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
             {
                 aCollector[i]->ClearFlags( flags );
 
-                // Need to update end shadows after ctrl-click unselecting one of two selected endpoints
+                // Need to update end shadows after ctrl-click unselecting one of two selected
+                // endpoints.
                 if( isLine )
                     getView()->Update( aCollector[i] );
 
@@ -1297,7 +1314,6 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
         // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".
-
         if( line || ( shape && shape->GetShape() == SHAPE_T::POLY )
                  || ( shape && shape->GetShape() == SHAPE_T::ARC ) )
         {
@@ -1356,7 +1372,8 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
             if( line )
             {
-                dist = KiROUND( DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos ) );
+                dist = KiROUND( DistanceLinePoint( line->GetStartPoint(),
+                                                   line->GetEndPoint(), pos ) );
             }
             else if( field )
             {

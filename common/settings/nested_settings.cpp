@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020, 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,6 +23,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/nested_settings.h>
 #include <locale_io.h>
+
 
 NESTED_SETTINGS::NESTED_SETTINGS( const std::string& aName, int aVersion, JSON_SETTINGS* aParent,
                                   const std::string& aPath ) :
@@ -61,7 +62,8 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             }
             catch( ... )
             {
-                wxLogTrace( traceSettings, wxT( "NESTED_SETTINGS %s: Could not load from %s at %s" ),
+                wxLogTrace( traceSettings, wxT( "NESTED_SETTINGS %s: Could not load from "
+                                                "%s at %s" ),
                             m_filename, m_parent->GetFilename(), m_path );
             }
         }

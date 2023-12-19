@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,20 +29,24 @@
 #include <macros.h>
 #include <wx/tokenzr.h>
 
+
 #define ARG_NO_BACKGROUND_COLOR "--no-background-color"
 #define ARG_SYMBOL "--symbol"
 #define ARG_INC_HIDDEN_PINS "--include-hidden-pins"
 #define ARG_INC_HIDDEN_FIELDS "--include-hidden-fields"
 
+
 CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : COMMAND( "svg" )
 {
     addCommonArgs( true, true, false, true );
 
-    m_argParser.add_description( UTF8STDSTR( _( "Exports the symbol or entire symbol library to SVG" ) ) );
+    m_argParser.add_description( UTF8STDSTR( _( "Exports the symbol or entire symbol library "
+                                                "to SVG" ) ) );
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to symbol editor settings)" ) ) )
+            .help( UTF8STDSTR( _( "Color theme to use (will default to symbol editor "
+                                  "settings)" ) ) )
             .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( "-s", ARG_SYMBOL )

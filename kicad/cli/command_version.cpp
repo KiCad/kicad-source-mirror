@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,7 +26,9 @@
 #include <string_utils.h>
 #include <build_version.h>
 
+
 #define ARG_FORMAT "--format"
+
 
 CLI::VERSION_COMMAND::VERSION_COMMAND() : COMMAND( "version" )
 {
@@ -44,8 +46,8 @@ int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
     {
         // were we redirected from the --version?
         // m_argParser override for bool() returns false if we didnt parse any args normally
-        // we need to exit here early because it'll exception in the later arg handling code if we dont
-        // no arg provided also ends up here on the version command
+        // we need to exit here early because it'll exception in the later arg handling code
+        // if we don't no arg provided also ends up here on the version command
         wxPrintf( "%s\n", GetMajorMinorPatchVersion() );
         return EXIT_CODES::OK;
     }

@@ -199,7 +199,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         else
         {
             success = true;
-            wxLogTrace( traceSettings, wxT( "%s: migrated from legacy format" ), GetFullFilename() );
+            wxLogTrace( traceSettings, wxT( "%s: migrated from legacy format" ),
+                        GetFullFilename() );
         }
 
         if( backed_up )
@@ -296,7 +297,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
                 if( filever >= 0 && filever < m_schemaVersion )
                 {
-                    wxLogTrace( traceSettings, wxT( "%s: attempting migration from version %d to %d" ),
+                    wxLogTrace( traceSettings, wxT( "%s: attempting migration from version "
+                                                  "%d to %d" ),
                                 GetFullFilename(), filever, m_schemaVersion );
 
                     if( Migrate() )
@@ -305,7 +307,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                     }
                     else
                     {
-                        wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
+                        wxLogTrace( traceSettings, wxT( "%s: migration failed!" ),
+                                    GetFullFilename() );
                     }
                 }
                 else if( filever > m_schemaVersion )
@@ -326,7 +329,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
             success = false;
             wxLogTrace( traceSettings, wxT( "Json parse error reading %s: %s" ),
                         path.GetFullPath(), error.what() );
-            wxLogTrace( traceSettings, wxT( "Attempting migration in case file is in legacy format" ) );
+            wxLogTrace( traceSettings, wxT( "Attempting migration in case file is in legacy "
+                                            "format" ) );
             migrateFromLegacy( path );
         }
     }
@@ -338,7 +342,8 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     for( auto settings : m_nested_settings )
         settings->LoadFromFile();
 
-    wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(), m_schemaVersion );
+    wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(),
+                m_schemaVersion );
 
     // If we migrated, clean up the legacy file (with no extension)
     if( m_writeFile && ( legacy_migrated || migrated ) )
@@ -404,8 +409,8 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     if( !m_createIfMissing && !path.FileExists() )
     {
         wxLogTrace( traceSettings,
-                wxT( "File for %s doesn't exist and m_createIfMissing == false; not saving" ),
-                GetFullFilename() );
+                    wxT( "File for %s doesn't exist and m_createIfMissing == false; not saving" ),
+                    GetFullFilename() );
         return false;
     }
 
@@ -420,7 +425,8 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     if( ( path.FileExists() && !path.IsFileWritable() ) ||
         ( !path.FileExists() && !path.IsDirWritable() ) )
     {
-        wxLogTrace( traceSettings, wxT( "File for %s is read-only; not saving" ), GetFullFilename() );
+        wxLogTrace( traceSettings, wxT( "File for %s is read-only; not saving" ),
+                    GetFullFilename() );
         return false;
     }
 
@@ -433,13 +439,14 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     if( !modified && !aForce && path.FileExists() )
     {
-        wxLogTrace( traceSettings, wxT( "%s contents not modified, skipping save" ), GetFullFilename() );
+        wxLogTrace( traceSettings, wxT( "%s contents not modified, skipping save" ),
+                    GetFullFilename() );
         return false;
     }
     else if( !modified && !aForce && !m_createIfDefault )
     {
         wxLogTrace( traceSettings,
-                wxT( "%s contents still default and m_createIfDefault == false; not saving" ),
+                    wxT( "%s contents still default and m_createIfDefault == false; not saving" ),
                     GetFullFilename() );
         return false;
     }
@@ -841,7 +848,6 @@ void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
 
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
-
 template<> std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const
 {
     if( std::optional<nlohmann::json> opt_json = GetJson( aPath ) )
@@ -856,8 +862,8 @@ template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString
     ( *m_internals )[aPath] = aVal.ToUTF8();
 }
 
-// Specializations to allow directly reading/writing wxStrings from JSON
 
+// Specializations to allow directly reading/writing wxStrings from JSON
 void to_json( nlohmann::json& aJson, const wxString& aString )
 {
     aJson = aString.ToUTF8();
@@ -891,6 +897,7 @@ ResultType JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std
 
 template std::string JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
                                                     const std::string& aKey, std::string aDefault );
+
 
 template bool JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
                                              bool aDefault );

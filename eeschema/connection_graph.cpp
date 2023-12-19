@@ -224,7 +224,8 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 }
 
 
-void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>>& aItems,
+void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH,
+                                                SCH_ITEM*>>& aItems,
                                                 std::set<CONNECTION_SUBGRAPH*>& aSubgraphs )
 {
     CONNECTION_SUBGRAPH* sg = this;
@@ -1370,8 +1371,8 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
                 CONNECTION_SUBGRAPH* new_sg = new CONNECTION_SUBGRAPH( this );
 
                 // This connection cannot form a part of the item because the item is not, itself
-                // connected to this subgraph.  It exists as part of a virtual item that may be connected
-                // to other items but is not in the schematic.
+                // connected to this subgraph.  It exists as part of a virtual item that may be
+                // connected to other items but is not in the schematic.
                 SCH_CONNECTION* new_conn = new SCH_CONNECTION( item, subgraph->m_sheet );
                 new_conn->SetGraph( this );
                 new_conn->SetName( name );
@@ -1399,7 +1400,8 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
         }
     }
 
-    std::copy( new_subgraphs.begin(), new_subgraphs.end(), std::back_inserter( m_driver_subgraphs ) );
+    std::copy( new_subgraphs.begin(), new_subgraphs.end(),
+               std::back_inserter( m_driver_subgraphs ) );
 }
 
 void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
@@ -2038,7 +2040,6 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
             }
         }
     }
-
 
     auto updateItemConnectionsTask =
             [&]( CONNECTION_SUBGRAPH* subgraph ) -> size_t

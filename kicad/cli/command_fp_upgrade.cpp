@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,7 +32,8 @@
 
 CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrade", true, true )
 {
-    m_argParser.add_description( UTF8STDSTR( _( "Upgrades the footprint library to the current kicad version format" ) ) );
+    m_argParser.add_description( UTF8STDSTR( _( "Upgrades the footprint library to the current "
+                                                "kicad version format" ) ) );
 
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(

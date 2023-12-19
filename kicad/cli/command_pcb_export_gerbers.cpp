@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -46,12 +46,14 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
     m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
             .default_value( std::string() )
             .help( UTF8STDSTR(
-                    _( "Layers to include on each plot, comma separated list of untranslated layer names to include such as "
+                    _( "Layers to include on each plot, comma separated list of untranslated "
+                       "layer names to include such as "
                                   "F.Cu,B.Cu" ) ) )
             .metavar( "COMMON_LAYER_LIST" );
 
     m_argParser.add_argument( ARG_USE_BOARD_PLOT_PARAMS )
-            .help( UTF8STDSTR( _( "Use the Gerber plot settings already configured in the board file" ) ) )
+            .help( UTF8STDSTR( _( "Use the Gerber plot settings already configured in the "
+                                  "board file" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

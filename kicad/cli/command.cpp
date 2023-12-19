@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -160,7 +160,8 @@ void CLI::COMMAND::addDrawingSheetArg()
 
     m_argParser.add_argument( ARG_DRAWING_SHEET )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Path to drawing sheet, this overrides any existing project defined sheet when used" ) ) )
+            .help( UTF8STDSTR( _( "Path to drawing sheet, this overrides any existing project "
+                                  "defined sheet when used" ) ) )
             .metavar( "SHEET_PATH" );
 }
 
@@ -173,7 +174,8 @@ void CLI::COMMAND::addDefineArg()
             .default_value( std::vector<std::string>() )
             .append()
             .help( UTF8STDSTR(
-                    _( "Overrides or adds project variables, can be used multiple times to declare multiple variables."
+                    _( "Overrides or adds project variables, can be used multiple times to "
+                       "declare multiple variables."
                        "\nUse in the format of '--define-var key=value' or '-D key=value'" ) ) )
             .metavar( "KEY=VALUE" );
 }

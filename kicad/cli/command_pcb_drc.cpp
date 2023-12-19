@@ -43,7 +43,8 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
     addCommonArgs( true, true, false, false );
     addDefineArg();
 
-    m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB and creates a report" ) ) );
+    m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB "
+                                                "and creates a report" ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )
@@ -61,22 +62,26 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
             .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_SEVERITY_ALL )
-            .help( UTF8STDSTR( _( "Report all DRC violations, this is equivalent to including all the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all DRC violations, this is equivalent to including "
+                                  "all the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_ERROR )
-            .help( UTF8STDSTR( _( "Report all DRC error level violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all DRC error level violations, this can be combined "
+                                  "with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_WARNING )
-            .help( UTF8STDSTR( _( "Report all DRC warning level violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all DRC warning level violations, this can be combined "
+                                  "with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_EXCLUSIONS )
-            .help( UTF8STDSTR( _( "Report all excluded DRC violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all excluded DRC violations, this can be combined with "
+                                  "the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 

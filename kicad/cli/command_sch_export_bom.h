@@ -27,7 +27,8 @@ namespace CLI
 {
 // Options for selecting presets of the export, e.g. GroupedByValue and CSV
 #define ARG_PRESET "--preset"
-#define ARG_PRESET_DESC "Use a named BOM preset setting from the schematic, e.g. \"Grouped By Value\"."
+#define ARG_PRESET_DESC "Use a named BOM preset setting from the schematic, e.g. " \
+                        "\"Grouped By Value\"."
 
 #define ARG_FMT_PRESET "--format-preset"
 #define ARG_FMT_PRESET_DESC "Use a named BOM format preset setting from the schematic, e.g. CSV."
@@ -43,13 +44,15 @@ namespace CLI
 #define ARG_REF_DELIMITER_DESC "Character to place between individual references."
 
 #define ARG_REF_RANGE_DELIMITER "--ref-range-delimiter"
-#define ARG_REF_RANGE_DELIMITER_DESC "Character to place in ranges of references. Leave blank for no ranges."
+#define ARG_REF_RANGE_DELIMITER_DESC "Character to place in ranges of references. Leave " \
+                                     "blank for no ranges."
 
 #define ARG_KEEP_TABS "--keep-tabs"
 #define ARG_KEEP_TABS_DESC "Keep tab characters from input fields. Stripped by default."
 
 #define ARG_KEEP_LINE_BREAKS "--keep-line-breaks"
-#define ARG_KEEP_LINE_BREAKS_DESC "Keep line break characters from input fields. Stripped by default."
+#define ARG_KEEP_LINE_BREAKS_DESC "Keep line break characters from input fields. Stripped " \
+                                  "by default."
 
 //Options for controlling the fields and the grouping
 #define ARG_FIELDS "--fields"

@@ -126,14 +126,16 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
     {
         m_argParser.add_argument( ARG_NO_OPTIMIZE_STEP )
-                .help( UTF8STDSTR( _( "Do not optimize STEP file (enables writing parametric curves)" ) ) )
+                .help( UTF8STDSTR( _( "Do not optimize STEP file (enables writing parametric "
+                                      "curves)" ) ) )
                 .implicit_value( true )
                 .default_value( false );
     }
 
     m_argParser.add_argument( ARG_USER_ORIGIN )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm)" ) ) );
+            .help( UTF8STDSTR( _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm "
+                                  "(default unit mm)" ) ) );
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
@@ -149,7 +151,8 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                            "empty, the models will be embedded in main exported VRML file" ) ) );
 
         m_argParser.add_argument( ARG_VRML_MODELS_RELATIVE )
-                .help( UTF8STDSTR( _( "Used with --models-dir to output relative paths in the resulting file" ) ) )
+                .help( UTF8STDSTR( _( "Used with --models-dir to output relative paths in the "
+                                      "resulting file" ) ) )
                 .implicit_value( true )
                 .default_value( false );
     }

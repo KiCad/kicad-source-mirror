@@ -61,7 +61,8 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
     {
         m_argParser.add_argument( "-t", ARG_THEME )
                 .default_value( std::string() )
-                .help( UTF8STDSTR( _( "Color theme to use (will default to schematic settings)" ) ) )
+                .help( UTF8STDSTR( _( "Color theme to use (will default to schematic "
+                                      "settings)" ) ) )
                 .metavar( "THEME_NAME" );
         m_argParser.add_argument( "-b", ARG_BLACKANDWHITE )
                 .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
@@ -94,7 +95,8 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
     m_argParser.add_argument( "-p", ARG_PAGES )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages" ) ) )
+            .help( UTF8STDSTR( _( "List of page numbers separated by comma to print, blank or "
+                                  "unspecified is equivalent to all pages" ) ) )
             .metavar( "PAGE_LIST" );
 
     if( aPlotFormat == SCH_PLOT_FORMAT::HPGL )

@@ -318,7 +318,8 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_y", &aWindow->state.pos_y, 0 ) );
 
-    m_params.emplace_back( new PARAM<unsigned int>( aJsonPath + ".display", &aWindow->state.display, 0 ) );
+    m_params.emplace_back( new PARAM<unsigned int>( aJsonPath + ".display",
+                                                    &aWindow->state.display, 0 ) );
 
     m_params.emplace_back( new PARAM_LIST<double>( aJsonPath + ".zoom_factors",
             &aWindow->zoom_factors, {} ) );

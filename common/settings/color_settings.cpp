@@ -43,7 +43,8 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     if( aAbsolutePath )
         SetLocation( SETTINGS_LOC::NONE );
 
-    m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, wxS( "KiCad Default" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName,
+                                                wxS( "KiCad Default" ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "schematic.override_item_colors",
                                             &m_overrideSchItemColors, false ) );
@@ -318,7 +319,8 @@ bool COLOR_SETTINGS::migrateSchema0to1()
 
     if( !Contains( "fpedit" ) )
     {
-        wxLogTrace( traceSettings, wxT( "migrateSchema0to1: %s doesn't have fpedit settings; skipping." ),
+        wxLogTrace( traceSettings,
+                    wxT( "migrateSchema0to1: %s doesn't have fpedit settings; skipping." ),
                     m_filename );
         return true;
     }

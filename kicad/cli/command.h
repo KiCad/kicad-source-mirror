@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -63,22 +63,24 @@ public:
 
 protected:
     /**
-     * Sets up the most common of args used across cli
+     * Set up the most common of args used across cli
      *
      * @param aInput Configures the input arg
      * @param aOutput Configures the output arg
-     * @param aInputIsDir Configures whether the input arg description will be for a file or directory
-     * @param aOutputIsDir Configures whether the output arg description will be for a file or directory
+     * @param aInputIsDir Configures whether the input arg description will be for a file or
+     *                    directory
+     * @param aOutputIsDir Configures whether the output arg description will be for a file or
+     *                     directory
      */
     void addCommonArgs( bool aInput, bool aOutput, bool aInputIsDir, bool aOutputIsDir );
 
     /**
-     * Sets up the drawing sheet arg used by many of the export commands
+     * Set up the drawing sheet arg used by many of the export commands
      */
     void addDrawingSheetArg();
 
     /**
-     * Sets up the drawing sheet arg used by many of the export commands
+     * Set up the drawing sheet arg used by many of the export commands
      */
     void addDefineArg();
 

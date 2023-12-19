@@ -42,7 +42,8 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
     addCommonArgs( true, true, false, false );
     addDefineArg();
 
-    m_argParser.add_description( UTF8STDSTR( _( "Runs the Electrical Rules Check (ERC) on the schematic and creates a report" ) ) );
+    m_argParser.add_description( UTF8STDSTR( _( "Runs the Electrical Rules Check (ERC) on the "
+                                                "schematic and creates a report" ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )
@@ -54,22 +55,26 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
                     _( "Report units; valid options: in, mm, mils" ) ) );
 
     m_argParser.add_argument( ARG_SEVERITY_ALL )
-            .help( UTF8STDSTR( _( "Report all ERC violations, this is equivalent to including all the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all ERC violations, this is equivalent to including "
+                                  "all the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_ERROR )
-            .help( UTF8STDSTR( _( "Report all ERC error level violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all ERC error level violations, this can be combined "
+                                  "with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_WARNING )
-            .help( UTF8STDSTR( _( "Report all ERC warning level violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all ERC warning level violations, this can be combined "
+                                  "with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_EXCLUSIONS )
-            .help( UTF8STDSTR( _( "Report all excluded ERC violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all excluded ERC violations, this can be combined "
+                                  "with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -108,6 +113,7 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
     {
         ercJob->m_severity |= RPT_SEVERITY_EXCLUSION;
     }
+
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
@@ -129,6 +135,7 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+
     if( format == "report" )
     {
         ercJob->m_format = JOB_SCH_ERC::OUTPUT_FORMAT::REPORT;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021, 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -94,7 +94,8 @@ JSON_SETTINGS* SETTINGS_MANAGER::registerSettings( JSON_SETTINGS* aSettings, boo
 
     ptr->SetManager( this );
 
-    wxLogTrace( traceSettings, wxT( "Registered new settings object <%s>" ), ptr->GetFullFilename() );
+    wxLogTrace( traceSettings, wxT( "Registered new settings object <%s>" ),
+                ptr->GetFullFilename() );
 
     if( aLoadNow )
         ptr->LoadFromFile( GetPathForSettingsFile( ptr.get() ) );
@@ -237,7 +238,8 @@ COLOR_SETTINGS* SETTINGS_MANAGER::loadColorSettingsByName( const wxString& aName
 
     if( !fn.IsOk() || !fn.Exists() )
     {
-        wxLogTrace( traceSettings, wxT( "Theme file %s.json not found, falling back to user" ), aName );
+        wxLogTrace( traceSettings, wxT( "Theme file %s.json not found, falling back to user" ),
+                    aName );
         return nullptr;
     }
 
@@ -532,7 +534,8 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
     if( m_headless )
     {
         // Special case namely for cli
-        // Ensure the settings directory at least exists to prevent additional loading errors from subdirectories
+        // Ensure the settings directory at least exists to prevent additional loading errors
+        // from subdirectories.
         // TODO review headless (unit tests) vs cli needs, this should be fine for unit tests though
         if( !path.DirExists() )
         {
@@ -635,7 +638,8 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
 
     // If the env override is set, also check the default paths
     if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )
-        base_paths.emplace_back( wxFileName( PATHS::CalculateUserSettingsPath( false, false ), wxS( "" ) ) );
+        base_paths.emplace_back( wxFileName( PATHS::CalculateUserSettingsPath( false, false ),
+                                             wxS( "" ) ) );
 
 #ifdef __WXGTK__
     // When running inside FlatPak, KIPLATFORM::ENV::GetUserConfigPath() will return a sandboxed
@@ -765,6 +769,8 @@ wxString SETTINGS_MANAGER::GetColorSettingsPath()
 
     return path.GetPath();
 }
+
+
 std::string SETTINGS_MANAGER::GetSettingsVersion()
 {
     // CMake computes the major.minor string for us.
@@ -781,7 +787,8 @@ int SETTINGS_MANAGER::compareVersions( const std::string& aFirst, const std::str
 
     if( !extractVersion( aFirst, &a_maj, &a_min ) || !extractVersion( aSecond, &b_maj, &b_min ) )
     {
-        wxLogTrace( traceSettings, wxT( "compareSettingsVersions: bad input (%s, %s)" ), aFirst, aSecond );
+        wxLogTrace( traceSettings, wxT( "compareSettingsVersions: bad input (%s, %s)" ),
+                    aFirst, aSecond );
         return -1;
     }
 
@@ -1163,7 +1170,8 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter ) const
 
     if( !target.DirExists() && !wxMkdir( target.GetPath() ) )
     {
-        wxLogTrace( traceSettings, wxT( "Could not create project backup path %s" ), target.GetPath() );
+        wxLogTrace( traceSettings, wxT( "Could not create project backup path %s" ),
+                    target.GetPath() );
         return false;
     }
 

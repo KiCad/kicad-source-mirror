@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -42,7 +42,8 @@ namespace CLI
 
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
-    PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputIsDir = false, bool aOutputIsDir = false );
+    PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aInputIsDir = false,
+                             bool aOutputIsDir = false );
 
 protected:
     int  doPerform( KIWAY& aKiway ) override;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -72,7 +72,8 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
 }
 
 
-LSEQ CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const
+LSEQ CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString,
+                                                           bool& aLayerArgSet ) const
 {
     LSEQ layerMask;
 

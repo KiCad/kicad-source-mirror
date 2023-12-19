@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -151,15 +151,16 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                         if( var.GetDefinedInSettings() )
                         {
                             wxLogTrace( traceEnvVars,
-                                        wxS( "COMMON_SETTINGS: Env var %s was overridden externally, " )
-                                        "saving previously-loaded value %s",
+                                        wxS( "COMMON_SETTINGS: Env var %s was overridden "
+                                             "externally, saving previously-loaded value %s" ),
                                         var.GetKey(), var.GetSettingsValue() );
                             value = var.GetSettingsValue();
                         }
                         else
                         {
                             wxLogTrace( traceEnvVars,
-                                        wxS( "COMMON_SETTINGS: Env var %s skipping save (external)" ),
+                                        wxS( "COMMON_SETTINGS: Env var %s skipping save "
+                                             "(external)" ),
                                         var.GetKey() );
                             continue;
                         }
@@ -189,7 +190,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                     {
                         if( m_Env.vars[key].GetDefinedExternally() )
                         {
-                            wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: %s is defined externally" ),
+                            wxLogTrace( traceEnvVars,
+                                        wxS( "COMMON_SETTINGS: %s is defined externally" ),
                                         key );
                             m_Env.vars[key].SetDefinedInSettings();
                             m_Env.vars[key].SetSettingsValue( val );
@@ -197,14 +199,16 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
                         }
                         else
                         {
-                            wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: Updating %s: %s -> %s"),
+                            wxLogTrace( traceEnvVars,
+                                        wxS( "COMMON_SETTINGS: Updating %s: %s -> %s"),
                                         key, m_Env.vars[key].GetValue(), val );
                             m_Env.vars[key].SetValue( val );
                         }
                     }
                     else
                     {
-                        wxLogTrace( traceEnvVars, wxS( "COMMON_SETTINGS: Loaded new var: %s = %s" ),
+                        wxLogTrace( traceEnvVars,
+                                    wxS( "COMMON_SETTINGS: Loaded new var: %s = %s" ),
                                     key, val );
                         m_Env.vars[key] = ENV_VAR_ITEM( key, val );
                     }
@@ -541,7 +545,8 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                 {
                     if( envVarBlacklist.count( key ) )
                     {
-                        wxLogTrace( traceSettings, wxT( "Migrate Env: %s is blacklisted; skipping." ), key );
+                        wxLogTrace( traceSettings,
+                                    wxT( "Migrate Env: %s is blacklisted; skipping." ), key );
                         continue;
                     }
 
@@ -551,7 +556,8 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
                     {
                         ptr.push_back( key.ToStdString() );
 
-                        wxLogTrace( traceSettings, wxT( "Migrate Env: %s=%s" ), ptr.to_string(), value );
+                        wxLogTrace( traceSettings, wxT( "Migrate Env: %s=%s" ),
+                                    ptr.to_string(), value );
                         ( *m_internals )[ptr] = value.ToUTF8();
 
                         ptr.pop_back();
@@ -617,7 +623,8 @@ void COMMON_SETTINGS::InitializeEnvironment()
             }
             else
             {
-                wxLogTrace( traceEnvVars, wxS( "InitializeEnvironment: Setting entry %s to default %s" ),
+                wxLogTrace( traceEnvVars, wxS( "InitializeEnvironment: Setting entry %s to "
+                                               "default %s" ),
                             aKey, aDefault );
             }
         };
