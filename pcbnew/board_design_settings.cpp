@@ -987,6 +987,10 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_NetSettings            = aOther.m_NetSettings;
     m_Pad_Master             = std::make_unique<PAD>( *aOther.m_Pad_Master );
     m_defaultZoneSettings    = aOther.m_defaultZoneSettings;
+
+    m_StyleFPFields = aOther.m_StyleFPFields;
+    m_StyleFPText   = aOther.m_StyleFPText;
+    m_StyleFPShapes = aOther.m_StyleFPShapes;
 }
 
 

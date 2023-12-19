@@ -225,6 +225,7 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
 
 SCH_ALTIUM_PLUGIN::SCH_ALTIUM_PLUGIN()
 {
+    m_isIntLib     = false;
     m_rootSheet    = nullptr;
     m_schematic    = nullptr;
     m_harnessOwnerIndexOffset = 0;

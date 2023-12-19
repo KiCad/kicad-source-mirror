@@ -494,6 +494,11 @@ APOLYGON6::APOLYGON6( ALTIUM_PARSER& aReader )
 ARULE6::ARULE6( ALTIUM_PARSER& aReader )
 {
     // Initialize all variables and make Coverity happy
+    minLimit                           = 0;
+    maxLimit                           = 0;
+    preferredWidth                     = 0;
+    soldermaskExpansion                = 0;
+    pastemaskExpansion                 = 0;
     clearanceGap                       = 0;
     planeclearanceClearance            = 0;
     polygonconnectAirgapwidth          = 0;
