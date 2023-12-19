@@ -1085,7 +1085,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     if( aOriginSegmentIndex && *aOriginSegmentIndex >= pl.SegmentCount() )
         *aOriginSegmentIndex = pl.SegmentCount() - 1;
 
-    assert( pl.SegmentCount() != 0 );
+    wxASSERT_MSG( pl.SegmentCount() != 0, "assembled line should never be empty" );
 
     return pl;
 }

@@ -126,16 +126,16 @@ public:
                 if( item->IsVirtual() )
                     continue;
 
-                if( item->Kind() == VIA_T )
-                {
-                    return false;
-                }
-                else if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
+                if( item->Kind() == SEGMENT_T || item->Kind() == ARC_T )
                 {
                     if( !seg1 )
                         seg1 = static_cast<const LINKED_ITEM*>( item );
                     else
                         seg2 = static_cast<const LINKED_ITEM*>( item );
+                }
+                else
+                {
+                    return false;
                 }
             }
 
