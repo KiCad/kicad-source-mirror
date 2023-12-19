@@ -184,6 +184,14 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( HAVE_WIMPLICIT_FLOAT_CONVERSION true )
     endif()
 
+    # See if the compiler will throw warnings on these conversions
+    CHECK_CXX_COMPILER_FLAG( "-Wunused-const-variable" COMPILER_SUPPORTS_WUNUSED_CONST_VARIABLE )
+
+    if( COMPILER_SUPPORTS_WUNUSED_CONST_VARIABLE )
+        # This one is different, it is used to guard warning removal for this inside the code
+        set( HAVE_WUNUSED_CONST_VARIABLE true )
+    endif()
+
     # Suppress GCC warnings about unknown/unused attributes (e.g. cdecl, [[maybe_unused, etc)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-attributes" )

@@ -57,6 +57,9 @@
 #define strncasecmp strnicmp
 #endif
 
+// Does the compiler support the -Wunused-const-variable warning
+#cmakedefine HAVE_WUNUSED_CONST_VARIABLE
+
 // Does the compiler support the -Wimplicit-int-float-conversion warning
 #cmakedefine HAVE_WIMPLICIT_FLOAT_CONVERSION
 
