@@ -309,6 +309,9 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 
     if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
+        // Save any changes to column widths, etc.
+        m_adapter->SaveSettings();
+
         cfg->m_SymChooserPanel.width = GetParent()->GetSize().x;
         cfg->m_SymChooserPanel.height = GetParent()->GetSize().y;
 
