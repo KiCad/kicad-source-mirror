@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 09:39-0800\n"
+"POT-Creation-Date: 2023-12-19 08:35-0800\n"
 "PO-Revision-Date: 2023-04-21 07:52+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v7/th/>\n"
@@ -1807,31 +1807,31 @@ msgstr "บริจาค"
 msgid "Donate to KiCad"
 msgstr "บริจาคเงินให้ KiCad"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:724
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:732
 msgid "&OK"
 msgstr "&OK"
 
-#: common/dialog_shim.cpp:725
+#: common/dialog_shim.cpp:733
 msgid "&Cancel"
 msgstr "(&C)ยกเลิก"
 
-#: common/dialog_shim.cpp:726
+#: common/dialog_shim.cpp:734
 msgid "&Yes"
 msgstr "(&Y)ใช่"
 
-#: common/dialog_shim.cpp:727
+#: common/dialog_shim.cpp:735
 msgid "&No"
 msgstr "(&N)ไม่ใช่"
 
-#: common/dialog_shim.cpp:728
+#: common/dialog_shim.cpp:736
 msgid "&Apply"
 msgstr "(&A)นำไปใช้"
 
-#: common/dialog_shim.cpp:729
+#: common/dialog_shim.cpp:737
 msgid "&Save"
 msgstr "(&S)บันทึก"
 
-#: common/dialog_shim.cpp:730 common/dialog_shim.cpp:731
+#: common/dialog_shim.cpp:738 common/dialog_shim.cpp:739
 #: common/eda_base_frame.cpp:499
 msgid "&Help"
 msgstr "ช่วยเหลือ(&H)"
@@ -3650,8 +3650,8 @@ msgid "Netclasses:"
 msgstr "เน็ตคลาส:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: pcbnew/tools/board_inspection_tool.cpp:495
-#: pcbnew/tools/board_inspection_tool.cpp:1007
+#: pcbnew/tools/board_inspection_tool.cpp:499
+#: pcbnew/tools/board_inspection_tool.cpp:1012
 msgid "Clearance"
 msgstr "ระยะห่าง"
 
@@ -3659,8 +3659,8 @@ msgstr "ระยะห่าง"
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:228
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
-#: pcbnew/tools/board_inspection_tool.cpp:319
-#: pcbnew/tools/board_inspection_tool.cpp:1160
+#: pcbnew/tools/board_inspection_tool.cpp:323
+#: pcbnew/tools/board_inspection_tool.cpp:1166
 msgid "Track Width"
 msgstr "ขนาดแทร็ก"
 
@@ -4272,7 +4272,7 @@ msgid "Leader"
 msgstr "ตัวนำ"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:362
-#: pcbnew/tools/board_inspection_tool.cpp:636
+#: pcbnew/tools/board_inspection_tool.cpp:641
 msgid "Zone"
 msgstr "โซน"
 
@@ -5066,9 +5066,9 @@ msgstr "ตั้งภาษา"
 
 #: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:936
 #: pcbnew/drc/drc_engine.cpp:937 pcbnew/drc/drc_engine.cpp:938
-#: pcbnew/tools/board_inspection_tool.cpp:213
-#: pcbnew/tools/board_inspection_tool.cpp:222
-#: pcbnew/tools/board_inspection_tool.cpp:231
+#: pcbnew/tools/board_inspection_tool.cpp:215
+#: pcbnew/tools/board_inspection_tool.cpp:224
+#: pcbnew/tools/board_inspection_tool.cpp:233
 msgid "undefined"
 msgstr "ไม่ได้กําหนด"
 
@@ -9173,7 +9173,7 @@ msgstr "เรียงตาม V"
 #: eeschema/lib_text.cpp:431 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:780 eeschema/sch_label.cpp:973
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1239
+#: pcbnew/tools/board_inspection_tool.cpp:1245
 msgid "Text Size"
 msgstr "ขนาดข้อความ"
 
@@ -18090,7 +18090,7 @@ msgstr "ไม่ได้เลือกเลเยอร์"
 msgid "Net must be labeled to assign a netclass."
 msgstr "เน็ตต้องมีป้ายกำกับเพื่อกำหนดเน็ตคลาส"
 
-#: eeschema/tools/sch_editor_control.cpp:1669
+#: eeschema/tools/sch_editor_control.cpp:1691
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18100,26 +18100,26 @@ msgstr ""
 "แผ่นชีตที่วางสำเนา '%s'\n"
 "ถูกหลุดเนื่องจากปลายทางมีแผ่นงานหรือแผ่นงานย่อยเป็นต้นกำเนิดอยู่แล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2074
+#: eeschema/tools/sch_editor_control.cpp:2098
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สามารถลบ"
 
-#: eeschema/tools/sch_editor_control.cpp:2366
+#: eeschema/tools/sch_editor_control.cpp:2390
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d แทนที่ไอดีซ้ำกัน\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2373
+#: eeschema/tools/sch_editor_control.cpp:2397
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d ปัญหาที่อาจเกิดขึ้นได้รับการแก้ไขแล้ว"
 
-#: eeschema/tools/sch_editor_control.cpp:2380
+#: eeschema/tools/sch_editor_control.cpp:2404
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "ไม่พบข้อผิดพลาด"
@@ -18495,7 +18495,7 @@ msgstr "เลือกเลเยอร์: %s"
 #: pcbnew/pcb_shape.cpp:412 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:124
 #: pcbnew/pcb_textbox.cpp:293 pcbnew/pcb_track.cpp:872 pcbnew/pcb_track.cpp:946
 #: pcbnew/pcb_track.cpp:1323 pcbnew/pcb_track.cpp:1330
-#: pcbnew/tools/board_inspection_tool.cpp:199
+#: pcbnew/tools/board_inspection_tool.cpp:201
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:213
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:224
 #: pcbnew/widgets/pcb_properties_panel.cpp:247
@@ -25769,7 +25769,7 @@ msgstr "เรียกใช้ DRC"
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr "DRC ไม่สมบูรณ์: ไม่สามารถตรวจกฎการออกแบบที่กำหนดเอง  "
 
-#: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
+#: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:178
 msgid "Show design rules."
 msgstr "แสดงกฎการออกแบบ"
 
@@ -27407,7 +27407,7 @@ msgstr "ความกว้างข้อความ"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:131
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_textbox.cpp:339 pcbnew/pcb_dimension.cpp:335
-#: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:289
+#: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:293
 msgid "Text Height"
 msgstr "ความสูงข้อความ"
 
@@ -27415,7 +27415,7 @@ msgstr "ความสูงข้อความ"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/pcb_dimension.cpp:333 pcbnew/pcb_textbox.cpp:298
-#: pcbnew/tools/board_inspection_tool.cpp:304
+#: pcbnew/tools/board_inspection_tool.cpp:308
 msgid "Text Thickness"
 msgstr "ความหนาข้อความ"
 
@@ -27463,8 +27463,8 @@ msgid "Set to layer default values:"
 msgstr "ตั้งเป็นค่าปริยายของเลเยอร์:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:229
-#: pcbnew/tools/board_inspection_tool.cpp:348
-#: pcbnew/tools/board_inspection_tool.cpp:1179
+#: pcbnew/tools/board_inspection_tool.cpp:352
+#: pcbnew/tools/board_inspection_tool.cpp:1185
 msgid "Via Diameter"
 msgstr "เส้นผ่าศูนย์กลางเวีย"
 
@@ -31948,8 +31948,8 @@ msgstr "เส้นผ่าศูนย์กลาง"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:103 pcbnew/pad.cpp:1074
 #: pcbnew/pcb_track.cpp:948 pcbnew/pcb_track.cpp:1328
-#: pcbnew/tools/board_inspection_tool.cpp:930
-#: pcbnew/tools/board_inspection_tool.cpp:959
+#: pcbnew/tools/board_inspection_tool.cpp:935
+#: pcbnew/tools/board_inspection_tool.cpp:964
 msgid "Hole"
 msgstr "รูเจาะ"
 
@@ -37287,378 +37287,378 @@ msgstr "การเลือกมีชิ้นส่วนที่ล็อ
 msgid "Net Inspection Tools"
 msgstr "ตัวตรวจสอบเน็ต"
 
-#: pcbnew/tools/board_inspection_tool.cpp:164
+#: pcbnew/tools/board_inspection_tool.cpp:166
 #, c-format
 msgid "[netclass %s]"
 msgstr "[เน็ตคลาส %s]"
 
-#: pcbnew/tools/board_inspection_tool.cpp:175
+#: pcbnew/tools/board_inspection_tool.cpp:177
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "รายงานไม่สมบูรณ์: ไม่สามารถรวบรวมกฎการออกแบบที่กำหนดเอง  "
 
-#: pcbnew/tools/board_inspection_tool.cpp:246
+#: pcbnew/tools/board_inspection_tool.cpp:248
 #, fuzzy
 msgid "Violation Report"
 msgstr "ระดับการละเมิด"
 
-#: pcbnew/tools/board_inspection_tool.cpp:274
+#: pcbnew/tools/board_inspection_tool.cpp:278
 #, fuzzy
 msgid "Uncoupled Length"
 msgstr "ความยาวลายเดินเส้นทองแดง"
 
-#: pcbnew/tools/board_inspection_tool.cpp:275
+#: pcbnew/tools/board_inspection_tool.cpp:279
 msgid "Diff pair uncoupled length resolution for:"
 msgstr "ค่าความละเอียดช่วงความยาวไม่คู่กันของดิฟแพร์:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:283
-#: pcbnew/tools/board_inspection_tool.cpp:827
+#: pcbnew/tools/board_inspection_tool.cpp:287
+#: pcbnew/tools/board_inspection_tool.cpp:832
 #, fuzzy, c-format
 msgid "Resolved max uncoupled length: %s."
 msgstr "ลบเน็ตที่ไม่ได้ใช้ %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:290
-#: pcbnew/tools/board_inspection_tool.cpp:1240
+#: pcbnew/tools/board_inspection_tool.cpp:294
+#: pcbnew/tools/board_inspection_tool.cpp:1246
 #, fuzzy
 msgid "Text height resolution for:"
 msgstr "การแก้ปิดกั้นสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:298
+#: pcbnew/tools/board_inspection_tool.cpp:302
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "ข้อจำกัดความสูงที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:305
-#: pcbnew/tools/board_inspection_tool.cpp:1256
+#: pcbnew/tools/board_inspection_tool.cpp:309
+#: pcbnew/tools/board_inspection_tool.cpp:1262
 msgid "Text thickness resolution for:"
 msgstr "ค่าความละเอียดความหนาข้อความ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:313
+#: pcbnew/tools/board_inspection_tool.cpp:317
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
 msgstr "ข้อจำกัดความหนาที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:320
-#: pcbnew/tools/board_inspection_tool.cpp:1161
+#: pcbnew/tools/board_inspection_tool.cpp:324
+#: pcbnew/tools/board_inspection_tool.cpp:1167
 msgid "Track width resolution for:"
 msgstr "ความละเอียดความกว้างของแทร็กสําหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:328
+#: pcbnew/tools/board_inspection_tool.cpp:332
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "ข้อจำกัดความกว้าง ที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:334
+#: pcbnew/tools/board_inspection_tool.cpp:338
 msgid "Connection Width"
 msgstr "ความกว้างของการเชื่อมต่อ"
 
-#: pcbnew/tools/board_inspection_tool.cpp:335
+#: pcbnew/tools/board_inspection_tool.cpp:339
 #, fuzzy
 msgid "Connection width resolution for:"
 msgstr "ความละเอียดความกว้างของแทร็กสําหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:343
+#: pcbnew/tools/board_inspection_tool.cpp:347
 #, fuzzy, c-format
 msgid "Resolved min connection width constraint: %s."
 msgstr "ประเภทการเชื่อมต่อโซน: %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:349
-#: pcbnew/tools/board_inspection_tool.cpp:1180
+#: pcbnew/tools/board_inspection_tool.cpp:353
+#: pcbnew/tools/board_inspection_tool.cpp:1186
 msgid "Via diameter resolution for:"
 msgstr "ความละเอียดเส้นผ่านศูนย์กลางเวียสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:357
-#: pcbnew/tools/board_inspection_tool.cpp:388
+#: pcbnew/tools/board_inspection_tool.cpp:361
+#: pcbnew/tools/board_inspection_tool.cpp:392
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "ข้อจำกัดเส้นผ่าศูนย์กลาง ที่แก้แล้ว: ต่ำสุด %s;สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:363
+#: pcbnew/tools/board_inspection_tool.cpp:367
 #, fuzzy
 msgid "Via Annulus"
 msgstr "ความกว้างวงแหวนเวีย"
 
-#: pcbnew/tools/board_inspection_tool.cpp:364
-#: pcbnew/tools/board_inspection_tool.cpp:1197
+#: pcbnew/tools/board_inspection_tool.cpp:368
+#: pcbnew/tools/board_inspection_tool.cpp:1203
 msgid "Via annular width resolution for:"
 msgstr "ความละเอียดความกว้างวงแหวนเวียสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:372
+#: pcbnew/tools/board_inspection_tool.cpp:376
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
 msgstr "ข้อจำกัดความกว้างของวงแหวน ที่แก้แล้ว: ต่ำสุด %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:379
-#: pcbnew/tools/board_inspection_tool.cpp:1217
+#: pcbnew/tools/board_inspection_tool.cpp:383
+#: pcbnew/tools/board_inspection_tool.cpp:1223
 msgid "Hole Size"
 msgstr "ขนาดรู"
 
-#: pcbnew/tools/board_inspection_tool.cpp:380
-#: pcbnew/tools/board_inspection_tool.cpp:1218
+#: pcbnew/tools/board_inspection_tool.cpp:384
+#: pcbnew/tools/board_inspection_tool.cpp:1224
 msgid "Hole diameter resolution for:"
 msgstr "ความละเอียดเส้นผ่านศูนย์กลางรูสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:394
+#: pcbnew/tools/board_inspection_tool.cpp:398
 #, fuzzy
 msgid "Hole Clearance"
 msgstr "ระยะห่าง"
 
-#: pcbnew/tools/board_inspection_tool.cpp:395
-#: pcbnew/tools/board_inspection_tool.cpp:940
+#: pcbnew/tools/board_inspection_tool.cpp:399
+#: pcbnew/tools/board_inspection_tool.cpp:945
 msgid "Hole clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างรูเจาะสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:403
-#: pcbnew/tools/board_inspection_tool.cpp:504
-#: pcbnew/tools/board_inspection_tool.cpp:765
+#: pcbnew/tools/board_inspection_tool.cpp:407
+#: pcbnew/tools/board_inspection_tool.cpp:508
+#: pcbnew/tools/board_inspection_tool.cpp:770
 msgid "Items belong to the same net. Clearance is 0."
 msgstr "ชิ้นส่วนอยู่ในเน็ตเดียวกัน ค่าระยะห่างคือ 0"
 
-#: pcbnew/tools/board_inspection_tool.cpp:412
-#: pcbnew/tools/board_inspection_tool.cpp:432
-#: pcbnew/tools/board_inspection_tool.cpp:449
-#: pcbnew/tools/board_inspection_tool.cpp:464
-#: pcbnew/tools/board_inspection_tool.cpp:513
-#: pcbnew/tools/board_inspection_tool.cpp:533
-#: pcbnew/tools/board_inspection_tool.cpp:732
-#: pcbnew/tools/board_inspection_tool.cpp:746
-#: pcbnew/tools/board_inspection_tool.cpp:781
-#: pcbnew/tools/board_inspection_tool.cpp:881
-#: pcbnew/tools/board_inspection_tool.cpp:905
-#: pcbnew/tools/board_inspection_tool.cpp:949
-#: pcbnew/tools/board_inspection_tool.cpp:978
-#: pcbnew/tools/board_inspection_tool.cpp:1017
-#: pcbnew/tools/board_inspection_tool.cpp:1046
-#: pcbnew/tools/board_inspection_tool.cpp:1112
+#: pcbnew/tools/board_inspection_tool.cpp:416
+#: pcbnew/tools/board_inspection_tool.cpp:436
+#: pcbnew/tools/board_inspection_tool.cpp:453
+#: pcbnew/tools/board_inspection_tool.cpp:468
+#: pcbnew/tools/board_inspection_tool.cpp:517
+#: pcbnew/tools/board_inspection_tool.cpp:537
+#: pcbnew/tools/board_inspection_tool.cpp:737
+#: pcbnew/tools/board_inspection_tool.cpp:751
+#: pcbnew/tools/board_inspection_tool.cpp:786
+#: pcbnew/tools/board_inspection_tool.cpp:886
+#: pcbnew/tools/board_inspection_tool.cpp:910
+#: pcbnew/tools/board_inspection_tool.cpp:954
+#: pcbnew/tools/board_inspection_tool.cpp:983
+#: pcbnew/tools/board_inspection_tool.cpp:1022
+#: pcbnew/tools/board_inspection_tool.cpp:1051
+#: pcbnew/tools/board_inspection_tool.cpp:1117
 #, c-format
 msgid "Resolved clearance: %s."
 msgstr "แก้ไขระยะห่าง: %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:418
-#: pcbnew/tools/board_inspection_tool.cpp:1095
+#: pcbnew/tools/board_inspection_tool.cpp:422
+#: pcbnew/tools/board_inspection_tool.cpp:1100
 #, fuzzy
 msgid "Physical hole clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างรูเจาะสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:427
-#: pcbnew/tools/board_inspection_tool.cpp:1107
+#: pcbnew/tools/board_inspection_tool.cpp:431
+#: pcbnew/tools/board_inspection_tool.cpp:1112
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "ไม่กำหนดข้อบังคับ'physical_hole_clearance'"
 
-#: pcbnew/tools/board_inspection_tool.cpp:438
+#: pcbnew/tools/board_inspection_tool.cpp:442
 msgid "Hole to Hole"
 msgstr "รูเจาะถึงรูเจาะ"
 
-#: pcbnew/tools/board_inspection_tool.cpp:439
-#: pcbnew/tools/board_inspection_tool.cpp:969
+#: pcbnew/tools/board_inspection_tool.cpp:443
+#: pcbnew/tools/board_inspection_tool.cpp:974
 #, fuzzy
 msgid "Hole to hole clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างรูเจาะสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:453
+#: pcbnew/tools/board_inspection_tool.cpp:457
 #, fuzzy
 msgid "Edge Clearance"
 msgstr "ระยะห่าง"
 
-#: pcbnew/tools/board_inspection_tool.cpp:454
-#: pcbnew/tools/board_inspection_tool.cpp:1008
+#: pcbnew/tools/board_inspection_tool.cpp:458
+#: pcbnew/tools/board_inspection_tool.cpp:1013
 msgid "Edge clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างจากขอบบอร์ดสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:496
-#: pcbnew/tools/board_inspection_tool.cpp:760
+#: pcbnew/tools/board_inspection_tool.cpp:500
+#: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างสําหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:519
-#: pcbnew/tools/board_inspection_tool.cpp:1029
+#: pcbnew/tools/board_inspection_tool.cpp:523
+#: pcbnew/tools/board_inspection_tool.cpp:1034
 #, fuzzy
 msgid "Physical clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างจากขอบบอร์ดสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:528
-#: pcbnew/tools/board_inspection_tool.cpp:1041
+#: pcbnew/tools/board_inspection_tool.cpp:532
+#: pcbnew/tools/board_inspection_tool.cpp:1046
 msgid "No 'physical_clearance' constraints defined."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:556
+#: pcbnew/tools/board_inspection_tool.cpp:560
 msgid "Select two items for a clearance resolution report."
 msgstr "เลือกชิ้นส่วนสองชิ้น สำหรับสร้างรายงานแก้ปัญหาระยะห่าง"
 
-#: pcbnew/tools/board_inspection_tool.cpp:571
-#: pcbnew/tools/board_inspection_tool.cpp:584
+#: pcbnew/tools/board_inspection_tool.cpp:575
+#: pcbnew/tools/board_inspection_tool.cpp:588
 msgid "Cannot generate clearance report on empty group."
 msgstr "ไม่สามารถสร้างรายงานระยะห่างสำหรับกลุ่มที่ว่างเปล่า"
 
-#: pcbnew/tools/board_inspection_tool.cpp:597
+#: pcbnew/tools/board_inspection_tool.cpp:601
 msgid "Clearance Report"
 msgstr "รายงานเรื่องระยะห่าง"
 
-#: pcbnew/tools/board_inspection_tool.cpp:637
+#: pcbnew/tools/board_inspection_tool.cpp:642
 msgid "Zone connection resolution for:"
 msgstr "แก้ปัญหาการเชื่อมต่อโซนสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:645
+#: pcbnew/tools/board_inspection_tool.cpp:650
 #, fuzzy
 msgid "Thermal relief gap resolution for:"
 msgstr "การแก้ปิดกั้นสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:654
+#: pcbnew/tools/board_inspection_tool.cpp:659
 #, fuzzy, c-format
 msgid "Resolved thermal relief gap: %s."
 msgstr "บรรเทาความร้อนโซน: %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:659
+#: pcbnew/tools/board_inspection_tool.cpp:664
 #, fuzzy
 msgid "Spoke width resolution for:"
 msgstr "ความละเอียดความกว้างของแทร็กสําหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:668
+#: pcbnew/tools/board_inspection_tool.cpp:673
 #, c-format
 msgid "Resolved thermal relief spoke width: %s."
 msgstr "ขนาดความกว้างของซี่ล้อบรรเทาความร้อน ที่แก้ไขแล้ว:%s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:673
+#: pcbnew/tools/board_inspection_tool.cpp:678
 #, fuzzy
 msgid "Spoke count resolution for:"
 msgstr "การแก้ปิดกั้นสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:682
+#: pcbnew/tools/board_inspection_tool.cpp:687
 #, c-format
 msgid "Resolved min thermal relief spoke count: %d."
 msgstr "จำนวนของซี่ล้อบรรเทาความร้อน ที่แก้ไขแล้ว:%d"
 
-#: pcbnew/tools/board_inspection_tool.cpp:691
-#: pcbnew/tools/board_inspection_tool.cpp:739
+#: pcbnew/tools/board_inspection_tool.cpp:696
+#: pcbnew/tools/board_inspection_tool.cpp:744
 #, fuzzy
 msgid "Zone clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างรูเจาะสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:695
+#: pcbnew/tools/board_inspection_tool.cpp:700
 #, c-format
 msgid "Zone clearance: %s."
 msgstr "ระยะห่างของโซน: %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:705
+#: pcbnew/tools/board_inspection_tool.cpp:710
 #, fuzzy, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "แทนที่แผ่นบรรเทาความร้อนที่มีขนาดใหญ่กว่าจาก %s ระยะห่าง: %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:721
+#: pcbnew/tools/board_inspection_tool.cpp:726
 #, fuzzy, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "แทนที่แผ่นบรรเทาความร้อนที่มีขนาดใหญ่กว่าจาก %s ระยะห่าง: %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:800
+#: pcbnew/tools/board_inspection_tool.cpp:805
 #, fuzzy
 msgid "Diff Pair"
 msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
 
-#: pcbnew/tools/board_inspection_tool.cpp:801
+#: pcbnew/tools/board_inspection_tool.cpp:806
 #, fuzzy
 msgid "Diff pair gap resolution for:"
 msgstr "แก้ปัญหาระยะห่างสําหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:806
+#: pcbnew/tools/board_inspection_tool.cpp:811
 #, fuzzy, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:814
+#: pcbnew/tools/board_inspection_tool.cpp:819
 msgid "Diff pair max uncoupled length resolution for:"
 msgstr "ค่าความละเอียดของความยาวช่วงไม่คู่กันของดิฟแพร์:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:819
+#: pcbnew/tools/board_inspection_tool.cpp:824
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:851
+#: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:868
+#: pcbnew/tools/board_inspection_tool.cpp:873
 msgid "Silkscreen clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างซิลค์สกรีนสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:896
+#: pcbnew/tools/board_inspection_tool.cpp:901
 msgid "Courtyard clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างลานสนามสําหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1024
+#: pcbnew/tools/board_inspection_tool.cpp:1029
 #, fuzzy
 msgid "Physical Clearances"
 msgstr "พารามิเตอร์ทางกายภาพ"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1134
+#: pcbnew/tools/board_inspection_tool.cpp:1139
 msgid "Select an item for a constraints resolution report."
 msgstr "เลือกชิ้นส่วนสำหรับรายงานการแก้ไขข้อจำกัด"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1141
+#: pcbnew/tools/board_inspection_tool.cpp:1146
 msgid "Constraints Report"
 msgstr "รายงานข้อจํากัด"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1169
+#: pcbnew/tools/board_inspection_tool.cpp:1175
 #, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1189
-#: pcbnew/tools/board_inspection_tool.cpp:1227
+#: pcbnew/tools/board_inspection_tool.cpp:1195
+#: pcbnew/tools/board_inspection_tool.cpp:1233
 #, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดเส้นผ่าศูนย์กลาง: ต่ำสุด %s;เลือก %s;สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1196
+#: pcbnew/tools/board_inspection_tool.cpp:1202
 msgid "Via Annular Width"
 msgstr "ความกว้างวงแหวนเวีย"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1206
+#: pcbnew/tools/board_inspection_tool.cpp:1212
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดความกว้างของวงแหวน: ต่ำสุด %s;เลือก %s;สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1248
+#: pcbnew/tools/board_inspection_tool.cpp:1254
 #, fuzzy, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1264
+#: pcbnew/tools/board_inspection_tool.cpp:1270
 #, fuzzy, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
 msgstr "ข้อจำกัดความกว้าง: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1272
+#: pcbnew/tools/board_inspection_tool.cpp:1278
 msgid "Keepouts"
 msgstr "ปิดกั้น"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1273
+#: pcbnew/tools/board_inspection_tool.cpp:1279
 msgid "Keepout resolution for:"
 msgstr "การแก้ปิดกั้นสำหรับ:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1283
-#: pcbnew/tools/board_inspection_tool.cpp:1305
+#: pcbnew/tools/board_inspection_tool.cpp:1289
+#: pcbnew/tools/board_inspection_tool.cpp:1311
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr "รายงานอาจไม่สมบูรณ์: ลานสนามของฟุ้ทพรินท์บางแห่งมีรูปแบบไม่ถูกต้อง"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1284
-#: pcbnew/tools/board_inspection_tool.cpp:1306
+#: pcbnew/tools/board_inspection_tool.cpp:1290
+#: pcbnew/tools/board_inspection_tool.cpp:1312
 msgid "Run DRC for a full analysis."
 msgstr "เรียกใช้ DRC เพื่อการวิเคราะห์แบบเต็ม"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1290
+#: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Item <b>disallowed</b> at current location."
 msgstr "ชิ้นส่วน <b>ไม่อนุญาต</b> ที่ตำแหน่งปัจจุบัน"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1292
+#: pcbnew/tools/board_inspection_tool.cpp:1298
 msgid "Item allowed at current location."
 msgstr "ชิ้นส่วนที่อนุญาต ณ ตำแหน่งปัจจุบัน"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1296
+#: pcbnew/tools/board_inspection_tool.cpp:1302
 #, fuzzy
 msgid "Assertions"
 msgstr "การกระทำ"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1297
+#: pcbnew/tools/board_inspection_tool.cpp:1303
 msgid "Assertions for:"
 msgstr "การยืนยันสำหรับ:"
 

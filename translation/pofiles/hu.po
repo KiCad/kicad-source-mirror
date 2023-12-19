@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 09:39-0800\n"
+"POT-Creation-Date: 2023-12-19 08:35-0800\n"
 "PO-Revision-Date: 2023-05-15 21:48+0000\n"
 "Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v7/hu/>\n"
@@ -2134,37 +2134,37 @@ msgstr "Támogatás"
 msgid "Donate to KiCad"
 msgstr "A KiCad támogatása"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:724
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:732
 #, fuzzy
 msgid "&OK"
 msgstr "Rendben"
 
-#: common/dialog_shim.cpp:725
+#: common/dialog_shim.cpp:733
 #, fuzzy
 msgid "&Cancel"
 msgstr "Mégsem"
 
-#: common/dialog_shim.cpp:726
+#: common/dialog_shim.cpp:734
 #, fuzzy
 msgid "&Yes"
 msgstr "Igen"
 
-#: common/dialog_shim.cpp:727
+#: common/dialog_shim.cpp:735
 #, fuzzy
 msgid "&No"
 msgstr "Nem"
 
-#: common/dialog_shim.cpp:728
+#: common/dialog_shim.cpp:736
 #, fuzzy
 msgid "&Apply"
 msgstr "Alkalmaz"
 
-#: common/dialog_shim.cpp:729
+#: common/dialog_shim.cpp:737
 #, fuzzy
 msgid "&Save"
 msgstr "Mentés"
 
-#: common/dialog_shim.cpp:730 common/dialog_shim.cpp:731
+#: common/dialog_shim.cpp:738 common/dialog_shim.cpp:739
 #: common/eda_base_frame.cpp:499
 #, fuzzy
 msgid "&Help"
@@ -4263,8 +4263,8 @@ msgid "Netclasses:"
 msgstr "Vezetékosztályok:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: pcbnew/tools/board_inspection_tool.cpp:495
-#: pcbnew/tools/board_inspection_tool.cpp:1007
+#: pcbnew/tools/board_inspection_tool.cpp:499
+#: pcbnew/tools/board_inspection_tool.cpp:1012
 #, fuzzy
 msgid "Clearance"
 msgstr "Szigetelési távolság"
@@ -4273,8 +4273,8 @@ msgstr "Szigetelési távolság"
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:228
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
-#: pcbnew/tools/board_inspection_tool.cpp:319
-#: pcbnew/tools/board_inspection_tool.cpp:1160
+#: pcbnew/tools/board_inspection_tool.cpp:323
+#: pcbnew/tools/board_inspection_tool.cpp:1166
 #, fuzzy
 msgid "Track Width"
 msgstr "Vezetősáv szélesség"
@@ -4972,7 +4972,7 @@ msgid "Leader"
 msgstr "Címke hozzáadása"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:362
-#: pcbnew/tools/board_inspection_tool.cpp:636
+#: pcbnew/tools/board_inspection_tool.cpp:641
 #, fuzzy
 msgid "Zone"
 msgstr "Zóna"
@@ -5907,9 +5907,9 @@ msgstr "Nyelv beállítása"
 
 #: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:936
 #: pcbnew/drc/drc_engine.cpp:937 pcbnew/drc/drc_engine.cpp:938
-#: pcbnew/tools/board_inspection_tool.cpp:213
-#: pcbnew/tools/board_inspection_tool.cpp:222
-#: pcbnew/tools/board_inspection_tool.cpp:231
+#: pcbnew/tools/board_inspection_tool.cpp:215
+#: pcbnew/tools/board_inspection_tool.cpp:224
+#: pcbnew/tools/board_inspection_tool.cpp:233
 #, fuzzy
 msgid "undefined"
 msgstr "Meghatározatlan!!!"
@@ -10627,7 +10627,7 @@ msgstr "Függőleges Igazítás"
 #: eeschema/lib_text.cpp:431 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:780 eeschema/sch_label.cpp:973
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1239
+#: pcbnew/tools/board_inspection_tool.cpp:1245
 #, fuzzy
 msgid "Text Size"
 msgstr "Szövegméret"
@@ -20700,7 +20700,7 @@ msgstr "Nincs vezeték kiválasztva."
 msgid "Net must be labeled to assign a netclass."
 msgstr "\"%s\" busz megnevezés tagjai"
 
-#: eeschema/tools/sch_editor_control.cpp:1669
+#: eeschema/tools/sch_editor_control.cpp:1691
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -20710,26 +20710,26 @@ msgstr ""
 "A kívánt változtatások nem hajthatóak végre, mivel a cél-lap már eleve "
 "tartalmazza a(z) \"%s\" lapot."
 
-#: eeschema/tools/sch_editor_control.cpp:2074
+#: eeschema/tools/sch_editor_control.cpp:2098
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "a(z) \"%s\" könyvtár nem törölhető"
 
-#: eeschema/tools/sch_editor_control.cpp:2366
+#: eeschema/tools/sch_editor_control.cpp:2390
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, fuzzy, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d azonos időbélyeget talált majd cserélt le."
 
-#: eeschema/tools/sch_editor_control.cpp:2373
+#: eeschema/tools/sch_editor_control.cpp:2397
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2380
+#: eeschema/tools/sch_editor_control.cpp:2404
 #: pcbnew/drc/drc_rule_parser.cpp:179
 #, fuzzy
 msgid "No errors found."
@@ -21143,7 +21143,7 @@ msgstr "Réteg kiválasztása:"
 #: pcbnew/pcb_shape.cpp:412 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:124
 #: pcbnew/pcb_textbox.cpp:293 pcbnew/pcb_track.cpp:872 pcbnew/pcb_track.cpp:946
 #: pcbnew/pcb_track.cpp:1323 pcbnew/pcb_track.cpp:1330
-#: pcbnew/tools/board_inspection_tool.cpp:199
+#: pcbnew/tools/board_inspection_tool.cpp:201
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:213
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:224
 #: pcbnew/widgets/pcb_properties_panel.cpp:247
@@ -29394,7 +29394,7 @@ msgstr "Tervezési szabályellenőrző (DRC) futtatása"
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr "Nem sikerült megnyitni a konfigurációs fájlt"
 
-#: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
+#: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:178
 #, fuzzy
 msgid "Show design rules."
 msgstr "Tervezési szabályok megjelenítése."
@@ -31326,7 +31326,7 @@ msgstr "Szöveg szélesség"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:131
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_textbox.cpp:339 pcbnew/pcb_dimension.cpp:335
-#: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:289
+#: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:293
 #, fuzzy
 msgid "Text Height"
 msgstr "Szöveg magasság"
@@ -31335,7 +31335,7 @@ msgstr "Szöveg magasság"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/pcb_dimension.cpp:333 pcbnew/pcb_textbox.cpp:298
-#: pcbnew/tools/board_inspection_tool.cpp:304
+#: pcbnew/tools/board_inspection_tool.cpp:308
 #, fuzzy
 msgid "Text Thickness"
 msgstr "Szövegvastagság"
@@ -31394,8 +31394,8 @@ msgid "Set to layer default values:"
 msgstr "Beállítás a réteg alapértelmezett értékére:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:229
-#: pcbnew/tools/board_inspection_tool.cpp:348
-#: pcbnew/tools/board_inspection_tool.cpp:1179
+#: pcbnew/tools/board_inspection_tool.cpp:352
+#: pcbnew/tools/board_inspection_tool.cpp:1185
 #, fuzzy
 msgid "Via Diameter"
 msgstr "Átvezetőforrpont átmérő"
@@ -36215,8 +36215,8 @@ msgstr "Forrszem átmérő"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:103 pcbnew/pad.cpp:1074
 #: pcbnew/pcb_track.cpp:948 pcbnew/pcb_track.cpp:1328
-#: pcbnew/tools/board_inspection_tool.cpp:930
-#: pcbnew/tools/board_inspection_tool.cpp:959
+#: pcbnew/tools/board_inspection_tool.cpp:935
+#: pcbnew/tools/board_inspection_tool.cpp:964
 #, fuzzy
 msgid "Hole"
 msgstr "Furatok száma"
@@ -42145,404 +42145,404 @@ msgstr "A kijelölés zárolt elemeket tartalmaz. Folytatja?"
 msgid "Net Inspection Tools"
 msgstr "Vezeték Ellenőrzési Eszközök"
 
-#: pcbnew/tools/board_inspection_tool.cpp:164
+#: pcbnew/tools/board_inspection_tool.cpp:166
 #, fuzzy, c-format
 msgid "[netclass %s]"
 msgstr "[vezetékosztály %s]"
 
-#: pcbnew/tools/board_inspection_tool.cpp:175
+#: pcbnew/tools/board_inspection_tool.cpp:177
 #, fuzzy
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "Nem sikerült megnyitni a konfigurációs fájlt"
 
-#: pcbnew/tools/board_inspection_tool.cpp:246
+#: pcbnew/tools/board_inspection_tool.cpp:248
 #, fuzzy
 msgid "Violation Report"
 msgstr "Szimulátor beállítások"
 
-#: pcbnew/tools/board_inspection_tool.cpp:274
+#: pcbnew/tools/board_inspection_tool.cpp:278
 #, fuzzy
 msgid "Uncoupled Length"
 msgstr "Panel hossz"
 
-#: pcbnew/tools/board_inspection_tool.cpp:275
+#: pcbnew/tools/board_inspection_tool.cpp:279
 #, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
 msgstr "Differenciális jelvezeték hosszának hangolása"
 
-#: pcbnew/tools/board_inspection_tool.cpp:283
-#: pcbnew/tools/board_inspection_tool.cpp:827
+#: pcbnew/tools/board_inspection_tool.cpp:287
+#: pcbnew/tools/board_inspection_tool.cpp:832
 #, fuzzy, c-format
 msgid "Resolved max uncoupled length: %s."
 msgstr "Nem használt %s alkatrészrajzolat eltávolítása."
 
-#: pcbnew/tools/board_inspection_tool.cpp:290
-#: pcbnew/tools/board_inspection_tool.cpp:1240
+#: pcbnew/tools/board_inspection_tool.cpp:294
+#: pcbnew/tools/board_inspection_tool.cpp:1246
 #, fuzzy
 msgid "Text height resolution for:"
 msgstr "Viák kizárása"
 
-#: pcbnew/tools/board_inspection_tool.cpp:298
+#: pcbnew/tools/board_inspection_tool.cpp:302
 #, fuzzy, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:305
-#: pcbnew/tools/board_inspection_tool.cpp:1256
+#: pcbnew/tools/board_inspection_tool.cpp:309
+#: pcbnew/tools/board_inspection_tool.cpp:1262
 #, fuzzy
 msgid "Text thickness resolution for:"
 msgstr "Vezetősávhossz hangolás"
 
-#: pcbnew/tools/board_inspection_tool.cpp:313
+#: pcbnew/tools/board_inspection_tool.cpp:317
 #, fuzzy, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:320
-#: pcbnew/tools/board_inspection_tool.cpp:1161
+#: pcbnew/tools/board_inspection_tool.cpp:324
+#: pcbnew/tools/board_inspection_tool.cpp:1167
 #, fuzzy
 msgid "Track width resolution for:"
 msgstr "Vezetősáv szélesség korrekció:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:328
+#: pcbnew/tools/board_inspection_tool.cpp:332
 #, fuzzy, c-format
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:334
+#: pcbnew/tools/board_inspection_tool.cpp:338
 #, fuzzy
 msgid "Connection Width"
 msgstr "Csatlakozás típusa:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:335
+#: pcbnew/tools/board_inspection_tool.cpp:339
 #, fuzzy
 msgid "Connection width resolution for:"
 msgstr "Vezetősáv szélesség korrekció:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:343
+#: pcbnew/tools/board_inspection_tool.cpp:347
 #, fuzzy, c-format
 msgid "Resolved min connection width constraint: %s."
 msgstr "Csatlakozás típusa:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:349
-#: pcbnew/tools/board_inspection_tool.cpp:1180
+#: pcbnew/tools/board_inspection_tool.cpp:353
+#: pcbnew/tools/board_inspection_tool.cpp:1186
 #, fuzzy
 msgid "Via diameter resolution for:"
 msgstr "Via átmérő:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:357
-#: pcbnew/tools/board_inspection_tool.cpp:388
+#: pcbnew/tools/board_inspection_tool.cpp:361
+#: pcbnew/tools/board_inspection_tool.cpp:392
 #, fuzzy, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:363
+#: pcbnew/tools/board_inspection_tool.cpp:367
 #, fuzzy
 msgid "Via Annulus"
 msgstr "Impulzusszélesség:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:364
-#: pcbnew/tools/board_inspection_tool.cpp:1197
+#: pcbnew/tools/board_inspection_tool.cpp:368
+#: pcbnew/tools/board_inspection_tool.cpp:1203
 #, fuzzy
 msgid "Via annular width resolution for:"
 msgstr "Vezetősáv szélesség korrekció:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:372
+#: pcbnew/tools/board_inspection_tool.cpp:376
 #, fuzzy, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:379
-#: pcbnew/tools/board_inspection_tool.cpp:1217
+#: pcbnew/tools/board_inspection_tool.cpp:383
+#: pcbnew/tools/board_inspection_tool.cpp:1223
 #, fuzzy
 msgid "Hole Size"
 msgstr "Furat Méret"
 
-#: pcbnew/tools/board_inspection_tool.cpp:380
-#: pcbnew/tools/board_inspection_tool.cpp:1218
+#: pcbnew/tools/board_inspection_tool.cpp:384
+#: pcbnew/tools/board_inspection_tool.cpp:1224
 #, fuzzy
 msgid "Hole diameter resolution for:"
 msgstr "Via átmérő:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:394
+#: pcbnew/tools/board_inspection_tool.cpp:398
 #, fuzzy
 msgid "Hole Clearance"
 msgstr "Furat távolság"
 
-#: pcbnew/tools/board_inspection_tool.cpp:395
-#: pcbnew/tools/board_inspection_tool.cpp:940
+#: pcbnew/tools/board_inspection_tool.cpp:399
+#: pcbnew/tools/board_inspection_tool.cpp:945
 #, fuzzy
 msgid "Hole clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:403
-#: pcbnew/tools/board_inspection_tool.cpp:504
-#: pcbnew/tools/board_inspection_tool.cpp:765
+#: pcbnew/tools/board_inspection_tool.cpp:407
+#: pcbnew/tools/board_inspection_tool.cpp:508
+#: pcbnew/tools/board_inspection_tool.cpp:770
 msgid "Items belong to the same net. Clearance is 0."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:412
-#: pcbnew/tools/board_inspection_tool.cpp:432
-#: pcbnew/tools/board_inspection_tool.cpp:449
-#: pcbnew/tools/board_inspection_tool.cpp:464
-#: pcbnew/tools/board_inspection_tool.cpp:513
-#: pcbnew/tools/board_inspection_tool.cpp:533
-#: pcbnew/tools/board_inspection_tool.cpp:732
-#: pcbnew/tools/board_inspection_tool.cpp:746
-#: pcbnew/tools/board_inspection_tool.cpp:781
-#: pcbnew/tools/board_inspection_tool.cpp:881
-#: pcbnew/tools/board_inspection_tool.cpp:905
-#: pcbnew/tools/board_inspection_tool.cpp:949
-#: pcbnew/tools/board_inspection_tool.cpp:978
-#: pcbnew/tools/board_inspection_tool.cpp:1017
-#: pcbnew/tools/board_inspection_tool.cpp:1046
-#: pcbnew/tools/board_inspection_tool.cpp:1112
+#: pcbnew/tools/board_inspection_tool.cpp:416
+#: pcbnew/tools/board_inspection_tool.cpp:436
+#: pcbnew/tools/board_inspection_tool.cpp:453
+#: pcbnew/tools/board_inspection_tool.cpp:468
+#: pcbnew/tools/board_inspection_tool.cpp:517
+#: pcbnew/tools/board_inspection_tool.cpp:537
+#: pcbnew/tools/board_inspection_tool.cpp:737
+#: pcbnew/tools/board_inspection_tool.cpp:751
+#: pcbnew/tools/board_inspection_tool.cpp:786
+#: pcbnew/tools/board_inspection_tool.cpp:886
+#: pcbnew/tools/board_inspection_tool.cpp:910
+#: pcbnew/tools/board_inspection_tool.cpp:954
+#: pcbnew/tools/board_inspection_tool.cpp:983
+#: pcbnew/tools/board_inspection_tool.cpp:1022
+#: pcbnew/tools/board_inspection_tool.cpp:1051
+#: pcbnew/tools/board_inspection_tool.cpp:1117
 #, fuzzy, c-format
 msgid "Resolved clearance: %s."
 msgstr "Engedett szigetelési távolság: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:418
-#: pcbnew/tools/board_inspection_tool.cpp:1095
+#: pcbnew/tools/board_inspection_tool.cpp:422
+#: pcbnew/tools/board_inspection_tool.cpp:1100
 #, fuzzy
 msgid "Physical hole clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:427
-#: pcbnew/tools/board_inspection_tool.cpp:1107
+#: pcbnew/tools/board_inspection_tool.cpp:431
+#: pcbnew/tools/board_inspection_tool.cpp:1112
 #, fuzzy
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:438
+#: pcbnew/tools/board_inspection_tool.cpp:442
 #, fuzzy
 msgid "Hole to Hole"
 msgstr "Furat - Furat Távolság"
 
-#: pcbnew/tools/board_inspection_tool.cpp:439
-#: pcbnew/tools/board_inspection_tool.cpp:969
+#: pcbnew/tools/board_inspection_tool.cpp:443
+#: pcbnew/tools/board_inspection_tool.cpp:974
 #, fuzzy
 msgid "Hole to hole clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:453
+#: pcbnew/tools/board_inspection_tool.cpp:457
 #, fuzzy
 msgid "Edge Clearance"
 msgstr "Szigetelési távolság"
 
-#: pcbnew/tools/board_inspection_tool.cpp:454
-#: pcbnew/tools/board_inspection_tool.cpp:1008
+#: pcbnew/tools/board_inspection_tool.cpp:458
+#: pcbnew/tools/board_inspection_tool.cpp:1013
 #, fuzzy
 msgid "Edge clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:496
-#: pcbnew/tools/board_inspection_tool.cpp:760
+#: pcbnew/tools/board_inspection_tool.cpp:500
+#: pcbnew/tools/board_inspection_tool.cpp:765
 #, fuzzy
 msgid "Clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:519
-#: pcbnew/tools/board_inspection_tool.cpp:1029
+#: pcbnew/tools/board_inspection_tool.cpp:523
+#: pcbnew/tools/board_inspection_tool.cpp:1034
 #, fuzzy
 msgid "Physical clearance resolution for:"
 msgstr "Szigetelési távolság a következőknél:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:528
-#: pcbnew/tools/board_inspection_tool.cpp:1041
+#: pcbnew/tools/board_inspection_tool.cpp:532
+#: pcbnew/tools/board_inspection_tool.cpp:1046
 #, fuzzy
 msgid "No 'physical_clearance' constraints defined."
 msgstr "Nincsenek 'szigetelési_távolság' szabályok definiálva"
 
-#: pcbnew/tools/board_inspection_tool.cpp:556
+#: pcbnew/tools/board_inspection_tool.cpp:560
 #, fuzzy
 msgid "Select two items for a clearance resolution report."
 msgstr "Válasszon ki két elemet a Szigetelési távolság jelentéshez."
 
-#: pcbnew/tools/board_inspection_tool.cpp:571
-#: pcbnew/tools/board_inspection_tool.cpp:584
+#: pcbnew/tools/board_inspection_tool.cpp:575
+#: pcbnew/tools/board_inspection_tool.cpp:588
 msgid "Cannot generate clearance report on empty group."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:597
+#: pcbnew/tools/board_inspection_tool.cpp:601
 #, fuzzy
 msgid "Clearance Report"
 msgstr "Szigetelési távolság"
 
-#: pcbnew/tools/board_inspection_tool.cpp:637
+#: pcbnew/tools/board_inspection_tool.cpp:642
 #, fuzzy
 msgid "Zone connection resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:645
+#: pcbnew/tools/board_inspection_tool.cpp:650
 #, fuzzy
 msgid "Thermal relief gap resolution for:"
 msgstr "Viák kizárása"
 
-#: pcbnew/tools/board_inspection_tool.cpp:654
+#: pcbnew/tools/board_inspection_tool.cpp:659
 #, fuzzy, c-format
 msgid "Resolved thermal relief gap: %s."
 msgstr "Hőcsapdák"
 
-#: pcbnew/tools/board_inspection_tool.cpp:659
+#: pcbnew/tools/board_inspection_tool.cpp:664
 #, fuzzy
 msgid "Spoke width resolution for:"
 msgstr "Vezetősáv szélesség korrekció:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:668
+#: pcbnew/tools/board_inspection_tool.cpp:673
 #, fuzzy, c-format
 msgid "Resolved thermal relief spoke width: %s."
 msgstr "Hőcsapda-küllő szélesség:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:673
+#: pcbnew/tools/board_inspection_tool.cpp:678
 #, fuzzy
 msgid "Spoke count resolution for:"
 msgstr "Viák kizárása"
 
-#: pcbnew/tools/board_inspection_tool.cpp:682
+#: pcbnew/tools/board_inspection_tool.cpp:687
 #, fuzzy, c-format
 msgid "Resolved min thermal relief spoke count: %d."
 msgstr "Hőcsapda-küllő szélesség:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:691
-#: pcbnew/tools/board_inspection_tool.cpp:739
+#: pcbnew/tools/board_inspection_tool.cpp:696
+#: pcbnew/tools/board_inspection_tool.cpp:744
 #, fuzzy
 msgid "Zone clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:695
+#: pcbnew/tools/board_inspection_tool.cpp:700
 #, fuzzy, c-format
 msgid "Zone clearance: %s."
 msgstr "Rézkitöltések közötti szigetelési távolságok...\n"
 
-#: pcbnew/tools/board_inspection_tool.cpp:705
+#: pcbnew/tools/board_inspection_tool.cpp:710
 #, fuzzy, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "lokális távolságtartás és szigetelési távolság beállítások"
 
-#: pcbnew/tools/board_inspection_tool.cpp:721
+#: pcbnew/tools/board_inspection_tool.cpp:726
 #, fuzzy, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "lokális távolságtartás és szigetelési távolság beállítások"
 
-#: pcbnew/tools/board_inspection_tool.cpp:800
+#: pcbnew/tools/board_inspection_tool.cpp:805
 #, fuzzy
 msgid "Diff Pair"
 msgstr "Differenciális jelvezetékek"
 
-#: pcbnew/tools/board_inspection_tool.cpp:801
+#: pcbnew/tools/board_inspection_tool.cpp:806
 #, fuzzy
 msgid "Diff pair gap resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:806
+#: pcbnew/tools/board_inspection_tool.cpp:811
 #, fuzzy, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:814
+#: pcbnew/tools/board_inspection_tool.cpp:819
 #, fuzzy
 msgid "Diff pair max uncoupled length resolution for:"
 msgstr "Differenciális jelvezeték hosszának hangolása"
 
-#: pcbnew/tools/board_inspection_tool.cpp:819
+#: pcbnew/tools/board_inspection_tool.cpp:824
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:851
+#: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:868
+#: pcbnew/tools/board_inspection_tool.cpp:873
 #, fuzzy
 msgid "Silkscreen clearance resolution for:"
 msgstr "lokális távolságtartás és szigetelési távolság beállítások"
 
-#: pcbnew/tools/board_inspection_tool.cpp:896
+#: pcbnew/tools/board_inspection_tool.cpp:901
 #, fuzzy
 msgid "Courtyard clearance resolution for:"
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1024
+#: pcbnew/tools/board_inspection_tool.cpp:1029
 #, fuzzy
 msgid "Physical Clearances"
 msgstr "Fizikai paraméterek:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1134
+#: pcbnew/tools/board_inspection_tool.cpp:1139
 #, fuzzy
 msgid "Select an item for a constraints resolution report."
 msgstr "Szigetelési távolság/Távolságtartás körvonalak"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1141
+#: pcbnew/tools/board_inspection_tool.cpp:1146
 #, fuzzy
 msgid "Constraints Report"
 msgstr "Alkatrészrajzolat jelentés"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1169
+#: pcbnew/tools/board_inspection_tool.cpp:1175
 #, fuzzy, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1189
-#: pcbnew/tools/board_inspection_tool.cpp:1227
+#: pcbnew/tools/board_inspection_tool.cpp:1195
+#: pcbnew/tools/board_inspection_tool.cpp:1233
 #, fuzzy, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1196
+#: pcbnew/tools/board_inspection_tool.cpp:1202
 #, fuzzy
 msgid "Via Annular Width"
 msgstr "Via Gyűrű Szélesség"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1206
+#: pcbnew/tools/board_inspection_tool.cpp:1212
 #, fuzzy, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1248
+#: pcbnew/tools/board_inspection_tool.cpp:1254
 #, fuzzy, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1264
+#: pcbnew/tools/board_inspection_tool.cpp:1270
 #, fuzzy, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
 msgstr "%s:%s láb átcsatlakoztatása (%s -> %s)"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1272
+#: pcbnew/tools/board_inspection_tool.cpp:1278
 #, fuzzy
 msgid "Keepouts"
 msgstr "Kizárt"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1273
+#: pcbnew/tools/board_inspection_tool.cpp:1279
 #, fuzzy
 msgid "Keepout resolution for:"
 msgstr "Viák kizárása"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1283
-#: pcbnew/tools/board_inspection_tool.cpp:1305
+#: pcbnew/tools/board_inspection_tool.cpp:1289
+#: pcbnew/tools/board_inspection_tool.cpp:1311
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:1284
-#: pcbnew/tools/board_inspection_tool.cpp:1306
+#: pcbnew/tools/board_inspection_tool.cpp:1290
+#: pcbnew/tools/board_inspection_tool.cpp:1312
 msgid "Run DRC for a full analysis."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:1290
+#: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Item <b>disallowed</b> at current location."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:1292
+#: pcbnew/tools/board_inspection_tool.cpp:1298
 msgid "Item allowed at current location."
 msgstr ""
 
-#: pcbnew/tools/board_inspection_tool.cpp:1296
+#: pcbnew/tools/board_inspection_tool.cpp:1302
 #, fuzzy
 msgid "Assertions"
 msgstr "Műveletek"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1297
+#: pcbnew/tools/board_inspection_tool.cpp:1303
 #, fuzzy
 msgid "Assertions for:"
 msgstr "Műveletek"

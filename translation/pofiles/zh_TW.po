@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 09:39-0800\n"
+"POT-Creation-Date: 2023-12-19 08:35-0800\n"
 "PO-Revision-Date: 2023-09-13 18:36+0000\n"
 "Last-Translator: Li Yidong <alenks@foxmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -1822,31 +1822,31 @@ msgstr "捐款"
 msgid "Donate to KiCad"
 msgstr "向 KiCad 捐款"
 
-#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:724
+#: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:732
 msgid "&OK"
 msgstr "確定 (&O)"
 
-#: common/dialog_shim.cpp:725
+#: common/dialog_shim.cpp:733
 msgid "&Cancel"
 msgstr "取消 (&C)"
 
-#: common/dialog_shim.cpp:726
+#: common/dialog_shim.cpp:734
 msgid "&Yes"
 msgstr "是 (&Y)"
 
-#: common/dialog_shim.cpp:727
+#: common/dialog_shim.cpp:735
 msgid "&No"
 msgstr "否(&N)"
 
-#: common/dialog_shim.cpp:728
+#: common/dialog_shim.cpp:736
 msgid "&Apply"
 msgstr "應用(&A)"
 
-#: common/dialog_shim.cpp:729
+#: common/dialog_shim.cpp:737
 msgid "&Save"
 msgstr "儲存 (&S)"
 
-#: common/dialog_shim.cpp:730 common/dialog_shim.cpp:731
+#: common/dialog_shim.cpp:738 common/dialog_shim.cpp:739
 #: common/eda_base_frame.cpp:499
 msgid "&Help"
 msgstr "幫助 (&H)"
@@ -3662,8 +3662,8 @@ msgid "Netclasses:"
 msgstr "網路類："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: pcbnew/tools/board_inspection_tool.cpp:495
-#: pcbnew/tools/board_inspection_tool.cpp:1007
+#: pcbnew/tools/board_inspection_tool.cpp:499
+#: pcbnew/tools/board_inspection_tool.cpp:1012
 msgid "Clearance"
 msgstr "間隙"
 
@@ -3671,8 +3671,8 @@ msgstr "間隙"
 #: pcb_calculator/pcb_calculator_frame.cpp:79
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:228
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
-#: pcbnew/tools/board_inspection_tool.cpp:319
-#: pcbnew/tools/board_inspection_tool.cpp:1160
+#: pcbnew/tools/board_inspection_tool.cpp:323
+#: pcbnew/tools/board_inspection_tool.cpp:1166
 msgid "Track Width"
 msgstr "佈線寬度"
 
@@ -4284,7 +4284,7 @@ msgid "Leader"
 msgstr "引線"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:362
-#: pcbnew/tools/board_inspection_tool.cpp:636
+#: pcbnew/tools/board_inspection_tool.cpp:641
 msgid "Zone"
 msgstr "敷銅"
 
@@ -5076,9 +5076,9 @@ msgstr "設定語言"
 
 #: common/layer_id.cpp:35 pcbnew/drc/drc_engine.cpp:936
 #: pcbnew/drc/drc_engine.cpp:937 pcbnew/drc/drc_engine.cpp:938
-#: pcbnew/tools/board_inspection_tool.cpp:213
-#: pcbnew/tools/board_inspection_tool.cpp:222
-#: pcbnew/tools/board_inspection_tool.cpp:231
+#: pcbnew/tools/board_inspection_tool.cpp:215
+#: pcbnew/tools/board_inspection_tool.cpp:224
+#: pcbnew/tools/board_inspection_tool.cpp:233
 msgid "undefined"
 msgstr "未定義"
 
@@ -9162,7 +9162,7 @@ msgstr "垂直排列"
 #: eeschema/lib_text.cpp:431 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:780 eeschema/sch_label.cpp:973
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1239
+#: pcbnew/tools/board_inspection_tool.cpp:1245
 msgid "Text Size"
 msgstr "文字大小"
 
@@ -17915,7 +17915,7 @@ msgstr "沒有選擇網路。"
 msgid "Net must be labeled to assign a netclass."
 msgstr "網路必須標記才能關聯網路類。"
 
-#: eeschema/tools/sch_editor_control.cpp:1669
+#: eeschema/tools/sch_editor_control.cpp:1691
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17925,25 +17925,25 @@ msgstr ""
 "貼上的圖框 \"%s\"\n"
 "被丟棄, 因為目標已有該圖框或其子圖框之一作為父級。"
 
-#: eeschema/tools/sch_editor_control.cpp:2074
+#: eeschema/tools/sch_editor_control.cpp:2098
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "無法編輯有損壞的庫符號連結的符號。"
 
-#: eeschema/tools/sch_editor_control.cpp:2366
+#: eeschema/tools/sch_editor_control.cpp:2390
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替換 %d 個重複 ID。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2373
+#: eeschema/tools/sch_editor_control.cpp:2397
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修復 %d 個潛在問題。"
 
-#: eeschema/tools/sch_editor_control.cpp:2380
+#: eeschema/tools/sch_editor_control.cpp:2404
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "未發現錯誤。"
@@ -18309,7 +18309,7 @@ msgstr "選擇層： %s"
 #: pcbnew/pcb_shape.cpp:412 pcbnew/pcb_target.cpp:153 pcbnew/pcb_text.cpp:124
 #: pcbnew/pcb_textbox.cpp:293 pcbnew/pcb_track.cpp:872 pcbnew/pcb_track.cpp:946
 #: pcbnew/pcb_track.cpp:1323 pcbnew/pcb_track.cpp:1330
-#: pcbnew/tools/board_inspection_tool.cpp:199
+#: pcbnew/tools/board_inspection_tool.cpp:201
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:213
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:224
 #: pcbnew/widgets/pcb_properties_panel.cpp:247
@@ -25501,7 +25501,7 @@ msgstr "執行 DRC"
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr "DRC 不完整：無法編譯自定義設計規則。  "
 
-#: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:176
+#: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:178
 msgid "Show design rules."
 msgstr "顯示設計規則。"
 
@@ -27128,7 +27128,7 @@ msgstr "文字寬度"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:131
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/fp_textbox.cpp:339 pcbnew/pcb_dimension.cpp:335
-#: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:289
+#: pcbnew/pcb_textbox.cpp:300 pcbnew/tools/board_inspection_tool.cpp:293
 msgid "Text Height"
 msgstr "文字高度"
 
@@ -27136,7 +27136,7 @@ msgstr "文字高度"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:132
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/pcb_dimension.cpp:333 pcbnew/pcb_textbox.cpp:298
-#: pcbnew/tools/board_inspection_tool.cpp:304
+#: pcbnew/tools/board_inspection_tool.cpp:308
 msgid "Text Thickness"
 msgstr "文字粗細"
 
@@ -27184,8 +27184,8 @@ msgid "Set to layer default values:"
 msgstr "設定為圖層預設值："
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:229
-#: pcbnew/tools/board_inspection_tool.cpp:348
-#: pcbnew/tools/board_inspection_tool.cpp:1179
+#: pcbnew/tools/board_inspection_tool.cpp:352
+#: pcbnew/tools/board_inspection_tool.cpp:1185
 msgid "Via Diameter"
 msgstr "過孔外徑"
 
@@ -31694,8 +31694,8 @@ msgstr "直徑"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:103 pcbnew/pad.cpp:1074
 #: pcbnew/pcb_track.cpp:948 pcbnew/pcb_track.cpp:1328
-#: pcbnew/tools/board_inspection_tool.cpp:930
-#: pcbnew/tools/board_inspection_tool.cpp:959
+#: pcbnew/tools/board_inspection_tool.cpp:935
+#: pcbnew/tools/board_inspection_tool.cpp:964
 msgid "Hole"
 msgstr "孔"
 
@@ -36946,360 +36946,360 @@ msgstr "所選部分不包含帶標籤網路的專案。"
 msgid "Net Inspection Tools"
 msgstr "網路檢查工具"
 
-#: pcbnew/tools/board_inspection_tool.cpp:164
+#: pcbnew/tools/board_inspection_tool.cpp:166
 #, c-format
 msgid "[netclass %s]"
 msgstr "[網路類 %s]"
 
-#: pcbnew/tools/board_inspection_tool.cpp:175
+#: pcbnew/tools/board_inspection_tool.cpp:177
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr "報告不完整：無法編譯自定義設計規則。  "
 
-#: pcbnew/tools/board_inspection_tool.cpp:246
+#: pcbnew/tools/board_inspection_tool.cpp:248
 msgid "Violation Report"
 msgstr "違規報告"
 
-#: pcbnew/tools/board_inspection_tool.cpp:274
+#: pcbnew/tools/board_inspection_tool.cpp:278
 msgid "Uncoupled Length"
 msgstr "解耦長度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:275
+#: pcbnew/tools/board_inspection_tool.cpp:279
 msgid "Diff pair uncoupled length resolution for:"
 msgstr "下列項的差分對非耦合長度解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:283
-#: pcbnew/tools/board_inspection_tool.cpp:827
+#: pcbnew/tools/board_inspection_tool.cpp:287
+#: pcbnew/tools/board_inspection_tool.cpp:832
 #, c-format
 msgid "Resolved max uncoupled length: %s."
 msgstr "已解決的最大非耦合長度： %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:290
-#: pcbnew/tools/board_inspection_tool.cpp:1240
+#: pcbnew/tools/board_inspection_tool.cpp:294
+#: pcbnew/tools/board_inspection_tool.cpp:1246
 msgid "Text height resolution for:"
 msgstr "下列項的文字高度解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:298
+#: pcbnew/tools/board_inspection_tool.cpp:302
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "已解決的高度約束：最小 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:305
-#: pcbnew/tools/board_inspection_tool.cpp:1256
+#: pcbnew/tools/board_inspection_tool.cpp:309
+#: pcbnew/tools/board_inspection_tool.cpp:1262
 msgid "Text thickness resolution for:"
 msgstr "下列項的文字粗細解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:313
+#: pcbnew/tools/board_inspection_tool.cpp:317
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
 msgstr "已解決的粗細約束：最小 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:320
-#: pcbnew/tools/board_inspection_tool.cpp:1161
+#: pcbnew/tools/board_inspection_tool.cpp:324
+#: pcbnew/tools/board_inspection_tool.cpp:1167
 msgid "Track width resolution for:"
 msgstr "佈線寬度解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:328
+#: pcbnew/tools/board_inspection_tool.cpp:332
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "已解決的寬度約束：最小 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:334
+#: pcbnew/tools/board_inspection_tool.cpp:338
 msgid "Connection Width"
 msgstr "連線寬度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:335
+#: pcbnew/tools/board_inspection_tool.cpp:339
 msgid "Connection width resolution for:"
 msgstr "下列專案的連線寬度解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:343
+#: pcbnew/tools/board_inspection_tool.cpp:347
 #, c-format
 msgid "Resolved min connection width constraint: %s."
 msgstr "已解析的最小連線寬度約束：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:349
-#: pcbnew/tools/board_inspection_tool.cpp:1180
+#: pcbnew/tools/board_inspection_tool.cpp:353
+#: pcbnew/tools/board_inspection_tool.cpp:1186
 msgid "Via diameter resolution for:"
 msgstr "過孔直徑解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:357
-#: pcbnew/tools/board_inspection_tool.cpp:388
+#: pcbnew/tools/board_inspection_tool.cpp:361
+#: pcbnew/tools/board_inspection_tool.cpp:392
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "已解決的直徑約束：最小 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:363
+#: pcbnew/tools/board_inspection_tool.cpp:367
 msgid "Via Annulus"
 msgstr "過孔環"
 
-#: pcbnew/tools/board_inspection_tool.cpp:364
-#: pcbnew/tools/board_inspection_tool.cpp:1197
+#: pcbnew/tools/board_inspection_tool.cpp:368
+#: pcbnew/tools/board_inspection_tool.cpp:1203
 msgid "Via annular width resolution for:"
 msgstr "過孔環形寬度解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:372
+#: pcbnew/tools/board_inspection_tool.cpp:376
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
 msgstr "已解決的環形寬度約束：最小 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:379
-#: pcbnew/tools/board_inspection_tool.cpp:1217
+#: pcbnew/tools/board_inspection_tool.cpp:383
+#: pcbnew/tools/board_inspection_tool.cpp:1223
 msgid "Hole Size"
 msgstr "通孔尺寸"
 
-#: pcbnew/tools/board_inspection_tool.cpp:380
-#: pcbnew/tools/board_inspection_tool.cpp:1218
+#: pcbnew/tools/board_inspection_tool.cpp:384
+#: pcbnew/tools/board_inspection_tool.cpp:1224
 msgid "Hole diameter resolution for:"
 msgstr "通孔環形寬度解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:394
+#: pcbnew/tools/board_inspection_tool.cpp:398
 msgid "Hole Clearance"
 msgstr "孔間隙"
 
-#: pcbnew/tools/board_inspection_tool.cpp:395
-#: pcbnew/tools/board_inspection_tool.cpp:940
+#: pcbnew/tools/board_inspection_tool.cpp:399
+#: pcbnew/tools/board_inspection_tool.cpp:945
 msgid "Hole clearance resolution for:"
 msgstr "孔間隙解像度，用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:403
-#: pcbnew/tools/board_inspection_tool.cpp:504
-#: pcbnew/tools/board_inspection_tool.cpp:765
+#: pcbnew/tools/board_inspection_tool.cpp:407
+#: pcbnew/tools/board_inspection_tool.cpp:508
+#: pcbnew/tools/board_inspection_tool.cpp:770
 msgid "Items belong to the same net. Clearance is 0."
 msgstr "專案屬於同一網路。間隙為 0。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:412
-#: pcbnew/tools/board_inspection_tool.cpp:432
-#: pcbnew/tools/board_inspection_tool.cpp:449
-#: pcbnew/tools/board_inspection_tool.cpp:464
-#: pcbnew/tools/board_inspection_tool.cpp:513
-#: pcbnew/tools/board_inspection_tool.cpp:533
-#: pcbnew/tools/board_inspection_tool.cpp:732
-#: pcbnew/tools/board_inspection_tool.cpp:746
-#: pcbnew/tools/board_inspection_tool.cpp:781
-#: pcbnew/tools/board_inspection_tool.cpp:881
-#: pcbnew/tools/board_inspection_tool.cpp:905
-#: pcbnew/tools/board_inspection_tool.cpp:949
-#: pcbnew/tools/board_inspection_tool.cpp:978
-#: pcbnew/tools/board_inspection_tool.cpp:1017
-#: pcbnew/tools/board_inspection_tool.cpp:1046
-#: pcbnew/tools/board_inspection_tool.cpp:1112
+#: pcbnew/tools/board_inspection_tool.cpp:416
+#: pcbnew/tools/board_inspection_tool.cpp:436
+#: pcbnew/tools/board_inspection_tool.cpp:453
+#: pcbnew/tools/board_inspection_tool.cpp:468
+#: pcbnew/tools/board_inspection_tool.cpp:517
+#: pcbnew/tools/board_inspection_tool.cpp:537
+#: pcbnew/tools/board_inspection_tool.cpp:737
+#: pcbnew/tools/board_inspection_tool.cpp:751
+#: pcbnew/tools/board_inspection_tool.cpp:786
+#: pcbnew/tools/board_inspection_tool.cpp:886
+#: pcbnew/tools/board_inspection_tool.cpp:910
+#: pcbnew/tools/board_inspection_tool.cpp:954
+#: pcbnew/tools/board_inspection_tool.cpp:983
+#: pcbnew/tools/board_inspection_tool.cpp:1022
+#: pcbnew/tools/board_inspection_tool.cpp:1051
+#: pcbnew/tools/board_inspection_tool.cpp:1117
 #, c-format
 msgid "Resolved clearance: %s."
 msgstr "已解析的間隙：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:418
-#: pcbnew/tools/board_inspection_tool.cpp:1095
+#: pcbnew/tools/board_inspection_tool.cpp:422
+#: pcbnew/tools/board_inspection_tool.cpp:1100
 msgid "Physical hole clearance resolution for:"
 msgstr "下列專案的物理孔間隙解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:427
-#: pcbnew/tools/board_inspection_tool.cpp:1107
+#: pcbnew/tools/board_inspection_tool.cpp:431
+#: pcbnew/tools/board_inspection_tool.cpp:1112
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "未定義 'physical_hole_clearance' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:438
+#: pcbnew/tools/board_inspection_tool.cpp:442
 msgid "Hole to Hole"
 msgstr "孔對孔"
 
-#: pcbnew/tools/board_inspection_tool.cpp:439
-#: pcbnew/tools/board_inspection_tool.cpp:969
+#: pcbnew/tools/board_inspection_tool.cpp:443
+#: pcbnew/tools/board_inspection_tool.cpp:974
 msgid "Hole to hole clearance resolution for:"
 msgstr "孔對孔間隙解像度，用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:453
+#: pcbnew/tools/board_inspection_tool.cpp:457
 msgid "Edge Clearance"
 msgstr "邊緣間隙"
 
-#: pcbnew/tools/board_inspection_tool.cpp:454
-#: pcbnew/tools/board_inspection_tool.cpp:1008
+#: pcbnew/tools/board_inspection_tool.cpp:458
+#: pcbnew/tools/board_inspection_tool.cpp:1013
 msgid "Edge clearance resolution for:"
 msgstr "邊緣間隙解析解像度，用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:496
-#: pcbnew/tools/board_inspection_tool.cpp:760
+#: pcbnew/tools/board_inspection_tool.cpp:500
+#: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Clearance resolution for:"
 msgstr "間隙解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:519
-#: pcbnew/tools/board_inspection_tool.cpp:1029
+#: pcbnew/tools/board_inspection_tool.cpp:523
+#: pcbnew/tools/board_inspection_tool.cpp:1034
 msgid "Physical clearance resolution for:"
 msgstr "下列專案的物理間隙解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:528
-#: pcbnew/tools/board_inspection_tool.cpp:1041
+#: pcbnew/tools/board_inspection_tool.cpp:532
+#: pcbnew/tools/board_inspection_tool.cpp:1046
 msgid "No 'physical_clearance' constraints defined."
 msgstr "未定義 'physical_clearance' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:556
+#: pcbnew/tools/board_inspection_tool.cpp:560
 msgid "Select two items for a clearance resolution report."
 msgstr "為間隙解決報告選擇兩個專案。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:571
-#: pcbnew/tools/board_inspection_tool.cpp:584
+#: pcbnew/tools/board_inspection_tool.cpp:575
+#: pcbnew/tools/board_inspection_tool.cpp:588
 msgid "Cannot generate clearance report on empty group."
 msgstr "無法為空分組生成間隙報告。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:597
+#: pcbnew/tools/board_inspection_tool.cpp:601
 msgid "Clearance Report"
 msgstr "間隙報告"
 
-#: pcbnew/tools/board_inspection_tool.cpp:637
+#: pcbnew/tools/board_inspection_tool.cpp:642
 msgid "Zone connection resolution for:"
 msgstr "敷銅連線解像度，用於："
 
-#: pcbnew/tools/board_inspection_tool.cpp:645
+#: pcbnew/tools/board_inspection_tool.cpp:650
 msgid "Thermal relief gap resolution for:"
 msgstr "下列專案的防散熱間距："
 
-#: pcbnew/tools/board_inspection_tool.cpp:654
+#: pcbnew/tools/board_inspection_tool.cpp:659
 #, c-format
 msgid "Resolved thermal relief gap: %s."
 msgstr "已解決的防散熱間隙：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:659
+#: pcbnew/tools/board_inspection_tool.cpp:664
 msgid "Spoke width resolution for:"
 msgstr "下列專案的輻條寬度解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:668
+#: pcbnew/tools/board_inspection_tool.cpp:673
 #, c-format
 msgid "Resolved thermal relief spoke width: %s."
 msgstr "已解析的防散熱輻條寬度：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:673
+#: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Spoke count resolution for:"
 msgstr "下列專案的輻條計數解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:682
+#: pcbnew/tools/board_inspection_tool.cpp:687
 #, c-format
 msgid "Resolved min thermal relief spoke count: %d."
 msgstr "已解析的最小輻條 (散熱) 輻條數目：%d。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:691
-#: pcbnew/tools/board_inspection_tool.cpp:739
+#: pcbnew/tools/board_inspection_tool.cpp:696
+#: pcbnew/tools/board_inspection_tool.cpp:744
 msgid "Zone clearance resolution for:"
 msgstr "下列專案的區域間隙解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:695
+#: pcbnew/tools/board_inspection_tool.cpp:700
 #, c-format
 msgid "Zone clearance: %s."
 msgstr "敷銅間隙：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:705
+#: pcbnew/tools/board_inspection_tool.cpp:710
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "被來自 %s 的較大物理間隙覆蓋；間隙：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:721
+#: pcbnew/tools/board_inspection_tool.cpp:726
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s;clearance: %s."
 msgstr "被來自 %s 的較大物理孔間隙覆蓋；間隙：%s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:800
+#: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "Diff Pair"
 msgstr "差分對"
 
-#: pcbnew/tools/board_inspection_tool.cpp:801
+#: pcbnew/tools/board_inspection_tool.cpp:806
 msgid "Diff pair gap resolution for:"
 msgstr "下列項的差分對間隙解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:806
+#: pcbnew/tools/board_inspection_tool.cpp:811
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "已解決的間距約束：最小 %s；最優 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:814
+#: pcbnew/tools/board_inspection_tool.cpp:819
 msgid "Diff pair max uncoupled length resolution for:"
 msgstr "下列項的差分對最大未耦合長度解析度："
 
-#: pcbnew/tools/board_inspection_tool.cpp:819
+#: pcbnew/tools/board_inspection_tool.cpp:824
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "未定義 'diff_pair_uncoupled' 約束。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:851
+#: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
 msgstr "注意：%s 完全被焊膏覆蓋； 間隙僅適用於過孔。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:868
+#: pcbnew/tools/board_inspection_tool.cpp:873
 msgid "Silkscreen clearance resolution for:"
 msgstr "絲印層間隙解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:896
+#: pcbnew/tools/board_inspection_tool.cpp:901
 msgid "Courtyard clearance resolution for:"
 msgstr "空間層間隙解像度，適用於："
 
-#: pcbnew/tools/board_inspection_tool.cpp:1024
+#: pcbnew/tools/board_inspection_tool.cpp:1029
 msgid "Physical Clearances"
 msgstr "物理間隙"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1134
+#: pcbnew/tools/board_inspection_tool.cpp:1139
 msgid "Select an item for a constraints resolution report."
 msgstr "選擇約束解析報告的項。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1141
+#: pcbnew/tools/board_inspection_tool.cpp:1146
 msgid "Constraints Report"
 msgstr "約束報告"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1169
+#: pcbnew/tools/board_inspection_tool.cpp:1175
 #, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
 msgstr "寬度約束：最小 %s；最優 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1189
-#: pcbnew/tools/board_inspection_tool.cpp:1227
+#: pcbnew/tools/board_inspection_tool.cpp:1195
+#: pcbnew/tools/board_inspection_tool.cpp:1233
 #, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
 msgstr "直徑約束：最小 %s；最優 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1196
+#: pcbnew/tools/board_inspection_tool.cpp:1202
 msgid "Via Annular Width"
 msgstr "過孔環形寬度"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1206
+#: pcbnew/tools/board_inspection_tool.cpp:1212
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
 msgstr "環形寬度約束：最小 %s；最優 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1248
+#: pcbnew/tools/board_inspection_tool.cpp:1254
 #, c-format
 msgid "Text height constraints: min %s; opt %s; max %s."
 msgstr "文字高度約束：最小 %s；最優 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1264
+#: pcbnew/tools/board_inspection_tool.cpp:1270
 #, c-format
 msgid "Text thickness constraints: min %s; opt %s; max %s."
 msgstr "文字粗細約束：最小 %s；最優 %s；最大 %s。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1272
+#: pcbnew/tools/board_inspection_tool.cpp:1278
 msgid "Keepouts"
 msgstr "禁止佈線"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1273
+#: pcbnew/tools/board_inspection_tool.cpp:1279
 msgid "Keepout resolution for:"
 msgstr "禁止區解析適用於:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1283
-#: pcbnew/tools/board_inspection_tool.cpp:1305
+#: pcbnew/tools/board_inspection_tool.cpp:1289
+#: pcbnew/tools/board_inspection_tool.cpp:1311
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr "報告可能不完整；某些封裝的外框不正確。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1284
-#: pcbnew/tools/board_inspection_tool.cpp:1306
+#: pcbnew/tools/board_inspection_tool.cpp:1290
+#: pcbnew/tools/board_inspection_tool.cpp:1312
 msgid "Run DRC for a full analysis."
 msgstr "執行 DRC 進行全面分析。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1290
+#: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Item <b>disallowed</b> at current location."
 msgstr "當前位置 <b>不允許</b> 的專案。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1292
+#: pcbnew/tools/board_inspection_tool.cpp:1298
 msgid "Item allowed at current location."
 msgstr "當前位置允許的專案。"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1296
+#: pcbnew/tools/board_inspection_tool.cpp:1302
 msgid "Assertions"
 msgstr "斷言"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1297
+#: pcbnew/tools/board_inspection_tool.cpp:1303
 msgid "Assertions for:"
 msgstr "斷言："
 
