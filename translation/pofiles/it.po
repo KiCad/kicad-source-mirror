@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-08 09:39-0800\n"
-"PO-Revision-Date: 2023-09-19 11:32+0200\n"
+"PO-Revision-Date: 2023-12-19 01:12+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -9891,9 +9891,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Eliminare stile corpo alternativo (De Morgan) dal simbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Il campo deve avere un nome."
+msgstr "Il simbolo deve avere un nome."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -13292,15 +13291,14 @@ msgstr ""
 "Salvare il documento corrente prima di procedere?"
 
 #: eeschema/files-io.cpp:597
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current project.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Questa operazione non può essere annullata.\n"
+"Questa rimpiazza i contenuti del progetto corrente.\n"
 "\n"
-"Salvare il documento corrente prima di procedere?"
+"Procedere ugualmente?"
 
 #: eeschema/files-io.cpp:634 pcbnew/files.cpp:178
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
@@ -18421,9 +18419,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Ripristinare '%s' (e tutti i sotto-fogli) all'ultima versione salvata?"
 
 #: eeschema/tools/sch_editor_control.cpp:335
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Aggiornare i simboli nello schema o nella nuova libreria?"
+msgstr "Includere i simboli di potenza nello schema nella libreria?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
 #, c-format
@@ -35632,9 +35629,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Fallito caricamento su '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile creare la cartella risultati\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -41485,6 +41481,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "Unable to read string, input is empty."
-#~ msgstr "Impossibile leggere una stringa, l'ingresso è vuoto."
