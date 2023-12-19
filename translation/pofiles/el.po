@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-11 23:54+0000\n"
+"PO-Revision-Date: 2023-12-20 13:33+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.3\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -4311,9 +4311,9 @@ msgid "Zoom %.2f"
 msgstr "Μεγέθυνση %.2f"
 
 #: common/eda_draw_frame.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Πεδίο %s"
+msgstr "πλέγμα %s"
 
 #: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -6698,9 +6698,8 @@ msgid "Min grid spacing:"
 msgstr "Ελάχιστη απόσταση πλέγματος:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Κόλλημα στο πλέγμα:"
+msgstr "Προσκόλληση στο πλέγμα:"
 
 #: common/widgets/gal_options_panel_base.cpp:76
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -32718,7 +32717,7 @@ msgstr "Έλεγχος %s μέγιστου αποδιαζευγμένου μήκ
 #: pcbnew/drc/drc_engine.cpp:893
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "Έλεγχος %s μέγιστη λοξότητα: %s."
+msgstr "Έλεγχος %s μέγιστης απόκλισης: %s."
 
 #: pcbnew/drc/drc_engine.cpp:899
 #, c-format
@@ -33111,7 +33110,7 @@ msgstr "Μήκος ίσχνους εκτός έυρους"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Skew between traces out of range"
-msgstr "Απόκλιση ανάμεσα σε δρόμους εκτός εμβέλειας"
+msgstr "Απόκλιση ανάμεσα σε διαδρόμους εκτός εμβέλειας"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Too many vias on a connection"
@@ -33744,9 +33743,9 @@ msgid "Determining PCB data\n"
 msgstr "Καθορίζονται τα δεδομένα του PCB\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Πάχος πλακέτας από τη στοίβαξη:"
+msgstr "Πάχος πλακέτας από τη στοίβαξη: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:356
 msgid "Build STEP data\n"
@@ -35746,14 +35745,13 @@ msgid "Error creating svg file"
 msgstr "Σφάλμα δημιουργίας αρχείου svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:360 pcbnew/pcbnew_jobs_handler.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Αποτυχία φόρτωσης '%s'."
+msgstr "Αποτυχία σχεδιογράφησης σε '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "αδυναμία δημιουργίας φακέλου προσωρινής αποθήκευσης 3Δ"
+msgstr "Αδυναμία δημιουργίας φακέλου εξαγωγής\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -36920,23 +36918,21 @@ msgstr ""
 "θέση: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Ο παλαιός τρόπος γεμίσματος ζωνών δεν υποστηρίζεται πλέον.\n"
-"Μετατροπή ζωνών σε πολυγωνικά γεμίσματα;"
+"Τα γεμίσματα ζώνης θα μετατραπούν με βάση την καλύτερη δυνατή προσπάθεια."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "Ο παλαιός τρόπος γεμίσματος περιοχών δεν υποστηρίζεται πλέον.\n"
-"Μετατροπή ζωνών σε πολυγωνικά γεμίσματα;"
+"Τα γεμίσματα ζώνης θα μετατραπούν με βάση την καλύτερη δυνατή προσπάθεια."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -40338,7 +40334,7 @@ msgstr "Ρύθμιση ακριβείας για το μήκος ενός δια
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "Ρύθμιση απόκλισης διαφορικού ζευγαριού"
+msgstr "Ρύθμιση απόκλισης διαφορικού ζεύγους"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
