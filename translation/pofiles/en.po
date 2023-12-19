@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 09:49-0800\n"
+"POT-Creation-Date: 2023-12-19 08:33-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2608,6 +2608,30 @@ msgstr "Reset to Mouse Defaults"
 msgid "Reset to Trackpad Defaults"
 msgstr "Reset to Trackpad Defaults"
 
+msgid "General"
+msgstr "General"
+
+msgid "Check for KiCad updates on startup"
+msgstr "Check for KiCad updates on startup"
+
+msgid "Plugin and Content Manager"
+msgstr "Plugin and Content Manager"
+
+msgid "Check for package updates on startup"
+msgstr "Check for package updates on startup"
+
+msgid "Library package handling"
+msgstr "Library package handling"
+
+msgid "Automatically add installed libraries to global library table"
+msgstr "Automatically add installed libraries to global library table"
+
+msgid "Automatically remove uninstalled libraries"
+msgstr "Automatically remove uninstalled libraries"
+
+msgid "Library nickname prefix:"
+msgstr "Library nickname prefix:"
+
 msgid "Solid"
 msgstr "Solid"
 
@@ -2967,9 +2991,6 @@ msgstr "PCB Editor"
 msgid "Action Plugins"
 msgstr "Action Plugins"
 
-msgid "General"
-msgstr "General"
-
 msgid "Realtime Renderer"
 msgstr "Realtime Renderer"
 
@@ -2985,8 +3006,8 @@ msgstr "Excellon Options"
 msgid "Drawing Sheet Editor"
 msgstr "Drawing Sheet Editor"
 
-msgid "Plugin and Content Manager"
-msgstr "Plugin and Content Manager"
+msgid "Packages and Updates"
+msgstr "Packages and Updates"
 
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
@@ -4478,8 +4499,8 @@ msgstr "Interactive Delete Tool"
 msgid "Delete clicked items"
 msgstr "Delete clicked items"
 
-msgid "Cycle arc editing mode"
-msgstr "Cycle arc editing mode"
+msgid "Cycle Arc Editing Mode"
+msgstr "Cycle Arc Editing Mode"
 
 msgid "Switch to a different method of editing arcs"
 msgstr "Switch to a different method of editing arcs"
@@ -5041,8 +5062,8 @@ msgstr "Small crosses"
 msgid "Grid thickness:"
 msgstr "Grid thickness:"
 
-msgid "Min grid spacing:"
-msgstr "Min grid spacing:"
+msgid "Minimum grid spacing:"
+msgstr "Minimum grid spacing:"
 
 msgid "Snap to grid:"
 msgstr "Snap to grid:"
@@ -6592,8 +6613,8 @@ msgstr "Show field name"
 msgid "Show the field name in addtion to its value"
 msgstr "Show the field name in addtion to its value"
 
-msgid "Allow autoplacement"
-msgstr "Allow autoplacement"
+msgid "Allow automatic placement"
+msgstr "Allow automatic placement"
 
 msgid "Allow automatic placement of this field in the schematic"
 msgstr "Allow automatic placement of this field in the schematic"
@@ -7137,8 +7158,8 @@ msgstr ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 
-msgid "Number of Units:"
-msgstr "Number of Units:"
+msgid "Number of units:"
+msgstr "Number of units:"
 
 msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
@@ -8865,8 +8886,8 @@ msgstr "Highlight cross-probed nets"
 msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Highlight nets when they are highlighted in the PCB editor"
 
-msgid "Line Drawing Mode:"
-msgstr "Line Drawing Mode:"
+msgid "Line drawing mode:"
+msgstr "Line drawing mode:"
 
 msgid "Free Angle"
 msgstr "Free Angle"
@@ -9214,10 +9235,10 @@ msgstr "&Default line width:"
 
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
-"from Schematic"
+"from schematic"
 msgstr ""
 "Set to 0 to allow symbols to inherit line width properties\n"
-"from Schematic"
+"from schematic"
 
 msgid "D&efault pin length:"
 msgstr "D&efault pin length:"
@@ -10658,8 +10679,8 @@ msgstr "Highlighted net: %s"
 msgid "Save Symbol to Schematic"
 msgstr "Save Symbol to Schematic"
 
-msgid "Diff Symbol with Library"
-msgstr "Diff Symbol with Library"
+msgid "Compare Symbol with Library"
+msgstr "Compare Symbol with Library"
 
 #, c-format
 msgid "Go to Page %s (%s)"
@@ -13509,8 +13530,8 @@ msgstr "New Symbol..."
 msgid "Create a new symbol"
 msgstr "Create a new symbol"
 
-msgid "Derive from existing symbol"
-msgstr "Derive from existing symbol"
+msgid "Derive from Existing Symbol"
+msgstr "Derive from Existing Symbol"
 
 msgid "Create a new symbol, derived from an existing symbol"
 msgstr "Create a new symbol, derived from an existing symbol"
@@ -13980,65 +14001,74 @@ msgstr "Edit with Symbol Editor"
 msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Open the selected symbol in the Symbol Editor"
 
+msgid "Exclude from Bill of Materials"
+msgstr "Exclude from Bill of Materials"
+
 msgid "Set the exclude from bill of materials attribute"
 msgstr "Set the exclude from bill of materials attribute"
 
-msgid "Include in bill of materials"
-msgstr "Include in bill of materials"
+msgid "Include in Bill of Materials"
+msgstr "Include in Bill of Materials"
 
 msgid "Clear the exclude from bill of materials attribute"
 msgstr "Clear the exclude from bill of materials attribute"
 
-msgid "Toggle Exclude from BOM"
-msgstr "Toggle Exclude from BOM"
+msgid "Toggle Exclude from Bill of Materials"
+msgstr "Toggle Exclude from Bill of Materials"
 
 msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Toggle the exclude from bill of materials attribute"
 
+msgid "Exclude from Simulation"
+msgstr "Exclude from Simulation"
+
 msgid "Set the exclude from simulation attribute"
 msgstr "Set the exclude from simulation attribute"
 
-msgid "Include in simulation"
-msgstr "Include in simulation"
+msgid "Include in Simulation"
+msgstr "Include in Simulation"
 
 msgid "Clear the exclude from simulation attribute"
 msgstr "Clear the exclude from simulation attribute"
 
-msgid "Toggle Exclude from simulation"
-msgstr "Toggle Exclude from simulation"
+msgid "Toggle Exclude from Simulation"
+msgstr "Toggle Exclude from Simulation"
 
 msgid "Toggle the exclude from simulation attribute"
 msgstr "Toggle the exclude from simulation attribute"
 
+msgid "Exclude from Board"
+msgstr "Exclude from Board"
+
 msgid "Set the exclude from board attribute"
 msgstr "Set the exclude from board attribute"
 
-msgid "Include on board"
-msgstr "Include on board"
+msgid "Include on Board"
+msgstr "Include on Board"
 
 msgid "Clear the exclude from board attribute"
 msgstr "Clear the exclude from board attribute"
 
-msgid "Toggle Exclude from board"
-msgstr "Toggle Exclude from board"
+msgid "Toggle Exclude from Board"
+msgstr "Toggle Exclude from Board"
 
 msgid "Toggle the exclude from board attribute"
 msgstr "Toggle the exclude from board attribute"
 
-msgid "Set do not populate"
-msgstr "Set do not populate"
+msgid "Set Do Not Populate"
+msgstr "Set Do Not Populate"
 
 msgid "Set the do not populate attribute"
 msgstr "Set the do not populate attribute"
 
-msgid "Unset do not populate"
-msgstr "Unset do not populate"
+msgid "Unset Do Not Populate"
+msgstr "Unset Do Not Populate"
 
 msgid "Clear the do not populate attribute"
 msgstr "Clear the do not populate attribute"
 
-msgid "Toggle do not populate"
-msgstr "Toggle do not populate"
+msgid "Toggle Do Not Populate"
+msgstr "Toggle Do Not Populate"
 
 msgid "Toggle the do not populate attribute"
 msgstr "Toggle the do not populate attribute"
@@ -14124,19 +14154,29 @@ msgstr "Export Netlist..."
 msgid "Export file containing netlist in one of several formats"
 msgstr "Export file containing netlist in one of several formats"
 
-msgid "Generate BOM..."
-msgstr "Generate BOM..."
+msgid "Generate Bill of Materials..."
+msgstr "Generate Bill of Materials..."
 
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Generate a bill of materials for the current schematic"
 
-msgid "Generate BOM (Legacy)..."
-msgstr "Generate BOM (Legacy)..."
+msgid "Generate Legacy Bill of Materials..."
+msgstr "Generate Legacy Bill of Materials..."
 
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
 msgstr ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
+
+msgid "Generate Bill of Materials (External)..."
+msgstr "Generate Bill of Materials (External)..."
+
+msgid ""
+"Generate a bill of materials for the current schematic using external "
+"generator"
+msgstr ""
+"Generate a bill of materials for the current schematic using external "
+"generator"
 
 msgid "Export Symbols to Library..."
 msgstr "Export Symbols to Library..."
@@ -14799,14 +14839,14 @@ msgstr "Clear layer %d?"
 msgid "Active layer name:"
 msgstr "Active layer name:"
 
-msgid "Offset X"
-msgstr "Offset X"
+msgid "Offset X:"
+msgstr "Offset X:"
 
-msgid "Offset Y"
-msgstr "Offset Y"
+msgid "Offset Y:"
+msgstr "Offset Y:"
 
-msgid "Rotation CCW"
-msgstr "Rotation CCW"
+msgid "Rotate counterclockwise:"
+msgstr "Rotate counterclockwise:"
 
 msgid "Active layer"
 msgstr "Active layer"
@@ -14986,8 +15026,8 @@ msgstr "File Format"
 msgid "These parameters are usually specified in files, but not always."
 msgstr "These parameters are usually specified in files, but not always."
 
-msgid "File units"
-msgstr "File units"
+msgid "File Units"
+msgstr "File Units"
 
 msgid "No leading zeros (TZ format)"
 msgstr "No leading zeros (TZ format)"
@@ -14995,8 +15035,8 @@ msgstr "No leading zeros (TZ format)"
 msgid "No trailing zeros (LZ format)"
 msgstr "No trailing zeros (LZ format)"
 
-msgid "Zero format"
-msgstr "Zero format"
+msgid "Zero Format"
+msgstr "Zero Format"
 
 msgid ""
 "Integers in files can have their zeros stripped.\n"
@@ -15735,8 +15775,8 @@ msgstr ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 
-msgid "Return a exit code depending on whether or not violations exist"
-msgstr "Return a exit code depending on whether or not violations exist"
+msgid "Return a nonzero exit code if DRC violations exist"
+msgstr "Return a nonzero exit code if DRC violations exist"
 
 msgid "Invalid units specified\n"
 msgstr "Invalid units specified\n"
@@ -15792,17 +15832,15 @@ msgstr ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
 
-msgid ""
-"Output units; ascii or csv format only; valid options: mm, m, in, tenths"
-msgstr ""
-"Output units; ascii or csv format only; valid options: mm, m, in, tenths"
+msgid "Output units; valid options: mm, m, in, tenths"
+msgstr "Output units; valid options: mm, m, in, tenths"
 
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
-"the models will be embedded in main exported vrml file"
+"the models will be embedded in main exported VRML file"
 msgstr ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
-"the models will be embedded in main exported vrml file"
+"the models will be embedded in main exported VRML file"
 
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr "Used with --models-dir to output relative paths in the resulting file"
@@ -16052,17 +16090,20 @@ msgstr ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 
+msgid "Return a nonzero exit code if ERC violations exist"
+msgstr "Return a nonzero exit code if ERC violations exist"
+
 msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr "Export utilities (netlist, pdf, bom, etc)"
 
-msgid "Generate a Bill of Material (BOM)"
-msgstr "Generate a Bill of Material (BOM)"
+msgid "Generate a Bill of Materials (BOM)"
+msgstr "Generate a Bill of Materials (BOM)"
 
 msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Schematic file does not exist or is not accessible\n"
 
-msgid "Export a Netlist"
-msgstr "Export a Netlist"
+msgid "Export a netlist"
+msgstr "Export a netlist"
 
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
@@ -16097,10 +16138,10 @@ msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr "HPGL origin option must be 0, 1, 2 or 3\n"
 
 msgid ""
-"Export the legacy bom xml format used in the schematic editor with python "
+"Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 msgstr ""
-"Export the legacy bom xml format used in the schematic editor with python "
+"Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 
 msgid "Symbol and Symbol Libraries"
@@ -16153,6 +16194,36 @@ msgstr "Project Template Title"
 
 msgid "Project Template Selector"
 msgstr "Project Template Selector"
+
+msgid "Would you like to automatically check for updates on startup?"
+msgstr "Would you like to automatically check for updates on startup?"
+
+msgid "KiCad"
+msgstr "KiCad"
+
+msgid "Check for Updates"
+msgstr "Check for Updates"
+
+#, c-format
+msgid ""
+"KiCad %s is now available (you have %s). Would you like to download it now?"
+msgstr ""
+"KiCad %s is now available (you have %s). Would you like to download it now?"
+
+msgid "A new version of KiCad is available!"
+msgstr "A new version of KiCad is available!"
+
+msgid "Skip this version"
+msgstr "Skip this version"
+
+msgid "Remind me later"
+msgstr "Remind me later"
+
+msgid "Open Downloads Page"
+msgstr "Open Downloads Page"
+
+msgid "Update Available"
+msgstr "Update Available"
 
 msgid "Edit the project schematic"
 msgstr "Edit the project schematic"
@@ -16316,12 +16387,6 @@ msgstr "Restoring session"
 #, c-format
 msgid "Restoring '%s'"
 msgstr "Restoring '%s'"
-
-msgid "Would you like to automatically check for plugin updates on startup?"
-msgstr "Would you like to automatically check for plugin updates on startup?"
-
-msgid "Check for updates"
-msgstr "Check for updates"
 
 msgid "Clear Recent Projects"
 msgstr "Clear Recent Projects"
@@ -16595,21 +16660,6 @@ msgstr "Show all versions"
 
 msgid "Download"
 msgstr "Download"
-
-msgid "Check for package updates on startup"
-msgstr "Check for package updates on startup"
-
-msgid "Library package handling"
-msgstr "Library package handling"
-
-msgid "Automatically add installed libraries to global lib table"
-msgstr "Automatically add installed libraries to global lib table"
-
-msgid "Automatically remove uninstalled libraries"
-msgstr "Automatically remove uninstalled libraries"
-
-msgid "Library nickname prefix:"
-msgstr "Library nickname prefix:"
 
 #, c-format
 msgid "schema file '%s' not found"
@@ -17190,6 +17240,16 @@ msgstr "Application failed to load:\n"
 msgid "Application cannot start."
 msgstr "Application cannot start."
 
+msgid "Update Check"
+msgstr "Update Check"
+
+msgid "Requesting update info"
+msgstr "Requesting update info"
+
+#, c-format
+msgid "Unable to parse update response: %s"
+msgstr "Unable to parse update response: %s"
+
 msgid "Create a new folder for the project"
 msgstr "Create a new folder for the project"
 
@@ -17282,14 +17342,14 @@ msgstr "Text width:"
 msgid "Text height:"
 msgstr "Text height:"
 
-msgid "Max width:"
-msgstr "Max width:"
+msgid "Maximum width:"
+msgstr "Maximum width:"
 
 msgid "Set to 0 to disable this constraint"
 msgstr "Set to 0 to disable this constraint"
 
-msgid "Max height:"
-msgstr "Max height:"
+msgid "Maximum height:"
+msgstr "Maximum height:"
 
 msgid "Set to 0 to use default values"
 msgstr "Set to 0 to use default values"
@@ -17484,8 +17544,8 @@ msgstr "Page Preview Settings..."
 msgid "Edit preview data for page size and title block"
 msgstr "Edit preview data for page size and title block"
 
-msgid "Show title block in preview mode"
-msgstr "Show title block in preview mode"
+msgid "Show Title Block in Preview Mode"
+msgstr "Show Title Block in Preview Mode"
 
 msgid ""
 "Show title block in preview mode:\n"
@@ -17494,8 +17554,8 @@ msgstr ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 
-msgid "Show title block in edit mode"
-msgstr "Show title block in edit mode"
+msgid "Show Title Block in Edit Mode"
+msgstr "Show Title Block in Edit Mode"
 
 msgid ""
 "Show title block in edit mode:\n"
@@ -17623,17 +17683,17 @@ msgstr "Class 6"
 msgid "Lines width"
 msgstr "Lines width"
 
-msgid "Min clearance"
-msgstr "Min clearance"
+msgid "Minimum clearance"
+msgstr "Minimum clearance"
 
-msgid "Via: (diam - drill)"
-msgstr "Via: (diam - drill)"
+msgid "Via: (diameter - drill)"
+msgstr "Via: (diameter - drill)"
 
-msgid "Plated Pad: (diam - drill)"
-msgstr "Plated Pad: (diam - drill)"
+msgid "Plated Pad: (diameter - drill)"
+msgstr "Plated Pad: (diameter - drill)"
 
-msgid "NP Pad: (diam - drill)"
-msgstr "NP Pad: (diam - drill)"
+msgid "NP Pad: (diameter - drill)"
+msgstr "NP Pad: (diameter - drill)"
 
 msgid "AWG0000"
 msgstr "AWG0000"
@@ -20303,8 +20363,8 @@ msgstr "Fix discontinuities in board outlines"
 msgid "Tolerance:"
 msgstr "Tolerance:"
 
-msgid "Changes To Be Applied:"
-msgstr "Changes To Be Applied:"
+msgid "Changes to be applied:"
+msgstr "Changes to be applied:"
 
 msgid "Cleanup Graphics"
 msgstr "Cleanup Graphics"
@@ -20407,8 +20467,8 @@ msgstr ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
 
-msgid "Hide auto-generated net names"
-msgstr "Hide auto-generated net names"
+msgid "Hide automatically generated net names"
+msgstr "Hide automatically generated net names"
 
 msgid "Sort nets by pad count"
 msgstr "Sort nets by pad count"
@@ -20632,14 +20692,14 @@ msgstr "Items Spacing"
 msgid "Horizontal spacing:"
 msgstr "Horizontal spacing:"
 
-msgid "Distance between rows"
-msgstr "Distance between rows"
+msgid "Distance between columns"
+msgstr "Distance between columns"
 
 msgid "Vertical spacing:"
 msgstr "Vertical spacing:"
 
-msgid "Distance between columns"
-msgstr "Distance between columns"
+msgid "Distance between rows"
+msgstr "Distance between rows"
 
 msgid "Grid Spacing Modifiers"
 msgstr "Grid Spacing Modifiers"
@@ -21045,8 +21105,8 @@ msgstr "Run Inspect > Clearance Resolution"
 msgid "Run Inspect > Constraints Resolution"
 msgstr "Run Inspect > Constraints Resolution"
 
-msgid "Run Inspect > Diff Footprint with Library"
-msgstr "Run Inspect > Diff Footprint with Library"
+msgid "Run Inspect > Compare Footprint with Library"
+msgstr "Run Inspect > Compare Footprint with Library"
 
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr "Violation severities can also be edited in the Board Setup... dialog"
@@ -21234,8 +21294,8 @@ msgstr "The number of values following the decimal separator"
 msgid "Version:"
 msgstr "Version:"
 
-msgid "Compress Output"
-msgstr "Compress Output"
+msgid "Compress output"
+msgstr "Compress output"
 
 msgid "Compress output into 'zip' file"
 msgstr "Compress output into 'zip' file"
@@ -21546,8 +21606,8 @@ msgstr "*.wrl"
 msgid "Footprint 3D model path:"
 msgstr "Footprint 3D model path:"
 
-msgid "Coordinate origin options:"
-msgstr "Coordinate origin options:"
+msgid "Coordinate Origin Options"
+msgstr "Coordinate Origin Options"
 
 msgid "User defined origin:"
 msgstr "User defined origin:"
@@ -21557,9 +21617,6 @@ msgstr "meter"
 
 msgid "0.1 Inch"
 msgstr "0.1 Inch"
-
-msgid "VRML Units for Output Files"
-msgstr "VRML Units for Output Files"
 
 msgid "Copy 3D model files to 3D model path"
 msgstr "Copy 3D model files to 3D model path"
@@ -22409,8 +22466,8 @@ msgstr "(as a percentage of pad/via size)"
 msgid "Best length:"
 msgstr "Best length:"
 
-msgid "Max length:"
-msgstr "Max length:"
+msgid "Maximum length:"
+msgstr "Maximum length:"
 
 msgid "Best height:"
 msgstr "Best height:"
@@ -23201,14 +23258,14 @@ msgstr "Teardrop Shape"
 msgid "Best length (L):"
 msgstr "Best length (L):"
 
-msgid "Max length (L):"
-msgstr "Max length (L):"
+msgid "Maximum length (L):"
+msgstr "Maximum length (L):"
 
 msgid "Best width (W):"
 msgstr "Best width (W):"
 
-msgid "Max width (W):"
-msgstr "Max width (W):"
+msgid "Maximum width (W):"
+msgstr "Maximum width (W):"
 
 msgid "Pad connection:"
 msgstr "Pad connection:"
@@ -23750,12 +23807,6 @@ msgstr "Reset to the current distance from the reference position."
 msgid "Reset to the current angle from the reference position."
 msgstr "Reset to the current angle from the reference position."
 
-msgid "Offset X:"
-msgstr "Offset X:"
-
-msgid "Offset Y:"
-msgstr "Offset Y:"
-
 msgid "Reset to the current X offset from the reference position."
 msgstr "Reset to the current X offset from the reference position."
 
@@ -24093,9 +24144,6 @@ msgstr "Use net class / custom rule widths"
 msgid "Pre-defined sizes:"
 msgstr "Pre-defined sizes:"
 
-msgid "Pos X:"
-msgstr "Pos X:"
-
 msgid "Use net class / custom rule sizes"
 msgstr "Use net class / custom rule sizes"
 
@@ -24160,8 +24208,11 @@ msgstr "Override custom rules"
 msgid "(from 'rule name')"
 msgstr "(from 'rule name')"
 
-msgid "Amplitude (A) min:"
-msgstr "Amplitude (A) min:"
+msgid "Minimum amplitude (A):"
+msgstr "Minimum amplitude (A):"
+
+msgid "Maximum amplitude (A):"
+msgstr "Maximum amplitude (A):"
 
 msgid "Spacing (s):"
 msgstr "Spacing (s):"
@@ -24255,8 +24306,8 @@ msgstr "Drag (45 degree mode)"
 msgid "Drag (free angle)"
 msgstr "Drag (free angle)"
 
-msgid "Flip board items L/R (default is T/B)"
-msgstr "Flip board items L/R (default is T/B)"
+msgid "Flip board items left/right (default is top/bottom)"
+msgstr "Flip board items left/right (default is top/bottom)"
 
 msgid "Allow free pads"
 msgstr "Allow free pads"
@@ -24320,8 +24371,8 @@ msgstr "Draw an outline to show the sheet size."
 msgid "Show courtyard collisions when moving/dragging"
 msgstr "Show courtyard collisions when moving/dragging"
 
-msgid "Auto-refill zones"
-msgstr "Auto-refill zones"
+msgid "Automatically refill zones"
+msgstr "Automatically refill zones"
 
 msgid "If checked, zones will be re-filled after each edit operation"
 msgstr "If checked, zones will be re-filled after each edit operation"
@@ -24506,8 +24557,8 @@ msgstr ""
 msgid "Icon"
 msgstr "Icon"
 
-msgid "Show button"
-msgstr "Show button"
+msgid "Show Button"
+msgstr "Show Button"
 
 msgid "Category"
 msgstr "Category"
@@ -24706,8 +24757,8 @@ msgstr "Minimum text thickness:"
 msgid "Arc/circle approximated by segments"
 msgstr "Arc/circle approximated by segments"
 
-msgid "Max allowed deviation:"
-msgstr "Max allowed deviation:"
+msgid "Maximum allowed deviation:"
+msgstr "Maximum allowed deviation:"
 
 msgid ""
 "This is the maximum distance between a circle and the polygonal shape that "
@@ -24737,8 +24788,8 @@ msgstr "Zone fill strategy"
 msgid "Allow fillets outside zone outline"
 msgstr "Allow fillets outside zone outline"
 
-msgid "Min thermal relief spoke count:"
-msgstr "Min thermal relief spoke count:"
+msgid "Minimum thermal relief spoke count:"
+msgstr "Minimum thermal relief spoke count:"
 
 msgid "Length tuning"
 msgstr "Length tuning"
@@ -26097,9 +26148,6 @@ msgstr "Curved"
 msgid "Curve points:"
 msgstr "Curve points:"
 
-msgid "Max track width:"
-msgstr "Max track width:"
-
 msgid "Allow teardrop to span two track segments"
 msgstr "Allow teardrop to span two track segments"
 
@@ -26109,8 +26157,15 @@ msgstr "Default properties for rectangular shapes:"
 msgid "Properties for track-to-track teardrops:"
 msgstr "Properties for track-to-track teardrops:"
 
-msgid "Max track width"
-msgstr "Max track width"
+msgid "Maximum track width"
+msgstr "Maximum track width"
+
+msgid ""
+"Max track width ratio to create a teardrop.\n"
+"100 always creates a teardrop."
+msgstr ""
+"Max track width ratio to create a teardrop.\n"
+"100 always creates a teardrop."
 
 msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Tracks which are similar in size do not need teardrops."
@@ -28754,8 +28809,8 @@ msgstr "Clearance Report"
 msgid "Constraints Report"
 msgstr "Constraints Report"
 
-msgid "Diff Footprint with Library"
-msgstr "Diff Footprint with Library"
+msgid "Compare Footprint with Library"
+msgstr "Compare Footprint with Library"
 
 msgid "User Field"
 msgstr "User Field"
@@ -31305,6 +31360,12 @@ msgstr "Group is in inconsistent state:"
 msgid "Click on new member..."
 msgstr "Click on new member..."
 
+msgid "Group Items"
+msgstr "Group Items"
+
+msgid "Ungroup Items"
+msgstr "Ungroup Items"
+
 msgid "Unable to fillet the selected lines."
 msgstr "Unable to fillet the selected lines."
 
@@ -31571,20 +31632,20 @@ msgstr "Switch Arc Posture"
 msgid "Switch the arc posture"
 msgstr "Switch the arc posture"
 
-msgid "Snap to objects on the active layer only"
-msgstr "Snap to objects on the active layer only"
+msgid "Snap to Objects on the Active Layer Only"
+msgstr "Snap to Objects on the Active Layer Only"
 
 msgid "Enables snapping to objects on the active layer only"
 msgstr "Enables snapping to objects on the active layer only"
 
-msgid "Snap to objects on all layers"
-msgstr "Snap to objects on all layers"
+msgid "Snap to Objects on All Layers"
+msgstr "Snap to Objects on All Layers"
 
 msgid "Enables snapping to objects on all visible layers"
 msgstr "Enables snapping to objects on all visible layers"
 
-msgid "Toggle snapping between active and all layers"
-msgstr "Toggle snapping between active and all layers"
+msgid "Toggle Snapping Between Active and All Layers"
+msgstr "Toggle Snapping Between Active and All Layers"
 
 msgid "Toggles between snapping on all visible layers and only the active area"
 msgstr ""
@@ -32028,8 +32089,8 @@ msgstr "IPC-D-356 Netlist File…"
 msgid "Generate IPC-D-356 netlist file"
 msgstr "Generate IPC-D-356 netlist file"
 
-msgid "BOM..."
-msgstr "BOM..."
+msgid "Bill of Materials..."
+msgstr "Bill of Materials..."
 
 msgid "Create bill of materials from board"
 msgstr "Create bill of materials from board"
@@ -32104,9 +32165,6 @@ msgstr "Allow items to be moved and/or resized on the canvas"
 
 msgid "Group the selected items so that they are treated as a single item"
 msgstr "Group the selected items so that they are treated as a single item"
-
-msgid "Ungroup"
-msgstr "Ungroup"
 
 msgid "Ungroup any selected groups"
 msgstr "Ungroup any selected groups"
@@ -32240,6 +32298,9 @@ msgstr "Sketch Text Items"
 msgid "Show footprint texts in line mode"
 msgstr "Show footprint texts in line mode"
 
+msgid "Show Pad Numbers"
+msgstr "Show Pad Numbers"
+
 msgid "Draw Zone Fills"
 msgstr "Draw Zone Fills"
 
@@ -32267,95 +32328,188 @@ msgstr "Cycle between showing zone fills and just their outlines"
 msgid "Switch to Component (F.Cu) layer"
 msgstr "Switch to Component (F.Cu) layer"
 
+msgid "Switch to Inner Layer 1"
+msgstr "Switch to Inner Layer 1"
+
 msgid "Switch to Inner layer 1"
 msgstr "Switch to Inner layer 1"
+
+msgid "Switch to Inner Layer 2"
+msgstr "Switch to Inner Layer 2"
 
 msgid "Switch to Inner layer 2"
 msgstr "Switch to Inner layer 2"
 
+msgid "Switch to Inner Layer 3"
+msgstr "Switch to Inner Layer 3"
+
 msgid "Switch to Inner layer 3"
 msgstr "Switch to Inner layer 3"
+
+msgid "Switch to Inner Layer 4"
+msgstr "Switch to Inner Layer 4"
 
 msgid "Switch to Inner layer 4"
 msgstr "Switch to Inner layer 4"
 
+msgid "Switch to Inner Layer 5"
+msgstr "Switch to Inner Layer 5"
+
 msgid "Switch to Inner layer 5"
 msgstr "Switch to Inner layer 5"
+
+msgid "Switch to Inner Layer 6"
+msgstr "Switch to Inner Layer 6"
 
 msgid "Switch to Inner layer 6"
 msgstr "Switch to Inner layer 6"
 
+msgid "Switch to Inner Layer 7"
+msgstr "Switch to Inner Layer 7"
+
 msgid "Switch to Inner layer 7"
 msgstr "Switch to Inner layer 7"
+
+msgid "Switch to Inner Layer 8"
+msgstr "Switch to Inner Layer 8"
 
 msgid "Switch to Inner layer 8"
 msgstr "Switch to Inner layer 8"
 
+msgid "Switch to Inner Layer 9"
+msgstr "Switch to Inner Layer 9"
+
 msgid "Switch to Inner layer 9"
 msgstr "Switch to Inner layer 9"
+
+msgid "Switch to Inner Layer 10"
+msgstr "Switch to Inner Layer 10"
 
 msgid "Switch to Inner layer 10"
 msgstr "Switch to Inner layer 10"
 
+msgid "Switch to Inner Layer 11"
+msgstr "Switch to Inner Layer 11"
+
 msgid "Switch to Inner layer 11"
 msgstr "Switch to Inner layer 11"
+
+msgid "Switch to Inner Layer 12"
+msgstr "Switch to Inner Layer 12"
 
 msgid "Switch to Inner layer 12"
 msgstr "Switch to Inner layer 12"
 
+msgid "Switch to Inner Layer 13"
+msgstr "Switch to Inner Layer 13"
+
 msgid "Switch to Inner layer 13"
 msgstr "Switch to Inner layer 13"
+
+msgid "Switch to Inner Layer 14"
+msgstr "Switch to Inner Layer 14"
 
 msgid "Switch to Inner layer 14"
 msgstr "Switch to Inner layer 14"
 
+msgid "Switch to Inner Layer 15"
+msgstr "Switch to Inner Layer 15"
+
 msgid "Switch to Inner layer 15"
 msgstr "Switch to Inner layer 15"
+
+msgid "Switch to Inner Layer 16"
+msgstr "Switch to Inner Layer 16"
 
 msgid "Switch to Inner layer 16"
 msgstr "Switch to Inner layer 16"
 
+msgid "Switch to Inner Layer 17"
+msgstr "Switch to Inner Layer 17"
+
 msgid "Switch to Inner layer 17"
 msgstr "Switch to Inner layer 17"
+
+msgid "Switch to Inner Layer 18"
+msgstr "Switch to Inner Layer 18"
 
 msgid "Switch to Inner layer 18"
 msgstr "Switch to Inner layer 18"
 
+msgid "Switch to Inner Layer 19"
+msgstr "Switch to Inner Layer 19"
+
 msgid "Switch to Inner layer 19"
 msgstr "Switch to Inner layer 19"
+
+msgid "Switch to Inner Layer 20"
+msgstr "Switch to Inner Layer 20"
 
 msgid "Switch to Inner layer 20"
 msgstr "Switch to Inner layer 20"
 
+msgid "Switch to Inner Layer 21"
+msgstr "Switch to Inner Layer 21"
+
 msgid "Switch to Inner layer 21"
 msgstr "Switch to Inner layer 21"
+
+msgid "Switch to Inner Layer 22"
+msgstr "Switch to Inner Layer 22"
 
 msgid "Switch to Inner layer 22"
 msgstr "Switch to Inner layer 22"
 
+msgid "Switch to Inner Layer 23"
+msgstr "Switch to Inner Layer 23"
+
 msgid "Switch to Inner layer 23"
 msgstr "Switch to Inner layer 23"
+
+msgid "Switch to Inner Layer 24"
+msgstr "Switch to Inner Layer 24"
 
 msgid "Switch to Inner layer 24"
 msgstr "Switch to Inner layer 24"
 
+msgid "Switch to Inner Layer 25"
+msgstr "Switch to Inner Layer 25"
+
 msgid "Switch to Inner layer 25"
 msgstr "Switch to Inner layer 25"
+
+msgid "Switch to Inner Layer 26"
+msgstr "Switch to Inner Layer 26"
 
 msgid "Switch to Inner layer 26"
 msgstr "Switch to Inner layer 26"
 
+msgid "Switch to Inner Layer 27"
+msgstr "Switch to Inner Layer 27"
+
 msgid "Switch to Inner layer 27"
 msgstr "Switch to Inner layer 27"
+
+msgid "Switch to Inner Layer 28"
+msgstr "Switch to Inner Layer 28"
 
 msgid "Switch to Inner layer 28"
 msgstr "Switch to Inner layer 28"
 
+msgid "Switch to Inner Layer 29"
+msgstr "Switch to Inner Layer 29"
+
 msgid "Switch to Inner layer 29"
 msgstr "Switch to Inner layer 29"
 
+msgid "Switch to Inner Layer 30"
+msgstr "Switch to Inner Layer 30"
+
 msgid "Switch to Inner layer 30"
 msgstr "Switch to Inner layer 30"
+
+msgid "Switch to Copper (B.Cu) Layer"
+msgstr "Switch to Copper (B.Cu) Layer"
 
 msgid "Switch to Copper (B.Cu) layer"
 msgstr "Switch to Copper (B.Cu) layer"
@@ -32479,14 +32633,14 @@ msgstr "Distribute Vertically"
 msgid "Distributes selected items along the vertical axis"
 msgstr "Distributes selected items along the vertical axis"
 
-msgid "Keep arc center, adjust radius"
-msgstr "Keep arc center, adjust radius"
+msgid "Keep Arc Center, Adjust Radius"
+msgstr "Keep Arc Center, Adjust Radius"
 
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr "Switch arc editing mode to keep center, adjust radius and endpoints"
 
-msgid "Keep arc endpoints or direction of starting point"
-msgstr "Keep arc endpoints or direction of starting point"
+msgid "Keep Arc Endpoints or Direction of Starting Point"
+msgstr "Keep Arc Endpoints or Direction of Starting Point"
 
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
@@ -32712,8 +32866,14 @@ msgid ""
 msgstr ""
 "Splits the track segment into two segments connected at the cursor position."
 
+msgid "Drag 45 Degree Mode"
+msgstr "Drag 45 Degree Mode"
+
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "Drags the track segment while keeping connected tracks at 45 degrees."
+
+msgid "Drag Free Angle"
+msgstr "Drag Free Angle"
 
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
@@ -33027,8 +33187,8 @@ msgstr "Locked Item Shadow"
 msgid "Show a shadow marker on locked items"
 msgstr "Show a shadow marker on locked items"
 
-msgid "Conflict Fp Shadow"
-msgstr "Conflict Fp Shadow"
+msgid "Conflict Footprint Shadow"
+msgstr "Conflict Footprint Shadow"
 
 msgid "Show a shadow marker on conflicting footprints"
 msgstr "Show a shadow marker on conflicting footprints"
@@ -33551,9 +33711,6 @@ msgstr "gerbview;PCB;Gerber;"
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-msgid "KiCad"
-msgstr "KiCad"
-
 msgid "EDA Suite"
 msgstr "EDA Suite"
 
@@ -33631,6 +33788,225 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Cycle arc editing mode"
+#~ msgstr "Cycle arc editing mode"
+
+#~ msgid "Min grid spacing:"
+#~ msgstr "Min grid spacing:"
+
+#~ msgid "Allow autoplacement"
+#~ msgstr "Allow autoplacement"
+
+#~ msgid "Number of Units:"
+#~ msgstr "Number of Units:"
+
+#~ msgid "Line Drawing Mode:"
+#~ msgstr "Line Drawing Mode:"
+
+#~ msgid ""
+#~ "Set to 0 to allow symbols to inherit line width properties\n"
+#~ "from Schematic"
+#~ msgstr ""
+#~ "Set to 0 to allow symbols to inherit line width properties\n"
+#~ "from Schematic"
+
+#~ msgid "Diff Symbol with Library"
+#~ msgstr "Diff Symbol with Library"
+
+#~ msgid "Derive from existing symbol"
+#~ msgstr "Derive from existing symbol"
+
+#~ msgid "Include in bill of materials"
+#~ msgstr "Include in bill of materials"
+
+#~ msgid "Toggle Exclude from BOM"
+#~ msgstr "Toggle Exclude from BOM"
+
+#~ msgid "Include in simulation"
+#~ msgstr "Include in simulation"
+
+#~ msgid "Toggle Exclude from simulation"
+#~ msgstr "Toggle Exclude from simulation"
+
+#~ msgid "Include on board"
+#~ msgstr "Include on board"
+
+#~ msgid "Toggle Exclude from board"
+#~ msgstr "Toggle Exclude from board"
+
+#~ msgid "Set do not populate"
+#~ msgstr "Set do not populate"
+
+#~ msgid "Unset do not populate"
+#~ msgstr "Unset do not populate"
+
+#~ msgid "Toggle do not populate"
+#~ msgstr "Toggle do not populate"
+
+#~ msgid "Generate BOM..."
+#~ msgstr "Generate BOM..."
+
+#~ msgid "Generate BOM (Legacy)..."
+#~ msgstr "Generate BOM (Legacy)..."
+
+#~ msgid "Offset X"
+#~ msgstr "Offset X"
+
+#~ msgid "Offset Y"
+#~ msgstr "Offset Y"
+
+#~ msgid "Rotation CCW"
+#~ msgstr "Rotation CCW"
+
+#~ msgid "File units"
+#~ msgstr "File units"
+
+#~ msgid "Zero format"
+#~ msgstr "Zero format"
+
+#~ msgid "Return a exit code depending on whether or not violations exist"
+#~ msgstr "Return a exit code depending on whether or not violations exist"
+
+#~ msgid ""
+#~ "Output units; ascii or csv format only; valid options: mm, m, in, tenths"
+#~ msgstr ""
+#~ "Output units; ascii or csv format only; valid options: mm, m, in, tenths"
+
+#~ msgid ""
+#~ "Name of folder to create and store 3d models in, if not specified or "
+#~ "empty, the models will be embedded in main exported vrml file"
+#~ msgstr ""
+#~ "Name of folder to create and store 3d models in, if not specified or "
+#~ "empty, the models will be embedded in main exported vrml file"
+
+#~ msgid "Generate a Bill of Material (BOM)"
+#~ msgstr "Generate a Bill of Material (BOM)"
+
+#~ msgid "Export a Netlist"
+#~ msgstr "Export a Netlist"
+
+#~ msgid ""
+#~ "Export the legacy bom xml format used in the schematic editor with python "
+#~ "scripts"
+#~ msgstr ""
+#~ "Export the legacy bom xml format used in the schematic editor with python "
+#~ "scripts"
+
+#~ msgid "Would you like to automatically check for plugin updates on startup?"
+#~ msgstr ""
+#~ "Would you like to automatically check for plugin updates on startup?"
+
+#~ msgid "Check for updates"
+#~ msgstr "Check for updates"
+
+#~ msgid "Automatically add installed libraries to global lib table"
+#~ msgstr "Automatically add installed libraries to global lib table"
+
+#~ msgid "Max width:"
+#~ msgstr "Max width:"
+
+#~ msgid "Max height:"
+#~ msgstr "Max height:"
+
+#~ msgid "Show title block in preview mode"
+#~ msgstr "Show title block in preview mode"
+
+#~ msgid "Show title block in edit mode"
+#~ msgstr "Show title block in edit mode"
+
+#~ msgid "Min clearance"
+#~ msgstr "Min clearance"
+
+#~ msgid "Via: (diam - drill)"
+#~ msgstr "Via: (diam - drill)"
+
+#~ msgid "Plated Pad: (diam - drill)"
+#~ msgstr "Plated Pad: (diam - drill)"
+
+#~ msgid "NP Pad: (diam - drill)"
+#~ msgstr "NP Pad: (diam - drill)"
+
+#~ msgid "Changes To Be Applied:"
+#~ msgstr "Changes To Be Applied:"
+
+#~ msgid "Hide auto-generated net names"
+#~ msgstr "Hide auto-generated net names"
+
+#~ msgid "Run Inspect > Diff Footprint with Library"
+#~ msgstr "Run Inspect > Diff Footprint with Library"
+
+#~ msgid "Compress Output"
+#~ msgstr "Compress Output"
+
+#~ msgid "Coordinate origin options:"
+#~ msgstr "Coordinate origin options:"
+
+#~ msgid "VRML Units for Output Files"
+#~ msgstr "VRML Units for Output Files"
+
+#~ msgid "Max length:"
+#~ msgstr "Max length:"
+
+#~ msgid "Max length (L):"
+#~ msgstr "Max length (L):"
+
+#~ msgid "Max width (W):"
+#~ msgstr "Max width (W):"
+
+#~ msgid "Pos X:"
+#~ msgstr "Pos X:"
+
+#~ msgid "Amplitude (A) min:"
+#~ msgstr "Amplitude (A) min:"
+
+#~ msgid "Flip board items L/R (default is T/B)"
+#~ msgstr "Flip board items L/R (default is T/B)"
+
+#~ msgid "Auto-refill zones"
+#~ msgstr "Auto-refill zones"
+
+#~ msgid "Show button"
+#~ msgstr "Show button"
+
+#~ msgid "Max allowed deviation:"
+#~ msgstr "Max allowed deviation:"
+
+#~ msgid "Min thermal relief spoke count:"
+#~ msgstr "Min thermal relief spoke count:"
+
+#~ msgid "Max track width:"
+#~ msgstr "Max track width:"
+
+#~ msgid "Max track width"
+#~ msgstr "Max track width"
+
+#~ msgid "Diff Footprint with Library"
+#~ msgstr "Diff Footprint with Library"
+
+#~ msgid "Snap to objects on the active layer only"
+#~ msgstr "Snap to objects on the active layer only"
+
+#~ msgid "Snap to objects on all layers"
+#~ msgstr "Snap to objects on all layers"
+
+#~ msgid "Toggle snapping between active and all layers"
+#~ msgstr "Toggle snapping between active and all layers"
+
+#~ msgid "BOM..."
+#~ msgstr "BOM..."
+
+#~ msgid "Ungroup"
+#~ msgstr "Ungroup"
+
+#~ msgid "Keep arc center, adjust radius"
+#~ msgstr "Keep arc center, adjust radius"
+
+#~ msgid "Keep arc endpoints or direction of starting point"
+#~ msgstr "Keep arc endpoints or direction of starting point"
+
+#~ msgid "Conflict Fp Shadow"
+#~ msgstr "Conflict Fp Shadow"
 
 #~ msgid "Reset View"
 #~ msgstr "Reset View"
@@ -34672,9 +35048,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ "\n"
 #~ "For the full documentation see [https://docs.kicad.org](https://docs."
 #~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
-
-#~ msgid "Maximum track width"
-#~ msgstr "Maximum track width"
 
 #~ msgid "(as a percentage of larger track width)"
 #~ msgstr "(as a percentage of larger track width)"
@@ -42969,9 +43342,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Navigate to page"
 #~ msgstr "Navigate to page"
-
-#~ msgid "Would you like to automatically check for updates on startup?"
-#~ msgstr "Would you like to automatically check for updates on startup?"
 
 #~ msgid ""
 #~ "Do not allow position of pad relative to parent footprint to be changed"
@@ -57870,12 +58240,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> in symbol "
 #~ "%c.<br>"
-
-#~ msgid "Maximum width:"
-#~ msgstr "Maximum width:"
-
-#~ msgid "Maximum height:"
-#~ msgstr "Maximum height:"
 
 #~ msgid "Set to 0 for default"
 #~ msgstr "Set to 0 for default"
