@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-19 16:33+0000\n"
+"PO-Revision-Date: 2023-12-20 13:33+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/"
-">\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -520,16 +520,16 @@ msgstr "Sử dụng tất cả thuộc tính vật liệu từ mỗi tập tin m
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 #, fuzzy
 msgid "Render Solid Colors"
-msgstr "Quét màu thành khối đặc"
+msgstr "Kết xuất màu đồng nhất"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
+#, fuzzy
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Chỉ mở mức độ phân tán màu từ tập tin 3D"
+msgstr "Chỉ sử dụng thuộc tính màu khuếch tán từ tệp mô hình 3D mô hình"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Quét màu cho bản vẽ CAD"
+msgstr "Kết xuất màu CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 #, fuzzy
@@ -2050,9 +2050,9 @@ msgstr ""
 "biến môi trường bên ngoài từ hệ thống của bạn."
 
 #: common/dialogs/dialog_configure_paths.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Tên %s được dành riêng, và không thể được sử dụng ở đây"
+msgstr "Tên %s đã được bảo lưu và không thể sử dụng được."
 
 #: common/dialogs/dialog_configure_paths.cpp:399
 msgid ""
@@ -2518,9 +2518,9 @@ msgid "Title Block"
 msgstr "Khối Tiêu đề"
 
 #: common/dialogs/dialog_page_settings.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Tệp Tài liệu \"%s\" không tìm thấy"
+msgstr "Không tìm thấy tệp bản vẽ '%s'."
 
 #: common/dialogs/dialog_page_settings.cpp:707
 #: common/dialogs/dialog_page_settings_base.cpp:51
@@ -2812,7 +2812,7 @@ msgstr "Giữ các chỉ định tham chiếu hiện có, ngay cả khi chúng b
 #: common/dialogs/dialog_paste_special_base.cpp:22
 #, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Giá trị chỉ định tham chiếu bất hợp pháp!"
+msgstr "Xóa chỉ định tham chiếu trên tất cả các biểu tượng được dán"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3973,9 +3973,8 @@ msgid "Default"
 msgstr "Mặc định"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:94
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
-msgstr "Đặt lại tất cả các màu sắc trong chủ đề này về mặc định của KiCad"
+msgstr "Đặt màu thành trong suốt để sử dụng màu mặc định của KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:112
 #, fuzzy
@@ -4027,19 +4026,19 @@ msgid "Could not use OpenGL"
 msgstr "Không thể dùng OpenGL"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:932
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Tệp Tài liệu \"%s\" không tìm thấy"
+msgstr "Không tìm thấy trang vẽ '%s'."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Tệp Tài liệu \"%s\" không tìm thấy"
+msgstr "Không thể mở được bản vẽ '%s'."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:955
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
+msgstr "Bản vẽ '%s' chưa được đọc đầy đủ."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:124 common/eda_item.cpp:341
@@ -5091,14 +5090,13 @@ msgstr ""
 "pretty."
 
 #: common/env_vars.cpp:92
-#, fuzzy
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "Thư mục chứa các dự án mẫu được cài đặt cùng với KiCad."
+msgstr "Thư mục chứa các tập lệnh toàn hệ thống được cài đặt với KiCad"
 
 #: common/env_vars.cpp:94
-#, fuzzy
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "Thư mục chứa các dự án mẫu được cài đặt cùng với KiCad."
+msgstr ""
+"Thư mục chứa các tập lệnh dành riêng cho người dùng được cài đặt với KiCad"
 
 #: common/env_vars.cpp:98
 #, fuzzy
@@ -5126,9 +5124,9 @@ msgid "from %s : %s() line %d"
 msgstr "từ %s: %s () dòng: %d"
 
 #: common/exceptions.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr "%s trong '%s', dòng %d, offset %d"
 
 #: common/exceptions.cpp:90
 #, fuzzy, c-format
@@ -5207,28 +5205,26 @@ msgstr "Không tìm thấy phông chữ '%s'; thay thế '%s'."
 #: eeschema/symbol_library_manager.cpp:81
 #: eeschema/symbol_tree_model_adapter.cpp:108
 #: eeschema/symbol_viewer_frame.cpp:366
-#, fuzzy
 msgid "Load Error"
 msgstr "Lỗi Tải"
 
 #: common/footprint_info.cpp:101
-#, fuzzy
 msgid "Errors were encountered loading footprints:"
 msgstr "Đã gặp lỗi khi tải footprint:"
 
 #: common/fp_lib_table.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Biệt hiệu thư viện trùng lặp \"%s\" được tìm thấy trong dòng tệp bảng thư "
-"viện footprint %d"
+"Biệt hiệu thư viện trùng lặp '%s' được tìm thấy trong dòng tệp bảng thư viện "
+"footprint %d."
 
 #: common/fp_lib_table.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr "tệp fp-lib-table không chứa thư viện có biệt hiệu \"%s\""
+msgstr "tệp fp-lib-table không chứa thư viện có biệt hiệu \"%s\"."
 
 #: common/fp_lib_table.cpp:546 eeschema/symbol_lib_table.cpp:583
 #, fuzzy
@@ -5241,14 +5237,14 @@ msgid "Cannot create global library table path '%s'."
 msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
 
 #: common/gestfich.cpp:213
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "Lệnh \"%s\" không tìm thấy"
+msgstr "Không thể tìm thấy lệnh '%s'."
 
 #: common/gestfich.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "Không thể tìm thấy trình xem PDF cho \"%s\""
+msgstr "Không thể tìm thấy trình xem PDF cho \"%s\"."
 
 #: common/gestfich.cpp:245
 #, c-format
@@ -5418,9 +5414,8 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:477
-#, fuzzy
 msgid "Error loading editor."
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi khi tải trình chỉnh sửa."
 
 #: common/kiway.cpp:585
 #, c-format
@@ -5886,9 +5881,10 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Nhập không khớp giữa %lf và '%s'"
 
 #: common/pgm_base.cpp:203
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Không tìm thấy trình soạn thảo mặc định, bạn phải chọn nó"
+msgstr ""
+"Không tìm thấy trình chỉnh sửa mặc định nào, bạn phải chọn một trình chỉnh "
+"sửa."
 
 #: common/pgm_base.cpp:223 common/pgm_base.cpp:225
 #, fuzzy
@@ -5958,9 +5954,9 @@ msgid "Open %s"
 msgstr "Mở %s"
 
 #: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể mở tệp '%s'."
 
 #: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file: cannot determine length."
@@ -5986,7 +5982,7 @@ msgstr "Đơn vị '%s' không kết thúc bằng 'mil'."
 #: common/plugins/altium/altium_parser.cpp:402
 #, fuzzy, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể chuyển đổi '%s' thành gấp đôi."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2445
 #, c-format
@@ -6047,9 +6043,8 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arc không hợp lệ với bán kính %f và góc %f"
 
 #: common/project.cpp:351 common/project.cpp:356 pcbnew/pcb_base_frame.cpp:191
-#, fuzzy
 msgid "Error loading project footprint library table."
-msgstr "Lỗi tải bảng thư viện footprint trong dự án"
+msgstr "Lỗi tải bảng thư viện footprint trong dự án."
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:117
 #, fuzzy
@@ -6135,9 +6130,9 @@ msgid "Error: "
 msgstr "Lỗi: "
 
 #: common/richio.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "Không thể mở tên tệp \"%s\" để đọc"
+msgstr "Không thể mở %s để đọc."
 
 #: common/richio.cpp:250 common/richio.cpp:348
 msgid "Maximum line length exceeded"
@@ -6849,9 +6844,8 @@ msgstr ""
 "Bạn có muốn truy cập trợ giúp trực tuyến của KiCad không?"
 
 #: common/tool/common_control.cpp:217 common/tool/common_control.cpp:237
-#, fuzzy
 msgid "File Not Found"
-msgstr "không tìm thấy tệp tin \"%s\"."
+msgstr "không tìm thấy tệp."
 
 #: common/tool/common_control.cpp:234
 #, c-format
@@ -6955,9 +6949,8 @@ msgid "<not found>"
 msgstr "%s không tìm thấy"
 
 #: common/widgets/footprint_preview_widget.cpp:109
-#, fuzzy
 msgid "Footprint not found."
-msgstr "Không tìm thấy Footprint"
+msgstr "Không tìm thấy Footprint."
 
 #: common/widgets/footprint_select_widget.cpp:70 cvpcb/cvpcb_mainframe.cpp:907
 #: pcbnew/footprint_edit_frame.cpp:972 pcbnew/load_select_footprint.cpp:225
@@ -7192,9 +7185,9 @@ msgid "Set Hotkey"
 msgstr "Đặt Phím nóng"
 
 #: common/widgets/widget_hotkey_list.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Tên %s được dành riêng, và không thể được sử dụng ở đây"
+msgstr "'%s' là phím nóng dành riêng trong KiCad và không thể gán được."
 
 #: common/widgets/widget_hotkey_list.cpp:402
 msgid "Edit..."
@@ -7632,10 +7625,9 @@ msgstr ""
 "tin."
 
 #: cvpcb/cvpcb.cpp:187
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
-msgstr "Đã xảy ra lỗi khi cố tải bảng thư viện footprint toàn cục"
+msgstr "Đã xảy ra lỗi khi cố tải bảng thư viện footprint toàn cục."
 
 #: cvpcb/cvpcb_mainframe.cpp:67 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
@@ -7754,9 +7746,9 @@ msgid "Footprint Association File"
 msgstr "Tệp Liên kết footprint"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
+msgstr "Tệp \"%s\" đã tồn tại trong danh sách."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -8087,14 +8079,14 @@ msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d dấu thời gian trùng lặp đã được tìm thấy và thay thế."
 
 #: eeschema/annotate.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
+msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s."
 
 #: eeschema/annotate.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Đã cập nhật %s từ %s thành %s"
+msgstr "Đã cập nhật %s từ %s thành %s."
 
 #: eeschema/annotate.cpp:403
 #, fuzzy, c-format
@@ -8156,9 +8148,9 @@ msgid "%s pin %s found"
 msgstr "%s pin %s tìm thấy"
 
 #: eeschema/cross-probing.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
-msgstr "Không tìm thấy Footprint"
+msgstr "đã tìm thấy %s nhưng không tìm thấy chân %s"
 
 #: eeschema/cross-probing.cpp:170
 #, c-format
@@ -8274,9 +8266,9 @@ msgid "(file missing)"
 msgstr "(tệp bị thiếu)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Không tìm thấy tệp trợ giúp \"%s\""
+msgstr "Không thể tìm thấy tập lệnh trình tạo BOM đã chọn %s."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -9119,9 +9111,8 @@ msgid "You must provide a netlist generator title"
 msgstr "Bạn phải cung cấp một tiêu đề để tạo netlist"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:52
-#, fuzzy
 msgid "Add Generator..."
-msgstr "Thêm Trình tạo"
+msgstr "Thêm Trình tạo..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:55
 #, fuzzy
@@ -9561,9 +9552,9 @@ msgid "Cannot create global library table '%s'."
 msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
+msgstr "Lỗi sao chép bảng thư viện biểu tượng toàn cục '%s' sang '%s'."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
@@ -11124,9 +11115,8 @@ msgid "Schematic Setup"
 msgstr "Văn bản Sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
-#, fuzzy
 msgid "Import Settings from Another Project..."
-msgstr "Nhập vào các cài đặt từ phiên bản trước (không tìm thấy)"
+msgstr "Nhập cài đặt từ dự án khác..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:69
 #, fuzzy
@@ -11311,9 +11301,9 @@ msgid "Error occurred saving schematic file '%s'."
 msgstr "Đã xảy ra lỗi khi lưu tệp sơ đồ '%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không lưu được sơ đồ mạch '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:687
 #, fuzzy
@@ -11699,9 +11689,9 @@ msgid "<unknown>"
 msgstr "Không xác định parent của thuộc tính"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
+msgstr "Không có mô hình \"%s\" trong thư viện."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:288 eeschema/sim/sim_model.cpp:403
 #, fuzzy
@@ -11775,9 +11765,8 @@ msgid "Differential"
 msgstr "Khoảng cách cặp vi sai"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:101
-#, fuzzy
 msgid "Built-in SPICE model"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Mô hình SPICE tích hợp"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:110
 msgid "Device:"
@@ -12050,26 +12039,22 @@ msgid "Do not populate"
 msgstr "Không điền đầy"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
-#, fuzzy
 msgid "Update Symbol from Library..."
-msgstr "Cập nhật các Symbol từ Thư viện"
+msgstr "Cập nhật các Biểu tượng từ Thư viện..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:233
 #: eeschema/tools/ee_actions.cpp:471
-#, fuzzy
 msgid "Change Symbol..."
-msgstr "Thay đổi Symbols"
+msgstr "Thay đổi Biểu tượng..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
-#, fuzzy
 msgid "Edit Symbol..."
-msgstr "Giá trị ký hiệu"
+msgstr "Chỉnh sửa biểu tượng..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:242
 #: eeschema/tools/ee_actions.cpp:601
-#, fuzzy
 msgid "Edit Library Symbol..."
-msgstr "Giá trị ký hiệu"
+msgstr "Chỉnh sửa Thư viện biểu tượng..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:280
 #, fuzzy
@@ -12156,14 +12141,13 @@ msgid "Symbol %s mapped to symbol library '%s'."
 msgstr "Ký hiệu %s được ánh xạ tới thư viện ký hiệu '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:284
-#, fuzzy
 msgid "Symbol library table mapping complete!"
-msgstr "Mã định danh thư viện symbol \"%s\" không hợp lệ."
+msgstr "Ánh xạ bảng thư viện biểu tượng đã hoàn tất!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể tạo thư mục sao lưu ánh xạ lại dự án '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:357
 #: eeschema/dialogs/dialog_symbol_remap.cpp:509
@@ -12293,9 +12277,8 @@ msgid "Net names"
 msgstr "Tên net"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:55
-#, fuzzy
 msgid "Update Schematic from PCB"
-msgstr "Cập nhật sơ đồ mạch từ PCB..."
+msgstr "Cập nhật sơ đồ mạch từ PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
 #, fuzzy
@@ -12575,17 +12558,15 @@ msgstr "Nhấp chuột"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
 #: pcbnew/dialogs/panel_edit_options_base.cpp:199
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
-#, fuzzy
 msgid "Clarify selection from menu."
-msgstr "Hiển thị Menu Lựa chọn một cách rõ ràng"
+msgstr "Làm rõ lựa chọn từ menu."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:137
 #: pcbnew/dialogs/panel_edit_options_base.cpp:209
-#, fuzzy
 msgid "Add item(s) to selection."
-msgstr "Thêm vào Lựa chọn"
+msgstr "Thêm (các) mục vào lựa chọn."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
@@ -12597,9 +12578,8 @@ msgstr "Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:147
 #: pcbnew/dialogs/panel_edit_options_base.cpp:219
-#, fuzzy
 msgid "Remove item(s) from selection."
-msgstr "Loại bỏ khỏi lựa chọn"
+msgstr "Xóa (các) mục vào lựa chọn."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:170
@@ -12788,7 +12768,7 @@ msgstr "Chữ thập nhỏ"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: pcbnew/dialogs/dialog_plot_base.cpp:112
 msgid "Small"
-msgstr ""
+msgstr "Nhỏ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #, fuzzy
@@ -12813,7 +12793,7 @@ msgstr "&Tùy chỉnh"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 #, fuzzy
 msgid "Show own page reference"
-msgstr "In khung tài liệu tham khảo."
+msgstr "Hiển thị tham chiếu trang riêng"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:180
 #, fuzzy
@@ -12966,9 +12946,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:366
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:550
-#, fuzzy
 msgid "Remove Invalid Cells"
-msgstr "Thêm Trường..."
+msgstr "Xóa các ô không hợp lệ"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:367
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:551
@@ -13011,9 +12990,9 @@ msgstr "Cảnh báo: Số tỷ lệ co dãn xấu"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:516
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:904
-#, fuzzy, c-format
+#, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Thư viện có biệt danh '%s' đã tồn tại."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:517
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:905
@@ -13060,9 +13039,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Tệp '%s' đã tồn tại. Bạn có muốn ghi đè lên tập tin này?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:776
-#, fuzzy
 msgid "Migrate Library"
-msgstr "Quản lý Thư viện Symbol ..."
+msgstr "Di chuyển thư viện"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:800 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
@@ -13182,9 +13160,8 @@ msgid "Remove library from table"
 msgstr "Loại bỏ khỏi lựa chọn"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "Quản lý Thư viện Symbol ..."
+msgstr "Di chuyển các thư viện"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
@@ -13239,9 +13216,8 @@ msgstr ""
 #: eeschema/eeschema_config.cpp:77 eeschema/eeschema_jobs_handler.cpp:94
 #: pcbnew/pcbnew_config.cpp:55
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:176
-#, fuzzy
 msgid "Error loading drawing sheet."
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi tải bản vẽ."
 
 #: eeschema/eeschema_config.cpp:308 eeschema/sheet.cpp:333
 #, c-format
@@ -13281,9 +13257,9 @@ msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Vẽ biểu tượng '%s' thành '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open destination '%s'"
-msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
+msgstr "Không thể mở đích '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:432
 #: eeschema/eeschema_jobs_handler.cpp:499 pcbnew/pcbnew_jobs_handler.cpp:679
@@ -13293,9 +13269,8 @@ msgstr "Không thể tải thư viện\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:445
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:123
-#, fuzzy
 msgid "There is no symbol selected to save."
-msgstr "Không có symbol nào được chọn"
+msgstr "Không có biểu tượng nào được chọn để lưu."
 
 #: eeschema/eeschema_jobs_handler.cpp:507 pcbnew/pcbnew_jobs_handler.cpp:665
 msgid "Output path must not conflict with existing path\n"
@@ -13306,9 +13281,8 @@ msgid "Saving symbol library in updated format\n"
 msgstr "Lưu thư viện biểu tượng ở định dạng đã cập nhật\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:531 pcbnew/pcbnew_jobs_handler.cpp:708
-#, fuzzy
 msgid "Unable to save library\n"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể lưu thư viện\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:537
 msgid "Symbol library was not updated\n"
@@ -13381,29 +13355,29 @@ msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr ""
 
 #: eeschema/erc.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "Xóa các liên kết footprint đã chọn"
+msgstr "Các footprint khác nhau được gán cho %s và %s"
 
 #: eeschema/erc.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has unplaced units %s"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Biểu tượng %s có đơn vị chưa được đặt %s"
 
 #: eeschema/erc.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
-msgstr "Thay đổi Symbol với footprint chưa được lưu"
+msgstr "Biểu tượng %s có các chân nguồn đầu vào theo đơn vị %s chưa được đặt."
 
 #: eeschema/erc.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
-msgstr "Thay đổi Symbol với footprint chưa được lưu"
+msgstr "Biểu tượng %s có các chân đầu vào theo đơn vị %s chưa được đặt."
 
 #: eeschema/erc.cpp:543
 #, fuzzy, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Thay đổi Symbol với footprint chưa được lưu"
+msgstr "Biểu tượng %s có chân hai chiều trong đơn vị %s chưa được đặt."
 
 #: eeschema/erc.cpp:582
 msgid "Pins with 'no connection' type are connected"
@@ -13415,29 +13389,29 @@ msgid "Pins of type %s and %s are connected"
 msgstr ""
 
 #: eeschema/erc.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "Chiều rộng Track"
+msgstr "Chân %s được kết nối với cả %s và %s"
 
 #: eeschema/erc.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'"
-msgstr "Tên '%s' xung đột với một mục hiện có trong thư viện '%s'."
+msgstr "Cấu hình hiện tại không bao gồm thư viện '%s'"
 
 #: eeschema/erc.cpp:883
-#, fuzzy, c-format
+#, c-format
 msgid "The library '%s' is not enabled in the current configuration"
-msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
+msgstr "Thư viện '%s' chưa được kích hoạt trong cấu hình hiện tại"
 
 #: eeschema/erc.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không tìm thấy biểu tượng '%s' trong thư viện biểu tượng '%s'"
 
 #: eeschema/erc.cpp:914
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Biểu tượng '%s' đã được sửa đổi trong thư viện '%s'"
 
 #: eeschema/erc_item.cpp:43
 #, fuzzy
@@ -13683,9 +13657,10 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:366
-#, fuzzy
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Chỉnh sửa danh sách thư viện symbol toàn cục và trong dự án"
+msgstr ""
+"Mục nhập không hợp lệ được tìm thấy trong danh sách thư viện biểu tượng tệp "
+"dự án."
 
 #: eeschema/files-io.cpp:367
 #, fuzzy
@@ -13701,9 +13676,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:374
-#, fuzzy
 msgid "Do not show this dialog again."
-msgstr "Không hiện lại"
+msgstr "Không hiện lại hộp thoại này."
 
 #: eeschema/files-io.cpp:403
 #, fuzzy, c-format
@@ -13736,9 +13710,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:522
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "Schematic Field"
+msgstr "Sơ đồ chỉ đọc."
 
 #: eeschema/files-io.cpp:547
 #, fuzzy
@@ -13776,12 +13749,12 @@ msgid "Unexpected file extension: '%s'."
 msgstr "Không mong đợi '%s'"
 
 #: eeschema/files-io.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Lỗi tải sơ đồ mạch.\n"
+"Lỗi lưu tệp sơ đồ mạch '%s'.\n"
 "%s"
 
 #: eeschema/files-io.cpp:748 pcbnew/files.cpp:1089
@@ -13853,9 +13826,9 @@ msgid "Abort Project Save"
 msgstr "Quản lý dự án"
 
 #: eeschema/files-io.cpp:1245
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Schematic Field"
+msgstr "Sơ đồ mạch '%s' đã được mở bởi '%s' tại '%s'."
 
 #: eeschema/files-io.cpp:1258
 #, fuzzy
@@ -13976,9 +13949,9 @@ msgid "Pos Y"
 msgstr ""
 
 #: eeschema/lib_pin.cpp:1385
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr "Đã cập nhật %s từ %s thành %s"
+msgstr "Chân %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1393
 #, c-format
@@ -14011,20 +13984,20 @@ msgid "Polyline, %d points"
 msgstr ""
 
 #: eeschema/lib_shape.cpp:491 eeschema/sch_shape.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Đường cong Bezier"
+msgstr "Đường cong Bezier, %d điểm"
 
 #: eeschema/lib_symbol.cpp:409 eeschema/sch_symbol.cpp:497
 #: eeschema/tools/sch_edit_tool.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s"
-msgstr "Đơn vị"
+msgstr "Đơn vị %s"
 
 #: eeschema/lib_text.cpp:480 eeschema/sch_text.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Text '%s'"
-msgstr "Phong cách Đồ họa"
+msgstr "Văn bản Đồ họa '%s'"
 
 #: eeschema/lib_textbox.cpp:375 eeschema/sch_textbox.cpp:361
 #, fuzzy
@@ -14050,9 +14023,9 @@ msgid "Box Height"
 msgstr "Chiều cao"
 
 #: eeschema/libarch.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không thể thêm biểu tượng %s vào tệp thư viện '%s'."
 
 #: eeschema/libarch.cpp:110
 #, fuzzy
@@ -14060,9 +14033,9 @@ msgid "Unexpected exception occurred."
 msgstr "Không mong đợi %s"
 
 #: eeschema/libarch.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không tìm thấy biểu tượng %s trong bất kỳ thư viện hoặc bộ đệm nào."
 
 #: eeschema/libarch.cpp:141
 #, c-format
@@ -14176,14 +14149,14 @@ msgid "P&references"
 msgstr "&Tùy chỉnh"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open file '%s' to write IBIS model"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể mở tệp '%s' để ghi mô hình IBIS"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm thấy tệp thư viện '%s'"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:147
 #, c-format
@@ -14295,9 +14268,9 @@ msgid "NonLogic"
 msgstr ""
 
 #: eeschema/project_rescue.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid "Rename %s to %s"
-msgstr "Đặt lại về Mặc định"
+msgstr "Đổi tên %s thành %s"
 
 #: eeschema/project_rescue.cpp:316 eeschema/project_rescue.cpp:489
 #, c-format
@@ -14308,12 +14281,12 @@ msgstr ""
 #: eeschema/project_rescue.cpp:319 eeschema/project_rescue.cpp:495
 #, fuzzy, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Biểu tượng cứu hộ %s chỉ được tìm thấy trong thư viện bộ đệm cho %s."
 
 #: eeschema/project_rescue.cpp:322 eeschema/project_rescue.cpp:501
 #, fuzzy, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
+msgstr "Thay đổi Rescue symbol %s thành %s"
 
 #: eeschema/project_rescue.cpp:595
 msgid "This project has nothing to rescue."
@@ -14464,9 +14437,9 @@ msgstr "không tìm thấy tệp tin \"%s\"."
 #: pagelayout_editor/pl_editor_frame.cpp:395
 #: pcbnew/footprint_edit_frame.cpp:720 pcbnew/footprint_edit_frame.cpp:760
 #: pcbnew/pcb_edit_frame.cpp:1076
-#, fuzzy, c-format
+#, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "Lưu thay đổi?"
+msgstr "Lưu các thay đổi vào '%s' trước khi đóng?"
 
 #: eeschema/sch_edit_frame.cpp:964
 msgid ""
@@ -14486,9 +14459,9 @@ msgid "New Schematic"
 msgstr "Lưu vào Sơ đồ mạch"
 
 #: eeschema/sch_edit_frame.cpp:1130
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Schematic Field"
+msgstr "Tệp sơ đồ '%s' đã tồn tại."
 
 #: eeschema/sch_edit_frame.cpp:1151
 #, fuzzy
@@ -14522,9 +14495,9 @@ msgid "[no schematic loaded]"
 msgstr "Sơ đồ mạch đã được lưu"
 
 #: eeschema/sch_edit_frame.cpp:1735
-#, fuzzy, c-format
+#, c-format
 msgid "Highlighted net: %s"
-msgstr "Phần tử được tô sáng"
+msgstr "Mạng được đánh dấu: %s"
 
 #: eeschema/sch_field.cpp:817
 #, fuzzy, c-format
@@ -14552,9 +14525,9 @@ msgid "Plugin type \"%s\" is not found."
 msgstr "ID footprint \"%s\" không hợp lệ."
 
 #: eeschema/sch_io_mgr.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SCH_FILE_T value: %d"
-msgstr "Không xác định parent của thuộc tính"
+msgstr "Giá trị SCH_FILE_T không xác định: %d"
 
 #: eeschema/sch_label.cpp:149
 #, fuzzy
@@ -14597,24 +14570,24 @@ msgid "Hierarchical Labels"
 msgstr "Hierarchical Label"
 
 #: eeschema/sch_label.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s'"
-msgstr "Nhãn"
+msgstr "Nhãn '%s'"
 
 #: eeschema/sch_label.cpp:1454
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s %s]"
-msgstr "Net Label"
+msgstr "Nhãn chỉ thị [%s %s]"
 
 #: eeschema/sch_label.cpp:1657
-#, fuzzy, c-format
+#, c-format
 msgid "Global Label '%s'"
-msgstr "Global Label"
+msgstr "Nhãn toàn cục '%s'"
 
 #: eeschema/sch_label.cpp:1790
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Label '%s'"
-msgstr "Hierarchical Label"
+msgstr "Nhãn phân cấp '%s'"
 
 #: eeschema/sch_label.cpp:1807 pcbnew/dialogs/panel_setup_rules.cpp:686
 #, fuzzy
@@ -14627,9 +14600,9 @@ msgid "Vertical Wire, length %s"
 msgstr "Đường thẳng, chiều dài %s"
 
 #: eeschema/sch_line.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Bus, length %s"
-msgstr "Tệp kiểm tra quy tắc điện tử"
+msgstr "Bus dọc, chiều dài %s"
 
 #: eeschema/sch_line.cpp:715
 #, fuzzy, c-format
@@ -14844,9 +14817,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "Cổng %s không có kết nối."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
 #, fuzzy, c-format
@@ -14855,9 +14828,9 @@ msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi khi đọc hình ảnh %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
 #, fuzzy, c-format
@@ -15013,9 +14986,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading database table %s: %s"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi đọc bảng cơ sở dữ liệu %s: %s"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:218
 #, c-format
@@ -15041,9 +15014,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1642
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm thấy '%s' trong thư viện đã nhập."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:54
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:70
@@ -15064,9 +15037,9 @@ msgstr "Tên tín hiệu không hợp lệ"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s contains invalid character '%c'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Biểu tượng %s chứa ký tự không hợp lệ '%c'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:215
 #, fuzzy
@@ -15089,29 +15062,29 @@ msgid "Invalid symbol unit name"
 msgstr "Tên tín hiệu không hợp lệ"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:314
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Tiền tố tên đơn vị biểu tượng không hợp lệ %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Hậu tố tên đơn vị ký hiệu không hợp lệ %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Số đơn vị biểu tượng không hợp lệ %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Số chuyển đổi biểu tượng không hợp lệ %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:671
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Tên tín hiệu không hợp lệ"
+msgstr "url siêu liên kết không hợp lệ '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:760
 #, fuzzy
@@ -15202,9 +15175,9 @@ msgstr "Thư viện ký hiệu '%s' đã tồn tại."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1560
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2203
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' cannot be deleted."
-msgstr "Không có symbol nào được chọn"
+msgstr "Không thể xóa thư viện biểu tượng '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:84
 #, fuzzy
@@ -15286,9 +15259,9 @@ msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
 msgstr "Lỗi: biểu tượng %s%s%s (đơn vị %d) vượt quá đơn vị được xác định (%d)"
 
 #: eeschema/sch_reference_list.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "Nhiều mục %s%s\n"
+msgstr "Trùng lặp nhiều mục %s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:778
 #, c-format
@@ -15301,9 +15274,9 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Các giá trị khác nhau cho %s %d %s (%s) và %s %d %s (%s)"
 
 #: eeschema/sch_screen.cpp:923 eeschema/sch_screen.cpp:1015
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Đặt mã định danh thư viện biểu tượng sơ đồ '%s %s' thành '%s'."
 
 #: eeschema/sch_screen.cpp:939
 #, c-format
@@ -15350,9 +15323,9 @@ msgid "File Name"
 msgstr "Tên biến"
 
 #: eeschema/sch_sheet.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet %s"
-msgstr "Nhãn phân cấp"
+msgstr "Trang phân cấp %s"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:368
 #, fuzzy
@@ -15360,9 +15333,9 @@ msgid "(Deleted Item)"
 msgstr "Xóa các mục đã nhấp"
 
 #: eeschema/sch_sheet_pin.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin %s"
-msgstr "Thuộc tính ghim bảng phân cấp"
+msgstr "Ghim bảng phân cấp %s"
 
 #: eeschema/sch_symbol.cpp:1364
 #, fuzzy
@@ -15403,19 +15376,18 @@ msgid "<Unknown>"
 msgstr "Không xác định parent của thuộc tính"
 
 #: eeschema/sch_symbol.cpp:1862
-#, fuzzy
 msgid "No library defined!"
-msgstr "Mã định danh thư viện mới:"
+msgstr "Không có thư viện được xác định!"
 
 #: eeschema/sch_symbol.cpp:1864
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol not found in %s!"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không tìm thấy biểu tượng trong %s!"
 
 #: eeschema/sch_symbol.cpp:2053
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s [%s]"
-msgstr "Symbol bởi"
+msgstr "Biểu tượng %s [%s]"
 
 #: eeschema/sch_text.cpp:495
 #, fuzzy
@@ -16098,9 +16070,8 @@ msgid "No extra argument was expected"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Không xác định parent của thuộc tính"
+msgstr "Từ khóa không xác định trong "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
@@ -16164,9 +16135,8 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1986
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Nút không biết '%s' trong '%s'"
+msgstr "Model_type không xác định "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1993
 msgid "Internal Error while reading model_type"
@@ -16385,9 +16355,9 @@ msgstr ""
 "viện '%s'"
 
 #: eeschema/sim/sim_library_kibis.cpp:39 eeschema/sim/sim_model_kibis.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS file '%s'"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Tệp IBIS không hợp lệ '%s'"
 
 #: eeschema/sim/sim_model.cpp:401 eeschema/sim/sim_model.cpp:556
 #: eeschema/sim/sim_model.cpp:618
@@ -16410,34 +16380,34 @@ msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr "Không thể mở tệp cấu hình"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS component '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm thấy linh kiện IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:87
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS component '%s'"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Linh kiện IBIS không hợp lệ '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS pin '%s' in component '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm thấy chân IBIS '%s' trong linh kiện '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS pin '%s' in component '%s'"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Chân IBIS không hợp lệ '%s' trong linh kiện '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find IBIS model '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tìm thấy mô hình IBIS '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid IBIS model '%s'"
-msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
+msgstr "Mô hình IBIS không hợp lệ '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:333
 #, fuzzy
@@ -16827,9 +16797,10 @@ msgstr "Không thể mở tệp '%s'"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
-msgstr "Không thể mở tệp cấu hình"
+msgstr ""
+"Không thể tìm thấy mô hình '%s' để sao chép cho mô hình \"A Kind Of\" '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:63
 msgid "DC Sweep"
@@ -16873,9 +16844,9 @@ msgid "'%s' is not a valid Spice value."
 msgstr "\"%s\" không phải là footprint hợp lệ."
 
 #: eeschema/symbol_async_loader.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "Đang tải thư viện symbol"
+msgstr "Đang tải thư viện %s..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
 #, c-format
@@ -17050,9 +17021,8 @@ msgid "Library changes are unsaved"
 msgstr "Thay đổi Symbol với footprint chưa được lưu"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:258
-#, fuzzy
 msgid "Symbol library loading was cancelled by user."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Việc tải thư viện biểu tượng đã bị người dùng hủy."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:771
 #, c-format
@@ -17079,9 +17049,9 @@ msgstr "Không có symbol nào được chọn"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:887
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:938
 #: eeschema/tools/sch_editor_control.cpp:388
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Thư viện '%s' đã tồn tại."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:895
 #, c-format
@@ -17100,9 +17070,9 @@ msgid "Could not open the library file."
 msgstr "Không thể mở tệp cấu hình"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library '%s'..."
-msgstr "Đang tải thư viện symbol"
+msgstr "Đang tải thư viện '%s'..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1131
 #, fuzzy, c-format
@@ -17180,9 +17150,9 @@ msgstr "Sơ đồ mạch đã được lưu"
 #: eeschema/tools/symbol_editor_control.cpp:187
 #: eeschema/tools/symbol_editor_control.cpp:259
 #: eeschema/tools/symbol_editor_control.cpp:301
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "Không có symbol nào được chọn"
+msgstr "Thư viện biểu tượng '%s' không thể ghi được."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:133
 #: eeschema/symbol_editor/symbol_editor.cpp:489
@@ -17202,9 +17172,9 @@ msgid "This new symbol has no name and cannot be created."
 msgstr "Tên %s được dành riêng, và không thể được sử dụng ở đây"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'."
-msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
+msgstr "Biểu tượng '%s' đã tồn tại trong thư viện '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:373
 #: eeschema/symbol_editor/symbol_editor.cpp:677
@@ -17286,9 +17256,9 @@ msgid "Revert '%s' to last version saved?"
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s not found in library '%s'."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không tìm thấy biểu tượng %s trong thư viện '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1038
 #, fuzzy
@@ -17296,9 +17266,9 @@ msgid "No library specified."
 msgstr "Không có symbol nào được chọn"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1057
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As..."
-msgstr "Thư viện Mới..."
+msgstr "Lưu Thư viện '%s' dưới dạng..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1106
 #, fuzzy, c-format
@@ -17316,9 +17286,8 @@ msgid "Symbol library file '%s' saved."
 msgstr "Mã định danh thư viện symbol \"%s\" không hợp lệ."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1249
-#, fuzzy
 msgid "Undefined!"
-msgstr "Màu sắc đường kẻ:"
+msgstr "Không xác định!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1250
 #: eeschema/symbol_viewer_frame.cpp:523 pcbnew/fp_shape.cpp:484
@@ -17356,9 +17325,9 @@ msgstr "Mã định danh thư viện symbol \"%s\" không hợp lệ."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s already exists in library '%s'."
-msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
+msgstr "Biểu tượng %s đã tồn tại trong thư viện '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
 #, fuzzy
@@ -17381,9 +17350,9 @@ msgid "Error creating symbol library '%s'."
 msgstr "Lỗi khi tạo thư viện biểu tượng '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:203
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s saved to library '%s'."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Biểu tượng %s đã được lưu vào thư viện '%s'."
 
 #: eeschema/symbol_lib_table.cpp:262
 #, fuzzy, c-format
@@ -17497,9 +17466,8 @@ msgid "Show all footprint fields"
 msgstr "Không có footprint nào được nạp vào."
 
 #: eeschema/tools/assign_footprints.cpp:225
-#, fuzzy
 msgid "Hide all footprint fields"
-msgstr "Tệp footprint  KiCad"
+msgstr "Ẩn tất cả các trường footprint"
 
 #: eeschema/tools/assign_footprints.cpp:227
 #, fuzzy
@@ -17512,9 +17480,9 @@ msgid "Change Visibility"
 msgstr "Hiển thị mô hình 3D"
 
 #: eeschema/tools/assign_footprints.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "Tệp liên kết footprint và symbol KiCad"
+msgstr "Không thể mở tệp liên kết biểu tượng-footprint '%s'."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -17573,14 +17541,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Đã cập nhật %s từ %s thành %s"
 
 #: eeschema/tools/backannotate.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "Không thể mở tệp '%s'"
+msgstr "Không thể tìm thấy %s chân '%s'."
 
 #: eeschema/tools/backannotate.cpp:532
 #, fuzzy, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
+msgstr "Thay đổi %s chân %s nhãn net từ '%s' thành '%s'."
 
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
@@ -18168,9 +18136,8 @@ msgid "Edit Footprint..."
 msgstr "Footprint"
 
 #: eeschema/tools/ee_actions.cpp:448
-#, fuzzy
 msgid "Displays footprint field dialog"
-msgstr "Tệp footprint  KiCad"
+msgstr "Hiển thị hộp thoại trường footprint"
 
 #: eeschema/tools/ee_actions.cpp:454
 #, fuzzy
@@ -18907,9 +18874,9 @@ msgstr ""
 #: eeschema/tools/sch_drawing_tools.cpp:622
 #: pagelayout_editor/pl_editor_frame.cpp:874
 #: pagelayout_editor/pl_editor_frame.cpp:882 pcbnew/tools/drawing_tool.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load image from '%s'."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể tải hình ảnh từ '%s'."
 
 #: eeschema/tools/sch_drawing_tools.cpp:815
 #, fuzzy
@@ -18967,15 +18934,15 @@ msgstr "Tên biến không được để trống."
 
 #: eeschema/tools/sch_edit_tool.cpp:1402 eeschema/tools/sch_edit_tool.cpp:1405
 #: eeschema/tools/symbol_editor_edit_tool.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s Field"
-msgstr "Chỉnh sửa tập tin"
+msgstr "Chỉnh sửa %s Trường"
 
 #: eeschema/tools/sch_edit_tool.cpp:1407
 #: eeschema/tools/symbol_editor_edit_tool.cpp:530
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
-msgstr "Chỉnh sửa tập tin"
+msgstr "Chỉnh sửa '%s' Trường"
 
 #: eeschema/tools/sch_edit_tool.cpp:1945 eeschema/tools/sch_edit_tool.cpp:2034
 msgid "<empty>"
@@ -19006,9 +18973,9 @@ msgid "Include power symbols in schematic to the library?"
 msgstr "Đưa các ký hiệu nguồn từ sơ đồ vào thư viện?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Could not add library '%s'."
-msgstr "Không thể mở tệp cấu hình"
+msgstr "Không thể thêm thư viện '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:413
 #, fuzzy
@@ -19135,9 +19102,9 @@ msgid "Image File Name"
 msgstr "Tên File hình ảnh 3D"
 
 #: eeschema/tools/symbol_editor_control.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file '%s'."
-msgstr "Không thể lưu file"
+msgstr "Không thể lưu tệp '%s'."
 
 #: eeschema/tools/symbol_editor_control.cpp:569
 #, fuzzy
@@ -19184,9 +19151,9 @@ msgid "Enter page number for sheet path %s"
 msgstr "cần một số cho '%s'"
 
 #: eeschema/widgets/hierarchy_pane.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "(page %s)"
-msgstr "Lưới: %s (%s)"
+msgstr "(trang %s)"
 
 #: eeschema/widgets/legacyfiledlg_save_project.h:36
 msgid ""
@@ -19260,9 +19227,9 @@ msgid "Clear layer %d?"
 msgstr "Làm sạch lớp %d?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d"
-msgstr "Phong cách Đồ họa"
+msgstr "Lớp %d"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:175
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:234
@@ -19433,9 +19400,9 @@ msgid "Deselect all"
 msgstr "Chọn tất cả"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:92
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
-msgstr "Chọn Thư viện"
+msgstr "Chọn Lớp: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:151
 #: pcbnew/board_connected_item.cpp:167 pcbnew/board_connected_item.cpp:170
@@ -19478,9 +19445,9 @@ msgid "Negative Objects"
 msgstr "Âm bản"
 
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Layer %d"
-msgstr "Phong cách Đồ họa"
+msgstr "Lớp Đồ họa %d"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:37
 #, fuzzy
@@ -19838,9 +19805,9 @@ msgid "Loading files..."
 msgstr "Đang tải..."
 
 #: gerbview/files.cpp:301 gerbview/files.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "Đang tải %s"
+msgstr "Đang tải %u/%zu %s..."
 
 #: gerbview/files.cpp:439
 #, fuzzy, c-format
@@ -19993,9 +19960,9 @@ msgid "Image Justify Offset"
 msgstr ""
 
 #: gerbview/gerber_file_image_list.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic layer %d"
-msgstr "Phong cách Đồ họa"
+msgstr "Lớp Đồ họa %d"
 
 #: gerbview/gerbview_frame.cpp:65 gerbview/menubar.cpp:135
 #: gerbview/menubar.cpp:141
@@ -20028,9 +19995,9 @@ msgid "(with X2 attributes)"
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:642
-#, fuzzy, c-format
+#, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
-msgstr "Tên tín hiệu không hợp lệ"
+msgstr "Tên hình ảnh: \"%s\" Tên lớp: \"%s\""
 
 #: gerbview/gerbview_frame.cpp:658
 msgid "X2 attr"
@@ -20406,14 +20373,14 @@ msgid "Highlight"
 msgstr "Tô sáng Net"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:68
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Phần tử được tô sáng"
+msgstr "Tô sáng các mục của Linh kiện '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:76
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Phần tử được tô sáng"
+msgstr "Tô sáng các mục của Mạng '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, fuzzy, c-format
@@ -20421,9 +20388,9 @@ msgid "Highlight Aperture Type '%s'"
 msgstr "Phần tử được tô sáng"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Phần tử được tô sáng"
+msgstr "Tô sáng DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:535
@@ -20541,9 +20508,8 @@ msgid "Malformed expression"
 msgstr ""
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Tệp khóa đã tồn tại"
 
 #: include/lockfile.h:124
 #, fuzzy
@@ -20669,24 +20635,20 @@ msgid "Invalid units specified\n"
 msgstr "Đơn vị được chỉ định không hợp lệ\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:165
-#, fuzzy
 msgid "Invalid zeros format specified\n"
-msgstr "Footprint được chỉ định không hợp lệ"
+msgstr "Định dạng số 0 không hợp lệ được chỉ định\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:181
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Footprint được chỉ định không hợp lệ"
+msgstr "Định dạng khoan hình bầu dục không hợp lệ được chỉ định\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
-#, fuzzy
 msgid "Invalid map format specified\n"
-msgstr "Footprint được chỉ định không hợp lệ"
+msgstr "Định dạng bản đồ không hợp lệ được chỉ định\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:225
-#, fuzzy
 msgid "Invalid origin mode specified\n"
-msgstr "Footprint được chỉ định không hợp lệ"
+msgstr "Chế độ origin không hợp lệ được chỉ định\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:237
 #: kicad/cli/command_export_pcb_gerber.cpp:121
@@ -20698,7 +20660,7 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:46
 #, fuzzy
 msgid "Exclude the reference designator text"
-msgstr "Giá trị chỉ định tham chiếu bất hợp pháp!"
+msgstr "Loại trừ văn bản chỉ định tham chiếu"
 
 #: kicad/cli/command_export_pcb_dxf.cpp:46
 #: kicad/cli/command_export_pcb_gerber.cpp:45
@@ -20721,9 +20683,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:96
 #: kicad/cli/command_export_pcb_pos.cpp:101
 #: kicad/cli/command_export_pcb_svg.cpp:102
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Tệp bo mạch không tồn tại hoặc không thể truy cập được\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:56
@@ -20836,18 +20797,16 @@ msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:126
 #: kicad/cli/command_export_sch_netlist.cpp:81 kicad/cli/command_version.cpp:67
-#, fuzzy
 msgid "Invalid format\n"
-msgstr "Tên tín hiệu không hợp lệ"
+msgstr "Định dạng không hợp lệ\n"
 
 #: kicad/cli/command_export_pcb_pos.cpp:152
 msgid "\"both\" not supported for gerber format\n"
 msgstr ""
 
 #: kicad/cli/command_export_pcb_pos.cpp:168
-#, fuzzy
 msgid "Invalid side specified\n"
-msgstr "Footprint được chỉ định không hợp lệ"
+msgstr "Mặt không hợp lệ được chỉ định\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
 msgid "Use Drill Origin for output origin"
@@ -20913,9 +20872,8 @@ msgstr ""
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_plot.cpp:90
 #: kicad/cli/command_export_sch_pythonbom.cpp:47
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Tệp sơ đồ mạch không tồn tại hoặc không thể truy cập được\n"
 
 #: kicad/cli/command_export_sch_plot.cpp:51
 msgid "Color theme to use (will default to schematic settings)"
@@ -20955,9 +20913,8 @@ msgid "Include hidden fields"
 msgstr "Các trường trang khác"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Tệp biểu tượng không tồn tại hoặc không thể truy cập được\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -21269,14 +21226,14 @@ msgid "Plugins (%d)"
 msgstr "Vi phạm (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Quản lý thư viện"
+msgstr "Thư viện (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Thêm chủ đề màu sắc"
+msgstr "Chủ đề màu sắc (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:77
 #, c-format
@@ -21310,7 +21267,7 @@ msgstr "Các Tùy chọn Render"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, fuzzy, c-format
 msgid "Repository (%d)"
-msgstr "Báo cáo"
+msgstr "Kho lưu trữ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #, fuzzy
@@ -21335,15 +21292,15 @@ msgstr "Chọn Ảnh"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:402
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Pending (%d)"
-msgstr "Kích cỡ Văn bản:"
+msgstr "Đang chờ xử lý (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:442
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Installed (%d)"
-msgstr "Kích cỡ Văn bản:"
+msgstr "Đã cài đặt (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 #, fuzzy
@@ -21585,16 +21542,14 @@ msgid "schema file '%s' not found"
 msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: kicad/pcm/pcm.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr ""
-"Lỗi tải sơ đồ mạch.\n"
-"%s"
+msgstr "Lỗi tải sơ đồ mạch: %s"
 
 #: kicad/pcm/pcm.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi tải danh sách gói đã cài đặt: %s"
 
 #: kicad/pcm/pcm.cpp:255
 #, c-format
@@ -21619,7 +21574,7 @@ msgstr "Không thể tạo tệp báo cáo '%s'"
 #: kicad/pcm/pcm.cpp:323
 #, fuzzy, c-format
 msgid "Unable to parse repository: %s"
-msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
+msgstr "Không thể phân tích kho lưu trữ: %s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
@@ -21641,12 +21596,15 @@ msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
+msgstr ""
+"Không thể phân tích siêu dữ liệu gói:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:465
 #, fuzzy
@@ -21683,26 +21641,27 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Tệp Tài liệu \"%s\" không tìm thấy"
+msgstr "Không tìm thấy phiên bản %s của gói %s!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Không thể tạo tệp báo cáo '%s'"
+msgstr "Không thể tạo thư mục tải xuống!"
 
 #: kicad/pcm/pcm_task_manager.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Đang tải xuống url gói: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr ""
+"Không tải được url %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:188
 #, c-format
@@ -21737,12 +21696,15 @@ msgid "Extracted package\n"
 msgstr "Đang giải nén tệp \"%s\"\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
-msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
+msgstr ""
+"Không thể phân tích siêu dữ liệu gói:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
@@ -21775,9 +21737,9 @@ msgid "Failed to remove directory %s"
 msgstr "Không thể mở tệp '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:577
-#, fuzzy, c-format
+#, c-format
 msgid "Package %s uninstalled"
-msgstr "Thời gian hiển thị %.3f s"
+msgstr "Đã gỡ cài đặt gói %s"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -22011,9 +21973,8 @@ msgid "Edit PCB"
 msgstr "Chỉnh sửa PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:98
-#, fuzzy
 msgid "Edit PCB footprints"
-msgstr "Tệp footprint  KiCad"
+msgstr "Chỉnh sửa footprint PCB"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
 #, fuzzy
@@ -22029,13 +21990,13 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_actions.cpp:115
 #: pcb_calculator/pcb_calculator_frame.cpp:50
-#, fuzzy
 msgid "Calculator Tools"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "Công cụ Tính toán"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
+#, fuzzy
 msgid "Run component calculations, track width calculations, etc."
-msgstr ""
+msgstr "Chạy tính toán linh kiện, tính toán độ rộng rãnh,..."
 
 #: kicad/tools/kicad_manager_actions.cpp:121
 #, fuzzy
@@ -22091,11 +22052,9 @@ msgstr "Tệp dự án: \"%s\""
 
 #: kicad/tools/kicad_manager_control.cpp:238
 #: kicad/tools/kicad_manager_control.cpp:676
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"Không đủ quyền cần thiết để lưu File\n"
-"%s"
+msgstr "Không đủ quyền để ghi vào thư mục '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:259
 msgid "Overwriting files:"
@@ -22125,17 +22084,19 @@ msgid "Save Project To"
 msgstr "Tệp dự án KiCad"
 
 #: kicad/tools/kicad_manager_control.cpp:667
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Please make sure you have write permissions and try again."
-msgstr "Bạn không có quyền ghi để lưu tệp tin \"%s\"."
+msgstr ""
+"Không thể tạo thư mục '%s'.\n"
+"\n"
+"Hãy đảm bảo rằng bạn có quyền ghi và thử lại."
 
 #: kicad/tools/kicad_manager_control.cpp:678
-#, fuzzy
 msgid "Error!"
-msgstr "Lỗi"
+msgstr "Lỗi!"
 
 #: kicad/tools/kicad_manager_control.cpp:734
 #, fuzzy
@@ -22148,9 +22109,8 @@ msgid "Create (or open) a project to edit a pcb."
 msgstr "Tạo tài liệu mới trong trình soạn thảo"
 
 #: kicad/tools/kicad_manager_control.cpp:757
-#, fuzzy
 msgid "Application failed to load:\n"
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không tải được ứng dụng:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:763
 #, fuzzy
@@ -22203,17 +22163,15 @@ msgstr "Điểm gốc của lưới"
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:275
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:328
-#, fuzzy
 msgid "Upper Right"
-msgstr "Góc nhìn  bên phải"
+msgstr "Phía trên bên phải"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:276
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:329
-#, fuzzy
 msgid "Upper Left"
-msgstr "Góc nhìn  bên trái"
+msgstr "Phía trên bên trái"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -22495,9 +22453,9 @@ msgid "Append Existing Drawing Sheet"
 msgstr "User.Drawings"
 
 #: pagelayout_editor/files.cpp:142 pagelayout_editor/files.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load %s file"
-msgstr "không thể mở tập tin"
+msgstr "Không thể tải tệp %s"
 
 #: pagelayout_editor/files.cpp:149
 #, fuzzy, c-format
@@ -22515,9 +22473,9 @@ msgid "File \"%s\" saved."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
 #: pagelayout_editor/files.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write '%s'."
-msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
+msgstr "Không thể ghi '%s'."
 
 #: pagelayout_editor/files.cpp:195
 #, fuzzy
@@ -22552,7 +22510,7 @@ msgstr "Thuộc tính Văn bản"
 #: pagelayout_editor/pl_editor_frame.cpp:343
 #, fuzzy, c-format
 msgid "Error loading drawing sheet '%s'."
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr "Lỗi tải trang vẽ '%s'."
 
 #: pagelayout_editor/pl_editor_frame.cpp:460
 #, fuzzy
@@ -23323,7 +23281,7 @@ msgstr "Xoay"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:221
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:98
 msgid "Calculate"
-msgstr ""
+msgstr "Tính toán"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -23486,14 +23444,12 @@ msgid "mV"
 msgstr "mm"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:154
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "Tệp dữ liệu máy tính PCB"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:157
-#, fuzzy
 msgid "Select PCB Calculator Data File"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "Chọn tệp dữ liệu máy tính PCB"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:172
 msgid "Do you want to load this file and replace current regulator list?"
@@ -23640,7 +23596,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, fuzzy, c-format
 msgid "Attenuation more than %f dB"
-msgstr "Saturation:"
+msgstr "Suy hao lớn hơn %f dB"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:23
 #, fuzzy
@@ -23792,9 +23748,8 @@ msgid "Coupled Microstrip Line"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
-#, fuzzy
 msgid "Stripline"
-msgstr "Độ dày lưới:"
+msgstr "Đường truyền dải"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Twisted Pair"
@@ -23981,11 +23936,15 @@ msgid "nanoseconds"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
+#, fuzzy
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
+"Cảnh báo:\n"
+"Đường kính via pad >= Đường kính lỗ hở.\n"
+"Một số tham số không thể tính toán được cho via bên trong vùng đồng."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
@@ -24154,6 +24113,16 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
+"Bạn có thể sử dụng máy tính này để kiểm tra xem một đường mạch nhỏ có thể "
+"chịu được dòng điện lớn trong khoảng thời gian ngắn hay không.<br>\n"
+"Công cụ này cho phép bạn thiết kế cầu chì đường mạch nhưng chỉ nên sử dụng "
+"như một ước tính.\n"
+"\n"
+"Máy tính ước tính năng lượng cần thiết để làm nóng dây<br>\n"
+"đến điểm nóng chảy của nó cũng như năng lượng cần thiết cho sự thay đổi "
+"pha.<br>\n"
+"Năng lượng này sau đó được so sánh với năng lượng bị tiêu tán bởi điện trở "
+"của dây."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:71
 msgid "General system design"
@@ -24266,6 +24235,30 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
+"Nếu bạn chỉ định dòng điện tối đa thì chiều rộng đường mạch sẽ được tính "
+"toán cho phù hợp.\n"
+"\n"
+"Nếu bạn chỉ định một trong các chiều rộng đường mạch, dòng điện tối đa có "
+"thể xử lý sẽ được tính toán. Sau đó, chiều rộng của đường mạch khác cũng xử "
+"lý dòng điện này sẽ được tính toán.\n"
+"\n"
+"Giá trị kiểm soát được hiển thị in đậm.\n"
+"\n"
+"Các tính toán có giá trị đối với dòng điện lên tới 35 A (bên ngoài) hoặc "
+"17,5 A (bên trong), nhiệt độ tăng lên tới 100 ° C và chiều rộng lên tới 400 "
+"mils (10 mm).\n"
+"\n"
+"Công thức từ IPC 2221 là\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
+"H)<sup>0,725</sup>___</center>\n"
+"Trong đó:<br>\n"
+"___I___ là dòng điện cực đại tính bằng A<br>\n"
+"___&Delta;T___ là mức tăng nhiệt độ so với môi trường xung quanh tính theo "
+"&deg;C<br>\n"
+"___W___ là chiều rộng tính bằng mil<br>\n"
+"___H___ là độ dày (chiều cao) tính bằng mil<br>\n"
+"___K___ là 0,024 đối với đường mạchbên trong hoặc 0,048 đối với đường mạch "
+"bên ngoài\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 #, fuzzy
@@ -24677,7 +24670,7 @@ msgstr "Đang tải..."
 #: pcbnew/autorouter/ar_autoplacer.cpp:905
 #, fuzzy, c-format
 msgid "Autoplacing %s"
-msgstr "Tốc độ pan tự động:"
+msgstr "Đang tự động đặt %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
@@ -24702,7 +24695,7 @@ msgstr "Đang tải..."
 #: pcbnew/board.cpp:1026
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
-msgstr ""
+msgstr "PCB"
 
 #: pcbnew/board.cpp:1432 pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:78
@@ -24757,9 +24750,8 @@ msgid "NetName"
 msgstr "Tên net"
 
 #: pcbnew/board_item.cpp:116
-#, fuzzy
 msgid "all copper layers"
-msgstr "Làm giảm góc nhọn %d  của vùng bao phủ ở các lớp"
+msgstr "tất cả các lớp đồng"
 
 #: pcbnew/board_item.cpp:127
 #, fuzzy
@@ -24801,9 +24793,9 @@ msgid "Locked"
 msgstr "Đối tượng Bị khóa"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Dielectric %d"
-msgstr "Sự Phản chiếu"
+msgstr "Điện môi %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:534
 #, fuzzy
@@ -24916,14 +24908,14 @@ msgid "PrePreg"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Độ dày lưới:"
+msgstr "Nhập độ dày bo mạch theo %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Độ dày lưới:"
+msgstr "Nhập độ dày bo mạch dự kiến (giá trị tối thiểu %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
 #, fuzzy
@@ -25410,7 +25402,9 @@ msgstr ""
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "Đường dẫn thư viện footprint KiCad"
+msgstr ""
+"\n"
+"Back footprints sẽ bắt đầu ở %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:334
 msgid "the last front footprint + 1"
@@ -25424,11 +25418,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
-msgstr "ID footprint \"%s\" không hợp lệ."
+msgstr ""
+"\n"
+"Front footprints sẽ được chèn '%s' làm tiền tố."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
 #, c-format
@@ -25556,27 +25552,31 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:798
 #, fuzzy, c-format
 msgid "Duplicate instances of %s"
-msgstr "Nhiều mục %s%s\n"
+msgstr "Nhiều mục %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:804
 msgid "Aborted: too many errors"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:858
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
-msgstr "Các Footprint được lọc"
+msgstr ""
+"\n"
+"\n"
+"Front Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:859
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "Footprint"
+msgstr ""
+"\n"
+"\n"
+"Back Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:924
 #, fuzzy
@@ -25868,13 +25868,12 @@ msgid "Loading PCB"
 msgstr "Đang tải PCB"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading board file:\n"
 "%s"
 msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
+"Lỗi tải tệp bo mạch:\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:96
@@ -26011,12 +26010,9 @@ msgid "Drill holes"
 msgstr "Tệp lỗ khoan"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing file '%s'."
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Lỗi ghi tệp '%s'."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
 #, fuzzy
@@ -26534,9 +26530,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
-#, fuzzy
 msgid "Copper Zone Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính vùng đồng"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:133
 msgid "Numerals (0,1,2,...,9,10)"
@@ -26557,7 +26552,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_create_array.cpp:269
 #, fuzzy, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "Đã cập nhật %s từ %s thành %s"
+msgstr "Giá trị số sai cho %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:305
 #, c-format
@@ -27149,7 +27144,7 @@ msgstr "-------- DRC bị hủy bởi người dùng.<br><br>"
 #: pcbnew/dialogs/dialog_drc.cpp:587
 #, fuzzy, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "Xóa loại trừ đối với vi phạm này"
+msgstr "Xóa tất cả các loại trừ do vi phạm quy tắc '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:599
 #, fuzzy, c-format
@@ -27216,14 +27211,13 @@ msgid "Unconnected Items (%s)"
 msgstr "Không kết nối"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Đánh dấu Schematic"
+msgstr "Sơ đồ chẵn lẻ (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Chỉnh sửa mức độ vi phạm ..."
+msgstr "Chỉnh sửa các kiểm tra bị bỏ qua"
 
 #: pcbnew/dialogs/dialog_drc_base.h:106 pcbnew/tools/pcb_actions.cpp:240
 #, fuzzy
@@ -27308,9 +27302,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Hiện footprint được chọn"
+msgstr "Đã cập nhật footprint %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, fuzzy, c-format
@@ -27379,7 +27373,7 @@ msgstr "Cập nhật trường vị trí"
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 #, fuzzy
 msgid "Update/reset fabrication attributes"
-msgstr "Duyệt qua các thư viện symbol"
+msgstr "Cập nhật/đặt lại thuộc tính chế tạo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
 #, fuzzy
@@ -27393,9 +27387,9 @@ msgstr "Tạo Thư viện Footprint"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Tệp %s đã tồn tại."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -27473,11 +27467,13 @@ msgid "STEP export failed!  Please save the PCB and try again"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
-msgstr "Đường viền bo mạch không đúng định dạng. Chạy DRC để phân tích đầy đủ."
+msgstr ""
+"Đường viền bo mạch bị thiếu hoặc không được đóng theo dung sai %.3f mm.\n"
+"Chạy DRC để phân tích đầy đủ."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:357
 #: pcbnew/dialogs/dialog_export_step_process_base.h:44
@@ -27578,9 +27574,8 @@ msgid "Export STEP"
 msgstr "%s Xuất"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Lệnh:"
+msgstr "Dòng lệnh:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -27898,24 +27893,24 @@ msgid "Text items must have some content."
 msgstr "Các trường phải có tên."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at least %s."
-msgstr "%s phải ít nhất %s."
+msgstr "Chiều rộng văn bản ít nhất phải là %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Text width must be at most %s."
-msgstr "%s phải ít nhất %s."
+msgstr "Chiều rộng văn bản tối đa phải là %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at least %s."
-msgstr "%s phải ít nhất %s."
+msgstr "Chiều cao văn bản ít nhất phải là %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "Text height must be at most %s."
-msgstr "%s phải ít nhất %s."
+msgstr "Chiều cao văn bản tối đa phải là %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:438
 #, c-format
@@ -27926,9 +27921,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:573
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:608
-#, fuzzy
 msgid "Modify footprint properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Sửa đổi thuộc tính footprint"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:632
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:679
@@ -28196,9 +28190,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:121
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:113
 #: pcbnew/footprint.cpp:3076
-#, fuzzy
 msgid "Footprint Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính footprint"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:370
 #, fuzzy
@@ -28206,19 +28199,19 @@ msgid "Footprint must have a name."
 msgstr "Trường phải có tên."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "Tên footprint không được chứa '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "The text width must be between %s and %s."
-msgstr "Nhập không khớp giữa '%s' và %lf"
+msgstr "Chiều rộng văn bản phải nằm trong khoảng từ %s đến %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "The text height must be between %s and %s."
-msgstr "Nhập không khớp giữa '%s' và %lf"
+msgstr "Chiều cao văn bản phải nằm trong khoảng từ %s đến %s."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:457
 #: pcbnew/dialogs/dialog_text_properties.cpp:543
@@ -28364,7 +28357,7 @@ msgstr "Tuỳ chọn"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "Các tùy chọn được hỗ trợ bởi plugin hiện tại"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
@@ -28413,11 +28406,13 @@ msgid "Placement file: '%s'."
 msgstr "Tệp dự án: \"%s\""
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint report file created:\n"
 "'%s'."
-msgstr "Tệp báo cáo '%s' đã được tạo\n"
+msgstr ""
+"Tệp báo cáo footprint đã được tạo:\n"
+"'%s'."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:569
 #, fuzzy
@@ -28521,9 +28516,9 @@ msgid "Generate Map File"
 msgstr "Trình tạo tệp tin:"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
-msgstr "Bạn không có quyền ghi để lưu tệp \"%s\" vào thư mục \"%s\"."
+msgstr "Không thể ghi các tệp khoan và/hoặc bản đồ vào thư mục '%s'."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:456
 #, fuzzy
@@ -28997,7 +28992,7 @@ msgstr "Footprint"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
 #, fuzzy, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "Lỗi tải bảng thư viện footprint trong dự án"
+msgstr "Đã xảy ra lỗi khi ghi bảng thư viện footprint trống '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:74
 #, fuzzy
@@ -29015,13 +29010,17 @@ msgid "Cannot create library table path '%s'."
 msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
-msgstr "Không thể tạo đường dẫn bảng thư viện chung \"%s\"."
+msgstr ""
+"Không thể sao chép bảng thư viện footprint từ:\n"
+"%s\n"
+"đến:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:134
 #, fuzzy
@@ -29193,21 +29192,17 @@ msgid "Changes Applied to PCB"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "Tệp netlist KiCad"
+msgstr "Đang đọc tệp netlist '%s'.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:229
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
-msgstr "Gán cho các Net đã chọn"
+msgstr "Sử dụng các chỉ định tham chiếu để khớp biểu tượng với footprint.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:231
-#, fuzzy
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr ""
-"Lưu các liên kết footprint trong các trường symbol và footprint trong sơ đồ "
-"mạch"
+msgstr "Sử dụng tstamp (ID duy nhất) để khớp biểu tượng với footprint.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 #, fuzzy
@@ -29582,9 +29577,8 @@ msgid "degree"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:84
-#, fuzzy
 msgid "Non Copper Zone Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính vùng không có đồng"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:143
@@ -29764,14 +29758,13 @@ msgstr "Không xác định parent của thuộc tính"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:944
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "All copper layers"
-msgstr "Làm giảm góc nhọn %d  của vùng bao phủ ở các lớp"
+msgstr "Tất cả các lớp đồng"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:945
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and connected layers"
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "%s, %s và các lớp được kết nối"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:948
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -29780,9 +29773,9 @@ msgid "Connected layers only"
 msgstr "Tạo các lớp"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:953
-#, fuzzy, c-format
+#, c-format
 msgid "%s and %s"
-msgstr "Khối"
+msgstr "%s và %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
@@ -30378,18 +30371,12 @@ msgid "No layer selected, Nothing to plot"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:1038
-#, fuzzy
 msgid "Warning: Scale option set to a very small value"
-msgstr ""
-"Cảnh báo: Tùy chọn tỷ lệ co dãn được đặt thành một giá trị rất nhỏ.\n"
-"giữ đến %f"
+msgstr "Cảnh báo: Tùy chọn tỷ lệ được đặt thành một giá trị rất nhỏ"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1041
-#, fuzzy
 msgid "Warning: Scale option set to a very large value"
-msgstr ""
-"Cảnh báo: Tùy chọn tỷ lệ co dãn được đặt thành giá trị rất lớn.\n"
-" Kẹp giữ vào %f"
+msgstr "Cảnh báo: Tùy chọn tỷ lệ được đặt thành một giá trị rất lớn"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:24
 #, fuzzy
@@ -31120,9 +31107,9 @@ msgid "from %s"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Lớp Net"
+msgstr "Chi tiết: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -31295,14 +31282,12 @@ msgid "Footprint Reference Properties"
 msgstr "Tệp footprint  KiCad"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:90
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính giá trị footprint"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:91
-#, fuzzy
 msgid "Footprint Text Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính văn bản footprint"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:96
 #, fuzzy
@@ -31310,9 +31295,9 @@ msgid "Reference:"
 msgstr "Tham chiếu"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "ID footprint \"%s\" không hợp lệ."
+msgstr "Footprint %s (%s), %s, đã xoay %.1f độ"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:575
 #, fuzzy
@@ -31877,14 +31862,14 @@ msgid "Edit options"
 msgstr "Các tùy chọn chỉnh sửa"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Tìm thấy ký tự bất hợp pháp trong tên thư viện lô-gic"
+msgstr "Ký tự không hợp lệ '%c' trong biệt danh '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:812
-#, fuzzy, c-format
+#, c-format
 msgid "Select %s Library"
-msgstr "Chọn Thư viện"
+msgstr "Chọn %s thư viện"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:870
 #, fuzzy
@@ -33432,9 +33417,9 @@ msgstr "Đang kiểm tra nhãn..."
 
 #: pcbnew/drc/drc_engine.cpp:241 pcbnew/drc/drc_engine.cpp:320
 #: pcbnew/drc/drc_engine.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s'"
-msgstr "Bộ lọc Net class:"
+msgstr "netclass '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:267 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:302
@@ -33455,7 +33440,7 @@ msgstr "Vùng Rule %s\t"
 #: pcbnew/drc/drc_engine.cpp:618
 #, fuzzy, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "Tạo các lớp"
+msgstr "Đã giải quyết loại kết nối vùng: %s."
 
 #: pcbnew/drc/drc_engine.cpp:636
 #, c-format
@@ -33762,9 +33747,8 @@ msgid "Items shorting two nets"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Items not allowed"
-msgstr "Mục không có chú thích: %s%s\n"
+msgstr "Mục không được phép"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Text (or dimension) on Edge.Cuts layer"
@@ -34594,9 +34578,8 @@ msgstr "Đường viền bo mạch không đúng định dạng. Chạy DRC đ�
 
 #: pcbnew/exporters/export_idf.cpp:655 pcbnew/exporters/export_idf.cpp:664
 #: pcbnew/exporters/export_idf.cpp:672
-#, fuzzy
 msgid "IDF Export Failed:\n"
-msgstr "Xuất ra Tệp"
+msgstr "Xuất IDP thất bại:\n"
 
 #: pcbnew/exporters/exporter_vrml.cpp:810
 msgid "VRML Export Failed: Could not add holes to contours."
@@ -34607,9 +34590,8 @@ msgid "No project when exporting the VRML file"
 msgstr ""
 
 #: pcbnew/exporters/exporter_vrml.cpp:1302
-#, fuzzy
 msgid "VRML Export Failed:\n"
-msgstr "Xuất ra Tệp"
+msgstr "Xuất VRML thất bại:\n"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:129
 #, fuzzy, c-format
@@ -34638,7 +34620,7 @@ msgstr ""
 #: pcbnew/exporters/step/exporter_step.cpp:351
 #, fuzzy, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Độ dày lưới:"
+msgstr "Độ dày của bo mạch khi xếp chồng: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:356
 msgid "Build STEP data\n"
@@ -34766,19 +34748,14 @@ msgid "Creating PCB"
 msgstr "Đang tạo PCB"
 
 #: pcbnew/files.cpp:772 pcbnew/files.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading PCB '%s'."
-msgstr ""
-"Lỗi tải sơ đồ mạch.\n"
-"%s"
+msgstr "Lỗi tải PCB '%s'."
 
 #: pcbnew/files.cpp:791
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Hết bộ nhớ khi tải PCB '%s'"
 
 #: pcbnew/files.cpp:904
 #, fuzzy, c-format
@@ -34794,43 +34771,41 @@ msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
 #: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
 #: pcbnew/footprint_libraries_utils.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr ""
-"Không đủ quyền cần thiết để lưu File\n"
-"%s"
+msgstr "Không đủ quyền để ghi tập tin '%s'."
 
 #: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Lỗi lưu tệp quy tắc tùy chỉnh '%s'."
 
 #: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
+"Lỗi lưu tệp bo mạch '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr ""
+"Lỗi lưu tệp bo mạch '%s'.\n"
+"Không thể đổi tên tệp tạm thời '%s."
 
 #: pcbnew/files.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
-msgstr "Phần bản mạch:"
+msgstr ""
+"copy bo mạch đến:\n"
+"%s"
 
 #: pcbnew/footprint.cpp:785 pcbnew/footprint_libraries_utils.cpp:1260
 #, fuzzy
@@ -35050,11 +35025,13 @@ msgid "Edit Zone"
 msgstr "Chỉnh sửa tập tin"
 
 #: pcbnew/footprint_editor_utils.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
-msgstr "Tên '%s' xung đột với một mục hiện có trong thư viện '%s'."
+msgstr ""
+"Cấu hình hiện tại không bao gồm thư viện có tên '%s'.\n"
+"Sử dụng Quản lý thư viện footprint để chỉnh sửa cấu hình."
 
 #: pcbnew/footprint_editor_utils.cpp:334
 #, fuzzy
@@ -35062,11 +35039,13 @@ msgid "Library not found in footprint library table."
 msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
 #: pcbnew/footprint_editor_utils.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
-msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
+msgstr ""
+"Thư viện '%s' không được kích hoạt trong cấu hình hiện tại.\n"
+"Sử dụng Quản lý thư viện footprint để chỉnh sửa cấu hình."
 
 #: pcbnew/footprint_editor_utils.cpp:346 pcbnew/footprint_viewer_frame.cpp:1123
 msgid "Footprint library not enabled."
@@ -35109,12 +35088,9 @@ msgid "Not a footprint file."
 msgstr "Không có footprint nào được nạp vào."
 
 #: pcbnew/footprint_libraries_utils.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Không thể tải dấu chân '%s' từ '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:334
 #, fuzzy
@@ -35132,9 +35108,9 @@ msgid "Library %s is read only."
 msgstr "Schematic Field"
 
 #: pcbnew/footprint_libraries_utils.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s already exists."
-msgstr "Chủ đề đã tồn tại!"
+msgstr "Thư viện %s đã tồn tại."
 
 #: pcbnew/footprint_libraries_utils.cpp:636
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:973
@@ -35155,19 +35131,18 @@ msgid "Footprint '%s' deleted from library '%s'"
 msgstr "Không tìm thấy Footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:674
-#, fuzzy
 msgid "No footprints to export!"
-msgstr "Văn bản trên Footprint"
+msgstr "Không có footprint để xuất!"
 
 #: pcbnew/footprint_libraries_utils.cpp:696
 #, fuzzy, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Cập nhật các Symbol từ Thư viện"
+msgstr "Cập nhật footprint trên bo mạch để tham khảo %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:743
 #, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Cập nhật các Symbol từ Thư viện"
+msgstr "Cập nhật footprint trên bo mạch để tham khảo thư viện mới?"
 
 #: pcbnew/footprint_libraries_utils.cpp:934
 #: pcbnew/footprint_viewer_frame.cpp:843
@@ -35314,7 +35289,7 @@ msgstr "Không có symbol nào được chọn"
 #: pcbnew/footprint_wizard_frame_functions.cpp:140
 #, fuzzy
 msgid "Couldn't reload footprint wizard"
-msgstr "Không thể mở tệp lưu trữ\n"
+msgstr "Không thể tải lại trình hướng dẫn footprint"
 
 #: pcbnew/fp_shape.cpp:126 pcbnew/pcb_shape.cpp:317
 #, fuzzy, c-format
@@ -35352,12 +35327,9 @@ msgid "Documentation"
 msgstr "Tệp Tài liệu"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Lỗi khi tải footprint %s từ thư viện '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:122
 msgid "doc url"
@@ -35458,9 +35430,8 @@ msgid "Default units:"
 msgstr "Mặc định"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:86
-#, fuzzy
 msgid "Import Vector Graphics File"
-msgstr "Nhập vào các phím nóng ..."
+msgstr "Nhập tệp Đồ họa Vector"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:134
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
@@ -36054,13 +36025,17 @@ msgid "Cannot find component with ref '%s' in netlist."
 msgstr ""
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"ID footprint không hợp lệ trong\n"
+"tệp: '%s'\n"
+"dòng: %d\n"
+"offset: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:118
 msgid "Cannot parse time stamp in symbol section of netlist."
@@ -36130,12 +36105,15 @@ msgstr ""
 "footprint nào của dự án."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
-msgstr "Footprint được chỉ định không hợp lệ"
+msgstr ""
+"ID footprint không hợp lệ trong\n"
+"tệp: '%s'\n"
+"dòng: %d"
 
 #: pcbnew/pad.cpp:839 pcbnew/pad.cpp:966 pcbnew/pad.cpp:975 pcbnew/pad.cpp:984
 #, fuzzy
@@ -36704,53 +36682,48 @@ msgid "Via Type"
 msgstr "Kiểu Đường dẫn"
 
 #: pcbnew/pcbnew.cpp:409
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
-msgstr "Đã xảy ra lỗi khi cố tải bảng thư viện footprint toàn cục"
+msgstr ""
+"Đã xảy ra lỗi khi tải bảng thư viện footprint toàn cục.\n"
+"Vui lòng chỉnh sửa bảng thư viện footprint toàn cục này trong menu Tùy chọn."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:85 pcbnew/pcbnew_jobs_handler.cpp:139
 #: pcbnew/pcbnew_jobs_handler.cpp:163 pcbnew/pcbnew_jobs_handler.cpp:218
 #: pcbnew/pcbnew_jobs_handler.cpp:287 pcbnew/pcbnew_jobs_handler.cpp:409
 #: pcbnew/pcbnew_jobs_handler.cpp:460 pcbnew/pcbnew_jobs_handler.cpp:583
-#, fuzzy
 msgid "Loading board\n"
-msgstr "Đang tải..."
+msgstr "Đang tải bo mạch\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:146
 msgid "Successfully created svg file"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:148 pcbnew/pcbnew_jobs_handler.cpp:830
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Lỗi giải nén tập tin!\n"
+msgstr "Lỗi tạo tệp svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:360 pcbnew/pcbnew_jobs_handler.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Không tải được thư viện kiface \"%s\"."
+msgstr "Không thể vẽ vào '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Không thể tạo thư mục đầu ra \"%s\".\n"
+msgstr "Không tạo được thư mục đầu ra\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
-#, fuzzy
 msgid "Loading footprint library\n"
-msgstr "Lỗi tải bảng thư viện footprint trong dự án"
+msgstr "Đang tải thư viện footprint\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:695
-#, fuzzy
 msgid "Saving footprint library\n"
-msgstr "Lỗi tải bảng thư viện footprint trong dự án"
+msgstr "Đang lưu thư viện footprint\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:714
-#, fuzzy
 msgid "Footprint library was not updated\n"
-msgstr "Footprint \"%s\" không tìm thấy."
+msgstr "Thư viện footprint không được cập nhật\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:778
 #, fuzzy
@@ -36759,9 +36732,9 @@ msgstr ""
 "Không thể tìm thấy tệp tương đương \"%s\" trong đường dẫn tìm kiếm mặc định."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:816
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Thay đổi symbol %s từ '%s' thành '%s'"
+msgstr "Vẽ footprint '%s' thành '%s'\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 #, fuzzy
@@ -37422,7 +37395,9 @@ msgstr ""
 msgid ""
 "Invalid zero-sized pad ignored in\n"
 "file: %s"
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"pad kích thước 0 không hợp lệ bị bỏ qua trong\n"
+"tệp: %s"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1972
 #, c-format
@@ -37597,11 +37572,9 @@ msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:992
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2751
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Không đủ quyền cần thiết để lưu File\n"
-"%s"
+msgstr "Không đủ quyền để xóa thư mục '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1000
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2759
@@ -37658,13 +37631,17 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "%s trong \"%s\", dòng %d, offset %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3601
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"footprint ID không hợp lệ trong\n"
+"tệp: %s\n"
+"dòng: %d\n"
+"offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3988
 #, fuzzy, c-format
@@ -37672,12 +37649,15 @@ msgid "Cannot handle footprint text type %s"
 msgstr "Không thể mở tệp '%s'"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4768
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"net ID không hợp lệ trong\n"
+"tệp: %s\n"
+"dòng: %d offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4787
 #, fuzzy, c-format
@@ -37685,7 +37665,10 @@ msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"Tên net không khớp ID trong\n"
+"tệp: %s\n"
+"dòng: %d offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5064
 #, fuzzy, c-format
@@ -37694,43 +37677,63 @@ msgid ""
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"pad có kích thước bằng 0 không hợp lệ được ghim vào %s trong\n"
+"tệp: %s\n"
+"dòng: %d\n"
+"offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d."
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"net ID không hợp lệ trong\n"
+"tệp: %s\n"
+"dòng: %d\n"
+"offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5327
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"net ID không hợp lệ trong\n"
+"tệp: '%s'\n"
+"dòng: %d\n"
+"offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5426
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d\n"
 "offset: %d"
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"net ID không hợp lệ trong\n"
+"tệp: %s\n"
+"dòng: %d\n"
+"offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5555
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s;\n"
 "line: %d\n"
 "offset: %d."
-msgstr "%s trong \"%s\", dòng %d, offset %d"
+msgstr ""
+"net ID không hợp lệ trong\n"
+"tệp: %s\n"
+"line: %d\n"
+"offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
 msgid ""
@@ -37814,11 +37817,9 @@ msgid "Footprint file name '%s' is not valid."
 msgstr "ID footprint \"%s\" không hợp lệ."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2654
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Không đủ quyền cần thiết để lưu File\n"
-"%s"
+msgstr "Không đủ quyền để xóa '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2726
 #, fuzzy, c-format
@@ -37856,9 +37857,9 @@ msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "Nhiều mục %s%s\n"
+msgstr "Trùng tên NETCLASS '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2403
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2414
@@ -37878,27 +37879,23 @@ msgstr ""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2811
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Số dấu phẩy động không hợp lệ trong\n"
-"tập tin: '%s'\n"
-"dòng: %d\n"
-"độ lệch: %d"
+"Số thập phân không hợp lệ trong tệp: '%s'\n"
+"dòng: %d, độ lệch: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2821
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2860
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Thiếu số dấu phẩy động trong\n"
-"tập tin: '%s'\n"
-"dòng: %d\n"
-"độ lệch: %d"
+"Thiếu số dấu phẩy động trong tệp: '%s'\n"
+"dòng: %d, độ lệch: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3002
 #, fuzzy, c-format
@@ -37936,12 +37933,9 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:139
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr ""
-"Tệp script:\n"
-"%s\n"
-"không tìm thấy. Tập lệnh không có sẵn."
+msgstr "Không tìm thấy phương thức '%s' hoặc không thể gọi được"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:140
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -40144,14 +40138,12 @@ msgid "Export footprint to file"
 msgstr "Xuất ra Tệp"
 
 #: pcbnew/tools/pcb_actions.cpp:453
-#, fuzzy
 msgid "Footprint Properties..."
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:453
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Chỉnh sửa thuộc tính footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:458
 #, fuzzy
@@ -40189,12 +40181,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:483
-#, fuzzy
 msgid "Assign a different footprint from the library"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Chỉ định một footprint khác từ thư viện"
 
 #: pcbnew/tools/pcb_actions.cpp:488
 #, fuzzy
@@ -40202,12 +40190,8 @@ msgid "Change Footprints..."
 msgstr "Đang kiểm tra footprint ..."
 
 #: pcbnew/tools/pcb_actions.cpp:488
-#, fuzzy
 msgid "Assign different footprints from the library"
-msgstr ""
-"Lỗi khi tải biểu tượng %s từ thư viện %s.\n"
-"\n"
-"%s"
+msgstr "Chỉ định dấu chân khác từ thư viện"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 #, fuzzy
@@ -41544,11 +41528,13 @@ msgid "Invalid clipboard contents"
 msgstr "Mã nhận dạng thư viện symbol không hợp lệ"
 
 #: pcbnew/tools/pcb_control.cpp:1312
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading board.\n"
 "%s"
-msgstr "Lỗi khi tải trình chỉnh sửa"
+msgstr ""
+"Lỗi khi tải bo mạch.\n"
+"%s"
 
 #: pcbnew/tools/pcb_control.cpp:1444
 #, fuzzy
@@ -42335,9 +42321,8 @@ msgid "Back copper layer"
 msgstr "Màu sắc lớp Đồng"
 
 #: pcbnew/widgets/appearance_controls.cpp:1699
-#, fuzzy
 msgid "Inner copper layer"
-msgstr "Làm giảm góc nhọn %d  của vùng bao phủ ở các lớp"
+msgstr "Lớp đồng bên trong"
 
 #: pcbnew/widgets/appearance_controls.cpp:1787
 #, fuzzy
@@ -42445,7 +42430,7 @@ msgstr "Di chuyển bo mạch lên trên"
 
 #: pcbnew/widgets/appearance_controls.cpp:2670
 msgid "Presets"
-msgstr ""
+msgstr "Cài đặt trước"
 
 #: pcbnew/widgets/appearance_controls.cpp:2682
 #, fuzzy
@@ -42475,12 +42460,12 @@ msgstr "Cấu hình các Đường dẫn"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
-msgstr ""
+msgstr "Cài đặt trước (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "(unsaved)"
-msgstr ""
+msgstr "(chưa lưu)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 #, fuzzy
@@ -42625,9 +42610,8 @@ msgid "Copper Zone"
 msgstr "Màu sắc lớp Đồng"
 
 #: pcbnew/zone.cpp:674
-#, fuzzy
 msgid "Non-copper Zone"
-msgstr "Tệp footprint  KiCad"
+msgstr "Khu vực không có đồng"
 
 #: pcbnew/zone.cpp:822
 #, fuzzy, c-format
@@ -42776,18 +42760,16 @@ msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "Máy tính PCB KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB Calculator"
-msgstr "Trình chỉnh sửa Ảnh"
+msgstr "Máy tính PCB"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
-msgstr ""
+msgstr "Máy tính cho các phép tính khác nhau liên quan đến điện tử"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 #, fuzzy
