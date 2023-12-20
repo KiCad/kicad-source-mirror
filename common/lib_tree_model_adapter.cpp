@@ -265,8 +265,8 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
             }
             else
             {
-                // In case the full token happens to be a library name
-                m_tree.UpdateScore( nullptr, term, nullptr );
+                // In case the full token happens to match a library name
+                m_tree.UpdateScore( nullptr, '*' + term + '*', nullptr );
             }
         }
 

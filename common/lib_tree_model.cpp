@@ -247,7 +247,7 @@ void LIB_TREE_NODE_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxSt
         m_Score += aMatcher->ScoreTerms( m_SearchTerms );
 
     // aLib test is additive
-    if( !aLib.IsEmpty() && m_Parent->m_Name.Lower() == aLib )
+    if( !aLib.IsEmpty() && m_Parent->m_Name.Lower().Matches( aLib ) )
         m_Score += 1;
 
     // aFilter test is subtractive
@@ -294,7 +294,7 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const w
     }
 
     // aLib test is additive
-    if( !aLib.IsEmpty() && m_Name.Lower() == aLib )
+    if( !aLib.IsEmpty() && m_Name.Lower().Matches( aLib ) )
         m_Score += 1;
 
     // aMatcher test is additive
