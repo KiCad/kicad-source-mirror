@@ -518,9 +518,3 @@ const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer ) const
 
     return color;
 }
-
-
-//const int ROUTER_PREVIEW_ITEM::ClearanceOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 10;
-//const int ROUTER_PREVIEW_ITEM::BaseOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 20;
-//const int ROUTER_PREVIEW_ITEM::ViaOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 50;
-//const int ROUTER_PREVIEW_ITEM::PathOverlayDepth = -VIEW::VIEW_MAX_LAYERS - 55;
