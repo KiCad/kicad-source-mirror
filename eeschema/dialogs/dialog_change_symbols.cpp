@@ -350,14 +350,26 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
     }
 
     // Update the listbox widget
+    wxArrayInt    checkedItems;
+    wxArrayString checkedNames;
+
+    m_fieldsBox->GetCheckedItems( checkedItems );
+
+    for( int i : checkedItems )
+        checkedNames.push_back( m_fieldsBox->GetString( i ) );
+
+    bool allChecked = checkedItems.size() == m_fieldsBox->GetCount();
+
     for( unsigned i = m_fieldsBox->GetCount() - 1; i >= MANDATORY_FIELDS; --i )
         m_fieldsBox->Delete( i );
 
     for( const wxString& fieldName : fieldNames )
+    {
         m_fieldsBox->Append( fieldName );
 
-    for( unsigned i = MANDATORY_FIELDS; i < m_fieldsBox->GetCount(); ++i )
-        m_fieldsBox->Check( i, true );
+        if( allChecked || alg::contains( checkedNames, fieldName ) )
+            m_fieldsBox->Check( m_fieldsBox->GetCount() - 1, true );
+    }
 }
 
 
