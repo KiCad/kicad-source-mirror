@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-20 13:33+0000\n"
+"PO-Revision-Date: 2023-12-21 10:49+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -302,7 +302,6 @@ msgid "Follow PCB Plot Settings"
 msgstr "Theo dõi cài đặt in bản mạch in"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
-#, fuzzy
 msgid "legacy colors"
 msgstr "Màu kế thừa"
 
@@ -510,7 +509,6 @@ msgid "Use all material properties from each 3D model file"
 msgstr "Sử dụng tất cả thuộc tính vật liệu từ mỗi tập tin mô hình 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:283
-#, fuzzy
 msgid "Render Solid Colors"
 msgstr "Kết xuất màu đồng nhất"
 
@@ -31892,9 +31890,9 @@ msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Xóa tất cả các loại trừ do vi phạm quy tắc '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:611
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "Loại trừ vi phạm này"
+msgstr "Loại trừ tất cả các vi phạm quy tắc '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:622
 #, fuzzy
@@ -31959,9 +31957,9 @@ msgid "Test for parity between PCB and schematic"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Không kết nối"
+msgstr "Các mục không được kết nối (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:140
 #, c-format
@@ -35863,9 +35861,9 @@ msgid "<none selected>"
 msgstr "Không có symbol nào được chọn"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Bộ chỉ định tham chiếu"
+msgstr "Mục tham chiếu: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 #, fuzzy
@@ -38707,9 +38705,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "Bộ lọc Net class:"
+msgstr "netclass '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 #, fuzzy
@@ -38734,7 +38732,7 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:759 pcbnew/drc/drc_engine.cpp:769
 #, fuzzy, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Ghi đè cục bộ trên %s; khoảng trống: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784 pcbnew/drc/drc_engine.cpp:1392
 #: pcbnew/drc/drc_engine.cpp:1408
@@ -38746,7 +38744,7 @@ msgstr "Chiều rộng Track"
 #: pcbnew/drc/drc_engine.cpp:1402
 #, fuzzy, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Clearance lớp đồng tối thiểu"
+msgstr "Khoảng trống tối thiểu của bảng: %s."
 
 #: pcbnew/drc/drc_engine.cpp:796
 #, fuzzy
@@ -38764,9 +38762,9 @@ msgid "Local override on %s; zone connection: %s."
 msgstr "Tên tín hiệu không được chứa khoảng trắng"
 
 #: pcbnew/drc/drc_engine.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Khác"
+msgstr "Ghi đè cục bộ trên %s; khoảng cách tản nhiệt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:852
 #, fuzzy, c-format
@@ -38774,14 +38772,14 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Đang kiểm tra nhãn..."
 
 #: pcbnew/drc/drc_engine.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Độ dày lưới:"
+msgstr "%s độ dày tối thiểu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:875
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "Đang kiểm tra xung đột bus ..."
+msgstr "Đang kiểm tra xác nhận \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:881 pcbnew/drc/drc_engine.cpp:1512
 #, fuzzy
@@ -38911,9 +38909,8 @@ msgid "Disallow constraint not met."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1180
-#, fuzzy
 msgid "Keepout layer(s) not matched."
-msgstr "Tạo các lớp"
+msgstr "(Các) lớp Keepout không khớp."
 
 #: pcbnew/drc/drc_engine.cpp:1184 pcbnew/drc/drc_engine.cpp:1205
 #: pcbnew/drc/drc_engine.cpp:1529
@@ -49033,7 +49030,7 @@ msgstr "Vùng Rule %s\t"
 #: pcbnew/zone.cpp:874
 #, fuzzy, c-format
 msgid "Zone Cutout %s"
-msgstr "Zone"
+msgstr "Vùng cắt %s"
 
 #: pcbnew/zone.cpp:879
 #, fuzzy, c-format
@@ -49041,9 +49038,9 @@ msgid "Rule Area %s"
 msgstr "Vùng Rule %s\t"
 
 #: pcbnew/zone.cpp:881
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s"
-msgstr "Zone"
+msgstr "Vùng %s %s"
 
 #: pcbnew/zone.cpp:1696
 #, fuzzy
