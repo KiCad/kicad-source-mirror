@@ -309,7 +309,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
 
     if( aField.length() == 0 ) // return reference to base object
     {
-        return std::move( vref );
+        return vref;
     }
 
     wxString field( aField );
@@ -353,7 +353,7 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
     if( vref->GetType() == LIBEVAL::VT_UNDEFINED )
         vref->SetType( LIBEVAL::VT_PARSE_ERROR );
 
-    return std::move( vref );
+    return vref;
 }
 
 

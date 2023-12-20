@@ -2109,7 +2109,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
         FOOTPRINT* parentFP = board_item->GetParentFootprint();
 
-        if( PCB_GROUP* parentGroup = board_item->GetParentGroup() )
+        if( board_item->GetParentGroup() )
             commit.Stage( board_item, CHT_UNGROUP );
 
         switch( item->Type() )
