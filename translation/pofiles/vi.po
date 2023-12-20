@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-20 13:33+0000\n"
+"PO-Revision-Date: 2023-12-25 13:09+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
 "\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -518,7 +518,6 @@ msgid "Use all material properties from each 3D model file"
 msgstr "Sử dụng tất cả thuộc tính vật liệu từ mỗi tập tin mô hình 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
 msgstr "Kết xuất màu đồng nhất"
 
@@ -27147,9 +27146,9 @@ msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Xóa tất cả các loại trừ do vi phạm quy tắc '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "Loại trừ vi phạm này"
+msgstr "Loại trừ tất cả các vi phạm quy tắc '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:610
 #, fuzzy
@@ -27206,9 +27205,9 @@ msgid "Test for parity between PCB and schematic"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Không kết nối"
+msgstr "Các mục không được kết nối (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
 #, c-format
@@ -31040,9 +31039,9 @@ msgid "<none selected>"
 msgstr "Không có symbol nào được chọn"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Reference item: %s"
-msgstr "Bộ chỉ định tham chiếu"
+msgstr "Mục tham chiếu: %s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 #, fuzzy
@@ -33450,7 +33449,7 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:735 pcbnew/drc/drc_engine.cpp:745
 #, fuzzy, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Ghi đè cục bộ trên %s; khoảng trống: %s."
 
 #: pcbnew/drc/drc_engine.cpp:760 pcbnew/drc/drc_engine.cpp:1388
 #: pcbnew/drc/drc_engine.cpp:1410
@@ -33462,7 +33461,7 @@ msgstr "Chiều rộng Track"
 #: pcbnew/drc/drc_engine.cpp:1404
 #, fuzzy, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Clearance lớp đồng tối thiểu"
+msgstr "Khoảng trống tối thiểu của bảng: %s."
 
 #: pcbnew/drc/drc_engine.cpp:772
 #, fuzzy
@@ -33480,9 +33479,9 @@ msgid "Local override on %s; zone connection: %s."
 msgstr "Tên tín hiệu không được chứa khoảng trắng"
 
 #: pcbnew/drc/drc_engine.cpp:811
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "Khác"
+msgstr "Ghi đè cục bộ trên %s; khoảng cách tản nhiệt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
 #, fuzzy, c-format
@@ -33490,14 +33489,14 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Đang kiểm tra nhãn..."
 
 #: pcbnew/drc/drc_engine.cpp:837
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness: %s."
-msgstr "Độ dày lưới:"
+msgstr "%s độ dày tối thiểu: %s."
 
 #: pcbnew/drc/drc_engine.cpp:851
 #, fuzzy, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "Đang kiểm tra xung đột bus ..."
+msgstr "Đang kiểm tra xác nhận \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:857 pcbnew/drc/drc_engine.cpp:1514
 #, fuzzy
@@ -33622,9 +33621,8 @@ msgid "Disallow constraint not met."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1150
-#, fuzzy
 msgid "Keepout layer(s) not matched."
-msgstr "Tạo các lớp"
+msgstr "(Các) lớp Keepout không khớp."
 
 #: pcbnew/drc/drc_engine.cpp:1154 pcbnew/drc/drc_engine.cpp:1176
 #: pcbnew/drc/drc_engine.cpp:1531
