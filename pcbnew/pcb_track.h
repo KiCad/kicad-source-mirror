@@ -321,6 +321,7 @@ public:
     void SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
 
     virtual VECTOR2I GetPosition() const override;
+    const VECTOR2I GetFocusPosition() const override  { return m_Mid; }
 
     virtual VECTOR2I GetCenter() const override { return GetPosition(); }
 

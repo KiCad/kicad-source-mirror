@@ -2049,8 +2049,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 {
                     dummyPattern.reset( PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
                                                                        m_pickerItem, mode ) );
-                    dummyPattern->SetPosition( m_pickerItem->GetPosition() );
-                    dummyPattern->SetEnd( m_pickerItem->GetPosition() );
+                    dummyPattern->SetPosition( m_pickerItem->GetFocusPosition() );
+                    dummyPattern->SetEnd( m_pickerItem->GetFocusPosition() );
                 }
 
                 if( dummyPattern )
@@ -2061,9 +2061,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     m_preview.FreeItems();
 
                     for( EDA_ITEM* item : dummyPattern->GetPreviewItems( generatorTool, m_frame ) )
-                    {
                         m_preview.Add( item );
-                    }
 
                     generatorTool->Router()->StopRouting();
 
