@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-11-21 22:02+0000\n"
+"PO-Revision-Date: 2023-12-25 13:09+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -539,7 +539,7 @@ msgstr "Volltonfarben rendern"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Benutze nur die diffuse Farbeinstellung aus der 3D-Modell-Datei"
+msgstr "Benutzt nur die diffuse Farbeinstellung aus der 3D-Modell-Datei"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -1434,12 +1434,12 @@ msgstr "Negativ"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr "Vorderseitiger Bestückungsdruck"
+msgstr "Vorderer Bestückungsdruck"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr "Vorderseitige Lötstoppmaske"
+msgstr "Vordere Lötstoppmaske"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 msgid "User layer Eco1"
@@ -3153,7 +3153,7 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"Wenn der Mauszeiger über die Arbeitsfläche eines Schaltplan- oder "
+"Wenn der Mauszeiger über die Zeichenfläche eines Schaltplan- oder "
 "Leiterplatteneditor-Fensters bewegt wird, wird jenes Fenster geöffnet."
 
 #: common/dialogs/panel_common_settings_base.cpp:163
@@ -3729,7 +3729,7 @@ msgstr "Minimaler Kupferfreiraum"
 
 #: common/dialogs/panel_setup_netclasses.cpp:499
 msgid "Minimum track width"
-msgstr "Mindestleiterbahnbreite"
+msgstr "Minimale Leiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses.cpp:500
 msgid "Via pad diameter"
@@ -5888,7 +5888,7 @@ msgstr "(Footprints)"
 #: common/settings/color_settings.cpp:384
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:80
 msgid "KiCad Default"
-msgstr "KiCad-Standard"
+msgstr "KiCad Standard"
 
 #: common/settings/color_settings.cpp:389
 msgid "KiCad Classic"
@@ -5997,7 +5997,7 @@ msgstr "Den aktuellen Editor schließen"
 
 #: common/tool/actions.cpp:121
 msgid "Cancel current tool"
-msgstr "Aktuelles Werkzeug abwählen"
+msgstr "Vorgang mit aktuellem Werkzeug abbrechen"
 
 #: common/tool/actions.cpp:127
 msgid "Show Context Menu"
@@ -6021,7 +6021,7 @@ msgstr "Wiederherstellen"
 
 #: common/tool/actions.cpp:147
 msgid "Redo last edit"
-msgstr "Letzte Bearbeitung wiederholen"
+msgstr "Letzte Änderung wiederholen"
 
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
@@ -6097,7 +6097,7 @@ msgstr "Text suchen"
 
 #: common/tool/actions.cpp:222 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr "Suchen und Ersetzen"
+msgstr "Suchen und ersetzen"
 
 #: common/tool/actions.cpp:222
 msgid "Find and replace text"
@@ -6109,7 +6109,7 @@ msgstr "Nächstes Element suchen"
 
 #: common/tool/actions.cpp:228
 msgid "Find next match"
-msgstr "Finde nächsten Treffer"
+msgstr "Nächsten Treffer suchen"
 
 #: common/tool/actions.cpp:234
 msgid "Find Next Marker"
@@ -6194,7 +6194,7 @@ msgstr "Auf Cursor zentrieren"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
-msgstr "Auswahl vergrößern"
+msgstr "Zoom auf Auswahl"
 
 #: common/tool/actions.cpp:356
 msgid "Cursor Up"
@@ -6642,7 +6642,7 @@ msgstr "Signalnamen dürfen keine Leerzeichen enthalten"
 
 #: common/view/view.cpp:537
 msgid "Mirroring for Y axis is not supported yet"
-msgstr "Spiegeln an der Y-Achse wird derzeit nicht unterstützt"
+msgstr "Spiegeln an der Y-Achse wird noch nicht unterstützt"
 
 #: common/widgets/font_choice.cpp:64
 msgid "<not found>"
@@ -6780,7 +6780,7 @@ msgstr "kürzliche Suchen"
 
 #: common/widgets/mathplot.cpp:1694
 msgid "Center plot view to this position"
-msgstr "Plot-Ansicht auf diese Position zentrieren"
+msgstr "Plotansicht auf diese Position zentrieren"
 
 #: common/widgets/mathplot.cpp:1695 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
@@ -6788,15 +6788,15 @@ msgstr "Auf Bildschirm einpassen"
 
 #: common/widgets/mathplot.cpp:1695
 msgid "Set plot view to show all items"
-msgstr "Alle Elemente in der Plot-Ansicht anzeigen"
+msgstr "Alle Elemente in der Plotansicht anzeigen"
 
 #: common/widgets/mathplot.cpp:1696
 msgid "Zoom in plot view."
-msgstr "In den Plot hinein zoomen."
+msgstr "In die Plotansicht hinein zoomen."
 
 #: common/widgets/mathplot.cpp:1697
 msgid "Zoom out plot view."
-msgstr "Aus dem Plot heraus zoomen."
+msgstr "Aus der Plotansicht heraus zoomen."
 
 #: common/widgets/net_selector.cpp:58 gerbview/gerber_draw_item.cpp:703
 #: pcbnew/dialogs/dialog_copper_zones.cpp:380
@@ -7231,7 +7231,7 @@ msgstr "IPC-D-356 Testdateien"
 
 #: common/wildcards_and_files_ext.cpp:576
 msgid "Workbook file"
-msgstr "Workbook Datei"
+msgstr "Arbeitsmappe-Datei"
 
 #: common/wildcards_and_files_ext.cpp:583
 msgid "PNG file"
@@ -7979,7 +7979,7 @@ msgstr "Generator-Dateiname nicht gefunden."
 
 #: eeschema/dialogs/dialog_bom.cpp:460
 msgid "Bill of Materials Generation Help"
-msgstr "Hilfe zur Erstellung der Bauteilliste (BoM)"
+msgstr "Hilfe zur Erstellung der Stückliste (BoM)"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
@@ -8024,7 +8024,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
-msgstr "Bauteilliste (BoM)"
+msgstr "Stückliste (BoM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -8110,19 +8110,19 @@ msgid ""
 msgstr ""
 "# 1. Zusammenfassung\n"
 "\n"
-"Das Bauteillisten-Werkzeug erstellt eine Liste von Bauteilen (engl. BoM, "
-"Bill of Materials), welche im Schaltplan-Design enthalten sind.\n"
+"Das Stückliste-Werkzeug erstellt eine Liste von Bauteilen (engl. BoM, Bill "
+"of Materials), welche im Schaltplan-Design enthalten sind.\n"
 "\n"
-"Das Werkzeug verwendet ein externes Skript, um eine Liste von Bauteilen "
-"(BoM) im gewünschten Ausgabeformat zu erstellen. Die Auswahl eines anderen "
-"Skripts verändert die Formatierung der Liste von Bauteilen (BoM).\n"
+"Das Werkzeug verwendet ein externes Skript, um eine Stückliste im "
+"gewünschten Ausgabeformat zu erstellen. Die Auswahl eines anderen Skripts "
+"verändert die Formatierung der Stückliste.\n"
 "\n"
-"Die Erzeugung einer Liste von Bauteilen (BoM) wird eingehender im Handbuch "
-"zum Schaltplan Editor beschrieben.\n"
+"Die Erzeugung einer Stückliste wird eingehender im Handbuch zum Schaltplan-"
+"Editor beschrieben.\n"
 "\n"
 "# 2. Verwendung\n"
 "\n"
-"Wählen Sie ein Generator Skript aus der Liste der **BoM-Generator Skripte**. "
+"Wählen Sie ein Generator-Skript aus der Liste der **BoM-Generator Skripte**. "
 "Einzelheiten zum ausgewählten Generator werden auf der rechten Seite des "
 "Dialogfensters angezeigt.\n"
 "\n"
@@ -9737,7 +9737,7 @@ msgstr "Als Spannungssymbol erstellen"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:284
 msgid "Exclude from schematic bill of materials"
-msgstr "Von Schaltplan-Bauteilliste (BoM) ausschließen"
+msgstr "Von Schaltplan-Stückliste ausschließen"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
@@ -9852,9 +9852,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Alternative Darstellungsform (De Morgan) aus Symbol entfernen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Feld muss einen Namen haben."
+msgstr "Symbol muss einen Namen haben."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -9930,7 +9929,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Has alternate body style (De Morgan)"
-msgstr "Es gibt eine alternative Darstellungsform (De Morgan)"
+msgstr "Besitzt alternative Darstellungsform (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -10449,7 +10448,7 @@ msgstr "Hintergrundfarbe plotten"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
 msgid "Plot the background color if the output format supports it"
 msgstr ""
-"Plotten der Hintergrundfarbe, wenn durch das Ausgabenformat unterstützt"
+"Plotten der Hintergrundfarbe, falls durch das Ausgabenformat unterstützt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:20
@@ -11553,7 +11552,7 @@ msgid ""
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
 "Verwendet die alternative Form dieser Komponente.\n"
-"Für Gatter erfolgt die Umsetzung nach \"De Morgan\""
+"Für Gatter erfolgt die Umwandlung nach \"De Morgan\""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:149
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:352
@@ -11610,16 +11609,15 @@ msgstr "Pinnamen anzeigen"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:208
 #: pcbnew/footprint.cpp:3102
 msgid "Exclude from bill of materials"
-msgstr "Von Bauteilliste ausschließen"
+msgstr "Von Stückliste ausschließen"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:209
 msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken "
-"hinzuzufügen\n"
-"und für Logos, die nicht in der Bauteilliste enthalten sein sollen"
+"Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken\n"
+"und Logos hinzuzufügen, welche nicht in der Stückliste enthalten sein sollen"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:214
 msgid ""
@@ -11627,8 +11625,8 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"Dies ist nützlich, um Symbole hinzuzufügen, die nur in die Bauteilliste "
-"exportiert werden, aber\n"
+"Dies ist nützlich, um Symbole hinzuzufügen, die ausschließlich in die "
+"Stückliste exportiert werden, jedoch\n"
 "nicht für das Platinenlayout benötigt werden, wie z. B. mechanische "
 "Verbinder und Gehäuse"
 
@@ -12027,7 +12025,7 @@ msgstr "Ansicht auf kreuzreferenzierte Elemente zentrieren"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Ensures that cross-probed symbols are visible in the current view"
 msgstr ""
-"Stellt sicher, das sich querverwiesene Symbole im aktuellen Sichtbereich "
+"Stellt sicher, das sich kreuzreferenzierte Symbole im aktuellen Sichtbereich "
 "befinden"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
@@ -12050,7 +12048,7 @@ msgstr "Linienzeichnungsmodus:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
-msgstr "Beliebiger Winkel"
+msgstr "Freier Winkel"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "90 deg Angle"
@@ -12870,7 +12868,7 @@ msgstr "Freier Pin"
 
 #: eeschema/erc.cpp:72 eeschema/erc.cpp:89
 msgid "Unspecified Pin"
-msgstr "Nicht spezifizierter Pin"
+msgstr "Unbestimmter Pin"
 
 #: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "Power Input Pin"
@@ -13746,7 +13744,7 @@ msgstr "Frei"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:193
 msgid "Unspecified"
-msgstr "Nicht spezifiziert"
+msgstr "Unbestimmt"
 
 #: eeschema/pin_type.cpp:59 eeschema/pin_type.cpp:251
 msgid "Power input"
@@ -16148,7 +16146,7 @@ msgstr "Anzahl der Bits"
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr ""
-"Simulation lieferte keine Diagramme. Ergebnisse sind im Konsolenfenster zu "
+"Simulation lieferte keine Plots. Ergebnisse sind im Konsolenfenster zu "
 "finden."
 
 #: eeschema/sim/sim_plot_frame.cpp:164
@@ -16257,7 +16255,7 @@ msgstr "Arbeitsmappe öffnen"
 
 #: eeschema/sim/sim_plot_frame.cpp:1274
 msgid "Save Simulation Workbook As"
-msgstr "Simulationsarbeitsmappe speichern unter"
+msgstr "Simulation-Arbeitsmappe speichern unter"
 
 #: eeschema/sim/sim_plot_frame.cpp:1289
 msgid "Save Plot as Image"
@@ -16325,11 +16323,11 @@ msgstr "Arbeitsmappe speichern unter..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Export Current Plot as PNG..."
-msgstr "Aktuelles Diagramm als PNG-Datei exportieren..."
+msgstr "Aktuellen Plot als PNG exportieren..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:43
 msgid "Export Current Plot as CSV..."
-msgstr "Aktuelles Diagramm als CSV-Datei exportieren..."
+msgstr "Aktuellen Plot als CSV exportieren..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 msgid "File"
@@ -17768,7 +17766,7 @@ msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "De Morgan Conversion"
-msgstr "De Morgan-Darstellung"
+msgstr "De Morgan-Umwandlung"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "Switch between De Morgan representations"
@@ -17852,8 +17850,7 @@ msgstr "Text- und Grafikeigenschaften bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:538
 msgid "Edit text and graphics properties globally across schematic"
-msgstr ""
-"Text- und Grafikeigenschaften global auf dem ganzen Schaltplan bearbeiten"
+msgstr "Text- und Grafikeigenschaften auf dem gesamten Schaltplan bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Symbol Properties..."
@@ -18040,7 +18037,7 @@ msgstr "Bauteilliste (BoM) erstellen..."
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate a bill of materials for the current schematic"
-msgstr "Erstelle eine Bauteilliste (BoM, Bill of Materials) aus dem Schaltplan"
+msgstr "Erstellt eine Stückliste (BoM) für den aktuellen Schaltplan"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Export Symbols to Library..."
@@ -18877,7 +18874,7 @@ msgstr "Alles auswählen"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:195
 msgid "Deselect all"
-msgstr "Alle Lagen abwählen"
+msgstr "Alle abwählen"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:92
 #, c-format
@@ -19136,7 +19133,7 @@ msgstr "Form der Werkzeugdefinition nicht gefunden"
 #: gerbview/excellon_read_drill_file.cpp:780
 #, c-format
 msgid "Tool definition '%c' not supported"
-msgstr "Werkzeugdefinition '%c' ist nicht unterstützt"
+msgstr "Werkzeugdefinition \"%c\" nicht unterstützt"
 
 #: gerbview/excellon_read_drill_file.cpp:861
 #, c-format
@@ -20193,7 +20190,7 @@ msgstr "Ungültige Seite angegeben\n"
 
 #: kicad/cli/command_export_pcb_step.cpp:48
 msgid "Use Drill Origin for output origin"
-msgstr "Benutze Bohrlochursprung für Ausgabeursprung"
+msgstr "Benutze Bohrursprung als Ausgabeursprung"
 
 #: kicad/cli/command_export_pcb_step.cpp:53
 msgid "Use Grid Origin for output origin"
@@ -20266,9 +20263,7 @@ msgstr ""
 
 #: kicad/cli/command_export_sch_plot.cpp:51
 msgid "Color theme to use (will default to schematic settings)"
-msgstr ""
-"Zu verwendendes Farbschema (standardmäßig werden die Schaltplaneinstellungen "
-"verwendet)"
+msgstr "Zu verwendendes Farbthema (Standard sind Schaltplaneinstellungen)"
 
 #: kicad/cli/command_export_sch_plot.cpp:64
 msgid "Avoid setting a background color (regardless of theme)"
@@ -22055,7 +22050,7 @@ msgstr "Klasse 6"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:73
 msgid "Lines width"
-msgstr "Leiterbahnbreite"
+msgstr "Linienbreite"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Min clearance"
@@ -24402,7 +24397,7 @@ msgstr ""
 
 #: pcbnew/build_BOM_from_board.cpp:89
 msgid "Save Bill of Materials"
-msgstr "Bauteilliste (BoM) speichern"
+msgstr "Stückliste speichern"
 
 #: pcbnew/build_BOM_from_board.cpp:109
 msgid "Designator"
@@ -24621,7 +24616,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Auf den rückseitige Footprints wird '%s' als Präfix eingefügt."
+"Auf den rückseitigen Footprints wird '%s' als Präfix eingefügt."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:372
 #, c-format
@@ -25097,7 +25092,7 @@ msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
 msgid "Unspecified:"
-msgstr "Nicht spezifiziert:"
+msgstr "Unbestimmt:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:150
 msgid "Through hole:"
@@ -25429,8 +25424,8 @@ msgstr "Abrundungsradius:"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:565
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
-"Die Speichenbreite einer thermischen Entlastung kann nicht kleiner als die "
-"Mindestbreite sein."
+"Breite einer thermischen Speiche kann nicht kleiner als die Mindestbreite "
+"sein."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:589
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:326
@@ -25576,7 +25571,7 @@ msgid ""
 "a pad connected by thermal relief spokes."
 msgstr ""
 "Der Abstand, der zwischen dem gefüllten Bereich der Zone und einem durch "
-"thermische Entlastung verbundenen Pad freigehalten wird."
+"thermische Entlastungspeichen verbundenen Pad freigehalten wird."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
@@ -25584,7 +25579,7 @@ msgstr "Freiraum zwischen Pads im selben Netz und gefüllten Flächen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
-msgstr "Speichenbreite für thermische Entlastung:"
+msgstr "Thermische Speichenbreite:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 msgid "Width of copper in thermal reliefs."
@@ -26654,7 +26649,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.h:75
 msgid "Export STEP"
-msgstr "STEP-Export"
+msgstr "STEP exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
 msgid "Command line:\n"
@@ -27693,7 +27688,7 @@ msgstr "Erstellt einen Bohrplan in PDF oder anderen Formaten"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
 msgid "Drill Origin"
-msgstr "Bohrlochursprung"
+msgstr "Bohrursprung"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:102
 msgid ""
@@ -28647,7 +28642,7 @@ msgstr "Pad-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:176
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Standard-Pad-Eigenschaften für Werkzeug \"Pad hinzufügen\""
+msgstr "Standard-Padeigenschaften für Werkzeug \"Pad hinzufügen\""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:494
 #, c-format
@@ -29551,7 +29546,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:248
 msgid "Default pen size:"
-msgstr "Voreinstellung für Stiftgröße:"
+msgstr "Standard-Stiftgröße:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:265
 msgid "Postscript Options"
@@ -29575,7 +29570,7 @@ msgstr "Setze globale Y-Skalierung für eine exakt skalierte Postscriptausgabe."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:299
 msgid "Track width correction:"
-msgstr "Leiterbahn Breitenkorrektur:"
+msgstr "Leiterbahnbreite-Korrektur:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:304
 msgid ""
@@ -30743,7 +30738,7 @@ msgstr "Interne Lagen"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
 msgid "Default text items for new footprints:"
-msgstr "Standardtextelemente für neue Footprints:"
+msgstr "Standard-Textelemente für neue Footprints:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:88
 msgid ""
@@ -30755,7 +30750,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:105
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
-msgstr "Standardwerte für neue grafische Elemente:"
+msgstr "Standardeigenschaften für neue grafische Elemente:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:296
 msgid "Options Editor..."
@@ -30908,7 +30903,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
-msgstr "Mindestleiterbahnbreite:"
+msgstr "Minimale Leiterbahnbreite:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:67
 msgid ""
@@ -31158,10 +31153,10 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
-"Elemente wurden auf den entfernten Lagen gefunden. Diese Aktion wird all "
-"diese Elemente von den entfernten Lagen entfernen und kann nicht rückgängig "
-"gemacht werden.\n"
-"Wollen Sie fortfahren?"
+"Es wurden Elemente auf entfernten Lagen gefunden. Diese Aktion wird alle "
+"Elemente von entfernten Lagen löschen und kann nicht rückgängig gemacht "
+"werden.\n"
+"Möchten Sie fortfahren?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:674
 msgid "Layer must have a name."
@@ -32539,7 +32534,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
-msgstr "Standardwerte für neue Bemaßungsobjekte:"
+msgstr "Standardeigenschaften für neue Bemaßungsobjekte:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:95
 msgid ""
@@ -32727,8 +32722,7 @@ msgstr "Lokale Überschreibung auf %s; thermischer Entlastungsspalt: %s."
 #: pcbnew/drc/drc_engine.cpp:828
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr ""
-"Lokale Überschreibung auf %s; Speichenbreite für therm. Entlastung: %s."
+msgstr "Lokale Überschreibung auf %s; thermische Speichenbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
 #, c-format
@@ -32771,7 +32765,7 @@ msgstr "Prüfe %s Abstand: %s."
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
-msgstr "Prüfe %s Speichenbreite für therm. Entlastung: %s."
+msgstr "Prüfe %s thermische Speichenbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:911
 #, c-format
@@ -32954,7 +32948,7 @@ msgstr "Thermischer Entlastungsspalt %s: %s."
 #: pcbnew/drc/drc_engine.cpp:1475
 #, c-format
 msgid "%s thermal spoke width: %s."
-msgstr "%s Speichenbreite für therm. Entlastung: %s."
+msgstr "%s thermale Speichenbreite: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1508
 #, c-format
@@ -34110,7 +34104,7 @@ msgstr "Überschreibung des Freiraums"
 
 #: pcbnew/footprint.cpp:3116 pcbnew/pad.cpp:1900
 msgid "Solderpaste Margin Override"
-msgstr "Überschreibung des Lötpasten-Abstandes"
+msgstr "Überschreibung des Lötpasten-Rands"
 
 #: pcbnew/footprint.cpp:3121 pcbnew/pad.cpp:1904
 msgid "Solderpaste Margin Ratio Override"
@@ -39310,11 +39304,11 @@ msgstr "Leiterbahn- & Via-Eigenschaften bearbeiten..."
 
 #: pcbnew/tools/pcb_actions.cpp:499
 msgid "Edit track and via properties globally across board"
-msgstr "Leiterbahn- und Via-Eigenschaften auf der ganzen Platine bearbeiten"
+msgstr "Leiterbahn- und Via-Eigenschaften auf der gesamten Platine bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:505
 msgid "Edit Text and graphics properties globally across board"
-msgstr "Text- und Grafikeigenschaften global auf der ganzen Platine bearbeiten"
+msgstr "Text- und Grafikeigenschaften auf der gesamten Platine bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:510
 msgid "Global Deletions..."
@@ -39549,7 +39543,7 @@ msgstr "Bauteilliste (BoM)..."
 
 #: pcbnew/tools/pcb_actions.cpp:677
 msgid "Create bill of materials from board"
-msgstr "Bauteilliste (BoM) aus Platine erstellen"
+msgstr "Erstellt eine Stückliste (BoM) aus der Platine"
 
 #: pcbnew/tools/pcb_actions.cpp:684
 msgid "Switch Track Width to Next"
@@ -39656,11 +39650,11 @@ msgstr "Ausgewählte Gruppierungen aufheben"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Remove Items"
-msgstr "Elemente aus Gruppe lösen"
+msgstr "Aus Gruppe lösen"
 
 #: pcbnew/tools/pcb_actions.cpp:768
 msgid "Remove items from group"
-msgstr "Elemente aus der Gruppe entfernen"
+msgstr "Elemente aus der Gruppe heraus lösen"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Enter Group"
