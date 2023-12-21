@@ -166,7 +166,7 @@ std::vector<wxString> LIB_TREE_MODEL_ADAPTER::GetOpenLibs() const
     for( const wxDataViewItem& child : children )
     {
         if( m_widget->IsExpanded( child ) )
-            openLibs.emplace_back( ToNode( child )->m_LibId.GetLibNickname() );
+            openLibs.emplace_back( ToNode( child )->m_LibId.GetLibNickname().wx_str() );
     }
 
     return openLibs;
