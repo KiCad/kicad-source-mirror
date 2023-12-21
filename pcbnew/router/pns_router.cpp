@@ -120,32 +120,14 @@ bool ROUTER::RoutingInProgress() const
 }
 
 
-const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
+const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
 {
-    NODE* node = nullptr;
-    int   clearance = 0;
-
-    if( m_state == IDLE || m_placer == nullptr )
-    {
-        node = m_world.get();
-        clearance = 0;
-    }
-    else if( m_mode == PNS_MODE_ROUTE_SINGLE )
-    {
-        node = m_placer->CurrentNode();
-        clearance = m_sizes.Clearance() + m_sizes.TrackWidth() / 2;
-    }
-    else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
-    {
-        node = m_placer->CurrentNode();
-        clearance = m_sizes.Clearance() + m_sizes.DiffPairWidth() / 2;
-    }
-
+    NODE*         node = m_placer ? m_placer->CurrentNode() : m_world.get();
     PNS::ITEM_SET ret;
 
     wxCHECK( node, ret );
 
-    if( aUseClearance )
+    if( aSlopRadius > 0 )
     {
         NODE::OBSTACLES          obs;
         SEGMENT                  test( SEG( aP, aP ), nullptr );
@@ -155,7 +137,7 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
         test.SetLayers( LAYER_RANGE::All() );
 
         opts.m_differentNetsOnly = false;
-        opts.m_overrideClearance = clearance;
+        opts.m_overrideClearance = aSlopRadius;
 
         node->QueryColliding( &test, obs, opts );
 

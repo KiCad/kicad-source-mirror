@@ -100,6 +100,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
                                  bool aIgnorePads, const std::vector<ITEM*> aAvoidItems )
 {
     int tl = aLayer > 0 ? aLayer : getView()->GetTopLayer();
+    int maxSlopRadius = std::max( m_gridHelper->GetGrid().x, m_gridHelper->GetGrid().y );
 
     static const int candidateCount = 5;
     ITEM* prioritized[candidateCount];
@@ -123,9 +124,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
                 return false;
             };
 
-    for( bool useClearance : { false, true } )
+    for( int slopRadius : { 0, maxSlopRadius } )
     {
-        ITEM_SET candidates = m_router->QueryHoverItems( aWhere, useClearance );
+        ITEM_SET candidates = m_router->QueryHoverItems( aWhere, slopRadius );
 
         for( ITEM* item : candidates.Items() )
         {

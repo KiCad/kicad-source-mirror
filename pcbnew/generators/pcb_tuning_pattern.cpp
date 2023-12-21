@@ -734,6 +734,8 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
 static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere, int aLayer,
                                       VECTOR2I& aPointOut )
 {
+    int maxSlopRadius = aRouter->Sizes().Clearance() + aRouter->Sizes().TrackWidth() / 2;
+
     static const int  candidateCount = 2;
     PNS::LINKED_ITEM* prioritized[candidateCount];
     SEG::ecoord       dist[candidateCount];
@@ -757,9 +759,9 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                 return false;
             };
 
-    for( bool useClearance : { false, true } )
+    for( int slopRadius : { 0, maxSlopRadius } )
     {
-        PNS::ITEM_SET candidates = aRouter->QueryHoverItems( aWhere, useClearance );
+        PNS::ITEM_SET candidates = aRouter->QueryHoverItems( aWhere, slopRadius );
 
         for( PNS::ITEM* item : candidates.Items() )
         {

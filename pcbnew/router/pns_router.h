@@ -181,7 +181,7 @@ public:
 
     bool IsPlacingVia() const;
 
-    const ITEM_SET QueryHoverItems( const VECTOR2I& aP, bool aUseClearance = false );
+    const ITEM_SET QueryHoverItems( const VECTOR2I& aP, int aSlopRadius = 0 );
 
     bool StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode = DM_ANY );
     bool StartDragging( const VECTOR2I& aP, ITEM_SET aItems, int aDragMode = DM_COMPONENT );
