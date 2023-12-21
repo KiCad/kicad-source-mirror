@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-10-17 04:17+0000\n"
+"PO-Revision-Date: 2023-12-25 13:08+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -36617,9 +36617,9 @@ msgid "Track Width: %s"
 msgstr "Šířka spoje: %s"
 
 #: pcbnew/router/router_tool.cpp:2563
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Mezera diferenciálního páru"
+msgstr "Mezera dif. páru: %s"
 
 #: pcbnew/sel_layer.cpp:340
 msgid "Warning: top and bottom layers are same."
@@ -37585,9 +37585,8 @@ msgid "Unable to resize arc tracks of %s or greater."
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:794
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "Táhnout spoj/průchodku"
+msgstr "Táhnout obloukový spoj"
 
 #: pcbnew/tools/edit_tool.cpp:856
 msgid "Edit track width/via size"
@@ -37689,9 +37688,9 @@ msgstr ""
 "Stisknutím klávesy Escape zrušte nebo dvakrát klikněte na schvá"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s"
-msgstr "%s a %s"
+msgstr "%s ploška %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:413
 #, fuzzy
@@ -38117,9 +38116,8 @@ msgid "Rotates selected item(s) counterclockwise"
 msgstr "Otočí vybranou položku(y) proti směru hodinových ručiček"
 
 #: pcbnew/tools/pcb_actions.cpp:326
-#, fuzzy
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "Zarovnat vybrané položky u dolního okraje"
+msgstr "Překlopí vybranou položku(y) na opačnou stranu desky."
 
 #: pcbnew/tools/pcb_actions.cpp:331
 #, fuzzy
@@ -38294,12 +38292,11 @@ msgid "Remove Unused Pads..."
 msgstr "Smazat nepoužívané plošky..."
 
 #: pcbnew/tools/pcb_actions.cpp:478
-#, fuzzy
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Odstraní průchodky z plošek vývodových součástek a překrývajících se "
-"průchodek"
+"Odstranit nebo obnovit nespojené vnitřní vrstvy přes průchozí díry plošek a "
+"prokvy"
 
 #: pcbnew/tools/pcb_actions.cpp:483
 #, fuzzy
@@ -38595,18 +38592,16 @@ msgid "Increase Via Size"
 msgstr "Zvýšení velikosti prokovu"
 
 #: pcbnew/tools/pcb_actions.cpp:695
-#, fuzzy
 msgid "Change via size to next pre-defined size"
-msgstr "Změnit šířku spoje na další předdefinovanou velikost"
+msgstr "Změnit velikost prokovu na další předdefinovanou velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:700
 msgid "Decrease Via Size"
 msgstr "Zmenšit velikost prokovu"
 
 #: pcbnew/tools/pcb_actions.cpp:700
-#, fuzzy
 msgid "Change via size to previous pre-defined size"
-msgstr "Změnit šířku spoje na předchozí předdefinovanou velikost"
+msgstr "Změnit velikost prokovu na předchozí předdefinovanou velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:714
 msgid "Merge Zones"
@@ -39716,9 +39711,8 @@ msgid "Checking null tracks and vias..."
 msgstr "Kontrola šířky spojů..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Nastavit všechny spoje a průchodky..."
+msgstr "Nastavit všechny spoje a prokovy..."
 
 #: pcbnew/tracks_cleaner.cpp:81
 #, fuzzy
