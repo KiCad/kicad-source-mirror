@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-19 16:32+0000\n"
+"PO-Revision-Date: 2023-12-25 13:06+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -3733,9 +3733,8 @@ msgstr ""
 "Automaticky zvolit světlé nebo tmavé ikony podle barevného tématu systému"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Příliš malá velikost mikroprůchodky"
+msgstr "Velikost ikon nástrojové lišty:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -32650,7 +32649,7 @@ msgstr "Filtrovat položky podle sítě:"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
 #, fuzzy
 msgid "Via size:"
-msgstr "Velikost uPrůchodky"
+msgstr "Velikost prokovu"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #, fuzzy
@@ -42287,9 +42286,8 @@ msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.h:294
-#, fuzzy
 msgid "KiCad footprint file"
-msgstr "Soubory pouzder KiCadu"
+msgstr "Soubor pouzder KiCadu"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:655
 #, c-format
@@ -42803,9 +42801,9 @@ msgid "Track Width: %s"
 msgstr "Šířka spoje: %s"
 
 #: pcbnew/router/router_tool.cpp:2621
-#, fuzzy, c-format
+#, c-format
 msgid "Diff Pair Gap: %s"
-msgstr "Mezera diferenciálního páru"
+msgstr "Mezera dif. páru: %s"
 
 #: pcbnew/router/router_tool.cpp:2632 pcbnew/tools/pcb_control.cpp:1502
 #, fuzzy, c-format
@@ -43358,9 +43356,8 @@ msgid "Items belong to the same net. Min clearance is 0."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:872
-#, fuzzy
 msgid "Min clearance is 0."
-msgstr "Izolační mezera: %s."
+msgstr "Min izolační mezera je 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:876
 #, fuzzy, c-format
@@ -43523,29 +43520,24 @@ msgid "Convert to Polygon"
 msgstr "Mnohoúhelníky v režimu obrysů"
 
 #: pcbnew/tools/convert_tool.cpp:535
-#, fuzzy
 msgid "Create Polygon"
-msgstr "Vytvořit zóny"
+msgstr "Vytvořit mnohoúhelník"
 
 #: pcbnew/tools/convert_tool.cpp:540
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "Převést na čáru"
+msgstr "Převést na zónu"
 
 #: pcbnew/tools/convert_tool.cpp:542
-#, fuzzy
 msgid "Create Zone"
-msgstr "Vytvořit zóny"
+msgstr "Vytvořit zónu"
 
 #: pcbnew/tools/convert_tool.cpp:1112
-#, fuzzy
 msgid "Create Lines"
-msgstr "Vytvořit zóny"
+msgstr "Vytvořit čáru"
 
 #: pcbnew/tools/convert_tool.cpp:1199
-#, fuzzy
 msgid "Create Arc"
-msgstr "Vytvořit matrici"
+msgstr "Vytvořit oblouk"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:246
 msgid "Layer Name"
@@ -43650,12 +43642,10 @@ msgid "Draw Arc"
 msgstr "Kreslit oblouk"
 
 #: pcbnew/tools/drawing_tool.cpp:722
-#, fuzzy
 msgid "Place Image"
-msgstr "Umístit modul"
+msgstr "Umístit obrázek"
 
 #: pcbnew/tools/drawing_tool.cpp:961
-#, fuzzy
 msgid "Place Text"
 msgstr "Umístit text"
 
@@ -43670,9 +43660,8 @@ msgid "Move Footprint Anchor"
 msgstr "Umístit ukotvení modulu pouzdra"
 
 #: pcbnew/tools/drawing_tool.cpp:3020
-#, fuzzy
 msgid "Select Net:"
-msgstr "Vybraná síť:"
+msgstr "Vybrat síť:"
 
 #: pcbnew/tools/drawing_tool.cpp:3192
 msgid "Via location violates DRC."
@@ -43706,9 +43695,8 @@ msgid "Unable to resize arc tracks of %s or greater."
 msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:865
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "Táhnout spoj/průchodku"
+msgstr "Táhnout obloukový spoj"
 
 #: pcbnew/tools/edit_tool.cpp:929
 msgid "Edit track width/via size"
@@ -43784,9 +43772,8 @@ msgid "Heal Shapes"
 msgstr "Tvar HLabel:"
 
 #: pcbnew/tools/edit_tool.cpp:1472
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "Tolerance:"
+msgstr "Hodnota tolerance:"
 
 #: pcbnew/tools/edit_tool.cpp:1509
 #, fuzzy
@@ -43834,9 +43821,9 @@ msgstr ""
 "Stisknutím klávesy Escape zrušte nebo dvakrát klikněte na schvá"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s"
-msgstr "%s a %s"
+msgstr "%s ploška %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:396
 #, fuzzy
@@ -43965,9 +43952,8 @@ msgid "Some of the polygons could not be subtracted."
 msgstr "Některé soubory projektu nelze zálohovat."
 
 #: pcbnew/tools/item_modification_routine.cpp:459
-#, fuzzy
 msgid "Intersect polygons."
-msgstr "Chybný mnohoúhelník"
+msgstr "Protínající se mnohoúhelníky."
 
 #: pcbnew/tools/item_modification_routine.cpp:467
 #, fuzzy
@@ -44007,9 +43993,8 @@ msgid "Place pad"
 msgstr "Umístit plošku"
 
 #: pcbnew/tools/pad_tool.cpp:640 pcbnew/tools/pad_tool.cpp:653
-#, fuzzy
 msgid "Edit Pad"
-msgstr "Upravit plošku..."
+msgstr "Upravit plošku"
 
 #: pcbnew/tools/pad_tool.cpp:730
 #, c-format
@@ -44409,9 +44394,8 @@ msgid "Moves the selected item(s) by an exact amount"
 msgstr "Přesune vybranou položku(y)"
 
 #: pcbnew/tools/pcb_actions.cpp:503
-#, fuzzy
 msgid "Move Corner To..."
-msgstr "Přemístit roh"
+msgstr "Přesunout roh na..."
 
 #: pcbnew/tools/pcb_actions.cpp:504
 #, fuzzy
@@ -44441,9 +44425,8 @@ msgid "Rotates selected item(s) counterclockwise"
 msgstr "Otočí vybranou položku(y) proti směru hodinových ručiček"
 
 #: pcbnew/tools/pcb_actions.cpp:553
-#, fuzzy
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "Zarovnat vybrané položky u dolního okraje"
+msgstr "Překlopí vybranou položku(y) na opačnou stranu desky."
 
 #: pcbnew/tools/pcb_actions.cpp:560
 #, fuzzy
@@ -44507,9 +44490,8 @@ msgid "Extend lines to meet each other"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:636
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "Mnohoúhelníky"
+msgstr "Sloučit mnohoúhelníky"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
@@ -44665,12 +44647,11 @@ msgid "Remove Unused Pads..."
 msgstr "Smazat nepoužívané plošky..."
 
 #: pcbnew/tools/pcb_actions.cpp:804
-#, fuzzy
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Odstraní průchodky z plošek vývodových součástek a překrývajících se "
-"průchodek"
+"Odstranit nebo obnovit nespojené vnitřní vrstvy přes průchozí díry plošek a "
+"prokvy"
 
 #: pcbnew/tools/pcb_actions.cpp:811
 #, fuzzy
@@ -44945,9 +44926,8 @@ msgid "IPC-2581 File (.xml)..."
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1063
-#, fuzzy
 msgid "Generate an IPC-2581 file"
-msgstr "Generovat IPC-D-356 soubor netlistu"
+msgstr "Generovat soubor IPC-2581"
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "IPC-D-356 Netlist File..."
@@ -44958,9 +44938,8 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Generovat IPC-D-356 soubor netlistu"
 
 #: pcbnew/tools/pcb_actions.cpp:1076
-#, fuzzy
 msgid "Bill of Materials..."
-msgstr "Rozpiska materiálu"
+msgstr "Rozpiska materiálu..."
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Create bill of materials from board"
@@ -44987,18 +44966,16 @@ msgid "Increase Via Size"
 msgstr "Zvýšení velikosti prokovu"
 
 #: pcbnew/tools/pcb_actions.cpp:1103
-#, fuzzy
 msgid "Change via size to next pre-defined size"
-msgstr "Změnit šířku spoje na další předdefinovanou velikost"
+msgstr "Změnit velikost prokovu na další předdefinovanou velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:1110
 msgid "Decrease Via Size"
 msgstr "Zmenšit velikost prokovu"
 
 #: pcbnew/tools/pcb_actions.cpp:1111
-#, fuzzy
 msgid "Change via size to previous pre-defined size"
-msgstr "Změnit šířku spoje na předchozí předdefinovanou velikost"
+msgstr "Změnit velikost prokovu na předchozí předdefinovanou velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:1128
 msgid "Merge Zones"
@@ -45035,9 +45012,8 @@ msgid "Place origin point for drill files and component placement files"
 msgstr "Umístit počáteční bod pro soubory vrtání a umístění pouzder"
 
 #: pcbnew/tools/pcb_actions.cpp:1161
-#, fuzzy
 msgid "Reset Drill Origin"
-msgstr "Reset počátku mřížky"
+msgstr "Reset počátku vrtání"
 
 #: pcbnew/tools/pcb_actions.cpp:1168
 msgid "Toggle Lock"
@@ -46359,9 +46335,8 @@ msgid "Checking null tracks and vias..."
 msgstr "Kontrola šířky spojů..."
 
 #: pcbnew/tracks_cleaner.cpp:70
-#, fuzzy
 msgid "Removing null tracks and vias..."
-msgstr "Nastavit všechny spoje a průchodky..."
+msgstr "Nastavit všechny spoje a prokovy..."
 
 #: pcbnew/tracks_cleaner.cpp:81
 #, fuzzy
