@@ -681,12 +681,16 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
 }
 
 
-void recursiveDescent( LIB_TREE_NODE& aNode, const std::function<bool( const LIB_TREE_NODE* )>& f )
+void recursiveDescent( LIB_TREE_NODE& aNode, const std::function<int( const LIB_TREE_NODE* )>& f )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& node: aNode.m_Children )
     {
-        if( !f( node.get() ) )
+        int r = f( node.get() );
+
+        if( r == 0 )
             break;
+        else if( r == -1 )
+            continue;
 
         recursiveDescent( *node, f );
     }
@@ -711,7 +715,7 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                     m_widget->ExpandAncestors( ToItem( n ) );
                 }
 
-                return true;    // keep going to expand ancestors of all found items
+                return 1; // keep going to expand ancestors of all found items
             } );
 
     // If no matches, find and show the preselect node
@@ -720,13 +724,17 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
+                    // Don't match the recent and already placed libraries
+                    if( n->m_Name.StartsWith( "-- " ) )
+                        return -1; // Skip this node and its children
+
                     if( n->m_Type == LIB_TREE_NODE::ITEM
                               && ( n->m_Children.empty() || !m_preselect_unit )
                               && m_preselect_lib_id == n->m_LibId )
                     {
                         firstMatch = n;
                         m_widget->ExpandAncestors( ToItem( n ) );
-                        return false;
+                        return 0;
                     }
                     else if( n->m_Type == LIB_TREE_NODE::UNIT
                               && ( m_preselect_unit && m_preselect_unit == n->m_Unit )
@@ -734,10 +742,10 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                     {
                         firstMatch = n;
                         m_widget->ExpandAncestors( ToItem( n ) );
-                        return false;
+                        return 0;
                     }
 
-                    return true;
+                    return 1;
                 } );
     }
 
@@ -762,10 +770,10 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                     {
                         firstMatch = n;
                         m_widget->ExpandAncestors( ToItem( n ) );
-                        return false;
+                        return 0;
                     }
 
-                    return true;
+                    return 1;
                 } );
     }
 
