@@ -63,7 +63,6 @@ protected:
                                   const std::vector<ITEM*> aAvoidItems = {} );
 
     virtual void highlightNets( bool aEnabled, std::set<NET_HANDLE> aNetcodes = {} );
-    virtual void updateHighlightedNets( std::set<NET_HANDLE> aNetcodes = {} );
 
     virtual void updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads = false );
     virtual void updateEndItem( const TOOL_EVENT& aEvent );

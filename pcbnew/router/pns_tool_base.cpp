@@ -279,43 +279,29 @@ void TOOL_BASE::highlightNets( bool aEnabled, std::set<NET_HANDLE> aNets )
 }
 
 
-void TOOL_BASE::updateHighlightedNets( std::set<NET_HANDLE> aNets )
-{
-    RENDER_SETTINGS* rs = getView()->GetPainter()->GetSettings();
-    std::set<int>    netcodes;
-
-    for( const NET_HANDLE& net : aNets )
-        netcodes.insert( m_router->GetInterface()->GetNetCode( net ) );
-
-    rs->SetHighlight( netcodes, true );
-}
-
-
 bool TOOL_BASE::checkSnap( ITEM *aItem )
 {
     // Sync PNS engine settings with the general PCB editor options.
-    auto& pnss = m_router->Settings();
+    ROUTING_SETTINGS& pnss = m_router->Settings();
 
     // If we're dragging a track segment, don't try to snap to items that are part of the original line.
     if( m_startItem && aItem && m_router->GetState() == ROUTER::DRAG_SEGMENT
         && m_router->GetDragger() )
     {
         DRAGGER*     dragger = dynamic_cast<DRAGGER*>( m_router->GetDragger() );
-        LINKED_ITEM* liItem = dynamic_cast<LINKED_ITEM*>( aItem );
+        LINKED_ITEM* linkedItem = dynamic_cast<LINKED_ITEM*>( aItem );
 
-        if( dragger && liItem && dragger->GetOriginalLine().ContainsLink( liItem ) )
-        {
+        if( dragger && linkedItem && dragger->GetOriginalLine().ContainsLink( linkedItem ) )
             return false;
-        }
     }
 
-    pnss.SetSnapToPads(
-            frame()->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ||
-            frame()->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+    MAGNETIC_SETTINGS* magSettings = frame()->GetMagneticItemsSettings();
 
-    pnss.SetSnapToTracks(
-            frame()->GetMagneticItemsSettings()->tracks == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL
-            || frame()->GetMagneticItemsSettings()->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+    pnss.SetSnapToPads( magSettings->pads == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL
+                        || magSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+
+    pnss.SetSnapToTracks( magSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL
+                          || magSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
 
     if( aItem )
     {
@@ -331,27 +317,19 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
-    int      tl = getView()->GetTopLayer();
-    VECTOR2I cp = aEvent.IsPrime() ? aEvent.Position()
-                                   : controls()->GetCursorPosition( !aEvent.Modifier( MD_SHIFT ) );
-    VECTOR2I p;
-    GAL*     gal = m_toolMgr->GetView()->GetGAL();
+    int  tl = getView()->GetTopLayer();
+    GAL* gal = m_toolMgr->GetView()->GetGAL();
 
     controls()->ForceCursorPosition( false );
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
-    if( aEvent.IsMotion() || aEvent.IsClick() )
-        p = aEvent.Position();
-    else
-        p = cp;
-
-    m_startItem = pickSingleItem( aEvent.IsClick() ? cp : p, nullptr, -1, aIgnorePads );
+    m_startItem = pickSingleItem( aEvent.Position(), nullptr, -1, aIgnorePads );
 
     if( !m_gridHelper->GetUseGrid() && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;
 
-    m_startSnapPoint = snapToItem( m_startItem, p );
+    m_startSnapPoint = snapToItem( m_startItem, aEvent.Position() );
     controls()->ForceCursorPosition( true, m_startSnapPoint );
 }
 
@@ -411,8 +389,8 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     else
     {
         m_endItem = nullptr;
-        m_endSnapPoint =
-                m_gridHelper->Align( mousePos, m_router->IsPlacingVia() ? GRID_VIAS : GRID_WIRES );
+        m_endSnapPoint = m_gridHelper->Align( mousePos, m_router->IsPlacingVia() ? GRID_VIAS
+                                                                                 : GRID_WIRES );
     }
 
     controls()->ForceCursorPosition( true, m_endSnapPoint );
