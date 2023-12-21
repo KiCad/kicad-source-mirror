@@ -155,6 +155,38 @@ LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
 {}
 
 
+std::vector<wxString> LIB_TREE_MODEL_ADAPTER::GetOpenLibs() const
+{
+    std::vector<wxString> openLibs;
+    wxDataViewItem        rootItem( nullptr );
+    wxDataViewItemArray   children;
+
+    GetChildren( rootItem, children );
+
+    for( const wxDataViewItem& child : children )
+    {
+        if( m_widget->IsExpanded( child ) )
+            openLibs.emplace_back( ToNode( child )->m_LibId.GetLibNickname() );
+    }
+
+    return openLibs;
+}
+
+
+void LIB_TREE_MODEL_ADAPTER::OpenLibs( const std::vector<wxString>& aLibs )
+{
+    wxWindowUpdateLocker updateLock( m_widget );
+
+    for( const wxString& lib : aLibs )
+    {
+        wxDataViewItem item = FindItem( LIB_ID( lib, wxEmptyString ) );
+
+        if( item.IsOk() )
+            m_widget->Expand( item );
+    }
+}
+
+
 void LIB_TREE_MODEL_ADAPTER::SaveSettings()
 {
     if( m_widget )
@@ -166,6 +198,8 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
 
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
             cfg->m_LibTree.column_widths[pair.first] = pair.second->GetWidth();
+
+        cfg->m_LibTree.open_libs = GetOpenLibs();
     }
 }
 

@@ -105,6 +105,7 @@ protected:
 
     void OnDetailsCharHook( wxKeyEvent& aEvt );
     void onCloseTimer( wxTimerEvent& aEvent );
+    void onOpenLibsTimer( wxTimerEvent& aEvent );
 
     void onFootprintSelected( wxCommandEvent& aEvent );
     void onSymbolSelected( wxCommandEvent& aEvent );
@@ -142,6 +143,7 @@ protected:
     static wxString           g_powerSearchString;
 
     wxTimer*                  m_dbl_click_timer;
+    wxTimer*                  m_open_libs_timer;
     SYMBOL_PREVIEW_WIDGET*    m_symbol_preview;
     wxSplitterWindow*         m_hsplitter;
     wxSplitterWindow*         m_vsplitter;

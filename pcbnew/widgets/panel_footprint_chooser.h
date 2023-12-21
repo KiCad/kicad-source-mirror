@@ -76,6 +76,7 @@ protected:
 
     void OnDetailsCharHook( wxKeyEvent& aEvt );
     void onCloseTimer( wxTimerEvent& aEvent );
+    void onOpenLibsTimer( wxTimerEvent& aEvent );
 
     void onFootprintSelected( wxCommandEvent& aEvent );
 
@@ -89,6 +90,7 @@ protected:
 
 protected:
     wxTimer*                  m_dbl_click_timer;
+    wxTimer*                  m_open_libs_timer;
     wxSplitterWindow*         m_hsplitter;
     wxSplitterWindow*         m_vsplitter;
 

@@ -185,6 +185,9 @@ public:
 
     std::vector<wxString> GetShownColumns() const { return m_shownColumns; }
 
+    std::vector<wxString> GetOpenLibs() const;
+    void                  OpenLibs( const std::vector<wxString>& aLibs );
+
     /**
      * Sets which columns are shown in the widget.  Invalid column names are discarded.
      * @param aColumnNames is an ordered list of column names to show

@@ -188,7 +188,6 @@ protected:
     {
         ///< List of expanded nodes
         std::vector<wxDataViewItem> expanded;
-        std::vector<wxString>       pinned;
 
         ///< Current selection, might be not valid if nothing was selected
         LIB_ID selection;

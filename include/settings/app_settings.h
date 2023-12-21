@@ -120,6 +120,7 @@ public:
     {
         std::vector<wxString> columns;         ///< Ordered list of visible columns in the tree
         std::map<wxString, int> column_widths; ///< Column widths, keyed by header name
+        std::vector<wxString>   open_libs;     ///< list of libraries the user has open in the tree
     };
 
     struct PRINTING

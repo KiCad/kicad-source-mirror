@@ -41,6 +41,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <footprint_info_impl.h>
 #include <project_pcb.h>
+#include <kiface_base.h>
 
 
 PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopLevelWindow* aParent,
@@ -147,12 +148,14 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_hsplitter->SplitVertically( m_tree, rightPanel );
 
     m_dbl_click_timer = new wxTimer( this );
+    m_open_libs_timer = new wxTimer( this );
 
     SetSizer( sizer );
 
     m_adapter->FinishTreeInitialization();
 
     Bind( wxEVT_TIMER, &PANEL_FOOTPRINT_CHOOSER::onCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( wxEVT_TIMER, &PANEL_FOOTPRINT_CHOOSER::onOpenLibsTimer, this, m_open_libs_timer->GetId() );
     Bind( EVT_LIBITEM_SELECTED, &PANEL_FOOTPRINT_CHOOSER::onFootprintSelected, this );
     Bind( EVT_LIBITEM_CHOSEN, &PANEL_FOOTPRINT_CHOOSER::onFootprintChosen, this );
 
@@ -192,6 +195,11 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
             } );
 
     Layout();
+
+    // Open the user's previously opened libraries on timer expiration.
+    // This is done on a timer because we need a gross hack to keep GTK from garbling the
+    // display. Must be longer than the search debounce timer.
+    m_open_libs_timer->StartOnce( 300 );
 }
 
 
@@ -207,7 +215,9 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
 
     // I am not sure the following two lines are necessary, but they will not hurt anyone
     m_dbl_click_timer->Stop();
+    m_open_libs_timer->Stop();
     delete m_dbl_click_timer;
+    delete m_open_libs_timer;
 
     PCBNEW_SETTINGS* cfg = nullptr;
     try
@@ -302,6 +312,13 @@ void PANEL_FOOTPRINT_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     {
         m_acceptHandler();
     }
+}
+
+
+void PANEL_FOOTPRINT_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
+{
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+        m_adapter->OpenLibs( cfg->m_LibTree.open_libs );
 }
 
 

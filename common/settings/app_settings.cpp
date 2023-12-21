@@ -109,6 +109,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             },
             {} ) );
 
+    m_params.emplace_back(
+            new PARAM_LIST<wxString>( "lib_tree.open_libs", &m_LibTree.open_libs, {} ) );
+
     m_params.emplace_back( new PARAM<bool>( "printing.background",
             &m_Printing.background, false ) );
 

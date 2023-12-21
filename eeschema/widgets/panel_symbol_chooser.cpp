@@ -253,12 +253,14 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     m_hsplitter->SplitVertically( treePanel, constructRightPanel( m_hsplitter ) );
 
     m_dbl_click_timer = new wxTimer( this );
+    m_open_libs_timer = new wxTimer( this );
 
     SetSizer( sizer );
 
     Layout();
 
     Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( wxEVT_TIMER, &PANEL_SYMBOL_CHOOSER::onOpenLibsTimer, this, m_open_libs_timer->GetId() );
     Bind( EVT_LIBITEM_SELECTED, &PANEL_SYMBOL_CHOOSER::onSymbolSelected, this );
     Bind( EVT_LIBITEM_CHOSEN, &PANEL_SYMBOL_CHOOSER::onSymbolChosen, this );
     Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, this );
@@ -275,6 +277,11 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
                             wxKeyEventHandler( PANEL_SYMBOL_CHOOSER::OnDetailsCharHook ),
                             nullptr, this );
     }
+
+    // Open the user's previously opened libraries on timer expiration.
+    // This is done on a timer because we need a gross hack to keep GTK from garbling the
+    // display. Must be longer than the search debounce timer.
+    m_open_libs_timer->StartOnce( 300 );
 }
 
 
@@ -287,7 +294,9 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
 
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_dbl_click_timer->Stop();
+    m_open_libs_timer->Stop();
     delete m_dbl_click_timer;
+    delete m_open_libs_timer;
 
     if( m_showPower )
         g_powerSearchString = m_tree->GetSearchString();
@@ -503,6 +512,13 @@ void PANEL_SYMBOL_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
     {
         m_acceptHandler();
     }
+}
+
+
+void PANEL_SYMBOL_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
+{
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+        m_adapter->OpenLibs( cfg->m_LibTree.open_libs );
 }
 
 
