@@ -176,7 +176,7 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
 
 
         // These platform keys are specific to the downloads site
-#if defined( __WXWINDOWS__ )
+#if defined( __WXMSW__ )
         requestContent.platform = "windows";
 
     #if defined( KICAD_BUILD_ARCH_X64 )
