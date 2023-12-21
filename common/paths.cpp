@@ -461,7 +461,7 @@ wxString PATHS::GetOSXKicadDataDir()
 #endif
 
 
-#ifdef __WXWINDOWS__
+#ifdef __WXMSW__
 wxString PATHS::GetWindowsFontConfigDir()
 {
     wxFileName fn;
