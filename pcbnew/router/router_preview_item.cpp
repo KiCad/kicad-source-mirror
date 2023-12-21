@@ -124,7 +124,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
     m_layer = m_originLayer;
     m_color = getLayerColor( m_originLayer );
     m_color.a = 0.8;
-    m_depth = m_originDepth - ( aItem->Layers().Start() * LayerDepthFactor );
+    m_depth = m_originDepth - ( ( aItem->Layers().Start() + 1 ) * LayerDepthFactor );
 
     switch( aItem->Kind() )
     {
