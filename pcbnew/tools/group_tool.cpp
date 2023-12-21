@@ -311,7 +311,6 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
                 toSelect.push_back( member );
             }
 
-            group->GetItems().clear();
             group->SetSelected();
             commit.Remove( group );
         }

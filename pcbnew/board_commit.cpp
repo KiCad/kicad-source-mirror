@@ -78,13 +78,16 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCRE
 
     // Many operations (move, rotate, etc.) are applied directly to a group's children, so they
     // must be staged as well.
-    if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+    if( aChangeType == CHT_MODIFY )
     {
-        group->RunOnChildren(
-                [&]( BOARD_ITEM* child )
-                {
-                    Stage( child, aChangeType );
-                } );
+        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+        {
+            group->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        Stage( child, aChangeType );
+                    } );
+        }
     }
 
     return COMMIT::Stage( aItem, aChangeType );
