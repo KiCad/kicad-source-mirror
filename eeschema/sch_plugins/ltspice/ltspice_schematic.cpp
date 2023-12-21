@@ -723,7 +723,10 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
             wxString key = tokens[1];
             wxString value = tokens[2];
 
-            lt_symbol.SymAttributes[ key.Capitalize() ] = value;
+            if( value == wxS( "\"\"" ) )
+                value = wxEmptyString;
+
+            lt_symbol.SymAttributes[ key.Upper() ] = value;
         }
         else if( element == "PIN" )
         {
@@ -919,6 +922,9 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
 
                 wxString name = tokens[1];
                 wxString value = tokens[2];
+
+                if( value == wxS( "\"\"" ) )
+                    value = wxEmptyString;
 
                 ascFile.Symbols.back().SymAttributes[ name.Upper() ] = value;
             }

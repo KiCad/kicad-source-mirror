@@ -74,8 +74,8 @@ void LTSPICE_SCH_PARSER::Parse( SCH_SHEET_PATH* aSheet,
 
 void LTSPICE_SCH_PARSER::readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
 {
-    wxString ltSubDir = m_lt_schematic->GetLTspiceDataDir().GetFullPath() + wxS( "lib/sub/" );
-    wxString path;
+    wxFileName ltSubDir( m_lt_schematic->GetLTspiceDataDir().GetFullPath(), wxEmptyString );
+    ltSubDir.AppendDir( wxS( "sub" ) );
 
     for( const LTSPICE_SCHEMATIC::LT_ASC& asc : outLT_ASCs )
     {
@@ -83,19 +83,22 @@ void LTSPICE_SCH_PARSER::readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>& o
         {
             for( wxString& line : wxSplit( lt_text.Value, '\n' ) )
             {
-                if( line.StartsWith( wxS( ".inc " ), &path ) )
+                if( line.StartsWith( wxS( ".include " ) ) || line.StartsWith( wxS( ".inc " ) )
+                    || line.StartsWith( wxS( ".lib " ) ) )
                 {
+                    wxString path = line.AfterFirst( ' ' );
+
                     path.Replace( '\\', '/' );
                     wxFileName fileName( path );
 
                     if( fileName.IsAbsolute() )
                     {
-                        m_includes[ fileName.GetName() ] = fileName.GetFullPath();
+                        m_includes[fileName.GetName()] = fileName.GetFullPath();
                     }
                     else
                     {
-                        wxFileName absolute( ltSubDir + path );
-                        m_includes[ absolute.GetName() ] = absolute.GetFullPath();
+                        fileName.MakeAbsolute( ltSubDir.GetFullPath() );
+                        m_includes[fileName.GetName()] = fileName.GetFullPath();
                     }
                 }
             }
@@ -514,14 +517,23 @@ void LTSPICE_SCH_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
             }
             else
             {
-                screen->Append( CreateSCH_LABEL( SCH_LABEL_T, lt_flag.Offset, lt_flag.Value,
+                screen->Append( CreateSCH_LABEL( SCH_GLOBAL_LABEL_T, lt_flag.Offset, lt_flag.Value,
                                                  lt_flag.FontSize ) );
             }
         }
 
         for( const LTSPICE_SCHEMATIC::TEXT& lt_text : lt_asc.Texts )
         {
-            screen->Append( CreateSCH_TEXT( lt_text.Offset, lt_text.Value, lt_text.FontSize,
+            wxString textVal = lt_text.Value;
+
+            // Includes are already handled through Sim.Library, comment them out
+            if( textVal.StartsWith( ".include " ) || textVal.StartsWith( ".inc " )
+                || textVal.StartsWith( ".lib " ) )
+            {
+                textVal = wxS( "* " ) + textVal;
+            }
+
+            screen->Append( CreateSCH_TEXT( lt_text.Offset, textVal, lt_text.FontSize,
                                             lt_text.Justification ) );
         }
 
@@ -895,13 +907,13 @@ SCH_LABEL_BASE* LTSPICE_SCH_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR
 {
     SCH_LABEL_BASE* label = nullptr;
 
-    if( aType == SCH_LABEL_T )
+    if( aType == SCH_GLOBAL_LABEL_T )
     {
-        label = new SCH_LABEL();
+        label = new SCH_GLOBALLABEL();
 
         label->SetText( aValue );
         label->SetTextSize( ToKicadFontSize( aFontSize ) );
-        label->SetSpinStyle( SPIN_STYLE::RIGHT );
+        label->SetSpinStyle( SPIN_STYLE::UP );
     }
     else if( aType == SCH_DIRECTIVE_LABEL_T )
     {
@@ -935,50 +947,109 @@ SCH_LABEL_BASE* LTSPICE_SCH_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR
 void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
                                        SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet )
 {
-    wxString libPath = m_lt_schematic->GetLTspiceDataDir().GetFullPath() + wxS( "lib/" );
+    wxString libPath = m_lt_schematic->GetLTspiceDataDir().GetFullPath();
     wxString symbolName = aLTSymbol.Name.Upper();
-    wxString type = aLTSymbol.SymAttributes[ wxS( "TYPE" ) ].Upper();
-    wxString prefix = aLTSymbol.SymAttributes[ wxS( "PREFIX" ) ].Upper();
-    wxString instName = aLTSymbol.SymAttributes[ wxS( "INSTNAME" ) ].Upper();
-    wxString value = aLTSymbol.SymAttributes[ wxS( "VALUE" ) ];
+    wxString type = aLTSymbol.SymAttributes[wxS( "TYPE" )].Upper();
+    wxString prefix = aLTSymbol.SymAttributes[wxS( "PREFIX" )].Upper();
+    wxString instName = aLTSymbol.SymAttributes[wxS( "INSTNAME" )].Upper();
+    wxString value = aLTSymbol.SymAttributes[wxS( "VALUE" )];
+    wxString value2 = aLTSymbol.SymAttributes[wxS( "VALUE2" )];
+
+    if( value.IsEmpty() )
+    {
+        value = value2;
+        value2 = wxEmptyString;
+    }
 
     aSymbol->SetRef( aSheet, instName );
     aSymbol->SetValueFieldText( value );
 
-    auto setupNonInferredPassive =
-            [&]( const wxString& aPrefix )
-            {
-                SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
-                deviceField.SetText( aPrefix );
-                aSymbol->AddField( deviceField );
+    if( !value2.IsEmpty() )
+    {
+        SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Value2" ) );
+        paramsField.SetText( value2 );
+        aSymbol->AddField( paramsField );
+    }
 
-                SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
-                paramsField.SetText( aPrefix + wxS( "=${VALUE}" ) );
-                aSymbol->AddField( paramsField );
-            };
+    auto setupNonInferredPassive = [&]( const wxString& aDevice, const wxString& aValueKey )
+    {
+        SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+        deviceField.SetText( aDevice );
+        aSymbol->AddField( deviceField );
 
-    if( symbolName == wxS( "RES" ) )
+        SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+        paramsField.SetText( aValueKey + wxS( "=${VALUE}" ) );
+        aSymbol->AddField( paramsField );
+    };
+
+    auto setupBehavioral = [&]( const wxString& aDevice, const wxString& aType )
     {
-        if( !instName.StartsWith( 'R' ) )
-            setupNonInferredPassive( wxS( "R" ) );
+        aSymbol->SetValueFieldText( wxS( "${Sim.Params}" ) );
+
+        SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+        deviceField.SetText( aDevice );
+        aSymbol->AddField( deviceField );
+
+        SCH_FIELD typeField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Type" ) );
+        typeField.SetText( aType );
+        aSymbol->AddField( typeField );
+
+        SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+        paramsField.SetText( value );
+        aSymbol->AddField( paramsField );
+    };
+
+    static const std::set<wxString> prefixWithGain = { wxS( "E" ), wxS( "F" ), wxS( "G" ),
+                                                       wxS( "H" ) };
+
+    if( prefix == wxS( "R" ) )
+    {
+        setupNonInferredPassive( prefix, wxS( "R" ) );
     }
-    else if( symbolName == wxS( "CAP" ) )
+    else if( prefix == wxS( "C" ) )
     {
-        if( !instName.StartsWith( 'C' ) )
-            setupNonInferredPassive( wxS( "C" ) );
+        setupNonInferredPassive( prefix, wxS( "C" ) );
     }
-    else if( symbolName == wxS( "IND" ) )
+    else if( prefix == wxS( "L" ) )
     {
-        if( !instName.StartsWith( 'L' ) )
-            setupNonInferredPassive( wxS( "L" ) );
+        setupNonInferredPassive( prefix, wxS( "L" ) );
     }
-    else if( symbolName == wxS( "VOLTAGE" ) || symbolName == wxS( "CURRENT" ) )
+    else if( prefixWithGain.count( prefix ) > 0 )
     {
-        // inference had better work....
+        setupNonInferredPassive( prefix, wxS( "gain" ) );
+    }
+    else if( prefix == wxS( "B" ) )
+    {
+        if( symbolName.StartsWith( wxS( "BV" ) ) )
+        {
+            setupBehavioral( wxS( "V" ), wxS( "=" ) );
+        }
+        else if( symbolName.StartsWith( wxS( "BI" ) ) )
+        {
+            setupBehavioral( wxS( "I" ), wxS( "=" ) );
+        }
+    }
+    else if( prefix == wxS( "V" ) || symbolName == wxS( "I" ) )
+    {
+        SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+        deviceField.SetText( wxS( "SPICE" ) );
+        aSymbol->AddField( deviceField );
+
+        wxString simParams;
+        simParams << "type=" << '"' << prefix << '"' << ' ';
+
+        if( value2.IsEmpty() )
+            simParams << "model=" << '"' << "${VALUE}" << '"' << ' ';
+        else
+            simParams << "model=" << '"' << "${VALUE} ${VALUE2}" << '"' << ' ';
+
+        SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+        paramsField.SetText( simParams );
+        aSymbol->AddField( paramsField );
     }
     else
     {
-        wxString libFile = aLTSymbol.SymAttributes[ wxS( "MODELFILE" ) ];
+        wxString libFile = aLTSymbol.SymAttributes[wxS( "MODELFILE" )];
 
         if( prefix == wxS( "X" ) )
         {
@@ -990,18 +1061,18 @@ void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
             if( type.IsEmpty() )
                 type = symbolName;
 
-            if( type == "DIODE" )
+            if( value == "DIODE" )
                 libFile = libPath + wxS( "cmp/standard.dio" );
-            else if( type == "NPN" || type == "PNP" )
+            else if( value == "NPN" || value == "PNP" )
                 libFile = libPath + wxS( "cmp/standard.bjt" );
-            else if( type == "NJF" || type == "PJF" )
+            else if( value == "NJF" || value == "PJF" )
                 libFile = libPath + wxS( "cmp/standard.jft" );
-            else if( type == "NMOS" || type == "PMOS" )
+            else if( value == "NMOS" || value == "PMOS" )
                 libFile = libPath + wxS( "cmp/standard.mos" );
         }
 
         if( libFile.IsEmpty() )
-            libFile = m_includes[ value ];
+            libFile = m_includes[value];
 
         if( !libFile.IsEmpty() )
         {
@@ -1010,24 +1081,33 @@ void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
             aSymbol->AddField( libField );
         }
 
-        SCH_FIELD nameField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Name" ) );
-        nameField.SetText( wxS( "${VALUE}" ) );
-        aSymbol->AddField( nameField );
-
         if( type == wxS( "X" ) )
         {
             SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
             deviceField.SetText( wxS( "SUBCKT" ) );
             aSymbol->AddField( deviceField );
         }
+        else
+        {
+            SCH_FIELD deviceField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Device" ) );
+            deviceField.SetText( wxS( "SPICE" ) );
+            aSymbol->AddField( deviceField );
+        }
 
-        wxString spiceLine = aLTSymbol.SymAttributes[ wxS( "SPICELINE" ) ];
+        wxString spiceLine = aLTSymbol.SymAttributes[wxS( "SPICELINE" )];
 
         if( !spiceLine.IsEmpty() )
         {
+            // TODO: append value
             SCH_FIELD paramsField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
             paramsField.SetText( spiceLine );
             aSymbol->AddField( paramsField );
+        }
+        else
+        {
+            SCH_FIELD modelField( { 0, 0 }, -1, aSymbol, wxS( "Sim.Params" ) );
+            modelField.SetText( "model=\"" + value + "\"" );
+            aSymbol->AddField( modelField );
         }
     }
 
