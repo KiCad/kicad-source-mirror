@@ -134,7 +134,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground,
         if( !aPlotter->GetColorMode() )
             return;
 
-        if( m_fill == FILL_T::FILLED_WITH_COLOR && GetFillColor() != COLOR4D::UNSPECIFIED )
+        if( IsFilled() )
         {
             if( GetFillColor() != COLOR4D::UNSPECIFIED )
                 aPlotter->SetColor( GetFillColor() );
