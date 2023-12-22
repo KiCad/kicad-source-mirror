@@ -355,13 +355,22 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
     m_fieldsBox->GetCheckedItems( checkedItems );
 
-    for( int i : checkedItems )
-        checkedNames.push_back( m_fieldsBox->GetString( i ) );
+    for( int ii : checkedItems )
+        checkedNames.push_back( m_fieldsBox->GetString( ii ) );
 
-    bool allChecked = checkedItems.size() == m_fieldsBox->GetCount();
+    bool allChecked = true;
 
-    for( unsigned i = m_fieldsBox->GetCount() - 1; i >= MANDATORY_FIELDS; --i )
-        m_fieldsBox->Delete( i );
+    for( unsigned ii = 0; ii < m_fieldsBox->GetCount(); ++ii )
+    {
+        if( ii == REFERENCE_FIELD || ii == VALUE_FIELD )
+            continue;
+
+        if( !m_fieldsBox->IsChecked( ii ) )
+            allChecked = false;
+    }
+
+    for( unsigned ii = m_fieldsBox->GetCount() - 1; ii >= MANDATORY_FIELDS; --ii )
+        m_fieldsBox->Delete( ii );
 
     for( const wxString& fieldName : fieldNames )
     {
