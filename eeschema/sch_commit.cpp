@@ -143,7 +143,7 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
         {
             if( frame && copy )
             {
-                frame->SaveCopyInUndoList( aMessage, copy );
+                frame->PushSymbolToUndoList( aMessage, copy );
                 copy = nullptr;   // we've transferred ownership to the undo stack
             }
         }
@@ -381,7 +381,24 @@ EDA_ITEM* SCH_COMMIT::makeImage( EDA_ITEM* aItem ) const
     if( m_isLibEditor )
     {
         SYMBOL_EDIT_FRAME* frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-        return new LIB_SYMBOL( *frame->GetCurSymbol() );
+        LIB_SYMBOL*        symbol = frame->GetCurSymbol();
+        std::vector<KIID>  selected;
+
+        for( const LIB_ITEM& item : symbol->GetDrawItems() )
+        {
+            if( item.IsSelected() )
+                selected.push_back( item.m_Uuid );
+        }
+
+        symbol = new LIB_SYMBOL( *symbol );
+
+        for( LIB_ITEM& item : symbol->GetDrawItems() )
+        {
+            if( alg::contains( selected, item.m_Uuid ) )
+                item.SetSelected();
+        }
+
+        return symbol;
     }
 
     return aItem->Clone();

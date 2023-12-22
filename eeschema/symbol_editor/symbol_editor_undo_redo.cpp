@@ -31,23 +31,20 @@
 #include <tools/ee_selection_tool.h>
 
 
-void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( const wxString& aDescription, EDA_ITEM* aItem,
-                                            UNDO_REDO aUndoType )
+void SYMBOL_EDIT_FRAME::PushSymbolToUndoList( const wxString& aDescription, LIB_SYMBOL* aSymbolCopy,
+                                              UNDO_REDO aUndoType )
 {
-    if( !aItem )
+    if( !aSymbolCopy )
         return;
 
-    LIB_SYMBOL*        copyItem;
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
-    copyItem = new LIB_SYMBOL( * (LIB_SYMBOL*) aItem );
-
     // Clear current flags (which can be temporary set by a current edit command).
-    copyItem->ClearTempFlags();
-    copyItem->ClearEditFlags();
-    copyItem->SetFlags( UR_TRANSIENT );
+    aSymbolCopy->ClearTempFlags();
+    aSymbolCopy->ClearEditFlags();
+    aSymbolCopy->SetFlags( UR_TRANSIENT );
 
-    ITEM_PICKER wrapper( GetScreen(), copyItem, aUndoType );
+    ITEM_PICKER wrapper( GetScreen(), aSymbolCopy, aUndoType );
     lastcmd->PushItem( wrapper );
     lastcmd->SetDescription( aDescription );
     PushCommandToUndoList( lastcmd );
@@ -57,12 +54,18 @@ void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( const wxString& aDescription, EDA_IT
 }
 
 
+void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( const wxString& aDescription, LIB_SYMBOL* aSymbol,
+                                            UNDO_REDO aUndoType )
+{
+    if( aSymbol )
+        PushSymbolToUndoList( aDescription, new LIB_SYMBOL( *aSymbol ), aUndoType );
+}
+
+
 void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 {
     if( GetRedoCommandCount() <= 0 )
         return;
-
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     // Load the last redo entry
     PICKED_ITEMS_LIST* redoCommand = PopCommandFromRedoList();
@@ -114,8 +117,6 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 {
     if( GetUndoCommandCount() <= 0 )
         return;
-
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();

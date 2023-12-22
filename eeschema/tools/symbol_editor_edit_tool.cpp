@@ -458,12 +458,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         switch( item->Type() )
         {
         case LIB_PIN_T:
-        {
-            SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
-
-            if( pinTool )
+            if( SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() )
                 pinTool->EditPinProperties( (LIB_PIN*) item );
-        }
+
             break;
 
         case LIB_SHAPE_T:
@@ -572,13 +569,14 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     wxString newFieldValue = EscapeString( dlg.GetText(), CTX_LIBID );
     wxString oldFieldValue = aField->GetFullText( m_frame->GetUnit() );
 
-    saveCopyInUndoList( parent, UNDO_REDO::LIBEDIT );
+    SCH_COMMIT commit( m_toolMgr );
+    commit.Modify( aField, m_frame->GetScreen() );
 
     dlg.UpdateField( aField );
 
-    updateItem( aField, true );
+    commit.Push( caption );
+
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
     m_frame->UpdateSymbolMsgPanelInfo();
 }
 
@@ -632,22 +630,25 @@ void SYMBOL_EDITOR_EDIT_TOOL::handlePinDuplication( LIB_PIN* aOldPin, LIB_PIN* a
 
 int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
+    SCH_COMMIT  commit( m_frame );
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
     if( !symbol )
         return 0;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    commit.Modify( symbol );
 
-    saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, symbol );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
+    // TODO: 9.0: this would be better as "Edit Pins", but we're past string freeze, so this
+    // (existing) string will have to do.
+    commit.Push( _( "Edit Pin Properties" ) );
     m_frame->RebuildView();
-    m_frame->OnModify();
 
     return 0;
 }
@@ -719,9 +720,14 @@ int SYMBOL_EDITOR_EDIT_TOOL::SetUnitDisplayName( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
-    m_frame->GetSymbolFromUndoList();
-
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+
+    // Nuke the selection for later rebuilding.  This does *not* clear the flags on any items;
+    // it just clears the SELECTION's reference to them.
+    selTool->GetSelection().Clear();
+    {
+        m_frame->GetSymbolFromUndoList();
+    }
     selTool->RebuildSelection();
 
     return 0;
@@ -730,9 +736,14 @@ int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 {
-    m_frame->GetSymbolFromRedoList();
-
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+
+    // Nuke the selection for later rebuilding.  This does *not* clear the flags on any items;
+    // it just clears the SELECTION's reference to them.
+    selTool->GetSelection().Clear();
+    {
+        m_frame->GetSymbolFromRedoList();
+    }
     selTool->RebuildSelection();
 
     return 0;

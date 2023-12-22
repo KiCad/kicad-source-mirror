@@ -40,8 +40,8 @@
 
 
 LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId, const wxString& aName ) :
-    LIB_ITEM( LIB_FIELD_T, aParent ),
-    EDA_TEXT( schIUScale )
+        LIB_ITEM( LIB_FIELD_T, aParent ),
+        EDA_TEXT( schIUScale )
 {
     Init( aId );
     m_name = aName;
@@ -49,16 +49,16 @@ LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId, const wxString& aName ) :
 
 
 LIB_FIELD::LIB_FIELD( int aId ) :
-    LIB_ITEM( LIB_FIELD_T, nullptr ),
-    EDA_TEXT( schIUScale )
+        LIB_ITEM( LIB_FIELD_T, nullptr ),
+        EDA_TEXT( schIUScale )
 {
     Init( aId );
 }
 
 
 LIB_FIELD::LIB_FIELD( int aId, const wxString& aName ) :
-    LIB_ITEM( LIB_FIELD_T, nullptr ),
-    EDA_TEXT( schIUScale )
+        LIB_ITEM( LIB_FIELD_T, nullptr ),
+        EDA_TEXT( schIUScale )
 {
     Init( aId );
     m_name = aName;
@@ -196,11 +196,7 @@ bool LIB_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 EDA_ITEM* LIB_FIELD::Clone() const
 {
-    LIB_FIELD* newfield = new LIB_FIELD( m_id );
-
-    Copy( newfield );
-
-    return (EDA_ITEM*) newfield;
+    return new LIB_FIELD( *this );
 }
 
 

@@ -39,8 +39,8 @@
 #include <string_utils.h>
 
 LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
-    LIB_ITEM( LIB_TEXT_T, aParent ),
-    EDA_TEXT( schIUScale, wxEmptyString )
+        LIB_ITEM( LIB_TEXT_T, aParent ),
+        EDA_TEXT( schIUScale, wxEmptyString )
 {
     SetTextSize( VECTOR2I( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ),
                            schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ) ) );
@@ -73,18 +73,7 @@ bool LIB_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 EDA_ITEM* LIB_TEXT::Clone() const
 {
-    LIB_TEXT* newitem = new LIB_TEXT( nullptr );
-
-    newitem->m_parent    = m_parent;
-    newitem->m_unit      = m_unit;
-    newitem->m_convert   = m_convert;
-    newitem->m_private   = m_private;
-    newitem->m_flags     = m_flags;
-
-    newitem->SetText( GetText() );
-    newitem->SetAttributes( *this );
-
-    return newitem;
+    return new LIB_TEXT( *this );
 }
 
 
