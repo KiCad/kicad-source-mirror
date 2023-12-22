@@ -857,7 +857,10 @@ void EDA_TEXT::SetFontIndex( int aIdx )
         std::vector<std::string> fontNames;
         Fontconfig()->ListFonts( fontNames, std::string( Pgm().GetLanguageTag().utf8_str() ) );
 
-        SetFont( KIFONT::FONT::GetFont( fontNames[ aIdx ], IsBold(), IsItalic() ) );
+        if( aIdx >= 0 && aIdx < static_cast<int>( fontNames.size() ) )
+            SetFont( KIFONT::FONT::GetFont( fontNames[ aIdx ], IsBold(), IsItalic() ) );
+        else
+            SetFont( nullptr );
     }
 }
 

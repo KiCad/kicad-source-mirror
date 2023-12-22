@@ -49,6 +49,11 @@ public:
 
     virtual void AfterCommit() {}
 
+    /**
+     * Parents will call this when the user changes the UI language
+     */
+    virtual void LanguageChanged() {}
+
     wxPropertyGrid* GetPropertyGrid()
     {
         return m_grid;

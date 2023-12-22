@@ -1912,6 +1912,8 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     m_auimgr.Update();
     m_hierarchy->UpdateHierarchyTree();
 
+    m_propertiesPanel->LanguageChanged();
+
     // status bar
     UpdateMsgPanel();
 

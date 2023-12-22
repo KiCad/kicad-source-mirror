@@ -87,6 +87,8 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     {
         m_colorEditorInstance = static_cast<PG_COLOR_EDITOR*>( it->second );
     }
+
+    updateFontList();
 }
 
 
@@ -101,10 +103,6 @@ void SCH_PROPERTIES_PANEL::UpdateData()
 {
     EE_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
-
-    // TODO perhaps it could be called less often? use PROPERTIES_TOOL and catch MODEL_RELOAD?
-    if( SCH_EDIT_FRAME* schFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-        updateLists( schFrame->Schematic() );
 
     // Will actually just be updatePropertyValues() if selection hasn't changed
     rebuildProperties( selection );
@@ -209,7 +207,13 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 }
 
 
-void SCH_PROPERTIES_PANEL::updateLists( const SCHEMATIC& aSchematic )
+void SCH_PROPERTIES_PANEL::LanguageChanged()
+{
+    updateFontList();
+}
+
+
+void SCH_PROPERTIES_PANEL::updateFontList()
 {
     wxPGChoices fonts;
 

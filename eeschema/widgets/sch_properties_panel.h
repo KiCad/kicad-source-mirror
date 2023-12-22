@@ -43,6 +43,8 @@ public:
 
     void AfterCommit() override;
 
+    void LanguageChanged() override;
+
 protected:
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
 
@@ -51,8 +53,8 @@ protected:
     void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
 
-    ///< Regenerates caches of list properties
-    void updateLists( const SCHEMATIC& aSchematic );
+    ///< Regenerates caches of font list property
+    void updateFontList();
 
     SCH_BASE_FRAME* m_frame;
     PROPERTY_MANAGER& m_propMgr;
