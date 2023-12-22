@@ -803,8 +803,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
-
-            ClearSelection();
         }
         else if( evt->IsMotion() && !m_isSymbolEditor && evt->FirstResponder() == this )
         {
