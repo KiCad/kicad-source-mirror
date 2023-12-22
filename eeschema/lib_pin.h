@@ -244,6 +244,7 @@ public:
     BITMAPS GetMenuImage() const override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, ALT* aAlt ) const;
 
     EDA_ITEM* Clone() const override;
 
@@ -260,6 +261,8 @@ public:
     static const wxString GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType );
 
 protected:
+    wxString getItemDescription( ALT* aAlt ) const;
+
     struct EXTENTS_CACHE
     {
         KIFONT::FONT* m_Font = nullptr;
