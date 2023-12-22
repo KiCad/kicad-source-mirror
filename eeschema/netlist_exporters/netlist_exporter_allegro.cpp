@@ -257,10 +257,8 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
                    return StrNumCmp( a->m_Name, b->m_Name ) < 0;
                } );
 
-    for( int i = 0; i < (int) nets.size(); ++i )
+    for( NET_RECORD* net_record : nets )
     {
-        NET_RECORD* net_record = nets[i];
-
         // Netlist ordering: Net name, then ref des, then pin name
         std::sort( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
                    []( const NET_NODE& a, const NET_NODE& b )
@@ -308,7 +306,6 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 {
-    int ret = 0;        // zero now, OR in the sign bit on error
     int groupCount = 1;
     wxString deviceFileCreatingError = wxString( "" );
 
@@ -352,8 +349,6 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         }
         groupCount++;
     }
-
-    ret |= fprintf( m_f, "%s\n", "$PACKAGES" );
 
     struct COMP_PACKAGE_STRUCT
     {
@@ -546,45 +541,36 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         if( value.IsEmpty() && tolerance.IsEmpty() )
         {
-            ret |= fprintf( m_f, "!%s;", TO_UTF8( deviceType ) );
+            fprintf( m_f, "!%s;", TO_UTF8( deviceType ) );
         }
         else if( tolerance.IsEmpty() )
         {
-            ret |= fprintf( m_f, "!%s!%s;", TO_UTF8( deviceType ), TO_UTF8( value ) );
+            fprintf( m_f, "!%s!%s;", TO_UTF8( deviceType ), TO_UTF8( value ) );
         }
         else
         {
-            ret |= fprintf( m_f, "!%s!%s!%s;", TO_UTF8( deviceType ), TO_UTF8( value ),
-                            TO_UTF8( tolerance ) );
+            fprintf( m_f, "!%s!%s!%s;", TO_UTF8( deviceType ), TO_UTF8( value ),
+                     TO_UTF8( tolerance ) );
         }
 
         std::vector<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> symbolSheetpaths =
                 iter->second.m_symbolSheetpaths;
 
-        for( auto it = symbolSheetpaths.begin(); it != symbolSheetpaths.end(); it++ )
-        {
-            SCH_SYMBOL*    sym = it->first;
-            SCH_SHEET_PATH sheetPath = it->second;
-            wxString       refText = sym->GetRef( &sheetPath );
-            ret |= fprintf( m_f, ",\n\t%s", TO_UTF8( refText ) );
-        }
+        for( const auto& [ sym, sheetPath ] : symbolSheetpaths)
+            fprintf( m_f, ",\n\t%s", TO_UTF8( sym->GetRef( &sheetPath ) ) );
 
-        ret |= fprintf( m_f, "\n" );
+        fprintf( m_f, "\n" );
     }
 
     if( !deviceFileCreatingError.IsEmpty() )
-    {
         DisplayError( nullptr, deviceFileCreatingError );
-    }
 }
 
 
 wxString NETLIST_EXPORTER_ALLEGRO::formatText( wxString aString )
 {
     if( aString.IsEmpty() )
-    {
-        return wxString( "" );
-    }
+        return wxEmptyString;
 
     aString.Replace( "\u03BC", "u" );
 
@@ -594,9 +580,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatText( wxString aString )
     std::regex search_reg( "[^a-zA-Z0-9_/]" );
 
     if( std::regex_search( std::string( processedString ), search_reg ) )
-    {
         return wxString( "'" ) + processedString + wxString( "'" );
-    }
 
     return processedString;
 }
@@ -618,9 +602,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, LIB_PINS aPin
     std::stable_sort( aPinList.begin(), aPinList.end(), NETLIST_EXPORTER_ALLEGRO::CompareLibPin );
 
     for( auto pin : aPinList )
-    {
         pinNameList.push_back( formatPin( *pin ) );
-    }
 
     wxString out_str = "";
     wxString str;
@@ -642,6 +624,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, LIB_PINS aPin
         str.Printf( ",\n\t%s", TO_UTF8( pin->GetNumber() ) );
         out_str += str;
     }
+
     out_str += wxString( "\n" );
 
     return out_str;
@@ -660,22 +643,16 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 
         for( const wxString& field : aFieldArray )
         {
-            SCH_FIELD* fld = sym->FindField( field, true, true );
-
-            if( fld != NULL )
+            if( SCH_FIELD* fld = sym->FindField( field, true, true ) )
             {
                 wxString fieldText = fld->GetShownText( &sheetPath, true );
 
                 if( !fieldText.IsEmpty() )
                 {
                     if( aSanitize )
-                    {
                         return formatText( fieldText );
-                    }
                     else
-                    {
                         return fieldText;
-                    }
                 }
             }
         }
@@ -687,28 +664,22 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 
         for( const wxString& field : aFieldArray )
         {
-            LIB_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true );
-
-            if( fld != NULL )
+            if( LIB_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true ) )
             {
                 wxString fieldText = fld->GetShownText( false, 0 );
 
                 if( !fieldText.IsEmpty() )
                 {
                     if( aSanitize )
-                    {
                         return formatText( fieldText );
-                    }
                     else
-                    {
                         return fieldText;
-                    }
                 }
             }
         }
     }
 
-    return wxString( "" );
+    return wxEmptyString;
 }
 
 
@@ -722,17 +693,15 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatDevice( wxString aString )
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
 {
-    int ret = 0;        // zero now, OR in the sign bit on error
-
-    ret |= fprintf( m_f, "%s\n", "$PACKAGES" );
-    ret |= fprintf( m_f, "%s\n", "$A_PROPERTIES" );
+    fprintf( m_f, "%s\n", "$PACKAGES" );
+    fprintf( m_f, "%s\n", "$A_PROPERTIES" );
 
     while( !m_packageProperties.empty() )
     {
         std::multimap<wxString, wxString>::iterator iter = m_packageProperties.begin();
         wxString                                    sheetPathText = iter->first;
 
-        ret |= fprintf( m_f, "ROOM %s;", TO_UTF8( formatText( sheetPathText ) ) );
+        fprintf( m_f, "ROOM %s;", TO_UTF8( formatText( sheetPathText ) ) );
 
         std::vector<wxString> refTexts;
 
@@ -749,21 +718,17 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
         std::stable_sort( refTexts.begin(), refTexts.end(),
                           NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef );
 
-        for( auto it = refTexts.begin(); it != refTexts.end(); it++ )
-        {
-            ret |= fprintf( m_f, ",\n\t%s", TO_UTF8( *it ) );
-        }
+        for( const wxString& ref : refTexts )
+            fprintf( m_f, ",\n\t%s", TO_UTF8( ref ) );
 
-        ret |= fprintf( m_f, "\n" );
+        fprintf( m_f, "\n" );
     }
 }
 
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 {
-    int ret = 0;        // zero now, OR in the sign bit on error
-
-    ret |= fprintf( m_f, "%s\n", "$NETS" );
+    fprintf( m_f, "%s\n", "$NETS" );
 
     while( !m_netNameNodes.empty() )
     {
@@ -772,7 +737,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 
         wxString netName = iter->first;
 
-        ret |= fprintf( m_f, "%s;", TO_UTF8( formatText( netName ).MakeUpper() ) );
+        fprintf( m_f, "%s;", TO_UTF8( formatText( netName ).MakeUpper() ) );
 
         auto pairIter = m_netNameNodes.equal_range( netName );
 
@@ -786,15 +751,14 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 
         std::stable_sort( netNodes.begin(), netNodes.end() );
 
-        for( auto it = netNodes.begin(); it != netNodes.end(); it++ )
+        for( const NET_NODE& netNode : netNodes )
         {
-            NET_NODE netNode = *it;
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
             wxString pinText = netNode.m_Pin->GetShownNumber();
-            ret |= fprintf( m_f, ",\n\t%s.%s", TO_UTF8( refText ), TO_UTF8( pinText ) );
+            fprintf( m_f, ",\n\t%s.%s", TO_UTF8( refText ), TO_UTF8( pinText ) );
         }
 
-        ret |= fprintf( m_f, "\n" );
+        fprintf( m_f, "\n" );
     }
 }
 

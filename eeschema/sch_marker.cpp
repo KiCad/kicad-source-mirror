@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,9 +35,7 @@
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <erc_item.h>
-#include <schematic.h>
 #include <sch_screen.h>
-#include <sch_file_versions.h>
 
 /// Factor to convert the maker unit shape to internal units:
 #define SCALING_FACTOR schIUScale.mmToIU( 0.15 )

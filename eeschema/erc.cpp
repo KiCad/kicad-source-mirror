@@ -769,8 +769,8 @@ int ERC_TESTER::TestPinToPin()
                                               ElectricalPinTypeGetText( refType ),
                                               ElectricalPinTypeGetText( testType ) ) );
 
-                    SCH_MARKER* marker =
-                            new SCH_MARKER( ercItem, refPin.Pin()->GetTransformedPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem,
+                                                         refPin.Pin()->GetTransformedPosition() );
                     pinToScreenMap[refPin.Pin()]->Append( marker );
                     errors++;
                 }
@@ -789,8 +789,8 @@ int ERC_TESTER::TestPinToPin()
                 ercItem->SetSheetSpecificPath( needsDriver.Sheet() );
                 ercItem->SetItemsSheetPaths( needsDriver.Sheet() );
 
-                SCH_MARKER* marker =
-                        new SCH_MARKER( ercItem, needsDriver.Pin()->GetTransformedPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( ercItem,
+                                                     needsDriver.Pin()->GetTransformedPosition() );
                 pinToScreenMap[needsDriver.Pin()]->Append( marker );
                 errors++;
             }
