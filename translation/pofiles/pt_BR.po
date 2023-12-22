@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-11 23:54+0000\n"
+"PO-Revision-Date: 2023-12-25 13:07+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -4392,9 +4392,8 @@ msgid "General"
 msgstr "Geral"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Verifique durante a inicialização se há atualizações dos pacotes"
+msgstr "Verificar se há atualizações do KiCad na inicialização"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4412,10 +4411,9 @@ msgid "Library package handling"
 msgstr "Manipulação dos pacotes da biblioteca"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
 msgstr ""
-"Adiciona automaticamente as bibliotecas instaladas à tabela da biblioteca "
+"Automaticamente adicione as bibliotecas instaladas na tabela da biblioteca "
 "global"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
@@ -5038,9 +5036,8 @@ msgid "Drawing Sheet Editor"
 msgstr "Editor do esquema"
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Cancela a atualização da tabela"
+msgstr "Pacotes e atualizações"
 
 #: common/eda_base_frame.cpp:1293
 #, c-format
@@ -7372,9 +7369,8 @@ msgid "Delete clicked items"
 msgstr "Apague os itens clicados"
 
 #: common/tool/actions.cpp:290
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "Alterne para o modo arco"
+msgstr "Alterne para o modo de edição do arco"
 
 #: common/tool/actions.cpp:291
 msgid "Switch to a different method of editing arcs"
@@ -8157,9 +8153,8 @@ msgid "Grid thickness:"
 msgstr "Espessura da grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
-msgstr "Espaçamento mínimo de grade:"
+msgstr "Espaçamento mínimo da grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Snap to grid:"
@@ -10324,9 +10319,8 @@ msgid "Show the field name in addtion to its value"
 msgstr "Mostra o campo nome além do seu valor"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
-#, fuzzy
 msgid "Allow automatic placement"
-msgstr "Permitir o posicionamento automático"
+msgstr "Permitir a colocação automática"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:106
 msgid "Allow automatic placement of this field in the schematic"
@@ -11355,9 +11349,8 @@ msgstr ""
 "símbolos principais."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
-#, fuzzy
 msgid "Number of units:"
-msgstr "Quantidade das unidades:"
+msgstr "Quantidade de unidades:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:172
 msgid "Enter the number of units for a symbol that contains more than one unit"
@@ -13894,9 +13887,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Destaque as nets quando estiverem destacadas no editor da PCI"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "Modo de desenho da linha:"
+msgstr "Modo de desenho em linha:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
@@ -14398,13 +14390,12 @@ msgid "&Default line width:"
 msgstr "&Largura padrão da linha:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
 msgstr ""
 "Defina como 0 para permitir que os símbolos herdem as propriedades de "
-"largura da linha\n"
+"largura de linha\n"
 "do esquema"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
@@ -16433,9 +16424,8 @@ msgid "Save Symbol to Schematic"
 msgstr "Salvar o símbolo no esquema"
 
 #: eeschema/sch_edit_frame.cpp:2217 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "Símbolo de diferença com a biblioteca"
+msgstr "Comparar o símbolo com a biblioteca"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -20176,9 +20166,8 @@ msgid "Create a new symbol"
 msgstr "Criar um novo símbolo"
 
 #: eeschema/tools/ee_actions.cpp:175
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Derivar do símbolo existente"
+msgstr "Derivar de um símbolo já existente"
 
 #: eeschema/tools/ee_actions.cpp:176
 msgid "Create a new symbol, derived from an existing symbol"
@@ -20823,43 +20812,38 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Abre o símbolo selecionado no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:888
-#, fuzzy
 msgid "Exclude from Bill of Materials"
-msgstr "Fazer a exclusão da lista de materiais"
+msgstr "Excluir da lista de materiais"
 
 #: eeschema/tools/ee_actions.cpp:889
 msgid "Set the exclude from bill of materials attribute"
 msgstr "Defina a exclusão do atributo da lista de materiais"
 
 #: eeschema/tools/ee_actions.cpp:894
-#, fuzzy
 msgid "Include in Bill of Materials"
-msgstr "Inclui na lista de materiais"
+msgstr "Incluir na lista de materiais"
 
 #: eeschema/tools/ee_actions.cpp:895
 msgid "Clear the exclude from bill of materials attribute"
 msgstr "Limpar o atributo excluir da lista de materiais"
 
 #: eeschema/tools/ee_actions.cpp:900
-#, fuzzy
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "Fazer a exclusão da lista de materiais"
+msgstr "Alternar a exclusão da lista de materiais"
 
 #: eeschema/tools/ee_actions.cpp:901
 msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Alterna o atributo excluir da lista de materiais"
 
 #: eeschema/tools/ee_actions.cpp:906
-#, fuzzy
 msgid "Exclude from Simulation"
-msgstr "Excluir da simulação"
+msgstr "Excluir a partir da simulação"
 
 #: eeschema/tools/ee_actions.cpp:907
 msgid "Set the exclude from simulation attribute"
 msgstr "Define a exclusão do atributo de simulação"
 
 #: eeschema/tools/ee_actions.cpp:912
-#, fuzzy
 msgid "Include in Simulation"
 msgstr "Incluir na simulação"
 
@@ -20868,25 +20852,22 @@ msgid "Clear the exclude from simulation attribute"
 msgstr "Limpa o atributo excluir da simulação"
 
 #: eeschema/tools/ee_actions.cpp:918
-#, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "Alterna excluir da simulação"
+msgstr "Alternar a exclusão da simulação"
 
 #: eeschema/tools/ee_actions.cpp:919
 msgid "Toggle the exclude from simulation attribute"
 msgstr "Alterna o atributo excluir da simulação"
 
 #: eeschema/tools/ee_actions.cpp:924
-#, fuzzy
 msgid "Exclude from Board"
-msgstr "Exclua da placa"
+msgstr "Excluir da placa"
 
 #: eeschema/tools/ee_actions.cpp:925
 msgid "Set the exclude from board attribute"
 msgstr "Define o atributo excluir do placa"
 
 #: eeschema/tools/ee_actions.cpp:930
-#, fuzzy
 msgid "Include on Board"
 msgstr "Incluir na placa"
 
@@ -20895,16 +20876,14 @@ msgid "Clear the exclude from board attribute"
 msgstr "Limpa o atributo excluir da placa"
 
 #: eeschema/tools/ee_actions.cpp:936
-#, fuzzy
 msgid "Toggle Exclude from Board"
-msgstr "Alterna excluir da placa"
+msgstr "Alternar a exclusão da placa"
 
 #: eeschema/tools/ee_actions.cpp:937
 msgid "Toggle the exclude from board attribute"
 msgstr "Alterna o atributo excluir da placa"
 
 #: eeschema/tools/ee_actions.cpp:942
-#, fuzzy
 msgid "Set Do Not Populate"
 msgstr "Definir como não popular"
 
@@ -20913,18 +20892,16 @@ msgid "Set the do not populate attribute"
 msgstr "Define o atributo não popular"
 
 #: eeschema/tools/ee_actions.cpp:948
-#, fuzzy
 msgid "Unset Do Not Populate"
-msgstr "Não defina não popular"
+msgstr "Não definir como não popular"
 
 #: eeschema/tools/ee_actions.cpp:949
 msgid "Clear the do not populate attribute"
 msgstr "Limpa o atributo não popular"
 
 #: eeschema/tools/ee_actions.cpp:954
-#, fuzzy
 msgid "Toggle Do Not Populate"
-msgstr "Alterna não popular"
+msgstr "Alternar não popular"
 
 #: eeschema/tools/ee_actions.cpp:955
 msgid "Toggle the do not populate attribute"
@@ -21040,18 +21017,16 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "Exportar o arquivo que contem uma netlist num dos vários formatos"
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Gerar uma lista de materiais (BOM)"
+msgstr "Gerar a lista de materiais (BOM)..."
 
 #: eeschema/tools/ee_actions.cpp:1052
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Gera uma lista de materiais a partir do esquema eletrônico atual"
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Gerar uma lista de materiais (BOM)"
+msgstr "Gerar uma lista legada de materiais (BOM)..."
 
 #: eeschema/tools/ee_actions.cpp:1059
 msgid ""
@@ -21059,16 +21034,15 @@ msgid ""
 msgstr "Gera uma lista de materiais para o esquema atual (gerador legado)"
 
 #: eeschema/tools/ee_actions.cpp:1065
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "Gerar uma lista de materiais (BOM)"
+msgstr "Gerar uma lista de materiais (Externo)..."
 
 #: eeschema/tools/ee_actions.cpp:1066
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Gera uma lista de materiais para o esquema atual (gerador legado)"
+msgstr ""
+"Gera uma lista de materiais para o esquema atual usando um gerador externo"
 
 #: eeschema/tools/ee_actions.cpp:1072
 msgid "Export Symbols to Library..."
@@ -22019,9 +21993,8 @@ msgid "Offset Y:"
 msgstr "Deslocamento Y:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotate counterclockwise:"
-msgstr "Gira no sentido anti-horário"
+msgstr "Rotacionar no sentido anti-horário:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 msgid "Active layer"
@@ -22306,7 +22279,6 @@ msgstr ""
 "Estes parâmetros são geralmente definidos nos arquivos, mas, nem sempre."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
-#, fuzzy
 msgid "File Units"
 msgstr "Unidades do arquivo"
 
@@ -22319,9 +22291,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr "Sem zeros à direita (formato LZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:39
-#, fuzzy
 msgid "Zero Format"
-msgstr "Formato dos zeros"
+msgstr "Formato zero"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:41
 msgid ""
@@ -23375,11 +23346,8 @@ msgstr ""
 "outros argumentos de gravidade"
 
 #: kicad/cli/command_pcb_drc.cpp:84
-#, fuzzy
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr ""
-"Retorna um código de encerramento, dependendo da existência ou não de "
-"violações"
+msgstr "Retorna um código de saída diferente de zero se houver violações DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:214
 #: kicad/cli/command_pcb_export_drill.cpp:150
@@ -23460,19 +23428,17 @@ msgstr ""
 "(unidade padrão em mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:143
-#, fuzzy
 msgid "Output units; valid options: mm, m, in, tenths"
-msgstr "Unidades de saída, opções válidas: mm, pol"
+msgstr "Unidades de saída; opções válidas: mm, m, in, décimos"
 
 #: kicad/cli/command_pcb_export_3d.cpp:148
-#, fuzzy
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
 "Nome da pasta para criar e armazenar os modelos 3D; se não for especificado "
 "ou estiver vazio, os modelos serão incorporados durante a exportação no "
-"arquivo vrml principal"
+"arquivo VRML principal"
 
 #: kicad/cli/command_pcb_export_3d.cpp:152
 msgid "Used with --models-dir to output relative paths in the resulting file"
@@ -23828,18 +23794,14 @@ msgstr ""
 "outros argumentos de gravidade"
 
 #: kicad/cli/command_sch_erc.cpp:77
-#, fuzzy
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr ""
-"Retorna um código de encerramento, dependendo da existência ou não de "
-"violações"
+msgstr "Retorna um código de saída diferente de zero se houver violações ERC"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr "Utilitário de exportação (netlist, pdf, bom, etc)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
 msgstr "Gerar uma lista de materiais (BOM)"
 
@@ -23851,9 +23813,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "O arquivo esquemático não existe ou não está acessível\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a netlist"
-msgstr "Exportar uma Netlist"
+msgstr "Exportar uma netlist"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
 msgid ""
@@ -23899,13 +23860,12 @@ msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr "A opção de origem HPGL deve ser 0, 1, 2 ou 3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
-#, fuzzy
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 msgstr ""
-"Exportar o formato bom xml legado usado no editor de esquemas com scripts "
-"python"
+"Exportar o formato BOM XML legado usado no editor de esquemas com scripts "
+"Python"
 
 #: kicad/cli/command_sym.h:31
 msgid "Symbol and Symbol Libraries"
@@ -23981,11 +23941,9 @@ msgid "Project Template Selector"
 msgstr "Seletor de modelo do projeto"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
-#, fuzzy
 msgid "Would you like to automatically check for updates on startup?"
 msgstr ""
-"Deseja verificar automaticamente se há atualizações dos plugins durante a "
-"inicialização?"
+"Deseja verificar automaticamente se há atualizações durante a inicialização?"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
@@ -23994,38 +23952,36 @@ msgid "KiCad"
 msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
-#, fuzzy
 msgid "Check for Updates"
-msgstr "Verifique se há atualizações"
+msgstr "Verificar se há atualizações"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
 msgstr ""
+"O KiCad %s já está disponível (você tem %s). Gostaria de fazer o download "
+"agora?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "Uma nova versão do KiCad está disponível!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "Skip this version"
-msgstr "versão esperada"
+msgstr "Ignorar esta versão"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
-msgstr ""
+msgstr "Me lembrar depois"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
-#, fuzzy
 msgid "Open Downloads Page"
-msgstr "Progresso do download"
+msgstr "Abrir a página de download"
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
-#, fuzzy
 msgid "Update Available"
-msgstr "Há atualizações PCM disponíveis"
+msgstr "Atualização disponível"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
@@ -25365,18 +25321,17 @@ msgid "Application cannot start."
 msgstr "O aplicativo não pode ser iniciado."
 
 #: kicad/update_manager.cpp:164
-#, fuzzy
 msgid "Update Check"
-msgstr "Atualiza a PCI"
+msgstr "Verificação de atualização"
 
 #: kicad/update_manager.cpp:173
 msgid "Requesting update info"
-msgstr ""
+msgstr "Requisitando informação da atualização"
 
 #: kicad/update_manager.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse update response: %s"
-msgstr "Não foi possível analisar o repositório: %s"
+msgstr "Não foi possível analisar a resposta da atualização: %s"
 
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
@@ -25522,9 +25477,8 @@ msgid "Text height:"
 msgstr "Altura do texto:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
-#, fuzzy
 msgid "Maximum width:"
-msgstr "Largura mínima:"
+msgstr "Largura máxima:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:185
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:198
@@ -25534,7 +25488,6 @@ msgstr "Defina como 0 para desativar essa restrição"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:196
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:264
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
-#, fuzzy
 msgid "Maximum height:"
 msgstr "Altura máxima:"
 
@@ -25804,9 +25757,8 @@ msgstr ""
 "bloco"
 
 #: pagelayout_editor/tools/pl_actions.cpp:119
-#, fuzzy
 msgid "Show Title Block in Preview Mode"
-msgstr "Mostre o título do bloco no modo de visualização"
+msgstr "Mostrar bloco de título no modo de visualização"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid ""
@@ -25818,9 +25770,8 @@ msgstr ""
 "visualização."
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Show Title Block in Edit Mode"
-msgstr "Mostre título do bloco no modo de edição"
+msgstr "Mostrar bloco de título no modo de edição"
 
 #: pagelayout_editor/tools/pl_actions.cpp:128
 msgid ""
@@ -25964,24 +25915,20 @@ msgid "Lines width"
 msgstr "Largura das linhas"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "Isolamento mínimo:"
+msgstr "Isolamento mínimo"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
-#, fuzzy
 msgid "Via: (diameter - drill)"
 msgstr "Via: (diâmetro - furo)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
-#, fuzzy
 msgid "Plated Pad: (diameter - drill)"
-msgstr "Ilha revestida: (diam - furo)"
+msgstr "Ilha revestida: (diâmetro - furo)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:77
-#, fuzzy
 msgid "NP Pad: (diameter - drill)"
-msgstr "Ilha não laminada: (diam - furo)"
+msgstr "Ilha não revestida: (diâmetro- furo)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:95
 msgid "AWG0000"
@@ -29646,9 +29593,8 @@ msgstr "Tolerância:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
-#, fuzzy
 msgid "Changes to be applied:"
-msgstr "Alterações que serão aplicados:"
+msgstr "Alterações que serão aplicadas:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:61
 msgid "Cleanup Graphics"
@@ -29801,9 +29747,8 @@ msgstr ""
 "Apenas os nomes das rede correspondentes a este padrão são exibidos."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide automatically generated net names"
-msgstr "Oculta os nomes da rede que forem gerados automaticamente"
+msgstr "Ocultar os nomes da rede que forem gerados automaticamente"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
@@ -30740,9 +30685,8 @@ msgid "Run Inspect > Constraints Resolution"
 msgstr "Executar inspeção > Resolução das restrições"
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
-#, fuzzy
 msgid "Run Inspect > Compare Footprint with Library"
-msgstr "Executar Inspeção > Diff do footprint com a biblioteca"
+msgstr "Executar Inspeção > Comparar o footprint com a biblioteca"
 
 #: pcbnew/dialogs/dialog_drc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:655
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -30989,9 +30933,8 @@ msgid "Version:"
 msgstr "Versão:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
-#, fuzzy
 msgid "Compress output"
-msgstr "Comprimir a saída"
+msgstr "Compactar a saída"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
@@ -31422,9 +31365,8 @@ msgid "Footprint 3D model path:"
 msgstr "Local dos arquivos footprint 3D:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "Opções das coordenadas de origem:"
+msgstr "Opções de origem das coordenadas"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -32641,7 +32583,6 @@ msgstr "Melhor comprimento:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:469
-#, fuzzy
 msgid "Maximum length:"
 msgstr "Comprimento máximo:"
 
@@ -33800,7 +33741,6 @@ msgstr "Melhor comprimento (L):"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:92
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:452
-#, fuzzy
 msgid "Maximum length (L):"
 msgstr "Comprimento máximo (L):"
 
@@ -33815,7 +33755,6 @@ msgstr "Melhor largura (W):"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:132
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:312
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
-#, fuzzy
 msgid "Maximum width (W):"
 msgstr "Largura máxima (W):"
 
@@ -35091,17 +35030,15 @@ msgstr "(de 'nome da regra')"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:167
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:302
-#, fuzzy
 msgid "Minimum amplitude (A):"
-msgstr "Amplitude mín (A):"
+msgstr "Amplitude mínima (A):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:60
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:184
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:319
-#, fuzzy
 msgid "Maximum amplitude (A):"
-msgstr "Amplitude máx (A):"
+msgstr "Amplitude máxima (A):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:71
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:66
@@ -35239,9 +35176,8 @@ msgid "Drag (free angle)"
 msgstr "Arrasta (ângulo livre)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid "Flip board items left/right (default is top/bottom)"
-msgstr "Inverte os itens da placa D/E (o padrão é C/B)"
+msgstr "Inverte os itens da placa esquerda/direita (o padrão é cima/baixo)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 msgid "Allow free pads"
@@ -35337,9 +35273,8 @@ msgid "Show courtyard collisions when moving/dragging"
 msgstr "Mostre as colisões do pedaço ao mover/arrastar"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
-#, fuzzy
 msgid "Automatically refill zones"
-msgstr "Regiões de preenchimento automático"
+msgstr "Preencher as regiões automaticamente"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:384
 msgid "If checked, zones will be re-filled after each edit operation"
@@ -35590,9 +35525,8 @@ msgid "Icon"
 msgstr "Ícone"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show Button"
-msgstr "Mostra o botão"
+msgstr "Mostrar o botão"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
@@ -35844,7 +35778,6 @@ msgid "Arc/circle approximated by segments"
 msgstr "Arco/círculo aproximado por segmentos"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
-#, fuzzy
 msgid "Maximum allowed deviation:"
 msgstr "Desvio máximo permitido:"
 
@@ -35882,7 +35815,6 @@ msgid "Allow fillets outside zone outline"
 msgstr "Permita filetes fora do contorno da zona"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
-#, fuzzy
 msgid "Minimum thermal relief spoke count:"
 msgstr "Quantidade mínima dos raios do alívio térmico:"
 
@@ -37588,18 +37520,15 @@ msgid "Properties for track-to-track teardrops:"
 msgstr "Propriedades do reforço da junção faixa a faixa:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
-#, fuzzy
 msgid "Maximum track width"
-msgstr "Largura máxima da trilha:"
+msgstr "Largura máxima da trilha"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
-#, fuzzy
 msgid ""
 "Max track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"Relação entre o tamanho máximo da ilha/via e a largura da trilha para criar "
-"um reforço da junção.\n"
+"Proporção máxima da largura da trilha para criar um reforço da junção.\n"
 "100 sempre cria um reforço da junção."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:518
@@ -41115,9 +41044,8 @@ msgid "Constraints Report"
 msgstr "Relatório das restrições"
 
 #: pcbnew/pcb_edit_frame.cpp:2530 pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Compare Footprint with Library"
-msgstr "Diff footprint com a biblioteca"
+msgstr "Comparar o footprint com a biblioteca"
 
 #: pcbnew/pcb_field.cpp:93
 msgid "User Field"
@@ -44474,14 +44402,12 @@ msgid "Click on new member..."
 msgstr "Clique no novo membro..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1197
-#, fuzzy
 msgid "Group Items"
-msgstr "Membros do grupo:"
+msgstr "Agrupar os itens"
 
 #: pcbnew/tools/group_tool.cpp:320 pcbnew/tools/pcb_actions.cpp:1204
-#, fuzzy
 msgid "Ungroup Items"
-msgstr "Desagrupe"
+msgstr "Desagrupar os itens"
 
 #: pcbnew/tools/item_modification_routine.cpp:71
 msgid "Unable to fillet the selected lines."
@@ -44839,25 +44765,22 @@ msgid "Switch the arc posture"
 msgstr "Alterna a postura do arco"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "Encaixe nos objetos apenas na camada ativa"
+msgstr "Encaixe em objetos apenas na camada ativa"
 
 #: pcbnew/tools/pcb_actions.cpp:375
 msgid "Enables snapping to objects on the active layer only"
 msgstr "Permite o encaixe nos objetos apenas na camada ativa"
 
 #: pcbnew/tools/pcb_actions.cpp:380
-#, fuzzy
 msgid "Snap to Objects on All Layers"
-msgstr "Encaixe nos objetos em todas as camadas"
+msgstr "Encaixar nos objetos em todas as camadas"
 
 #: pcbnew/tools/pcb_actions.cpp:381
 msgid "Enables snapping to objects on all visible layers"
 msgstr "Permite o encaixe nos objetos em todas as camadas visíveis"
 
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Toggle Snapping Between Active and All Layers"
 msgstr "Alternar o encaixe entre as camadas ativas e todas as camadas"
 
@@ -45469,9 +45392,8 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Gera um arquivo netlist IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:1076
-#, fuzzy
 msgid "Bill of Materials..."
-msgstr "Lista de materiais"
+msgstr "Lista de materiais..."
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Create bill of materials from board"
@@ -45752,9 +45674,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Mostra os textos do footprint em modo de linha"
 
 #: pcbnew/tools/pcb_actions.cpp:1421
-#, fuzzy
 msgid "Show Pad Numbers"
-msgstr "Mostra os números dos pinos"
+msgstr "Exibe os números da ilha"
 
 #: pcbnew/tools/pcb_actions.cpp:1428
 msgid "Draw Zone Fills"
@@ -45795,7 +45716,6 @@ msgid "Switch to Component (F.Cu) layer"
 msgstr "Alterna para a camada de componente (F.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1528
-#, fuzzy
 msgid "Switch to Inner Layer 1"
 msgstr "Alterna para a camada interna 1"
 
@@ -45804,7 +45724,6 @@ msgid "Switch to Inner layer 1"
 msgstr "Alterna para a camada interna 1"
 
 #: pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Switch to Inner Layer 2"
 msgstr "Alterna para a camada interna 2"
 
@@ -45813,7 +45732,6 @@ msgid "Switch to Inner layer 2"
 msgstr "Alterna para a camada interna 2"
 
 #: pcbnew/tools/pcb_actions.cpp:1548
-#, fuzzy
 msgid "Switch to Inner Layer 3"
 msgstr "Alterna para a camada interna 3"
 
@@ -45822,7 +45740,6 @@ msgid "Switch to Inner layer 3"
 msgstr "Alterna para a camada interna 3"
 
 #: pcbnew/tools/pcb_actions.cpp:1558
-#, fuzzy
 msgid "Switch to Inner Layer 4"
 msgstr "Alterna para a camada interna 4"
 
@@ -45831,7 +45748,6 @@ msgid "Switch to Inner layer 4"
 msgstr "Alterna para a camada interna 4"
 
 #: pcbnew/tools/pcb_actions.cpp:1568
-#, fuzzy
 msgid "Switch to Inner Layer 5"
 msgstr "Alterna para a camada interna 5"
 
@@ -45840,7 +45756,6 @@ msgid "Switch to Inner layer 5"
 msgstr "Alterna para a camada interna 5"
 
 #: pcbnew/tools/pcb_actions.cpp:1578
-#, fuzzy
 msgid "Switch to Inner Layer 6"
 msgstr "Alterna para a camada interna 6"
 
@@ -45849,7 +45764,6 @@ msgid "Switch to Inner layer 6"
 msgstr "Alterna para a camada interna 6"
 
 #: pcbnew/tools/pcb_actions.cpp:1587
-#, fuzzy
 msgid "Switch to Inner Layer 7"
 msgstr "Alterna para a camada interna 7"
 
@@ -45858,7 +45772,6 @@ msgid "Switch to Inner layer 7"
 msgstr "Alterna para a camada interna 7"
 
 #: pcbnew/tools/pcb_actions.cpp:1596
-#, fuzzy
 msgid "Switch to Inner Layer 8"
 msgstr "Alterna para a camada interna 8"
 
@@ -45867,7 +45780,6 @@ msgid "Switch to Inner layer 8"
 msgstr "Alterna para a camada interna 8"
 
 #: pcbnew/tools/pcb_actions.cpp:1605
-#, fuzzy
 msgid "Switch to Inner Layer 9"
 msgstr "Alterna para a camada interna 9"
 
@@ -45876,7 +45788,6 @@ msgid "Switch to Inner layer 9"
 msgstr "Alterna para a camada interna 9"
 
 #: pcbnew/tools/pcb_actions.cpp:1614
-#, fuzzy
 msgid "Switch to Inner Layer 10"
 msgstr "Alterna para a camada interna 10"
 
@@ -45885,7 +45796,6 @@ msgid "Switch to Inner layer 10"
 msgstr "Alterna para a camada interna 10"
 
 #: pcbnew/tools/pcb_actions.cpp:1623
-#, fuzzy
 msgid "Switch to Inner Layer 11"
 msgstr "Alterna para a camada interna 11"
 
@@ -45894,7 +45804,6 @@ msgid "Switch to Inner layer 11"
 msgstr "Alterna para a camada interna 11"
 
 #: pcbnew/tools/pcb_actions.cpp:1632
-#, fuzzy
 msgid "Switch to Inner Layer 12"
 msgstr "Alterna para a camada interna 12"
 
@@ -45903,7 +45812,6 @@ msgid "Switch to Inner layer 12"
 msgstr "Alterna para a camada interna 12"
 
 #: pcbnew/tools/pcb_actions.cpp:1641
-#, fuzzy
 msgid "Switch to Inner Layer 13"
 msgstr "Alterna para a camada interna 13p"
 
@@ -45912,7 +45820,6 @@ msgid "Switch to Inner layer 13"
 msgstr "Alterna para a camada interna 13p"
 
 #: pcbnew/tools/pcb_actions.cpp:1650
-#, fuzzy
 msgid "Switch to Inner Layer 14"
 msgstr "Alterna para a camada interna 14"
 
@@ -45921,7 +45828,6 @@ msgid "Switch to Inner layer 14"
 msgstr "Alterna para a camada interna 14"
 
 #: pcbnew/tools/pcb_actions.cpp:1659
-#, fuzzy
 msgid "Switch to Inner Layer 15"
 msgstr "Alterna para a camada interna 15"
 
@@ -45930,7 +45836,6 @@ msgid "Switch to Inner layer 15"
 msgstr "Alterna para a camada interna 15"
 
 #: pcbnew/tools/pcb_actions.cpp:1668
-#, fuzzy
 msgid "Switch to Inner Layer 16"
 msgstr "Alterna para a camada interna 16"
 
@@ -45939,7 +45844,6 @@ msgid "Switch to Inner layer 16"
 msgstr "Alterna para a camada interna 16"
 
 #: pcbnew/tools/pcb_actions.cpp:1677
-#, fuzzy
 msgid "Switch to Inner Layer 17"
 msgstr "Alterna para a camada interna 17"
 
@@ -45948,7 +45852,6 @@ msgid "Switch to Inner layer 17"
 msgstr "Alterna para a camada interna 17"
 
 #: pcbnew/tools/pcb_actions.cpp:1686
-#, fuzzy
 msgid "Switch to Inner Layer 18"
 msgstr "Alterna para a camada interna 18"
 
@@ -45957,7 +45860,6 @@ msgid "Switch to Inner layer 18"
 msgstr "Alterna para a camada interna 18"
 
 #: pcbnew/tools/pcb_actions.cpp:1695
-#, fuzzy
 msgid "Switch to Inner Layer 19"
 msgstr "Alterna para a camada interna 19"
 
@@ -45966,7 +45868,6 @@ msgid "Switch to Inner layer 19"
 msgstr "Alterna para a camada interna 19"
 
 #: pcbnew/tools/pcb_actions.cpp:1704
-#, fuzzy
 msgid "Switch to Inner Layer 20"
 msgstr "Alterna para a camada interna 20"
 
@@ -45975,7 +45876,6 @@ msgid "Switch to Inner layer 20"
 msgstr "Alterna para a camada interna 20"
 
 #: pcbnew/tools/pcb_actions.cpp:1713
-#, fuzzy
 msgid "Switch to Inner Layer 21"
 msgstr "Alterna para a camada interna 21"
 
@@ -45984,7 +45884,6 @@ msgid "Switch to Inner layer 21"
 msgstr "Alterna para a camada interna 21"
 
 #: pcbnew/tools/pcb_actions.cpp:1722
-#, fuzzy
 msgid "Switch to Inner Layer 22"
 msgstr "Alterna para a camada interna 22"
 
@@ -45993,7 +45892,6 @@ msgid "Switch to Inner layer 22"
 msgstr "Alterna para a camada interna 22"
 
 #: pcbnew/tools/pcb_actions.cpp:1731
-#, fuzzy
 msgid "Switch to Inner Layer 23"
 msgstr "Alterna para a camada interna 23"
 
@@ -46002,7 +45900,6 @@ msgid "Switch to Inner layer 23"
 msgstr "Alterna para a camada interna 23"
 
 #: pcbnew/tools/pcb_actions.cpp:1740
-#, fuzzy
 msgid "Switch to Inner Layer 24"
 msgstr "Alterna para a camada interna 24"
 
@@ -46011,7 +45908,6 @@ msgid "Switch to Inner layer 24"
 msgstr "Alterna para a camada interna 24"
 
 #: pcbnew/tools/pcb_actions.cpp:1749
-#, fuzzy
 msgid "Switch to Inner Layer 25"
 msgstr "Alterna para a camada interna 25"
 
@@ -46020,7 +45916,6 @@ msgid "Switch to Inner layer 25"
 msgstr "Alterna para a camada interna 25"
 
 #: pcbnew/tools/pcb_actions.cpp:1758
-#, fuzzy
 msgid "Switch to Inner Layer 26"
 msgstr "Alterna para a camada interna 26"
 
@@ -46029,7 +45924,6 @@ msgid "Switch to Inner layer 26"
 msgstr "Alterna para a camada interna 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1767
-#, fuzzy
 msgid "Switch to Inner Layer 27"
 msgstr "Alterna para a camada interna 27"
 
@@ -46038,7 +45932,6 @@ msgid "Switch to Inner layer 27"
 msgstr "Alterna para a camada interna 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1776
-#, fuzzy
 msgid "Switch to Inner Layer 28"
 msgstr "Alterna para a camada interna 28"
 
@@ -46047,7 +45940,6 @@ msgid "Switch to Inner layer 28"
 msgstr "Alterna para a camada interna 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1785
-#, fuzzy
 msgid "Switch to Inner Layer 29"
 msgstr "Alterna para a camada interna 29"
 
@@ -46056,7 +45948,6 @@ msgid "Switch to Inner layer 29"
 msgstr "Alterna para a camada interna 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1794
-#, fuzzy
 msgid "Switch to Inner Layer 30"
 msgstr "Alterna para a camada interna 30"
 
@@ -46065,9 +45956,8 @@ msgid "Switch to Inner layer 30"
 msgstr "Alterna para a camada interna 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1805
-#, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
-msgstr "Alterna para camada com cobre (B.Cu)"
+msgstr "Alterna para a camada cobre (B.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1806
 msgid "Switch to Copper (B.Cu) layer"
@@ -46238,9 +46128,8 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Distribui itens selecionados ao longo do eixo vertical"
 
 #: pcbnew/tools/pcb_actions.cpp:2003
-#, fuzzy
 msgid "Keep Arc Center, Adjust Radius"
-msgstr "Mantenha o centro do arco, ajuste o raio"
+msgstr "Mantenha o arco centralizado, ajustar o raio"
 
 #: pcbnew/tools/pcb_actions.cpp:2004
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
@@ -46249,9 +46138,9 @@ msgstr ""
 "pontos da extremidade"
 
 #: pcbnew/tools/pcb_actions.cpp:2010
-#, fuzzy
 msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr "Mantenha os pontos da extremidade ou a direção do ponto de partida"
+msgstr ""
+"Mantenha os pontos da extremidade do arco ou a direção do ponto de partida"
 
 #: pcbnew/tools/pcb_actions.cpp:2011
 msgid ""
@@ -46556,18 +46445,16 @@ msgstr ""
 "cursor."
 
 #: pcbnew/tools/pcb_actions.cpp:2390
-#, fuzzy
 msgid "Drag 45 Degree Mode"
-msgstr "Arrasta (modo com 45 graus)"
+msgstr "Modo arrasta com 45 graus"
 
 #: pcbnew/tools/pcb_actions.cpp:2391
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "Arrasta o segmento de trilha, mantendo trilhas conectadas em 45 graus."
 
 #: pcbnew/tools/pcb_actions.cpp:2399
-#, fuzzy
 msgid "Drag Free Angle"
-msgstr "Arrasta (ângulo livre)"
+msgstr "Arrastar com ângulo livre"
 
 #: pcbnew/tools/pcb_actions.cpp:2400
 msgid ""
@@ -46985,9 +46872,8 @@ msgid "Show a shadow marker on locked items"
 msgstr "Mostre um marcador em forma de sombra nos itens bloqueados"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Conflict Footprint Shadow"
-msgstr "Sombra Fp conflitante"
+msgstr "Sombra do footprint conflitante"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show a shadow marker on conflicting footprints"
