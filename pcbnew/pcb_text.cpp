@@ -263,7 +263,7 @@ void PCB_TEXT::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
 }
 
 
-void PCB_TEXT::KeepUpright( const EDA_ANGLE& aOldOrientation, const EDA_ANGLE& aNewOrientation )
+void PCB_TEXT::KeepUpright( const EDA_ANGLE& aNewOrientation )
 {
     if( !IsKeepUpright() )
         return;

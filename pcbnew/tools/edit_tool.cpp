@@ -2357,7 +2357,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             case ROTATE_AROUND_ITEM_ANCHOR:
                 boardItem->Rotate( boardItem->GetPosition(), angle );
                 break;
-            case ROTATE_AROUND_SEL_CENTER: boardItem->Rotate( selCenter, angle );
+            case ROTATE_AROUND_SEL_CENTER:
+                boardItem->Rotate( selCenter, angle );
                 break;
             case ROTATE_AROUND_USER_ORIGIN:
                 boardItem->Rotate( frame()->GetScreen()->m_LocalOrigin, angle );

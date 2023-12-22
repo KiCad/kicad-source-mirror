@@ -1894,6 +1894,9 @@ const wxChar* FOOTPRINT::StringLibNameInvalidChars( bool aUserReadable )
 
 void FOOTPRINT::Move( const VECTOR2I& aMoveVector )
 {
+    if( aMoveVector.x == 0 && aMoveVector.y == 0 )
+        return;
+
     VECTOR2I newpos = m_pos + aMoveVector;
     SetPosition( newpos );
 }
@@ -1901,6 +1904,9 @@ void FOOTPRINT::Move( const VECTOR2I& aMoveVector )
 
 void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
+    if( aAngle == ANGLE_0 )
+        return;
+
     EDA_ANGLE orientation = GetOrientation();
     EDA_ANGLE newOrientation = orientation + aAngle;
     VECTOR2I  newpos = m_pos;
@@ -1909,12 +1915,12 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     SetOrientation( newOrientation );
 
     for( PCB_FIELD* field : m_fields )
-        field->KeepUpright( orientation, newOrientation );
+        field->KeepUpright( newOrientation );
 
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_TEXT_T )
-            static_cast<PCB_TEXT*>( item )->KeepUpright( orientation, newOrientation );
+            static_cast<PCB_TEXT*>( item )->KeepUpright( newOrientation );
     }
 
     m_boundingBoxCacheTimeStamp = 0;
