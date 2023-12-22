@@ -329,12 +329,18 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 try
                 {
                     LIB_PIN* curr_pin = (LIB_PIN*) selection.Front();
-                    // PlacePin() will clear the current selection, so we need to reset
-                    // flags of the selected pin here:
-                    if( !pinTool->PlacePin( curr_pin ) )
-                        restore_state = true;
+
+                    if( pinTool->PlacePin( curr_pin ) )
+                    {
+                        // PlacePin() clears the current selection, which we don't want.  Not only
+                        // is it a poor user experience, but it also prevents us from doing the
+                        // proper cleanup at the end of this routine (ie: clearing the edit flags).
+                        m_selectionTool->AddItemToSel( curr_pin, true /*quiet mode*/ );
+                    }
                     else
-                        curr_pin->ClearEditFlags();
+                    {
+                        restore_state = true;
+                    }
                 }
                 catch( const boost::bad_pointer& e )
                 {
