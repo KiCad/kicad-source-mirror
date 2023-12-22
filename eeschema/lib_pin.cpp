@@ -1396,49 +1396,63 @@ BITMAPS LIB_PIN::GetMenuImage() const
 }
 
 
+wxString LIB_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, ALT* aAlt ) const
+{
+    return getItemDescription( aAlt );
+}
+
+
 wxString LIB_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+{
+    return getItemDescription( nullptr );
+}
+
+
+wxString LIB_PIN::getItemDescription( ALT* aAlt ) const
 {
     // This code previously checked "m_name.IsEmpty()" to choose the correct
     // formatting path, but that check fails if the pin is called "~" which is
     // the default for an empty pin name.  Instead we get the final display string
     // that will be shown and check if it's empty.
 
-    wxString shownName = UnescapeString( GetShownName() );
+    wxString name = UnescapeString( aAlt ? aAlt->m_Name : GetShownName() );
+    wxString electricalTypeName = ElectricalPinTypeGetText( aAlt ? aAlt->m_Type : m_type );
+    wxString pinShapeName = PinShapeGetText( aAlt ? aAlt->m_Shape : m_shape );
 
     if( IsVisible() )
     {
-        if ( !shownName.IsEmpty() )
+        if ( !name.IsEmpty() )
         {
             return wxString::Format( _( "Pin %s [%s, %s, %s]" ),
                                      GetShownNumber(),
-                                     shownName,
-                                     GetElectricalTypeName(),
-                                     PinShapeGetText( m_shape ) );
+                                     name,
+                                     electricalTypeName,
+                                     pinShapeName );
         }
         else
         {
             return wxString::Format( _( "Pin %s [%s, %s]" ),
                                      GetShownNumber(),
-                                     GetElectricalTypeName(),
-                                     PinShapeGetText( m_shape ) );
+                                     electricalTypeName,
+                                     pinShapeName );
         }
     }
     else
     {
-        if( !shownName.IsEmpty() )
+        if( !name.IsEmpty() )
         {
             return wxString::Format( _( "Hidden pin %s [%s, %s, %s]" ),
                                      GetShownNumber(),
-                                     shownName,
-                                     GetElectricalTypeName(),
-                                     PinShapeGetText( m_shape ) );
+                                     name,
+                                     electricalTypeName,
+                                     pinShapeName );
         }
         else
         {
             return wxString::Format( _( "Hidden pin %s [%s, %s]" ),
                                      GetShownNumber(),
-                                     GetElectricalTypeName(),
-                                     PinShapeGetText( m_shape ) );
+                                     electricalTypeName,
+                                     pinShapeName );
         }
     }
 }

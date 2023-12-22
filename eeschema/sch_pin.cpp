@@ -194,9 +194,18 @@ SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
 
 wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
+    LIB_PIN::ALT  localStorage;
+    LIB_PIN::ALT* alt = nullptr;
+
+    if( !m_alt.IsEmpty() )
+    {
+        localStorage = m_libPin->GetAlt( m_alt );
+        alt = &localStorage;
+    }
+
     return wxString::Format( "Symbol %s %s",
                              UnescapeString( GetParentSymbol()->GetField( REFERENCE_FIELD )->GetText() ),
-                             m_libPin->GetItemDescription( aUnitsProvider ) );
+                             m_libPin->GetItemDescription( aUnitsProvider, alt ) );
 }
 
 
