@@ -71,6 +71,8 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 
     netlist << wxString::Format( wxS( "%zu\r" ), aSymbol->GetFullPinCount() );
 
+    wxCHECK( aSymbol && aSymbol->GetLibSymbolRef(), wxEmptyString );
+
     wxArrayString fpFilters = aSymbol->GetLibSymbolRef()->GetFPFilters();
 
     if( !fpFilters.IsEmpty() )
