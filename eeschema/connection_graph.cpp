@@ -3180,7 +3180,6 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 }
 
 
-// TODO(JE) Check sheet pins here too?
 bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     ERC_SETTINGS&         settings = m_schematic->ErcSettings();
@@ -3251,6 +3250,23 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
     if( aSubgraph->m_no_connect != nullptr )
     {
+        // Special case: If the subgraph being checked consists of only a hier port/pin and
+        // a no-connect, we don't issue a "no-connect connected" warning just because
+        // connections exist on the sheet on the other side of the link.
+        VECTOR2I noConnectPos = aSubgraph->m_no_connect->GetPosition();
+
+        for( SCH_SHEET_PIN* hierPin : aSubgraph->m_hier_pins )
+        {
+            if( hierPin->GetPosition() == noConnectPos )
+                return true;
+        }
+
+        for( SCH_HIERLABEL* hierLabel : aSubgraph->m_hier_ports )
+        {
+            if( hierLabel->GetPosition() == noConnectPos )
+                return true;
+        }
+
         if( unique_pins.size() > 1 && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
