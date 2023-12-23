@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-21 10:48+0000\n"
+"PO-Revision-Date: 2023-12-25 13:06+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -290,7 +290,7 @@ msgstr "Απόδοση τρέχουσας προβολής με χρήση Raytr
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
 msgid "KiCad 3D Viewer"
-msgstr "KiCad 3D Viewer"
+msgstr "3Δ Προβολή KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:666
@@ -620,7 +620,7 @@ msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show front copper / surface finish color"
-msgstr "Προβολή χρώματος χαλκού/επιφάνειας εμπρός..."
+msgstr "Προβολή χρώματος χαλκού/μπροστά επιφάνειας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
@@ -628,10 +628,9 @@ msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "Show back copper / surface finish color"
-msgstr "Προβολή χρώματος χαλκού/επιφάνειας πίσω..."
+msgstr "Προβολή χρώματος χαλκού/πίσω επιφάνειας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Adhesive"
 msgstr "Επίπεδο Επικόλλησης"
 
@@ -651,7 +650,7 @@ msgstr "Εμφάνιση επιπέδων πάστας συγκόλλησης"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "Μπροστά.Μεταξοτυπία"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show front silkscreen"
@@ -659,7 +658,7 @@ msgstr "Εμφάνιση μπροστά μεταξοτυπίας"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "Πίσω.Μεταξοτυπία"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
@@ -1709,7 +1708,6 @@ msgid "Front Fab layer"
 msgstr "Front_layer"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
 msgstr "Επίπεδο γραφικών σχεδίων χρήστη"
 
@@ -3235,7 +3233,6 @@ msgid "Title"
 msgstr "Τίτλος"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
 msgstr "Μετακίνηση Σημείου σε Τοποθεσία"
 
@@ -3377,7 +3374,6 @@ msgid "Deleted"
 msgstr "Deleted"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
 msgstr "Μήνυμα του Commit:"
 
@@ -3387,7 +3383,6 @@ msgid "Author:"
 msgstr "Author:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
-#, fuzzy
 msgid "C&ommit"
 msgstr "C&ommit"
 
@@ -3419,14 +3414,12 @@ msgid "Could not open private key '%s'"
 msgstr "Αδυναμία φόρτωσης private key '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
-#, fuzzy
 msgid "Invalid SSH Key"
 msgstr "Εσφαλμένο private κλειδί SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Το επιλεγμένο αρχείο δεν είναι έγκυρο SSH private κλειδί."
+msgstr "Το επιλεγμένο αρχείο δεν είναι έγκυρο SSH private κλειδί"
 
 #: common/dialogs/git/dialog_git_repository.cpp:387
 #, c-format
@@ -3488,7 +3481,6 @@ msgid "Git Repository"
 msgstr "Αποθετήριο Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
-#, fuzzy
 msgid "Git Branch Switch"
 msgstr "Αλλαγή Git Branch"
 
@@ -3497,7 +3489,6 @@ msgid "Select or enter a branch name:"
 msgstr "Επιλογή ή είσαγωγή ονόματος για το branch:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
-#, fuzzy
 msgid "Branch"
 msgstr "Branch"
 
@@ -3512,7 +3503,6 @@ msgstr "Προηγούμενη Ενημέρωση"
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
 #: common/dialogs/git/dialog_git_switch.cpp:213
-#, fuzzy
 msgid "Switch"
 msgstr "Switch"
 
@@ -3522,7 +3512,6 @@ msgid "Add"
 msgstr "Προσθήκη"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
-#, fuzzy
 msgid "Git Commit Data"
 msgstr "Δεδομένα του Git Commit"
 
@@ -3531,19 +3520,16 @@ msgid "Use default values"
 msgstr "Χρήση προκαθορισμένων τιμών"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
 msgstr "Όνομα Author:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
 msgstr "e-mail του Author:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Διαχείριση Αποθετηρίων Git"
+msgstr "Αποθετήρια Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3562,7 +3548,6 @@ msgid "Edit repository properties"
 msgstr "Επεξεργασία ιδιοτήτων αποθετηρίου"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
 msgstr "Αφαίρεση Αποθετηρίου Git"
 
@@ -4027,7 +4012,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4069,9 +4053,9 @@ msgid "Reset Unique Id"
 msgstr "Επαναφορά Μοναδικού Id"
 
 #: common/dialogs/panel_grid_settings.cpp:125 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Σελίδα %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:244
 #, c-format
@@ -4118,7 +4102,7 @@ msgstr "Καλώδια:"
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
 msgid "Vias:"
-msgstr "Vias:"
+msgstr "Διελεύσεις:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:143
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -5990,9 +5974,9 @@ msgid "Could not create directory '%s'"
 msgstr "Αδυναμία δημιουργίας καταλόγου '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Αδυναμία αντιγραφής αποθετηρίου git '%s'."
+msgstr "Αδυναμία αντιγραφής αποθετηρίου git '%s'"
 
 #: common/git/git_pull_handler.cpp:46
 #, fuzzy, c-format
@@ -6034,9 +6018,9 @@ msgid "Could not get repository head"
 msgstr "Αδυναμία λήψης του head του αποθετηρίου"
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "Αδυναμία εύρεσης προσαρμοσμένης έδρας '%s'."
+msgstr "Αδυναμία λήψης αναφοράς OID για αναφορά '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:45
 #, fuzzy
@@ -6044,9 +6028,8 @@ msgid "Failed to perform checkout operation."
 msgstr "Αδυναμία εκτέλεσης εντολής checkout."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Αδυναμία φόρτωσης εικόνας από '%s'."
+msgstr "Αδυναμία εύρεσης commit '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 #, fuzzy
@@ -6054,9 +6037,8 @@ msgid "Could not merge commits"
 msgstr "Αδυναμία merge commits"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Αδυναμία ανοίγματος αρχείου βιβλιοθήκης."
+msgstr "Αδυναμία εύρεσης index αποθετηρίου git"
 
 #: common/git/git_pull_handler.cpp:265
 #, fuzzy
@@ -6074,14 +6056,12 @@ msgid "Added"
 msgstr "Added"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Αδυναμία ανοίγματος συμπιεσμένου αρχείου."
+msgstr "Αδυναμία εύρεσης απομακρυσμένου αποθετηρίου git"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Αδυναμία ανοίγματος συμπιεσμένου αρχείου."
+msgstr "Αδυναμία σύνδεσης με απομακρυσμένο αποθετήριο git"
 
 #: common/git/git_push_handler.cpp:68
 #, fuzzy
@@ -6094,9 +6074,9 @@ msgid "Received %u of %u objects"
 msgstr "Received %u of %u objects"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Ενημέρωση του %s από %s σε %s."
+msgstr "* [Ενημέρωση] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
 #, fuzzy, c-format
@@ -6114,9 +6094,9 @@ msgid "* [rejected] %s (%s)"
 msgstr "Πλέγμα: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Ενημερωμένο"
+msgstr "[Ενημερωμένο] %s"
 
 #: common/git/kicad_git_errors.cpp:30
 msgid "Invalid repository."
@@ -6133,23 +6113,20 @@ msgid "Failed to merge branches."
 msgstr "Αποτυχία αποθήκευσης βιβλιοθήκης διάσωσης %s."
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Αδυναμία φόρτωσης διεύθυνσης url του αποθετηρίου"
+msgstr "Αδυναμία αντιγραφής αποθετηρίου git"
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Αποθετήριο"
+msgstr "Δεν βρέθηκε απομακρυσμένο αποθετήριο git."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
 msgstr "Απέτυχε η αυθεντικοποίηση για το απομακρυσμένο αποθετήριο."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Branch not found."
-msgstr "δεν βρέθηκε %s"
+msgstr "δεν βρέθηκε το branch."
 
 #: common/git/kicad_git_errors.cpp:41
 #, fuzzy
@@ -6157,9 +6134,8 @@ msgid "Failed to create branch."
 msgstr "Αποτυχία δημιουργίας αρχείου '%s'."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Αποτυχία διαγραφής '%s'"
+msgstr "Αποτυχία διαγραφής branch"
 
 #: common/git/kicad_git_errors.cpp:46
 #, fuzzy
@@ -6176,14 +6152,12 @@ msgid "Rebase conflict encountered."
 msgstr "Προέκυψε git rebase conflict."
 
 #: common/git/kicad_git_errors.cpp:53
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Αδυναμία ανάλυσης αποθετηρίου: %s"
+msgstr "Αδυναμία git pull από απομακρυσμένο αποθετηρίο."
 
 #: common/git/kicad_git_errors.cpp:54
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Αδυναμία ανάλυσης αποθετηρίου: %s"
+msgstr "Αδυναμία git push σε απομακρυσμένο αποθετήριο."
 
 #: common/git/kicad_git_errors.cpp:55
 #, fuzzy
@@ -6191,14 +6165,12 @@ msgid "No upstream branch configured."
 msgstr "Δεν έχει ρυθμιστεί κάποιο upstream branch."
 
 #: common/git/kicad_git_errors.cpp:56
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Αδυναμία ανάλυσης αποθετηρίου: %s"
+msgstr "Αδυναμία σύνδεσης με το απομακρυσμένο αποθετήριο."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "δεν βρέθηκε %s"
+msgstr "Δεν βρέθηκε git tag."
 
 #: common/git/kicad_git_errors.cpp:60
 #, fuzzy
@@ -6206,9 +6178,8 @@ msgid "Failed to create tag."
 msgstr "Αποτυχία δημιουργίας αρχείου '%s'."
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Αποτυχία διαγραφής git tag"
+msgstr "Αποτυχία διαγραφής git tag."
 
 #: common/git/kicad_git_errors.cpp:63
 msgid "Unknown error."
@@ -7095,9 +7066,9 @@ msgid "Error reading '%s': %s"
 msgstr "Σφάλμα ανάγνωσης '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Δε βρέθηκε %s ακίδα «%s»."
+msgstr "Αδυναμία προσπέλασης JSON στη γραμμή %d στο '%s': %s"
 
 #: common/project.cpp:374 common/project.cpp:379 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -7772,9 +7743,8 @@ msgid "Use millimeters"
 msgstr "Χρήση χιλιοστών"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Επιλέξτε Στήλες"
+msgstr "Επιλέξτε Στήλες..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -8270,7 +8240,7 @@ msgstr "Μικροί σταυροί"
 
 #: common/widgets/gal_options_panel_base.cpp:135
 msgid "Full window crosshairs"
-msgstr "Σταυρός πλήρους οθόνης"
+msgstr "Σταυροί πλήρους οθόνης"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
@@ -8871,9 +8841,9 @@ msgid "Filtered by %s"
 msgstr "Φιλτράρισμα με βάση %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Λείπει αποτύπωμα"
+msgstr ": %i ταιριαστά αποτυπώματα"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -9093,9 +9063,8 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "Άνοιγμα του επιλεγμένου αποτυπώματος στην προβολή αποτυπώματος"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Διαχείριση Αρχείων Συσχέτισης Αποτυπωμάτων"
+msgstr "Διαχείριση Αρχείων Συσχέτισης Αποτυπωμάτων..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
 #, fuzzy
@@ -9749,9 +9718,8 @@ msgid "Update"
 msgstr "Ενημέρωση"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:405
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Ενημέρωση Συμβόλου..."
+msgstr "Ενημέρωση Συμβόλων"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:514
 #, fuzzy
@@ -9874,9 +9842,9 @@ msgid "Connected to database successfully"
 msgstr "Η σύνδεση με τη βάση δεδομένων έγινε με επιτυχία"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Σύνδεση ζώνης %s: %s."
+msgstr "Αποτυχία σύνδεσης σε βάση δεδομένων: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
 #, fuzzy
@@ -9884,9 +9852,9 @@ msgid "No connection to database"
 msgstr "Σύνδεση εδρών με ζώνες:"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Βιβλιοθήκες"
+msgstr "Φορτώθηκαν %zu βιβλιοθήκες"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
@@ -9924,9 +9892,8 @@ msgid "Reload the database library configuration file"
 msgstr "Φόρτωση ενός υπάρχοντος αρχείου ρυθμίσεων συντομεύσεων"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Αναζήτηση..."
+msgstr "Προσωρινή αποθήκευση"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
 #, fuzzy
@@ -10157,9 +10124,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Άνοιγμα του διαλόγου για τις ρυθμίσεις σχηματικού..."
 
 #: eeschema/dialogs/dialog_erc.cpp:642
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Ελάχιστη απόσταση πλέγματος:"
+msgstr "Επεξεργασία ελάχιστης απόσταση πλέγματος.."
 
 #: eeschema/dialogs/dialog_erc.cpp:735
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10888,9 +10854,8 @@ msgid "untitled"
 msgstr "χωρίς όνομα"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:584
-#, fuzzy
 msgid "Edit Label"
-msgstr "Επεξεργασία Ετικέτας..."
+msgstr "Επεξεργασία Ετικέτας"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:667
 msgid "The first field is mandatory."
@@ -12392,9 +12357,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "&Επεξεργασία"
+msgstr "Επεξεργασία %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
@@ -12571,9 +12536,8 @@ msgid "A DC source must be specified."
 msgstr "Ένα φύλλο πρέπει να έχει καθορισμένο αρχείο."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:361
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "Η Πηγή 1 και η Πηγή 2 πρέπει να είναι διαφορετικές"
+msgstr "Η Πηγή 1 και η Πηγή 2 πρέπει να είναι διαφορετικές."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
 msgid "A frequency range must be specified."
@@ -12920,9 +12884,9 @@ msgstr "Εντολή Προσομοίωσης"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:686
 #: eeschema/dialogs/dialog_sim_command_base.cpp:725
 #: eeschema/dialogs/dialog_sim_command_base.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed %s scale"
-msgstr "Μη έγκυρη κλίμακα Ψ"
+msgstr "Καθορισμένη %s κλίμακα"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
@@ -13092,9 +13056,9 @@ msgid "P"
 msgstr "π"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Μορφή"
+msgstr "Μορφή %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:222
 msgid "<unknown>"
@@ -13852,9 +13816,8 @@ msgstr ""
 "υπερσύνδεσμο σε μια σελίδα σε αυτό το σχηματικό."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:537
-#, fuzzy
 msgid "Edit Text"
-msgstr "Επεξεργασία Κειμένου..."
+msgstr "Επεξεργασία Κειμένου"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -14761,9 +14724,8 @@ msgid "All supported formats"
 msgstr "Όλες οι υποστηριζόμενες μορφές"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:617
-#, fuzzy
 msgid "Add Library"
-msgstr "Προσθήκη Βιβλιοθήκης..."
+msgstr "Προσθήκη Βιβλιοθήκης"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:631
 msgid "Warning: Duplicate Nickname"
@@ -15078,7 +15040,7 @@ msgstr "Δεν έχει ενημερωθεί η βιβλιοθήκη συμβό�
 
 #: eeschema/eeschema_jobs_handler.cpp:981
 msgid "Running ERC...\n"
-msgstr "Εκτέλεση ΕΚΣ...\n"
+msgstr "Εκτέλεση ΕΗΚ...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:989 pcbnew/pcbnew_jobs_handler.cpp:1004
 #, c-format
@@ -15091,9 +15053,9 @@ msgid "Unable to save ERC report to %s\n"
 msgstr "Αδυναμία αποθήκευσης αρχείου αναφοράς ΕΗΚ σε %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Αποθήκευση Αρχείου Αναφοράς ΕΗΚ\n"
+msgstr "Αποθήκευση Αρχείου Αναφοράς ΕΗΚ σε %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 #, fuzzy
@@ -15195,9 +15157,9 @@ msgstr ""
 "τοποθετηθεί."
 
 #: eeschema/erc.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "Το εργαλείο %d δεν έχει οριστεί"
+msgstr "Κλάση δικτύου %s δεν έχει οριστεί"
 
 #: eeschema/erc.cpp:656
 #, fuzzy
@@ -15492,9 +15454,9 @@ msgid "Allow Autoplacement"
 msgstr "Να Επιτρέπεται η Αυτόματη Τοποθέτηση"
 
 #: eeschema/files-io.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Το αρχείο σχηματικού \"%s\" είναι ήδη ανοιχτό."
+msgstr "Το αρχείο σχηματικού '%s' είναι ήδη ανοιχτό από το '%s' σε '%s'."
 
 #: eeschema/files-io.cpp:133
 #, c-format
@@ -15514,9 +15476,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "Αλλαγές στο αρχείο του σχηματικού δεν ειναι αποθηκευμένες"
 
 #: eeschema/files-io.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Σχηματικά αρχεία Altium"
+msgstr "Μη υποστηριζόμενο αρχείο σχηματικού '%s'."
 
 #: eeschema/files-io.cpp:265
 msgid "Root"
@@ -16141,9 +16103,9 @@ msgid "Pin %s not found."
 msgstr "δεν βρέθηκε %s"
 
 #: eeschema/lib_symbol.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "Πλήθος εδρών"
+msgstr "Διαφέρουν οι ακροδέκτες %s."
 
 #: eeschema/lib_symbol.cpp:402
 #, c-format
@@ -16328,14 +16290,14 @@ msgid "P&references"
 msgstr "Π&ροτιμήσεις"
 
 #: eeschema/net_navigator.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "%s Σύρμα από (%s,%s) σε (%s,%s)"
+msgstr "Καλώδιο από %s, %s σε %s, %s"
 
 #: eeschema/net_navigator.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "%s Δίαυλος από (%s,%s) σε (%s,%s)"
+msgstr "Δίαυλος από %s, %s σε %s, %s"
 
 #: eeschema/net_navigator.cpp:72
 #, fuzzy
@@ -16348,9 +16310,9 @@ msgid "Symbol '%s' pin '%s'"
 msgstr "Σύμβολο %s [%s]"
 
 #: eeschema/net_navigator.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Ακροδέκτες φύλλου"
+msgstr "Φύλλο '%s' ακροδέκτης '%s'"
 
 #: eeschema/net_navigator.cpp:106
 #, fuzzy, c-format
@@ -16358,34 +16320,34 @@ msgid "Label '%s' at %s, %s"
 msgstr "Κείμενο %s στο (%s, %s)"
 
 #: eeschema/net_navigator.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Καθολική Ετικέτα '%s'"
+msgstr "Καθολική Ετικέτα '%s' σε %s, %s"
 
 #: eeschema/net_navigator.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Ιεραρχική Ετικέτα '%s'"
+msgstr "Ιεραρχική Ετικέτα '%s' σε %s, %s"
 
 #: eeschema/net_navigator.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Μέγεθος σημείου κόμβου:"
+msgstr "Κόμβος σε %s, %s"
 
 #: eeschema/net_navigator.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "%s Σύρμα από (%s,%s) σε (%s,%s)"
+msgstr "Καλώδιο διαύλου από %s, %s σε %s, %s"
 
 #: eeschema/net_navigator.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "%s Δίαυλος από (%s,%s) σε (%s,%s)"
+msgstr "Δίαυλος σε δίαυλο από %s, %s σε %s, %s"
 
 #: eeschema/net_navigator.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "Αδυναμία χειρισμού κειμένου αποτυπώματος %s"
+msgstr "Αδυναμία χειρισμού τύπου αντικειμένου %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
 #, fuzzy
@@ -17051,11 +17013,10 @@ msgid "File not found %s."
 msgstr "Το αρχείο δεν βρέθηκε %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3981
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr ""
-"Άγνωστο ή μη αναμενόμενο αναγνωριστικό καταγραφής %d βρέθηκε μέσα στην "
-"ενότητα \"FileHeader\"."
+"Άγνωστο ή μη αναμενόμενο αναγνωριστικό καταγραφής %d βρέθηκε μέσα σε %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4107
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -17418,15 +17379,15 @@ msgstr "Σφάλμα κατά τη φόρτωση συμβόλου \"%s\" από
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:404
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:441
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Σφάλμα δημιουργίας βιβλιοθήκης συμβόλων '%s'."
+msgstr "Σφάλμα προσπέλασης βιβλιοθήκης συμβόλων '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:537
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Σφάλμα κατά τη φόρτωση σχηματικού '%s'."
+msgstr "Σφάλμα κατά τη φόρτωση σχηματικού '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.h:59
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.h:42
@@ -17523,9 +17484,9 @@ msgid "Open cancelled by user."
 msgstr "Η επανασύνδεση του αποτυπώματος ακυρώθηκε από τον χρήστη."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "Το συνώνυμο δεν μπορεί να έχει το ίδιο όνομα με το σύμβολο."
+msgstr "Αδυναμία προσπέλασης %s σαν σύμβολο"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 msgid "Invalid symbol name"
@@ -17788,9 +17749,9 @@ msgid "Expecting CELL or BLOCK"
 msgstr "Αναμένεται CELL ή BLOCK"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "Δεν βρέθηκε το σύμβολο."
+msgstr "Δεν βρέθηκε το σύμβολο '%s.asy'"
 
 #: eeschema/sch_reference_list.cpp:674
 #, c-format
@@ -19069,9 +19030,9 @@ msgid "expecting measurement format definition"
 msgstr "Αναμένεται ορισμός της μορφής μέτρησης"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "Βιβλιοθήκη μοντέλων προσομοίωσης δεν βρέθηκε σε '%s' ή '%s'"
+msgstr "Δεν βρέθηκε βιβλιοθήκη μοντέλων προσομοίωσης σε '%s'"
 
 #: eeschema/sim/sim_lib_mgr.cpp:88
 #, c-format
@@ -19114,9 +19075,9 @@ msgid "Invalid IBIS file '%s'"
 msgstr "Λανθασμένο αρχείο IBIS '%s'"
 
 #: eeschema/sim/sim_model.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr "Βιβλιοθήκη μοντέλων προσομοίωσης δεν βρέθηκε σε '%s' ή '%s'"
+msgstr "Δεν βρέθηκε ορισμός μοντέλου προσομοίωσης για το σύμβολο '%s'."
 
 #: eeschema/sim/sim_model.cpp:410
 #, fuzzy
@@ -19133,9 +19094,9 @@ msgstr ""
 "%s"
 
 #: eeschema/sim/sim_model.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "Άγνωστο στοιχείο '%s' σε '%s'"
+msgstr "Άγνωστος ακροδέκτης μοντέλου προσομοίωσης '%s'"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -19212,9 +19173,9 @@ msgid "Number of bits"
 msgstr "Αριθμός bits"
 
 #: eeschema/sim/sim_plot_tab.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
 #, fuzzy
@@ -19397,9 +19358,9 @@ msgid " (amplitude)"
 msgstr " (πλάτος)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Fourier Analysis of %s"
-msgstr "Ιδιότητες για %s (συνώνυμο του %s)"
+msgstr "Ανάλυση Fourier για %s"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 #, fuzzy
@@ -19412,9 +19373,9 @@ msgid "Fundamental frequency:"
 msgstr "Συχνότητα σήματος:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "Μορφή"
+msgstr "Μορφή %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:398
 #, fuzzy
@@ -19824,14 +19785,14 @@ msgstr ""
 "%c."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Ακροδέκτης εκτός πλέγματος %s</b> %s στη θέση <b>(%s, %s)</b>."
+msgstr "<b>Κύκλος γραφικών με ακτίνα = 0</b> στη θέση <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Ακροδέκτης εκτός πλέγματος %s</b> %s στη θέση <b>(%s, %s)</b>."
+msgstr "<b>Το ορθογώνιο γραφικών έχει μέγεθος 0</b> στη θέση <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
 #, fuzzy
@@ -37730,28 +37691,31 @@ msgstr ""
 "                                                                        |\n"
 "| `diff_pair_gap`           | min/opt/max                                    "
 "                                                                        | "
-"Checks the gap between coupled tracks in a differential pair.  Coupled "
-"tracks are segments that are parallel to each other.  Differential pair gap "
-"is not tested on uncoupled portions of a differential pair (for example, the "
-"fanout from a component).<br>                                                "
+"Ελέγχει το κενό μεταξύ των συζευγμένων διαδρόμων σε ένα διαφορικό ζεύγος.  "
+"Τα συζευγμένα κομμάτια είναι τμήματα που είναι παράλληλα μεταξύ τους.  Το "
+"διάκενο διαφορικού ζεύγους δεν ελέγχεται σε μη συζευγμένα τμήματα ενός "
+"διαφορικού ζεύγους (για παράδειγμα, το fanout από ένα στοιχείο).<br>         "
 "                                                                             "
-"                                                              |\n"
+"                                                                             "
+"                        |\n"
 "| `diff_pair_uncoupled`     | max                                            "
 "                                                                        | "
-"Checks the distance that a differential pair track is routed uncoupled from "
-"the other polarity track in the pair (for example, where the pair fans out "
-"from a component, or becomes uncoupled to pass around another object such as "
-"a via).<br>                                                                  "
+"Ελέγχει την απόσταση που ένας διάδρομος διαφορικού ζεύγους δρομολογείται μη "
+"συζευγμένος από το άλλο κομμάτι πολικότητας του ζεύγους(για παράδειγμα, όταν "
+"το ζεύγος βγαίνει από ένα στοιχείο ή αποσυνδέεται για να περάσει γύρω από "
+"ένα άλλο αντικείμενο, όπως μια διέλευση).<br>                                "
 "                                                                             "
-"                                                          |\n"
+"                                                                             "
+"               |\n"
 "| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
 "<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
-"Specify one or more object types to disallow, separated by spaces.  For "
-"example, `(constraint disallow track)` or `(constraint disallow track via "
-"pad)`.  If an object of this type matches the rule condition, a DRC error "
-"will be created.<br><br>This constraint is essentially the same as a keepout "
-"rule area, but can be used to create more specific keepout restrictions.<br> "
-"                                                                  |\n"
+"Καθορίστε έναν ή περισσότερους τύπους αντικειμένων προς απαγόρευση, "
+"διαχωρισμένους με κενά.  Για παράδειγμα, `(constraint disallow track)` ή `("
+"constraint disallow track via pad)`.  Εάν ένα αντικείμενο αυτού του τύπου "
+"ταιριάζει με τη συνθήκη κανόνα, θα δημιουργηθεί ένα σφάλμα ΕΚΣ.<br><br>Αυτός "
+"ο περιορισμός είναι ουσιαστικά ο ίδιος με μια περιοχή κανόνων, αλλά μπορεί "
+"να χρησιμοποιηθεί για τη δημιουργία πιο συγκεκριμένων περιορισμών διατήρησης."
+"<br>                                                                   |\n"
 "| `edge_clearance`          | min/opt/max                                    "
 "                                                                        | "
 "Checks the clearance between objects and the board edge.<br><br>This can "
@@ -47492,7 +47456,7 @@ msgstr "Επιλεγμένα Αντικείμενα"
 
 #: pcbnew/tools/pcb_point_editor.cpp:663
 msgid "Drag Corner"
-msgstr "Σύρσιμο γωνίας"
+msgstr "Σύρσιμο Γωνίας"
 
 #: pcbnew/tools/pcb_point_editor.cpp:731
 msgid "Move Midpoint to Location"
