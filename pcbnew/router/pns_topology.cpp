@@ -469,59 +469,66 @@ bool commonParallelProjection( SEG p, SEG n, SEG &pClip, SEG& nClip );
 
 bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 {
-    NET_HANDLE refNet = aStart->Net();
-    NET_HANDLE coupledNet = m_world->GetRuleResolver()->DpCoupledNet( refNet );
+    NET_HANDLE   refNet = aStart->Net();
+    NET_HANDLE   coupledNet = m_world->GetRuleResolver()->DpCoupledNet( refNet );
+    LINKED_ITEM* startItem = dynamic_cast<LINKED_ITEM*>( aStart );
 
-    if( !coupledNet )
+    if( !coupledNet || !startItem )
         return false;
+
+    LINE lp = m_world->AssembleLine( startItem );
 
     std::set<ITEM*> coupledItems;
 
     m_world->AllItemsInNet( coupledNet, coupledItems );
 
-    SEGMENT* coupledSeg = nullptr, *refSeg;
-    int minDist = std::numeric_limits<int>::max();
+    SEGMENT* refSeg = nullptr;
+    SEGMENT* coupledSeg = nullptr;
+    int      minDist = std::numeric_limits<int>::max();
 
-    if( ( refSeg = dyn_cast<SEGMENT*>( aStart ) ) != nullptr )
+    for( ITEM* p_item : lp.Links() )
     {
-        for( ITEM* item : coupledItems )
+        SEGMENT* p_seg = dyn_cast<SEGMENT*>( p_item );
+
+        if( !p_seg )
+            continue;
+
+        for( ITEM* n_item : coupledItems )
         {
-            if( SEGMENT* s = dyn_cast<SEGMENT*>( item ) )
+            SEGMENT* n_seg = dyn_cast<SEGMENT*>( n_item );
+
+            if( !n_seg )
+                continue;
+
+            if( n_seg->Layers().Start() != p_seg->Layers().Start() || n_seg->Width() != p_seg->Width() )
+                continue;
+
+            if( !p_seg->Seg().ApproxParallel( n_seg->Seg(), DP_PARALLELITY_THRESHOLD ) )
+                continue;
+
+            SEG p_clip, n_clip;
+
+            if( !commonParallelProjection( p_seg->Seg(), n_seg->Seg(), p_clip, n_clip ) )
+                continue;
+
+            int dist = n_seg->Seg().Distance( p_seg->Seg() );
+
+            if( dist < minDist )
             {
-                if( s->Layers().Start() == refSeg->Layers().Start() &&
-                    s->Width() == refSeg->Width() )
-                {
-                    int dist = s->Seg().Distance( refSeg->Seg() );
-                    bool isParallel = refSeg->Seg().ApproxParallel( s->Seg(), DP_PARALLELITY_THRESHOLD );
-                    SEG p_clip, n_clip;
-
-                    bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip,
-                                                               n_clip );
-
-                    if( isParallel && isCoupled && dist < minDist )
-                    {
-                        minDist = dist;
-                        coupledSeg = s;
-                    }
-                }
+                minDist = dist;
+                refSeg = p_seg;
+                coupledSeg = n_seg;
             }
         }
-    }
-    else
-    {
-        return false;
     }
 
     if( !coupledSeg )
         return false;
 
-    LINE lp = m_world->AssembleLine( refSeg );
     LINE ln = m_world->AssembleLine( coupledSeg );
 
     if( m_world->GetRuleResolver()->DpNetPolarity( refNet ) < 0 )
-    {
         std::swap( lp, ln );
-    }
 
     int gap = -1;
 
