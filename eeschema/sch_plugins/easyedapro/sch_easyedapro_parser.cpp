@@ -469,7 +469,6 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
         {
             VECTOR2D start, size;
             wxString mimeType, data;
-            double   angle = 0;
             int      upsideDown = 0;
 
             if( line.at( 3 ).is_number() )
