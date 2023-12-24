@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-20 13:33+0000\n"
+"PO-Revision-Date: 2023-12-25 13:09+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -332,7 +332,7 @@ msgstr "Απόδοση τρέχουσας προβολής με χρήση Raytr
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:100
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
 msgid "KiCad 3D Viewer"
-msgstr "KiCad 3D Viewer"
+msgstr "3Δ Προβολή KiCad"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2837
@@ -13357,9 +13357,9 @@ msgid "Abort Project Save"
 msgstr "Ακύρωση Αποθήκευσης Έργου"
 
 #: eeschema/files-io.cpp:1245
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Το αρχείο σχηματικού \"%s\" είναι ήδη ανοιχτό."
+msgstr "Το αρχείο σχηματικού '%s' είναι ήδη ανοιχτό από το '%s' σε '%s'."
 
 #: eeschema/files-io.cpp:1258
 msgid "Importing Schematic"
