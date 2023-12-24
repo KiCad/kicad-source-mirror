@@ -644,10 +644,22 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                 }
                 else
                 {
-                    for( BOARD_ITEM* item : sel_items )
+                    if( showCourtyardConflicts )
                     {
-                        if( showCourtyardConflicts && item->Type() == PCB_FOOTPRINT_T )
-                            drc_on_move->m_FpInMove.push_back( static_cast<FOOTPRINT*>( item ) );
+                        std::vector<FOOTPRINT*>& FPs = drc_on_move->m_FpInMove;
+
+                        for( BOARD_ITEM* item : sel_items )
+                        {
+                            if( item->Type() == PCB_FOOTPRINT_T )
+                                FPs.push_back( static_cast<FOOTPRINT*>( item ) );
+
+                            item->RunOnDescendants(
+                                    [&]( BOARD_ITEM* descendent )
+                                    {
+                                        if( descendent->Type() == PCB_FOOTPRINT_T )
+                                            FPs.push_back( static_cast<FOOTPRINT*>( descendent ) );
+                                    } );
+                        }
                     }
 
                     m_cursor = grid.BestDragOrigin( originalCursorPos, sel_items,
