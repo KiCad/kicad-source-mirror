@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-12 09:44+0000\n"
+"PO-Revision-Date: 2023-12-25 13:07+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1288,9 +1288,8 @@ msgid "3D Preview Options"
 msgstr "Opciones de Gerbview"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Grosor de la placa: "
+msgstr "Grosor de la placa:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -3451,9 +3450,9 @@ msgid "Connection successful"
 msgstr "Archivo creado satisfactoriamente."
 
 #: common/dialogs/git/dialog_git_repository.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "&Selección de tipos"
+msgstr "No se pudo conectar a '%s ' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:350
 #, fuzzy, c-format
@@ -3466,9 +3465,8 @@ msgid "Invalid SSH Key"
 msgstr "Escala Y no válida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "¡El archivo seleccionado no es válido o podría estar corrupto!"
+msgstr "El archivo seleccionado no es una clave privada SSH válida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:387
 #, fuzzy, c-format
@@ -6061,9 +6059,8 @@ msgid "Could not fetch data from remote '%s'"
 msgstr "No se pudo encontrar el modelo IBIS '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "No se puede leer el archivo "
+msgstr "No se pudo leer 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
 #, fuzzy
@@ -6071,9 +6068,8 @@ msgid "Could not lookup commit"
 msgstr "No ha pudido abrirse CvPcb"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "No se puede leer el archivo "
+msgstr "No se puede analizar la fusión"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -6098,9 +6094,8 @@ msgid "Could not lookup commit '{}'"
 msgstr "No se pudo cargar una imagen desde '%s'."
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "No se puede leer el archivo "
+msgstr "No se pudo unir los commits"
 
 #: common/git/git_pull_handler.cpp:257
 #, fuzzy
@@ -6196,9 +6191,8 @@ msgid "Authentication failed for remote repository."
 msgstr ""
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Branch not found."
-msgstr " \" no encontrado"
+msgstr "Rama no encontrada."
 
 #: common/git/kicad_git_errors.cpp:41
 #, fuzzy
@@ -6242,9 +6236,8 @@ msgid "Failed to establish connection with remote repository."
 msgstr "Error al analizar repository.json almacenado localmente."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr " \" no encontrado"
+msgstr "Etiqueta no encontrada."
 
 #: common/git/kicad_git_errors.cpp:60
 #, fuzzy
@@ -6386,9 +6379,9 @@ msgstr ""
 #: common/http_lib/http_lib_connection.cpp:155
 #: common/http_lib/http_lib_connection.cpp:278
 #: common/http_lib/http_lib_connection.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Error: "
+msgstr "Error: %s"
 
 #: common/http_lib/http_lib_connection.cpp:90
 #: common/http_lib/http_lib_connection.cpp:155
@@ -6644,9 +6637,8 @@ msgid "No-connect symbols"
 msgstr "Símbolos de no conectado"
 
 #: common/layer_id.cpp:138
-#, fuzzy
 msgid "DNP markers"
-msgstr "&Borrar Marcadores    "
+msgstr "Marcadores DNP"
 
 #: common/layer_id.cpp:139
 msgid "ERC warnings"
@@ -13265,9 +13257,9 @@ msgstr "Símbolo de alimentación"
 #: eeschema/symbol_chooser_frame.cpp:103
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:61
 #: pcbnew/footprint_chooser_frame.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Seleccionar símbolo (%d elementos cargados)"
+msgstr " (%d elementos cargados)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -14750,9 +14742,8 @@ msgid "All supported formats"
 msgstr "Todos los formatos compatibles"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:617
-#, fuzzy
 msgid "Add Library"
-msgstr "&Añadir biblioteca"
+msgstr "Añadir biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:631
 msgid "Warning: Duplicate Nickname"
@@ -15782,11 +15773,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Recuperación manual requerida para restaurar los archivos mostrados."
 
 #: eeschema/files-io.cpp:1641
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "¡No se puede eliminar el archivo de guardado automático '%s'!"
+msgstr ""
+"El archivo de guardado automático '%s' no pudo ser eliminado.\n"
+"Se requerirá la eliminación manual."
 
 #: eeschema/files-io.cpp:1675
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -19328,9 +19321,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:846
 #: eeschema/sim/simulator_frame_ui.cpp:1008
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Amplitud:"
+msgstr " (amplitud)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, fuzzy, c-format
@@ -23635,9 +23627,8 @@ msgid "Export utilities (svg)"
 msgstr "Exportar unidades:"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
-#, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr "Actualizar la huella desde la biblioteca"
+msgstr "Exporta la huella o la biblioteca de huellas entera a SVG"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #, fuzzy
@@ -25373,9 +25364,8 @@ msgid "Commit File..."
 msgstr "Editar campo..."
 
 #: kicad/project_tree_pane.cpp:967
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Cambiar a lienzo Cairo"
+msgstr "Cambiar a rama "
 
 #: kicad/project_tree_pane.cpp:972
 msgid "Other..."
@@ -25418,9 +25408,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Ruta local: supervisando cambios en la carpeta"
 
 #: kicad/project_tree_pane.cpp:1535
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "¡El archivo seleccionado no es válido o podría estar corrupto!"
+msgstr "El directorio seleccionado ya es un proyecto git."
 
 #: kicad/project_tree_pane.cpp:1551
 #, fuzzy
@@ -28070,7 +28059,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -28087,20 +28075,8 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Las series E están definidas en IEC 60063.\n"
-"\n"
-"Los valores disponibles están espaciados de manera aproximadamente igual en "
-"una escala logarítmica.\n"
-"\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
-"\n"
-"- Esta calculadora encuentra combinaciones de componentes con valores de las "
-"series E para crear valores arbitrarios.\n"
+"- Esta calculadora encuentra combinaciones de series E estándar (entre 10Ω y "
+"1MΩ) para crear valores arbitrarios.\n"
 "- Puedes ingresar la resistencia requerida desde 0,0025 a 4000 kΩ.\n"
 "- Se proporcionan soluciones que utilizan hasta 4 componentes.\n"
 "\n"
@@ -31059,11 +31035,9 @@ msgid "Run DRC"
 msgstr "Ejecutar DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr ""
-"DRC incompleto: no se pudieron compilar las reglas de diseño "
-"personalizadas.  "
+"DRC incompleto: no se pudieron compilar las reglas de diseño personalizadas."
 
 #: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Show design rules."
@@ -31495,9 +31469,8 @@ msgid "STEP files"
 msgstr "Archivos STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
-#, fuzzy
 msgid "Binary GTLF files"
-msgstr "Archivos de biblioteca:"
+msgstr "Archivos binarios GTLF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy
@@ -31971,7 +31944,7 @@ msgstr "Reiniciar búsqueda"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
 msgid "Footprint: "
-msgstr "Módulo:"
+msgstr "Huella: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
 #, fuzzy
@@ -31979,9 +31952,8 @@ msgid "Symbol:"
 msgstr "Símbolo"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
-#, fuzzy
 msgid "Sheet: "
-msgstr "Página"
+msgstr "Hoja: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -32932,9 +32904,8 @@ msgstr "Ajustar a valores específicos:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Add teardrops with default values for shape"
-msgstr "Añadir lágrimas solo a las formas redondas "
+msgstr "Añadir lágrimas con valores por defecto para la forma"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
@@ -35509,9 +35480,8 @@ msgstr "Dimensiones de pistas y vías"
 
 # Desvío deseado:
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Desvío objetivo:"
+msgstr "Desvío objetivo: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1966
@@ -39272,11 +39242,9 @@ msgstr ""
 "** Error al escribir el archivo STEP. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"Archivo STEP '%s' creado.\n"
+msgstr "%s archivo '%s' creado.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
@@ -39303,11 +39271,13 @@ msgid "%s file has been created, but there are warnings."
 msgstr "Se ha creado el archivo STEP, pero hay avisos."
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Tiempo de actualización %.3f s"
+msgstr ""
+"\n"
+"Tiempo de exportación %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
 #, fuzzy, c-format
@@ -39981,19 +39951,16 @@ msgid "Tuning"
 msgstr "Aviso"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1276
-#, fuzzy
 msgid "too long"
-msgstr "Demasiado larga: "
+msgstr "demasiado largo"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1277
-#, fuzzy
 msgid "too short"
-msgstr "Demasiado corta: "
+msgstr "demasiado corto"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1278
-#, fuzzy
 msgid "tuned"
-msgstr "Afinada: "
+msgstr "afinado"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1349
 #, fuzzy
@@ -41662,9 +41629,8 @@ msgid "File not found: '%s'."
 msgstr "Archivo no encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:272
-#, fuzzy
 msgid "No footprints in library"
-msgstr "Cargar huella desde biblioteca"
+msgstr "Sin huellas en la biblioteca"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:294
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
@@ -42491,9 +42457,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Archivos XML de biblioteca de Eagle ver. 6.x"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Model_type desconocido "
+msgstr "SVGNODE nodeType desconocido %d"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
 #, fuzzy, c-format
@@ -42786,9 +42752,8 @@ msgid "Generating logistic section"
 msgstr "Generar archivo de posición"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2914
-#, fuzzy
 msgid "Saving file"
-msgstr "Leyendo archivo "
+msgstr "Guardando archivo"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2946
 #, fuzzy
@@ -43836,11 +43801,9 @@ msgid "[netclass %s]"
 msgstr "[clase de red %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:211
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
 msgstr ""
-"Informe incompleto: no se pudieron compilar reglas de diseño "
-"personalizadas.  "
+"Informe incompleto: no se pudieron compilar reglas de diseño personalizadas."
 
 #: pcbnew/tools/board_inspection_tool.cpp:316
 msgid "Uncoupled Length"
@@ -46868,7 +46831,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1345
 msgid "Append Board"
-msgstr "&Importar ..."
+msgstr "Agregar placa"
 
 #: pcbnew/tools/pcb_control.cpp:1403
 #, fuzzy
@@ -47887,9 +47850,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] fallo al cargar: la línea de entrada es demasiado larga\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Conversor de mapas de bits en componentes"
+msgstr "bitmap2component;Bitmap;Converter;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -47928,9 +47890,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Administrador de proyectos"
+msgstr "Projectmanager;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -47946,9 +47907,8 @@ msgid "KiCad PCB Calculator"
 msgstr "Calculadora de placas de KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "Calculadora de placas"
+msgstr "PCB;Calculator;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
