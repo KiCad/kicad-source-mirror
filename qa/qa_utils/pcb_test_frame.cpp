@@ -101,7 +101,7 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 
 BOARD* PCB_TEST_FRAME_BASE::LoadAndDisplayBoard( const std::string& filename )
 {
-    PLUGIN::RELEASER pi( new PCB_IO_KICAD_SEXPR );
+    PCB_IO::RELEASER pi( new PCB_IO_KICAD_SEXPR );
     BOARD* brd = nullptr;
 
     try
