@@ -77,11 +77,12 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
         PANEL_SETUP_BOARD_STACKUP_BASE( aParentWindow ),
         m_delectricMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_DIELECTRIC ),
         m_solderMaskMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SOLDERMASK ),
-        m_silkscreenMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SILKSCREEN )
+        m_silkscreenMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SILKSCREEN ),
+        m_board( aFrame->GetBoard() ),
+        m_frame( aFrame ),
+        m_lastUnits( aFrame->GetUserUnits() )
 {
-    m_frame = aFrame;
     m_panelLayers = aPanelLayers;
-    m_board = m_frame->GetBoard();
     m_brdSettings = &m_board->GetDesignSettings();
 
     m_panel1->SetBorders( false, false, true, true );
@@ -118,12 +119,47 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
     buildLayerStackPanel( true );
     synchronizeWithBoard( true );
     computeBoardThickness();
+
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_BOARD_STACKUP::onUnitsChanged, this );
 }
 
 
 PANEL_SETUP_BOARD_STACKUP::~PANEL_SETUP_BOARD_STACKUP()
 {
     disconnectEvents();
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onUnitsChanged( wxCommandEvent& event )
+{
+    EDA_UNITS    newUnits = m_frame->GetUserUnits();
+    EDA_IU_SCALE scale = m_frame->GetIuScale();
+
+    auto convert =
+            [&]( wxTextCtrl* aTextCtrl )
+            {
+                wxString str = aTextCtrl->GetValue();
+                long long int temp = EDA_UNIT_UTILS::UI::ValueFromString( scale, m_lastUnits, str );
+                str = EDA_UNIT_UTILS::UI::StringFromValue( scale, newUnits, temp, true );
+
+                // Don't use SetValue(); we don't want a bunch of event propagation as the actual
+                // value hasn't changed, only its presentation.
+                aTextCtrl->ChangeValue( str );
+            };
+
+    for( BOARD_STACKUP_ROW_UI_ITEM& ui_item : m_rowUiItemsList )
+    {
+        BOARD_STACKUP_ITEM* item = ui_item.m_Item;
+
+        if( item->IsThicknessEditable() && item->IsEnabled() )
+            convert( static_cast<wxTextCtrl*>( ui_item.m_ThicknessCtrl ) );
+    }
+
+    convert( m_tcCTValue );
+
+    m_lastUnits = newUnits;
+
+    event.Skip();
 }
 
 

@@ -219,6 +219,8 @@ private:
      */
     wxBitmapComboBox* createColorBox( BOARD_STACKUP_ITEM* aStackupItem, int aRow );
 
+    void onUnitsChanged( wxCommandEvent& event );
+
     /**
      * disconnect event handlers connected to wxControl items found in list m_controlItemsList
      */
@@ -244,6 +246,7 @@ private:
     BOARD*                  m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
     PCB_EDIT_FRAME*         m_frame;
+    EDA_UNITS               m_lastUnits;
     wxSize                  m_numericTextCtrlSize;  // Best size for wxTextCtrls with units
     wxSize                  m_numericFieldsSize;    // Best size for wxTextCtrls without units
     wxArrayString           m_core_prepreg_choice;  // Used to display the option list in dialog
