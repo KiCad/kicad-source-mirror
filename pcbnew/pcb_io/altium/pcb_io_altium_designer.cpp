@@ -39,10 +39,8 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER()
+PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() : PCB_IO( wxS( "Altium Designer" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 

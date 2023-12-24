@@ -31,8 +31,6 @@
 class PCB_IO_ALTIUM_CIRCUIT_STUDIO : public PCB_IO
 {
 public:
-    const wxString PluginName() const override;
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override;
 
     bool CanReadBoard( const wxString& aFileName ) const override;
@@ -49,10 +47,6 @@ public:
 
     PCB_IO_ALTIUM_CIRCUIT_STUDIO();
     ~PCB_IO_ALTIUM_CIRCUIT_STUDIO();
-
-private:
-    const STRING_UTF8_MAP* m_props;
-    BOARD*            m_board;
 };
 
 #endif // PCB_IO_ALTIUM_CIRCUIT_STUDIO_H_

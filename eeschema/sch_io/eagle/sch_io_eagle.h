@@ -86,15 +86,6 @@ public:
     SCH_IO_EAGLE();
     ~SCH_IO_EAGLE();
 
-    const wxString GetName() const override;
-
-    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
-
-    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
-    {
-        m_progressReporter = aReporter;
-    }
-
     const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Eagle XML schematic files" ), { "sch" } );
@@ -241,8 +232,6 @@ private:
         std::map<int, bool> units;
     };
 
-    REPORTER*   m_reporter;       ///< Reporter for warnings/errors
-
     ///< Map references to missing symbol units data
     std::map<wxString, EAGLE_MISSING_CMP> m_missingCmps;
 
@@ -261,7 +250,6 @@ private:
     SCH_IO::SCH_IO_RELEASER   m_pi;                ///< PI to create KiCad symbol library.
     std::unique_ptr<STRING_UTF8_MAP>     m_properties;        ///< Library plugin properties.
 
-    PROGRESS_REPORTER*                m_progressReporter;  ///< optional; may be nullptr
     unsigned                          m_doneCount;
     unsigned                          m_lastProgressCount;
     unsigned                          m_totalCount;        ///< for progress reporting

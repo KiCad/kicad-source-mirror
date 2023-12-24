@@ -47,11 +47,6 @@ class GPCB_FPL_CACHE;
 class PCB_IO_GEDA : public PCB_IO
 {
 public:
-    const wxString PluginName() const override
-    {
-        return wxT( "gEDA PCB" );
-    }
-
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "gEDA PCB footprint file" ), { "fp" } );
@@ -108,7 +103,6 @@ private:
 
 protected:
     wxString               m_error;    ///< for throwing exceptions
-    const STRING_UTF8_MAP* m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
     GPCB_FPL_CACHE*        m_cache;    ///< Footprint library cache.
     int                    m_ctl;
     LINE_READER*           m_reader;   ///< no ownership here.

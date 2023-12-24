@@ -39,8 +39,6 @@ public:
     PCB_IO_PCAD();
     ~PCB_IO_PCAD();
 
-    const wxString PluginName() const override { return wxT( "P-Cad" ); }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
@@ -57,10 +55,6 @@ public:
         // No support for libraries....
         return 0;
     }
-
-private:
-    const STRING_UTF8_MAP*   m_props;
-    BOARD*              m_board;
 };
 
 #endif    // PCB_IO_PCAD_H_

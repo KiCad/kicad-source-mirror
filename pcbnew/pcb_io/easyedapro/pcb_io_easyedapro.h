@@ -35,11 +35,6 @@
 class PCB_IO_EASYEDAPRO : public PCB_IO, public PROJECT_CHOOSER_PLUGIN
 {
 public:
-    const wxString PluginName() const override
-    {
-        return wxS( "EasyEDA (JLCEDA) Professional" );
-    }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ), { "epro", "zip" } );
@@ -85,9 +80,6 @@ private:
     PRJ_DATA* m_projectData = nullptr;
 
     void LoadAllDataFromProject( const wxString& aLibraryPath, const nlohmann::json& aProject );
-
-    const STRING_UTF8_MAP* m_props;
-    BOARD*                 m_board;
 };
 
 

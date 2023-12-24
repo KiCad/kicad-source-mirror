@@ -37,12 +37,6 @@
 #include <wx/txtstrm.h>
 
 
-const wxString SCH_IO_CADSTAR_ARCHIVE::GetName() const
-{
-    return wxT( "CADSTAR Schematic Archive" );
-}
-
-
 bool SCH_IO_CADSTAR_ARCHIVE::CanReadLibrary( const wxString& aFileName ) const
 {
     if( !SCH_IO::CanReadLibrary( aFileName ) )

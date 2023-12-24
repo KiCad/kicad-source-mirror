@@ -32,11 +32,6 @@
 class PCB_IO_EASYEDA : public PCB_IO
 {
 public:
-    const wxString PluginName() const override
-    {
-        return wxS( "EasyEDA (JLCEDA) Standard" );
-    }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Std files" ), { "json", "zip" } );
@@ -74,8 +69,6 @@ public:
     ~PCB_IO_EASYEDA();
 
 private:
-    const STRING_UTF8_MAP* m_props;
-    BOARD*                 m_board;
 
     std::map<wxString, std::unique_ptr<FOOTPRINT>> m_loadedFootprints;
 };

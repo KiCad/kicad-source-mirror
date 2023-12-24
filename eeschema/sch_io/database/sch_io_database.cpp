@@ -33,7 +33,7 @@
 #include "sch_io_database.h"
 
 
-SCH_IO_DATABASE::SCH_IO_DATABASE() :
+SCH_IO_DATABASE::SCH_IO_DATABASE() : SCH_IO( wxS( "Database library" ) ),
         m_libTable( nullptr ),
         m_settings(),
         m_conn()

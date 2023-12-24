@@ -53,7 +53,7 @@ public:
      * @brief PCB_IO_IPC2581
      *
     */
-    PCB_IO_IPC2581()
+    PCB_IO_IPC2581() : PCB_IO( wxS( "IPC-2581" ) )
     {
         m_show_layer_mapping_warnings = false;
         m_total_bytes = 0;
@@ -73,11 +73,6 @@ public:
     }
 
     ~PCB_IO_IPC2581() override;
-
-    /**
-     * @brief PCB_IO_IPC2581
-    */
-    const wxString PluginName() const override;
 
     /**
      *

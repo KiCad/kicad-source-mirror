@@ -72,9 +72,8 @@
 #define T_WIDTH "width"
 
 
-SCH_IO_KICAD_LEGACY::SCH_IO_KICAD_LEGACY() :
+SCH_IO_KICAD_LEGACY::SCH_IO_KICAD_LEGACY() : SCH_IO( wxS( "Eeschema legacy" ) ),
     m_appending( false ),
-    m_progressReporter( nullptr ),
     m_lineReader( nullptr ),
     m_lastProgressLine( 0 ),
     m_lineCount( 0 )

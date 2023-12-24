@@ -277,11 +277,6 @@ public:
 class PCB_IO_KICAD_SEXPR : public PCB_IO
 {
 public:
-    const wxString PluginName() const override
-    {
-        return wxT( "KiCad" );
-    }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         // Would have used wildcards_and_files_ext.cpp's KiCadPcbFileExtension,
@@ -447,9 +442,7 @@ private:
 
 protected:
     wxString               m_error;      ///< for throwing exceptions
-    BOARD*                 m_board;      ///< which BOARD, no ownership here
 
-    const STRING_UTF8_MAP* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL
     FP_CACHE*              m_cache;      ///< Footprint library cache
 
     LINE_READER*           m_reader;     ///< no ownership

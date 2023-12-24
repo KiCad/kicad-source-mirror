@@ -25,16 +25,17 @@
 #ifndef PCB_IO_H_
 #define PCB_IO_H_
 
+#include <io/io_base.h>
+#include <plugin_file_desc.h>
+#include <pcb_io/pcb_io_mgr.h>
+
 #include <cstdint>
 #include <config.h>
 #include <vector>
 #include <wx/arrstr.h>
 #include <i18n_utility.h>
-#include <plugin_file_desc.h>
-#include <pcb_io/pcb_io_mgr.h>
 
 class BOARD;
-class PLUGIN;
 class FOOTPRINT;
 class STRING_UTF8_MAP;
 class PROJECT;
@@ -68,14 +69,9 @@ class PROGRESS_REPORTER;
  *   }
  * </pre>
  */
-class PCB_IO
+class PCB_IO : public IO_BASE
 {
 public:
-    /**
-     * Return a brief hard coded name for this PCB_IO.
-     */
-    virtual const wxString PluginName() const = 0;
-
     /**
      * Returns board file description for the PCB_IO.
      */
@@ -456,6 +452,18 @@ public:
         }
     };
 #endif
+
+protected:
+    PCB_IO( const wxString& aName ) : IO_BASE( aName ),
+        m_board( nullptr ),
+        m_props( nullptr )
+    {}
+
+    /// The board BOARD being worked on, no ownership here
+    BOARD* m_board;
+
+    /// Properties passed via Save() or Load(), no ownership, may be NULL.
+    const STRING_UTF8_MAP* m_props;
 };
 
 #endif // PCB_IO_H_

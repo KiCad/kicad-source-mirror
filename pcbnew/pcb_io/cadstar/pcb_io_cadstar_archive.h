@@ -32,8 +32,6 @@
 class PCB_IO_CADSTAR_ARCHIVE : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    const wxString PluginName() const override { return wxT( "CADSTAR PCB Archive" ); }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "CADSTAR PCB Archive files" ), { "cpa" } );
@@ -101,8 +99,6 @@ private:
     std::map<wxString, NAME_TO_FOOTPRINT_MAP> m_cache;
     std::map<wxString, long long> m_timestamps;
 
-    const STRING_UTF8_MAP*  m_props;
-    BOARD*                  m_board;
     std::vector<FOOTPRINT*> m_loaded_footprints;
     bool                    m_show_layer_mapping_warnings;
 

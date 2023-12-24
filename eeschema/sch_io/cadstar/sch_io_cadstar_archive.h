@@ -35,16 +35,13 @@ class SCH_SCREEN;
 class SCH_IO_CADSTAR_ARCHIVE : public SCH_IO
 {
 public:
-    SCH_IO_CADSTAR_ARCHIVE() :
+    SCH_IO_CADSTAR_ARCHIVE() : SCH_IO( wxS( "CADSTAR Schematic Archive" ) ),
         m_cacheTimestamp( 0 )
     {
         m_reporter = &WXLOG_REPORTER::GetInstance();
-        m_progressReporter = nullptr;
     }
 
     virtual ~SCH_IO_CADSTAR_ARCHIVE() {}
-
-    const wxString GetName() const override;
 
     void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
 
@@ -106,9 +103,6 @@ private:
     wxString           m_cachePath;
     wxFileName         m_cachecsafn;
     wxString           m_cachefplibname;
-
-    REPORTER* m_reporter; // current reporter for warnings/errors
-    PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
 };
 
 #endif // SCH_IO_CADSTAR_ARCHIVE_H_

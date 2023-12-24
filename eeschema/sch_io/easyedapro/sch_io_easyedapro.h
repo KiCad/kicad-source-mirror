@@ -41,15 +41,6 @@ public:
     SCH_IO_EASYEDAPRO();
     ~SCH_IO_EASYEDAPRO();
 
-    const wxString GetName() const override;
-
-    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
-
-    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
-    {
-        m_progressReporter = aReporter;
-    }
-
     const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "epro", "zip" } );
@@ -84,9 +75,6 @@ public:
 private:
     struct PRJ_DATA; // Opaque data structure
     PRJ_DATA* m_projectData = nullptr;
-
-    REPORTER*          m_reporter;         // current reporter for warnings/errors
-    PROGRESS_REPORTER* m_progressReporter; // optional; may be nullptr
 };
 
 

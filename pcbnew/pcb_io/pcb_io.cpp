@@ -36,7 +36,7 @@
 #define FMT_UNIMPLEMENTED wxT( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define NOT_IMPLEMENTED( aCaller )                                          \
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,                    \
-                                      PluginName(),                         \
+                                      GetName(),                         \
                                       wxString::FromUTF8( aCaller ) ) );
 
 

@@ -72,12 +72,6 @@ void PCB_IO_IPC2581::clearLoadedFootprints()
 }
 
 
-const wxString PCB_IO_IPC2581::PluginName() const
-{
-    return wxT( "IPC-2581" );
-}
-
-
 std::vector<FOOTPRINT*> PCB_IO_IPC2581::GetImportedCachedLibraryFootprints()
 {
     std::vector<FOOTPRINT*> retval;

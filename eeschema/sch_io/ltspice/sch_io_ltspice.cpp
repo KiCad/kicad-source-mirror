@@ -33,12 +33,6 @@
  * @brief schematic PLUGIN for LTspice (*.asc) and (.asy) format.
  */
 
-const wxString SCH_IO_LTSPICE::GetName() const
-{
-    return wxT( "LTspice Schematic Importer" );
-}
-
-
 int SCH_IO_LTSPICE::GetModifyHash() const
 {
     return 0;

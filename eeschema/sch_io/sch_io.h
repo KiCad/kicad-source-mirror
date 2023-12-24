@@ -23,6 +23,7 @@
 #ifndef SCH_IO_H_
 #define SCH_IO_H_
 
+#include <io/io_base.h>
 #include <sch_io/sch_io_mgr.h>
 #include <import_export.h>
 #include <map>
@@ -53,26 +54,11 @@
  *   }
  * </pre>
  */
-class SCH_IO
+class SCH_IO : public IO_BASE
 {
 public:
 
     //-----<PUBLIC SCH_IO API>-------------------------------------------------
-
-    /**
-     * Return a brief hard coded name for this SCH_IO.
-     */
-    virtual const wxString GetName() const = 0;
-
-    /**
-     * Set an optional reporter for warnings/errors.
-     */
-    virtual void SetReporter( REPORTER* aReporter ) {}
-
-    /**
-     * Set an optional progress reporter.
-     */
-    virtual void SetProgressReporter( PROGRESS_REPORTER* aReporter ) {}
 
     /**
      * Returns schematic file description for the #SCH_IO.
@@ -483,6 +469,11 @@ public:
             return plugin;
         }
     };
+
+protected:
+
+    SCH_IO( const wxString& aName ) : IO_BASE( aName )
+    {}
 };
 
 

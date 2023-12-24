@@ -792,7 +792,7 @@ bool GPCB_FPL_CACHE::testFlags( const wxString& aFlag, long aMask, const wxChar*
 }
 
 
-PCB_IO_GEDA::PCB_IO_GEDA() :
+PCB_IO_GEDA::PCB_IO_GEDA() : PCB_IO( wxS( "gEDA PCB" ) ),
     m_cache( nullptr ),
     m_ctl( 0 )
 {
@@ -801,7 +801,7 @@ PCB_IO_GEDA::PCB_IO_GEDA() :
 }
 
 
-PCB_IO_GEDA::PCB_IO_GEDA( int aControlFlags ) :
+PCB_IO_GEDA::PCB_IO_GEDA( int aControlFlags ) : PCB_IO( wxS( "gEDA PCB" ) ),
     m_cache( nullptr ),
     m_ctl( aControlFlags )
 {

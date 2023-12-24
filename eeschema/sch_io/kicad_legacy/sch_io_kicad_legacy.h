@@ -70,11 +70,6 @@ public:
     SCH_IO_KICAD_LEGACY();
     virtual ~SCH_IO_KICAD_LEGACY();
 
-    const wxString GetName() const override
-    {
-        return wxT( "Eeschema-Legacy" );
-    }
-
     const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "KiCad legacy schematic files" ),
@@ -90,11 +85,6 @@ public:
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
 
     bool CanReadLibrary( const wxString& aFileName ) const override;
-
-    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
-    {
-        m_progressReporter = aReporter;
-    }
 
     /**
      * The property used internally by the plugin to enable cache buffering which prevents
@@ -191,7 +181,6 @@ protected:
 
     wxString                 m_error;            ///< For throwing exceptions or errors on partial
                                                  ///<  schematic loads.
-    PROGRESS_REPORTER*       m_progressReporter; ///< optional; may be nullptr
     LINE_READER*             m_lineReader;       ///< for progress reporting
     unsigned                 m_lastProgressLine;
     unsigned                 m_lineCount;        ///< for progress reporting

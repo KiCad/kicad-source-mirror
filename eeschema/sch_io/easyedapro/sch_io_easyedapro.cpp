@@ -54,10 +54,9 @@ struct SCH_IO_EASYEDAPRO::PRJ_DATA
 };
 
 
-SCH_IO_EASYEDAPRO::SCH_IO_EASYEDAPRO()
+SCH_IO_EASYEDAPRO::SCH_IO_EASYEDAPRO() : SCH_IO( wxS( "EasyEDA Pro (JLCEDA) Schematic" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
-    m_progressReporter = nullptr;
 }
 
 
@@ -65,12 +64,6 @@ SCH_IO_EASYEDAPRO::~SCH_IO_EASYEDAPRO()
 {
     if( m_projectData )
         delete m_projectData;
-}
-
-
-const wxString SCH_IO_EASYEDAPRO::GetName() const
-{
-    return wxT( "EasyEDA (JLCEDA) Schematic Importer" );
 }
 
 

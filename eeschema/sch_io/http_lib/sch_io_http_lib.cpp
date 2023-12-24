@@ -28,7 +28,7 @@
 #include "sch_io_http_lib.h"
 
 
-SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() :
+SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() : SCH_IO( wxS( "HTTP library" ) ),
     m_libTable( nullptr )
 {
 }

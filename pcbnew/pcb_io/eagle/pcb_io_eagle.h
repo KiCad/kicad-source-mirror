@@ -131,8 +131,6 @@ struct ERULES
 class PCB_IO_EAGLE : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    const wxString PluginName() const override { return wxT( "Eagle" ); }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
@@ -355,9 +353,6 @@ private:
                                                  ///< lookup key is either libname.packagename or
                                                  ///< simply packagename if FootprintLoad() or
                                                  ///< FootprintEnumberate()
-
-    const STRING_UTF8_MAP*   m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
-    BOARD*              m_board;    ///< which BOARD is being worked on, no ownership here
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     unsigned            m_doneCount;

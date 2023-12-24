@@ -55,10 +55,8 @@ struct PCB_IO_EASYEDAPRO::PRJ_DATA
 };
 
 
-PCB_IO_EASYEDAPRO::PCB_IO_EASYEDAPRO()
+PCB_IO_EASYEDAPRO::PCB_IO_EASYEDAPRO() : PCB_IO( wxS( "EasyEDA (JLCEDA) Professional" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 

@@ -40,13 +40,6 @@
 #include <wx/wfstream.h>
 
 
-
-const wxString SCH_IO_EASYEDA::GetName() const
-{
-    return wxT( "EasyEDA (JLCEDA) Schematic Importer" );
-}
-
-
 static bool FindSchFileInStream( const wxString& aName, wxInputStream& aStream,
                                  nlohmann::json& aOut, EASYEDA::DOCUMENT& aDoc,
                                  EASYEDA::DOC_TYPE& aDocType )

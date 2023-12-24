@@ -3287,10 +3287,8 @@ bool PCB_IO_KICAD_LEGACY::IsFootprintLibWritable( const wxString& aLibraryPath )
 }
 
 
-PCB_IO_KICAD_LEGACY::PCB_IO_KICAD_LEGACY() :
+PCB_IO_KICAD_LEGACY::PCB_IO_KICAD_LEGACY() : PCB_IO( wxS( "KiCad-Legacy" ) ),
     m_cu_count( 16 ),               // for FootprintLoad()
-    m_board( nullptr ),
-    m_props( nullptr ),
     m_progressReporter( nullptr ),
     m_lastProgressLine( 0 ),
     m_lineCount( 0 ),

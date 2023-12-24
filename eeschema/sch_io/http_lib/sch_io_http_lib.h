@@ -42,11 +42,6 @@ public:
     SCH_IO_HTTP_LIB();
     virtual ~SCH_IO_HTTP_LIB();
 
-    const wxString GetName() const override
-    {
-        return wxT( "HTTP library" );
-    }
-
     const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "KiCad HTTP library files" ),

@@ -66,11 +66,6 @@ public:
     PCB_IO_KICAD_LEGACY();
     ~PCB_IO_KICAD_LEGACY();
 
-    const wxString PluginName() const override
-    {
-        return wxT( "KiCad-Legacy" );
-    }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
@@ -192,9 +187,6 @@ protected:
     int                m_cu_count;
 
     wxString           m_error;                  ///< for throwing exceptions
-    BOARD*             m_board;                  ///< which BOARD, no ownership here
-    const STRING_UTF8_MAP*  m_props;                  ///< passed via Save() or Load(), no ownership,
-                                                 ///<  may be NULL.
     PROGRESS_REPORTER* m_progressReporter;       ///< may be NULL, no ownership
     unsigned           m_lastProgressLine;
     unsigned           m_lineCount;              ///< for progress reporting

@@ -2397,7 +2397,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
 }
 
 
-PCB_IO_KICAD_SEXPR::PCB_IO_KICAD_SEXPR( int aControlFlags ) :
+PCB_IO_KICAD_SEXPR::PCB_IO_KICAD_SEXPR( int aControlFlags ) : PCB_IO( wxS( "KiCad" ) ),
     m_cache( nullptr ),
     m_ctl( aControlFlags ),
     m_mapping( new NETINFO_MAPPING() )

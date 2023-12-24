@@ -69,11 +69,6 @@ public:
     SCH_IO_KICAD_SEXPR();
     virtual ~SCH_IO_KICAD_SEXPR();
 
-    const wxString GetName() const override
-    {
-        return wxT( "Eeschema s-expression" );
-    }
-
     const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "KiCad s-expression schematic files" ),
@@ -84,11 +79,6 @@ public:
     {
         return PLUGIN_FILE_DESC( _HKI( "KiCad symbol library files" ),
                                  { KiCadSymbolLibFileExtension } );
-    }
-
-    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
-    {
-        m_progressReporter = aReporter;
     }
 
     /**
@@ -174,7 +164,6 @@ protected:
     bool                    m_appending;        ///< Schematic load append status.
     wxString                m_error;            ///< For throwing exceptions or errors on partial
                                                 ///<  loads.
-    PROGRESS_REPORTER*      m_progressReporter;
 
     wxString                m_path;             ///< Root project path for loading child sheets.
     std::stack<wxString>    m_currentPath;      ///< Stack to maintain nested sheet paths

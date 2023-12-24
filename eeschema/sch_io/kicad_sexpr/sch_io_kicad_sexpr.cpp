@@ -74,8 +74,7 @@ using namespace TSCHEMATIC_T;
                        reader.LineNumber(), pos - reader.Line() )
 
 
-SCH_IO_KICAD_SEXPR::SCH_IO_KICAD_SEXPR() :
-    m_progressReporter( nullptr )
+SCH_IO_KICAD_SEXPR::SCH_IO_KICAD_SEXPR() : SCH_IO( wxS( "Eeschema s-expression" ) )
 {
     init( nullptr );
 }

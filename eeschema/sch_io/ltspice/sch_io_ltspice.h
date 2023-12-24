@@ -35,23 +35,13 @@ class SCH_SCREEN;
 class SCH_IO_LTSPICE : public SCH_IO
 {
 public:
-    SCH_IO_LTSPICE()
+    SCH_IO_LTSPICE() : SCH_IO( wxS( "LTspice Schematic" ) )
     {
         m_reporter = &WXLOG_REPORTER::GetInstance();
-        m_progressReporter = nullptr;
     }
 
     ~SCH_IO_LTSPICE()
     {
-    }
-
-    const wxString GetName() const override;
-
-    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
-
-    void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
-    {
-        m_progressReporter = aReporter;
     }
 
     const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
@@ -70,8 +60,5 @@ public:
                                   SCH_SHEET*             aAppendToMe = nullptr,
                                   const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-private:
-    REPORTER*          m_reporter;          // current reporter for warnings/errors
-    PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
 };
 #endif // SCH_IO_LTSPICE_H_

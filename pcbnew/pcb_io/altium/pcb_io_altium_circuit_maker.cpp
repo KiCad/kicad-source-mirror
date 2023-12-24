@@ -39,21 +39,13 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_ALTIUM_CIRCUIT_MAKER::PCB_IO_ALTIUM_CIRCUIT_MAKER()
+PCB_IO_ALTIUM_CIRCUIT_MAKER::PCB_IO_ALTIUM_CIRCUIT_MAKER() : PCB_IO( wxS( "Altium Circuit Maker" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 
 PCB_IO_ALTIUM_CIRCUIT_MAKER::~PCB_IO_ALTIUM_CIRCUIT_MAKER()
 {
-}
-
-
-const wxString PCB_IO_ALTIUM_CIRCUIT_MAKER::PluginName() const
-{
-    return wxT( "Altium Circuit Maker" );
 }
 
 

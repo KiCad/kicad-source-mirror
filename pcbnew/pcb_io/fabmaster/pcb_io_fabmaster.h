@@ -33,8 +33,6 @@
 class PCB_IO_FABMASTER : public PCB_IO
 {
 public:
-    const wxString PluginName() const override;
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
@@ -51,9 +49,6 @@ public:
     ~PCB_IO_FABMASTER();
 
 private:
-    const STRING_UTF8_MAP* m_props;
-    BOARD*                 m_board;
-
     FABMASTER              m_fabmaster;
 };
 

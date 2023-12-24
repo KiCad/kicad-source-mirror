@@ -223,7 +223,7 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
 }
 
 
-SCH_IO_ALTIUM::SCH_IO_ALTIUM()
+SCH_IO_ALTIUM::SCH_IO_ALTIUM() : SCH_IO( wxS( "Altium" ) )
 {
     m_isIntLib     = false;
     m_rootSheet    = nullptr;
@@ -244,12 +244,6 @@ SCH_IO_ALTIUM::~SCH_IO_ALTIUM()
             delete symbol;
         }
     }
-}
-
-
-const wxString SCH_IO_ALTIUM::GetName() const
-{
-    return "Altium";
 }
 
 

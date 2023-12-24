@@ -220,7 +220,7 @@ void ERULES::parse( wxXmlNode* aRules, std::function<void()> aCheckpoint )
 }
 
 
-PCB_IO_EAGLE::PCB_IO_EAGLE() :
+PCB_IO_EAGLE::PCB_IO_EAGLE() : PCB_IO( wxS( "Eagle" ) ),
         m_rules( new ERULES() ),
         m_xpath( new XPATH() ),
         m_progressReporter( nullptr ),

@@ -33,21 +33,13 @@
 #include <macros.h>
 
 
-PCB_IO_FABMASTER::PCB_IO_FABMASTER()
+PCB_IO_FABMASTER::PCB_IO_FABMASTER() : PCB_IO( wxS( "Fabmaster" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 
 PCB_IO_FABMASTER::~PCB_IO_FABMASTER()
 {
-}
-
-
-const wxString PCB_IO_FABMASTER::PluginName() const
-{
-    return wxT( "Fabmaster" );
 }
 
 

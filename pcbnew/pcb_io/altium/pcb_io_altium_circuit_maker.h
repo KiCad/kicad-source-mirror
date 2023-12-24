@@ -32,8 +32,6 @@
 class PCB_IO_ALTIUM_CIRCUIT_MAKER : public PCB_IO
 {
 public:
-    const wxString PluginName() const override;
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override;
 
     bool CanReadBoard( const wxString& aFileName ) const override;
@@ -50,10 +48,6 @@ public:
 
     PCB_IO_ALTIUM_CIRCUIT_MAKER();
     ~PCB_IO_ALTIUM_CIRCUIT_MAKER();
-
-private:
-    const STRING_UTF8_MAP* m_props;
-    BOARD*            m_board;
 };
 
 #endif // PCB_IO_ALTIUM_CIRCUIT_MAKER_H_

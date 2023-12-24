@@ -37,9 +37,6 @@ class PCB_IO_ALTIUM_DESIGNER : public PCB_IO
 {
 public:
     // -----<PUBLIC PCB_IO API>--------------------------------------------------
-
-    const wxString PluginName() const override { return wxT( "Altium Designer" ); }
-
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Altium Designer PCB files" ), { "PcbDoc" } );
@@ -81,9 +78,6 @@ public:
     static bool checkFileHeader( const wxString& aFileName );
 
 private:
-    const STRING_UTF8_MAP* m_props;
-    BOARD*                 m_board;
-
     std::map<wxString, std::vector<std::unique_ptr<ALTIUM_COMPOUND_FILE>>> m_fplibFiles;
 
     void loadAltiumLibrary( const wxString& aLibraryPath );

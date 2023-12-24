@@ -43,10 +43,8 @@
 #include <core/map_helpers.h>
 
 
-PCB_IO_EASYEDA::PCB_IO_EASYEDA()
+PCB_IO_EASYEDA::PCB_IO_EASYEDA() : PCB_IO( wxS( "EasyEDA (JLCEDA) Standard" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 

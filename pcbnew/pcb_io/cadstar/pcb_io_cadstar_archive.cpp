@@ -55,10 +55,8 @@ void PCB_IO_CADSTAR_ARCHIVE::RegisterLayerMappingCallback(
 }
 
 
-PCB_IO_CADSTAR_ARCHIVE::PCB_IO_CADSTAR_ARCHIVE()
+PCB_IO_CADSTAR_ARCHIVE::PCB_IO_CADSTAR_ARCHIVE() : PCB_IO( wxS( "CADSTAR PCB Archive" ) )
 {
-    m_board                       = nullptr;
-    m_props                       = nullptr;
     m_show_layer_mapping_warnings = true;
     LAYER_REMAPPABLE_PLUGIN::RegisterLayerMappingCallback(
         PCB_IO_CADSTAR_ARCHIVE::DefaultLayerMappingCallback );

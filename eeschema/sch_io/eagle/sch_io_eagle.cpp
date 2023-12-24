@@ -356,8 +356,7 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
 }
 
 
-SCH_IO_EAGLE::SCH_IO_EAGLE() :
-    m_progressReporter( nullptr ),
+SCH_IO_EAGLE::SCH_IO_EAGLE() : SCH_IO( wxS( "EAGLE" ) ),
     m_doneCount( 0 ),
     m_lastProgressCount( 0 ),
     m_totalCount( 0 )
@@ -371,12 +370,6 @@ SCH_IO_EAGLE::SCH_IO_EAGLE() :
 
 SCH_IO_EAGLE::~SCH_IO_EAGLE()
 {
-}
-
-
-const wxString SCH_IO_EAGLE::GetName() const
-{
-    return wxT( "EAGLE" );
 }
 
 

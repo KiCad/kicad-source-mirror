@@ -43,10 +43,8 @@
 using namespace PCAD2KICAD;
 
 
-PCB_IO_PCAD::PCB_IO_PCAD()
+PCB_IO_PCAD::PCB_IO_PCAD() : PCB_IO( wxS( "P-Cad" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 

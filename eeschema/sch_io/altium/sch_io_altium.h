@@ -58,10 +58,6 @@ public:
     SCH_IO_ALTIUM();
     ~SCH_IO_ALTIUM();
 
-    const wxString GetName() const override;
-
-    void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
-
     const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Altium schematic files" ), { "SchDoc" } );
@@ -187,8 +183,6 @@ private:
     std::vector<LIB_SYMBOL*> ParseLibComponent( const std::map<wxString, wxString>& aProperties );
 
 private:
-    REPORTER*                       m_reporter;          // current reporter for warnings/errors
-
     SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
     SCH_SHEET_PATH m_sheetPath;
     SCHEMATIC* m_schematic;      // Passed to Load(), the schematic object being loaded

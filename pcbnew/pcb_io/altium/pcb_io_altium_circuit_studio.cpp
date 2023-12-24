@@ -39,21 +39,13 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_ALTIUM_CIRCUIT_STUDIO::PCB_IO_ALTIUM_CIRCUIT_STUDIO()
+PCB_IO_ALTIUM_CIRCUIT_STUDIO::PCB_IO_ALTIUM_CIRCUIT_STUDIO() : PCB_IO( wxS( "Altium Circuit Studio" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 
 PCB_IO_ALTIUM_CIRCUIT_STUDIO::~PCB_IO_ALTIUM_CIRCUIT_STUDIO()
 {
-}
-
-
-const wxString PCB_IO_ALTIUM_CIRCUIT_STUDIO::PluginName() const
-{
-    return wxT( "Altium Circuit Studio" );
 }
 
 

@@ -30,21 +30,13 @@
 #include <compoundfilereader.h>
 #include <utf.h>
 
-PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS()
+PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS() : PCB_IO( wxS( "Solidworks PCB" ) )
 {
-    m_board = nullptr;
-    m_props = nullptr;
 }
 
 
 PCB_IO_SOLIDWORKS::~PCB_IO_SOLIDWORKS()
 {
-}
-
-
-const wxString PCB_IO_SOLIDWORKS::PluginName() const
-{
-    return wxT( "Solidworks PCB" );
 }
 
 
