@@ -34,7 +34,7 @@
 #include <lib_item.h>
 
 
-class SCH_LEGACY_PLUGIN_CACHE;
+class SCH_IO_KICAD_LEGACY_LIB_CACHE;
 
 
 /**
@@ -234,7 +234,7 @@ private:
      */
     void CalcEdit( const VECTOR2I& aPosition ) override;
 
-    friend class SCH_LEGACY_PLUGIN_CACHE;   // Required to access m_name.
+    friend class SCH_IO_KICAD_LEGACY_LIB_CACHE;   // Required to access m_name.
 
     int      m_id;         ///< @see enum MANDATORY_FIELD_T
     wxString m_name;       ///< Name (not the field text value itself, that is #EDA_TEXT::m_Text)

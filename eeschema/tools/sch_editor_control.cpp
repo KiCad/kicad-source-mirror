@@ -45,7 +45,7 @@
 #include <project/net_settings.h>
 #include <project_sch.h>
 #include <sch_edit_frame.h>
-#include <sch_io/kicad/sch_sexpr_plugin.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
@@ -1313,7 +1313,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
     }
 
     STRING_FORMATTER formatter;
-    SCH_SEXPR_PLUGIN plugin;
+    SCH_IO_KICAD_SEXPR plugin;
     SCH_SHEET_LIST   hierarchy = schematic.GetSheets();
     SCH_SHEET_PATH   selPath = m_frame->GetCurrentSheet();
 
@@ -1583,7 +1583,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         eventPos = getViewControls()->GetCursorPosition( false );
 
     STRING_LINE_READER reader( content, "Clipboard" );
-    SCH_SEXPR_PLUGIN   plugin;
+    SCH_IO_KICAD_SEXPR   plugin;
 
     SCH_SHEET          tempSheet;
     SCH_SCREEN*        tempScreen = new SCH_SCREEN( &m_frame->Schematic() );

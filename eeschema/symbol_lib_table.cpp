@@ -34,7 +34,7 @@
 #include <systemdirsappend.h>
 #include <symbol_lib_table.h>
 #include <lib_symbol.h>
-#include <sch_io/database/sch_database_plugin.h>
+#include <sch_io/database/sch_io_database.h>
 #include <dialogs/dialog_database_lib_settings.h>
 
 #include <wx/dir.h>
@@ -111,7 +111,7 @@ void SYMBOL_LIB_TABLE_ROW::ShowSettingsDialog( wxWindow* aParent ) const
         return;
 
     DIALOG_DATABASE_LIB_SETTINGS dlg( aParent,
-                                      static_cast<SCH_DATABASE_PLUGIN*>( ( SCH_IO* )plugin ) );
+                                      static_cast<SCH_IO_DATABASE*>( ( SCH_IO* )plugin ) );
     dlg.ShowModal();
 }
 

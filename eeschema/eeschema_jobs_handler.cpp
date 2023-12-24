@@ -50,7 +50,7 @@
 #include <settings/settings_manager.h>
 
 #include <sch_file_versions.h>
-#include <sch_io/kicad/sch_sexpr_lib_plugin_cache.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 
 #include <netlist.h>
 #include <netlist_exporter_base.h>
@@ -802,7 +802,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     wxFileName fn( svgJob->m_libraryPath );
     fn.MakeAbsolute();
 
-    SCH_SEXPR_PLUGIN_CACHE schLibrary( fn.GetFullPath() );
+    SCH_IO_KICAD_SEXPR_LIB_CACHE schLibrary( fn.GetFullPath() );
 
     try
     {
@@ -872,7 +872,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     wxFileName fn( upgradeJob->m_libraryPath );
     fn.MakeAbsolute();
 
-    SCH_SEXPR_PLUGIN_CACHE schLibrary( fn.GetFullPath() );
+    SCH_IO_KICAD_SEXPR_LIB_CACHE schLibrary( fn.GetFullPath() );
 
     try
     {

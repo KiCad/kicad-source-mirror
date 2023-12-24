@@ -24,7 +24,7 @@
  */
 
 #include <sch_io/ltspice/ltspice_schematic.h>
-#include <sch_io/ltspice/ltspice_sch_parser.h>
+#include <sch_io/ltspice/sch_io_ltspice_parser.h>
 #include <sch_screen.h>
 #include <wx/log.h>
 #include <wx/dir.h>
@@ -130,7 +130,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         }
 
         SCH_SHEET_PATH     curSheetPath;
-        LTSPICE_SCH_PARSER parser( this );
+        SCH_IO_LTSPICE_PARSER parser( this );
 
         if( i > 0 )
         {

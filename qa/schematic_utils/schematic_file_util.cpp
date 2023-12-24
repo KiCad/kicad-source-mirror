@@ -29,8 +29,8 @@
 #include <sch_screen.h>
 
 // For SCH parsing
-#include <sch_io/kicad/sch_sexpr_plugin.h>
-#include <sch_io/kicad/sch_sexpr_parser.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.h>
 #include <richio.h>
 
 #include <qa_utils/stdstream_line_reader.h>
@@ -40,7 +40,7 @@ namespace KI_TEST
 
 void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet, const std::string& aFilename )
 {
-    SCH_SEXPR_PLUGIN io;
+    SCH_IO_KICAD_SEXPR io;
     io.SaveSchematicFile( aFilename, &aSheet, &aSchematic );
 }
 
@@ -51,7 +51,7 @@ void LoadSheetSchematicContents( const std::string& fileName, SCH_SHEET* sheet )
     wxASSERT( fileStream.is_open() );
     STDISTREAM_LINE_READER reader;
     reader.SetStream( fileStream );
-    SCH_SEXPR_PARSER parser( &reader );
+    SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
     parser.ParseSchematic( sheet );
 }
 

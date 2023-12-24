@@ -38,8 +38,8 @@
 #include <symbol_tree_pane.h>
 #include <project/project_file.h>
 #include <widgets/lib_tree.h>
-#include <sch_io/legacy/sch_legacy_plugin.h>
-#include <sch_io/kicad/sch_sexpr_plugin.h>
+#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <dialogs/dialog_lib_new_symbol.h>
 #include <eda_list_dialog.h>
 #include <wx/clipbrd.h>
@@ -853,7 +853,7 @@ void SYMBOL_EDIT_FRAME::CopySymbolToClipboard()
             continue;
 
         std::unique_ptr<LIB_SYMBOL> tmp = symbol->Flatten();
-        SCH_SEXPR_PLUGIN::FormatLibSymbol( tmp.get(), formatter );
+        SCH_IO_KICAD_SEXPR::FormatLibSymbol( tmp.get(), formatter );
     }
 
     wxLogNull doNotLog; // disable logging of failed clipboard actions
@@ -887,7 +887,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 
         try
         {
-            newSymbols = SCH_SEXPR_PLUGIN::ParseLibSymbols( clipboardData, "Clipboard" );
+            newSymbols = SCH_IO_KICAD_SEXPR::ParseLibSymbols( clipboardData, "Clipboard" );
         }
         catch( IO_ERROR& e )
         {

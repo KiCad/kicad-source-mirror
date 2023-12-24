@@ -61,11 +61,11 @@ class SCH_LINE;
 class SCH_LABEL_BASE;
 class PLOTTER;
 class REPORTER;
-class SCH_ALTIUM_PLUGIN;
+class SCH_IO_ALTIUM;
 class SCH_EDIT_FRAME;
 class SCH_SHEET_LIST;
-class SCH_SEXPR_PARSER;
-class SCH_SEXPR_PLUGIN;
+class SCH_IO_KICAD_SEXPR_PARSER;
+class SCH_IO_KICAD_SEXPR;
 
 enum SCH_LINE_TEST_T
 {
@@ -102,7 +102,7 @@ public:
      * N.B. The iteration order of the RTree is not readily apparent and will change
      * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
      * RTree contents to the user MUST be sorted before being presented.  See
-     * SCH_SEXPR_PLUGIN::Format() or SCH_EDITOR_CONTROL::nextMatch() for examples.
+     * SCH_IO_KICAD_SEXPR::Format() or SCH_EDITOR_CONTROL::nextMatch() for examples.
      *
      * @return Complete RTree of the screen's items
      */
@@ -568,9 +568,9 @@ public:
 
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
-    friend SCH_SEXPR_PARSER;   // Only to load instance information from schematic file.
-    friend SCH_SEXPR_PLUGIN;   // Only to save the loaded instance information to schematic file.
-    friend SCH_ALTIUM_PLUGIN;
+    friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
+    friend SCH_IO_KICAD_SEXPR;   // Only to save the loaded instance information to schematic file.
+    friend SCH_IO_ALTIUM;
 
     bool doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,
                        bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const;

@@ -38,7 +38,7 @@
 #include <dialogs/dialog_lib_symbol_properties.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <dialogs/dialog_update_symbol_fields.h>
-#include <sch_io/kicad/sch_sexpr_plugin.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <lib_text.h>
 #include <lib_textbox.h>
 #include "symbol_editor_edit_tool.h"
@@ -783,7 +783,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     LIB_SYMBOL* partCopy = new LIB_SYMBOL( *symbol );
 
     STRING_FORMATTER  formatter;
-    SCH_SEXPR_PLUGIN::FormatLibSymbol( partCopy, formatter );
+    SCH_IO_KICAD_SEXPR::FormatLibSymbol( partCopy, formatter );
 
     delete partCopy;
 
@@ -809,7 +809,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     try
     {
-        std::vector<LIB_SYMBOL*> newParts = SCH_SEXPR_PLUGIN::ParseLibSymbols( clipboardData, "Clipboard" );
+        std::vector<LIB_SYMBOL*> newParts = SCH_IO_KICAD_SEXPR::ParseLibSymbols( clipboardData, "Clipboard" );
 
         if( newParts.empty() || !newParts[0] )
             return -1;

@@ -501,7 +501,7 @@ ASCH_HARNESS_ENTRY::ASCH_HARNESS_ENTRY( const std::map<wxString, wxString>& aPro
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_ENTRY );
 
-    // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead, because this property sometimes
+    // use SCH_IO_ALTIUM::m_harnessEntryParent instead, because this property sometimes
     // does not exist in altium file!
     // ownerindex = ReadOwnerIndex( aProps );
 
@@ -527,7 +527,7 @@ ASCH_HARNESS_TYPE::ASCH_HARNESS_TYPE( const std::map<wxString, wxString>& aProps
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::HARNESS_TYPE );
 
-    //ownerindex = ReadOwnerIndex( aProps ); // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead!
+    //ownerindex = ReadOwnerIndex( aProps ); // use SCH_IO_ALTIUM::m_harnessEntryParent instead!
 
     Text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
 

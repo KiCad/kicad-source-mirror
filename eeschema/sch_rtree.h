@@ -269,7 +269,7 @@ public:
      * element in the %EE_RTREE
      * N.B. The iteration order of the RTree is not readily apparent and will change
      * if/when you add or move items and the RTree is re-balanced.  Any exposure of the
-     * RTree contents to the user MUST be sorted before being presented.  See SCH_SEXPR_PLUGIN::Format
+     * RTree contents to the user MUST be sorted before being presented.  See SCH_IO_KICAD_SEXPR::Format
      * or SCH_EDITOR_CONTROL::nextMatch for examples.
      * @return Complete RTree of the screen's items
      */

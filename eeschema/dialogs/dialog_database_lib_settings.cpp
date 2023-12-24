@@ -19,12 +19,12 @@
  */
 
 #include <dialogs/dialog_database_lib_settings.h>
-#include <sch_io/database/sch_database_plugin.h>
+#include <sch_io/database/sch_io_database.h>
 #include <database/database_lib_settings.h>
 
 
 DIALOG_DATABASE_LIB_SETTINGS::DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent,
-                                                            SCH_DATABASE_PLUGIN* aPlugin ) :
+                                                            SCH_IO_DATABASE* aPlugin ) :
         DIALOG_DATABASE_LIB_SETTINGS_BASE( aParent ),
         m_plugin( aPlugin )
 {

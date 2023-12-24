@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <project_sch.h>
 #include <sch_edit_frame.h>
-#include <sch_io/legacy/sch_legacy_plugin.h>
+#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>

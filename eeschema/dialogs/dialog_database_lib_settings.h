@@ -23,12 +23,12 @@
 
 #include "dialog_database_lib_settings_base.h"
 
-class SCH_DATABASE_PLUGIN;
+class SCH_IO_DATABASE;
 
 class DIALOG_DATABASE_LIB_SETTINGS : public DIALOG_DATABASE_LIB_SETTINGS_BASE
 {
 public:
-    DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, SCH_DATABASE_PLUGIN* aPlugin );
+    DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, SCH_IO_DATABASE* aPlugin );
 
     virtual ~DIALOG_DATABASE_LIB_SETTINGS() {}
 
@@ -44,7 +44,7 @@ protected:
 private:
     bool hasPotentiallyValidConfig();
 
-    SCH_DATABASE_PLUGIN* m_plugin;
+    SCH_IO_DATABASE* m_plugin;
 };
 
 #endif //KICAD_DIALOG_DATABASE_LIB_SETTINGS_H

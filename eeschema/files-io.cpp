@@ -48,7 +48,7 @@
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
-#include <sch_io/legacy/sch_legacy_plugin.h>
+#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_file_versions.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
@@ -535,7 +535,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // cache library or missing installed libraries, this can cause connectivity errors
     // unless junctions are added.
     //
-    // TODO: (RFB) This really needs to be put inside the Load() function of the SCH_LEGACY_PLUGIN
+    // TODO: (RFB) This really needs to be put inside the Load() function of the SCH_IO_KICAD_LEGACY
     // I can't put it right now because of the extra code that is above to convert legacy bus-bus
     // entries to bus wires
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )

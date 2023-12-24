@@ -41,7 +41,7 @@
 
 #include <string_utf8_map.h>
 #include <lib_symbol.h>
-#include <sch_io/legacy/sch_legacy_plugin.h>
+#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <class_draw_panel_gal.h>
 
 
@@ -49,7 +49,7 @@ class LIB_SYMBOL;
 class SCH_SYMBOL;
 class RESCUER;
 class SCH_EDIT_FRAME;
-class SCH_LEGACY_PLUGIN;
+class SCH_IO_KICAD_LEGACY;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
 

@@ -29,7 +29,7 @@
 
 class KIID_PATH;
 class SCH_SCREEN;
-class SCH_SEXPR_PARSER;
+class SCH_IO_KICAD_SEXPR_PARSER;
 class SCH_SHEET_LIST;
 class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
@@ -431,7 +431,7 @@ public:
 
 protected:
     friend SCH_SHEET_PATH;
-    friend SCH_SEXPR_PARSER;
+    friend SCH_IO_KICAD_SEXPR_PARSER;
 
     void setInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances )
     {

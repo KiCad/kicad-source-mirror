@@ -822,7 +822,7 @@ void SYMBOL_LIB_TABLE_RESCUER::InvokeDialog( wxWindow* aParent, bool aAskShowAga
 
 void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
 {
-    (*m_properties)[ SCH_LEGACY_PLUGIN::PropBuffering ] = "";
+    (*m_properties)[ SCH_IO_KICAD_LEGACY::PropBuffering ] = "";
 
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
 

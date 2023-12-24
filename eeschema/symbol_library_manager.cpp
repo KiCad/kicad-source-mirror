@@ -34,7 +34,7 @@
 #include <core/profile.h>
 #include <wx_filename.h>
 #include <sch_io/sch_io_mgr.h>
-#include <sch_io/legacy/sch_legacy_plugin.h>
+#include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <symbol_lib_table.h>
 #include <symbol_async_loader.h>
 #include <progress_reporter.h>
@@ -177,7 +177,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     bool res = true;    // assume all libraries are successfully saved
 
     STRING_UTF8_MAP properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+    properties.emplace( SCH_IO_KICAD_LEGACY::PropBuffering, "" );
 
     auto it = m_libs.find( aLibrary );
 
@@ -993,7 +993,7 @@ bool LIB_BUFFER::SaveBuffer( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf,
 
     // Set properties to prevent saving the file on every symbol save.
     STRING_UTF8_MAP properties;
-    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+    properties.emplace( SCH_IO_KICAD_LEGACY::PropBuffering, "" );
 
     std::shared_ptr<SYMBOL_BUFFER>& symbolBuf = aSymbolBuf;
     LIB_SYMBOL* libSymbol = symbolBuf->GetSymbol();

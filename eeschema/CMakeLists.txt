@@ -42,52 +42,52 @@ include_directories(
     )
 
 set( EESCHEMA_SCH_IO
-    sch_io/sch_lib_plugin_cache.cpp
+    sch_io/sch_io_lib_cache.cpp
 
     sch_io/sch_io.cpp
     sch_io/sch_io_mgr.cpp
 
     # KiCad IO plugin
-    sch_io/kicad/sch_sexpr_lib_plugin_cache.cpp
-    sch_io/kicad/sch_sexpr_plugin_common.cpp
-    sch_io/kicad/sch_sexpr_parser.cpp
-    sch_io/kicad/sch_sexpr_plugin.cpp
+    sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp
+    sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp
+    sch_io/kicad_sexpr/sch_io_kicad_sexpr_common.cpp
+    sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp
 
     # Legacy IO plugin
-    sch_io/legacy/sch_legacy_lib_plugin_cache.cpp
-    sch_io/legacy/sch_legacy_plugin.cpp
-    sch_io/legacy/sch_legacy_plugin_helpers.cpp
+    sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp
+    sch_io/kicad_legacy/sch_io_kicad_legacy.cpp
+    sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp
 
     # HTTP IO plugin
-    sch_io/http_lib/sch_http_lib_plugin.cpp
+    sch_io/http_lib/sch_io_http_lib.cpp
 
     # Database IO plugin
-    sch_io/database/sch_database_plugin.cpp
+    sch_io/database/sch_io_database.cpp
 
     # Eagle IO plugin
-    sch_io/eagle/sch_eagle_plugin.cpp
+    sch_io/eagle/sch_io_eagle.cpp
 
     # Altium IO plugin
     sch_io/altium/altium_parser_sch.cpp
-    sch_io/altium/sch_altium_plugin.cpp
+    sch_io/altium/sch_io_altium.cpp
 
     # Cadstar IO plugin
     sch_io/cadstar/cadstar_sch_archive_loader.cpp
     sch_io/cadstar/cadstar_sch_archive_parser.cpp
-    sch_io/cadstar/cadstar_sch_archive_plugin.cpp
+    sch_io/cadstar/sch_io_cadstar_archive.cpp
 
     # LTSpice IO plugin
     sch_io/ltspice/ltspice_schematic.cpp
-    sch_io/ltspice/ltspice_sch_parser.cpp
-    sch_io/ltspice/ltspice_sch_plugin.cpp
+    sch_io/ltspice/sch_io_ltspice.cpp
+    sch_io/ltspice/sch_io_ltspice_parser.cpp
 
     # EasyEDA IO plugin
     sch_io/easyeda/sch_easyeda_parser.cpp
-    sch_io/easyeda/sch_easyeda_plugin.cpp
+    sch_io/easyeda/sch_io_easyeda.cpp
 
     # EasyEDA Pro IO plugin
     sch_io/easyedapro/sch_easyedapro_parser.cpp
-    sch_io/easyedapro/sch_easyedapro_plugin.cpp
+    sch_io/easyedapro/sch_io_easyedapro.cpp
     )
 
 set( EESCHEMA_DLGS
