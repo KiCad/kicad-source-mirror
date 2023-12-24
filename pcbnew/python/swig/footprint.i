@@ -101,7 +101,8 @@
     %}
 }
 
-%extend PLUGIN
+
+%extend PCB_IO
 {
     // This version of FootprintEnumerate is for Python scripts, because the c++
     // version of FootprintEnumerate is not easy to handle in these Python scripts
