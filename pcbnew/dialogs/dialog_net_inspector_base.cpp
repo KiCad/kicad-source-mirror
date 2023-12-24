@@ -64,8 +64,8 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 
 	bSizerMain->Add( bMidSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_VERT_RULES );
-	m_netsList->SetMinSize( wxSize( 640,300 ) );
+	m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_VERT_RULES );
+	m_netsList->SetMinSize( wxSize( 480,200 ) );
 
 	bSizerMain->Add( m_netsList, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 

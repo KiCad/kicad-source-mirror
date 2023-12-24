@@ -45,20 +45,6 @@ wxDECLARE_EVENT( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, wxCommandEvent );
 class DIALOG_NET_INSPECTOR : public DIALOG_NET_INSPECTOR_BASE, public BOARD_LISTENER
 {
 public:
-    struct SETTINGS
-    {
-        wxString filter_string;
-        bool     show_zero_pad_nets = true;
-        bool     group_by           = false;
-        int      group_by_kind      = 0;
-        wxString group_by_text;
-        int      sorting_column     = -1;
-        bool     sort_order_asc     = true;
-
-        std::vector<int> col_order;
-        std::vector<int> col_widths;
-    };
-
     DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent );
     ~DIALOG_NET_INSPECTOR();
 

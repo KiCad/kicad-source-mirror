@@ -312,8 +312,18 @@ public:
     struct DIALOG_NET_INSPECTOR
     {
         wxString group_by_text;
-        bool group_by;
-        int group_by_kind;
+        bool     group_by;
+        int      group_by_kind;
+
+        bool     show_zero_pad_nets;
+        int      sorting_column;
+        bool     sort_order_asc;
+
+        std::vector<int> col_order;
+        std::vector<int> col_widths;
+
+        int      dlg_width;
+        int      dlg_height;
     };
 
     struct FOOTPRINT_CHOOSER

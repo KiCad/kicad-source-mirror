@@ -585,6 +585,24 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_NetInspector.group_by, false ) );
     m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.group_by_kind",
             &m_NetInspector.group_by_kind, 0 ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_dialog.show_zero_pad_nets",
+            &m_NetInspector.show_zero_pad_nets, true ) );
+    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.sorting_column",
+            &m_NetInspector.sorting_column, -1 ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_dialog.sort_ascending",
+            &m_NetInspector.sort_order_asc, true ) );
+    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.dlg_width",
+            &m_NetInspector.dlg_width, 960 ) );
+    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.dlg_height",
+            &m_NetInspector.dlg_height, 520 ) );
+
+    const std::vector<int> default_col_order = { };
+    const std::vector<int> default_widths = { };
+
+    m_params.emplace_back( new PARAM_LIST<int>( "net_inspector_dialog.col_order",
+            &m_NetInspector.col_order, default_col_order ) );
+    m_params.emplace_back( new PARAM_LIST<int>( "net_inspector_dialog.col_widths",
+            &m_NetInspector.col_widths, default_widths ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json

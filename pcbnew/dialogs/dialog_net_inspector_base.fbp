@@ -503,11 +503,11 @@
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
                         <property name="maximum_size"></property>
-                        <property name="minimum_size">640,300</property>
+                        <property name="minimum_size">480,200</property>
                         <property name="name">m_netsList</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>
-                        <property name="size"></property>
+                        <property name="size">-1,-1</property>
                         <property name="style">wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_VERT_RULES</property>
                         <property name="subclass"></property>
                         <property name="tooltip"></property>

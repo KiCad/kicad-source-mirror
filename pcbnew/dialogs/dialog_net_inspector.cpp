@@ -56,7 +56,7 @@
 wxDEFINE_EVENT( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, wxCommandEvent );
 
 
-static DIALOG_NET_INSPECTOR::SETTINGS g_settings;
+static wxString g_filter_string;
 
 
 enum class CSV_COLUMN_DESC : int
@@ -328,8 +328,7 @@ public:
     void SetChipWireLength( uint64_t aValue )
     {
         if( m_parent )
-            m_parent->SetChipWireLength(
-                    m_parent->GetChipWireLength() - m_chip_wire_length + aValue );
+            m_parent->SetChipWireLength( m_parent->GetChipWireLength() - m_chip_wire_length + aValue );
 
         m_column_changed[COLUMN_CHIP_LENGTH] |= ( m_chip_wire_length != aValue );
         m_chip_wire_length = aValue;
@@ -422,9 +421,11 @@ private:
 
     std::array<uint64_t, MAX_CU_LAYERS> m_layer_wire_length{};
 
-    // dirty bits to record when some attribute has changed.  this is to
-    // avoid unnecessary resort operations.
-    std::vector<char> m_column_changed;
+    // Dirty bits to record when some attribute has changed, in order to avoid unnecessary sort
+    // operations.
+    // The values are semantically bools, but STL auto-promotes a std::vector<bool> to a bitset,
+    // and then operator|= doesn't work.
+    std::vector<int> m_column_changed;
 
     // cached formatted net name for faster display sorting.
     wxString m_net_name;
@@ -1068,17 +1069,17 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
         }
     };
 
-    std::vector<int> col_order = g_settings.col_order;
+    auto& cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>()->m_NetInspector;
 
-    if( col_order.size() != add_col.size() )
+    if( cfg.col_order.size() != add_col.size() )
     {
-        col_order.resize( add_col.size() );
+        cfg.col_order.resize( add_col.size() );
 
-        for( unsigned int i = 0; i < add_col.size(); ++i )
-            col_order[i] = i;
+        for( int i = 0; i < (int) add_col.size(); ++i )
+            cfg.col_order[i] = i;
     }
 
-    for( unsigned int i : col_order )
+    for( int i : cfg.col_order )
         add_col.at( i )();
 
     for( PCB_LAYER_ID layer : m_brd->GetEnabledLayers().Seq() )
@@ -1101,20 +1102,14 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
     // list over and over again.
     m_filter_change_no_rebuild = true;
 
-    m_textCtrlFilter->SetValue( g_settings.filter_string );
-    m_cbShowZeroPad->SetValue( g_settings.show_zero_pad_nets );
+    m_textCtrlFilter->SetValue( g_filter_string );
+    m_cbShowZeroPad->SetValue( cfg.show_zero_pad_nets );
 
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-    g_settings.group_by_text = app_settings->m_NetInspector.group_by_text;
-    g_settings.group_by = app_settings->m_NetInspector.group_by;
-    g_settings.group_by_kind = app_settings->m_NetInspector.group_by_kind;
+    m_groupBy->SetValue( cfg.group_by );
+    m_groupByKind->SetSelection( cfg.group_by_kind );
 
-    m_groupBy->SetValue( g_settings.group_by );
-    m_groupByKind->SetSelection( g_settings.group_by_kind );
-
-    m_groupByText->SetValue( g_settings.group_by_text );
+    m_groupByText->SetValue( cfg.group_by_text );
 
     m_filter_change_no_rebuild = false;
     buildNetsList();
@@ -1133,16 +1128,22 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
     m_renameNet->Disable();
     m_deleteNet->Disable();
 
-    if( g_settings.sorting_column != -1 )
+    if( cfg.sorting_column != -1 )
     {
-        if( wxDataViewColumn* c = m_netsList->GetColumn( g_settings.sorting_column ) )
+        if( wxDataViewColumn* c = m_netsList->GetColumn( cfg.sorting_column ) )
         {
-            c->SetSortOrder( g_settings.sort_order_asc );
+            c->SetSortOrder( cfg.sort_order_asc );
             m_data_model->Resort();
         }
     }
 
     finishDialogSettings();
+
+    if( cfg.dlg_width > 0 && cfg.dlg_height > 0 )
+    {
+        SetSize( cfg.dlg_width, cfg.dlg_height );
+        Center();
+    }
 
     Bind( EDA_EVT_UNITS_CHANGED, &DIALOG_NET_INSPECTOR::onUnitsChanged, this );
     Bind( EDA_EVT_BOARD_CHANGED, &DIALOG_NET_INSPECTOR::onBoardChanged, this );
@@ -1159,29 +1160,13 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
 
 DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
 {
-    std::vector<int> column_order( m_data_model->columnCount() );
+    g_filter_string = m_textCtrlFilter->GetValue();
 
-    for( unsigned int i = 0; i < column_order.size(); ++i )
-        column_order[i] = m_netsList->GetColumn( i )->GetModelColumn();
-
-    wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn();
-
-    g_settings.filter_string      = m_textCtrlFilter->GetValue();
-    g_settings.show_zero_pad_nets = m_cbShowZeroPad->IsChecked();
-    g_settings.group_by           = m_groupBy->IsChecked();
-    g_settings.group_by_kind      = m_groupByKind->GetSelection();
-    g_settings.group_by_text      = m_groupByText->GetValue();
-    g_settings.sorting_column     = sorting_column ?
-                                    static_cast<int>( sorting_column->GetModelColumn() ) : -1;
-    g_settings.sort_order_asc     = sorting_column ? sorting_column->IsSortOrderAscending() : true;
-    g_settings.col_order          = column_order;
-
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS*  app_settings = nullptr;
+    PCBNEW_SETTINGS* app_settings = nullptr;
 
     try
     {
-        app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+        app_settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
     }
     catch( const std::runtime_error& err )
     {
@@ -1190,9 +1175,31 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
 
     if( app_settings )
     {
-        app_settings->m_NetInspector.group_by_text = g_settings.group_by_text;
-        app_settings->m_NetInspector.group_by = g_settings.group_by;
-        app_settings->m_NetInspector.group_by_kind = g_settings.group_by_kind;
+        PCBNEW_SETTINGS::DIALOG_NET_INSPECTOR& cfg = app_settings->m_NetInspector;
+        wxDataViewColumn*                      sortingCol = m_netsList->GetSortingColumn();
+
+        cfg.show_zero_pad_nets = m_cbShowZeroPad->IsChecked();
+
+        cfg.group_by           = m_groupBy->IsChecked();
+        cfg.group_by_kind      = m_groupByKind->GetSelection();
+        cfg.group_by_text      = m_groupByText->GetValue();
+
+        cfg.sorting_column     = sortingCol ? static_cast<int>( sortingCol->GetModelColumn() )
+                                            : -1;
+        cfg.sort_order_asc     = sortingCol ? sortingCol->IsSortOrderAscending()
+                                            : true;
+
+        cfg.col_order.resize( m_data_model->columnCount() );
+        cfg.col_widths.resize( m_data_model->columnCount() );
+
+        for( unsigned int ii = 0; ii < m_data_model->columnCount(); ++ii )
+        {
+            cfg.col_order[ii]  = (int) m_netsList->GetColumn( ii )->GetModelColumn();
+            cfg.col_widths[ii] = m_netsList->GetColumn( ii )->GetWidth();
+        }
+
+        cfg.dlg_width = GetSize().x;
+        cfg.dlg_height = GetSize().y;
     }
 
     // the displayed list elements are going to be deleted before the list view itself.
@@ -1706,9 +1713,22 @@ DIALOG_NET_INSPECTOR::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCount,
 
 void DIALOG_NET_INSPECTOR::buildNetsList()
 {
-    // Only build the list of nets if there is a board present
-    if( !m_brd )
+    PCBNEW_SETTINGS* app_settings = nullptr;
+
+    try
+    {
+        app_settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    }
+    catch( const std::runtime_error& err )
+    {
+        wxLogWarning( wxS( "%s" ), err.what() );
+    }
+
+    // Only build the list of nets if there is a board && app present
+    if( !m_brd || !app_settings )
         return;
+
+    PCBNEW_SETTINGS::DIALOG_NET_INSPECTOR& cfg = app_settings->m_NetInspector;
 
     m_in_build_nets_list = true;
 
@@ -1729,8 +1749,8 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
     // At least on GTK, wxDVC will crash if you rebuild with a sorting column set.
     if( wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn() )
     {
-        g_settings.sorting_column = static_cast<int>( sorting_column->GetModelColumn() ) ;
-        g_settings.sort_order_asc = sorting_column->IsSortOrderAscending();
+        cfg.sorting_column = static_cast<int>( sorting_column->GetModelColumn() ) ;
+        cfg.sort_order_asc = sorting_column->IsSortOrderAscending();
         sorting_column->UnsetAsSortKey();
     }
 
@@ -1814,11 +1834,11 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
 
     m_data_model->addItems( std::move( new_items ) );
 
-    if( g_settings.sorting_column != -1 )
+    if( cfg.sorting_column != -1 )
     {
-        if( wxDataViewColumn* c = m_netsList->GetColumn( g_settings.sorting_column ) )
+        if( wxDataViewColumn* c = m_netsList->GetColumn( cfg.sorting_column ) )
         {
-            c->SetSortOrder( g_settings.sort_order_asc );
+            c->SetSortOrder( cfg.sort_order_asc );
             m_data_model->Resort();
         }
     }
@@ -1828,7 +1848,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
 
     for( int& nc : prev_selected_netcodes )
     {
-        auto r = m_data_model->findItem( nc );
+        std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( nc );
 
         if( r )
         {
@@ -1930,7 +1950,7 @@ void DIALOG_NET_INSPECTOR::onSelChanged()
     if( m_in_build_nets_list )
         return;
 
-    RENDER_SETTINGS* ps = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    RENDER_SETTINGS* renderSettings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
 
     bool enable_rename_button = false;
     bool enable_delete_button = false;
@@ -1940,7 +1960,7 @@ void DIALOG_NET_INSPECTOR::onSelChanged()
         wxDataViewItemArray sel;
         m_netsList->GetSelections( sel );
 
-        ps->SetHighlight( false );
+        renderSettings->SetHighlight( false );
 
         enable_rename_button = sel.GetCount() == 1;
         enable_delete_button = true;
@@ -1954,14 +1974,18 @@ void DIALOG_NET_INSPECTOR::onSelChanged()
                 enable_rename_button = false;
 
                 for( auto c = ii->ChildrenBegin(), end = ii->ChildrenEnd(); c != end; ++c )
-                    ps->SetHighlight( true, ( *c )->GetNetCode(), true );
+                    renderSettings->SetHighlight( true, ( *c )->GetNetCode(), true );
             }
             else
-                ps->SetHighlight( true, ii->GetNetCode(), true );
+            {
+                renderSettings->SetHighlight( true, ii->GetNetCode(), true );
+            }
         }
     }
     else
-        ps->SetHighlight( false );
+    {
+        renderSettings->SetHighlight( false );
+    }
 
     m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->Refresh();
@@ -1988,46 +2012,61 @@ void DIALOG_NET_INSPECTOR::onSortingChanged( wxDataViewEvent& aEvent )
 
 void DIALOG_NET_INSPECTOR::adjustListColumns()
 {
-    wxWindowUpdateLocker locker( m_netsList );
+    PCBNEW_SETTINGS* app_settings = nullptr;
 
-    if( g_settings.col_widths.size() < m_columns.size() )
+    try
     {
-        g_settings.col_widths.reserve( m_columns.size() );
-
-        for( DIALOG_NET_INSPECTOR::COLUMN_DESC& m_column : m_columns)
-            g_settings.col_widths.push_back( GetTextExtent( m_column.display_name ).x );
-
-        int minValueWidth = GetTextExtent( wxT( "00000,000 mm" ) ).x;
-        int minNumberWidth = GetTextExtent( wxT( "000" ) ).x;
-        int minNameWidth = GetTextExtent( wxT( "MMMMMM" ) ).x;
-
-        // Considering left and right margins.
-        // For wxRenderGeneric it is 5px.
-        // Also account for the sorting arrow in the column header.
-        // Column 0 also needs space for any potential expander icons.
-        const int margins = 15;
-        const int extra_width = 30;
-
-        g_settings.col_widths[0] = std::max( g_settings.col_widths[0], minNumberWidth ) + extra_width;
-        g_settings.col_widths[1] = std::max( g_settings.col_widths[1], minNameWidth )   + margins;
-        g_settings.col_widths[2] = std::max( g_settings.col_widths[2], minNumberWidth ) + margins;
-        g_settings.col_widths[3] = std::max( g_settings.col_widths[3], minNumberWidth ) + margins;
-
-        for( size_t ii = 4; ii < g_settings.col_widths.size(); ++ii )
-            g_settings.col_widths[ii] = std::max( g_settings.col_widths[ii], minValueWidth ) + margins;
+        app_settings = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+    }
+    catch( const std::runtime_error& err )
+    {
+        wxLogWarning( wxS( "%s" ), err.what() );
     }
 
-    for( size_t ii = 0; ii < m_data_model->columnCount(); ++ii )
-        m_netsList->GetColumn( ii )->SetWidth( g_settings.col_widths[ii] );
+    if( app_settings )
+    {
+        PCBNEW_SETTINGS::DIALOG_NET_INSPECTOR& cfg = app_settings->m_NetInspector;
+        wxWindowUpdateLocker                   locker( m_netsList );
 
-    m_netsList->Refresh();
+        if( cfg.col_widths.size() < m_columns.size() )
+        {
+            cfg.col_widths.reserve( m_columns.size() );
 
-    // Force refresh on GTK so that horizontal scroll bar won't appear
+            for( DIALOG_NET_INSPECTOR::COLUMN_DESC& m_column : m_columns)
+                cfg.col_widths.push_back( GetTextExtent( m_column.display_name ).x );
+
+            int minValueWidth = GetTextExtent( wxT( "00000,000 mm" ) ).x;
+            int minNumberWidth = GetTextExtent( wxT( "000" ) ).x;
+            int minNameWidth = GetTextExtent( wxT( "MMMMMM" ) ).x;
+
+            // Considering left and right margins.
+            // For wxRenderGeneric it is 5px.
+            // Also account for the sorting arrow in the column header.
+            // Column 0 also needs space for any potential expander icons.
+            const int margins = 15;
+            const int extra_width = 30;
+
+            cfg.col_widths[0] = std::max( cfg.col_widths[0], minNumberWidth ) + extra_width;
+            cfg.col_widths[1] = std::max( cfg.col_widths[1], minNameWidth )   + margins;
+            cfg.col_widths[2] = std::max( cfg.col_widths[2], minNumberWidth ) + margins;
+            cfg.col_widths[3] = std::max( cfg.col_widths[3], minNumberWidth ) + margins;
+
+            for( size_t ii = 4; ii < cfg.col_widths.size(); ++ii )
+                cfg.col_widths[ii] = std::max( cfg.col_widths[ii], minValueWidth ) + margins;
+        }
+
+        for( size_t ii = 0; ii < m_data_model->columnCount(); ++ii )
+            m_netsList->GetColumn( ii )->SetWidth( cfg.col_widths[ii] );
+
+        m_netsList->Refresh();
+
+        // Force refresh on GTK so that horizontal scroll bar won't appear
 #ifdef __WXGTK__
-    wxPoint pos = m_netsList->GetPosition();
-    m_netsList->Move( pos.x, pos.y + 1 );
-    m_netsList->Move( pos.x, pos.y );
+        wxPoint pos = m_netsList->GetPosition();
+        m_netsList->Move( pos.x, pos.y + 1 );
+        m_netsList->Move( pos.x, pos.y );
 #endif
+    }
 }
 
 
