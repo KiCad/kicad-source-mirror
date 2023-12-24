@@ -32,7 +32,7 @@
 #include <footprint_preview_panel.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_painter.h>
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <wx/treebook.h>
 
 
@@ -793,7 +793,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_page->SetWidthMils( 6000 );
 
     STRING_LINE_READER reader( g_previewBoard, wxT( "preview" ) );
-    PCB_PLUGIN         pi;
+    PCB_IO_KICAD_SEXPR         pi;
 
     try
     {

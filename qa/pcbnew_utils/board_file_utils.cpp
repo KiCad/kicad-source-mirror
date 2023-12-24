@@ -24,8 +24,8 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 // For PCB parsing
-#include <pcb_io/kicad/pcb_plugin.h>
-#include <pcb_io/kicad/pcb_parser.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <richio.h>
 
 #include <board.h>
@@ -65,7 +65,7 @@ std::string GetPcbnewTestDataDir()
 
 void DumpBoardToFile( BOARD& board, const std::string& aFilename )
 {
-    PCB_PLUGIN io;
+    PCB_IO_KICAD_SEXPR io;
     io.SaveBoard( aFilename, &board );
 }
 
@@ -76,7 +76,7 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
     STDISTREAM_LINE_READER reader;
     reader.SetStream( aStream );
 
-    PCB_PARSER                  parser( &reader, nullptr, nullptr );
+    PCB_IO_KICAD_SEXPR_PARSER                  parser( &reader, nullptr, nullptr );
     std::unique_ptr<BOARD_ITEM> board;
 
     try

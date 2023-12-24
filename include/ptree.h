@@ -40,7 +40,7 @@ grammar. The tipping point depends on whether you want to read only a small
 portion of a much larger document. If so, then using the ptree will likely be a
 "faster to code" route. Documentation on how to navigate a ptree can be found on
 the boost website and there are a number of examples in the
-pcbnew/eagle_plugin.cpp file in this project. Powerful path navigation support
+pcbnew/pcb_io_eagle.cpp file in this project. Powerful path navigation support
 makes it easy to extract a subset of a ptree.
 */
 

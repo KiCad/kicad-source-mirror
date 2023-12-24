@@ -30,8 +30,8 @@
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <pcbnew/pcb_io/eagle/eagle_plugin.h>
-#include <pcbnew/pcb_io/kicad/pcb_plugin.h>
+#include <pcbnew/pcb_io/eagle/pcb_io_eagle.h>
+#include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <footprint.h>
 #include <pad.h>
@@ -42,8 +42,8 @@ struct EAGLE_LBR_IMPORT_FIXTURE
 {
     EAGLE_LBR_IMPORT_FIXTURE() {}
 
-    EAGLE_PLUGIN eaglePlugin;
-    PCB_PLUGIN   kicadPlugin;
+    PCB_IO_EAGLE eaglePlugin;
+    PCB_IO_KICAD_SEXPR   kicadPlugin;
 };
 
 

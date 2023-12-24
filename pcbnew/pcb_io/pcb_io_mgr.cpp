@@ -31,20 +31,20 @@
 
 #include <pcb_io/pcb_io_mgr.h>
 
-#include <pcb_io/eagle/eagle_plugin.h>
-#include <pcb_io/geda/gpcb_plugin.h>
-#include <pcb_io/kicad/pcb_plugin.h>
-#include <pcb_io/legacy/legacy_plugin.h>
-#include <pcb_io/pcad/pcad_plugin.h>
-#include <pcb_io/altium/altium_circuit_maker_plugin.h>
-#include <pcb_io/altium/altium_circuit_studio_plugin.h>
-#include <pcb_io/altium/altium_designer_plugin.h>
-#include <pcb_io/altium/solidworks_pcb_plugin.h>
-#include <pcb_io/cadstar/cadstar_pcb_archive_plugin.h>
-#include <pcb_io/fabmaster/fabmaster_plugin.h>
-#include <pcb_io/easyeda/pcb_easyeda_plugin.h>
-#include <pcb_io/easyedapro/pcb_easyedapro_plugin.h>
-#include <pcb_io/ipc2581/ipc2581_plugin.h>
+#include <pcb_io/eagle/pcb_io_eagle.h>
+#include <pcb_io/geda/pcb_io_geda.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_legacy/pcb_io_kicad_legacy.h>
+#include <pcb_io/pcad/pcb_io_pcad.h>
+#include <pcb_io/altium/pcb_io_altium_circuit_maker.h>
+#include <pcb_io/altium/pcb_io_altium_circuit_studio.h>
+#include <pcb_io/altium/pcb_io_altium_designer.h>
+#include <pcb_io/altium/pcb_io_solidworks.h>
+#include <pcb_io/cadstar/pcb_io_cadstar_archive.h>
+#include <pcb_io/fabmaster/pcb_io_fabmaster.h>
+#include <pcb_io/easyeda/pcb_io_easyeda_plugin.h>
+#include <pcb_io/easyedapro/pcb_io_easyedapro.h>
+#include <pcb_io/ipc2581/pcb_io_ipc2581.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -201,72 +201,72 @@ void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* a
 static PCB_IO_MGR::REGISTER_PLUGIN registerKicadPlugin(
         PCB_IO_MGR::KICAD_SEXP,
         wxT( "KiCad" ),
-        []() -> PCB_IO* { return new PCB_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_KICAD_SEXPR; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerLegacyPlugin(
         PCB_IO_MGR::LEGACY,
         wxT( "Legacy" ),
-        []() -> PCB_IO* { return new LEGACY_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_KICAD_LEGACY; } );
 
 // Keep non-KiCad plugins in alphabetical order
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin(
         PCB_IO_MGR::ALTIUM_CIRCUIT_MAKER,
         wxT( "Altium Circuit Maker" ),
-        []() -> PCB_IO* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_ALTIUM_CIRCUIT_MAKER; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin(
         PCB_IO_MGR::ALTIUM_CIRCUIT_STUDIO,
         wxT( "Altium Circuit Studio" ),
-        []() -> PCB_IO* { return new ALTIUM_CIRCUIT_STUDIO_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_ALTIUM_CIRCUIT_STUDIO; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin(
         PCB_IO_MGR::ALTIUM_DESIGNER,
         wxT( "Altium Designer" ),
-        []() -> PCB_IO* { return new ALTIUM_DESIGNER_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_ALTIUM_DESIGNER; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin(
         PCB_IO_MGR::CADSTAR_PCB_ARCHIVE,
         wxT( "CADSTAR PCB Archive" ),
-        []() -> PCB_IO* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_CADSTAR_ARCHIVE; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerEaglePlugin(
         PCB_IO_MGR::EAGLE,
         wxT( "Eagle" ),
-        []() -> PCB_IO* { return new EAGLE_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_EAGLE; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerEasyEDAPlugin(
         PCB_IO_MGR::EASYEDA,
         wxT( "EasyEDA / JLCEDA Std" ),
-	    []() -> PCB_IO* { return new EASYEDA_PLUGIN; });
+	    []() -> PCB_IO* { return new PCB_IO_EASYEDA; });
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerEasyEDAProPlugin(
         PCB_IO_MGR::EASYEDAPRO,
         wxT( "EasyEDA / JLCEDA Pro" ),
-        []() -> PCB_IO* { return new EASYEDAPRO_PLUGIN; });
+        []() -> PCB_IO* { return new PCB_IO_EASYEDAPRO; });
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin(
         PCB_IO_MGR::FABMASTER,
         wxT( "Fabmaster" ),
-        []() -> PCB_IO* { return new FABMASTER_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_FABMASTER; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerGPCBPlugin(
         PCB_IO_MGR::GEDA_PCB,
         wxT( "GEDA/Pcb" ),
-        []() -> PCB_IO* { return new GPCB_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_GEDA; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerPcadPlugin(
         PCB_IO_MGR::PCAD,
         wxT( "P-Cad" ),
-        []() -> PCB_IO* { return new PCAD_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_PCAD; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin(
         PCB_IO_MGR::SOLIDWORKS_PCB,
         wxT( "Solidworks PCB" ),
-        []() -> PCB_IO* { return new SOLIDWORKS_PCB_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_SOLIDWORKS; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerIPC2581Plugin(
         PCB_IO_MGR::IPC2581,
         wxT( "IPC-2581" ),
-        []() -> PCB_IO* { return new IPC2581_PLUGIN; } );
+        []() -> PCB_IO* { return new PCB_IO_IPC2581; } );
 // clang-format on

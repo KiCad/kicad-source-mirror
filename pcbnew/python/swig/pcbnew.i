@@ -111,9 +111,9 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintEnumerate)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintLoad)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintSave)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
-%include <pcb_io/kicad/pcb_plugin.h>
+%include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 %{
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 %}
 
 

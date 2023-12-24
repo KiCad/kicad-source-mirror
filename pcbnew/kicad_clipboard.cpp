@@ -37,13 +37,13 @@
 #include <zone.h>
 #include <locale_io.h>
 #include <netinfo.h>
-#include <pcb_io/kicad/pcb_parser.h>
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <kicad_clipboard.h>
 #include "confirm.h"
 
 CLIPBOARD_IO::CLIPBOARD_IO():
-        PCB_PLUGIN(CTL_FOR_CLIPBOARD ),
+        PCB_IO_KICAD_SEXPR(CTL_FOR_CLIPBOARD ),
         m_formatter()
 {
     m_out = &m_formatter;
@@ -318,7 +318,7 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
 
     try
     {
-        item = PCB_PLUGIN::Parse( result );
+        item = PCB_IO_KICAD_SEXPR::Parse( result );
     }
     catch (...)
     {
@@ -411,7 +411,7 @@ BOARD* CLIPBOARD_IO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
             };
 
     STRING_LINE_READER reader( result, wxT( "clipboard" ) );
-    PCB_PARSER         parser( &reader, aAppendToMe, queryUser );
+    PCB_IO_KICAD_SEXPR_PARSER         parser( &reader, aAppendToMe, queryUser );
 
     init( aProperties );
 

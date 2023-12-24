@@ -42,8 +42,8 @@
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <pcb_io/kicad/pcb_plugin.h>
-#include <pcb_io/legacy/legacy_plugin.h>
+#include <pcb_io/kicad_legacy/pcb_io_kicad_legacy.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <env_paths.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
@@ -250,7 +250,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
         // Export as *.kicad_pcb format, using a strategy which is specifically chosen
         // as an example on how it could also be used to send it to the system clipboard.
 
-        PCB_PLUGIN  pcb_io(CTL_FOR_LIBRARY );
+        PCB_IO_KICAD_SEXPR  pcb_io(CTL_FOR_LIBRARY );
 
         /*  This footprint should *already* be "normalized" in a way such that
             orientation is zero, etc., since it came from the Footprint Editor.

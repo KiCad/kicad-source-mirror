@@ -27,7 +27,7 @@
 #define CADSTAR_PCB_ARCHIVE_LOADER_H_
 
 #include <cadstar_pcb_archive_parser.h>
-#include <cadstar_pcb_archive_plugin.h>
+#include <pcb_io_cadstar_archive.h>
 #include <board.h>
 #include <footprint.h>
 

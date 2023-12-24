@@ -32,20 +32,20 @@
 
 #include <board_item.h>
 #include <footprint.h>
-#include <pcb_io/kicad/pcb_plugin.h>
-#include <pcb_io/kicad/pcb_parser.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <memory.h>
 #include <tools/pcb_selection.h>
 
 
-class CLIPBOARD_IO : public PCB_PLUGIN
+class CLIPBOARD_IO : public PCB_IO_KICAD_SEXPR
 {
 public:
     CLIPBOARD_IO();
     ~CLIPBOARD_IO();
 
     /*
-     * Saves the entire board to the clipboard formatted using the PCB_PLUGIN formatting
+     * Saves the entire board to the clipboard formatted using the PCB_IO_KICAD_SEXPR formatting
      */
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
                     const STRING_UTF8_MAP* aProperties = nullptr,
@@ -53,7 +53,7 @@ public:
 
     /*
      * Write all the settings of the BOARD* set by setBoard() and then adds all the
-     * BOARD_ITEMs found in selection formatted by PCB_PLUGIN to clipboard as sexpr text
+     * BOARD_ITEMs found in selection formatted by PCB_IO_KICAD_SEXPR to clipboard as sexpr text
      */
     void SaveSelection( const PCB_SELECTION& selected, bool isFootprintEditor );
 

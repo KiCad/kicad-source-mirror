@@ -4,8 +4,8 @@
 # This CMakeLists.txt is included from pcbnew, so we are inheriting its include_directories(),
 
 set( PCAD2PCBNEW_SRCS
+    pcb_io_pcad.cpp
     pcad2kicad_common.cpp
-    pcad_plugin.cpp
     pcad_pcb.cpp
         pcad_arc.cpp
     pcad_pcb_component.cpp

@@ -32,8 +32,8 @@
 #include <wx/msgout.h>
 
 #include <board_item.h>
-#include <pcb_io/kicad/pcb_plugin.h>
-#include <pcb_io/kicad/pcb_parser.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <richio.h>
 #include <qa_utils/stdstream_line_reader.h>
 
@@ -53,7 +53,7 @@ bool parse( std::istream& aStream, bool aVerbose )
     STDISTREAM_LINE_READER reader;
     reader.SetStream( aStream );
 
-    PCB_PARSER  parser( &reader, nullptr, nullptr );
+    PCB_IO_KICAD_SEXPR_PARSER  parser( &reader, nullptr, nullptr );
     BOARD_ITEM* board = nullptr;
 
     PARSE_DURATION duration{};

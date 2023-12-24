@@ -31,7 +31,7 @@
 
 #include <board_design_settings.h>
 
-#include <pcbnew/plugins/kicad/pcb_plugin.h>
+#include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew/drc/drc_engine.h>
 
 #include <project.h>
@@ -347,7 +347,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
     try
     {
-        PCB_PLUGIN io;
+        PCB_IO_KICAD_SEXPR io;
         aRpt->Report( wxString::Format( wxT("Loading board snapshot from '%s'"),
                                         fname_dump.GetFullPath() ) );
 

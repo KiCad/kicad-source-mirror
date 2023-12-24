@@ -193,7 +193,7 @@ private:
 
         for( int i = 0; i < aCount; ++i )
         {
-            // this fires on some eagle board after EAGLE_PLUGIN::Load()
+            // this fires on some eagle board after PCB_IO_EAGLE::Load()
             wxASSERT( unsigned( aLayers[i] ) <= unsigned( VIEW::VIEW_MAX_LAYERS ) );
 
             m_layers.push_back( aLayers[i] );

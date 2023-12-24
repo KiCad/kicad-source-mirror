@@ -58,7 +58,7 @@
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <pgm_base.h>
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
@@ -750,7 +750,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
         }
     }
 
-    PCB_PLUGIN  pcb_io( CTL_FOR_LIBRARY );
+    PCB_IO_KICAD_SEXPR  pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, upgradeJob->m_libraryPath );
 
     try
@@ -811,7 +811,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
 
-    PCB_PLUGIN pcb_io( CTL_FOR_LIBRARY );
+    PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
     FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
 
     try

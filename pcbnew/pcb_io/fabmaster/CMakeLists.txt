@@ -5,7 +5,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 
 set( FABMASTER_SRCS
-    fabmaster_plugin.cpp
+    pcb_io_fabmaster.cpp
     import_fabmaster.cpp
     )
 

@@ -29,7 +29,7 @@
 /**
  * The set of pad shapes, used with PAD::{Set,Get}Shape()
  *
- * --> DO NOT REORDER, legacy_plugin is dependent on the integer values <--
+ * --> DO NOT REORDER, PCB_IO_KICAD_LEGACY is dependent on the integer values <--
  */
 enum class PAD_SHAPE : int
 {

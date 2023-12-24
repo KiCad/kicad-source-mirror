@@ -30,7 +30,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <board.h>
 #include <footprint.h>
 #include <settings/settings_manager.h>
@@ -54,7 +54,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
     };
 
     std::unique_ptr<FOOTPRINT> original, converted;
-    PCB_PLUGIN plugin;
+    PCB_IO_KICAD_SEXPR plugin;
 
     std::string tempLibPath = fmt::format( "{}/prettifier.pretty",
                                            std::filesystem::temp_directory_path() );

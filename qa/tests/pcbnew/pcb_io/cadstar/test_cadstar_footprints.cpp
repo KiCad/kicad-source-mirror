@@ -27,8 +27,8 @@
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <pcbnew/pcb_io/cadstar/cadstar_pcb_archive_plugin.h>
-#include <pcbnew/pcb_io/kicad/pcb_plugin.h>
+#include <pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h>
+#include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <footprint.h>
 #include <pad.h>
@@ -39,8 +39,8 @@ struct CADSTAR_IMPORT_FIXTURE
 {
     CADSTAR_IMPORT_FIXTURE() {}
 
-    CADSTAR_PCB_ARCHIVE_PLUGIN cstarPlugin;
-    PCB_PLUGIN                 kicadPlugin;
+    PCB_IO_CADSTAR_ARCHIVE cstarPlugin;
+    PCB_IO_KICAD_SEXPR             kicadPlugin;
 };
 
 

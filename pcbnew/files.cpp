@@ -58,8 +58,8 @@
 #include <project/net_settings.h>
 #include <io/common/plugin_common_choose_project.h>
 #include <pcb_io/pcb_io_mgr.h>
-#include <pcb_io/cadstar/cadstar_pcb_archive_plugin.h>
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/cadstar/pcb_io_cadstar_archive.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_imported_layers.h>
 #include <dialogs/dialog_import_choose_project.h>
@@ -653,7 +653,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( m_importProperties )
                 props.insert( m_importProperties->begin(), m_importProperties->end() );
 
-            // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
+            // PCB_IO_EAGLE can use this info to center the BOARD, but it does not yet.
             props["page_width"] = std::to_string( GetPageSizeIU().x );
             props["page_height"] = std::to_string( GetPageSizeIU().y );
 

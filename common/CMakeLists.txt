@@ -722,11 +722,11 @@ set( PCB_COMMON_SRCS
     # IO files
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/pcb_io.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/pcb_io_mgr.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/legacy/legacy_plugin.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad/pcb_plugin.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad/pcb_parser.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/eagle/eagle_plugin.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/geda/gpcb_plugin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/eagle/pcb_io_eagle.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/geda/pcb_io_geda.cpp
 
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_grid_helper.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp

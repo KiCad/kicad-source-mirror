@@ -50,7 +50,7 @@
 #include <connectivity/connectivity_data.h>
 
 #include <pcb_io/pcb_io_mgr.h>
-#include <pcb_io/kicad/pcb_plugin.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <memory>
 
@@ -101,7 +101,7 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 
 BOARD* PCB_TEST_FRAME_BASE::LoadAndDisplayBoard( const std::string& filename )
 {
-    PLUGIN::RELEASER pi( new PCB_PLUGIN );
+    PLUGIN::RELEASER pi( new PCB_IO_KICAD_SEXPR );
     BOARD* brd = nullptr;
 
     try

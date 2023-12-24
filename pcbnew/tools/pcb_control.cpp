@@ -1282,7 +1282,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
     {
         STRING_UTF8_MAP props;
 
-        // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
+        // PCB_IO_EAGLE can use this info to center the BOARD, but it does not yet.
 
         props["page_width"] = std::to_string( editFrame->GetPageSizeIU().x );
         props["page_height"] = std::to_string( editFrame->GetPageSizeIU().y );
