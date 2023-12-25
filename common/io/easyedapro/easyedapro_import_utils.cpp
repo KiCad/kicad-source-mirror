@@ -140,7 +140,7 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
 }
 
 
-nlohmann::json EASYEDAPRO::ReadProjectFile( const wxString& aZipFileName )
+nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName )
 {
     std::shared_ptr<wxZipEntry> entry;
     wxFFileInputStream          in( aZipFileName );
@@ -150,7 +150,7 @@ nlohmann::json EASYEDAPRO::ReadProjectFile( const wxString& aZipFileName )
     {
         wxString name = entry->GetName();
 
-        if( name == wxS( "project.json" ) )
+        if( name == wxS( "project.json" ) || name == wxS( "device.json" ) )
         {
             wxMemoryOutputStream memos;
             memos << zip;
@@ -161,9 +161,10 @@ nlohmann::json EASYEDAPRO::ReadProjectFile( const wxString& aZipFileName )
         }
     }
 
-    THROW_IO_ERROR( wxString::Format( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro "
-                                         "project file. Cannot find project.json." ),
-                                      aZipFileName ) );
+    THROW_IO_ERROR( wxString::Format(
+            _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro "
+               "project or library file. Cannot find project.json or device.json." ),
+            aZipFileName ) );
 }
 
 

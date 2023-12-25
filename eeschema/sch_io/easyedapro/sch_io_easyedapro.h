@@ -55,7 +55,10 @@ public:
         return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "epro", "zip" } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override { return GetSchematicFileDesc(); }
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "elibz", "epro", "zip" } );
+    }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
 

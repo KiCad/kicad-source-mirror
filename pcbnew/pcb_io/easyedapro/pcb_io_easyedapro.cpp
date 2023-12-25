@@ -125,7 +125,7 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
 
     if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
     {
-        nlohmann::json project = EASYEDAPRO::ReadProjectFile( aFileName );
+        nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( aFileName );
 
         wxString pcbToLoad;
 
@@ -220,13 +220,23 @@ void PCB_IO_EASYEDAPRO::FootprintEnumerate( wxArrayString&  aFootprintNames,
             }
         }
     }
-    else if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
+    else if( fname.GetExt() == wxS( "elibz" ) || fname.GetExt() == wxS( "epro" )
+             || fname.GetExt() == wxS( "zip" ) )
     {
-        nlohmann::json                     project = EASYEDAPRO::ReadProjectFile( aLibraryPath );
+        nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( aLibraryPath );
         std::map<wxString, nlohmann::json> footprintMap = project.at( "footprints" );
 
         for( auto& [key, value] : footprintMap )
-            aFootprintNames.Add( value.at( "title" ) );
+        {
+            wxString title;
+
+            if( value.contains( "display_title" ) )
+                title = value.at( "display_title" ).get<wxString>();
+            else
+                title = value.at( "title" ).get<wxString>();
+
+            aFootprintNames.Add( title );
+        }
     }
 }
 
@@ -344,16 +354,22 @@ FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
         footprint->Value().SetVisible( true );
         footprint->AutoPositionFields();
     }
-    else if( libFname.GetExt() == wxS( "epro" ) || libFname.GetExt() == wxS( "zip" ) )
+    else if( libFname.GetExt() == wxS( "elibz" ) || libFname.GetExt() == wxS( "epro" )
+             || libFname.GetExt() == wxS( "zip" ) )
     {
-        nlohmann::json project = EASYEDAPRO::ReadProjectFile( aLibraryPath );
+        nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( aLibraryPath );
 
         wxString fpUuid;
 
         std::map<wxString, nlohmann::json> footprintMap = project.at( "footprints" );
         for( auto& [uuid, data] : footprintMap )
         {
-            wxString title = data.at( "title" );
+            wxString title;
+
+            if( data.contains( "display_title" ) )
+                title = data.at( "display_title" ).get<wxString>();
+            else
+                title = data.at( "title" ).get<wxString>();
 
             if( title == aFootprintName )
             {

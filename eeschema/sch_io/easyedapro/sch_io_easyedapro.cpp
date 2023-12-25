@@ -116,7 +116,7 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
     SCH_EASYEDAPRO_PARSER parser( nullptr, nullptr );
     LIB_SYMBOL*           symbol = nullptr;
     wxFileName            libFname( aLibraryPath );
-    wxString              symLibName = EASYEDAPRO::ShortenLibName( libFname.GetName() );
+    wxString              symLibName = LIB_ID::FixIllegalChars( libFname.GetName(), true );
 
     /*if( libFname.GetExt() == wxS( "esym" ) )
     {
@@ -146,7 +146,8 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
         }
     }
     else */
-    if( libFname.GetExt() == wxS( "epro" ) || libFname.GetExt() == wxS( "zip" ) )
+    if( libFname.GetExt() == wxS( "elibz" ) || libFname.GetExt() == wxS( "epro" )
+        || libFname.GetExt() == wxS( "zip" ) )
     {
         std::map<wxString, EASYEDAPRO::PRJ_SYMBOL>    prjSymbols = project.at( "symbols" );
         std::map<wxString, EASYEDAPRO::PRJ_FOOTPRINT> prjFootprints = project.at( "footprints" );
@@ -206,7 +207,7 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
             LIB_ID libID = EASYEDAPRO::ToKiCadLibID( symLibName, aAliasName );
             symInfo.libSymbol->SetLibId( libID );
             symInfo.libSymbol->SetName( aAliasName );
-            symInfo.libSymbol->GetFootprintField().SetText( symLibName + wxS( "/" ) + fpTitle );
+            symInfo.libSymbol->GetFootprintField().SetText( symLibName + wxS( ":" ) + fpTitle );
 
             symbol = symInfo.libSymbol.release();
 
@@ -244,13 +245,23 @@ void SCH_IO_EASYEDAPRO::EnumerateSymbolLib( wxArrayString&         aSymbolNameLi
             }
         }
     }
-    else if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
+    else if( fname.GetExt() == wxS( "elibz" ) || fname.GetExt() == wxS( "epro" )
+             || fname.GetExt() == wxS( "zip" ) )
     {
-        nlohmann::json                     project = EASYEDAPRO::ReadProjectFile( aLibraryPath );
+        nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( aLibraryPath );
         std::map<wxString, nlohmann::json> symbolMap = project.at( "symbols" );
 
         for( auto& [key, value] : symbolMap )
-            aSymbolNameList.Add( value.at( "title" ) );
+        {
+            wxString title;
+
+            if( value.contains( "display_title" ) )
+                title = value.at( "display_title" ).get<wxString>();
+            else
+                title = value.at( "title" ).get<wxString>();
+
+            aSymbolNameList.Add( title );
+        }
     }
 }
 
@@ -265,8 +276,11 @@ void SCH_IO_EASYEDAPRO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolLis
 
     EnumerateSymbolLib( symbolNameList, aLibraryPath, aProperties );
 
-    if( libFname.GetExt() == wxS( "epro" ) || libFname.GetExt() == wxS( "zip" ) )
-        project = EASYEDAPRO::ReadProjectFile( aLibraryPath );
+    if( libFname.GetExt() == wxS( "elibz" ) || libFname.GetExt() == wxS( "epro" )
+        || libFname.GetExt() == wxS( "zip" ) )
+    {
+        project = EASYEDAPRO::ReadProjectOrDeviceFile( aLibraryPath );
+    }
 
     for( const wxString& symbolName : symbolNameList )
     {
@@ -292,7 +306,7 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
     if( fname.GetExt() != wxS( "epro" ) && fname.GetExt() != wxS( "zip" ) )
         return;
 
-    nlohmann::json project = EASYEDAPRO::ReadProjectFile( aProjectPath );
+    nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( aProjectPath );
 
     std::map<wxString, EASYEDAPRO::PRJ_SYMBOL>    prjSymbols = project.at( "symbols" );
     std::map<wxString, EASYEDAPRO::PRJ_FOOTPRINT> prjFootprints = project.at( "footprints" );
@@ -335,7 +349,7 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
             LIB_ID libID = EASYEDAPRO::ToKiCadLibID( symLibName, symData.title );
             symInfo.libSymbol->SetLibId( libID );
             symInfo.libSymbol->SetName( symData.title );
-            symInfo.libSymbol->GetFootprintField().SetText( symLibName + wxS( "/" ) + fpTitle );
+            symInfo.libSymbol->GetFootprintField().SetText( symLibName + wxS( ":" ) + fpTitle );
 
             m_projectData->m_Symbols.emplace( baseName, std::move( symInfo ) );
         }
@@ -357,15 +371,17 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
 }
 
 
-LIB_SYMBOL* SCH_IO_EASYEDAPRO::LoadSymbol( const wxString&        aLibraryPath,
-                                               const wxString&        aAliasName,
-                                               const STRING_UTF8_MAP* aProperties )
+LIB_SYMBOL* SCH_IO_EASYEDAPRO::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                           const STRING_UTF8_MAP* aProperties )
 {
     wxFileName     libFname( aLibraryPath );
     nlohmann::json project;
 
-    if( libFname.GetExt() == wxS( "epro" ) || libFname.GetExt() == wxS( "zip" ) )
-        project = EASYEDAPRO::ReadProjectFile( aLibraryPath );
+    if( libFname.GetExt() == wxS( "elibz" ) || libFname.GetExt() == wxS( "epro" )
+        || libFname.GetExt() == wxS( "zip" ) )
+    {
+        project = EASYEDAPRO::ReadProjectOrDeviceFile( aLibraryPath );
+    }
 
     return loadSymbol( project, aLibraryPath, aAliasName, aProperties );
 }
@@ -413,7 +429,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     if( fname.GetExt() != wxS( "epro" ) && fname.GetExt() != wxS( "zip" ) )
         return rootSheet;
 
-    nlohmann::json project = EASYEDAPRO::ReadProjectFile( aFileName );
+    nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( aFileName );
 
     std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
 

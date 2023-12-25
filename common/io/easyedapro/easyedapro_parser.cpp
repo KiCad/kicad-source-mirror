@@ -195,10 +195,14 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
     if( j.at( "source" ).is_string() )
         d.source = j.at( "source" ).get<wxString>();
 
-    if( j.at( "desc" ).is_string() )
+    if( j.contains( "desc" ) )
         d.desc = j.at( "desc" ).get<wxString>();
+    else if( j.contains( "description" ) )
+        d.desc = j.at( "description" ).get<wxString>();
 
-    if( j.at( "title" ).is_string() )
+    if( j.contains( "display_title" ) )
+        d.title = j.at( "display_title" ).get<wxString>();
+    else if( j.contains( "title" ) )
         d.title = j.at( "title" ).get<wxString>();
 
     if( j.at( "version" ).is_string() )
@@ -219,10 +223,14 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& 
     if( j.at( "source" ).is_string() )
         d.source = j.at( "source" ).get<wxString>();
 
-    if( j.at( "desc" ).is_string() )
+    if( j.contains( "desc" ) )
         d.desc = j.at( "desc" ).get<wxString>();
+    else if( j.contains( "description" ) )
+        d.desc = j.at( "description" ).get<wxString>();
 
-    if( j.at( "title" ).is_string() )
+    if( j.contains( "display_title" ) )
+        d.title = j.at( "display_title" ).get<wxString>();
+    else if( j.contains( "title" ) )
         d.title = j.at( "title" ).get<wxString>();
 
     if( j.at( "version" ).is_string() )
@@ -243,10 +251,14 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
     if( j.at( "source" ).is_string() )
         d.source = j.at( "source" ).get<wxString>();
 
-    if( j.at( "description" ).is_string() )
+    if( j.contains( "desc" ) )
+        d.description = j.at( "desc" ).get<wxString>();
+    else if( j.contains( "description" ) )
         d.description = j.at( "description" ).get<wxString>();
 
-    if( j.at( "title" ).is_string() )
+    if( j.contains( "display_title" ) )
+        d.title = j.at( "display_title" ).get<wxString>();
+    else if( j.contains( "title" ) )
         d.title = j.at( "title" ).get<wxString>();
 
     if( j.at( "version" ).is_string() )

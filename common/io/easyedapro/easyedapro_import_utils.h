@@ -46,7 +46,7 @@ std::vector<IMPORT_PROJECT_DESC> ProjectToSelectorDialog( const nlohmann::json& 
                                                           bool                  aPcbOnly = false,
                                                           bool                  aSchOnly = false );
 
-nlohmann::json ReadProjectFile( const wxString& aZipFileName );
+nlohmann::json ReadProjectOrDeviceFile( const wxString& aZipFileName );
 
 void IterateZipFiles(
         const wxString&                                                         aFileName,

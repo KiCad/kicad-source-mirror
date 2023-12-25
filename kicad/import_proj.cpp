@@ -174,7 +174,7 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
 
     if( fname.GetExt() == wxS( "epro" ) || fname.GetExt() == wxS( "zip" ) )
     {
-        nlohmann::json project = EASYEDAPRO::ReadProjectFile( fname.GetFullPath() );
+        nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( fname.GetFullPath() );
 
         std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
         std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = project.at( "boards" );

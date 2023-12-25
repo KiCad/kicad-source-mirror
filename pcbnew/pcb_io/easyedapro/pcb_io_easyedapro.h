@@ -47,12 +47,14 @@ public:
 
     PLUGIN_FILE_DESC GetFootprintLibDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ), { "epro", "zip" } );
+        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ),
+                                 { "elibz", "epro", "zip" } );
     }
 
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "efoo", "epro", "zip" } );
+        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ),
+                                 { "elibz", "efoo", "epro", "zip" } );
     }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
