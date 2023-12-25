@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-25 13:06+0000\n"
+"PO-Revision-Date: 2023-12-26 08:38+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -3370,36 +3370,31 @@ msgid "Invalid SSH Key"
 msgstr "Neplatný SSH klíč"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Vybraný soubor není platný nebo může být poškozen!"
+msgstr "Vybraný soubor není platným soukromým klíčem SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Nelze najít soubor knihovny '%s'"
+msgstr "Nelze otevřít veřejný klíč '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:405
 #: common/dialogs/git/dialog_git_repository.cpp:411
-#, fuzzy
 msgid "Missing information"
-msgstr "Chybějící pouzdro"
+msgstr "Chybějící informace"
 
 #: common/dialogs/git/dialog_git_repository.cpp:405
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Zadejte prosím úplnou adresu url repozitáře"
+msgstr "Prosím, zadejte název repozitáře"
 
 #: common/dialogs/git/dialog_git_repository.cpp:411
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Zadejte prosím úplnou adresu url repozitáře"
+msgstr "Zadejte adresu URL pro repozitář"
 
 #: common/dialogs/git/dialog_git_repository.cpp:432
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Heslo:"
+msgstr "Heslo klíče SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 #, fuzzy
@@ -3426,9 +3421,8 @@ msgid "SSH Private Key"
 msgstr "Tisknout vrstvy"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Vybrat soubor"
+msgstr "Vyberte soubor soukromého klíče SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
@@ -5887,19 +5881,19 @@ msgid "'%s' is not a directory"
 msgstr "'%s' není adresář"
 
 #: common/gestfich.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Odstranění adresáře %s"
+msgstr "Chyba při odstraňování složky '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Nelze vytvořit výstupní adresář '%s'."
+msgstr "Nelze vytvořit adresář '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Nelze načíst obrázek z '%s'."
+msgstr "Nelze klonovat repozitář '%s'"
 
 #: common/git/git_pull_handler.cpp:46
 #, fuzzy, c-format
@@ -6111,19 +6105,16 @@ msgid "Failed to delete tag."
 msgstr "Nepodařilo se smazat '%s'"
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "Neznámá chyba"
+msgstr "Neznámá chyba."
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "No error."
-msgstr " CHYBA!"
+msgstr "Bez chyby."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr " CHYBA!"
+msgstr "Bez chyby"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:202
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:124
@@ -6791,9 +6782,8 @@ msgstr "Neshoda typu mezi %lf a '%s'"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
-#, fuzzy
 msgid "View Details"
-msgstr "Podrobnosti"
+msgstr "Zobrazit podrobnosti"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
@@ -6970,13 +6960,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "potřebuji číslo pro '%s'"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
 "find project.json."
 msgstr ""
-"Soubor '%s'\n"
-"se nezdá být platný soubor KiCad projektu."
+"Soubor '%s' zřejmě není platný soubor projektu EasyEDA (JLCEDA) Pro. "
+"Projekt.json nebyl nalezen."
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:180
 #, fuzzy, c-format
@@ -7267,9 +7257,8 @@ msgid "Finish"
 msgstr "Dokončit sběrnici"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Zrušit aktuální nástroj"
+msgstr "Dokončit aktuální nástroj"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7671,9 +7660,8 @@ msgid "Use millimeters"
 msgstr "Použít milimetry"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Vybrat sloupce"
+msgstr "Vybrat sloupce..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -7863,9 +7851,8 @@ msgid "About KiCad"
 msgstr "O aplikaci KiCad"
 
 #: common/tool/actions.cpp:976
-#, fuzzy
 msgid "Open about dialog"
-msgstr "O KiCadu"
+msgstr "Otevřít dialog O programu"
 
 #: common/tool/actions.cpp:985
 msgid "List Hotkeys..."
@@ -8977,9 +8964,8 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "Zobrazí vybrané pouzdro v prohlížeči pouzder"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Správa souborů přiřazení pouzdra"
+msgstr "Správa souborů přiřazení pouzdra..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
 #, fuzzy
@@ -9301,9 +9287,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "Generování BOM vyžaduje plně očíslované schéma."
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "Selhalo vytvoření souboru '%s'."
+msgstr "Selhalo vytvoření souboru."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -12766,9 +12751,8 @@ msgid "Plot Setup"
 msgstr "Nastavení stránky"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
-#, fuzzy
 msgid "Simulation Analysis"
-msgstr "Nastavení simulace"
+msgstr "Simulační analýza"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:36
 #: eeschema/sim/sim_plot_tab.cpp:652
@@ -13659,9 +13643,8 @@ msgid "Net names"
 msgstr "Názvy sítí"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "Další pole listu"
+msgstr "Další pole"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
@@ -13719,9 +13702,8 @@ msgid "Wire & Bus Properties"
 msgstr "Vlastnosti drátu & sběrnic"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "Rozpiska materiálu"
+msgstr "Předvolby rozpisky materiálu:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
 #, fuzzy
@@ -15781,7 +15763,7 @@ msgstr "Vyplnit"
 
 #: eeschema/lib_symbol.cpp:275
 msgid "Power flag differs."
-msgstr ""
+msgstr "Power Flag se liší."
 
 #: eeschema/lib_symbol.cpp:284
 #, fuzzy
@@ -15817,7 +15799,7 @@ msgstr "Vývod %s se liší."
 #: eeschema/lib_symbol.cpp:402
 #, c-format
 msgid "%s field differs."
-msgstr ""
+msgstr "Pole %s se liší."
 
 #: eeschema/lib_symbol.cpp:412
 #, fuzzy
@@ -17059,7 +17041,7 @@ msgstr "Chyba při načítání schématu '%s'."
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.h:59
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.h:42
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "Soubory EasyEDA (JLCEDA) Std"
 
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_parser.cpp:73
@@ -30808,7 +30790,7 @@ msgstr "Zkomprimovat soubor "
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
-msgstr ""
+msgstr "Zkomprimujte výstup do souboru 'zip'"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
 #, fuzzy
@@ -44426,7 +44408,7 @@ msgstr "Otočí vybranou položku(y) proti směru hodinových ručiček"
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "Překlopí vybranou položku(y) na opačnou stranu desky."
+msgstr "Překlopí vybranou položku(y) na opačnou stranu desky"
 
 #: pcbnew/tools/pcb_actions.cpp:560
 #, fuzzy
@@ -46135,6 +46117,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Varování: Některé položky byly na vrstvách, které nejsou přítomny na "
+"aktuální desce.\n"
+"Tyto položky nemohly být vloženy.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1024
 msgid "Invalid clipboard contents"
