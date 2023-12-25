@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-25 13:08+0000\n"
+"PO-Revision-Date: 2023-12-25 14:36+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -38117,7 +38117,7 @@ msgstr "Otočí vybranou položku(y) proti směru hodinových ručiček"
 
 #: pcbnew/tools/pcb_actions.cpp:326
 msgid "Flips selected item(s) to opposite side of board"
-msgstr "Překlopí vybranou položku(y) na opačnou stranu desky."
+msgstr "Překlopí vybranou položku(y) na opačnou stranu desky"
 
 #: pcbnew/tools/pcb_actions.cpp:331
 #, fuzzy
@@ -39533,6 +39533,9 @@ msgid ""
 "current board.\n"
 "These items could not be pasted.\n"
 msgstr ""
+"Varování: Některé položky byly na vrstvách, které nejsou přítomny na "
+"aktuální desce.\n"
+"Tyto položky nemohly být vloženy.\n"
 
 #: pcbnew/tools/pcb_control.cpp:1032
 msgid "Invalid clipboard contents"
