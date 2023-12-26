@@ -281,7 +281,7 @@ TOOL_ACTION EDA_3D_ACTIONS::materialDiffuse( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.materialDiffuse" )
         .Scope( AS_ACTIVE )
         .FriendlyName( _( "Render Solid Colors" ) )
-        .Tooltip( _( "Use only the diffuse color property from model 3D model file" ) )
+        .Tooltip( _( "Use only the diffuse color property from 3D model file" ) )
         .Flags( AF_NONE )
         .Parameter( MATERIAL_MODE::DIFFUSE_ONLY ) );
 
