@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-25 14:36+0000\n"
+"PO-Revision-Date: 2023-12-26 21:27+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -38864,9 +38864,8 @@ msgid "Sketch Graphic Items"
 msgstr "Obrys &spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:912
-#, fuzzy
 msgid "Show graphic items in outline mode"
-msgstr "Zobrazit pouze obrys grafických prvků"
+msgstr "Zobrazit grafické prvky v režimu obrysu"
 
 #: pcbnew/tools/pcb_actions.cpp:917
 msgid "Sketch Text Items"
@@ -39052,9 +39051,8 @@ msgid "Toggle Layer"
 msgstr "Přepnout vrstvu"
 
 #: pcbnew/tools/pcb_actions.cpp:1137
-#, fuzzy
 msgid "Switch between layers in active layer pair"
-msgstr "Přepínání mezi palci a milimetry"
+msgstr "Přepínání mezi vrstvami v aktivním páru vrstev"
 
 #: pcbnew/tools/pcb_actions.cpp:1144
 msgid "Increase Layer Opacity"
@@ -39095,9 +39093,8 @@ msgid "Constraints Resolution..."
 msgstr "Rozlišení omezení..."
 
 #: pcbnew/tools/pcb_actions.cpp:1173
-#, fuzzy
 msgid "Show constraints resolution for the selected object"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Zobrazit rozlišení omezení pro vybraný objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:1179
 msgid "Geographical Reannotate..."
@@ -39255,7 +39252,7 @@ msgstr "Zruší výběr všech spojů & prokovů patřící do stejné sítě."
 #: pcbnew/tools/pcb_actions.cpp:1349
 #, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "Vybírá všechny spoje a průchodky."
+msgstr "Vybrat všechny nespojené pouzdra"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
 #, fuzzy
