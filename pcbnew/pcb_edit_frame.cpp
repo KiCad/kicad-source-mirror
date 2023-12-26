@@ -2284,6 +2284,10 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
         if( srcItem )
         {
+            // Dimensions have PCB_TEXT base but are not treated like texts in the updater
+            if( dynamic_cast<PCB_DIMENSION_BASE*>( srcItem ) )
+                continue;
+
             PCB_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
 
             if( destItem )
@@ -2293,7 +2297,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
             }
             else if( !deleteExtraTexts )
             {
-                aNew->Add( new PCB_TEXT( *srcItem ) );
+                aNew->Add( static_cast<BOARD_ITEM*>( srcItem->Clone() ) );
             }
         }
     }
