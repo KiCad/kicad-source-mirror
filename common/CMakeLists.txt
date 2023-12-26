@@ -95,6 +95,8 @@ set( KICOMMON_SRCS
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
 
+    widgets/progress_reporter_base.cpp
+
     advanced_config.cpp
     asset_archive.cpp
     array_axis.cpp
@@ -309,7 +311,6 @@ set( COMMON_WIDGET_SRCS
     widgets/msgpanel.cpp
     widgets/number_badge.cpp
     widgets/paged_dialog.cpp
-    widgets/progress_reporter_base.cpp
     widgets/properties_panel.cpp
     widgets/search_pane.cpp
     widgets/search_pane_base.cpp

@@ -34,7 +34,7 @@
 /**
  * This implements all the tricky bits for thread safety, but the GUI is left to derived classes.
  */
-class PROGRESS_REPORTER_BASE : public PROGRESS_REPORTER
+class KICOMMON_API PROGRESS_REPORTER_BASE : public PROGRESS_REPORTER
 {
 public:
 

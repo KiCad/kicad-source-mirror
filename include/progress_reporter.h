@@ -27,13 +27,15 @@
 #ifndef PROGRESS_REPORTER_H
 #define PROGRESS_REPORTER_H
 
+#include <kicommon.h>
+
 /**
  * A progress reporter interface for use in multi-threaded environments.  The various advancement
  * and message methods can be called from sub-threads.  The KeepRefreshing method *MUST* be called
  * only from the main thread (primarily a MSW requirement, which won't allow access to UI objects
  * allocated from a separate thread).
  */
-class PROGRESS_REPORTER
+class KICOMMON_API PROGRESS_REPORTER
 {
 public:
 
