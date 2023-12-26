@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-26 08:38+0000\n"
+"PO-Revision-Date: 2023-12-26 21:27+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -3457,9 +3457,9 @@ msgid "Could not connect to '%s' "
 msgstr "No se pudo conectar a '%s ' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "No se puede abrir el archivo de almacenamiento."
+msgstr "No se pudo abrir la llave privada '%s '"
 
 #: common/dialogs/git/dialog_git_repository.cpp:363
 #, fuzzy
@@ -4122,9 +4122,9 @@ msgid "Reset Unique Id"
 msgstr "Restablecer Id. único"
 
 #: common/dialogs/panel_grid_settings.cpp:125 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Página %s (%s)"
+msgstr "%s %s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:244
 #, fuzzy, c-format
@@ -5901,7 +5901,7 @@ msgstr ""
 "Para abrirlo, necesita actualizar KiCad a la versión %s o posterior."
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -5912,7 +5912,8 @@ msgstr ""
 "KiCad no ha podido abrir el archivo ya que ha sido creado con una versión "
 "más reciente de la que está en uso.\n"
 "\n"
-"Para abrirlo, necesita actualizar KiCad a la versión %s o posterior."
+"Para abrirlo, necesita actualizar KiCad a la versión %s o posterior (formato "
+"de archivo con fecha %s o posterior)."
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -6036,9 +6037,9 @@ msgid "'%s' is not a directory"
 msgstr "'%s' no fue analizado correctamente."
 
 #: common/gestfich.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Borrando directorio %s"
+msgstr "Error eliminando directorio '%s':%s"
 
 #: common/git/git_clone_handler.cpp:49
 #, fuzzy, c-format
@@ -6164,9 +6165,9 @@ msgid "* [rejected] %s (%s)"
 msgstr "Cuadrícula: %s (%s)"
 
 #: common/git/kicad_git_common.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Actualizado"
+msgstr "[actualizado] %s"
 
 #: common/git/kicad_git_errors.cpp:30
 msgid "Invalid repository."
@@ -6413,9 +6414,9 @@ msgid "Invalid spline definition encountered"
 msgstr "Se encontró una definición inválida de spline"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "(no se admiten varios contornos de placa)"
+msgstr "%s no es compatible."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
@@ -7139,19 +7140,19 @@ msgid "Cannot read ZIP archive '%s'"
 msgstr "No puede abrirse al archivo '%s'"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:196
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Error al crear '%s'"
+msgstr "JSON error al leer '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Error al crear '%s'"
+msgstr "Error al leer '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "No se puede encontrar %s pin '%s'."
+msgstr "No se puede analizar la línea JSON %d en '%s': %s"
 
 #: common/project.cpp:374 common/project.cpp:379 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
@@ -8935,9 +8936,9 @@ msgid "Filtered by %s"
 msgstr "Filtrado por %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Huella faltante"
+msgstr ": %i huellas coincidentes"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -12422,9 +12423,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "Editar"
+msgstr "Editar %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
@@ -15181,9 +15182,9 @@ msgstr ""
 "colocados."
 
 #: eeschema/erc.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "No se ha definido la herramienta %d"
+msgstr "No se ha definido la clase de red %s"
 
 #: eeschema/erc.cpp:656
 #, fuzzy
@@ -15497,9 +15498,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "No se han guardado las modificaciones del esquema"
 
 #: eeschema/files-io.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Archivos esquemáticos LTSpice"
+msgstr "Archivo esquemático no compatible '%s'."
 
 #: eeschema/files-io.cpp:265
 msgid "Root"
@@ -16310,14 +16311,14 @@ msgid "P&references"
 msgstr "P&referencias"
 
 #: eeschema/net_navigator.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "Línea %s de (%s, %s) a (%s, %s)"
+msgstr "Línea de %s, %s a %s , %s"
 
 #: eeschema/net_navigator.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "Bus %s de (%s, %s) a (%s, %s)"
+msgstr "Bus de %s, %s a %s, %s"
 
 #: eeschema/net_navigator.cpp:72
 #, fuzzy
@@ -16330,45 +16331,45 @@ msgid "Symbol '%s' pin '%s'"
 msgstr "Símbolo %s [%s]"
 
 #: eeschema/net_navigator.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Pines de página"
+msgstr "Hoja '%s' pin '%s'"
 
 #: eeschema/net_navigator.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "Etiqueta '%s'"
+msgstr "Etiqueta '%s' en %s, %s"
 
 #: eeschema/net_navigator.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Etiqueta global '%s'"
+msgstr "Etiqueta global '%s' en %s, %s"
 
 #: eeschema/net_navigator.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Etiqueta jerárquica '%s'"
+msgstr "Etiqueta jerárquica '%s' en %s, %s"
 
 #: eeschema/net_navigator.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Tamaño del punto de unión:"
+msgstr "Unión en %s, %s"
 
 #: eeschema/net_navigator.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "Línea %s de (%s, %s) a (%s, %s)"
+msgstr "Entrada de bus a cable de %s, %s a %s, %s"
 
 #: eeschema/net_navigator.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "Bus %s de (%s, %s) a (%s, %s)"
+msgstr "Entrada de bus a bus de %s, %s a %s, %s"
 
 # Pendiente de contexto
 #: eeschema/net_navigator.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "No puede utilizarse el texto de huella tipo %s"
+msgstr "Tipo de elemento no manipulado %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
 #, fuzzy
@@ -17041,11 +17042,9 @@ msgid "File not found %s."
 msgstr "Archivo no encontrado %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3981
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr ""
-"ID de registro desconocido o inesperado %d encontrado dentro de la sección "
-"\"FileHeader\"."
+msgstr "ID de registro desconocido o inesperado %d encontrado en %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4107
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -17392,15 +17391,15 @@ msgstr "Error al cargar el símbolo %s desde la biblioteca '%s'. (%s)"
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:404
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:441
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Error al crear la biblioteca de símbolos '%s'."
+msgstr "Error al enumerar la biblioteca de símbolos '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:537
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Error al cargar el esquema '%s'."
+msgstr "Error al cargar el esquema '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.h:59
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.h:42
@@ -17492,9 +17491,9 @@ msgid "Open cancelled by user."
 msgstr "Apertura cancelada por el usuario."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "Anotado %s como %s."
+msgstr "No se puede analizar %s como símbolo"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:307
 msgid "Invalid symbol name"
@@ -17751,9 +17750,9 @@ msgid "Expecting CELL or BLOCK"
 msgstr ""
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "No se ha encontrado el símbolo."
+msgstr "Símbolo '%s.asy' no encontrado"
 
 #: eeschema/sch_reference_list.cpp:674
 #, c-format
@@ -19333,9 +19332,9 @@ msgid " (amplitude)"
 msgstr " (amplitud)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Fourier Analysis of %s"
-msgstr "Propiedades de %s (alias de %s)"
+msgstr "Análisis de Fourier de %s"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 msgid "Fourier Analyses of Multiple Signals"
@@ -19713,16 +19712,16 @@ msgstr ""
 "unidad %c."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
+"<b>El círculo gráfico tiene radio = 0</b> en la ubicación <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
+"<b>El rectángulo gráfico tiene tamaño 0</b> en la ubicación <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
 #, fuzzy
@@ -19813,10 +19812,11 @@ msgstr ""
 "Administrar Bibliotecas de Símbolos para migrar al formato actual."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:844
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
 msgstr ""
-"El símbolo %s se deriva de %s. Los gráficos de símbolos no se podrán editar."
+"El símbolo %s es un símbolo derivado.  Los gráficos de símbolos no serán "
+"editables."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:922
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:973
@@ -19925,9 +19925,9 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Se ha modificado el símbolo. ¿Desea guardar los cambios?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Derivar del símbolo:"
+msgstr "Derivado del símbolo '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:387
 #, fuzzy
@@ -20330,9 +20330,9 @@ msgid "Add field '%s' with value '%s'."
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field '%s.'"
-msgstr "Eliminar campo"
+msgstr "Eliminar campo '%s.'"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -21904,14 +21904,14 @@ msgstr "Añadir página"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1855
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "Añadir bus"
+msgstr "Añadir %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1910
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "Opciones de dibujo"
+msgstr "Dibujar %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2041
 msgid "Press <ESC> to cancel sheet creation."
@@ -24551,9 +24551,9 @@ msgid "PCM Updates Available"
 msgstr "Actualizaciones de paquetes disponibles"
 
 #: kicad/kicad_manager_frame.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "No hay actualizaciones de paquetes disponibles"
+msgstr "%d actualizaciones de paquetes disponibles"
 
 #: kicad/kicad_manager_frame.cpp:740
 #, fuzzy
@@ -25176,7 +25176,7 @@ msgstr "Paquete %s desinstalado"
 #: kicad/pcm/pcm_task_manager.cpp:661
 #, fuzzy, c-format
 msgid "%d out of %d operations failed."
-msgstr "Error al escribir en el archivo."
+msgstr "%s de %d operaciones fallaron."
 
 #: kicad/pcm/pcm_task_manager.cpp:668
 #, fuzzy
@@ -25443,9 +25443,9 @@ msgid "Failed to push project"
 msgstr "Imposible encontrar el componente"
 
 #: kicad/project_tree_pane.cpp:1760
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Fallo al cargar '%s'."
+msgstr "Error al buscar la rama '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1772
 #, fuzzy, c-format
@@ -27206,9 +27206,9 @@ msgid "Exact"
 msgstr "Exacto"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect required resistance value: %s"
-msgstr "Valor del tamaño de redondeo incorrecto"
+msgstr "Valor de resistencia requerido incorrecto: %s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
@@ -31901,9 +31901,9 @@ msgid "'%s' found"
 msgstr "'%s' encontrado"
 
 #: pcbnew/dialogs/dialog_find.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Hit(s): %d / %zu"
-msgstr "Coincidencia(s): %ld / %lu"
+msgstr "Coincidencia(s): %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -32762,9 +32762,9 @@ msgid "Buried vias:"
 msgstr "Vías enterradas:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid "Generators A (%s)"
-msgstr "Archivos del generador:"
+msgstr "Generadores A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
@@ -35803,22 +35803,22 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text thickness is too large.\n"
 "It will be truncated to %s"
 msgstr ""
-"El grosor del texto es demasiado grande para el tamaño del texto.\n"
+"%s: El grosor del texto es demasiado grande.\n"
 "Será recortará a %s."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:428
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text thickness is too small.\n"
 "It will be truncated to %s"
 msgstr ""
-"El grosor del texto es demasiado grande para el tamaño del texto.\n"
+"%s: El grosor del texto es demasiado grande.\n"
 "Será recortará a %s."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:476
@@ -35845,9 +35845,9 @@ msgid "Default properties for new graphic items:"
 msgstr "Propiedades por defecto para nuevos elementos gráficos:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Polilínea, %d puntos"
+msgstr "carpeta con %s archivos"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:570
 #, c-format
@@ -38590,30 +38590,30 @@ msgid "Pad %s"
 msgstr "Pad %s\t"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "%s has clearance override."
-msgstr "Margen de pad anulado."
+msgstr "%s tiene una anulación de separación."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder mask expansion override."
-msgstr "Expansión de la máscara de soldadura sobreescrita."
+msgstr "%s tiene anulación de expansión de máscara de soldadura."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:204
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder paste clearance override."
-msgstr "Margen absoluto de la pasta de soldadura sobreescrito."
+msgstr "%s tiene anulación de separación de soldadura en pasta."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone connection override."
-msgstr "Conexión de zona anulada."
+msgstr "%s tiene anulación de conexión de zona."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief gap override."
-msgstr "Brecha de alivio térmico %s: %s."
+msgstr "%s tiene anulación de brecha de alivio térmico."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:213
 #, fuzzy, c-format
@@ -38626,9 +38626,9 @@ msgid "%s has thermal relief spoke angle override."
 msgstr "Resuelto el ancho de los radios de alivio térmico: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone knockout setting override."
-msgstr "Conexión de zona anulada."
+msgstr "%s tiene anulación de configuración de exclusión de zona."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:228
 #, fuzzy, c-format
@@ -38641,9 +38641,9 @@ msgid "%s position differs."
 msgstr "%s difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "%s has different numbers."
-msgstr "Los pads con números diferentes se superponen"
+msgstr "%s tiene números diferentes."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:255
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
@@ -38662,14 +38662,14 @@ msgid "%s pad type differs."
 msgstr "%s difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "%s fabrication property differs."
-msgstr "Conexión de pad %s: %s."
+msgstr "La propiedad de fabricación de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s orientation differs."
-msgstr "El recuento de áreas de regla difiere."
+msgstr "La orientación de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:274
 #, fuzzy, c-format
@@ -38692,9 +38692,9 @@ msgid "%s chamfered corners differ."
 msgstr "%s difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:301
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs."
-msgstr "Conexión de pad %s: %s."
+msgstr "La forma %s desplazada del agujero es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:304
 #, fuzzy, c-format
@@ -38737,14 +38737,15 @@ msgid "%s keep-out property differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out copper fill setting differs."
-msgstr "Área restringida para zonas de cobre"
+msgstr ""
+"La configuración de %s para mantener fuera el relleno de cobre es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "La configuración de exentar los requerimientos de patio es diferente."
+msgstr "La configuración para mantener fuera las huellas de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:443
 #, c-format
@@ -38762,9 +38763,9 @@ msgid "%s keep out vias setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection property differs."
-msgstr "Conexión de pad %s: %s."
+msgstr "La propiedad de conexión del pad de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:455
 #, fuzzy, c-format
@@ -38772,9 +38773,9 @@ msgid "%s local clearance differs."
 msgstr "Margen resuelto: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap differs."
-msgstr "Brecha de alivio térmico %s: %s."
+msgstr "La brecha de alivio térmico de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
 #, fuzzy, c-format
@@ -38782,9 +38783,9 @@ msgid "%s thermal relief spoke width differs."
 msgstr "Resuelto el ancho de los radios de alivio térmico: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness differs."
-msgstr "%s espesor mínimo: %s."
+msgstr "%s espesor mínimo difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:465
 #, c-format
