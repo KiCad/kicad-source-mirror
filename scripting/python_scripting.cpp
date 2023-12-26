@@ -29,9 +29,11 @@
 
 #include <python_scripting.h>
 
+#undef pid_t
+#include <pybind11/embed.h>
+
 #include <cstdlib>
 #include <cstring>
-#include <Python.h>
 #include <string>
 
 #include <eda_base_frame.h>

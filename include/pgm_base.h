@@ -40,9 +40,6 @@
 #include <wx/filename.h>
 #include <wx/snglinst.h>
 
-#undef pid_t
-#include <pybind11/embed.h>
-
 class wxApp;
 class wxMenu;
 class wxWindow;
