@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-26 08:38+0000\n"
+"PO-Revision-Date: 2023-12-26 21:27+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -45204,9 +45204,8 @@ msgid "Sketch Graphic Items"
 msgstr "Obrys &spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:1408
-#, fuzzy
 msgid "Show graphic items in outline mode"
-msgstr "Zobrazit pouze obrys grafických prvků"
+msgstr "Zobrazit grafické prvky v režimu obrysu"
 
 #: pcbnew/tools/pcb_actions.cpp:1414
 msgid "Sketch Text Items"
@@ -45218,9 +45217,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Zobrazit texty v režimu čáry"
 
 #: pcbnew/tools/pcb_actions.cpp:1421
-#, fuzzy
 msgid "Show Pad Numbers"
-msgstr "Zobrazit čísla vývodů"
+msgstr "Zobrazit čísla plošek"
 
 #: pcbnew/tools/pcb_actions.cpp:1428
 msgid "Draw Zone Fills"
@@ -45261,7 +45259,6 @@ msgid "Switch to Component (F.Cu) layer"
 msgstr "Přepnout na vrstvu součástek (F.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1528
-#, fuzzy
 msgid "Switch to Inner Layer 1"
 msgstr "Přepnout na vnitřní vrstvu 1"
 
@@ -45270,7 +45267,6 @@ msgid "Switch to Inner layer 1"
 msgstr "Přepnout na vnitřní vrstvu 1"
 
 #: pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Switch to Inner Layer 2"
 msgstr "Přepnout na vnitřní vrstvu 2"
 
@@ -45279,7 +45275,6 @@ msgid "Switch to Inner layer 2"
 msgstr "Přepnout na vnitřní vrstvu 2"
 
 #: pcbnew/tools/pcb_actions.cpp:1548
-#, fuzzy
 msgid "Switch to Inner Layer 3"
 msgstr "Přepnout na vnitřní vrstvu 3"
 
@@ -45288,7 +45283,6 @@ msgid "Switch to Inner layer 3"
 msgstr "Přepnout na vnitřní vrstvu 3"
 
 #: pcbnew/tools/pcb_actions.cpp:1558
-#, fuzzy
 msgid "Switch to Inner Layer 4"
 msgstr "Přepnout na vnitřní vrstvu 4"
 
@@ -45297,7 +45291,6 @@ msgid "Switch to Inner layer 4"
 msgstr "Přepnout na vnitřní vrstvu 4"
 
 #: pcbnew/tools/pcb_actions.cpp:1568
-#, fuzzy
 msgid "Switch to Inner Layer 5"
 msgstr "Přepnout na vnitřní vrstvu 5"
 
@@ -45306,7 +45299,6 @@ msgid "Switch to Inner layer 5"
 msgstr "Přepnout na vnitřní vrstvu 5"
 
 #: pcbnew/tools/pcb_actions.cpp:1578
-#, fuzzy
 msgid "Switch to Inner Layer 6"
 msgstr "Přepnout na vnitřní vrstvu 6"
 
@@ -45315,7 +45307,6 @@ msgid "Switch to Inner layer 6"
 msgstr "Přepnout na vnitřní vrstvu 6"
 
 #: pcbnew/tools/pcb_actions.cpp:1587
-#, fuzzy
 msgid "Switch to Inner Layer 7"
 msgstr "Přepnout na vnitřní vrstvu 7"
 
@@ -45324,7 +45315,6 @@ msgid "Switch to Inner layer 7"
 msgstr "Přepnout na vnitřní vrstvu 7"
 
 #: pcbnew/tools/pcb_actions.cpp:1596
-#, fuzzy
 msgid "Switch to Inner Layer 8"
 msgstr "Přepnout na vnitřní vrstvu 8"
 
@@ -45333,7 +45323,6 @@ msgid "Switch to Inner layer 8"
 msgstr "Přepnout na vnitřní vrstvu 8"
 
 #: pcbnew/tools/pcb_actions.cpp:1605
-#, fuzzy
 msgid "Switch to Inner Layer 9"
 msgstr "Přepnout na vnitřní vrstvu 9"
 
@@ -45342,7 +45331,6 @@ msgid "Switch to Inner layer 9"
 msgstr "Přepnout na vnitřní vrstvu 9"
 
 #: pcbnew/tools/pcb_actions.cpp:1614
-#, fuzzy
 msgid "Switch to Inner Layer 10"
 msgstr "Přepnout na vnitřní vrstvu 10"
 
@@ -45351,7 +45339,6 @@ msgid "Switch to Inner layer 10"
 msgstr "Přepnout na vnitřní vrstvu 10"
 
 #: pcbnew/tools/pcb_actions.cpp:1623
-#, fuzzy
 msgid "Switch to Inner Layer 11"
 msgstr "Přepnout na vnitřní vrstvu 11"
 
@@ -45360,7 +45347,6 @@ msgid "Switch to Inner layer 11"
 msgstr "Přepnout na vnitřní vrstvu 11"
 
 #: pcbnew/tools/pcb_actions.cpp:1632
-#, fuzzy
 msgid "Switch to Inner Layer 12"
 msgstr "Přepnout na vnitřní vrstvu 12"
 
@@ -45369,7 +45355,6 @@ msgid "Switch to Inner layer 12"
 msgstr "Přepnout na vnitřní vrstvu 12"
 
 #: pcbnew/tools/pcb_actions.cpp:1641
-#, fuzzy
 msgid "Switch to Inner Layer 13"
 msgstr "Přepnout na vnitřní vrstvu 13"
 
@@ -45378,7 +45363,6 @@ msgid "Switch to Inner layer 13"
 msgstr "Přepnout na vnitřní vrstvu 13"
 
 #: pcbnew/tools/pcb_actions.cpp:1650
-#, fuzzy
 msgid "Switch to Inner Layer 14"
 msgstr "Přepnout na vnitřní vrstvu 14"
 
@@ -45387,7 +45371,6 @@ msgid "Switch to Inner layer 14"
 msgstr "Přepnout na vnitřní vrstvu 14"
 
 #: pcbnew/tools/pcb_actions.cpp:1659
-#, fuzzy
 msgid "Switch to Inner Layer 15"
 msgstr "Přepnout na vnitřní vrstvu 15"
 
@@ -45396,7 +45379,6 @@ msgid "Switch to Inner layer 15"
 msgstr "Přepnout na vnitřní vrstvu 15"
 
 #: pcbnew/tools/pcb_actions.cpp:1668
-#, fuzzy
 msgid "Switch to Inner Layer 16"
 msgstr "Přepnout na vnitřní vrstvu 16"
 
@@ -45405,7 +45387,6 @@ msgid "Switch to Inner layer 16"
 msgstr "Přepnout na vnitřní vrstvu 16"
 
 #: pcbnew/tools/pcb_actions.cpp:1677
-#, fuzzy
 msgid "Switch to Inner Layer 17"
 msgstr "Přepnout na vnitřní vrstvu 17"
 
@@ -45414,16 +45395,14 @@ msgid "Switch to Inner layer 17"
 msgstr "Přepnout na vnitřní vrstvu 17"
 
 #: pcbnew/tools/pcb_actions.cpp:1686
-#, fuzzy
 msgid "Switch to Inner Layer 18"
-msgstr "Přepnout na vnitřní vrstvu 19"
+msgstr "Přepnout na vnitřní vrstvu 18"
 
 #: pcbnew/tools/pcb_actions.cpp:1687
 msgid "Switch to Inner layer 18"
 msgstr "Přepnout na vnitřní vrstvu 19"
 
 #: pcbnew/tools/pcb_actions.cpp:1695
-#, fuzzy
 msgid "Switch to Inner Layer 19"
 msgstr "Přepnout na vnitřní vrstvu 19"
 
@@ -45432,7 +45411,6 @@ msgid "Switch to Inner layer 19"
 msgstr "Přepnout na vnitřní vrstvu 19"
 
 #: pcbnew/tools/pcb_actions.cpp:1704
-#, fuzzy
 msgid "Switch to Inner Layer 20"
 msgstr "Přepnout na vnitřní vrstvu 20"
 
@@ -45441,7 +45419,6 @@ msgid "Switch to Inner layer 20"
 msgstr "Přepnout na vnitřní vrstvu 20"
 
 #: pcbnew/tools/pcb_actions.cpp:1713
-#, fuzzy
 msgid "Switch to Inner Layer 21"
 msgstr "Přepnout na vnitřní vrstvu 21"
 
@@ -45450,7 +45427,6 @@ msgid "Switch to Inner layer 21"
 msgstr "Přepnout na vnitřní vrstvu 21"
 
 #: pcbnew/tools/pcb_actions.cpp:1722
-#, fuzzy
 msgid "Switch to Inner Layer 22"
 msgstr "Přepnout na vnitřní vrstvu 22"
 
@@ -45459,7 +45435,6 @@ msgid "Switch to Inner layer 22"
 msgstr "Přepnout na vnitřní vrstvu 22"
 
 #: pcbnew/tools/pcb_actions.cpp:1731
-#, fuzzy
 msgid "Switch to Inner Layer 23"
 msgstr "Přepnout na vnitřní vrstvu 23"
 
@@ -45468,7 +45443,6 @@ msgid "Switch to Inner layer 23"
 msgstr "Přepnout na vnitřní vrstvu 23"
 
 #: pcbnew/tools/pcb_actions.cpp:1740
-#, fuzzy
 msgid "Switch to Inner Layer 24"
 msgstr "Přepnout na vnitřní vrstvu 24"
 
@@ -45477,7 +45451,6 @@ msgid "Switch to Inner layer 24"
 msgstr "Přepnout na vnitřní vrstvu 24"
 
 #: pcbnew/tools/pcb_actions.cpp:1749
-#, fuzzy
 msgid "Switch to Inner Layer 25"
 msgstr "Přepnout na vnitřní vrstvu 25"
 
@@ -45486,7 +45459,6 @@ msgid "Switch to Inner layer 25"
 msgstr "Přepnout na vnitřní vrstvu 25"
 
 #: pcbnew/tools/pcb_actions.cpp:1758
-#, fuzzy
 msgid "Switch to Inner Layer 26"
 msgstr "Přepnout na vnitřní vrstvu 26"
 
@@ -45495,7 +45467,6 @@ msgid "Switch to Inner layer 26"
 msgstr "Přepnout na vnitřní vrstvu 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1767
-#, fuzzy
 msgid "Switch to Inner Layer 27"
 msgstr "Přepnout na vnitřní vrstvu 27"
 
@@ -45504,7 +45475,6 @@ msgid "Switch to Inner layer 27"
 msgstr "Přepnout na vnitřní vrstvu 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1776
-#, fuzzy
 msgid "Switch to Inner Layer 28"
 msgstr "Přepnout na vnitřní vrstvu 28"
 
@@ -45513,7 +45483,6 @@ msgid "Switch to Inner layer 28"
 msgstr "Přepnout na vnitřní vrstvu 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1785
-#, fuzzy
 msgid "Switch to Inner Layer 29"
 msgstr "Přepnout na vnitřní vrstvu 29"
 
@@ -45522,7 +45491,6 @@ msgid "Switch to Inner layer 29"
 msgstr "Přepnout na vnitřní vrstvu 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1794
-#, fuzzy
 msgid "Switch to Inner Layer 30"
 msgstr "Přepnout na vnitřní vrstvu 30"
 
@@ -45531,7 +45499,6 @@ msgid "Switch to Inner layer 30"
 msgstr "Přepnout na vnitřní vrstvu 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1805
-#, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
 msgstr "Přepnout na vrstvu mědi (B.Cu)"
 
@@ -45552,9 +45519,8 @@ msgid "Toggle Layer"
 msgstr "Přepnout vrstvu"
 
 #: pcbnew/tools/pcb_actions.cpp:1834
-#, fuzzy
 msgid "Switch between layers in active layer pair"
-msgstr "Přepínání mezi palci a milimetry"
+msgstr "Přepínání mezi vrstvami v aktivním páru vrstev"
 
 #: pcbnew/tools/pcb_actions.cpp:1843
 msgid "Increase Layer Opacity"
@@ -45581,9 +45547,8 @@ msgid "Shows board statistics"
 msgstr "Zobrazit statistiky desky"
 
 #: pcbnew/tools/pcb_actions.cpp:1872
-#, fuzzy
 msgid "Clearance Resolution"
-msgstr "Rozlišení izolační mezery..."
+msgstr "Rozlišení izolační mezery"
 
 #: pcbnew/tools/pcb_actions.cpp:1873
 #, fuzzy
@@ -45592,24 +45557,20 @@ msgid ""
 msgstr "Přesune vybranou položku(y)"
 
 #: pcbnew/tools/pcb_actions.cpp:1879
-#, fuzzy
 msgid "Constraints Resolution"
-msgstr "Rozlišení omezení..."
+msgstr "Rozlišení omezení"
 
 #: pcbnew/tools/pcb_actions.cpp:1880
-#, fuzzy
 msgid "Show constraints resolution for the selected object"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Zobrazit rozlišení omezení pro vybraný objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:1887
-#, fuzzy
 msgid "Show differences between board footprint and its library equivalent"
-msgstr "Kontrola pouzder desky proti knihovně..."
+msgstr "Zobrazit rozdíly mezi pouzdrem desky a jejím ekvivalentem knihovny"
 
 #: pcbnew/tools/pcb_actions.cpp:1893
-#, fuzzy
 msgid "Show Footprint Associations"
-msgstr "Exportovat přiřazení pouzder"
+msgstr "Zobrazit přiřazení pouzdra"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
 #, fuzzy
@@ -45772,7 +45733,7 @@ msgstr "Zruší výběr všech spojů & prokovů patřící do stejné sítě."
 #: pcbnew/tools/pcb_actions.cpp:2126
 #, fuzzy
 msgid "Select All Unconnected Footprints"
-msgstr "Vybírá všechny spoje a průchodky."
+msgstr "Vybrat všechny nespojené pouzdra"
 
 #: pcbnew/tools/pcb_actions.cpp:2127
 #, fuzzy
