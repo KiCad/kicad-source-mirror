@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-25 13:06+0000\n"
+"PO-Revision-Date: 2023-12-26 08:38+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -12679,7 +12679,6 @@ msgid "Dotted current/phase"
 msgstr "점선 전류/위상"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
-#, fuzzy
 msgid "Margins:"
 msgstr "마진:"
 
@@ -19960,7 +19959,7 @@ msgstr "'%s' 필드를 '%s' 값으로 추가합니다."
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
 msgid "Delete field '%s.'"
-msgstr "'%s' 필드 삭제."
+msgstr "'%s.' 필드 삭제"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -20054,14 +20053,12 @@ msgid "Create a new symbol"
 msgstr "새로운 심볼 생성"
 
 #: eeschema/tools/ee_actions.cpp:175
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "기존 심볼에서 파생:"
+msgstr "기존 심볼에서 파생"
 
 #: eeschema/tools/ee_actions.cpp:176
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "기존 심볼에서 파생:"
+msgstr "기존 심볼에서 파생된 새 심볼 만들기"
 
 #: eeschema/tools/ee_actions.cpp:182
 msgid "Edit Symbol"
@@ -20940,18 +20937,16 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "여러 포맷 중 하나로 네트 리스트가 포함된 파일 내보내기"
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "BOM:"
+msgstr "BOM 생성..."
 
 #: eeschema/tools/ee_actions.cpp:1052
 msgid "Generate a bill of materials for the current schematic"
-msgstr "현재 회로도의 BOM 생성"
+msgstr "현재 회로도에 대한 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "BOM:"
+msgstr "기존 BOM 생성..."
 
 #: eeschema/tools/ee_actions.cpp:1059
 #, fuzzy
@@ -20960,9 +20955,8 @@ msgid ""
 msgstr "회로도 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:1065
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "BOM:"
+msgstr "BOM 생성(외부)..."
 
 #: eeschema/tools/ee_actions.cpp:1066
 #, fuzzy
@@ -21390,9 +21384,8 @@ msgid "Summary"
 msgstr "요약"
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
-#, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "회로도는 읽기 전용입니다."
+msgstr "회로도와 라이브러리의 차이점:"
 
 #: eeschema/tools/ee_inspection_tool.cpp:281
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
@@ -21653,9 +21646,8 @@ msgstr ""
 "니까?"
 
 #: eeschema/tools/sch_editor_control.cpp:340
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "새 라이브러리를 참조하도록 회로도의 심볼을 업데이트하시겠습니까?"
+msgstr "라이브러리 회로도에 전원 기호를 포함할까요?"
 
 #: eeschema/tools/sch_editor_control.cpp:405
 #, c-format
@@ -21947,14 +21939,12 @@ msgid "Offset Y:"
 msgstr "Y 오프셋:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotate counterclockwise:"
-msgstr "반시계 방향 회전"
+msgstr "반시계 방향으로 회전:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "Active layer"
-msgstr "비활성 레이어:"
+msgstr "활성레이어"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -23173,23 +23163,20 @@ msgid "Failed to output data"
 msgstr "데이터 출력에 실패하였습니다"
 
 #: kicad/cli/command.cpp:126
-#, fuzzy
 msgid "Input directory"
-msgstr "출력 디렉토리:"
+msgstr "입력 디렉토리"
 
 #: kicad/cli/command.cpp:132
 msgid "Input file"
 msgstr "입력 파일"
 
 #: kicad/cli/command.cpp:143
-#, fuzzy
 msgid "Output directory"
-msgstr "출력 디렉토리:"
+msgstr "출력 디렉토리"
 
 #: kicad/cli/command.cpp:150
-#, fuzzy
 msgid "Output file"
-msgstr "출력 파일:"
+msgstr "출력 파일"
 
 #: kicad/cli/command.cpp:163
 msgid ""
@@ -23218,9 +23205,8 @@ msgid "Footprint and Footprint Libraries"
 msgstr "풋프린트 라이브러리 불러오는 중"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
-#, fuzzy
 msgid "Export utilities (svg)"
-msgstr "내보내기 단위:"
+msgstr "유틸리티 내보내기(svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
 #, fuzzy
@@ -23360,9 +23346,8 @@ msgstr "배선 없음"
 
 #: kicad/cli/command_pcb_export_3d.cpp:115
 #: pcbnew/dialogs/dialog_export_step_base.cpp:165
-#, fuzzy
 msgid "Export zones"
-msgstr "내보내기 단위:"
+msgstr "내보내기 구역"
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Minimum distance between points to treat them as separate ones"
@@ -23747,9 +23732,8 @@ msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr "내보내기 유틸리티(네트리스트, PDF, BOM 등)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "BOM:"
+msgstr "부품 명세서(BOM) 생성"
 
 #: kicad/cli/command_sch_export_bom.cpp:177
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -23793,9 +23777,8 @@ msgstr ""
 "함"
 
 #: kicad/cli/command_sch_export_plot.cpp:103
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "페이지 크기:"
+msgstr "펜 크기 [mm]"
 
 #: kicad/cli/command_sch_export_plot.cpp:109
 #, fuzzy
@@ -25894,9 +25877,8 @@ msgid "Lines width"
 msgstr "선 두께"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "최소 클리어런스:"
+msgstr "최소 간격"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 #, fuzzy
@@ -26122,9 +26104,8 @@ msgid "Ampacity:"
 msgstr "전류 용량:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Current density"
-msgstr "현재 키:"
+msgstr "현재 밀도"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
 #, fuzzy
@@ -26319,18 +26300,16 @@ msgid "Compute the clearance and creepage distances"
 msgstr "간격 및 연면 거리 계산하기"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "전압"
+msgstr "RMS 전압:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
 msgstr "예상 RMS 전압."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "과도 노이즈"
+msgstr "과도 과전압:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -26373,9 +26352,8 @@ msgstr ""
 "비교적 긴 기간의 이벤트."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "텍스트 방향"
+msgstr "단열재 종류:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -26521,9 +26499,8 @@ msgid "Clearance:"
 msgstr "클리어런스:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
-#, fuzzy
 msgid "Creepage:"
-msgstr "가운데"
+msgstr "연면거리:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
 #, fuzzy
@@ -26790,9 +26767,8 @@ msgid "Threshold voltage:"
 msgstr "임계 전압:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "재료"
+msgstr "재료 이름:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 #, fuzzy
@@ -28213,14 +28189,12 @@ msgid "Enable Teardrops"
 msgstr "눈물 방울 추가"
 
 #: pcbnew/board_connected_item.cpp:243
-#, fuzzy
 msgid "Best Length Ratio"
-msgstr "최적 길이:"
+msgstr "최적 길이 비율"
 
 #: pcbnew/board_connected_item.cpp:250
-#, fuzzy
 msgid "Max Length"
-msgstr "최대 길이:"
+msgstr "최대 길이"
 
 #: pcbnew/board_connected_item.cpp:256
 #, fuzzy
@@ -28228,14 +28202,12 @@ msgid "Best Width Ratio"
 msgstr "텍스트 너비"
 
 #: pcbnew/board_connected_item.cpp:263
-#, fuzzy
 msgid "Max Width"
-msgstr "최대 너비:"
+msgstr "최대 너비"
 
 #: pcbnew/board_connected_item.cpp:269
-#, fuzzy
 msgid "Curve Points"
-msgstr "곡선 점:"
+msgstr "곡선 점"
 
 #: pcbnew/board_connected_item.cpp:275
 #, fuzzy
@@ -28248,9 +28220,8 @@ msgid "Allow Teardrops To Span Two Tracks"
 msgstr "티어 드롭이 두 트랙 세그먼트에 걸쳐 있도록 허용"
 
 #: pcbnew/board_connected_item.cpp:287
-#, fuzzy
 msgid "Max Width Ratio"
-msgstr "최대 너비:"
+msgstr "최대 너비 비율"
 
 #: pcbnew/board_item.cpp:125
 msgid "all copper layers"
@@ -29555,9 +29526,8 @@ msgstr "보드 윤곽선의 불연속성 수정"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
-#, fuzzy
 msgid "Tolerance:"
-msgstr "유격"
+msgstr "허용오차:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -30202,14 +30172,12 @@ msgstr ""
 "생성할 원형 영역을 정의"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
-msgstr "가운데"
+msgstr "중앙 위치 X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
-#, fuzzy
 msgid "Center pos Y:"
-msgstr "가운데"
+msgstr "중앙 위치 Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:365
 msgid ""
@@ -30260,9 +30228,8 @@ msgid "How many items in the array."
 msgstr "배열의 항목 수."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:451
-#, fuzzy
 msgid "Rotate items:"
-msgstr "회전 -"
+msgstr "항목 회전:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:457
 msgid ""
@@ -30662,9 +30629,8 @@ msgid "Run Inspect > Constraints Resolution"
 msgstr "제약 해결..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
-#, fuzzy
 msgid "Run Inspect > Compare Footprint with Library"
-msgstr "라이브러리 ID로 풋프린트 변경:"
+msgstr "검사 실행 > 라이브러리와 풋프린트 비교"
 
 #: pcbnew/dialogs/dialog_drc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:655
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -30739,9 +30705,8 @@ msgid "First pad number:"
 msgstr "첫 번째 패드 번호:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:54
-#, fuzzy
 msgid "Numbering step:"
-msgstr "번호 매기기"
+msgstr "번호 지정 단계:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:50
 msgid "Pad Enumeration Settings"
@@ -30907,9 +30872,8 @@ msgid "The number of values following the decimal separator"
 msgstr "소수 구분자 뒤에 오는 값의 수"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
-#, fuzzy
 msgid "Version:"
-msgstr "버전"
+msgstr "버전:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
 #, fuzzy
@@ -30926,9 +30890,8 @@ msgid "BOM Columns"
 msgstr "열"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
-#, fuzzy
 msgid "Internal ID:"
-msgstr "내부 레이어"
+msgstr "내부 ID:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:103
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:111
@@ -30945,9 +30908,8 @@ msgid "Generate Unique"
 msgstr "경고 생성"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "제조업체 선택"
+msgstr "제조업체 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
@@ -30962,9 +30924,8 @@ msgid "Omit"
 msgstr "네트 생략"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
-#, fuzzy
 msgid "Manufacturer:"
-msgstr "제조업체 선택"
+msgstr "제조업체:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
@@ -30975,9 +30936,8 @@ msgid "Column containing the distributor part number"
 msgstr "유통업체 부품 번호가 포함된 열"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#, fuzzy
 msgid "Distributor:"
-msgstr "정렬/분포"
+msgstr "유통업체:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.h:81
 #, fuzzy
@@ -31370,9 +31330,8 @@ msgid "Footprint 3D model path:"
 msgstr "풋프린트 3D 모델 경로:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "좌표 원점 옵션:"
+msgstr "좌표 원점 옵션"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -31520,18 +31479,16 @@ msgid "Footprint: "
 msgstr "풋프린트: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Symbol:"
-msgstr "심볼"
+msgstr "심볼:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
 msgid "Sheet: "
 msgstr "시트: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "드로우 설정:"
+msgstr "라이브러리 연결"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
 #, fuzzy
@@ -32599,9 +32556,8 @@ msgstr "곡선"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:523
-#, fuzzy
 msgid "Points:"
-msgstr "포인트"
+msgstr "포인트:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 #, fuzzy
@@ -32756,14 +32712,12 @@ msgid "Filter vias by size:"
 msgstr "네트 항목으로 필터링:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "Via size:"
-msgstr "비아 크기"
+msgstr "비아 크기:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "Set to net class / custom rule values"
-msgstr "네트 클래스 값으로 설정:"
+msgstr "네트 클래스/사용자 지정 값으로 설정"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:83
 msgid "Set Track and Via Properties"
@@ -34255,9 +34209,8 @@ msgstr ""
 "잘 모르겠다면 4번을 선택하세요."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:410
-#, fuzzy
 msgid "Generate property popups for front footprints"
-msgstr "새 풋ㅍ프린트에 대한 기본 텍스트 항목:"
+msgstr "앞면 풋프린트에 대한 속성 팝업 생성"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:413
 #, fuzzy
@@ -34893,14 +34846,12 @@ msgstr ""
 "붙어 있는 패드 또는 존이 변경되면 이 비아의 네트 또한 자동으로 변경됩니다"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:76
-#, fuzzy
 msgid "Start X:"
-msgstr "시작 X"
+msgstr "시작 X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:94
-#, fuzzy
 msgid "End X:"
-msgstr "끝 X"
+msgstr "끝 X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:120
 #, fuzzy
@@ -35054,9 +35005,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:373
-#, fuzzy
 msgid "Corner style:"
-msgstr "모서리 스타일"
+msgstr "모서리 스타일:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -35160,9 +35110,8 @@ msgid "Keep endpoints or direction of starting point"
 msgstr "끝점 또는 시작점 방향 유지"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
-#, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "배선 코너 모드"
+msgstr "마우스 드래그 모드 배선:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
@@ -35426,9 +35375,8 @@ msgid "3D Model(s)"
 msgstr "3D 모델"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:49
-#, fuzzy
 msgid "Net names:"
-msgstr "네트 이름"
+msgstr "네트 이름:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
@@ -37027,9 +36975,8 @@ msgstr "새 그래픽 항목에 대한 기본 속성:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:38
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:218
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:398
-#, fuzzy
 msgid "Edges:"
-msgstr "Pcb_Edges"
+msgstr "가장자리:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:42
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:222
@@ -37066,9 +37013,8 @@ msgid "Properties for track-to-track teardrops:"
 msgstr "트랙 간 티어드롭의 속성:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
-#, fuzzy
 msgid "Maximum track width"
-msgstr "최소 배선폭:"
+msgstr "최대 배선폭"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
 #, fuzzy
@@ -38318,9 +38264,8 @@ msgid "Footprint keywords differ."
 msgstr "풋프린트 순서"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
-#, fuzzy
 msgid "Footprint types differ."
-msgstr "풋프린트 유형:"
+msgstr "풋프린트 유형이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:552
 #, fuzzy
@@ -38338,19 +38283,16 @@ msgid "Pad clearance overridden."
 msgstr "클리어런스 재정의"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:571
-#, fuzzy
 msgid "Solder mask expansion overridden."
-msgstr "솔더 마스크 확장:"
+msgstr "솔더 마스크 확장 재정의."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:573
-#, fuzzy
 msgid "Solder paste absolute clearance overridden."
-msgstr "솔더 페이스트의 절대 클리어런스:"
+msgstr "솔더 페이스트 절대 간격이 재정의됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:575
-#, fuzzy
 msgid "Solder paste relative clearance overridden."
-msgstr "솔더 페이스트의 상대 클리어런스:"
+msgstr "솔더 페이스트 상대 간격이 재정의됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:578
 #, fuzzy
@@ -39426,14 +39368,12 @@ msgid "Edit Tuning Pattern"
 msgstr "텍스트 편집기에서 편집"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1841
-#, fuzzy
 msgid "current skew"
-msgstr "현재 키:"
+msgstr "현재 왜곡도"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1843
-#, fuzzy
 msgid "current length"
-msgstr "타겟 길이:"
+msgstr "현재 길이"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1929
 #, fuzzy
@@ -39490,9 +39430,8 @@ msgid "Single track"
 msgstr "단일 페이지"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2283
-#, fuzzy
 msgid "Differential pair"
-msgstr "차동 쌍:"
+msgstr "차동 쌍"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2284
 #, fuzzy
@@ -39510,39 +39449,32 @@ msgid "Tuning Mode"
 msgstr "라인 모델"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2319
-#, fuzzy
 msgid "Min Amplitude"
-msgstr "최소 진폭 (Amin):"
+msgstr "최소 진폭"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2326
-#, fuzzy
 msgid "Max Amplitude"
-msgstr "최대 진폭 (Amax):"
+msgstr "최대 진폭"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2333
-#, fuzzy
 msgid "Initial Side"
-msgstr "초기 시간:"
+msgstr "초기 상태"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2339
-#, fuzzy
 msgid "Min Spacing"
-msgstr "최소 간격 (s):"
+msgstr "최소 간격"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2345
-#, fuzzy
 msgid "Corner Radius %"
-msgstr "모서리 반경:"
+msgstr "모서리 반경 %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2367
-#, fuzzy
 msgid "Target Length"
-msgstr "타겟 길이:"
+msgstr "타겟 길이"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2376
-#, fuzzy
 msgid "Target Skew"
-msgstr "타겟 스큐:"
+msgstr "대상 기울기"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2384
 #, fuzzy
@@ -39582,9 +39514,8 @@ msgid "Used when the DXF file has no unit set"
 msgstr "DXF 파일에 단위가 설정되지 않은 경우 사용"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:94
-#, fuzzy
 msgid "Place at:"
-msgstr "비아 설치 (V)"
+msgstr "위치:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:95
 #, fuzzy
@@ -39984,7 +39915,7 @@ msgstr "%s 심볼 관련성을 %s에서 %s(으)로 업데이트하였습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:391
 #, c-format
 msgid "Update %s fields."
-msgstr "%s 필드 업데이트"
+msgstr "%s 필드 업데이트."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:402
 #, c-format
@@ -39994,7 +39925,7 @@ msgstr "심볼에 없는 %s 풋프린트 필드 제거."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
 #, c-format
 msgid "Updated %s fields."
-msgstr "%s 필드 업데이트"
+msgstr "%s 필드 업데이트."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
 #, c-format
@@ -40692,9 +40623,8 @@ msgid "Marker (%s)"
 msgstr "마커 (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
-#, fuzzy
 msgid "Associated Layer"
-msgstr "비활성 레이어:"
+msgstr "연관 레이어"
 
 #: pcbnew/pcb_reference_image.cpp:358
 msgid "Greyscale"
@@ -40752,9 +40682,8 @@ msgid "Border Properties"
 msgstr "곡선 속성"
 
 #: pcbnew/pcb_textbox.cpp:688
-#, fuzzy
 msgid "Border Style"
-msgstr "테두리 스타일:"
+msgstr "테두리 스타일"
 
 #: pcbnew/pcb_track.cpp:139
 #, c-format
@@ -41050,9 +40979,8 @@ msgid "File not found: '%s'."
 msgstr "파일을 찾지 못했습니다: '%s'."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:272
-#, fuzzy
 msgid "No footprints in library"
-msgstr "새 풋프린트 라이브러리 ID:"
+msgstr "라이브러리에 풋프린트 없음"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:294
 #: pcbnew/plugins/altium/altium_pcb.cpp:651
@@ -42170,9 +42098,8 @@ msgstr ""
 "%s 레이어로 복구하시겠습니까?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1094
-#, fuzzy
 msgid "Undefined Layers Warning"
-msgstr "정의되지 않은 레이어:"
+msgstr "미정의 레이어 경고"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1213
 #, fuzzy, c-format
@@ -43839,9 +43766,8 @@ msgstr "모깍기 라인"
 #: pcbnew/tools/edit_tool.cpp:1194
 #: pcbnew/tools/item_modification_routine.cpp:173
 #: pcbnew/tools/pcb_actions.cpp:616
-#, fuzzy
 msgid "Chamfer Lines"
-msgstr "모따기 크기:"
+msgstr "모따기 선"
 
 #: pcbnew/tools/edit_tool.cpp:1194
 #, fuzzy
@@ -43872,14 +43798,12 @@ msgid "Heal Shapes"
 msgstr "전역 라벨 모양"
 
 #: pcbnew/tools/edit_tool.cpp:1472
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "유격"
+msgstr "공차 값:"
 
 #: pcbnew/tools/edit_tool.cpp:1509
-#, fuzzy
 msgid "Heal shapes"
-msgstr "구멍 모양:"
+msgstr "형상 복구"
 
 #: pcbnew/tools/edit_tool.cpp:2077 pcbnew/tools/pcb_actions.cpp:552
 msgid "Change Side / Flip"
@@ -43973,9 +43897,8 @@ msgid "Click on new member..."
 msgstr "새로운 멤버를 클릭하세요..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1197
-#, fuzzy
 msgid "Group Items"
-msgstr "그룹 멤버:"
+msgstr "그룹 항목"
 
 #: pcbnew/tools/group_tool.cpp:320 pcbnew/tools/pcb_actions.cpp:1204
 #, fuzzy
@@ -44002,9 +43925,8 @@ msgstr "일부 선을 모깎기할 수 없습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:240
 #: pcbnew/tools/pcb_actions.cpp:630
-#, fuzzy
 msgid "Extend Lines to Meet"
-msgstr "연장선 옵셋 :"
+msgstr "만날 선 연장"
 
 #: pcbnew/tools/item_modification_routine.cpp:248
 #, fuzzy
@@ -44191,9 +44113,8 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "그래픽 레이어에 기판 스택업 테이블 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:165
-#, fuzzy
 msgid "Add Reference Image"
-msgstr "참조 노드:"
+msgstr "참조 이미지 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid ""
@@ -44549,9 +44470,8 @@ msgid "Extend lines to meet each other"
 msgstr "서로 만나도록 선을 연장"
 
 #: pcbnew/tools/pcb_actions.cpp:636
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "다각형:"
+msgstr "다각형 병합"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
@@ -46080,9 +46000,8 @@ msgid "Rebuilds geometry of selected generator(s)"
 msgstr "선택한 생성기의 형상을 재구축"
 
 #: pcbnew/tools/pcb_actions.cpp:2455
-#, fuzzy
 msgid "Generators Manager"
-msgstr "생성기 별칭:"
+msgstr "생성기 관리자"
 
 #: pcbnew/tools/pcb_actions.cpp:2456
 msgid "Show a manager dialog for Generator objects"
@@ -46111,9 +46030,8 @@ msgid "Hidden"
 msgstr "숨겨진 텍스트"
 
 #: pcbnew/tools/pcb_control.cpp:351
-#, fuzzy
 msgid "Inactive Layer Display"
-msgstr "비활성 레이어:"
+msgstr "비활성 레이어 표시"
 
 #: pcbnew/tools/pcb_control.cpp:643
 msgid "Item locked."
@@ -46146,9 +46064,8 @@ msgid "Append Board"
 msgstr "보드 추가"
 
 #: pcbnew/tools/pcb_control.cpp:1403
-#, fuzzy
 msgid "Active Layer"
-msgstr "비활성 레이어:"
+msgstr "활성 레이어"
 
 #: pcbnew/tools/pcb_control.cpp:1404 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
@@ -47018,9 +46935,9 @@ msgid "%s"
 msgstr "%s"
 
 #: pcbnew/zone.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s, %s and %s"
+msgstr "%s, %s 와 %s"
 
 #: pcbnew/zone.cpp:628
 #, c-format
