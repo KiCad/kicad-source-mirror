@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-26 08:38+0000\n"
+"PO-Revision-Date: 2023-12-26 21:27+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5679,7 +5679,7 @@ msgstr "KiCad와 함께 설치된 프로젝트 템플릿이 포함된 디렉토�
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
-msgstr "선택적. 고유한 프로젝트 템플릿 폴더를 만들려면 정의할 수 있습니다."
+msgstr "선택사항. 고유한 프로젝트 템플릿 폴더를 만들려면 정의할 수 있습니다."
 
 #: common/env_vars.cpp:83
 msgid ""
@@ -23858,7 +23858,7 @@ msgstr "<h1>템플릿 선택기</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:254
 msgid "Select Templates Directory"
-msgstr "템플릿 폴더 선택"
+msgstr "템플릿 디렉토리 선택"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:24
 msgid "Folder:"
@@ -24734,7 +24734,7 @@ msgstr "작업 %d개 중 %d개가 초기화되었지만 성공하지 못했습�
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
-msgstr "템플릿 경로를 열 수 있습니다!"
+msgstr "템플릿 경로를 열 수 있음!"
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template!"
@@ -25078,16 +25078,15 @@ msgstr "새 빈 프로젝트 만들기"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
-msgstr "템플릿의 새 프로젝트..."
+msgstr "새 프로젝트 템플릿..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Create new project from template"
 msgstr "템플릿에서 새 프로젝트 만들기"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
-#, fuzzy
 msgid "Clone Project from Repository..."
-msgstr "템플릿의 새 프로젝트..."
+msgstr "저장소에서 프로젝트 복제..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
 #, fuzzy
@@ -25187,9 +25186,8 @@ msgstr ""
 "계속하시겠습니까?"
 
 #: kicad/tools/kicad_manager_control.cpp:150
-#, fuzzy
 msgid "Clone Project from Git Repository"
-msgstr "템플릿에서 새 프로젝트 만들기"
+msgstr "Git 저장소에서 프로젝트 복제하기"
 
 #: kicad/tools/kicad_manager_control.cpp:172
 #, fuzzy
@@ -25206,7 +25204,7 @@ msgstr "시스템 템플릿"
 
 #: kicad/tools/kicad_manager_control.cpp:229
 msgid "User Templates"
-msgstr "유저 템플릿"
+msgstr "사용자 템플릿"
 
 #: kicad/tools/kicad_manager_control.cpp:238
 msgid "No project template was selected.  Cannot generate new project."
@@ -41484,8 +41482,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 템플릿 '%s'은(는) 설정 'Allow in No Routing Areas' 이 활성화되어 있습"
-"니다. 이 설정은 KiCad에서 대응되지 않으며, 따라서 무시됩니다."
+"CADSTAR 템플릿 '%s'에 'Allow in No Routing Areas' 설정이 활성화되어 "
+"있습니다. 이 설정은 KiCad에 해당하는 설정이 없으므로 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1925
 #, c-format
@@ -41493,8 +41491,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 템플릿 '%s'은(는) 설정 'Box Isolated Pins' 이 활성화되어 있습니다. "
-"이 설정은 KiCad에서 대응되지 않으며, 따라서 무시됩니다."
+"CADSTAR 템플릿 '%s'에 'Box Isolated Pins' 설정이 활성화되어 있습니다. 이 "
+"설정은 KiCad에 해당하는 설정이 없으므로 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
 #, c-format
@@ -41502,8 +41500,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 템플릿 '%s'은(는) 설정 'Automatic Repour' 이 활성화되어 있습니다. 이 "
-"설정은 KiCad에서 대응되지 않으며, 따라서 무시됩니다."
+"CADSTAR 템플릿 '%s'에 'Automatic Repour' 설정이 활성화되어 있습니다. 이 "
+"설정은 KiCad에 해당하는 설정이 없으므로 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1944
 #, c-format
@@ -41512,8 +41510,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"CADSTAR 템플릿 '%s'은(는) 'Sliver Width'의 값이 0이 아닌 값으로 설정되어 있습"
-"니다. 이는 KiCad에서 대응되지 않으며, 따라서 무시됩니다."
+"CADSTAR 템플릿 '%s'에 'Sliver Width'설정에 0이 아닌 값이 정의되어 있습니다. "
+"이 설정은 KiCad에 해당하는 설정이 없으므로 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1954
 #, c-format
@@ -41535,9 +41533,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR 템플릿 '%s'은(는) 패드와 비아의 단열판에 대해 다른 설정을 가지고 있습"
-"니다. KiCad는 패드와 비아에 공통된 설정 하나만을 지원합니다. 패드의 설정이 공"
-"통 설정으로 반영됩니다."
+"CADSTAR 템플릿 '%s'에는 패드와 비아의 단열판에 대한 설정이 서로 다릅니다. "
+"KiCad는 패드와 비아에 공통된 하나의 설정만 지원합니다. 패드에 대한 설정이 "
+"적용되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2022
 #, c-format
