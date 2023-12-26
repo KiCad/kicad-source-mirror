@@ -568,8 +568,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->Refresh();
     }
 
-    if( grid )
-        delete grid;
+    delete grid;
 
     return 0;
 }

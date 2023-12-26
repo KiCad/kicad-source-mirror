@@ -1864,9 +1864,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayers()
         cu[cu.size()-1].m_number = B_Cu;
 
         for( unsigned i=0; i < cu.size()-1; ++i )
-        {
             cu[i].m_number = i;
-        }
 
         for( std::vector<LAYER>::const_iterator it = cu.begin(); it<cu.end();  ++it )
         {
@@ -3140,11 +3138,17 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
     {
         switch( token )
         {
-        case T_reference: text = std::make_unique<PCB_FIELD>( parentFP, REFERENCE_FIELD ); break;
+        case T_reference:
+            text = std::make_unique<PCB_FIELD>( parentFP, REFERENCE_FIELD );
+            break;
 
-        case T_value: text = std::make_unique<PCB_FIELD>( parentFP, VALUE_FIELD ); break;
+        case T_value:
+            text = std::make_unique<PCB_FIELD>( parentFP, VALUE_FIELD );
+            break;
 
-        case T_user: text = std::make_unique<PCB_TEXT>( parentFP ); break;
+        case T_user:
+            text = std::make_unique<PCB_TEXT>( parentFP );
+            break;
 
         default:
             THROW_IO_ERROR( wxString::Format( _( "Cannot handle footprint text type %s" ),
@@ -5693,12 +5697,14 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     switch( token )
                     {
                     case T_hatch:
-                        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN ); break;
+                        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
+                        break;
 
                     case T_segment: // deprecated, convert to polygons
                     case T_polygon:
                     default:
-                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); break;
+                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+                        break;
                     }
 
                     NeedRIGHT();
@@ -5790,8 +5796,10 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                 case T_radius:
                     tmp = parseBoardUnits( "corner radius" );
+
                     if( !zone->GetIsRuleArea() ) // smoothing has meaning only for filled zones
                        zone->SetCornerRadius( tmp );
+
                     NeedRIGHT();
                     break;
 
@@ -5843,6 +5851,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
+
                     zone->SetDoNotAllowTracks( token == T_not_allowed );
                     break;
 
@@ -5851,6 +5860,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
+
                     zone->SetDoNotAllowVias( token == T_not_allowed );
                     break;
 
@@ -5859,6 +5869,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
+
                     zone->SetDoNotAllowCopperPour( token == T_not_allowed );
                     break;
 
@@ -5867,6 +5878,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
+
                     zone->SetDoNotAllowPads( token == T_not_allowed );
                     break;
 
@@ -5875,6 +5887,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
+
                     zone->SetDoNotAllowFootprints( token == T_not_allowed );
                     break;
 
@@ -6085,9 +6098,10 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             {
                 for( auto& [layer, polyset] : pts )
                 {
-                    polyset.InflateWithLinkedHoles(
-                            zone->GetMinThickness() / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                            ARC_HIGH_DEF / 2, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                    polyset.InflateWithLinkedHoles( zone->GetMinThickness() / 2,
+                                                    CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                                    ARC_HIGH_DEF / 2,
+                                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
                 }
             }
         }
@@ -6100,8 +6114,8 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     else if( legacySegs.size() > 0 )
     {
         // No polygons, just segment fill?
-        // Note RFB: This code might be removed if turns out this never existed for sexpr file format or otherwise we
-        // should add a test case to the qa folder
+        // Note RFB: This code might be removed if turns out this never existed for sexpr file
+        // format or otherwise we should add a test case to the qa folder
 
         if( m_showLegacySegmentZoneWarning )
         {
