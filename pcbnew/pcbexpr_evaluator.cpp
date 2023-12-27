@@ -89,6 +89,39 @@ protected:
 };
 
 
+class PCBEXPR_PINTYPE_VALUE : public LIBEVAL::VALUE
+{
+public:
+    PCBEXPR_PINTYPE_VALUE( const wxString& aPinTypeName ) :
+            LIBEVAL::VALUE( aPinTypeName )
+    {};
+
+    bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
+    {
+        const wxString& thisStr = AsString();
+        const wxString& otherStr = b->AsString();
+
+        if( thisStr.IsSameAs( otherStr, false ) )
+            return true;
+
+        // Handle cases where the netlist token is different from the EEschema token
+        if( thisStr == wxT( "tri_state" ) )
+            return otherStr.IsSameAs( wxT( "Tri-state" ), false );
+
+        if( thisStr == wxT( "power_in" ) )
+            return otherStr.IsSameAs( wxT( "Power input" ), false );
+
+        if( thisStr == wxT( "power_out" ) )
+            return otherStr.IsSameAs( wxT( "Power output" ), false );
+
+        if( thisStr == wxT( "no_connect" ) )
+            return otherStr.IsSameAs( wxT( "Unconnected" ), false );
+
+        return false;
+    }
+};
+
+
 class PCBEXPR_NETCLASS_VALUE : public LIBEVAL::VALUE
 {
 public:
@@ -184,7 +217,9 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     else
     {
         if( m_type == LIBEVAL::VT_NUMERIC )
+        {
             return new LIBEVAL::VALUE( (double) item->Get<int>( it->second ) );
+        }
         else
         {
             wxString str;
@@ -192,7 +227,11 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             if( !m_isEnum )
             {
                 str = item->Get<wxString>( it->second );
-                return new LIBEVAL::VALUE( str );
+
+                if( it->second->Name() == wxT( "Pin Type" ) )
+                    return new PCBEXPR_PINTYPE_VALUE( str );
+                else
+                    return new LIBEVAL::VALUE( str );
             }
             else
             {
