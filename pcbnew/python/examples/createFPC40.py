@@ -57,6 +57,6 @@ dst_type = IO_MGR.GuessPluginTypeFromLibPath( lib_name );
 dst_plugin = IO_MGR.PluginFind( dst_type )
 
 if os.path.exists(lib_name) == False:
-    dst_plugin.FootprintLibCreate(lib_name)
+    dst_plugin.CreateLibrary(lib_name)
 
 dst_plugin.FootprintSave(lib_name,module)

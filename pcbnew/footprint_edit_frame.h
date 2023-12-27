@@ -145,7 +145,7 @@ public:
     /**
      * Save a library to a new name and/or library type.
      *
-     * @see #PLUGIN::FootprintSave and #PLUGIN::FootprintLibCreate
+     * @see #PCB_IO::FootprintSave and #IO_BASE::LibraryCreate
      *
      * @note Saving as a new library type requires the plug-in to support saving libraries
      */

@@ -71,7 +71,7 @@ public:
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override { return false; }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 };
 
 

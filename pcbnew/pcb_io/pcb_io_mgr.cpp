@@ -155,7 +155,7 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
 
         PCB_IO::RELEASER pi( plugin.m_createFunc() );
 
-        if( pi->CanReadFootprintLib( aLibPath ) )
+        if( pi->CanReadLibrary( aLibPath ) )
             return plugin.m_type;
     }
 

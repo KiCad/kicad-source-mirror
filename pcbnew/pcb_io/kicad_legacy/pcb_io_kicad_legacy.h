@@ -93,12 +93,12 @@ public:
                               bool  aKeepUUID = false,
                               const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    bool DeleteLibrary( const wxString& aLibraryPath,
+                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
     typedef int BIU;
 

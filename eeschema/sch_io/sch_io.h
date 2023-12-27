@@ -76,11 +76,7 @@ public:
      */
     virtual bool CanReadSchematicFile( const wxString& aFileName ) const;
 
-    /**
-     * Checks if this SCH_IO can read the specified symbol library file.
-     * If not overriden, extension check is used.
-     */
-    virtual bool CanReadLibrary( const wxString& aFileName ) const;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     /**
      * Return the modification hash from the library cache.
@@ -268,57 +264,6 @@ public:
                                const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
-     * Create a new empty symbol library at \a aLibraryPath.  It is an error to attempt
-     * to create an existing library or to attempt to create on a "read only" location.
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *                     or URL containing several footprints.
-     *
-     * @param aProperties is an associative array that can be used to tell the library
-     *                    create function anything special, because it can take any number
-     *                    of additional named tuning arguments that the plugin is known to
-     *                    support.  The caller continues to own this object (plugin may not
-     *                    delete it), and plugins should expect it to be optionally NULL.
-     *
-     * @throw IO_ERROR if there is a problem finding the library, or creating it.
-     */
-    virtual void CreateSymbolLib( const wxString& aLibraryPath,
-                                  const STRING_UTF8_MAP* aProperties = nullptr );
-
-    /**
-     * Delete an existing symbol library and returns true if successful, or if library
-     * does not exist returns false, or throws an exception if library exists but is read
-     * only or cannot be deleted for some other reason.
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory or file
-     *                     which will contain symbols.
-     *
-     * @param aProperties is an associative array that can be used to tell the library
-     *                    delete implementation function anything special, because it can
-     *                    take any number of additional named tuning arguments that the
-     *                    plugin is known to support.  The caller continues to own this
-     *                    object (plugin may not delete it), and plugins should expect
-     *                    it to be optionally NULL.
-     *
-     * @return true if library deleted or false if library did not exist.
-     *
-     * @throw IO_ERROR if there is a problem deleting an existing library.
-     */
-    virtual bool DeleteSymbolLib( const wxString& aLibraryPath,
-                                  const STRING_UTF8_MAP* aProperties = nullptr );
-
-    /**
-     * Return true if the library at \a aLibraryPath is writable.  (Often
-     * system libraries are read only because of where they are installed.)
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *                     or URL containing several symbols.
-     *
-     * @throw IO_ERROR if no library at aLibraryPath exists.
-     */
-    virtual bool IsSymbolLibWritable( const wxString& aLibraryPath );
-
-    /**
      * Append supported #SCH_IO options to \a aListToAppenTo along with internationalized
      * descriptions.  Options are typically appended so that a derived SCH_IO can call
      * its base class function by the same name first, thus inheriting options declared there.
@@ -342,7 +287,7 @@ public:
      *   This would require a 3 column list, and introducing wx GUI knowledge to
      *   #SCH_IO, which has been avoided to date.
      */
-    virtual void SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
+    virtual void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const override;
 
     /**
      * @return true if this plugin supports libraries that contain sub-libraries.

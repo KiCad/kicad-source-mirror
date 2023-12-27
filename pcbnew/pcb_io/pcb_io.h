@@ -103,7 +103,7 @@ public:
      * Checks if this PCB_IO can read footprint library from specified file or directory.
      * If not overriden, extension check is used.
      */
-    virtual bool CanReadFootprintLib( const wxString& aFileName ) const;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     /**
      * Registers a KIDIALOG callback for collecting info from the user.
@@ -320,56 +320,6 @@ public:
                                   const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
-     * Create a new empty footprint library at @a aLibraryPath empty.
-     *
-     * It is an error to attempt to create an existing library or to attempt to create
-     * on a "read only" location.
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory, file, or URL
-     *                     containing several footprints.
-     * @param aProperties is an associative array that can be used to tell the library create
-     *                    function anything special, because it can take any number of additional
-     *                    named tuning arguments that the plugin is known to support.  The caller
-     *                    continues to own this object (plugin may not delete it), and plugins
-     *                    should expect it to be optionally NULL.
-     *
-     * @throw IO_ERROR if there is a problem finding the library, or creating it.
-     */
-    virtual void FootprintLibCreate( const wxString& aLibraryPath,
-                                     const STRING_UTF8_MAP* aProperties = nullptr );
-
-    /**
-     * Delete an existing footprint library and returns true, or if library does not
-     * exist returns false, or throws an exception if library exists but is read only or
-     * cannot be deleted for some other reason.
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory or file which
-     *                     will contain footprints.
-     * @param aProperties is an associative array that can be used to tell the library delete
-     *                    implementation function anything special, because it can take any
-     *                    number of additional named tuning arguments that the plugin is known
-     *                    to support. The caller continues to own this object (plugin may not
-     *                    delete it), and plugins should expect it to be optionally NULL.
-     * @return true if library deleted, false if library did not exist.
-     *
-     * @throw IO_ERROR if there is a problem deleting an existing library.
-     */
-    virtual bool FootprintLibDelete( const wxString& aLibraryPath,
-                                     const STRING_UTF8_MAP* aProperties = nullptr );
-
-    /**
-     * Return true if the library at @a aLibraryPath is writable.
-     *
-     * The system libraries are typically read only because of where they are installed..
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory, file, or URL
-     *                     containing several footprints.
-     *
-     * @throw IO_ERROR if no library at aLibraryPath exists.
-     */
-    virtual bool IsFootprintLibWritable( const wxString& aLibraryPath );
-
-    /**
      * Append supported PLUGIN options to @a aListToAppenTo along with internationalized
      * descriptions.
      *
@@ -396,7 +346,7 @@ public:
      *  This would require a 3 column list, and introducing wx GUI knowledge to
      * PLUGIN, which has been avoided to date.
      */
-    virtual void FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
+    virtual void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const override;
 
     virtual ~PCB_IO()
     {};

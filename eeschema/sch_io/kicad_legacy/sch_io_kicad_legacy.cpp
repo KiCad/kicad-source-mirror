@@ -2176,7 +2176,7 @@ void SCH_IO_KICAD_LEGACY::DeleteSymbol( const wxString& aLibraryPath, const wxSt
 }
 
 
-void SCH_IO_KICAD_LEGACY::CreateSymbolLib( const wxString& aLibraryPath,
+void SCH_IO_KICAD_LEGACY::CreateLibrary( const wxString& aLibraryPath,
                                          const STRING_UTF8_MAP* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
@@ -2195,7 +2195,7 @@ void SCH_IO_KICAD_LEGACY::CreateSymbolLib( const wxString& aLibraryPath,
 }
 
 
-bool SCH_IO_KICAD_LEGACY::DeleteSymbolLib( const wxString& aLibraryPath,
+bool SCH_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
                                          const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn = aLibraryPath;
@@ -2258,7 +2258,7 @@ bool SCH_IO_KICAD_LEGACY::CanReadLibrary( const wxString& aFileName ) const
 }
 
 
-bool SCH_IO_KICAD_LEGACY::IsSymbolLibWritable( const wxString& aLibraryPath )
+bool SCH_IO_KICAD_LEGACY::IsLibraryWritable( const wxString& aLibraryPath )
 {
     // Writing legacy symbol libraries is deprecated.
     return false;

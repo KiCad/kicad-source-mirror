@@ -965,7 +965,7 @@ void PCB_IO_GEDA::FootprintDelete( const wxString& aLibraryPath, const wxString&
 }
 
 
-bool PCB_IO_GEDA::FootprintLibDelete( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+bool PCB_IO_GEDA::DeleteLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );
@@ -1049,7 +1049,7 @@ long long PCB_IO_GEDA::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 }
 
 
-bool PCB_IO_GEDA::IsFootprintLibWritable( const wxString& aLibraryPath )
+bool PCB_IO_GEDA::IsLibraryWritable( const wxString& aLibraryPath )
 {
     LOCALE_IO   toggle;
 

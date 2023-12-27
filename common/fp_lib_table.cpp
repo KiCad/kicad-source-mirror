@@ -448,7 +448,7 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PCB_IO*) row->plugin );
-    return row->plugin->IsFootprintLibWritable( row->GetFullURI( true ) );
+    return row->plugin->IsLibraryWritable( row->GetFullURI( true ) );
 }
 
 
@@ -456,7 +456,7 @@ void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PCB_IO*) row->plugin );
-    row->plugin->FootprintLibDelete( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->DeleteLibrary( row->GetFullURI( true ), row->GetProperties() );
 }
 
 
@@ -464,7 +464,7 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxASSERT( (PCB_IO*) row->plugin );
-    row->plugin->FootprintLibCreate( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->CreateLibrary( row->GetFullURI( true ), row->GetProperties() );
 }
 
 

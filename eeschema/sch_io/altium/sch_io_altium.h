@@ -106,18 +106,7 @@ public:
     //void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
     //                   const PROPERTIES* aProperties = NULL ) override;
 
-    //void CreateSymbolLib( const wxString& aLibraryPath,
-    //                      const PROPERTIES* aProperties = NULL ) override;
-
-    // bool DeleteSymbolLib( const wxString& aLibraryPath,
-    //                      const PROPERTIES* aProperties = NULL ) override;
-
-    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override
-    {
-        return false;
-    }
-
-    //void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const override;
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     wxString   getLibName();
     wxFileName getLibFileName();

@@ -95,7 +95,7 @@ void SYMBOL_LIB::Create( const wxString& aFileName )
     if( !aFileName.IsEmpty() )
         tmpFileName = aFileName;
 
-    m_plugin->CreateSymbolLib( tmpFileName, m_properties.get() );
+    m_plugin->CreateLibrary( tmpFileName, m_properties.get() );
 }
 
 

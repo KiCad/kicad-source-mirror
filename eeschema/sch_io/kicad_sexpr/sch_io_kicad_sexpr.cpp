@@ -1535,7 +1535,7 @@ void SCH_IO_KICAD_SEXPR::DeleteSymbol( const wxString& aLibraryPath, const wxStr
 }
 
 
-void SCH_IO_KICAD_SEXPR::CreateSymbolLib( const wxString& aLibraryPath,
+void SCH_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
                                         const STRING_UTF8_MAP* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
@@ -1554,7 +1554,7 @@ void SCH_IO_KICAD_SEXPR::CreateSymbolLib( const wxString& aLibraryPath,
 }
 
 
-bool SCH_IO_KICAD_SEXPR::DeleteSymbolLib( const wxString& aLibraryPath,
+bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
                                         const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn = aLibraryPath;
@@ -1599,7 +1599,7 @@ void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath, const STRING
 }
 
 
-bool SCH_IO_KICAD_SEXPR::IsSymbolLibWritable( const wxString& aLibraryPath )
+bool SCH_IO_KICAD_SEXPR::IsLibraryWritable( const wxString& aLibraryPath )
 {
     wxFileName fn( aLibraryPath );
 

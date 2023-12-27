@@ -340,13 +340,13 @@ public:
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
-    void FootprintLibCreate( const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr) override;
+    void CreateLibrary( const wxString& aLibraryPath,
+                        const STRING_UTF8_MAP* aProperties = nullptr) override;
 
-    bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    bool DeleteLibrary( const wxString& aLibraryPath,
+                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
     PCB_IO_KICAD_SEXPR( int aControlFlags = CTL_FOR_BOARD );
 

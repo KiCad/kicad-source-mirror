@@ -25,6 +25,7 @@
 
 class REPORTER;
 class PROGRESS_REPORTER;
+class STRING_UTF8_MAP;
 
 class IO_BASE
 {
@@ -46,6 +47,97 @@ public:
      * Set an optional progress reporter.
      */
     virtual void SetProgressReporter( PROGRESS_REPORTER* aReporter ) { m_progressReporter = aReporter; }
+
+
+    ////////////////////////////////////////////////////
+    // Library-related functions
+    ////////////////////////////////////////////////////
+
+    /**
+     * Checks if this IO object can read the specified library file/directory.
+     * If not overriden, extension check is used.
+     *
+     * @note This is not a check that the file system object is readable by the user,
+     *       but a check that this IO object can parse the given library.
+     */
+    virtual bool CanReadLibrary( const wxString& aFileName ) const;
+
+    /**
+     * Create a new empty library at @a aLibraryPath empty.
+     *
+     * It is an error to attempt to create an existing library or to attempt to create
+     * on a "read only" location.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory, file, or URL
+     *                     containing several elements.
+     * @param aProperties is an associative array that can be used to tell the library create
+     *                    function anything special, because it can take any number of additional
+     *                    named tuning arguments that the IO is known to support.  The caller
+     *                    continues to own this object (IO may not delete it), and IOs
+     *                    should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if there is a problem finding the library, or creating it.
+     */
+    virtual void CreateLibrary( const wxString& aLibraryPath,
+                                const STRING_UTF8_MAP* aProperties = nullptr );
+
+    /**
+     * Delete an existing library and returns true, or if library does not
+     * exist returns false, or throws an exception if library exists but is read only or
+     * cannot be deleted for some other reason.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory or file which
+     *                     will contain several elements.
+     * @param aProperties is an associative array that can be used to tell the library delete
+     *                    implementation function anything special, because it can take any
+     *                    number of additional named tuning arguments that the plugin is known
+     *                    to support. The caller continues to own this object (plugin may not
+     *                    delete it), and plugins should expect it to be optionally NULL.
+     *
+     * @return true if library deleted, false if library did not exist.
+     *
+     * @throw IO_ERROR if there is a problem deleting an existing library.
+     */
+    virtual bool DeleteLibrary( const wxString& aLibraryPath,
+                                const STRING_UTF8_MAP* aProperties = nullptr );
+
+    /**
+     * Return true if the library at @a aLibraryPath is writable.
+     *
+     * The system libraries are typically read only because of where they are installed..
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory, file, or URL
+     *                     containing several footprints.
+     *
+     * @throw IO_ERROR if no library at aLibraryPath exists.
+     */
+    virtual bool IsLibraryWritable( const wxString& aLibraryPath );
+
+    /**
+     * Append supported IO options to \a aListToAppenTo along with internationalized
+     * descriptions.  Options are typically appended so that a derived IO_BASE can call
+     * its base class function by the same name first, thus inheriting options declared there.
+     * (Some base class options could pertain to all functions in all derived IOs.)
+     * Note that since aListToAppendTo is a PROPERTIES object, all options
+     * will be unique and last guy wins.
+     *
+     * @param aListToAppendTo holds a tuple of
+     * <dl>
+     *   <dt>option</dt>
+     *   <dd>This eventually is what shows up into the "options"
+     *       field, possibly combined with others.</dd>
+     *   <dt>internationalized description</dt>
+     *   <dd>The internationalized description is displayed in DIALOG_PLUGIN_OPTIONS.
+     *      It may be multi-line and be quite explanatory of the option.</dd>
+     *  </dl>
+     * <br>
+     *  In the future perhaps \a aListToAppendTo evolves to something capable of also
+     *  holding a wxValidator for the cells in said dialog:
+     *  http://forums.wxwidgets.org/viewtopic.php?t=23277&p=104180.
+     *   This would require a 3 column list, and introducing wx GUI knowledge to
+     *   #SCH_IO, which has been avoided to date.
+     */
+    virtual void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
 
 protected:
     // Delete the zero-argument base constructor to force proper construction

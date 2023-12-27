@@ -65,9 +65,9 @@ bool PCB_IO_ALTIUM_DESIGNER::CanReadBoard( const wxString& aFileName ) const
 }
 
 
-bool PCB_IO_ALTIUM_DESIGNER::CanReadFootprintLib( const wxString& aFileName ) const
+bool PCB_IO_ALTIUM_DESIGNER::CanReadLibrary( const wxString& aFileName ) const
 {
-    if( !PCB_IO::CanReadFootprintLib( aFileName ) )
+    if( !PCB_IO::CanReadLibrary( aFileName ) )
         return false;
 
     return checkFileHeader( aFileName );

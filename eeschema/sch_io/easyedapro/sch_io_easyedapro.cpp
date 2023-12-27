@@ -546,7 +546,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     if( !libTable->HasLibrary( libName ) )
     {
         // Create a new empty symbol library.
-        sch_plugin->CreateSymbolLib( libFileName.GetFullPath() );
+        sch_plugin->CreateLibrary( libFileName.GetFullPath() );
         wxString libTableUri = wxS( "${KIPRJMOD}/" ) + libFileName.GetFullName();
 
         // Add the new library to the project symbol library table.

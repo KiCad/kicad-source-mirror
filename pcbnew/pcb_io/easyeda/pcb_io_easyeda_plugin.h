@@ -45,7 +45,7 @@ public:
 
     bool CanReadFootprint( const wxString& aFileName ) const override;
 
-    bool CanReadFootprintLib( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
@@ -63,7 +63,7 @@ public:
                               bool                   aKeepUUID = false,
                               const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override { return false; }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     PCB_IO_EASYEDA();
     ~PCB_IO_EASYEDA();

@@ -144,7 +144,7 @@ public:
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
-    bool CanReadFootprintLib( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
     bool CanReadFootprint( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
@@ -165,12 +165,10 @@ public:
         return getModificationTime( aLibraryPath ).GetValue().GetValue();
     }
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override
     {
         return false;   // until someone writes others like FootprintSave(), etc.
     }
-
-    void FootprintLibOptions( STRING_UTF8_MAP* aProperties ) const override;
 
     typedef int BIU;
 

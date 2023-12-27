@@ -109,7 +109,7 @@ public:
     }
 
     // Reading currently disabled
-    bool CanReadFootprintLib( const wxString& aFileName ) const override
+    bool CanReadLibrary( const wxString& aFileName ) const override
     {
         return false;
     }

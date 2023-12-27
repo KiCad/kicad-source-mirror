@@ -85,12 +85,9 @@ public:
 
 
     // Writing to CADSTAR libraries is not supported
-    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override
-    {
-        return false;
-    }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const override;
+    void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const override;
 
 private:
     // Symbol caching

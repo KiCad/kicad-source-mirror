@@ -124,6 +124,18 @@
     %{
         def FootprintEnumerate(self, libname):
             return self.footprintPyEnumerate( libname, True )
+
+        # Old function name for compatibility with pre-v8 scripts, use CreateLibrary() for new scripts.
+        def FootprintLibCreate(self, aLibraryPath, aProperties=None):
+            self.CreateLibrary(aLibraryPath, aProperties)
+
+        # Old function name for compatibility with pre-v8 scripts, use DeleteLibrary() for new scripts.
+        def FootprintLibDelete(self, aLibraryPath, aProperties=None):
+            return self.DeleteLibrary(aLibraryPath, aProperties)
+
+        # Old function name for compatibility with pre-v8 scripts, use IsLibraryWritable() for new scripts.
+        def IsFootprintLibWritable(self, aLibraryPath):
+            return self.IsLibraryWritable(aLibraryPath)
     %}
 }
 
@@ -151,11 +163,11 @@
 
     def FootprintLibCreate(libname):
         plug = GetPluginForPath(libname)
-        plug.FootprintLibCreate(libname)
+        plug.CreateLibrary(libname)
 
     def FootprintLibDelete(libname):
         plug = GetPluginForPath(libname)
-        plug.FootprintLibDelete(libname)
+        plug.DeleteLibrary(libname)
 
     def FootprintIsWritable(libname):
         plug = GetPluginForPath(libname)

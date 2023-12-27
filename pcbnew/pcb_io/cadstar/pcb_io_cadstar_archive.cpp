@@ -151,9 +151,9 @@ bool PCB_IO_CADSTAR_ARCHIVE::CanReadBoard( const wxString& aFileName ) const
 }
 
 
-bool PCB_IO_CADSTAR_ARCHIVE::CanReadFootprintLib( const wxString& aFileName ) const
+bool PCB_IO_CADSTAR_ARCHIVE::CanReadLibrary( const wxString& aFileName ) const
 {
-    if( !PCB_IO::CanReadFootprintLib( aFileName ) )
+    if( !PCB_IO::CanReadLibrary( aFileName ) )
         return false;
 
     return checkBoardHeader( aFileName );

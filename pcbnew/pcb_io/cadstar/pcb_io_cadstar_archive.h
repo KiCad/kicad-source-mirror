@@ -42,7 +42,7 @@ public:
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
-    bool CanReadFootprintLib( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
     bool CanReadFootprint( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
@@ -85,7 +85,7 @@ public:
      * CADSTAR Plugin is read-only
      * @return Always false
      */
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override { return false; }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     PCB_IO_CADSTAR_ARCHIVE();
     ~PCB_IO_CADSTAR_ARCHIVE();

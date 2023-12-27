@@ -173,7 +173,7 @@ protected:
 
             SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( row->GetType() );
             SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( pi_type ) );
-            pi->SymbolLibOptions( &choices );
+            pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
             dlg.ShowModal();

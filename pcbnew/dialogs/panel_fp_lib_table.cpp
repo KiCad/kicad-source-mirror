@@ -241,7 +241,7 @@ protected:
 
             PCB_IO_MGR::PCB_FILE_T pi_type = PCB_IO_MGR::EnumFromStr( row->GetType() );
             PCB_IO::RELEASER   pi( PCB_IO_MGR::PluginFind( pi_type ) );
-            pi->FootprintLibOptions( &choices );
+            pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
             dlg.ShowModal();

@@ -70,7 +70,7 @@ public:
                               bool                   aKeepUUID = false,
                               const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override { return false; }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     PCB_IO_EASYEDAPRO();
     ~PCB_IO_EASYEDAPRO();

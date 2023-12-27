@@ -361,7 +361,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     if( !libTable->HasLibrary( getLibName() ) )
     {
         // Create a new empty symbol library.
-        m_pi->CreateSymbolLib( getLibFileName().GetFullPath() );
+        m_pi->CreateLibrary( getLibFileName().GetFullPath() );
         wxString libTableUri = "${KIPRJMOD}/" + getLibFileName().GetFullName();
 
         // Add the new library to the project symbol library table.

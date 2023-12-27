@@ -353,7 +353,7 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
 
         try
         {
-            writable = pi->IsFootprintLibWritable( libPath );
+            writable = pi->IsLibraryWritable( libPath );
             exists   = true;    // no exception was thrown, lib must exist.
         }
         catch( const IO_ERROR& )
@@ -379,11 +379,11 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
                 if( dlg.ShowModal() == wxID_CANCEL )
                     return wxEmptyString;
 
-                pi->FootprintLibDelete( libPath );
+                pi->DeleteLibrary( libPath );
             }
         }
 
-        pi->FootprintLibCreate( libPath );
+        pi->CreateLibrary( libPath );
     }
     catch( const IO_ERROR& ioe )
     {

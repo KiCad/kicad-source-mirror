@@ -127,14 +127,14 @@ public:
                      const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
-    void CreateSymbolLib( const wxString& aLibraryPath,
-                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
-    bool DeleteSymbolLib( const wxString& aLibraryPath,
-                          const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    void CreateLibrary( const wxString& aLibraryPath,
+                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    bool DeleteLibrary( const wxString& aLibraryPath,
+                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void SaveLibrary( const wxString& aLibraryPath,
                       const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
     const wxString& GetError() const override { return m_error; }
 

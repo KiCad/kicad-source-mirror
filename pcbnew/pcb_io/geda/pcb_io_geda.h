@@ -76,12 +76,12 @@ public:
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    bool DeleteLibrary( const wxString& aLibraryPath,
+                        const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
     //-----</PLUGIN API>--------------------------------------------------------
 

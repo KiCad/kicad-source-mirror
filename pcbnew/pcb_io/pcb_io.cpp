@@ -90,7 +90,7 @@ bool PCB_IO::CanReadFootprint( const wxString& aFileName ) const
 }
 
 
-bool PCB_IO::CanReadFootprintLib( const wxString& aFileName ) const
+bool PCB_IO::CanReadLibrary( const wxString& aFileName ) const
 {
     const PLUGIN_FILE_DESC& desc = GetFootprintLibDesc();
 
@@ -239,29 +239,11 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void PCB_IO::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 {
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    NOT_IMPLEMENTED( __FUNCTION__ );
-}
+    // Get base options first
+    IO_BASE::GetLibraryOptions( aListToAppendTo );
 
-
-bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    NOT_IMPLEMENTED( __FUNCTION__ );
-}
-
-
-bool PCB_IO::IsFootprintLibWritable( const wxString& aLibraryPath )
-{
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
-    NOT_IMPLEMENTED( __FUNCTION__ );
-}
-
-
-void PCB_IO::FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
-{
     // disable all these in another couple of months, after everyone has seen them:
 #if 1
     (*aListToAppendTo)["debug_level"] = UTF8( _( "Enable <b>debug</b> logging for Footprint*() "

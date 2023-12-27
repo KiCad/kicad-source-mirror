@@ -255,9 +255,9 @@ bool PCB_IO_EAGLE::CanReadBoard( const wxString& aFileName ) const
 }
 
 
-bool PCB_IO_EAGLE::CanReadFootprintLib( const wxString& aFileName ) const
+bool PCB_IO_EAGLE::CanReadLibrary( const wxString& aFileName ) const
 {
-    if( !PCB_IO::CanReadFootprintLib( aFileName ) )
+    if( !PCB_IO::CanReadLibrary( aFileName ) )
         return false;
 
     return checkHeader( aFileName );
@@ -266,7 +266,7 @@ bool PCB_IO_EAGLE::CanReadFootprintLib( const wxString& aFileName ) const
 
 bool PCB_IO_EAGLE::CanReadFootprint( const wxString& aFileName ) const
 {
-    return CanReadFootprintLib( aFileName );
+    return CanReadLibrary( aFileName );
 }
 
 
@@ -3224,11 +3224,6 @@ FOOTPRINT* PCB_IO_EAGLE::FootprintLoad( const wxString& aLibraryPath,
     return copy;
 }
 
-
-void PCB_IO_EAGLE::FootprintLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
-{
-    PCB_IO::FootprintLibOptions( aListToAppendTo );
-}
 
 int PCB_IO_EAGLE::getMinimumCopperLayerCount() const
 {

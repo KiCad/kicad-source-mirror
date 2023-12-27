@@ -446,7 +446,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, SAVE_SKIPPED );
 
-    if( !row->plugin->IsSymbolLibWritable( row->GetFullURI( true ) ) )
+    if( !row->plugin->IsLibraryWritable( row->GetFullURI( true ) ) )
         return SAVE_SKIPPED;
 
     if( !aOverwrite )
@@ -488,7 +488,7 @@ bool SYMBOL_LIB_TABLE::IsSymbolLibWritable( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, false );
-    return row->plugin->IsSymbolLibWritable( row->GetFullURI( true ) );
+    return row->plugin->IsLibraryWritable( row->GetFullURI( true ) );
 }
 
 bool SYMBOL_LIB_TABLE::IsSymbolLibLoaded( const wxString& aNickname )
@@ -503,7 +503,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbolLib( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
-    row->plugin->DeleteSymbolLib( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->DeleteLibrary( row->GetFullURI( true ), row->GetProperties() );
 }
 
 
@@ -511,7 +511,7 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
     wxCHECK( row && row->plugin, /* void */ );
-    row->plugin->CreateSymbolLib( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->CreateLibrary( row->GetFullURI( true ), row->GetProperties() );
 }
 
 

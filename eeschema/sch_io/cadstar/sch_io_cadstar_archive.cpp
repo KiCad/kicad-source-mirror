@@ -121,7 +121,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     if( !libTable->HasLibrary( libName ) )
     {
         // Create a new empty symbol library.
-        sch_plugin->CreateSymbolLib( libFileName.GetFullPath() );
+        sch_plugin->CreateLibrary( libFileName.GetFullPath() );
         wxString libTableUri = "${KIPRJMOD}/" + libFileName.GetFullName();
 
         // Add the new library to the project symbol library table.
@@ -232,7 +232,7 @@ void SCH_IO_CADSTAR_ARCHIVE::GetAvailableSymbolFields( std::vector<wxString>& aN
 }
 
 
-void SCH_IO_CADSTAR_ARCHIVE::SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
+void SCH_IO_CADSTAR_ARCHIVE::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 {
     ( *aListToAppendTo )["csa"] =
             UTF8( _( "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "

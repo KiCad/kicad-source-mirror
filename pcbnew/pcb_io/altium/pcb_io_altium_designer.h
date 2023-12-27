@@ -51,7 +51,7 @@ public:
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
-    bool CanReadFootprintLib( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr,
@@ -68,7 +68,7 @@ public:
 
     //bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = nullptr );
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override { return false; }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     // -----</PUBLIC PCB_IO API>-------------------------------------------------
 

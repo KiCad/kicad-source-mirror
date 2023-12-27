@@ -126,7 +126,7 @@ bool PCB_IO_EASYEDA::CanReadFootprint( const wxString& aFileName ) const
 }
 
 
-bool PCB_IO_EASYEDA::CanReadFootprintLib( const wxString& aFileName ) const
+bool PCB_IO_EASYEDA::CanReadLibrary( const wxString& aFileName ) const
 {
     return CanReadBoard( aFileName );
 }

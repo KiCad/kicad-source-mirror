@@ -2746,7 +2746,7 @@ long long PCB_IO_KICAD_SEXPR::GetLibraryTimestamp( const wxString& aLibraryPath 
 }
 
 
-void PCB_IO_KICAD_SEXPR::FootprintLibCreate( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void PCB_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
@@ -2764,7 +2764,7 @@ void PCB_IO_KICAD_SEXPR::FootprintLibCreate( const wxString& aLibraryPath, const
 }
 
 
-bool PCB_IO_KICAD_SEXPR::FootprintLibDelete( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+bool PCB_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );
@@ -2841,7 +2841,7 @@ bool PCB_IO_KICAD_SEXPR::FootprintLibDelete( const wxString& aLibraryPath, const
 }
 
 
-bool PCB_IO_KICAD_SEXPR::IsFootprintLibWritable( const wxString& aLibraryPath )
+bool PCB_IO_KICAD_SEXPR::IsLibraryWritable( const wxString& aLibraryPath )
 {
     LOCALE_IO   toggle;
 

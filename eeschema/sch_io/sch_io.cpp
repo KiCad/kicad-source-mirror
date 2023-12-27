@@ -179,29 +179,11 @@ void SCH_IO::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbol
 }
 
 
-void SCH_IO::CreateSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void SCH_IO::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 {
-    // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
-    NOT_IMPLEMENTED( __FUNCTION__ );
-}
+    // Get base options first
+    IO_BASE::GetLibraryOptions( aListToAppendTo );
 
-
-bool SCH_IO::DeleteSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
-    NOT_IMPLEMENTED( __FUNCTION__ );
-}
-
-
-bool SCH_IO::IsSymbolLibWritable( const wxString& aLibraryPath )
-{
-    // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
-    NOT_IMPLEMENTED( __FUNCTION__ );
-}
-
-
-void SCH_IO::SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
-{
     // Empty for most plugins
     //
     // To add a new option override and use example code below:

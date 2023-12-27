@@ -73,10 +73,7 @@ public:
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
 
     // Database libraries can never be written using the symbol editing API
-    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override
-    {
-        return false;
-    }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     void SetLibTable( SYMBOL_LIB_TABLE* aTable ) override
     {

@@ -28,11 +28,11 @@ src_plugin = IO_MGR.PluginFind( src_type )
 dst_plugin = IO_MGR.PluginFind( dst_type )
 
 try:
-    dst_plugin.FootprintLibDelete( dst_libpath )
+    dst_plugin.DeleteLibrary( dst_libpath )
 except:
     None    # ignore, new may not exist if first run
 
-dst_plugin.FootprintLibCreate( dst_libpath )
+dst_plugin.CreateLibrary( dst_libpath )
 
 list_of_parts = src_plugin.FootprintEnumerate( src_libpath )
 

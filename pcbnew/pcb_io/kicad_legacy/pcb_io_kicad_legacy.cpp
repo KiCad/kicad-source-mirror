@@ -3245,8 +3245,8 @@ FOOTPRINT* PCB_IO_KICAD_LEGACY::FootprintLoad( const wxString& aLibraryPath,
 }
 
 
-bool PCB_IO_KICAD_LEGACY::FootprintLibDelete( const wxString& aLibraryPath,
-                                        const STRING_UTF8_MAP* aProperties )
+bool PCB_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
+                                         const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
@@ -3271,7 +3271,7 @@ bool PCB_IO_KICAD_LEGACY::FootprintLibDelete( const wxString& aLibraryPath,
 }
 
 
-bool PCB_IO_KICAD_LEGACY::IsFootprintLibWritable( const wxString& aLibraryPath )
+bool PCB_IO_KICAD_LEGACY::IsLibraryWritable( const wxString& aLibraryPath )
 {
 #if 0   // no support for 32 Cu layers in legacy format
     return false;

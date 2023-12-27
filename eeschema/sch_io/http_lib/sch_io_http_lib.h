@@ -69,7 +69,7 @@ public:
 
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
 
-    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override
     {
         // TODO: HTTP libraries are well capabale of supporting this.
         return false;

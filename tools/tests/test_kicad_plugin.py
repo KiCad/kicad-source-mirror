@@ -27,20 +27,20 @@ plugin = IO_MGR.PluginFind( IO_MGR.KICAD_SEXP )
 print( "Plugin Type: %s" % plugin.PluginName() )
 
 try:
-    plugin.FootprintLibDelete( lib_path1 )
+    plugin.DeleteLibrary( lib_path1 )
 except:
     pass    # ignore, new may not exist if first run
 
 try:
-    plugin.FootprintLibDelete( lib_path2 )
+    plugin.DeleteLibrary( lib_path2 )
 except:
     pass    # ignore, new may not exist if first run
 
-plugin.FootprintLibCreate( lib_path1 )
+plugin.CreateLibrary( lib_path1 )
 
 # Verify that the same plugin instance can edge trigger on a lib_path change
-# for a FootprintLibCreate()
-plugin.FootprintLibCreate( lib_path2 )
+# for a CreateLibrary()
+plugin.CreateLibrary( lib_path2 )
 
 board = BOARD()
 
