@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-20 13:33+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-12-28 08:09+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -4365,9 +4365,8 @@ msgid "General"
 msgstr "Yleiset"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Tarkista pakettipäivitykset käynnistyksen yhteydessä"
+msgstr "Tarkista Kicad-päivitykset käynnistyksen yhteydessä"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4385,9 +4384,8 @@ msgid "Library package handling"
 msgstr "Kirjastopakettien käsittely"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "Lisää asennetut kirjastot automaattisesti yleiseen lib-taulukkoon"
+msgstr "Lisää asennetut kirjastot automaattisesti yleiseen kirjastotaulukkoon"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
 msgid "Automatically remove uninstalled libraries"
@@ -5006,9 +5004,8 @@ msgid "Drawing Sheet Editor"
 msgstr "Piirustusarkkieditori"
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Keskeytä Taulukon Päivitys"
+msgstr "Paketit ja päivitykset"
 
 #: common/eda_base_frame.cpp:1293
 #, c-format
@@ -7329,7 +7326,6 @@ msgid "Delete clicked items"
 msgstr "Poista napsautetut kohteet"
 
 #: common/tool/actions.cpp:290
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
 msgstr "Vaihda kaaren muokkaustila"
 
@@ -8114,7 +8110,6 @@ msgid "Grid thickness:"
 msgstr "Ristikon paksuus:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
 msgstr "Ruudukon vähimmäisväli:"
 
@@ -10263,7 +10258,6 @@ msgid "Show the field name in addtion to its value"
 msgstr "Näytä kentän nimi sen arvon lisäksi"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
-#, fuzzy
 msgid "Allow automatic placement"
 msgstr "Salli automaattinen sijoittelu"
 
@@ -11288,7 +11282,6 @@ msgstr ""
 "juurisymbolit."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
-#, fuzzy
 msgid "Number of units:"
 msgstr "Yksiköiden lukumäärä:"
 
@@ -13816,7 +13809,6 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Korosta verkot, kun ne on korostettu piirilevyeditorissa"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
 msgstr "Viivanpiirtotila:"
 
@@ -14317,7 +14309,6 @@ msgid "&Default line width:"
 msgstr "Oletusviivan leveys:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
@@ -16321,9 +16312,8 @@ msgid "Save Symbol to Schematic"
 msgstr "Tallenna Symboli Kytkentäkaavioon"
 
 #: eeschema/sch_edit_frame.cpp:2217 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "Diff Symboli Kirjastolla"
+msgstr "Vertaa symbolia kirjastoon"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -20005,7 +19995,6 @@ msgid "Create a new symbol"
 msgstr "Luo uusi symboli"
 
 #: eeschema/tools/ee_actions.cpp:175
-#, fuzzy
 msgid "Derive from Existing Symbol"
 msgstr "Johda olemassa olevasta symbolista"
 
@@ -20650,7 +20639,6 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Avaa valitun symbolin Editorissa"
 
 #: eeschema/tools/ee_actions.cpp:888
-#, fuzzy
 msgid "Exclude from Bill of Materials"
 msgstr "Jätä pois materiaaliluettelosta"
 
@@ -20659,7 +20647,6 @@ msgid "Set the exclude from bill of materials attribute"
 msgstr "Aseta poissulkeminen materiaaliluettelosta -määrite"
 
 #: eeschema/tools/ee_actions.cpp:894
-#, fuzzy
 msgid "Include in Bill of Materials"
 msgstr "Sisällytä materiaaliluetteloon"
 
@@ -20668,16 +20655,14 @@ msgid "Clear the exclude from bill of materials attribute"
 msgstr "Poista poissulkeminen materiaaliluettelosta -määrite"
 
 #: eeschema/tools/ee_actions.cpp:900
-#, fuzzy
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "Jätä pois materiaaliluettelosta"
+msgstr "Jätä pois materiaaliluettelosta (Päälle/Pois)"
 
 #: eeschema/tools/ee_actions.cpp:901
 msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Ota pois materiaaliluettelosta -määrite (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:906
-#, fuzzy
 msgid "Exclude from Simulation"
 msgstr "Sulje pois simulaatiosta"
 
@@ -20686,7 +20671,6 @@ msgid "Set the exclude from simulation attribute"
 msgstr "Aseta poissulkeminen simulaatiosta -määrite"
 
 #: eeschema/tools/ee_actions.cpp:912
-#, fuzzy
 msgid "Include in Simulation"
 msgstr "Sisällytä simulaatioon"
 
@@ -20868,18 +20852,16 @@ msgstr ""
 "Vie tiedosto, joka sisältää netlist-tiedoston yhdessä useista muodoista"
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Luo materiaaliluettelo (BOM)"
+msgstr "Luo materiaaliluettelo..."
 
 #: eeschema/tools/ee_actions.cpp:1052
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Luo materiaalilista nykyistä kaaviota varten"
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Luo materiaaliluettelo (BOM)"
+msgstr "Luo vanha materiaaliluettelo..."
 
 #: eeschema/tools/ee_actions.cpp:1059
 msgid ""
@@ -20887,9 +20869,8 @@ msgid ""
 msgstr "Luo materiaaliluettelo nykyiselle kaaviolle (Legacy generaatori)"
 
 #: eeschema/tools/ee_actions.cpp:1065
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "Luo materiaaliluettelo (BOM)"
+msgstr "Luo materiaaliluettelo (ulkoinen)..."
 
 #: eeschema/tools/ee_actions.cpp:1066
 #, fuzzy
@@ -21835,9 +21816,8 @@ msgid "Offset Y:"
 msgstr "Siirtymä Y:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotate counterclockwise:"
-msgstr "Käännä Vastapäivään"
+msgstr "Käännä vastapäivään:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 msgid "Active layer"
@@ -25754,9 +25734,8 @@ msgid "Lines width"
 msgstr "Viivojen leveys"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "Pienin välys:"
+msgstr "Pienin etäisyys"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 #, fuzzy
@@ -31184,9 +31163,8 @@ msgid "Footprint 3D model path:"
 msgstr "Jalanjäljen 3D-mallin polku:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "Koordinaatti origon asetukset:"
+msgstr "Koordinaatti origon asetukset"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -36862,9 +36840,8 @@ msgid "Properties for track-to-track teardrops:"
 msgstr "Johdinliuskojen välisten kyynelpisaroiden ominaisuudet:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
-#, fuzzy
 msgid "Maximum track width"
-msgstr "Maksimi johdinraidan leveys:"
+msgstr "Maksimi johdinraidan leveys"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
 #, fuzzy
@@ -43676,9 +43653,8 @@ msgid "Click on new member..."
 msgstr "Napsauta uutta jäsentä ..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1197
-#, fuzzy
 msgid "Group Items"
-msgstr "Ryhmän jäsenet:"
+msgstr "Ryhmän jäsenet"
 
 #: pcbnew/tools/group_tool.cpp:320 pcbnew/tools/pcb_actions.cpp:1204
 #, fuzzy
@@ -44659,9 +44635,8 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Luo IPC-D-356 netlist-tiedosto"
 
 #: pcbnew/tools/pcb_actions.cpp:1076
-#, fuzzy
 msgid "Bill of Materials..."
-msgstr "Materiaaliluettelo"
+msgstr "Materiaaliluettelo..."
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Create bill of materials from board"
