@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-26 21:27+0000\n"
+"PO-Revision-Date: 2023-12-28 12:05+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -19985,7 +19985,7 @@ msgstr "회로도와 PCB 디자인에서 사용되는 시트와 제목 블록 �
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "KiCad와 서드 파티 레포지토리로부터 다운로드 가능한 패키지 관리"
+msgstr "KiCad와 타사 저장소에서 다운로드 가능한 패키지 관리"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
