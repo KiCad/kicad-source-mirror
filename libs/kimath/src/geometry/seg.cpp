@@ -358,15 +358,13 @@ int SEG::LineDistance( const VECTOR2I& aP, bool aDetermineSide ) const
 }
 
 
-bool SEG::mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const
+bool SEG::mutualDistanceSquared( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const
 {
     SEG a( *this );
     SEG b( aSeg );
 
     if( a.SquaredLength() < b.SquaredLength() )
-    {
         std::swap(a, b);
-    }
 
     ecoord p = ecoord{ a.A.y } - a.B.y;
     ecoord q = ecoord{ a.B.x } - a.A.x;
@@ -383,31 +381,33 @@ bool SEG::mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const
     ecoord dsq1 = rescale( det1, det1, l );
     ecoord dsq2 = rescale( det2, det2, l );
 
-    aD1 = sgn( det1 ) * isqrt( dsq1 );
-    aD2 = sgn( det2 ) * isqrt( dsq2 );
+    aD1 = sgn( det1 ) * dsq1;
+    aD2 = sgn( det2 ) * dsq2;
 
     return true;
 }
 
 bool SEG::ApproxCollinear( const SEG& aSeg, int aDistanceThreshold ) const
 {
-    ecoord d1, d2;
+    ecoord thresholdSquared = Square( aDistanceThreshold );
+    ecoord d1_sq, d2_sq;
 
-    if( ! mutualDistance( aSeg, d1, d2 ) )
+    if( !mutualDistanceSquared( aSeg, d1_sq, d2_sq ) )
         return false;
 
-    return std::abs( d1 ) <= aDistanceThreshold && std::abs( d2 ) <= aDistanceThreshold;
+    return std::abs( d1_sq ) <= thresholdSquared && std::abs( d2_sq ) <= thresholdSquared;
 }
 
 
 bool SEG::ApproxParallel( const SEG& aSeg, int aDistanceThreshold ) const
 {
-    ecoord d1, d2;
+    ecoord thresholdSquared = Square( aDistanceThreshold );
+    ecoord d1_sq, d2_sq;
 
-    if( ! mutualDistance( aSeg, d1, d2 ) )
+    if( ! mutualDistanceSquared( aSeg, d1_sq, d2_sq ) )
         return false;
 
-    return std::abs( d1 - d2 ) <= (ecoord) aDistanceThreshold;
+    return std::abs( d1_sq - d2_sq ) <= thresholdSquared;
 }
 
 

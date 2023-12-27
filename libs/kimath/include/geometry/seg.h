@@ -378,7 +378,7 @@ private:
     bool intersects( const SEG& aSeg, bool aIgnoreEndpoints = false, bool aLines = false,
                      VECTOR2I* aPt = nullptr ) const;
 
-    bool mutualDistance( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const;
+    bool mutualDistanceSquared( const SEG& aSeg, ecoord& aD1, ecoord& aD2 ) const;
 
 private:
     ///< index within the parent shape (used when m_is_local == false)
