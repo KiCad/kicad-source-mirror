@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-25 13:06+0000\n"
+"PO-Revision-Date: 2023-12-28 08:09+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -21268,8 +21268,9 @@ msgid "Set Do Not Populate"
 msgstr "Να μη γίνει γέμισμα με εξαρτήματα"
 
 #: eeschema/tools/ee_actions.cpp:943
+#, fuzzy
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "Επιλογή σημείωσης Να Μην Συμπληρωθεί (DNP)"
 
 #: eeschema/tools/ee_actions.cpp:948
 #, fuzzy
@@ -21277,8 +21278,9 @@ msgid "Unset Do Not Populate"
 msgstr "Να μη γίνει γέμισμα με εξαρτήματα"
 
 #: eeschema/tools/ee_actions.cpp:949
+#, fuzzy
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "Αποεπιλογή σημείωσης Να Μην Συμπληρωθεί (DNP)"
 
 #: eeschema/tools/ee_actions.cpp:954
 #, fuzzy
@@ -21524,7 +21526,7 @@ msgstr "Προβολή σελίδας %s"
 
 #: eeschema/tools/ee_actions.cpp:1133
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Εμφάνιση τάσεων σημείου λειτουργίας από προσομοίωση"
 
 #: eeschema/tools/ee_actions.cpp:1138
 #, fuzzy
@@ -21533,7 +21535,7 @@ msgstr "Εμφάνιση Κέρσορα"
 
 #: eeschema/tools/ee_actions.cpp:1139
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Εμφάνιση ρευμάτων σημείου λειτουργίας από προσομοίωση"
 
 #: eeschema/tools/ee_actions.cpp:1144 eeschema/tools/ee_actions.cpp:1153
 #: eeschema/tools/ee_actions.cpp:1162 eeschema/tools/ee_actions.cpp:1172
@@ -21740,7 +21742,7 @@ msgstr "Αποθήκευση αντίγραφου του τρέχοντος φύ
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Νέα Καρτέλα Ανάλυσης..."
 
 #: eeschema/tools/ee_actions.cpp:1393
 msgid "Open Workbook..."
@@ -21774,6 +21776,7 @@ msgstr "Διακεκομμένα Ρεύμα/Φάση"
 #: eeschema/tools/ee_actions.cpp:1434
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
+"Σχεδίαση ίχνους του δευτερεύον σήματος (ρεύμα ή φάση) με διακεκομμένη γραμμή"
 
 #: eeschema/tools/ee_actions.cpp:1439
 #, fuzzy
@@ -21830,6 +21833,8 @@ msgstr "Αρχικό σημείο ορισμένο από τον χρήστη"
 #: eeschema/tools/ee_actions.cpp:1482
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"Προσθήκη, επεξεργασία ή διαγραφή των ορισμένων σημάτων προσομοίωσης του "
+"χρήστη"
 
 #: eeschema/tools/ee_actions.cpp:1488
 #, fuzzy
@@ -21857,7 +21862,7 @@ msgstr "Σύμβολα"
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Summary"
-msgstr ""
+msgstr "Σύνοψη"
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
 #, fuzzy
@@ -23574,7 +23579,7 @@ msgstr "Προβολή Επιπέδων βάση Επέκτασης Αρχείο
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:184
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "Παράμετροι Εμφάνισης Επιπέδων: Μετατόπιση και Περιστροφή"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:189
 msgid "Move Current Layer Up"
