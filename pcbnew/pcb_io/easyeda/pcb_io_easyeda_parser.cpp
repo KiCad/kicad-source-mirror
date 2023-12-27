@@ -430,6 +430,41 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
             aContainer->Add( shape.release(), ADD_MODE::APPEND );
         }
+        else if( elType == wxS( "DIMENSION" ) )
+        {
+            PCB_LAYER_ID layer = LayerToKi( arr[1] );
+            double       lineWidth = ConvertSize( arr[7] );
+            wxString     shapeData = arr[2].Trim();
+            //double       textHeight = !arr[4].IsEmpty() ? ConvertSize( arr[4] ) : 0;
+
+            std::vector<SHAPE_LINE_CHAIN> lineChains =
+                    ParseLineChains( shapeData, pcbIUScale.mmToIU( 0.01 ) );
+
+            std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( aContainer );
+            group->SetName( wxS( "Dimension" ) );
+
+            for( const SHAPE_LINE_CHAIN& chain : lineChains )
+            {
+                for( int segId = 0; segId < chain.SegmentCount(); segId++ )
+                {
+                    SEG seg = chain.CSegment( segId );
+
+                    std::unique_ptr<PCB_SHAPE> shape =
+                            std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::SEGMENT );
+
+                    shape->SetLayer( layer );
+                    shape->SetWidth( lineWidth );
+                    shape->SetStart( seg.A );
+                    shape->SetEnd( seg.B );
+
+                    group->AddItem( shape.get() );
+
+                    aContainer->Add( shape.release(), ADD_MODE::APPEND );
+                }
+            }
+
+            aContainer->Add( group.release(), ADD_MODE::APPEND );
+        }
         else if( elType == wxS( "SOLIDREGION" ) )
         {
             wxString layer = arr[1];

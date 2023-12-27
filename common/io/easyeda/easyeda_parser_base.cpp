@@ -108,11 +108,8 @@ std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxStri
             readNumber( xStr );
             readNumber( yStr );
 
-            if( chain.PointCount() > 2 )
-            {
-                chain.SetClosed( true );
+            if( chain.PointCount() > 1 )
                 result.emplace_back( chain );
-            }
 
             chain.Clear();
 
@@ -130,8 +127,13 @@ std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxStri
             }
             chain.Clear();
         }
-        else if( sym == 'L' )
+        else if( sym == 'L' || isdigit( sym ) || sym == '-' )
         {
+            // We may not have a command, just coordinates:
+            // M 4108.8 3364.1 3982.598 3295.6914
+            if( isdigit( sym ) || sym == '-' )
+                pos--;
+
             while( true )
             {
                 if( pos >= data.size() )
@@ -147,7 +149,7 @@ std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxStri
                     ch = data[pos];
                 }
 
-                if( !isdigit( ch ) )
+                if( !isdigit( ch ) && ch != '-' )
                     break;
 
                 wxString xStr, yStr;
@@ -226,10 +228,8 @@ std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxStri
         }
     } while( pos < data.size() );
 
-    if( chain.PointCount() > 2 )
-    {
+    if( chain.PointCount() > 1 )
         result.emplace_back( chain );
-    }
 
     return result;
 }
