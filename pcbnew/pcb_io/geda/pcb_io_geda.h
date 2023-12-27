@@ -36,7 +36,7 @@
 #include <pcb_io/pcb_io_mgr.h>
 
 class GPCB_FPL_CACHE;
-
+class LINE_READER;
 
 /**
  * A #PLUGIN derivation for saving and loading Geda PCB files.

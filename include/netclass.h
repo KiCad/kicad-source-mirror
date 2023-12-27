@@ -31,9 +31,6 @@
 #include <optional>
 #include <macros_swig.h>
 
-class LINE_READER;
-class BOARD;
-class BOARD_DESIGN_SETTINGS;
 using KIGFX::COLOR4D;
 
 
