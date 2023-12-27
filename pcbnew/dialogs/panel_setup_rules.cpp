@@ -52,6 +52,10 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
             {
                 wxPostEvent( PAGED_DIALOG::GetDialog( this ),
                              wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            },
+            [this]( wxStyledTextEvent& aEvent )
+            {
+                onScintillaCharAdded( aEvent );
             } );
 
     m_textEditor->AutoCompSetSeparator( '|' );
@@ -71,17 +75,12 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
     m_textEditor->SetZoom( Pgm().GetCommonSettings()->m_Appearance.text_editor_zoom );
 
     m_textEditor->UsePopUp( 0 );
-    m_textEditor->Bind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
-    m_textEditor->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
     m_textEditor->Bind( wxEVT_CHAR_HOOK, &PANEL_SETUP_RULES::onCharHook, this );
 }
 
 
 PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
 {
-    m_textEditor->Unbind( wxEVT_STC_CHARADDED, &PANEL_SETUP_RULES::onScintillaCharAdded, this );
-    m_textEditor->Unbind( wxEVT_STC_AUTOCOMP_CHAR_DELETED, &PANEL_SETUP_RULES::onScintillaCharAdded,
-                          this );
     m_textEditor->Unbind( wxEVT_CHAR_HOOK, &PANEL_SETUP_RULES::onCharHook, this );
     Pgm().GetCommonSettings()->m_Appearance.text_editor_zoom = m_textEditor->GetZoom();
 
@@ -181,7 +180,15 @@ void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
 
 void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
-    PAGED_DIALOG::GetDialog( this )->SetModified();
+    if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKey() == ' ' )
+    {
+        // This is just a short-cut for do-auto-complete
+    }
+    else
+    {
+        PAGED_DIALOG::GetDialog( this )->SetModified();
+    }
+
     m_textEditor->SearchAnchor();
 
     wxString rules = m_textEditor->GetText();

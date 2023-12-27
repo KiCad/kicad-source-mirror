@@ -225,6 +225,22 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         return;
     }
 
+#ifdef __WXMAC__
+    if( aEvent.GetModifiers() == wxMOD_RAW_CONTROL && aEvent.GetKeyCode() == WXK_SPACE )
+#else
+    if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == WXK_SPACE )
+#endif
+    {
+        m_suppressAutocomplete = false;
+
+        wxStyledTextEvent event;
+        event.SetKey( ' ' );
+        event.SetModifiers( wxMOD_CONTROL );
+        m_onCharAddedHandler( event );
+
+        return;
+    }
+
     if( !isalpha( aEvent.GetKeyCode() ) )
         m_suppressAutocomplete = false;
 
