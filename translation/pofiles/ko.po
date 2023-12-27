@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-26 21:27+0000\n"
+"PO-Revision-Date: 2023-12-28 08:09+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -5882,14 +5882,14 @@ msgid "Invalid directory name, cannot remove root"
 msgstr "잘못된 디렉토리 이름, root를 제거 할 수 없음"
 
 #: common/gestfich.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "단위 '%s'이(가) 'mil'로 끝나지 않습니다."
+msgstr "디렉토리 '%s'가 없음"
 
 #: common/gestfich.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s'은(는) 제대로 파싱되지 않았습니다."
+msgstr "'%s'는 디렉토리가 아님"
 
 #: common/gestfich.cpp:337
 #, c-format
@@ -5897,19 +5897,19 @@ msgid "Error removing directory '%s': %s"
 msgstr "'%s' 디렉터리 제거 오류: %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "출력 디렉토리 '%s'을(를) 생성할 수 없습니다."
+msgstr "디렉토리 '%s'를 만들 수 없음"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "'%s'에서 이미지를 불러올 수 없습니다."
+msgstr "저장소 '%s'를 복제할 수 없음"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "'%s'에서 이미지를 불러올 수 없습니다."
+msgstr "원격 '%s'를 조회할 수 없음"
 
 #: common/git/git_pull_handler.cpp:59
 #, fuzzy, c-format
@@ -5952,18 +5952,16 @@ msgid "Failed to perform checkout operation."
 msgstr "체크아웃 작업을 수행하지 못함."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "'%s'에서 이미지를 불러올 수 없습니다."
+msgstr "커밋 '{}'를 조회할 수 없음"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
 msgstr "커밋을 병합할 수 없음"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "라이브러리 파일을 열 수 없습니다."
+msgstr "저장소 인덱스를 가져올 수 없음"
 
 #: common/git/git_pull_handler.cpp:265
 #, fuzzy
@@ -5980,14 +5978,12 @@ msgid "Added"
 msgstr "추가됨"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "보관된 파일을 열 수 없음."
+msgstr "원격을 조회할 수 없음"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "보관된 파일을 열 수 없음."
+msgstr "원격에 연결할 수 없음"
 
 #: common/git/git_push_handler.cpp:68
 #, fuzzy
@@ -6000,9 +5996,9 @@ msgid "Received %u of %u objects"
 msgstr "%u 수신 %u 개체"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "%s을(를) %s에서 %s(으)로 업데이트했습니다."
+msgstr "* [업데이트됨] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
 #, fuzzy, c-format
@@ -6039,14 +6035,12 @@ msgid "Failed to merge branches."
 msgstr "복구 라이브러리 %s을(를) 저장하는 데에 실패하였습니다."
 
 #: common/git/kicad_git_errors.cpp:35
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "레포지토리 주소를 불러올 수 없습니다"
+msgstr "저장소 복제에 실패함."
 
 #: common/git/kicad_git_errors.cpp:36
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "레포지토리"
+msgstr "원격 저장소를 찾을 수 없음."
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Authentication failed for remote repository."
@@ -6063,9 +6057,8 @@ msgid "Failed to create branch."
 msgstr "파일 '%s'의 생성에 실패하였습니다."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "만들기 실패"
+msgstr "분기를 삭제하지 못함."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "File not found during checkout operation."
@@ -6099,9 +6092,8 @@ msgid "Failed to establish connection with remote repository."
 msgstr "로컬에 저장된 repository.json을 구문 분석하지 못함."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s을(를) 찾을 수 없음"
+msgstr "태그를 찾을 수 없음."
 
 #: common/git/kicad_git_errors.cpp:60
 #, fuzzy
@@ -6109,14 +6101,12 @@ msgid "Failed to create tag."
 msgstr "파일 '%s'의 생성에 실패하였습니다."
 
 #: common/git/kicad_git_errors.cpp:61
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "만들기 실패"
+msgstr "태그 삭제에 실패함."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Unknown error."
-msgstr "알 수 없는 오류"
+msgstr "알 수 없는 오류."
 
 #: common/git/kicad_git_errors.cpp:64
 #, fuzzy
@@ -12315,9 +12305,8 @@ msgid "A DC source must be specified."
 msgstr "시트에는 지정된 파일이 있어야 합니다."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:361
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "소스 1과 소스 2는 반드시 달라야 합니다"
+msgstr "소스 1과 소스 2는 서로 달라야 합니다."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
 msgid "A frequency range must be specified."
@@ -14673,9 +14662,9 @@ msgid "Unable to open destination '%s'"
 msgstr "대상 '%s'을(를) 열 수 없음"
 
 #: eeschema/eeschema_jobs_handler.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "%s 풋프린트를 찾을 수 없습니다."
+msgstr "BOM 형식 사전 설정 '%s'를 찾을 수 없음"
 
 #: eeschema/eeschema_jobs_handler.cpp:722
 #, c-format
@@ -15462,9 +15451,8 @@ msgstr "피트"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1568 pcbnew/tools/drawing_tool.cpp:1657
-#, fuzzy
 msgid "Import Graphics"
-msgstr "그래픽 가져오기..."
+msgstr "그래픽 불러오기"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 msgid "No file selected!"
@@ -15984,9 +15972,8 @@ msgid "Unhandled item type %d"
 msgstr "처리되지 않은 항목 유형 %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "디렉토리 %s 삭제에 실패하였습니다"
+msgstr "'장치' 디렉토리를 만들지 못함."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:424
 #, c-format
@@ -16975,9 +16962,9 @@ msgstr "Eagle 버전 6.x XML 라이브러리 파일"
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:421
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:465
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:499
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "'%s' 데이터 파일을 읽을 수 없습니다."
+msgstr "'%s'에서 올바른 회로도 파일을 찾을 수 없음"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:274
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:279
@@ -17009,19 +16996,18 @@ msgstr "EasyEDA (JLCEDA) 표준 파일"
 
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_parser.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "'%s' 파일을 보관하지 못함."
+msgstr "값 구문 분석 실패: '%s'"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:58
 msgid "httplib plugin missing library table handle!"
 msgstr "httplib 플러그인에 라이브러리 테이블 핸들이 없음!"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr ""
-"풋프린트 %s을(를) '%s' 라이브러리에서 불러오는 중에 오류가 발생하였습니다."
+msgstr "HTTP 라이브러리 %s에서 데이터를 검색하는 중 오류 발생: %s"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:218
 #, fuzzy, c-format
@@ -18587,9 +18573,8 @@ msgid "expecting trace type"
 msgstr "기존 배선"
 
 #: eeschema/sim/legacy_workbook.cpp:236
-#, fuzzy
 msgid "expecting trace name"
-msgstr "예상 번호."
+msgstr "예상되는 트레이스 이름"
 
 #: eeschema/sim/legacy_workbook.cpp:246
 msgid "expecting trace color"
@@ -18659,9 +18644,8 @@ msgid "No simulation model definition found for symbol '%s'."
 msgstr "심볼 '%s'에 대한 시뮬레이션 모델 정의를 찾을 수 없습니다."
 
 #: eeschema/sim/sim_model.cpp:410
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "시뮬레이션 모델 편집기"
+msgstr "시뮬레이션 모델 정의를 찾을 수 없음."
 
 #: eeschema/sim/sim_model.cpp:542 eeschema/sim/sim_model.cpp:601
 #, c-format
@@ -19991,9 +19975,8 @@ msgid "Show the symbol checker window"
 msgstr "심볼 검사기 창 표시"
 
 #: eeschema/tools/ee_actions.cpp:64
-#, fuzzy
 msgid "Show differences between schematic symbol and its library equivalent"
-msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
+msgstr "회로도 심볼과 해당 라이브러리 간의 차이점 표시"
 
 #: eeschema/tools/ee_actions.cpp:71
 msgid "Show simulation window for running SPICE or IBIS simulations."
@@ -20751,9 +20734,8 @@ msgid "Exclude from Simulation"
 msgstr "시뮬레이션에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:907
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr "%s에 'BOM에서 제외' 제작 속성이 추가되었습니다."
+msgstr "시뮬레이션 속성에서 제외 설정"
 
 #: eeschema/tools/ee_actions.cpp:912
 #, fuzzy
@@ -20761,9 +20743,8 @@ msgid "Include in Simulation"
 msgstr "시뮬레이션 상의 Spice 값"
 
 #: eeschema/tools/ee_actions.cpp:913
-#, fuzzy
 msgid "Clear the exclude from simulation attribute"
-msgstr "%s에 'BOM에서 제외' 제작 속성이 추가되었습니다."
+msgstr "시뮬레이션에서 제외 속성 선택 취소"
 
 #: eeschema/tools/ee_actions.cpp:918
 #, fuzzy
@@ -20771,9 +20752,8 @@ msgid "Toggle Exclude from Simulation"
 msgstr "시뮬레이션에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:919
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr "%s에서 'BOM에서 제외' 제작 속성을 제거합니다."
+msgstr "시뮬레이션에서 제외 속성 토글"
 
 #: eeschema/tools/ee_actions.cpp:924
 #, fuzzy
@@ -20781,9 +20761,8 @@ msgid "Exclude from Board"
 msgstr "기판에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:925
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr "%s에 'BOM에서 제외' 제작 속성이 추가되었습니다."
+msgstr "보드에서 제외 속성 설정"
 
 #: eeschema/tools/ee_actions.cpp:930
 #, fuzzy
@@ -20791,9 +20770,8 @@ msgid "Include on Board"
 msgstr "기판에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:931
-#, fuzzy
 msgid "Clear the exclude from board attribute"
-msgstr "%s에 'BOM에서 제외' 제작 속성이 추가되었습니다."
+msgstr "보드에서 제외 속성 지우기"
 
 #: eeschema/tools/ee_actions.cpp:936
 #, fuzzy
@@ -20801,9 +20779,8 @@ msgid "Toggle Exclude from Board"
 msgstr "기판에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:937
-#, fuzzy
 msgid "Toggle the exclude from board attribute"
-msgstr "%s에서 'BOM에서 제외' 제작 속성을 제거합니다."
+msgstr "보드에서 제외하기 속성 토글"
 
 #: eeschema/tools/ee_actions.cpp:942
 #, fuzzy
@@ -21312,9 +21289,8 @@ msgid "Draw plots with a black background"
 msgstr "검은색 배경으로 플롯 그리기"
 
 #: eeschema/tools/ee_actions.cpp:1445
-#, fuzzy
 msgid "Edit Analysis Tab..."
-msgstr "전역 라벨 추가"
+msgstr "분석 탭 편집..."
 
 #: eeschema/tools/ee_actions.cpp:1446
 #, fuzzy
@@ -21348,9 +21324,8 @@ msgid "Select a value to be tuned"
 msgstr "조정하고 싶은 값을 선택하세요"
 
 #: eeschema/tools/ee_actions.cpp:1481
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "사용자 정의 신호"
+msgstr "사용자 정의 신호..."
 
 #: eeschema/tools/ee_actions.cpp:1482
 msgid "Add, edit or delete user-defined simulation signals"
@@ -21407,9 +21382,8 @@ msgstr "라이브러리 '%s'이(가) 현재 구성에서 사용하도록 설정�
 
 #: eeschema/tools/ee_inspection_tool.cpp:294
 #: eeschema/tools/ee_inspection_tool.cpp:300
-#, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "심볼 라이브러리 관리..."
+msgstr "심볼 라이브러리 관리"
 
 #: eeschema/tools/ee_inspection_tool.cpp:298
 #: pcbnew/tools/board_inspection_tool.cpp:1520
@@ -21474,9 +21448,8 @@ msgstr "파일에 그래픽 항목이 없습니다."
 #: eeschema/tools/sch_drawing_tools.cpp:893
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:712
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:801
-#, fuzzy
 msgid "Import Graphic"
-msgstr "그래픽 가져오기..."
+msgstr "그래픽 불러오기"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1038
 msgid "Junction location contains no joinable wires and/or pins."
@@ -21803,9 +21776,8 @@ msgstr "내보낼 심볼이 없습니다"
 
 #: eeschema/tools/symbol_editor_control.cpp:578
 #: pcbnew/footprint_edit_frame.cpp:1366
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "보기를 PNG로 내보내기..."
+msgstr "뷰를 PNG로 내보내기"
 
 #: eeschema/tools/symbol_editor_control.cpp:589
 #, c-format
@@ -23953,7 +23925,7 @@ msgstr "회로도와 PCB 디자인에서 사용되는 시트와 제목 블록 �
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "KiCad와 서드 파티 레포지토리로부터 다운로드 가능한 패키지 관리"
+msgstr "KiCad와 타사 저장소에서 다운로드 가능한 패키지 관리"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -24613,9 +24585,8 @@ msgid "Preparing to fetch repositories"
 msgstr "저장소 관리"
 
 #: kicad/pcm/pcm.cpp:1132
-#, fuzzy
 msgid "Fetching repository..."
-msgstr "레포지토리 취득"
+msgstr "저장소 가져오기..."
 
 #: kicad/pcm/pcm.cpp:1145
 #, fuzzy
@@ -24881,9 +24852,8 @@ msgid "Initialize a new repository"
 msgstr "레포지토리를 파싱할 수 없습니다: %s"
 
 #: kicad/project_tree_pane.cpp:938
-#, fuzzy
 msgid "Commit Project..."
-msgstr "프로젝트 (&P)"
+msgstr "프로젝트 커밋..."
 
 #: kicad/project_tree_pane.cpp:939 kicad/project_tree_pane.cpp:953
 msgid "Commit changes to the local repository"
@@ -24906,18 +24876,16 @@ msgid "Pull changes from remote repository into local"
 msgstr "원격 저장소의 변경 내용을 로컬로 가져오기"
 
 #: kicad/project_tree_pane.cpp:952
-#, fuzzy
 msgid "Commit File..."
-msgstr "필드 편집"
+msgstr "파일 커밋..."
 
 #: kicad/project_tree_pane.cpp:967
 msgid "Switch to branch "
 msgstr "브랜치로 전환 "
 
 #: kicad/project_tree_pane.cpp:972
-#, fuzzy
 msgid "Other..."
-msgstr "기타"
+msgstr "기타..."
 
 #: kicad/project_tree_pane.cpp:973
 #, fuzzy
@@ -24960,9 +24928,8 @@ msgid "The selected directory is already a git project."
 msgstr "선택한 디렉터리는 이미 git 프로젝트입니다."
 
 #: kicad/project_tree_pane.cpp:1551
-#, fuzzy
 msgid "Failed to initialize git project."
-msgstr "부품 찾기 실패"
+msgstr "git 프로젝트 초기화에 실패했습니다."
 
 #: kicad/project_tree_pane.cpp:1566
 #, fuzzy
@@ -24991,9 +24958,9 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "분기 '%s' 조회에 실패함: %s"
 
 #: kicad/project_tree_pane.cpp:1772
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s'"
-msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
+msgstr "'%s'의 분기 헤드를 찾지 못함"
 
 #: kicad/project_tree_pane.cpp:1783
 #, c-format
@@ -25034,9 +25001,9 @@ msgid "Failed to add file to index: %s"
 msgstr "인덱스에 파일을 추가하지 못함: %s"
 
 #: kicad/project_tree_pane.cpp:2171
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "파일 '%s'의 생성에 실패하였습니다."
+msgstr "인덱스 작성에 실패함: %s"
 
 #: kicad/project_tree_pane.cpp:2178
 #, c-format
@@ -25059,14 +25026,14 @@ msgid "Failed to get commit: %s"
 msgstr "'%s'회로도를 저장하지 못했습니다"
 
 #: kicad/project_tree_pane.cpp:2218
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "임시 파일 '%s'을(를) 만들지 못했습니다."
+msgstr "작성자 서명 생성에 실패함: %s"
 
 #: kicad/project_tree_pane.cpp:2228
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "파일 '%s'의 생성에 실패하였습니다."
+msgstr "커밋 생성에 실패함: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -28208,9 +28175,8 @@ msgid "Curve Points"
 msgstr "곡선 점"
 
 #: pcbnew/board_connected_item.cpp:275
-#, fuzzy
 msgid "Prefer Zone Connections"
-msgstr "%s 영역 연결: %s."
+msgstr "선호 영역 연결"
 
 #: pcbnew/board_connected_item.cpp:281
 #, fuzzy
@@ -30043,9 +30009,8 @@ msgid "Stagger:"
 msgstr "스태거:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:148
-#, fuzzy
 msgid "Value -1,  0 or 1 disable this option."
-msgstr "값을 0으로 설정하여 제약을 비활성화"
+msgstr "-1, 0 또는 1 값을 입력하면 이 옵션이 비활성화됨."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:158
 msgid "Rows"
@@ -30186,9 +30151,8 @@ msgstr ""
 "기준점 위치 및 배열 중심에서:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
-#, fuzzy
 msgid "Distance between Ref point and Center pos."
-msgstr "스트립 라인과 상단 금속 사이의 거리"
+msgstr "기준점과 중심 위치 사이의 거리."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:384
 msgid ""
@@ -30199,9 +30163,8 @@ msgstr ""
 "기준점 위치 및 배열 중심에서:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:400
-#, fuzzy
 msgid "Angle between Ref point and Center pos."
-msgstr "스트립 라인과 상단 금속 사이의 거리"
+msgstr "기준점과 중심 위치 사이의 각도."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:418
 #, fuzzy
@@ -30617,14 +30580,12 @@ msgid "Exclude all violations of rule '%s'"
 msgstr "모든 규칙 '%s' 위반 제외"
 
 #: pcbnew/dialogs/dialog_drc.cpp:622
-#, fuzzy
 msgid "Run Inspect > Clearance Resolution"
-msgstr "클리어런스 해상도..."
+msgstr "검사 실행 > 클리어런스 해결"
 
 #: pcbnew/dialogs/dialog_drc.cpp:635
-#, fuzzy
 msgid "Run Inspect > Constraints Resolution"
-msgstr "제약 해결..."
+msgstr "검사 실행 > 제약 조건 해결"
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
 msgid "Run Inspect > Compare Footprint with Library"
@@ -30911,9 +30872,8 @@ msgstr "제조업체 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Column containing the manufacturer part number"
-msgstr "Component: 제조업체는 비어있을 수 없습니다."
+msgstr "제조사 부품 번호가 포함된 열"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
@@ -31020,9 +30980,8 @@ msgid "STEP Output File"
 msgstr "BOM 출력 파일"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:368
-#, fuzzy
 msgid "No filename for output file"
-msgstr "풋프린트 파일이 아닙니다."
+msgstr "출력 파일의 파일명이 없음"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:400
 #, c-format
@@ -31157,9 +31116,8 @@ msgid "Export silkscreen"
 msgstr "전면 실크 스크린"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:172
-#, fuzzy
 msgid "Export silkscreen graphics."
-msgstr "실크스크린 레이어 표시"
+msgstr "실크스크린 그래픽 내보내기."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:176
 #, fuzzy
@@ -31167,9 +31125,8 @@ msgid "Export solder mask"
 msgstr "전면 솔더 마스크"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:178
-#, fuzzy
 msgid "Export solder mask graphics."
-msgstr "전면 솔더 마스크"
+msgstr "솔더 마스크 그래픽 내보내기."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:182
 #, fuzzy
@@ -31177,9 +31134,8 @@ msgid "Export solder paste"
 msgstr "전면 솔더 페이스트"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
-#, fuzzy
 msgid "Export solder paste graphics."
-msgstr "전면 솔더 페이스트"
+msgstr "솔더 페이스트 그래픽 내보내기."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 msgid "Board outline chaining tolerance:"
@@ -31215,9 +31171,8 @@ msgid "Process failed with exit code %d"
 msgstr "종료 코드 %d로 인해 프로세스 실패함"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:192
-#, fuzzy
 msgid "Success"
-msgstr "성공."
+msgstr "성공"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:236
 msgid "Command line:\n"
@@ -31267,9 +31222,8 @@ msgid "Export as black elements on a white background"
 msgstr "흰 배경에 검은색 요소로 내보내기"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
-#, fuzzy
 msgid "Use current board theme"
-msgstr "현재 보드를 다른 이름으로 저장..."
+msgstr "현재 보드 테마 사용"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:114
 msgid "Page with frame and title block"
@@ -32459,9 +32413,8 @@ msgid "Round pads only"
 msgstr "원형 패드만"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
-#, fuzzy
 msgid "Existing teardrops only"
-msgstr "네트 업데이트 중..."
+msgstr "기존 티어드롭만 해당"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
@@ -32475,9 +32428,8 @@ msgstr "보드 설정에서 기본값 수정"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:150
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:330
-#, fuzzy
 msgid "Prefer zone connection"
-msgstr "%s 영역 연결: %s."
+msgstr "선호 영역 연결"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
@@ -32524,9 +32476,8 @@ msgid ""
 msgstr "패드 또는 비아와 크기가 비슷한 트랙은 티어드롭이 필요하지 않습니다."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
-#, fuzzy
 msgid "(as a percentage of pad/via size)"
-msgstr "추가 클리어런스는 패드 사이즈에 대해 백분율로 지정됩니다."
+msgstr "(패드/비아 크기의 백분율)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:222
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:458
@@ -38077,9 +38028,9 @@ msgid "%s fabrication property differs."
 msgstr "%s 패드 연결 속성이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s orientation differs."
-msgstr "%s의 규칙 영역"
+msgstr "%s 방향이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:274
 #, fuzzy, c-format
@@ -38222,9 +38173,9 @@ msgid "%s hatch gap differs."
 msgstr "%s 해치 간격이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch orientation differs."
-msgstr "%s의 규칙 영역"
+msgstr "%s 해치 방향이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:478
 #, fuzzy, c-format
@@ -38242,9 +38193,9 @@ msgid "%s minimum hatch hole setting differs."
 msgstr "%s 최소 해치 홀 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "%s outline corner count differs."
-msgstr "%s의 규칙 영역"
+msgstr "%s 외곽선 모서리 개수가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:503
 #, c-format
@@ -38252,33 +38203,28 @@ msgid "%s corners differ."
 msgstr "%s 모서리가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:544
-#, fuzzy
 msgid "Footprint descriptions differ."
-msgstr "풋프린트 관련성 파일"
+msgstr "풋프린트 설명이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:545
-#, fuzzy
 msgid "Footprint keywords differ."
-msgstr "풋프린트 순서"
+msgstr "풋프린트 키워드가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:550
 msgid "Footprint types differ."
 msgstr "풋프린트 유형이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:552
-#, fuzzy
 msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "패드 사이에 브리지 솔더 마스크 구멍 허용"
+msgstr "패드 간에 브리지 솔더 마스크 구멍 설정이 다를 수 있도록 허용합니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:554
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "부품자리 요구 사항 면제"
+msgstr "부품자리 요구 사항 설정에서 제외됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:569
-#, fuzzy
 msgid "Pad clearance overridden."
-msgstr "클리어런스 재정의"
+msgstr "패드 간격이 재정의됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:571
 msgid "Solder mask expansion overridden."
@@ -38293,9 +38239,8 @@ msgid "Solder paste relative clearance overridden."
 msgstr "솔더 페이스트 상대 간격이 재정의됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:578
-#, fuzzy
 msgid "Zone connection overridden."
-msgstr "영역 연결 스타일"
+msgstr "영역 연결이 재정의됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:582
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:587
@@ -38303,14 +38248,12 @@ msgid "Net tie pad groups differ."
 msgstr "네트 타이 패드 그룹이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:654
-#, fuzzy
 msgid "Pad count differs."
-msgstr "패드 커퍼"
+msgstr "패드 개수가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:681
-#, fuzzy
 msgid "Rule area count differs."
-msgstr "%s의 규칙 영역"
+msgstr "규칙 영역 개수가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:700
 msgid "No project loaded, skipping library parity tests."
@@ -39516,9 +39459,8 @@ msgid "Place at:"
 msgstr "위치:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:95
-#, fuzzy
 msgid "If not checked: use interactive placement."
-msgstr "인터랙티브 배치"
+msgstr "선택하지 않은 경우: 대화형 배치를 사용함."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:139
 msgid ""
@@ -40540,9 +40482,8 @@ msgid "Constraints Report"
 msgstr "제약 보고서"
 
 #: pcbnew/pcb_edit_frame.cpp:2530 pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Compare Footprint with Library"
-msgstr "풋프린트를 라이브러리로 내보내기..."
+msgstr "라이브러리와 풋프린트 비교"
 
 #: pcbnew/pcb_field.cpp:93
 #, fuzzy
@@ -41783,9 +41724,9 @@ msgid "Unknown SVGNODE nodeType %d"
 msgstr "알 수 없는 SVGNODE 노드 타입 %d"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid board in '%s'"
-msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
+msgstr "'%s'에서 올바른 보드를 찾을 수 없음"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:266
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:271
@@ -41801,10 +41742,9 @@ msgstr "'%s'에서 유효한 풋프린트를 찾을 수 없음"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:362
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr ""
-"풋프린트 %s을(를) '%s' 라이브러리에서 불러오는 중에 오류가 발생하였습니다."
+msgstr "라이브러리 '%s'에서 풋프린트를 열거하는 중 오류 발생: %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
@@ -41819,9 +41759,9 @@ msgid "Cannot load footprint '%s' from '%s'"
 msgstr "풋프린트 '%s'을(를) '%s'에서 불러올 수 없습니다"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "풋프린트 '%s'이(가) 라이브러리 '%s'에서 찾을 수 없습니다."
+msgstr "풋프린트 '%s'를 라이브러리 '%s'에서 찾을 수 없음"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:43
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:48
@@ -42100,9 +42040,9 @@ msgid "Undefined Layers Warning"
 msgstr "미정의 레이어 경고"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1213
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "출력 디렉토리 '%s'을(를) 생성할 수 없습니다."
+msgstr "'%s' 유형의 생성된 개체를 만들 수 없음"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1350
 #, c-format
@@ -42847,9 +42787,9 @@ msgid "Diff Pair Gap: %s"
 msgstr "차동 쌍 간격: %s"
 
 #: pcbnew/router/router_tool.cpp:2632 pcbnew/tools/pcb_control.cpp:1502
-#, fuzzy, c-format
+#, c-format
 msgid "DP Max Uncoupled-length: %s"
-msgstr "최대 uncoupled 길이를 해결했습니다: %s."
+msgstr "DP 최대 비결합 길이: %s"
 
 #: pcbnew/sel_layer.cpp:351
 msgid "Warning: top and bottom layers are same."
@@ -43507,9 +43447,8 @@ msgstr "라이브러리 파일:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1514
 #: pcbnew/tools/board_inspection_tool.cpp:1522
-#, fuzzy
 msgid "Manage Footprint Libraries"
-msgstr "풋프린트 라이브러리 관리..."
+msgstr "풋프린트 라이브러리 관리"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Copy line width of first object"
@@ -43524,9 +43463,8 @@ msgid "Create from Selection"
 msgstr "선택 항목 생성"
 
 #: pcbnew/tools/convert_tool.cpp:422
-#, fuzzy
 msgid "Could not convert selection"
-msgstr "보관된 파일을 열 수 없음."
+msgstr "선택 항목을 변환할 수 없음"
 
 #: pcbnew/tools/convert_tool.cpp:422
 #, fuzzy
@@ -43937,9 +43875,8 @@ msgid "Some of the lines could not be extended to meet."
 msgstr "일부 선을 모깎기할 수 없습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:380
-#, fuzzy
 msgid "Merge polygons."
-msgstr "그래픽 폴리곤 그리기"
+msgstr "다각형 병합."
 
 #: pcbnew/tools/item_modification_routine.cpp:388
 #, fuzzy
@@ -43952,9 +43889,8 @@ msgid "Some of the polygons could not be merged."
 msgstr "일부 선을 모깎기할 수 없습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:418
-#, fuzzy
 msgid "Subtract polygons."
-msgstr "다각형 스케치"
+msgstr "다각형 빼기."
 
 #: pcbnew/tools/item_modification_routine.cpp:426
 #, fuzzy
@@ -43967,9 +43903,8 @@ msgid "Some of the polygons could not be subtracted."
 msgstr "일부 선을 모깎기할 수 없습니다."
 
 #: pcbnew/tools/item_modification_routine.cpp:459
-#, fuzzy
 msgid "Intersect polygons."
-msgstr "다각형 스케치"
+msgstr "다각형 교차하기."
 
 #: pcbnew/tools/item_modification_routine.cpp:467
 #, fuzzy
@@ -44046,9 +43981,8 @@ msgid "Creates a rule area from the selection"
 msgstr "규칙 영역 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:76
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "선택 범위에서 선 생성"
+msgstr "선택 항목에서 선 생성..."
 
 #: pcbnew/tools/pcb_actions.cpp:77
 msgid "Creates graphic lines from the selection"
@@ -44274,9 +44208,8 @@ msgid "Switch the arc posture"
 msgstr "호의 모양을 전환합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "활성화 레이어 %d에 불러온 파일이 없습니다."
+msgstr "활성 레이어의 개체에만 스냅"
 
 #: pcbnew/tools/pcb_actions.cpp:375
 msgid "Enables snapping to objects on the active layer only"
@@ -44376,9 +44309,8 @@ msgid "Moves the selected item(s) by an exact amount"
 msgstr "선택한 개체를 지정된 수치만큼 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:503
-#, fuzzy
 msgid "Move Corner To..."
-msgstr "제거"
+msgstr "모서리 이동 위치..."
 
 #: pcbnew/tools/pcb_actions.cpp:504
 #, fuzzy
@@ -44386,9 +44318,8 @@ msgid "Move the active corner to an exact location"
 msgstr "선택한 개체를 지정된 수치만큼 이동"
 
 #: pcbnew/tools/pcb_actions.cpp:510
-#, fuzzy
 msgid "Move Midpoint To..."
-msgstr "핀 이동"
+msgstr "중간점 이동 위치..."
 
 #: pcbnew/tools/pcb_actions.cpp:511
 #, fuzzy
@@ -44446,9 +44377,8 @@ msgid "Adds arcs tangent to the selected straight track segments"
 msgstr "선택한 직선 배선 세그먼트에 호 탄젠트를 추가합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:609
-#, fuzzy
 msgid "Fillet Lines..."
-msgstr "모깍기 라인"
+msgstr "모깍기 선..."
 
 #: pcbnew/tools/pcb_actions.cpp:610
 msgid "Adds arcs tangent to the selected lines"
@@ -44891,9 +44821,8 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "IPC-D-356 네트리스트 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:1076
-#, fuzzy
 msgid "Bill of Materials..."
-msgstr "BOM"
+msgstr "BOM..."
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Create bill of materials from board"
@@ -45527,9 +45456,8 @@ msgid "Shows board statistics"
 msgstr "기판의 통계 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1872
-#, fuzzy
 msgid "Clearance Resolution"
-msgstr "클리어런스 해상도..."
+msgstr "클리어런스 해결"
 
 #: pcbnew/tools/pcb_actions.cpp:1873
 msgid ""
@@ -45537,18 +45465,16 @@ msgid ""
 msgstr "선택한 두 객체에 대하여 활성화된 레이어의 클리어런스 해상도를 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1879
-#, fuzzy
 msgid "Constraints Resolution"
-msgstr "제약 해결..."
+msgstr "제약 조건 해결"
 
 #: pcbnew/tools/pcb_actions.cpp:1880
 msgid "Show constraints resolution for the selected object"
 msgstr "선택한 객체에 대한 제약 해결 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1887
-#, fuzzy
 msgid "Show differences between board footprint and its library equivalent"
-msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
+msgstr "보드 풋프린트와 해당 라이브러리 간의 차이점 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1893
 #, fuzzy
