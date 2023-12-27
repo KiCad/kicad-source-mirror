@@ -46,8 +46,7 @@ public:
     bool CanReadBoard( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr,
-                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+                      const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {

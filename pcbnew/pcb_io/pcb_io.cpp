@@ -73,8 +73,7 @@ bool PCB_IO::CanReadFootprint( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                          const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                          PROGRESS_REPORTER* aProgressReporter )
+                          const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
@@ -87,7 +86,7 @@ std::vector<FOOTPRINT*> PCB_IO::GetImportedCachedLibraryFootprints()
 
 
 void PCB_IO::SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                        const STRING_UTF8_MAP* aProperties, PROGRESS_REPORTER* aProgressReporter )
+                        const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     NOT_IMPLEMENTED( __FUNCTION__ );

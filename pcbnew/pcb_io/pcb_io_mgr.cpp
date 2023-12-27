@@ -172,7 +172,8 @@ BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD*
 
     if( (PCB_IO*) pi )  // test pi->plugin
     {
-        return pi->LoadBoard( aFileName, aAppendToMe, aProperties, aProject, aProgressReporter );
+        pi->SetProgressReporter( aProgressReporter );
+        return pi->LoadBoard( aFileName, aAppendToMe, aProperties, aProject );
     }
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );

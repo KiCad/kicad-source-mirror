@@ -675,7 +675,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             unsigned startTime = GetRunningMicroSecs();
 #endif
 
-            loadedBoard = pi->LoadBoard( fullFileName, nullptr, &props, &Prj(), &progressReporter );
+            pi->SetProgressReporter( &progressReporter );
+            loadedBoard = pi->LoadBoard( fullFileName, nullptr, &props, &Prj() );
 
 #if USE_INSTRUMENTATION
             unsigned stopTime = GetRunningMicroSecs();
@@ -1273,8 +1274,8 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
         try
         {
             PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
-
-            pi->SaveBoard( tempFile, GetBoard(), &props, &reporter );
+            pi->SetProgressReporter( &reporter );
+            pi->SaveBoard( tempFile, GetBoard(), &props );
             return true;
         }
         catch( const IO_ERROR& ioe )

@@ -44,8 +44,7 @@ PCB_IO_FABMASTER::~PCB_IO_FABMASTER()
 
 
 BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                    const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                    PROGRESS_REPORTER* aProgressReporter )
+                                    const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
 
@@ -55,11 +54,11 @@ BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToM
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    if( aProgressReporter )
+    if( m_progressReporter )
     {
-        aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
-        if( !aProgressReporter->KeepRefreshing() )
+        if( !m_progressReporter->KeepRefreshing() )
             THROW_IO_ERROR( _( "Open cancelled by user." ) );
     }
 
@@ -72,7 +71,7 @@ BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToM
     }
 
     m_fabmaster.Process();
-    m_fabmaster.LoadBoard( m_board, aProgressReporter );
+    m_fabmaster.LoadBoard( m_board, m_progressReporter );
 
     return m_board;
 }

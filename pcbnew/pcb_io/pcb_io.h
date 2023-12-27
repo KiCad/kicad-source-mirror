@@ -119,8 +119,6 @@ public:
      *                    it to be optionally NULL.
      * @param aProject is the optional #PROJECT object primarily used by third party
      *                 importers.
-     * @param aProgressReporter an optional progress reporter
-     * @param aLineCount a line count (necessary if a progress reporter is supplied)
      * @return the successfully loaded board, or the same one as \a aAppendToMe if aAppendToMe
      *         was not NULL, and caller owns it.
      *
@@ -129,8 +127,7 @@ public:
      *                 possible.
      */
     virtual BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                         const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
-                         PROGRESS_REPORTER* aProgressReporter = nullptr );
+                         const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr );
 
     /**
      * Return a container with the cached library footprints generated in the last call to
@@ -157,13 +154,11 @@ public:
      *                    tuning arguments that the plugin is known to support.  The caller
      *                    continues to own this object (plugin may not delete it) and plugins
      *                    should expect it to be optionally NULL.
-     * @param aProgressReporter an optional progress reporter
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                            const STRING_UTF8_MAP* aProperties = nullptr,
-                            PROGRESS_REPORTER*     aProgressReporter = nullptr );
+                            const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Return a list of footprint names contained within the library at @a aLibraryPath.

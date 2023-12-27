@@ -50,8 +50,7 @@ bool PCB_IO_SOLIDWORKS::CanReadBoard( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                         PROGRESS_REPORTER* aProgressReporter )
+                                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
 
@@ -120,7 +119,7 @@ BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, aProgressReporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )

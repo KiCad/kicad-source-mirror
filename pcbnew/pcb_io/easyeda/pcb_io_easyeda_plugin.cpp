@@ -133,8 +133,7 @@ bool PCB_IO_EASYEDA::CanReadLibrary( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                  const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                  PROGRESS_REPORTER* aProgressReporter )
+                                  const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     m_loadedFootprints.clear();
 
@@ -145,11 +144,11 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    if( aProgressReporter )
+    if( m_progressReporter )
     {
-        aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
-        if( !aProgressReporter->KeepRefreshing() )
+        if( !m_progressReporter->KeepRefreshing() )
             THROW_IO_ERROR( _( "Open cancelled by user." ) );
     }
 

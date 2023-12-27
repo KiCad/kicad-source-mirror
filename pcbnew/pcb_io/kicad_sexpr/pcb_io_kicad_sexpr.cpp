@@ -294,8 +294,7 @@ bool PCB_IO_KICAD_SEXPR::CanReadBoard( const wxString& aFileName ) const
 
 
 void PCB_IO_KICAD_SEXPR::SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                            const STRING_UTF8_MAP* aProperties,
-                            PROGRESS_REPORTER*     aProgressReporter )
+                            const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2415,18 +2414,17 @@ PCB_IO_KICAD_SEXPR::~PCB_IO_KICAD_SEXPR()
 
 
 BOARD* PCB_IO_KICAD_SEXPR::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                              const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                              PROGRESS_REPORTER* aProgressReporter )
+                              const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     FILE_LINE_READER reader( aFileName );
 
     unsigned lineCount = 0;
 
-    if( aProgressReporter )
+    if( m_progressReporter )
     {
-        aProgressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
+        m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
-        if( !aProgressReporter->KeepRefreshing() )
+        if( !m_progressReporter->KeepRefreshing() )
             THROW_IO_ERROR( _( "Open cancelled by user." ) );
 
         while( reader.ReadLine() )
@@ -2435,7 +2433,7 @@ BOARD* PCB_IO_KICAD_SEXPR::LoadBoard( const wxString& aFileName, BOARD* aAppendT
         reader.Rewind();
     }
 
-    BOARD* board = DoLoad( reader, aAppendToMe, aProperties, aProgressReporter, lineCount );
+    BOARD* board = DoLoad( reader, aAppendToMe, aProperties, m_progressReporter, lineCount );
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )

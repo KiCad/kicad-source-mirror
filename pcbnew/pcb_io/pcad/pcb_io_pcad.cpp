@@ -63,8 +63,7 @@ bool PCB_IO_PCAD::CanReadBoard( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_PCAD::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                               const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                               PROGRESS_REPORTER* aProgressReporter )
+                               const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     wxXmlDocument   xmlDoc;
 

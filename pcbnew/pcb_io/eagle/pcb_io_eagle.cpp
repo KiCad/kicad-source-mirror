@@ -321,8 +321,7 @@ VECTOR2I inline PCB_IO_EAGLE::kicad_fontsize( const ECOORD& d, int aTextThicknes
 
 
 BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                PROGRESS_REPORTER* aProgressReporter )
+                                const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;
@@ -330,7 +329,6 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     init( aProperties );
 
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
-    m_progressReporter = aProgressReporter;
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )

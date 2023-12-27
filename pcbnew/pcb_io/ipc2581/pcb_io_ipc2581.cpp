@@ -301,8 +301,8 @@ wxXmlNode* PCB_IO_IPC2581::generateXmlHeader()
 
 wxXmlNode* PCB_IO_IPC2581::generateContentSection()
 {
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase( _( "Generating content section" ) );
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Generating content section" ) );
 
     wxXmlNode* contentNode = appendNode( m_xml_root, "Content" );
     addAttribute( contentNode,  "roleRef", "Owner" );
@@ -1116,8 +1116,8 @@ wxXmlNode* PCB_IO_IPC2581::generateLogisticSection()
 
 wxXmlNode* PCB_IO_IPC2581::generateHistorySection()
 {
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase( _( "Generating history section" ) );
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Generating history section" ) );
 
     wxXmlNode* historyNode = appendNode( m_xml_root, "HistoryRecord" );
     addAttribute( historyNode,  "number", "1" );
@@ -1143,8 +1143,8 @@ wxXmlNode* PCB_IO_IPC2581::generateHistorySection()
 
 wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 {
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase( _( "Generating BOM section" ) );
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Generating BOM section" ) );
 
     struct REFDES
     {
@@ -1307,8 +1307,8 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
 wxXmlNode* PCB_IO_IPC2581::generateEcadSection()
 {
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase( _( "Generating CAD data" ) );
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Generating CAD data" ) );
 
     wxXmlNode* ecadNode = appendNode( m_xml_root, "Ecad" );
     addAttribute( ecadNode,  "name", "Design" );
@@ -2339,20 +2339,20 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
 
     for( PCB_LAYER_ID layer : layers )
     {
-        if( m_progress_reporter )
-            m_progress_reporter->SetMaxProgress( nets.GetNetCount() * layers.size() );
+        if( m_progressReporter )
+            m_progressReporter->SetMaxProgress( nets.GetNetCount() * layers.size() );
 
         wxXmlNode* layerNode = appendNode( aStepNode, "LayerFeature" );
         addAttribute( layerNode,  "layerRef", m_layer_name_map[layer] );
 
         for( const NETINFO_ITEM* net : nets )
         {
-            if( m_progress_reporter )
+            if( m_progressReporter )
             {
-                m_progress_reporter->Report( wxString::Format( _( "Exporting Layer %s, Net %s" ),
+                m_progressReporter->Report( wxString::Format( _( "Exporting Layer %s, Net %s" ),
                                                                m_board->GetLayerName( layer ),
                                                                net->GetNetname() ) );
-                m_progress_reporter->AdvanceProgress();
+                m_progressReporter->AdvanceProgress();
             }
 
             std::vector<BOARD_ITEM*>& vec = elements[layer][net->GetNetCode()];
@@ -2735,8 +2735,8 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
 
 wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
 {
-    if( m_progress_reporter )
-        m_progress_reporter->AdvancePhase( _( "Generating BOM section" ) );
+    if( m_progressReporter )
+        m_progressReporter->AdvancePhase( _( "Generating BOM section" ) );
 
     wxXmlNode* avl = appendNode( m_xml_root, "Avl" );
     addAttribute( avl,  "name", "Primary_Vendor_List" );
@@ -2827,14 +2827,12 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
 
 
 void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                                const STRING_UTF8_MAP* aProperties,
-                                PROGRESS_REPORTER*     aProgressReporter )
+                                const STRING_UTF8_MAP* aProperties )
 {
     m_board = aBoard;
     m_units_str = "MILLIMETER";
     m_scale = 1.0 / PCB_IU_PER_MM;
     m_sigfig = 4;
-    m_progress_reporter = aProgressReporter;
 
     if( auto it = aProperties->find( "units" ); it != aProperties->end() )
     {
@@ -2889,11 +2887,11 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
 
     generateContentSection();
 
-    if( m_progress_reporter )
+    if( m_progressReporter )
     {
-        m_progress_reporter->SetNumPhases( 7 );
-        m_progress_reporter->BeginPhase( 1 );
-        m_progress_reporter->Report( _( "Generating logistic section" ) );
+        m_progressReporter->SetNumPhases( 7 );
+        m_progressReporter->BeginPhase( 1 );
+        m_progressReporter->Report( _( "Generating logistic section" ) );
     }
 
     generateLogisticSection();
@@ -2903,9 +2901,9 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     generateBOMSection( ecad_node );
     generateAvlSection();
 
-    if( m_progress_reporter )
+    if( m_progressReporter )
     {
-        m_progress_reporter->AdvancePhase( _( "Saving file" ) );
+        m_progressReporter->AdvancePhase( _( "Saving file" ) );
     }
 
     wxFileOutputStreamWithProgress out_stream( aFileName );
@@ -2922,13 +2920,13 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
         written_bytes += aBytes;
         double percent = written_bytes / static_cast<double>( m_total_bytes );
 
-        if( m_progress_reporter )
+        if( m_progressReporter )
         {
             // Only update every percent
             if( last_yield + 0.01 < percent )
             {
                 last_yield = percent;
-                m_progress_reporter->SetCurrentProgress( percent );
+                m_progressReporter->SetCurrentProgress( percent );
             }
         }
     };

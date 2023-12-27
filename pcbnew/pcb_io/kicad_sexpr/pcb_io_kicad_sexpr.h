@@ -305,12 +305,10 @@ public:
     bool CanReadBoard( const wxString& aFileName ) const override;
 
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                    const STRING_UTF8_MAP* aProperties = nullptr,
-                    PROGRESS_REPORTER*     aProgressReporter = nullptr ) override;
+                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
-                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                      PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );

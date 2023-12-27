@@ -60,8 +60,7 @@ bool PCB_IO_ALTIUM_CIRCUIT_MAKER::CanReadBoard( const wxString& aFileName ) cons
 
 BOARD* PCB_IO_ALTIUM_CIRCUIT_MAKER::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                                const STRING_UTF8_MAP* aProperties,
-                                               PROJECT*               aProject,
-                                               PROGRESS_REPORTER*     aProgressReporter )
+                                               PROJECT*               aProject )
 {
     m_props = aProperties;
 
@@ -101,7 +100,7 @@ BOARD* PCB_IO_ALTIUM_CIRCUIT_MAKER::LoadBoard( const wxString& aFileName, BOARD*
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, aProgressReporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )

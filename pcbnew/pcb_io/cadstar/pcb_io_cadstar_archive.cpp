@@ -94,15 +94,14 @@ std::vector<FOOTPRINT*> PCB_IO_CADSTAR_ARCHIVE::GetImportedCachedLibraryFootprin
 
 
 BOARD* PCB_IO_CADSTAR_ARCHIVE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                              const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                              PROGRESS_REPORTER* aProgressReporter )
+                                              const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
     clearLoadedFootprints();
 
     CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName, m_layer_mapping_handler,
-                                        m_show_layer_mapping_warnings, aProgressReporter );
+                                        m_show_layer_mapping_warnings, m_progressReporter );
     tempPCB.Load( m_board, aProject );
 
     //center the board:

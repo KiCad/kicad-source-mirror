@@ -1303,7 +1303,8 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
         WX_PROGRESS_REPORTER progressReporter( editFrame, _( "Loading PCB" ), 1 );
 
         editFrame->GetDesignSettings().m_NetSettings->m_NetClasses.clear();
-        pi.LoadBoard( fileName, brd, &props, nullptr, &progressReporter );
+        pi.SetProgressReporter( &progressReporter );
+        pi.LoadBoard( fileName, brd, &props, nullptr );
     }
     catch( const IO_ERROR& ioe )
     {

@@ -466,8 +466,7 @@ bool PCB_IO_KICAD_LEGACY::CanReadFootprint( const wxString& aFileName ) const
 
 
 BOARD* PCB_IO_KICAD_LEGACY::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                 const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                 PROGRESS_REPORTER* aProgressReporter )
+                                 const STRING_UTF8_MAP* aProperties, PROJECT* aProject )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -492,7 +491,6 @@ BOARD* PCB_IO_KICAD_LEGACY::LoadBoard( const wxString& aFileName, BOARD* aAppend
     FILE_LINE_READER    reader( aFileName );
 
     m_reader = &reader;
-    m_progressReporter = aProgressReporter;
 
     m_loading_format_version = getVersion( m_reader );
     m_board->SetFileFormatVersionAtLoad( m_loading_format_version );
