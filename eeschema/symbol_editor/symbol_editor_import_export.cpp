@@ -56,7 +56,7 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
         if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
             continue; // this is "Import non-KiCad schematic"
 
-        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
             continue;
@@ -98,7 +98,7 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
         return;
     }
 
-    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( piType ) );
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( piType ) );
 
     // TODO dialog to select the symbol to be imported if there is more than one
     try
@@ -173,7 +173,7 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
     if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         pluginType = SCH_IO_MGR::SCH_KICAD;
 
-    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
     if( fn.FileExists() )
     {

@@ -29,6 +29,7 @@
 #include <reporter.h>
 #include <i18n_utility.h>
 #include <io/io_base.h>
+#include <io/io_mgr.h>
 #include <wx/arrstr.h>
 
 
@@ -47,7 +48,7 @@ class PROGRESS_REPORTER;
 /**
  * A factory which returns an instance of a #SCH_IO.
  */
-class SCH_IO_MGR
+class SCH_IO_MGR : public IO_MGR
 {
 public:
 
@@ -78,25 +79,13 @@ public:
      * Return a #SCH_IO which the caller can use to import, export, save, or load
      * design documents.
      *
-     * The returned #SCH_IO, may be reference counted, so please call PluginRelease()
-     * when you are done using the returned #SCH_IO.  It may or may not be code running
-     * from a DLL/DSO.
-     *
      * @param aFileType is from #SCH_FILE_T and tells which plugin to find.
      *
      * @return the plugin corresponding to aFileType or NULL if not found.
-     *  Caller owns the returned object, and must call PluginRelease when done using it.
+     *  Caller owns the returned object.
      */
     APIEXPORT
     static SCH_IO* FindPlugin( SCH_FILE_T aFileType );
-
-    /**
-     * Release a #SCH_IO back to the system, and may cause it to be unloaded from memory.
-     *
-     * @param aPlugin is the one to be released, and which is no longer usable
-     *  after calling this.
-     */
-    static void ReleasePlugin( SCH_IO* aPlugin );
 
     /**
      * Return a brief name for a plugin, given aFileType enum.

@@ -540,8 +540,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     };
     EASYEDAPRO::IterateZipFiles( aFileName, cbs );
 
-    SCH_IO::SCH_IO_RELEASER sch_plugin;
-    sch_plugin.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
     if( !libTable->HasLibrary( libName ) )
     {

@@ -31,6 +31,7 @@
 #include <wx/arrstr.h>
 #include <i18n_utility.h>
 #include <io/io_base.h>
+#include <io/io_mgr.h>
 
 class BOARD;
 class PCB_IO;
@@ -42,7 +43,7 @@ class PROGRESS_REPORTER;
 /**
  * A factory which returns an instance of a #PLUGIN.
  */
-class PCB_IO_MGR
+class PCB_IO_MGR : public IO_MGR
 {
 public:
 
@@ -154,23 +155,12 @@ public:
      * Return a #PLUGIN which the caller can use to import, export, save, or load
      * design documents.
      *
-     * The returned #PLUGIN, may be reference counted, so please call PluginRelease() when you
-     * are done using the returned #PLUGIN.  It may or may not be code running from a DLL/DSO.
-     *
-     * @note The caller owns the returned object and must call PluginRelease when done using it.
+     * @note The caller owns the returned object.
      *
      * @param aFileType is from #PCB_FILE_T and tells which plugin to find.
      * @return the plug in corresponding to \a aFileType or NULL if not found.
      */
     static PCB_IO* PluginFind( PCB_FILE_T aFileType );
-
-    /**
-     * Release a #PLUGIN back to the system and may cause it to be unloaded from memory.
-     *
-     * @param aPlugin is the one to be released, and which is no longer usable
-     *                after calling this.
-     */
-    static void PluginRelease( PCB_IO* aPlugin );
 
     /**
      * Return a brief name for a plugin given \a aFileType enum.

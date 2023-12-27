@@ -58,16 +58,16 @@ public:
     virtual ~SCHEMATIC_TEST_FIXTURE()
     {
         m_schematic.Reset();
-        SCH_IO_MGR::ReleasePlugin( m_pi );
+        m_pi.reset();
     }
 
 protected:
     virtual void LoadSchematic( const wxString& aRelativePath );
     virtual wxFileName GetSchematicPath( const wxString& aBaseName );
 
-    SCHEMATIC         m_schematic;
-    SCH_IO*           m_pi;
-    SETTINGS_MANAGER  m_manager;
+    SCHEMATIC           m_schematic;
+    IO_RELEASER<SCH_IO> m_pi;
+    SETTINGS_MANAGER    m_manager;
 };
 
 

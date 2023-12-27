@@ -356,57 +356,6 @@ public:
     */
     virtual ~SCH_IO() { }
 
-
-    /**
-     * Helper object to release a #SCH_IO in the context of a potential thrown exception
-     * through its destructor.
-     */
-    class SCH_IO_RELEASER
-    {
-        SCH_IO* plugin;
-
-        // private assignment operator so it's illegal
-        SCH_IO_RELEASER& operator=( SCH_IO_RELEASER& aOther ) { return *this; }
-
-        // private copy constructor so it's illegal
-        SCH_IO_RELEASER( const SCH_IO_RELEASER& aOther ) {}
-
-    public:
-        SCH_IO_RELEASER( SCH_IO* aPlugin = nullptr ) :
-            plugin( aPlugin )
-        {
-        }
-
-        ~SCH_IO_RELEASER()
-        {
-            if( plugin )
-                release();
-        }
-
-        void release()
-        {
-            SCH_IO_MGR::ReleasePlugin( plugin );
-            plugin = nullptr;
-        }
-
-        void set( SCH_IO* aPlugin )
-        {
-            if( plugin )
-                release();
-            plugin = aPlugin;
-        }
-
-        operator SCH_IO* () const
-        {
-            return plugin;
-        }
-
-        SCH_IO* operator -> () const
-        {
-            return plugin;
-        }
-    };
-
 protected:
 
     SCH_IO( const wxString& aName ) : IO_BASE( aName )

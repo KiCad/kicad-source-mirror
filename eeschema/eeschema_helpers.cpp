@@ -121,8 +121,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
     if( !project )
         project = GetDefaultProject();
 
-    SCH_IO*                 plugin = SCH_IO_MGR::FindPlugin( aFormat );
-    SCH_IO::SCH_IO_RELEASER pi( plugin );
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFormat ) );
 
     SCHEMATIC* schematic = new SCHEMATIC( project );
 

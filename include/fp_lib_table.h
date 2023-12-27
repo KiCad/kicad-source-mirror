@@ -84,13 +84,13 @@ private:
 
     void setPlugin( PCB_IO* aPlugin )
     {
-        plugin.set( aPlugin );
+        plugin.reset( aPlugin );
     }
 
     friend class FP_LIB_TABLE;
 
 private:
-    PCB_IO::RELEASER   plugin;
+    IO_RELEASER<PCB_IO>    plugin;
     PCB_IO_MGR::PCB_FILE_T type;
 };
 

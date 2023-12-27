@@ -133,11 +133,11 @@ private:
 
     void setPlugin( SCH_IO* aPlugin )
     {
-        plugin.set( aPlugin );
+        plugin.reset( aPlugin );
     }
 
-    SCH_IO::SCH_IO_RELEASER plugin;
-    LIB_T                   type;
+    IO_RELEASER<SCH_IO> plugin;
+    LIB_T               type;
 };
 
 

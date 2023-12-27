@@ -422,7 +422,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     SYMBOL_LIB_TABLE_ROW* row = mgr.GetLibrary( targetLib );
     SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->GetType() );
-    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( type ) );
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
 
     wxFileName dest = row->GetFullURI( true );
     dest.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );

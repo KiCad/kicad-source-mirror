@@ -169,7 +169,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     if( schFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         schFileType = SCH_IO_MGR::SCH_KICAD;
 
-    SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( schFileType ) );
     std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &Schematic() );
 
     // This will cause the sheet UUID to be set to the UUID of the aSheet argument.  This is

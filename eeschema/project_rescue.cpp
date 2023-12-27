@@ -862,7 +862,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 
     try
     {
-        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
         for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_rescueLibSymbols )
             pi->SaveSymbol( fn.GetFullPath(), new LIB_SYMBOL( *symbol.get() ), m_properties.get() );

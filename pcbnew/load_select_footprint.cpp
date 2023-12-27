@@ -337,8 +337,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
     try
     {
-        PCB_IO::RELEASER cur( PCB_IO_MGR::PluginFind( curType ) );
-        PCB_IO::RELEASER dst( PCB_IO_MGR::PluginFind( dstType ) );
+        IO_RELEASER<PCB_IO> cur( PCB_IO_MGR::PluginFind( curType ) );
+        IO_RELEASER<PCB_IO> dst( PCB_IO_MGR::PluginFind( dstType ) );
 
         if( !cur )
         {

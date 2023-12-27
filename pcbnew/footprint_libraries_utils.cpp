@@ -90,7 +90,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
         for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
         {
-            PCB_IO::RELEASER pi( plugin.m_createFunc() );
+            IO_RELEASER<PCB_IO> pi( plugin.m_createFunc() );
 
             if( !pi )
                 continue;
@@ -148,7 +148,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
-        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+        IO_RELEASER<PCB_IO> pi( plugin.m_createFunc() );
 
         if( !pi )
             continue;
@@ -174,7 +174,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     try
     {
-        PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( fileType ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( fileType ) );
 
         footprint = pi->ImportFootprint( fn.GetFullPath(), footprintName);
 
@@ -346,7 +346,7 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
 
     try
     {
-        PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( piType ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( piType ) );
 
         bool writable = false;
         bool exists   = false;
@@ -658,7 +658,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         }
 
         PCB_IO_MGR::PCB_FILE_T piType = PCB_IO_MGR::KICAD_SEXP;
-        PCB_IO::RELEASER   pi( PCB_IO_MGR::PluginFind( piType ) );
+        IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( piType ) );
 
         for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {

@@ -172,7 +172,7 @@ protected:
             STRING_UTF8_MAP choices;
 
             SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( row->GetType() );
-            SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( pi_type ) );
+            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
@@ -256,7 +256,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( type ) );
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
 
         if( !pi )
             continue;
@@ -308,7 +308,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
                             auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
                             auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
 
-                            SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
+                            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
 
                             if( pi )
                             {
@@ -585,7 +585,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
             continue;
@@ -936,8 +936,8 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, const 
     if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         return false;
 
-    SCH_IO::SCH_IO_RELEASER    oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
-    SCH_IO::SCH_IO_RELEASER    kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    IO_RELEASER<SCH_IO>                oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
+    IO_RELEASER<SCH_IO>                kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     std::vector<LIB_SYMBOL*>           symbols;
     std::vector<LIB_SYMBOL*>           newSymbols;
     std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;

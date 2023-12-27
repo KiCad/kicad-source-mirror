@@ -71,16 +71,6 @@ PCB_IO* PCB_IO_MGR::PluginFind( PCB_FILE_T aFileType )
 }
 
 
-void PCB_IO_MGR::PluginRelease( PCB_IO* aPlugin )
-{
-    // This function is a place holder for a future point in time where
-    // the plugin is a DLL/DSO.  It could do reference counting, and then
-    // unload the DLL/DSO when count goes to zero.
-
-    delete aPlugin;
-}
-
-
 const wxString PCB_IO_MGR::ShowType( PCB_FILE_T aType )
 {
     const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
@@ -129,7 +119,7 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::FindPluginTypeFromBoardPath( const wxString& 
         if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
             continue;
 
-        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+        IO_RELEASER<PCB_IO> pi( plugin.m_createFunc() );
 
         if( pi->CanReadBoard( aFileName ) )
             return plugin.m_type;
@@ -153,7 +143,7 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
         if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
             continue;
 
-        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+        IO_RELEASER<PCB_IO> pi( plugin.m_createFunc() );
 
         if( pi->CanReadLibrary( aLibPath ) )
             return plugin.m_type;
@@ -167,10 +157,9 @@ BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD*
                      const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                      PROGRESS_REPORTER* aProgressReporter )
 {
-    // release the PLUGIN even if an exception is thrown.
-    PCB_IO::RELEASER pi( PluginFind( aFileType ) );
+    IO_RELEASER<PCB_IO> pi( PluginFind( aFileType ) );
 
-    if( (PCB_IO*) pi )  // test pi->plugin
+    if( pi )  // test pi->plugin
     {
         pi->SetProgressReporter( aProgressReporter );
         return pi->LoadBoard( aFileName, aAppendToMe, aProperties, aProject );
@@ -183,10 +172,9 @@ BOARD* PCB_IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD*
 void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
                    const STRING_UTF8_MAP* aProperties )
 {
-    // release the PLUGIN even if an exception is thrown.
-    PCB_IO::RELEASER pi( PluginFind( aFileType ) );
+    IO_RELEASER<PCB_IO> pi( PluginFind( aFileType ) );
 
-    if( (PCB_IO*) pi )  // test pi->plugin
+    if( pi )
     {
         pi->SaveBoard( aFileName, aBoard, aProperties );  // virtual
         return;

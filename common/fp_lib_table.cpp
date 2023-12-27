@@ -303,7 +303,7 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
                                        bool aBestEfforts )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
     row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
                                      row->GetProperties() );
 }
@@ -312,7 +312,7 @@ void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
     row->plugin->PrefetchLib( row->GetFullURI( true ), row->GetProperties() );
 }
 
@@ -369,7 +369,7 @@ const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname
                                                        const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
 
     return row->plugin->GetEnumeratedFootprint( row->GetFullURI( true ), aFootprintName,
                                                 row->GetProperties() );
@@ -381,7 +381,7 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
     try
     {
         const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-        wxASSERT( (PCB_IO*) row->plugin );
+        wxASSERT( row->plugin );
 
         return row->plugin->FootprintExists( row->GetFullURI( true ), aFootprintName,
                                              row->GetProperties() );
@@ -397,7 +397,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname,
                                         const wxString& aFootprintName, bool aKeepUUID )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
 
     FOOTPRINT* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
                                                  aKeepUUID, row->GetProperties() );
@@ -412,7 +412,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
                                                   const FOOTPRINT* aFootprint, bool aOverwrite )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
 
     if( !aOverwrite )
     {
@@ -438,7 +438,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
 void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
     return row->plugin->FootprintDelete( row->GetFullURI( true ), aFootprintName,
                                          row->GetProperties() );
 }
@@ -447,7 +447,7 @@ void FP_LIB_TABLE::FootprintDelete( const wxString& aNickname, const wxString& a
 bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
     return row->plugin->IsLibraryWritable( row->GetFullURI( true ) );
 }
 
@@ -455,7 +455,7 @@ bool FP_LIB_TABLE::IsFootprintLibWritable( const wxString& aNickname )
 void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
     row->plugin->DeleteLibrary( row->GetFullURI( true ), row->GetProperties() );
 }
 
@@ -463,7 +463,7 @@ void FP_LIB_TABLE::FootprintLibDelete( const wxString& aNickname )
 void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxASSERT( (PCB_IO*) row->plugin );
+    wxASSERT( row->plugin );
     row->plugin->CreateLibrary( row->GetFullURI( true ), row->GetProperties() );
 }
 

@@ -82,7 +82,7 @@ bool SYMBOL_LIB_TABLE_ROW::Refresh()
     {
         wxArrayString dummyList;
 
-        plugin.set( SCH_IO_MGR::FindPlugin( type ) );
+        plugin.reset( SCH_IO_MGR::FindPlugin( type ) );
         SetLoaded( false );
         plugin->SetLibTable( static_cast<SYMBOL_LIB_TABLE*>( GetParent() ) );
         plugin->EnumerateSymbolLib( dummyList, GetFullURI( true ), GetProperties() );
@@ -110,8 +110,7 @@ void SYMBOL_LIB_TABLE_ROW::ShowSettingsDialog( wxWindow* aParent ) const
     if( type != SCH_IO_MGR::SCH_DATABASE )
         return;
 
-    DIALOG_DATABASE_LIB_SETTINGS dlg( aParent,
-                                      static_cast<SCH_IO_DATABASE*>( ( SCH_IO* )plugin ) );
+    DIALOG_DATABASE_LIB_SETTINGS dlg( aParent, static_cast<SCH_IO_DATABASE*>( plugin.get() ) );
     dlg.ShowModal();
 }
 

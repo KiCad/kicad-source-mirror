@@ -240,7 +240,7 @@ protected:
             STRING_UTF8_MAP choices;
 
             PCB_IO_MGR::PCB_FILE_T pi_type = PCB_IO_MGR::EnumFromStr( row->GetType() );
-            PCB_IO::RELEASER   pi( PCB_IO_MGR::PluginFind( pi_type ) );
+            IO_RELEASER<PCB_IO>    pi( PCB_IO_MGR::PluginFind( pi_type ) );
             pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
@@ -514,7 +514,7 @@ void PANEL_FP_LIB_TABLE::populatePluginList()
 {
     for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
-        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+        IO_RELEASER<PCB_IO> pi( plugin.m_createFunc() );
 
         if( !pi )
             continue;
@@ -899,8 +899,8 @@ bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
         return false;
 
 
-    PCB_IO::RELEASER oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
-    PCB_IO::RELEASER kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+    IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
+    IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 

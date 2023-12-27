@@ -86,9 +86,6 @@ wxArrayString GetFootprints(const wxString& aNickName);
 
 
 %include <pcb_io/pcb_io_mgr.h>
-
-// ignore RELEASER as nested classes are still unsupported by swig
-%ignore IO_MGR::RELEASER;
 %include <pcb_io/pcb_io.h>
 
 

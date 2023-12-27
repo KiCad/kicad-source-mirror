@@ -79,16 +79,6 @@ SCH_IO* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
 }
 
 
-void SCH_IO_MGR::ReleasePlugin( SCH_IO* aPlugin )
-{
-    // This function is a place holder for a future point in time where
-    // the plugin is a DLL/DSO.  It could do reference counting, and then
-    // unload the DLL/DSO when count goes to zero.
-
-    delete aPlugin;
-}
-
-
 const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
 {
     // keep this function in sync with EnumFromStr() relative to the
@@ -158,7 +148,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
         if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
             continue;
 
-        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
             continue;
@@ -184,7 +174,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& a
         if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
             continue;
 
-        SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
             continue;

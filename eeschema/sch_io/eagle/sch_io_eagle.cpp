@@ -455,7 +455,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
     wxCHECK_MSG( libTable, nullptr, wxT( "Could not load symbol lib table." ) );
 
-    m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     m_properties = std::make_unique<STRING_UTF8_MAP>();
     ( *m_properties )[SCH_IO_KICAD_LEGACY::PropBuffering] = "";
 

@@ -107,8 +107,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
         if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
             continue;
 
-        // release the PLUGIN even if an exception is thrown.
-        PCB_IO::RELEASER pi( plugin.m_createFunc() );
+        IO_RELEASER<PCB_IO> pi( plugin.m_createFunc() );
         wxCHECK( pi, false );
 
         const IO_BASE::IO_FILE_DESC& desc = pi->GetBoardFileDesc();
@@ -606,24 +605,22 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
-        BOARD*           loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
-        PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( pluginType ) );
+        BOARD*              loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( pluginType ) );
 
-        LAYER_REMAPPABLE_PLUGIN* layerRemappablePlugin =
-            dynamic_cast< LAYER_REMAPPABLE_PLUGIN* >( (PCB_IO*) pi );
+        LAYER_REMAPPABLE_PLUGIN* layerRemappableIO = dynamic_cast<LAYER_REMAPPABLE_PLUGIN*>( pi.get() );
 
-        if( layerRemappablePlugin )
+        if( layerRemappableIO )
         {
-            layerRemappablePlugin->RegisterLayerMappingCallback(
+            layerRemappableIO->RegisterLayerMappingCallback(
                     std::bind( DIALOG_IMPORTED_LAYERS::GetMapModal, this, std::placeholders::_1 ) );
         }
 
-        PROJECT_CHOOSER_PLUGIN* projectChooserPlugin =
-                dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( (PCB_IO*) pi );
+        PROJECT_CHOOSER_PLUGIN* projectChooserIO = dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( pi.get() );
 
-        if( projectChooserPlugin )
+        if( projectChooserIO )
         {
-            projectChooserPlugin->RegisterChooseProjectCallback(
+            projectChooserIO->RegisterChooseProjectCallback(
                     std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::GetSelectionsModal, this,
                                std::placeholders::_1 ) );
         }
@@ -802,7 +799,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // which prompts the user to continue with overwrite or abort)
             if( newLibPath.Length() > 0 )
             {
-                PCB_IO::RELEASER piSexpr( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+                IO_RELEASER<PCB_IO> piSexpr( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
                 for( FOOTPRINT* footprint : loadedFootprints )
                 {
@@ -992,7 +989,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     try
     {
-        PCB_IO::RELEASER    pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
         pi->SaveBoard( tempFile, GetBoard(), nullptr );
     }
@@ -1092,7 +1089,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     try
     {
-        PCB_IO::RELEASER    pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
 
         wxASSERT( pcbFileName.IsAbsolute() );
 
@@ -1273,7 +1270,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
     {
         try
         {
-            PCB_IO::RELEASER pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
+            IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
             pi->SetProgressReporter( &reporter );
             pi->SaveBoard( tempFile, GetBoard(), &props );
             return true;

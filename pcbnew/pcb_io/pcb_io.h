@@ -333,58 +333,6 @@ public:
     virtual ~PCB_IO()
     {};
 
-
-#ifndef SWIG
-    /**
-     * Releases a PLUGIN in the context of a potential thrown exception through its destructor.
-     */
-    class RELEASER
-    {
-        PCB_IO* plugin;
-
-        // private assignment operator so it's illegal
-        RELEASER& operator=( RELEASER& aOther ) { return *this; }
-
-        // private copy constructor so it's illegal
-        RELEASER( const RELEASER& aOther ) : plugin( nullptr ) {}
-
-    public:
-        RELEASER( PCB_IO* aPlugin = nullptr ) :
-            plugin( aPlugin )
-        {
-        }
-
-        ~RELEASER()
-        {
-            if( plugin )
-                release();
-        }
-
-        void release()
-        {
-            PCB_IO_MGR::PluginRelease( plugin );
-            plugin = nullptr;
-        }
-
-        void set( PCB_IO* aPlugin )
-        {
-            if( plugin )
-                release();
-            plugin = aPlugin;
-        }
-
-        operator PCB_IO* () const
-        {
-            return plugin;
-        }
-
-        PCB_IO* operator -> () const
-        {
-            return plugin;
-        }
-    };
-#endif
-
 protected:
     PCB_IO( const wxString& aName ) : IO_BASE( aName ),
         m_board( nullptr ),

@@ -561,7 +561,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         if( renameFile )
         {
-            SCH_IO::SCH_IO_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
             // If the associated screen is shared by more than one sheet, do not
             // change the filename of the corresponding screen here.

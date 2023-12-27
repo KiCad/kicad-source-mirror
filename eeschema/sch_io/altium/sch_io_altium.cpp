@@ -355,7 +355,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
-    m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    m_pi.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
     /// @note No check is being done here to see if the existing symbol library exists so this
     ///       will overwrite the existing one.

@@ -893,8 +893,8 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
 
 static BOARD* loadBoard( const std::string& filename )
 {
-    PLUGIN::RELEASER pi( new PCB_IO_KICAD_SEXPR );
-    BOARD*           brd = nullptr;
+    IO_RELEASER<PCB_IO> pi( new PCB_IO_KICAD_SEXPR );
+    BOARD*              brd = nullptr;
 
     try
     {
