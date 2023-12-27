@@ -21,6 +21,7 @@
 
 #include "pns_line.h"
 #include "pns_segment.h"
+#include "pns_arc.h"
 #include "pns_node.h"
 #include "pns_joint.h"
 #include "pns_solid.h"
@@ -482,62 +483,88 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 
     m_world->AllItemsInNet( coupledNet, coupledItems );
 
-    SEGMENT* refSeg = nullptr;
-    SEGMENT* coupledSeg = nullptr;
-    int      minDist = std::numeric_limits<int>::max();
+    LINKED_ITEM* refItem = nullptr;
+    LINKED_ITEM* coupledItem = nullptr;
+    SEG::ecoord  minDist_sq = std::numeric_limits<SEG::ecoord>::max();
 
     for( ITEM* p_item : lp.Links() )
     {
-        SEGMENT* p_seg = dyn_cast<SEGMENT*>( p_item );
-
-        if( !p_seg )
+        if( !p_item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
             continue;
 
         for( ITEM* n_item : coupledItems )
         {
-            SEGMENT* n_seg = dyn_cast<SEGMENT*>( n_item );
+            SEG::ecoord dist_sq = std::numeric_limits<SEG::ecoord>::max();
 
-            if( !n_seg )
+            if( n_item->Kind() != p_item->Kind() || n_item->Layers() == p_item->Layers() )
                 continue;
 
-            if( n_seg->Layers().Start() != p_seg->Layers().Start() || n_seg->Width() != p_seg->Width() )
-                continue;
-
-            if( !p_seg->Seg().ApproxParallel( n_seg->Seg(), DP_PARALLELITY_THRESHOLD ) )
-                continue;
-
-            SEG p_clip, n_clip;
-
-            if( !commonParallelProjection( p_seg->Seg(), n_seg->Seg(), p_clip, n_clip ) )
-                continue;
-
-            int dist = n_seg->Seg().Distance( p_seg->Seg() );
-
-            if( dist < minDist )
+            if( p_item->Kind() == ITEM::SEGMENT_T )
             {
-                minDist = dist;
-                refSeg = p_seg;
-                coupledSeg = n_seg;
+                SEGMENT* p_seg = static_cast<SEGMENT*>( p_item );
+                SEGMENT* n_seg = static_cast<SEGMENT*>( n_item );
+
+                if( n_seg->Width() != p_seg->Width() )
+                    continue;
+
+                if( !p_seg->Seg().ApproxParallel( n_seg->Seg(), DP_PARALLELITY_THRESHOLD ) )
+                    continue;
+
+                SEG p_clip, n_clip;
+
+                if( !commonParallelProjection( p_seg->Seg(), n_seg->Seg(), p_clip, n_clip ) )
+                    continue;
+
+                dist_sq = n_seg->Seg().SquaredDistance( p_seg->Seg() );
+            }
+            else if( p_item->Kind() == ITEM::ARC_T )
+            {
+                ARC* p_arc = static_cast<ARC*>( p_item );
+                ARC* n_arc = static_cast<ARC*>( n_item );
+
+                if( n_arc->Width() != p_arc->Width() )
+                    continue;
+
+                VECTOR2I    centerDiff = n_arc->CArc().GetCenter() - p_arc->CArc().GetCenter();
+                SEG::ecoord centerDist_sq = centerDiff.SquaredEuclideanNorm();
+
+                if( centerDist_sq > SEG::Square( DP_PARALLELITY_THRESHOLD ) )
+                    continue;
+
+                dist_sq = SEG::Square( p_arc->CArc().GetRadius() - n_arc->CArc().GetRadius() );
+            }
+
+            if( dist_sq < minDist_sq )
+            {
+                minDist_sq = dist_sq;
+                refItem = static_cast<LINKED_ITEM*>( p_item );
+                coupledItem = static_cast<LINKED_ITEM*>( n_item );
             }
         }
     }
 
-    if( !coupledSeg )
+    if( !coupledItem )
         return false;
 
-    LINE ln = m_world->AssembleLine( coupledSeg );
+    LINE ln = m_world->AssembleLine( coupledItem );
 
     if( m_world->GetRuleResolver()->DpNetPolarity( refNet ) < 0 )
         std::swap( lp, ln );
 
     int gap = -1;
 
-    if( refSeg->Seg().ApproxParallel( coupledSeg->Seg(), DP_PARALLELITY_THRESHOLD ) )
+    if( refItem && refItem->Kind() == ITEM::SEGMENT_T )
     {
         // Segments are parallel -> compute pair gap
-        const VECTOR2I refDir       = refSeg->Anchor( 1 ) - refSeg->Anchor( 0 );
-        const VECTOR2I displacement = refSeg->Anchor( 1 ) - coupledSeg->Anchor( 1 );
+        const VECTOR2I refDir       = refItem->Anchor( 1 ) - refItem->Anchor( 0 );
+        const VECTOR2I displacement = refItem->Anchor( 1 ) - coupledItem->Anchor( 1 );
         gap = (int) std::abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp.Width();
+    }
+    else if( refItem && refItem->Kind() == ITEM::ARC_T )
+    {
+        const ARC* refArc = static_cast<ARC*>( refItem );
+        const ARC* coupledArc = static_cast<ARC*>( coupledItem );
+        gap = (int) std::abs( refArc->CArc().GetRadius() - coupledArc->CArc().GetRadius() ) - lp.Width();
     }
 
     aPair = DIFF_PAIR( lp, ln );
