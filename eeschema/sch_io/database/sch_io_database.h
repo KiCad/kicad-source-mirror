@@ -45,10 +45,10 @@ public:
     SCH_IO_DATABASE();
     virtual ~SCH_IO_DATABASE();
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "KiCad database library files" ),
-                                 { DatabaseLibraryFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad database library files" ),
+                                      { DatabaseLibraryFileExtension } );
     }
 
     int GetModifyHash() const override { return 0; }

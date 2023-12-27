@@ -70,16 +70,16 @@ public:
     SCH_IO_KICAD_LEGACY();
     virtual ~SCH_IO_KICAD_LEGACY();
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "KiCad legacy schematic files" ),
-                                 { LegacySchematicFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad legacy schematic files" ),
+                                      { LegacySchematicFileExtension } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "KiCad legacy symbol library files" ),
-                                 { LegacySymbolLibFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad legacy symbol library files" ),
+                                      { LegacySymbolLibFileExtension } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;

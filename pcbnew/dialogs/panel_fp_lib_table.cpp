@@ -365,7 +365,7 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
                             auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
                             auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
                             PCB_IO_MGR::PCB_FILE_T fileType = tableRow->GetFileType();
-                            const PLUGIN_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
+                            const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
 
                             if( pluginDesc.m_IsFile )
                                 return pluginDesc.FileFilter();
@@ -519,7 +519,7 @@ void PANEL_FP_LIB_TABLE::populatePluginList()
         if( !pi )
             continue;
 
-        if( PLUGIN_FILE_DESC desc = pi->GetFootprintLibDesc() )
+        if( const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc() )
             m_supportedFpFiles.emplace( plugin.m_type, desc );
     }
 }
@@ -954,7 +954,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         return;
     }
 
-    const PLUGIN_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
+    const IO_BASE::IO_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
     PCBNEW_SETTINGS*        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     wxString title = wxString::Format( _( "Select %s Library" ), PCB_IO_MGR::ShowType( fileType ) );

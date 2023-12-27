@@ -32,14 +32,12 @@
 class PCB_IO_CADSTAR_ARCHIVE : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "CADSTAR PCB Archive files" ), { "cpa" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "CADSTAR PCB Archive files" ), { "cpa" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override { return GetBoardFileDesc(); }
-
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override { return GetBoardFileDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadLibrary( const wxString& aFileName ) const override;

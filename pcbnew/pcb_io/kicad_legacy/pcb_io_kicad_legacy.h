@@ -66,17 +66,15 @@ public:
     PCB_IO_KICAD_LEGACY();
     ~PCB_IO_KICAD_LEGACY();
 
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Legacy footprint library files" ), { "mod", "emp" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Legacy footprint library files" ), { "mod", "emp" } );
     }
-
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadFootprint( const wxString& aFileName ) const override;

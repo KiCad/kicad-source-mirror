@@ -20,12 +20,20 @@
 
 #include <io/io_base.h>
 #include <ki_exception.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/translation.h>
 
 #define FMT_UNIMPLEMENTED wxT( "IO interface \"%s\" does not implement the \"%s\" function." )
 #define NOT_IMPLEMENTED( aCaller )                                       \
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,                 \
                                       GetName(),                         \
                                       wxString::FromUTF8( aCaller ) ) );
+
+
+wxString IO_BASE::IO_FILE_DESC::FileFilter() const
+{
+    return wxGetTranslation( m_Description ) + AddFileExtListToFilter( m_FileExtensions );
+}
 
 
 void IO_BASE::CreateLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )

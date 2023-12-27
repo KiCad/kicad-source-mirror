@@ -42,10 +42,10 @@ public:
     SCH_IO_HTTP_LIB();
     virtual ~SCH_IO_HTTP_LIB();
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "KiCad HTTP library files" ),
-            { HTTPLibraryFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad HTTP library files" ),
+                                      { HTTPLibraryFileExtension } );
     }
 
     int GetModifyHash() const override { return 0; }

@@ -35,21 +35,21 @@
 class PCB_IO_EASYEDAPRO : public PCB_IO, public PROJECT_CHOOSER_PLUGIN
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ), { "epro", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ), { "epro", "zip" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ),
-                                 { "elibz", "epro", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro project" ),
+                                      { "elibz", "epro", "zip" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ),
-                                 { "elibz", "efoo", "epro", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ),
+                                      { "elibz", "efoo", "epro", "zip" } );
     }
 
     bool CanReadBoard( const wxString& aFileName ) const override;

@@ -30,7 +30,7 @@
 #include <vector>
 #include <wx/arrstr.h>
 #include <i18n_utility.h>
-#include <plugin_file_desc.h>
+#include <io/io_base.h>
 
 class BOARD;
 class PCB_IO;

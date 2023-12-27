@@ -26,7 +26,6 @@
 #define PCB_IO_H_
 
 #include <io/io_base.h>
-#include <plugin_file_desc.h>
 #include <pcb_io/pcb_io_mgr.h>
 
 #include <cstdint>
@@ -75,17 +74,11 @@ public:
     /**
      * Returns board file description for the PCB_IO.
      */
-    virtual PLUGIN_FILE_DESC GetBoardFileDesc() const;
+    virtual const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const
+    {
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+    }
 
-    /**
-     * Returns footprint file description for the PCB_IO.
-     */
-    virtual PLUGIN_FILE_DESC GetFootprintFileDesc() const;
-
-    /**
-     * Returns footprint library description for the PCB_IO.
-     */
-    virtual PLUGIN_FILE_DESC GetFootprintLibDesc() const;
 
     /**
      * Checks if this PCB_IO can read the specified board file.

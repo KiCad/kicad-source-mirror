@@ -45,12 +45,12 @@ public:
 
     ~SCH_IO_EASYEDA() {}
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Std files" ), { "json" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Std files" ), { "json" } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override { return GetSchematicFileDesc(); }
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override { return GetSchematicFileDesc(); }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
 

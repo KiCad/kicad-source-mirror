@@ -41,14 +41,14 @@ public:
     SCH_IO_EASYEDAPRO();
     ~SCH_IO_EASYEDAPRO();
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "epro", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "epro", "zip" } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "elibz", "epro", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro files" ), { "elibz", "epro", "zip" } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;

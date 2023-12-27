@@ -674,7 +674,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         if( !pi )
             continue;
 
-        const PLUGIN_FILE_DESC& desc = pi->GetSchematicFileDesc();
+        const IO_BASE::IO_FILE_DESC& desc = pi->GetSchematicFileDesc();
 
         if( desc.m_FileExtensions.empty() )
             continue;

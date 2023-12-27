@@ -28,7 +28,7 @@
 #include <enum_vector.h>
 #include <reporter.h>
 #include <i18n_utility.h>
-#include <plugin_file_desc.h>
+#include <io/io_base.h>
 #include <wx/arrstr.h>
 
 

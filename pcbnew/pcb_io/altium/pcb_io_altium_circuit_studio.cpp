@@ -49,12 +49,6 @@ PCB_IO_ALTIUM_CIRCUIT_STUDIO::~PCB_IO_ALTIUM_CIRCUIT_STUDIO()
 }
 
 
-PLUGIN_FILE_DESC PCB_IO_ALTIUM_CIRCUIT_STUDIO::GetBoardFileDesc() const
-{
-    return PLUGIN_FILE_DESC( _HKI( "Altium Circuit Studio PCB files" ), { "CSPcbDoc" } );
-}
-
-
 bool PCB_IO_ALTIUM_CIRCUIT_STUDIO::CanReadBoard( const wxString& aFileName ) const
 {
     if( !PCB_IO::CanReadBoard( aFileName ) )

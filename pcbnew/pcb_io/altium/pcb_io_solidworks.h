@@ -26,7 +26,16 @@
 class PCB_IO_SOLIDWORKS : public PCB_IO
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override;
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
+    {
+        return IO_BASE::IO_FILE_DESC( _HKI( "Solidworks PCB files" ), { "SWPcbDoc" } );
+    }
+
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
+    {
+        // No library description for this plugin
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+    }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 

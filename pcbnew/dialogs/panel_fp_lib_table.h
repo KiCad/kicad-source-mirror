@@ -100,7 +100,7 @@ private:
     //< Transient (unsaved) last browsed folder when adding a project level library.
     wxString         m_lastProjectLibDir;
 
-    std::map<PCB_IO_MGR::PCB_FILE_T, PLUGIN_FILE_DESC> m_supportedFpFiles;
+    std::map<PCB_IO_MGR::PCB_FILE_T, IO_BASE::IO_FILE_DESC> m_supportedFpFiles;
 };
 
 #endif    // PANEL_FP_LIB_TABLE_H

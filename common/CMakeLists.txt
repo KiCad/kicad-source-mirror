@@ -378,7 +378,6 @@ set( PLOTTERS_CONTROL_SRCS
     )
 
 set( COMMON_IO_SRCS
-    io/plugin_file_desc.cpp
     io/io_base.cpp
     io/io_utils.cpp
 

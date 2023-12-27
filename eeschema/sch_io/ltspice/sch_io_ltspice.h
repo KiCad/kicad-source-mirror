@@ -44,15 +44,17 @@ public:
     {
     }
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "LTspice schematic files" ), { "asc" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "LTspice schematic files" ), { "asc" } );
     }
 
-    /*const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "LTspice library files" ), { "lib" } );
-    }*/
+        // This was originally commented out, so keep it commented and just return an empty library description
+        //return IO_BASE::IO_FILE_DESC( _HKI( "LTspice library files" ), { "lib" } );
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, { } );
+    }
 
     int GetModifyHash() const override;
 

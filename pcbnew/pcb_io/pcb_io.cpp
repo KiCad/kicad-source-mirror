@@ -40,24 +40,6 @@
                                       wxString::FromUTF8( aCaller ) ) );
 
 
-PLUGIN_FILE_DESC PCB_IO::GetBoardFileDesc() const
-{
-    return PLUGIN_FILE_DESC( wxEmptyString, {} );
-}
-
-
-PLUGIN_FILE_DESC PCB_IO::GetFootprintFileDesc() const
-{
-    return PLUGIN_FILE_DESC( wxEmptyString, {} );
-}
-
-
-PLUGIN_FILE_DESC PCB_IO::GetFootprintLibDesc() const
-{
-    return PLUGIN_FILE_DESC( wxEmptyString, {} );
-}
-
-
 bool PCB_IO::CanReadBoard( const wxString& aFileName ) const
 {
     const std::vector<std::string>& exts = GetBoardFileDesc().m_FileExtensions;
@@ -76,7 +58,7 @@ bool PCB_IO::CanReadBoard( const wxString& aFileName ) const
 
 bool PCB_IO::CanReadFootprint( const wxString& aFileName ) const
 {
-    const std::vector<std::string>& exts = GetFootprintFileDesc().m_FileExtensions;
+    const std::vector<std::string>& exts = GetLibraryFileDesc().m_FileExtensions;
 
     wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
 
@@ -92,7 +74,7 @@ bool PCB_IO::CanReadFootprint( const wxString& aFileName ) const
 
 bool PCB_IO::CanReadLibrary( const wxString& aFileName ) const
 {
-    const PLUGIN_FILE_DESC& desc = GetFootprintLibDesc();
+    const IO_BASE::IO_FILE_DESC& desc = GetLibraryDesc();
 
     if( desc.m_IsFile )
     {

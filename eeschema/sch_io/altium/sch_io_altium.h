@@ -58,15 +58,15 @@ public:
     SCH_IO_ALTIUM();
     ~SCH_IO_ALTIUM();
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Altium schematic files" ), { "SchDoc" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Altium schematic files" ), { "SchDoc" } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Altium Schematic Library or Integrated Library" ),
-                                 { "SchLib", "IntLib" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Altium Schematic Library or Integrated Library" ),
+                                      { "SchLib", "IntLib" } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;

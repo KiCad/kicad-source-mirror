@@ -261,7 +261,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
         if( !pi )
             continue;
 
-        if( PLUGIN_FILE_DESC desc = pi->GetLibraryFileDesc() )
+        if( const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc() )
             pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
     }
 
@@ -312,7 +312,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
                             if( pi )
                             {
-                                const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+                                const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
 
                                 if( desc.m_IsFile )
                                     return desc.FileFilter();
@@ -590,7 +590,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         if( !pi )
             continue;
 
-        const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+        const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
 
         if( desc.m_FileExtensions.empty() )
             continue;

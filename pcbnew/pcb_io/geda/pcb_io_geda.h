@@ -47,15 +47,15 @@ class GPCB_FPL_CACHE;
 class PCB_IO_GEDA : public PCB_IO
 {
 public:
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "gEDA PCB footprint file" ), { "fp" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA PCB footprint file" ), { "fp" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "gEDA PCB footprint library directory" ), {}, { "fp" },
-                                 false );
+        return IO_BASE::IO_FILE_DESC( _HKI( "gEDA PCB footprint library directory" ), {}, { "fp" },
+                                      false );
     }
 
     FOOTPRINT* ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,

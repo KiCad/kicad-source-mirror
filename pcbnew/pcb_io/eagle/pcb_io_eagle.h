@@ -131,17 +131,15 @@ struct ERULES
 class PCB_IO_EAGLE : public PCB_IO, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML library files" ), { "lbr" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle ver. 6.x XML library files" ), { "lbr" } );
     }
-
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadLibrary( const wxString& aFileName ) const override;

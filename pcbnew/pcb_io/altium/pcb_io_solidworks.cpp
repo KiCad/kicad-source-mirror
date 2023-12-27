@@ -40,12 +40,6 @@ PCB_IO_SOLIDWORKS::~PCB_IO_SOLIDWORKS()
 }
 
 
-PLUGIN_FILE_DESC PCB_IO_SOLIDWORKS::GetBoardFileDesc() const
-{
-    return PLUGIN_FILE_DESC( _HKI( "Solidworks PCB files" ), { "SWPcbDoc" } );
-}
-
-
 bool PCB_IO_SOLIDWORKS::CanReadBoard( const wxString& aFileName ) const
 {
     if( !PCB_IO::CanReadBoard( aFileName ) )

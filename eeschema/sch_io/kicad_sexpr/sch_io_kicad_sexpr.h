@@ -69,16 +69,16 @@ public:
     SCH_IO_KICAD_SEXPR();
     virtual ~SCH_IO_KICAD_SEXPR();
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "KiCad s-expression schematic files" ),
-                                 { KiCadSchematicFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad s-expression schematic files" ),
+                                      { KiCadSchematicFileExtension } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "KiCad symbol library files" ),
-                                 { KiCadSymbolLibFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "KiCad symbol library files" ),
+                                      { KiCadSymbolLibFileExtension } );
     }
 
     /**

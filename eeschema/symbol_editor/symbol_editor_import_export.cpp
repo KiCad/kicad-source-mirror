@@ -61,7 +61,7 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
         if( !pi )
             continue;
 
-        const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+        const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryFileDesc();
 
         if( desc.m_FileExtensions.empty() )
             continue;

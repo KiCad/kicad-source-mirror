@@ -32,14 +32,14 @@
 class PCB_IO_EASYEDA : public PCB_IO
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Std files" ), { "json", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Std files" ), { "json", "zip" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetBoardFileDesc(); }
+    const IO_BASE::IO_FILE_DESC GetLibraryFileDesc() const override { return GetBoardFileDesc(); }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override { return GetBoardFileDesc(); }
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override { return GetBoardFileDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 

@@ -43,12 +43,6 @@ PCB_IO_FABMASTER::~PCB_IO_FABMASTER()
 }
 
 
-PLUGIN_FILE_DESC PCB_IO_FABMASTER::GetBoardFileDesc() const
-{
-    return PLUGIN_FILE_DESC( _HKI( "Fabmaster PCB files" ), { "txt", "fab" } );
-}
-
-
 BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                     const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                                     PROGRESS_REPORTER* aProgressReporter )

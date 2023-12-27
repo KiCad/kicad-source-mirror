@@ -49,12 +49,6 @@ PCB_IO_ALTIUM_CIRCUIT_MAKER::~PCB_IO_ALTIUM_CIRCUIT_MAKER()
 }
 
 
-PLUGIN_FILE_DESC PCB_IO_ALTIUM_CIRCUIT_MAKER::GetBoardFileDesc() const
-{
-    return PLUGIN_FILE_DESC( _HKI( "Altium Circuit Maker PCB files" ), { "CMPcbDoc" } );
-}
-
-
 bool PCB_IO_ALTIUM_CIRCUIT_MAKER::CanReadBoard( const wxString& aFileName ) const
 {
     if( !PCB_IO::CanReadBoard( aFileName ) )

@@ -95,7 +95,7 @@
  */
 bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 )
 {
-    std::vector<PLUGIN_FILE_DESC> descriptions;
+    std::vector<IO_BASE::IO_FILE_DESC> descriptions;
 
     for( const auto& plugin : PCB_IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
@@ -111,7 +111,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
         PCB_IO::RELEASER pi( plugin.m_createFunc() );
         wxCHECK( pi, false );
 
-        const PLUGIN_FILE_DESC& desc = pi->GetBoardFileDesc();
+        const IO_BASE::IO_FILE_DESC& desc = pi->GetBoardFileDesc();
 
         if( desc.m_FileExtensions.empty() )
             continue;
@@ -123,7 +123,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
     std::vector<std::string> allExtensions;
     std::set<wxString>       allWildcardsSet;
 
-    for( const PLUGIN_FILE_DESC& desc : descriptions )
+    for( const IO_BASE::IO_FILE_DESC& desc : descriptions )
     {
         if( !fileFiltersStr.IsEmpty() )
             fileFiltersStr += wxChar( '|' );

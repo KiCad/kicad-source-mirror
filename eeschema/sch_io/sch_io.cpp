@@ -37,15 +37,9 @@
                                       wxString::FromUTF8( aCaller ).GetData() ) );
 
 
-const PLUGIN_FILE_DESC SCH_IO::GetSchematicFileDesc() const
+const IO_BASE::IO_FILE_DESC SCH_IO::GetSchematicFileDesc() const
 {
-    return PLUGIN_FILE_DESC( wxEmptyString, {} );
-}
-
-
-const PLUGIN_FILE_DESC SCH_IO::GetLibraryFileDesc() const
-{
-    return PLUGIN_FILE_DESC( wxEmptyString, {} );
+    return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
 }
 
 
@@ -67,7 +61,7 @@ bool SCH_IO::CanReadSchematicFile( const wxString& aFileName ) const
 
 bool SCH_IO::CanReadLibrary( const wxString& aFileName ) const
 {
-    const PLUGIN_FILE_DESC& desc = GetLibraryFileDesc();
+    const IO_BASE::IO_FILE_DESC& desc = GetLibraryFileDesc();
 
     if( desc.m_IsFile )
     {

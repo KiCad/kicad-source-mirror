@@ -95,7 +95,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
             if( !pi )
                 continue;
 
-            PLUGIN_FILE_DESC desc = pi->GetFootprintFileDesc();
+            const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryFileDesc();
 
             if( !desc )
                 continue;
@@ -153,7 +153,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         if( !pi )
             continue;
 
-        if( pi->GetFootprintFileDesc().m_FileExtensions.empty() )
+        if( pi->GetLibraryFileDesc().m_FileExtensions.empty() )
             continue;
 
         if( pi->CanReadFootprint( fn.GetFullPath() ) )

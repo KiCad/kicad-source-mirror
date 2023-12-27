@@ -21,6 +21,8 @@
 #ifndef IO_BASE_H_
 #define IO_BASE_H_
 
+#include <vector>
+#include <string>
 #include <wx/string.h>
 
 class REPORTER;
@@ -30,6 +32,33 @@ class STRING_UTF8_MAP;
 class IO_BASE
 {
 public:
+    /**
+    * Container that describes file type info
+    */
+    struct IO_FILE_DESC
+    {
+        wxString                 m_Description;    ///< Description shown in the file picker dialog
+        std::vector<std::string> m_FileExtensions; ///< Filter used for file pickers if m_IsFile is true
+        std::vector<std::string> m_ExtensionsInDir; ///< In case of folders: extensions of files inside
+        bool                     m_IsFile;          ///< Whether the library is a folder or a file
+
+        IO_FILE_DESC( const wxString& aDescription, const std::vector<std::string>& aFileExtensions,
+                      const std::vector<std::string>& aExtsInFolder = {}, bool aIsFile = true ) :
+                m_Description( aDescription ),
+                m_FileExtensions( aFileExtensions ), m_ExtensionsInDir( aExtsInFolder ),
+                m_IsFile( aIsFile )
+        {
+        }
+
+        IO_FILE_DESC() : IO_FILE_DESC( wxEmptyString, {} ) {}
+
+        /**
+         * @return translated description + wildcards string for file dialogs.
+         */
+        wxString FileFilter() const;
+
+        operator bool() const { return !m_Description.empty(); }
+    };
 
     virtual ~IO_BASE() = default;
 
@@ -52,6 +81,22 @@ public:
     ////////////////////////////////////////////////////
     // Library-related functions
     ////////////////////////////////////////////////////
+
+    /**
+     * Get the descriptor for the library container that this IO plugin operates on.
+     *
+     * @return File descriptor for the container of the library elements
+     */
+    virtual const IO_FILE_DESC GetLibraryDesc() const = 0;
+
+    /**
+     * Get the descriptor for the individual library elements that this IO plugin operates on.
+     * For libraries where all the elements are in a single container (e.g. all elements in a single file),
+     * then this will return the descriptor from #IO_BASE::GetLibraryDesc().
+     *
+     * @return File descriptor for the library elements
+     */
+    virtual const IO_FILE_DESC GetLibraryFileDesc() const { return GetLibraryDesc(); }
 
     /**
      * Checks if this IO object can read the specified library file/directory.

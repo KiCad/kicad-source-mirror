@@ -85,10 +85,17 @@ public:
                 const STRING_UTF8_MAP* aProperties = nullptr,
                 PROGRESS_REPORTER*     aProgressReporter = nullptr ) override;
 
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "IPC-2581 Production File" ), { "xml" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "IPC-2581 Production File" ), { "xml" } );
     }
+
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
+    {
+        // No library description for this plugin
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+    }
+
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override

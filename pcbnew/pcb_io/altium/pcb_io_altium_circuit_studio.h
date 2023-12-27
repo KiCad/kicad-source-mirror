@@ -31,7 +31,16 @@
 class PCB_IO_ALTIUM_CIRCUIT_STUDIO : public PCB_IO
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override;
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
+    {
+        return IO_BASE::IO_FILE_DESC( _HKI( "Altium Circuit Studio PCB files" ), { "CSPcbDoc" } );
+    }
+
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
+    {
+        // No library description for this plugin
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+    }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 

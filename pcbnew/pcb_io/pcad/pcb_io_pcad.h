@@ -39,9 +39,15 @@ public:
     PCB_IO_PCAD();
     ~PCB_IO_PCAD();
 
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
+    }
+
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
+    {
+        // No library description for this plugin
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
     }
 
     bool CanReadBoard( const wxString& aFileName ) const override;

@@ -30,7 +30,6 @@
 #include <enum_vector.h>
 #include <reporter.h>
 #include <i18n_utility.h>
-#include <plugin_file_desc.h>
 #include <wx/arrstr.h>
 
 /**
@@ -63,12 +62,7 @@ public:
     /**
      * Returns schematic file description for the #SCH_IO.
      */
-    virtual const PLUGIN_FILE_DESC GetSchematicFileDesc() const;
-
-    /**
-     * Returns symbol library description for the #SCH_IO.
-     */
-    virtual const PLUGIN_FILE_DESC GetLibraryFileDesc() const;
+    virtual const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const;
 
     /**
      * Checks if this SCH_IO can read the specified schematic file.

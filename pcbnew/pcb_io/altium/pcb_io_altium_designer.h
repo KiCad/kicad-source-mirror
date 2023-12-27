@@ -37,18 +37,16 @@ class PCB_IO_ALTIUM_DESIGNER : public PCB_IO
 {
 public:
     // -----<PUBLIC PCB_IO API>--------------------------------------------------
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Altium Designer PCB files" ), { "PcbDoc" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Altium Designer PCB files" ), { "PcbDoc" } );
     }
 
-    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Altium PCB Library or Integrated Library" ),
+        return IO_BASE::IO_FILE_DESC( _HKI( "Altium PCB Library or Integrated Library" ),
                                  { "PcbLib", "IntLib" } );
     }
-
-    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadLibrary( const wxString& aFileName ) const override;

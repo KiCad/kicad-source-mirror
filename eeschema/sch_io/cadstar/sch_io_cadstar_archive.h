@@ -50,16 +50,16 @@ public:
         m_progressReporter = aReporter;
     }
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "CADSTAR Schematic Archive files" ),
-                                 { CadstarSchematicFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "CADSTAR Schematic Archive files" ),
+                                      { CadstarSchematicFileExtension } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "CADSTAR Parts Library files" ),
-                                 { CadstarPartsLibraryFileExtension } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "CADSTAR Parts Library files" ),
+                                      { CadstarPartsLibraryFileExtension } );
     }
 
     bool CanReadLibrary( const wxString& aFileName ) const override;

@@ -86,14 +86,14 @@ public:
     SCH_IO_EAGLE();
     ~SCH_IO_EAGLE();
 
-    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Eagle XML schematic files" ), { "sch" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle XML schematic files" ), { "sch" } );
     }
 
-    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Eagle XML library files" ), { "lbr" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle XML library files" ), { "lbr" } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;

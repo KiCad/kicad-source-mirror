@@ -33,7 +33,16 @@
 class PCB_IO_FABMASTER : public PCB_IO
 {
 public:
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override;
+    const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
+    {
+       return IO_BASE::IO_FILE_DESC( _HKI( "Fabmaster PCB files" ), { "txt", "fab" } );
+    }
+
+    const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
+    {
+        // No library description for this plugin
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+    }
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
