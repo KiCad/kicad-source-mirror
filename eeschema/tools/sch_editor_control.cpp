@@ -332,7 +332,8 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 {
-    bool savePowerSymbols = IsOK( m_frame, _( "Include power symbols in schematic to the library?" ) );
+    bool savePowerSymbols = IsOK( m_frame,
+                                  _( "Include power symbols in schematic to the library?" ) );
 
     bool createNew = aEvent.IsAction( &EE_ACTIONS::exportSymbolsToNewLibrary );
 
@@ -425,7 +426,19 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         LIB_SYMBOL* origSym = it.second;
         LIB_SYMBOL* newSym = origSym->Flatten().release();
 
-        pi->SaveSymbol( dest.GetFullPath(), newSym );
+        try
+        {
+            pi->SaveSymbol( dest.GetFullPath(), newSym );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg;
+            msg.Printf( _( "Error saving symbol %s to library '%s'." ),
+                        newSym->GetName(), row->GetNickName() );
+            msg += wxS( "\n\n" ) + ioe.What();
+            wxLogWarning( msg );
+            return 0;
+        }
 
         if( map )
         {
@@ -434,7 +447,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
             for( SCH_SYMBOL* symbol : symbolMap[it.first] )
             {
-                m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED, append, false);
+                m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED,
+                                             append, false );
                 symbol->SetLibId( id );
                 append = true;
             }
