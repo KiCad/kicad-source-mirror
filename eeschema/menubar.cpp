@@ -171,6 +171,52 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     editMenu->Add( EE_ACTIONS::changeSymbols );
     editMenu->Add( EE_ACTIONS::editPageNumber );
 
+    ACTION_MENU* submenuAttributes = new ACTION_MENU( false, selTool );
+    submenuAttributes->SetTitle( _( "Attributes..." ) );
+    {
+        {
+            ACTION_MENU *attribSimMoveSubMenu = new ACTION_MENU( false, selTool );
+            attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
+            submenuAttributes->Add( attribSimMoveSubMenu );
+        
+            attribSimMoveSubMenu->Add( EE_ACTIONS::setExcludeFromSimulation );
+            attribSimMoveSubMenu->Add( EE_ACTIONS::unsetExcludeFromSimulation );
+            attribSimMoveSubMenu->Add( EE_ACTIONS::toggleExcludeFromSimulation );
+        }
+
+        {
+            ACTION_MENU *attribBOMMoveSubMenu = new ACTION_MENU( false, selTool );
+            attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
+            submenuAttributes->Add( attribBOMMoveSubMenu );
+
+            attribBOMMoveSubMenu->Add( EE_ACTIONS::setExcludeFromBOM );
+            attribBOMMoveSubMenu->Add( EE_ACTIONS::unsetExcludeFromBOM );
+            attribBOMMoveSubMenu->Add( EE_ACTIONS::toggleExcludeFromBOM );
+        }
+
+        {
+            ACTION_MENU *attribBoardMoveSubMenu = new ACTION_MENU( false, selTool );
+            attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
+            submenuAttributes->Add( attribBoardMoveSubMenu );
+
+            attribBoardMoveSubMenu->Add( EE_ACTIONS::setExcludeFromBoard );
+            attribBoardMoveSubMenu->Add( EE_ACTIONS::unsetExcludeFromBoard );
+            attribBoardMoveSubMenu->Add( EE_ACTIONS::toggleExcludeFromBoard );
+        }
+
+        {
+            ACTION_MENU *attribDNPMoveSubMenu = new ACTION_MENU( false, selTool );
+            attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
+            submenuAttributes->Add( attribDNPMoveSubMenu );
+
+            attribDNPMoveSubMenu->Add( EE_ACTIONS::setDNP );
+            attribDNPMoveSubMenu->Add( EE_ACTIONS::unsetDNP );
+            attribDNPMoveSubMenu->Add( EE_ACTIONS::toggleDNP );
+        }
+    }
+
+    editMenu->Add( submenuAttributes );
+
     //-- View menu -----------------------------------------------------------
     //
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );

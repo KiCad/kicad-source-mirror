@@ -466,49 +466,16 @@ bool SCH_EDIT_TOOL::Init()
 
         {
             CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribMoveSubMenu->SetTitle( _( "Attributes" ) );
+            attribMoveSubMenu->SetTitle( _( "Attributes..." ) );
             moveMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
 
             {
-                CONDITIONAL_MENU *attribSimMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-                attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
-                attribMoveSubMenu->AddMenu( attribSimMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-                attribSimMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromSimulation,
+                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
                         E_C::ShowAlways );
-                attribSimMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,
+                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
+                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard,
                         E_C::ShowAlways );
-                attribSimMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
-                        E_C::ShowAlways );
-            }
-
-            {
-                CONDITIONAL_MENU *attribBOMMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-                attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
-                attribMoveSubMenu->AddMenu( attribBOMMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-                attribBOMMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBOM, E_C::ShowAlways );
-                attribBOMMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBOM, E_C::ShowAlways );
-                attribBOMMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
-            }
-
-            {
-                CONDITIONAL_MENU *attribBoardMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-                attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
-                attribMoveSubMenu->AddMenu( attribBoardMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-                attribBoardMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBoard,
-                        E_C::ShowAlways );
-                attribBoardMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBoard,
-                        E_C::ShowAlways );
-                attribBoardMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard,
-                        E_C::ShowAlways );
-            }
-
-            {
-                CONDITIONAL_MENU *attribDNPMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-                attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
-                attribMoveSubMenu->AddMenu( attribDNPMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-                attribDNPMoveSubMenu->AddItem( EE_ACTIONS::setDNP, E_C::ShowAlways );
-                attribDNPMoveSubMenu->AddItem( EE_ACTIONS::unsetDNP, E_C::ShowAlways );
-                attribDNPMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
+                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
             }
         }
         moveMenu.AddItem( EE_ACTIONS::swap,            SELECTION_CONDITIONS::MoreThan( 1 ) );
@@ -562,41 +529,11 @@ bool SCH_EDIT_TOOL::Init()
         drawMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
 
         {
-            CONDITIONAL_MENU *attribSimMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
-            attribMoveSubMenu->AddMenu( attribSimMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribSimMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromSimulation, E_C::ShowAlways );
-            attribSimMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
                     E_C::ShowAlways );
-            attribSimMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
-                    E_C::ShowAlways );
-        }
-
-        {
-            CONDITIONAL_MENU *attribBOMMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
-            attribMoveSubMenu->AddMenu( attribBOMMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBOM, E_C::ShowAlways );
-            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBOM, E_C::ShowAlways );
-            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
-        }
-
-        {
-            CONDITIONAL_MENU *attribBoardMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
-            attribMoveSubMenu->AddMenu( attribBoardMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBoard, E_C::ShowAlways );
-            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBoard, E_C::ShowAlways );
-            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
-        }
-
-        {
-            CONDITIONAL_MENU *attribDNPMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
-            attribMoveSubMenu->AddMenu( attribDNPMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::setDNP, E_C::ShowAlways );
-            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::unsetDNP, E_C::ShowAlways );
-            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
         }
     }
 
@@ -647,41 +584,11 @@ bool SCH_EDIT_TOOL::Init()
         selToolMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
 
         {
-            CONDITIONAL_MENU *attribSimMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
-            attribMoveSubMenu->AddMenu( attribSimMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribSimMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromSimulation, E_C::ShowAlways );
-            attribSimMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
                     E_C::ShowAlways );
-            attribSimMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
-                    E_C::ShowAlways );
-        }
-
-        {
-            CONDITIONAL_MENU *attribBOMMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
-            attribMoveSubMenu->AddMenu( attribBOMMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBOM, E_C::ShowAlways );
-            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBOM, E_C::ShowAlways );
-            attribBOMMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
-        }
-
-        {
-            CONDITIONAL_MENU *attribBoardMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
-            attribMoveSubMenu->AddMenu( attribBoardMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::setExcludeFromBoard, E_C::ShowAlways );
-            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::unsetExcludeFromBoard, E_C::ShowAlways );
-            attribBoardMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
-        }
-
-        {
-            CONDITIONAL_MENU *attribDNPMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
-            attribMoveSubMenu->AddMenu( attribDNPMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ) );
-            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::setDNP, E_C::ShowAlways );
-            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::unsetDNP, E_C::ShowAlways );
-            attribDNPMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
+            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
         }
     }
 

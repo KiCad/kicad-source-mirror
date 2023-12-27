@@ -951,6 +951,7 @@ TOOL_ACTION EE_ACTIONS::unsetDNP( TOOL_ACTION_ARGS()
 TOOL_ACTION EE_ACTIONS::toggleDNP( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.toggleDNP" )
         .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_ALT + 'X' )
         .FriendlyName( _( "Toggle Do Not Populate" ) )
         .Tooltip( _( "Toggle the do not populate attribute" ) ) );
 
