@@ -408,6 +408,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         else if( sexprs.top() == wxT( "disallow" ) || isDisallowToken( sexprs.top() ) )
         {
             tokens = wxT( "buried_via|"
+                          "footprint|"
                           "graphic|"
                           "hole|"
                           "micro_via|"
