@@ -25,6 +25,7 @@
 #ifndef STD_BITMAP_BUTTON_H
 #define STD_BITMAP_BUTTON_H
 
+#include <kicommon.h>
 #include <wx/bmpbndl.h>
 #include <wx/panel.h>
 
@@ -41,7 +42,7 @@ class wxButton;
  * allows our bitmap buttons to match the layout of our SPLIT_BUTTON.
  */
 
-class STD_BITMAP_BUTTON : public wxPanel
+class KICOMMON_API STD_BITMAP_BUTTON : public wxPanel
 {
 public:
     // For use with wxFormBuilder on a sub-classed wxBitmapButton
