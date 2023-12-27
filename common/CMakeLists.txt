@@ -114,6 +114,7 @@ set( KICOMMON_SRCS
     locale_io.cpp
     lset.cpp
     markup_parser.cpp
+    netclass.cpp
     paths.cpp
     richio.cpp
     string_utils.cpp
@@ -486,7 +487,6 @@ set( COMMON_SRCS
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     marker_base.cpp
-    netclass.cpp
     notifications_manager.cpp
     origin_transforms.cpp
     page_info.cpp
