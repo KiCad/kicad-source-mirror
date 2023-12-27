@@ -18,10 +18,15 @@
  */
 
 
+#include <unordered_set>
+
 #include <io/io_base.h>
 #include <ki_exception.h>
 #include <wildcards_and_files_ext.h>
+
+#include <wx/filename.h>
 #include <wx/translation.h>
+#include <wx/dir.h>
 
 #define FMT_UNIMPLEMENTED wxT( "IO interface \"%s\" does not implement the \"%s\" function." )
 #define NOT_IMPLEMENTED( aCaller )                                       \
@@ -61,6 +66,52 @@ void IO_BASE::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const
 
 bool IO_BASE::CanReadLibrary( const wxString& aFileName ) const
 {
-    // TODO: Push file extension based checks from PCB_IO and SCH_IO into this function
+    const IO_BASE::IO_FILE_DESC& desc = GetLibraryDesc();
+
+    if( desc.m_IsFile )
+    {
+        const std::vector<std::string>& exts = desc.m_FileExtensions;
+
+        wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
+
+        for( const std::string& ext : exts )
+        {
+            if( fileExt == wxString( ext ).Lower() )
+                return true;
+        }
+    }
+    else
+    {
+        wxDir dir( aFileName );
+
+        if( !dir.IsOpened() )
+            return false;
+
+        std::vector<std::string>     exts = desc.m_ExtensionsInDir;
+        std::unordered_set<wxString> lowerExts;
+
+        for( const std::string& ext : exts )
+            lowerExts.emplace( wxString( ext ).MakeLower() );
+
+        wxString filenameStr;
+
+        bool cont = dir.GetFirst( &filenameStr, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+
+        while( cont )
+        {
+            wxString ext = wxS( "" );
+
+            int idx = filenameStr.Find( '.', true );
+
+            if( idx != -1 )
+                ext = filenameStr.Mid( idx + 1 ).MakeLower();
+
+            if( lowerExts.count( ext ) )
+                return true;
+
+            cont = dir.GetNext( &filenameStr );
+        }
+    }
+
     return false;
 }

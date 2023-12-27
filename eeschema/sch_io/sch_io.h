@@ -70,8 +70,6 @@ public:
      */
     virtual bool CanReadSchematicFile( const wxString& aFileName ) const;
 
-    bool CanReadLibrary( const wxString& aFileName ) const override;
-
     /**
      * Return the modification hash from the library cache.
      *

@@ -93,12 +93,6 @@ public:
     virtual bool CanReadFootprint( const wxString& aFileName ) const;
 
     /**
-     * Checks if this PCB_IO can read footprint library from specified file or directory.
-     * If not overriden, extension check is used.
-     */
-    bool CanReadLibrary( const wxString& aFileName ) const override;
-
-    /**
      * Registers a KIDIALOG callback for collecting info from the user.
      */
     virtual void SetQueryUserCallback( std::function<bool( wxString aTitle, int aIcon,

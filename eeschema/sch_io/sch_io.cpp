@@ -59,57 +59,6 @@ bool SCH_IO::CanReadSchematicFile( const wxString& aFileName ) const
 }
 
 
-bool SCH_IO::CanReadLibrary( const wxString& aFileName ) const
-{
-    const IO_BASE::IO_FILE_DESC& desc = GetLibraryFileDesc();
-
-    if( desc.m_IsFile )
-    {
-        const std::vector<std::string>& exts = desc.m_FileExtensions;
-
-        wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
-
-        for( const std::string& ext : exts )
-        {
-            if( fileExt == wxString( ext ).Lower() )
-                return true;
-        }
-    }
-    else
-    {
-        wxDir dir( aFileName );
-
-        if( !dir.IsOpened() )
-            return false;
-
-        std::vector<std::string>     exts = desc.m_ExtensionsInDir;
-        std::unordered_set<wxString> lowerExts;
-
-        for( const std::string& ext : exts )
-            lowerExts.emplace( wxString( ext ).MakeLower() );
-
-        wxString filenameStr;
-
-        bool cont = dir.GetFirst( &filenameStr, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
-        while( cont )
-        {
-            wxString ext = wxS( "" );
-
-            int idx = filenameStr.Find( '.', true );
-            if( idx != -1 )
-                ext = filenameStr.Mid( idx + 1 ).MakeLower();
-
-            if( lowerExts.count( ext ) )
-                return true;
-
-            cont = dir.GetNext( &filenameStr );
-        }
-    }
-
-    return false;
-}
-
-
 void SCH_IO::SaveLibrary( const wxString& aFileName, const STRING_UTF8_MAP* aProperties )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
