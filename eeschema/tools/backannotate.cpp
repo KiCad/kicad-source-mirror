@@ -109,7 +109,7 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
     if( !frame )
     {
         wxFileName fn( m_frame->Prj().GetProjectFullName() );
-        fn.SetExt( PcbFileExtension );
+        fn.SetExt( FILEEXT::PcbFileExtension );
 
         frame = m_frame->Kiway().Player( FRAME_PCB_EDITOR, true );
         frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );

@@ -504,26 +504,28 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
 
     destFile.SetPath( destPath );
 
-    if( ext == KiCadPcbFileExtension || ext == KiCadPcbFileExtension + BackupFileSuffix )
+    if( ext == FILEEXT::KiCadPcbFileExtension
+        || ext == FILEEXT::KiCadPcbFileExtension + FILEEXT::BackupFileSuffix )
     {
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == LegacyPcbFileExtension )
+    else if( ext == FILEEXT::LegacyPcbFileExtension )
     {
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == LegacyFootprintLibPathExtension || ext == KiCadFootprintFileExtension )
+    else if( ext == FILEEXT::LegacyFootprintLibPathExtension
+             || ext == FILEEXT::KiCadFootprintFileExtension )
     {
         // Footprints are not project-specific.  Keep their source names.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == FootprintAssignmentFileExtension )
+    else if( ext == FILEEXT::FootprintAssignmentFileExtension )
     {
         // TODO
     }

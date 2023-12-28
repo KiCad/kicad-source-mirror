@@ -82,12 +82,12 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     /* Set the file extension: */
     fn = GetBoard()->GetFileName();
-    fn.SetExt( CsvFileExtension );
+    fn.SetExt( FILEEXT::CsvFileExtension );
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Save Bill of Materials" ), pro_dir, fn.GetFullName(),
-                      CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      FILEEXT::CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

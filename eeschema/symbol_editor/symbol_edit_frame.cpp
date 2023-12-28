@@ -238,7 +238,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
-    m_acceptedExts.emplace( KiCadSymbolLibFileExtension, &ACTIONS::ddAddLibrary );
+    m_acceptedExts.emplace( FILEEXT::KiCadSymbolLibFileExtension, &ACTIONS::ddAddLibrary );
     DragAcceptFiles( true );
 
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Library changes are unsaved" ) );
@@ -904,8 +904,8 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
-    if( !LibraryFileBrowser( !aCreateNew, fn, KiCadSymbolLibFileWildcard(),
-                             KiCadSymbolLibFileExtension, false,
+    if( !LibraryFileBrowser( !aCreateNew, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
+                             FILEEXT::KiCadSymbolLibFileExtension, false,
                              ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
                              PATHS::GetDefaultUserSymbolsPath() ) )
     {

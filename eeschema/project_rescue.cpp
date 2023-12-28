@@ -115,7 +115,7 @@ static wxFileName GetRescueLibraryFileName( SCHEMATIC* aSchematic )
 {
     wxFileName fn = aSchematic->GetFileName();
     fn.SetName( fn.GetName() + wxT( "-rescue" ) );
-    fn.SetExt( LegacySymbolLibFileExtension );
+    fn.SetExt( FILEEXT::LegacySymbolLibFileExtension );
     return fn;
 }
 
@@ -833,7 +833,7 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
     if( row )
     {
         if( SCH_IO_MGR::EnumFromStr( row->GetType() ) == SCH_IO_MGR::SCH_KICAD )
-            fn.SetExt( KiCadSymbolLibFileExtension );
+            fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
         std::vector<LIB_SYMBOL*> symbols;
 
@@ -858,7 +858,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
     wxFileName fn = GetRescueLibraryFileName( m_schematic );
     SYMBOL_LIB_TABLE_ROW* row = PROJECT_SCH::SchSymbolLibTable( m_prj )->FindRow( fn.GetName() );
 
-    fn.SetExt( KiCadSymbolLibFileExtension );
+    fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
     try
     {

@@ -339,7 +339,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
         wxFileName   fn( boardFilename );
         wxString     suffix = aOnlyOneFile ? wxString( wxT( "brd" ) ) : m_board->GetStandardLayerName( layer );
 
-        BuildPlotFileName( &fn, outputDir.GetPath(), suffix, SVGFileExtension );
+        BuildPlotFileName( &fn, outputDir.GetPath(), suffix, FILEEXT::SVGFileExtension );
         wxString svgPath = fn.GetFullPath();
 
         m_printMaskLayer = aOnlyOneFile ? all_selected.SeqStackupForPlotting() : LSEQ( { layer } );

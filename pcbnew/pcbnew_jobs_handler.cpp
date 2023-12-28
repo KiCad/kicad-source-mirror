@@ -415,7 +415,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         if( plotOpts.GetUseGerberProtelExtensions() )
             fileExt = GetGerberProtelExtension( layer );
         else
-            fileExt = GerberFileExtension;
+            fileExt = FILEEXT::GerberFileExtension;
 
         BuildPlotFileName( &fn, aGerberJob->m_outputFile, brd->GetLayerName( layer ), fileExt );
         wxString fullname = fn.GetFullName();
@@ -447,7 +447,8 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     wxFileName fn( aGerberJob->m_filename );
 
     // Build gerber job file from basename
-    BuildPlotFileName( &fn, aGerberJob->m_outputFile, wxT( "job" ), GerberJobFileExtension );
+    BuildPlotFileName( &fn, aGerberJob->m_outputFile, wxT( "job" ),
+                       FILEEXT::GerberJobFileExtension );
     jobfile_writer.CreateJobFile( fn.GetFullPath() );
 
     return exitCode;
@@ -671,11 +672,11 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         fn.SetName( fn.GetName() );
 
         if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII )
-            fn.SetExt( FootprintPlaceFileExtension );
+            fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
         else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
-            fn.SetExt( CsvFileExtension );
+            fn.SetExt( FILEEXT::CsvFileExtension );
         else if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
-            fn.SetExt( GerberFileExtension );
+            fn.SetExt( FILEEXT::GerberFileExtension );
 
         aPosJob->m_outputFile = fn.GetFullName();
     }
@@ -898,7 +899,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     wxFileName outputFile;
     outputFile.SetPath( aSvgJob->m_outputDirectory );
     outputFile.SetName( aFootprint->GetFPID().GetLibItemName().wx_str() );
-    outputFile.SetExt( SVGFileExtension );
+    outputFile.SetExt( FILEEXT::SVGFileExtension );
 
     m_reporter->Report( wxString::Format( _( "Plotting footprint '%s' to '%s'\n" ),
                                           aFootprint->GetFPID().GetLibItemName().wx_str(),
@@ -942,9 +943,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         fn.SetName( fn.GetName() );
 
         if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
-            fn.SetExt( JsonFileExtension );
+            fn.SetExt( FILEEXT::JsonFileExtension );
         else
-            fn.SetExt( ReportFileExtension );
+            fn.SetExt( FILEEXT::ReportFileExtension );
 
         drcJob->m_outputFile = fn.GetFullName();
     }

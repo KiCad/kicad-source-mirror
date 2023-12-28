@@ -170,7 +170,7 @@ void FP_CACHE::Load()
     }
 
     wxString fullName;
-    wxString fileSpec = wxT( "*." ) + KiCadFootprintFileExtension;
+    wxString fileSpec = wxT( "*." ) + FILEEXT::KiCadFootprintFileExtension;
 
     // wxFileName construction is egregiously slow.  Construct it once and just swap out
     // the filename thereafter.
@@ -267,7 +267,7 @@ bool FP_CACHE::IsModified()
 
 long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    wxString fileSpec = wxT( "*." ) + KiCadFootprintFileExtension;
+    wxString fileSpec = wxT( "*." ) + FILEEXT::KiCadFootprintFileExtension;
 
     return TimestampDir( aLibPath, fileSpec );
 }
@@ -2574,7 +2574,7 @@ bool PCB_IO_KICAD_SEXPR::FootprintExists( const wxString& aLibraryPath, const wx
     // case-insensitive filesystem) handled "for free".
     // Warning: footprint names frequently contain a point. So be careful when initializing
     // wxFileName, and use a CTOR with extension specified
-    wxFileName footprintFile( aLibraryPath, aFootprintName, KiCadFootprintFileExtension );
+    wxFileName footprintFile( aLibraryPath, aFootprintName, FILEEXT::KiCadFootprintFileExtension );
 
     return footprintFile.Exists();
 }
@@ -2663,7 +2663,7 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
 
     // Quietly overwrite footprint and delete footprint file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
-                   KiCadFootprintFileExtension );
+                   FILEEXT::KiCadFootprintFileExtension );
 
     // Write through symlinks, don't replace them
     WX_FILENAME::ResolvePossibleSymlinks( fn );
@@ -2798,7 +2798,7 @@ bool PCB_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath, const STRI
         {
             tmp = files[i];
 
-            if( tmp.GetExt() != KiCadFootprintFileExtension )
+            if( tmp.GetExt() != FILEEXT::KiCadFootprintFileExtension )
             {
                 THROW_IO_ERROR( wxString::Format( _( "Unexpected file '%s' found in library "
                                                      "path '%s'." ),

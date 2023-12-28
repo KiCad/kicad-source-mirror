@@ -51,8 +51,8 @@ public:
 
         wxLogTrace( LCK, "Trying to lock %s", filename );
         wxFileName fn( filename );
-        fn.SetName( LockFilePrefix + fn.GetName() );
-        fn.SetExt( fn.GetExt() + '.' + LockFileExtension );
+        fn.SetName( FILEEXT::LockFilePrefix + fn.GetName() );
+        fn.SetExt( fn.GetExt() + '.' + FILEEXT::LockFileExtension );
 
         if( !fn.IsDirWritable() )
         {

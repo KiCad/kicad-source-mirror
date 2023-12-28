@@ -728,7 +728,7 @@ void PANEL_SETUP_RULES::ImportSettingsFrom( BOARD* aBoard )
     if( !m_frame->Prj().IsNullProject() )
     {
         wxFileName relFile = aBoard->GetFileName();
-        relFile.SetExt( DesignRulesFileExtension );
+        relFile.SetExt( FILEEXT::DesignRulesFileExtension );
 
         wxFileName absFile( aBoard->GetProject()->AbsolutePath( relFile.GetFullName() ) );
 

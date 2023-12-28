@@ -1192,10 +1192,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& even
 
     // Calculate the export filename
     wxFileName fn( Prj().AbsolutePath( m_parent->Schematic().GetFileName() ) );
-    fn.SetExt( CsvFileExtension );
+    fn.SetExt( FILEEXT::CsvFileExtension );
 
     wxFileDialog saveDlg( this, _( "Bill of Materials Output File" ), path, fn.GetFullName(),
-                          CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          FILEEXT::CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;

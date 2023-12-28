@@ -263,7 +263,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
     wxFileName boardFn( importDlg.GetFilePath() );
     wxFileName projectFn( boardFn );
 
-    projectFn.SetExt( ProjectFileExtension );
+    projectFn.SetExt( FILEEXT::ProjectFileExtension );
 
     if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
     {

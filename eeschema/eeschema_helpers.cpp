@@ -80,9 +80,9 @@ PROJECT* EESCHEMA_HELPERS::GetDefaultProject()
 
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName )
 {
-    if( aFileName.EndsWith( KiCadSchematicFileExtension ) )
+    if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
         return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD );
-    else if( aFileName.EndsWith( LegacySchematicFileExtension ) )
+    else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
         return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY );
 
     // as fall back for any other kind use the legacy format
@@ -93,7 +93,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName )
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat )
 {
     wxFileName pro = aFileName;
-    pro.SetExt( ProjectFileExtension );
+    pro.SetExt( FILEEXT::ProjectFileExtension );
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
 

@@ -453,7 +453,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         // Back up the cache library.
         srcFileName.SetPath( Prj().GetProjectPath() );
         srcFileName.SetName( Prj().GetProjectName() + wxS( "-cache" ) );
-        srcFileName.SetExt( LegacySymbolLibFileExtension );
+        srcFileName.SetExt( FILEEXT::LegacySymbolLibFileExtension );
 
         destFileName = srcFileName;
         destFileName.SetName( destFileName.GetName() + timeStamp );
@@ -488,7 +488,7 @@ bool DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
         }
 
         // Back up the rescue symbol library document file if it exists.
-        srcFileName.SetExt( LegacySymbolDocumentFileExtension );
+        srcFileName.SetExt( FILEEXT::LegacySymbolDocumentFileExtension );
         destFileName.SetExt( srcFileName.GetExt() );
 
         tmp.Printf( _( "Backing up file '%s' to '%s'." ),

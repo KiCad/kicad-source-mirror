@@ -445,7 +445,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     wxFileName fn = m_board->GetFileName();
 
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
-    fn.SetExt( ReportFileExtension );
+    fn.SetExt( FILEEXT::ReportFileExtension );
 
     wxString defaultPath = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
     defaultPath = Prj().AbsolutePath( defaultPath );
@@ -454,7 +454,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
         defaultPath = PATHS::GetDefaultUserProjectsPath();
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath, fn.GetFullName(),
-                      ReportFileWildcard(), wxFD_SAVE );
+                      FILEEXT::ReportFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

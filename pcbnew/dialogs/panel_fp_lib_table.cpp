@@ -846,7 +846,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         }
 
         wxFileName newLib( resolvedPath );
-        newLib.AppendDir( newLib.GetName() + "." + KiCadFootprintLibPathExtension );
+        newLib.AppendDir( newLib.GetName() + "." + FILEEXT::KiCadFootprintLibPathExtension );
         newLib.SetName( "" );
         newLib.ClearExt();
 
@@ -1006,7 +1006,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
 
     // Drop the last directory if the path is a .pretty folder
-    if( cfg->m_lastFootprintLibDir.EndsWith( KiCadFootprintLibPathExtension ) )
+    if( cfg->m_lastFootprintLibDir.EndsWith( FILEEXT::KiCadFootprintLibPathExtension ) )
         cfg->m_lastFootprintLibDir = cfg->m_lastFootprintLibDir.BeforeLast( wxFileName::GetPathSeparator() );
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
@@ -1023,7 +1023,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
         bool       doAdd    = true;
 
-        if( fileType == PCB_IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
+        if( fileType == PCB_IO_MGR::KICAD_SEXP
+            && fn.GetExt() != FILEEXT::KiCadFootprintLibPathExtension )
             nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true ).wx_str();
 
         if( cur_model()->ContainsNickname( nickname ) )

@@ -86,9 +86,9 @@ void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 
 BOARD* LoadBoard( wxString& aFileName )
 {
-    if( aFileName.EndsWith( KiCadPcbFileExtension ) )
+    if( aFileName.EndsWith( FILEEXT::KiCadPcbFileExtension ) )
         return LoadBoard( aFileName, PCB_IO_MGR::KICAD_SEXP );
-    else if( aFileName.EndsWith( LegacyPcbFileExtension ) )
+    else if( aFileName.EndsWith( FILEEXT::LegacyPcbFileExtension ) )
         return LoadBoard( aFileName, PCB_IO_MGR::LEGACY );
 
     // as fall back for any other kind use the legacy format
@@ -137,7 +137,7 @@ PROJECT* GetDefaultProject()
 BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
 {
     wxFileName pro = aFileName;
-    pro.SetExt( ProjectFileExtension );
+    pro.SetExt( FILEEXT::ProjectFileExtension );
     pro.MakeAbsolute();
     wxString projectPath = pro.GetFullPath();
 
@@ -194,7 +194,7 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
         try
         {
             wxFileName rules = pro;
-            rules.SetExt( DesignRulesFileExtension );
+            rules.SetExt( FILEEXT::DesignRulesFileExtension );
             bds.m_DRCEngine->InitEngine( rules );
         }
         catch( ... )
@@ -219,7 +219,7 @@ BOARD* NewBoard( wxString& aFileName )
 {
     wxFileName boardFn = aFileName;
     wxFileName proFn   = aFileName;
-    proFn.SetExt( ProjectFileExtension );
+    proFn.SetExt( FILEEXT::ProjectFileExtension );
     proFn.MakeAbsolute();
 
     wxString projectPath = proFn.GetFullPath();
@@ -278,7 +278,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, PCB_IO_MGR::PCB_FILE_T aForm
     if( !aSkipSettings )
     {
         wxFileName pro = aFileName;
-        pro.SetExt( ProjectFileExtension );
+        pro.SetExt( FILEEXT::ProjectFileExtension );
         pro.MakeAbsolute();
 
         GetSettingsManager()->SaveProjectAs( pro.GetFullPath(), aBoard->GetProject() );
@@ -503,7 +503,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     wxCHECK( engine, false );
 
     wxFileName fn = aBoard->GetFileName();
-    fn.SetExt( DesignRulesFileExtension );
+    fn.SetExt( FILEEXT::DesignRulesFileExtension );
     PROJECT* prj = nullptr;
 
     if( aBoard->GetProject() )

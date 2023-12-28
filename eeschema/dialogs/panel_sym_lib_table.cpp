@@ -410,7 +410,7 @@ bool PANEL_SYM_LIB_TABLE::allowAutomaticPluginTypeSelection( wxString& aLibraryP
 
     // Currently, only the extension .lib is common to legacy libraries and Cadstar libraries
     // so return false in this case
-    if( ext == LegacySymbolLibFileExtension )
+    if( ext == FILEEXT::LegacySymbolLibFileExtension )
         return false;
 
     return true;

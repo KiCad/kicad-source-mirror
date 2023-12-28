@@ -192,7 +192,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
         wxFileDialog dlg( this, _( "Open Gerber Job File" ),
                           currentPath,
                           filename.GetFullName(),
-                          GerberJobFileWildcard(),
+                          FILEEXT::GerberJobFileWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )

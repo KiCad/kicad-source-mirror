@@ -88,7 +88,7 @@ public:
         fn.AppendDir( "spice_netlists" );
         fn.AppendDir( aBaseName );
         fn.SetName( aBaseName );
-        fn.SetExt( KiCadSchematicFileExtension );
+        fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
         return fn;
     }

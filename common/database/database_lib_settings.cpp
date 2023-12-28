@@ -168,5 +168,5 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
 
 wxString DATABASE_LIB_SETTINGS::getFileExt() const
 {
-    return DatabaseLibraryFileExtension;
+    return FILEEXT::DatabaseLibraryFileExtension;
 }

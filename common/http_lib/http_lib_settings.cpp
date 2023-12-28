@@ -47,5 +47,5 @@ HTTP_LIB_SETTINGS::HTTP_LIB_SETTINGS( const std::string& aFilename ) :
 
 wxString HTTP_LIB_SETTINGS::getFileExt() const
 {
-    return HTTPLibraryFileExtension;
+    return FILEEXT::HTTPLibraryFileExtension;
 }

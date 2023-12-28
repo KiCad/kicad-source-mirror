@@ -119,7 +119,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
-    m_acceptedExts.emplace( DrawingSheetFileExtension, nullptr );
+    m_acceptedExts.emplace( FILEEXT::DrawingSheetFileExtension, nullptr );
     DragAcceptFiles( true );
 
     VECTOR2I pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU( drawSheetIUScale.IU_PER_MILS );

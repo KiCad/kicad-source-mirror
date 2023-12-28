@@ -371,8 +371,8 @@ void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
     wxFileName  fn = GetBoard()->GetFileName();
     wxString    ext, wildcard;
 
-    ext = IpcD356FileExtension;
-    wildcard = IpcD356FileWildcard();
+    ext = FILEEXT::IpcD356FileExtension;
+    wildcard = FILEEXT::IpcD356FileWildcard();
     fn.SetExt( ext );
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );

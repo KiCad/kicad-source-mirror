@@ -309,7 +309,8 @@ bool PGM_KICAD::OnPgmInit()
         {
             wxFileName tmp = App().argv[1];
 
-            if( tmp.GetExt() != ProjectFileExtension && tmp.GetExt() != LegacyProjectFileExtension )
+            if( tmp.GetExt() != FILEEXT::ProjectFileExtension
+                && tmp.GetExt() != FILEEXT::LegacyProjectFileExtension )
             {
                 wxString msg;
 

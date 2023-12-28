@@ -252,8 +252,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
-    m_acceptedExts.emplace( KiCadFootprintLibPathExtension, &ACTIONS::ddAddLibrary );
-    m_acceptedExts.emplace( KiCadFootprintFileExtension, &PCB_ACTIONS::ddImportFootprint );
+    m_acceptedExts.emplace( FILEEXT::KiCadFootprintLibPathExtension, &ACTIONS::ddAddLibrary );
+    m_acceptedExts.emplace( FILEEXT::KiCadFootprintFileExtension, &PCB_ACTIONS::ddImportFootprint );
     DragAcceptFiles( true );
 
     ActivateGalCanvas();
@@ -942,7 +942,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
         title += footprint->GetReference();
         title += wxS( " " ) + wxString::Format( _( "[from %s]" ), Prj().GetProjectName()
                                                                               + wxT( "." )
-                                                                              + PcbFileExtension );
+                                                                              + FILEEXT::PcbFileExtension );
     }
     else if( fpid.IsValid() )
     {
@@ -1363,8 +1363,8 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
 
     wxString projectPath = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Export View as PNG" ), projectPath,
-                      fn.GetFullName(), PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Export View as PNG" ), projectPath, fn.GetFullName(),
+                      FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetPath().IsEmpty() )
         return;

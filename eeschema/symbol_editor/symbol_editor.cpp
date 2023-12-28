@@ -1077,9 +1077,9 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
             default_path = search->LastVisitedPath();
 
         fn.SetName( aLibrary );
-        fn.SetExt( KiCadSymbolLibFileExtension );
+        fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
-        wxString wildcards = KiCadSymbolLibFileWildcard();
+        wxString wildcards = FILEEXT::KiCadSymbolLibFileWildcard();
 
         wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ),
                           default_path, fn.GetFullName(), wildcards,
@@ -1096,7 +1096,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
         if( fn.GetExt().IsEmpty() )
-            fn.SetExt( KiCadSymbolLibFileExtension );
+            fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
         type = saveAsHook.GetOption();
     }

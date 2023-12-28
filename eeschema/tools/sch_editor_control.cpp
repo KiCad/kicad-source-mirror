@@ -112,14 +112,15 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
 {
     SCH_SHEET* curr_sheet = m_frame->GetCurrentSheet().Last();
     wxFileName curr_fn = curr_sheet->GetFileName();
-    wxFileDialog dlg( m_frame, _( "Schematic Files" ), curr_fn.GetPath(),
-                      curr_fn.GetFullName(), KiCadSchematicFileWildcard(),
+    wxFileDialog dlg( m_frame, _( "Schematic Files" ), curr_fn.GetPath(), curr_fn.GetFullName(),
+                      FILEEXT::KiCadSchematicFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    wxString newFilename = EnsureFileExtension( dlg.GetPath(), KiCadSchematicFileExtension );
+    wxString newFilename =
+            EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadSchematicFileExtension );
 
     m_frame->saveSchematicFile( curr_sheet, newFilename );
     return 0;
@@ -379,8 +380,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         if( !libTable )     // Cancelled by user
             return 0;
 
-        if( !m_frame->LibraryFileBrowser( false, fn, KiCadSymbolLibFileWildcard(),
-                                          KiCadSymbolLibFileExtension, false,
+        if( !m_frame->LibraryFileBrowser( false, fn, FILEEXT::KiCadSymbolLibFileWildcard(),
+                                          FILEEXT::KiCadSymbolLibFileExtension, false,
                                           ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
                                           PATHS::GetDefaultUserSymbolsPath() ) )
         {

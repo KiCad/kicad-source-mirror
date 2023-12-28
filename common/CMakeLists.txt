@@ -119,6 +119,7 @@ set( KICOMMON_SRCS
     richio.cpp
     string_utils.cpp
     trace_helpers.cpp
+    wildcards_and_files_ext.cpp
     wx_filename.cpp
 
     io/kicad/kicad_io_utils.cpp    # needed by richio
@@ -509,7 +510,6 @@ set( COMMON_SRCS
     title_block.cpp
     undo_redo_container.cpp
     validators.cpp
-    wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp
     xnode.cpp
     view/wx_view_controls.cpp

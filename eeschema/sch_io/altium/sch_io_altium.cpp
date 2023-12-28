@@ -304,7 +304,8 @@ wxString SCH_IO_ALTIUM::getLibName()
 
 wxFileName SCH_IO_ALTIUM::getLibFileName()
 {
-    wxFileName fn( m_schematic->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
+    wxFileName fn( m_schematic->Prj().GetProjectPath(), getLibName(),
+                   FILEEXT::KiCadSymbolLibFileExtension );
 
     return fn;
 }
@@ -317,7 +318,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
     wxFileName fileName( aFileName );
-    fileName.SetExt( KiCadSchematicFileExtension );
+    fileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
     m_schematic = aSchematic;
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
@@ -491,7 +492,7 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             // Map the loaded Altium file to the project file.
             wxFileName projectFileName = loadAltiumFileName;
             projectFileName.SetPath( m_schematic->Prj().GetProjectPath() );
-            projectFileName.SetExt( KiCadSchematicFileExtension );
+            projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
             sheet->SetFileName( projectFileName.GetFullName() );
             screen->SetFileName( projectFileName.GetFullPath() );
 
@@ -2505,9 +2506,10 @@ void SCH_IO_ALTIUM::ParseHarnessType( const std::map<wxString, wxString>& aPrope
     sheetNameField.SetTextColor( GetColorFromInt( elem.Color ) );
 
     SCH_FIELD& sheetFileName = sheetIt->second->GetFields()[SHEETFILENAME];
-    sheetFileName.SetText( elem.Text + wxT( "." ) + KiCadSchematicFileExtension );
+    sheetFileName.SetText( elem.Text + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension );
 
-    wxFileName fn( m_schematic->Prj().GetProjectPath(), elem.Text, KiCadSchematicFileExtension );
+    wxFileName fn( m_schematic->Prj().GetProjectPath(), elem.Text,
+                   FILEEXT::KiCadSchematicFileExtension );
     wxString fullPath = fn.GetFullPath();
 
     fullPath.Replace( wxT( "\\" ), wxT( "/" ) );

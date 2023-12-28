@@ -356,7 +356,7 @@ void ReadHotKeyConfig( const wxString&                             aFileName,
     if( fileName.IsEmpty() )
     {
         wxFileName fn( wxS( "user" ) );
-        fn.SetExt( HotkeyFileExtension );
+        fn.SetExt( FILEEXT::HotkeyFileExtension );
         fn.SetPath( PATHS::GetUserSettingsPath() );
         fileName = fn.GetFullPath();
     }
@@ -411,7 +411,7 @@ int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
     std::map<std::string, std::pair<int, int>> hotkeys;
     wxFileName fn( "user" );
 
-    fn.SetExt( HotkeyFileExtension );
+    fn.SetExt( FILEEXT::HotkeyFileExtension );
     fn.SetPath( PATHS::GetUserSettingsPath() );
 
     // Read the existing config (all hotkeys)
@@ -458,7 +458,7 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
 {
     wxFileName fn( aFilename );
 
-    fn.SetExt( HotkeyFileExtension );
+    fn.SetExt( FILEEXT::HotkeyFileExtension );
     fn.SetPath( PATHS::GetUserSettingsPath() );
 
     if( !wxFile::Exists( fn.GetFullPath() ) )

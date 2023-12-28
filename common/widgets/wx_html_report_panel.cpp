@@ -366,7 +366,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
         fn = m_reportFileName;
 
     wxFileDialog dlg( this, _( "Save Report File" ), fn.GetPath(), fn.GetFullName(),
-                      TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      FILEEXT::TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

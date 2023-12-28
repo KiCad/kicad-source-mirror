@@ -273,7 +273,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     // Ensure the filename extension is OK.  (In normal use will be caught by grid validators,
     // but unedited data from existing files can be bad.)
-    sheetFileName = EnsureFileExtension( sheetFileName, KiCadSchematicFileExtension );
+    sheetFileName = EnsureFileExtension( sheetFileName, FILEEXT::KiCadSchematicFileExtension );
 
     wxFileName fn( sheetFileName );
     wxString newRelativeFilename = fn.GetFullPath();
@@ -416,7 +416,8 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
 {
     wxString   msg;
-    wxFileName sheetFileName( EnsureFileExtension( aNewFilename, KiCadSchematicFileExtension ) );
+    wxFileName sheetFileName(
+            EnsureFileExtension( aNewFilename, FILEEXT::KiCadSchematicFileExtension ) );
 
     // Sheet file names are relative to the path of the current sheet.  This allows for
     // nesting of schematic files in subfolders.  Screen file names are always absolute.

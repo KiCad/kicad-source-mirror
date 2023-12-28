@@ -585,7 +585,7 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 {
     wxASSERT( m_project );
 
-    Set( "meta.filename", m_project->GetProjectName() + "." + ProjectFileExtension );
+    Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
 
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 }
@@ -597,7 +597,7 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
     wxString   oldProjectName = oldFilename.GetName();
     wxString   oldProjectPath = oldFilename.GetPath();
 
-    Set( "meta.filename", aFile + "." + ProjectFileExtension );
+    Set( "meta.filename", aFile + "." + FILEEXT::ProjectFileExtension );
     SetFilename( aFile );
 
     auto updatePath =
@@ -638,13 +638,13 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
 
 wxString PROJECT_FILE::getFileExt() const
 {
-    return ProjectFileExtension;
+    return FILEEXT::ProjectFileExtension;
 }
 
 
 wxString PROJECT_FILE::getLegacyFileExt() const
 {
-    return LegacyProjectFileExtension;
+    return FILEEXT::LegacyProjectFileExtension;
 }
 
 

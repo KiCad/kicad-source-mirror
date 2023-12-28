@@ -378,11 +378,11 @@ int BOARD_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
     wxString ext;
 
     wxFileName::SplitPath( fullFileName, &path, &name, &ext );
-    name += wxT( "." ) + SpecctraSessionFileExtension;
+    name += wxT( "." ) + FILEEXT::SpecctraSessionFileExtension;
 
     fullFileName = wxFileSelector( _( "Specctra Session File" ), path, name,
-                                   wxT( "." ) + SpecctraSessionFileExtension,
-                                   SpecctraSessionFileWildcard(), wxFD_OPEN | wxFD_CHANGE_DIR,
+                                   wxT( "." ) + FILEEXT::SpecctraSessionFileExtension,
+                                   FILEEXT::SpecctraSessionFileWildcard(), wxFD_OPEN | wxFD_CHANGE_DIR,
                                    frame() );
 
     if( !fullFileName.IsEmpty() )
@@ -400,7 +400,7 @@ int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
     if( fullFileName.IsEmpty() )
     {
         fn = m_frame->GetBoard()->GetFileName();
-        fn.SetExt( SpecctraDsnFileExtension );
+        fn.SetExt( FILEEXT::SpecctraDsnFileExtension );
     }
     else
     {
@@ -408,7 +408,7 @@ int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
     }
 
     fullFileName = wxFileSelector( _( "Specctra DSN File" ), fn.GetPath(), fn.GetFullName(),
-                                   SpecctraDsnFileExtension, SpecctraDsnFileWildcard(),
+                                   FILEEXT::SpecctraDsnFileExtension, FILEEXT::SpecctraDsnFileWildcard(),
                                    wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR, frame() );
 
     if( !fullFileName.IsEmpty() )

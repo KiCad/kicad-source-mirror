@@ -298,33 +298,33 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
 {
     switch( type )
     {
-    case TREE_FILE_TYPE::LEGACY_PROJECT:        return LegacyProjectFileExtension;
-    case TREE_FILE_TYPE::JSON_PROJECT:          return ProjectFileExtension;
-    case TREE_FILE_TYPE::LEGACY_SCHEMATIC:      return LegacySchematicFileExtension;
-    case TREE_FILE_TYPE::SEXPR_SCHEMATIC:       return KiCadSchematicFileExtension;
-    case TREE_FILE_TYPE::LEGACY_PCB:            return LegacyPcbFileExtension;
-    case TREE_FILE_TYPE::SEXPR_PCB:             return KiCadPcbFileExtension;
-    case TREE_FILE_TYPE::GERBER:                return GerberFileExtensionsRegex;
-    case TREE_FILE_TYPE::GERBER_JOB_FILE:       return GerberJobFileExtension;
-    case TREE_FILE_TYPE::HTML:                  return HtmlFileExtension;
-    case TREE_FILE_TYPE::PDF:                   return PdfFileExtension;
-    case TREE_FILE_TYPE::TXT:                   return TextFileExtension;
-    case TREE_FILE_TYPE::MD:                    return MarkdownFileExtension;
-    case TREE_FILE_TYPE::NET:                   return NetlistFileExtension;
-    case TREE_FILE_TYPE::NET_SPICE:             return SpiceFileExtension;
-    case TREE_FILE_TYPE::CMP_LINK:              return FootprintAssignmentFileExtension;
-    case TREE_FILE_TYPE::REPORT:                return ReportFileExtension;
-    case TREE_FILE_TYPE::FP_PLACE:              return FootprintPlaceFileExtension;
-    case TREE_FILE_TYPE::DRILL:                 return DrillFileExtension;
+    case TREE_FILE_TYPE::LEGACY_PROJECT:        return FILEEXT::LegacyProjectFileExtension;
+    case TREE_FILE_TYPE::JSON_PROJECT:          return FILEEXT::ProjectFileExtension;
+    case TREE_FILE_TYPE::LEGACY_SCHEMATIC:      return FILEEXT::LegacySchematicFileExtension;
+    case TREE_FILE_TYPE::SEXPR_SCHEMATIC:       return FILEEXT::KiCadSchematicFileExtension;
+    case TREE_FILE_TYPE::LEGACY_PCB:            return FILEEXT::LegacyPcbFileExtension;
+    case TREE_FILE_TYPE::SEXPR_PCB:             return FILEEXT::KiCadPcbFileExtension;
+    case TREE_FILE_TYPE::GERBER:                return FILEEXT::GerberFileExtensionsRegex;
+    case TREE_FILE_TYPE::GERBER_JOB_FILE:       return FILEEXT::GerberJobFileExtension;
+    case TREE_FILE_TYPE::HTML:                  return FILEEXT::HtmlFileExtension;
+    case TREE_FILE_TYPE::PDF:                   return FILEEXT::PdfFileExtension;
+    case TREE_FILE_TYPE::TXT:                   return FILEEXT::TextFileExtension;
+    case TREE_FILE_TYPE::MD:                    return FILEEXT::MarkdownFileExtension;
+    case TREE_FILE_TYPE::NET:                   return FILEEXT::NetlistFileExtension;
+    case TREE_FILE_TYPE::NET_SPICE:             return FILEEXT::SpiceFileExtension;
+    case TREE_FILE_TYPE::CMP_LINK:              return FILEEXT::FootprintAssignmentFileExtension;
+    case TREE_FILE_TYPE::REPORT:                return FILEEXT::ReportFileExtension;
+    case TREE_FILE_TYPE::FP_PLACE:              return FILEEXT::FootprintPlaceFileExtension;
+    case TREE_FILE_TYPE::DRILL:                 return FILEEXT::DrillFileExtension;
     case TREE_FILE_TYPE::DRILL_NC:              return "nc";
     case TREE_FILE_TYPE::DRILL_XNC:             return "xnc";
-    case TREE_FILE_TYPE::SVG:                   return SVGFileExtension;
-    case TREE_FILE_TYPE::DRAWING_SHEET:         return DrawingSheetFileExtension;
-    case TREE_FILE_TYPE::FOOTPRINT_FILE:        return KiCadFootprintFileExtension;
-    case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:     return LegacySymbolLibFileExtension;
-    case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return KiCadSymbolLibFileExtension;
-    case TREE_FILE_TYPE::DESIGN_RULES:          return DesignRulesFileExtension;
-    case TREE_FILE_TYPE::ZIP_ARCHIVE:           return ArchiveFileExtension;
+    case TREE_FILE_TYPE::SVG:                   return FILEEXT::SVGFileExtension;
+    case TREE_FILE_TYPE::DRAWING_SHEET:         return FILEEXT::DrawingSheetFileExtension;
+    case TREE_FILE_TYPE::FOOTPRINT_FILE:        return FILEEXT::KiCadFootprintFileExtension;
+    case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:     return FILEEXT::LegacySymbolLibFileExtension;
+    case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE: return FILEEXT::KiCadSymbolLibFileExtension;
+    case TREE_FILE_TYPE::DESIGN_RULES:          return FILEEXT::DesignRulesFileExtension;
+    case TREE_FILE_TYPE::ZIP_ARCHIVE:           return FILEEXT::ArchiveFileExtension;
 
     case TREE_FILE_TYPE::ROOT:
     case TREE_FILE_TYPE::UNKNOWN:
@@ -346,7 +346,8 @@ std::vector<wxString> getProjects( const wxDir& dir )
     {
         wxFileName file( dir_filename );
 
-        if( file.GetExt() == LegacyProjectFileExtension || file.GetExt() == ProjectFileExtension )
+        if( file.GetExt() == FILEEXT::LegacyProjectFileExtension
+            || file.GetExt() == FILEEXT::ProjectFileExtension )
             projects.push_back( file.GetName() );
 
         haveFile = dir.GetNext( &dir_filename );
@@ -622,7 +623,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
         fn.Clear();
         fn.SetPath( PATHS::GetDefaultUserProjectsPath() );
         fn.SetName( NAMELESS_PROJECT );
-        fn.SetExt( ProjectFileExtension );
+        fn.SetExt( FILEEXT::ProjectFileExtension );
         prjReset = true;
     }
 
@@ -647,11 +648,11 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     // name of the migrated (new format) file, which may not have been saved to disk yet.
     if( !prjOpened && !prjReset )
     {
-        fn.SetExt( LegacyProjectFileExtension );
+        fn.SetExt( FILEEXT::LegacyProjectFileExtension );
         prjOpened = fn.FileExists();
 
         // Set the ext back so that in the tree view we see the (not-yet-saved) new file
-        fn.SetExt( ProjectFileExtension );
+        fn.SetExt( FILEEXT::ProjectFileExtension );
     }
 
     // root tree:

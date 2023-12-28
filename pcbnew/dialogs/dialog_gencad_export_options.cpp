@@ -47,7 +47,7 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     // is set to.
     m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, "",
                                          _("Select a GenCAD export filename"),
-                                         GencadFileWildcard(),
+                                         FILEEXT::GencadFileWildcard(),
                                          wxDefaultPosition, wxSize( -1,-1 ),
                                          wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
     m_mainSizer->Add( m_filePicker, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 5 );

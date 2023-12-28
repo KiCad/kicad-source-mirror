@@ -68,7 +68,7 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     m_mirror = false;
     m_merge_PTH_NPTH = false;
     m_minimalHeader = false;
-    m_drillFileExtension = DrillFileExtension;
+    m_drillFileExtension = FILEEXT::DrillFileExtension;
     m_useRouteModeForOval = true;
 }
 

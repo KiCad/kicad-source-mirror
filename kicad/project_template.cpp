@@ -156,7 +156,8 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
 
     for( wxFileName& file : srcFiles )
     {
-        if( file.GetExt() == ProjectFileExtension || file.GetExt() == LegacyProjectFileExtension )
+        if( file.GetExt() == FILEEXT::ProjectFileExtension
+            || file.GetExt() == FILEEXT::LegacyProjectFileExtension )
         {
             if( !basename.IsEmpty() && basename != file.GetName() )
                 multipleProjectFilesFound = true;
@@ -205,7 +206,8 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
     for( wxFileName& file : srcFiles )
     {
-        if( file.GetExt() == ProjectFileExtension || file.GetExt() == LegacyProjectFileExtension )
+        if( file.GetExt() == FILEEXT::ProjectFileExtension
+            || file.GetExt() == FILEEXT::LegacyProjectFileExtension )
         {
             if( !basename.IsEmpty() && basename != file.GetName() )
                 multipleProjectFilesFound = true;
@@ -225,7 +227,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
         // Replace the template filename with the project filename for the new project creation
         wxString currname = destFile.GetName();
 
-        if( destFile.GetExt() == DrawingSheetFileExtension )
+        if( destFile.GetExt() == FILEEXT::DrawingSheetFileExtension )
         {
             // Don't rename drawing sheet definitions; they're often shared
         }

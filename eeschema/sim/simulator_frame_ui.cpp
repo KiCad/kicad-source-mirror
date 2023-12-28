@@ -2097,7 +2097,7 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
     updateMeasurementsFromGrid();
 
     wxFileName filename = aPath;
-    filename.SetExt( WorkbookFileExtension );
+    filename.SetExt( FILEEXT::WorkbookFileExtension );
 
     wxFile file;
 

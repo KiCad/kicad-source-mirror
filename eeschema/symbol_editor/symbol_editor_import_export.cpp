@@ -156,10 +156,10 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
     wxFileName fn;
 
     fn.SetName( symbol->GetName().Lower() );
-    fn.SetExt( KiCadSymbolLibFileExtension );
+    fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
     wxFileDialog dlg( this, _( "Export Symbol" ), m_mruPath, fn.GetFullName(),
-                      KiCadSymbolLibFileWildcard(), wxFD_SAVE );
+                      FILEEXT::KiCadSymbolLibFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

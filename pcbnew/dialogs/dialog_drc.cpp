@@ -872,10 +872,10 @@ void DIALOG_DRC::OnSeverity( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
 {
-    wxFileName fn( "DRC." + ReportFileExtension );
+    wxFileName fn( "DRC." + FILEEXT::ReportFileExtension );
 
     wxFileDialog dlg( this, _( "Save Report File" ), Prj().GetProjectPath(), fn.GetFullName(),
-                      ReportFileWildcard() + wxS( "|" ) + JsonFileWildcard(),
+                      FILEEXT::ReportFileWildcard() + wxS( "|" ) + FILEEXT::JsonFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -884,7 +884,7 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
     fn = dlg.GetPath();
 
     if( fn.GetExt().IsEmpty() )
-        fn.SetExt( ReportFileExtension );
+        fn.SetExt( FILEEXT::ReportFileExtension );
 
     if( !fn.IsAbsolute() )
     {
@@ -896,7 +896,7 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
                              m_ratsnestProvider, m_fpWarningsProvider );
 
     bool success = false;
-    if( fn.GetExt() == JsonFileExtension )
+    if( fn.GetExt() == FILEEXT::JsonFileExtension )
         success = reportWriter.WriteJsonReport( fn.GetFullPath() );
     else
         success = reportWriter.WriteTextReport( fn.GetFullPath() );

@@ -208,7 +208,7 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
     wxString   libpath = m_gridEnvVars->GetCellValue( wxGridCellCoords( row, 1 ) );
 
     wxFileDialog dlg( this, _( "Footprint Association File" ), libpath, wxEmptyString,
-                      EquFileWildcard(), wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
+                      FILEEXT::EquFileWildcard(), wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

@@ -368,7 +368,7 @@ const wxString PLACEFILE_GERBER_WRITER::GetPlaceFileName( const wxString& aFullB
     wxString post_id = wxT( "-pnp_" );
     post_id += aLayer == B_Cu ? wxT( "bottom" ) : wxT( "top" );
     fn.SetName( fn.GetName() + post_id );
-    fn.SetExt( GerberFileExtension );
+    fn.SetExt( FILEEXT::GerberFileExtension );
 
     return fn.GetFullPath();
 }

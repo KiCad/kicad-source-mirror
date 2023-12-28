@@ -113,7 +113,8 @@ void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
     wxFileName fn = m_frame->GetBoard()->GetFileName();
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
-                      PcbFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+                      FILEEXT::PcbFileWildcard(),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
     if( dlg.ShowModal() == wxID_OK )
         m_filePathCtrl->SetValue( dlg.GetPath() );

@@ -32,22 +32,10 @@
 #ifndef INCLUDE_WILDCARDS_AND_FILES_EXT_H_
 #define INCLUDE_WILDCARDS_AND_FILES_EXT_H_
 
+#include <kicommon.h>
 #include <string>
 #include <vector>
 #include <wx/string.h>
-
-/**
- * \defgroup file_extensions File Extension Definitions
- *
- * @note Please do not changes these.  If a different file extension is needed, create a new
- *       definition in here.  If you create a extension definition in another file, make sure
- *       to add it to the Doxygen group "file_extensions" using the "addtogroup" tag. Also
- *       note, just because they are defined as const doesn't guarantee that they cannot be
- *       changed.
- *
- * @{
- */
-
 
 /**
  * Compare the given extension against the reference extensions to see if it matches any
@@ -65,8 +53,8 @@
  *
  * @return if the extension matches any reference extensions
  */
-bool compareFileExtensions( const std::string& aExtension,
-        const std::vector<std::string>& aReference, bool aCaseSensitive = false );
+KICOMMON_API bool compareFileExtensions( const std::string&              aExtension,
+                                         const std::vector<std::string>& aReference, bool aCaseSensitive = false );
 
 /**
  * Build the wildcard extension file dialog wildcard filter to add to the base message dialog.
@@ -86,7 +74,7 @@ bool compareFileExtensions( const std::string& aExtension,
  * @return the appropriate file dialog wildcard filter list.
  */
 
-wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
+KICOMMON_API wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
 
 /**
  * Format wildcard extension to support case sensitive file dialogs.
@@ -106,156 +94,175 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
  *
  * @return the build appropriate file dialog wildcard filter.
  */
-wxString formatWildcardExt( const wxString& aWildcard );
-
-extern const std::string BackupFileSuffix;
-extern const std::string LockFilePrefix;
-extern const std::string LockFileExtension;
-
-extern const std::string SchematicSymbolFileExtension;
-extern const std::string LegacySymbolLibFileExtension;
-extern const std::string LegacySymbolDocumentFileExtension;
-extern const std::string SchematicBackupFileExtension;
-
-extern const std::string VrmlFileExtension;
-extern const std::string ProjectFileExtension;
-extern const std::string LegacyProjectFileExtension;
-extern const std::string ProjectLocalSettingsFileExtension;
-extern const std::string LegacySchematicFileExtension;
-extern const std::string CadstarSchematicFileExtension;
-extern const std::string CadstarPartsLibraryFileExtension;
-extern const std::string KiCadSchematicFileExtension;
-extern const std::string SpiceFileExtension;
-extern const std::string CadstarNetlistFileExtension;
-extern const std::string OrCadPcb2NetlistFileExtension;
-extern const std::string NetlistFileExtension;
-extern const std::string AllegroNetlistFileExtension;
-extern const std::string GerberFileExtension;
-extern const std::string GerberJobFileExtension;
-extern const std::string HtmlFileExtension;
-extern const std::string EquFileExtension;
-extern const std::string HotkeyFileExtension;
-extern const std::string DatabaseLibraryFileExtension;
-extern const std::string HTTPLibraryFileExtension;
-
-extern const std::string ArchiveFileExtension;
-
-extern const std::string LegacyPcbFileExtension;
-extern const std::string EaglePcbFileExtension;
-extern const std::string CadstarPcbFileExtension;
-extern const std::string KiCadPcbFileExtension;
-#define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
-extern const std::string KiCadSymbolLibFileExtension;
-extern const std::string DrawingSheetFileExtension;
-extern const std::string DesignRulesFileExtension;
-
-extern const std::string LegacyFootprintLibPathExtension;
-extern const std::string PdfFileExtension;
-extern const std::string MacrosFileExtension;
-extern const std::string FootprintAssignmentFileExtension;
-extern const std::string DrillFileExtension;
-extern const std::string SVGFileExtension;
-extern const std::string ReportFileExtension;
-extern const std::string FootprintPlaceFileExtension;
-extern const std::string KiCadFootprintFileExtension;
-extern const std::string KiCadFootprintLibPathExtension;
-extern const std::string AltiumFootprintLibPathExtension;
-extern const std::string GedaPcbFootprintLibFileExtension;
-extern const std::string EagleFootprintLibPathExtension;
-extern const std::string DrawingSheetFileExtension;
-extern const std::string SpecctraDsnFileExtension;
-extern const std::string SpecctraSessionFileExtension;
-extern const std::string IpcD356FileExtension;
-extern const std::string Ipc2581FileExtension;
-extern const std::string WorkbookFileExtension;
-
-extern const std::string PngFileExtension;
-extern const std::string JpegFileExtension;
-extern const std::string TextFileExtension;
-extern const std::string MarkdownFileExtension;
-extern const std::string CsvFileExtension;
-extern const std::string XmlFileExtension;
-extern const std::string JsonFileExtension;
-
-extern const std::string StepFileExtension;
-extern const std::string StepFileAbrvExtension;
-extern const std::string GltfBinaryFileExtension;
-
-extern const wxString GerberFileExtensionsRegex;
-
-bool IsGerberFileExtension( const wxString& ext );
-
-/**
- * @}
- */
+KICOMMON_API wxString formatWildcardExt( const wxString& aWildcard );
 
 
-/**
- * \defgroup file_wildcards File Wildcard Definitions
- *
- * @note Please do not changes these.  If a different file wildcard is needed, create a new
- *       definition in here.  If you create a wildcard definition in another file, make sure
- *       to add it to the Doxygen group "file_extensions" using the "addtogroup" tag and
- *       correct handle the GTK+ file dialog case sensitivity issue.
- * @{
- */
+class KICOMMON_API FILEEXT
+{
+public:
+    FILEEXT() = delete;
 
-extern wxString AllFilesWildcard();
+    /**
+     * \defgroup file_extensions File Extension Definitions
+     *
+     * @note Please do not changes these.  If a different file extension is needed, create a new
+     *       definition in here.  If you create a extension definition in another file, make sure
+     *       to add it to the Doxygen group "file_extensions" using the "addtogroup" tag. Also
+     *       note, just because they are defined as const doesn't guarantee that they cannot be
+     *       changed.
+     *
+     * @{
+     */
+    static const std::string BackupFileSuffix;
+    static const std::string LockFilePrefix;
+    static const std::string LockFileExtension;
 
-extern wxString FootprintAssignmentFileWildcard();
-extern wxString DrawingSheetFileWildcard();
-extern wxString KiCadSymbolLibFileWildcard();
-extern wxString ProjectFileWildcard();
-extern wxString LegacyProjectFileWildcard();
-extern wxString AllProjectFilesWildcard();
-extern wxString AllSchematicFilesWildcard();
-extern wxString KiCadSchematicFileWildcard();
-extern wxString LegacySchematicFileWildcard();
-extern wxString BoardFileWildcard();
-extern wxString OrCadPcb2NetlistFileWildcard();
-extern wxString NetlistFileWildcard();
-extern wxString AllegroNetlistFileWildcard();
-extern wxString HtmlFileWildcard();
-extern wxString CsvFileWildcard();
-extern wxString PcbFileWildcard();
-extern wxString CadstarArchiveFilesWildcard();
-extern wxString EagleFilesWildcard();
-extern wxString EasyEdaArchiveWildcard();
-extern wxString EasyEdaProFileWildcard();
-extern wxString PdfFileWildcard();
-extern wxString PSFileWildcard();
-extern wxString MacrosFileWildcard();
-extern wxString DrillFileWildcard();
-extern wxString SVGFileWildcard();
-extern wxString JsonFileWildcard();
-extern wxString ReportFileWildcard();
-extern wxString FootprintPlaceFileWildcard();
-extern wxString Shapes3DFileWildcard();
-extern wxString IDF3DFileWildcard();
-extern wxString DocModulesFileName();
-extern wxString KiCadFootprintLibFileWildcard();
-extern wxString KiCadFootprintLibPathWildcard();
-extern wxString TextFileWildcard();
-extern wxString ModLegacyExportFileWildcard();
-extern wxString ErcFileWildcard();
-extern wxString SpiceLibraryFileWildcard();
-extern wxString SpiceNetlistFileWildcard();
-extern wxString CadstarNetlistFileWildcard();
-extern wxString EquFileWildcard();
-extern wxString ZipFileWildcard();
-extern wxString GencadFileWildcard();
-extern wxString DxfFileWildcard();
-extern wxString GerberJobFileWildcard();
-extern wxString SpecctraDsnFileWildcard();
-extern wxString SpecctraSessionFileWildcard();
-extern wxString IpcD356FileWildcard();
-extern wxString WorkbookFileWildcard();
-extern wxString PngFileWildcard();
-extern wxString JpegFileWildcard();
-extern wxString HotkeyFileWildcard();
+    static const std::string SchematicSymbolFileExtension;
+    static const std::string LegacySymbolLibFileExtension;
+    static const std::string LegacySymbolDocumentFileExtension;
+    static const std::string SchematicBackupFileExtension;
 
-/**
- * @}
- */
+    static const std::string VrmlFileExtension;
+    static const std::string ProjectFileExtension;
+    static const std::string LegacyProjectFileExtension;
+    static const std::string ProjectLocalSettingsFileExtension;
+    static const std::string LegacySchematicFileExtension;
+    static const std::string CadstarSchematicFileExtension;
+    static const std::string CadstarPartsLibraryFileExtension;
+    static const std::string KiCadSchematicFileExtension;
+    static const std::string SpiceFileExtension;
+    static const std::string CadstarNetlistFileExtension;
+    static const std::string OrCadPcb2NetlistFileExtension;
+    static const std::string NetlistFileExtension;
+    static const std::string AllegroNetlistFileExtension;
+    static const std::string GerberFileExtension;
+    static const std::string GerberJobFileExtension;
+    static const std::string HtmlFileExtension;
+    static const std::string EquFileExtension;
+    static const std::string HotkeyFileExtension;
+    static const std::string DatabaseLibraryFileExtension;
+    static const std::string HTTPLibraryFileExtension;
+
+    static const std::string ArchiveFileExtension;
+
+    static const std::string LegacyPcbFileExtension;
+    static const std::string EaglePcbFileExtension;
+    static const std::string CadstarPcbFileExtension;
+    static const std::string KiCadPcbFileExtension;
+    #define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
+    static const std::string KiCadSymbolLibFileExtension;
+    static const std::string DrawingSheetFileExtension;
+    static const std::string DesignRulesFileExtension;
+
+    static const std::string LegacyFootprintLibPathExtension;
+    static const std::string PdfFileExtension;
+    static const std::string MacrosFileExtension;
+    static const std::string FootprintAssignmentFileExtension;
+    static const std::string DrillFileExtension;
+    static const std::string SVGFileExtension;
+    static const std::string ReportFileExtension;
+    static const std::string FootprintPlaceFileExtension;
+    static const std::string KiCadFootprintFileExtension;
+    static const std::string KiCadFootprintLibPathExtension;
+    static const std::string AltiumFootprintLibPathExtension;
+    static const std::string CadstarFootprintLibPathExtension;
+    static const std::string GedaPcbFootprintLibFileExtension;
+    static const std::string EagleFootprintLibPathExtension;
+    static const std::string DrawingSheetFileExtension;
+    static const std::string SpecctraDsnFileExtension;
+    static const std::string SpecctraSessionFileExtension;
+    static const std::string IpcD356FileExtension;
+    static const std::string Ipc2581FileExtension;
+    static const std::string WorkbookFileExtension;
+
+    static const std::string PngFileExtension;
+    static const std::string JpegFileExtension;
+    static const std::string TextFileExtension;
+    static const std::string MarkdownFileExtension;
+    static const std::string CsvFileExtension;
+    static const std::string XmlFileExtension;
+    static const std::string JsonFileExtension;
+
+    static const std::string StepFileExtension;
+    static const std::string StepFileAbrvExtension;
+    static const std::string GltfBinaryFileExtension;
+
+    static const wxString GerberFileExtensionsRegex;
+
+    /**
+     * @}
+     */
+
+    /**
+     * \defgroup file_wildcards File Wildcard Definitions
+     *
+     * @note Please do not changes these.  If a different file wildcard is needed, create a new
+     *       definition in here.  If you create a wildcard definition in another file, make sure
+     *       to add it to the Doxygen group "file_extensions" using the "addtogroup" tag and
+     *       correct handle the GTK+ file dialog case sensitivity issue.
+     * @{
+     */
+
+
+    static bool IsGerberFileExtension( const wxString& ext );
+    static wxString AllFilesWildcard();
+
+    static wxString FootprintAssignmentFileWildcard();
+    static wxString DrawingSheetFileWildcard();
+    static wxString KiCadSymbolLibFileWildcard();
+    static wxString ProjectFileWildcard();
+    static wxString LegacyProjectFileWildcard();
+    static wxString AllProjectFilesWildcard();
+    static wxString AllSchematicFilesWildcard();
+    static wxString KiCadSchematicFileWildcard();
+    static wxString LegacySchematicFileWildcard();
+    static wxString BoardFileWildcard();
+    static wxString OrCadPcb2NetlistFileWildcard();
+    static wxString NetlistFileWildcard();
+    static wxString AllegroNetlistFileWildcard();
+    static wxString HtmlFileWildcard();
+    static wxString CsvFileWildcard();
+    static wxString PcbFileWildcard();
+    static wxString CadstarArchiveFilesWildcard();
+    static wxString EagleFilesWildcard();
+    static wxString EasyEdaArchiveWildcard();
+    static wxString EasyEdaProFileWildcard();
+    static wxString PdfFileWildcard();
+    static wxString PSFileWildcard();
+    static wxString MacrosFileWildcard();
+    static wxString DrillFileWildcard();
+    static wxString SVGFileWildcard();
+    static wxString JsonFileWildcard();
+    static wxString ReportFileWildcard();
+    static wxString FootprintPlaceFileWildcard();
+    static wxString Shapes3DFileWildcard();
+    static wxString IDF3DFileWildcard();
+    static wxString DocModulesFileName();
+    static wxString KiCadFootprintLibFileWildcard();
+    static wxString KiCadFootprintLibPathWildcard();
+    static wxString TextFileWildcard();
+    static wxString ModLegacyExportFileWildcard();
+    static wxString ErcFileWildcard();
+    static wxString SpiceLibraryFileWildcard();
+    static wxString SpiceNetlistFileWildcard();
+    static wxString CadstarNetlistFileWildcard();
+    static wxString EquFileWildcard();
+    static wxString ZipFileWildcard();
+    static wxString GencadFileWildcard();
+    static wxString DxfFileWildcard();
+    static wxString GerberJobFileWildcard();
+    static wxString SpecctraDsnFileWildcard();
+    static wxString SpecctraSessionFileWildcard();
+    static wxString IpcD356FileWildcard();
+    static wxString WorkbookFileWildcard();
+    static wxString PngFileWildcard();
+    static wxString JpegFileWildcard();
+    static wxString HotkeyFileWildcard();
+
+    /**
+     * @}
+     */
+};
+
 
 #endif  // INCLUDE_WILDCARDS_AND_FILES_EXT_H_

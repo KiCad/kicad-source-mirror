@@ -61,10 +61,10 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
     wxFileName fn = Prj().GetProjectFullName();
 
-    fn.SetExt( ArchiveFileExtension );
+    fn.SetExt( FILEEXT::ArchiveFileExtension );
 
     wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
-                             fn.GetFullName(), ZipFileWildcard(),
+                             fn.GetFullName(), FILEEXT::ZipFileWildcard(),
                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( zipfiledlg.ShowModal() == wxID_CANCEL )
@@ -112,11 +112,11 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
     wxFileName  fileName = GetProjectFileName();
 
-    fileName.SetExt( ArchiveFileExtension );
+    fileName.SetExt( FILEEXT::ArchiveFileExtension );
 
     wxFileDialog dlg( this, _( "Archive Project Files" ),
                       fileName.GetPath(), fileName.GetFullName(),
-                      ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      FILEEXT::ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

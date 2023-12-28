@@ -489,10 +489,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
     destFile.SetPath( destPath );
 
-    if( ext == LegacySchematicFileExtension ||
-        ext == LegacySchematicFileExtension + BackupFileSuffix ||
-        ext == KiCadSchematicFileExtension ||
-        ext == KiCadSchematicFileExtension + BackupFileSuffix )
+    if( ext == FILEEXT::LegacySchematicFileExtension
+        || ext == FILEEXT::LegacySchematicFileExtension + FILEEXT::BackupFileSuffix
+        || ext == FILEEXT::KiCadSchematicFileExtension
+        || ext == FILEEXT::KiCadSchematicFileExtension + FILEEXT::BackupFileSuffix )
     {
         if( destFile.GetName() == aProjectName )
         {
@@ -522,13 +522,14 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == SchematicSymbolFileExtension )
+    else if( ext == FILEEXT::SchematicSymbolFileExtension )
     {
         // Symbols are not project-specific.  Keep their source names.
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == LegacySymbolLibFileExtension || ext == LegacySymbolDocumentFileExtension ||
-             ext == KiCadSymbolLibFileExtension )
+    else if( ext == FILEEXT::LegacySymbolLibFileExtension
+             || ext == FILEEXT::LegacySymbolDocumentFileExtension
+             || ext == FILEEXT::KiCadSymbolLibFileExtension )
     {
         if( destFile.GetName() == aProjectName + wxS( "-cache" ) )
             destFile.SetName( aNewProjectName + wxS( "-cache" ) );
@@ -538,7 +539,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == NetlistFileExtension )
+    else if( ext == FILEEXT::NetlistFileExtension )
     {
         bool success = false;
 

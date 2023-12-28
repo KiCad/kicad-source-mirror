@@ -175,7 +175,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         destFile.SetPath( destPath );
     }
 
-    if( IsGerberFileExtension( ext ) )
+    if( FILEEXT::IsGerberFileExtension( ext ) )
     {
         wxString destFileName = destFile.GetName();
 
@@ -187,7 +187,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
 
         KiCopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
-    else if( ext == GerberJobFileExtension )
+    else if( ext == FILEEXT::GerberJobFileExtension )
     {
         if( destFile.GetName() == aProjectName + wxT( "-job" ) )
             destFile.SetName( aNewProjectName + wxT( "-job" )  );
@@ -248,7 +248,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
             aErrors += msg;
         }
     }
-    else if( ext == DrillFileExtension )
+    else if( ext == FILEEXT::DrillFileExtension )
     {
         wxString destFileName = destFile.GetName();
 

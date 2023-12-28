@@ -48,7 +48,7 @@ public:
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
         return IO_BASE::IO_FILE_DESC( _HKI( "KiCad database library files" ),
-                                      { DatabaseLibraryFileExtension } );
+                                      { FILEEXT::DatabaseLibraryFileExtension } );
     }
 
     int GetModifyHash() const override { return 0; }

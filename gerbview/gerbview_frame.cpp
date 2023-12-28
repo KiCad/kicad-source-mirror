@@ -182,9 +182,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     // Drag and drop
     // Note that all gerber files are aliased as GerberFileExtension
-    m_acceptedExts.emplace( GerberFileExtension, &GERBVIEW_ACTIONS::loadGerbFiles );
-    m_acceptedExts.emplace( ArchiveFileExtension, &GERBVIEW_ACTIONS::loadZipFile );
-    m_acceptedExts.emplace( DrillFileExtension, &GERBVIEW_ACTIONS::loadGerbFiles );
+    m_acceptedExts.emplace( FILEEXT::GerberFileExtension, &GERBVIEW_ACTIONS::loadGerbFiles );
+    m_acceptedExts.emplace( FILEEXT::ArchiveFileExtension, &GERBVIEW_ACTIONS::loadZipFile );
+    m_acceptedExts.emplace( FILEEXT::DrillFileExtension, &GERBVIEW_ACTIONS::loadGerbFiles );
     DragAcceptFiles( true );
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
@@ -269,9 +269,9 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             wxString ext = wxFileName( aFileSet[i] ).GetExt().Lower();
 
-            if( ext == ArchiveFileExtension )
+            if( ext == FILEEXT::ArchiveFileExtension )
                 LoadZipArchiveFile( aFileSet[i] );
-            else if( ext == GerberJobFileExtension )
+            else if( ext == FILEEXT::GerberJobFileExtension )
                 LoadGerberJobFile( aFileSet[i] );
             else
             {

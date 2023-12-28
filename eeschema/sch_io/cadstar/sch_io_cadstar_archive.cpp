@@ -113,7 +113,7 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     libName = LIB_ID::FixIllegalChars( libName, true ).wx_str();
 
     wxFileName libFileName( aSchematic->Prj().GetProjectPath(), libName,
-                            KiCadSymbolLibFileExtension );
+                            FILEEXT::KiCadSymbolLibFileExtension );
 
     SCH_IO::SCH_IO_RELEASER sch_plugin;
     sch_plugin.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );

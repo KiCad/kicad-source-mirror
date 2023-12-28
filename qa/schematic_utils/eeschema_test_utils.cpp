@@ -41,7 +41,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     BOOST_TEST_MESSAGE( fn.GetFullPath() );
 
     wxFileName pro( fn );
-    pro.SetExt( ProjectFileExtension );
+    pro.SetExt( FILEEXT::ProjectFileExtension );
 
     // Schematic must be reset before a project is reloaded
     m_schematic.Reset();
@@ -98,7 +98,7 @@ wxFileName KI_TEST::SCHEMATIC_TEST_FIXTURE::GetSchematicPath( const wxString& aB
     fn.AppendDir( "netlists" );
     fn.AppendDir( aBaseName );
     fn.SetName( aBaseName );
-    fn.SetExt( KiCadSchematicFileExtension );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
     return fn;
 }
@@ -112,7 +112,7 @@ wxString TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::GetNetlistPath( bool aTest )
     if( aTest )
         netFile.SetName( netFile.GetName() + "_test" );
 
-    netFile.SetExt( NetlistFileExtension );
+    netFile.SetExt( FILEEXT::NetlistFileExtension );
 
     return netFile.GetFullPath();
 }

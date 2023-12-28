@@ -714,8 +714,8 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
         // Remember path between saves during this session only.
-        const wxString wildcard = fmt_is_jpeg ? JpegFileWildcard() : PngFileWildcard();
-        const wxString ext = fmt_is_jpeg ? JpegFileExtension : PngFileExtension;
+        const wxString wildcard = fmt_is_jpeg ? FILEEXT::JpegFileWildcard() : FILEEXT::PngFileWildcard();
+        const wxString ext = fmt_is_jpeg ? FILEEXT::JpegFileExtension : FILEEXT::PngFileExtension;
 
         // First time path is set to the project path.
         if( !m_defaultSaveScreenshotFileName.IsOk() )

@@ -2088,7 +2088,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet->SetBorderColor( cfg->m_Drawing.default_sheet_border_color );
             sheet->SetBackgroundColor( cfg->m_Drawing.default_sheet_background_color );
             sheet->GetFields()[ SHEETNAME ].SetText( "Untitled Sheet" );
-            sheet->GetFields()[ SHEETFILENAME ].SetText( "untitled." + KiCadSchematicFileExtension );
+            sheet->GetFields()[ SHEETFILENAME ].SetText( "untitled." + FILEEXT::KiCadSchematicFileExtension );
             sizeSheet( sheet, cursorPos );
 
             m_view->ClearPreview();

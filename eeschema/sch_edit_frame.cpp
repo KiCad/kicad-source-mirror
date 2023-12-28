@@ -367,7 +367,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New schematic file is unsaved" ) );
 
     // Init for dropping files
-    m_acceptedExts.emplace( KiCadSchematicFileExtension, &EE_ACTIONS::ddAppendFile );
+    m_acceptedExts.emplace( FILEEXT::KiCadSchematicFileExtension, &EE_ACTIONS::ddAppendFile );
     DragAcceptFiles( true );
 
     // Ensure the window is on top
@@ -1105,7 +1105,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
     if( !frame )
     {
         wxFileName fn = Prj().GetProjectFullName();
-        fn.SetExt( PcbFileExtension );
+        fn.SetExt( FILEEXT::PcbFileExtension );
 
         frame = Kiway().Player( FRAME_PCB_EDITOR, true );
 
@@ -1249,12 +1249,13 @@ void SCH_EDIT_FRAME::NewProject()
     wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString,
-                      KiCadSchematicFileWildcard(), wxFD_SAVE );
+                      FILEEXT::KiCadSchematicFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {
         // Enforce the extension, wxFileDialog is inept.
-        wxFileName create_me = EnsureFileExtension( dlg.GetPath(), KiCadSchematicFileExtension );
+        wxFileName create_me =
+                EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadSchematicFileExtension );
 
         if( create_me.FileExists() )
         {
@@ -1276,9 +1277,9 @@ void SCH_EDIT_FRAME::NewProject()
 void SCH_EDIT_FRAME::LoadProject()
 {
     wxString pro_dir = m_mruPath;
-    wxString wildcards = AllSchematicFilesWildcard()
-                            + wxS( "|" ) + KiCadSchematicFileWildcard()
-                            + wxS( "|" ) + LegacySchematicFileWildcard();
+    wxString wildcards = FILEEXT::AllSchematicFilesWildcard()
+                            + wxS( "|" ) + FILEEXT::KiCadSchematicFileWildcard()
+                            + wxS( "|" ) + FILEEXT::LegacySchematicFileWildcard();
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
                       wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -1297,9 +1298,9 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 
     if( kicad_board.IsOk() && !Schematic().GetFileName().IsEmpty() )
     {
-        kicad_board.SetExt( PcbFileExtension );
+        kicad_board.SetExt( FILEEXT::PcbFileExtension );
         wxFileName legacy_board( kicad_board );
-        legacy_board.SetExt( LegacyPcbFileExtension );
+        legacy_board.SetExt( FILEEXT::LegacyPcbFileExtension );
         wxFileName& boardfn = legacy_board;
 
         if( !legacy_board.FileExists() || kicad_board.FileExists() )
@@ -1347,7 +1348,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 {
     wxFileName fn = Prj().AbsolutePath( Schematic().GetFileName() );
-    fn.SetExt( NetlistFileExtension );
+    fn.SetExt( FILEEXT::NetlistFileExtension );
 
     if( !ReadyToNetlist( _( "Assigning footprints requires a fully annotated schematic." ) ) )
         return;

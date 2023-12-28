@@ -176,7 +176,8 @@ wxFileName SCH_IO_EAGLE::getLibFileName()
 
     wxCHECK( m_schematic, fn );
 
-    fn.Assign( m_schematic->Prj().GetProjectPath(), getLibName(), KiCadSymbolLibFileExtension );
+    fn.Assign( m_schematic->Prj().GetProjectPath(), getLibName(),
+               FILEEXT::KiCadSymbolLibFileExtension );
 
     return fn;
 }
@@ -424,7 +425,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
 
     wxFileName newFilename( m_filename );
-    newFilename.SetExt( KiCadSchematicFileExtension );
+    newFilename.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
     if( aAppendToMe )
     {
@@ -967,7 +968,7 @@ void SCH_IO_EAGLE::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     wxFileName fn( m_filename );
     fn.SetName( filename );
-    fn.SetExt( KiCadSchematicFileExtension );
+    fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
     filenameField.SetText( fn.GetFullName() );
 

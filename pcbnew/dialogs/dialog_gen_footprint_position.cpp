@@ -418,12 +418,12 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     if( useCSVfmt )
     {
-        fn.SetName( fn.GetName() + wxT( "-" ) + FootprintPlaceFileExtension );
+        fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
         fn.SetExt( wxT( "csv" ) );
     }
     else
     {
-        fn.SetExt( FootprintPlaceFileExtension );
+        fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
     }
 
     int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
@@ -464,12 +464,12 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     if( useCSVfmt )
     {
-        fn.SetName( fn.GetName() + wxT( "-" ) + FootprintPlaceFileExtension );
+        fn.SetName( fn.GetName() + wxT( "-" ) + FILEEXT::FootprintPlaceFileExtension );
         fn.SetExt( wxT( "csv" ) );
     }
     else
     {
-        fn.SetExt( FootprintPlaceFileExtension );
+        fn.SetExt( FILEEXT::FootprintPlaceFileExtension );
     }
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),

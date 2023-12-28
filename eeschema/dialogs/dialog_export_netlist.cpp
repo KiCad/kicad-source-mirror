@@ -523,7 +523,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 
     if( runExternalSpiceCommand )
     {
-        fn.SetExt( SpiceFileExtension );
+        fn.SetExt( FILEEXT::SpiceFileExtension );
         fullpath = fn.GetFullPath();
     }
     else
@@ -647,32 +647,32 @@ bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt
     switch( aType )
     {
     case NET_TYPE_SPICE:
-        fileExt = SpiceFileExtension;
-        fileWildcard = SpiceNetlistFileWildcard();
+        fileExt = FILEEXT::SpiceFileExtension;
+        fileWildcard = FILEEXT::SpiceNetlistFileWildcard();
         break;
 
     case NET_TYPE_CADSTAR:
-        fileExt = CadstarNetlistFileExtension;
-        fileWildcard = CadstarNetlistFileWildcard();
+        fileExt = FILEEXT::CadstarNetlistFileExtension;
+        fileWildcard = FILEEXT::CadstarNetlistFileWildcard();
         break;
 
     case NET_TYPE_ORCADPCB2:
-        fileExt = OrCadPcb2NetlistFileExtension;
-        fileWildcard = OrCadPcb2NetlistFileWildcard();
+        fileExt = FILEEXT::OrCadPcb2NetlistFileExtension;
+        fileWildcard = FILEEXT::OrCadPcb2NetlistFileWildcard();
         break;
 
     case NET_TYPE_PCBNEW:
-        fileExt = NetlistFileExtension;
-        fileWildcard = NetlistFileWildcard();
+        fileExt = FILEEXT::NetlistFileExtension;
+        fileWildcard = FILEEXT::NetlistFileWildcard();
         break;
 
     case NET_TYPE_ALLEGRO:
-        fileExt = AllegroNetlistFileExtension;
-        fileWildcard = AllegroNetlistFileWildcard();
+        fileExt = FILEEXT::AllegroNetlistFileExtension;
+        fileWildcard = FILEEXT::AllegroNetlistFileWildcard();
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
-        fileWildcard = AllFilesWildcard();
+        fileWildcard = FILEEXT::AllFilesWildcard();
         ret = false;
     }
 

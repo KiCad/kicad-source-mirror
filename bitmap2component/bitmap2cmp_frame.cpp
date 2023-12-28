@@ -438,14 +438,14 @@ void BITMAP2CMP_FRAME::ExportDrawingSheetFormat()
         path = ::wxGetCwd();
 
     wxFileDialog fileDlg( this, _( "Create Drawing Sheet File" ), path, wxEmptyString,
-                          DrawingSheetFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          FILEEXT::DrawingSheetFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = fileDlg.ShowModal();
 
     if( diag != wxID_OK )
         return;
 
     fn = fileDlg.GetPath();
-    fn.SetExt( DrawingSheetFileExtension );
+    fn.SetExt( FILEEXT::DrawingSheetFileExtension );
     m_convertedFileName = fn.GetFullPath();
 
     FILE*    outfile;
@@ -475,7 +475,7 @@ void BITMAP2CMP_FRAME::ExportPostScriptFormat()
         path = ::wxGetCwd();
 
     wxFileDialog fileDlg( this, _( "Create PostScript File" ), path, wxEmptyString,
-                          PSFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          FILEEXT::PSFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( fileDlg.ShowModal() != wxID_OK )
         return;
@@ -511,12 +511,13 @@ void BITMAP2CMP_FRAME::ExportEeschemaFormat()
         path = ::wxGetCwd();
 
     wxFileDialog fileDlg( this, _( "Create Symbol Library" ), path, wxEmptyString,
-                          KiCadSymbolLibFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          FILEEXT::KiCadSymbolLibFileWildcard(),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
-    fn = EnsureFileExtension( fileDlg.GetPath(), KiCadSymbolLibFileExtension );
+    fn = EnsureFileExtension( fileDlg.GetPath(), FILEEXT::KiCadSymbolLibFileExtension );
     m_convertedFileName = fn.GetFullPath();
 
     FILE*    outfile = wxFopen( m_convertedFileName, wxT( "w" ) );
@@ -545,12 +546,13 @@ void BITMAP2CMP_FRAME::ExportPcbnewFormat()
         path = m_mruPath;
 
     wxFileDialog fileDlg( this, _( "Create Footprint Library" ), path, wxEmptyString,
-                          KiCadFootprintLibFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          FILEEXT::KiCadFootprintLibFileWildcard(),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( fileDlg.ShowModal() != wxID_OK )
         return;
 
-    fn = EnsureFileExtension( fileDlg.GetPath(), KiCadFootprintFileExtension );
+    fn = EnsureFileExtension( fileDlg.GetPath(), FILEEXT::KiCadFootprintFileExtension );
     m_convertedFileName = fn.GetFullPath();
 
     FILE* outfile = wxFopen( m_convertedFileName, wxT( "w" ) );

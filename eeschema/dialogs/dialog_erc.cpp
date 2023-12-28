@@ -880,10 +880,10 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 
 void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 {
-    wxFileName fn( wxS( "ERC." ) + ReportFileExtension );
+    wxFileName fn( wxS( "ERC." ) + FILEEXT::ReportFileExtension );
 
     wxFileDialog dlg( this, _( "Save Report File" ), Prj().GetProjectPath(), fn.GetFullName(),
-                      ReportFileWildcard() + wxS( "|" ) + JsonFileWildcard(),
+                      FILEEXT::ReportFileWildcard() + wxS( "|" ) + FILEEXT::JsonFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -892,7 +892,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
     fn = dlg.GetPath();
 
     if( fn.GetExt().IsEmpty() )
-        fn.SetExt( ReportFileExtension );
+        fn.SetExt( FILEEXT::ReportFileExtension );
 
     if( !fn.IsAbsolute() )
     {
@@ -903,7 +903,7 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
     ERC_REPORT reportWriter( &m_parent->Schematic(), m_parent->GetUserUnits() );
 
     bool success = false;
-    if( fn.GetExt() == JsonFileExtension )
+    if( fn.GetExt() == FILEEXT::JsonFileExtension )
         success = reportWriter.WriteJsonReport( fn.GetFullPath() );
     else
         success = reportWriter.WriteTextReport( fn.GetFullPath() );

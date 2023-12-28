@@ -199,10 +199,10 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
  */
 bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* aCreateProject )
 {
-    wxString    wildcard =  PcbFileWildcard();
+    wxString   wildcard = FILEEXT::PcbFileWildcard();
     wxFileName  fn = *aFileName;
 
-    fn.SetExt( KiCadPcbFileExtension );
+    fn.SetExt( FILEEXT::KiCadPcbFileExtension );
 
     wxFileDialog dlg( aParent, _( "Save Board File As" ), fn.GetPath(), fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -217,7 +217,7 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
         return false;
 
     *aFileName = dlg.GetPath();
-    *aFileName = EnsureFileExtension( *aFileName, KiCadPcbFileExtension );
+    *aFileName = EnsureFileExtension( *aFileName, FILEEXT::KiCadPcbFileExtension );
 
     if( newProjectHook.IsAttachedToDialog() )
         *aCreateProject = newProjectHook.GetCreateNewProject();
@@ -407,7 +407,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
                 savePath = PATHS::GetDefaultUserProjectsPath();
         }
 
-        wxFileName  fn( savePath.GetPath(), orig_name, KiCadPcbFileExtension );
+        wxFileName  fn( savePath.GetPath(), orig_name, FILEEXT::KiCadPcbFileExtension );
         wxString    filename = fn.GetFullPath();
         bool        createProject = false;
         bool        success = false;
@@ -535,7 +535,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     wxFileName pro = fullFileName;
-    pro.SetExt( ProjectFileExtension );
+    pro.SetExt( FILEEXT::ProjectFileExtension );
 
     bool is_new = !wxFileName::IsFileReadable( fullFileName );
 
@@ -872,7 +872,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         wxFileName fn = fullFileName;
 
         if( converted )
-            fn.SetExt( PcbFileExtension );
+            fn.SetExt( FILEEXT::PcbFileExtension );
 
         wxString fname = fn.GetFullPath();
 
@@ -932,8 +932,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     // please, keep it simple.  prompting goes elsewhere.
     wxFileName pcbFileName = aFileName;
 
-    if( pcbFileName.GetExt() == LegacyPcbFileExtension )
-        pcbFileName.SetExt( KiCadPcbFileExtension );
+    if( pcbFileName.GetExt() == FILEEXT::LegacyPcbFileExtension )
+        pcbFileName.SetExt( FILEEXT::KiCadPcbFileExtension );
 
     // Write through symlinks, don't replace them
     WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
@@ -952,8 +952,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     wxFileName rulesFile( pcbFileName );
     wxString   msg;
 
-    projectFile.SetExt( ProjectFileExtension );
-    rulesFile.SetExt( DesignRulesFileExtension );
+    projectFile.SetExt( FILEEXT::ProjectFileExtension );
+    rulesFile.SetExt( FILEEXT::DesignRulesFileExtension );
 
     if( projectFile.FileExists() )
     {
@@ -1075,7 +1075,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
 bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject )
 {
-    wxFileName pcbFileName( EnsureFileExtension( aFileName, KiCadPcbFileExtension ) );
+    wxFileName pcbFileName( EnsureFileExtension( aFileName, FILEEXT::KiCadPcbFileExtension ) );
 
     if( !IsWritable( pcbFileName ) )
     {
@@ -1111,8 +1111,8 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
     wxFileName rulesFile( pcbFileName );
     wxString   msg;
 
-    projectFile.SetExt( ProjectFileExtension );
-    rulesFile.SetExt( DesignRulesFileExtension );
+    projectFile.SetExt( FILEEXT::ProjectFileExtension );
+    rulesFile.SetExt( FILEEXT::DesignRulesFileExtension );
 
     if( aCreateProject && !projectFile.FileExists() )
         GetSettingsManager()->SaveProjectCopy( projectFile.GetFullPath() );
@@ -1148,7 +1148,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
     if( GetBoard()->GetFileName().IsEmpty() )
     {
         tmpFileName = wxFileName( PATHS::GetDefaultUserProjectsPath(), NAMELESS_PROJECT,
-                                  KiCadPcbFileExtension );
+                                  FILEEXT::KiCadPcbFileExtension );
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
     }
     else
@@ -1324,7 +1324,7 @@ void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
     if( dlg.GetCompress() )
     {
         wxFileName tempfn = pcbFileName;
-        tempfn.SetExt( Ipc2581FileExtension );
+        tempfn.SetExt( FILEEXT::Ipc2581FileExtension );
         wxFileName zipfn = tempFile;
         zipfn.SetExt( "zip" );
 

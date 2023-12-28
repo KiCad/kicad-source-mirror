@@ -199,8 +199,8 @@ void PANEL_HOTKEYS_EDITOR::OnFilterSearch( wxCommandEvent& aEvent )
 void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 {
     wxString filename = wxFileSelector( _( "Import Hotkeys File:" ), m_frame->GetMruPath(),
-                                        wxEmptyString, HotkeyFileExtension,
-                                        HotkeyFileWildcard(), wxFD_OPEN, this );
+                                        wxEmptyString, FILEEXT::HotkeyFileExtension,
+                                        FILEEXT::HotkeyFileWildcard(), wxFD_OPEN, this );
 
     if( filename.IsEmpty() )
         return;
@@ -229,7 +229,7 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 {
     wxString filename = wxFileSelector( wxT( "Hotkeys File" ), m_frame->GetMruPath(),
-                                        wxEmptyString, TextFileExtension, TextFileWildcard(),
+                                        wxEmptyString, FILEEXT::TextFileExtension, FILEEXT::TextFileWildcard(),
                                         wxFD_SAVE, this );
 
     if( filename.IsEmpty() )

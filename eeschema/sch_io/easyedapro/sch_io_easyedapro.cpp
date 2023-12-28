@@ -417,7 +417,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     wxFileName            fname( aFileName );
     wxString              libName = EASYEDAPRO::ShortenLibName( fname.GetName() );
 
-    wxFileName libFileName( fname.GetPath(), libName, KiCadSymbolLibFileExtension );
+    wxFileName libFileName( fname.GetPath(), libName, FILEEXT::KiCadSymbolLibFileExtension );
 
     if( fname.GetExt() != wxS( "epro" ) && fname.GetExt() != wxS( "zip" ) )
         return rootSheet;
@@ -455,7 +455,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
     wxFileName rootFname( aFileName );
     rootFname.SetFullName( rootBaseName + wxS( "." )
-                           + wxString::FromUTF8( KiCadSchematicFileExtension ) );
+                           + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
 
     rootSheet->SetName( prjSchematics[schematicToLoad].name );
     rootSheet->SetFileName( rootFname.GetFullPath() );
@@ -505,7 +505,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
 
         wxFileName sheetFname( aFileName );
         sheetFname.SetFullName( sheetBaseName + wxS( "." )
-                                + wxString::FromUTF8( KiCadSchematicFileExtension ) );
+                                + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
 
         std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
         subSheet->SetFileName( sheetFname.GetFullPath() );

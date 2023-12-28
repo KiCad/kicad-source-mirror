@@ -278,28 +278,28 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     switch( aNetJob->format )
     {
     case JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR:
-        fileExt = NetlistFileExtension;
+        fileExt = FILEEXT::NetlistFileExtension;
         helper = std::make_unique<NETLIST_EXPORTER_KICAD>( sch );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2:
-        fileExt = OrCadPcb2NetlistFileExtension;
+        fileExt = FILEEXT::OrCadPcb2NetlistFileExtension;
         helper = std::make_unique<NETLIST_EXPORTER_ORCADPCB2>( sch );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR:
-        fileExt = CadstarNetlistFileExtension;
+        fileExt = FILEEXT::CadstarNetlistFileExtension;
         helper = std::make_unique<NETLIST_EXPORTER_CADSTAR>( sch );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE:
-        fileExt = SpiceFileExtension;
+        fileExt = FILEEXT::SpiceFileExtension;
         netlistOption = NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
         helper = std::make_unique<NETLIST_EXPORTER_SPICE>( sch );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL:
-        fileExt = SpiceFileExtension;
+        fileExt = FILEEXT::SpiceFileExtension;
         helper = std::make_unique<NETLIST_EXPORTER_SPICE_MODEL>( sch );
         break;
 
@@ -520,7 +520,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() );
-        fn.SetExt( CsvFileExtension );
+        fn.SetExt( FILEEXT::CsvFileExtension );
 
         aBomJob->m_outputFile = fn.GetFullName();
     }
@@ -638,7 +638,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     {
         wxFileName fn = sch->GetFileName();
         fn.SetName( fn.GetName() + "-bom" );
-        fn.SetExt( XmlFileExtension );
+        fn.SetExt( FILEEXT::XmlFileExtension );
 
         aNetJob->m_outputFile = fn.GetFullName();
     }
@@ -699,7 +699,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             size_t     forbidden_char;
 
             fn.SetPath( aSvgJob->m_outputDirectory );
-            fn.SetExt( SVGFileExtension );
+            fn.SetExt( FILEEXT::SVGFileExtension );
 
             filename = symbol->GetName().Lower();
 
@@ -951,9 +951,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         fn.SetName( fn.GetName() );
 
         if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
-            fn.SetExt( JsonFileExtension );
+            fn.SetExt( FILEEXT::JsonFileExtension );
         else
-            fn.SetExt( ReportFileExtension );
+            fn.SetExt( FILEEXT::ReportFileExtension );
 
         ercJob->m_outputFile = fn.GetFullName();
     }

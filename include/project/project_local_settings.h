@@ -74,7 +74,7 @@ public:
 protected:
     wxString getFileExt() const override
     {
-        return ProjectLocalSettingsFileExtension;
+        return FILEEXT::ProjectLocalSettingsFileExtension;
     }
 
     wxString getLegacyFileExt() const override

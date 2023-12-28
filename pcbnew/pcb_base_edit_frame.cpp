@@ -269,7 +269,7 @@ wxString PCB_BASE_EDIT_FRAME::GetDesignRulesPath()
         return wxEmptyString;
 
     wxFileName fn = GetBoard()->GetFileName();
-    fn.SetExt( DesignRulesFileExtension );
+    fn.SetExt( FILEEXT::DesignRulesFileExtension );
     return Prj().AbsolutePath( fn.GetFullName() );
 }
 

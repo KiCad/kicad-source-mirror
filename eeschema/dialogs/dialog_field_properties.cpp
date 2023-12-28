@@ -364,7 +364,7 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
     }
     else if( m_fieldId == SHEETFILENAME_V )
     {
-        m_text = EnsureFileExtension( m_text, KiCadSchematicFileExtension );
+        m_text = EnsureFileExtension( m_text, FILEEXT::KiCadSchematicFileExtension );
     }
 
     m_position = VECTOR2I( m_posX.GetValue(), m_posY.GetValue() );

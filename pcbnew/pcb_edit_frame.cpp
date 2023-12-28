@@ -487,8 +487,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
           this );
     Bind( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, &PCB_EDIT_FRAME::onCloseNetInspectorDialog, this );
     Bind( EDA_EVT_UNITS_CHANGED, &PCB_EDIT_FRAME::onUnitsChanged, this );
-    m_acceptedExts.emplace( KiCadPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
-    m_acceptedExts.emplace( LegacyPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
+    m_acceptedExts.emplace( FILEEXT::KiCadPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
+    m_acceptedExts.emplace( FILEEXT::LegacyPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     DragAcceptFiles( true );
 }
 
@@ -1836,13 +1836,13 @@ int PCB_EDIT_FRAME::TestStandalone()
     if( !frame->IsShownOnScreen() )
     {
         wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(),
-                       KiCadSchematicFileExtension );
+                       FILEEXT::KiCadSchematicFileExtension );
 
         // Maybe the file hasn't been converted to the new s-expression file format so
         // see if the legacy schematic file is still in play.
         if( !fn.FileExists() )
         {
-            fn.SetExt( LegacySchematicFileExtension );
+            fn.SetExt( FILEEXT::LegacySchematicFileExtension );
 
             if( !fn.FileExists() )
             {
@@ -1922,12 +1922,12 @@ void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
     wxFileName schematic( Prj().GetProjectPath(), Prj().GetProjectName(),
-                          KiCadSchematicFileExtension );
+                          FILEEXT::KiCadSchematicFileExtension );
 
     if( !schematic.FileExists() )
     {
         wxFileName legacySchematic( Prj().GetProjectPath(), Prj().GetProjectName(),
-                                    LegacySchematicFileExtension );
+                                    FILEEXT::LegacySchematicFileExtension );
 
         if( legacySchematic.FileExists() )
         {

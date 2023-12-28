@@ -1158,7 +1158,7 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     }
 
     m_watcherFileName.Assign( libfullname, aFootprint->GetFPID().GetLibItemName(),
-                              KiCadFootprintFileExtension );
+                              FILEEXT::KiCadFootprintFileExtension );
 
     if( !m_watcherFileName.FileExists() )
         return;

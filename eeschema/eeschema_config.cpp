@@ -126,7 +126,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 {
     wxFileName fn = Schematic().RootScreen()->GetFileName();  //ConfigFileName
 
-    fn.SetExt( ProjectFileExtension );
+    fn.SetExt( FILEEXT::ProjectFileExtension );
 
     if( !fn.HasName() || !IsWritable( fn, false ) )
         return;

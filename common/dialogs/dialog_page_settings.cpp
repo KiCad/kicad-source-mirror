@@ -793,7 +793,8 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 
     // Display a file picker dialog
     wxFileDialog fileDialog( this, _( "Drawing Sheet File" ), path, name,
-                             DrawingSheetFileWildcard(), wxFD_DEFAULT_STYLE|wxFD_FILE_MUST_EXIST );
+                             FILEEXT::DrawingSheetFileWildcard(),
+                             wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( fileDialog.ShowModal() != wxID_OK )
         return;

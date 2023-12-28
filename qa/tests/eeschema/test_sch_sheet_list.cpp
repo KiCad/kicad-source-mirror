@@ -36,7 +36,7 @@ wxFileName TEST_SCH_SHEET_LIST_FIXTURE::GetSchematicPath( const wxString& aRelat
     fn.AppendDir( "netlists" );
 
     wxString path = fn.GetFullPath();
-    path += aRelativePath + wxT( "." ) + KiCadSchematicFileExtension;
+    path += aRelativePath + wxT( "." ) + FILEEXT::KiCadSchematicFileExtension;
 
     return wxFileName( path );
 }
@@ -106,13 +106,13 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         wxFileName rootFn = GetSchematicPath( "complex_hierarchy_shared/complex_hierarchy" );
         wxFileName prjFn = rootFn;
 
-        prjFn.SetExt( ProjectFileExtension );
+        prjFn.SetExt( FILEEXT::ProjectFileExtension );
 
         rootFn.AppendDir( "temp" );
         BOOST_CHECK( rootFn.Mkdir() );
 
         wxFileName newPrjFn = rootFn;
-        newPrjFn.SetExt( ProjectFileExtension );
+        newPrjFn.SetExt( FILEEXT::ProjectFileExtension );
         BOOST_CHECK( wxCopyFile( prjFn.GetFullPath(), newPrjFn.GetFullPath() ) );
 
         m_pi->SaveSchematicFile( rootFn.GetFullPath(), &m_schematic.Root(), &m_schematic );

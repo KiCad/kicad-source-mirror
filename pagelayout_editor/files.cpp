@@ -130,7 +130,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
          wxFileDialog openFileDialog( this, _( "Append Existing Drawing Sheet" ),
                                       wxEmptyString, wxEmptyString,
-                                      DrawingSheetFileWildcard(), wxFD_OPEN );
+                                      FILEEXT::DrawingSheetFileWildcard(), wxFD_OPEN );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
             return;
@@ -155,7 +155,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     case wxID_OPEN:
     {
          wxFileDialog openFileDialog( this, _( "Open Drawing Sheet" ), wxEmptyString, wxEmptyString,
-                                      DrawingSheetFileWildcard(), wxFD_OPEN );
+                                     FILEEXT::DrawingSheetFileWildcard(), wxFD_OPEN );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
             return;
@@ -193,7 +193,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     {
         wxString dir = PATHS::GetUserTemplatesPath();
         wxFileDialog openFileDialog( this, _( "Save Drawing Sheet As" ), dir, wxEmptyString,
-                                     DrawingSheetFileWildcard(),
+                                     FILEEXT::DrawingSheetFileWildcard(),
                                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( openFileDialog.ShowModal() == wxID_CANCEL )
@@ -206,8 +206,8 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         // extension
         wxFileName fn(filename);
 
-        if( fn.GetExt() != DrawingSheetFileExtension )
-            filename << wxT(".") << DrawingSheetFileExtension;
+        if( fn.GetExt() != FILEEXT::DrawingSheetFileExtension )
+            filename << wxT( "." ) << FILEEXT::DrawingSheetFileExtension;
 
         if( !SaveDrawingSheetFile( filename ) )
         {

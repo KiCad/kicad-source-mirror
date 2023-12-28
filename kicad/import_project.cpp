@@ -81,7 +81,7 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
 
     importProj.m_TargetProj.SetPath( targetDir );
     importProj.m_TargetProj.SetName( importProj.m_InputFile.GetName() );
-    importProj.m_TargetProj.SetExt( ProjectFileExtension );
+    importProj.m_TargetProj.SetExt( FILEEXT::ProjectFileExtension );
     importProj.m_TargetProj.MakeAbsolute();
 
     // Check if the project directory is empty
@@ -125,27 +125,27 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
 void KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import CADSTAR Archive Project Files" ),
-                           CadstarArchiveFilesWildcard(), { "csa" }, { "cpa" },
+                           FILEEXT::CadstarArchiveFilesWildcard(), { "csa" }, { "cpa" },
                            SCH_IO_MGR::SCH_CADSTAR_ARCHIVE, PCB_IO_MGR::CADSTAR_PCB_ARCHIVE );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {
-    ImportNonKiCadProject( _( "Import Eagle Project Files" ), EagleFilesWildcard(), { "sch" },
+    ImportNonKiCadProject( _( "Import Eagle Project Files" ), FILEEXT::EagleFilesWildcard(), { "sch" },
                            { "brd" }, SCH_IO_MGR::SCH_EAGLE, PCB_IO_MGR::EAGLE );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEasyEdaFiles( wxCommandEvent& event )
 {
-    ImportNonKiCadProject( _( "Import EasyEDA Std Backup" ), EasyEdaArchiveWildcard(), { "INPUT" },
+    ImportNonKiCadProject( _( "Import EasyEDA Std Backup" ), FILEEXT::EasyEdaArchiveWildcard(), { "INPUT" },
                            { "INPUT" }, SCH_IO_MGR::SCH_EASYEDA, PCB_IO_MGR::EASYEDA );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEasyEdaProFiles( wxCommandEvent& event )
 {
-    ImportNonKiCadProject( _( "Import EasyEDA Pro Project" ), EasyEdaProFileWildcard(), { "INPUT" },
+    ImportNonKiCadProject( _( "Import EasyEDA Pro Project" ), FILEEXT::EasyEdaProFileWildcard(), { "INPUT" },
                            { "INPUT" }, SCH_IO_MGR::SCH_EASYEDAPRO, PCB_IO_MGR::EASYEDAPRO );
 }

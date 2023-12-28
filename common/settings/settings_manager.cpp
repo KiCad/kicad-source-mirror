@@ -853,8 +853,8 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     // Normalize path to new format even if migrating from a legacy file
     wxFileName path( aFullPath );
 
-    if( path.GetExt() == LegacyProjectFileExtension )
-        path.SetExt( ProjectFileExtension );
+    if( path.GetExt() == FILEEXT::LegacyProjectFileExtension )
+        path.SetExt( FILEEXT::ProjectFileExtension );
 
     wxString fullPath = path.GetFullPath();
 
@@ -1166,7 +1166,7 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter ) const
     wxFileName target;
     target.SetPath( GetProjectBackupsPath() );
     target.SetName( fileName );
-    target.SetExt( ArchiveFileExtension );
+    target.SetExt( FILEEXT::ArchiveFileExtension );
 
     if( !target.DirExists() && !wxMkdir( target.GetPath() ) )
     {

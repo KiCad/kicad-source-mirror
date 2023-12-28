@@ -642,7 +642,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
     boardName = fn.GetName();
     wxFileDialog dlg( this, _( "Save Report File" ), s_savedDialogState.saveReportFolder,
-                      s_savedDialogState.saveReportName, TextFileWildcard(),
+                      s_savedDialogState.saveReportName, FILEEXT::TextFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )

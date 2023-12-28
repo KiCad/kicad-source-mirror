@@ -1248,8 +1248,8 @@ void EDA_BASE_FRAME::OnDropFiles( wxDropFilesEvent& aEvent )
         wxString         ext = fn.GetExt();
 
         // Alias all gerber files as GerberFileExtension
-        if( IsGerberFileExtension( ext ) )
-            ext = GerberFileExtension;
+        if( FILEEXT::IsGerberFileExtension( ext ) )
+            ext = FILEEXT::GerberFileExtension;
 
         if( m_acceptedExts.find( ext.ToStdString() ) != m_acceptedExts.end() )
             m_AcceptedFiles.emplace_back( fn );

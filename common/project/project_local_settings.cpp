@@ -352,7 +352,7 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 {
     wxASSERT( m_project );
 
-    Set( "meta.filename", m_project->GetProjectName() + "." + ProjectLocalSettingsFileExtension );
+    Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
 
     return JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 }
@@ -360,7 +360,7 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 
 bool PROJECT_LOCAL_SETTINGS::SaveAs( const wxString& aDirectory, const wxString& aFile )
 {
-    Set( "meta.filename", aFile + "." + ProjectLocalSettingsFileExtension );
+    Set( "meta.filename", aFile + "." + FILEEXT::ProjectLocalSettingsFileExtension );
     SetFilename( aFile );
 
     return JSON_SETTINGS::SaveToFile( aDirectory, true );

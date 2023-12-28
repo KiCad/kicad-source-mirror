@@ -227,9 +227,9 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 
     fn.SetName( aFootprint->GetFPID().GetLibItemName() );
 
-    wxString    wildcard = KiCadFootprintLibFileWildcard();
+    wxString wildcard = FILEEXT::KiCadFootprintLibFileWildcard();
 
-    fn.SetExt( KiCadFootprintFileExtension );
+    fn.SetExt( FILEEXT::KiCadFootprintFileExtension );
 
     if( !cfg->m_LastExportPath.empty() )
         fn.SetPath( cfg->m_LastExportPath );
@@ -242,7 +242,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    fn = EnsureFileExtension( dlg.GetPath(), KiCadFootprintFileExtension );
+    fn = EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadFootprintFileExtension );
     cfg->m_LastExportPath = fn.GetPath();
 
     try
@@ -320,8 +320,8 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
     {
         fn = initialPath;
 
-        if( !LibraryFileBrowser( false, fn, KiCadFootprintLibPathWildcard(),
-                                 KiCadFootprintLibPathExtension, false, isGlobal,
+        if( !LibraryFileBrowser( false, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
+                                 FILEEXT::KiCadFootprintLibPathExtension, false, isGlobal,
                                  PATHS::GetDefaultUserFootprintsPath() ) )
         {
             return wxEmptyString;
@@ -331,7 +331,7 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aLibName,
     }
     else
     {
-        fn = EnsureFileExtension( aLibName, KiCadFootprintLibPathExtension );
+        fn = EnsureFileExtension( aLibName, FILEEXT::KiCadFootprintLibPathExtension );
 
         if( !fn.IsAbsolute() )
         {
@@ -456,8 +456,8 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
 
     if( aFilename.IsEmpty() )
     {
-        if( !LibraryFileBrowser( true, fn, KiCadFootprintLibPathWildcard(),
-                                 KiCadFootprintLibPathExtension, true, isGlobal,
+        if( !LibraryFileBrowser( true, fn, FILEEXT::KiCadFootprintLibPathWildcard(),
+                                 FILEEXT::KiCadFootprintLibPathExtension, true, isGlobal,
                                  PATHS::GetDefaultUserFootprintsPath() ) )
         {
             return false;
@@ -479,7 +479,8 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
 
     // KiCad lib is our default guess.  So it might not have the .pretty extension
     // In this case, the extension is part of the library name
-    if( lib_type == PCB_IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
+    if( lib_type == PCB_IO_MGR::KICAD_SEXP
+        && fn.GetExt() != FILEEXT::KiCadFootprintLibPathExtension )
         libName = fn.GetFullName();
 
     // try to use path normalized to an environmental variable or project path

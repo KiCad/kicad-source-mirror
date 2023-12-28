@@ -576,7 +576,7 @@ int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
     wxString projectPath = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
     wxFileDialog dlg( editFrame, _( "Export View as PNG" ), projectPath, fn.GetFullName(),
-                      PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_OK && !dlg.GetPath().IsEmpty() )
     {
@@ -609,12 +609,13 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
     }
 
     wxFileName fn( symbol->GetName() );
-    fn.SetExt( SVGFileExtension );
+    fn.SetExt( FILEEXT::SVGFileExtension );
 
     wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
     wxString fullFileName = wxFileSelector( _( "SVG File Name" ), pro_dir, fn.GetFullName(),
-                                            SVGFileExtension, SVGFileWildcard(), wxFD_SAVE,
+                                            FILEEXT::SVGFileExtension, FILEEXT::SVGFileWildcard(),
+                                            wxFD_SAVE,
                                             m_frame );
 
     if( !fullFileName.IsEmpty() )

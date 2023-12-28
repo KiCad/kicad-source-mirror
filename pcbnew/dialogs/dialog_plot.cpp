@@ -1259,7 +1259,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         wxFileName fn( boardFilename );
 
         // Build gerber job file from basename
-        BuildPlotFileName( &fn, outputDir.GetPath(), wxT( "job" ), GerberJobFileExtension );
+        BuildPlotFileName( &fn, outputDir.GetPath(), wxT( "job" ),
+                           FILEEXT::GerberJobFileExtension );
         jobfile_writer.CreateJobFile( fn.GetFullPath() );
     }
 

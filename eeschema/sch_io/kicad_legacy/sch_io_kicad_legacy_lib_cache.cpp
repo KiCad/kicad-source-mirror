@@ -171,7 +171,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadDocs()
     wxFileName  fn = m_libFileName;
     LIB_SYMBOL* symbol = nullptr;;
 
-    fn.SetExt( LegacySymbolDocumentFileExtension );
+    fn.SetExt( FILEEXT::LegacySymbolDocumentFileExtension );
 
     // Not all libraries will have a document file.
     if( !fn.FileExists() )
@@ -1856,7 +1856,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveDocFile()
 
     wxFileName fileName = m_libFileName;
 
-    fileName.SetExt( LegacySymbolDocumentFileExtension );
+    fileName.SetExt( FILEEXT::LegacySymbolDocumentFileExtension );
     FILE_OUTPUTFORMATTER formatter( fileName.GetFullPath() );
 
     formatter.Print( 0, "%s\n", DOCFILE_IDENT );

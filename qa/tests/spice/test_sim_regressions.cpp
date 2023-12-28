@@ -46,7 +46,7 @@ public:
     {
         wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
         fn.SetName( aBaseName );
-        fn.SetExt( KiCadSchematicFileExtension );
+        fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
         return fn;
     }

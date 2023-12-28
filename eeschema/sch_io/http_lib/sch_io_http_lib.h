@@ -45,7 +45,7 @@ public:
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
         return IO_BASE::IO_FILE_DESC( _HKI( "KiCad HTTP library files" ),
-                                      { HTTPLibraryFileExtension } );
+                                      { FILEEXT::HTTPLibraryFileExtension } );
     }
 
     int GetModifyHash() const override { return 0; }

@@ -338,9 +338,9 @@ void DIALOG_EXPORT_STEP::onUpdateYPos( wxUpdateUIEvent& aEvent )
 void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
 {
     wxString filter = _( "STEP files" )
-                      + AddFileExtListToFilter( { StepFileExtension, StepFileAbrvExtension } ) + "|"
+                      + AddFileExtListToFilter( { FILEEXT::StepFileExtension, FILEEXT::StepFileAbrvExtension } ) + "|"
                       + _( "Binary GTLF files" )
-                      + AddFileExtListToFilter( { GltfBinaryFileExtension } );
+                      + AddFileExtListToFilter( { FILEEXT::GltfBinaryFileExtension } );
 
     // Build the absolute path of current output directory to preselect it in the file browser.
     wxString   path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
@@ -442,7 +442,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     cmdK2S.Append( wxT( " pcb" ) );
     cmdK2S.Append( wxT( " export" ) );
 
-    if( fn.GetExt() == GltfBinaryFileExtension )
+    if( fn.GetExt() == FILEEXT::GltfBinaryFileExtension )
         cmdK2S.Append( wxT( " glb" ) );
     else
         cmdK2S.Append( wxT( " step" ) );

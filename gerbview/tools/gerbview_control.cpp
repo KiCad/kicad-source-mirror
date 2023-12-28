@@ -120,16 +120,16 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxString     fileDialogName( NAMELESS_PROJECT + wxT( "." ) + KiCadPcbFileExtension );
+    wxString fileDialogName( NAMELESS_PROJECT + wxT( "." ) + FILEEXT::KiCadPcbFileExtension );
     wxString     path = m_frame->GetMruPath();
 
     wxFileDialog filedlg( m_frame, _( "Export as KiCad Board File" ), path, fileDialogName,
-                          PcbFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          FILEEXT::PcbFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( filedlg.ShowModal() == wxID_CANCEL )
         return 0;
 
-    wxFileName fileName = EnsureFileExtension( filedlg.GetPath(), KiCadPcbFileExtension );
+    wxFileName fileName = EnsureFileExtension( filedlg.GetPath(), FILEEXT::KiCadPcbFileExtension );
 
     /* Install a dialog frame to choose the mapping
      * between gerber layers and Pcbnew layers

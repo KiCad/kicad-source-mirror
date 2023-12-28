@@ -230,7 +230,7 @@ void GPCB_FPL_CACHE::Load()
     }
 
     wxString fullName;
-    wxString fileSpec = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
+    wxString fileSpec = wxT( "*." ) + FILEEXT::GedaPcbFootprintLibFileExtension;
 
     // wxFileName construction is egregiously slow.  Construct it once and just swap out
     // the filename thereafter.
@@ -301,7 +301,7 @@ bool GPCB_FPL_CACHE::IsModified()
 
 long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    wxString fileSpec = wxT( "*." ) + GedaPcbFootprintLibFileExtension;
+    wxString fileSpec = wxT( "*." ) + FILEEXT::GedaPcbFootprintLibFileExtension;
 
     return TimestampDir( aLibPath, fileSpec );
 }
@@ -1001,7 +1001,7 @@ bool PCB_IO_GEDA::DeleteLibrary( const wxString& aLibraryPath, const STRING_UTF8
         {
             tmp = files[i];
 
-            if( tmp.GetExt() != KiCadFootprintFileExtension )
+            if( tmp.GetExt() != FILEEXT::KiCadFootprintFileExtension )
             {
                 THROW_IO_ERROR( wxString::Format( _( "Unexpected file '%s' found in library '%s'." ),
                                                   files[i].GetData(),

@@ -92,7 +92,7 @@ int SIMULATOR_CONTROL::NewAnalysisTab( const TOOL_EVENT& aEvent )
 int SIMULATOR_CONTROL::OpenWorkbook( const TOOL_EVENT& aEvent )
 {
     wxFileDialog openDlg( m_simulatorFrame, _( "Open Simulation Workbook" ), getDefaultPath(), "",
-                          WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                          FILEEXT::WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -111,12 +111,12 @@ wxString SIMULATOR_CONTROL::getDefaultFilename()
         if( m_simulatorFrame->Prj().GetProjectName().IsEmpty() )
         {
             filename.SetName( _( "noname" ) );
-            filename.SetExt( WorkbookFileExtension );
+            filename.SetExt( FILEEXT::WorkbookFileExtension );
         }
         else
         {
             filename.SetName( m_simulatorFrame->Prj().GetProjectName() );
-            filename.SetExt( WorkbookFileExtension );
+            filename.SetExt( FILEEXT::WorkbookFileExtension );
         }
     }
 
@@ -144,7 +144,8 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
     if( filename.IsEmpty() )
     {
         wxFileDialog saveAsDlg( m_simulatorFrame, _( "Save Simulation Workbook As" ),
-                                getDefaultPath(), getDefaultFilename(), WorkbookFileWildcard(),
+                                getDefaultPath(), getDefaultFilename(),
+                                FILEEXT::WorkbookFileWildcard(),
                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( saveAsDlg.ShowModal() == wxID_CANCEL )
@@ -163,7 +164,7 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
         wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "",
-                              PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                              FILEEXT::PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( saveDlg.ShowModal() == wxID_CANCEL )
             return -1;
@@ -187,7 +188,8 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
     {
         const wxChar SEPARATOR = ';';
 
-        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
+        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "",
+                              FILEEXT::CsvFileWildcard(),
                               wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( saveDlg.ShowModal() == wxID_CANCEL )
