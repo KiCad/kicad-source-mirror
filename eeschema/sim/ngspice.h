@@ -110,8 +110,6 @@ public:
     void Clean() override final;
 
 private:
-    void init();
-
     // Performs DLL initialization, obtains function pointers
     void init_dll();
 
@@ -125,19 +123,42 @@ private:
     typedef char** ( *ngSpice_AllPlots )( void );
     typedef char** ( *ngSpice_AllVecs )( char* plotname );
     typedef bool ( *ngSpice_Running )( void );
+    typedef int ( *ngSpice_LockRealloc )( void );
+    typedef int ( *ngSpice_UnlockRealloc )( void );
 
     ///< Handle to DLL functions
-    ngSpice_Init m_ngSpice_Init;
-    ngSpice_Circ m_ngSpice_Circ;
-    ngSpice_Command m_ngSpice_Command;
-    ngGet_Vec_Info m_ngGet_Vec_Info;
-    ngSpice_CurPlot  m_ngSpice_CurPlot;
-    ngSpice_AllPlots m_ngSpice_AllPlots;
-    ngSpice_AllVecs m_ngSpice_AllVecs;
-    ngSpice_Running m_ngSpice_Running;
+    ngSpice_Init          m_ngSpice_Init;
+    ngSpice_Circ          m_ngSpice_Circ;
+    ngSpice_Command       m_ngSpice_Command;
+    ngGet_Vec_Info        m_ngGet_Vec_Info;
+    ngSpice_CurPlot       m_ngSpice_CurPlot;
+    ngSpice_AllPlots      m_ngSpice_AllPlots;
+    ngSpice_AllVecs       m_ngSpice_AllVecs;
+    ngSpice_Running       m_ngSpice_Running;
+    ngSpice_LockRealloc   m_ngSpice_LockRealloc;
+    ngSpice_UnlockRealloc m_ngSpice_UnlockRealloc;
 
     wxDynamicLibrary m_dll;
 
+    class NGSPICE_LOCK_REALLOC
+    {
+    public:
+        NGSPICE_LOCK_REALLOC( NGSPICE* ngspice ) :
+                m_ngspice( ngspice )
+        {
+            if( m_ngspice->m_ngSpice_LockRealloc )
+                m_ngspice->m_ngSpice_LockRealloc();
+        };
+
+        ~NGSPICE_LOCK_REALLOC()
+        {
+            if( m_ngspice->m_ngSpice_UnlockRealloc )
+                m_ngspice->m_ngSpice_UnlockRealloc();
+        };
+
+    private:
+        NGSPICE* m_ngspice;
+    };
 
     ///< Execute commands from a file
     bool loadSpinit( const std::string& aFileName );
