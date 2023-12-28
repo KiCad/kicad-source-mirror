@@ -1914,6 +1914,21 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 pastedSheet.SetPageNumber( pageNum );
                 hierarchy.push_back( pastedSheet );
+
+                // Remove all pasted sheet instance data that is not part of the current project.
+                std::vector<KIID_PATH> instancesToRemove;
+                SCH_SHEET* sheet = pastedSheet.Last();
+
+                wxCHECK2( sheet, continue );
+
+                for( const SCH_SHEET_INSTANCE& instance : sheet->GetInstances() )
+                {
+                    if( instance.m_ProjectName != m_frame->Prj().GetProjectName() )
+                        instancesToRemove.push_back( instance.m_Path );
+                }
+
+                for( const KIID_PATH& instancePath : instancesToRemove )
+                    sheet->RemoveInstance( instancePath );
             }
         }
 
@@ -1974,15 +1989,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
-    prunePastedSymbolInstances();
-
     // The copy operation creates instance paths that are not valid for the current project or
     // saved as part of another project.  Prune them now so they do not accumulate in the saved
     // schematic file.
+    prunePastedSymbolInstances();
+
     SCH_SCREENS allScreens( m_frame->Schematic().Root() );
 
     allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(),
                                              m_frame->Schematic().GetSheets() );
+    allScreens.PruneOrphanedSheetInstances( m_frame->Prj().GetProjectName(),
+                                            m_frame->Schematic().GetSheets() );
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
