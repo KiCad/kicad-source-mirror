@@ -313,7 +313,8 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
         reader.Rewind();
     }
 
-    SCH_IO_KICAD_SEXPR_PARSER parser( &reader, m_progressReporter, lineCount, m_rootSheet, m_appending );
+    SCH_IO_KICAD_SEXPR_PARSER parser( &reader, m_progressReporter, lineCount, m_rootSheet,
+                                      m_appending );
 
     parser.ParseSchematic( aSheet );
 }
@@ -503,8 +504,8 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
 
 void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelectionPath,
-                               SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter,
-                               bool aForClipboard )
+                                 SCHEMATIC& aSchematic, OUTPUTFORMATTER* aFormatter,
+                                 bool aForClipboard )
 {
     wxCHECK( aSelection && aSelectionPath && aFormatter, /* void */ );
 
@@ -548,7 +549,8 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
         m_out->Print( 0, "(lib_symbols\n" );
 
         for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : libSymbols )
-            SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( libSymbol.second, *m_out, 1, libSymbol.first );
+            SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( libSymbol.second, *m_out, 1,
+                                                      libSymbol.first );
 
         m_out->Print( 0, ")\n\n" );
     }
@@ -613,8 +615,8 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
 
 
 void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
-                                   int aNestLevel, bool aForClipboard,
-                                   const SCH_SHEET_PATH* aRelativePath )
+                                     int aNestLevel, bool aForClipboard,
+                                     const SCH_SHEET_PATH* aRelativePath )
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
@@ -680,9 +682,9 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     // The symbol unit is always set to the first instance regardless of the current sheet
     // instance to prevent file churn.
-    int unit = ( aSymbol->GetInstanceReferences().size() == 0 ) ?
+    int unit = ( aSymbol->GetInstances().size() == 0 ) ?
                aSymbol->GetUnit() :
-               aSymbol->GetInstanceReferences()[0].m_Unit;
+               aSymbol->GetInstances()[0].m_Unit;
 
     if( aForClipboard && aRelativePath )
     {
@@ -719,13 +721,13 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         int id = field.GetId();
         wxString value = field.GetText();
 
-        if( !aForClipboard && aSymbol->GetInstanceReferences().size() )
+        if( !aForClipboard && aSymbol->GetInstances().size() )
         {
             // The instance fields are always set to the default instance regardless of the
             // sheet instance to prevent file churn.
             if( id == REFERENCE_FIELD )
             {
-                field.SetText( aSymbol->GetInstanceReferences()[0].m_Reference );
+                field.SetText( aSymbol->GetInstances()[0].m_Reference );
             }
             else if( id == VALUE_FIELD )
             {
@@ -736,7 +738,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                 field.SetText( aSymbol->GetField( FOOTPRINT_FIELD )->GetText() );
             }
         }
-        else if( aForClipboard && aSymbol->GetInstanceReferences().size() && aRelativePath
+        else if( aForClipboard && aSymbol->GetInstances().size() && aRelativePath
                && ( id == REFERENCE_FIELD ) )
         {
             SCH_SYMBOL_INSTANCE instance;
@@ -779,7 +781,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         }
     }
 
-    if( !aSymbol->GetInstanceReferences().empty() )
+    if( !aSymbol->GetInstances().empty() )
     {
         m_out->Print( aNestLevel + 1, "(instances\n" );
 
@@ -788,10 +790,10 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
         bool project_open = false;
 
-        for( size_t i = 0; i < aSymbol->GetInstanceReferences().size(); i++ )
+        for( size_t i = 0; i < aSymbol->GetInstances().size(); i++ )
         {
             // Zero length KIID_PATH objects are not valid and will cause a crash below.
-            wxCHECK2( aSymbol->GetInstanceReferences()[i].m_Path.size(), continue );
+            wxCHECK2( aSymbol->GetInstances()[i].m_Path.size(), continue );
 
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
@@ -799,11 +801,11 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             //
             // Keep all instance data when copying to the clipboard.  It may be needed on paste.
             if( !aForClipboard
-              && ( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
-              && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstanceReferences()[i].m_Path ) )
+              && ( aSymbol->GetInstances()[i].m_Path[0] == rootSheetUuid )
+              && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstances()[i].m_Path ) )
             {
-                if( project_open && ( ( i + 1 == aSymbol->GetInstanceReferences().size() )
-                  || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] ) )
+                if( project_open && ( ( i + 1 == aSymbol->GetInstances().size() )
+                  || lastProjectUuid != aSymbol->GetInstances()[i+1].m_Path[0] ) )
                 {
                     m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
                     project_open = false;
@@ -812,23 +814,23 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                 continue;
             }
 
-            if( lastProjectUuid != aSymbol->GetInstanceReferences()[i].m_Path[0] )
+            if( lastProjectUuid != aSymbol->GetInstances()[i].m_Path[0] )
             {
                 wxString projectName;
 
-                if( aSymbol->GetInstanceReferences()[i].m_Path[0] == rootSheetUuid )
+                if( aSymbol->GetInstances()[i].m_Path[0] == rootSheetUuid )
                     projectName = aSchematic.Prj().GetProjectName();
                 else
-                    projectName = aSymbol->GetInstanceReferences()[i].m_ProjectName;
+                    projectName = aSymbol->GetInstances()[i].m_ProjectName;
 
-                lastProjectUuid = aSymbol->GetInstanceReferences()[i].m_Path[0];
+                lastProjectUuid = aSymbol->GetInstances()[i].m_Path[0];
                 m_out->Print( aNestLevel + 2, "(project %s\n",
                               m_out->Quotew( projectName ).c_str() );
                 project_open = true;
             }
 
             wxString path;
-            KIID_PATH tmp = aSymbol->GetInstanceReferences()[i].m_Path;
+            KIID_PATH tmp = aSymbol->GetInstances()[i].m_Path;
 
             if( aForClipboard && aRelativePath )
                 tmp.MakeRelativeTo( aRelativePath->Path() );
@@ -838,12 +840,12 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             m_out->Print( aNestLevel + 3, "(path %s\n",
                           m_out->Quotew( path ).c_str() );
             m_out->Print( aNestLevel + 4, "(reference %s) (unit %d)\n",
-                          m_out->Quotew( aSymbol->GetInstanceReferences()[i].m_Reference ).c_str(),
-                          aSymbol->GetInstanceReferences()[i].m_Unit );
+                          m_out->Quotew( aSymbol->GetInstances()[i].m_Reference ).c_str(),
+                          aSymbol->GetInstances()[i].m_Unit );
             m_out->Print( aNestLevel + 3, ")\n" );
 
-            if( project_open && ( ( i + 1 == aSymbol->GetInstanceReferences().size() )
-              || lastProjectUuid != aSymbol->GetInstanceReferences()[i+1].m_Path[0] ) )
+            if( project_open && ( ( i + 1 == aSymbol->GetInstances().size() )
+              || lastProjectUuid != aSymbol->GetInstances()[i+1].m_Path[0] ) )
             {
                 m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
                 project_open = false;
@@ -1383,7 +1385,7 @@ void SCH_IO_KICAD_SEXPR::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias, int aN
 
 
 void SCH_IO_KICAD_SEXPR::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances,
-                                      int aNestLevel )
+                                        int aNestLevel )
 {
     if( aInstances.size() )
     {
@@ -1408,7 +1410,7 @@ void SCH_IO_KICAD_SEXPR::saveInstances( const std::vector<SCH_SHEET_INSTANCE>& a
 
 
 void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
-                                 const STRING_UTF8_MAP* aProperties )
+                                   const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
@@ -1439,8 +1441,8 @@ int SCH_IO_KICAD_SEXPR::GetModifyHash() const
 
 
 void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
-                                           const wxString&   aLibraryPath,
-                                           const STRING_UTF8_MAP* aProperties )
+                                             const wxString&   aLibraryPath,
+                                             const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1460,8 +1462,8 @@ void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 
 void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                           const wxString&   aLibraryPath,
-                                           const STRING_UTF8_MAP* aProperties )
+                                             const wxString&   aLibraryPath,
+                                             const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -1480,8 +1482,9 @@ void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolLi
 }
 
 
-LIB_SYMBOL* SCH_IO_KICAD_SEXPR::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                          const STRING_UTF8_MAP* aProperties )
+LIB_SYMBOL* SCH_IO_KICAD_SEXPR::LoadSymbol( const wxString& aLibraryPath,
+                                            const wxString& aSymbolName,
+                                            const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1508,7 +1511,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR::LoadSymbol( const wxString& aLibraryPath, const 
 
 
 void SCH_IO_KICAD_SEXPR::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                   const STRING_UTF8_MAP* aProperties )
+                                     const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1522,7 +1525,7 @@ void SCH_IO_KICAD_SEXPR::SaveSymbol( const wxString& aLibraryPath, const LIB_SYM
 
 
 void SCH_IO_KICAD_SEXPR::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                     const STRING_UTF8_MAP* aProperties )
+                                       const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -1580,7 +1583,8 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
 }
 
 
-void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void SCH_IO_KICAD_SEXPR::SaveLibrary( const wxString& aLibraryPath,
+                                      const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryPath );
@@ -1643,8 +1647,8 @@ void SCH_IO_KICAD_SEXPR::GetDefaultSymbolFields( std::vector<wxString>& aNames )
 
 
 std::vector<LIB_SYMBOL*> SCH_IO_KICAD_SEXPR::ParseLibSymbols( std::string& aSymbolText,
-                                                            std::string  aSource,
-                                                            int aFileVersion )
+                                                              std::string  aSource,
+                                                              int aFileVersion )
 {
     LOCALE_IO      toggle;     // toggles on, then off, the C locale.
     LIB_SYMBOL*    newSymbol = nullptr;

@@ -122,8 +122,8 @@ void SCH_IO_KICAD_LEGACY::checkpoint()
 
 
 SCH_SHEET* SCH_IO_KICAD_LEGACY::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                                 SCH_SHEET*             aAppendToMe,
-                                                 const STRING_UTF8_MAP* aProperties )
+                                                   SCH_SHEET*             aAppendToMe,
+                                                   const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -1368,7 +1368,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
                 }
                 else
                 {
-                    for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstanceReferences() )
+                    for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
                     {
                         SCH_SYMBOL_INSTANCE tmpInstance = instance;
                         symbol->AddHierarchicalReference( tmpInstance );
@@ -1428,7 +1428,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
 
 std::shared_ptr<BUS_ALIAS> SCH_IO_KICAD_LEGACY::loadBusAlias( LINE_READER& aReader,
-                                                            SCH_SCREEN* aScreen )
+                                                              SCH_SCREEN* aScreen )
 {
     auto busAlias = std::make_shared<BUS_ALIAS>( aScreen );
     const char* line = aReader.Line();
@@ -1453,8 +1453,8 @@ std::shared_ptr<BUS_ALIAS> SCH_IO_KICAD_LEGACY::loadBusAlias( LINE_READER& aRead
 
 
 void SCH_IO_KICAD_LEGACY::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
-                                           SCHEMATIC*             aSchematic,
-                                           const STRING_UTF8_MAP* aProperties )
+                                             SCHEMATIC*             aSchematic,
+                                             const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -1629,9 +1629,9 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
     static wxString delimiters( wxT( " " ) );
 
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
-    if( aSymbol->GetInstanceReferences().size() > 0 )
+    if( aSymbol->GetInstances().size() > 0 )
     {
-        const SCH_SYMBOL_INSTANCE& instance = aSymbol->GetInstanceReferences()[0];
+        const SCH_SYMBOL_INSTANCE& instance = aSymbol->GetInstances()[0];
         name1 = toUTFTildaText( instance.m_Reference );
     }
     else
@@ -1672,9 +1672,9 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
      * the reference inf is already saved
      * this is useful for old Eeschema version compatibility
      */
-    if( aSymbol->GetInstanceReferences().size() > 1 )
+    if( aSymbol->GetInstances().size() > 1 )
     {
-        for( const SCH_SYMBOL_INSTANCE& instance : aSymbol->GetInstanceReferences() )
+        for( const SCH_SYMBOL_INSTANCE& instance : aSymbol->GetInstances() )
         {
             /*format:
              * AR Path="/140/2" Ref="C99"   Part="1"
@@ -2048,7 +2048,8 @@ void SCH_IO_KICAD_LEGACY::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 }
 
 
-void SCH_IO_KICAD_LEGACY::cacheLib( const wxString& aLibraryFileName, const STRING_UTF8_MAP* aProperties )
+void SCH_IO_KICAD_LEGACY::cacheLib( const wxString& aLibraryFileName,
+                                    const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
     {
@@ -2090,8 +2091,8 @@ int SCH_IO_KICAD_LEGACY::GetModifyHash() const
 
 
 void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
-                                            const wxString&   aLibraryPath,
-                                            const STRING_UTF8_MAP* aProperties )
+                                              const wxString&   aLibraryPath,
+                                              const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2111,7 +2112,7 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 
 void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                            const wxString&   aLibraryPath,
+                                              const wxString&   aLibraryPath,
                                             const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -2132,8 +2133,8 @@ void SCH_IO_KICAD_LEGACY::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
 
 
 LIB_SYMBOL* SCH_IO_KICAD_LEGACY::LoadSymbol( const wxString& aLibraryPath,
-                                           const wxString& aSymbolName,
-                                           const STRING_UTF8_MAP* aProperties )
+                                             const wxString& aSymbolName,
+                                             const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2149,7 +2150,7 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY::LoadSymbol( const wxString& aLibraryPath,
 
 
 void SCH_IO_KICAD_LEGACY::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                    const STRING_UTF8_MAP* aProperties )
+                                      const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2163,7 +2164,7 @@ void SCH_IO_KICAD_LEGACY::SaveSymbol( const wxString& aLibraryPath, const LIB_SY
 
 
 void SCH_IO_KICAD_LEGACY::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                      const STRING_UTF8_MAP* aProperties )
+                                        const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -2221,7 +2222,8 @@ bool SCH_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
 }
 
 
-void SCH_IO_KICAD_LEGACY::SaveLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties )
+void SCH_IO_KICAD_LEGACY::SaveLibrary( const wxString& aLibraryPath,
+                                       const STRING_UTF8_MAP* aProperties )
 {
     if( !m_cache )
         m_cache = new SCH_IO_KICAD_LEGACY_LIB_CACHE( aLibraryPath );

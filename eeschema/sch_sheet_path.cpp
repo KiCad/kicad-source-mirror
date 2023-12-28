@@ -474,7 +474,6 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( rootFn.GetPath() );
 
-
     // The source and destination sheet file names cannot be the same.
     if( srcFn == destFn )
     {
@@ -585,10 +584,10 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
             newSymbolInstance.m_Path = newSheetPath.Path();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
-        else if( !symbol->GetInstanceReferences().empty() )
+        else if( !symbol->GetInstances().empty() )
         {
             // Use the first symbol instance if any symbol instance data exists.
-            newSymbolInstance = symbol->GetInstanceReferences()[0];
+            newSymbolInstance = symbol->GetInstances()[0];
             newSymbolInstance.m_Path = newSheetPath.Path();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }

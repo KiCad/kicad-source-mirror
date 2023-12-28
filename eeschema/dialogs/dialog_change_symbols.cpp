@@ -469,8 +469,6 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
 }
 
 
-
-
 int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
@@ -532,7 +530,8 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
     if( symbols.size() > 0 )
         matchesProcessed += processSymbols( aCommit, symbols );
     else
-        m_messagePanel->Report( _( "*** No symbols matching criteria found ***" ), RPT_SEVERITY_ERROR );
+        m_messagePanel->Report( _( "*** No symbols matching criteria found ***" ),
+                                RPT_SEVERITY_ERROR );
 
     frame->GetCurrentSheet().UpdateAllScreenReferences();
 
@@ -755,7 +754,7 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const 
 
     SCH_SHEET_LIST sheets = parent->Schematic().GetSheets();
 
-    for( const SCH_SYMBOL_INSTANCE& instance : aSymbol.GetInstanceReferences() )
+    for( const SCH_SYMBOL_INSTANCE& instance : aSymbol.GetInstances() )
     {
         // Only include the symbol instances for the current project.
         if( !sheets.HasPath( instance.m_Path ) )
@@ -769,7 +768,7 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const 
 
     if( m_mode == MODE::UPDATE )
     {
-        if( aSymbol.GetInstanceReferences().size() == 1 )
+        if( aSymbol.GetInstances().size() == 1 )
         {
             msg.Printf( _( "Update symbol %s from '%s' to '%s'" ),
                         references,
@@ -786,7 +785,7 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const 
     }
     else
     {
-        if( aSymbol.GetInstanceReferences().size() == 1 )
+        if( aSymbol.GetInstances().size() == 1 )
         {
             msg.Printf( _( "Change symbol %s from '%s' to '%s'" ),
                         references,

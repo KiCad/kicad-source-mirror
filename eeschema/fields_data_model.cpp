@@ -961,7 +961,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& 
             m_symbolsList.RemoveItem( index );
 
             // If we're out of instances then remove the symbol, too
-            if( ref.GetSymbol()->GetInstanceReferences().empty() )
+            if( ref.GetSymbol()->GetInstances().empty() )
                 m_dataStore.erase( ref.GetSymbol()->m_Uuid );
         }
     }

@@ -1534,7 +1534,7 @@ void SCH_EDITOR_CONTROL::setPastedSymbolInstances( SCH_SCREENS& aScreenList )
 
                 wxCHECK2( symbol, continue );
 
-                for( const SCH_SYMBOL_INSTANCE& symbolInstance : symbol->GetInstanceReferences() )
+                for( const SCH_SYMBOL_INSTANCE& symbolInstance : symbol->GetInstances() )
                 {
                     KIID_PATH pathWithSymbol = symbolInstance.m_Path;
 
@@ -1558,7 +1558,7 @@ void SCH_EDITOR_CONTROL::prunePastedSymbolInstances()
 
         std::vector<KIID_PATH> instancePathsToRemove;
 
-        for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstanceReferences() )
+        for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
         {
             if( ( instance.m_ProjectName != m_frame->Prj().GetProjectName() )
               || instance.m_Path.empty() )
@@ -2590,12 +2590,14 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::GridFeedback,          EVENTS::GridChangedByKeyEvent );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithLibEdit.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,
+        EE_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ImportFPAssignments,   EE_ACTIONS::importFPAssignments.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,
+        EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowPcbNew,            EE_ACTIONS::showPcbNew.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdatePCB,             ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdateFromPCB,         ACTIONS::updateSchematicFromPcb.MakeEvent() );

@@ -1587,7 +1587,7 @@ void SCH_SCREEN::SetLegacySymbolInstanceData()
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         // Add missing value and footprint instance data for legacy schematics.
-        for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstanceReferences() )
+        for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )
         {
             symbol->AddHierarchicalReference( instance.m_Path, instance.m_Reference,
                                               instance.m_Unit );
@@ -1655,7 +1655,7 @@ void SCH_SCREEN::PruneOrphanedSymbolInstances( const wxString& aProjectName,
         wxCHECK2( symbol, continue );
 
         std::set<KIID_PATH> pathsToPrune;
-        const std::vector<SCH_SYMBOL_INSTANCE> instances = symbol->GetInstanceReferences();
+        const std::vector<SCH_SYMBOL_INSTANCE> instances = symbol->GetInstances();
 
         for( const SCH_SYMBOL_INSTANCE& instance : instances )
         {
