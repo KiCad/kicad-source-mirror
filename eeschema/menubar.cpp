@@ -172,48 +172,26 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     editMenu->Add( EE_ACTIONS::editPageNumber );
 
     ACTION_MENU* submenuAttributes = new ACTION_MENU( false, selTool );
-    submenuAttributes->SetTitle( _( "Attributes..." ) );
-    {
-        {
-            ACTION_MENU *attribSimMoveSubMenu = new ACTION_MENU( false, selTool );
-            attribSimMoveSubMenu->SetTitle( _( "Simulation" ) );
-            submenuAttributes->Add( attribSimMoveSubMenu );
-        
-            attribSimMoveSubMenu->Add( EE_ACTIONS::setExcludeFromSimulation );
-            attribSimMoveSubMenu->Add( EE_ACTIONS::unsetExcludeFromSimulation );
-            attribSimMoveSubMenu->Add( EE_ACTIONS::toggleExcludeFromSimulation );
-        }
+    submenuAttributes->SetTitle( _( "Attributes" ) );
 
-        {
-            ACTION_MENU *attribBOMMoveSubMenu = new ACTION_MENU( false, selTool );
-            attribBOMMoveSubMenu->SetTitle( _( "Bill of Materials" ) );
-            submenuAttributes->Add( attribBOMMoveSubMenu );
+    submenuAttributes->Add( EE_ACTIONS::setExcludeFromSimulation );
+    submenuAttributes->Add( EE_ACTIONS::unsetExcludeFromSimulation );
+    submenuAttributes->Add( EE_ACTIONS::toggleExcludeFromSimulation );
 
-            attribBOMMoveSubMenu->Add( EE_ACTIONS::setExcludeFromBOM );
-            attribBOMMoveSubMenu->Add( EE_ACTIONS::unsetExcludeFromBOM );
-            attribBOMMoveSubMenu->Add( EE_ACTIONS::toggleExcludeFromBOM );
-        }
+    submenuAttributes->AppendSeparator();
+    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBOM );
+    submenuAttributes->Add( EE_ACTIONS::unsetExcludeFromBOM );
+    submenuAttributes->Add( EE_ACTIONS::toggleExcludeFromBOM );
 
-        {
-            ACTION_MENU *attribBoardMoveSubMenu = new ACTION_MENU( false, selTool );
-            attribBoardMoveSubMenu->SetTitle( _( "Exclude from board" ) );
-            submenuAttributes->Add( attribBoardMoveSubMenu );
+    submenuAttributes->AppendSeparator();
+    submenuAttributes->Add( EE_ACTIONS::setExcludeFromBoard );
+    submenuAttributes->Add( EE_ACTIONS::unsetExcludeFromBoard );
+    submenuAttributes->Add( EE_ACTIONS::toggleExcludeFromBoard );
 
-            attribBoardMoveSubMenu->Add( EE_ACTIONS::setExcludeFromBoard );
-            attribBoardMoveSubMenu->Add( EE_ACTIONS::unsetExcludeFromBoard );
-            attribBoardMoveSubMenu->Add( EE_ACTIONS::toggleExcludeFromBoard );
-        }
-
-        {
-            ACTION_MENU *attribDNPMoveSubMenu = new ACTION_MENU( false, selTool );
-            attribDNPMoveSubMenu->SetTitle( _( "Do not populate" ) );
-            submenuAttributes->Add( attribDNPMoveSubMenu );
-
-            attribDNPMoveSubMenu->Add( EE_ACTIONS::setDNP );
-            attribDNPMoveSubMenu->Add( EE_ACTIONS::unsetDNP );
-            attribDNPMoveSubMenu->Add( EE_ACTIONS::toggleDNP );
-        }
-    }
+    submenuAttributes->AppendSeparator();
+    submenuAttributes->Add( EE_ACTIONS::setDNP );
+    submenuAttributes->Add( EE_ACTIONS::unsetDNP );
+    submenuAttributes->Add( EE_ACTIONS::toggleDNP );
 
     editMenu->Add( submenuAttributes );
 

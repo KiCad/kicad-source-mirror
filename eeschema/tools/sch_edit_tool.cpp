@@ -92,21 +92,9 @@ private:
 
         Clear();
 
-        if( !symbol )
-        {
-            Append( ID_POPUP_SCH_SELECT_UNIT, _( "no symbol selected" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
-            return;
-        }
+        wxCHECK( symbol, /* void */ );
 
         int  unit = symbol->GetUnit();
-
-        if( !symbol->GetLibSymbolRef() || symbol->GetLibSymbolRef()->GetUnitCount() < 2 )
-        {
-            Append( ID_POPUP_SCH_SELECT_UNIT, _( "symbol is not multi-unit" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
-            return;
-        }
 
         for( int ii = 0; ii < symbol->GetLibSymbolRef()->GetUnitCount(); ii++ )
         {
@@ -153,19 +141,7 @@ private:
 
         Clear();
 
-        if( !pin )
-        {
-            Append( ID_POPUP_SCH_SELECT_UNIT, _( "no pin selected" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
-            return;
-        }
-
-        if( !pin->GetLibPin() || pin->GetLibPin()->GetAlternates().empty() )
-        {
-            Append( ID_POPUP_SCH_SELECT_UNIT, _( "no alternate pin functions defined" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
-            return;
-        }
+        wxCHECK( pin, /* void */ );
 
         wxMenuItem* item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION, pin->GetName(), wxEmptyString,
                                    wxITEM_CHECK );
@@ -215,12 +191,11 @@ private:
         if( !pin )
             return;
 
-        Add( wxS( "Wire" ), ID_POPUP_SCH_PIN_TRICKS_WIRE, BITMAPS::add_line );
-        Add( wxS( "No Connect" ), ID_POPUP_SCH_PIN_TRICKS_NO_CONNECT, BITMAPS::noconn );
-        Add( wxS( "Net Label" ), ID_POPUP_SCH_PIN_TRICKS_NET_LABEL, BITMAPS::add_label );
-        Add( wxS( "Hierarchical Label" ), ID_POPUP_SCH_PIN_TRICKS_HIER_LABEL,
-             BITMAPS::add_hierarchical_label );
-        Add( wxS( "Global Label" ), ID_POPUP_SCH_PIN_TRICKS_GLOBAL_LABEL, BITMAPS::add_glabel );
+        Add( _( "Wire" ),               ID_POPUP_SCH_PIN_TRICKS_WIRE,         BITMAPS::add_line );
+        Add( _( "No Connect" ),         ID_POPUP_SCH_PIN_TRICKS_NO_CONNECT,   BITMAPS::noconn );
+        Add( _( "Net Label" ),          ID_POPUP_SCH_PIN_TRICKS_NET_LABEL,    BITMAPS::add_label );
+        Add( _( "Hierarchical Label" ), ID_POPUP_SCH_PIN_TRICKS_HIER_LABEL,   BITMAPS::add_hierarchical_label );
+        Add( _( "Global Label" ),       ID_POPUP_SCH_PIN_TRICKS_GLOBAL_LABEL, BITMAPS::add_glabel );
     }
 };
 
@@ -446,198 +421,174 @@ bool SCH_EDIT_TOOL::Init()
 
     auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyTypes( { SCH_SHEET_T } );
 
+    auto makeSymbolUnitMenu =
+            [&]( TOOL_INTERACTIVE* tool )
+            {
+                std::shared_ptr<SYMBOL_UNIT_MENU> menu = std::make_shared<SYMBOL_UNIT_MENU>();
+                menu->SetTool( tool );
+                tool->GetToolMenu().RegisterSubMenu( menu );
+                return menu.get();
+            };
+
+    auto makePinFunctionMenu =
+            [&]( TOOL_INTERACTIVE* tool )
+            {
+                std::shared_ptr<ALT_PIN_FUNCTION_MENU> menu = std::make_shared<ALT_PIN_FUNCTION_MENU>();
+                menu->SetTool( tool );
+                tool->GetToolMenu().RegisterSubMenu( menu );
+                return menu.get();
+            };
+
+    auto makePinTricksMenu =
+            [&]( TOOL_INTERACTIVE* tool )
+            {
+                std::shared_ptr<PIN_TRICKS_MENU> menu = std::make_shared<PIN_TRICKS_MENU>();
+                menu->SetTool( tool );
+                tool->GetToolMenu().RegisterSubMenu( menu );
+                return menu.get();
+            };
+
+    auto makeTransformMenu =
+            [&]()
+            {
+                CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( moveTool );
+                menu->SetTitle( _( "Transform Selection" ) );
+
+                menu->AddItem( EE_ACTIONS::rotateCCW,   orientCondition );
+                menu->AddItem( EE_ACTIONS::rotateCW,    orientCondition );
+                menu->AddItem( EE_ACTIONS::mirrorV,     orientCondition );
+                menu->AddItem( EE_ACTIONS::mirrorH,     orientCondition );
+
+                return menu;
+            };
+
+    auto makeAttributesMenu =
+            [&]()
+            {
+                CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( moveTool );
+                menu->SetTitle( _( "Attributes" ) );
+
+                menu->AddItem( EE_ACTIONS::setExcludeFromSimulation,    E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::unsetExcludeFromSimulation,  E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation, E_C::ShowAlways );
+
+                menu->AddSeparator();
+                menu->AddItem( EE_ACTIONS::setExcludeFromBOM,           E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::unsetExcludeFromBOM,         E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::toggleExcludeFromBOM,        E_C::ShowAlways );
+
+                menu->AddSeparator();
+                menu->AddItem( EE_ACTIONS::setExcludeFromBoard,         E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::unsetExcludeFromBoard,       E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::toggleExcludeFromBoard,      E_C::ShowAlways );
+
+                menu->AddSeparator();
+                menu->AddItem( EE_ACTIONS::setDNP,                      E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::unsetDNP,                    E_C::ShowAlways );
+                menu->AddItem( EE_ACTIONS::toggleDNP,                   E_C::ShowAlways );
+
+                return menu;
+            };
+
+    auto makeEditFieldsMenu =
+            [&]()
+            {
+                CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( m_selectionTool );
+                menu->SetTitle( _( "Edit Main Fields" ) );
+
+                menu->AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
+                menu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
+                menu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
+
+                return menu;
+            };
+
+    auto makeConvertToMenu =
+            [&]()
+            {
+                CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( m_selectionTool );
+                menu->SetTitle( _( "Change To" ) );
+                menu->SetIcon( BITMAPS::right );
+
+                menu->AddItem( EE_ACTIONS::toLabel,    toLabelCondition );
+                menu->AddItem( EE_ACTIONS::toCLabel,   toCLabelCondition );
+                menu->AddItem( EE_ACTIONS::toHLabel,   toHLabelCondition );
+                menu->AddItem( EE_ACTIONS::toGLabel,   toGLabelCondition );
+                menu->AddItem( EE_ACTIONS::toText,     toTextCondition );
+                menu->AddItem( EE_ACTIONS::toTextBox,  toTextBoxCondition );
+
+                return menu;
+            };
+
     //
     // Add edit actions to the move tool menu
     //
-    if( moveTool )
-    {
-        CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
+    CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
-        moveMenu.AddSeparator();
+    moveMenu.AddSeparator();
+    moveMenu.AddMenu( makeSymbolUnitMenu( moveTool ), E_C::SingleMultiUnitSymbol, 1 );
 
-        CONDITIONAL_MENU* transformMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-        transformMoveSubMenu->SetTitle( _( "Transform Selection" ) );
-        moveMenu.AddMenu( transformMoveSubMenu, orientCondition, 200 );
+    moveMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
+    moveMenu.AddMenu( makeAttributesMenu(),           E_C::HasType( SCH_SYMBOL_T ), 200 );
+    moveMenu.AddItem( EE_ACTIONS::swap,               SELECTION_CONDITIONS::MoreThan( 1 ), 200);
+    moveMenu.AddItem( EE_ACTIONS::properties,         propertiesCondition, 200 );
+    moveMenu.AddMenu( makeEditFieldsMenu(),           E_C::SingleSymbol, 200 );
 
-        transformMoveSubMenu->AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
-        transformMoveSubMenu->AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-        transformMoveSubMenu->AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
-        transformMoveSubMenu->AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
-
-        {
-            CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-            attribMoveSubMenu->SetTitle( _( "Attributes..." ) );
-            moveMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
-
-            {
-                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
-                        E_C::ShowAlways );
-                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
-                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard,
-                        E_C::ShowAlways );
-                attribMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
-            }
-        }
-        moveMenu.AddItem( EE_ACTIONS::swap,            SELECTION_CONDITIONS::MoreThan( 1 ) );
-
-        moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
-
-        CONDITIONAL_MENU* editMoveItemSubMenu = new CONDITIONAL_MENU(moveTool);
-        editMoveItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
-        editMoveItemSubMenu->SetIcon( BITMAPS::right );
-        moveMenu.AddMenu( editMoveItemSubMenu, E_C::SingleSymbol );
-
-        editMoveItemSubMenu->AddItem( EE_ACTIONS::editReference,   E_C::SingleSymbol );
-        editMoveItemSubMenu->AddItem( EE_ACTIONS::editValue,       E_C::SingleSymbol );
-        editMoveItemSubMenu->AddItem( EE_ACTIONS::editFootprint,   E_C::SingleSymbol );
-
-        std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
-        symUnitMenu->SetTool( this );
-        m_menu.RegisterSubMenu( symUnitMenu );
-        moveMenu.AddMenu( symUnitMenu.get(), E_C::SingleMultiUnitSymbol, 1 );
-
-        moveMenu.AddSeparator();
-        moveMenu.AddItem( ACTIONS::cut,                E_C::IdleSelection );
-        moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
-        moveMenu.AddItem( ACTIONS::doDelete,           E_C::NotEmpty );
-        moveMenu.AddItem( ACTIONS::duplicate,          duplicateCondition );
-    }
+    moveMenu.AddSeparator();
+    moveMenu.AddItem( ACTIONS::cut,                   E_C::IdleSelection );
+    moveMenu.AddItem( ACTIONS::copy,                  E_C::IdleSelection );
+    moveMenu.AddItem( ACTIONS::doDelete,              E_C::NotEmpty );
+    moveMenu.AddItem( ACTIONS::duplicate,             duplicateCondition );
 
     //
     // Add editing actions to the drawing tool menu
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddItem( EE_ACTIONS::clearHighlight,   haveHighlight && EE_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                          haveHighlight && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::enterSheet,       sheetSelection && EE_CONDITIONS::Idle, 1 );
-    drawMenu.AddSeparator(                          sheetSelection && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 1 );
+    drawMenu.AddSeparator(                            sheetSelection && EE_CONDITIONS::Idle, 1 );
 
-    CONDITIONAL_MENU* transformDrawSubMenu = new CONDITIONAL_MENU( drawingTools );
-    transformDrawSubMenu->SetTitle( _( "Transform Selection" ) );
-    drawMenu.AddMenu( transformDrawSubMenu, orientCondition, 200 );
+    drawMenu.AddMenu( makeSymbolUnitMenu( drawingTools ), E_C::SingleMultiUnitSymbol, 1 );
 
-    transformDrawSubMenu->AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
-    transformDrawSubMenu->AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-    transformDrawSubMenu->AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
-    transformDrawSubMenu->AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
+    drawMenu.AddMenu( makeTransformMenu(),            orientCondition, 200 );
+    drawMenu.AddMenu( makeAttributesMenu(),           E_C::HasType( SCH_SYMBOL_T ), 200 );
+    drawMenu.AddItem( EE_ACTIONS::properties,         propertiesCondition, 200 );
+    drawMenu.AddMenu( makeEditFieldsMenu(),           E_C::SingleSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,    autoplaceCondition, 200 );
 
-    {
-        CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-        attribMoveSubMenu->SetTitle( _( "Attributes" ) );
-        drawMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,    E_C::SingleSymbolOrPower && E_C::Idle, 200 );
 
-        {
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
-                    E_C::ShowAlways );
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
-        }
-    }
-
-    drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-
-    CONDITIONAL_MENU* editDrawItemSubMenu = new CONDITIONAL_MENU( drawingTools );
-    editDrawItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
-    editDrawItemSubMenu->SetIcon( BITMAPS::right );
-    drawMenu.AddMenu( editDrawItemSubMenu, E_C::SingleSymbol, 200 );
-
-    editDrawItemSubMenu->AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
-    editDrawItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
-    editDrawItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-
-
-    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,              autoplaceCondition, 200 );
-
-    std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
-    symUnitMenu2->SetTool( drawingTools );
-    drawingTools->GetToolMenu().RegisterSubMenu( symUnitMenu2 );
-    drawMenu.AddMenu( symUnitMenu2.get(), E_C::SingleMultiUnitSymbol, 1 );
-
-    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
-
-    drawMenu.AddItem( EE_ACTIONS::toLabel,          anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toHLabel,         anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toGLabel,         anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toText,           anyTextTool && E_C::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toTextBox,        anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toLabel,            anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toHLabel,           anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toGLabel,           anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toText,             anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toTextBox,          anyTextTool && E_C::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    CONDITIONAL_MENU* transformSelSubMenu = new CONDITIONAL_MENU( m_selectionTool );
-    transformSelSubMenu->SetTitle( _( "Transform Selection" ) );
-    selToolMenu.AddMenu( transformSelSubMenu, orientCondition, 200 );
+    selToolMenu.AddMenu( makeSymbolUnitMenu( m_selectionTool ),  E_C::SingleMultiUnitSymbol, 1 );
+    selToolMenu.AddMenu( makePinFunctionMenu( m_selectionTool ), E_C::SingleMultiFunctionPin, 1 );
+    selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   E_C::AllPins, 1 );
 
-    transformSelSubMenu->AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
-    transformSelSubMenu->AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
-    transformSelSubMenu->AddItem( EE_ACTIONS::mirrorV,          orientCondition, 200 );
-    transformSelSubMenu->AddItem( EE_ACTIONS::mirrorH,          orientCondition, 200 );
-
-    {
-        CONDITIONAL_MENU *attribMoveSubMenu = new CONDITIONAL_MENU( moveTool );
-        attribMoveSubMenu->SetTitle( _( "Attributes" ) );
-        selToolMenu.AddMenu( attribMoveSubMenu, E_C::HasType( SCH_SYMBOL_T ), 200 );
-
-        {
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromSimulation,
-                    E_C::ShowAlways );
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBOM, E_C::ShowAlways );
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleExcludeFromBoard, E_C::ShowAlways );
-            attribMoveSubMenu->AddItem( EE_ACTIONS::toggleDNP, E_C::ShowAlways );
-        }
-    }
-
-    selToolMenu.AddItem( EE_ACTIONS::swap,             SELECTION_CONDITIONS::MoreThan( 1 ) );
+    selToolMenu.AddMenu( makeTransformMenu(),          orientCondition, 200 );
+    selToolMenu.AddMenu( makeAttributesMenu(),         E_C::HasType( SCH_SYMBOL_T ), 200 );
+    selToolMenu.AddItem( EE_ACTIONS::swap,             SELECTION_CONDITIONS::MoreThan( 1 ), 200 );
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-
-    CONDITIONAL_MENU* editSelItemSubMenu = new CONDITIONAL_MENU( m_selectionTool );
-    editSelItemSubMenu->SetTitle( _( "Edit Main Fields" ) );
-    editSelItemSubMenu->SetIcon( BITMAPS::right );
-    selToolMenu.AddMenu( editSelItemSubMenu, E_C::SingleSymbol, 200 );
-
-    editSelItemSubMenu->AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
-    editSelItemSubMenu->AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
-    editSelItemSubMenu->AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-
-    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,          autoplaceCondition, 200 );
-
-    std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
-    symUnitMenu3->SetTool( m_selectionTool );
-    m_selectionTool->GetToolMenu().RegisterSubMenu( symUnitMenu3 );
-    selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
-
-    std::shared_ptr<ALT_PIN_FUNCTION_MENU> altPinMenu = std::make_shared<ALT_PIN_FUNCTION_MENU>();
-    altPinMenu->SetTool( m_selectionTool );
-    m_selectionTool->GetToolMenu().RegisterSubMenu( altPinMenu );
-    selToolMenu.AddMenu( altPinMenu.get(), E_C::SingleMultiFunctionPin, 1 );
-
-    std::shared_ptr<PIN_TRICKS_MENU> pinTricksMenu = std::make_shared<PIN_TRICKS_MENU>();
-    pinTricksMenu->SetTool( m_selectionTool );
-    m_selectionTool->GetToolMenu().RegisterSubMenu( pinTricksMenu );
-    selToolMenu.AddMenu( pinTricksMenu.get(), E_C::AllPins, 1 );
+    selToolMenu.AddMenu( makeEditFieldsMenu(),         E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  autoplaceCondition, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbolOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbols,    E_C::MultipleSymbolsOrPower, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbols,    E_C::MultipleSymbolsOrPower, 200 );
-
-    CONDITIONAL_MENU* convertToSubMenu = new CONDITIONAL_MENU( m_selectionTool );
-    convertToSubMenu->SetTitle( _( "Change To" ) );
-    convertToSubMenu->SetIcon( BITMAPS::right );
-    selToolMenu.AddMenu( convertToSubMenu,             toChangeCondition, 200 );
-
-    convertToSubMenu->AddItem( EE_ACTIONS::toLabel,    toLabelCondition, 200 );
-    convertToSubMenu->AddItem( EE_ACTIONS::toCLabel,   toCLabelCondition, 200 );
-    convertToSubMenu->AddItem( EE_ACTIONS::toHLabel,   toHLabelCondition, 200 );
-    convertToSubMenu->AddItem( EE_ACTIONS::toGLabel,   toGLabelCondition, 200 );
-    convertToSubMenu->AddItem( EE_ACTIONS::toText,     toTextCondition, 200 );
-    convertToSubMenu->AddItem( EE_ACTIONS::toTextBox,  toTextBoxCondition, 200 );
+    selToolMenu.AddMenu( makeConvertToMenu(),          toChangeCondition, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
 
