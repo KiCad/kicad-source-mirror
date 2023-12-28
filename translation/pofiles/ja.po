@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-11 23:54+0000\n"
+"PO-Revision-Date: 2023-12-28 12:05+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -17801,7 +17801,7 @@ msgstr "部品表を生成..."
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate a bill of materials for the current schematic"
-msgstr "現在の回路図から部品表 (Bill Of Materials)を作成"
+msgstr "現在の回路図から部品表を作成"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Export Symbols to Library..."
@@ -39801,7 +39801,7 @@ msgstr "差動ペア配線の配線長を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "差動ペアの遅延(スキュー)調整"
+msgstr "差動ペアの遅延(スキュー)を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
