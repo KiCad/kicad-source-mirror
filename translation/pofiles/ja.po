@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-28 08:09+0000\n"
+"PO-Revision-Date: 2023-12-28 12:05+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -4317,9 +4317,8 @@ msgid "Pan left/right:"
 msgstr "左右にパン:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "変更を破棄"
+msgstr "反転"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -4354,9 +4353,8 @@ msgid "General"
 msgstr "一般設定"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "起動時にパッケージの更新を確認"
+msgstr "起動時にKiCadの更新を確認"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4374,10 +4372,8 @@ msgid "Library package handling"
 msgstr "ライブラリ パッケージの取り扱い"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr ""
-"インストールしたライブラリを自動的にグローバル ライブラリ テーブルに追加"
+msgstr "インストールしたライブラリを自動的にグローバル ライブラリ テーブルに追加"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
 msgid "Automatically remove uninstalled libraries"
@@ -4997,9 +4993,8 @@ msgid "Drawing Sheet Editor"
 msgstr "図面シート エディター"
 
 #: common/eda_base_frame.cpp:1207
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "テーブルの更新をキャンセル"
+msgstr "パッケージと更新"
 
 #: common/eda_base_frame.cpp:1293
 #, c-format
@@ -8103,9 +8098,8 @@ msgstr ""
 "さないコンピューター向け）"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "表示"
+msgstr "グリッドの表示"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -8134,7 +8128,6 @@ msgid "Grid thickness:"
 msgstr "グリッド線幅:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
 msgstr "最小グリッド間隔:"
 
@@ -10003,9 +9996,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "回路図の設定... ダイアログを開く"
 
 #: eeschema/dialogs/dialog_erc.cpp:642
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "最小グリッド間隔:"
+msgstr "接続グリッドの間隔を編集..."
 
 #: eeschema/dialogs/dialog_erc.cpp:735
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -11903,9 +11895,8 @@ msgid "PDF Options"
 msgstr "PDF オプション"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "製造用ガーバーを生成"
+msgstr "プロパティのポップアップを生成"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -12067,9 +12058,8 @@ msgstr "ネットクラス"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
-#, fuzzy
 msgid "BOM Presets"
-msgstr "プリセット"
+msgstr "BOMプリセット"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
 #, fuzzy
@@ -12560,9 +12550,8 @@ msgid "Max time step:"
 msgstr "最大時間ステップ:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:301
-#, fuzzy
 msgid "(optional; default min{tstep, (tstop-tstart)/50})"
-msgstr "(オプション; デフォルト 0)"
+msgstr "(オプション; デフォルトは最小{tstep, (tstop-tstart)/50))"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:305
 msgid "Use initial conditions"
@@ -12573,9 +12562,8 @@ msgid "Input signals:"
 msgstr "入力信号:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "DRC 実行前にすべてのゾーンを塗り直す"
+msgstr "FFTを実行前に入力を線形化する"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 msgid "Measured node:"
@@ -12639,9 +12627,8 @@ msgid "Find:"
 msgstr "検索:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles and Zeros"
-msgstr "極零点"
+msgstr "極と零点"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles"
@@ -12690,9 +12677,9 @@ msgstr "SPICE コマンド"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:686
 #: eeschema/dialogs/dialog_sim_command_base.cpp:725
 #: eeschema/dialogs/dialog_sim_command_base.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed %s scale"
-msgstr "フィールド %s (%s)"
+msgstr "%s の拡大率を固定"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
@@ -13198,14 +13185,12 @@ msgid "Scope:"
 msgstr "スコープ:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Entire project"
-msgstr "プロジェクトを解凍"
+msgstr "プロジェクト全体"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
-#, fuzzy
 msgid "Recursive"
-msgstr "再帰レベル"
+msgstr "再帰"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
 msgid "Cross-probe action:"
@@ -13235,9 +13220,8 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimeter:"
-msgstr "開始値:"
+msgstr "文字列区切り文字:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
@@ -13812,9 +13796,8 @@ msgid "Cross-probing"
 msgstr "クロスプローブ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
-#, fuzzy
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "選択したシンボルに対応するフットプリントをハイライト表示"
+msgstr "PCBエディターでの選択に対応するオブジェクトを選択/ハイライトします"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Highlight symbols corresponding to selected footprints"
@@ -13844,9 +13827,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "PCBエディターでハイライトされたトラックのネットをハイライト"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "描画モード:"
+msgstr "線の描画モード:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
@@ -14154,9 +14136,8 @@ msgid "Largest"
 msgstr "最大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "接続文字列:"
+msgstr "接続グリッド:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14974,9 +14955,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "与えられたシートの中でシート名が重複している"
 
 #: eeschema/erc_item.cpp:51
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "シンボルのピンまたは配線の端がグリッドから外れている"
+msgstr "シンボルのピンまたは配線の端が接続グリッドから外れている"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
@@ -16357,9 +16337,8 @@ msgid "Save Symbol to Schematic"
 msgstr "回路図にシンボルを保存"
 
 #: eeschema/sch_edit_frame.cpp:2217 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "シンボルとライブラリの差分"
+msgstr "ライブラリとシンボルを比較"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -18931,34 +18910,29 @@ msgid "Measure RMS"
 msgstr "二乗平均平方根を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:149
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "計測ツール"
+msgstr "ピーク間を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "計測ツール"
+msgstr "最小周波数を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "計測ツール"
+msgstr "最大周波数を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:158
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "計測ツール"
+msgstr "最小時間を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:159
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "計測ツール"
+msgstr "最大時間を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:162
 #, fuzzy
 msgid "Measure Integral"
-msgstr "距離を計測"
+msgstr "積分を計測"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
@@ -18981,9 +18955,8 @@ msgid "Fourier Analyses of Multiple Signals"
 msgstr "複数の信号のフーリエ解析"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "信号周波数:"
+msgstr "基本周波数:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
 #, c-format
@@ -18991,14 +18964,12 @@ msgid "Format %s..."
 msgstr "フォーマット %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:398
-#, fuzzy
 msgid "Format Value..."
-msgstr "値を編集..."
+msgstr "値をフォーマット..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:401
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "セグメントを削除"
+msgstr "計測を削除"
 
 #: eeschema/sim/simulator_frame_ui.cpp:582
 #: eeschema/sim/simulator_frame_ui.cpp:964
@@ -19095,9 +19066,8 @@ msgid "DC Operating Point"
 msgstr "DC動作点"
 
 #: eeschema/sim/spice_simulator.cpp:58
-#, fuzzy
 msgid "Small-Signal Analysis"
-msgstr "過渡応答解析"
+msgstr "小信号解析"
 
 #: eeschema/sim/spice_simulator.cpp:59
 msgid "DC Sweep Analysis"
@@ -19118,7 +19088,7 @@ msgstr "ノイズ解析"
 #: eeschema/sim/spice_simulator.cpp:63
 #, fuzzy
 msgid "Pole-Zero Analysis"
-msgstr "極零点"
+msgstr "極零点解析"
 
 #: eeschema/sim/spice_simulator.cpp:64
 #, fuzzy
@@ -19131,14 +19101,12 @@ msgid "Transfer Function Analysis"
 msgstr "伝達関数"
 
 #: eeschema/sim/spice_simulator.cpp:66
-#, fuzzy
 msgid "S-Parameter Analysis"
-msgstr "過渡応答解析"
+msgstr "S-パラメーター解析"
 
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Frequency Content Analysis"
-msgstr "入力信号の周波数"
+msgstr "周波数成分解析"
 
 #: eeschema/sim/spice_value.cpp:378
 msgid "Please, fill required fields"
@@ -20955,36 +20923,31 @@ msgstr ""
 "ポート"
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "部品表を生成 (&M)..."
+msgstr "部品表を生成..."
 
 #: eeschema/tools/ee_actions.cpp:1052
 msgid "Generate a bill of materials for the current schematic"
-msgstr "現在の回路図から部品表 (Bill Of Materials)を作成"
+msgstr "現在の回路図から部品表を作成"
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "部品表を生成 (&M)..."
+msgstr "古い形式の部品表を生成..."
 
 #: eeschema/tools/ee_actions.cpp:1059
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "現在の回路図から部品表 (Bill Of Materials)を作成"
+msgstr "現在の回路図から部品表を作成 (古い形式のジェネレーター)"
 
 #: eeschema/tools/ee_actions.cpp:1065
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "部品表を生成 (&M)..."
+msgstr "部品表を生成(外部)..."
 
 #: eeschema/tools/ee_actions.cpp:1066
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "現在の回路図から部品表 (Bill Of Materials)を作成"
+msgstr "外部のジェネレーターを使って現在の回路図から部品表を作成"
 
 #: eeschema/tools/ee_actions.cpp:1072
 msgid "Export Symbols to Library..."
@@ -21325,14 +21288,12 @@ msgid "Draw plots with a black background"
 msgstr "背景色を黒にして描画"
 
 #: eeschema/tools/ee_actions.cpp:1445
-#, fuzzy
 msgid "Edit Analysis Tab..."
-msgstr "グローバル ラベルを編集..."
+msgstr "解析タブを編集..."
 
 #: eeschema/tools/ee_actions.cpp:1446
-#, fuzzy
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "現在のプロットのシミュレーション コマンドを編集"
+msgstr "現在の解析タブのSPICEコマンドとプロット設定を編集"
 
 #: eeschema/tools/ee_actions.cpp:1453
 msgid "Run Simulation"
@@ -21439,9 +21400,8 @@ msgstr "レイヤーが未選択です。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:341
 #: pcbnew/tools/board_inspection_tool.cpp:1548
-#, fuzzy
 msgid "Visual"
-msgstr "可視部分"
+msgstr "外観"
 
 #: eeschema/tools/ee_inspection_tool.cpp:432
 msgid "No datasheet defined."
@@ -21556,9 +21516,8 @@ msgstr "ピンのプロパティ"
 
 #: eeschema/tools/sch_edit_tool.cpp:459 eeschema/tools/sch_edit_tool.cpp:551
 #: eeschema/tools/sch_edit_tool.cpp:636
-#, fuzzy
 msgid "Transform Selection"
-msgstr "選択対象から作成"
+msgstr "選択対象を変形"
 
 #: eeschema/tools/sch_edit_tool.cpp:519 eeschema/tools/sch_edit_tool.cpp:606
 #: eeschema/tools/sch_edit_tool.cpp:692
@@ -22226,7 +22185,6 @@ msgstr ""
 "せん。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
-#, fuzzy
 msgid "File Units"
 msgstr "ファイルの単位"
 
@@ -22239,9 +22197,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr "後続ゼロなし（LZ形式）"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:39
-#, fuzzy
 msgid "Zero Format"
-msgstr "ゼロの扱い"
+msgstr "ゼロの形式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:41
 msgid ""
@@ -23736,9 +23693,8 @@ msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr ""
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "部品表を生成 (&M)"
+msgstr "部品表(BOM)を生成"
 
 #: kicad/cli/command_sch_export_bom.cpp:177
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -23765,9 +23721,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "カラー テーマを使用する (回路図エディターの設定でのデフォルト)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "製造用ガーバーを生成"
+msgstr "PDFでプロパティのポップアップを生成しない"
 
 #: kicad/cli/command_sch_export_plot.cpp:90
 msgid "Avoid setting a background color (regardless of theme)"
@@ -23872,9 +23827,8 @@ msgid "Project Template Selector"
 msgstr "プロジェクト テンプレートの選択"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
-#, fuzzy
 msgid "Would you like to automatically check for updates on startup?"
-msgstr "起動時に自動的プラグインの更新を確認しますか？"
+msgstr "起動時に自動でプラグインの更新を確認しますか？"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
@@ -23883,9 +23837,8 @@ msgid "KiCad"
 msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
-#, fuzzy
 msgid "Check for Updates"
-msgstr "更新を確認する"
+msgstr "更新を確認"
 
 #: kicad/dialogs/dialog_update_notice.cpp:38
 #, c-format
@@ -25090,14 +25043,12 @@ msgid "Create new project from template"
 msgstr "テンプレートから新規プロジェクトを作成"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
-#, fuzzy
 msgid "Clone Project from Repository..."
-msgstr "テンプレートから新規プロジェクトを作成..."
+msgstr "リポジトリからプロジェクトをクローン..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
-#, fuzzy
 msgid "Clone a project from an existing repository"
-msgstr "既存のフットプリント ファイルからフットプリントをインポート"
+msgstr "既存のリポジトリからプロジェクトをクローンする"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
 msgid "Open Demo Project..."
@@ -31474,14 +31425,12 @@ msgid "Sheet: "
 msgstr "シート: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "エイリアスの説明:"
+msgstr "ライブラリとの関連付け"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "回路図エディター"
+msgstr "回路図との関連付け"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
 #, fuzzy
@@ -34200,14 +34149,12 @@ msgstr ""
 "不明な場合は 4を選択して下さい。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:410
-#, fuzzy
 msgid "Generate property popups for front footprints"
-msgstr "現在のフットプリントを削除"
+msgstr "表面のフットプリントのプロパティのポップアップを生成"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:413
-#, fuzzy
 msgid "Generate property popups for back footprints"
-msgstr "製造用ガーバーを生成"
+msgstr "裏面のフットプリントのプロパティのポップアップを生成"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:441
 msgid "Run DRC..."
@@ -35109,9 +35056,8 @@ msgid "Keep endpoints or direction of starting point"
 msgstr "終点もしくは始点の方向を固定"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
-#, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "配線のマウス ドラッグ動作:"
+msgstr "配線のマウスドラッグ モード:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
@@ -35122,7 +35068,6 @@ msgid "Drag (free angle)"
 msgstr "ドラッグ (自由角度)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid "Flip board items left/right (default is top/bottom)"
 msgstr "基板アイテムを左右に反転 (デフォルトは上下)"
 
@@ -35220,7 +35165,6 @@ msgid "Show courtyard collisions when moving/dragging"
 msgstr "移動/ドラッグ時にコートヤードの衝突を表示する"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
-#, fuzzy
 msgid "Automatically refill zones"
 msgstr "ゾーンを自動的に塗り直す"
 
@@ -35437,14 +35381,12 @@ msgid "Show pad clearance"
 msgstr "パッドのクリアランスを表示"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
-#, fuzzy
 msgid "Show all fields when parent footprint is selected"
-msgstr "フットプリント選択時のシンボルをハイライト表示"
+msgstr "親のフットプリントが選択されている場合にすべてのフィールドを表示"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
-#, fuzzy
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "回路図エディターで対応するアイテムを選択"
+msgstr "回路図エディターでの選択に対応するオブジェクトを選択/ハイライトします"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:132
 msgid "Highlight footprints corresponding to selected symbols"
@@ -35476,7 +35418,6 @@ msgid "Icon"
 msgstr "アイコン"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show Button"
 msgstr "ボタンを表示"
 
@@ -37489,7 +37430,7 @@ msgstr "ティアドロップが2つの配線セグメントを跨ぐことを�
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:199
 #, fuzzy
 msgid "Default properties for rectangular shapes:"
-msgstr "新規グラフィック アイテムのデフォルト値:"
+msgstr "矩形のデフォルト値:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:379
 msgid "Properties for track-to-track teardrops:"
@@ -37514,9 +37455,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphics and text:"
-msgstr "新規グラフィック アイテムのデフォルト値:"
+msgstr "新規グラフィック アイテムとテキストのデフォルト値:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
@@ -40215,9 +40155,8 @@ msgid "Add Microwave Shape"
 msgstr "マイクロ波用の形状を追加"
 
 #: pcbnew/menubar_pcb_editor.cpp:318
-#, fuzzy
 msgid "Add Dimension"
-msgstr "寸法線"
+msgstr "寸法線を追加"
 
 #: pcbnew/menubar_pcb_editor.cpp:339
 msgid "Auto-Place Footprints"
@@ -41033,9 +40972,8 @@ msgid "Constraints Report"
 msgstr "制約レポート"
 
 #: pcbnew/pcb_edit_frame.cpp:2530 pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Compare Footprint with Library"
-msgstr "フットプリントとライブラリの差分"
+msgstr "ライブラリとフットプリントを比較"
 
 #: pcbnew/pcb_field.cpp:93
 msgid "User Field"
@@ -45148,9 +45086,8 @@ msgid "Edit Text and graphics properties globally across board"
 msgstr "基板全般で使用するテキストと図形のプロパティを編集"
 
 #: pcbnew/tools/pcb_actions.cpp:845
-#, fuzzy
 msgid "Edit Teardrops..."
-msgstr "ティアドロップを追加…"
+msgstr "ティアドロップを編集…"
 
 #: pcbnew/tools/pcb_actions.cpp:846
 #, fuzzy
@@ -45457,9 +45394,8 @@ msgid "Place origin point for drill files and component placement files"
 msgstr "ドリル ファイルと部品配置ファイルへ原点位置を配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1161
-#, fuzzy
 msgid "Reset Drill Origin"
-msgstr "グリッド原点をリセット"
+msgstr "ドリル原点をリセット"
 
 #: pcbnew/tools/pcb_actions.cpp:1168
 msgid "Toggle Lock"
@@ -46043,14 +45979,12 @@ msgid "Show differences between board footprint and its library equivalent"
 msgstr "フットプリントがライブラリのものと等しいかをチェック"
 
 #: pcbnew/tools/pcb_actions.cpp:1893
-#, fuzzy
 msgid "Show Footprint Associations"
-msgstr "フットプリントの関連付けをエクスポート"
+msgstr "フットプリントの関連付けを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Show footprint library and schematic symbol associations"
-msgstr "回路図シンボルのキーワードでフットプリント リストを絞込み"
+msgstr "フットプリントライブラリと回路図のシンボルの関連付けを表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
 msgid "Geographical Reannotate..."
@@ -46377,7 +46311,6 @@ msgid "Change active layer pair for routing"
 msgstr "配線時のアクティブなレイヤー ペアを変更"
 
 #: pcbnew/tools/pcb_actions.cpp:2306
-#, fuzzy
 msgid "Tune Length"
 msgstr "配線長を調整"
 
@@ -46387,13 +46320,12 @@ msgid "Tune length of a single track or differential pair"
 msgstr "差動ペア配線の配線長を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2318
-#, fuzzy
 msgid "Tune Skew of a Differential Pair"
-msgstr "差動ペアの遅延(スキュー)調整"
+msgstr "差動ペアの遅延(スキュー)を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2319
 msgid "Tune skew of a differential pair"
-msgstr "差動ペアの遅延(スキュー)調整"
+msgstr "差動ペアの遅延(スキュー)を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2334
 msgid "Walks the current track back one segment."
