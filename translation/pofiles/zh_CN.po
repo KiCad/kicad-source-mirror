@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-26 21:27+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2023-12-28 08:09+0000\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -377,9 +377,8 @@ msgid "Set Pivot"
 msgstr "设置旋转中心点"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "中心轴旋转 (点击鼠标中键)"
+msgstr "放置 PCB 板旋转中心 (点击鼠标中键)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
@@ -624,21 +623,19 @@ msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show front copper / surface finish color"
-msgstr "显示铜/表面处理颜色"
+msgstr "显示顶层铜 / 表面处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "铜/表面处理颜色..."
+msgstr "显示底层铜 / 表面处理颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "Adhesive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
@@ -646,9 +643,8 @@ msgid "Show adhesive"
 msgstr "显示胶粘层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "阻焊："
+msgstr "阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
@@ -660,78 +656,68 @@ msgid "F.Silkscreen"
 msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "顶层丝印"
+msgstr "显示顶层丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
 msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "底层丝印"
+msgstr "显示底层丝印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "顶层阻焊"
+msgstr "显示顶层阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "底层阻焊"
+msgstr "显示底层阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "User.Drawings"
-msgstr "图形"
+msgstr "User.Drawings"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "显示注释和绘图层"
+msgstr "显示用户绘图层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "显示阻焊层"
+msgstr "显示用户注释层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "显示 ECO 层"
+msgstr "显示用户 ECO1 层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "显示 ECO 层"
+msgstr "显示用户 ECO2 层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "通孔焊盘"
+msgstr "通孔模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "SMD Models"
@@ -739,11 +725,11 @@ msgstr "SMD模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "Virtual Models"
-msgstr "虚拟 3D 模型"
+msgstr "虚拟模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Models not in POS File"
-msgstr "模型不在文件(.pos)中"
+msgstr "不在坐标文件(.pos)中的模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Models marked DNP"
@@ -3367,7 +3353,7 @@ msgstr "作者"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
-msgstr ""
+msgstr "提交"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
 #, fuzzy
@@ -17064,22 +17050,22 @@ msgstr "HTTP 库设置文件 %s 缺少 API 版本号！"
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
-msgstr ""
+msgstr "HTTP库的设置文件 %s 使用 %s 的 API 版本，但 KiCad 使用 %s 的版本"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:247
 #, c-format
 msgid "HTTP library settings file %s is missing the root URL!"
-msgstr ""
+msgstr "HTTP库设置文件 %s 缺少 root URL！"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:259
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
-msgstr ""
+msgstr "HTTP库设置文件 %s 存在无效的库类型"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:306
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
-msgstr ""
+msgstr "无法连接到 %s。错误：%s"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.h:51
 #, fuzzy
@@ -17322,54 +17308,57 @@ msgstr "Altium 原理图文件"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:220
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
-msgstr ""
+msgstr "文件 '%s' 已忽略。使用之前找到的文件 '%s' 替代。"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:360
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "第 %d 行需要整型（文件 %s ）"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:383
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "第 %d 行缺少预期数据（文件 %s）"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:389
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "第 %d 行找到额外数据（文件 %s）"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:415
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr ""
+msgstr "需要 0,1,2,3 或 4"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "需要 NORMAL 或 WIDE"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:447
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr ""
+msgstr "需要 I, O, B, IN, OUT 或 BIDIR"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "需要 R0, R90, R18, R270, M0, M90, M180 或 M270"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:490
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
+"需要 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP 或 "
+"VBOTTOM"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:512
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
+"需要 NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT 或 VRIGHT"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "需要 CELL 或 BLOCK"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:545
 #, fuzzy, c-format
@@ -18604,7 +18593,7 @@ msgstr "无效的引脚名定义"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "需要测量格式定义"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
 #, c-format
@@ -18759,11 +18748,11 @@ msgstr "幅度："
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "噪声 (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "噪声 (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 #, fuzzy
@@ -18842,7 +18831,7 @@ msgstr ""
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
-msgstr ""
+msgstr "您必须先运行 TRAN 仿真； 其结果将用于快速傅里叶变换。"
 
 #: eeschema/sim/simulator_frame.cpp:410
 msgid ""
@@ -18902,7 +18891,7 @@ msgstr "测量积分"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "进行傅立叶分析..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:731
@@ -18919,7 +18908,7 @@ msgstr "瞬态分析"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "多信号的傅立叶分析"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
 #, fuzzy
@@ -18943,7 +18932,7 @@ msgstr "删除测量"
 #: eeschema/sim/simulator_frame_ui.cpp:964
 #, c-format
 msgid "Analysis %u - "
-msgstr ""
+msgstr "分析 %u - "
 
 #: eeschema/sim/simulator_frame_ui.cpp:589
 #: eeschema/sim/simulator_frame_ui.cpp:596
@@ -19047,7 +19036,7 @@ msgstr "瞬态分析"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr ""
+msgstr "小信号失真分析"
 
 #: eeschema/sim/spice_simulator.cpp:62
 #, fuzzy
@@ -19131,6 +19120,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"SPICE 函数:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -19827,11 +19851,11 @@ msgstr "用户取消了封装重新链接。"
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "true"
-msgstr ""
+msgstr "true"
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "false"
-msgstr ""
+msgstr "false"
 
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
@@ -19872,7 +19896,7 @@ msgstr "将 '%s' 标签更改为 '%s'。"
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "添加字段 '%s' 值为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:563
 #, fuzzy, c-format
@@ -19913,7 +19937,7 @@ msgstr "检查电路板封装与其对应库的差异"
 
 #: eeschema/tools/ee_actions.cpp:71
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "显示运行 SPICE 或 IBIS 仿真的仿真窗口。"
 
 #: eeschema/tools/ee_actions.cpp:80
 msgid "Opens the datasheet in a browser"
@@ -20728,7 +20752,7 @@ msgstr "不填充"
 
 #: eeschema/tools/ee_actions.cpp:943
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "设置“不装配(DNP)”属性"
 
 #: eeschema/tools/ee_actions.cpp:948
 #, fuzzy
@@ -20737,7 +20761,7 @@ msgstr "不填充"
 
 #: eeschema/tools/ee_actions.cpp:949
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "清除“不装配(DNP)”属性"
 
 #: eeschema/tools/ee_actions.cpp:954
 #, fuzzy
@@ -21183,7 +21207,7 @@ msgstr "将当前图纸的副本保存到其他位置或以另一个名称进行
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "新的分析选项卡..."
 
 #: eeschema/tools/ee_actions.cpp:1393
 msgid "Open Workbook..."
@@ -21293,7 +21317,7 @@ msgstr "符号"
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Summary"
-msgstr ""
+msgstr "总结"
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
 #, fuzzy
@@ -22992,7 +23016,7 @@ msgstr "按文件扩展名对层进行排序"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:184
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "图层显示参数： 偏移和旋转"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:189
 msgid "Move Current Layer Up"
@@ -23088,7 +23112,7 @@ msgstr "输出文件夹："
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
-msgstr ""
+msgstr "图框(Drawing Sheet)的路径，使用时会覆盖所有项目中已定义的页面"
 
 #: kicad/cli/command.cpp:176
 msgid ""
@@ -23096,6 +23120,8 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"覆盖或添加项目变量，可多次使用以声明多个变量。\n"
+"使用格式为 '--define-var key=value' 或 '-D key=value'"
 
 #: kicad/cli/command.h:32
 #, fuzzy
@@ -23147,11 +23173,11 @@ msgstr "封装库不存在或无法访问\n"
 
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
-msgstr ""
+msgstr "在 PCB 上运行设计规则检查 (DRC) 并创建报告"
 
 #: kicad/cli/command_pcb_drc.cpp:50 kicad/cli/command_sch_erc.cpp:49
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "输出文件格式，选项：json、报告"
 
 #: kicad/cli/command_pcb_drc.cpp:54 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -23166,49 +23192,48 @@ msgstr "输出单位，有效选项：mm、in"
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有 DRC 违规行为，这将包含所有严重性级别(Severity)的 DRC 提示"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "报告某一级别的 DRC 违规，可结合错误级别参数(Severity)使用"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有警告级别的 DRC 违规，可结合错误级别参数(Severity)使用"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有排除在外级别的 DRC 违规，可结合错误级别参数(Severity)使用"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr ""
+msgstr "如果存在 DRC 违规，返回非零退出代码"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:214
 #: kicad/cli/command_pcb_export_drill.cpp:150
 #: kicad/cli/command_pcb_export_dxf.cpp:108
 #: kicad/cli/command_pcb_export_pos.cpp:154 kicad/cli/command_sch_erc.cpp:127
 msgid "Invalid units specified\n"
-msgstr "指定的单元无效\n"
+msgstr "指定的单位无效\n"
 
 #: kicad/cli/command_pcb_drc.cpp:153 kicad/cli/command_sch_erc.cpp:142
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "无效的格式\n"
+msgstr "无效的报告格式\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "导出工具（Gerber, 钻孔, 坐标文件等）"
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "输出文件格式，选项：step, glb (二进制 glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:70
 msgid "Overwrite output file"
@@ -23258,7 +23283,7 @@ msgstr "点之间最短相距多少才被视作分开的点"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr ""
+msgstr "不优化 STEP 文件（可写入参数曲线）"
 
 #: kicad/cli/command_pcb_export_3d.cpp:136
 msgid ""
@@ -23275,11 +23300,12 @@ msgstr "输出单位，有效选项：mm、in"
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
-msgstr ""
+msgstr "创建和存储 3D 模型的文件夹名称，如果未指定或为空，模型将嵌入导出的 VRML "
+"主文件中"
 
 #: kicad/cli/command_pcb_export_3d.cpp:152
 msgid "Used with --models-dir to output relative paths in the resulting file"
-msgstr ""
+msgstr "与 --models-dir 一起使用可在生成的文件中输出相对路径"
 
 #: kicad/cli/command_pcb_export_3d.cpp:195
 #, fuzzy
@@ -23384,7 +23410,7 @@ msgstr "Gerber 坐标精度应为 5 或 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "根据图层列表生成 DXF"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -23464,7 +23490,7 @@ msgstr "使用 KiCad gerber 文件扩展"
 msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
-msgstr ""
+msgstr "为 PCB 绘制多个 Gerber，包括使用存储的电路板绘制设置"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:49
 msgid ""
@@ -23561,7 +23587,7 @@ msgstr "指定的侧无效\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "生成指定图层列表的 SVG"
 
 #: kicad/cli/command_pcb_export_svg.cpp:55
 #, fuzzy
@@ -23588,39 +23614,39 @@ msgstr "原理图"
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
-msgstr ""
+msgstr "在原理图上运行电气规则检查 (ERC) 并创建报告"
 
 #: kicad/cli/command_sch_erc.cpp:57
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有 ERC 违规行为，这相当于包含所有级别的错误"
 
 #: kicad/cli/command_sch_erc.cpp:62
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有错误级别的 ERC 违规，可以结合错误级别的参数(Severity)使用"
 
 #: kicad/cli/command_sch_erc.cpp:67
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有警告级别的 ERC 违规，可以结合错误级别的参数(Severity)使用"
 
 #: kicad/cli/command_sch_erc.cpp:72
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "报告所有排除在外级别的 ERC 违规，可以结合错误级别的参数(Severity)使用"
 
 #: kicad/cli/command_sch_erc.cpp:77
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr ""
+msgstr "如果存在违反 ERC 的情况，返回非零退出代码"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "输出工具(netlist, pdf, bom 等)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
 #, fuzzy
@@ -23664,7 +23690,7 @@ msgstr "避免设置背景色（无论什么主题）"
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
-msgstr ""
+msgstr "用逗号分隔的要打印的页码列表，空白或未指定等同于所有页码"
 
 #: kicad/cli/command_sch_export_plot.cpp:103
 #, fuzzy
@@ -23673,17 +23699,17 @@ msgstr "图框尺寸："
 
 #: kicad/cli/command_sch_export_plot.cpp:109
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
-msgstr ""
+msgstr "原点和比例： 0 左下角，1 居中，2 适合页面，3 适合内容"
 
 #: kicad/cli/command_sch_export_plot.cpp:173
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "HPGL 原点选项必须为 0, 1, 2 或 3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
-msgstr ""
+msgstr "在原理图编辑器中使用 Python 脚本导出传统的 BOM XML 格式"
 
 #: kicad/cli/command_sym.h:31
 #, fuzzy
@@ -23779,11 +23805,11 @@ msgstr "检查更新"
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
-msgstr ""
+msgstr "KiCad %s 现已可用（您现在使用的是 %s）。 您想立即下载吗？"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "KiCad 新版本现已推出！"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
 #, fuzzy
@@ -23792,7 +23818,7 @@ msgstr "预期 %s"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
-msgstr ""
+msgstr "稍后提醒我"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 #, fuzzy
@@ -23914,7 +23940,7 @@ msgstr "导入 Eagle 工程文件"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "导入 EasyEDA 标准版备份"
 
 #: kicad/import_project.cpp:149
 #, fuzzy
@@ -23932,7 +23958,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "导出 GLB (binary GLTF)"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
@@ -24039,7 +24065,7 @@ msgstr "导入 EAGLE CAD XML 原理图和电路板"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "EasyEDA (JLCEDA) 标准版备份..."
 
 #: kicad/menubar.cpp:117
 #, fuzzy
@@ -24601,7 +24627,7 @@ msgstr "文件已经成功创建。"
 #: kicad/pcm/pcm_task_manager.cpp:673
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr ""
+msgstr "已初始化 %d 个操作中的 %d 个，但未成功。"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -24744,7 +24770,7 @@ msgstr "移动到垃圾箱"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "将项目添加到版本控制..."
 
 #: kicad/project_tree_pane.cpp:934
 #, fuzzy
@@ -24758,19 +24784,19 @@ msgstr "工程... (&P)"
 
 #: kicad/project_tree_pane.cpp:939 kicad/project_tree_pane.cpp:953
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "将更改提交到本地存储库"
 
 #: kicad/project_tree_pane.cpp:942
 msgid "Push"
-msgstr ""
+msgstr "推送"
 
 #: kicad/project_tree_pane.cpp:943
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "将提交的本地更改推送到远程存储库"
 
 #: kicad/project_tree_pane.cpp:946
 msgid "Pull"
-msgstr ""
+msgstr "拉取"
 
 #: kicad/project_tree_pane.cpp:947
 #, fuzzy
@@ -24808,7 +24834,7 @@ msgstr "移除转角"
 
 #: kicad/project_tree_pane.cpp:981
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "从项目目录中删除所有版本控制文件。"
 
 #: kicad/project_tree_pane.cpp:1039
 #, c-format
@@ -24834,7 +24860,7 @@ msgstr "所选文件无效或可能已损坏！"
 
 #: kicad/project_tree_pane.cpp:1551
 msgid "Failed to initialize git project."
-msgstr ""
+msgstr "未能初始化 git 项目。"
 
 #: kicad/project_tree_pane.cpp:1566
 #, fuzzy
@@ -24889,11 +24915,11 @@ msgstr "未能删除目录 %s"
 
 #: kicad/project_tree_pane.cpp:2143
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "由于提交消息为空而放弃提交。"
 
 #: kicad/project_tree_pane.cpp:2149
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "由于选择空文件而放弃提交。"
 
 #: kicad/project_tree_pane.cpp:2155
 #, fuzzy, c-format
@@ -25158,7 +25184,7 @@ msgstr "更新 PCB"
 
 #: kicad/update_manager.cpp:173
 msgid "Requesting update info"
-msgstr ""
+msgstr "请求更新信息"
 
 #: kicad/update_manager.cpp:246
 #, fuzzy, c-format
@@ -26080,31 +26106,31 @@ msgstr "乘数"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:19
 msgid "IPC 2221"
-msgstr ""
+msgstr "IPC 2221"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:21
 msgid "IEC 60664"
-msgstr ""
+msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
-msgstr ""
+msgstr "低压供电系统内设备的绝缘材料"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
-msgstr ""
+msgstr "确定可承受的瞬态冲击电压"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
-msgstr ""
+msgstr "额定电压（RMS 或 DC）："
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr ""
+msgstr "主电源电压"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
-msgstr ""
+msgstr "过电压类别："
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
 msgid ""
@@ -26120,22 +26146,30 @@ msgid ""
 "OVC IV: Equipments at the origin of the installation (eg: electricity "
 "meters, primary overcurrent protection devices)"
 msgstr ""
+"OVC I： 不直接连接主电源的设备\n"
+"\n"
+"OVC II： 由固定装置供电的耗能设备。(例如：电器、便携式工具、家用负载）。如果"
+"有可靠性和可用性要求，则适用 OVCIII\n"
+"\n"
+"OVC III：有可靠性和可用性要求的固定安装设备。(例如：电气开关、工业用设备）\n"
+"\n"
+"OVC IV：安装地点的设备（如：电表、一次过流保护装置）"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
-msgstr ""
+msgstr "OVC I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC II"
-msgstr ""
+msgstr "OVC II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC III"
-msgstr ""
+msgstr "OVC III"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC IV"
-msgstr ""
+msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
 #, fuzzy
@@ -26147,7 +26181,8 @@ msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value whithout a breakdown of insulation. This impulse "
 "voltage is a standard 1.2/50µs wave"
-msgstr ""
+msgstr "根据额定电压和过压类别，设备应能承受该值而不会发生绝缘击穿。"
+"该脉冲电压为标准的 1.2/50µs 波形"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -26158,7 +26193,7 @@ msgstr "V"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr ""
+msgstr "计算间隙和爬电距离"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 #, fuzzy
@@ -26167,7 +26202,7 @@ msgstr "电压"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
-msgstr ""
+msgstr "预期有效值电压(RMS)。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
 #, fuzzy
@@ -26186,6 +26221,14 @@ msgid ""
 "\n"
 "Events that last for a few milliseconds or less."
 msgstr ""
+"由于以下原因造成的瞬态过电压\n"
+"\n"
+"- 由主电源传输的大气干扰（如雷击）\n"
+"- 主电源中的开关负载\n"
+"- 外部电路\n"
+"- 内部产生\n"
+"\n"
+"持续几毫秒或更短时间的事件。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:149
 #, fuzzy
@@ -26200,6 +26243,11 @@ msgid ""
 "\n"
 "Events of relatively long duration."
 msgstr ""
+"- 稳态电压值\n"
+"- 暂时过电压\n"
+"- 反复出现的峰值电压\n"
+"\n"
+"持续时间相对较长的事件。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
 #, fuzzy
@@ -26217,6 +26265,12 @@ msgid ""
 "equivalent to a double insulation. ( which is two separate basic "
 "insulations, in case one of them fails  )."
 msgstr ""
+"功能性：绝缘仅为设备运行所必需\n"
+"\n"
+"基本：危险带电部件的绝缘。\n"
+"\n"
+"加强型：单绝缘，提供相当于双绝缘的保护程度。 "
+"（这是两个独立的基本绝缘，以防其中之一失效）。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 #, fuzzy
@@ -26225,11 +26279,11 @@ msgstr "结点"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
-msgstr ""
+msgstr "强化"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
 msgid "Pollution Degree:"
-msgstr ""
+msgstr "污染程度："
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
 msgid ""
@@ -26242,6 +26296,13 @@ msgid ""
 "\n"
 "PD4: Continous conductivity occurs due to conductive dust, rain, ..."
 msgstr ""
+"PD1：无污染或仅发生干燥、非导电污染\n"
+"\n"
+"PD2：仅发生非导电污染。 可能会发生凝结。\n"
+"\n"
+"PD3：发生导电污染，或发生非导电污染，由于预期的凝结而变成导电污染。\n"
+"\n"
+"PD4：由于导电灰尘、雨水等而发生连续导电。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
 #, fuzzy
@@ -26278,6 +26339,12 @@ msgid ""
 "Material group IIIa: 175 <= CTI < 400\n"
 "Material group IIIb: 100 <= CTI < 175"
 msgstr ""
+"CTI 高的材料隔离效果更好。\n"
+"\n"
+"材料组 I：600 <= CTI\n"
+"第二组材料：400 <= CTI < 600\n"
+"材料组 IIIa：175 <= CTI < 400\n"
+"材料组 IIIb：100 <= CTI < 175"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 #, fuzzy
@@ -26286,11 +26353,11 @@ msgstr "I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
 #, fuzzy
@@ -26301,7 +26368,7 @@ msgstr "普通材料："
 msgid ""
 "Printed wiring material can benefit of a creepage distance reduction for RMS "
 "voltages lower than 1000V"
-msgstr ""
+msgstr "当有效值电压(RMS)低于 1000V 时，印刷线路材料可从减少爬电距离中受益"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:221
 #, fuzzy
@@ -26316,6 +26383,9 @@ msgid ""
 "A coating that could easily delaminate in the lifespan of the product (such "
 "as a soldermask) should not be considered for a reduction."
 msgstr ""
+"涂层和灌封可减少间隙和爬电距离。计算器不支持。\n"
+"\n"
+"在产品寿命期内容易脱层的涂层（如阻焊层）不应考虑减小间隙。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
@@ -26324,7 +26394,7 @@ msgstr "间隙："
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 msgid "Creepage:"
-msgstr ""
+msgstr "爬电："
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
 #, fuzzy
@@ -26335,13 +26405,15 @@ msgstr "线宽："
 msgid ""
 "A groove which width is smaller has no effect on the path considered for "
 "creepage"
-msgstr ""
+msgstr "宽度较小的凹槽对爬电路径没有影响"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:313
 msgid ""
 "solid: clearance\n"
 "dashed: creepage"
 msgstr ""
+"实线：间隙\n"
+"虚线：爬电距离"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
 msgid "Voltage > 500 V:"
@@ -26441,11 +26513,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
-msgstr ""
+msgstr "E24,E48,E96"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:52
 msgid "E1,E3,E6,E12"
-msgstr ""
+msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -27294,6 +27366,21 @@ msgid ""
 "\n"
 "The value 0 is a special case and is not present in any series."
 msgstr ""
+"无源元件通常使用与其精度相适应的 E 系列值。\n"
+"电容器通常使用 E12 值。10% 和 5% 电阻器通常使用 E24 值。1%\n"
+"电阻器使用 E96 值。其他系列不常用。\n"
+"\n"
+"要选择一个值，请从计算出的目标值开始，然后四舍五入到 2 位有效数字（E24 "
+"或以下），或 3 位有效数字（E48 和以下）。\n"
+"对于 E24 或以下，四舍五入到两位有效数字；对于 E48 "
+"及以上，四舍五入到三位有效数字。\n"
+"然后从表中找出与剩余有效数字最接近的值，并用它代替这些数字。\n"
+"然后从表中找出与剩余有效数字最接近的值，并用它代替这些数字。\n"
+"\n"
+"例如，如果计算出的目标值是 16,834.2Ω ，则四舍五入为 16,800Ω。\n"
+"与 168 最接近的数值是 169，选定的 E96 值是 16.9kΩ。\n"
+"\n"
+"数值 0 是一种特殊情况，在任何系列中都不存在。"
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -27354,6 +27441,14 @@ msgid ""
 "- Insulations trough liquids, compressed air or gases other than air are not "
 "in the scope of IEC60664"
 msgstr ""
+"IEC60664-1 的目标是为连接主电源的产品提供绝缘设计指导。\n"
+"\n"
+"然而，本计算器并未涵盖某些情况：\n"
+"\n"
+"- 频率高于 30kHz 时，介电性能会降低。IEC60664-4 涵盖了这些情况\n"
+"- 在使用保形涂层或灌封层以防止污染时，如果符合 IEC60664-3 "
+"规定的所有条件，则可减少间隙和爬电距离。阻焊层通常不被视为保形涂层\n"
+"- 通过液体、压缩空气或空气以外的气体进行的绝缘不在 IEC60664 的适用范围内"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 #, fuzzy
@@ -28532,22 +28627,22 @@ msgstr "(不支持多电路板轮廓)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:652
 #, c-format
 msgid "(Rectangle has null or very small size: %d nm)"
-msgstr ""
+msgstr "(矩形的尺寸为空或非常小：%d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:669
 #, c-format
 msgid "(Circle has null or very small radius: %d nm)"
-msgstr ""
+msgstr "(圆的半径为空或非常小：%d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:689
 #, c-format
 msgid "(Segment has null or very small length: %d nm)"
-msgstr ""
+msgstr "(线段长度为空或非常小：%d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:712
 #, c-format
 msgid "(Arc has null or very small size: %d nm)"
-msgstr ""
+msgstr "(弧的尺寸为空或非常小：%d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:192
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/pcb_edit_frame.cpp:2404
@@ -29320,7 +29415,7 @@ msgstr "（不会考虑合并出现在 Net Tie 焊盘组中的焊盘。）"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "修复电路板板框中的不连续"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -29809,7 +29904,7 @@ msgstr "带状线和顶部金属间的距离"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "Grid Spacing Modifiers"
-msgstr ""
+msgstr "网格间距修改器"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal offset:"
@@ -29817,7 +29912,7 @@ msgstr "水平偏移："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Offset added to the next row position."
-msgstr ""
+msgstr "下一行位置的偏移量。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Vertical offset:"
@@ -29825,7 +29920,7 @@ msgstr "垂直偏移："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Offset added to the next column position"
-msgstr ""
+msgstr "下一列位置的偏移量"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
 #, fuzzy
@@ -29927,6 +30022,8 @@ msgid ""
 "This is the position of the selected item,\n"
 "or the position of the group to duplicate"
 msgstr ""
+"这是需要复制的选中对象\n"
+"或组的位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
 #, fuzzy
@@ -29958,6 +30055,8 @@ msgid ""
 "This is the position of the center of the circle\n"
 "defining the circular area to create"
 msgstr ""
+"这是圆心的位置\n"
+"定义要创建的圆形区域"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
 #, fuzzy
@@ -29974,6 +30073,8 @@ msgid ""
 "Array radius,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"阵列半径、\n"
+"从参考点位置和阵列中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
 #, fuzzy
@@ -29985,6 +30086,8 @@ msgid ""
 "Array angle,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"阵列角度、\n"
+"从参考点位置和阵列中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:400
 #, fuzzy
@@ -30618,11 +30721,11 @@ msgstr "从库中更新封装"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:71
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr ""
+msgstr "IPC-2581 文件 (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:72
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr ""
+msgstr "IPC-2581 压缩文件 (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:74
 #, fuzzy
@@ -30652,7 +30755,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:63
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:68
 msgid "The number of values following the decimal separator"
-msgstr ""
+msgstr "小数分隔符后的数值个数"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
 #, fuzzy
@@ -30666,7 +30769,7 @@ msgstr "强制 A4 输出"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
-msgstr ""
+msgstr "将输出压缩为 'zip' 文件"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
 #, fuzzy
@@ -30684,6 +30787,8 @@ msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
 msgstr ""
+"设计时内部使用的 Part ID 编号。\n"
+"该编号必须是每个器件独有的。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
 #, fuzzy
@@ -30714,11 +30819,11 @@ msgstr "选择制造商"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "分销商元件编号:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr ""
+msgstr "包含分销商零件编号的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 #, fuzzy
@@ -30798,7 +30903,7 @@ msgstr "STEP 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
 msgid "Binary GTLF files"
-msgstr ""
+msgstr "二进制 GTLF 文件"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy
@@ -30898,7 +31003,8 @@ msgstr "STEP 文件"
 msgid ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
-msgstr ""
+msgstr "禁止写入参数曲线。可优化文件大小和写入/读取时间，但可能会降低与其他软件的兼容"
+"性。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
 #, fuzzy
@@ -30907,7 +31013,7 @@ msgstr "导出布线(耗时)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
-msgstr ""
+msgstr "将相交的几何体组合成一个形状。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
 #, fuzzy
@@ -30918,7 +31024,7 @@ msgstr "导入非 KiCad 电路板文件"
 msgid ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
-msgstr ""
+msgstr "将所有形状合并为一个复合形状。适用于根据形状名称进行去重的外部软件。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 #, fuzzy
@@ -32248,7 +32354,7 @@ msgstr "移除泪滴"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
 msgid "Edit default values in Board Setup"
-msgstr ""
+msgstr "在电路板设置中编辑默认值"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:141
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
@@ -32298,7 +32404,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:161
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
-msgstr ""
+msgstr "与焊盘或过孔尺寸相近的导线不需要泪滴。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
 #, fuzzy
@@ -33129,7 +33235,7 @@ msgstr "焊盘尺寸 X："
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:479
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:530
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -33394,12 +33500,12 @@ msgstr "半孔焊盘（仅限通孔）"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 msgid "Board contains legacy teardrops."
-msgstr ""
+msgstr "电路板上有遗留的泪滴。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
-msgstr ""
+msgstr "使用 Edit > Edit Teardrops 来自动生成泪滴。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
 #, fuzzy
@@ -33409,7 +33515,7 @@ msgstr "在敷铜区域中的焊盘放置泪滴"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 msgid "Tracks which are similar in size to the pad do not need teardrops."
-msgstr ""
+msgstr "与焊盘大小相似的导线不需要泪滴。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:647
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
@@ -33440,7 +33546,7 @@ msgstr "%"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:485
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:536
 msgid " )"
-msgstr ""
+msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
 #, fuzzy
@@ -33719,6 +33825,9 @@ msgid ""
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
 msgstr ""
+"过孔盖油：不在阻焊层上绘制\n"
+"未盖油：通孔绘制在阻焊层上\n"
+"(阻焊层是负片）"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
@@ -34658,11 +34767,11 @@ msgstr "添加泪滴到过孔和有孔焊盘"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
-msgstr ""
+msgstr "与过孔尺寸相似的导线不需要泪滴。"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:418
 msgid "(as a percentage of pad/via/track size)"
-msgstr ""
+msgstr "(占焊盘/通孔/导线尺寸的百分比）"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:146
 msgid "Track & Via Properties"
@@ -34702,7 +34811,7 @@ msgstr "覆盖锁定"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
-msgstr ""
+msgstr "(从 '规则名称')"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
@@ -36722,7 +36831,7 @@ msgstr "新建图形对象的默认属性："
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:379
 msgid "Properties for track-to-track teardrops:"
-msgstr ""
+msgstr "导线到导线泪滴的属性："
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
 #, fuzzy
@@ -36740,7 +36849,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:518
 msgid "Tracks which are similar in size do not need teardrops."
-msgstr ""
+msgstr "尺寸相似的导线不需要泪滴。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 #, fuzzy
@@ -37837,12 +37946,12 @@ msgstr "%s 不同."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr ""
+msgstr "%s 角平滑设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:430
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr ""
+msgstr "%s 角平滑半径不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:432
 #, fuzzy, c-format
@@ -37857,7 +37966,7 @@ msgstr "%s 不同."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:437
 #, c-format
 msgid "%s keep-out property differs."
-msgstr ""
+msgstr "%s keep-out 属性不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:439
 #, fuzzy, c-format
@@ -37872,7 +37981,7 @@ msgstr "不要求courtyard设置不同。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:443
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr ""
+msgstr "%s keep out pads 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
 #, fuzzy, c-format
@@ -37882,7 +37991,7 @@ msgstr "删除和跟踪连接不同网络的信息 (&T)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr ""
+msgstr "%s keep out vias 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
 #, fuzzy, c-format
@@ -37912,7 +38021,7 @@ msgstr "%s 最小厚度： %s。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:465
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr ""
+msgstr "%s 移除死铜设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:467
 #, fuzzy, c-format
@@ -37942,17 +38051,17 @@ msgstr "规则区域数量差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:478
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr ""
+msgstr "%s hatch smoothing 等级不同."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr ""
+msgstr "%s hatch smoothing 量不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s 最小 hatch 孔设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
 #, fuzzy, c-format
@@ -38396,7 +38505,7 @@ msgstr "构造工艺层 %d"
 #: pcbnew/exporters/step/step_pcb_model.cpp:959
 #, c-format
 msgid "Cutting %d/%d %s\n"
-msgstr ""
+msgstr "剪切 %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:981
 #, fuzzy
@@ -38551,7 +38660,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:1243
 msgid "The board must be saved before generating IPC2581 file."
-msgstr ""
+msgstr "生成 IPC2581 文件前必须保存电路板。"
 
 #: pcbnew/files.cpp:1259
 #, fuzzy
@@ -39212,7 +39321,7 @@ msgstr "默认线宽："
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:61
 msgid "Used when the DXF items in file have no line thickness set"
-msgstr ""
+msgstr "当文件中的 DXF 项目未设置线条粗细时使用"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 #, fuzzy
@@ -39221,7 +39330,7 @@ msgstr "默认单位："
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:74
 msgid "Used when the DXF file has no unit set"
-msgstr ""
+msgstr "当 DXF 文件未设置单位时使用"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:94
 #, fuzzy
@@ -39238,6 +39347,8 @@ msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
+"如果选中，则在此对话框中使用所选图层\n"
+"如果未选中，则使用电路板编辑器活动图层"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 #, fuzzy
@@ -39251,12 +39362,12 @@ msgstr "将所有导入的项目添加到新分组中"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Fix discontinuities"
-msgstr ""
+msgstr "修复不连续"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:174
 msgid ""
 "Trim/extend open shapes or add segments to make vertices of shapes coincide"
-msgstr ""
+msgstr "修剪/延伸开放图形或添加线段，使图形顶点重合"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -40617,7 +40728,7 @@ msgstr "组 %s 包含已删除的项目 %s"
 #: pcbnew/pcbnew_jobs_handler.cpp:1009
 #, c-format
 msgid "Found %d schematic parity issues\n"
-msgstr ""
+msgstr "发现 %d 原理图奇偶校验问题\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1023
 #, fuzzy, c-format
@@ -40637,7 +40748,7 @@ msgstr "多层"
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported."
-msgstr ""
+msgstr "所选文件包含多个封装。将只导入第一个。"
 
 #: pcbnew/plugin.cpp:267
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -40698,7 +40809,7 @@ msgstr "Altium Designer PCB 文件"
 
 #: pcbnew/plugins/altium/altium_designer_plugin.h:49
 msgid "Altium PCB Library or Integrated Library"
-msgstr ""
+msgstr "Altium PCB 库或集成库"
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
@@ -40747,6 +40858,8 @@ msgid ""
 "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
+"该文件似乎不是有效的 PCB 二进制版本 6.0 格式。在 Altium Designer 中，"
+"确保保存为 \"PCB 二进制文件 (*.PcbDoc)\"。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:503
 #, fuzzy, c-format
@@ -40775,7 +40888,7 @@ msgstr "正加载网络类..."
 msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
-msgstr ""
+msgstr "发现多个名称为 '%s' 的 Altium 网络类。将只导入第一个。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1110
 msgid "Loading components..."
@@ -41485,7 +41598,7 @@ msgstr "未找到封装 '%s' (在库 '%s' 中)。"
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:43
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:48
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) 专业版项目"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:56
 msgid "Fabmaster PCB files"
@@ -41723,7 +41836,7 @@ msgstr "无法删除 '%s'"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.h:93
 msgid "IPC-2581 Production File"
-msgstr ""
+msgstr "IPC-2581 生产文件"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:281
 #, c-format
@@ -43754,7 +43867,7 @@ msgstr "参考节点"
 msgid ""
 "Add a bitmap image to be used as a reference (image will not be included in "
 "any output)"
-msgstr ""
+msgstr "添加用作参考的位图图像（图像不会包含在任何输出中）"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add a wrapped text item"
@@ -43916,7 +44029,7 @@ msgstr "没有文件加载到活跃层 %d。"
 
 #: pcbnew/tools/pcb_actions.cpp:375
 msgid "Enables snapping to objects on the active layer only"
-msgstr ""
+msgstr "仅对活动图层上的对象启用捕捉功能"
 
 #: pcbnew/tools/pcb_actions.cpp:380
 #, fuzzy
@@ -43930,11 +44043,11 @@ msgstr "显示可见层的项目飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr ""
+msgstr "切换在活动层或所有层捕捉"
 
 #: pcbnew/tools/pcb_actions.cpp:388
 msgid "Toggles between snapping on all visible layers and only the active area"
-msgstr ""
+msgstr "切换在所有可见层或仅活动层捕捉"
 
 #: pcbnew/tools/pcb_actions.cpp:394
 msgid "Delete Last Point"
@@ -44091,16 +44204,16 @@ msgstr "添加与所选直线相切的弧"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Cut away corners between selected lines"
-msgstr ""
+msgstr "剪切掉所选线条之间的角"
 
 #: pcbnew/tools/pcb_actions.cpp:624
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
-msgstr ""
+msgstr "连接图形，可能会扩展或切割图形，或添加额外的几何图形"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid "Extend lines to meet each other"
-msgstr ""
+msgstr "延长线相交"
 
 #: pcbnew/tools/pcb_actions.cpp:636
 #, fuzzy
@@ -44109,7 +44222,7 @@ msgstr "合并敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "将选定的敷铜合并为一个敷铜"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 #, fuzzy
@@ -44118,7 +44231,7 @@ msgstr "多边形草图"
 
 #: pcbnew/tools/pcb_actions.cpp:644
 msgid "Subtract selected polygons from the last one selected"
-msgstr ""
+msgstr "将选中的敷铜从最后选中的敷铜中减去"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 #, fuzzy
@@ -44508,7 +44621,7 @@ msgstr "创建当前电路板所有封装报告"
 
 #: pcbnew/tools/pcb_actions.cpp:1062
 msgid "IPC-2581 File (.xml)..."
-msgstr ""
+msgstr "IPC-2581 文件 (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 #, fuzzy
@@ -45601,11 +45714,11 @@ msgstr "拖拽布线中最近的连接点，而不限制相连导线的角度。
 
 #: pcbnew/tools/pcb_actions.cpp:2410
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "更新所有线长调制的模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2411
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
-msgstr ""
+msgstr "尝试在其范围内重新调整现有的线长调制模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
 #, fuzzy
@@ -45614,7 +45727,7 @@ msgstr "移除生成器"
 
 #: pcbnew/tools/pcb_actions.cpp:2419
 msgid "Rebuilds geometry of all generators"
-msgstr ""
+msgstr "重建所有生成器的几何图形"
 
 #: pcbnew/tools/pcb_actions.cpp:2426
 #, fuzzy
@@ -45623,7 +45736,7 @@ msgstr "移除生成器"
 
 #: pcbnew/tools/pcb_actions.cpp:2427
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr ""
+msgstr "重建选中生成器的几何图形"
 
 #: pcbnew/tools/pcb_actions.cpp:2455
 #, fuzzy
@@ -45632,7 +45745,7 @@ msgstr "生成器别名："
 
 #: pcbnew/tools/pcb_actions.cpp:2456
 msgid "Show a manager dialog for Generator objects"
-msgstr ""
+msgstr "显示生成器对象的管理对话框"
 
 #: pcbnew/tools/pcb_control.cpp:232
 msgid "Don't show again"
@@ -45649,7 +45762,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:341
 msgid "Dimmed"
-msgstr ""
+msgstr "暗灰"
 
 #: pcbnew/tools/pcb_control.cpp:342
 #, fuzzy
@@ -45704,7 +45817,7 @@ msgstr "所有图层"
 
 #: pcbnew/tools/pcb_control.cpp:1416
 msgid "Object Snapping"
-msgstr ""
+msgstr "对象捕捉"
 
 #: pcbnew/tools/pcb_control.cpp:1492
 #, fuzzy, c-format
@@ -46728,7 +46841,7 @@ msgstr "查看 Gerber 文件"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
-msgstr ""
+msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #, fuzzy
@@ -46762,7 +46875,7 @@ msgstr "用于各种电子相关计算的计算器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr ""
+msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
