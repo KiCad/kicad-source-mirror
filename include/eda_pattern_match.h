@@ -29,6 +29,7 @@
 #ifndef EDA_PATTERN_MATCH_H
 #define EDA_PATTERN_MATCH_H
 
+#include <kicommon.h>
 #include <vector>
 #include <map>
 #include <memory>
@@ -43,7 +44,7 @@ static const int EDA_PATTERN_NOT_FOUND = wxNOT_FOUND;
  * NOTE: an exact match is scored at 8 * Score while a match at the start of the text is scored
  * at 2 * Score.
  */
-struct SEARCH_TERM
+struct KICOMMON_API SEARCH_TERM
 {
     SEARCH_TERM( const wxString& aText, int aScore ) :
             Text( aText ),
@@ -60,7 +61,7 @@ struct SEARCH_TERM
 /*
  * Interface for a pattern matcher, for which there are several implementations
  */
-class EDA_PATTERN_MATCH
+class KICOMMON_API EDA_PATTERN_MATCH
 {
 public:
     struct FIND_RESULT
@@ -104,9 +105,10 @@ public:
 /*
  * Match simple substring
  */
-class EDA_PATTERN_MATCH_SUBSTR : public EDA_PATTERN_MATCH
+class KICOMMON_API EDA_PATTERN_MATCH_SUBSTR : public EDA_PATTERN_MATCH
 {
 public:
+
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
     virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
@@ -119,9 +121,10 @@ protected:
 /*
  * Match regular expression
  */
-class EDA_PATTERN_MATCH_REGEX : public EDA_PATTERN_MATCH
+class KICOMMON_API EDA_PATTERN_MATCH_REGEX : public EDA_PATTERN_MATCH
 {
 public:
+
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
     virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
@@ -132,16 +135,17 @@ protected:
 };
 
 
-class EDA_PATTERN_MATCH_REGEX_ANCHORED : public EDA_PATTERN_MATCH_REGEX
+class KICOMMON_API EDA_PATTERN_MATCH_REGEX_ANCHORED : public EDA_PATTERN_MATCH_REGEX
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
 };
 
 
-class EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
+class KICOMMON_API EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
 {
 public:
+
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual wxString const& GetPattern() const override;
     virtual FIND_RESULT     Find( const wxString& aCandidate ) const override;
@@ -151,7 +155,7 @@ protected:
 };
 
 
-class EDA_PATTERN_MATCH_WILDCARD_ANCHORED : public EDA_PATTERN_MATCH_WILDCARD
+class KICOMMON_API EDA_PATTERN_MATCH_WILDCARD_ANCHORED : public EDA_PATTERN_MATCH_WILDCARD
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
@@ -171,7 +175,7 @@ public:
  *
  * by parsing the value numerically and comparing.
  */
-class EDA_PATTERN_MATCH_RELATIONAL : public EDA_PATTERN_MATCH
+class KICOMMON_API EDA_PATTERN_MATCH_RELATIONAL : public EDA_PATTERN_MATCH
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
@@ -203,10 +207,22 @@ enum COMBINED_MATCHER_CONTEXT
 };
 
 
-class EDA_COMBINED_MATCHER
+class KICOMMON_API EDA_COMBINED_MATCHER
 {
 public:
     EDA_COMBINED_MATCHER( const wxString& aPattern, COMBINED_MATCHER_CONTEXT aContext );
+
+    /*
+     * Deleted copy or else we have to implement copy constructors for all EDA_PATTERN_MATCH classes
+     * due to this class' m_matchers member being copied
+     */
+    EDA_COMBINED_MATCHER( EDA_COMBINED_MATCHER const& ) = delete;
+
+    /*
+     * Deleted copy or else we have to implement copy constructors for all EDA_PATTERN_MATCH classes
+     * due to this class' m_matchers member being copied
+     */
+    EDA_COMBINED_MATCHER& operator=( EDA_COMBINED_MATCHER const& ) = delete;
 
     /*
      * Look in all existing matchers, return the earliest match of any of

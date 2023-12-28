@@ -106,6 +106,7 @@ set( KICOMMON_SRCS
     build_version.cpp
     config_params.cpp
     confirm.cpp
+    eda_pattern_match.cpp
     eda_units.cpp
     exceptions.cpp
     kiid.cpp
@@ -459,7 +460,6 @@ set( COMMON_SRCS
     eda_doc.cpp
     eda_draw_frame.cpp
     eda_item.cpp
-    eda_pattern_match.cpp
     eda_shape.cpp
     eda_text.cpp
     eda_tools.cpp
