@@ -84,6 +84,13 @@ SCH_CONNECTION::SCH_CONNECTION( CONNECTION_GRAPH* aGraph ) :
 }
 
 
+SCH_CONNECTION::SCH_CONNECTION( SCH_CONNECTION& aOther )
+{
+    Reset();
+    Clone( aOther );
+}
+
+
 bool SCH_CONNECTION::operator==( const SCH_CONNECTION& aOther ) const
 {
     // NOTE: Not comparing m_dirty or net/bus/subgraph codes
@@ -236,6 +243,7 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     m_sheet  = aOther.Sheet();
     // Note: m_local_sheet is not cloned
     m_name   = aOther.m_name;
+    m_type   = aOther.m_type;
     // Note: m_local_name is not cloned if not set yet
     if( m_local_name.IsEmpty() )
     {
