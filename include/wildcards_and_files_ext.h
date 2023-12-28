@@ -168,7 +168,6 @@ public:
     static const std::string CadstarFootprintLibPathExtension;
     static const std::string GedaPcbFootprintLibFileExtension;
     static const std::string EagleFootprintLibPathExtension;
-    static const std::string DrawingSheetFileExtension;
     static const std::string SpecctraDsnFileExtension;
     static const std::string SpecctraSessionFileExtension;
     static const std::string IpcD356FileExtension;
