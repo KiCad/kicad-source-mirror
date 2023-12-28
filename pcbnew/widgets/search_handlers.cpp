@@ -24,6 +24,7 @@
 #include <pcb_painter.h>
 #include <pcb_textbox.h>
 #include <pcb_text.h>
+#include <pcb_dimension.h>
 #include <ratsnest/ratsnest_data.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -243,6 +244,8 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
             return _( "Text" );
         else if( PCB_TEXTBOX::ClassOf( aItem ) )
             return _( "Textbox" );
+        else if( dynamic_cast<PCB_DIMENSION_BASE*>( aItem ) )
+            return _( "Dimension" );
     }
     else if( aCol == 1 )
     {
@@ -250,6 +253,8 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
             return UnescapeString( static_cast<PCB_TEXT*>( aItem )->GetText() );
         else if( PCB_TEXTBOX::ClassOf( aItem ) )
             return UnescapeString( static_cast<PCB_TEXTBOX*>( aItem )->GetText() );
+        else if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( aItem ) )
+            return UnescapeString( dimension->GetText() );
     }
     else if( aCol == 2 )
         return aItem->GetLayerName();
