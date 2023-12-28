@@ -566,6 +566,21 @@ public:
     void PruneOrphanedSymbolInstances( const wxString& aProjectName,
                                        const SCH_SHEET_LIST& aValidSheetPaths );
 
+    /**
+     * Remove all invalid sheet instance data in this screen object for the project defined
+     * by \a aProjectName and the list of \a aValidSheetPaths.
+     *
+     * @warning This method will assert and exit on debug builds when \a aProjectName is empty.
+     *
+     * @note This method does not affect instance data for any other projects.
+     *
+     * @param aProjectName is the name of the current project.
+     * @param aValidSheetPaths is the list of valid #SCH_SHEET_PATH objects for the current
+     *                         project.
+     */
+    void PruneOrphanedSheetInstances( const wxString& aProjectName,
+                                      const SCH_SHEET_LIST& aValidSheetPaths );
+
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
     friend SCH_IO_KICAD_SEXPR_PARSER;   // Only to load instance information from schematic file.
@@ -593,12 +608,13 @@ private:
     size_t getLibSymbolNameMatches( const SCH_SYMBOL& aSymbol, std::vector<wxString>& aMatches );
 
 
-/**
- * Compare two #BUS_ALIAS objects by name.  For sorting in the set.
-*/
+    /**
+     * Compare two #BUS_ALIAS objects by name.  For sorting in the set.
+     */
     struct BusAliasCmp
     {
-        bool operator()( const std::shared_ptr<BUS_ALIAS>& a, const std::shared_ptr<BUS_ALIAS>& b ) const
+        bool operator()( const std::shared_ptr<BUS_ALIAS>& a,
+                         const std::shared_ptr<BUS_ALIAS>& b ) const
         {
             return a->GetName() < b->GetName();
         }
@@ -822,6 +838,9 @@ public:
 
     void PruneOrphanedSymbolInstances( const wxString& aProjectName,
                                        const SCH_SHEET_LIST& aValidSheetPaths );
+
+    void PruneOrphanedSheetInstances( const wxString& aProjectName,
+                                      const SCH_SHEET_LIST& aValidSheetPaths );
 
 private:
     void addScreenToList( SCH_SCREEN* aScreen, SCH_SHEET* aSheet );

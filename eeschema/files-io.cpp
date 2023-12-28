@@ -502,6 +502,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), Schematic().GetSheets() );
+        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), Schematic().GetSheets() );
 
         Schematic().ConnectionGraph()->Reset();
 
