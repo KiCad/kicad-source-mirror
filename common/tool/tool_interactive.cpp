@@ -24,10 +24,14 @@
 
 #include <string>
 
+#include <trace_helpers.h>
+
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
+
+#include <wx/log.h>
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName ) :
     TOOL_BASE( INTERACTIVE, aId, aName ),
@@ -69,6 +73,10 @@ void TOOL_INTERACTIVE::resetTransitions()
 
 void TOOL_INTERACTIVE::goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions )
 {
+    wxLogTrace( kicadTraceToolStack,
+                wxS( "TOOL_INTERACTIVE::goInternal: Tool '%s', Registering handler for actions '%s'" ),
+                GetName(), aConditions.Names() );
+
     m_toolMgr->ScheduleNextState( this, aState, aConditions );
 }
 

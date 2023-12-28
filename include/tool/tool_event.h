@@ -535,6 +535,7 @@ public:
     bool IsActionInGroup( const TOOL_ACTION_GROUP& aGroup ) const;
 
 private:
+    friend class TOOL_EVENT_LIST;
     friend class TOOL_DISPATCHER;
     friend class TOOL_MANAGER;
     friend class TOOLS_HOLDER;
@@ -664,6 +665,13 @@ public:
      * @return Event information.
      */
     const std::string Format() const;
+
+    /**
+     * Returns a string containing the names of all the events in this list.
+     *
+     * @return Event names.
+     */
+    const std::string Names() const;
 
     OPT_TOOL_EVENT Matches( const TOOL_EVENT& aEvent ) const
     {

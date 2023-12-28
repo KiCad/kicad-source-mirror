@@ -245,6 +245,9 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
                   wxT( "Adding two tools of the same type may result in unexpected behavior.") );
 
+    wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::RegisterTool: Registering tool %s with ID %d" ),
+                aTool->GetName(), aTool->GetId() );
+
     m_toolOrder.push_back( aTool );
 
     TOOL_STATE* st = new TOOL_STATE( aTool );
@@ -612,6 +615,10 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
     for( auto& state : m_toolState )
     {
         TOOL_BASE* tool = state.first;
+
+        wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::ResetTools: Resetting tool '%s'" ),
+                                             tool->GetName() );
+
         setActiveState( state.second );
         tool->Reset( aReason );
 

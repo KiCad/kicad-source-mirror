@@ -163,7 +163,7 @@ const std::string TOOL_EVENT::Format() const
     }
     else
     {
-        ev += "none";
+        ev += "none ";
     }
 
     if( m_actions & TA_MOUSE )
@@ -190,6 +190,17 @@ const std::string TOOL_EVENT_LIST::Format() const
 
     for( const TOOL_EVENT& e : m_events )
         s += e.Format() + " ";
+
+    return s;
+}
+
+
+const std::string TOOL_EVENT_LIST::Names() const
+{
+    std::string s;
+
+    for( const TOOL_EVENT& e : m_events )
+        s += e.m_commandStr + " ";
 
     return s;
 }
