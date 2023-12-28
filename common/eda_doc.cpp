@@ -34,20 +34,6 @@
 #include <wx/filedlg.h>
 
 
-void PGM_BASE::ReadPdfBrowserInfos()
-{
-    SetPdfBrowserName( GetCommonSettings()->m_System.pdf_viewer_name );
-    m_use_system_pdf_browser = GetCommonSettings()->m_System.use_system_pdf_viewer;
-}
-
-
-void PGM_BASE::WritePdfBrowserInfos()
-{
-    GetCommonSettings()->m_System.pdf_viewer_name = GetPdfBrowserName();
-    GetCommonSettings()->m_System.use_system_pdf_viewer = m_use_system_pdf_browser;
-}
-
-
 //  Mime type extensions (PDF files are not considered here)
 static wxMimeTypesManager*  mimeDatabase;
 static const wxFileTypeInfo EDAfallbacks[] =
