@@ -493,9 +493,8 @@ void NGSPICE::init_dll()
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll.GetSymbol( "ngSpice_AllVecs" );
     m_ngSpice_Running = (ngSpice_Running) m_dll.GetSymbol( "ngSpice_running" ); // it is not a typo
 
+    if( m_dll.HasSymbol( "ngSpice_LockRealloc" ) )
     {
-        wxLogNull doNotLog; // disable logging so we don't get warnings on pre-ngspice42 dlls
-
         m_ngSpice_LockRealloc = (ngSpice_LockRealloc) m_dll.GetSymbol( "ngSpice_LockRealloc" );
         m_ngSpice_UnlockRealloc = (ngSpice_UnlockRealloc) m_dll.GetSymbol( "ngSpice_UnlockRealloc" );
     }
