@@ -369,16 +369,6 @@ TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::anchor  )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::symbolImportGraphics( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolDrawing.symbolImportGraphics" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'F' )
-        .LegacyHotkeyName( "Place DXF" )
-        .FriendlyName( _( "Import Graphics..." ) )
-        .Tooltip( _( "Import 2D drawing file" ) )
-        .Icon( BITMAPS::import_vector )
-        .Flags( AF_ACTIVATE ) );
-
 // SYMBOL_EDITOR_PIN_TOOL
 //
 TOOL_ACTION EE_ACTIONS::pushPinLength( TOOL_ACTION_ARGS()
@@ -572,15 +562,6 @@ TOOL_ACTION EE_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<SCH_BITMAP*>( nullptr ) );
 
-TOOL_ACTION EE_ACTIONS::schImportGraphics( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawing.schImportGraphics" )
-        .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'F' )
-        .LegacyHotkeyName( "Place DXF" )
-        .FriendlyName( _( "Import Graphics..." ) )
-        .Tooltip( _( "Import 2D drawing file" ) )
-        .Icon( BITMAPS::import_vector )
-        .Flags( AF_ACTIVATE ) );
 
 // SCH_EDIT_TOOL
 //
@@ -1031,6 +1012,16 @@ TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Export Drawing to Clipboard" ) )
         .Tooltip( _( "Export drawing of current sheet to clipboard" ) )
         .Icon( BITMAPS::copy ) );
+
+TOOL_ACTION EE_ACTIONS::importGraphics( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.importGraphics" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'F' )
+        .LegacyHotkeyName( "Place DXF" )
+        .FriendlyName( _( "Import Graphics..." ) )
+        .Tooltip( _( "Import 2D drawing file" ) )
+        .Icon( BITMAPS::import_vector )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::showPcbNew( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showPcbNew" )

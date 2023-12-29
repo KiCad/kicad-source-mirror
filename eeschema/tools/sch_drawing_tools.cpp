@@ -758,7 +758,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOLS::SchImportGraphics( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
 {
     if( m_inDrawingTool )
         return 0;
@@ -2193,5 +2193,5 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::SchImportGraphics,   EE_ACTIONS::schImportGraphics.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );
 }

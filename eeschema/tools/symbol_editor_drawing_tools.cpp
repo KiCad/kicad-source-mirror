@@ -654,7 +654,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_DRAWING_TOOLS::SymbolImportGraphics( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
@@ -868,6 +868,6 @@ void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::SymbolImportGraphics, EE_ACTIONS::symbolImportGraphics.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics,    EE_ACTIONS::importGraphics.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    EE_ACTIONS::repeatDrawItem.MakeEvent() );
 }

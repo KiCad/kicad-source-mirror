@@ -97,7 +97,6 @@ public:
     static TOOL_ACTION drawArc;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
-    static TOOL_ACTION schImportGraphics;
     static TOOL_ACTION undoLastSegment;
     static TOOL_ACTION switchSegmentPosture;
 
@@ -108,7 +107,6 @@ public:
     static TOOL_ACTION drawSymbolLines;
     static TOOL_ACTION drawSymbolPolygon;
     static TOOL_ACTION placeSymbolAnchor;
-    static TOOL_ACTION symbolImportGraphics;
 
     // Interactive Editing
     static TOOL_ACTION alignToGrid;
@@ -242,6 +240,7 @@ public:
     static TOOL_ACTION showSymbolTree;
     static TOOL_ACTION hideSymbolTree;
     static TOOL_ACTION drawSheetOnClipboard;
+    static TOOL_ACTION importGraphics;
     static TOOL_ACTION exportSymbolView;
     static TOOL_ACTION exportSymbolAsSVG;
     static TOOL_ACTION showPythonConsole;

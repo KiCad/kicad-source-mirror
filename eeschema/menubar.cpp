@@ -113,7 +113,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     submenuImport->Add( EE_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL,
                         _( "Footprint Assignments..." ) );
-    submenuImport->Add( EE_ACTIONS::schImportGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
+    submenuImport->Add( EE_ACTIONS::importGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
     fileMenu->Add( submenuImport );
 

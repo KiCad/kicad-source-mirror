@@ -52,7 +52,7 @@ public:
     int DrawShape( const TOOL_EVENT& aEvent );
     int DrawSymbolTextBox( const TOOL_EVENT& aEvent );
     int PlaceAnchor( const TOOL_EVENT& aEvent );
-    int SymbolImportGraphics( const TOOL_EVENT& aEvent );
+    int ImportGraphics( const TOOL_EVENT& aEvent );
 
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
 
