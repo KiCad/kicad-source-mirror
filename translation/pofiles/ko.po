@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-28 12:05+0000\n"
+"PO-Revision-Date: 2023-12-31 00:10+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -11446,7 +11446,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
 msgid "Do not populate"
-msgstr "채우지 마십시오"
+msgstr "채우지 않음"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
