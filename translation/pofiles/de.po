@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-25 13:09+0000\n"
+"PO-Revision-Date: 2023-12-31 00:10+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
@@ -1755,7 +1755,7 @@ msgstr "Weitere Beiträge von"
 
 #: common/dialog_about/AboutDialog_main.cpp:1136
 msgid "KiCad Librarian Team"
-msgstr "KiCad Bibliothekar Team"
+msgstr "KiCad Bibliothekar-Team"
 
 #: common/dialog_about/AboutDialog_main.cpp:1169
 msgid "3D models by"
@@ -1853,7 +1853,7 @@ msgstr "Versionsinfo &kopieren"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Kopiere KiCad-Version in die Zwischenablage"
+msgstr "KiCad-Version in die Zwischenablage kopieren"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
@@ -4452,15 +4452,15 @@ msgstr "Knotenpunkt"
 
 #: common/eda_item.cpp:369
 msgid "No-Connect Flag"
-msgstr "\"Keine-Verbindung\"-Markierung"
+msgstr "Keine-Verbindung-Kennzeichnung"
 
 #: common/eda_item.cpp:370
 msgid "Wire Entry"
-msgstr "Verbindungseintritt"
+msgstr "Verbindungszugang"
 
 #: common/eda_item.cpp:371
 msgid "Bus Entry"
-msgstr "Buseintritt"
+msgstr "Buszugang"
 
 #: common/eda_item.cpp:376
 msgid "Net Label"
@@ -5237,7 +5237,7 @@ msgstr "nicht definiert"
 
 #: common/layer_id.cpp:107 pcbnew/plugins/kicad/pcb_parser.cpp:927
 msgid "Rescue"
-msgstr "Wiederherstellung"
+msgstr "Rettung"
 
 #: common/layer_id.cpp:111
 msgid "Wires"
@@ -9994,7 +9994,7 @@ msgstr "Positionsversatz:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 msgid "Margin between the pin name position and the symbol body."
-msgstr "Abstand zwischen Pinname und Symbolkörper."
+msgstr "Rand zwischen Pinname-Position und dem Symbolkörper."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:256
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:120
@@ -10585,7 +10585,7 @@ msgstr "Referenz"
 #: eeschema/dialogs/dialog_rescue_each.cpp:150
 #: eeschema/dialogs/dialog_rescue_each.cpp:300
 msgid "Rescue Symbols"
-msgstr "Symbole wiederherstellen"
+msgstr "Symbole retten"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
 msgid "Skip Symbol Rescue"
@@ -10633,7 +10633,7 @@ msgstr "Nicht wieder anzeigen"
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:596 eeschema/project_rescue.cpp:611
 msgid "Project Rescue Helper"
-msgstr "Projekt-Wiederherstellungsassistent"
+msgstr "Assistent für Projekt-Rettung"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:44
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:63
@@ -11761,12 +11761,12 @@ msgstr "Backup-Fehler"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:359
 #: eeschema/dialogs/dialog_symbol_remap.cpp:513
 msgid "Continue with Rescue"
-msgstr "Mit Wiederherstellung fortfahren"
+msgstr "Mit Rettung fortfahren"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:360
 #: eeschema/dialogs/dialog_symbol_remap.cpp:514
 msgid "Abort Rescue"
-msgstr "Wiederherstellung abbrechen"
+msgstr "Rettung abbrechen"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:380
 #: eeschema/dialogs/dialog_symbol_remap.cpp:415
@@ -12999,11 +12999,11 @@ msgstr ""
 
 #: eeschema/erc_item.cpp:79
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "Ein Pin mit einer \"Keine Verbindung\"-Markierung ist verbunden"
+msgstr "Ein Pin mit einer Keine-Verbindung-Kennzeichnung ist verbunden"
 
 #: eeschema/erc_item.cpp:83
 msgid "Unconnected \"no connection\" flag"
-msgstr "Unverbundene Markierung \"Keine Verbindung\""
+msgstr "Unverbundene Keine-Verbindung-Kennzeichnung"
 
 #: eeschema/erc_item.cpp:87
 msgid "Label not connected to anything"
@@ -13110,7 +13110,7 @@ msgstr "Doppelte Referenzbezeichner"
 
 #: eeschema/erc_item.cpp:183
 msgid "Bus Entry needed"
-msgstr "Buseintritt erforderlich"
+msgstr "Buszugang erforderlich"
 
 #: eeschema/fields_grid_table.cpp:222 eeschema/files-io.cpp:848
 #: eeschema/tools/sch_editor_control.cpp:110
@@ -13808,27 +13808,26 @@ msgstr "Umbenennen von %s in %s"
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
-"Das Symbol %s kann nicht wiederhergestellt werden, da es in keiner "
-"Bibliothek oder dem Cache vorhanden ist."
+"Das Symbol %s kann nicht gerettet werden, da es in keiner Bibliothek oder "
+"dem Cache vorhanden ist."
 
 #: eeschema/project_rescue.cpp:319 eeschema/project_rescue.cpp:495
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr ""
-"Nur in der Cache-Bibliothek gefundenes Symbol %s als %s wiederherstellen."
+msgstr "Nur in der Cache-Bibliothek gefundenes Symbol %s als %s retten."
 
 #: eeschema/project_rescue.cpp:322 eeschema/project_rescue.cpp:501
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "Bearbeitetes Symbol %s als %s wiederherstellen"
+msgstr "Bearbeitetes Symbol %s als %s retten"
 
 #: eeschema/project_rescue.cpp:595
 msgid "This project has nothing to rescue."
-msgstr "In diesem Projekt ist nichts wiederherzustellen."
+msgstr "In diesem Projekt gibt es keine Daten, die gerettet werden können."
 
 #: eeschema/project_rescue.cpp:610
 msgid "No symbols were rescued."
-msgstr "Keine Symbole wurden wiederhergestellt."
+msgstr "Es wurden keine Symbole gerettet."
 
 #: eeschema/project_rescue.cpp:718
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
@@ -13839,7 +13838,7 @@ msgstr "Konnte Symbolbibliotheksdatei \"%s\" nicht erstellen."
 #: eeschema/project_rescue.cpp:871
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "Konnte die Sicherungsbibliothek %s nicht speichern."
+msgstr "Konnte die Rettungsbibliothek %s nicht speichern."
 
 #: eeschema/project_rescue.cpp:894
 msgid "Error occurred saving project specific symbol library table."
@@ -13903,11 +13902,11 @@ msgstr "Symbolbibliothek wählen"
 
 #: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
-msgstr "Buseintritt für Verbindung"
+msgstr "Bus-zu-Verbindung-Zugang"
 
 #: eeschema/sch_bus_entry.cpp:424
 msgid "Bus to Bus Entry"
-msgstr "Buseintritt für Bus"
+msgstr "Bus-zu-Bus-Zugang"
 
 #: eeschema/sch_bus_entry.cpp:496 eeschema/sch_line.cpp:899
 msgid "Wire"
@@ -13919,7 +13918,7 @@ msgstr "Bus"
 
 #: eeschema/sch_bus_entry.cpp:500
 msgid "Bus Entry Type"
-msgstr "Buseintritt-Typ"
+msgstr "Buszugang-Typ"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
@@ -14923,7 +14922,7 @@ msgstr "Spannungssymbol"
 
 #: eeschema/sch_symbol.cpp:1813
 msgid "flags"
-msgstr "Markierungen"
+msgstr "Kennzeichnungen"
 
 #: eeschema/sch_symbol.cpp:1818
 msgid "Missing parent"
@@ -17517,7 +17516,7 @@ msgstr "Fügt ein Spannungssymbol hinzu"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
-msgstr "Markierung \"Keine-Verbindung\" hinzufügen"
+msgstr "Keine-Verbindung-Kennzeichnung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add a no-connection flag"
@@ -17533,7 +17532,7 @@ msgstr "Einen Knotenpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add Wire to Bus Entry"
-msgstr "Buseintritt für Verbindung hinzufügen"
+msgstr "Buszugang für Verbindung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add a wire entry to a bus"
@@ -17987,11 +17986,11 @@ msgstr "Seitennummer des aktuellen Schaltplanblatts bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:643
 msgid "Rescue Symbols..."
-msgstr "Symbole wiederherstellen..."
+msgstr "Symbole retten..."
 
 #: eeschema/tools/ee_actions.cpp:644
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "Alte Symbole im Projekt finden und diese umbenennen/wiederherstellen"
+msgstr "Alte Symbole im Projekt finden und diese umbenennen/retten"
 
 #: eeschema/tools/ee_actions.cpp:649
 msgid "Remap Legacy Library Symbols..."
@@ -18261,7 +18260,7 @@ msgstr "Vom Bus lösen"
 
 #: eeschema/tools/ee_actions.cpp:827
 msgid "Break a wire out of a bus"
-msgstr "Herausführen einer Verbindung aus dem Bus"
+msgstr "Eine elektrische Verbindung aus einem Bus heraus führen"
 
 #: eeschema/tools/ee_actions.cpp:840 pcbnew/tools/pcb_actions.cpp:1502
 msgid "Undo Last Segment"
@@ -19660,7 +19659,7 @@ msgstr "Vorherige Lage"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Move Layer Up"
-msgstr "Lage nach oben schieben"
+msgstr "Lage hoch schieben"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 #: gerbview/widgets/gerbview_layer_widget.cpp:185
@@ -19669,12 +19668,12 @@ msgstr "Aktuelle Lage nach oben schieben"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Move Layer Down"
-msgstr "Lage nach unten schieben"
+msgstr "Lage runter schieben"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 #: gerbview/widgets/gerbview_layer_widget.cpp:187
 msgid "Move Current Layer Down"
-msgstr "Aktuelle Lage nach unten schieben"
+msgstr "Aktuelle Lage weiter nach unten schieben"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Sketch Lines"
@@ -26666,8 +26665,8 @@ msgstr "Einen relativen Pfad verwenden?"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
-"Kann keinen relativen Pfad erzeugen (Zieldatei und Platinendatei haben "
-"unterschiedliche Datenträger)!"
+"Kann keinen relativen Pfadnamen erstellen (unterschiedliche Datenträger für "
+"Ziel und Platinendatei)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:272
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:280
@@ -28767,7 +28766,7 @@ msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
-"Warnung: Negative Lötpastenabstände größer als Pad. Es wird keine "
+"Warnung: Negative Lötpastenränder größer als Pad. Es wird keine "
 "Lötstoppmaske erzeugt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1347
@@ -31648,7 +31647,7 @@ msgstr "Platinenumriss"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Margin"
-msgstr "Margin"
+msgstr "Rand"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 msgid "Edge_Cuts setback"
@@ -34104,11 +34103,11 @@ msgstr "Überschreibung des Freiraums"
 
 #: pcbnew/footprint.cpp:3116 pcbnew/pad.cpp:1900
 msgid "Solderpaste Margin Override"
-msgstr "Überschreibung des Lötpasten-Rands"
+msgstr "Überschreibung des Lötpastenrands"
 
 #: pcbnew/footprint.cpp:3121 pcbnew/pad.cpp:1904
 msgid "Solderpaste Margin Ratio Override"
-msgstr "Überschreibung des Lötpasten-Rand-Verhältnisses"
+msgstr "Überschreibung des Lötpastenrand-Verhältnisses"
 
 #: pcbnew/footprint.cpp:3126 pcbnew/pad.cpp:1909
 msgid "Zone Connection Style"
@@ -34680,7 +34679,7 @@ msgstr "Wieder&herstellen"
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
 "Platine leeren und zuletzt vom Leiterplatteneditor automatisch gespeicherte "
-"Wiederherstellungsdatei öffnen"
+"Rettungsdatei öffnen"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Specctra Session..."
@@ -40531,7 +40530,7 @@ msgstr "Ermittelter Kanten-Abstand"
 
 #: pcbnew/tools/pcb_control.cpp:1535
 msgid "Resolved margin clearance"
-msgstr "Ermittelter Rand-Abstand"
+msgstr "Ermittelter Randabstand"
 
 #: pcbnew/tools/pcb_control.cpp:1546
 msgid "Selected Items"
