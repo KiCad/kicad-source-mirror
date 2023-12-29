@@ -125,18 +125,18 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
 
 SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
-        SCH_SEARCH_HANDLER( wxT( "Symbols" ), aFrame )
+        SCH_SEARCH_HANDLER( _( "Symbols" ), aFrame )
 {
-    m_columns.emplace_back( wxT( "Reference" ),   2,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Value" ),       6,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Footprint" ),   10, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Page" ),        1,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _( "Reference" ),     2,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Value" ),         6,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Footprint" ),     10, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Page" ),          1,  wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( wxT( "X" ),           3,  wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( wxT( "Y" ),           3,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "DNP" ),         2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );   // 9.0 TODO: make this translatable
+    m_columns.emplace_back( wxT( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );   // 9.0 TODO: make this translatable
+    m_columns.emplace_back( wxT( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );   // 9.0 TODO: make this translatable
+    m_columns.emplace_back( _( "DNP" ),           2,  wxLIST_FORMAT_CENTER );
 }
 
 
@@ -211,13 +211,13 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
 
 
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
-        SCH_SEARCH_HANDLER( wxT( "Text" ), aFrame )
+        SCH_SEARCH_HANDLER( _( "Text" ), aFrame )
 {
-    m_columns.emplace_back( wxT( "Type" ), 2, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Text" ), 12, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Page" ), 1, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),    3, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),    3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _( "Type" ), 2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Text" ), 12, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Page" ), 1, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),  3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),  3, wxLIST_FORMAT_CENTER );
 }
 
 
@@ -260,7 +260,7 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
             return wxEmptyString;
 
         if( aCol == 0 )
-            return wxS( "Text" );
+            return _( "Text" );
         else if( aCol == 1 )
             return txt->GetShownText( false );
         else if( aCol == 2 )
@@ -278,7 +278,7 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
             return wxEmptyString;
 
         if( aCol == 0 )
-            return wxS( "Text" );
+            return _( "Text Box" );
         else if( aCol == 1 )
             return txt->GetShownText( false );
         else if( aCol == 2 )
@@ -295,13 +295,13 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
 
 
 LABEL_SEARCH_HANDLER::LABEL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
-        SCH_SEARCH_HANDLER( wxT( "Labels" ), aFrame )
+        SCH_SEARCH_HANDLER( _( "Labels" ), aFrame )
 {
-    m_columns.emplace_back( wxT( "Type" ), 2, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Name" ), 6, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Page" ), 2, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),    3, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),    3 , wxLIST_FORMAT_CENTER);
+    m_columns.emplace_back( _( "Type" ), 2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Name" ), 6, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _( "Page" ), 2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),  3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),  3 , wxLIST_FORMAT_CENTER);
 }
 
 
@@ -347,6 +347,7 @@ wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
 
     if (aCol == 0)
     {
+        // 9.0 TODO: make these translatable:
         if(lbl->Type() == SCH_LABEL_T)
             return wxS( "Local" );
         else if( lbl->Type() == SCH_GLOBAL_LABEL_T )
