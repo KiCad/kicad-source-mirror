@@ -821,9 +821,6 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 
                     st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );
 
-                    // as the state changes, the transition table has to be set up again
-                    st->transitions.clear();
-
                     wxLogTrace( kicadTraceToolStack,
                                 wxS( "TOOL_MANAGER::dispatchInternal - Running tool %s for event: %s" ),
                                 st->theTool->GetName(), aEvent.Format() );
@@ -1001,12 +998,6 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
     if( aState == m_activeState )
         setActiveState( nullptr );
-
-    // Set transitions to be ready for future TOOL_EVENTs
-    TOOL_BASE* tool = aState->theTool;
-
-    if( tool->GetType() == INTERACTIVE )
-        static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
 
     return it;
 }
