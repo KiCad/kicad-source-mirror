@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-28 08:09+0000\n"
+"PO-Revision-Date: 2023-12-31 06:07+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -13349,7 +13349,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:215
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:216
 msgid "Do not populate"
-msgstr "채우지 마십시오"
+msgstr "채우지 않음"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:229
 msgid "Update Symbol from Library..."
@@ -17561,9 +17561,8 @@ msgid "Exclude From Bill of Materials"
 msgstr "BOM에서 제외"
 
 #: eeschema/sch_symbol.cpp:2619 pcbnew/footprint.cpp:3438
-#, fuzzy
 msgid "Do not Populate"
-msgstr "채우지 마십시오"
+msgstr "채우지 않음"
 
 #: eeschema/sch_text.cpp:404
 msgid "Graphic Text"
@@ -20783,27 +20782,24 @@ msgid "Toggle the exclude from board attribute"
 msgstr "보드에서 제외하기 속성 토글"
 
 #: eeschema/tools/ee_actions.cpp:942
-#, fuzzy
 msgid "Set Do Not Populate"
-msgstr "채우지 마십시오"
+msgstr "채우지 않도록 설정"
 
 #: eeschema/tools/ee_actions.cpp:943
 msgid "Set the do not populate attribute"
 msgstr "채우기 안 함 속성 설정"
 
 #: eeschema/tools/ee_actions.cpp:948
-#, fuzzy
 msgid "Unset Do Not Populate"
-msgstr "채우지 마십시오"
+msgstr "채우지 않음 설정 해제"
 
 #: eeschema/tools/ee_actions.cpp:949
 msgid "Clear the do not populate attribute"
 msgstr "채우지 않음 속성 지우기"
 
 #: eeschema/tools/ee_actions.cpp:954
-#, fuzzy
 msgid "Toggle Do Not Populate"
-msgstr "채우지 마십시오"
+msgstr "채우지 않음 토글"
 
 #: eeschema/tools/ee_actions.cpp:955
 #, fuzzy
