@@ -1921,10 +1921,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 wxCHECK2( sheet, continue );
 
-                for( const SCH_SHEET_INSTANCE& instance : sheet->GetInstances() )
+                for( const SCH_SHEET_INSTANCE& pastedInstance : sheet->GetInstances() )
                 {
-                    if( instance.m_ProjectName != m_frame->Prj().GetProjectName() )
-                        instancesToRemove.push_back( instance.m_Path );
+                    if( pastedInstance.m_ProjectName != m_frame->Prj().GetProjectName() )
+                        instancesToRemove.push_back( pastedInstance.m_Path );
                 }
 
                 for( const KIID_PATH& instancePath : instancesToRemove )
