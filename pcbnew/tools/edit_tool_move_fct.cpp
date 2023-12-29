@@ -653,12 +653,16 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                             if( item->Type() == PCB_FOOTPRINT_T )
                                 FPs.push_back( static_cast<FOOTPRINT*>( item ) );
 
-                            item->RunOnDescendants(
-                                    [&]( BOARD_ITEM* descendent )
-                                    {
-                                        if( descendent->Type() == PCB_FOOTPRINT_T )
-                                            FPs.push_back( static_cast<FOOTPRINT*>( descendent ) );
-                                    } );
+                            if( item->Type() == PCB_GROUP_T )
+                            {
+                                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                                group->RunOnDescendants(
+                                        [&]( BOARD_ITEM* descendent )
+                                        {
+                                            if( descendent->Type() == PCB_FOOTPRINT_T )
+                                                FPs.push_back( static_cast<FOOTPRINT*>( descendent ) );
+                                        } );
+                            }
                         }
                     }
 

@@ -120,7 +120,7 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( wxWindow* aParentWindow,
     synchronizeWithBoard( true );
     computeBoardThickness();
 
-    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PANEL_SETUP_BOARD_STACKUP::onUnitsChanged, this );
+    m_frame->Bind( UNITS_CHANGED, &PANEL_SETUP_BOARD_STACKUP::onUnitsChanged, this );
 }
 
 
