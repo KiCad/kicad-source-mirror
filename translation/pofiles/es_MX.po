@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-26 21:27+0000\n"
+"PO-Revision-Date: 2023-12-31 06:07+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -25174,9 +25174,9 @@ msgid "Package %s uninstalled"
 msgstr "Paquete %s desinstalado"
 
 #: kicad/pcm/pcm_task_manager.cpp:661
-#, fuzzy, c-format
+#, c-format
 msgid "%d out of %d operations failed."
-msgstr "%s de %d operaciones fallaron."
+msgstr "%d de %d operaciones fallaron."
 
 #: kicad/pcm/pcm_task_manager.cpp:668
 #, fuzzy
@@ -38793,9 +38793,9 @@ msgid "%s remove islands setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "%s minimum island size setting differs."
-msgstr "Tamaño mínimo de isla:"
+msgstr "La configuración del tamaño mínimo de isla de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:470
 #, fuzzy, c-format
@@ -38813,9 +38813,9 @@ msgid "%s hatch gap differs."
 msgstr "%s difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch orientation differs."
-msgstr "El recuento de áreas de regla difiere."
+msgstr "La orientación del sombreado de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:478
 #, c-format
