@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-28 12:05+0000\n"
+"PO-Revision-Date: 2023-12-31 00:10+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -9626,7 +9626,7 @@ msgstr "基板から除外"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
-msgstr "ピン テキストの位置オフセット:"
+msgstr "ピン名の位置オフセット:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
@@ -9729,9 +9729,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "シンボルから代替ボディスタイル(ド・モルガン)削除しますか？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "フィールドは名前を持たなければなりません。"
+msgstr "シンボルは名前を持たなければなりません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -18216,9 +18215,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "'%s' （およびサブシート）を最後に保存したバージョンへ戻しますか?"
 
 #: eeschema/tools/sch_editor_control.cpp:335
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "基板上のシンボルが 新しいライブラリを参照するように更新しますか?"
+msgstr "回路図にある電源シンボルをライブラリに含めますか?"
 
 #: eeschema/tools/sch_editor_control.cpp:400
 #, c-format
@@ -25418,11 +25416,11 @@ msgstr "不正なパラメーター"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:34
 msgid "Horizontal count:"
-msgstr "横(X)方向の数:"
+msgstr "水平方向の数:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Vertical count:"
-msgstr "縦(Y)方向の数:"
+msgstr "垂直方向の数:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:48
 msgid "Horizontal spacing:"
@@ -25434,15 +25432,16 @@ msgstr "垂直間隔:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
 msgid "Horizontal offset:"
-msgstr "横(X)方向のオフセット:"
+msgstr "水平方向のオフセット:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
 msgid "Vertical offset:"
-msgstr "縦(Y)方向のオフセット:"
+msgstr "垂直方向のオフセット:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
+#, fuzzy
 msgid "Stagger:"
-msgstr "配置シフトの間隔:"
+msgstr "スタッガー:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Rows"
@@ -30066,11 +30065,11 @@ msgstr "非表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on pads"
-msgstr "パッドで表示"
+msgstr "パッドに表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on tracks"
-msgstr "配線で表示"
+msgstr "配線に表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on pads and tracks"
@@ -34469,12 +34468,12 @@ msgstr "%s の値を %s から %s に変更しました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:327
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "%s シンボルの関連付けを %s から %s へ変更します。"
+msgstr "%s のシンボルの関連付けを %s から %s へ変更します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:334
 #, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "%s シンボルの関連付けを %s から %s へ変更しました。"
+msgstr "%s のシンボルの関連付けを %s から %s へ変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:350
 #, c-format
@@ -36821,9 +36820,8 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"遅延(スキュー)を調整する相補的な差動ペアのネットを見つけることができません。"
-"_N/_P か +/- で終わっている差動ペアに属しているネットの名前かどうか確認して下"
-"さい。"
+"遅延を調整する相補的な差動ペアのネットを見つけることができません。_N/_P か "
+"+/- で終わっている差動ペアに属しているネットの名前かどうか確認して下さい。"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:174
 msgid "Too long: skew "
@@ -39801,7 +39799,7 @@ msgstr "差動ペア配線の配線長を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "差動ペアの遅延(スキュー)を調整"
+msgstr "差動ペアの遅延を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
