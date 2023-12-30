@@ -75,6 +75,9 @@ bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataToWindow()
     else
         m_targetLength.SetValue( m_settings.m_targetLength.Opt() );
 
+    if( m_targetLength.GetValue() == std::numeric_limits<int>::max() )
+        m_targetLengthCtrl->SetValue( wxEmptyString );
+
     m_overrideCustomRules->SetValue( m_settings.m_overrideCustomRules );
 
     m_targetLength.Enable( m_constraint.IsNull() || m_settings.m_overrideCustomRules );
@@ -97,19 +100,22 @@ bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_TUNING_PATTERN_PROPERTIES::TransferDataFromWindow()
 {
-    if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
+    if(! m_targetLengthCtrl->GetValue().IsEmpty() )
     {
-        if( m_targetLength.GetValue() != m_constraint.GetValue().Opt() )
-            m_settings.SetTargetSkew( m_targetLength.GetValue() );
+        if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
+        {
+            if( m_targetLength.GetValue() != m_constraint.GetValue().Opt() )
+                m_settings.SetTargetSkew( m_targetLength.GetValue() );
+            else
+                m_settings.m_targetSkew = m_constraint.GetValue();
+        }
         else
-            m_settings.m_targetSkew = m_constraint.GetValue();
-    }
-    else
-    {
-        if( m_targetLength.GetValue() != m_constraint.GetValue().Opt() )
-            m_settings.SetTargetLength( m_targetLength.GetValue() );
-        else
-            m_settings.SetTargetLength( m_constraint.GetValue() );
+        {
+            if( m_targetLength.GetValue() != m_constraint.GetValue().Opt() )
+                m_settings.SetTargetLength( m_targetLength.GetValue() );
+            else
+                m_settings.SetTargetLength( m_constraint.GetValue() );
+        }
     }
 
     m_settings.m_overrideCustomRules = m_overrideCustomRules->GetValue();

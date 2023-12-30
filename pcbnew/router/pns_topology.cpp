@@ -479,24 +479,35 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 
     LINE lp = m_world->AssembleLine( startItem );
 
-    std::set<ITEM*> coupledItems;
+    std::vector<ITEM*> pItems;
+    std::vector<ITEM*> nItems;
 
+    for( ITEM* item : lp.Links() )
+    {
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) && item->Layers() == startItem->Layers() )
+            pItems.push_back( item );
+    }
+
+    std::set<ITEM*> coupledItems;
     m_world->AllItemsInNet( coupledNet, coupledItems );
+
+    for( ITEM* item : coupledItems )
+    {
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) && item->Layers() == startItem->Layers() )
+            nItems.push_back( item );
+    }
 
     LINKED_ITEM* refItem = nullptr;
     LINKED_ITEM* coupledItem = nullptr;
     SEG::ecoord  minDist_sq = std::numeric_limits<SEG::ecoord>::max();
 
-    for( ITEM* p_item : lp.Links() )
+    for( ITEM* p_item : pItems )
     {
-        if( !p_item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
-            continue;
-
-        for( ITEM* n_item : coupledItems )
+        for( ITEM* n_item : nItems )
         {
             SEG::ecoord dist_sq = std::numeric_limits<SEG::ecoord>::max();
 
-            if( n_item->Kind() != p_item->Kind() || n_item->Layers() == p_item->Layers() )
+            if( n_item->Kind() != p_item->Kind() )
                 continue;
 
             if( p_item->Kind() == ITEM::SEGMENT_T )
