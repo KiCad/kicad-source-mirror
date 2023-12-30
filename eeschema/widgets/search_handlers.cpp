@@ -125,18 +125,18 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
 
 SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
-        SCH_SEARCH_HANDLER( _( "Symbols" ), aFrame )
+        SCH_SEARCH_HANDLER( _HKI( "Symbols" ), aFrame )
 {
-    m_columns.emplace_back( _( "Reference" ),     2,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Value" ),         6,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Footprint" ),     10, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Page" ),          1,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Reference" ),  2,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Value" ),      6,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Footprint" ),  10, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ),       1,  wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( wxT( "X" ),           3,  wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( wxT( "Y" ),           3,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );   // 9.0 TODO: make this translatable
-    m_columns.emplace_back( wxT( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );   // 9.0 TODO: make this translatable
-    m_columns.emplace_back( wxT( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );   // 9.0 TODO: make this translatable
-    m_columns.emplace_back( _( "DNP" ),           2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );    // 9.0 TODO: wxT -> _HKI
+    m_columns.emplace_back( wxT( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );    // 9.0 TODO: wxT -> _HKI
+    m_columns.emplace_back( wxT( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );    // 9.0 TODO: wxT -> _HKI
+    m_columns.emplace_back( _HKI( "DNP" ),        2,  wxLIST_FORMAT_CENTER );
 }
 
 
@@ -211,13 +211,13 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
 
 
 TEXT_SEARCH_HANDLER::TEXT_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
-        SCH_SEARCH_HANDLER( _( "Text" ), aFrame )
+        SCH_SEARCH_HANDLER( _HKI( "Text" ), aFrame )
 {
-    m_columns.emplace_back( _( "Type" ), 2, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Text" ), 12, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Page" ), 1, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),  3, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),  3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Type" ), 2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Text" ), 12, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ), 1, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),     3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),     3, wxLIST_FORMAT_CENTER );
 }
 
 
@@ -295,13 +295,13 @@ wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCo
 
 
 LABEL_SEARCH_HANDLER::LABEL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
-        SCH_SEARCH_HANDLER( _( "Labels" ), aFrame )
+        SCH_SEARCH_HANDLER( _HKI( "Labels" ), aFrame )
 {
-    m_columns.emplace_back( _( "Type" ), 2, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Name" ), 6, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _( "Page" ), 2, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),  3, wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),  3 , wxLIST_FORMAT_CENTER);
+    m_columns.emplace_back( _HKI( "Type" ), 2, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Name" ), 6, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ), 2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),     3, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),     3 , wxLIST_FORMAT_CENTER);
 }
 
 
@@ -347,7 +347,7 @@ wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
 
     if (aCol == 0)
     {
-        // 9.0 TODO: make these translatable:
+        // 9.0 TODO: wxS() -> _HKI():
         if(lbl->Type() == SCH_LABEL_T)
             return wxS( "Local" );
         else if( lbl->Type() == SCH_GLOBAL_LABEL_T )
