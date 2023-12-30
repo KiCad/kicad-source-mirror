@@ -532,6 +532,12 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 {
+    // When creating a new pad (in FP editor) we can use a new pad number
+    // or the last entered pad number
+    // neednewPadNumber = true to create a new pad number, false to use the last
+    // entered pad number
+    static bool neednewPadNumber;
+
     if( !m_isFootprintEditor )
         return 0;
 
@@ -542,6 +548,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
     {
         PAD_PLACER( PAD_TOOL* aPadTool )
         {
+            neednewPadNumber = true;    // Use a new pad number when creatin a pad by default
             m_padTool = aPadTool;
         }
 
@@ -578,9 +585,18 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
             if( pad->CanHaveNumber() )
             {
                 wxString padNumber = m_padTool->GetLastPadNumber();
-                padNumber = m_board->GetFirstFootprint()->GetNextPadNumber( padNumber );
+
+                // Use the last entered pad number when recreating a pad without using the
+                // previously created pad, and a new number when creating a really new pad
+                if( neednewPadNumber )
+                    padNumber = m_board->GetFirstFootprint()->GetNextPadNumber( padNumber );
+
                 pad->SetNumber( padNumber );
                 m_padTool->SetLastPadNumber( padNumber );
+
+                // If a pad is recreated and the previously created was not placed, use
+                // the last entered pad number
+                neednewPadNumber = false;
             }
 
             return std::unique_ptr<BOARD_ITEM>( pad );
@@ -589,6 +605,9 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
         bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit ) override
         {
             PAD* pad = dynamic_cast<PAD*>( aItem );
+            // We are using this pad number.
+            // therefore use a new pad number for a newly created pad
+            neednewPadNumber = true;
 
             if( pad )
             {
