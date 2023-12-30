@@ -1238,7 +1238,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
                     selectedItems.emplace_back( item->m_Uuid );
                 }
 
-                m_toolManager->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
                 ReloadFootprint( newfp );
 
