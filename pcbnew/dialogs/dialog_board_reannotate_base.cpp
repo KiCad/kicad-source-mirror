@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,10 +46,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Down_Right->SetValue( true );
 	fgSizerButtons->Add( m_Down_Right, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_down_right_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_down_right_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_down_right_bitmap->SetToolTip( _("Horizontally: top left to bottom right") );
 
-	fgSizerButtons->Add( reannotate_down_right_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_down_right_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -57,10 +57,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Right_Down = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Right_Down, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_right_down_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_right_down_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_right_down_bitmap->SetToolTip( _("Horizontally: top right to bottom left") );
 
-	fgSizerButtons->Add( reannotate_right_down_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_right_down_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -68,10 +68,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Down_Left = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Down_Left, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_down_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_down_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_down_left_bitmap->SetToolTip( _("Horizontally: bottom left to top right") );
 
-	fgSizerButtons->Add( reannotate_down_left_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_down_left_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -79,18 +79,18 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Left_Down = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Left_Down, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_left_down_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_left_down_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_left_down_bitmap->SetToolTip( _("Horizontally:: bottom right to top left") );
 
-	fgSizerButtons->Add( reannotate_left_down_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_left_down_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Up_Right = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Up_Right, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_up_right_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_up_right_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_up_right_bitmap->SetToolTip( _("Vertically: top left to bottom right") );
 
-	fgSizerButtons->Add( reannotate_up_right_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_up_right_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -98,10 +98,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Right_Up = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Right_Up, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_right_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_right_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_right_up_bitmap->SetToolTip( _("Vertically: bottom left to top right") );
 
-	fgSizerButtons->Add( reannotate_right_up_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_right_up_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -109,10 +109,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Up_Left = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Up_Left, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_up_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_up_left_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_up_left_bitmap->SetToolTip( _("Vertically: top right to bottom left") );
 
-	fgSizerButtons->Add( reannotate_up_left_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_up_left_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerButtons->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -120,10 +120,10 @@ DIALOG_BOARD_REANNOTATE_BASE::DIALOG_BOARD_REANNOTATE_BASE( wxWindow* parent, wx
 	m_Left_Up = new wxRadioButton( m_StandardOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerButtons->Add( m_Left_Up, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	reannotate_left_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 48,48 ), 0 );
+	reannotate_left_up_bitmap = new wxStaticBitmap( m_StandardOptions, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	reannotate_left_up_bitmap->SetToolTip( _("Vertically: bottom right to top left") );
 
-	fgSizerButtons->Add( reannotate_left_up_bitmap, 0, wxALL, 5 );
+	fgSizerButtons->Add( reannotate_left_up_bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerOpts->Add( fgSizerButtons, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
