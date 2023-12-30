@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-28 08:09+0000\n"
+"PO-Revision-Date: 2023-12-31 06:07+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -19885,11 +19885,11 @@ msgstr ""
 "μετεγκαταστήσετε στην τρέχουσα μορφή."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:844
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
 msgstr ""
-"Το σύμβολο %s προέρχεται από το %s. Τα γραφικά εικονίδια του συμβόλου δεν θα "
-"είναι επεξεργάσιμα."
+"Το σύμβολο %s είναι παράγωγο σύμβολο.   Τα γραφικά εικονίδια του συμβόλου "
+"δεν επεξεργάζονται."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:922
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:973
@@ -19998,9 +19998,9 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Το τρέχον σύμβολο έχει τροποποιηθεί.  Αποθήκευση των αλλαγών;"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Προέρχεται από το σύμβολο:"
+msgstr "Παράγωγο από το σύμβολο '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:387
 #, fuzzy
@@ -20405,9 +20405,9 @@ msgid "Add field '%s' with value '%s'."
 msgstr "Προσθήκη πεδίου '%s' με τιμή '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field '%s.'"
-msgstr "Διαγραφή πεδίου"
+msgstr "Διαγραφή πεδίου '%s.'"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -21855,9 +21855,9 @@ msgid "Select a symbol to diff against its library equivalent."
 msgstr "Έλεγχος αποτυπωμάτων πλακέτας σε σχέση με τη βιβλιοθήκη..."
 
 #: eeschema/tools/ee_inspection_tool.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Σύμβολα"
+msgstr "Σύμβολο %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #: pcbnew/tools/board_inspection_tool.cpp:1489
@@ -21900,9 +21900,9 @@ msgstr "Η βιβλιοθήκη '%s' δεν είναι ενεργοποιημέ�
 
 #: eeschema/tools/ee_inspection_tool.cpp:318
 #: pcbnew/tools/board_inspection_tool.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid "The library no longer contains the item %s."
-msgstr "Η επιλογή περιέχει %d κλειδωμένα αντικείμενα."
+msgstr "Η βιβλιοθήκη δεν περιέχει πλέον το %s."
 
 #: eeschema/tools/ee_inspection_tool.cpp:339
 #: pcbnew/tools/board_inspection_tool.cpp:1546
@@ -21983,14 +21983,14 @@ msgstr "Προσθήκη Ακροδέκτη Φύλλου"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1855
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "Προσθήκη Δίαυλου"
+msgstr "Προσθήκη %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1910
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "Σχέδια"
+msgstr "Σχεδίαση %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2041
 msgid "Press <ESC> to cancel sheet creation."
@@ -22383,9 +22383,9 @@ msgid "Add new project library table entry"
 msgstr "Προσθήκη νέας εισόδου πίνακα βιβλιοθήκης έργου"
 
 #: eeschema/widgets/tuner_slider.cpp:58 eeschema/widgets/tuner_slider.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Tune %s"
-msgstr "Ρύθμιση"
+msgstr "Ρύθμιση %s"
 
 #: eeschema/widgets/tuner_slider.cpp:75
 #, fuzzy, c-format
@@ -23801,7 +23801,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "Επιλογές μορφής αρχείου εξόδου: step, glb (binary glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:70
 msgid "Overwrite output file"
@@ -23852,6 +23852,8 @@ msgstr "Ελάχιστη απόσταση σημείων για να θεωρη�
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid "Do not optimize STEP file (enables writing parametric curves)"
 msgstr ""
+"Μην βελτιστοποιήσετε το αρχείο STEP (επιλέγει τη σύνταξη παραμετρικών "
+"καμπυλών)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:136
 msgid ""
@@ -23871,10 +23873,14 @@ msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
+"Όνομα φακέλου για δημιουργία και αποθήκευση 3Δ μοντέλων, εάν δεν καθοριστεί "
+"ή μείνει κενό, τα μοντέλα θα ενσωματωθούν στο κύριο εξαγόμενο αρχείο VRML"
 
 #: kicad/cli/command_pcb_export_3d.cpp:152
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
+"Χρησιμοποιείται με --models-dir για την έξοδο σχετικών διαδρομών τοποθεσίας "
+"στο αρχείο που προκύπτει"
 
 #: kicad/cli/command_pcb_export_3d.cpp:195
 #, fuzzy
@@ -23984,7 +23990,7 @@ msgstr "Η ακρίβεια των συντεταγμένων για τα Gerber
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Δημιουργία DXF από λίστα επιπέδων"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -24605,9 +24611,9 @@ msgid "PCM Updates Available"
 msgstr "Διαθέσιμες ενημερώσεις πακέτων"
 
 #: kicad/kicad_manager_frame.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "Δεν υπάρχουν διαθέσιμες ενημερώσεις"
+msgstr "%d διαθέσιμες ενημερώσεις"
 
 #: kicad/kicad_manager_frame.cpp:740
 #, fuzzy
@@ -25231,9 +25237,9 @@ msgid "Package %s uninstalled"
 msgstr "Το πακέτο %s απεγκαταστάθηκε"
 
 #: kicad/pcm/pcm_task_manager.cpp:661
-#, fuzzy, c-format
+#, c-format
 msgid "%d out of %d operations failed."
-msgstr "Η εγγραφή αρχείου απέτυχε."
+msgstr "Απέτυχαν %d από τις %d διεργασίες."
 
 #: kicad/pcm/pcm_task_manager.cpp:668
 #, fuzzy
@@ -25499,9 +25505,9 @@ msgid "Failed to push project"
 msgstr "Αποτυχία εξαγωγής δεδομένων"
 
 #: kicad/project_tree_pane.cpp:1760
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Αποτυχία φόρτωσης '%s'."
+msgstr "Αποτυχία εύρεσης branch '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1772
 #, fuzzy, c-format
@@ -27260,9 +27266,9 @@ msgid "Exact"
 msgstr "Ακριβής"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect required resistance value: %s"
-msgstr "Λανθασμένη τιμή μεγέθους γωνίας"
+msgstr "Λανθασμένη απαιτούμενη τιμή αντίστασης: %s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
@@ -31957,9 +31963,9 @@ msgid "'%s' found"
 msgstr "βρέθηκε '%s'"
 
 #: pcbnew/dialogs/dialog_find.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Hit(s): %d / %zu"
-msgstr "Επιτυχία(-ες): %ld / %lu"
+msgstr "Επιτυχία(-ες): %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -32818,9 +32824,9 @@ msgid "Buried vias:"
 msgstr "Ενταφιασμένες διελεύσεις:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid "Generators A (%s)"
-msgstr "Αρχείο Δημιουργού"
+msgstr "Δημιουργοί A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
@@ -35879,23 +35885,23 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text thickness is too large.\n"
 "It will be truncated to %s"
 msgstr ""
-"Το πάχος του κειμένου είναι πολύ μεγάλο για το μέγεθός του. \n"
-"Θα συμπιεστεί σε %s."
+"%s: Το πάχος του κειμένου είναι πολύ μεγάλο για το μέγεθός του. \n"
+"Θα συμπιεστεί σε %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:428
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text thickness is too small.\n"
 "It will be truncated to %s"
 msgstr ""
-"Το πάχος του κειμένου είναι πολύ μεγάλο για το μέγεθός του. \n"
-"Θα συμπιεστεί σε %s."
+"%s: Το πάχος του κειμένου είναι πολύ μικρό για το μέγεθός του. \n"
+"Θα συμπιεστεί σε %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:476
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:313
@@ -35921,9 +35927,9 @@ msgid "Default properties for new graphic items:"
 msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Πολυγραμμή, %d σημεία"
+msgstr "φάκελος με %s αρχεία"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:570
 #, c-format
@@ -39159,9 +39165,9 @@ msgid "Pad %s"
 msgstr "Έδρα %s\t"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "%s has clearance override."
-msgstr "Περιγράμματα Διάκενου"
+msgstr "Το %s έχει παράκαμψη διακένου."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:202
 #, fuzzy, c-format
