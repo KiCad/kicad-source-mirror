@@ -204,5 +204,10 @@ BOOST_AUTO_TEST_CASE( Issue16003 )
     TestNetlist( "issue16003" );
 }
 
+BOOST_AUTO_TEST_CASE( Issue16439 )
+{
+    TestNetlist( "issue16439" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
