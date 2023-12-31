@@ -312,16 +312,28 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         }
         else if( c == ' ' )
         {
-            if( context == SEXPR_OPEN && ( partial == wxT( "constraint" )
-                                        || partial == wxT( "disallow" )
-                                        || partial == wxT( "layer" )
-                                        || partial == wxT( "severity" ) ) )
+            if( context == SEXPR_OPEN && !partial.IsEmpty() )
             {
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
 
+                if(    partial == wxT( "constraint" )
+                    || partial == wxT( "layer" )
+                    || partial == wxT( "severity" ) )
+                {
+                    context = SEXPR_TOKEN;
+                }
+                else if( partial == wxT( "rule" )
+                      || partial == wxT( "condition" ) )
+                {
+                    context = SEXPR_STRING;
+                }
+                else
+                {
+                    context = NONE;
+                }
+
                 partial = wxEmptyString;
-                context = SEXPR_TOKEN;
                 continue;
             }
             else if( partial == wxT( "disallow" )
@@ -336,9 +348,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                 context = SEXPR_TOKEN;
                 continue;
             }
-            else if( partial == wxT( "rule" )
-                  || partial == wxT( "assertion" )
-                  || partial == wxT( "condition" ) )
+            else if( partial == wxT( "assertion" ) )
             {
                 m_textEditor->AutoCompCancel();
                 sexprs.push( partial );
