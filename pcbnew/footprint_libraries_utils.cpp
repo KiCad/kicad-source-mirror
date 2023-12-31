@@ -818,6 +818,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
         PROJECT_PCB::PcbFootprintLibs( &Prj() )->FootprintSave( aLibraryName, aFootprint );
 
         aFootprint->SetFPID( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) );
+
+        if( aFootprint == GetBoard()->GetFirstFootprint() )
+            setFPWatcher( aFootprint );
+
         return true;
     }
     catch( const IO_ERROR& ioe )
@@ -1084,7 +1088,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
                     // So prompt the user if he try to add/replace a footprint in a legacy lib
                     const FP_LIB_TABLE_ROW* row = PROJECT_PCB::PcbFootprintLibs( &Prj() )->FindRow( newLib );
                     wxString                libPath = row->GetFullURI();
-                    PCB_IO_MGR::PCB_FILE_T      piType = PCB_IO_MGR::GuessPluginTypeFromLibPath( libPath );
+                    PCB_IO_MGR::PCB_FILE_T  piType = PCB_IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
                     if( piType == PCB_IO_MGR::LEGACY )
                     {
