@@ -2541,6 +2541,7 @@ void ROUTER_TOOL::UpdateMessagePanel()
         std::vector<PNS::NET_HANDLE> nets = m_router->GetCurrentNets();
         wxString                     description;
         wxString                     secondary;
+        wxString                     mode;
 
         if( m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR )
         {
@@ -2603,6 +2604,16 @@ void ROUTER_TOOL::UpdateMessagePanel()
         }
 
         items.emplace_back( _( "Corner Style" ), cornerMode );
+
+        switch( m_router->Settings().Mode() )
+        {
+        case PNS::PNS_MODE::RM_MarkObstacles: mode = _( "Highlight collisions" ); break;
+        case PNS::PNS_MODE::RM_Walkaround:    mode = _( "Walk around" );          break;
+        case PNS::PNS_MODE::RM_Shove:         mode = _( "Shove" );                break;
+        default: break;
+        }
+
+        items.emplace_back( _( "Mode" ), mode );
 
 #define FORMAT_VALUE( x ) frame()->MessageTextFromValue( x )
 
