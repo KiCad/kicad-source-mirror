@@ -113,6 +113,7 @@ end
 epsilon_r
 exclude_from_pos_files
 exclude_from_bom
+expr
 extension_height
 extension_offset
 external
@@ -261,6 +262,7 @@ pcbplotparams
 pinfunction
 pintype
 placed
+placement
 plus
 polygon
 portrait
