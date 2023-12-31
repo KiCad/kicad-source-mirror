@@ -61,6 +61,7 @@
 #include <tool/tool_manager.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
+#include <widgets/appearance_controls.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
 #include <wx/hyperlink.h>
@@ -1346,6 +1347,9 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
         commit.Push( _( "Append Board" ) );
     else
         commit.Revert();
+
+    // Refresh the UI for the updated board properties
+    editFrame->GetAppearancePanel()->OnBoardChanged();
 
     return 0;
 }
