@@ -62,6 +62,12 @@ enum class ISLAND_REMOVAL_MODE
     AREA
 };
 
+enum class RULE_AREA_TYPE
+{
+    KEEPOUT = 0,
+    PLACEMENT
+};
+
 /**
  * ZONE_SETTINGS
  * handles zones parameters.
@@ -125,11 +131,14 @@ private:
      */
     bool m_isRuleArea;
 
+    RULE_AREA_TYPE m_ruleAreaType;
+
     bool            m_keepoutDoNotAllowCopperPour;
     bool            m_keepoutDoNotAllowVias;
     bool            m_keepoutDoNotAllowTracks;
     bool            m_keepoutDoNotAllowPads;
     bool            m_keepoutDoNotAllowFootprints;
+    wxString            m_ruleAreaExpression;
 
     ISLAND_REMOVAL_MODE m_removeIslands;
     long long int       m_minIslandArea;
@@ -187,6 +196,8 @@ public:
      * Accessors to parameters used in Rule Area zones:
      */
     bool GetIsRuleArea() const { return m_isRuleArea; }
+    RULE_AREA_TYPE GetRuleAreaType() const { return m_ruleAreaType; }
+    const wxString& GetRuleAreaExpression( ) const { return m_ruleAreaExpression; }
     bool GetDoNotAllowCopperPour() const { return m_keepoutDoNotAllowCopperPour; }
     bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
     bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
@@ -194,6 +205,8 @@ public:
     bool GetDoNotAllowFootprints() const { return m_keepoutDoNotAllowFootprints; }
 
     void SetIsRuleArea( bool aEnable ) { m_isRuleArea = aEnable; }
+    void SetRuleAreaType( RULE_AREA_TYPE aType ) { m_ruleAreaType = aType; }
+    void SetRuleAreaExpression( const wxString& aExpr ) { m_ruleAreaExpression = aExpr; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_keepoutDoNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_keepoutDoNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_keepoutDoNotAllowTracks = aEnable; }

@@ -116,6 +116,8 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_zoneName                = aZone.m_zoneName;
     m_priority                = aZone.m_priority;
     m_isRuleArea              = aZone.m_isRuleArea;
+    m_ruleAreaExpression = aZone.m_ruleAreaExpression;
+    m_ruleAreaType = aZone.m_ruleAreaType;
     SetLayerSet( aZone.GetLayerSet() );
 
     m_doNotAllowCopperPour    = aZone.m_doNotAllowCopperPour;
@@ -550,6 +552,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     {
         msg.Empty();
 
+// fixme placement
         if( GetDoNotAllowVias() )
             AccumulateDescription( msg, _( "No vias" ) );
 

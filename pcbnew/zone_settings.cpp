@@ -83,6 +83,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     SetDoNotAllowFootprints( false );
 
     m_TeardropType = TEARDROP_TYPE::TD_NONE;
+    m_ruleAreaType = RULE_AREA_TYPE::KEEPOUT; // for backwards compatibility
 }
 
 
@@ -152,6 +153,8 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE& aSource )
     m_cornerSmoothingType         = aSource.GetCornerSmoothingType();
     m_cornerRadius                = aSource.GetCornerRadius();
     m_isRuleArea                  = aSource.GetIsRuleArea();
+    m_ruleAreaExpression = aSource.GetRuleAreaExpression();
+    m_ruleAreaType = aSource.GetRuleAreaType();
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
     m_keepoutDoNotAllowVias       = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks     = aSource.GetDoNotAllowTracks();
@@ -190,6 +193,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsRuleArea( GetIsRuleArea() );
+    aTarget.SetRuleAreaType( GetRuleAreaType() );
+    aTarget.SetRuleAreaExpression( GetRuleAreaExpression() );
     aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
