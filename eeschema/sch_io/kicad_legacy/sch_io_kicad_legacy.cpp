@@ -798,6 +798,10 @@ SCH_LINE* SCH_IO_KICAD_LEGACY::loadWire( LINE_READER& aReader )
     if( !strCompare( "Line", line, &line ) )
         SCH_PARSE_ERROR( "invalid wire definition", aReader, line );
 
+    // The default graphical line style was Dashed.
+    if( wire->GetLayer() == LAYER_NOTES )
+        wire->SetLineStyle( LINE_STYLE::DASH );
+
     // Since Sept 15, 2017, a line style is alloved (width, style, color)
     // Only non default values are stored
     while( !is_eol( *line ) )

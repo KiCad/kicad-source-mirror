@@ -3611,6 +3611,11 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
 
         case T_stroke:
             parseStroke( stroke );
+
+            // In 6.0, the default schematic line style was Dashed.
+            if( m_requiredVersion <= 20211123 && stroke.GetLineStyle() == LINE_STYLE::DEFAULT )
+                stroke.SetLineStyle( LINE_STYLE::DASH );
+
             polyline->SetStroke( stroke );
             break;
 
