@@ -3141,8 +3141,33 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         }
 
         aKiCadTextItem->SetTextPos( pos );
+
+        switch( spin )
+        {
+        case SPIN_STYLE::RIGHT:            // Horiz Normal Orientation
+            aKiCadTextItem->SetTextAngle( ANGLE_HORIZONTAL );
+            aKiCadTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+
+        case SPIN_STYLE::UP:               // Vert Orientation UP
+            aKiCadTextItem->SetTextAngle( ANGLE_VERTICAL );
+            aKiCadTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+
+        case SPIN_STYLE::LEFT:             // Horiz Orientation - Right justified
+            aKiCadTextItem->SetTextAngle( ANGLE_HORIZONTAL );
+            aKiCadTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+
+        case SPIN_STYLE::BOTTOM:           //  Vert Orientation BOTTOM
+            aKiCadTextItem->SetTextAngle( ANGLE_VERTICAL );
+            aKiCadTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+        }
+
+        aKiCadTextItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        break;
     }
-        KI_FALLTHROUGH;
 
     // We don't want to change position of net labels as that would break connectivity
     case SCH_LABEL_T:

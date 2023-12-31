@@ -996,6 +996,23 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
     }
 
     int spinStyle = parseInt( aReader, line, &line );
+
+    // Sadly we store the orientation of hierarchical and global labels using a different
+    // int encoding than that for local labels:
+    //                   Global      Local
+    // Left justified      0           2
+    // Up                  1           3
+    // Right justified     2           0
+    // Down                3           1
+    // So we must flip it as the enum is setup with the "global" numbering
+    if( textType != SCH_GLOBAL_LABEL_T && textType != SCH_HIER_LABEL_T  )
+    {
+        if( spinStyle == 0 )
+            spinStyle = 2;
+        else if( spinStyle == 2 )
+            spinStyle = 0;
+    }
+
     int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     text->SetTextSize( VECTOR2I( size, size ) );
@@ -1003,22 +1020,6 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
     if( textType == SCH_LABEL_T || textType == SCH_HIER_LABEL_T || textType == SCH_GLOBAL_LABEL_T )
     {
         SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( text.get() );
-
-        // Sadly we store the orientation of hierarchical and global labels using a different
-        // int encoding than that for local labels:
-        //                   Global      Local
-        // Left justified      0           2
-        // Up                  1           3
-        // Right justified     2           0
-        // Down                3           1
-        // So we must flip it as the enum is setup with the "global" numbering
-        if( textType == SCH_LABEL_T )
-        {
-            if( spinStyle == 0 )
-                spinStyle = 2;
-            else if( spinStyle == 2 )
-                spinStyle = 0;
-        }
 
         label->SetSpinStyle( static_cast<SPIN_STYLE::SPIN>( spinStyle ) );
 
@@ -1036,6 +1037,33 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
             else
                 SCH_PARSE_ERROR( "invalid label type", aReader, line );
         }
+    }
+    else if( textType == SCH_TEXT_T )
+    {
+        switch( spinStyle )
+        {
+        case SPIN_STYLE::RIGHT:            // Horiz Normal Orientation
+            text->SetTextAngle( ANGLE_HORIZONTAL );
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+
+        case SPIN_STYLE::UP:               // Vert Orientation UP
+            text->SetTextAngle( ANGLE_VERTICAL );
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+
+        case SPIN_STYLE::LEFT:             // Horiz Orientation - Right justified
+            text->SetTextAngle( ANGLE_HORIZONTAL );
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+
+        case SPIN_STYLE::BOTTOM:           //  Vert Orientation BOTTOM
+            text->SetTextAngle( ANGLE_VERTICAL );
+            text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+        }
+
+        text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
     }
 
     int penWidth = 0;
