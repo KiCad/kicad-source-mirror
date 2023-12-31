@@ -110,6 +110,14 @@ bool CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         aReporter->KeepRefreshing( false );
     }
 
+    std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
+
+    for( auto net : m_nets )
+        if ( net )
+            delete net;
+
+    m_nets.clear();
+
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO( this ) );
     m_connAlgo->Build( aBoard, aReporter );
 
