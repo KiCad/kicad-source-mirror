@@ -3391,6 +3391,11 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchPolyLine()
 
         case T_stroke:
             parseStroke( stroke );
+
+            // In 6.0, the default schematic line style was Dashed.
+            if( m_requiredVersion <= 20211123 && stroke.GetPlotStyle() == PLOT_DASH_TYPE::DEFAULT )
+                stroke.SetPlotStyle( PLOT_DASH_TYPE::DASH );
+
             polyline->SetStroke( stroke );
             break;
 
