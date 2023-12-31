@@ -2437,6 +2437,8 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
                   formatInternalUnits( aZone->GetBorderHatchPitch() ).c_str() );
 
+    
+
     if( aZone->GetAssignedPriority() > 0 )
         m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetAssignedPriority() );
 
@@ -2494,14 +2496,27 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
 
     if( aZone->GetIsRuleArea() )
     {
-        m_out->Print( aNestLevel + 1,
-                      "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
-                      "(footprints %s))\n",
-                      aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
+        switch( aZone->GetRuleAreaType() )
+        {
+            case RULE_AREA_TYPE::KEEPOUT:
+                m_out->Print( aNestLevel + 1,
+                            "(keepout (tracks %s) (vias %s) (pads %s) (copperpour %s) "
+                            "(footprints %s))\n",
+                            aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
+                            aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
+                            aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed",
+                            aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed",
+                            aZone->GetDoNotAllowFootprints() ? "not_allowed" : "allowed" );
+                break;
+
+            case RULE_AREA_TYPE::PLACEMENT:
+                m_out->Print( aNestLevel + 1,
+                            "(placement (expr %s))", m_out->Quotew( aZone->GetRuleAreaExpression() ).c_str() );
+                break;
+
+            default:
+                break;
+        }
     }
 
     m_out->Print( aNestLevel + 1, "(fill" );
