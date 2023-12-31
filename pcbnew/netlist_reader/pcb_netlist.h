@@ -172,6 +172,9 @@ public:
 
     void Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl );
 
+    void SetHumanReadablePath( const wxString& aPath ) { m_humanReadablePath = aPath; }
+    const wxString& GetHumanReadablePath() const { return m_humanReadablePath; }
+
 private:
     std::vector<COMPONENT_NET>   m_nets;  ///< list of nets shared by the component pins
 
@@ -179,6 +182,9 @@ private:
     int                          m_pinCount;
     wxString                     m_reference;
     wxString                     m_value;
+
+    // human-readable hierarchical sheet path (e.g. /root/block0/sheet1)
+    wxString                     m_humanReadablePath;
 
     /// A fully specified path to the component (but not the component: [ sheetUUID, sheetUUID, .. ]
     KIID_PATH                    m_path;

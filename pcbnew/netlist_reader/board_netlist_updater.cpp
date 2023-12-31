@@ -508,7 +508,11 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     wxString sheetfile;
     wxString fpFilters;
 
-    if( aNetlistComponent->GetProperties().count( wxT( "Sheetname" ) ) > 0 )
+    wxString humanSheetPath = aNetlistComponent->GetHumanReadablePath();
+
+    if( !humanSheetPath.empty() )
+        sheetname = humanSheetPath;
+    else if( aNetlistComponent->GetProperties().count( wxT( "Sheetname" ) ) > 0 )
         sheetname = aNetlistComponent->GetProperties().at( wxT( "Sheetname" ) );
 
     if( aNetlistComponent->GetProperties().count( wxT( "Sheetfile" ) ) > 0 )

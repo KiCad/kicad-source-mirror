@@ -299,6 +299,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     wxString    value;
     wxString    library;
     wxString    name;
+    wxString    humanSheetPath;
     KIID_PATH   path;
 
     std::vector<KIID>            uuids;
@@ -438,14 +439,24 @@ void KICAD_NETLIST_PARSER::parseComponent()
         case T_sheetpath:
             while( ( token = NextTok() ) != T_EOF )
             {
+                if( token == T_names )
+                {
+                    NeedSYMBOLorNUMBER();
+                    humanSheetPath = From_UTF8( CurText() );
+                    printf("SPath '%s'\n", humanSheetPath.c_str().AsChar() );
+                    NeedRIGHT();
+                }
                 if( token == T_tstamps )
+                {
+                    NeedSYMBOLorNUMBER();
+                    path = KIID_PATH( From_UTF8( CurText() ) );
+                    NeedRIGHT();
                     break;
+                }
             }
 
-            NeedSYMBOLorNUMBER();
-            path = KIID_PATH( From_UTF8( CurText() ) );
             NeedRIGHT();
-            NeedRIGHT();
+
             break;
 
         case T_tstamps:
@@ -469,7 +480,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     if( !footprint.IsEmpty() && fpid.Parse( footprint, true ) >= 0 )
     {
         wxString error;
-        error.Printf( _( "Invalid footprint ID in\nfile: '%s'\nline: %d\noffset: %d" ),
+        error.Printf( _( "Invalid footprint ID in\nfile: '%s'\nline: %d\nofff: %d" ),
                       CurSource(), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -480,6 +491,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetLibrary( library );
     component->SetProperties( properties );
     component->SetFields( fields );
+    component->SetHumanReadablePath( humanSheetPath );
     m_netlist->AddComponent( component );
 }
 
