@@ -404,7 +404,7 @@ void D_CODE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent )
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
 
         if( !m_Rotation.IsZero() )    // rotate polygonal shape:
-            m_Polygon.Rotate( m_Rotation );
+            m_Polygon.Rotate( -m_Rotation );
 
         break;
 
