@@ -2963,7 +2963,21 @@ void FOOTPRINT::swapData( BOARD_ITEM* aImage )
 {
     wxASSERT( aImage->Type() == PCB_FOOTPRINT_T );
 
-    std::swap( *this, *static_cast<FOOTPRINT*>( aImage ) );
+    FOOTPRINT* image = static_cast<FOOTPRINT*>( aImage );
+
+    std::swap( *this, *image );
+
+    RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                child->SetParent( this );
+            } );
+
+    image->RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                child->SetParent( image );
+            } );
 }
 
 

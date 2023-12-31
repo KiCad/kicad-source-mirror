@@ -436,11 +436,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                     newField->Rotate( aPcbFootprint->GetPosition(), aPcbFootprint->GetOrientation() );
 
                     if( m_frame )
-                    {
                         newField->StyleFromSettings( m_frame->GetDesignSettings() );
-                        KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
-                        view->Add( newField );
-                    }
                 }
             }
 
