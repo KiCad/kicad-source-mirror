@@ -64,7 +64,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.SetAppName( Pgm().App().GetAppName() );
 
     /* Copyright information */
-    aInfo.SetCopyright( wxT( "(C) 1992-2023 KiCad Developers Team" ) );
+    aInfo.SetCopyright( wxT( "(C) 1992-2024 KiCad Developers Team" ) );
 
     /* KiCad build version */
     wxString version;
