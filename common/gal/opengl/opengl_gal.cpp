@@ -1492,6 +1492,9 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
 
     glDepthFunc( GL_ALWAYS );
 
+    glAlphaFunc( GL_GREATER, 0.01f );
+    glEnable( GL_ALPHA_TEST );
+
     glMatrixMode( GL_TEXTURE );
     glPushMatrix();
     glTranslated( 0.5, 0.5, 0.5 );
@@ -1537,6 +1540,8 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     glMatrixMode( GL_TEXTURE );
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
+
+    glDisable( GL_ALPHA_TEST );
 
     glDepthFunc( GL_LESS );
 }
