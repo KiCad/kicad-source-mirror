@@ -1490,7 +1490,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     if( !glIsTexture( texture_id ) ) // ensure the bitmap texture is still valid
         return;
 
-    glDisable( GL_DEPTH_TEST );
+    glDepthFunc( GL_ALWAYS );
 
     glMatrixMode( GL_TEXTURE );
     glPushMatrix();
@@ -1538,7 +1538,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
 
-    glEnable( GL_DEPTH_TEST );
+    glDepthFunc( GL_LESS );
 }
 
 
