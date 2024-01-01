@@ -994,6 +994,98 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
 }
 
 
+bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) const
+{
+    if( m_TrackWidthList         != aOther.m_TrackWidthList ) return false;
+    if( m_ViasDimensionsList     != aOther.m_ViasDimensionsList ) return false;
+    if( m_DiffPairDimensionsList != aOther.m_DiffPairDimensionsList ) return false;
+    if( m_CurrentViaType         != aOther.m_CurrentViaType ) return false;
+    if( m_UseConnectedTrackWidth != aOther.m_UseConnectedTrackWidth ) return false;
+    if( m_TempOverrideTrackWidth != aOther.m_TempOverrideTrackWidth ) return false;
+    if( m_MinClearance           != aOther.m_MinClearance ) return false;
+    if( m_MinConn                != aOther.m_MinConn ) return false;
+    if( m_TrackMinWidth          != aOther.m_TrackMinWidth ) return false;
+    if( m_ViasMinAnnularWidth    != aOther.m_ViasMinAnnularWidth ) return false;
+    if( m_ViasMinSize            != aOther.m_ViasMinSize ) return false;
+    if( m_MinThroughDrill        != aOther.m_MinThroughDrill ) return false;
+    if( m_MicroViasMinSize       != aOther.m_MicroViasMinSize ) return false;
+    if( m_MicroViasMinDrill      != aOther.m_MicroViasMinDrill ) return false;
+    if( m_CopperEdgeClearance    != aOther.m_CopperEdgeClearance ) return false;
+    if( m_HoleClearance          != aOther.m_HoleClearance ) return false;
+    if( m_HoleToHoleMin          != aOther.m_HoleToHoleMin ) return false;
+    if( m_SilkClearance          != aOther.m_SilkClearance ) return false;
+    if( m_MinResolvedSpokes      != aOther.m_MinResolvedSpokes ) return false;
+    if( m_MinSilkTextHeight      != aOther.m_MinSilkTextHeight ) return false;
+    if( m_MinSilkTextThickness   != aOther.m_MinSilkTextThickness ) return false;
+    if( m_DRCSeverities          != aOther.m_DRCSeverities ) return false;
+    if( m_DrcExclusions          != aOther.m_DrcExclusions ) return false;
+    if( m_ZoneKeepExternalFillets     != aOther.m_ZoneKeepExternalFillets ) return false;
+    if( m_MaxError                    != aOther.m_MaxError ) return false;
+    if( m_SolderMaskExpansion         != aOther.m_SolderMaskExpansion ) return false;
+    if( m_SolderMaskMinWidth          != aOther.m_SolderMaskMinWidth ) return false;
+    if( m_SolderMaskToCopperClearance != aOther.m_SolderMaskToCopperClearance ) return false;
+    if( m_SolderPasteMargin           != aOther.m_SolderPasteMargin ) return false;
+    if( m_SolderPasteMarginRatio      != aOther.m_SolderPasteMarginRatio ) return false;
+    if( m_AllowSoldermaskBridgesInFPs != aOther.m_AllowSoldermaskBridgesInFPs ) return false;
+    if( m_DefaultFPTextItems          != aOther.m_DefaultFPTextItems ) return false;
+
+    if( !std::equal( std::begin( m_LineThickness ), std::end( m_LineThickness ),
+                     std::begin( aOther.m_LineThickness ) ) )
+        return false;
+
+    if( !std::equal( std::begin( m_TextSize ), std::end( m_TextSize ),
+                     std::begin( aOther.m_TextSize ) ) )
+        return false;
+
+    if( !std::equal( std::begin( m_TextThickness ), std::end( m_TextThickness ),
+                     std::begin( aOther.m_TextThickness ) ) )
+        return false;
+
+    if( !std::equal( std::begin( m_TextItalic ), std::end( m_TextItalic ),
+                     std::begin( aOther.m_TextItalic ) ) )
+        return false;
+
+    if( !std::equal( std::begin( m_TextUpright ), std::end( m_TextUpright ),
+                     std::begin( aOther.m_TextUpright ) ) )
+        return false;
+
+    if( m_DimensionUnitsMode       != aOther.m_DimensionUnitsMode ) return false;
+    if( m_DimensionPrecision       != aOther.m_DimensionPrecision ) return false;
+    if( m_DimensionUnitsFormat     != aOther.m_DimensionUnitsFormat ) return false;
+    if( m_DimensionSuppressZeroes  != aOther.m_DimensionSuppressZeroes ) return false;
+    if( m_DimensionTextPosition    != aOther.m_DimensionTextPosition ) return false;
+    if( m_DimensionKeepTextAligned != aOther.m_DimensionKeepTextAligned ) return false;
+    if( m_DimensionArrowLength     != aOther.m_DimensionArrowLength ) return false;
+    if( m_DimensionExtensionOffset != aOther.m_DimensionExtensionOffset ) return false;
+    if( m_auxOrigin                != aOther.m_auxOrigin ) return false;
+    if( m_gridOrigin               != aOther.m_gridOrigin ) return false;
+    if( m_HasStackup               != aOther.m_HasStackup ) return false;
+    if( m_UseHeightForLengthCalcs  != aOther.m_UseHeightForLengthCalcs ) return false;
+    if( m_trackWidthIndex          != aOther.m_trackWidthIndex ) return false;
+    if( m_viaSizeIndex             != aOther.m_viaSizeIndex ) return false;
+    if( m_diffPairIndex            != aOther.m_diffPairIndex ) return false;
+    if( m_useCustomTrackVia        != aOther.m_useCustomTrackVia ) return false;
+    if( m_customTrackWidth         != aOther.m_customTrackWidth ) return false;
+    if( m_customViaSize            != aOther.m_customViaSize ) return false;
+    if( m_useCustomDiffPair        != aOther.m_useCustomDiffPair ) return false;
+    if( m_customDiffPair           != aOther.m_customDiffPair ) return false;
+    if( m_copperLayerCount         != aOther.m_copperLayerCount ) return false;
+    if( m_enabledLayers            != aOther.m_enabledLayers ) return false;
+    if( m_boardThickness           != aOther.m_boardThickness ) return false;
+    if( m_currentNetClassName      != aOther.m_currentNetClassName ) return false;
+    if( m_stackup                  != aOther.m_stackup ) return false;
+    if( *m_NetSettings             != *aOther.m_NetSettings ) return false;
+    if( *m_Pad_Master              != *aOther.m_Pad_Master ) return false;
+    if( m_defaultZoneSettings      != aOther.m_defaultZoneSettings ) return false;
+
+    if( m_StyleFPFields != aOther.m_StyleFPFields ) return false;
+    if( m_StyleFPText   != aOther.m_StyleFPText ) return false;
+    if( m_StyleFPShapes != aOther.m_StyleFPShapes ) return false;
+
+    return true;
+}
+
+
 bool BOARD_DESIGN_SETTINGS::migrateSchema0to1()
 {
     /**

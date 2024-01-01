@@ -360,6 +360,22 @@ BOARD_STACKUP& BOARD_STACKUP::operator=( const BOARD_STACKUP& aOther )
 }
 
 
+bool BOARD_STACKUP::operator==( const BOARD_STACKUP& aOther ) const
+{
+    if( m_HasDielectricConstrains  != aOther.m_HasDielectricConstrains ) return false;
+    if( m_HasThicknessConstrains   != aOther.m_HasThicknessConstrains ) return false;
+    if( m_EdgeConnectorConstraints != aOther.m_EdgeConnectorConstraints ) return false;
+    if( m_CastellatedPads          != aOther.m_CastellatedPads ) return false;
+    if( m_EdgePlating              != aOther.m_EdgePlating ) return false;
+    if( m_FinishType               != aOther.m_FinishType ) return false;
+
+    if( !std::equal( std::begin( m_list ), std::end( m_list ), std::begin( aOther.m_list ) ) )
+        return false;
+
+    return true;
+}
+
+
 void BOARD_STACKUP::RemoveAll()
 {
     for( BOARD_STACKUP_ITEM* item : m_list )

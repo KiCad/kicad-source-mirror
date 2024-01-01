@@ -127,6 +127,8 @@ struct VIA_DIMENSION
         return ( m_Diameter == aOther.m_Diameter ) && ( m_Drill == aOther.m_Drill );
     }
 
+    bool operator!=( const VIA_DIMENSION& aOther ) const { return !operator==( aOther ); }
+
     bool operator<( const VIA_DIMENSION& aOther ) const
     {
         if( m_Diameter != aOther.m_Diameter )
@@ -168,6 +170,8 @@ struct DIFF_PAIR_DIMENSION
                 && ( m_ViaGap == aOther.m_ViaGap );
     }
 
+    bool operator!=( const DIFF_PAIR_DIMENSION& aOther ) const { return !operator==( aOther ); }
+
     bool operator<( const DIFF_PAIR_DIMENSION& aOther ) const
     {
         if( m_Width != aOther.m_Width )
@@ -206,6 +210,13 @@ struct TEXT_ITEM_INFO
         m_Visible = aVisible;
         m_Layer = aLayer;
     }
+
+    bool operator==( const TEXT_ITEM_INFO& aOther ) const
+    {
+        return m_Text.IsSameAs( aOther.m_Text )
+                && ( m_Visible == aOther.m_Visible )
+                && ( m_Layer == aOther.m_Layer );
+    }
 };
 
 
@@ -229,6 +240,12 @@ public:
     BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
     virtual ~BOARD_DESIGN_SETTINGS();
+
+    bool operator==( const BOARD_DESIGN_SETTINGS& aOther ) const;
+    bool operator!=( const BOARD_DESIGN_SETTINGS& aOther ) const
+    {
+        return !operator==( aOther );
+    }
 
     BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther);
 

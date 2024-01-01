@@ -37,6 +37,10 @@ public:
 
     virtual ~NET_SETTINGS();
 
+    bool operator==( const NET_SETTINGS& aOther ) const;
+
+    bool operator!=( const NET_SETTINGS& aOther ) const { return !operator==( aOther ); }
+
 public:
     std::map<wxString, std::shared_ptr<NETCLASS>> m_NetClasses;
     std::shared_ptr<NETCLASS>                     m_DefaultNetClass;

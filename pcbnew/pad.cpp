@@ -1689,7 +1689,7 @@ bool PAD::operator==( const BOARD_ITEM& aOther ) const
     if( Type() != aOther.Type() )
         return false;
 
-    if( m_parent->m_Uuid != aOther.GetParent()->m_Uuid )
+    if( m_parent && aOther.GetParent() && m_parent->m_Uuid != aOther.GetParent()->m_Uuid )
         return false;
 
     const PAD& other = static_cast<const PAD&>( aOther );

@@ -2660,7 +2660,7 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 
     const BOARD& other = static_cast<const BOARD&>( aItem );
 
-    if( m_designSettings != other.m_designSettings )
+    if( *m_designSettings != *other.m_designSettings )
         return false;
 
     if( m_NetInfo.GetNetCount() != other.m_NetInfo.GetNetCount() )

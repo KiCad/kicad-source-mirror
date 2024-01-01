@@ -136,6 +136,10 @@ private:
 public:
     ZONE_SETTINGS();
 
+    bool operator==( const ZONE_SETTINGS& aOther ) const;
+
+    bool operator!=( const ZONE_SETTINGS& aOther ) const { return !operator==( aOther ); }
+
     /**
      * operator << ( const ZONE& )
      * was Function ImportSetting

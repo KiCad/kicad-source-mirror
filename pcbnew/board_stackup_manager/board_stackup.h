@@ -214,6 +214,9 @@ public:
     BOARD_STACKUP( const BOARD_STACKUP& aOther );
     BOARD_STACKUP& operator=( const BOARD_STACKUP& aOther );
 
+    bool operator==( const BOARD_STACKUP& aOther ) const;
+    bool operator!=( const BOARD_STACKUP& aOther ) const { return !operator==( aOther ); }
+
     ~BOARD_STACKUP() { RemoveAll(); }
 
     const std::vector<BOARD_STACKUP_ITEM*>& GetList() const { return m_list; }

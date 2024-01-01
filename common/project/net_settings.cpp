@@ -314,6 +314,31 @@ NET_SETTINGS::~NET_SETTINGS()
 }
 
 
+bool NET_SETTINGS::operator==( const NET_SETTINGS& aOther ) const
+{
+    if( !std::equal( std::begin( m_NetClasses ), std::end( m_NetClasses ),
+                     std::begin( aOther.m_NetClasses ) ) )
+        return false;
+
+    if( !std::equal( std::begin( m_NetClassPatternAssignments ),
+                     std::end( m_NetClassPatternAssignments ),
+                     std::begin( aOther.m_NetClassPatternAssignments ) ) )
+        return false;
+
+    if( !std::equal( std::begin( m_NetClassLabelAssignments ),
+                     std::end( m_NetClassLabelAssignments ),
+                     std::begin( aOther.m_NetClassLabelAssignments ) ) )
+        return false;
+
+
+    if( !std::equal( std::begin( m_NetColorAssignments ), std::end( m_NetColorAssignments ),
+                     std::begin( aOther.m_NetColorAssignments ) ) )
+        return false;
+
+    return true;
+}
+
+
 bool NET_SETTINGS::migrateSchema0to1()
 {
     if( m_internals->contains( "classes" ) && m_internals->At( "classes" ).is_array() )
