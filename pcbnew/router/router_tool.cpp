@@ -1519,6 +1519,7 @@ int ROUTER_TOOL::ChangeRouterMode( const TOOL_EVENT& aEvent )
     PNS::ROUTING_SETTINGS& settings = m_router->Settings();
 
     settings.SetMode( mode );
+    UpdateMessagePanel();
 
     return 0;
 }
@@ -1537,6 +1538,7 @@ int ROUTER_TOOL::CycleRouterMode( const TOOL_EVENT& aEvent )
     }
 
     settings.SetMode( mode );
+    UpdateMessagePanel();
 
     return 0;
 }
