@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
         "Samtec_HLE-133-02-xx-DV-PE-LC_2x33_P2.54mm_Horizontal"
     };
 
-    std::unique_ptr<FOOTPRINT> original, converted;
+    std::unique_ptr<FOOTPRINT> original, converted, golden;
     PCB_IO_KICAD_SEXPR plugin;
 
     std::string tempLibPath = fmt::format( "{}/prettifier.pretty",
@@ -91,17 +91,20 @@ BOOST_FIXTURE_TEST_CASE( FootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
             std::string goldenPath = fmt::format( "{}prettifier/{}_formatted.kicad_mod",
                                                   KI_TEST::GetPcbnewTestDataDir(),
                                                   footprint.ToStdString() );
-            {
 
-            // Note also m_fileFormatVersionAtLoad could create an issue
-            // So warn the user if happens
-            if( converted->GetFileFormatVersionAtLoad() != original->GetFileFormatVersionAtLoad() )
+            // Note also m_fileFormatVersionAtLoad (of gloden file) could create an issue
+            // during comprarison, so warn the user if happens
+            BOOST_CHECK_NO_THROW( golden = KI_TEST::ReadFootprintFromFileOrStream( goldenPath ) );
+            BOOST_REQUIRE( golden.get() );
+
+            if( converted->GetFileFormatVersionAtLoad() != golden->GetFileFormatVersionAtLoad() )
             {
                 wxLogWarning( "Golden file %s has a old version id %d and need update (now %d)",
                     goldenPath.c_str(),
-                    original->GetFileFormatVersionAtLoad(),converted->GetFileFormatVersionAtLoad() );
+                    golden->GetFileFormatVersionAtLoad(),converted->GetFileFormatVersionAtLoad() );
             }
 
+            {
             std::ifstream test( newPath );
             std::ifstream golden( goldenPath );
 

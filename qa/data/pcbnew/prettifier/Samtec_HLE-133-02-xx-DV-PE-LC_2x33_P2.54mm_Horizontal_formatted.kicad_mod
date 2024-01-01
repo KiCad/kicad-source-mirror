@@ -1,5 +1,5 @@
 (footprint "Samtec_HLE-133-02-xx-DV-PE-LC_2x33_P2.54mm_Horizontal"
-	(version 20231212)
+	(version 20231231)
 	(generator "pcbnew")
 	(generator_version "7.99")
 	(layer "F.Cu")
