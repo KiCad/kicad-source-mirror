@@ -46,8 +46,9 @@ class DIALOG_IMPORT_NETLIST_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_NetlistFilenameCtrl;
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxRadioBox* m_matchByTimestamp;
-		wxCheckBox* m_cbUpdateFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
+		wxCheckBox* m_cbUpdateFootprints;
+		wxCheckBox* m_cbOverrideLocks;
 		wxCheckBox* m_cbDeleteShortingTracks;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxBoxSizer* m_buttonsSizer;

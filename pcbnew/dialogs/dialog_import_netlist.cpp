@@ -262,6 +262,7 @@ void DIALOG_IMPORT_NETLIST::loadNetlist( bool aDryRun )
     updater.SetLookupByTimestamp( m_matchByUUID );
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
+    updater.SetOverrideLocks( m_cbOverrideLocks->GetValue() );
     updater.UpdateNetlist( netlist );
 
     // The creation of the report was made without window update: the full page must be displayed

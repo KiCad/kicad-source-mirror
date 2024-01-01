@@ -58,6 +58,7 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_isDryRun = false;
     m_replaceFootprints = true;
     m_lookupByTimestamp = false;
+    m_overrideLocks = false;
 
     m_warningCount = 0;
     m_errorCount = 0;
@@ -229,27 +230,55 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
 
     if( m_isDryRun )
     {
-        msg.Printf( _( "Change %s footprint from '%s' to '%s'."),
-                    aFootprint->GetReference(),
-                    aFootprint->GetFPID().Format().wx_str(),
-                    aNewComponent->GetFPID().Format().wx_str() );
-
-        delete newFootprint;
-        newFootprint = nullptr;
+        if( aFootprint->IsLocked() && !m_overrideLocks )
+        {
+            msg.Printf( _( "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."),
+                        aFootprint->GetReference(),
+                        aFootprint->GetFPID().Format().wx_str(),
+                        aNewComponent->GetFPID().Format().wx_str() );
+            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            ++m_warningCount;
+            delete newFootprint;
+            return nullptr;
+        }
+        else
+        {
+            msg.Printf( _( "Change %s footprint from '%s' to '%s'."),
+                        aFootprint->GetReference(),
+                        aFootprint->GetFPID().Format().wx_str(),
+                        aNewComponent->GetFPID().Format().wx_str() );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            ++m_newFootprintsCount;
+            delete newFootprint;
+            return nullptr;
+        }
     }
     else
     {
-        m_frame->ExchangeFootprint( aFootprint, newFootprint, m_commit );
+        if( aFootprint->IsLocked() && !m_overrideLocks )
+        {
+            msg.Printf( _( "Could not change %s footprint from '%s' to '%s' (footprint is locked)."),
+                        aFootprint->GetReference(),
+                        aFootprint->GetFPID().Format().wx_str(),
+                        aNewComponent->GetFPID().Format().wx_str() );
+            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            ++m_warningCount;
+            delete newFootprint;
+            return nullptr;
+        }
+        else
+        {
+            m_frame->ExchangeFootprint( aFootprint, newFootprint, m_commit );
 
-        msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
-                    aFootprint->GetReference(),
-                    aFootprint->GetFPID().Format().wx_str(),
-                    aNewComponent->GetFPID().Format().wx_str() );
+            msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
+                        aFootprint->GetReference(),
+                        aFootprint->GetFPID().Format().wx_str(),
+                        aNewComponent->GetFPID().Format().wx_str() );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            ++m_newFootprintsCount;
+            return newFootprint;
+        }
     }
-
-    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-    m_newFootprintsCount++;
-    return newFootprint;
 }
 
 
@@ -1223,21 +1252,21 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         if( component && component->GetProperties().count( wxT( "exclude_from_board" ) ) == 0 )
             matched = true;
 
-        if( doDelete && !matched && footprint->IsLocked() )
+        if( doDelete && !matched && footprint->IsLocked() && !m_overrideLocks )
         {
             if( m_isDryRun )
             {
-                msg.Printf( _( "Cannot remove unused footprint %s (locked)." ),
+                msg.Printf( _( "Cannot remove unused footprint %s (footprint is locked)." ),
                             footprint->GetReference() );
             }
             else
             {
-                msg.Printf( _( "Could not remove unused footprint %s (locked)." ),
+                msg.Printf( _( "Could not remove unused footprint %s (footprint is locked)." ),
                             footprint->GetReference() );
             }
 
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            m_errorCount++;
+            m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+            m_warningCount++;
             doDelete = false;
         }
 

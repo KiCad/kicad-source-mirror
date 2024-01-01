@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,12 +38,13 @@ class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRelinkFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
 		wxCheckBox* m_cbUpdateFootprints;
+		wxCheckBox* m_cbOverrideLocks;
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateClick( wxCommandEvent& event ) { event.Skip(); }
 
@@ -51,6 +52,7 @@ class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update PCB from Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_UPDATE_PCB_BASE();
 
 };

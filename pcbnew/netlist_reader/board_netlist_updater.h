@@ -85,6 +85,8 @@ public:
 
     void SetReplaceFootprints( bool aEnabled ) { m_replaceFootprints = aEnabled; }
 
+    void SetOverrideLocks( bool aOverride ) { m_overrideLocks = aOverride; }
+
     void SetDeleteUnusedFootprints( bool aEnabled ) { m_deleteUnusedFootprints = aEnabled; }
 
     void SetLookupByTimestamp( bool aEnabled ) { m_lookupByTimestamp = aEnabled; }
@@ -131,6 +133,7 @@ private:
     bool m_isDryRun;
     bool m_replaceFootprints;
     bool m_lookupByTimestamp;
+    bool m_overrideLocks;
 
     int m_warningCount;
     int m_errorCount;
