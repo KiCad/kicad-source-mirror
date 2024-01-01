@@ -114,8 +114,8 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 
             wxString msg;
             msg.Printf( _( "Missing footprint %s (%s)" ),
-                          component->GetReference(),
-                          component->GetValue() );
+                        component->GetReference(),
+                        component->GetValue() );
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
@@ -149,7 +149,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 {
                     wxString msg;
                     msg.Printf( _( "Pad missing net given by schematic (%s)." ),
-                                  sch_net.GetNetName() );
+                                sch_net.GetNetName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( msg );
@@ -160,8 +160,8 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 {
                     wxString msg;
                     msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)." ),
-                                  pcb_netname,
-                                  sch_net.GetNetName() );
+                                pcb_netname,
+                                sch_net.GetNetName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( msg );
@@ -180,8 +180,19 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 if( !footprint->FindPadByNumber( sch_net.GetPinName() ) )
                 {
                     wxString msg;
-                    msg.Printf( _( "No pad found for pin %s in schematic." ),
-                                  sch_net.GetPinName() );
+
+                    if( sch_net.GetNetName().StartsWith( wxT( "unconnected-" ) ) )
+                    {
+                        msg = sch_net.GetPinName();
+                    }
+                    else
+                    {
+                        msg = wxString::Format( wxT( "%s (%s)" ),
+                                                sch_net.GetPinName(),
+                                                sch_net.GetNetName() );
+                    }
+
+                    msg.Printf( _( "No pad found for pin %s in schematic." ), msg );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( msg );
