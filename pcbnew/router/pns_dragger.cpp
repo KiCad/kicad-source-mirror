@@ -120,7 +120,7 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
         m_forceMarkObstaclesMode = true;
     }
 
-    if( m_shove )
+    if( m_shove && !m_forceMarkObstaclesMode )
         m_shove->SetInitialLine( m_draggedLine );
 
     auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
