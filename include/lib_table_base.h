@@ -27,7 +27,6 @@
 #define _LIB_TABLE_BASE_H_
 
 #include <map>
-#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <mutex>
@@ -63,7 +62,7 @@ LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
  * Hold a record identifying a library accessed by the appropriate plug in object in the
  * #LIB_TABLE.  This is an abstract base class from which to derive library specific rows.
  */
-class LIB_TABLE_ROW : boost::noncopyable
+class LIB_TABLE_ROW
 {
 public:
     LIB_TABLE_ROW() :
