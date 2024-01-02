@@ -6,7 +6,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -708,8 +708,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
             {
                 // pad is connectable but has no net found in netlist
                 msg.Printf( _( "No net found for component %s pad %s (no pin %s in symbol)." ),
-                            pad->GetNumber(),
                             aFootprint->GetReference(),
+                            pad->GetNumber(),
                             pad->GetNumber() );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING);
                 ++m_warningCount;
