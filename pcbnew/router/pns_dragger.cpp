@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -116,7 +116,7 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     if ( m_world->CheckColliding( &m_draggedLine ) )
     {
         // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode (and ignore other DRC violation).
+        // switch to mark obstacles mode.
         m_forceMarkObstaclesMode = true;
     }
 
@@ -162,7 +162,7 @@ bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
     if ( m_world->CheckColliding( &m_draggedLine ) )
     {
         // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode (and ignore other DRC violation).
+        // switch to mark obstacles mode.
         m_forceMarkObstaclesMode = true;
     }
 
@@ -180,7 +180,7 @@ bool DRAGGER::startDragVia( VIA* aVia )
     if ( m_world->CheckColliding( aVia ) )
     {
         // If we're already in a state that violates DRC then there's not much we can do but
-        // switch to mark obstacles mode (and ignore other DRC violation).
+        // switch to mark obstacles mode.
         m_forceMarkObstaclesMode = true;
     }
 
@@ -335,7 +335,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         break;
     }
 
-    if( m_forceMarkObstaclesMode || Settings().AllowDRCViolations() )
+    if( Settings().AllowDRCViolations() )
         m_dragStatus = true;
     else
         m_dragStatus = !m_lastNode->CheckColliding( m_draggedItems );
@@ -704,29 +704,41 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
 }
 
 
-bool DRAGGER::FixRoute()
+bool DRAGGER::FixRoute( bool aForceCommit )
 {
     NODE* node = CurrentNode();
 
     if( node )
     {
-        // If collisions exist, we can fix in shove/smart mode because all tracks to be committed
-        // will be in valid positions (even if the current routing solution to the mouse cursor is
-        // invalid).  In other modes, we can only commit if "Allow DRC violations" is enabled.
-        if( !m_dragStatus )
+        if( m_dragStatus )
         {
+            Router()->CommitRouting( node );
+            return true;
+        }
+        else if( m_forceMarkObstaclesMode )
+        {
+            if( aForceCommit )
+            {
+                Router()->CommitRouting( node );
+                return true;
+            }
+
+            return false;
+        }
+        else
+        {
+            // If collisions exist, we can fix in shove/smart mode because all tracks to be
+            // committed will be in valid positions (even if the current routing solution to
+            // the mouse cursor is invalid).
             Drag( m_lastValidPoint );
             node = CurrentNode();
 
-            if( !node )
-                return false;
+            if( node && m_dragStatus )
+            {
+                Router()->CommitRouting( node );
+                return true;
+            }
         }
-
-        if( !m_dragStatus && !Settings().AllowDRCViolations() && !m_forceMarkObstaclesMode )
-            return false;
-
-        Router()->CommitRouting( node );
-        return true;
     }
 
     return false;

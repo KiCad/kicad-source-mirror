@@ -1309,7 +1309,10 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
 
     if( router->RoutingInProgress() )
     {
-        router->FixRoute( m_end, nullptr, true );
+        bool forceFinish = true;
+        bool forceCommit = false;
+
+        router->FixRoute( m_end, nullptr, forceFinish, forceCommit );
         router->StopRouting();
     }
 

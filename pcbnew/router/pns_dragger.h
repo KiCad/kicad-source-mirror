@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -73,7 +73,7 @@ public:
      * and eventually commits it to the world.
      * @return true, if dragging finished with success.
      */
-    bool FixRoute() override;
+    bool FixRoute( bool aForceCommit ) override;
 
     /**
      * Function CurrentNode()
@@ -101,7 +101,7 @@ public:
     }
 
     const LINE& GetOriginalLine()
-{
+    {
         return m_draggedLine;
     }
 
@@ -120,6 +120,12 @@ public:
     void SetMode( PNS::DRAG_MODE aDragMode ) override;
 
     PNS::DRAG_MODE Mode() const override;
+
+    bool GetForceMarkObstaclesMode( bool* aDragStatus ) const override
+    {
+        *aDragStatus = m_dragStatus;
+        return m_forceMarkObstaclesMode;
+    }
 
 private:
     const ITEM_SET findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& handle );

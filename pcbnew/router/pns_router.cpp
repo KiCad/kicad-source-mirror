@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -557,7 +557,12 @@ bool ROUTER::Finish()
 
     // If we've made it, fix the route and we're done
     if( moveResultPoint == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
-        return FixRoute( otherEnd, otherEndItem, false );
+    {
+        bool forceFinish = false;
+        bool allowViolations = false;
+
+        return FixRoute( otherEnd, otherEndItem, forceFinish, allowViolations );
+    }
 
     return false;
 }
@@ -848,7 +853,7 @@ void ROUTER::CommitRouting( NODE* aNode )
 }
 
 
-bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
+bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish, bool aForceCommit )
 {
     bool rv = false;
 
@@ -863,7 +868,7 @@ bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 
     case DRAG_SEGMENT:
     case DRAG_COMPONENT:
-        rv = m_dragger->FixRoute();
+        rv = m_dragger->FixRoute( aForceCommit );
         break;
 
     default:

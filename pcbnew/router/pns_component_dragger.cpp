@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2020 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -244,13 +244,13 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
 }
 
 
-bool COMPONENT_DRAGGER::FixRoute()
+bool COMPONENT_DRAGGER::FixRoute( bool aForceCommit )
 {
     NODE* node = CurrentNode();
 
     if( node )
     {
-        if( Settings().AllowDRCViolations() || !node->CheckColliding( m_draggedItems ) )
+        if( Settings().AllowDRCViolations() || aForceCommit || !node->CheckColliding( m_draggedItems ) )
         {
             Router()->CommitRouting( node );
             return true;

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -149,7 +149,7 @@ public:
     bool Move( const VECTOR2I& aP, ITEM* aItem );
     bool Finish();
     bool ContinueFromEnd( ITEM** aNewStartItem );
-    bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
+    bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish, bool aForceCommit );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
     std::optional<VECTOR2I> UndoLastSegment();

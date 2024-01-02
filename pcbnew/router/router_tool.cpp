@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -66,13 +66,12 @@ using namespace std::placeholders;
 #include <project/project_local_settings.h>
 
 #include "router_tool.h"
-#include "pns_segment.h"
+#include "router_status_view_item.h"
 #include "pns_router.h"
 #include "pns_itemset.h"
 #include "pns_logger.h"
 #include "pns_placement_algo.h"
-#include "pns_line_placer.h"
-#include "pns_topology.h"
+#include "pns_drag_algo.h"
 
 #include "pns_kicad_iface.h"
 
@@ -1391,13 +1390,16 @@ void ROUTER_TOOL::performRouting()
                 frame()->ShowInfoBarError( m_router->FailureReason(), true );
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
+        else if( evt->IsClick( BUT_LEFT )
+                     || evt->IsDrag( BUT_LEFT )
+                     || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
         {
             updateEndItem( *evt );
             bool needLayerSwitch = m_router->IsPlacingVia();
             bool forceFinish = evt->Modifier( MD_SHIFT );
+            bool forceCommit = false;
 
-            if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
+            if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish, forceCommit ) )
                 break;
 
             if( needLayerSwitch )
@@ -1437,7 +1439,10 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACTIONS::finishInteractive ) || evt->IsDblClick( BUT_LEFT )  )
         {
             // Stop current routing:
-            m_router->FixRoute( m_endSnapPoint, m_endItem, true );
+            bool forceFinish = true;
+            bool forceCommit = false;
+
+            m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish, forceCommit );
             break;
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate()
@@ -1848,6 +1853,9 @@ void ROUTER_TOOL::performDragging( int aMode )
 {
     m_router->ClearViewDecorations();
 
+    view()->ClearPreview();
+    view()->InitPreview();
+
     VIEW_CONTROLS* ctls = getViewControls();
 
     if( m_startItem && m_startItem->IsLocked() )
@@ -1900,10 +1908,36 @@ void ROUTER_TOOL::performDragging( int aMode )
         {
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
+
+            if( PNS::DRAG_ALGO* dragger = m_router->GetDragger() )
+            {
+                bool dragStatus;
+
+                if( dragger->GetForceMarkObstaclesMode( &dragStatus ) )
+                {
+                    view()->ClearPreview();
+
+                    if( !dragStatus )
+                    {
+                        wxString hint;
+                        hint.Printf( _( "(%s to commit anyway.)" ),
+                                    KeyNameFromKeyCode( MD_CTRL + PSEUDO_WXK_CLICK ) );
+
+                        ROUTER_STATUS_VIEW_ITEM* statusItem = new ROUTER_STATUS_VIEW_ITEM();
+                        statusItem->SetMessage( _( "Track violates DRC." ) );
+                        statusItem->SetHint( hint );
+                        statusItem->SetPosition( frame()->GetToolManager()->GetMousePosition() );
+                        view()->AddToPreview( statusItem );
+                    }
+                }
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
+            bool forceFinish = false;
+            bool forceCommit = evt->Modifier( MD_CTRL );
+
+            if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish, forceCommit ) )
                 break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -1958,6 +1992,9 @@ void ROUTER_TOOL::performDragging( int aMode )
 
         handleCommonEvents( *evt );
     }
+
+    view()->ClearPreview();
+    view()->ShowPreview( false );
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
@@ -2283,12 +2320,12 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
 
+            view()->ClearPreview();
+
             if( !footprints.empty() )
             {
                 VECTOR2I offset = m_endSnapPoint - p;
                 BOARD_ITEM* previewItem;
-
-                view()->ClearPreview();
 
                 for( FOOTPRINT* footprint : footprints )
                 {
@@ -2347,11 +2384,35 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 lastOffset = offset;
                 connectivityData->ComputeLocalRatsnest( dynamicItems, dynamicData.get(), offset );
             }
+
+            if( PNS::DRAG_ALGO* dragger = m_router->GetDragger() )
+            {
+                bool dragStatus;
+
+                if( dragger->GetForceMarkObstaclesMode( &dragStatus ) )
+                {
+                    if( !dragStatus )
+                    {
+                        wxString hint;
+                        hint.Printf( _( "(%s to commit anyway.)" ),
+                                    KeyNameFromKeyCode( MD_CTRL + PSEUDO_WXK_CLICK ) );
+
+                        ROUTER_STATUS_VIEW_ITEM* statusItem = new ROUTER_STATUS_VIEW_ITEM();
+                        statusItem->SetMessage( _( "Track violates DRC." ) );
+                        statusItem->SetHint( hint );
+                        statusItem->SetPosition( frame()->GetToolManager()->GetMousePosition() );
+                        view()->AddToPreview( statusItem );
+                    }
+                }
+            }
         }
         else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
+            bool forceFinish = false;
+            bool forceCommit = evt->Modifier( MD_CTRL );
+
             updateEndItem( *evt );
-            m_router->FixRoute( m_endSnapPoint, m_endItem );
+            m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish, forceCommit );
             break;
         }
         else if( evt->IsUndoRedo() )
@@ -2407,11 +2468,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 view()->Hide( pad, false );
         }
 
-        view()->ClearPreview();
-        view()->ShowPreview( false );
-
         connectivityData->ClearLocalRatsnest();
     }
+
+    view()->ClearPreview();
+    view()->ShowPreview( false );
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
     courtyardClearanceDRC.ClearConflicts( getView() );
