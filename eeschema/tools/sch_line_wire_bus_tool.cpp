@@ -271,11 +271,13 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 
     if( aEvent.HasPosition() )
     {
-        EE_GRID_HELPER   grid( m_toolMgr );
+        EE_GRID_HELPER    grid( m_toolMgr );
+        GRID_HELPER_GRIDS gridType = ( params->layer == LAYER_NOTES ) ? GRID_GRAPHICS : GRID_WIRES;
+
         grid.SetSnap( !aEvent.Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !aEvent.DisableGridSnapping() );
 
-        VECTOR2D cursorPos = grid.BestSnapAnchor( aEvent.Position(), GRID_WIRES, nullptr );
+        VECTOR2D cursorPos = grid.BestSnapAnchor( aEvent.Position(), gridType, nullptr );
         startSegments( params->layer, cursorPos, params->sourceSegment );
     }
 
@@ -551,6 +553,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
     SCH_SCREEN*           screen = m_frame->GetScreen();
     SCH_LINE*             segment = nullptr;
     EE_GRID_HELPER        grid( m_toolMgr );
+    GRID_HELPER_GRIDS     gridType = ( aType == LAYER_NOTES ) ? GRID_GRAPHICS : GRID_WIRES;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     int                   lastMode = m_frame->eeconfig()->m_Drawing.line_mode;
     static bool           posture = false;
@@ -639,7 +642,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
         VECTOR2D eventPosition = evt->HasPosition() ? evt->Position()
                                                     : controls->GetMousePosition();
 
-        VECTOR2I cursorPos = grid.BestSnapAnchor( eventPosition, GRID_WIRES, segment );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( eventPosition, gridType, segment );
         controls->ForceCursorPosition( true, cursorPos );
 
         // Need to handle change in H/V mode while drawing
