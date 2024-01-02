@@ -2196,8 +2196,13 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             }
             else
             {
-                for( BOARD_ITEM* member : static_cast<PCB_GROUP*>( board_item )->GetItems() )
+                PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
+
+                for( BOARD_ITEM* member : generator->GetItems() )
                     commit.Stage( member, CHT_UNGROUP );
+
+                for( BOARD_ITEM* member : generator->GetItems() )
+                    commit.Remove( member );
 
                 commit.Remove( board_item );
             }
