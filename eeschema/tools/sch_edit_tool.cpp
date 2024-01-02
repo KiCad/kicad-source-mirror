@@ -738,6 +738,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
             KI_FALLTHROUGH;
         case SCH_JUNCTION_T:
+        case SCH_NO_CONNECT_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
