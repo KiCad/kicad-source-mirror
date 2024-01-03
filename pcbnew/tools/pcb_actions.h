@@ -582,8 +582,7 @@ public:
     static TOOL_ACTION ddImportFootprint;
 
     static TOOL_ACTION repeatLayout;
-
-
+    static TOOL_ACTION generatePlacementRuleAreas;
 };
 
 class PCB_EVENTS

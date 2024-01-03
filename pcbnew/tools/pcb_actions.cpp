@@ -2206,12 +2206,17 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Place Off-Board Footprints" ) )
         .Tooltip( _( "Performs automatic placement of components outside board area" ) ) );
 
-TOOL_ACTION PCB_ACTIONS::repeatLayout( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Autoplacer.repeatLayout" )
+TOOL_ACTION PCB_ACTIONS::generatePlacementRuleAreas( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Multichannel.generatePlacementRuleAreas" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Clones identical fragments of layout" ) )
-        .Tooltip( _( "" ) ) );
+        .FriendlyName( "Generate Placement Rule Areas" )
+        .Tooltip( "Generates Placement Areas in easy way" ).Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::repeatLayout( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Multichannel.repeatLayout" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName(  "Repeat Layout" )
+        .Tooltip(  "Clones placement & routing across multiple identical channels" ) );
 
 // ROUTER_TOOL
 //
