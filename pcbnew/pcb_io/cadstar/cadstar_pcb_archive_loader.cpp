@@ -847,14 +847,27 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponen
 void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponent,
                                                      FOOTPRINT* aFootprint )
 {
-    int totalCopperPads = 0;
+    bool compCopperError = false;
 
     for( COMPONENT_COPPER compCopper : aComponent.ComponentCoppers )
     {
         int lineThickness = getKiCadLength( getCopperCode( compCopper.CopperCodeID ).CopperWidth );
-        PCB_LAYER_ID copperLayer = getKiCadLayer( compCopper.LayerID );
+        LSET layers = getKiCadLayerSet( compCopper.LayerID );
+        LSET copperLayers = LSET::AllCuMask() & layers;
+        LSET remainingLayers = layers;
 
-        if( compCopper.AssociatedPadIDs.size() > 0 && LSET::AllCuMask().Contains( copperLayer )
+        if( !compCopperError && copperLayers.count() > 1 && compCopper.AssociatedPadIDs.size() > 0 )
+        {
+            // TODO: Fix when we have full padstacks
+            wxLogError( _( "Footprint definition '%s' has component copper associated to a pad on "
+                           "multiple layers. Custom padstacks are not supported in KiCad. The "
+                           "copper items have been imported as graphical elements." ),
+                        aComponent.BuildLibName() );
+
+            compCopperError = true;
+        }
+
+        if( compCopper.AssociatedPadIDs.size() > 0 && copperLayers.count() == 1
             && compCopper.Shape.Type == SHAPE_TYPE::SOLID )
         {
             // The copper is associated with pads and in an electrical layer which means it can
@@ -883,7 +896,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
             pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
             pad->SetAttribute( PAD_ATTRIB::SMD );
-            pad->SetLayerSet( LSET( 1, copperLayer ) );
+            pad->SetLayerSet( copperLayers );
             pad->SetNumber( anchorPad.Identifier.IsEmpty()
                                   ? wxString::Format( wxT( "%ld" ), anchorPad.ID )
                                   : anchorPad.Identifier );
@@ -922,14 +935,19 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
                                                       // when finding pads by PAD_ID. See loadNets()
 
             m_librarycopperpads[aComponent.ID][anchorPad.ID].push_back( aFootprint->Pads().size() );
-            totalCopperPads++;
+
+            remainingLayers ^= copperLayers; // don't process copper layers again!
         }
-        else
+
+        if( remainingLayers.any() )
         {
-            drawCadstarShape( compCopper.Shape, copperLayer, lineThickness,
-                              wxString::Format( wxT( "Component %s:%s -> Copper element" ),
-                                                aComponent.ReferenceName, aComponent.Alternate ),
-                              aFootprint );
+            for( const PCB_LAYER_ID& layer : remainingLayers.Seq() )
+            {
+                drawCadstarShape( compCopper.Shape, layer, lineThickness,
+                                  wxString::Format( wxT( "Component %s:%s -> Copper element" ),
+                                                    aComponent.ReferenceName, aComponent.Alternate ),
+                                  aFootprint );
+            }
         }
     }
 }
