@@ -52,6 +52,7 @@ private:
     bool TransferDataFromWindow() override;
 
     void OnLayerSelection( wxDataViewEvent& event ) override;
+    void OnRuleTypeSelect( wxCommandEvent& event ) override;
 
 private:
     UNIT_BINDER       m_outlineHatchPitch;
@@ -161,13 +162,26 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         m_cbDeleteOriginals->SetValue( m_convertSettings->m_DeleteOriginals );
     }
 
-    // Init keepout parameters:
-    m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
-    m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
-    m_cbPadsCtrl->SetValue( m_zonesettings.GetDoNotAllowPads() );
-    m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
-    m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
+    if( m_zonesettings.GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT )
+    {
+        // Init keepout parameters:
+        m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
+        m_cbViasCtrl->SetValue( m_zonesettings.GetDoNotAllowVias() );
+        m_cbPadsCtrl->SetValue( m_zonesettings.GetDoNotAllowPads() );
+        m_cbFootprintsCtrl->SetValue( m_zonesettings.GetDoNotAllowFootprints() );
+        m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
+        m_rbRuleType->Select( 0 );
+        m_placementRuleSizer->Show( false );
+        m_keepoutRuleSizer->Show( true );
+    }
+    else
+    {
+        m_placementRuleSizer->Show( true );
+        m_keepoutRuleSizer->Show( false );
+        m_rbRuleType->Select( 1 );
+    }
 
+    m_ruleText->SetText( m_zonesettings.GetRuleAreaExpression() );
     m_cbLocked->SetValue( m_zonesettings.m_Locked );
 
     m_tcName->SetValue( m_zonesettings.m_Name );
@@ -183,8 +197,28 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     m_outlineHatchPitch.SetValue( m_zonesettings.m_BorderHatchPitch );
 
     SetInitialFocus( m_OutlineDisplayCtrl );
+    Layout();
 
     return true;
+}
+
+
+void DIALOG_RULE_AREA_PROPERTIES::OnRuleTypeSelect( wxCommandEvent& event )
+{
+    if( m_rbRuleType->GetSelection() == 0 )
+    {
+        m_zonesettings.SetRuleAreaType( RULE_AREA_TYPE::KEEPOUT );
+        m_placementRuleSizer->Show( false );
+        m_keepoutRuleSizer->Show( true );
+        Layout();
+    }
+    else
+    {
+        m_zonesettings.SetRuleAreaType( RULE_AREA_TYPE::PLACEMENT );
+        m_placementRuleSizer->Show( true );
+        m_keepoutRuleSizer->Show( false );
+        Layout();
+    }
 }
 
 
@@ -233,6 +267,8 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     }
 
     // Init keepout parameters:
+    m_zonesettings.SetRuleAreaType( m_rbRuleType->GetSelection() == 0 ? RULE_AREA_TYPE::KEEPOUT : RULE_AREA_TYPE::PLACEMENT );
+    m_zonesettings.SetRuleAreaExpression( m_ruleText->GetText() );
     m_zonesettings.SetIsRuleArea( true );
     m_zonesettings.SetDoNotAllowTracks( m_cbTracksCtrl->GetValue() );
     m_zonesettings.SetDoNotAllowVias( m_cbViasCtrl->GetValue() );

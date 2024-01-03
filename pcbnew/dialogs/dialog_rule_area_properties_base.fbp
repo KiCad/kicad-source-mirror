@@ -488,6 +488,7 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnRadioBox">OnRuleTypeSelect</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
@@ -503,7 +504,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">m_keepoutRuleSizer</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-                        <property name="permission">none</property>
+                        <property name="permission">protected</property>
                         <property name="rows">0</property>
                         <property name="vgap">3</property>
                         <object class="sizeritem" expanded="true">
@@ -848,7 +849,7 @@
                     <property name="minimum_size"></property>
                     <property name="name">m_placementRuleSizer</property>
                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-                    <property name="permission">none</property>
+                    <property name="permission">protected</property>
                     <property name="rows">0</property>
                     <property name="vgap">3</property>
                     <object class="sizeritem" expanded="true">

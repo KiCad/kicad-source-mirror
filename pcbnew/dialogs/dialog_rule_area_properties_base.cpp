@@ -73,7 +73,6 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	m_rbRuleType->SetSelection( 0 );
 	fgSizer2->Add( m_rbRuleType, 0, wxALL|wxEXPAND, 5 );
 
-	wxFlexGridSizer* m_keepoutRuleSizer;
 	m_keepoutRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
 	m_keepoutRuleSizer->SetFlexibleDirection( wxBOTH );
 	m_keepoutRuleSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -109,7 +108,6 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 
 	bSizerRight->Add( fgSizer2, 1, wxEXPAND, 5 );
 
-	wxFlexGridSizer* m_placementRuleSizer;
 	m_placementRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
 	m_placementRuleSizer->AddGrowableCol( 0 );
 	m_placementRuleSizer->SetFlexibleDirection( wxBOTH );
@@ -219,6 +217,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::OnLayerSelection ), NULL, this );
 	m_layers->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::onLayerListRightDown ), NULL, this );
 	m_layers->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::OnSizeLayersList ), NULL, this );
+	m_rbRuleType->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::OnRuleTypeSelect ), NULL, this );
 }
 
 DIALOG_RULE_AREA_PROPERTIES_BASE::~DIALOG_RULE_AREA_PROPERTIES_BASE()
@@ -227,5 +226,6 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::~DIALOG_RULE_AREA_PROPERTIES_BASE()
 	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::OnLayerSelection ), NULL, this );
 	m_layers->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::onLayerListRightDown ), NULL, this );
 	m_layers->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::OnSizeLayersList ), NULL, this );
+	m_rbRuleType->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_RULE_AREA_PROPERTIES_BASE::OnRuleTypeSelect ), NULL, this );
 
 }

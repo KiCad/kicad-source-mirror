@@ -45,11 +45,13 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_tcName;
 		wxCheckBox* m_cbLocked;
 		wxRadioBox* m_rbRuleType;
+		wxFlexGridSizer* m_keepoutRuleSizer;
 		wxCheckBox* m_cbTracksCtrl;
 		wxCheckBox* m_cbViasCtrl;
 		wxCheckBox* m_cbPadsCtrl;
 		wxCheckBox* m_cbCopperPourCtrl;
 		wxCheckBox* m_cbFootprintsCtrl;
+		wxFlexGridSizer* m_placementRuleSizer;
 		wxStaticText* m_staticText31;
 		wxStyledTextCtrl* m_ruleText;
 		wxStaticText* m_staticTextStyle;
@@ -65,6 +67,7 @@ class DIALOG_RULE_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onLayerListRightDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnSizeLayersList( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnRuleTypeSelect( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
