@@ -431,8 +431,18 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == FOOTPRINT_FIELD )
         {
-            m_footprintAttr->IncRef();
-            return m_footprintAttr;
+            // Power symbols have do not appear in the board, so don't allow
+            // a footprint
+            if( m_part->IsPower() )
+            {
+                m_readOnlyAttr->IncRef();
+                return m_readOnlyAttr;
+            }
+            else
+            {
+                m_footprintAttr->IncRef();
+                return m_footprintAttr;
+            }
         }
         else if( m_parentType == SCH_SYMBOL_T && aRow == DATASHEET_FIELD )
         {
@@ -868,7 +878,8 @@ template class FIELDS_GRID_TABLE<LIB_FIELD>;
 
 void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-    if( m_grid->GetGridCursorRow() == FOOTPRINT_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE )
+    if( m_grid->GetGridCursorRow() == FOOTPRINT_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE
+        && !m_grid->IsReadOnly( FOOTPRINT_FIELD, FDC_VALUE ) )
     {
         menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
                      _( "Browse for footprint" ) );
