@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-31 00:10+0000\n"
+"PO-Revision-Date: 2024-01-04 16:07+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
@@ -11950,7 +11950,7 @@ msgstr "/pfad/zu/schaltplanblatt"
 #: pcbnew/footprint_edit_frame.cpp:228 pcbnew/footprint_edit_frame.cpp:865
 #: pcbnew/pcb_edit_frame.cpp:290 pcbnew/pcb_edit_frame.cpp:1520
 msgid "Appearance"
-msgstr "Erscheinungsbild"
+msgstr "Darstellung"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:40
 msgid "Default font:"
