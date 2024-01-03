@@ -150,6 +150,10 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_unused_pad_layers_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
+    dialogs/dialog_multichannel_generate_rule_areas_base.cpp
+    dialogs/dialog_multichannel_generate_rule_areas.cpp
+    dialogs/dialog_multichannel_repeat_layout_base.cpp
+    dialogs/dialog_multichannel_repeat_layout.cpp
     dialogs/panel_pcb_display_options.cpp
     dialogs/panel_pcb_display_options_base.cpp
     dialogs/panel_edit_options.cpp
@@ -385,6 +389,7 @@ set( PCBNEW_CLASS_SRCS
     tools/zone_filler_tool.cpp
     tools/generator_tool.cpp
     tools/generator_tool_pns_proxy.cpp
+    tools/multichannel_tool.cpp
 
     footprint_preview_panel.cpp
     footprint_tree_pane.cpp
