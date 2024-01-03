@@ -787,13 +787,17 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponen
     {
         FIGURE& fig = figPair.second;
 
-        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
-                          getLineThickness( fig.LineCodeID ),
-                          wxString::Format( wxT( "Component %s:%s -> Figure %s" ),
-                                            aComponent.ReferenceName,
-                                            aComponent.Alternate,
-                                            fig.ID ),
-                          aFootprint );
+        for( const PCB_LAYER_ID& layer : getKiCadLayerSet( fig.LayerID ).Seq() )
+        {
+            drawCadstarShape( fig.Shape,
+                              layer,
+                              getLineThickness( fig.LineCodeID ),
+                              wxString::Format( wxT( "Component %s:%s -> Figure %s" ),
+                                                aComponent.ReferenceName,
+                                                aComponent.Alternate,
+                                                fig.ID ),
+                              aFootprint );
+        }
     }
 }
 
@@ -1380,10 +1384,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadFigures()
     for( std::pair<FIGURE_ID, FIGURE> figPair : Layout.Figures )
     {
         FIGURE& fig = figPair.second;
-        drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
-                          getLineThickness( fig.LineCodeID ),
-                          wxString::Format( wxT( "FIGURE %s" ), fig.ID ),
-                          m_board, fig.GroupID );
+
+        for( const PCB_LAYER_ID& layer : getKiCadLayerSet( fig.LayerID ).Seq() )
+        {
+            drawCadstarShape( fig.Shape,
+                              layer,
+                              getLineThickness( fig.LineCodeID ),
+                              wxString::Format( wxT( "FIGURE %s" ), fig.ID ),
+                              m_board, fig.GroupID );
+        }
 
         //TODO process "swaprule" (doesn't seem to apply to Layout Figures?)
         //TODO process re-use block when KiCad Supports it
@@ -4166,16 +4175,23 @@ LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayer
     switch( layerType )
     {
     case LAYER_TYPE::ALLDOC:
-        return LSET( 4, PCB_LAYER_ID::Dwgs_User, PCB_LAYER_ID::Cmts_User, PCB_LAYER_ID::Eco1_User,
-                PCB_LAYER_ID::Eco2_User );
+        return LSET( 4, PCB_LAYER_ID::Dwgs_User,
+                        PCB_LAYER_ID::Cmts_User,
+                        PCB_LAYER_ID::Eco1_User,
+                        PCB_LAYER_ID::Eco2_User )
+                | LSET::UserDefinedLayers();
 
     case LAYER_TYPE::ALLELEC:
         return LSET::AllCuMask( m_numCopperLayers );
 
     case LAYER_TYPE::ALLLAYER:
-        return LSET::AllLayersMask()
-               ^ ( LSET::AllCuMask( m_numCopperLayers ) ^ LSET::AllCuMask( MAX_CU_LAYERS ) )
-               ^ ( LSET( PCB_LAYER_ID::Rescue ) );
+        return LSET::AllCuMask( m_numCopperLayers )
+                | LSET( 4, PCB_LAYER_ID::Dwgs_User,
+                           PCB_LAYER_ID::Cmts_User,
+                           PCB_LAYER_ID::Eco1_User,
+                           PCB_LAYER_ID::Eco2_User )
+                | LSET::UserDefinedLayers()
+                | LSET::AllBoardTechMask();
 
     default:
         return LSET( getKiCadLayer( aCadstarLayerID ) );
