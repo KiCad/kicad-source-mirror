@@ -590,6 +590,13 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 aFootprint->SetReference( "REF**" );
             };
 
+    auto resetGroup =
+            []( FOOTPRINT* aFootprint )
+            {
+                if( PCB_GROUP* parentGroup = aFootprint->GetParentGroup() )
+                    parentGroup->RemoveItem( aFootprint );
+            };
+
     if( !aStoreInNewLib )
     {
         // The footprints are saved in an existing .pretty library in the fp lib table
@@ -615,7 +622,10 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 {
                     FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
 
+                    // Reset reference designator and group membership before saving
                     resetReference( fpCopy );
+                    resetGroup( fpCopy );
+
                     tbl->FootprintSave( nickname, fpCopy, true );
 
                     delete fpCopy;
@@ -668,12 +678,11 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 {
                     FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
 
+                    // Reset reference designator and group membership before saving
                     resetReference( fpCopy );
-                    pi->FootprintSave( libPath, fpCopy );
+                    resetGroup( fpCopy );
 
-                    // Remove reference to the group before deleting
-                    if( PCB_GROUP* parentGroup = fpCopy->GetParentGroup() )
-                        parentGroup->RemoveItem( fpCopy );
+                    pi->FootprintSave( libPath, fpCopy );
 
                     delete fpCopy;
                 }
