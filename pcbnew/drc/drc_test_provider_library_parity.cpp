@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2023 KiCad Developers.
+ * Copyright (C) 2021-2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -605,8 +605,17 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
     // algorithm we use the footprint sorting functions to attempt to sort them in the same
     // order.
 
+    // However FOOTPRINT::cmp_drawings uses PCB_SHAPE coordinates and other infos, so we have
+    // already normalized graphic items in model footprint from library, so we need to normalize
+    // graphic items in the footprint to test (*this). So normalize them using a copy of this
+    FOOTPRINT dummy( *this );
+    dummy.SetParent( nullptr );
+
+    for( BOARD_ITEM* item : dummy.GraphicalItems() )
+        item->Normalize();
+
     std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> aShapes;
-    std::copy_if( GraphicalItems().begin(), GraphicalItems().end(),
+    std::copy_if( dummy.GraphicalItems().begin(), dummy.GraphicalItems().end(),
                   std::inserter( aShapes, aShapes.begin() ),
                   []( BOARD_ITEM* item )
                   {
@@ -630,12 +639,12 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
     {
         for( auto aIt = aShapes.begin(), bIt = bShapes.begin(); aIt != aShapes.end(); aIt++, bIt++ )
         {
-            // aShapes are the tested footprint PCB_SHAPE. Normalize them
-            // bShapes are from the footprint model: they are already normalized.
-            PCB_SHAPE curr_shape = *static_cast<PCB_SHAPE*>( *aIt );
-            curr_shape.Normalize();
+            // aShapes and bShapes are the tested footprint PCB_SHAPE and the model PCB_SHAPE.
+            // These shapes are already normalized.
+            PCB_SHAPE* curr_shape = static_cast<PCB_SHAPE*>( *aIt );
+            PCB_SHAPE* test_shape = static_cast<PCB_SHAPE*>( *bIt );
 
-            if( shapeNeedsUpdate( curr_shape, *static_cast<PCB_SHAPE*>( *bIt ) ) )
+            if( shapeNeedsUpdate( *curr_shape, *test_shape ) )
             {
                 diff = true;
                 REPORT( wxString::Format( _( "%s differs." ), ITEM_DESC( *aIt ) ) );
@@ -666,14 +675,8 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
 
     CHECKPOINT;
 
-    // Rotate/position a copy of libFootprint so that zones sort the same
-    std::unique_ptr<FOOTPRINT> libCopy( static_cast<FOOTPRINT*>( aLibFP->Clone() ) );
-
-    libCopy->SetOrientation( GetOrientation() );
-    libCopy->Move( GetPosition() );
-
     std::set<ZONE*, FOOTPRINT::cmp_zones> aZones( Zones().begin(), Zones().end() );
-    std::set<ZONE*, FOOTPRINT::cmp_zones> bZones( libCopy->Zones().begin(), libCopy->Zones().end() );
+    std::set<ZONE*, FOOTPRINT::cmp_zones> bZones( aLibFP->Zones().begin(), aLibFP->Zones().end() );
 
     if( aZones.size() != bZones.size() )
     {
