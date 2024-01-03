@@ -351,6 +351,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* multichannelSubmenu = new ACTION_MENU( false, selTool );
     multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
     multichannelSubmenu->SetIcon( BITMAPS::mode_module );
+    multichannelSubmenu->Add( PCB_ACTIONS::generatePlacementRuleAreas );
     multichannelSubmenu->Add( PCB_ACTIONS::repeatLayout );
 
     placeMenu->Add( multichannelSubmenu );
