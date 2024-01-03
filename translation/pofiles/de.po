@@ -9,7 +9,7 @@
 # Dominik Wernberger <dominik.wernberger@gmx.de>, 2021.
 # Flo082002 <flos6323@gmail.com>, 2021.
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
-# Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023.
+# Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
 # Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
 "PO-Revision-Date: 2024-01-08 00:06+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -318,7 +318,7 @@ msgstr "KiCad 3D-Betrachter"
 #: pcbnew/footprint_edit_frame.cpp:237 pcbnew/footprint_edit_frame.cpp:899
 #: pcbnew/pcb_edit_frame.cpp:298 pcbnew/pcb_edit_frame.cpp:1586
 msgid "Appearance"
-msgstr "Erscheinungsbild"
+msgstr "Darstellung"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
