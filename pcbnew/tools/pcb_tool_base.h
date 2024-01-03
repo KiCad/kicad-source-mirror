@@ -162,9 +162,10 @@ protected:
         return getViewControls();
     }
 
-    PCB_BASE_EDIT_FRAME* frame() const
+    template<class T = PCB_BASE_EDIT_FRAME>
+    T* frame() const
     {
-        return getEditFrame<PCB_BASE_EDIT_FRAME>();
+        return getEditFrame<T>();
     }
 
     BOARD* board() const { return getModel<BOARD>(); }
