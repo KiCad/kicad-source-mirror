@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2511,6 +2511,10 @@ void EAGLE_PLUGIN::deleteTemplates()
 
 void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
 {
+    // Eagle board DTD defines the "classes" element as 0 or 1.
+    if( !aClasses )
+        return;
+
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     m_xpath->push( "classes.class", "number" );
@@ -2575,6 +2579,10 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
 
 void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 {
+    // Eagle board DTD defines the "signals" element as 0 or 1.
+    if( !aSignals )
+        return;
+
     ZONES zones;      // per net
     int   netCode = 1;
 
