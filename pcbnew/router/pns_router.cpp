@@ -251,6 +251,9 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             {
                 ZONE* zone = static_cast<ZONE*>( parent );
 
+                if( zone->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT )
+                    break;
+
                 if( !zone->GetZoneName().IsEmpty() )
                 {
                     failureReason = wxString::Format( _( "Rule area '%s' disallows tracks." ),

@@ -255,7 +255,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aObstacle, const PNS:
     {
         const ZONE* zone = static_cast<ZONE*>( aObstacle->Parent() );
 
-        if( zone->GetIsRuleArea() )
+        if( zone->GetIsRuleArea() && zone->GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT )
         {
             *aEnforce = checkKeepout( zone, getBoardItem( aItem, aObstacle->Layer() ) );
             return true;
@@ -1253,7 +1253,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
     static wxString msg;
     SHAPE_POLY_SET* poly;
 
-    if( !aZone->GetIsRuleArea() )
+    if( !aZone->GetIsRuleArea() || aZone->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT )
         return false;
 
     LSET layers = aZone->GetLayerSet();
