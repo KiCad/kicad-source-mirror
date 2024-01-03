@@ -731,6 +731,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new GENERATOR_TOOL );
     m_toolManager->RegisterTool( new SCRIPTING_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
+    m_toolManager->RegisterTool( new MULTICHANNEL_TOOL );
     m_toolManager->RegisterTool( new EMBED_TOOL );
     m_toolManager->InitTools();
 
