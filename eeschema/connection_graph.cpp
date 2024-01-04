@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jon Evans <jon@craftyjon.com>
  *
@@ -3061,6 +3061,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( const CONNECTION_SUBGRAPH* aSu
     if( net_item && bus_item )
     {
         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_TO_NET_CONFLICT );
+        ercItem->SetSheetSpecificPath( sheet );
         ercItem->SetItems( net_item, bus_item );
 
         SCH_MARKER* marker = new SCH_MARKER( ercItem, net_item->GetPosition() );
@@ -3128,6 +3129,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( const CONNECTION_SUBGRAPH* aSu
         if( !match )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_TO_BUS_CONFLICT );
+            ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItems( label, port );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
@@ -3231,6 +3233,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
                                          UnescapeString( netName ),
                                          UnescapeString( bus_name ) );
         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_CONFLICT );
+        ercItem->SetSheetSpecificPath( sheet );
         ercItem->SetItems( bus_entry, bus_wire );
         ercItem->SetErrorMessage( msg );
 
@@ -3333,6 +3336,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         if( unique_pins.size() > 1 && settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
+            ercItem->SetSheetSpecificPath( sheet );
+
             VECTOR2I pos;
 
             if( pin )
@@ -3356,6 +3361,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
+            ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItems( aSubgraph->m_no_connect );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
@@ -3444,6 +3450,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
+            ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
@@ -3467,6 +3474,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                     && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
+                    ercItem->SetSheetSpecificPath( sheet );
                     ercItem->SetItems( testPin );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem,
@@ -3488,6 +3496,7 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
     if( aSubgraph->m_driver )
         return true;
 
+    const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
     std::vector<SCH_ITEM*> wires;
 
     // We've gotten this far, so we know we have no valid driver.  All we need to do is check
@@ -3505,6 +3514,7 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
         SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
 
         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_WIRE_DANGLING );
+        ercItem->SetSheetSpecificPath( sheet );
         ercItem->SetItems( wires[0],
                            wires.size() > 1 ? wires[1] : nullptr,
                            wires.size() > 2 ? wires[2] : nullptr,
@@ -3536,6 +3546,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( aSubgraph->m_driver_connection->IsBus() )
         return true;
 
+    const SCH_SHEET_PATH& sheet = aSubgraph->m_sheet;
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
     bool          ok       = true;
     int           pinCount = 0;
@@ -3560,6 +3571,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         if( settings.IsTestEnabled( errCode ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( errCode );
+            ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItems( aText );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aText->GetPosition() );
