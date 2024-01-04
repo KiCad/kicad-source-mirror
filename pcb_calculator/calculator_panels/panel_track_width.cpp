@@ -245,15 +245,15 @@ void PANEL_TRACK_WIDTH::OnTWResetButtonClick( wxCommandEvent& event )
     m_TW_CuLength_choiceUnit->SetSelection( 0 );
     m_TWResistivity->SetValue( wxString::Format( "%g", copper_resistivity ) );
 
-    // m_ExtTrackWidthValue is not reinitialized: it will be calculated from previous parameters
+    m_ExtTrackWidthValue->SetValue( wxString::Format( "%g", 0.2 ) );
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
-    m_ExtTrackThicknessValue->SetValue( wxString::Format( "%g", 0.035 ) );
-    m_ExtTrackThicknessUnit->SetSelection( 0 );
+    m_ExtTrackThicknessValue->SetValue( wxString::Format( "%g", 35.0 ) );
+    m_ExtTrackThicknessUnit->SetSelection( 1 );
 
-    // m_IntTrackWidthValue is not reinitialized: it will be calculated from previous parameters
+    m_IntTrackWidthValue->SetValue( wxString::Format( "%g", 0.2 ) );
     m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
-    m_IntTrackThicknessValue->SetValue( wxString::Format( "%g", 0.035 ) );
-    m_IntTrackThicknessUnit->SetSelection( 0 );
+    m_IntTrackThicknessValue->SetValue( wxString::Format( "%g", 35.0 ) );
+    m_IntTrackThicknessUnit->SetSelection( 1 );
 }
 
 
