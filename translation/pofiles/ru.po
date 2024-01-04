@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-19 16:33+0000\n"
+"PO-Revision-Date: 2024-01-08 00:06+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -572,7 +572,7 @@ msgstr "Переключить отображение 3D-моделей отсу
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
-msgstr "Показать ограничивающий параллелепипед модели"
+msgstr "Показывать ограничивающие параллелепипеды моделей"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 msgid "Toggle realistic mode"
@@ -6127,11 +6127,11 @@ msgstr "Обновить"
 
 #: common/tool/actions.cpp:292
 msgid "Zoom to Fit"
-msgstr "Масштаб по размеру"
+msgstr "Масштаб по рамке"
 
 #: common/tool/actions.cpp:297
 msgid "Zoom to Objects"
-msgstr "Масштаб по компонентам"
+msgstr "Масштаб по объектам"
 
 #: common/tool/actions.cpp:308
 msgid "Zoom In at Cursor"
@@ -6159,7 +6159,7 @@ msgstr "Центрировать на курсоре"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
-msgstr "Увеличить выбранное"
+msgstr "Масштаб по выделению"
 
 #: common/tool/actions.cpp:356
 msgid "Cursor Up"
@@ -6243,15 +6243,15 @@ msgstr "Панорамировать правее"
 
 #: common/tool/actions.cpp:455
 msgid "Switch to Fast Grid 1"
-msgstr "Переключиться на сетку 1"
+msgstr "Переключиться на быструю сетку 1"
 
 #: common/tool/actions.cpp:460
 msgid "Switch to Fast Grid 2"
-msgstr "Переключиться на сетку 2"
+msgstr "Переключиться на быструю сетку 2"
 
 #: common/tool/actions.cpp:465
 msgid "Switch to Next Grid"
-msgstr "Переключиться на следующую секту"
+msgstr "Переключиться на следующую сетку"
 
 #: common/tool/actions.cpp:469
 msgid "Switch to Previous Grid"
