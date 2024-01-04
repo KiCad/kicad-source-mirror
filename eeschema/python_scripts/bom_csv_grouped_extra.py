@@ -86,9 +86,11 @@ out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=
 # Output a CSV header
 out.writerow(header_names)
 
+components = net.getInterestingComponents( excludeBOM=True )
+
 # Get all of the components in groups of matching parts + values
 # (see kicad_netlist_reader.py)
-grouped = net.groupComponents()
+grouped = net.groupComponents(components)
 
 # Output all of the component information
 index = 1
@@ -101,9 +103,9 @@ for group in grouped:
     for component in group:
         refs_l.append( component.getRef() )
         c = component
-    
+
     refs = ", ".join(refs_l)
-    
+
     # Fill in the component groups common data
     row = []
     row.append( index )

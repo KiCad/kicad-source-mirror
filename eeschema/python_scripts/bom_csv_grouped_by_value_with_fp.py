@@ -52,10 +52,13 @@ out.writerow( ['Generator:', sys.argv[0]] )
 out.writerow(['Component Count:', len(net.components)])
 out.writerow(['Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor', 'DNP'])
 
+# subset the components to those wanted in the BOM, controlled
+# by <configure> block in kicad_netlist_reader.py
+components = net.getInterestingComponents( excludeBOM=True )
 
 # Get all of the components in groups of matching parts + values
 # (see ky_generic_netlist_reader.py)
-grouped = net.groupComponents()
+grouped = net.groupComponents(components)
 
 # Output all of the component information
 for group in grouped:
@@ -67,9 +70,9 @@ for group in grouped:
     for component in group:
         refs_l.append( fromNetlistText( component.getRef() ) )
         c = component
-    
+
     refs = ", ".join(refs_l)
-    
+
     # Fill in the component groups common data
     out.writerow([refs, len(group),
         fromNetlistText( c.getValue() ),
