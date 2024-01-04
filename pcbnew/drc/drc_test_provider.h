@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,7 @@ protected:
 
     virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const VECTOR2I& aMarkerPos,
                                   int aMarkerLayer );
-    virtual bool reportProgress( int aCount, int aSize, int aDelta );
+    virtual bool reportProgress( size_t aCount, size_t aSize, size_t aDelta = 1 );
     virtual bool reportPhase( const wxString& aStageName );
 
     virtual void reportRuleStatistics();

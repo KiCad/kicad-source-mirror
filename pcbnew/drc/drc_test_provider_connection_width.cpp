@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers.
+ * Copyright (C) 2022-2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -844,7 +844,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
         while( status != std::future_status::ready )
         {
-            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
+            reportProgress( done, total_effort );
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }
@@ -864,7 +864,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
 
         while( status != std::future_status::ready )
         {
-            m_drcEngine->ReportProgress( static_cast<double>( done ) / total_effort );
+            reportProgress( done, total_effort );
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }

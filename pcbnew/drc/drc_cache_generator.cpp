@@ -148,7 +148,7 @@ bool DRC_CACHE_GENERATOR::Run()
 
     while( status != std::future_status::ready )
     {
-        m_drcEngine->ReportProgress( static_cast<double>( done ) / count );
+        reportProgress( done, count );
         status = retn.wait_for( std::chrono::milliseconds( 250 ) );
     }
 
@@ -204,7 +204,7 @@ bool DRC_CACHE_GENERATOR::Run()
 
         while( status != std::future_status::ready )
         {
-            m_drcEngine->ReportProgress( static_cast<double>( done ) / allZones.size() );
+            reportProgress( done, allZones.size() );
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }

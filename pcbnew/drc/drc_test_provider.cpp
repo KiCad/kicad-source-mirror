@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,11 +84,11 @@ void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
 }
 
 
-bool DRC_TEST_PROVIDER::reportProgress( int aCount, int aSize, int aDelta )
+bool DRC_TEST_PROVIDER::reportProgress( size_t aCount, size_t aSize, size_t aDelta )
 {
     if( ( aCount % aDelta ) == 0 || aCount == aSize -  1 )
     {
-        if( !m_drcEngine->ReportProgress( (double) aCount / (double) aSize ) )
+        if( !m_drcEngine->ReportProgress( static_cast<double>( aCount ) / aSize ) )
             return false;
     }
 

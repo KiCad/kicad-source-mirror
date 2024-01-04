@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2022 KiCad Developers.
+ * Copyright (C) 2021-2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,8 +174,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
 
         while( status != std::future_status::ready )
         {
-            m_drcEngine->ReportProgress( static_cast<double>( zoneLayerCount ) / done );
-
+            reportProgress( zoneLayerCount, done );
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
     }

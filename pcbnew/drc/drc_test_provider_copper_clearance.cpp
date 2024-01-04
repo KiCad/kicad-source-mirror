@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2024 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -676,7 +676,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     while( done < count )
     {
-        m_drcEngine->ReportProgress( static_cast<double>( done ) / count );
+        reportProgress( done, count );
 
         if( m_drcEngine->IsCancelled() )
         {
@@ -1005,7 +1005,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     while( status != std::future_status::ready )
     {
-        m_drcEngine->ReportProgress( static_cast<double>( done ) / count );
+        reportProgress( done, count );
         status = retn.wait_for( std::chrono::milliseconds( 250 ) );
     }
 }
@@ -1157,7 +1157,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
 
     while( status != std::future_status::ready )
     {
-        m_drcEngine->ReportProgress( static_cast<double>( done ) / count );
+        reportProgress( done, count );
         status = retn.wait_for( std::chrono::milliseconds( 250 ) );
     }
 }
@@ -1333,7 +1333,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
         {
             result = task.wait_for( std::chrono::milliseconds( 250 ) );
 
-            m_drcEngine->ReportProgress( static_cast<double>( done ) / count );
+            reportProgress( done, count );
 
             if( m_drcEngine->IsCancelled() )
                 break;
