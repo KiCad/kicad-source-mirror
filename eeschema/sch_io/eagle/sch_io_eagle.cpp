@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2017-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -248,7 +248,8 @@ static SYMBOL_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
     case 270: return SYM_ORIENT_270;
 
     default:
-        wxASSERT_MSG( false, wxString::Format( wxT( "Unhandled orientation (%d degrees)" ), roti ) );
+        wxASSERT_MSG( false, wxString::Format( wxT( "Unhandled orientation (%d degrees)" ),
+                                               roti ) );
         return SYM_ORIENT_0;
     }
 }
@@ -401,8 +402,8 @@ void SCH_IO_EAGLE::checkpoint()
 
 
 SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                                SCH_SHEET*             aAppendToMe,
-                                                const STRING_UTF8_MAP* aProperties )
+                                            SCH_SHEET*             aAppendToMe,
+                                            const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
@@ -509,8 +510,8 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
 
 void SCH_IO_EAGLE::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                           const wxString&        aLibraryPath,
-                                           const STRING_UTF8_MAP* aProperties )
+                                       const wxString&        aLibraryPath,
+                                       const STRING_UTF8_MAP* aProperties )
 {
     m_filename = aLibraryPath;
     m_libName = m_filename.GetName();
@@ -528,8 +529,8 @@ void SCH_IO_EAGLE::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
 
 
 void SCH_IO_EAGLE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                           const wxString&           aLibraryPath,
-                                           const STRING_UTF8_MAP*    aProperties )
+                                       const wxString&           aLibraryPath,
+                                       const STRING_UTF8_MAP*    aProperties )
 {
     m_filename = aLibraryPath;
     m_libName = m_filename.GetName();
@@ -547,7 +548,7 @@ void SCH_IO_EAGLE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO_EAGLE::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                                          const STRING_UTF8_MAP* aProperties )
+                                      const STRING_UTF8_MAP* aProperties )
 {
     m_filename = aLibraryPath;
     m_libName = m_filename.GetName();
@@ -1342,7 +1343,7 @@ void SCH_IO_EAGLE::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aIt
 
 
 void SCH_IO_EAGLE::loadSegments( wxXmlNode* aSegmentsNode, const wxString& netName,
-                                     const wxString& aNetClass )
+                                 const wxString& aNetClass )
 {
     // Loop through all segments
     wxXmlNode*  currentSegment = aSegmentsNode->GetChildren();
@@ -1534,6 +1535,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadWire( wxXmlNode* aWireNode, SEG& endpoints )
     start.y = -ewire.y1.ToSchUnits();
     end.x   = ewire.x2.ToSchUnits();
     end.y   = -ewire.y2.ToSchUnits();
+
     // For segment wires.
     endpoints = SEG( start, end );
 
@@ -1544,7 +1546,9 @@ SCH_ITEM* SCH_IO_EAGLE::loadWire( wxXmlNode* aWireNode, SEG& endpoints )
         VECTOR2I center = ConvertArcCenter( start, end, *ewire.curve );
         arc->SetCenter( center );
         arc->SetStart( start );
-        arc->SetArcAngleAndEnd( -EDA_ANGLE( *ewire.curve, DEGREES_T ), true ); // KiCad rotates the other way
+
+        // KiCad rotates the other way.
+        arc->SetArcAngleAndEnd( -EDA_ANGLE( *ewire.curve, DEGREES_T ), true );
         arc->SetLayer( kiCadLayer( ewire.layer ) );
         arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), LINE_STYLE::SOLID ) );
 
@@ -1659,7 +1663,7 @@ SCH_TEXT* SCH_IO_EAGLE::loadLabel( wxXmlNode* aLabelNode, const wxString& aNetNa
 
 std::pair<VECTOR2I, const SEG*>
 SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I&         aPoint,
-                                        const std::vector<SEG>& aLines ) const
+                                    const std::vector<SEG>& aLines ) const
 {
     VECTOR2I   nearestPoint;
     const SEG* nearestLine = nullptr;
@@ -1901,7 +1905,6 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
 
             if( field )
             {
-
                 field->SetPosition( VECTOR2I( attr.x->ToSchUnits(), -attr.y->ToSchUnits() ) );
                 int  align      = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
                 int  absdegrees = attr.rot ? attr.rot->degrees : 0;
@@ -1976,8 +1979,7 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
 }
 
 
-EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( wxXmlNode* aLibraryNode,
-                                              EAGLE_LIBRARY* aEagleLibrary )
+EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* aEagleLibrary )
 {
     NODE_MAP libraryChildren = MapChildren( aLibraryNode );
 
@@ -2125,7 +2127,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( wxXmlNode* aLibraryNode,
 
 
 bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                   EDEVICE* aDevice, int aGateNumber, const wxString& aGateName )
+                               EDEVICE* aDevice, int aGateNumber, const wxString& aGateName )
 {
     wxString               symbolName = aSymbolNode->GetAttribute( wxT( "name" ) );
     std::vector<LIB_ITEM*> items;
@@ -2215,7 +2217,8 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
         }
         else if( nodeName == wxT( "text" ) )
         {
-            std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aSymbol, currentNode, aGateNumber ) );
+            std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aSymbol, currentNode,
+                                                               aGateNumber ) );
 
             if( libtext->GetText() == wxT( "${REFERENCE}" ) )
             {
@@ -2281,7 +2284,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
 
 
 LIB_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                               wxXmlNode* aCircleNode, int aGateNumber )
+                                           wxXmlNode* aCircleNode, int aGateNumber )
 {
     // Parse the circle properties
     ECIRCLE    c( aCircleNode );
@@ -2298,7 +2301,7 @@ LIB_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
 
 LIB_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                  wxXmlNode* aRectNode, int aGateNumber )
+                                              wxXmlNode* aRectNode, int aGateNumber )
 {
     ERECT      rect( aRectNode );
     LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECTANGLE );
@@ -2329,7 +2332,7 @@ LIB_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymb
 
 
 LIB_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                            wxXmlNode* aWireNode, int aGateNumber )
+                                        wxXmlNode* aWireNode, int aGateNumber )
 {
     EWIRE ewire = EWIRE( aWireNode );
 
@@ -2387,7 +2390,7 @@ LIB_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
 
 LIB_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                 wxXmlNode* aPolygonNode, int aGateNumber )
+                                             wxXmlNode* aPolygonNode, int aGateNumber )
 {
     LIB_SHAPE* poly = new LIB_SHAPE( aSymbol.get(), SHAPE_T::POLY );
     EPOLYGON   epoly( aPolygonNode );
@@ -2429,7 +2432,7 @@ LIB_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
 
 LIB_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aPin,
-                                    EPIN* aEPin, int aGateNumber )
+                                EPIN* aEPin, int aGateNumber )
 {
     std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aSymbol.get() );
     pin->SetPosition( VECTOR2I( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
@@ -2506,7 +2509,7 @@ LIB_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*
 
 
 LIB_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                            wxXmlNode* aLibText, int aGateNumber )
+                                        wxXmlNode* aLibText, int aGateNumber )
 {
     std::unique_ptr<LIB_TEXT> libtext = std::make_unique<LIB_TEXT>( aSymbol.get() );
     ETEXT                     etext( aLibText );
@@ -2958,7 +2961,7 @@ void SCH_IO_EAGLE::addBusEntries()
                     []( int signX, int signY ) -> VECTOR2I
                     {
                         return VECTOR2I( schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) * signX,
-                                        schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) * signY );
+                                         schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) * signY );
                     };
 
             auto testBusHit =
@@ -3504,7 +3507,7 @@ bool SCH_IO_EAGLE::checkConnections( const SCH_SYMBOL* aSymbol, const LIB_PIN* a
 
 
 void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
-                                               bool aUpdateSet )
+                                           bool aUpdateSet )
 {
     wxCHECK( aSymbol->GetLibSymbolRef(), /*void*/ );
 
@@ -3540,10 +3543,18 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
 
                     switch( pin->GetOrientation() )
                     {
-                    case PIN_ORIENTATION::PIN_LEFT:  netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );  break;
-                    case PIN_ORIENTATION::PIN_RIGHT: netLabel->SetSpinStyle( SPIN_STYLE::LEFT );   break;
-                    case PIN_ORIENTATION::PIN_UP:    netLabel->SetSpinStyle( SPIN_STYLE::UP );     break;
-                    case PIN_ORIENTATION::PIN_DOWN:  netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM ); break;
+                    case PIN_ORIENTATION::PIN_LEFT:
+                        netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );
+                        break;
+                    case PIN_ORIENTATION::PIN_RIGHT:
+                        netLabel->SetSpinStyle( SPIN_STYLE::LEFT );
+                        break;
+                    case PIN_ORIENTATION::PIN_UP:
+                        netLabel->SetSpinStyle( SPIN_STYLE::UP );
+                        break;
+                    case PIN_ORIENTATION::PIN_DOWN:
+                        netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM );
+                        break;
                     }
 
                     aScreen->Append( netLabel );
