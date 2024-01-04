@@ -65,7 +65,7 @@ BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
 
 
 BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
-        m_toolMgr( aMgr ),
+    m_toolMgr( aMgr ),
         m_isBoardEditor( false ),
         m_isFootprintEditor( false )
 {
