@@ -89,7 +89,8 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
 
     m_argParser.add_argument( ARG_GERBER_PRECISION )
             .help( UTF8STDSTR( _( "Precision of gerber coordinates (5 or 6)" ) ) )
-            .default_value( 6 );
+            .default_value( 6 )            
+            .scan<'i', int>();
 }
 
 
