@@ -79,8 +79,7 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 
     m_argParser.add_argument( ARG_EXCLUDE_DNP )
             .help( UTF8STDSTR( _( ARG_EXCLUDE_DNP_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     // Output formatting options
     m_argParser.add_argument( ARG_FIELD_DELIMITER )
@@ -105,13 +104,11 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 
     m_argParser.add_argument( ARG_KEEP_TABS )
             .help( UTF8STDSTR( _( ARG_KEEP_TABS_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_KEEP_LINE_BREAKS )
             .help( UTF8STDSTR( _( ARG_KEEP_LINE_BREAKS_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

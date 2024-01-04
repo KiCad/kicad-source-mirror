@@ -57,14 +57,12 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
     m_argParser.add_argument( ARG_SEVERITY_ALL )
             .help( UTF8STDSTR( _( "Report all ERC violations, this is equivalent to including "
                                   "all the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SEVERITY_ERROR )
             .help( UTF8STDSTR( _( "Report all ERC error level violations, this can be combined "
                                   "with the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SEVERITY_WARNING )
             .help( UTF8STDSTR( _( "Report all ERC warning level violations, this can be combined "
@@ -75,13 +73,11 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
     m_argParser.add_argument( ARG_SEVERITY_EXCLUSIONS )
             .help( UTF8STDSTR( _( "Report all excluded ERC violations, this can be combined "
                                   "with the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_EXIT_CODE_VIOLATIONS )
             .help( UTF8STDSTR( _( "Return a nonzero exit code if ERC violations exist" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

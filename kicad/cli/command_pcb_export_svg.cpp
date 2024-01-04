@@ -47,8 +47,7 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
@@ -57,13 +56,11 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( ARG_NEGATIVE_SHORT, ARG_NEGATIVE )
             .help( UTF8STDSTR( _( ARG_NEGATIVE_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_PAGE_SIZE )
             .help( UTF8STDSTR( _( "Set page sizing mode (0 = page with frame and title block, 1 = "
@@ -74,8 +71,7 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( ARG_EXCLUDE_DRAWING_SHEET )
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
             .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "

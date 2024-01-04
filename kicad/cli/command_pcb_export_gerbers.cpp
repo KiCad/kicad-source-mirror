@@ -54,8 +54,7 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
     m_argParser.add_argument( ARG_USE_BOARD_PLOT_PARAMS )
             .help( UTF8STDSTR( _( "Use the Gerber plot settings already configured in the "
                                   "board file" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

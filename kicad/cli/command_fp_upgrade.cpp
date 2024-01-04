@@ -38,8 +38,7 @@ CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrad
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(
                     _( "Forces the footprint library to be resaved regardless of versioning" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

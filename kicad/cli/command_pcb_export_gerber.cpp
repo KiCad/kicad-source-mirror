@@ -42,33 +42,27 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
 
     m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( "--ev", ARG_EXCLUDE_VALUE )
             .help( UTF8STDSTR( _( "Exclude the value text" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( "--ibt", ARG_INCLUDE_BORDER_TITLE )
             .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_NO_X2 )
             .help( UTF8STDSTR( _( "Do not use the extended X2 format" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_NO_NETLIST )
             .help( UTF8STDSTR( _( "Do not generate netlist attributes" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SUBTRACT_SOLDERMASK )
             .help( UTF8STDSTR( _( "Subtract soldermask from silkscreen" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_DISABLE_APERTURE_MACROS )
             .help( UTF8STDSTR( _( "Disable aperture macros" ) ) )
@@ -77,8 +71,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
 
     m_argParser.add_argument( ARG_USE_DRILL_FILE_ORIGIN )
             .help( UTF8STDSTR( _( "Use drill/place file origin" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_PRECISION )
             .help( UTF8STDSTR( _( "Precision of Gerber coordinates, valid options: 5 or 6" ) ) )
@@ -88,8 +81,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
 
     m_argParser.add_argument( ARG_NO_PROTEL_EXTENSION )
             .help( UTF8STDSTR( _( "Use KiCad Gerber file extension" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

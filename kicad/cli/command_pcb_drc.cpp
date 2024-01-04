@@ -53,8 +53,7 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 
     m_argParser.add_argument( ARG_ALL_TRACK_ERRORS )
             .help( UTF8STDSTR( _( "Report all errors for each track" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "mm" ) )
@@ -64,31 +63,26 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
     m_argParser.add_argument( ARG_SEVERITY_ALL )
             .help( UTF8STDSTR( _( "Report all DRC violations, this is equivalent to including "
                                   "all the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SEVERITY_ERROR )
             .help( UTF8STDSTR( _( "Report all DRC error level violations, this can be combined "
                                   "with the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SEVERITY_WARNING )
             .help( UTF8STDSTR( _( "Report all DRC warning level violations, this can be combined "
                                   "with the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SEVERITY_EXCLUSIONS )
             .help( UTF8STDSTR( _( "Report all excluded DRC violations, this can be combined with "
                                   "the other severity arguments" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_EXIT_CODE_VIOLATIONS )
             .help( UTF8STDSTR( _( "Return a nonzero exit code if DRC violations exist" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

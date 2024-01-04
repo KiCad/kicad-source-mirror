@@ -68,20 +68,17 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
     m_argParser.add_argument( ARG_FORCE, "-f" )
             .help( UTF8STDSTR( _( "Overwrite output file" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         m_argParser.add_argument( ARG_GRID_ORIGIN )
                 .help( UTF8STDSTR( _( "Use Grid Origin for output origin" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( ARG_DRILL_ORIGIN )
                 .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( ARG_NO_UNSPECIFIED )
                 .help( UTF8STDSTR( _(
@@ -92,19 +89,16 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_argParser.add_argument( ARG_NO_DNP )
                 .help( UTF8STDSTR(
                         _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( "--subst-models" )
                 .help( UTF8STDSTR( _( "Substitute STEP or IGS models with the same name in place "
                                       "of VRML models" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( ARG_BOARD_ONLY )
                 .help( UTF8STDSTR( _( "Only generate a board with no components" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( ARG_INCLUDE_TRACKS )
                 .help( UTF8STDSTR( _( "Export tracks" ) ) )
@@ -113,8 +107,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
         m_argParser.add_argument( ARG_INCLUDE_ZONES )
                 .help( UTF8STDSTR( _( "Export zones" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( ARG_MIN_DISTANCE )
                 .default_value( std::string( "0.01mm" ) )
@@ -128,8 +121,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_argParser.add_argument( ARG_NO_OPTIMIZE_STEP )
                 .help( UTF8STDSTR( _( "Do not optimize STEP file (enables writing parametric "
                                       "curves)" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
     }
 
     m_argParser.add_argument( ARG_USER_ORIGIN )
@@ -153,8 +145,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_argParser.add_argument( ARG_VRML_MODELS_RELATIVE )
                 .help( UTF8STDSTR( _( "Used with --models-dir to output relative paths in the "
                                       "resulting file" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
     }
 }
 

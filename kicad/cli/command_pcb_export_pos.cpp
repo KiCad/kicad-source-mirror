@@ -64,35 +64,29 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
     m_argParser.add_argument( ARG_NEGATE_BOTTOM_X )
             .help( UTF8STDSTR( _( "Use negative X coordinates for footprints on bottom layer "
                                 "(ascii or csv formats only)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_USE_DRILL_FILE_ORIGIN )
             .help( UTF8STDSTR( _( "Use drill/place file origin (ascii or csv only)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_SMD_ONLY )
             .help( UTF8STDSTR( _( "Include only SMD footprints (ascii or csv only)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_EXCLUDE_FOOTPRINTS_TH )
             .help( UTF8STDSTR(
                     _( "Exclude all footprints with through-hole pads (ascii or csv only)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_EXCLUDE_DNP )
             .help( UTF8STDSTR(
                     _( "Exclude all footprints with the Do Not Populate flag set" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_GERBER_BOARD_EDGE )
             .help( UTF8STDSTR( _( "Include board edge layer (Gerber only)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

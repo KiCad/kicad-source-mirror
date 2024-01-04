@@ -74,23 +74,19 @@ CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMM
 
     m_argParser.add_argument( ARG_EXCELLON_MIRRORY )
             .help( UTF8STDSTR( _( "Mirror Y axis" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_EXCELLON_MINIMALHEAD )
             .help( UTF8STDSTR( _( "Minimal header" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_EXCELLON_SEPARATE_TH )
             .help( UTF8STDSTR( _( "Generate independent files for NPTH and PTH holes" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_GENERATE_MAP )
             .help( UTF8STDSTR( _( "Generate map / summary of drill hits" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_MAP_FORMAT )
             .default_value( std::string( "pdf" ) )

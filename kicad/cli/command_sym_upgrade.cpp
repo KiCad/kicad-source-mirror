@@ -42,8 +42,7 @@ CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : COMMAND( "upgrade" )
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(
                     _( "Forces the symbol library to be resaved regardless of versioning" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 

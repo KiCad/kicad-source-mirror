@@ -56,18 +56,15 @@ CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : COMMAND( "svg" )
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_INC_HIDDEN_PINS )
             .help( UTF8STDSTR( _( "Include hidden pins" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 
     m_argParser.add_argument( ARG_INC_HIDDEN_FIELDS )
             .help( UTF8STDSTR( _( "Include hidden fields" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+            .flag();
 }
 
 
