@@ -34,6 +34,27 @@
 #include <pad.h>
 #include <footprint.h>
 #include <reporter.h>
+#include <core/profile.h>
+
+typedef std::vector<std::pair<FOOTPRINT*, FOOTPRINT*> > FP_PAIRS;
+
+enum class REPEAT_LAYOUT_EDGE_MODE
+{
+    INSIDE = 0,
+    TOUCHING,
+    CLIP
+};
+
+struct REPEAT_LAYOUT_OPTIONS
+{
+    bool m_copyRouting = true;
+    bool m_copyPlacement = true;
+    bool m_groupItems = false;
+    bool m_moveOffRAComponents = true;
+    bool m_includeLockedItems = true;
+    bool m_keepOldRouting = false;
+    REPEAT_LAYOUT_EDGE_MODE m_edgeMode;
+};
 
 struct PAD_PREFIX_ENTRY
 {
@@ -90,29 +111,31 @@ struct FP_WITH_CONNECTIONS
     }
 };
 
+struct RULE_AREA;
+
+struct RULE_AREA_COMPAT_DATA
+{
+    RULE_AREA* m_refArea;
+    bool m_isOk;
+    bool m_doCopy;
+    wxString m_errorMsg;
+    std::vector< std::pair<FOOTPRINT*, FOOTPRINT*> > m_matchingFootprints;
+};
+
 struct RULE_AREA
     {
         ZONE* m_area;
         std::vector<FP_WITH_CONNECTIONS> m_raFootprints;
         std::set<FOOTPRINT*> m_sheetComponents;
+        std::map<PAD*, FOOTPRINT*> m_fpPads;
         bool m_existsAlready;
         bool m_generateEnabled;
         wxString m_sheetPath;
         wxString m_sheetName;
         wxString m_ruleName;
         VECTOR2I m_center;
-        std::unordered_set<BOARD_ITEM*> m_clonableItems;
     };
 
-
-struct RULE_AREA_COMPAT_DATA
-{
-    RULE_AREA* m_refArea;
-    bool m_componentCountError;
-    bool m_topologyError;
-    bool m_componentTypeError;
-    std::vector< std::pair<FOOTPRINT*, FOOTPRINT*> > m_matchingFootprints;
-};
 
 struct RA_SHEET
 {
@@ -126,28 +149,15 @@ struct RULE_AREAS_DATA
 {
     bool m_replaceExisting;
     bool m_groupItems;
+    RULE_AREA* m_refRA;
+    REPEAT_LAYOUT_OPTIONS m_options;
 
     std::vector<RULE_AREA> m_areas;
     std::unordered_map<RULE_AREA*, RULE_AREA_COMPAT_DATA> m_compatMap;
 
 };
 
-enum class REPEAT_LAYOUT_EDGE_MODE
-{
-    INSIDE = 0,
-    TOUCHING,
-    CLIP
-};
 
-struct REPEAT_LAYOUT_OPTIONS
-{
-    bool m_copyRouting = true;
-    bool m_copyPlacement = true;
-    bool m_groupItems = false;
-    bool m_moveOffRAComponents = true;
-    bool m_includeLockedItems = true;   
-    REPEAT_LAYOUT_EDGE_MODE m_edgeMode;
-};
 
 class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
 {
@@ -158,8 +168,6 @@ class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
         RULE_AREAS_DATA* GetData() { return &m_areas; }
 
     private:
-        typedef std::vector<std::pair<FOOTPRINT*, FOOTPRINT*> > FP_PAIRS;
-
         void setTransitions() override;
         int autogenerateRuleAreas( const TOOL_EVENT& aEvent );
         int repeatLayout( const TOOL_EVENT& aEvent );
@@ -171,7 +179,7 @@ class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
         void querySheets();
 
         RULE_AREA* findRAByName( const wxString& aName );
-        bool resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, FP_PAIRS& aMatches );
+        bool resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, RULE_AREA_COMPAT_DATA& aMatches );
         bool copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts );
 
         std::unique_ptr<REPORTER> m_reporter;

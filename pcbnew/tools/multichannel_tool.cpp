@@ -244,9 +244,17 @@ void MULTICHANNEL_TOOL::findExistingRuleAreas()
             FP_WITH_CONNECTIONS fpc;
             fpc.fp = fp;
             area.m_raFootprints.push_back( fpc );
+
+            for ( auto pad : fp->Pads() )
+            {
+                area.m_fpPads[ pad ] = fp;
+            }
+
         }
         area.m_ruleName = zone->GetZoneName();
         area.m_center = zone->Outline()->COutline(0).Centre();
+
+
 
         m_areas.m_areas.push_back( area );
     }
@@ -285,8 +293,6 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         }
     }
 
-    printf("refRAs: %d\n", refRAs.size() );
-
     if( refRAs.size() != 1 )
     {
         frame()->ShowInfoBarError( 
@@ -297,36 +303,57 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
     findExistingRuleAreas();
 
+    m_areas.m_refRA = nullptr;
+
+    for( auto& ra : m_areas.m_areas )
+    {
+        if( ra.m_area == refRAs.front() )
+        {
+            m_areas.m_refRA = &ra;
+            break;
+        }
+    }
+
+    if( !m_areas.m_refRA )
+        return -1;
+
+    for( auto& ra : m_areas.m_areas )
+    {
+        if( ra.m_area == m_areas.m_refRA->m_area )
+            continue;
+
+        m_areas.m_compatMap[ &ra ] = RULE_AREA_COMPAT_DATA();
+
+        resolveConnectionTopology( m_areas.m_refRA, &ra, m_areas.m_compatMap[ &ra ] );
+    }
+
     DIALOG_MULTICHANNEL_REPEAT_LAYOUT dialog( frame(), this );
     int ret = dialog.ShowModal();
 
     if( ret != wxID_OK )
         return 0;
 
-    auto refArea = findRAByName( wxT( "r1" ) );
-    auto targetArea = findRAByName( wxT( "r2" ) );
-    //auto targetArea = findRAByName( wxT( "auto-placement-area-/io_drivers_fp/bank2/io56/" ) );
-
-
-    MULTICHANNEL_TOOL::FP_PAIRS pairs;
-
     BOARD_COMMIT  commit( frame()->GetToolManager(), true ); //<PNS_LOG_VIEWER_FRAME>()->GetToolManager(), true );
 
-    REPEAT_LAYOUT_OPTIONS opts;
-
-    if( ! resolveConnectionTopology( refArea, targetArea, pairs ) )
+    for( auto& targetArea : m_areas.m_compatMap )
     {
-        m_reporter->Report( wxString::Format( wxT( "Can't fit connection topologies between %s and %s"), 
-        refArea->m_area->GetZoneName(),
-        targetArea->m_area->GetZoneName() ) );
+        if( !targetArea.second.m_isOk )
+            continue;
+
+        if( !copyRuleAreaContents( targetArea.second.m_matchingFootprints, &commit, m_areas.m_refRA, targetArea.first, m_areas.m_options ) )
+        {
+            auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'."),
+            m_areas.m_refRA->m_area->GetZoneName(),
+            targetArea.first->m_area->GetZoneName() );
+
+            commit.Revert();
+            frame()->ShowInfoBarError( errMsg, true );
+
+            return 0;
+        }
     }
 
-    if( copyRuleAreaContents( pairs, &commit, refArea, targetArea, opts ) )
-    {
-        printf("Committing\n");
-        commit.Push( wxT("Repeat layout"));
-    }
-
+    commit.Push( _("Repeat layout"));
     return 0;
 }
 
@@ -350,103 +377,156 @@ wxString MULTICHANNEL_TOOL::stripComponentIndex( wxString aRef ) const
     return rv;
 }
 
+const std::set<BOARD_ITEM*> findRoutedConnections( std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
+                                                   const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA,
+                                                   FOOTPRINT*                   aFp,
+                                                   const REPEAT_LAYOUT_OPTIONS& aOpts )
+{
+    std::set<BOARD_ITEM*> rv;
+
+    for( auto pad : aFp->Pads() )
+    {
+        auto connItems = aConnectivity->GetConnectedItems(
+                pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
+
+        printf( "pad [%p] %s-%s: %d items\n", pad, aFp->GetReference().c_str().AsChar(),
+                pad->GetNumber().c_str().AsChar(), connItems.size() );
+
+        for( auto item : connItems )
+        {
+            // fixme: respect layer sets assigned to each RA
+
+            if( item->Type() == PCB_PAD_T )
+                continue;
+
+            auto effShape = item->GetEffectiveShape( item->GetLayer() );
+
+            if( effShape->Collide( &aRAPoly, 0 ) )
+            {
+                rv.insert( item );
+            }
+        }
+    }
+
+    return rv;
+}
+
 bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts )
 {
-    // copy shapes
-
-    printf("ref : %p z: %p\n", aRefArea, aRefArea->m_area );
-    printf("tgt : %p z: %p\n", aTargetArea, aTargetArea->m_area );
+    // copy RA shapes first
 
     SHAPE_LINE_CHAIN refOutline = aRefArea->m_area->Outline()->COutline(0);
+    SHAPE_LINE_CHAIN targetOutline = aTargetArea->m_area->Outline()->COutline(0);
 
-    printf("RefOutlVtx: %d closed %d\n", refOutline.PointCount(), refOutline.IsClosed() ? 1: 0);
     VECTOR2I disp = aTargetArea->m_center - aRefArea->m_center;
-    
+
     SHAPE_POLY_SET refPoly;
     refPoly.AddOutline( refOutline );
     refPoly.CacheTriangulation( false );
 
-    SHAPE_LINE_CHAIN targetOutline( refOutline );
+    SHAPE_POLY_SET targetPoly;
 
-    targetOutline.Move( disp );
-
+    SHAPE_LINE_CHAIN newTargetOutline( refOutline );
+    newTargetOutline.Move( disp );
+    targetPoly.AddOutline( newTargetOutline );
+    targetPoly.CacheTriangulation( false );
+    
     auto connectivity = board()->GetConnectivity();
 
     if( aOpts.m_copyRouting )
     {
-
-    for( auto& fpPair : aMatches )
-    {
-        auto refFP = fpPair.first;
-
-        for( auto pad : refFP->Pads() )
+        for( auto& fpPair : aMatches )
         {
-            auto connItems = connectivity->GetConnectedItems( pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
+            auto refRouting = findRoutedConnections( connectivity, refPoly, aRefArea, fpPair.first, aOpts );
+            auto targetRouting = findRoutedConnections( connectivity, targetPoly, aTargetArea, fpPair.second, aOpts );
 
-            printf("pad [%p] %s-%s: %d items\n", pad, refFP->GetReference().c_str().AsChar(), pad->GetNumber().c_str().AsChar(), connItems.size() );
-
-            for( auto item : connItems )
+            for( auto item : targetRouting )
             {
+                if( item->IsLocked() && !aOpts.m_includeLockedItems )
+                    continue;
+
+                aCommit->Remove( item );
+            }
+
+            for( auto item : refRouting )
+            {
+                auto copied = static_cast<BOARD_ITEM*>( item->Clone() );
+                copied->Move( disp );
+                aCommit->Add( copied );
+            }
+
+#if 0
+            for( auto pad : refFP->Pads() )
+            {
+                auto connItems = connectivity->GetConnectedItems( pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
+
+                printf("pad [%p] %s-%s: %d items\n", pad, refFP->GetReference().c_str().AsChar(), pad->GetNumber().c_str().AsChar(), connItems.size() );
+
+                for( auto item : connItems )
+                {
 
 
-                //if( ! ( item->GetLayerSet(). aRefArea->m_area->GetLayerSet() ) )
-                  //  continue;
-                
-                printf("process conn: type %\n", item->Type() );
+                    //if( ! ( item->GetLayerSet(). aRefArea->m_area->GetLayerSet() ) )
+                    //  continue;
+                    
+                    printf("process conn: type %\n", item->Type() );
 
-                auto effShape = item->GetEffectiveShape( item->GetLayer() );
-                auto bb =effShape->BBox();
+                    auto effShape = item->GetEffectiveShape( item->GetLayer() );
+                    auto bb =effShape->BBox();
 
-                printf("Effshape: %s bbox %d %d %d %d\n",
-                    effShape->TypeName().c_str().AsChar(),
-                    bb.GetLeft(), bb.GetTop(),
-                    bb.GetRight(), bb.GetBottom()
-                );
-
-
-                //overlay->SetIsFill( true );
-                //overlay->SetFillColor( GREEN );
-                //overlay->Rectangle( bb.GetOrigin(), bb.GetEnd() );
-                
-                auto rbb = refPoly.BBox();
-                printf("ref: bbox %d %d %d %d tris %d\n",
-                    rbb.GetLeft(), rbb.GetTop(),
-                    rbb.GetRight(), rbb.GetBottom()
+                    printf("Effshape: %s bbox %d %d %d %d\n",
+                        effShape->TypeName().c_str().AsChar(),
+                        bb.GetLeft(), bb.GetTop(),
+                        bb.GetRight(), bb.GetBottom()
                     );
 
-                //overlay->SetIsFill( true );
-                //overlay->SetFillColor( RED );
-                //overlay->Rectangle( rbb.GetOrigin(), rbb.GetEnd() );
+
+                    //overlay->SetIsFill( true );
+                    //overlay->SetFillColor( GREEN );
+                    //overlay->Rectangle( bb.GetOrigin(), bb.GetEnd() );
+                    
+                    auto rbb = refPoly.BBox();
+                    printf("ref: bbox %d %d %d %d tris %d\n",
+                        rbb.GetLeft(), rbb.GetTop(),
+                        rbb.GetRight(), rbb.GetBottom()
+                        );
+
+                    //overlay->SetIsFill( true );
+                    //overlay->SetFillColor( RED );
+                    //overlay->Rectangle( rbb.GetOrigin(), rbb.GetEnd() );
 
 
-                if( rbb.Intersects( bb ) )
-                    printf("Possible collision\n");
+                    if( rbb.Intersects( bb ) )
+                        printf("Possible collision\n");
 
-                if( effShape->Collide( &refPoly, 0 ) )
-                {
-                    //printf("Coll : %p\n", item );
+                    if( effShape->Collide( &refPoly, 0 ) )
+                    {
+                        //printf("Coll : %p\n", item );
 
-                    auto ni = static_cast<BOARD_ITEM*>( item->Clone() );
-                    ni->Move( disp );
-                    aCommit->Add( ni );
+                        auto ni = static_cast<BOARD_ITEM*>( item->Clone() );
+                        ni->Move( disp );
+                        aCommit->Add( ni );
+                    }
                 }
             }
+#endif
         }
-    }
     }
 
     aCommit->Modify( aTargetArea->m_area );
 
     aTargetArea->m_area->RemoveAllContours();
-    aTargetArea->m_area->AddPolygon( targetOutline );
+    aTargetArea->m_area->AddPolygon( newTargetOutline );
 
+    if( aOpts.m_copyPlacement )
+    {
     for( auto& fpPair : aMatches )
     {
         auto refFP = fpPair.first;
         auto targetFP = fpPair.second;
 
-        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
-        printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+//        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+  //      printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
 
 #if 0
         if( ! aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) );
@@ -460,6 +540,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
             continue;
         }
 #endif
+        if( targetFP->IsLocked() && !aOpts.m_includeLockedItems )
+            continue;
+
         aCommit->Modify( targetFP );
 
         targetFP->SetOrientation( refFP->GetOrientation() );
@@ -471,14 +554,20 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
         targetFP->Value().SetTextAngle( refFP->Value().GetTextAngle() );
         targetFP->Value().SetPosition( refFP->Value().GetPosition() );
     }
+    }
 
     return true;
 }
 
 
-bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, MULTICHANNEL_TOOL::FP_PAIRS& aMatches )
+bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, RULE_AREA_COMPAT_DATA& aMatches )
 {
     std::map<NETINFO_ITEM*, std::vector<PAD* > > allPads;
+
+    PROF_TIMER totalMatch("total-match");
+
+    {
+        //PROF_TIMER tmr1("buldPads");
 
     for( auto fp : board()->Footprints() )
         for( auto pad : fp->Pads() )
@@ -490,17 +579,16 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
             else
                 allPads[ pad->GetNet() ].push_back( pad );
         }
+        //tmr1.Show();
+    }
 
     auto belongsToRAFootprint = [] ( RULE_AREA* ra, PAD *aPad ) -> FOOTPRINT*
     {
-        for( auto fp : ra->m_raFootprints )
-            for ( auto pad : fp.fp->Pads() )
-            {
-                if (aPad == pad)
-                    return fp.fp;
-            }
+        auto iter = ra->m_fpPads.find( aPad );
+        if ( iter == ra->m_fpPads.end() )
+            return nullptr;
 
-        return nullptr;
+        return iter->second;
     };
 
     auto findPadConnectionsWithinRA = [&] ( RULE_AREA* ra, PAD *aPad ) -> std::vector<PAD_PREFIX_ENTRY>
@@ -596,13 +684,21 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 
     if( aRefArea->m_raFootprints.size() != aTargetArea->m_raFootprints.size() )
     {
-        m_reporter->Report( wxString::Format( wxT("component count mismatch, ref=%d, target=%d\n"), 
+        aMatches.m_isOk = false;
+        aMatches.m_errorMsg =  wxString::Format( wxT("Component count mismatch (reference area has %d, target area has %d)"),
                     (int) aRefArea->m_raFootprints.size(),
-                    (int) aTargetArea->m_raFootprints.size() ) );
+                    (int) aTargetArea->m_raFootprints.size() );
+
+        m_reporter->Report( aMatches.m_errorMsg );
     }
+
+    {
+        //PROF_TIMER tmr1("buldPadCons");
 
     buildPadConnectionsWithinRA( aRefArea );
     buildPadConnectionsWithinRA( aTargetArea );
+    //tmr1.Show();
+    }
 
     for( auto& refFP : aRefArea->m_raFootprints )
     {
@@ -618,6 +714,8 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 
     int targetsRemaining = aTargetArea->m_raFootprints.size();
 
+    {
+        //PROF_TIMER tmr1("matchTopo");
     for( auto& refFP : aRefArea->m_raFootprints )
     {
         //int tid = random() % targetsRemaining;
@@ -640,12 +738,12 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 
                 if( matches )
                 {
-                    printf("%s: matches %s\n", refFP.fp->GetReference().c_str().AsChar(), targetFP.fp->GetReference().c_str().AsChar() );
+                 //   printf("%s: matches %s\n", refFP.fp->GetReference().c_str().AsChar(), targetFP.fp->GetReference().c_str().AsChar() );
                     //refFP.processed = true;
                     //targetFP.processed = true;
                     anyMatchesFound = true;
                     targetFP.processed = true;
-                    aMatches.push_back( { refFP.fp, targetFP.fp } );
+                    aMatches.m_matchingFootprints.push_back( { refFP.fp, targetFP.fp } );
                     break;
                 }
                 //else
@@ -662,13 +760,22 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 
         if( !anyMatchesFound )
         {
-                    printf("%s: no match\n", refFP.fp->GetReference().c_str().AsChar() );
+            aMatches.m_errorMsg =  wxString::Format( wxT("Topology mismatch (no counterpart found for component %s)"),
+            refFP.fp->GetReference() );
+
+            aMatches.m_isOk = false;
+                printf("%s: no match\n", refFP.fp->GetReference().c_str().AsChar() );
                     return false;
+
         }
 
 
 
     }
+    //tmr1.Show();
+    }
+
+    printf("match done\n");
 
         /*for( auto refPad : refFP->Pads() )
         {
@@ -678,6 +785,10 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
             
         }*/
     //}
+
+    aMatches.m_isOk = true;
+
+    totalMatch.Show();
 
     return true;
 }
