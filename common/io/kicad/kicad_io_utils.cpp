@@ -224,7 +224,7 @@ void Prettify( std::string& aSource, char aQuoteChar )
         ++cursor;
     }
 
-    aSource = formatted;
+    aSource = std::move( formatted );
 }
 
 } // namespace KICAD_FORMAT
