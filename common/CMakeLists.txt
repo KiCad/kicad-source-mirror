@@ -106,6 +106,7 @@ set( KICOMMON_SRCS
     build_version.cpp
     config_params.cpp
     confirm.cpp
+    dsnlexer.cpp
     eda_pattern_match.cpp
     eda_units.cpp
     exceptions.cpp
@@ -454,7 +455,6 @@ set( COMMON_SRCS
     draw_panel_gal.cpp
     gal_display_options_common.cpp
     gr_text.cpp
-    dsnlexer.cpp
     eda_base_frame.cpp
     eda_dde.cpp
     eda_doc.cpp

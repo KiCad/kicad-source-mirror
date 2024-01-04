@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2021 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2024 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #ifndef DSNLEXER_H_
 #define DSNLEXER_H_
 
+#include <kicommon.h>
 #include <cstdio>
 #include <hashtables.h>
 #include <string>
@@ -36,7 +37,7 @@
 /**
  * Hold a keyword string and its unique integer token.
  */
-struct KEYWORD
+struct KICOMMON_API KEYWORD
 {
     const char* name;       ///< unique keyword.
     int         token;      ///< a zero based index into an array of KEYWORDs
@@ -75,7 +76,7 @@ enum DSN_SYNTAX_T
  *
  * It reads lexical tokens from the current #LINE_READER through the #NextTok() function.
  */
-class DSNLEXER
+class KICOMMON_API DSNLEXER
 {
 public:
 
