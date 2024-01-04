@@ -239,21 +239,22 @@ void PANEL_TRACK_WIDTH::OnTWResetButtonClick( wxCommandEvent& event )
     // Note: a wxString:Format( "%g", xx) is used to use local separator in floats
 
     // Init main parameters:
-    m_TrackCurrentValue->SetValue( wxString::Format( "%g", 1.0 ) );
-    m_TrackDeltaTValue->SetValue( wxString::Format( "%g", 10.0 ) );
-    m_TrackLengthValue->SetValue( wxString::Format( "%g", 20.0 ) );
+    m_TrackDeltaTValue->ChangeValue( wxString::Format( "%g", 10.0 ) );
+    m_TrackLengthValue->ChangeValue( wxString::Format( "%g", 20.0 ) );
     m_TW_CuLength_choiceUnit->SetSelection( 0 );
     m_TWResistivity->SetValue( wxString::Format( "%g", copper_resistivity ) );
 
-    m_ExtTrackWidthValue->SetValue( wxString::Format( "%g", 0.2 ) );
+    m_ExtTrackWidthValue->ChangeValue( wxString::Format( "%g", 0.2 ) );
     m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
-    m_ExtTrackThicknessValue->SetValue( wxString::Format( "%g", 35.0 ) );
+    m_ExtTrackThicknessValue->ChangeValue( wxString::Format( "%g", 35.0 ) );
     m_ExtTrackThicknessUnit->SetSelection( 1 );
 
-    m_IntTrackWidthValue->SetValue( wxString::Format( "%g", 0.2 ) );
+    m_IntTrackWidthValue->ChangeValue( wxString::Format( "%g", 0.2 ) );
     m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
-    m_IntTrackThicknessValue->SetValue( wxString::Format( "%g", 35.0 ) );
+    m_IntTrackThicknessValue->ChangeValue( wxString::Format( "%g", 35.0 ) );
     m_IntTrackThicknessUnit->SetSelection( 1 );
+
+    m_TrackCurrentValue->SetValue( wxString::Format( "%g", 1.0 ) );
 }
 
 
