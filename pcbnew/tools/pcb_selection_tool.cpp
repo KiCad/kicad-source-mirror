@@ -2578,9 +2578,27 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
+    case PCB_BITMAP_T:
+    {
+        if( !board()->IsElementVisible( LAYER_DRAW_BITMAPS ) )
+            return false;
+
+        if( m_isFootprintEditor )
+        {
+            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+        else
+        {
+            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+
+        break;
+    }
+
     case PCB_FP_SHAPE_T:
     case PCB_FP_TEXTBOX_T:
-    case PCB_BITMAP_T:
         if( m_isFootprintEditor )
         {
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
