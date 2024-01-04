@@ -31,6 +31,7 @@
 
 class PCB_BASE_FRAME;
 class MULTICHANNEL_TOOL;
+class RULE_AREA;
 
 class DIALOG_MULTICHANNEL_REPEAT_LAYOUT : public DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE
 {
@@ -43,6 +44,15 @@ public:
     bool TransferDataToWindow() override;
 
 private:
+    struct TABLE_ENTRY {
+        RULE_AREA *m_targetRA;
+        bool m_isOK;
+        bool m_doCopy;
+        wxString m_raName;
+        wxString m_errMsg;
+    };
+
+    std::vector<TABLE_ENTRY> m_targetRAs;
     MULTICHANNEL_TOOL* m_parentTool;
 };
 
