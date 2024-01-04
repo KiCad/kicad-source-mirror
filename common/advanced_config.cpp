@@ -229,7 +229,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowRepairSchematic       = false;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
-    m_EnableEeschemaPrintCairo  = false;
+
+    m_EnableEeschemaPrintCairo  = true;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
