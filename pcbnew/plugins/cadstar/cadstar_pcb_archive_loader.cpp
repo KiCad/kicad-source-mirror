@@ -820,7 +820,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             wxLogError( _( "Footprint definition '%s' has component copper associated to a pad on "
                            "multiple layers. Custom padstacks are not supported in KiCad. The "
                            "copper items have been imported as graphical elements." ),
-                        aComponent.BuildLibName() );
+                        aComponent.ReferenceName );
 
             compCopperError = true;
         }
