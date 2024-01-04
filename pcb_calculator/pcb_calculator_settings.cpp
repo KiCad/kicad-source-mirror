@@ -151,10 +151,10 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
             &m_TrackWidth.ext_track_width_units, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "track_width.ext_track_thickness",
-            &m_TrackWidth.ext_track_thickness, "0.035" ) );
+            &m_TrackWidth.ext_track_thickness, "35" ) );
 
     m_params.emplace_back( new PARAM<int>( "track_width.ext_track_thickness_units",
-            &m_TrackWidth.ext_track_thickness_units, 0 ) );
+            &m_TrackWidth.ext_track_thickness_units, 1 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "track_width.int_track_width",
             &m_TrackWidth.int_track_width, "0.2" ) );
@@ -163,10 +163,10 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
             &m_TrackWidth.int_track_width_units, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "track_width.int_track_thickness",
-            &m_TrackWidth.int_track_thickness, "0.035" ) );
+            &m_TrackWidth.int_track_thickness, "35" ) );
 
     m_params.emplace_back( new PARAM<int>( "track_width.int_track_thickness_units",
-            &m_TrackWidth.int_track_thickness_units, 0 ) );
+            &m_TrackWidth.int_track_thickness_units, 1 ) );
 
     {
         const std::array<std::string, 8> transline_names = { "MicroStrip", "CoPlanar", "GrCoPlanar",
