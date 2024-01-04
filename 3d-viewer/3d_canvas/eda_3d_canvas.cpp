@@ -921,7 +921,6 @@ bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
 
     const float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
     const float arrow_moving_time_speed = 8.0f;
-    bool        handled = false;
 
     switch( aRequestedView )
     {
@@ -1046,15 +1045,6 @@ bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
     default:
         return false;
     }
-
-    m_mouse_was_moved = true;
-
-    restart_editingTimeOut_Timer();
-
-    DisplayStatus();
-    Request_refresh();
-
-    return handled;
 }
 
 
