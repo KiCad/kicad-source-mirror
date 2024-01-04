@@ -612,6 +612,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                         // Visitor:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
+                            if( m_drcEngine->IsCancelled() )
+                                return false;
+
                             if( other->Type() == PCB_PAD_T && static_cast<PAD*>( other )->IsFreePad() )
                             {
                                 if( other->GetEffectiveShape( layer )->Collide( trackShape.get() ) )
@@ -622,11 +625,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                     if( it == freePadsUsageMap.end() )
                                     {
                                         freePadsUsageMap[ other ] = track->GetNetCode();
-                                        return false;
+                                        return true;    // Continue colliding tests
                                     }
                                     else if( it->second == track->GetNetCode() )
                                     {
-                                        return false;
+                                        return true;    // Continue colliding tests
                                     }
                                 }
                             }
@@ -640,9 +643,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                 std::swap( a, b );
 
                             // If we get an error, mark the pair as having a clearance error already
-                            // Only continue if we are reporting all track errors
-                            if( !testSingleLayerItemAgainstItem( track, trackShape.get(), layer,
-                                                                other ) )
+                            if( !testSingleLayerItemAgainstItem( track, trackShape.get(), layer, other ) )
                             {
                                 std::lock_guard<std::mutex> lock( checkedPairsMutex );
                                 auto it = checkedPairs.find( { a, b } );
@@ -650,7 +651,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                 if( it != checkedPairs.end() )
                                     it->second.has_error = true;
 
-                                return m_drcEngine->GetReportAllTrackErrors() && !m_drcEngine->IsCancelled();
+                                if( !m_drcEngine->GetReportAllTrackErrors() )
+                                    return false;   // We're done with this track
                             }
 
                             return !m_drcEngine->IsCancelled();
@@ -922,8 +924,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             reportViolation( drce, pos, aLayer );
         }
     }
-
-    return;
 }
 
 
