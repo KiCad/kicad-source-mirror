@@ -752,32 +752,20 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
         {
             int      traceType = SPT_UNKNOWN;
             wxString vectorName = vectorNameFromSignalName( plotPanel, signal, &traceType );
-            TRACE*   trace = plotPanel ? plotPanel->GetTrace( vectorName, traceType ) : nullptr;
+            TRACE*   trace = plotPanel->GetTrace( vectorName, traceType );
 
             m_signalsGrid->AppendRows( 1 );
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_NAME, signal );
 
-            if( !plotPanel )
-            {
-                wxGridCellAttr* attr = new wxGridCellAttr;
-                attr->SetReadOnly();
-                m_signalsGrid->SetAttr( row, COL_SIGNAL_SHOW, attr );
-            }
-            else
-            {
-                wxGridCellAttr* attr = new wxGridCellAttr;
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-                attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-                m_signalsGrid->SetAttr( row, COL_SIGNAL_SHOW, attr );
-            }
+            wxGridCellAttr* attr = new wxGridCellAttr;
+            attr->SetRenderer( new wxGridCellBoolRenderer() );
+            attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+            attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+            m_signalsGrid->SetAttr( row, COL_SIGNAL_SHOW, attr );
 
-            if( trace )
-                m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
-
-            if( !plotPanel || !trace )
+            if( !trace )
             {
-                wxGridCellAttr* attr = new wxGridCellAttr;
+                attr = new wxGridCellAttr;
                 attr->SetReadOnly();
                 m_signalsGrid->SetAttr( row, COL_SIGNAL_COLOR, attr );
                 m_signalsGrid->SetCellValue( row, COL_SIGNAL_COLOR, wxEmptyString );
@@ -792,7 +780,8 @@ void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
             }
             else
             {
-                wxGridCellAttr* attr = new wxGridCellAttr;
+                m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
+
                 attr = new wxGridCellAttr;
                 attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( this ) );
                 attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( this, m_signalsGrid ) );
