@@ -64,6 +64,11 @@ else()
     set( UNIX_NOT_APPLE OFF )
 endif()
 
+if( APPLE OR WIN32 )
+    set( APPLE_OR_WIN32 ON )
+else()
+    set( APPLE_OR_WIN32 OFF )
+endif()
 
 #
 # KiCad build options should be added below.
@@ -100,6 +105,11 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default ON)."
     ON )
 mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
+
+cmake_dependent_option( KICAD_UPDATE_CHECK
+    "Build in update check"
+    ON "APPLE_OR_WIN32"
+    OFF )
 
 # EGL is only needed on Linux with Wayland
 cmake_dependent_option( KICAD_USE_EGL
@@ -252,6 +262,7 @@ add_compile_definitions( $<$<BOOL:${KICAD_SIGNAL_INTEGRITY}>:KICAD_SIGNAL_INTEGR
 add_compile_definitions( $<$<BOOL:${KICAD_USE_VALGRIND}>:KICAD_USE_VALGRIND> )
 add_compile_definitions( $<$<BOOL:${KICAD_GAL_PROFILE}>:KICAD_GAL_PROFILE> )
 add_compile_definitions( $<$<BOOL:${KICAD_WIN32_VERIFY_CODESIGN}>:KICAD_WIN32_VERIFY_CODESIGN> )
+add_compile_definitions( $<$<BOOL:${KICAD_UPDATE_CHECK}>:KICAD_UPDATE_CHECK> )
 
 if( KICAD_USE_EGL )
     message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )

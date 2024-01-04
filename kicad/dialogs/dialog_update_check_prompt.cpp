@@ -30,6 +30,9 @@
 DIALOG_UPDATE_CHECK_PROMPT::DIALOG_UPDATE_CHECK_PROMPT( wxWindow* aWindow ) :
         DIALOG_UPDATE_CHECK_PROMPT_BASE( aWindow )
 {
+#ifndef KICAD_UPDATE_CHECK
+    m_cbKiCadUpdates->Hide();
+#endif
 }
 
 
@@ -39,7 +42,9 @@ bool DIALOG_UPDATE_CHECK_PROMPT::TransferDataFromWindow()
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
     settings->m_PcmUpdateCheck = m_cbPCMUpdates->GetValue();
+#ifndef KICAD_UPDATE_CHECK
     settings->m_KiCadUpdateCheck = m_cbKiCadUpdates->GetValue();
+#endif
 
     return true;
 }

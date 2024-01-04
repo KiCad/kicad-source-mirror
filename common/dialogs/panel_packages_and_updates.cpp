@@ -36,6 +36,12 @@ PANEL_PACKAGES_AND_UPDATES::PANEL_PACKAGES_AND_UPDATES( wxWindow* parent ) :
     int    minWidth = m_libPrefix->GetTextExtent( wxT( "XXX.XXX" ) ).GetWidth();
 
     m_libPrefix->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
+
+#ifndef KICAD_UPDATE_CHECK
+    m_generalLabel->Hide();
+    m_staticline3->Hide();
+    m_cbKicadUpdate->Hide();
+#endif
 }
 
 
@@ -44,7 +50,9 @@ bool PANEL_PACKAGES_AND_UPDATES::TransferDataToWindow()
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
+#ifndef KICAD_UPDATE_CHECK
     m_cbKicadUpdate->SetValue( settings->m_KiCadUpdateCheck );
+#endif
     m_cbPcmUpdate->SetValue( settings->m_PcmUpdateCheck );
     m_libAutoAdd->SetValue( settings->m_PcmLibAutoAdd );
     m_libAutoRemove->SetValue( settings->m_PcmLibAutoRemove );

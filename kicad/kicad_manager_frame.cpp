@@ -963,11 +963,13 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
         m_pcm->RunBackgroundUpdate();
     }
 
+#ifdef KICAD_UPDATE_CHECK
     if( !m_updateManager && settings->m_KiCadUpdateCheck )
     {
         m_updateManager = std::make_unique<UPDATE_MANAGER>();
         m_updateManager->CheckForUpdate( this );
     }
+#endif
 }
 
 
