@@ -69,7 +69,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
     aPlacer->m_modifiers = 0;
 
     auto makeNewItem =
-            [&]( VECTOR2I aPosition )
+            [&]( const VECTOR2I& aPosition )
             {
                 if( frame()->GetModel() )
                     newItem = aPlacer->CreateItem();

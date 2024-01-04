@@ -1617,51 +1617,51 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
     int braceNesting = 0;
 
     auto iterateString =
-            [&]( std::function<void( int aOverbarLength, int aOverbarHeight )> overbarFn,
-                 std::function<int( unsigned long aChar )>                     bitmapCharFn )
-    {
-        for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
-        {
-            wxASSERT_MSG( *chIt != '\n' && *chIt != '\r',
-                          "No support for multiline bitmap text yet" );
-
-            if( *chIt == '~' && overbarDepth == -1 )
+            [&]( const std::function<void( int aOverbarLength, int aOverbarHeight )>& overbarFn,
+                 const std::function<int( unsigned long aChar )>& bitmapCharFn )
             {
-                UTF8::uni_iter lookahead = chIt;
-
-                if( ++lookahead != end && *lookahead == '{' )
+                for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
                 {
-                    chIt = lookahead;
-                    overbarDepth = braceNesting;
-                    braceNesting++;
-                    continue;
+                    wxASSERT_MSG( *chIt != '\n' && *chIt != '\r',
+                                  "No support for multiline bitmap text yet" );
+
+                    if( *chIt == '~' && overbarDepth == -1 )
+                    {
+                        UTF8::uni_iter lookahead = chIt;
+
+                        if( ++lookahead != end && *lookahead == '{' )
+                        {
+                            chIt = lookahead;
+                            overbarDepth = braceNesting;
+                            braceNesting++;
+                            continue;
+                        }
+                    }
+                    else if( *chIt == '{' )
+                    {
+                        braceNesting++;
+                    }
+                    else if( *chIt == '}' )
+                    {
+                        if( braceNesting > 0 )
+                            braceNesting--;
+
+                        if( braceNesting == overbarDepth )
+                        {
+                            overbarFn( overbarLength, overbarHeight );
+                            overbarLength = 0;
+
+                            overbarDepth = -1;
+                            continue;
+                        }
+                    }
+
+                    if( overbarDepth != -1 )
+                        overbarLength += bitmapCharFn( *chIt );
+                    else
+                        bitmapCharFn( *chIt );
                 }
-            }
-            else if( *chIt == '{' )
-            {
-                braceNesting++;
-            }
-            else if( *chIt == '}' )
-            {
-                if( braceNesting > 0 )
-                    braceNesting--;
-
-                if( braceNesting == overbarDepth )
-                {
-                    overbarFn( overbarLength, overbarHeight );
-                    overbarLength = 0;
-
-                    overbarDepth = -1;
-                    continue;
-                }
-            }
-
-            if( overbarDepth != -1 )
-                overbarLength += bitmapCharFn( *chIt );
-            else
-                bitmapCharFn( *chIt );
-        }
-    };
+            };
 
     // First, calculate the amount of characters and overbars to reserve
 
