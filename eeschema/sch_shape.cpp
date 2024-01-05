@@ -181,7 +181,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground,
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            aPlotter->Arc( GetStart(), GetArcMid(), GetEnd(), m_fill, pen_size );
+            aPlotter->Arc( GetStart(), GetArcMid(), GetEnd(), FILL_T::NO_FILL, pen_size );
             break;
 
         case SHAPE_T::CIRCLE:
