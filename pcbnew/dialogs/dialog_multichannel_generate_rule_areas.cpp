@@ -61,6 +61,9 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_sheetsGrid->SetMaxSize( wxSize( -1, 800 ) );
     m_sheetsGrid->Fit();
 
+    m_cbGroupItems->SetValue( raData->m_groupItems );
+    m_cbReplaceExisting->SetValue( raData->m_replaceExisting );
+
     Layout();
     SetupStandardButtons();
     finishDialogSettings();
@@ -74,23 +77,19 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
     for( int i = 0; i < raData->m_areas.size(); i++)
     {
         wxString enabled = m_sheetsGrid->GetCellValue( i, 0 );
-
-
-
         raData->m_areas[i].m_generateEnabled = ( !enabled.CompareTo( wxT("1") ) ) ? true : false;
-
-        printf("i %d en '%s'\n", i, enabled.c_str().AsChar() );
     }
 
     raData->m_replaceExisting = m_cbReplaceExisting->GetValue();
+    raData->m_groupItems = m_cbGroupItems->GetValue();
+
     return true;
 }
 
 
 bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataToWindow()
 {
-    //if( !wxDialog::TransferDataToWindow() )
-        //return false;
-
+    // fixme: no idea how to make the wxGrid autoresize to the actual window width when setting
+    // grid cells from within this method.
     return true;
 }

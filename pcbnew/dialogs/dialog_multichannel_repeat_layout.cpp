@@ -105,7 +105,9 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
     {
         wxString doCopy = m_raGrid->GetCellValue( i, 0 );
 
-        data->m_compatMap[ m_targetRAs[i].m_targetRA ].m_doCopy = doCopy.CompareTo( wxT("1") ) ? true : false;
+        data->m_compatMap[ m_targetRAs[i].m_targetRA ].m_doCopy = !doCopy.CompareTo( wxT("1") ) ? true : false;
+
+//        printf("RA %d cpy=%d\n", i, data->m_compatMap[ m_targetRAs[i].m_targetRA ].m_doCopy ? 1 : 0);
     }
 
     data->m_options.m_copyPlacement = m_cbCopyPlacement->GetValue();
