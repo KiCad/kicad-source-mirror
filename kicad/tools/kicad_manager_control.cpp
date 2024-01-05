@@ -154,8 +154,23 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     if( ret != wxID_OK )
         return -1;
 
-    wxString   repodest = dlg.GetRepoName();
-    wxFileName pro = newProjectDirectory( &repodest );
+    wxFileName reponame( dlg.GetRepoName() );
+
+    // Set the default file extension for the new repository's project,
+    // preserving any part that is the original extension in the process.
+    if( reponame.GetExt().IsEmpty() )
+    {
+        reponame.SetExt( FILEEXT::ProjectFileExtension );
+    }
+    else if( reponame.GetExt().ToStdString() != FILEEXT::ProjectFileExtension )
+    {
+        reponame.SetName( reponame.GetName() + wxT( "." ) + reponame.GetExt() );
+        reponame.SetExt( FILEEXT::ProjectFileExtension );
+    }
+
+    wxString project_name = reponame.GetFullPath();
+
+    wxFileName pro = newProjectDirectory( &project_name );
 
     if( !pro.IsOk() )
         return -1;
