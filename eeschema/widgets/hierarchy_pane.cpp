@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,7 +231,8 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
     buildHierarchyTree( &m_list, root );
     UpdateHierarchySelection();
 
-    m_tree->ExpandAll();
+    if( m_tree->ItemHasChildren( root ) )
+        m_tree->Expand( root );
 
     if( eventsWereBound )
     {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1218,9 +1218,10 @@ static std::vector<KICAD_T> deletableItems =
 
 int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    SCH_SCREEN*          screen = m_frame->GetScreen();
-    auto                 items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
-    bool                 appendToUndo = false;
+    SCH_SCREEN*           screen = m_frame->GetScreen();
+    auto                  items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
+    bool                  appendToUndo = false;
+    bool                  rebuildHierarchyNavigator = false;
     std::vector<VECTOR2I> pts;
 
     if( items.empty() )
@@ -1285,7 +1286,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
 
             if( sch_item->Type() == SCH_SHEET_T )
-                m_frame->UpdateHierarchyNavigator();
+                rebuildHierarchyNavigator = true;
         }
     }
 
@@ -1300,8 +1301,10 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             m_frame->DeleteJunction( junction, appendToUndo );
     }
 
-    m_frame->TestDanglingEnds();
+    if( rebuildHierarchyNavigator )
+        m_frame->UpdateHierarchyNavigator();
 
+    m_frame->TestDanglingEnds();
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 

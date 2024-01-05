@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,22 @@ bool PICKED_ITEMS_LIST::ContainsItem( const EDA_ITEM* aItem ) const
     for( const ITEM_PICKER& picker : m_ItemsList )
     {
         if( picker.GetItem() == aItem )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool PICKED_ITEMS_LIST::ContainsItemType( KICAD_T aItemType ) const
+{
+    for( const ITEM_PICKER& picker : m_ItemsList )
+    {
+        const EDA_ITEM* item = picker.GetItem();
+
+        wxCHECK2( item, continue );
+
+        if( item->Type() == aItemType )
             return true;
     }
 

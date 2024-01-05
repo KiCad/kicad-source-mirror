@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1231,7 +1231,10 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
-    PICKED_ITEMS_LIST* List = m_frame->PopCommandFromUndoList();
+    PICKED_ITEMS_LIST* list = m_frame->PopCommandFromUndoList();
+
+    wxCHECK( m_frame && list, 0 );
+
     size_t num_undos = m_frame->m_undoList.m_CommandsList.size();
 
     // The cleanup routines normally run after an operation and so attempt to append their
@@ -1240,9 +1243,15 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     PICKED_ITEMS_LIST* dummy = new PICKED_ITEMS_LIST();
     m_frame->PushCommandToUndoList( dummy );
 
-    m_frame->PutDataInPreviousState( List );
+    m_frame->PutDataInPreviousState( list );
 
-    m_frame->SetSheetNumberAndCount();
+    // Only rebuild the hierarchy navigator if there are sheet changes.
+    if( list->ContainsItemType( SCH_SHEET_T ) )
+    {
+        m_frame->SetSheetNumberAndCount();
+        m_frame->UpdateHierarchyNavigator();
+    }
+
     m_frame->TestDanglingEnds();
     m_frame->OnPageSettingsChange();
 
@@ -1252,8 +1261,8 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
         delete m_frame->PopCommandFromUndoList();
 
     // Now push the old command to the RedoList
-    List->ReversePickersListOrder();
-    m_frame->PushCommandToRedoList( List );
+    list->ReversePickersListOrder();
+    m_frame->PushCommandToRedoList( list );
 
     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
 
@@ -1267,6 +1276,8 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 {
+    wxCHECK( m_frame, 0 );
+
     if( m_frame->GetRedoCommandCount() == 0 )
         return 0;
 
@@ -1276,6 +1287,8 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     /* Get the old list */
     PICKED_ITEMS_LIST* list = m_frame->PopCommandFromRedoList();
 
+    wxCHECK( list, 0 );
+
     /* Redo the command: */
     m_frame->PutDataInPreviousState( list );
 
@@ -1283,7 +1296,13 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     list->ReversePickersListOrder();
     m_frame->PushCommandToUndoList( list );
 
-    m_frame->SetSheetNumberAndCount();
+    // Only rebuild the hierarchy navigator if there are sheet changes.
+    if( list->ContainsItemType( SCH_SHEET_T ) )
+    {
+        m_frame->SetSheetNumberAndCount();
+        m_frame->UpdateHierarchyNavigator();
+    }
+
     m_frame->TestDanglingEnds();
 
     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
