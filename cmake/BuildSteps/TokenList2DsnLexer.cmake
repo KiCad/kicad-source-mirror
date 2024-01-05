@@ -56,6 +56,10 @@
 #                  *.h lexfer file.  If not defined, the output path is the same
 #                  path as the token list file path, with a file name of *_lexer.h
 #
+#   exportMacro  - Optional, the name of the macro used for dllexport/dllimport and is used
+#                  to mark the class for export
+#   exportMacroInclude - Optional, a include that is added for use of the export macro
+#
 # Use the max_lexer() CMake function from functions.cmake for invocation convenience.
 
 
@@ -92,6 +96,10 @@ if( NOT DEFINED outHeaderFile )
     set( outHeaderFile "${outputPath}/${result}_lexer.h" )
 endif()
 
+if( exportMacro )
+    set( exportMacro "${exportMacro} ")
+endif()
+
 # Create tag for generating header file.
 set( headerTag "${LEXERCLASS}_H_" )
 
@@ -105,7 +113,18 @@ set( includeFileHeader
 #define ${headerTag}
 
 #include <dsnlexer.h>
+")
 
+if( exportMacroInclude )
+set( includeFileHeader
+"${includeFileHeader}
+#include <${exportMacroInclude}>
+"
+)
+endif()
+
+set( includeFileHeader
+"${includeFileHeader}
 /**
  * C++ does not put enum _values_ in separate namespaces unless the enum itself
  * is in a separate namespace.  All the token enums must be in separate namespaces
@@ -234,7 +253,7 @@ file( APPEND "${outHeaderFile}"
  * technology, based on keywords provided by file:
  *    ${inputFile}
  */
-class ${LEXERCLASS} : public DSNLEXER
+class ${exportMacro}${LEXERCLASS} : public DSNLEXER
 {
     /// Auto generated lexer keywords table and length:
     static const KEYWORD  keywords[];
@@ -397,7 +416,7 @@ const char* ${LEXERCLASS}::TokenName( T aTok )
 )
 
 
-file( APPEND "${outCppFile}" 
+file( APPEND "${outCppFile}"
 "
 
 const KEYWORD_MAP ${LEXERCLASS}::keywords_hash({
@@ -410,7 +429,7 @@ math( EXPR tokensAfter "${tokensAfter} - 1" )
 
 foreach( token ${tokens} )
     file(APPEND "${outCppFile}" "    { \"${token}\", ${TOKEN_NUM} }" )
-    
+
     if( TOKEN_NUM EQUAL tokensAfter )
         file( APPEND "${outCppFile}" "\n" )
     else( TOKEN_NUM EQUAL tokensAfter )

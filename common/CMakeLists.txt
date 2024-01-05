@@ -781,21 +781,25 @@ generate_lemon_grammar(
 # Called twice one for common and one for gal, to ensure the files are created
 # on all devel tools ( Linux and msys2 )
 # works on Linux:
-make_lexer(
-    common
+make_lexer_export(
+    kicommon
     stroke_params.keywords
     stroke_params_lexer.h
     stroke_params_keywords.cpp
     STROKEPARAMS_T
+    KICOMMON_API
+    kicommon.h
     )
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
-make_lexer(
-    common
+make_lexer_export(
+    kicommon
     netlist.keywords
     netlist_lexer.h
     netlist_keywords.cpp
     NL_T
+    KICOMMON_API
+    kicommon.h
     )
 
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
@@ -808,12 +812,14 @@ make_lexer(
     )
 
 # auto-generate drc_rules_lexer.h and drc_rules_keywords.cpp
-make_lexer(
-    common
+make_lexer_export(
+    kicommon
     drc_rules.keywords
     drc_rules_lexer.h
     drc_rules_keywords.cpp
     DRCRULE_T
+    KICOMMON_API
+    kicommon.h
     )
 
 
@@ -827,31 +833,37 @@ make_lexer(
     )
 
 # auto-generate s-expression library table code.
-make_lexer(
-    common
+make_lexer_export(
+    kicommon
     lib_table.keywords
     lib_table_lexer.h
     lib_table_keywords.cpp
     LIB_TABLE_T
+    KICOMMON_API
+    kicommon.h
     )
 
 # auto-generate s-expression template fieldnames lexer and keywords.
-make_lexer(
-    common
+make_lexer_export(
+    kicommon
     template_fieldnames.keywords
     template_fieldnames_lexer.h
     template_fieldnames_keywords.cpp
     TFIELD_T
+    KICOMMON_API
+    kicommon.h
     )
 
 # auto-generate page layout reader s-expression page_layout_reader_lexer.h
 # and title_block_reader_keywords.cpp.
-make_lexer(
-    common
+make_lexer_export(
+    kicommon
     drawing_sheet/drawing_sheet.keywords
     drawing_sheet/drawing_sheet_lexer.h
     drawing_sheet/drawing_sheet_keywords.cpp
     DRAWINGSHEET_T
+    KICOMMON_API
+    kicommon.h
     )
 
 # This one gets made only when testing.
