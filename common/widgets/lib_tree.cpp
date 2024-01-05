@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <tool/tool_manager.h>
 #include <tool/action_manager.h>
 #include <tool/actions.h>
+#include <tool/tool_dispatcher.h>
 #include <widgets/wx_dataviewctrl.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
@@ -752,7 +753,9 @@ void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
 {
     hidePreview();
 
-    if( !m_tree_ctrl->IsShownOnScreen() || m_previewDisabled )
+    TOOL_DISPATCHER* toolDispatcher = m_adapter->GetToolDispatcher();
+
+    if( !m_tree_ctrl->IsShownOnScreen() || m_previewDisabled || toolDispatcher->GetCurrentMenu() )
         return;
 
     wxDataViewItem    item;

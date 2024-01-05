@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,8 @@ public:
      * Return the MVC controller.
      */
     TOOL_MANAGER* GetToolManager() const { return m_toolManager; }
+
+    TOOL_DISPATCHER* GetToolDispatcher() const { return m_toolDispatcher; }
 
     /**
      * Register an action's update conditions with the UI layer to allow the UI to appropriately

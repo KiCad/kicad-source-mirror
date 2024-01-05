@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __TOOL_DISPATCHER_H
-#define __TOOL_DISPATCHER_H
+#ifndef TOOL_DISPATCHER_H
+#define TOOL_DISPATCHER_H
 
 #include <vector>
 #include <wx/event.h>
@@ -34,6 +34,7 @@
 class TOOL_MANAGER;
 class PCB_BASE_FRAME;
 class ACTIONS;
+class ACTION_MENU;
 
 namespace KIGFX
 {
@@ -76,23 +77,14 @@ public:
      */
     std::optional<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
+    ACTION_MENU* GetCurrentMenu() const { return m_currentMenu; }
+
 private:
-    ///< The time threshold for a mouse button press that distinguishes between a single mouse
-    ///< click and a beginning of drag event (expressed in milliseconds).
-    static const int DragTimeThreshold = 300;
-
-    ///< The distance threshold for mouse cursor that distinguishes between a single mouse click
-    ///< and a beginning of drag event (expressed in screen pixels).
-    ///< System drag preferences take precedence if available
-    static const int DragDistanceThreshold = 8;
-
-    ///< Mininum distance before drag is activated in the X axis
-    int m_sysDragMinX;
-    ///< Maximum distance before drag is activated in the Y axis
-    int m_sysDragMinY;
-
     ///< Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
+
+    ///< Returns the instance of VIEW, used by the application.
+    KIGFX::VIEW* getView();
 
     ///< Saves the state of key modifiers (Alt, Ctrl and so on).
     static int decodeModifiers( const wxKeyboardState* aState )
@@ -111,23 +103,31 @@ private:
         return mods;
     }
 
-    ///< Stores all the information regarding a mouse button state.
-    struct BUTTON_STATE;
+private:
+    ///< The time threshold for a mouse button press that distinguishes between a single mouse
+    ///< click and a beginning of drag event (expressed in milliseconds).
+    static const int DragTimeThreshold = 300;
 
-    ///< The last mouse cursor position (in world coordinates).
-    VECTOR2D m_lastMousePos;
+    ///< The distance threshold for mouse cursor that distinguishes between a single mouse click
+    ///< and a beginning of drag event (expressed in screen pixels).
+    ///< System drag preferences take precedence if available
+    static const int DragDistanceThreshold = 8;
 
-    ///< The last mouse cursor position (in screen coordinates).
-    VECTOR2D m_lastMousePosScreen;
+    int      m_sysDragMinX;          ///< Mininum distance before drag is activated in the X axis
+    int      m_sysDragMinY;          ///< Maximum distance before drag is activated in the Y axis
+
+    VECTOR2D m_lastMousePos;         ///< The last mouse cursor position (in world coordinates).
+    VECTOR2D m_lastMousePosScreen;   ///< The last mouse cursor position (in screen coordinates).
 
     ///< State of mouse buttons.
+    struct BUTTON_STATE;
     std::vector<BUTTON_STATE*> m_buttons;
-
-    ///< Returns the instance of VIEW, used by the application.
-    KIGFX::VIEW* getView();
 
     ///< Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
+
+    ///< The menu from the main menubar currently shown (if any; nullptr otherwise)
+    ACTION_MENU*  m_currentMenu;
 };
 
-#endif
+#endif  // TOOL_DISPATCHER_H

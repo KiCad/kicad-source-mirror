@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
  * Copyright (C) 2023 CERN
- * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,6 +23,7 @@
 #ifndef LIB_TREE_MODEL_ADAPTER_H
 #define LIB_TREE_MODEL_ADAPTER_H
 
+#include <eda_base_frame.h>
 #include <lib_id.h>
 #include <lib_tree_model.h>
 #include <wx/hashmap.h>
@@ -258,6 +259,8 @@ public:
 
     virtual bool HasPreview( const wxDataViewItem& aItem ) { return false; }
     virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) {}
+
+    TOOL_DISPATCHER* GetToolDispatcher() const { return m_parent->GetToolDispatcher(); }
 
     /**
      * Return the number of symbols loaded in the tree.

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2023 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2013-2024 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -115,17 +115,16 @@ struct TOOL_DISPATCHER::BUTTON_STATE
             return mouseState.Aux2IsDown();
 
         default:
-            assert( false );
-            break;
+            wxFAIL_MSG( wxT( "unknown button" ) );
+            return false;
         }
-
-        return false;
     }
 };
 
 
 TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
-    m_toolMgr( aToolMgr )
+        m_toolMgr( aToolMgr ),
+        m_currentMenu( nullptr )
 {
     m_sysDragMinX = wxSystemSettings::GetMetric( wxSYS_DRAG_X );
     m_sysDragMinY = wxSystemSettings::GetMetric( wxSYS_DRAG_Y );
@@ -550,8 +549,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         //    hotkey.  So we keep track of menu highlighting so we can differentiate.
         //
 
-        static ACTION_MENU* currentMenu;
-
         wxMenuEvent* tmp = dynamic_cast<wxMenuEvent*>( &aEvent );
 
         wxCHECK( tmp, /* void */ );
@@ -560,22 +557,22 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( type == wxEVT_MENU_OPEN )
         {
-            currentMenu = dynamic_cast<ACTION_MENU*>( menuEvent.GetMenu() );
+            m_currentMenu = dynamic_cast<ACTION_MENU*>( menuEvent.GetMenu() );
 
-            if( currentMenu )
-                currentMenu->OnMenuEvent( menuEvent );
+            if( m_currentMenu )
+                m_currentMenu->OnMenuEvent( menuEvent );
         }
         else if( type == wxEVT_MENU_HIGHLIGHT )
         {
-            if( currentMenu )
-                currentMenu->OnMenuEvent( menuEvent );
+            if( m_currentMenu )
+                m_currentMenu->OnMenuEvent( menuEvent );
         }
         else if( type == wxEVT_MENU_CLOSE )
         {
-            if( currentMenu )
-                currentMenu->OnMenuEvent( menuEvent );
+            if( m_currentMenu )
+                m_currentMenu->OnMenuEvent( menuEvent );
 
-            currentMenu = nullptr;
+            m_currentMenu = nullptr;
         }
 
         aEvent.Skip();
