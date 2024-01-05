@@ -27,9 +27,15 @@
 #include <macros.h>
 #include <cstdint>
 
+#ifdef __WIN32__
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 using namespace fontconfig;
 
 static FONTCONFIG* g_config = nullptr;
+static bool        g_fcInitSuccess = false;
 
 /**
  * A simple wrapper to avoid exporing fontconfig in the header
@@ -51,11 +57,40 @@ FONTCONFIG::FONTCONFIG()
 };
 
 
+/**
+ * This is simply a wrapper to call FcInit() with SEH for Windows
+ * SEH on Windows can only be used in functions without objects that might be unwinded
+ * (basically objects with destructors)
+ * For example, new FONTCONFIG() in Fontconfig() is creating a object with a destructor
+ * that *might* need to be unwinded. MSVC catches this and throws a compile error
+ */
+static void bootstrapFc()
+{
+#if defined( _MSC_VER )
+    __try
+    {
+#endif
+        FcInit();
+        g_fcInitSuccess = true;
+#if defined( _MSC_VER )
+    }
+    __except( GetExceptionCode() == STATUS_IN_PAGE_ERROR )
+    {
+        g_fcInitSuccess = false;
+        // We have documented cases that fontconfig while trying to cache fonts
+        // ends up using freetype to try and get font info
+        // freetype itself reads fonts through memory mapping instead of normal file APIs
+        // there are crashes reading fonts sometimes as a result that return STATUS_IN_PAGE_ERROR
+    }
+#endif
+}
+
+
 FONTCONFIG* Fontconfig()
 {
     if( !g_config )
     {
-        FcInit();
+        bootstrapFc();
         g_config = new FONTCONFIG();
     }
 
@@ -155,6 +190,10 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
                                             int& aFaceIndex, bool aBold, bool aItalic )
 {
     FF_RESULT retval = FF_RESULT::FF_ERROR;
+
+    if( !g_fcInitSuccess )
+        return retval;
+
     wxString qualifiedFontName = aFontName;
 
     wxScopedCharBuffer const fcBuffer = qualifiedFontName.ToUTF8();
@@ -292,6 +331,9 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString &aFontName, wxString 
 
 void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string& aDesiredLang )
 {
+    if( !g_fcInitSuccess )
+        return;
+
     // be sure to cache bust if the language changed
     if( m_fontInfoCache.empty() || m_fontCacheLastLang != aDesiredLang )
     {
