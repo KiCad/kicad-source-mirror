@@ -65,6 +65,8 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
 
     SetupStandardButtons();
     updateAuthControls();
+
+    Layout();
 }
 
 DIALOG_GIT_REPOSITORY::~DIALOG_GIT_REPOSITORY()
@@ -439,6 +441,8 @@ void DIALOG_GIT_REPOSITORY::updateAuthControls()
             setDefaultSSHKey();
         }
     }
+
+    Layout();
 }
 
 
