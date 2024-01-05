@@ -124,7 +124,7 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 
     while( std::unique_ptr<IO_ERROR> error = PopError() )
     {
-        wxString tmp = error->Problem();
+        wxString tmp = EscapeHTML( error->Problem() );
 
         // Preserve new lines in error messages so queued errors don't run together.
         tmp.Replace( wxS( "\n" ), wxS( "<BR>" ) );
