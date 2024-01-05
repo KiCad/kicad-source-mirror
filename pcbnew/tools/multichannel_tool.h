@@ -181,6 +181,11 @@ class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
         RULE_AREA* findRAByName( const wxString& aName );
         bool resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, RULE_AREA_COMPAT_DATA& aMatches );
         bool copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts );
+    int findRoutedConnections( std::set<BOARD_ITEM*> &aOutput,
+                                                    std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
+                                                   const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA,
+                                                   FOOTPRINT*                   aFp,
+                                                   const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
 
         std::unique_ptr<REPORTER> m_reporter;
         RULE_AREAS_DATA m_areas;

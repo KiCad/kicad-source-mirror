@@ -58,39 +58,6 @@ void MULTICHANNEL_TOOL::setTransitions()
 }
 
 
-#if 0
-int MULTICHANNEL_TOOL::autogenerateRuleAreas( const TOOL_EVENT& aEvent )
-{
-    using DData = DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_DATA;
-    DData ddata;
-
-    using PathAndName = std::pair<wxString, wxString>;
-    std::set<PathAndName> uniqueSheets;
-
-    for ( auto fp : board()->Footprints() )
-    {
-        uniqueSheets.insert( PathAndName( fp->GetSheetname(), fp->GetSheetfile() ) );
-    }
-
-    for( auto& sheet : uniqueSheets )
-    {
-        DData::ENTRY ent;
-
-        ent.m_generateEnabled = true;
-        ent.m_sheetPath = sheet.first;
-        ent.m_sheetName = sheet.second;
-        ddata.m_sheets.push_back( ent );
-    }
-
-    ddata.m_replaceExisting = true;
-
-    DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS dialog( frame(), ddata );
-    int ret = dialog.ShowModal();
-    return 0;
-}
-
-#endif
-    
 bool MULTICHANNEL_TOOL::identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents )
 {
     LEGACY::PCBEXPR_COMPILER compiler( new LEGACY::PCBEXPR_UNIT_RESOLVER );
@@ -377,23 +344,28 @@ wxString MULTICHANNEL_TOOL::stripComponentIndex( wxString aRef ) const
     return rv;
 }
 
-const std::set<BOARD_ITEM*> findRoutedConnections( std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
+
+int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*> &aOutput,
+                                                    std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
                                                    const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA,
                                                    FOOTPRINT*                   aFp,
-                                                   const REPEAT_LAYOUT_OPTIONS& aOpts )
+                                                   const REPEAT_LAYOUT_OPTIONS& aOpts ) const
 {
-    std::set<BOARD_ITEM*> rv;
+    std::set<BOARD_ITEM*> conns;
 
     for( auto pad : aFp->Pads() )
     {
         auto connItems = aConnectivity->GetConnectedItems(
-                pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
-
-        printf( "pad [%p] %s-%s: %d items\n", pad, aFp->GetReference().c_str().AsChar(),
-                pad->GetNumber().c_str().AsChar(), connItems.size() );
+                pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, false );
 
         for( auto item : connItems )
-        {
+            conns.insert( item );
+    }
+
+    int count = 0;
+
+    for( auto item : conns )
+    {
             // fixme: respect layer sets assigned to each RA
 
             if( item->Type() == PCB_PAD_T )
@@ -403,12 +375,12 @@ const std::set<BOARD_ITEM*> findRoutedConnections( std::shared_ptr<CONNECTIVITY_
 
             if( effShape->Collide( &aRAPoly, 0 ) )
             {
-                rv.insert( item );
+                aOutput.insert( item );
+                count++;
             }
-        }
     }
 
-    return rv;
+    return count;
 }
 
 bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts )
@@ -433,12 +405,18 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
     
     auto connectivity = board()->GetConnectivity();
 
+    printf("Copy-routing %d\n", aOpts.m_copyRouting?1:0);
+    printf("Copy-placement %d\n", aOpts.m_copyPlacement?1:0);
+
     if( aOpts.m_copyRouting )
     {
+        std::set<BOARD_ITEM*> refRouting;
+
         for( auto& fpPair : aMatches )
         {
-            auto refRouting = findRoutedConnections( connectivity, refPoly, aRefArea, fpPair.first, aOpts );
-            auto targetRouting = findRoutedConnections( connectivity, targetPoly, aTargetArea, fpPair.second, aOpts );
+            std::set<BOARD_ITEM*> targetRouting;
+            findRoutedConnections( targetRouting, connectivity, targetPoly, aTargetArea, fpPair.second, aOpts );
+            findRoutedConnections( refRouting, connectivity, refPoly, aRefArea, fpPair.first, aOpts );
 
             for( auto item : targetRouting )
             {
@@ -447,6 +425,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
 
                 aCommit->Remove( item );
             }
+        }
 
             for( auto item : refRouting )
             {
@@ -454,63 +433,6 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
                 copied->Move( disp );
                 aCommit->Add( copied );
             }
-
-#if 0
-            for( auto pad : refFP->Pads() )
-            {
-                auto connItems = connectivity->GetConnectedItems( pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
-
-                printf("pad [%p] %s-%s: %d items\n", pad, refFP->GetReference().c_str().AsChar(), pad->GetNumber().c_str().AsChar(), connItems.size() );
-
-                for( auto item : connItems )
-                {
-
-
-                    //if( ! ( item->GetLayerSet(). aRefArea->m_area->GetLayerSet() ) )
-                    //  continue;
-                    
-                    printf("process conn: type %\n", item->Type() );
-
-                    auto effShape = item->GetEffectiveShape( item->GetLayer() );
-                    auto bb =effShape->BBox();
-
-                    printf("Effshape: %s bbox %d %d %d %d\n",
-                        effShape->TypeName().c_str().AsChar(),
-                        bb.GetLeft(), bb.GetTop(),
-                        bb.GetRight(), bb.GetBottom()
-                    );
-
-
-                    //overlay->SetIsFill( true );
-                    //overlay->SetFillColor( GREEN );
-                    //overlay->Rectangle( bb.GetOrigin(), bb.GetEnd() );
-                    
-                    auto rbb = refPoly.BBox();
-                    printf("ref: bbox %d %d %d %d tris %d\n",
-                        rbb.GetLeft(), rbb.GetTop(),
-                        rbb.GetRight(), rbb.GetBottom()
-                        );
-
-                    //overlay->SetIsFill( true );
-                    //overlay->SetFillColor( RED );
-                    //overlay->Rectangle( rbb.GetOrigin(), rbb.GetEnd() );
-
-
-                    if( rbb.Intersects( bb ) )
-                        printf("Possible collision\n");
-
-                    if( effShape->Collide( &refPoly, 0 ) )
-                    {
-                        //printf("Coll : %p\n", item );
-
-                        auto ni = static_cast<BOARD_ITEM*>( item->Clone() );
-                        ni->Move( disp );
-                        aCommit->Add( ni );
-                    }
-                }
-            }
-#endif
-        }
     }
 
     aCommit->Modify( aTargetArea->m_area );
@@ -525,8 +447,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
         auto refFP = fpPair.first;
         auto targetFP = fpPair.second;
 
-//        printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
-  //      printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+        //printf("ref-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
+        //printf("target-ls: %s\n", aRefArea->m_area->GetLayerSet().FmtHex().c_str() );
 
 #if 0
         if( ! aRefArea->m_area->GetLayerSet().Contains( refFP->GetLayer() ) );
@@ -690,6 +612,7 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
                     (int) aTargetArea->m_raFootprints.size() );
 
         m_reporter->Report( aMatches.m_errorMsg );
+        return false;
     }
 
     {
@@ -809,8 +732,6 @@ int MULTICHANNEL_TOOL::autogenerateRuleAreas( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    m_areas.m_replaceExisting = true;
-    m_areas.m_groupItems = false;
 
     DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS dialog( frame(), this );
     int ret = dialog.ShowModal();
@@ -877,23 +798,36 @@ int MULTICHANNEL_TOOL::autogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
         //aBoard->Add( newZone.release() );
         commit.Add( newZone.get() );
+        commit.Push( wxT("Auto-generate placement rule areas") );
+
+
 
         if( m_areas.m_groupItems )
         {
+            // fixme: sth gets weird when creating new zones & grouping them within a single COMMIT
+            BOARD_COMMIT grpCommit( frame()->GetToolManager(), true );
+
             PCB_GROUP *grp = new PCB_GROUP( board() );
 
+            printf("groupItems: %p\n", newZone.get() );
+
+            grpCommit.Add( grp );
+
+            grpCommit.Stage( newZone.get(), CHT_GROUP );
             grp->AddItem( newZone.get() );
-
+            
             for( auto fp : ra.m_sheetComponents )
+            {
+                grpCommit.Stage( fp, CHT_GROUP );
                 grp->AddItem( fp );
-
-            commit.Add( grp );
+                printf("groupItems: %p\n", fp );
+            }
+            grpCommit.Push( wxT("Group components with their placement rule areas") );
         }
 
         newZone.release();
     }
 
-    commit.Push( wxT("Auto-generate placement rule areas") );
 
     return true;
 }
