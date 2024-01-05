@@ -14,7 +14,7 @@
 # Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
-# Luc <some_physics@live.com>, 2023.
+# Luc <some_physics@live.com>, 2023, 2024.
 # Ken Ovo <Elektroniker@aon.at>, 2023.
 # Karl SCHUH <k.schuh@schuh-tv.at>, 2023.
 # Julian Daube <julian@daube.xyz>, 2023.
@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-31 06:07+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-01-08 00:06+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6161,7 +6161,7 @@ msgstr "Verbindung mit Remote-Repository konnte nicht hergestellt werden."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Tag not found."
-msgstr "Tag nicht gefunden"
+msgstr "Tag nicht gefunden."
 
 #: common/git/kicad_git_errors.cpp:60
 msgid "Failed to create tag."
@@ -17066,9 +17066,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "Die Footprintbibliothek \"%s\" konnte nicht erstellen werden."
+msgstr "Die zur Bibliothek '%s' passende .csa Datei kann nicht gefunden werden."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:63
 msgid "CADSTAR Schematic Archive files"
@@ -17185,18 +17185,16 @@ msgid "httplib plugin missing library table handle!"
 msgstr ""
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
 msgstr ""
-"Bei dem Versuch den Footprint %s aus der Bibliothek \"%s\" zu laden ist ein "
-"Fehler aufgetreten."
+"Fehler aufgetreten beim Herunterladen von Daten aus der HTTP Bibliothek %s: "
+"%s"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid"
-msgstr ""
-"Datenbankbibliothek konnte nicht geladen werden: Einstellungsdatei %s fehlt "
-"oder ist ungültig"
+msgstr "Einstellungsdatei %s der HTTP Bibliothek fehlt oder ist ungültig"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:227
 #, c-format
@@ -19853,7 +19851,7 @@ msgstr "Symbol importieren"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: pcbnew/load_select_footprint.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
 msgstr "Es konnte kein Leser für \"%s\" gefunden werden."
 
@@ -19956,7 +19954,6 @@ msgid "(failed to load)"
 msgstr "(Laden fehlgeschlagen)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
 msgstr "KiCad Symbolbibliothek-Browser"
 
@@ -20081,7 +20078,7 @@ msgid "Change %s 'Do not populate' from '%s' to '%s'."
 msgstr "Ändere %s 'Nicht bestücken' von '%s' zu '%s'."
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Ändere %s 'Von Stückliste ausschließen' von '%s' zu '%s'."
 
@@ -20235,9 +20232,8 @@ msgid "Save Copy As..."
 msgstr "Kopie speichern als..."
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "Das aktuelle Symbol in einer anderen Bibliothek speichern."
+msgstr "Eine Kopie des aktuellen Symbols in einer anderen Bibliothek speichern."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
@@ -25043,9 +25039,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokaler Pfad: Ordneränderungen überwachen"
 
 #: kicad/project_tree_pane.cpp:1535
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "Die ausgewählte Datei ist ungültig oder möglicherweise beschädigt!"
+msgstr "Der ausgewählte Ordner ist schon ein git-Projekt."
 
 #: kicad/project_tree_pane.cpp:1551
 msgid "Failed to initialize git project."
@@ -25150,9 +25145,9 @@ msgid "Failed to create author signature: %s"
 msgstr "Konnte temporäre Datei \"%s\" nicht erstellen."
 
 #: kicad/project_tree_pane.cpp:2228
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "Konnte Datei \"%s\" nicht erstellen."
+msgstr "Konnte Commit \"%s\" nicht erstellen"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -26800,9 +26795,9 @@ msgid "Exact"
 msgstr "Exakt"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect required resistance value: %s"
-msgstr "Inkorrekte Größe für Eckwert"
+msgstr "Ungültiger Widerstandswert: %s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
@@ -30063,9 +30058,8 @@ msgid "Stagger:"
 msgstr "Staffelung:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:148
-#, fuzzy
 msgid "Value -1,  0 or 1 disable this option."
-msgstr "Auf 0 setzen, um diese Einschränkung zu deaktivieren"
+msgstr "Die Werte -1, 0 oder 1 deaktivieren diese Option."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:158
 msgid "Rows"
@@ -31480,18 +31474,16 @@ msgid "Restart Search"
 msgstr "Suche von vorn beginnen"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#, fuzzy
 msgid "Footprint: "
-msgstr "Footprint: %s"
+msgstr "Footprint: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
 msgid "Symbol:"
 msgstr "Symbol:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
-#, fuzzy
 msgid "Sheet: "
-msgstr "Schaltplanblatt"
+msgstr "Schaltplanblatt "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -34994,9 +34986,8 @@ msgid "Track and Via Dimensions"
 msgstr "Leiterbahn- und Via-Maße"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Zielversatz:"
+msgstr "Zielversatz: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:83
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1966
@@ -35292,19 +35283,23 @@ msgstr "Interne Lagen"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:379
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Incorrect line width.\n"
 "It must be between %s and %s"
-msgstr "Die Textbreite muss zwischen %s und %s liegen."
+msgstr ""
+"%s: Ungültige Zeilenbreite.\n"
+"Die Zeilenbreite muss zwischen %s und %s liegen"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:404
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text size is incorrect.\n"
 "Size must be between %s and %s"
-msgstr "Die Texthöhe muss zwischen %s und %s liegen."
+msgstr ""
+"%s: Ungültige Schriftgrösse.\n"
+"Die Schriftgrösse muss zwischen %s und %s liegen"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
@@ -38166,9 +38161,9 @@ msgid "%s fabrication property differs."
 msgstr "Pad-Verbindung %s: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s orientation differs."
-msgstr "Die Anzahl der Regelbereiche ist unterschiedlich."
+msgstr "Orientierung von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:274
 #, fuzzy, c-format
@@ -38262,9 +38257,9 @@ msgid "%s keep out vias setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection property differs."
-msgstr "Pad-Verbindung %s: %s."
+msgstr "Pad-Verbindung ist unterschiedlich für %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:455
 #, fuzzy, c-format
@@ -38272,9 +38267,9 @@ msgid "%s local clearance differs."
 msgstr "Ermittelter Freiraum: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:457
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap differs."
-msgstr "Thermischer Entlastungsspalt %s: %s."
+msgstr "Thermischer Entlastungsspalt ist unterschiedlich für %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
 #, fuzzy, c-format
@@ -38282,9 +38277,9 @@ msgid "%s thermal relief spoke width differs."
 msgstr "Ermittelte Speichenbreite der thermischen Entlastung: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness differs."
-msgstr "%s Mindestdicke: %s."
+msgstr "Mindestdicke ist unterschiedlich für %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:465
 #, c-format
@@ -38332,9 +38327,9 @@ msgid "%s minimum hatch hole setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "%s outline corner count differs."
-msgstr "Die Anzahl der Regelbereiche ist unterschiedlich."
+msgstr "Die Anzahl der Ecken des Umrisses von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:503
 #, fuzzy, c-format
@@ -38726,56 +38721,56 @@ msgstr ""
 "** Fehler beim Erstellen des STEP-Platinenmodells. Export abgebrochen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Writing %s file\n"
-msgstr "STEP-Datei wird geschrieben\n"
+msgstr "%s-Datei wird geschrieben\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
 "\n"
-"** Fehler beim Schreiben der STEP-Datei. **\n"
+"** Fehler beim Schreiben der %s-Datei. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"STEP-Datei \"%s\" erstellt.\n"
+msgstr "%s-Datei \"%s\" erstellt.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** Fehler beim Exportieren der STEP-Datei. Export abgebrochen. **\n"
+"** Fehler beim Exportieren der %s-Datei. Export abgebrochen. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"STEP-Datei kann nicht erstellt werden.\n"
+"%s-Datei kann nicht erstellt werden.\n"
 "Prüfen Sie, ob die Platine einen gültigen Umriss und Modelle hat."
 
 #: pcbnew/exporters/step/exporter_step.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "%s file has been created, but there are warnings."
-msgstr "Die STEP Datei wurde erstellt, es gab jedoch Warnmeldungen."
+msgstr "Die %s Datei wurde erstellt, es gab jedoch Warnmeldungen."
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Neu geladen in %.3f s"
+msgstr ""
+"\n"
+"Exportiert in %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
 #, fuzzy, c-format
@@ -39455,19 +39450,16 @@ msgid "Tuning"
 msgstr "Warnung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1276
-#, fuzzy
 msgid "too long"
-msgstr "Zu lang: "
+msgstr "zu lang"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1277
-#, fuzzy
 msgid "too short"
-msgstr "Zu kurz: "
+msgstr "zu kurz"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1278
-#, fuzzy
 msgid "tuned"
-msgstr "Abgestimmt: "
+msgstr "abgestimmt"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1349
 #, fuzzy
@@ -39519,9 +39511,9 @@ msgid "Skew Constraints: %s"
 msgstr "Breitenbeschränkungen: min %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1978
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "Ziellänge:"
+msgstr "Ziellänge: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1987
 #, fuzzy, c-format
@@ -40758,9 +40750,9 @@ msgid "Drawing"
 msgstr "Zeichnung"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
-msgstr "%s auf %s"
+msgstr "%s %s auf %s"
 
 #: pcbnew/pcb_shape.cpp:491
 #, c-format
@@ -40973,14 +40965,13 @@ msgid "Loading board\n"
 msgstr "Lade Platine\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "SVG-Datei erfolgreich erstellt"
+msgstr "VRML wurde erfolgreich exportiert nach %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "Fehler beim Extrahieren!"
+msgstr "Fehler beim Exportieren von VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:211
 msgid "Successfully created svg file"
@@ -40996,9 +40987,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Fehler beim Plotten von \"%s\".\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:550
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Verzeichnis %s konnte nicht entfernt werden"
+msgstr "Ausgabeverzeichnis konnte nicht erstellt werden\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:740 pcbnew/pcbnew_jobs_handler.cpp:812
 msgid "Loading footprint library\n"
@@ -41035,9 +41025,9 @@ msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Unverbundene Elemente (%s)"
+msgstr "Unverbundene Elemente (%d) gefunden\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1009
 #, c-format
@@ -41045,14 +41035,14 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1023
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Kann Repository nicht parsen: %s"
+msgstr "DRC-Bericht kann nicht gespeichert werden in %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1028
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Speichere DRC Protokolldatei"
+msgstr "DRC-Bericht wurde gespeichert in %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:116
 msgid "Multiple Layers"
@@ -41946,9 +41936,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle Version 6.x XML Bibliotheksdateien"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Unbekannter Model_type "
+msgstr "Unbekannter SVGNODE nodeType %d"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
 #, fuzzy, c-format
@@ -41957,17 +41947,15 @@ msgstr "Konnte keinen PDF-Betrachter für \"%s\" finden."
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:266
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"Fehler beim Einlesen der Platine.\n"
-"%s"
+msgstr "Fehler beim Einlesen der Platine '%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find valid footprints in '%s'"
-msgstr "Padindex \"%d\" kann in Footprint \"%s\" nicht gefunden werden."
+msgstr "Es konnten keine gültigen Footprints in '%s' gefunden werden."
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:362
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
@@ -41979,11 +41967,11 @@ msgstr ""
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
 msgstr ""
 "Bei dem Versuch den Footprint %s aus der Bibliothek \"%s\" zu laden ist ein "
-"Fehler aufgetreten."
+"Fehler aufgetreten: %s"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:334
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:384
@@ -42220,14 +42208,13 @@ msgid "Generating BOM section"
 msgstr "Rendering-Optionen"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:1317
-#, fuzzy
 msgid "Generating CAD data"
-msgstr "Bestimme Platinendaten\n"
+msgstr "CAD-Daten werden erstellt"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2358
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting Layer %s, Net %s"
-msgstr "Netzliste exportieren"
+msgstr "Exportieren der Lage %s und der Netzliste %s"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2902
 #, fuzzy
@@ -42235,9 +42222,8 @@ msgid "Generating logistic section"
 msgstr "Positionsdatei generieren"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2914
-#, fuzzy
 msgid "Saving file"
-msgstr "Lese Datei "
+msgstr "Datei wird gespeichert"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2946
 #, fuzzy
@@ -43636,18 +43622,18 @@ msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr "Ermittelte Spaltbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "Ermittelte Durchmesserbeschränkungen: min %s; max %s."
+msgstr "Ermittelte Durchmesserbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1297
 msgid "Via Annular Width"
 msgstr "Via-Restring-Breite"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1307
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "Ermittelte Restring-Breitenbeschränkungen: min %s; max %s."
+msgstr "Ermittelte Restring-Breitenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, fuzzy, c-format
@@ -43660,9 +43646,9 @@ msgid "Resolved height constraints: min %s; opt %s; max %s."
 msgstr "Ermittelte Spaltbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "Ermittelte Dickenbeschränkungen: min %s; max %s."
+msgstr "Ermittelte Dickenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1371
 msgid "Keepouts"
@@ -44064,9 +44050,9 @@ msgid "Regenerate All"
 msgstr "Alle ersetzen"
 
 #: pcbnew/tools/generator_tool.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "Aktualisieren"
+msgstr "%s aktualisieren"
 
 #: pcbnew/tools/generator_tool.cpp:235
 #, fuzzy
@@ -44185,12 +44171,12 @@ msgid "Push Pad Settings"
 msgstr "Übertrage Pad-Einstellungen"
 
 #: pcbnew/tools/pad_tool.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Auf Pad %s%d klicken\n"
+"Auf Pad %s klicken\n"
 "<esc> drücken, um alles abzubrechen; Doppelklick zum Beenden"
 
 #: pcbnew/tools/pad_tool.cpp:401 pcbnew/tools/pad_tool.cpp:499
@@ -47192,14 +47178,14 @@ msgid "%s"
 msgstr "%s"
 
 #: pcbnew/zone.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s und %s"
+msgstr "%s, %s und %s"
 
 #: pcbnew/zone.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s und %d mehr"
+msgstr "%s, %s und %d mehr"
 
 #: pcbnew/zone.cpp:646 pcbnew/zone.cpp:1637
 msgid "Fill Mode"
@@ -47230,9 +47216,9 @@ msgid "Non-copper Zone"
 msgstr "Nicht-Kupfer-Zone"
 
 #: pcbnew/zone.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "on %s"
-msgstr "%s auf %s"
+msgstr "auf %s"
 
 #: pcbnew/zone.cpp:849
 #, fuzzy, c-format
@@ -47240,14 +47226,14 @@ msgid "on %s and %s"
 msgstr "%s und %s"
 
 #: pcbnew/zone.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %s"
-msgstr "(Netze %s und %s)"
+msgstr "auf %s, %s und %s"
 
 #: pcbnew/zone.cpp:862
 #, fuzzy, c-format
 msgid "on %s, %s and %zu more"
-msgstr "%s und %d mehr"
+msgstr "auf %s, %s und %s mehr"
 
 #: pcbnew/zone.cpp:872
 #, fuzzy, c-format
