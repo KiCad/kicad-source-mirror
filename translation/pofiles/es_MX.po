@@ -10,13 +10,13 @@
 # Ulices <ulicesah@gmail.com>, 2021, 2022.
 # Ulices <dev.n47os@aleeas.com>, 2022, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
-# Ulices <hasecilu@tuta.io>, 2023.
+# Ulices <hasecilu@tuta.io>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-31 06:07+0000\n"
+"PO-Revision-Date: 2024-01-08 00:06+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -38833,9 +38833,9 @@ msgid "%s minimum hatch hole setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "%s outline corner count differs."
-msgstr "El recuento de áreas de regla difiere."
+msgstr "El recuento de esquinas del contorno de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:503
 #, fuzzy, c-format
@@ -39122,14 +39122,14 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s diámetro máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(%s cantidad mínima de radios %d; real %d)"
+msgstr "(capa %s; %d radios conectados a una isla aislada)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(%s cantidad mínima de radios %d; real %d)"
+msgstr "(capa %s; %s recuento mínimo de radios %d; %d real)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:242
 msgid "Checking thermal reliefs..."
@@ -39218,9 +39218,9 @@ msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "Grosor de la placa desde el apilado: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Build %s data\n"
-msgstr "Construir datos STEP\n"
+msgstr "Construir %s datos\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:519
 msgid ""
@@ -39232,18 +39232,18 @@ msgstr ""
 "**\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Writing %s file\n"
-msgstr "Escribiendo archivo STEP\n"
+msgstr "Escribiendo archivo %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
 "\n"
-"** Error al escribir el archivo STEP. **\n"
+"** Error al escribir el archivo %s. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
 #, c-format
@@ -39252,27 +39252,27 @@ msgstr "%s archivo '%s' creado.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** Error al exportar el archivo STEP. Exportación abortada. **\n"
+"** Error al exportar el archivo %s. Exportación abortada. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"No se pudo crear el archivo STEP.\n"
+"No se pudo crear el archivo %s.\n"
 "Compruebe que la placa tiene un contorno y modelos válidos."
 
 #: pcbnew/exporters/step/exporter_step.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "%s file has been created, but there are warnings."
-msgstr "Se ha creado el archivo STEP, pero hay avisos."
+msgstr "Se ha creado el archivo %s, pero hay advertencias."
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
 #, c-format
@@ -40001,9 +40001,9 @@ msgstr "Longitud total"
 
 # Desvío deseado:
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1956
-#, fuzzy, c-format
+#, c-format
 msgid "Target Skew: %s"
-msgstr "Desvío objetivo:"
+msgstr "Desvío objetivo: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1957
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
@@ -40017,9 +40017,9 @@ msgid "Skew Constraints: %s"
 msgstr "Restricciones de ancho: min %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1978
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "Longitud objetivo:"
+msgstr "Longitud objetivo: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1987
 #, fuzzy, c-format
@@ -40532,54 +40532,54 @@ msgid "Updated %s symbol association from %s to %s."
 msgstr "Asociación de símbolos %s actualizada de %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:391
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s fields."
-msgstr "Actualizar campos"
+msgstr "Actualizar campos %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s footprint fields not in symbol."
-msgstr "Eliminar campos si no aparecen en el nuevo símbolo"
+msgstr "Eliminar campos de huella %s si no están el símbolo."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s fields."
-msgstr "Actualizar campos"
+msgstr "Actualizar campos %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s footprint fields not in symbol."
-msgstr "Eliminar campos si no aparecen en el nuevo símbolo"
+msgstr "Campos de huella %s que no están el símbolo eliminados."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "Actualizado %s de %s a %s."
+msgstr "Actualizar el nombre de la hoja %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "Actualizado %s de %s a %s."
+msgstr "Se actualizó el nombre de la hoja %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:510
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "Actualizado %s de %s a %s."
+msgstr "Actualizar el archivo de hoja %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:517
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "Actualizado %s de %s a %s."
+msgstr "Se actualizó el archivo de hoja %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s footprint filters to '%s'."
-msgstr "Actualizar la huella %s de '%s' a '%s'"
+msgstr "Actualizar los filtros de huella de %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s footprint filters to '%s'."
-msgstr "Huella %s cambiada de '%s' a '%s'."
+msgstr "Se actualizaron los filtros de huella de %s a '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:551
 #, c-format
@@ -40640,9 +40640,11 @@ msgid "Disconnected %s pin %s."
 msgstr "%s pin %s desconectado."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:714
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
-msgstr "No se ha encontrado la red del símbolo %s pin %s."
+msgstr ""
+"No se encontró red para el componente %s pad %s (no hay pin %s en el "
+"símbolo)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:775
 #, c-format
@@ -41282,9 +41284,9 @@ msgid "Drawing"
 msgstr "Dibujo"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
-msgstr "%s en %s"
+msgstr "%s%s en %s"
 
 #: pcbnew/pcb_shape.cpp:491
 #, c-format
@@ -41493,9 +41495,9 @@ msgid "Loading board\n"
 msgstr "Cargando placa\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "Archivo svg creado exitosamente"
+msgstr "VRML exportado exitosamente a %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
 msgid "Error exporting VRML"
@@ -41702,9 +41704,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s' for directory '%s'."
-msgstr "Archivo no encontrado: '%s'."
+msgstr "Archivo no encontrado: '%s' para directorio '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:770
 #, c-format
@@ -41997,13 +41999,13 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
 msgstr ""
-"El diseño de CADSTAR contiene lágrimas. Este importador aún no los soporta, "
-"por lo que las lágrimas en el diseño han sido ignoradas."
+"La capa de construcción '%s' de CADSTAR está en la superficie exterior de la "
+"placa. Ha sido ignorado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
@@ -42478,9 +42480,9 @@ msgstr "Error al cargar la placa.'%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find valid footprints in '%s'"
-msgstr "No se ha podido encontrar el índice del pad '%d' en la huella '%s'."
+msgstr "No se pueden encontrar huellas válidas en '%s'"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:362
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
@@ -42490,9 +42492,9 @@ msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
-msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
+msgstr "Error al leer la huella '%s' de la biblioteca '%s': %s"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:334
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:384
@@ -42743,9 +42745,9 @@ msgid "Generating CAD data"
 msgstr "Generando datos CAD"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2358
-#, fuzzy, c-format
+#, c-format
 msgid "Exporting Layer %s, Net %s"
-msgstr "Exportar listado de redes"
+msgstr "Exportando capa %s, red %s"
 
 #: pcbnew/plugins/ipc2581/ipc2581_plugin.cpp:2902
 #, fuzzy
@@ -42771,13 +42773,13 @@ msgid "Cannot interpret date code %d"
 msgstr "No puede interpretarse el código de fecha %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?"
 msgstr ""
-"Se encontraron elementos es capas indefinidas.\n"
-"¿Quiere rescatarlos a la capa User.Comments?"
+"Se encontraron elementos es capas indefinidas (%s).\n"
+"¿Quiere rescatarlos a la capa %s?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1094
 #, fuzzy
@@ -44136,18 +44138,18 @@ msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr "Restricciones de espacio resueltas: mín %s; opt %s; máx. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de diámetro resueltas: mín %s; máx. %s."
+msgstr "Restricciones de diámetro resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1297
 msgid "Via Annular Width"
 msgstr "Ancho de anular de vía"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1307
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de ancho anular resueltas: mín %s; máx. %s."
+msgstr "Restricciones de ancho anular resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, fuzzy, c-format
@@ -44160,9 +44162,9 @@ msgid "Resolved height constraints: min %s; opt %s; max %s."
 msgstr "Restricciones de espacio resueltas: mín %s; opt %s; máx. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de espesor resueltas: mín %s; máx. %s."
+msgstr "Restricciones de espesor resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1371
 msgid "Keepouts"
@@ -44576,9 +44578,9 @@ msgid "Regenerate All"
 msgstr "Eliminar todo"
 
 #: pcbnew/tools/generator_tool.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "Actualizar"
+msgstr "Actualizar %s"
 
 #: pcbnew/tools/generator_tool.cpp:235
 #, fuzzy
@@ -44700,12 +44702,12 @@ msgid "Push Pad Settings"
 msgstr "Guardar ajustes de pad"
 
 #: pcbnew/tools/pad_tool.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Haga clic en el pad %s%d\n"
+"Haga clic en el pad %s\n"
 "Pulse <esc> para cancelar todo; haga doble clic para terminar"
 
 #: pcbnew/tools/pad_tool.cpp:401 pcbnew/tools/pad_tool.cpp:499
@@ -47721,14 +47723,14 @@ msgid "%s"
 msgstr "%s"
 
 #: pcbnew/zone.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s y %s"
+msgstr "%s, %s y %s"
 
 #: pcbnew/zone.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s y %d más"
+msgstr "%s, %s y %d más"
 
 #: pcbnew/zone.cpp:646 pcbnew/zone.cpp:1637
 msgid "Fill Mode"
@@ -47759,9 +47761,9 @@ msgid "Non-copper Zone"
 msgstr "Zona sin cobre"
 
 #: pcbnew/zone.cpp:845
-#, fuzzy, c-format
+#, c-format
 msgid "on %s"
-msgstr "%s en %s"
+msgstr "en %s"
 
 #: pcbnew/zone.cpp:849
 #, fuzzy, c-format
@@ -47769,14 +47771,14 @@ msgid "on %s and %s"
 msgstr "%s y %s"
 
 #: pcbnew/zone.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %s"
-msgstr "(redes %s y %s)"
+msgstr "en %s, %s y %s"
 
 #: pcbnew/zone.cpp:862
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %zu more"
-msgstr "%s y %d más"
+msgstr "en %s, %s y %zu más"
 
 #: pcbnew/zone.cpp:872
 #, fuzzy, c-format
@@ -47789,9 +47791,9 @@ msgid "Zone Cutout %s"
 msgstr "Recorte de zona en %s"
 
 #: pcbnew/zone.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area %s"
-msgstr "Áreas de Reglas"
+msgstr "Área de regla %s"
 
 #: pcbnew/zone.cpp:881
 #, fuzzy, c-format
