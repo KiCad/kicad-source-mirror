@@ -11,13 +11,13 @@
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 # Petri Niemelä <petrinm@gmail.com>, 2022, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
-# Toni Laiho <apelegeos@gmail.com>, 2022, 2023.
+# Toni Laiho <apelegeos@gmail.com>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-28 08:09+0000\n"
+"PO-Revision-Date: 2024-01-08 00:06+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -6003,7 +6003,7 @@ msgstr "Ei saatu yhteyttä etätietovarastoon"
 
 #: common/git/git_push_handler.cpp:68
 msgid "Could not push to remote"
-msgstr "Ei voitu työntää etätietovarastoon"
+msgstr "Ei voitu viedä etävarastoon"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
@@ -20679,16 +20679,14 @@ msgid "Clear the exclude from simulation attribute"
 msgstr "Poista simulaatiosta poissulkeminen -määrite"
 
 #: eeschema/tools/ee_actions.cpp:918
-#, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "Poissulkeminen simulaatiosta (päälle/pois)"
+msgstr "Poissulje simulaatiosta (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:919
 msgid "Toggle the exclude from simulation attribute"
 msgstr "Ota pois simulaatiosta -määrite (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:924
-#, fuzzy
 msgid "Exclude from Board"
 msgstr "Jätä pois piirilevyltä"
 
@@ -20697,7 +20695,6 @@ msgid "Set the exclude from board attribute"
 msgstr "Aseta poissulkeminen piirilevyltä -määrite"
 
 #: eeschema/tools/ee_actions.cpp:930
-#, fuzzy
 msgid "Include on Board"
 msgstr "Sisällytä piirilevylle"
 
@@ -20706,16 +20703,14 @@ msgid "Clear the exclude from board attribute"
 msgstr "Tyhjennä poissulkeminen piirilevyltä -määrite"
 
 #: eeschema/tools/ee_actions.cpp:936
-#, fuzzy
 msgid "Toggle Exclude from Board"
-msgstr "Vaihda Sulje pois piirilevyltä (päälle/pois)"
+msgstr "Sulje pois piirilevyltä (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:937
 msgid "Toggle the exclude from board attribute"
 msgstr "Kytke pois piirilevyltä -attribuutti (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:942
-#, fuzzy
 msgid "Set Do Not Populate"
 msgstr "Aseta älä sijoita"
 
@@ -20724,18 +20719,16 @@ msgid "Set the do not populate attribute"
 msgstr "Aseta attribuutti Älä täytä"
 
 #: eeschema/tools/ee_actions.cpp:948
-#, fuzzy
 msgid "Unset Do Not Populate"
-msgstr "poista älä sijoita"
+msgstr "Poista älä sijoita"
 
 #: eeschema/tools/ee_actions.cpp:949
 msgid "Clear the do not populate attribute"
 msgstr "Tyhjennä Älä täytä -määrite"
 
 #: eeschema/tools/ee_actions.cpp:954
-#, fuzzy
 msgid "Toggle Do Not Populate"
-msgstr "Vaihda älä sijoita"
+msgstr "Vaihda älä sijoita (päälle/pois)"
 
 #: eeschema/tools/ee_actions.cpp:955
 msgid "Toggle the do not populate attribute"
@@ -20873,11 +20866,12 @@ msgid "Generate Bill of Materials (External)..."
 msgstr "Luo materiaaliluettelo (ulkoinen)..."
 
 #: eeschema/tools/ee_actions.cpp:1066
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Luo materiaaliluettelo nykyiselle kaaviolle (Legacy generaatori)"
+msgstr ""
+"Luo materiaaliluettelo nykyiselle kytkentäkaaviolle käyttämällä ulkoista "
+"generaattoria"
 
 #: eeschema/tools/ee_actions.cpp:1072
 msgid "Export Symbols to Library..."
@@ -22101,7 +22095,6 @@ msgid "These parameters are usually specified in files, but not always."
 msgstr "Nämä parametrit määritellään yleensä tiedostoissa, mutta ei aina."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
-#, fuzzy
 msgid "File Units"
 msgstr "Tiedostoyksiköt"
 
@@ -22114,9 +22107,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr "Ei perässä olevia nollia (LZ-muoto)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:39
-#, fuzzy
 msgid "Zero Format"
-msgstr "Nollat-muoto"
+msgstr "Nollamuoto"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:41
 msgid ""
@@ -23163,9 +23155,8 @@ msgstr ""
 "vakavuusargumentteihin"
 
 #: kicad/cli/command_pcb_drc.cpp:84
-#, fuzzy
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr "Palauta poistumiskoodi sen mukaan, onko rikkomuksia vai ei"
+msgstr "Palauta nollasta poikkeava poistumiskoodi, jos DRC-rikkomuksia esiintyy"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:214
 #: kicad/cli/command_pcb_export_drill.cpp:150
@@ -23247,18 +23238,16 @@ msgstr ""
 "25,4 mm (oletusyksikkö mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:143
-#, fuzzy
 msgid "Output units; valid options: mm, m, in, tenths"
-msgstr "Lähtöyksiköt, hyväksytyt vaihtoehdot: mm, tuuma"
+msgstr "Tulostusyksiköt; vaihtoehdot: mm, m, tuumat, kymmenesosat"
 
 #: kicad/cli/command_pcb_export_3d.cpp:148
-#, fuzzy
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
-"Kansion nimi, johon luodaan ja tallennetaan 3D-malleja, jos sitä ei ole "
-"määritetty tai se on tyhjä, mallit upotetaan tärkeimpään viettävään vrml-"
+"Kansion nimi, johon luodaan ja tallennetaan 3D-malleja, jos niitä ei ole "
+"määritetty tai ne ovat tyhjiä, mallit upotetaan tärkeimpään viettävään VRML-"
 "tiedostoon"
 
 #: kicad/cli/command_pcb_export_3d.cpp:152
@@ -23616,16 +23605,14 @@ msgstr ""
 "vakavuusargumentteihin"
 
 #: kicad/cli/command_sch_erc.cpp:77
-#, fuzzy
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr "Palauta poistumiskoodi sen mukaan, onko rikkomuksia vai ei"
+msgstr "Palauta nollasta poikkeava poistumiskoodi, jos ERC-rikkomuksia esiintyy"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
 msgstr "Vie apuohjelmat (netlist, pdf, bom jne.)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
 msgstr "Luo materiaaliluettelo (BOM)"
 
@@ -23637,9 +23624,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Kytkentäkaaviotiedostoa ei ole olemassa tai se ei ole käytettävissä\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a netlist"
-msgstr "Vie Verkkolista"
+msgstr "Vie verkkolista"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
 msgid ""
@@ -23684,12 +23670,11 @@ msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr "HPGL aloitusvaihtoehdon oltava 0, 1, 2 tai 3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
-#, fuzzy
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 msgstr ""
-"Vie vanha bom xml -muoto, jota käytetään kytkentäkaavioeditorissa python-"
+"Vie vanha BOM XML-muoto käytetetään kytkentäkaavioeditorissa python-"
 "skripteillä"
 
 #: kicad/cli/command_sym.h:31
@@ -23761,7 +23746,6 @@ msgid "Project Template Selector"
 msgstr "Projektimallin valitsin"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
-#, fuzzy
 msgid "Would you like to automatically check for updates on startup?"
 msgstr ""
 "Haluatko automaattisesti tarkistaa lisäosien päivitykset käynnistyksen "
@@ -23774,7 +23758,6 @@ msgid "KiCad"
 msgstr "KiCad (ohjelma)"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
-#, fuzzy
 msgid "Check for Updates"
 msgstr "Tarkista päivitykset"
 
@@ -23782,30 +23765,27 @@ msgstr "Tarkista päivitykset"
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
-msgstr ""
+msgstr "KiCad %s on nyt saatavilla (sinulla on %s). Haluatko ladata sen nyt?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "Uusi versio KiCadista on saatavilla!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "Skip this version"
-msgstr "Odotettu versio"
+msgstr "Ohita tämä versio"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
-msgstr ""
+msgstr "Muistuta minua myöhemmin"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
-#, fuzzy
 msgid "Open Downloads Page"
-msgstr "Latauksen Edistyminen"
+msgstr "Avaa lataussivu"
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
-#, fuzzy
 msgid "Update Available"
-msgstr "PCM-päivitykset saatavilla"
+msgstr "Päivitys saatavilla"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
@@ -25139,18 +25119,17 @@ msgid "Application cannot start."
 msgstr "Sovellusta ei voi käynnistää."
 
 #: kicad/update_manager.cpp:164
-#, fuzzy
 msgid "Update Check"
-msgstr "Päivitä PCB"
+msgstr "Päivitystarkistus"
 
 #: kicad/update_manager.cpp:173
 msgid "Requesting update info"
-msgstr ""
+msgstr "Pyydetään päivitystietoja"
 
 #: kicad/update_manager.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse update response: %s"
-msgstr "Tietovaraston jäsentäminen epäonnistui: %s"
+msgstr "Päivitysvastausta ei voi jäsentää: %s"
 
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
@@ -25296,7 +25275,6 @@ msgid "Text height:"
 msgstr "Tekstin korkeus:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
-#, fuzzy
 msgid "Maximum width:"
 msgstr "Vähimmäisleveys:"
 
@@ -25308,9 +25286,8 @@ msgstr "Aseta arvoksi 0 poistaaksesi tämän rajoituksen käytöstä"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:196
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:264
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
-#, fuzzy
 msgid "Maximum height:"
-msgstr "Maksimi korkeus:"
+msgstr "Maksimikorkeus:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
 msgid "Set to 0 to use default values"
@@ -25576,7 +25553,6 @@ msgid "Edit preview data for page size and title block"
 msgstr "Muokkaa sivukoon ja otsikkolohkon esikatselutietoja"
 
 #: pagelayout_editor/tools/pl_actions.cpp:119
-#, fuzzy
 msgid "Show Title Block in Preview Mode"
 msgstr "Näytä otsikkolohko esikatselutilassa"
 
@@ -25589,7 +25565,6 @@ msgstr ""
 "tekstin paikkamerkit korvataan esikatselutiedoilla."
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Show Title Block in Edit Mode"
 msgstr "Näytä otsikkolohko muokkaustilassa"
 
@@ -25738,19 +25713,16 @@ msgid "Minimum clearance"
 msgstr "Pienin etäisyys"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
-#, fuzzy
 msgid "Via: (diameter - drill)"
-msgstr "Läpivienti: (halkaisija - pora)"
+msgstr "Läpivienti: (halkaisija - poraus)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
-#, fuzzy
 msgid "Plated Pad: (diameter - drill)"
-msgstr "Pinnoitettu Antura: (halkaisija - pora)"
+msgstr "Pinnoitettu Antura: (halkaisija - poraus)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:77
-#, fuzzy
 msgid "NP Pad: (diameter - drill)"
-msgstr "NP Antura: (halkaisija - pora)"
+msgstr "NP Antura: (halkaisija - poraus)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:95
 msgid "AWG0000"
@@ -29351,7 +29323,7 @@ msgstr "Päivitä Jalanjälki"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 #: pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Päivitä PCB"
+msgstr "Päivitä piirilevy"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:134
 msgid "Graphics cleanup"
@@ -29388,7 +29360,6 @@ msgstr "Toleranssi:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
-#, fuzzy
 msgid "Changes to be applied:"
 msgstr "Sovellettavat muutokset:"
 
@@ -29543,7 +29514,6 @@ msgstr ""
 "Vain vastaavat kytkentäverkkonimet näytetään."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide automatically generated net names"
 msgstr "Piilota automattisesti luodut verkkonimet"
 
@@ -30479,9 +30449,8 @@ msgid "Run Inspect > Constraints Resolution"
 msgstr "Suorita Tarkastus > Rajoitusresoluutio"
 
 #: pcbnew/dialogs/dialog_drc.cpp:639
-#, fuzzy
 msgid "Run Inspect > Compare Footprint with Library"
-msgstr "Suorita tarkista > Diff jalanjälkikirjastolla"
+msgstr "Suorita Tarkastus > Vertaa jalanjälkeä kirjastoon"
 
 #: pcbnew/dialogs/dialog_drc.cpp:648 pcbnew/dialogs/dialog_drc.cpp:655
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -30731,9 +30700,8 @@ msgid "Version:"
 msgstr "Versio:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
-#, fuzzy
 msgid "Compress output"
-msgstr "Pakkaa tulostus"
+msgstr "Pakkaa ulostulo"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
@@ -32371,7 +32339,6 @@ msgstr "Paras pituus:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:469
-#, fuzzy
 msgid "Maximum length:"
 msgstr "Maksimipituus:"
 
@@ -33524,7 +33491,6 @@ msgstr "Paras pituus (L):"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:92
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:452
-#, fuzzy
 msgid "Maximum length (L):"
 msgstr "Maksimipituus (L):"
 
@@ -33539,7 +33505,6 @@ msgstr "Paras leveys (W):"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:132
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:312
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
-#, fuzzy
 msgid "Maximum width (W):"
 msgstr "Suurin leveys (W):"
 
@@ -34805,7 +34770,6 @@ msgstr "(objektista \"säännön nimi\")"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:167
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:302
-#, fuzzy
 msgid "Minimum amplitude (A):"
 msgstr "Pienin amplitudi (A):"
 
@@ -34813,7 +34777,6 @@ msgstr "Pienin amplitudi (A):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:184
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:319
-#, fuzzy
 msgid "Maximum amplitude (A):"
 msgstr "Suurin amplitudi (A):"
 
@@ -34952,9 +34915,8 @@ msgid "Drag (free angle)"
 msgstr "Vedä (vapaa kulma)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid "Flip board items left/right (default is top/bottom)"
-msgstr "Käännä piirilevyn osat V/O (oletus on Y/A)"
+msgstr "Käännä piirilevyn osat vasen/oikea (oletus on ylä/alapuoli)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 msgid "Allow free pads"
@@ -35047,7 +35009,6 @@ msgid "Show courtyard collisions when moving/dragging"
 msgstr "Näytä piha-alueen törmäykset liikuttaessa/raahattaessa"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
-#, fuzzy
 msgid "Automatically refill zones"
 msgstr "Uudelleentäytä automaattisesti vyöhykkeitä"
 
@@ -35298,9 +35259,8 @@ msgid "Icon"
 msgstr "Ikoni"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show Button"
-msgstr "Näytä-painike"
+msgstr "Näytä painike"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
@@ -35549,7 +35509,6 @@ msgid "Arc/circle approximated by segments"
 msgstr "Kaari / ympyrä arvioitu segmenteillä"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
-#, fuzzy
 msgid "Maximum allowed deviation:"
 msgstr "Suurin sallittu poikkeama:"
 
@@ -35587,7 +35546,6 @@ msgid "Allow fillets outside zone outline"
 msgstr "Salli kaistaleet vyöhykkeen ääriviivan ulkopuolella"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
-#, fuzzy
 msgid "Minimum thermal relief spoke count:"
 msgstr "Minimi lämmönpoistoanturoiden määrä:"
 
@@ -36844,13 +36802,11 @@ msgid "Maximum track width"
 msgstr "Maksimi johdinraidan leveys"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
-#, fuzzy
 msgid ""
 "Max track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"Suurin anturan/läpivientikoon ja johtimen leveyden suhde kyynelpisaran "
-"luomiseksi.\n"
+"Suurin johdinliuskan leveyden suhde kyynelpisaran luomiseksi.\n"
 "100 luo aina kyynelpisaran."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:518
@@ -40336,9 +40292,8 @@ msgid "Constraints Report"
 msgstr "Rajoitukset Raportti"
 
 #: pcbnew/pcb_edit_frame.cpp:2530 pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Compare Footprint with Library"
-msgstr "Diff Jalanjälki kirjastolla"
+msgstr "Vertaa jalanjälkeä kirjastoon"
 
 #: pcbnew/pcb_field.cpp:93
 msgid "User Field"
@@ -43657,7 +43612,6 @@ msgid "Group Items"
 msgstr "Ryhmän jäsenet"
 
 #: pcbnew/tools/group_tool.cpp:320 pcbnew/tools/pcb_actions.cpp:1204
-#, fuzzy
 msgid "Ungroup Items"
 msgstr "Poista ryhmitys"
 
@@ -44015,7 +43969,6 @@ msgid "Switch the arc posture"
 msgstr "Vaihda kaaren asento"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Snap to Objects on the Active Layer Only"
 msgstr "Kiinnitä vain aktiivisen tason objekteihin"
 
@@ -44024,7 +43977,6 @@ msgid "Enables snapping to objects on the active layer only"
 msgstr "Ottaa käyttöön kohdistuksen vain aktiivisen tason objekteihin"
 
 #: pcbnew/tools/pcb_actions.cpp:380
-#, fuzzy
 msgid "Snap to Objects on All Layers"
 msgstr "Kiinnitä kaikkien tasojen objekteihin"
 
@@ -44033,7 +43985,6 @@ msgid "Enables snapping to objects on all visible layers"
 msgstr "Mahdollistaa kohdistuksen kohteiksi kaikilla näkyvillä tasoilla"
 
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Toggle Snapping Between Active and All Layers"
 msgstr "Vaihda kohdistusta aktiivisen ja kaikkien tasojen välillä"
 
@@ -44916,9 +44867,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Näytä jalanjälkitekstit linjatilassa"
 
 #: pcbnew/tools/pcb_actions.cpp:1421
-#, fuzzy
 msgid "Show Pad Numbers"
-msgstr "Näytä Nastanumerot"
+msgstr "Näytä anturanumerot"
 
 #: pcbnew/tools/pcb_actions.cpp:1428
 msgid "Draw Zone Fills"
@@ -44958,7 +44908,6 @@ msgid "Switch to Component (F.Cu) layer"
 msgstr "Vaihda Komponenttikerrokseen (F.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1528
-#, fuzzy
 msgid "Switch to Inner Layer 1"
 msgstr "Vaihda Sisäkerrokseen 1"
 
@@ -44967,7 +44916,6 @@ msgid "Switch to Inner layer 1"
 msgstr "Vaihda Sisäkerrokseen 1"
 
 #: pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Switch to Inner Layer 2"
 msgstr "Vaihda Sisäkerrokseen 2"
 
@@ -44976,7 +44924,6 @@ msgid "Switch to Inner layer 2"
 msgstr "Vaihda Sisäkerrokseen 2"
 
 #: pcbnew/tools/pcb_actions.cpp:1548
-#, fuzzy
 msgid "Switch to Inner Layer 3"
 msgstr "Vaihda Sisäkerrokseen 3"
 
@@ -44985,7 +44932,6 @@ msgid "Switch to Inner layer 3"
 msgstr "Vaihda Sisäkerrokseen 3"
 
 #: pcbnew/tools/pcb_actions.cpp:1558
-#, fuzzy
 msgid "Switch to Inner Layer 4"
 msgstr "Vaihda Sisäkerrokseen 4"
 
@@ -44994,7 +44940,6 @@ msgid "Switch to Inner layer 4"
 msgstr "Vaihda Sisäkerrokseen 4"
 
 #: pcbnew/tools/pcb_actions.cpp:1568
-#, fuzzy
 msgid "Switch to Inner Layer 5"
 msgstr "Vaihda Sisäkerrokseen 5"
 
@@ -45003,7 +44948,6 @@ msgid "Switch to Inner layer 5"
 msgstr "Vaihda Sisäkerrokseen 5"
 
 #: pcbnew/tools/pcb_actions.cpp:1578
-#, fuzzy
 msgid "Switch to Inner Layer 6"
 msgstr "Vaihda Sisäkerrokseen 6"
 
@@ -45012,7 +44956,6 @@ msgid "Switch to Inner layer 6"
 msgstr "Vaihda Sisäkerrokseen 6"
 
 #: pcbnew/tools/pcb_actions.cpp:1587
-#, fuzzy
 msgid "Switch to Inner Layer 7"
 msgstr "Vaihda Sisäkerrokseen 7"
 
@@ -45021,7 +44964,6 @@ msgid "Switch to Inner layer 7"
 msgstr "Vaihda Sisäkerrokseen 7"
 
 #: pcbnew/tools/pcb_actions.cpp:1596
-#, fuzzy
 msgid "Switch to Inner Layer 8"
 msgstr "Vaihda Sisäkerrokseen 8"
 
@@ -45030,7 +44972,6 @@ msgid "Switch to Inner layer 8"
 msgstr "Vaihda Sisäkerrokseen 8"
 
 #: pcbnew/tools/pcb_actions.cpp:1605
-#, fuzzy
 msgid "Switch to Inner Layer 9"
 msgstr "Vaihda Sisäkerrokseen 9"
 
@@ -45039,7 +44980,6 @@ msgid "Switch to Inner layer 9"
 msgstr "Vaihda Sisäkerrokseen 9"
 
 #: pcbnew/tools/pcb_actions.cpp:1614
-#, fuzzy
 msgid "Switch to Inner Layer 10"
 msgstr "Vaihda Sisäkerrokseen 10"
 
@@ -45048,7 +44988,6 @@ msgid "Switch to Inner layer 10"
 msgstr "Vaihda Sisäkerrokseen 10"
 
 #: pcbnew/tools/pcb_actions.cpp:1623
-#, fuzzy
 msgid "Switch to Inner Layer 11"
 msgstr "Vaihda Sisäkerrokseen 11"
 
@@ -45057,7 +44996,6 @@ msgid "Switch to Inner layer 11"
 msgstr "Vaihda Sisäkerrokseen 11"
 
 #: pcbnew/tools/pcb_actions.cpp:1632
-#, fuzzy
 msgid "Switch to Inner Layer 12"
 msgstr "Vaihda Sisäkerrokseen 12"
 
@@ -45066,7 +45004,6 @@ msgid "Switch to Inner layer 12"
 msgstr "Vaihda Sisäkerrokseen 12"
 
 #: pcbnew/tools/pcb_actions.cpp:1641
-#, fuzzy
 msgid "Switch to Inner Layer 13"
 msgstr "Vaihda Sisäkerrokseen 13"
 
@@ -45075,7 +45012,6 @@ msgid "Switch to Inner layer 13"
 msgstr "Vaihda Sisäkerrokseen 13"
 
 #: pcbnew/tools/pcb_actions.cpp:1650
-#, fuzzy
 msgid "Switch to Inner Layer 14"
 msgstr "Vaihda Sisäkerrokseen 14"
 
@@ -45084,7 +45020,6 @@ msgid "Switch to Inner layer 14"
 msgstr "Vaihda Sisäkerrokseen 14"
 
 #: pcbnew/tools/pcb_actions.cpp:1659
-#, fuzzy
 msgid "Switch to Inner Layer 15"
 msgstr "Vaihda Sisäkerrokseen 15"
 
@@ -45093,7 +45028,6 @@ msgid "Switch to Inner layer 15"
 msgstr "Vaihda Sisäkerrokseen 15"
 
 #: pcbnew/tools/pcb_actions.cpp:1668
-#, fuzzy
 msgid "Switch to Inner Layer 16"
 msgstr "Vaihda Sisäkerrokseen 16"
 
@@ -45102,7 +45036,6 @@ msgid "Switch to Inner layer 16"
 msgstr "Vaihda Sisäkerrokseen 16"
 
 #: pcbnew/tools/pcb_actions.cpp:1677
-#, fuzzy
 msgid "Switch to Inner Layer 17"
 msgstr "Vaihda Sisäkerrokseen 17"
 
@@ -45111,7 +45044,6 @@ msgid "Switch to Inner layer 17"
 msgstr "Vaihda Sisäkerrokseen 17"
 
 #: pcbnew/tools/pcb_actions.cpp:1686
-#, fuzzy
 msgid "Switch to Inner Layer 18"
 msgstr "Vaihda Sisäkerrokseen 18"
 
@@ -45120,7 +45052,6 @@ msgid "Switch to Inner layer 18"
 msgstr "Vaihda Sisäkerrokseen 18"
 
 #: pcbnew/tools/pcb_actions.cpp:1695
-#, fuzzy
 msgid "Switch to Inner Layer 19"
 msgstr "Vaihda Sisäkerrokseen 19"
 
@@ -45129,7 +45060,6 @@ msgid "Switch to Inner layer 19"
 msgstr "Vaihda Sisäkerrokseen 19"
 
 #: pcbnew/tools/pcb_actions.cpp:1704
-#, fuzzy
 msgid "Switch to Inner Layer 20"
 msgstr "Vaihda Sisäkerrokseen 20"
 
@@ -45138,7 +45068,6 @@ msgid "Switch to Inner layer 20"
 msgstr "Vaihda Sisäkerrokseen 20"
 
 #: pcbnew/tools/pcb_actions.cpp:1713
-#, fuzzy
 msgid "Switch to Inner Layer 21"
 msgstr "Vaihda Sisäkerrokseen 21"
 
@@ -45147,7 +45076,6 @@ msgid "Switch to Inner layer 21"
 msgstr "Vaihda Sisäkerrokseen 21"
 
 #: pcbnew/tools/pcb_actions.cpp:1722
-#, fuzzy
 msgid "Switch to Inner Layer 22"
 msgstr "Vaihda Sisäkerrokseen 22"
 
@@ -45156,7 +45084,6 @@ msgid "Switch to Inner layer 22"
 msgstr "Vaihda Sisäkerrokseen 22"
 
 #: pcbnew/tools/pcb_actions.cpp:1731
-#, fuzzy
 msgid "Switch to Inner Layer 23"
 msgstr "Vaihda Sisäkerrokseen 23"
 
@@ -45165,7 +45092,6 @@ msgid "Switch to Inner layer 23"
 msgstr "Vaihda Sisäkerrokseen 23"
 
 #: pcbnew/tools/pcb_actions.cpp:1740
-#, fuzzy
 msgid "Switch to Inner Layer 24"
 msgstr "Vaihda Sisäkerrokseen 24"
 
@@ -45174,7 +45100,6 @@ msgid "Switch to Inner layer 24"
 msgstr "Vaihda Sisäkerrokseen 24"
 
 #: pcbnew/tools/pcb_actions.cpp:1749
-#, fuzzy
 msgid "Switch to Inner Layer 25"
 msgstr "Vaihda Sisäkerrokseen 25"
 
@@ -45183,7 +45108,6 @@ msgid "Switch to Inner layer 25"
 msgstr "Vaihda Sisäkerrokseen 25"
 
 #: pcbnew/tools/pcb_actions.cpp:1758
-#, fuzzy
 msgid "Switch to Inner Layer 26"
 msgstr "Vaihda Sisäkerrokseen 26"
 
@@ -45192,7 +45116,6 @@ msgid "Switch to Inner layer 26"
 msgstr "Vaihda Sisäkerrokseen 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1767
-#, fuzzy
 msgid "Switch to Inner Layer 27"
 msgstr "Vaihda Sisäkerrokseen 27"
 
@@ -45201,7 +45124,6 @@ msgid "Switch to Inner layer 27"
 msgstr "Vaihda Sisäkerrokseen 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1776
-#, fuzzy
 msgid "Switch to Inner Layer 28"
 msgstr "Vaihda Sisäkerrokseen 28"
 
@@ -45210,7 +45132,6 @@ msgid "Switch to Inner layer 28"
 msgstr "Vaihda Sisäkerrokseen 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1785
-#, fuzzy
 msgid "Switch to Inner Layer 29"
 msgstr "Vaihda Sisäkerrokseen 29"
 
@@ -45219,7 +45140,6 @@ msgid "Switch to Inner layer 29"
 msgstr "Vaihda Sisäkerrokseen 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1794
-#, fuzzy
 msgid "Switch to Inner Layer 30"
 msgstr "Vaihda Sisäkerrokseen 30"
 
@@ -45228,9 +45148,8 @@ msgid "Switch to Inner layer 30"
 msgstr "Vaihda Sisäkerrokseen 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1805
-#, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
-msgstr "Vaihda Kuparikerrokseen (B.Cu)"
+msgstr "Vaihda kupari (B.Cu) kerros"
 
 #: pcbnew/tools/pcb_actions.cpp:1806
 msgid "Switch to Copper (B.Cu) layer"
@@ -45396,7 +45315,6 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Levittää valitut kohteet pitkin pysty-akselia"
 
 #: pcbnew/tools/pcb_actions.cpp:2003
-#, fuzzy
 msgid "Keep Arc Center, Adjust Radius"
 msgstr "Pidä kaari keskellä, säädä sädettä"
 
@@ -45407,7 +45325,6 @@ msgstr ""
 "ja päätepisteitä"
 
 #: pcbnew/tools/pcb_actions.cpp:2010
-#, fuzzy
 msgid "Keep Arc Endpoints or Direction of Starting Point"
 msgstr "Säilytä kaaren päätepisteet tai aloituspisteen suunta"
 
@@ -45501,7 +45418,7 @@ msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:2153
 msgid "Select on Schematic"
-msgstr "Valitse Kytkentäkaavio"
+msgstr "Valitse kytkentäkaaviosta"
 
 #: pcbnew/tools/pcb_actions.cpp:2154
 msgid "Selects corresponding items in Schematic editor"
@@ -45712,7 +45629,6 @@ msgstr ""
 "Jakaa johtimen kahdeksi osioksi, jotka on yhdistetty kohdistimen sijaintiin."
 
 #: pcbnew/tools/pcb_actions.cpp:2390
-#, fuzzy
 msgid "Drag 45 Degree Mode"
 msgstr "Vedä (45 asteen tila)"
 
@@ -45721,9 +45637,8 @@ msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "Vetää johdinsegmenttiä samalla pitäen yhdistetyt johtimet 45 asteessa."
 
 #: pcbnew/tools/pcb_actions.cpp:2399
-#, fuzzy
 msgid "Drag Free Angle"
-msgstr "Vedä (vapaa kulma)"
+msgstr "Vedä vapaassa kulmassa"
 
 #: pcbnew/tools/pcb_actions.cpp:2400
 msgid ""
@@ -46140,9 +46055,8 @@ msgid "Show a shadow marker on locked items"
 msgstr "Näytä varjomerkintä lukituissa kohteissa"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Conflict Footprint Shadow"
-msgstr "Ristiriita Fp Varjo"
+msgstr "Ristitiita jalanjälkivarjo"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show a shadow marker on conflicting footprints"
