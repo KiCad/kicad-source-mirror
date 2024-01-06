@@ -68,10 +68,10 @@ BOOST_AUTO_TEST_CASE( TabCheck )
         wxString text2 = wxString::Format( c.second );
 
             VECTOR2I output1 = font->GetTextAsGlyphs( &bbox, &glyphs, text1,
-                    VECTOR2I( 1000, 1000 ), VECTOR2I( 0, 0 ), EDA_ANGLE::m_Angle0, false,
+                    VECTOR2I( 1000, 1000 ), VECTOR2I( 0, 0 ), ANGLE_0, false,
                     VECTOR2I( 0, 0 ), 0 );
             VECTOR2I output2 = font->GetTextAsGlyphs( &bbox, &glyphs, text2,
-                    VECTOR2I( 1000, 1000 ), VECTOR2I( 0, 0 ), EDA_ANGLE::m_Angle0, false,
+                    VECTOR2I( 1000, 1000 ), VECTOR2I( 0, 0 ), ANGLE_0, false,
                     VECTOR2I( 0, 0 ), 0 );
 
         BOOST_CHECK_MESSAGE( output1.x == output2.x, "Incorrect tab size for \n\t'" <<

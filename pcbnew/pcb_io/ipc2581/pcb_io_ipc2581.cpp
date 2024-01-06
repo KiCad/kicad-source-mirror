@@ -1195,7 +1195,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         if( fp->GetLayer() != F_Cu )
             fp->Flip( fp->GetPosition(), false );
 
-        fp->SetOrientation( EDA_ANGLE::m_Angle0 );
+        fp->SetOrientation( ANGLE_0 );
 
         size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
         auto iter = m_footprint_dict.find( hash );
@@ -1579,7 +1579,7 @@ void PCB_IO_IPC2581::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
 
     addPadStack( padNode, aPad );
 
-    if( aPad->GetOrientation() != EDA_ANGLE::m_Angle0 )
+    if( aPad->GetOrientation() != ANGLE_0 )
     {
         wxXmlNode* xformNode = appendNode( padNode, "Xform" );
         xformNode->AddAttribute( "rotation",
@@ -1888,7 +1888,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     if( fp->GetLayer() != F_Cu )
         fp->Flip( fp->GetPosition(), false );
 
-    fp->SetOrientation( EDA_ANGLE::m_Angle0 );
+    fp->SetOrientation( ANGLE_0 );
 
 
     size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
@@ -2146,7 +2146,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         else
             addAttribute( pinNode,  "type", "SURFACE" );
 
-        if( pad->GetFPRelativeOrientation() != EDA_ANGLE::m_Angle0 )
+        if( pad->GetFPRelativeOrientation() != ANGLE_0 )
         {
             wxXmlNode* xformNode = appendNode( pinNode, "Xform" );
             xformNode->AddAttribute(
@@ -2215,11 +2215,11 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         else
             addAttribute( componentNode,  "mountType", "OTHER" );
 
-        if( fp->GetOrientation() != EDA_ANGLE::m_Angle0 || fp->GetLayer() != F_Cu )
+        if( fp->GetOrientation() != ANGLE_0 || fp->GetLayer() != F_Cu )
         {
             wxXmlNode* xformNode = appendNode( componentNode, "Xform" );
 
-            if( fp->GetOrientation() != EDA_ANGLE::m_Angle0 )
+            if( fp->GetOrientation() != ANGLE_0 )
                 addAttribute( xformNode,  "rotation", floatVal( fp->GetOrientation().Normalize().AsDegrees() ) );
 
             if( fp->GetLayer() != F_Cu )

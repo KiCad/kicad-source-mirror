@@ -2113,7 +2113,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
         wxCHECK( currentScreen, /* void */ );
 
         ELLIPSE<int>             ellipse( elem.m_Center + m_sheetOffset, elem.m_Radius,
-                                          KiROUND( elem.m_SecondaryRadius ), EDA_ANGLE::m_Angle0,
+                                          KiROUND( elem.m_SecondaryRadius ), ANGLE_0,
                                           EDA_ANGLE( elem.m_StartAngle, DEGREES_T ),
                                           EDA_ANGLE( elem.m_EndAngle, DEGREES_T ) );
         std::vector<BEZIER<int>> beziers;
@@ -2164,7 +2164,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
         }
 
         ELLIPSE<int>             ellipse( elem.m_Center, elem.m_Radius,
-                                          KiROUND( elem.m_SecondaryRadius ), EDA_ANGLE::m_Angle0,
+                                          KiROUND( elem.m_SecondaryRadius ), ANGLE_0,
                                           EDA_ANGLE( elem.m_StartAngle, DEGREES_T ),
                                           EDA_ANGLE( elem.m_EndAngle, DEGREES_T ) );
         std::vector<BEZIER<int>> beziers;
@@ -2224,7 +2224,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
         FILL_T fillMode = elem.IsSolid ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL;
 
         ELLIPSE<int> ellipse( elem.Center + m_sheetOffset, elem.Radius,
-                              KiROUND( elem.SecondaryRadius ), EDA_ANGLE::m_Angle0 );
+                              KiROUND( elem.SecondaryRadius ), ANGLE_0 );
 
         std::vector<BEZIER<int>> beziers;
         std::vector<VECTOR2I>    polyPoints;
@@ -2288,7 +2288,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
         }
 
         ELLIPSE<int> ellipse( elem.Center, elem.Radius, KiROUND( elem.SecondaryRadius ),
-                              EDA_ANGLE::m_Angle0 );
+                              ANGLE_0 );
 
         std::vector<BEZIER<int>> beziers;
         std::vector<VECTOR2I>    polyPoints;

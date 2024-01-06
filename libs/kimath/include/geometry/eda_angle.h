@@ -60,6 +60,12 @@ public:
         }
     }
 
+    /**
+     * Construct an EDA_ANGLE in degrees
+     * @param aAngleInDegrees
+     */
+    constexpr EDA_ANGLE( double aAngleInDegrees ) : m_value(aAngleInDegrees) {}
+
     explicit EDA_ANGLE( const VECTOR2D& aVector )
     {
         if( aVector.x == 0.0 && aVector.y == 0.0 )
@@ -332,14 +338,6 @@ public:
 private:
     double  m_value;           ///< value in degrees
 
-public:
-    static EDA_ANGLE m_Angle0;
-    static EDA_ANGLE m_Angle45;
-    static EDA_ANGLE m_Angle90;
-    static EDA_ANGLE m_Angle135;
-    static EDA_ANGLE m_Angle180;
-    static EDA_ANGLE m_Angle270;
-    static EDA_ANGLE m_Angle360;
 };
 
 
@@ -430,17 +428,17 @@ inline EDA_ANGLE abs( const EDA_ANGLE& aAngle )
 }
 
 
-static constexpr EDA_ANGLE& ANGLE_HORIZONTAL  = EDA_ANGLE::m_Angle0;
-static constexpr EDA_ANGLE& ANGLE_VERTICAL    = EDA_ANGLE::m_Angle90;
-static constexpr EDA_ANGLE& FULL_CIRCLE       = EDA_ANGLE::m_Angle360;
+static constexpr EDA_ANGLE ANGLE_HORIZONTAL{ 0 };
+static constexpr EDA_ANGLE ANGLE_VERTICAL{ 90 };
+static constexpr EDA_ANGLE FULL_CIRCLE{ 360 };
 
-static constexpr EDA_ANGLE& ANGLE_0   = EDA_ANGLE::m_Angle0;
-static constexpr EDA_ANGLE& ANGLE_45  = EDA_ANGLE::m_Angle45;
-static constexpr EDA_ANGLE& ANGLE_90  = EDA_ANGLE::m_Angle90;
-static constexpr EDA_ANGLE& ANGLE_135 = EDA_ANGLE::m_Angle135;
-static constexpr EDA_ANGLE& ANGLE_180 = EDA_ANGLE::m_Angle180;
-static constexpr EDA_ANGLE& ANGLE_270 = EDA_ANGLE::m_Angle270;
-static constexpr EDA_ANGLE& ANGLE_360 = EDA_ANGLE::m_Angle360;
+static constexpr EDA_ANGLE ANGLE_0{ 0 };
+static constexpr EDA_ANGLE ANGLE_45{ 45 };
+static constexpr EDA_ANGLE ANGLE_90{ 90 };
+static constexpr EDA_ANGLE ANGLE_135{ 135 };
+static constexpr EDA_ANGLE ANGLE_180{ 180 };
+static constexpr EDA_ANGLE ANGLE_270{ 270 };
+static constexpr EDA_ANGLE ANGLE_360{ 360 };
 
 
 #endif // EDA_ANGLE_H
