@@ -357,7 +357,7 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
     int blue    = (int) ( 255.0 * b );
     long rgb_color = (red << 16) | (green << 8) | blue;
 
-    if( m_pen_rgb_color != rgb_color )
+    if( m_pen_rgb_color != rgb_color || m_brush_alpha != a )
     {
         m_graphics_changed = true;
         m_pen_rgb_color = rgb_color;
