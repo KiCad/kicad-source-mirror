@@ -34,7 +34,6 @@
 #include <notifications_manager.h>
 #include <bitmaps.h>
 
-
 #define FIELD_OFFSET_BGJOB_TEXT 0
 #define FIELD_OFFSET_BGJOB_GAUGE 1
 #define FIELD_OFFSET_BGJOB_CANCEL 2
@@ -60,10 +59,11 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
     for( int i = 0; i < aNumberFields; i++ )
         widths[i] = -1;
 
-    widths[aNumberFields + FIELD_OFFSET_BGJOB_TEXT] = 200; // background status text field
-    widths[aNumberFields + FIELD_OFFSET_BGJOB_GAUGE] = 75; // background progress button
-    widths[aNumberFields + FIELD_OFFSET_BGJOB_CANCEL] = 20; // background stop button
-    widths[aNumberFields + FIELD_OFFSET_NOTIFICATION_BUTTON] = 20; // notifications button
+    widths[aNumberFields + FIELD_OFFSET_BGJOB_TEXT] = -1;       // background status text field
+                                                                // (variable size)
+    widths[aNumberFields + FIELD_OFFSET_BGJOB_GAUGE] = 75;      // background progress button
+    widths[aNumberFields + FIELD_OFFSET_BGJOB_CANCEL] = 20;     // background stop button
+    widths[aNumberFields + FIELD_OFFSET_NOTIFICATION_BUTTON] = 20;  // notifications button
 #ifdef __WXOSX__
     // offset from the right edge
     widths[aNumberFields + ExtraFields - 1] = 10;

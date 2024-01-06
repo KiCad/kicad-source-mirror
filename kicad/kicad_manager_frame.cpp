@@ -142,7 +142,12 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Create the status line (bottom of the frame).  Left half is for project name; right half
     // is for Reporter (currently used by archiver/unarchiver and PCM).
-    CreateStatusBar( 3 );
+    // Note: this is a KISTATUSBAR status bar. Therefore the specified number of fields
+    // is the extra number of fields, not the full field count.
+    // We need here 2 fields: the extra fiels to display the project name, and another field
+    // to display a info (specific to Windows) using the FIELD_OFFSET_BGJOB_TEXT id offset (=1)
+    // So the extra field count is 1
+    CreateStatusBar( 1 );
     Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     Pgm().GetNotificationsManager().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
@@ -864,7 +869,13 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
 
     wxString     status = wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() );
     wxStatusBar* statusBar = GetStatusBar();
-    int          width = statusBar->GetSize().GetWidth() / 2;
+    wxRect       fieldRect;
+    int          width = -1;
+
+    // Only GetFieldRect() returns the current size for variable size fields
+    // Other methods return -1 for the width of these fields.
+    if( statusBar->GetFieldRect( 0, fieldRect ) )
+        width = fieldRect.GetWidth();
 
     if( width > 20 )
     {

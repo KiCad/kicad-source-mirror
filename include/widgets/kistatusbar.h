@@ -30,6 +30,15 @@ class wxButton;
 class wxStaticText;
 class BITMAP_BUTTON;
 
+/**
+ * KISTATUSBAR is a wxStatusBar suitable for Kicad manager.
+ * It displays the fields needed by the caller, and room for 4 other fields (see kistatusbar.cpp)
+ * Background text (FIELD_OFFSET_BGJOB_TEXT offset id)
+ * Background gauge widget (FIELD_OFFSET_BGJOB_GAUGE offset id)
+ * Background background stop button (FIELD_OFFSET_BGJOB_CANCEL offset id)
+ * Background notifications button (FIELD_OFFSET_NOTIFICATION_BUTTON  offset id)
+ */
+
 class KISTATUSBAR : public wxStatusBar
 {
 public:
