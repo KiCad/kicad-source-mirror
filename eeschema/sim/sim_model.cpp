@@ -196,9 +196,9 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_PINKNOISE:          return { DEVICE_T::V,      "PINKNOISE",      "Pink noise (1/f)"           };
     case TYPE::V_BURSTNOISE:         return { DEVICE_T::V,      "BURSTNOISE",     "Burst noise"                };
     case TYPE::V_RANDUNIFORM:        return { DEVICE_T::V,      "RANDUNIFORM",    "Random uniform"             };
-    case TYPE::V_RANDNORMAL:         return { DEVICE_T::V,      "RANDNORMAL",     "Random normal"              };
+    case TYPE::V_RANDGAUSSIAN:       return { DEVICE_T::V,      "RANDGAUSSIAN",   "Random Gaussian"            };
     case TYPE::V_RANDEXP:            return { DEVICE_T::V,      "RANDEXP",        "Random exponential"         };
-  //case TYPE::V_RANDPOISSON:        return { DEVICE_T::V,      "RANDPOISSON",    "Random Poisson"             };
+    case TYPE::V_RANDPOISSON:        return { DEVICE_T::V,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::V_BEHAVIORAL:         return { DEVICE_T::V,      "=",              "Behavioral"                 };
 
     case TYPE::I:                    return { DEVICE_T::I,      "DC",             "DC",                        };
@@ -214,9 +214,9 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::I_PINKNOISE:          return { DEVICE_T::I,      "PINKNOISE",      "Pink noise (1/f)"           };
     case TYPE::I_BURSTNOISE:         return { DEVICE_T::I,      "BURSTNOISE",     "Burst noise"                };
     case TYPE::I_RANDUNIFORM:        return { DEVICE_T::I,      "RANDUNIFORM",    "Random uniform"             };
-    case TYPE::I_RANDNORMAL:         return { DEVICE_T::I,      "RANDNORMAL",     "Random normal"              };
+    case TYPE::I_RANDGAUSSIAN:       return { DEVICE_T::I,      "RANDGAUSSIAN",   "Random Gaussian"            };
     case TYPE::I_RANDEXP:            return { DEVICE_T::I,      "RANDEXP",        "Random exponential"         };
-  //case TYPE::I_RANDPOISSON:        return { DEVICE_T::I,      "RANDPOISSON",    "Random Poisson"             };
+    case TYPE::I_RANDPOISSON:        return { DEVICE_T::I,      "RANDPOISSON",    "Random Poisson"             };
     case TYPE::I_BEHAVIORAL:         return { DEVICE_T::I,      "=",              "Behavioral"                 };
 
     case TYPE::SUBCKT:               return { DEVICE_T::SUBCKT, "",               "Subcircuit"                 };
@@ -333,9 +333,9 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::V_PINKNOISE:          return { "V", "",            "TRNOISE"  };
     case TYPE::V_BURSTNOISE:         return { "V", "",            "TRNOISE"  };
     case TYPE::V_RANDUNIFORM:        return { "V", "",            "TRRANDOM" };
-    case TYPE::V_RANDNORMAL:         return { "V", "",            "TRRANDOM" };
+    case TYPE::V_RANDGAUSSIAN:       return { "V", "",            "TRRANDOM" };
     case TYPE::V_RANDEXP:            return { "V", "",            "TRRANDOM" };
-  //case TYPE::V_RANDPOISSON:        return { "V", "",            "TRRANDOM" };
+    case TYPE::V_RANDPOISSON:        return { "V", "",            "TRRANDOM" };
     case TYPE::V_BEHAVIORAL:         return { "B"  };
 
     case TYPE::I:                    return { "I", "",            "DC"       };
@@ -351,9 +351,9 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::I_PINKNOISE:          return { "I", "",            "TRNOISE"  };
     case TYPE::I_BURSTNOISE:         return { "I", "",            "TRNOISE"  };
     case TYPE::I_RANDUNIFORM:        return { "I", "",            "TRRANDOM" };
-    case TYPE::I_RANDNORMAL:         return { "I", "",            "TRRANDOM" };
+    case TYPE::I_RANDGAUSSIAN:       return { "I", "",            "TRRANDOM" };
     case TYPE::I_RANDEXP:            return { "I", "",            "TRRANDOM" };
-  //case TYPE::I_RANDPOISSON:        return { "I", "",            "TRRANDOM" };
+    case TYPE::I_RANDPOISSON:        return { "I", "",            "TRRANDOM" };
     case TYPE::I_BEHAVIORAL:         return { "B"  };
 
     case TYPE::SUBCKT:               return { "X"  };
@@ -931,12 +931,12 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::I_BURSTNOISE:
     case TYPE::V_RANDUNIFORM:
     case TYPE::I_RANDUNIFORM:
-    case TYPE::V_RANDNORMAL:
-    case TYPE::I_RANDNORMAL:
+    case TYPE::V_RANDGAUSSIAN:
+    case TYPE::I_RANDGAUSSIAN:
     case TYPE::V_RANDEXP:
     case TYPE::I_RANDEXP:
-    //case TYPE::V_RANDPOISSON:
-    //case TYPE::I_RANDPOISSON:
+    case TYPE::V_RANDPOISSON:
+    case TYPE::I_RANDPOISSON:
         return std::make_unique<SIM_MODEL_SOURCE>( aType );
 
     case TYPE::SUBCKT:
@@ -1475,26 +1475,63 @@ template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymb
 template <typename T_symbol, typename T_field>
 void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 {
-    if( aSymbol.FindField( SIM_DEVICE_TYPE_FIELD )
-        || aSymbol.FindField( SIM_TYPE_FIELD )
-        || aSymbol.FindField( SIM_PINS_FIELD )
-        || aSymbol.FindField( SIM_PARAMS_FIELD ) )
+    T_field* existing_deviceTypeField = aSymbol.FindField( SIM_DEVICE_TYPE_FIELD );
+    T_field* existing_typeField = aSymbol.FindField( SIM_TYPE_FIELD );
+    T_field* existing_pinsField = aSymbol.FindField( SIM_PINS_FIELD );
+    T_field* existing_paramsField = aSymbol.FindField( SIM_PARAMS_FIELD );
+
+    wxString existing_type;
+
+    if( existing_typeField )
+        existing_type = existing_typeField->GetShownText( false ).Upper();
+
+    if( existing_deviceTypeField
+        || existing_typeField
+        || existing_pinsField
+        || existing_paramsField )
     {
-        // Has a V7 model field.
+        // Has a current (V7+) model field.
 
         // Up until 7.0RC2 we used '+' and '-' for potentiometer pins, which doesn't match
         // SPICE.  Here we remap them to 'r0' and 'r1'.
-        if( T_field* deviceType = aSymbol.FindField( SIM_TYPE_FIELD ) )
+        if( existing_type == wxS( "POT" ) )
         {
-            if( deviceType->GetShownText( false ).Lower() == wxS( "pot" ) )
+            if( existing_pinsField )
             {
-                if( T_field* pins = aSymbol.FindField( SIM_PINS_FIELD ) )
-                {
-                    wxString pinMap = pins->GetText();
-                    pinMap.Replace( wxS( "=+" ), wxS( "=r1" ) );
-                    pinMap.Replace( wxS( "=-" ), wxS( "=r0" ) );
-                    pins->SetText( pinMap );
-                }
+                wxString pinMap = existing_pinsField->GetText();
+                pinMap.Replace( wxS( "=+" ), wxS( "=r1" ) );
+                pinMap.Replace( wxS( "=-" ), wxS( "=r0" ) );
+                existing_pinsField->SetText( pinMap );
+            }
+        }
+
+        // Up until 8.0RC1 random voltage/current sources were a bit of a mess.
+        if( existing_type.StartsWith( wxS( "RAND" ) ) )
+        {
+            // Re-fetch value without resolving references.  If it's an indirect value then we
+            // can't migrate it.
+            existing_type = existing_typeField->GetText().Upper();
+
+            if( existing_type.Replace( wxS( "NORMAL" ), wxS( "GAUSSIAN" ) ) )
+                existing_typeField->SetText( existing_type );
+
+            if( existing_paramsField )
+            {
+                wxString params = existing_paramsField->GetText().Lower();
+                size_t   count = 0;
+
+                // We used to support 'min' and 'max' instead of 'range' and 'offset', but we
+                // wrote all 4 to the netlist which would cause ngspice to barf, so no one has
+                // working documents with min and max specified.  Just delete them if they're
+                // uninitialized.
+                count += params.Replace( wxS( "min=0 " ), wxEmptyString );
+                count += params.Replace( wxS( "max=0 " ), wxEmptyString );
+
+                // We used to use 'dt', but the correct ngspice name is 'ts'.
+                count += params.Replace( wxS( "dt=" ), wxS( "ts=" ) );
+
+                if( count )
+                    existing_paramsField->SetText( params );
             }
         }
 

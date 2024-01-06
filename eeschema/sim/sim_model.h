@@ -248,9 +248,9 @@ public:
         V_PINKNOISE,
         V_BURSTNOISE,
         V_RANDUNIFORM,
-        V_RANDNORMAL,
+        V_RANDGAUSSIAN,
         V_RANDEXP,
-        //V_RANDPOISSON,
+        V_RANDPOISSON,
         V_BEHAVIORAL,
 
         I,
@@ -266,9 +266,9 @@ public:
         I_PINKNOISE,
         I_BURSTNOISE,
         I_RANDUNIFORM,
-        I_RANDNORMAL,
+        I_RANDGAUSSIAN,
         I_RANDEXP,
-        //I_RANDPOISSON,
+        I_RANDPOISSON,
         I_BEHAVIORAL,
 
         SUBCKT,

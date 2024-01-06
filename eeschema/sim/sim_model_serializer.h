@@ -66,13 +66,13 @@ namespace SIM_MODEL_SERIALIZER_GRAMMAR
                            TAO_PEGTL_ISTRING( "thermal" ),      // VDMOS
                            TAO_PEGTL_ISTRING( "xpart" )> {};    // BSIM1
 
-    struct fieldParamValuePair : sor<flagParam,
-                                     if_must<param,
+    struct fieldParamValuePair : sor<if_must<param,
                                              opt<sep>,
                                              one<'='>,
                                              opt<sep>,
                                              sor<quotedString,
-                                                 unquotedString>>> {};
+                                                 unquotedString>>,
+                                     flagParam> {};
     struct fieldParamValuePairs : list<fieldParamValuePair, sep> {};
     struct fieldParamValuePairsGrammar : must<opt<sep>,
                                               opt<fieldParamValuePairs>,
