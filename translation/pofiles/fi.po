@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-11 23:54+0000\n"
+"PO-Revision-Date: 2024-01-08 00:06+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -25015,7 +25015,7 @@ msgstr "Päivitä Jalanjälki"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:83
 #: pcbnew/dialogs/dialog_update_pcb.cpp:59
 msgid "Update PCB"
-msgstr "Päivitä PCB"
+msgstr "Päivitä piirilevy"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:124
 msgid "Graphics cleanup"
@@ -39805,7 +39805,7 @@ msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviosivulta"
 
 #: pcbnew/tools/pcb_actions.cpp:1372
 msgid "Select on Schematic"
-msgstr "Valitse Kytkentäkaavio"
+msgstr "Valitse kytkentäkaaviosta"
 
 #: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Selects corresponding items in Schematic editor"
