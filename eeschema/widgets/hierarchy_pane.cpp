@@ -151,8 +151,6 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
         m_events_bound = false;
     }
 
-    bool sheetSelected = false;
-
     std::function<void( const wxTreeItemId& )> recursiveDescent =
             [&]( const wxTreeItemId& id )
             {
@@ -162,19 +160,20 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
 
                 if( itemData->m_SheetPath == m_frame->GetCurrentSheet() )
                 {
-                    m_tree->EnsureVisible( id );
+                    wxTreeItemId parent = m_tree->GetItemParent( id );
+
+                    if( parent.IsOk() && !m_tree->IsExpanded( parent ) )
+                        m_tree->Expand( parent );
+
+                    if( !m_tree->IsVisible( id ) )
+                        m_tree->EnsureVisible( id );
+
                     m_tree->SetItemBold( id, true );
+                    m_tree->SetFocusedItem( id );
                 }
                 else
                 {
                     m_tree->SetItemBold( id, false );
-                }
-
-                if( itemData->m_SheetPath.Last()->IsSelected() )
-                {
-                    m_tree->EnsureVisible( id );
-                    m_tree->SelectItem( id );
-                    sheetSelected = true;
                 }
 
                 wxTreeItemIdValue cookie;
@@ -188,9 +187,6 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
             };
 
     recursiveDescent( m_tree->GetRootItem() );
-
-    if( !sheetSelected && m_tree->GetSelection() )
-        m_tree->SelectItem( m_tree->GetSelection(), false );
 
     if( eventsWereBound )
     {
