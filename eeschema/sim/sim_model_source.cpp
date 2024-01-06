@@ -292,10 +292,14 @@ void SIM_MODEL_SOURCE::doSetParamValue( int aParamIndex, const std::string& aVal
         {
             if( GetParam( paramIndex ).value == "" )
             {
-                std::string defaultValue = m_params.at( aParamIndex ).info.defaultValue;
+                double   dummy;
+                wxString defaultValue = m_params.at( aParamIndex ).info.defaultValue;
+
+                if( !defaultValue.ToDouble( &dummy ) )
+                    defaultValue = wxT( "0" );
 
                 m_params.at( aParamIndex ).value = defaultValue;
-                SIM_MODEL::SetParamValue( paramIndex, defaultValue );
+                SIM_MODEL::SetParamValue( paramIndex, defaultValue.ToStdString() );
             }
         }
     }
