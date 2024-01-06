@@ -90,10 +90,10 @@ private:
                                                          const std::string& aUnit );
     static std::vector<PARAM::INFO> makeExpParamInfos( const std::string& aPrefix,
                                                        const std::string& aUnit );
-    //static std::vector<PARAM::INFO> makeSfamParamInfos( const std::string& aPrefix,
-    //                                                    const std::string& aUnit );
-    //static std::vector<PARAM::INFO> makeSffmParamInfos( const std::string& aPrefix,
-    //                                                    const std::string& aUnit );
+    static std::vector<PARAM::INFO>            makeAMParamInfos( const std::string& aPrefix,
+                                                        const std::string& aUnit );
+    static std::vector<PARAM::INFO>            makeSFFMParamInfos( const std::string& aPrefix,
+                                                        const std::string& aUnit );
     static std::vector<SIM_MODEL::PARAM::INFO> makeVcParamInfos( const std::string& aGainUnit );
     static std::vector<SIM_MODEL::PARAM::INFO> makeCcParamInfos( const std::string& aGainUnit );
     static std::vector<PARAM::INFO> makePwlParamInfos( const std::string& aPrefix,

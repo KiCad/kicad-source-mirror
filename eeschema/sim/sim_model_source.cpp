@@ -337,11 +337,11 @@ const std::vector<SIM_MODEL::PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYP
     static std::vector<PARAM::INFO> vexp = makeExpParamInfos( "y", "V" );
     static std::vector<PARAM::INFO> iexp = makeExpParamInfos( "y", "A" );
 
-    /*static std::vector<PARAM::INFO> vsfam = makeSfamParamInfos( "y", "V" );
-    static std::vector<PARAM::INFO> isfam = makeSfamParamInfos( "y", "A" );
+    static std::vector<PARAM::INFO> vam = makeAMParamInfos( "y", "V" );
+    static std::vector<PARAM::INFO> iam = makeAMParamInfos( "y", "A" );
 
-    static std::vector<PARAM::INFO> vsffm = makeSffmParamInfos( "y", "V" );
-    static std::vector<PARAM::INFO> isffm = makeSffmParamInfos( "y", "A" );*/
+    static std::vector<PARAM::INFO> vsffm = makeSFFMParamInfos( "y", "V" );
+    static std::vector<PARAM::INFO> isffm = makeSFFMParamInfos( "y", "A" );
 
     static std::vector<PARAM::INFO> vcvs = makeVcParamInfos( "" );
     static std::vector<PARAM::INFO> ccvs = makeCcParamInfos( "ohm" );
@@ -382,10 +382,10 @@ const std::vector<SIM_MODEL::PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYP
     case TYPE::I_PULSE:       return ipulse;
     case TYPE::V_EXP:         return vexp;
     case TYPE::I_EXP:         return iexp;
-    //case TYPE::V_SFAM:        return vsfam;
-    //case TYPE::I_SFAM:        return isfam;
-    //case TYPE::V_SFFM:        return vsffm;
-    //case TYPE::I_SFFM:        return isffm;
+    case TYPE::V_AM:          return vam;
+    case TYPE::I_AM:          return iam;
+    case TYPE::V_SFFM:        return vsffm;
+    case TYPE::I_SFFM:        return isffm;
     case TYPE::V_VCL:         return vcvs;
     case TYPE::V_CCL:         return ccvs;
     case TYPE::V_PWL:         return vpwl;
@@ -630,40 +630,26 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( const s
 }
 
 
-/*std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSfamParamInfos( const std::string& aPrefix, const std::string& aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeAMParamInfos( const std::string& aPrefix,
+                                                                        const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = "dc";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = aUnit;
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "DC offset";
-
-    paramInfo.name = "ampl";
+    paramInfo.name = "va";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
     paramInfo.description = "Amplitude";
-
-    paramInfos.push_back( paramInfo );
-    paramInfo.name = "mo";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Modulating signal offset";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "fc";
+    paramInfo.name = "vo";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "Hz";
+    paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
-    paramInfo.description = "Carrier frequency";
+    paramInfo.description = "DC offset";
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "mf";
@@ -674,17 +660,25 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( const s
     paramInfo.description = "Modulating frequency";
     paramInfos.push_back( paramInfo );
 
-    appendAcParamInfos( paramInfos, aUnit );
+    paramInfo.name = "fc";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "Hz";
+    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "";
+    paramInfo.description = "Carrier frequency";
+    paramInfos.push_back( paramInfo );
+
     return paramInfos;
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( const std::string& aPrefix, const std::string& aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSFFMParamInfos( const std::string& aPrefix,
+                                                                          const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = "dc";
+    paramInfo.name = "vo";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
@@ -692,7 +686,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( const 
     paramInfo.description = "DC offset";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "ampl";
+    paramInfo.name = "va";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
@@ -740,9 +734,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( const 
     paramInfo.description = "Signal phase";
     paramInfos.push_back( paramInfo );
 
-    appendAcParamInfos( paramInfos, aUnit );
     return paramInfos;
-}*/
+}
 
 
 std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeCcParamInfos( const std::string& aGainUnit )

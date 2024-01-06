@@ -187,8 +187,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::V_SIN:                return { DEVICE_T::V,      "SIN",            "Sine"                       };
     case TYPE::V_PULSE:              return { DEVICE_T::V,      "PULSE",          "Pulse"                      };
     case TYPE::V_EXP:                return { DEVICE_T::V,      "EXP",            "Exponential"                };
-  //case TYPE::V_SFAM:               return { DEVICE_T::V,      "SFAM",           "Single-frequency AM"        };
-  //case TYPE::V_SFFM:               return { DEVICE_T::V,      "SFFM",           "Single-frequency FM"        };
+    case TYPE::V_AM:                 return { DEVICE_T::V,      "AM",             "Amplitude modulated"        };
+    case TYPE::V_SFFM:               return { DEVICE_T::V,      "SFFM",           "Single-frequency FM"        };
     case TYPE::V_VCL:                return { DEVICE_T::E,      "",               "Voltage-controlled"         };
     case TYPE::V_CCL:                return { DEVICE_T::H,      "",               "Current-controlled"         };
     case TYPE::V_PWL:                return { DEVICE_T::V,      "PWL",            "Piecewise linear"           };
@@ -205,8 +205,8 @@ SIM_MODEL::INFO SIM_MODEL::TypeInfo( TYPE aType )
     case TYPE::I_SIN:                return { DEVICE_T::I,      "SIN",            "Sine"                       };
     case TYPE::I_PULSE:              return { DEVICE_T::I,      "PULSE",          "Pulse"                      };
     case TYPE::I_EXP:                return { DEVICE_T::I,      "EXP",            "Exponential"                };
-  //case TYPE::I_SFAM:               return { DEVICE_T::I,      "SFAM",           "Single-frequency AM"        };
-  //case TYPE::I_SFFM:               return { DEVICE_T::I,      "SFFM",           "Single-frequency FM"        };
+    case TYPE::I_AM:                 return { DEVICE_T::I,      "AM",             "Amplitude modulated"        };
+    case TYPE::I_SFFM:               return { DEVICE_T::I,      "SFFM",           "Single-frequency FM"        };
     case TYPE::I_VCL:                return { DEVICE_T::G,      "",               "Voltage-controlled"         };
     case TYPE::I_CCL:                return { DEVICE_T::F,      "",               "Current-controlled"         };
     case TYPE::I_PWL:                return { DEVICE_T::I,      "PWL",            "Piecewise linear"           };
@@ -324,8 +324,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::V_SIN:                return { "V", "",            "SIN"      };
     case TYPE::V_PULSE:              return { "V", "",            "PULSE"    };
     case TYPE::V_EXP:                return { "V", "",            "EXP"      };
-  //case TYPE::V_SFAM:               return { "V", "",            "AM"       };
-  //case TYPE::V_SFFM:               return { "V", "",            "SFFM"     };
+    case TYPE::V_AM:                 return { "V", "",            "AM"       };
+    case TYPE::V_SFFM:               return { "V", "",            "SFFM"     };
     case TYPE::V_VCL:                return { "E", "",            ""         };
     case TYPE::V_CCL:                return { "H", "",            ""         };
     case TYPE::V_PWL:                return { "V", "",            "PWL"      };
@@ -342,8 +342,8 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
     case TYPE::I_PULSE:              return { "I", "",            "PULSE"    };
     case TYPE::I_SIN:                return { "I", "",            "SIN"      };
     case TYPE::I_EXP:                return { "I", "",            "EXP"      };
-  //case TYPE::I_SFAM:               return { "V", "",            "AM"       };
-  //case TYPE::I_SFFM:               return { "V", "",            "SFFM"     };
+    case TYPE::I_AM:                 return { "V", "",            "AM"       };
+    case TYPE::I_SFFM:               return { "V", "",            "SFFM"     };
     case TYPE::I_VCL:                return { "G", "",            ""         };
     case TYPE::I_CCL:                return { "F", "",            ""         };
     case TYPE::I_PWL:                return { "I", "",            "PWL"      };
@@ -913,10 +913,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType )
     case TYPE::I_PULSE:
     case TYPE::V_EXP:
     case TYPE::I_EXP:
-    /*case TYPE::V_SFAM:
-    case TYPE::I_SFAM:
+    case TYPE::V_AM:
+    case TYPE::I_AM:
     case TYPE::V_SFFM:
-    case TYPE::I_SFFM:*/
+    case TYPE::I_SFFM:
     case TYPE::V_VCL:
     case TYPE::V_CCL:
     case TYPE::V_PWL:
