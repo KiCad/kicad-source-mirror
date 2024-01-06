@@ -224,6 +224,13 @@
       "zones_allow_external_fillets": true,
       "zones_use_no_outline": true
     },
+    "ipc2581": {
+      "dist": "",
+      "distpn": "",
+      "internal_id": "",
+      "mfg": "",
+      "mpn": ""
+    },
     "layer_presets": [],
     "viewports": []
   },
@@ -632,7 +639,7 @@
   "sheets": [
     [
       "092cfb52-b6f1-4355-8e6c-0f835c9fcaf7",
-      ""
+      "Racine"
     ]
   ],
   "text_variables": {}

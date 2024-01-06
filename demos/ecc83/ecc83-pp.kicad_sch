@@ -1,1482 +1,3519 @@
-(kicad_sch (version 20230819) (generator eeschema)
-
-  (uuid 28f865a0-4433-4a53-bbd7-b62f276848e4)
-
-  (paper "A4")
-
-  (title_block
-    (title "ECC Push-Pull")
-    (date "Sat 21 Mar 2015")
-    (rev "0.1")
-  )
-
-  (lib_symbols
-    (symbol "ecc83_schlib:C" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "C" (at 0.635 2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Value" "C" (at 0.635 -2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Footprint" "" (at 0.9652 -3.81 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "C_0_1"
-        (polyline
-          (pts
-            (xy -2.032 -0.762)
-            (xy 2.032 -0.762)
-          )
-          (stroke (width 0.508) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -2.032 0.762)
-            (xy 2.032 0.762)
-          )
-          (stroke (width 0.508) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "C_1_1"
-        (pin passive line (at 0 3.81 270) (length 2.794)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at 0 -3.81 90) (length 2.794)
-          (name "~" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:CONN_1" (pin_numbers hide) (pin_names (offset 0.762) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "P" (at 2.032 0 0)
-        (effects (font (size 1.016 1.016)) (justify left))
-      )
-      (property "Value" "CONN_1" (at 0 1.397 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" (at 0 -1.27 0)
-        (effects (font (size 0.254 0.254)))
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "CONN_1_0_1"
-        (polyline
-          (pts
-            (xy -0.762 0)
-            (xy -1.27 0)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (circle (center 0 0) (radius 0.7874)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "CONN_1_1_1"
-        (pin passive line (at -3.81 0 0) (length 2.54)
-          (name "1" (effects (font (size 1.524 1.524))))
-          (number "1" (effects (font (size 1.524 1.524))))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:CONN_2" (pin_names (offset 1.016) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "P" (at -1.27 0 90)
-        (effects (font (size 1.016 1.016)))
-      )
-      (property "Value" "CONN_2" (at 1.27 0 90)
-        (effects (font (size 1.016 1.016)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "CONN_2_0_1"
-        (rectangle (start -2.54 3.81) (end 2.54 -3.81)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "CONN_2_1_1"
-        (pin passive inverted (at -8.89 2.54 0) (length 6.35)
-          (name "P1" (effects (font (size 1.524 1.524))))
-          (number "1" (effects (font (size 1.524 1.524))))
-        )
-        (pin passive inverted (at -8.89 -2.54 0) (length 6.35)
-          (name "PM" (effects (font (size 1.524 1.524))))
-          (number "2" (effects (font (size 1.524 1.524))))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:CP" (pin_numbers hide) (pin_names (offset 0.254)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "C" (at 0.635 2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Value" "CP" (at 0.635 -2.54 0)
-        (effects (font (size 1.27 1.27)) (justify left))
-      )
-      (property "Footprint" "" (at 0.9652 -3.81 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Description" "Polarised capacitor" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_keywords" "cap capacitor" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_fp_filters" "CP_*" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "CP_0_1"
-        (rectangle (start -2.286 0.508) (end -2.286 1.016)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (rectangle (start -2.286 0.508) (end 2.286 0.508)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.778 2.286)
-            (xy -0.762 2.286)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.27 2.794)
-            (xy -1.27 1.778)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (rectangle (start 2.286 -0.508) (end -2.286 -1.016)
-          (stroke (width 0) (type default))
-          (fill (type outline))
-        )
-        (rectangle (start 2.286 1.016) (end -2.286 1.016)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (rectangle (start 2.286 1.016) (end 2.286 0.508)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "CP_1_1"
-        (pin passive line (at 0 3.81 270) (length 2.794)
-          (name "~" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-        (pin passive line (at 0 -3.81 90) (length 2.794)
-          (name "~" (effects (font (size 1.27 1.27))))
-          (number "2" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:ECC83" (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "U" (at 3.302 7.874 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "ECC83" (at 8.89 -7.62 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "VALVE-NOVAL_P" (at 10.16 -8.89 0)
-        (effects (font (size 0.762 0.762)) hide)
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_locked" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (symbol "ECC83_0_1"
-        (arc (start -5.08 -2.54) (mid 0 -7.5979) (end 5.08 -2.54)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 5.08 2.54)
-            (xy 5.08 -2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -5.08 2.54)
-            (xy -5.08 -2.54)
-            (xy -5.08 -2.54)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (arc (start 5.08 2.54) (mid 0 7.5979) (end -5.08 2.54)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "ECC83_1_0"
-        (polyline
-          (pts
-            (xy -2.54 -5.08)
-            (xy -2.54 -7.62)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 5.08)
-            (xy 0 7.62)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "ECC83_1_1"
-        (polyline
-          (pts
-            (xy -5.08 0)
-            (xy -3.175 0)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.905 0)
-            (xy -3.175 0)
-          )
-          (stroke (width 0.1524) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -0.635 0)
-            (xy 0.635 0)
-          )
-          (stroke (width 0.1524) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 1.905 0)
-            (xy 3.175 0)
-          )
-          (stroke (width 0.1524) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -2.54 5.08)
-            (xy 2.794 5.08)
-            (xy 2.794 5.08)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (arc (start 2.54 -5.08) (mid 0 -3.0968) (end -2.54 -5.08)
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (pin passive line (at 0 10.16 270) (length 2.54)
-          (name "A" (effects (font (size 1.016 1.016))))
-          (number "6" (effects (font (size 1.016 1.016))))
-        )
-        (pin input line (at -7.62 0 0) (length 2.54)
-          (name "G" (effects (font (size 1.016 1.016))))
-          (number "7" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at -2.54 -10.16 90) (length 2.54)
-          (name "K" (effects (font (size 1.016 1.016))))
-          (number "8" (effects (font (size 1.016 1.016))))
-        )
-      )
-      (symbol "ECC83_2_0"
-        (polyline
-          (pts
-            (xy -2.54 -5.08)
-            (xy -2.54 -7.62)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 0 5.08)
-            (xy 0 7.62)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "ECC83_2_1"
-        (polyline
-          (pts
-            (xy -5.08 0)
-            (xy -3.175 0)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -1.905 0)
-            (xy -3.175 0)
-          )
-          (stroke (width 0.1524) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -0.635 0)
-            (xy 0.635 0)
-          )
-          (stroke (width 0.1524) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy 1.905 0)
-            (xy 3.175 0)
-          )
-          (stroke (width 0.1524) (type default))
-          (fill (type none))
-        )
-        (polyline
-          (pts
-            (xy -2.54 5.08)
-            (xy 2.794 5.08)
-            (xy 2.794 5.08)
-          )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (arc (start 2.54 -5.08) (mid 0 -3.0968) (end -2.54 -5.08)
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (pin passive line (at 0 10.16 270) (length 2.54)
-          (name "A" (effects (font (size 1.016 1.016))))
-          (number "1" (effects (font (size 1.016 1.016))))
-        )
-        (pin input line (at -7.62 0 0) (length 2.54)
-          (name "G" (effects (font (size 1.016 1.016))))
-          (number "2" (effects (font (size 1.016 1.016))))
-        )
-        (pin passive line (at -2.54 -10.16 90) (length 2.54)
-          (name "K" (effects (font (size 1.016 1.016))))
-          (number "3" (effects (font (size 1.016 1.016))))
-        )
-      )
-      (symbol "ECC83_3_1"
-        (arc (start 0 -6.35) (mid -1.27 -5.5651) (end -2.54 -6.35)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (arc (start 2.54 -6.35) (mid 1.27 -5.5651) (end 0 -6.35)
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-        (pin input line (at -2.54 -11.43 90) (length 5.08)
-          (name "F1" (effects (font (size 1.016 1.016))))
-          (number "4" (effects (font (size 1.016 1.016))))
-        )
-        (pin input line (at 2.54 -11.43 90) (length 5.08)
-          (name "F1" (effects (font (size 1.016 1.016))))
-          (number "5" (effects (font (size 1.016 1.016))))
-        )
-        (pin input line (at 0 -11.43 90) (length 5.08)
-          (name "F2" (effects (font (size 1.016 1.016))))
-          (number "9" (effects (font (size 1.016 1.016))))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:GND" (power) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "#PWR" (at 0 -6.35 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "GND" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "GND_0_1"
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 -1.27)
-            (xy 1.27 -1.27)
-            (xy 0 -2.54)
-            (xy -1.27 -1.27)
-            (xy 0 -1.27)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "GND_1_1"
-        (pin power_in line (at 0 0 270) (length 0) hide
-          (name "GND" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:PWR_FLAG" (power) (pin_numbers hide) (pin_names (offset 0) hide) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "#FLG" (at 0 2.413 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "Value" "PWR_FLAG" (at 0 4.572 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 1.524 1.524)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "PWR_FLAG_0_0"
-        (pin power_out line (at 0 0 90) (length 0)
-          (name "pwr" (effects (font (size 0.508 0.508))))
-          (number "1" (effects (font (size 0.508 0.508))))
-        )
-      )
-      (symbol "PWR_FLAG_0_1"
-        (polyline
-          (pts
-            (xy 0 0)
-            (xy 0 1.27)
-            (xy -1.905 2.54)
-            (xy 0 3.81)
-            (xy 1.905 2.54)
-            (xy 0 1.27)
-          )
-          (stroke (width 0) (type default))
-          (fill (type none))
-        )
-      )
-    )
-    (symbol "ecc83_schlib:R" (pin_numbers hide) (pin_names (offset 0)) (exclude_from_sim no) (in_bom yes) (on_board yes)
-      (property "Reference" "R" (at 2.032 0 90)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "R" (at 0 0 90)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at -1.778 0 90)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Datasheet" "" (at 0 0 0)
-        (effects (font (size 0.762 0.762)))
-      )
-      (property "Description" "" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (property "ki_fp_filters" "R_* Resistor_*" (at 0 0 0)
-        (effects (font (size 1.27 1.27)) hide)
-      )
-      (symbol "R_0_1"
-        (rectangle (start -1.016 -2.54) (end 1.016 2.54)
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-      )
-      (symbol "R_1_1"
-        (pin passive line (at 0 3.81 270) (length 1.27)
-          (name "~" (effects (font (size 1.524 1.524))))
-          (number "1" (effects (font (size 1.524 1.524))))
-        )
-        (pin passive line (at 0 -3.81 90) (length 1.27)
-          (name "~" (effects (font (size 1.524 1.524))))
-          (number "2" (effects (font (size 1.524 1.524))))
-        )
-      )
-    )
-  )
-
-  (junction (at 76.2 50.8) (diameter 1.016) (color 0 0 0 0)
-    (uuid 10ef5c17-5272-4e7f-89a5-ecf737e33e26)
-  )
-  (junction (at 185.42 76.2) (diameter 1.016) (color 0 0 0 0)
-    (uuid 28b3893d-db59-42a0-9c46-cef29fab5b3a)
-  )
-  (junction (at 86.36 50.8) (diameter 1.016) (color 0 0 0 0)
-    (uuid 5ff87081-c0a0-47ce-a04e-7b4396f38ef3)
-  )
-  (junction (at 60.96 88.9) (diameter 1.016) (color 0 0 0 0)
-    (uuid 75bb7da6-039f-40b8-ba94-99186b61d8b3)
-  )
-  (junction (at 144.78 107.95) (diameter 1.016) (color 0 0 0 0)
-    (uuid da0797c6-d142-4a5b-b008-3d4d0d2550ff)
-  )
-  (junction (at 50.8 55.88) (diameter 1.016) (color 0 0 0 0)
-    (uuid e98b95f3-e3ac-46a0-b2c5-310dc77f3348)
-  )
-  (junction (at 157.48 93.98) (diameter 1.016) (color 0 0 0 0)
-    (uuid eb94e8ae-d252-44ad-9a8c-740b5c98d893)
-  )
-  (junction (at 157.48 76.2) (diameter 1.016) (color 0 0 0 0)
-    (uuid ecb56094-6b3e-4511-801e-afbe298ca102)
-  )
-
-  (no_connect (at 154.94 177.8) (uuid 07e6e92c-c8a8-42b9-a8a3-099796ec9615))
-  (no_connect (at 154.94 180.34) (uuid 230887ce-f305-4883-86d7-72df3a1a2372))
-  (no_connect (at 154.94 185.42) (uuid 4102cf29-cf4e-42c4-96cb-330b1b756d96))
-  (no_connect (at 154.94 182.88) (uuid 517db1d3-5d33-4d54-a6be-6a1fc40799a4))
-
-  (wire (pts (xy 185.42 76.2) (xy 198.12 76.2))
-    (stroke (width 0) (type solid))
-    (uuid 06655b90-3a73-4865-8781-04208e869f47)
-  )
-  (wire (pts (xy 198.12 81.28) (xy 195.58 81.28))
-    (stroke (width 0) (type solid))
-    (uuid 10537025-ad57-4a68-a3ad-97783b6e906f)
-  )
-  (wire (pts (xy 86.36 53.34) (xy 86.36 50.8))
-    (stroke (width 0) (type solid))
-    (uuid 1a7e2049-1cef-423f-9044-882a24cd3080)
-  )
-  (wire (pts (xy 195.58 81.28) (xy 195.58 83.82))
-    (stroke (width 0) (type solid))
-    (uuid 1bfc9e1d-9730-4ad2-b53c-049bbdc4f2eb)
-  )
-  (wire (pts (xy 138.43 116.84) (xy 138.43 113.03))
-    (stroke (width 0) (type solid))
-    (uuid 31e24174-4181-446f-9f24-5cffc59c241d)
-  )
-  (wire (pts (xy 144.78 107.95) (xy 144.78 123.19))
-    (stroke (width 0) (type solid))
-    (uuid 3211000a-11bc-4174-b47e-920409d772ed)
-  )
-  (wire (pts (xy 50.8 57.15) (xy 50.8 55.88))
-    (stroke (width 0) (type solid))
-    (uuid 38870f5c-4bbe-464a-b4a4-7b080932d227)
-  )
-  (wire (pts (xy 157.48 76.2) (xy 157.48 81.28))
-    (stroke (width 0) (type solid))
-    (uuid 43ff79b9-e7f1-4ce8-8f5d-a3e328a0951b)
-  )
-  (wire (pts (xy 149.86 64.77) (xy 149.86 93.98))
-    (stroke (width 0) (type solid))
-    (uuid 492f5cda-ba4e-4ac1-9675-e6be96092062)
-  )
-  (wire (pts (xy 185.42 76.2) (xy 185.42 81.28))
-    (stroke (width 0) (type solid))
-    (uuid 58ca8983-4450-4fe2-8e2b-0e30d48402fa)
-  )
-  (wire (pts (xy 86.36 50.8) (xy 160.02 50.8))
-    (stroke (width 0) (type solid))
-    (uuid 5cb2363c-c774-4f15-8526-d847a6a0f944)
-  )
-  (wire (pts (xy 50.8 50.8) (xy 76.2 50.8))
-    (stroke (width 0) (type solid))
-    (uuid 67a136ce-9a43-4815-bf37-5a48e3c5ba88)
-  )
-  (wire (pts (xy 171.45 76.2) (xy 157.48 76.2))
-    (stroke (width 0) (type solid))
-    (uuid 6e244d34-c7f4-4b73-b2e4-7cd6a9e68746)
-  )
-  (wire (pts (xy 138.43 113.03) (xy 135.89 113.03))
-    (stroke (width 0) (type solid))
-    (uuid 7573f100-0025-455b-9269-cc3c743be43c)
-  )
-  (wire (pts (xy 179.07 76.2) (xy 185.42 76.2))
-    (stroke (width 0) (type solid))
-    (uuid 78e27532-fd91-4f5a-a2d8-e6fdf5d8048d)
-  )
-  (wire (pts (xy 60.96 88.9) (xy 60.96 86.36))
-    (stroke (width 0) (type solid))
-    (uuid 7b559062-4412-4d9e-9c3b-32723558239a)
-  )
-  (wire (pts (xy 76.2 49.53) (xy 76.2 50.8))
-    (stroke (width 0) (type solid))
-    (uuid 84963a83-b6da-4751-9910-f093c3a03bee)
-  )
-  (wire (pts (xy 157.48 74.93) (xy 157.48 76.2))
-    (stroke (width 0) (type solid))
-    (uuid 87a9b2c0-1c64-462f-bd1f-2bce76398152)
-  )
-  (wire (pts (xy 63.5 93.98) (xy 50.8 93.98))
-    (stroke (width 0) (type solid))
-    (uuid 8e3fe7d9-4894-46e6-9f30-60c30a67eb4d)
-  )
-  (wire (pts (xy 86.36 62.23) (xy 86.36 60.96))
-    (stroke (width 0) (type solid))
-    (uuid 93661ccf-845f-4e28-a2f3-792cd2d0f455)
-  )
-  (wire (pts (xy 53.34 55.88) (xy 50.8 55.88))
-    (stroke (width 0) (type solid))
-    (uuid 936bde2e-ed95-450c-9794-94948f30b67d)
-  )
-  (wire (pts (xy 63.5 86.36) (xy 63.5 93.98))
-    (stroke (width 0) (type solid))
-    (uuid 96d8a739-fd6e-4a71-af88-21b52a62647d)
-  )
-  (wire (pts (xy 50.8 88.9) (xy 60.96 88.9))
-    (stroke (width 0) (type solid))
-    (uuid 986dd788-f18e-4db3-a5a5-6a0a989a7f34)
-  )
-  (wire (pts (xy 149.86 93.98) (xy 157.48 93.98))
-    (stroke (width 0) (type solid))
-    (uuid 9b04edba-dede-4967-8f9b-38a56988a081)
-  )
-  (wire (pts (xy 157.48 93.98) (xy 157.48 97.79))
-    (stroke (width 0) (type solid))
-    (uuid 9edfba25-39d5-4b5e-a81e-c68bb365f583)
-  )
-  (wire (pts (xy 135.89 107.95) (xy 144.78 107.95))
-    (stroke (width 0) (type solid))
-    (uuid ac0e9f32-a4a3-4405-b25f-0b2daa84fbf8)
-  )
-  (wire (pts (xy 160.02 50.8) (xy 160.02 54.61))
-    (stroke (width 0) (type solid))
-    (uuid af9c8561-1608-47a7-8aa7-1d378b72d4c1)
-  )
-  (wire (pts (xy 154.94 130.81) (xy 154.94 132.08))
-    (stroke (width 0) (type solid))
-    (uuid b7a0ea88-eaff-457a-afff-3c743cbd7651)
-  )
-  (wire (pts (xy 152.4 64.77) (xy 149.86 64.77))
-    (stroke (width 0) (type solid))
-    (uuid b9ea24f5-9437-4489-8f03-fb33f32ab984)
-  )
-  (wire (pts (xy 157.48 88.9) (xy 157.48 93.98))
-    (stroke (width 0) (type solid))
-    (uuid c3e30b89-963c-45be-9c7c-93532b58206c)
-  )
-  (wire (pts (xy 144.78 130.81) (xy 144.78 132.08))
-    (stroke (width 0) (type solid))
-    (uuid dc9271ea-f970-4a19-a75f-7e6f5ed9c7b4)
-  )
-  (wire (pts (xy 76.2 50.8) (xy 86.36 50.8))
-    (stroke (width 0) (type solid))
-    (uuid dd8fad86-da9c-4a52-b908-cd4a2e7bd87e)
-  )
-  (wire (pts (xy 66.04 88.9) (xy 66.04 86.36))
-    (stroke (width 0) (type solid))
-    (uuid df86ea1e-527e-4c0f-b20e-3a0e986faf20)
-  )
-  (wire (pts (xy 154.94 118.11) (xy 154.94 123.19))
-    (stroke (width 0) (type solid))
-    (uuid e35a19d0-80c7-4a83-8507-037b6833d50c)
-  )
-  (wire (pts (xy 185.42 90.17) (xy 185.42 88.9))
-    (stroke (width 0) (type solid))
-    (uuid e9c31df6-6f42-45a2-8981-394de7ce2e5a)
-  )
-  (wire (pts (xy 60.96 88.9) (xy 66.04 88.9))
-    (stroke (width 0) (type solid))
-    (uuid eb2a78d6-b4d5-4ef8-9a1a-3d9ed3db2fee)
-  )
-  (wire (pts (xy 144.78 107.95) (xy 149.86 107.95))
-    (stroke (width 0) (type solid))
-    (uuid eb6832ef-d0fe-479d-8f32-b253c6621b1a)
-  )
-
-  (symbol (lib_id "ecc83_schlib:R") (at 157.48 85.09 180) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f38a)
-    (property "Reference" "R1" (at 154.94 85.09 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "1.5K" (at 157.48 85.09 90)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 159.512 85.0392 90)
-      (effects (font (size 0.254 0.254)))
-    )
-    (property "Datasheet" "" (at 157.48 85.09 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 157.48 85.09 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 490a35ba-1ba2-44c5-adce-e27a045257ab))
-    (pin "2" (uuid 51355c82-d1cf-445b-b079-21c660dd8989))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "R1") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:R") (at 154.94 127 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f39d)
-    (property "Reference" "R2" (at 152.4 127 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "1.5K" (at 154.94 127 90)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 156.8196 127 90)
-      (effects (font (size 0.762 0.762)))
-    )
-    (property "Datasheet" "" (at 154.94 127 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 154.94 127 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid d54c7402-b55e-42a6-b24e-c8231bb401fe))
-    (pin "2" (uuid e7039a2b-a55a-45c3-8a0e-2abf3a015549))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "R2") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:R") (at 144.78 127 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f3a2)
-    (property "Reference" "R4" (at 142.24 125.73 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "47K" (at 144.78 127 90)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 146.7104 127.0508 90)
-      (effects (font (size 0.762 0.762)))
-    )
-    (property "Datasheet" "" (at 144.78 127 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 144.78 127 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid c270f478-7e23-4604-bfdf-038c11b27bdf))
-    (pin "2" (uuid 0ad09d20-5006-493e-8278-f356e26f66f7))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "R4") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:R") (at 185.42 85.09 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f3ad)
-    (property "Reference" "R3" (at 182.88 85.09 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "100K" (at 185.42 85.09 90)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 187.4266 85.09 90)
-      (effects (font (size 0.254 0.254)))
-    )
-    (property "Datasheet" "" (at 185.42 85.09 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 185.42 85.09 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 39435a49-8935-4ddf-b360-6a015d358cfb))
-    (pin "2" (uuid 3f332333-6f91-4a13-8c53-eebb9573b799))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "R3") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:C") (at 175.26 76.2 270) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f3be)
-    (property "Reference" "C2" (at 175.26 72.39 90)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "680nF" (at 175.26 80.01 90)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Capacitor_THT:C_Disc_D4.7mm_W2.5mm_P5.00mm" (at 175.26 81.28 90)
-      (effects (font (size 0.254 0.254)))
-    )
-    (property "Datasheet" "" (at 175.26 76.2 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 175.26 76.2 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid eadc305d-a101-4c9c-94d9-1ecaf23352ac))
-    (pin "2" (uuid 44dabcab-6c7b-4e96-b86a-4fb6dd8f5b97))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "C2") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_2") (at 127 110.49 180) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f464)
-    (property "Reference" "P1" (at 127 105.41 0)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Value" "IN" (at 127 110.49 0)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" (at 127 115.57 0)
-      (effects (font (size 0.381 0.381)))
-    )
-    (property "Datasheet" "" (at 127 110.49 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 127 110.49 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 4e008eff-1d48-4641-80fd-f3bdec030729))
-    (pin "2" (uuid 7bc904bf-18da-4a24-be4f-4a6e9fd74076))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P1") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_2") (at 207.01 78.74 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f46c)
-    (property "Reference" "P2" (at 207.01 73.66 0)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Value" "OUT" (at 208.28 78.74 90)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" (at 207.01 83.82 0)
-      (effects (font (size 0.381 0.381)))
-    )
-    (property "Datasheet" "" (at 207.01 78.74 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 207.01 78.74 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 5052135e-1b72-4faa-add1-da0cf01aa026))
-    (pin "2" (uuid 0a09657c-35de-4de7-9dfe-7d3a0d792dc3))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P2") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_2") (at 41.91 53.34 0) (mirror y) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f4a5)
-    (property "Reference" "P3" (at 41.91 48.26 0)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Value" "POWER" (at 40.64 53.34 90)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" (at 41.91 58.42 0)
-      (effects (font (size 0.381 0.381)))
-    )
-    (property "Datasheet" "" (at 41.91 53.34 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 41.91 53.34 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 54a114eb-3233-4517-9c5d-b1447c552b5c))
-    (pin "2" (uuid 357ce97b-c23c-459c-af19-1a501705cbb4))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P3") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CP") (at 86.36 57.15 0) (mirror y) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-00004549f4be)
-    (property "Reference" "C1" (at 92.71 55.88 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Value" "10uF" (at 93.98 58.42 0)
-      (effects (font (size 1.27 1.27)) (justify left))
-    )
-    (property "Footprint" "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm" (at 91.44 59.69 0)
-      (effects (font (size 0.254 0.254)))
-    )
-    (property "Datasheet" "" (at 86.36 57.15 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 86.36 57.15 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 6f18cb93-a67b-4a40-887d-5dbe82da9cf7))
-    (pin "2" (uuid f905ad9c-2fd8-4770-9c67-d7f99b1c26af))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "C1") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_2") (at 41.91 91.44 180) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000456a8acc)
-    (property "Reference" "P4" (at 43.18 91.44 90)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Value" "CONN_2" (at 40.64 91.44 90)
-      (effects (font (size 1.016 1.016)))
-    )
-    (property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" (at 43.18 96.52 0)
-      (effects (font (size 0.381 0.381)))
-    )
-    (property "Datasheet" "" (at 41.91 91.44 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 41.91 91.44 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 0b2cb6e8-aee2-426a-a772-436c4f8fd1de))
-    (pin "2" (uuid f4c26ce8-3b51-4b5c-839b-1fa8af9cd764))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P4") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:PWR_FLAG") (at 53.34 55.88 270) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000457dbac0)
-    (property "Reference" "#FLG005" (at 60.198 55.88 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "PWR_FLAG" (at 59.182 55.88 0)
-      (effects (font (size 0.762 0.762)))
-    )
-    (property "Footprint" "" (at 53.34 55.88 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 53.34 55.88 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 53.34 55.88 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 8508cfae-2f39-4086-9b3c-8362f92ce148))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#FLG005") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 144.78 132.08 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000457dbaef)
-    (property "Reference" "#PWR004" (at 144.78 132.08 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 144.78 133.858 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 144.78 132.08 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 144.78 132.08 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 144.78 132.08 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 7b3ac387-2d8f-4fc2-98a0-74502639828d))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR004") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 154.94 132.08 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000457dbaf1)
-    (property "Reference" "#PWR003" (at 154.94 132.08 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 154.94 133.858 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 154.94 132.08 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 154.94 132.08 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 154.94 132.08 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 1f35e760-d662-44a6-8970-5b1f4f0c5299))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR003") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 185.42 90.17 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000457dbaf5)
-    (property "Reference" "#PWR002" (at 185.42 90.17 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 185.42 91.948 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 185.42 90.17 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 185.42 90.17 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 185.42 90.17 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 45409752-92eb-492b-8722-9657988f10c8))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR002") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 195.58 83.82 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000457dbaf8)
-    (property "Reference" "#PWR001" (at 195.58 83.82 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 195.58 85.598 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 195.58 83.82 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 195.58 83.82 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 195.58 83.82 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid ffd8d9c0-407c-42f3-9854-4c5baebeb6bc))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR001") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:ECC83") (at 160.02 64.77 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000048b4f256)
-    (property "Reference" "U1" (at 163.83 55.88 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "ECC83" (at 153.67 72.39 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Valve:Valve_ECC-83-1" (at 166.37 64.77 90)
-      (effects (font (size 0.762 0.762)))
-    )
-    (property "Datasheet" "" (at 160.02 64.77 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 160.02 64.77 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "6" (uuid 290267e7-4016-4193-aa9b-8e119f086579))
-    (pin "7" (uuid 57816012-691f-43c4-891a-0a9875701932))
-    (pin "8" (uuid dfa2a830-6e8c-46c0-9986-7a866e30ad89))
-    (pin "1" (uuid d071bc8d-0a42-4749-ab3b-bc91c0b12307))
-    (pin "2" (uuid 91389f1c-a07a-4e24-a880-42977189f2e3))
-    (pin "3" (uuid 5e94a278-17ab-494c-b84d-2518c4915ca9))
-    (pin "4" (uuid d9fb4f9d-c0e3-4555-b79f-5f73479f12da))
-    (pin "5" (uuid b87ff3e3-fb45-4272-93a9-dfdea2efee10))
-    (pin "9" (uuid da18c681-21b7-4160-90d8-28ac0b07192c))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "U1") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:ECC83") (at 157.48 107.95 0) (unit 2)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000048b4f263)
-    (property "Reference" "U1" (at 161.29 99.06 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "ECC83" (at 162.56 116.84 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Valve:Valve_ECC-83-1" (at 162.56 118.11 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Datasheet" "" (at 157.48 107.95 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 157.48 107.95 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "6" (uuid 80ec201d-a52d-4fd2-ba38-1cdc1981bbfe))
-    (pin "7" (uuid d54d8a7a-7cd2-40e2-af4a-a93696020627))
-    (pin "8" (uuid 8c3c98bc-57bf-4abd-86bc-7b589d000949))
-    (pin "1" (uuid 5ddcc9fb-67b8-4a28-ab44-71770d18fdc9))
-    (pin "2" (uuid 0644856d-0b21-4dec-9d81-e558c1bbc258))
-    (pin "3" (uuid 802841aa-9aa8-4683-9a8b-c79629d12511))
-    (pin "4" (uuid 137be269-0f98-42d1-91e1-2262f482b268))
-    (pin "5" (uuid 012226b2-d408-4aca-bdb4-5434ce0353d8))
-    (pin "9" (uuid 94a316aa-51cc-4d72-a077-b17481f80966))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "U1") (unit 2)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:ECC83") (at 63.5 74.93 0) (unit 3)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000048b4f266)
-    (property "Reference" "U1" (at 63.5 63.5 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "ECC83" (at 63.5 66.04 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "Valve:Valve_ECC-83-1" (at 57.15 74.93 90)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Datasheet" "" (at 63.5 74.93 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 63.5 74.93 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "6" (uuid e1edffc8-a42d-4e92-819d-af672c5b448f))
-    (pin "7" (uuid d47b30f2-1df2-4c12-a2e7-cd034702a671))
-    (pin "8" (uuid d0c889d7-c38a-41ea-a23a-653d6aaec11d))
-    (pin "1" (uuid 6940fbb4-6bc6-403e-9a2e-59d49828a683))
-    (pin "2" (uuid e7f8c376-bfb6-4458-bb95-ab4f9cd52db2))
-    (pin "3" (uuid d780e109-c85e-4185-9956-dda4fde43edd))
-    (pin "4" (uuid ff7c5f3b-943d-45e2-9097-0672973e1c9d))
-    (pin "5" (uuid cd044e93-d16e-49c6-9c3f-ff2d37031cd6))
-    (pin "9" (uuid 9ca87f9c-db08-4bb2-b129-650dccc6a99d))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "U1") (unit 3)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 86.36 62.23 0) (mirror y) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000053b6f370)
-    (property "Reference" "#PWR006" (at 86.36 62.23 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 86.36 64.008 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 86.36 62.23 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 86.36 62.23 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 86.36 62.23 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 0925899f-4041-41ea-abb1-12963c2e5446))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR006") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_1") (at 158.75 177.8 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000054a5890a)
-    (property "Reference" "P5" (at 160.782 177.8 0)
-      (effects (font (size 1.016 1.016)) (justify left))
-    )
-    (property "Value" "MOUNTING_HOLE" (at 158.75 176.403 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" (at 158.75 177.8 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 158.75 177.8 0)
-      (effects (font (size 1.524 1.524)))
-    )
-    (property "Description" "" (at 158.75 177.8 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid b47c1d61-902c-48ae-8802-734a54efb1a1))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P5") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_1") (at 158.75 180.34 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000054a58c65)
-    (property "Reference" "P6" (at 160.782 180.34 0)
-      (effects (font (size 1.016 1.016)) (justify left))
-    )
-    (property "Value" "MOUNTING_HOLE" (at 158.75 178.943 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" (at 158.75 180.34 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 158.75 180.34 0)
-      (effects (font (size 1.524 1.524)))
-    )
-    (property "Description" "" (at 158.75 180.34 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid f56a8913-ef96-4f3b-aa8b-1a13f8229c54))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P6") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_1") (at 158.75 182.88 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000054a58c8a)
-    (property "Reference" "P7" (at 160.782 182.88 0)
-      (effects (font (size 1.016 1.016)) (justify left))
-    )
-    (property "Value" "MOUNTING_HOLE" (at 158.75 181.483 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" (at 158.75 182.88 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 158.75 182.88 0)
-      (effects (font (size 1.524 1.524)))
-    )
-    (property "Description" "" (at 158.75 182.88 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid ca1e588f-0267-46c9-b6cd-66fd0b13056c))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P7") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:CONN_1") (at 158.75 185.42 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-000054a58ca3)
-    (property "Reference" "P8" (at 160.782 185.42 0)
-      (effects (font (size 1.016 1.016)) (justify left))
-    )
-    (property "Value" "MOUNTING_HOLE" (at 158.75 184.023 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" (at 158.75 185.42 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 158.75 185.42 0)
-      (effects (font (size 1.524 1.524)))
-    )
-    (property "Description" "" (at 158.75 185.42 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 37f3c682-6c02-4995-a68d-ba2bc9fac1ab))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "P8") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:PWR_FLAG") (at 76.2 49.53 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000550ea992)
-    (property "Reference" "#FLG007" (at 76.2 42.672 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "PWR_FLAG" (at 76.2 43.688 0)
-      (effects (font (size 0.762 0.762)))
-    )
-    (property "Footprint" "" (at 76.2 49.53 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 76.2 49.53 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 76.2 49.53 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid b1b98e40-b69b-4b60-8486-e01c25c7ae90))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#FLG007") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 50.8 57.15 0) (mirror y) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000550eab37)
-    (property "Reference" "#PWR008" (at 50.8 57.15 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 50.8 58.928 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 50.8 57.15 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Datasheet" "" (at 50.8 57.15 0)
-      (effects (font (size 1.524 1.524)) hide)
-    )
-    (property "Description" "" (at 50.8 57.15 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid 2441dfd7-a2b0-441b-ab95-dc80d3bfb10c))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR008") (unit 1)
-        )
-      )
-    )
-  )
-
-  (symbol (lib_id "ecc83_schlib:GND") (at 138.43 116.84 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid 00000000-0000-0000-0000-0000550eaf5a)
-    (property "Reference" "#PWR009" (at 138.43 116.84 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Value" "GND" (at 138.43 118.618 0)
-      (effects (font (size 0.762 0.762)) hide)
-    )
-    (property "Footprint" "" (at 138.43 116.84 0)
-      (effects (font (size 1.524 1.524)))
-    )
-    (property "Datasheet" "" (at 138.43 116.84 0)
-      (effects (font (size 1.524 1.524)))
-    )
-    (property "Description" "" (at 138.43 116.84 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (pin "1" (uuid a8c7d88f-5a85-486a-8858-7ed63775f7db))
-    (instances
-      (project "ecc83-pp"
-        (path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
-          (reference "#PWR009") (unit 1)
-        )
-      )
-    )
-  )
-
-  (sheet_instances
-    (path "/" (page "1"))
-  )
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "7.99")
+	(uuid "28f865a0-4433-4a53-bbd7-b62f276848e4")
+	(paper "A4")
+	(title_block
+		(title "ECC Push-Pull")
+		(date "Sat 21 Mar 2015")
+		(rev "0.1")
+	)
+	(lib_symbols
+		(symbol "ecc83_schlib:C"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 0.762 0.762)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C? C_????_* C_???? SMD*_c Capacitor*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:CONN_1"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.762) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "P"
+				(at 2.032 0 0)
+				(effects
+					(font
+						(size 1.016 1.016)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "CONN_1"
+				(at 0 1.397 0)
+				(effects
+					(font
+						(size 0.762 0.762)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 0.254 0.254)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "CONN_1_0_1"
+				(polyline
+					(pts
+						(xy -0.762 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 0.7874)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "CONN_1_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:CONN_2"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "P"
+				(at -1.27 0 90)
+				(effects
+					(font
+						(size 1.016 1.016)
+					)
+				)
+			)
+			(property "Value" "CONN_2"
+				(at 1.27 0 90)
+				(effects
+					(font
+						(size 1.016 1.016)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "CONN_2_0_1"
+				(rectangle
+					(start -2.54 3.81)
+					(end 2.54 -3.81)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "CONN_2_1_1"
+				(pin passive inverted
+					(at -8.89 2.54 0)
+					(length 6.35)
+					(name "P1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin passive inverted
+					(at -8.89 -2.54 0)
+					(length 6.35)
+					(name "PM"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:CP"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "CP"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Polarised capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "CP_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "CP_0_1"
+				(rectangle
+					(start -2.286 0.508)
+					(end -2.286 1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -2.286 0.508)
+					(end 2.286 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.778 2.286) (xy -0.762 2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 2.794) (xy -1.27 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 2.286 -0.508)
+					(end -2.286 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 2.286 1.016)
+					(end -2.286 1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 2.286 1.016)
+					(end 2.286 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "CP_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:ECC83"
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at 3.302 7.874 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "ECC83"
+				(at 8.89 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "VALVE-NOVAL_P"
+				(at 10.16 -8.89 0)
+				(effects
+					(font
+						(size 0.762 0.762)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "ECC83_0_1"
+				(arc
+					(start -5.08 -2.54)
+					(mid 0 -7.5979)
+					(end 5.08 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 5.08 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 2.54) (xy -5.08 -2.54) (xy -5.08 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 5.08 2.54)
+					(mid 0 7.5979)
+					(end -5.08 2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "ECC83_1_0"
+				(polyline
+					(pts
+						(xy -2.54 -5.08) (xy -2.54 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.08) (xy 0 7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "ECC83_1_1"
+				(polyline
+					(pts
+						(xy -5.08 0) (xy -3.175 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 0) (xy -3.175 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.635 0) (xy 0.635 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.905 0) (xy 3.175 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 5.08) (xy 2.794 5.08) (xy 2.794 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 2.54 -5.08)
+					(mid 0 -3.0968)
+					(end -2.54 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 10.16 270)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "G"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -2.54 -10.16 90)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(symbol "ECC83_2_0"
+				(polyline
+					(pts
+						(xy -2.54 -5.08) (xy -2.54 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.08) (xy 0 7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "ECC83_2_1"
+				(polyline
+					(pts
+						(xy -5.08 0) (xy -3.175 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 0) (xy -3.175 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.635 0) (xy 0.635 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.905 0) (xy 3.175 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 5.08) (xy 2.794 5.08) (xy 2.794 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 2.54 -5.08)
+					(mid 0 -3.0968)
+					(end -2.54 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 10.16 270)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "G"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -2.54 -10.16 90)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(symbol "ECC83_3_1"
+				(arc
+					(start 0 -6.35)
+					(mid -1.27 -5.5651)
+					(end -2.54 -6.35)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 2.54 -6.35)
+					(mid 1.27 -5.5651)
+					(end 0 -6.35)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin input line
+					(at -2.54 -11.43 90)
+					(length 5.08)
+					(name "F1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -11.43 90)
+					(length 5.08)
+					(name "F1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 0 -11.43 90)
+					(length 5.08)
+					(name "F2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0) hide
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:PWR_FLAG"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#FLG"
+				(at 0 2.413 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 4.572 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.524 1.524)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name "pwr"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 0.508 0.508)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.905 2.54) (xy 0 3.81) (xy 1.905 2.54) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+		)
+		(symbol "ecc83_schlib:R"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(effects
+					(font
+						(size 0.762 0.762)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 0.762 0.762)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_* Resistor_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+	(junction
+		(at 76.2 50.8)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "10ef5c17-5272-4e7f-89a5-ecf737e33e26")
+	)
+	(junction
+		(at 185.42 76.2)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "28b3893d-db59-42a0-9c46-cef29fab5b3a")
+	)
+	(junction
+		(at 86.36 50.8)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "5ff87081-c0a0-47ce-a04e-7b4396f38ef3")
+	)
+	(junction
+		(at 60.96 88.9)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "75bb7da6-039f-40b8-ba94-99186b61d8b3")
+	)
+	(junction
+		(at 144.78 107.95)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "da0797c6-d142-4a5b-b008-3d4d0d2550ff")
+	)
+	(junction
+		(at 50.8 55.88)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "e98b95f3-e3ac-46a0-b2c5-310dc77f3348")
+	)
+	(junction
+		(at 157.48 93.98)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "eb94e8ae-d252-44ad-9a8c-740b5c98d893")
+	)
+	(junction
+		(at 157.48 76.2)
+		(diameter 1.016)
+		(color 0 0 0 0)
+		(uuid "ecb56094-6b3e-4511-801e-afbe298ca102")
+	)
+	(no_connect
+		(at 154.94 177.8)
+		(uuid "07e6e92c-c8a8-42b9-a8a3-099796ec9615")
+	)
+	(no_connect
+		(at 154.94 180.34)
+		(uuid "230887ce-f305-4883-86d7-72df3a1a2372")
+	)
+	(no_connect
+		(at 154.94 185.42)
+		(uuid "4102cf29-cf4e-42c4-96cb-330b1b756d96")
+	)
+	(no_connect
+		(at 154.94 182.88)
+		(uuid "517db1d3-5d33-4d54-a6be-6a1fc40799a4")
+	)
+	(wire
+		(pts
+			(xy 185.42 76.2) (xy 198.12 76.2)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "06655b90-3a73-4865-8781-04208e869f47")
+	)
+	(wire
+		(pts
+			(xy 198.12 81.28) (xy 195.58 81.28)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "10537025-ad57-4a68-a3ad-97783b6e906f")
+	)
+	(wire
+		(pts
+			(xy 86.36 53.34) (xy 86.36 50.8)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "1a7e2049-1cef-423f-9044-882a24cd3080")
+	)
+	(wire
+		(pts
+			(xy 195.58 81.28) (xy 195.58 83.82)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "1bfc9e1d-9730-4ad2-b53c-049bbdc4f2eb")
+	)
+	(wire
+		(pts
+			(xy 138.43 116.84) (xy 138.43 113.03)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "31e24174-4181-446f-9f24-5cffc59c241d")
+	)
+	(wire
+		(pts
+			(xy 144.78 107.95) (xy 144.78 123.19)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "3211000a-11bc-4174-b47e-920409d772ed")
+	)
+	(wire
+		(pts
+			(xy 50.8 57.15) (xy 50.8 55.88)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "38870f5c-4bbe-464a-b4a4-7b080932d227")
+	)
+	(wire
+		(pts
+			(xy 157.48 76.2) (xy 157.48 81.28)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "43ff79b9-e7f1-4ce8-8f5d-a3e328a0951b")
+	)
+	(wire
+		(pts
+			(xy 149.86 64.77) (xy 149.86 93.98)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "492f5cda-ba4e-4ac1-9675-e6be96092062")
+	)
+	(wire
+		(pts
+			(xy 185.42 76.2) (xy 185.42 81.28)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "58ca8983-4450-4fe2-8e2b-0e30d48402fa")
+	)
+	(wire
+		(pts
+			(xy 86.36 50.8) (xy 160.02 50.8)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "5cb2363c-c774-4f15-8526-d847a6a0f944")
+	)
+	(wire
+		(pts
+			(xy 50.8 50.8) (xy 76.2 50.8)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "67a136ce-9a43-4815-bf37-5a48e3c5ba88")
+	)
+	(wire
+		(pts
+			(xy 171.45 76.2) (xy 157.48 76.2)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "6e244d34-c7f4-4b73-b2e4-7cd6a9e68746")
+	)
+	(wire
+		(pts
+			(xy 138.43 113.03) (xy 135.89 113.03)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "7573f100-0025-455b-9269-cc3c743be43c")
+	)
+	(wire
+		(pts
+			(xy 179.07 76.2) (xy 185.42 76.2)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "78e27532-fd91-4f5a-a2d8-e6fdf5d8048d")
+	)
+	(wire
+		(pts
+			(xy 60.96 88.9) (xy 60.96 86.36)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "7b559062-4412-4d9e-9c3b-32723558239a")
+	)
+	(wire
+		(pts
+			(xy 76.2 49.53) (xy 76.2 50.8)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "84963a83-b6da-4751-9910-f093c3a03bee")
+	)
+	(wire
+		(pts
+			(xy 157.48 74.93) (xy 157.48 76.2)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "87a9b2c0-1c64-462f-bd1f-2bce76398152")
+	)
+	(wire
+		(pts
+			(xy 63.5 93.98) (xy 50.8 93.98)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "8e3fe7d9-4894-46e6-9f30-60c30a67eb4d")
+	)
+	(wire
+		(pts
+			(xy 86.36 62.23) (xy 86.36 60.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "93661ccf-845f-4e28-a2f3-792cd2d0f455")
+	)
+	(wire
+		(pts
+			(xy 53.34 55.88) (xy 50.8 55.88)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "936bde2e-ed95-450c-9794-94948f30b67d")
+	)
+	(wire
+		(pts
+			(xy 63.5 86.36) (xy 63.5 93.98)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "96d8a739-fd6e-4a71-af88-21b52a62647d")
+	)
+	(wire
+		(pts
+			(xy 50.8 88.9) (xy 60.96 88.9)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "986dd788-f18e-4db3-a5a5-6a0a989a7f34")
+	)
+	(wire
+		(pts
+			(xy 149.86 93.98) (xy 157.48 93.98)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "9b04edba-dede-4967-8f9b-38a56988a081")
+	)
+	(wire
+		(pts
+			(xy 157.48 93.98) (xy 157.48 97.79)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "9edfba25-39d5-4b5e-a81e-c68bb365f583")
+	)
+	(wire
+		(pts
+			(xy 135.89 107.95) (xy 144.78 107.95)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "ac0e9f32-a4a3-4405-b25f-0b2daa84fbf8")
+	)
+	(wire
+		(pts
+			(xy 160.02 50.8) (xy 160.02 54.61)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "af9c8561-1608-47a7-8aa7-1d378b72d4c1")
+	)
+	(wire
+		(pts
+			(xy 154.94 130.81) (xy 154.94 132.08)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "b7a0ea88-eaff-457a-afff-3c743cbd7651")
+	)
+	(wire
+		(pts
+			(xy 152.4 64.77) (xy 149.86 64.77)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "b9ea24f5-9437-4489-8f03-fb33f32ab984")
+	)
+	(wire
+		(pts
+			(xy 157.48 88.9) (xy 157.48 93.98)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "c3e30b89-963c-45be-9c7c-93532b58206c")
+	)
+	(wire
+		(pts
+			(xy 144.78 130.81) (xy 144.78 132.08)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "dc9271ea-f970-4a19-a75f-7e6f5ed9c7b4")
+	)
+	(wire
+		(pts
+			(xy 76.2 50.8) (xy 86.36 50.8)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "dd8fad86-da9c-4a52-b908-cd4a2e7bd87e")
+	)
+	(wire
+		(pts
+			(xy 66.04 88.9) (xy 66.04 86.36)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "df86ea1e-527e-4c0f-b20e-3a0e986faf20")
+	)
+	(wire
+		(pts
+			(xy 154.94 118.11) (xy 154.94 123.19)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "e35a19d0-80c7-4a83-8507-037b6833d50c")
+	)
+	(wire
+		(pts
+			(xy 185.42 90.17) (xy 185.42 88.9)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "e9c31df6-6f42-45a2-8981-394de7ce2e5a")
+	)
+	(wire
+		(pts
+			(xy 60.96 88.9) (xy 66.04 88.9)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "eb2a78d6-b4d5-4ef8-9a1a-3d9ed3db2fee")
+	)
+	(wire
+		(pts
+			(xy 144.78 107.95) (xy 149.86 107.95)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "eb6832ef-d0fe-479d-8f32-b253c6621b1a")
+	)
+	(symbol
+		(lib_id "ecc83_schlib:R")
+		(at 157.48 85.09 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f38a")
+		(property "Reference" "R1"
+			(at 154.94 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1.5K"
+			(at 157.48 85.09 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 159.512 85.0392 90)
+			(effects
+				(font
+					(size 0.254 0.254)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 157.48 85.09 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 157.48 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "490a35ba-1ba2-44c5-adce-e27a045257ab")
+		)
+		(pin "2"
+			(uuid "51355c82-d1cf-445b-b079-21c660dd8989")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:R")
+		(at 154.94 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f39d")
+		(property "Reference" "R2"
+			(at 152.4 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1.5K"
+			(at 154.94 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 156.8196 127 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 154.94 127 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 154.94 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d54c7402-b55e-42a6-b24e-c8231bb401fe")
+		)
+		(pin "2"
+			(uuid "e7039a2b-a55a-45c3-8a0e-2abf3a015549")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:R")
+		(at 144.78 127 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f3a2")
+		(property "Reference" "R4"
+			(at 142.24 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "47K"
+			(at 144.78 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 146.7104 127.0508 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 127 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c270f478-7e23-4604-bfdf-038c11b27bdf")
+		)
+		(pin "2"
+			(uuid "0ad09d20-5006-493e-8278-f356e26f66f7")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:R")
+		(at 185.42 85.09 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f3ad")
+		(property "Reference" "R3"
+			(at 182.88 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100K"
+			(at 185.42 85.09 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 187.4266 85.09 90)
+			(effects
+				(font
+					(size 0.254 0.254)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 85.09 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 185.42 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "39435a49-8935-4ddf-b360-6a015d358cfb")
+		)
+		(pin "2"
+			(uuid "3f332333-6f91-4a13-8c53-eebb9573b799")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "R3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:C")
+		(at 175.26 76.2 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f3be")
+		(property "Reference" "C2"
+			(at 175.26 72.39 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "680nF"
+			(at 175.26 80.01 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:C_Disc_D4.7mm_W2.5mm_P5.00mm"
+			(at 175.26 81.28 90)
+			(effects
+				(font
+					(size 0.254 0.254)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 76.2 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 175.26 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "eadc305d-a101-4c9c-94d9-1ecaf23352ac")
+		)
+		(pin "2"
+			(uuid "44dabcab-6c7b-4e96-b86a-4fb6dd8f5b97")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_2")
+		(at 127 110.49 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f464")
+		(property "Reference" "P1"
+			(at 127 105.41 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "IN"
+			(at 127 110.49 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+			(at 127 115.57 0)
+			(effects
+				(font
+					(size 0.381 0.381)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 110.49 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 127 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4e008eff-1d48-4641-80fd-f3bdec030729")
+		)
+		(pin "2"
+			(uuid "7bc904bf-18da-4a24-be4f-4a6e9fd74076")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_2")
+		(at 207.01 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f46c")
+		(property "Reference" "P2"
+			(at 207.01 73.66 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "OUT"
+			(at 208.28 78.74 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+			(at 207.01 83.82 0)
+			(effects
+				(font
+					(size 0.381 0.381)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 207.01 78.74 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 207.01 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5052135e-1b72-4faa-add1-da0cf01aa026")
+		)
+		(pin "2"
+			(uuid "0a09657c-35de-4de7-9dfe-7d3a0d792dc3")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_2")
+		(at 41.91 53.34 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f4a5")
+		(property "Reference" "P3"
+			(at 41.91 48.26 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "POWER"
+			(at 40.64 53.34 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+			(at 41.91 58.42 0)
+			(effects
+				(font
+					(size 0.381 0.381)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 41.91 53.34 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 41.91 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "54a114eb-3233-4517-9c5d-b1447c552b5c")
+		)
+		(pin "2"
+			(uuid "357ce97b-c23c-459c-af19-1a501705cbb4")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CP")
+		(at 86.36 57.15 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00004549f4be")
+		(property "Reference" "C1"
+			(at 92.71 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 93.98 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm"
+			(at 91.44 59.69 0)
+			(effects
+				(font
+					(size 0.254 0.254)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 57.15 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 86.36 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6f18cb93-a67b-4a40-887d-5dbe82da9cf7")
+		)
+		(pin "2"
+			(uuid "f905ad9c-2fd8-4770-9c67-d7f99b1c26af")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_2")
+		(at 41.91 91.44 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000456a8acc")
+		(property "Reference" "P4"
+			(at 43.18 91.44 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "CONN_2"
+			(at 40.64 91.44 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+			(at 43.18 96.52 0)
+			(effects
+				(font
+					(size 0.381 0.381)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 41.91 91.44 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 41.91 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0b2cb6e8-aee2-426a-a772-436c4f8fd1de")
+		)
+		(pin "2"
+			(uuid "f4c26ce8-3b51-4b5c-839b-1fa8af9cd764")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:PWR_FLAG")
+		(at 53.34 55.88 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000457dbac0")
+		(property "Reference" "#FLG05"
+			(at 60.198 55.88 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 59.182 55.88 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 53.34 55.88 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 53.34 55.88 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 53.34 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8508cfae-2f39-4086-9b3c-8362f92ce148")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#FLG05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 144.78 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000457dbaef")
+		(property "Reference" "#PWR04"
+			(at 144.78 132.08 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 144.78 133.858 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 132.08 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 132.08 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7b3ac387-2d8f-4fc2-98a0-74502639828d")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 154.94 132.08 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000457dbaf1")
+		(property "Reference" "#PWR03"
+			(at 154.94 132.08 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 154.94 133.858 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 154.94 132.08 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 154.94 132.08 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 154.94 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1f35e760-d662-44a6-8970-5b1f4f0c5299")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 185.42 90.17 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000457dbaf5")
+		(property "Reference" "#PWR02"
+			(at 185.42 90.17 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 185.42 91.948 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 185.42 90.17 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 90.17 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 185.42 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "45409752-92eb-492b-8722-9657988f10c8")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR02")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 195.58 83.82 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000457dbaf8")
+		(property "Reference" "#PWR01"
+			(at 195.58 83.82 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 195.58 85.598 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 195.58 83.82 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 195.58 83.82 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 195.58 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ffd8d9c0-407c-42f3-9854-4c5baebeb6bc")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:ECC83")
+		(at 160.02 64.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000048b4f256")
+		(property "Reference" "U1"
+			(at 163.83 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ECC83"
+			(at 153.67 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Valve:Valve_ECC-83-1"
+			(at 166.37 64.77 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 160.02 64.77 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 160.02 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "6"
+			(uuid "290267e7-4016-4193-aa9b-8e119f086579")
+		)
+		(pin "7"
+			(uuid "57816012-691f-43c4-891a-0a9875701932")
+		)
+		(pin "8"
+			(uuid "dfa2a830-6e8c-46c0-9986-7a866e30ad89")
+		)
+		(pin "1"
+			(uuid "d071bc8d-0a42-4749-ab3b-bc91c0b12307")
+		)
+		(pin "2"
+			(uuid "91389f1c-a07a-4e24-a880-42977189f2e3")
+		)
+		(pin "3"
+			(uuid "5e94a278-17ab-494c-b84d-2518c4915ca9")
+		)
+		(pin "4"
+			(uuid "d9fb4f9d-c0e3-4555-b79f-5f73479f12da")
+		)
+		(pin "5"
+			(uuid "b87ff3e3-fb45-4272-93a9-dfdea2efee10")
+		)
+		(pin "9"
+			(uuid "da18c681-21b7-4160-90d8-28ac0b07192c")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:ECC83")
+		(at 157.48 107.95 0)
+		(unit 2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000048b4f263")
+		(property "Reference" "U1"
+			(at 161.29 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ECC83"
+			(at 162.56 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Valve:Valve_ECC-83-1"
+			(at 162.56 118.11 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 157.48 107.95 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 157.48 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "6"
+			(uuid "80ec201d-a52d-4fd2-ba38-1cdc1981bbfe")
+		)
+		(pin "7"
+			(uuid "d54d8a7a-7cd2-40e2-af4a-a93696020627")
+		)
+		(pin "8"
+			(uuid "8c3c98bc-57bf-4abd-86bc-7b589d000949")
+		)
+		(pin "1"
+			(uuid "5ddcc9fb-67b8-4a28-ab44-71770d18fdc9")
+		)
+		(pin "2"
+			(uuid "0644856d-0b21-4dec-9d81-e558c1bbc258")
+		)
+		(pin "3"
+			(uuid "802841aa-9aa8-4683-9a8b-c79629d12511")
+		)
+		(pin "4"
+			(uuid "137be269-0f98-42d1-91e1-2262f482b268")
+		)
+		(pin "5"
+			(uuid "012226b2-d408-4aca-bdb4-5434ce0353d8")
+		)
+		(pin "9"
+			(uuid "94a316aa-51cc-4d72-a077-b17481f80966")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "U1")
+					(unit 2)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:ECC83")
+		(at 63.5 74.93 0)
+		(unit 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000048b4f266")
+		(property "Reference" "U1"
+			(at 63.5 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ECC83"
+			(at 63.5 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Valve:Valve_ECC-83-1"
+			(at 57.15 74.93 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 74.93 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "6"
+			(uuid "e1edffc8-a42d-4e92-819d-af672c5b448f")
+		)
+		(pin "7"
+			(uuid "d47b30f2-1df2-4c12-a2e7-cd034702a671")
+		)
+		(pin "8"
+			(uuid "d0c889d7-c38a-41ea-a23a-653d6aaec11d")
+		)
+		(pin "1"
+			(uuid "6940fbb4-6bc6-403e-9a2e-59d49828a683")
+		)
+		(pin "2"
+			(uuid "e7f8c376-bfb6-4458-bb95-ab4f9cd52db2")
+		)
+		(pin "3"
+			(uuid "d780e109-c85e-4185-9956-dda4fde43edd")
+		)
+		(pin "4"
+			(uuid "ff7c5f3b-943d-45e2-9097-0672973e1c9d")
+		)
+		(pin "5"
+			(uuid "cd044e93-d16e-49c6-9c3f-ff2d37031cd6")
+		)
+		(pin "9"
+			(uuid "9ca87f9c-db08-4bb2-b129-650dccc6a99d")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "U1")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 86.36 62.23 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000053b6f370")
+		(property "Reference" "#PWR06"
+			(at 86.36 62.23 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 86.36 64.008 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 86.36 62.23 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 62.23 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 86.36 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0925899f-4041-41ea-abb1-12963c2e5446")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR06")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_1")
+		(at 158.75 177.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000054a5890a")
+		(property "Reference" "P5"
+			(at 160.782 177.8 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MOUNTING_HOLE"
+			(at 158.75 176.403 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+			(at 158.75 177.8 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 158.75 177.8 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 158.75 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b47c1d61-902c-48ae-8802-734a54efb1a1")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_1")
+		(at 158.75 180.34 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000054a58c65")
+		(property "Reference" "P6"
+			(at 160.782 180.34 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MOUNTING_HOLE"
+			(at 158.75 178.943 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+			(at 158.75 180.34 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 158.75 180.34 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 158.75 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f56a8913-ef96-4f3b-aa8b-1a13f8229c54")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_1")
+		(at 158.75 182.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000054a58c8a")
+		(property "Reference" "P7"
+			(at 160.782 182.88 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MOUNTING_HOLE"
+			(at 158.75 181.483 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+			(at 158.75 182.88 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 158.75 182.88 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 158.75 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ca1e588f-0267-46c9-b6cd-66fd0b13056c")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:CONN_1")
+		(at 158.75 185.42 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-000054a58ca3")
+		(property "Reference" "P8"
+			(at 160.782 185.42 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MOUNTING_HOLE"
+			(at 158.75 184.023 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+			(at 158.75 185.42 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 158.75 185.42 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 158.75 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "37f3c682-6c02-4995-a68d-ba2bc9fac1ab")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "P8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:PWR_FLAG")
+		(at 76.2 49.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000550ea992")
+		(property "Reference" "#FLG07"
+			(at 76.2 42.672 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 76.2 43.688 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 76.2 49.53 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 49.53 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 76.2 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b1b98e40-b69b-4b60-8486-e01c25c7ae90")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#FLG07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 50.8 57.15 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000550eab37")
+		(property "Reference" "#PWR08"
+			(at 50.8 57.15 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 50.8 58.928 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 50.8 57.15 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 50.8 57.15 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 50.8 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2441dfd7-a2b0-441b-ab95-dc80d3bfb10c")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR08")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "ecc83_schlib:GND")
+		(at 138.43 116.84 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-0000550eaf5a")
+		(property "Reference" "#PWR09"
+			(at 138.43 116.84 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 138.43 118.618 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 138.43 116.84 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 138.43 116.84 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 138.43 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a8c7d88f-5a85-486a-8858-7ed63775f7db")
+		)
+		(instances
+			(project "ecc83-pp"
+				(path "/28f865a0-4433-4a53-bbd7-b62f276848e4"
+					(reference "#PWR09")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
 )
