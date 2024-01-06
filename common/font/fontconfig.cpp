@@ -74,7 +74,8 @@ static void bootstrapFc()
         g_fcInitSuccess = true;
 #if defined( _MSC_VER )
     }
-    __except( GetExceptionCode() == STATUS_IN_PAGE_ERROR )
+    __except( GetExceptionCode() == STATUS_IN_PAGE_ERROR ? EXCEPTION_EXECUTE_HANDLER
+                                                         : EXCEPTION_CONTINUE_SEARCH )
     {
         g_fcInitSuccess = false;
         // We have documented cases that fontconfig while trying to cache fonts
