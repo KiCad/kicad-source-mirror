@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1233,6 +1233,8 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 {
+    wxCHECK( m_frame, 0 );
+
     if( m_frame->GetUndoCommandCount() <= 0 )
         return 0;
 
@@ -1242,8 +1244,17 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     // Get the old list
     PICKED_ITEMS_LIST* undo_list = m_frame->PopCommandFromUndoList();
 
+    wxCHECK( undo_list, 0 );
+
     m_frame->PutDataInPreviousState( undo_list );
-    m_frame->SetSheetNumberAndCount();
+
+    // Only rebuild the hierarchy navigator if there are sheet changes.
+    if( undo_list->ContainsItemType( SCH_SHEET_T ) )
+    {
+        m_frame->SetSheetNumberAndCount();
+        m_frame->UpdateHierarchyNavigator();
+    }
+
     m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
     m_frame->TestDanglingEnds();
 
@@ -1262,6 +1273,8 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 {
+    wxCHECK( m_frame, 0 );
+
     if( m_frame->GetRedoCommandCount() == 0 )
         return 0;
 
@@ -1271,6 +1284,8 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     /* Get the old list */
     PICKED_ITEMS_LIST* list = m_frame->PopCommandFromRedoList();
 
+    wxCHECK( list, 0 );
+
     /* Redo the command: */
     m_frame->PutDataInPreviousState( list );
 
@@ -1278,7 +1293,13 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     list->ReversePickersListOrder();
     m_frame->PushCommandToUndoList( list );
 
-    m_frame->SetSheetNumberAndCount();
+    // Only rebuild the hierarchy navigator if there are sheet changes.
+    if( list->ContainsItemType( SCH_SHEET_T ) )
+    {
+        m_frame->SetSheetNumberAndCount();
+        m_frame->UpdateHierarchyNavigator();
+    }
+
     m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
     m_frame->TestDanglingEnds();
 

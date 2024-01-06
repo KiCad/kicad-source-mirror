@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2009-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,6 +150,14 @@ public:
      * @return True if \a aItem is found in the pick list.
      */
     bool ContainsItem( const EDA_ITEM* aItem ) const;
+
+    /**
+     * Check the undo/redo list for any #EDA_ITEM of type \a aItemType.
+     *
+     * @param aItemType is an #EDA_ITEM type from the list of #KICAD_T types.
+     * @return true if an item of \a aItemType is found in the pick list.
+     */
+    bool ContainsItemType( KICAD_T aItemType ) const;
 
     /**
      * @return Index of the searched item. If the item is not stored in the list, negative value
