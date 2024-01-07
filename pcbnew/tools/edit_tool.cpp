@@ -2135,8 +2135,17 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_GROUP_T:
-            for( BOARD_ITEM* member : static_cast<PCB_GROUP*>( board_item )->GetItems() )
-                commit.Stage( member, CHT_UNGROUP );
+            board_item->RunOnDescendants(
+                         [&commit]( BOARD_ITEM* aItem )
+                         {
+                             commit.Stage( aItem, CHT_UNGROUP );
+                         } );
+
+            board_item->RunOnDescendants(
+                         [&commit]( BOARD_ITEM* aItem )
+                         {
+                             commit.Remove( aItem );
+                         } );
 
             commit.Remove( board_item );
             break;
@@ -2409,20 +2418,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
-
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
-
-                        if( item->Type() == PCB_GENERATOR_T )
-                        {
-                            // Could you duplicate something like a generated stitching pattern?
-                            // Dunno.  But duplicating a tuning pattern is a sure crash.
-                            //
-                            aCollector.Remove( item );
-                        }
-                    }
                 } );
 
     if( selection.Empty() )
@@ -2475,7 +2470,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
             case PCB_REFERENCE_IMAGE_T:
-            case PCB_GENERATOR_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:
@@ -2488,10 +2482,30 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
                 dupe_item = orig_item->Duplicate();
+
+                // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
+                // will not properly select it later on
+                dupe_item->ClearSelected();
+
+                new_items.push_back( dupe_item );
+                commit.Add( dupe_item );
                 break;
 
+            case PCB_GENERATOR_T:
             case PCB_GROUP_T:
                 dupe_item = static_cast<PCB_GROUP*>( orig_item )->DeepDuplicate();
+
+                dupe_item->RunOnDescendants(
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            aItem->ClearSelected();
+                            new_items.push_back( aItem );
+                            commit.Add( aItem );
+                        } );
+
+                dupe_item->ClearSelected();
+                new_items.push_back( dupe_item );
+                commit.Add( dupe_item );
                 break;
 
             default:
@@ -2499,16 +2513,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                                                        orig_item->Type() ) );
                 break;
             }
-        }
-
-        if( dupe_item )
-        {
-            // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
-            // will not properly select it later on
-            dupe_item->ClearSelected();
-
-            new_items.push_back( dupe_item );
-            commit.Add( dupe_item );
         }
     }
 

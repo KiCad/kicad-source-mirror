@@ -173,12 +173,19 @@ void ARRAY_CREATOR::Invoke()
                     this_item->ClearSelected();
 
                     this_item->RunOnDescendants(
-                            [&]( BOARD_ITEM* aItem )
+                            []( BOARD_ITEM* aItem )
                             {
                                 aItem->ClearSelected();
-                            });
+                            } );
 
                     TransformItem( *array_opts, ptN, *this_item );
+
+                    this_item->RunOnDescendants(
+                            [&]( BOARD_ITEM* aItem )
+                            {
+                                commit.Add( aItem );
+                            } );
+
                     commit.Add( this_item );
                 }
             }

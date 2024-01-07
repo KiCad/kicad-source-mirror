@@ -1204,7 +1204,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
     if( aReannotateDuplicates && m_isBoardEditor )
         m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicatesInSelection();
 
-    for( BOARD_ITEM* item : itemsToSel )
+    for( BOARD_ITEM* item : aItems )
     {
         if( aIsNew )
             aCommit->Add( item );

@@ -142,12 +142,12 @@ public:
      */
     int Remove( const TOOL_EVENT& aEvent );
 
-    void DeleteItems( const PCB_SELECTION& aItems, bool aIsCut );
+    void DeleteItems( const PCB_SELECTION& aItem, bool aIsCut );
 
     /**
      * Duplicate the current selection and starts a move action.
      */
-    int Duplicate( const TOOL_EVENT& aEvent );
+    int Duplicate( const TOOL_EVENT& aItem );
 
     /**
      * Invoke a dialog box to allow moving of the item by an exact amount.

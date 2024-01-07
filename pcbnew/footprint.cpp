@@ -2210,8 +2210,23 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
     }
 
     case PCB_GROUP_T:
-        new_item = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate();
+    {
+        PCB_GROUP* group = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate();
+
+        if( aAddToFootprint )
+        {
+            group->RunOnDescendants(
+                    [&]( BOARD_ITEM* aItem )
+                    {
+                        Add( aItem );
+                    } );
+
+            Add( new_item );
+        }
+
+        new_item = group;
         break;
+    }
 
     case PCB_FOOTPRINT_T:
         // Ignore the footprint itself
