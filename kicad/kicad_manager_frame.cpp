@@ -63,7 +63,6 @@
 #include <widgets/kistatusbar.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
-#include <wx/dcclient.h>
 #include <wx/dnd.h>
 #include <wx/process.h>
 #include <atomic>
@@ -455,6 +454,11 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
         m_auimgr.Update();
 
     PrintPrjInfo();
+
+#if defined( _WIN32 )
+    KISTATUSBAR* statusBar = static_cast<KISTATUSBAR*>( GetStatusBar() );
+    statusBar->SetEllipsedTextField( m_FileWatcherInfo, 1 );
+#endif
 
     event.Skip();
 }
@@ -868,22 +872,8 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
     // wxStatusBar's wxELLIPSIZE_MIDDLE flag doesn't work (at least on Mac).
 
     wxString     status = wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() );
-    wxStatusBar* statusBar = GetStatusBar();
-    wxRect       fieldRect;
-    int          width = -1;
-
-    // Only GetFieldRect() returns the current size for variable size fields
-    // Other methods return -1 for the width of these fields.
-    if( statusBar->GetFieldRect( 0, fieldRect ) )
-        width = fieldRect.GetWidth();
-
-    if( width > 20 )
-    {
-        wxClientDC dc( this );
-        status = wxControl::Ellipsize( status, dc, wxELLIPSIZE_MIDDLE, width );
-    }
-
-    SetStatusText( status );
+    KISTATUSBAR* statusBar = static_cast<KISTATUSBAR*>( GetStatusBar() );
+    statusBar->SetEllipsedTextField( status, 0 );
 }
 
 

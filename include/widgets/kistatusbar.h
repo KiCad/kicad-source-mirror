@@ -46,6 +46,13 @@ public:
 
 public:
     /**
+     * Set the text in a field using wxELLIPSIZE_MIDDLE option to adjust the text size
+     * to the field size (unfortunately, setting the wxStatusBar style to wxELLIPSIZE_MIDDLE
+     * does not work fine
+     */
+    void SetEllipsedTextField( const wxString& aText, int aFieldId );
+
+    /**
      * Shows the background progress bar
      */
     void ShowBackgroundProgressBar( bool aCancellable = false );

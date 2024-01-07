@@ -76,6 +76,7 @@
 #include "kicad_manager_frame.h"
 
 #include "project_tree_pane.h"
+#include <widgets/kistatusbar.h>
 
 
 /* Note about the project tree build process:
@@ -1368,18 +1369,22 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
 #if defined( _WIN32 )
+    KISTATUSBAR* statusBar = static_cast<KISTATUSBAR*>( m_Parent->GetStatusBar() );
+
     if( KIPLATFORM::ENV::IsNetworkPath( prj_dir ) )
     {
         // Due to a combination of a bug in SAMBA sending bad change event IDs and wxWidgets
         // choosing to fault on an invalid event ID instead of sanely ignoring them we need to
         // avoid spawning a filewatcher. Unfortunately this punishes corporate environments with
         // Windows Server shares :/
-        m_Parent->SetStatusText( _( "Network path: not monitoring folder changes" ), 1 );
+        m_Parent->m_FileWatcherInfo = _( "Network path: not monitoring folder changes" );
+        statusBar->SetEllipsedTextField( m_Parent->m_FileWatcherInfo, 1 );
         return;
     }
     else
     {
-        m_Parent->SetStatusText( _( "Local path: monitoring folder changes" ), 1 );
+        m_Parent->m_FileWatcherInfo = _( "Local path: monitoring folder changes" );
+        statusBar->SetEllipsedTextField( m_Parent->m_FileWatcherInfo, 1 );
     }
 #endif
 

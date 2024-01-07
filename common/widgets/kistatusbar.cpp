@@ -33,6 +33,7 @@
 #include <background_jobs_monitor.h>
 #include <notifications_manager.h>
 #include <bitmaps.h>
+#include <wx/dcclient.h>
 
 #define FIELD_OFFSET_BGJOB_TEXT 0
 #define FIELD_OFFSET_BGJOB_GAUGE 1
@@ -210,4 +211,27 @@ void KISTATUSBAR::SetNotificationCount(int aCount)
 
     // force a repaint or it wont until it gets activity
     Refresh();
+}
+
+#include <widgets/ui_common.h>
+void KISTATUSBAR::SetEllipsedTextField( const wxString& aText, int aFieldId )
+{
+    wxRect       fieldRect;
+    int          width = -1;
+    wxString     etext = aText;
+
+    // Only GetFieldRect() returns the current size for variable size fields
+    // Other methods return -1 for the width of these fields.
+    if( GetFieldRect( aFieldId, fieldRect ) )
+        width = fieldRect.GetWidth();
+
+    if( width > 20 )
+    {
+        wxClientDC dc( this );
+        // Gives a margin to the text to be sure it is not clamped at its end
+        int margin = KIUI::GetTextSize( wxT( "XX" ), this ).x;
+        etext = wxControl::Ellipsize( etext, dc, wxELLIPSIZE_MIDDLE, width - margin );
+    }
+
+    SetStatusText( etext, aFieldId );
 }

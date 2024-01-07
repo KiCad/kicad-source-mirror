@@ -63,6 +63,11 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );
     void OnExit( wxCommandEvent& event );
+
+    /** Create the status line (like a wxStatusBar). This is actually a KISTATUSBAR status bar.
+     * the specified number of fields is the extra number of fields, not the full field count.
+     * @return a KISTATUSBAR (derived from wxStatusBar)
+     */
     wxStatusBar* OnCreateStatusBar( int number, long style, wxWindowID id,
                                     const wxString& name ) override;
 
@@ -167,6 +172,9 @@ public:
     void SetPcmButton( BITMAP_BUTTON* aButton );
 
     void CreatePCM();   // creates the PLUGIN_CONTENT_MANAGER
+
+    // Used only on Windows: stores the info message about file watcher
+    wxString m_FileWatcherInfo;
 
     DECLARE_EVENT_TABLE()
 
