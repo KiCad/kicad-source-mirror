@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,7 +415,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
             color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == LINE_STYLE::DEFAULT )
-            lineStyle = LINE_STYLE::DASH;
+            lineStyle = LINE_STYLE::SOLID;
 
         if( aDimmed )
         {
