@@ -25,6 +25,7 @@
 #include <sch_symbol.h>
 #include <id.h>
 #include <kiway.h>
+#include <kiplatform/ui.h>
 #include <confirm.h>
 #include <string_utils.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -108,6 +109,8 @@ void EE_INSPECTION_TOOL::ShowERCDialog()
 
     // Bring it to the top if already open.  Dual monitor users need this.
     dlg->Raise();
+
+    KIPLATFORM::UI::ForceFocus( dlg->FindWindow( wxID_OK ) );
 }
 
 

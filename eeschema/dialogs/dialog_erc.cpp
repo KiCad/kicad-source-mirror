@@ -397,6 +397,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     m_ignoredList->SetColumnWidth( 0, m_ignoredList->GetParent()->GetClientSize().x - 20 );
 
+    m_cancelled = false;
     Raise();
 
     m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
