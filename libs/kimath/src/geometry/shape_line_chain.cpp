@@ -821,7 +821,12 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
 void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
 {
-    assert( m_shapes.size() == m_points.size() );
+    wxCHECK( m_shapes.size() == m_points.size(), /*void*/ );
+
+    // Unwrap the chain first (correctly handling removing arc at
+    // end of chain coincident with start)
+    bool closedState = IsClosed();
+    SetClosed( false );
 
     if( aEndIndex < 0 )
         aEndIndex += PointCount();
@@ -829,19 +834,31 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
-    if( aStartIndex >= PointCount() )
+    if( aStartIndex >= PointCount() || aEndIndex >= PointCount() || aStartIndex > aEndIndex)
+    {
+        SetClosed( closedState );
         return;
+    }
 
-    aEndIndex = std::min( aEndIndex, PointCount() - 1 );
 
-    // Split arcs at start index and end just after the end index
-    if( IsPtOnArc( aStartIndex ) )
-        splitArc( aStartIndex );
+    // Split arcs, making arcs coincident
+    if( !IsArcStart( aStartIndex ) && IsPtOnArc( aStartIndex ) )
+        splitArc( aStartIndex, false );
 
-    size_t nextIndex = static_cast<size_t>( aEndIndex ) + 1;
+    if( IsSharedPt( aStartIndex ) ) // Don't delete the shared point
+        aStartIndex += 1;
 
-    if( IsPtOnArc( nextIndex ) )
-        splitArc( nextIndex );
+    if( !IsArcEnd( aEndIndex ) && IsPtOnArc( aEndIndex ) && aEndIndex < PointCount() - 1 )
+        splitArc( aEndIndex + 1, true );
+
+    if( IsSharedPt( aEndIndex ) ) // Don't delete the shared point
+        aEndIndex -= 1;
+
+    if( aStartIndex > aEndIndex )
+    {
+        SetClosed( closedState );
+        return;
+    }
 
     std::set<size_t> extra_arcs;
     auto logArcIdxRemoval = [&]( ssize_t& aShapeIndex )
@@ -869,14 +886,16 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
                 logArcIdxRemoval( m_shapes[i].first ); // Only remove the arc on the first index
 
                 // Ensure that m_shapes has been built correctly.
-                assert( i > aStartIndex || IsSharedPt( i - 1 )
+                assert( i > aStartIndex || ( IsSharedPt( i - 1 )
                                 ? m_shapes[i - 1].second == m_shapes[i].first
-                                : m_shapes[i - 1].first == m_shapes[i].first );
+                                : m_shapes[i - 1].first == m_shapes[i].first ) );
                 continue;
             }
         }
-
-        alg::run_on_pair( m_shapes[i], logArcIdxRemoval );
+        else
+        {
+            alg::run_on_pair( m_shapes[i], logArcIdxRemoval );
+        }
     }
 
     for( auto arc : extra_arcs )
@@ -885,6 +904,8 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
     m_shapes.erase( m_shapes.begin() + aStartIndex, m_shapes.begin() + aEndIndex + 1 );
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
     assert( m_shapes.size() == m_points.size() );
+
+    SetClosed( closedState );
 }
 
 
@@ -1077,32 +1098,28 @@ void SHAPE_LINE_CHAIN::RemoveShape( int aPointIndex )
     if( aPointIndex < 0 )
         aPointIndex += PointCount();
 
+    if( aPointIndex >= PointCount() || aPointIndex < 0 )
+        return; // Invalid index, fail gracefully
+
     if( m_shapes[aPointIndex] == SHAPES_ARE_PT )
     {
         Remove( aPointIndex );
         return;
     }
 
-    //@todo should this be replaced to use NextShape() / PrevShape()?
     int start  = aPointIndex;
     int end    = aPointIndex;
     int arcIdx = ArcIndex( aPointIndex );
 
-    if( !IsSharedPt( aPointIndex ) )
+    if( !IsArcStart( start ) )
     {
         // aPointIndex is not a shared point, so iterate backwards to find the start of the arc
-        while( start >= 0 && m_shapes[start].first == arcIdx )
-            start--;
-
-        // Check if the previous point might be a shared point and decrement 'start' if so
-        if( start >= 1 && m_shapes[static_cast<ssize_t>( start ) - 1].second == arcIdx )
+        while( start > 0 && ArcIndex( static_cast<ssize_t>( start ) - 1 ) == arcIdx )
             start--;
     }
 
-    // For the end point we only need to check the first element in m_shapes (the second one is only
-    // populated if there is an arc after the current one sharing the same point).
-    while( end < static_cast<int>( m_shapes.size() ) - 1 && m_shapes[end].first == arcIdx )
-        end++;
+    if( !IsArcEnd( end ) || start == end )
+        end = NextShape( end ); // can be -1 to indicate end of chain
 
     Remove( start, end );
 }

@@ -288,6 +288,126 @@ BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )
 }
 
 
+struct REMOVE_SHAPE_CASE
+{
+    std::string m_ctx_name;
+    SHAPE_LINE_CHAIN m_chain;
+    int m_shape_count;
+    int m_arc_count;
+    int m_remove_index;
+    int m_expected_shape_count;
+    int m_expected_arc_count;
+};
+
+static const std::vector<REMOVE_SHAPE_CASE> remove_shape_cases =
+        {
+            { "Circle1Arc - 1st arc - index on start", SLC_CASES().Circle1Arc, 1, 1,  0, 0, 0 },
+            { "Circle1Arc - 1st arc - index on mid",   SLC_CASES().Circle1Arc, 1, 1,  8, 0, 0 },
+            { "Circle1Arc - 1st arc - index on end",   SLC_CASES().Circle1Arc, 1, 1, 14, 0, 0 },
+            { "Circle1Arc - 1st arc - index on  -1",   SLC_CASES().Circle1Arc, 1, 1, -1, 0, 0 },
+            { "Circle1Arc - invalid index",            SLC_CASES().Circle1Arc, 1, 1, 15, 1, 1 },
+
+            { "Circle2Arcs - 1st arc - index on start", SLC_CASES().Circle2Arcs, 2, 2,  0, 2, 1 },
+            { "Circle2Arcs - 1st arc - index on mid",   SLC_CASES().Circle2Arcs, 2, 2,  3, 2, 1 },
+            { "Circle2Arcs - 1st arc - index on end",   SLC_CASES().Circle2Arcs, 2, 2,  7, 2, 1 },
+            { "Circle2Arcs - 2nd arc - index on start", SLC_CASES().Circle2Arcs, 2, 2,  8, 2, 1 },
+            { "Circle2Arcs - 2nd arc - index on mid",   SLC_CASES().Circle2Arcs, 2, 2, 11, 2, 1 },
+            { "Circle2Arcs - 2nd arc - index on end",   SLC_CASES().Circle2Arcs, 2, 2, 15, 2, 1 },
+            { "Circle2Arcs - 2nd arc - index on  -1",   SLC_CASES().Circle2Arcs, 2, 2, -1, 2, 1 },
+            { "Circle2Arcs - invalid index",            SLC_CASES().Circle2Arcs, 2, 2, 16, 2, 2 },
+
+            { "ArcsCoinc. - 1st arc - idx on start", SLC_CASES().ArcsCoincident, 2, 2,  0, 1, 1 },
+            { "ArcsCoinc. - 1st arc - idx on mid",   SLC_CASES().ArcsCoincident, 2, 2,  3, 1, 1 },
+            { "ArcsCoinc. - 1st arc - idx on end",   SLC_CASES().ArcsCoincident, 2, 2,  7, 1, 1 },
+            { "ArcsCoinc. - 2nd arc - idx on start", SLC_CASES().ArcsCoincident, 2, 2,  8, 1, 1 },
+            { "ArcsCoinc. - 2nd arc - idx on mid",   SLC_CASES().ArcsCoincident, 2, 2, 10, 1, 1 },
+            { "ArcsCoinc. - 2nd arc - idx on end",   SLC_CASES().ArcsCoincident, 2, 2, 13, 1, 1 },
+            { "ArcsCoinc. - 2nd arc - idx on  -1",   SLC_CASES().ArcsCoincident, 2, 2, -1, 1, 1 },
+            { "ArcsCoinc. - invalid idx",            SLC_CASES().ArcsCoincident, 2, 2, 14, 2, 2 },
+            { "ArcsCoinc. - 1st arc - idx on start", SLC_CASES().ArcsCoincident, 2, 2,  0, 1, 1 },
+
+            { "A.Co.Closed - 1st arc - idx on start", SLC_CASES().ArcsCoincidentClosed, 3, 2,  1, 2, 1 },
+            { "A.Co.Closed - 1st arc - idx on mid",   SLC_CASES().ArcsCoincidentClosed, 3, 2,  3, 2, 1 },
+            { "A.Co.Closed - 1st arc - idx on end",   SLC_CASES().ArcsCoincidentClosed, 3, 2,  7, 2, 1 },
+            { "A.Co.Closed - 2nd arc - idx on start", SLC_CASES().ArcsCoincidentClosed, 3, 2,  8, 2, 1 },
+            { "A.Co.Closed - 2nd arc - idx on mid",   SLC_CASES().ArcsCoincidentClosed, 3, 2, 10, 2, 1 },
+            { "A.Co.Closed - 2nd arc - idx on end",   SLC_CASES().ArcsCoincidentClosed, 3, 2, 13, 2, 1 },
+            { "A.Co.Closed - 2nd arc - idx on  -1",   SLC_CASES().ArcsCoincidentClosed, 3, 2, -1, 2, 1 },
+            { "A.Co.Closed - invalid idx",            SLC_CASES().ArcsCoincidentClosed, 3, 2, 14, 3, 2 },
+
+            { "ArcsIndep. - 1st arc - idx on start", SLC_CASES().ArcsIndependent, 3, 2,  0, 1, 1 },
+            { "ArcsIndep. - 1st arc - idx on mid",   SLC_CASES().ArcsIndependent, 3, 2,  3, 1, 1 },
+            { "ArcsIndep. - 1st arc - idx on end",   SLC_CASES().ArcsIndependent, 3, 2,  8, 1, 1 },
+            { "ArcsIndep. - 2nd arc - idx on start", SLC_CASES().ArcsIndependent, 3, 2,  9, 1, 1 },
+            { "ArcsIndep. - 2nd arc - idx on mid",   SLC_CASES().ArcsIndependent, 3, 2, 12, 1, 1 },
+            { "ArcsIndep. - 2nd arc - idx on end",   SLC_CASES().ArcsIndependent, 3, 2, 17, 1, 1 },
+            { "ArcsIndep. - 2nd arc - idx on  -1",   SLC_CASES().ArcsIndependent, 3, 2, -1, 1, 1 },
+            { "ArcsIndep. - invalid idx",            SLC_CASES().ArcsIndependent, 3, 2, 18, 3, 2 },
+
+            { "Dup.Arcs - 1st arc - idx on start", SLC_CASES().DuplicateArcs, 4, 3,  0, 3, 2 },
+            { "Dup.Arcs - 1st arc - idx on mid",   SLC_CASES().DuplicateArcs, 4, 3,  3, 3, 2 },
+            { "Dup.Arcs - 1st arc - idx on end",   SLC_CASES().DuplicateArcs, 4, 3,  7, 3, 2 },
+            { "Dup.Arcs - 2nd arc - idx on start", SLC_CASES().DuplicateArcs, 4, 3,  8, 3, 2 },
+            { "Dup.Arcs - 2nd arc - idx on mid",   SLC_CASES().DuplicateArcs, 4, 3, 10, 3, 2 },
+            { "Dup.Arcs - 2nd arc - idx on end",   SLC_CASES().DuplicateArcs, 4, 3, 13, 3, 2 },
+            { "Dup.Arcs - 3rd arc - idx on start", SLC_CASES().DuplicateArcs, 4, 3, 14, 2, 2 },
+            { "Dup.Arcs - 3rd arc - idx on mid",   SLC_CASES().DuplicateArcs, 4, 3, 17, 2, 2 },
+            { "Dup.Arcs - 3rd arc - idx on end",   SLC_CASES().DuplicateArcs, 4, 3, 19, 2, 2 },
+            { "Dup.Arcs - 3rd arc - idx on  -1",   SLC_CASES().DuplicateArcs, 4, 3, -1, 2, 2 },
+            { "Dup.Arcs - invalid idx",            SLC_CASES().DuplicateArcs, 4, 3, 20, 4, 3 },
+
+            { "Arcs Mixed - 1st arc - idx on start", SLC_CASES().ArcsAndSegMixed, 4, 2,  0, 2, 1 },
+            { "Arcs Mixed - 1st arc - idx on mid",   SLC_CASES().ArcsAndSegMixed, 4, 2,  3, 2, 1 },
+            { "Arcs Mixed - 1st arc - idx on end",   SLC_CASES().ArcsAndSegMixed, 4, 2,  8, 2, 1 },
+            { "Arcs Mixed - Straight segment",       SLC_CASES().ArcsAndSegMixed, 4, 2,  9, 3, 2 },
+            { "Arcs Mixed - 2nd arc - idx on start", SLC_CASES().ArcsAndSegMixed, 4, 2, 10, 2, 1 },
+            { "Arcs Mixed - 2nd arc - idx on mid",   SLC_CASES().ArcsAndSegMixed, 4, 2, 14, 2, 1 },
+            { "Arcs Mixed - 2nd arc - idx on end",   SLC_CASES().ArcsAndSegMixed, 4, 2, 18, 2, 1 },
+            { "Arcs Mixed - 2nd arc - idx on  -1",   SLC_CASES().ArcsAndSegMixed, 4, 2, -1, 2, 1 },
+            { "Arcs Mixed - invalid idx",            SLC_CASES().ArcsAndSegMixed, 4, 2, 19, 4, 2 }
+        };
+
+
+BOOST_AUTO_TEST_CASE( RemoveShape )
+{
+    for( const REMOVE_SHAPE_CASE& c : remove_shape_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            SHAPE_LINE_CHAIN slc_case = c.m_chain; // make a copy to edit
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.ArcCount(), c.m_arc_count );
+            BOOST_CHECK_EQUAL( GEOM_TEST::IsOutlineValid( slc_case ), true );
+            slc_case.RemoveShape( c.m_remove_index );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_expected_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.ArcCount(), c.m_expected_arc_count );
+            BOOST_CHECK_EQUAL( GEOM_TEST::IsOutlineValid( slc_case ), true );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( RemoveShapeAfterSimplify )
+{
+    for( const REMOVE_SHAPE_CASE& c : remove_shape_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            SHAPE_LINE_CHAIN slc_case = c.m_chain; // make a copy to edit
+            BOOST_CHECK_EQUAL( GEOM_TEST::IsOutlineValid( slc_case ), true );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.ArcCount(), c.m_arc_count );
+            slc_case.Simplify();
+            BOOST_CHECK_EQUAL( GEOM_TEST::IsOutlineValid( slc_case ), true );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.ArcCount(), c.m_arc_count );
+            slc_case.RemoveShape( c.m_remove_index );
+            BOOST_CHECK_EQUAL( GEOM_TEST::IsOutlineValid( slc_case ), true );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_expected_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.ArcCount(), c.m_expected_arc_count );
+        }
+    }
+}
 
 
 BOOST_AUTO_TEST_CASE( ShapeCount )
