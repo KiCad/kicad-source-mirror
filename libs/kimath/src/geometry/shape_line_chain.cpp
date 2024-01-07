@@ -980,49 +980,15 @@ int SHAPE_LINE_CHAIN::FindSegment( const VECTOR2I& aP, int aThreshold ) const
 
 int SHAPE_LINE_CHAIN::ShapeCount() const
 {
-    if( m_points.empty() )
+    wxCHECK2_MSG( m_points.size() == m_shapes.size(), return 0, "Invalid chain!" );
+
+    if( m_points.size() < 2 )
         return 0;
 
-    int numPoints = static_cast<int>( m_shapes.size() );
-    int numShapes = 0;
-    int arcIdx    = -1;
+    int numShapes = 1;
 
-    for( int i = 0; i < static_cast<int>( m_points.size() ) - 1; i++ )
-    {
-        if( m_shapes[i] == SHAPES_ARE_PT )
-        {
-            numShapes++;
-        }
-        else
-        {
-            // Expect that the second index only gets populated when the point is shared between
-            // two shapes. Otherwise, the shape index should always go on the first element of
-            // the pair.
-            assert( m_shapes[i].first != SHAPE_IS_PT );
-
-            // Start assuming the point is shared with the previous arc
-            // If so, the new/next arc index should be located at the second
-            // element in the pair
-            arcIdx = m_shapes[i].second;
-
-            if( arcIdx == SHAPE_IS_PT )
-                arcIdx = m_shapes[i].first; // Not a shared point
-
-            numShapes++;
-
-            // Now skip the rest of the arc
-            while( i < numPoints && m_shapes[i].first == arcIdx )
-                i++;
-
-            // Add the "hidden" segment at the end of the arc, if it exists
-            if( i < numPoints && m_points[i] != m_points[i - 1] )
-            {
-                numShapes++;
-            }
-
-            i--;
-        }
-    }
+    for( int i = NextShape( 0 ); i != -1; i = NextShape( i ) )
+        numShapes++;
 
     return numShapes;
 }

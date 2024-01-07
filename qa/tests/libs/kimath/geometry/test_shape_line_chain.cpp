@@ -229,6 +229,20 @@ BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )
 
 
 
+BOOST_AUTO_TEST_CASE( ShapeCount )
+{
+    BOOST_CHECK_EQUAL( Circle1Arc.ShapeCount(), 1 );
+    BOOST_CHECK_EQUAL( Circle2Arcs.ShapeCount(), 2 );
+    BOOST_CHECK_EQUAL( ArcsCoincident.ShapeCount(), 2 );
+    BOOST_CHECK_EQUAL( ArcsCoincidentClosed.ShapeCount(), 3 );
+    BOOST_CHECK_EQUAL( DuplicateArcs.ShapeCount(), 4 );
+    BOOST_CHECK_EQUAL( ArcAndPoint.ShapeCount(), 2 );
+    BOOST_CHECK_EQUAL( ArcsAndSegMixed.ShapeCount(), 4 );
+    BOOST_CHECK_EQUAL( EmptyChain.ShapeCount(), 0 );
+    BOOST_CHECK_EQUAL( OnePoint.ShapeCount(), 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( NextShape )
 {
     BOOST_CHECK_EQUAL( Circle1Arc.NextShape( 0 ), -1 ); //only one arc
