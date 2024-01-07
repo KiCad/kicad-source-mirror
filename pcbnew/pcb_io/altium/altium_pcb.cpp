@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,9 +74,9 @@ FOOTPRINT* ALTIUM_PCB::HelperGetFootprint( uint16_t aComponent ) const
 {
     if( aComponent == ALTIUM_COMPONENT_NONE || m_components.size() <= aComponent )
     {
-        THROW_IO_ERROR( wxString::Format( wxT( "Component creator tries to access component id %d "
-                                               "of %d existing components" ),
-                                          aComponent, m_components.size() ) );
+        THROW_IO_ERROR( wxString::Format( wxT( "Component creator tries to access component id %u "
+                                               "of %u existing components" ),
+                                          (unsigned)aComponent, (unsigned)m_components.size() ) );
     }
 
     return m_components.at( aComponent );
@@ -3187,9 +3187,12 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
     {
         if( m_polygons.size() <= aElem.polygon )
         {
-            THROW_IO_ERROR( wxString::Format( "Tracks stream tries to access polygon id %d "
-                                              "of %d existing polygons.",
-                                              aElem.polygon, m_polygons.size() ) );
+            // Can happen when reading old Altium files: just skip this item
+            wxLogError( "ATRACK6 stream tries to access polygon id %u "
+                        "of %u existing polygons. Skip it",
+                        (unsigned) aElem.polygon,
+                        (unsigned)m_polygons.size() );
+            return;
         }
 
         ZONE* zone = m_polygons.at( aElem.polygon );
@@ -3263,8 +3266,8 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
 {
     if( aElem.polygon != ALTIUM_POLYGON_NONE )
     {
-        wxFAIL_MSG( wxString::Format( "Altium: Unexpected footprint Track with polygon id %d",
-                                      aElem.polygon ) );
+        wxFAIL_MSG( wxString::Format( "Altium: Unexpected footprint Track with polygon id %u",
+                                      (unsigned)aElem.polygon ) );
         return;
     }
 
