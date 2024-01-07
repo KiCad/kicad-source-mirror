@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
     BOOST_CHECK_EQUAL( base_chain.Area(), areaPriorToArcRemoval ); // Area should not have changed
 }
 
-// Test that duplicate point gets removed when line is set to be closed
+// Test that duplicate point gets removed when line is set to be closed and added where required
 BOOST_AUTO_TEST_CASE( SetClosedDuplicatePoint )
 {
     // Test from issue #9843
@@ -205,7 +205,68 @@ BOOST_AUTO_TEST_CASE( SetClosedDuplicatePoint )
     BOOST_CHECK_EQUAL( chain.CPoints().size(), chain.CShapes().size() );
     BOOST_CHECK_EQUAL( chain.PointCount(), 30 ); // (-1) should have removed coincident points
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+
+    // Special case: arc wrapping around to start (e.g. circle)
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( Circle2Arcs ) );
+    BOOST_CHECK_EQUAL( Circle2Arcs.IsClosed(), true );
+    BOOST_CHECK_EQUAL( Circle2Arcs.PointCount(), 16 );
+    BOOST_CHECK_EQUAL( Circle2Arcs.IsArcSegment( 15 ), true );
+    BOOST_CHECK_EQUAL( Circle2Arcs.ShapeCount(), 2 );
+    Circle2Arcs.SetClosed( false );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( Circle2Arcs ) );
+    BOOST_CHECK_EQUAL( Circle2Arcs.IsClosed(), false );
+    BOOST_CHECK_EQUAL( Circle2Arcs.PointCount(), 17 );
+    BOOST_CHECK_EQUAL( Circle2Arcs.IsArcSegment( 15 ), true );
+    BOOST_CHECK_EQUAL( Circle2Arcs.IsArcSegment( 16 ), false ); // last point doesn't join up
 }
+
+struct CLOSE_TOGGLE_SHAPE_CASE
+{
+    std::string m_ctx_name;
+    SHAPE_LINE_CHAIN m_chain;
+    bool m_closed;
+    int m_shape_count;
+    int m_point_count;
+    int m_expected_shape_count;
+    int m_expected_point_count;
+};
+
+static const std::vector<CLOSE_TOGGLE_SHAPE_CASE> close_toggle_shape_cases =
+        {
+            { "Circle1Arc",           SLC_CASES().Circle1Arc,           true,  1, 15, 1, 16 },
+            { "Circle2Arcs",          SLC_CASES().Circle2Arcs,          true,  2, 16, 2, 17 },
+            { "ArcsCoincident",       SLC_CASES().ArcsCoincident,       false, 2, 14, 3, 14 },
+            { "ArcsCoincidentClosed", SLC_CASES().ArcsCoincidentClosed, true,  3, 14, 2, 14 },
+            { "DuplicateArcs",        SLC_CASES().DuplicateArcs,        false, 4, 20, 5, 20 },
+            { "ArcAndPoint",          SLC_CASES().ArcAndPoint,          false, 2, 10, 3, 10 },
+            { "ArcsAndSegMixed",      SLC_CASES().ArcsAndSegMixed,      false, 4, 19, 5, 19 }
+        };
+
+BOOST_AUTO_TEST_CASE( ToggleClosed )
+{
+    for( const CLOSE_TOGGLE_SHAPE_CASE& c : close_toggle_shape_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            SHAPE_LINE_CHAIN slc_case = c.m_chain; // make a copy to edit
+            BOOST_CHECK( GEOM_TEST::IsOutlineValid( slc_case ) );
+            BOOST_CHECK_EQUAL( slc_case.IsClosed(), c.m_closed );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.PointCount(), c.m_point_count );
+            slc_case.SetClosed( !c.m_closed );
+            BOOST_CHECK( GEOM_TEST::IsOutlineValid( slc_case ) );
+            BOOST_CHECK_EQUAL( slc_case.IsClosed(), !c.m_closed );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_expected_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.PointCount(), c.m_expected_point_count );
+            slc_case.SetClosed( c.m_closed ); // toggle back to normal
+            BOOST_CHECK( GEOM_TEST::IsOutlineValid( slc_case ) );
+            BOOST_CHECK_EQUAL( slc_case.IsClosed(), c.m_closed );
+            BOOST_CHECK_EQUAL( slc_case.ShapeCount(), c.m_shape_count );
+            BOOST_CHECK_EQUAL( slc_case.PointCount(), c.m_point_count );
+        }
+    }
+}
+
 
 // Test that duplicate point gets removed when we call simplify
 BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )

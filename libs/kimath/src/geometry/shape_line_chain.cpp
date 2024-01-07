@@ -215,14 +215,15 @@ void SHAPE_LINE_CHAIN::fixIndicesRotation()
 {
     wxCHECK( m_shapes.size() == m_points.size(), /*void*/ );
 
-    if( m_shapes.size() <= 1 || m_arcs.size() <= 1 )
+    if( m_shapes.size() <= 1 )
         return;
 
     size_t rotations = 0;
     size_t numPoints = m_points.size();
 
     while( ArcIndex( 0 ) != SHAPE_IS_PT
-        && ArcIndex( 0 ) == ArcIndex( numPoints - 1 ) )
+        && ArcIndex( 0 ) == ArcIndex( numPoints - 1 )
+        && !IsSharedPt( 0 ) )
     {
         // Rotate right
         std::rotate( m_points.rbegin(), m_points.rbegin() + 1, m_points.rend() );
@@ -251,6 +252,17 @@ void SHAPE_LINE_CHAIN::mergeFirstLastPointIfNeeded()
             m_shapes.pop_back();
 
             fixIndicesRotation();
+        }
+    }
+    else
+    {
+        if( m_points.size() > 1 && IsSharedPt( 0 ) )
+        {
+            // Create a duplicate point at the end
+            m_points.push_back( m_points.front() );
+            m_shapes.push_back( { m_shapes.front().first, SHAPE_IS_PT });
+            m_shapes.front().first = m_shapes.front().second;
+            m_shapes.front().second = SHAPE_IS_PT;
         }
     }
 }

@@ -232,6 +232,9 @@ inline bool IsOutlineValid( const SHAPE_LINE_CHAIN& aChain )
     ssize_t           prevArcIdx = -1;
     std::set<size_t> testedArcs;
 
+    if( aChain.PointCount() > 0 && !aChain.IsClosed() && aChain.IsSharedPt( 0 ) )
+        return false; //can't have first point being shared on an open chain
+
     for( int i = 0; i < aChain.PointCount(); i++ )
     {
         ssize_t arcIdx = aChain.ArcIndex( i );
@@ -284,6 +287,24 @@ inline bool IsOutlineValid( const SHAPE_LINE_CHAIN& aChain )
         }
 
         prevArcIdx = arcIdx;
+    }
+
+    // Make sure last arc point matches the end of the arc
+    if( prevArcIdx >= 0 )
+    {
+        if( aChain.IsClosed() && aChain.IsSharedPt( 0 ) )
+        {
+            if( aChain.CShapes()[0].first != prevArcIdx )
+                return false;
+
+            if( aChain.Arc( prevArcIdx ).GetP1() != aChain.CPoint( 0 ) )
+                return false;
+        }
+        else
+        {
+            if( aChain.Arc( prevArcIdx ).GetP1() != aChain.CPoint( -1 ) )
+                return false;
+        }
     }
 
     return true;
