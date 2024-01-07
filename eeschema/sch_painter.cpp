@@ -792,6 +792,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
 
 bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimmed )
 {
+    COLOR4D          bg = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     const EDA_SHAPE* shape = dynamic_cast<const EDA_SHAPE*>( aItem );
 
     switch( aLayer )
@@ -840,6 +841,10 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
         else if( shape && shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
         {
             COLOR4D fillColour = shape->GetFillColor();
+            double  transparency = aItem->GetForcedTransparency();
+
+            if( transparency > 0.0 )
+                fillColour = fillColour.WithAlpha( fillColour.a * ( 1.0 - transparency ) );
 
             if( m_schSettings.m_OverrideItemColors )
             {
@@ -847,9 +852,8 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
             }
             else if( aDimmed )
             {
-                fillColour = fillColour.Mix(
-                        m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ), 0.5f );
-                fillColour.Desaturate( );
+                fillColour = fillColour.Mix( bg, 0.5f );
+                fillColour.Desaturate();
             }
 
             m_gal->SetFillColor( fillColour );
@@ -1254,17 +1258,21 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
         {
             COLOR4D    borderColor = aTextBox->GetStroke().GetColor();
             LINE_STYLE borderStyle = aTextBox->GetStroke().GetLineStyle();
+            double     transparency = aTextBox->GetForcedTransparency();
 
             if( m_schSettings.m_OverrideItemColors || aTextBox->IsBrightened()
                     || borderColor == COLOR4D::UNSPECIFIED )
             {
                 borderColor = m_schSettings.GetLayerColor( aLayer );
+
+                if( transparency > 0.0 )
+                    borderColor = borderColor.WithAlpha( borderColor.a * ( 1.0 - transparency ) );
             }
 
             if( aDimmed )
             {
-                borderColor.Desaturate( );
                 borderColor = borderColor.Mix( bg, 0.5f );
+                borderColor.Desaturate( );
             }
 
             m_gal->SetIsFill( false );
