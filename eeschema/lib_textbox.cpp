@@ -414,7 +414,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
             color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == PLOT_DASH_TYPE::DEFAULT )
-            lineStyle = PLOT_DASH_TYPE::DASH;
+            lineStyle = PLOT_DASH_TYPE::SOLID;
 
         if( aDimmed )
         {
