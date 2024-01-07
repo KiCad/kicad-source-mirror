@@ -1302,27 +1302,18 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 
 void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc, double aAccuracy )
 {
-    SEG startToEnd( aArc.GetP0(), aArc.GetP1() );
+    SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline( aAccuracy );
 
-    if( startToEnd.Distance( aArc.GetArcMid() ) < 1 )
+    if( chain.PointCount() > 2 )
     {
-        // Not really a valid arc. Add as a straight line segment instead
-        Append( aArc.GetP0() );
-        Append( aArc.GetP1() );
-    }
-    else
-    {
-        SHAPE_LINE_CHAIN chain = aArc.ConvertToPolyline( aAccuracy );
-
-        // @todo should the below 4 LOC be moved to SHAPE_ARC::ConvertToPolyline ?
         chain.m_arcs.push_back( aArc );
         chain.m_arcs.back().SetWidth( 0 );
 
         for( auto& sh : chain.m_shapes )
             sh.first = 0;
-
-        Append( chain );
     }
+
+    Append( chain );
 
     assert( m_shapes.size() == m_points.size() );
 }

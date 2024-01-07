@@ -477,6 +477,9 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
     VECTOR2I  c    = GetCenter();
     EDA_ANGLE ca   = GetCentralAngle();
 
+    SEG    startToEnd( GetP0(), GetP1() );
+    double halfAccuracy = std::max( 1.0, aAccuracy / 2 );
+
     int n;
 
     // To calculate the arc to segment count, use the external radius instead of the radius.
@@ -484,7 +487,8 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
     double external_radius = r+(m_width/2);
     double effectiveAccuracy;
 
-    if( external_radius < aAccuracy/2 )     // Should be a very rare case
+    if( external_radius < halfAccuracy
+        || startToEnd.Distance( GetArcMid() ) < halfAccuracy ) // Should be a very rare case
     {
         // In this case, the arc is approximated by one segment, with a effective error
         // between -aAccuracy/2 and +aAccuracy/2, as expected.

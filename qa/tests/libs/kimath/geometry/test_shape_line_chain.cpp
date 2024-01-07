@@ -346,6 +346,95 @@ BOOST_AUTO_TEST_CASE( NextShape )
 }
 
 
+
+BOOST_AUTO_TEST_CASE( AppendArc )
+{
+    BOOST_TEST_CONTEXT( "Case 1: Arc mid point nearly collinear" )
+    {
+        SHAPE_ARC arc( VECTOR2I( 100000, 0 ), VECTOR2I( 0, 2499 ), VECTOR2I( -100000, 0 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 0 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( 100000, 0 ) ); //arc start
+        BOOST_CHECK_EQUAL( chain.GetPoint( 1 ), VECTOR2I( -100000, 0 ) ); //arc end
+        BOOST_CHECK_EQUAL( chain.GetPoint( -1 ), VECTOR2I( -100000, 0 ) ); //arc end
+    }
+
+    BOOST_TEST_CONTEXT( "Case 2: Arc = Large Circle" )
+    {
+        SHAPE_ARC        arc( VECTOR2I( 100000, 0 ), VECTOR2I( 0, 0 ), VECTOR2I( 100000, 0 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 1 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 10 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( 100000, 0 ) );   //arc start
+        BOOST_CHECK_EQUAL( chain.GetPoint( 9 ), VECTOR2I( 100000, 0 ) );  //arc end
+        BOOST_CHECK_EQUAL( chain.GetPoint( -1 ), VECTOR2I( 100000, 0 ) ); //arc end
+    }
+
+    BOOST_TEST_CONTEXT( "Case 3: Arc = Small Circle (approximate to point)" )
+    {
+        SHAPE_ARC        arc( VECTOR2I( 2499, 0 ), VECTOR2I( 0, 0 ), VECTOR2I( 2499, 0 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 0 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 1 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( 2499, 0 ) );  //arc start
+    }
+
+    BOOST_TEST_CONTEXT( "Case 3: Small Arc (approximate to segment)" )
+    {
+        SHAPE_ARC        arc( VECTOR2I( 1767, 0 ), VECTOR2I( 2499, 2499 ), VECTOR2I( 0, 1767 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 0 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( 1767, 0 ) ); //arc start
+        BOOST_CHECK_EQUAL( chain.GetPoint( 1 ), VECTOR2I( 0, 1767 ) ); //arc end
+    }
+
+    BOOST_TEST_CONTEXT( "Case 4: Arc = null arc (all points coincident)" )
+    {
+        SHAPE_ARC        arc( VECTOR2I( 2499, 0 ), VECTOR2I( 2499, 0 ), VECTOR2I( 2499, 0 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 0 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 1 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( 2499, 0 ) );    //arc start
+    }
+
+    BOOST_TEST_CONTEXT( "Case 5: Arc = infinite radius (all points very close)" )
+    {
+        SHAPE_ARC        arc( VECTOR2I( 2499, 0 ), VECTOR2I( 2500, 0 ), VECTOR2I( 2501, 0 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 0 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( 2499, 0 ) ); //arc start
+        BOOST_CHECK_EQUAL( chain.GetPoint( 1 ), VECTOR2I( 2501, 0 ) ); //arc end
+    }
+
+    BOOST_TEST_CONTEXT( "Case 6: Arc = large radius (all points very close)" )
+    {
+        SHAPE_ARC arc( VECTOR2I( -100000, 0 ), VECTOR2I( 0, 1 ), VECTOR2I( 100000, 0 ), 0 );
+        SHAPE_LINE_CHAIN chain;
+        chain.Append( arc, 5000 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+        BOOST_CHECK_EQUAL( chain.ArcCount(), 0 );
+        BOOST_CHECK_EQUAL( chain.PointCount(), 2 );
+        BOOST_CHECK_EQUAL( chain.GetPoint( 0 ), VECTOR2I( -100000, 0 ) ); //arc start
+        BOOST_CHECK_EQUAL( chain.GetPoint( 1 ), VECTOR2I( 100000, 0 ) );  //arc end
+    }
+}
+
+
 // Test special case where the last arc in the chain has a shared point with the first arc
 BOOST_AUTO_TEST_CASE( ArcWrappingToStartSharedPoints )
 {
