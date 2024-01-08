@@ -588,8 +588,13 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
 std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            aFootprint,
                                                        const nlohmann::json& line )
 {
-    wxString     uuid = line.at( 1 );
-    int          unk = line.at( 2 ).get<int>();
+    wxString uuid = line.at( 1 );
+
+    // if( line.at( 2 ).is_number() )
+    //     int unk = line.at( 2 ).get<int>();
+    // else if( line.at( 2 ).is_string() )
+    //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
+
     wxString     netname = line.at( 3 );
     int          layer = line.at( 4 ).get<int>();
     PCB_LAYER_ID klayer = LayerToKi( layer );
@@ -745,8 +750,13 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
         if( type == wxS( "POLY" ) || type == wxS( "PAD" ) || type == wxS( "FILL" )
             || type == wxS( "ATTR" ) )
         {
-            wxString     uuid = line.at( 1 );
-            int          unk = line.at( 2 ).get<int>();
+            wxString uuid = line.at( 1 );
+
+            // if( line.at( 2 ).is_number() )
+            //     int unk = line.at( 2 ).get<int>();
+            // else if( line.at( 2 ).is_string() )
+            //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
+
             wxString     netname = line.at( 3 );
             int          layer = line.at( 4 ).get<int>();
             PCB_LAYER_ID klayer = LayerToKi( layer );
@@ -838,7 +848,11 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
         else if( type == wxS( "REGION" ) )
         {
             wxString uuid = line.at( 1 );
-            int      unk = line.at( 2 ).get<int>();
+            
+            // if( line.at( 2 ).is_number() )
+            //     int unk = line.at( 2 ).get<int>();
+            // else if( line.at( 2 ).is_string() )
+            //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
 
             int          layer = line.at( 3 ).get<int>();
             PCB_LAYER_ID klayer = LayerToKi( layer );
@@ -1012,7 +1026,12 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                  || type == wxS( "POLY" ) || type == wxS( "FILL" ) || type == wxS( "POUR" ) )
         {
             wxString uuid = line.at( 1 );
-            int      unk = line.at( 2 ).get<int>();
+
+            // if( line.at( 2 ).is_number() )
+            //     int unk = line.at( 2 ).get<int>();
+            // else if( line.at( 2 ).is_string() )
+            //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
+
             wxString netname = line.at( 3 );
 
             if( type == wxS( "VIA" ) )
@@ -1304,7 +1323,11 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         else if( type == wxS( "REGION" ) )
         {
             wxString uuid = line.at( 1 );
-            int      unk = line.at( 2 ).get<int>();
+
+            // if( line.at( 2 ).is_number() )
+            //     int unk = line.at( 2 ).get<int>();
+            // else if( line.at( 2 ).is_string() )
+            //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
 
             int          layer = line.at( 3 ).get<int>();
             PCB_LAYER_ID klayer = LayerToKi( layer );
@@ -1366,7 +1389,11 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         else if( type == wxS( "IMAGE" ) )
         {
             wxString uuid = line.at( 1 );
-            int      unk = line.at( 2 ).get<int>();
+            
+            // if( line.at( 2 ).is_number() )
+            //     int unk = line.at( 2 ).get<int>();
+            // else if( line.at( 2 ).is_string() )
+            //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
 
             int          layer = line.at( 3 ).get<int>();
             PCB_LAYER_ID klayer = LayerToKi( layer );
@@ -1443,7 +1470,11 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         else if( type == wxS( "STRING" ) )
         {
             wxString uuid = line.at( 1 );
-            int      unk = line.at( 2 );
+            
+            // if( line.at( 2 ).is_number() )
+            //     int unk = line.at( 2 ).get<int>();
+            // else if( line.at( 2 ).is_string() )
+            //     int unk = wxAtoi( line.at( 2 ).get<wxString>() );
 
             int          layer = line.at( 3 ).get<int>();
             PCB_LAYER_ID klayer = LayerToKi( layer );
