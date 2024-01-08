@@ -762,18 +762,22 @@ bool isDefaultTeardropParameters( const TEARDROP_PARAMETERS& tdParams )
 void PCB_IO_KICAD_SEXPR::formatTeardropParameters( const TEARDROP_PARAMETERS& tdParams,
                                            int aNestLevel ) const
 {
-    m_out->Print( aNestLevel, "(teardrops%s%s%s (best_length_ratio %s) (max_length %s) "
+    m_out->Print( aNestLevel, "(teardrops (best_length_ratio %s) (max_length %s) "
                               "(best_width_ratio %s) (max_width %s) (curve_points %d) "
-                              "(filter_ratio %s))\n",
-                  tdParams.m_Enabled ? " enabled" : "",
-                  tdParams.m_AllowUseTwoTracks ? " allow_two_segments" : "",
-                  tdParams.m_TdOnPadsInZones ? " prefer_zone_connections" : "",
+                              "(filter_ratio %s)",
                   FormatDouble2Str( tdParams.m_BestLengthRatio ).c_str(),
                   formatInternalUnits( tdParams.m_TdMaxLen ).c_str(),
                   FormatDouble2Str( tdParams.m_BestWidthRatio ).c_str(),
                   formatInternalUnits( tdParams.m_TdMaxWidth ).c_str(),
                   tdParams.m_CurveSegCount,
                   FormatDouble2Str( tdParams.m_WidthtoSizeFilterRatio ).c_str() );
+
+    KICAD_FORMAT::FormatBool( m_out, aNestLevel, "enabled", tdParams.m_Enabled );
+    KICAD_FORMAT::FormatBool( m_out, aNestLevel, "allow_two_segments",
+                              tdParams.m_AllowUseTwoTracks );
+    KICAD_FORMAT::FormatBool( m_out, aNestLevel, "prefer_zone_connections",
+                              !tdParams.m_TdOnPadsInZones );
+    m_out->Print( aNestLevel, ")" );
 }
 
 

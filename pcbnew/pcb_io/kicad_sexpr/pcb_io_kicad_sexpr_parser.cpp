@@ -433,15 +433,15 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* t
         switch( token )
         {
         case T_enabled:
-            tdParams->m_Enabled = true;
+            tdParams->m_Enabled = parseMaybeAbsentBool( true );
             break;
 
         case T_allow_two_segments:
-            tdParams->m_AllowUseTwoTracks = true;
+            tdParams->m_AllowUseTwoTracks = parseMaybeAbsentBool( true );
             break;
 
         case T_prefer_zone_connections:
-            tdParams->m_TdOnPadsInZones = false;
+            tdParams->m_TdOnPadsInZones = !parseMaybeAbsentBool( false );
             break;
 
         case T_best_length_ratio:
