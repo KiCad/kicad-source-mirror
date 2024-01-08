@@ -65,7 +65,7 @@ struct PAD_PREFIX_ENTRY
     bool processed;
 
     wxString format() const {
-        return wxString::Format( wxT("%s-%s"), componentPrefix, pad->GetNumber() );
+        return wxString::Format( wxT("%s-%s[%s]"), componentPrefix, pad->GetNumber(), pad->GetNetname().c_str().AsChar() );
     }
 
     bool matchesPadNumberAndPrefix( const PAD_PREFIX_ENTRY& aOther ) const
@@ -83,16 +83,17 @@ struct PAD_PREFIX_ENTRY
 struct FP_WITH_CONNECTIONS
 {
     FOOTPRINT* fp;
-    std::unordered_map<PAD*, std::vector<PAD_PREFIX_ENTRY> > connsWithinRA;
+    typedef std::unordered_map<PAD*, std::vector<PAD_PREFIX_ENTRY> > PAD_CONNECTION_MAP;
+    PAD_CONNECTION_MAP connsWithinRA;
     bool processed;
 
     void sortByPadNumbers()
     {
         // fixme
-        std::unordered_map<PAD*, std::vector<PAD_PREFIX_ENTRY> > sorted;
+        PAD_CONNECTION_MAP sorted;
         for( auto& ent : connsWithinRA )
         {
-            auto v = ent.second;
+            std::vector<PAD_PREFIX_ENTRY> v( ent.second );
             auto compare = [] ( const PAD_PREFIX_ENTRY& a, const PAD_PREFIX_ENTRY& b ) -> int
             {
                 if( a.pad->GetNumber() > b.pad->GetNumber() )
@@ -186,6 +187,8 @@ class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
                                                    const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA,
                                                    FOOTPRINT*                   aFp,
                                                    const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
+
+        bool checkIfPadNetsMatch( FP_WITH_CONNECTIONS& aRef, FP_WITH_CONNECTIONS& aTgt, FP_PAIRS& aMatches ) const;
 
         std::unique_ptr<REPORTER> m_reporter;
         RULE_AREAS_DATA m_areas;

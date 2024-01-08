@@ -39,7 +39,7 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
     auto raData = m_parentTool->GetData();
 
-    m_sheetsGrid->CreateGrid( 10, 3 );
+    m_sheetsGrid->AppendCols( 3 );
     m_sheetsGrid->EnableEditing( true );
     m_sheetsGrid->HideRowLabels();
     m_sheetsGrid->SetColLabelValue( 0, wxT("Generate") );
@@ -74,7 +74,7 @@ bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
 {
     auto raData = m_parentTool->GetData();
 
-    for( int i = 0; i < raData->m_areas.size(); i++)
+    for( size_t i = 0; i < raData->m_areas.size(); i++)
     {
         wxString enabled = m_sheetsGrid->GetCellValue( i, 0 );
         raData->m_areas[i].m_generateEnabled = ( !enabled.CompareTo( wxT("1") ) ) ? true : false;

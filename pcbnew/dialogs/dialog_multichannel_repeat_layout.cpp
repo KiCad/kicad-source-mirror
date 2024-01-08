@@ -37,6 +37,8 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     auto data = m_parentTool->GetData();
     m_refRAName->SetLabelText( data->m_refRA->m_area->GetZoneName() );
 
+    printf("CMAP: %d entries\n", (int) data->m_compatMap.size() );
+
     for( auto& ra : data->m_compatMap )
     {
         TABLE_ENTRY ent;
@@ -63,7 +65,8 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
 
     int i = 0;
 
-    m_raGrid->CreateGrid( 10, 3 );
+    m_raGrid->ClearGrid();
+    m_raGrid->AppendCols( 3 );
     m_raGrid->EnableEditing( true );
     m_raGrid->HideRowLabels();
     m_raGrid->SetColLabelValue( 0, wxT("Copy") );
@@ -101,7 +104,7 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
 {
     auto data = m_parentTool->GetData();
 
-    for( int i = 0; i < m_targetRAs.size(); i++)
+    for( size_t i = 0; i < m_targetRAs.size(); i++)
     {
         wxString doCopy = m_raGrid->GetCellValue( i, 0 );
 
