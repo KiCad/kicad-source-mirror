@@ -1567,6 +1567,15 @@ static struct ZONE_DESC
                   .Map( ZONE_FILL_MODE::HATCH_PATTERN, _HKI( "Hatch pattern" ) );
         }
 
+        ENUM_MAP<RULE_AREA_TYPE>& raTypeMap = ENUM_MAP<RULE_AREA_TYPE>::Instance();
+
+        if( raTypeMap.Choices().GetCount() == 0 )
+        {
+            raTypeMap.Undefined( RULE_AREA_TYPE::KEEPOUT );
+            raTypeMap.Map( RULE_AREA_TYPE::KEEPOUT, _HKI( "Keepout" ) )
+                  .Map( RULE_AREA_TYPE::PLACEMENT, _HKI( "Placement" ) );
+        }
+
         ENUM_MAP<ISLAND_REMOVAL_MODE>& irmMap = ENUM_MAP<ISLAND_REMOVAL_MODE>::Instance();
 
         if( irmMap.Choices().GetCount() == 0 )
@@ -1602,6 +1611,15 @@ static struct ZONE_DESC
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
                         return !zone->GetIsRuleArea() && IsCopperLayer( zone->GetFirstLayer() );
+
+                    return false;
+                };
+
+   auto isRuleArea =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                        return zone->GetIsRuleArea();
 
                     return false;
                 };
@@ -1644,6 +1662,11 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
                     &ZONE::SetZoneName, &ZONE::GetZoneName ) );
 
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, RULE_AREA_TYPE>( _HKI( "Rule Area Type" ),
+                                                           &ZONE::SetRuleAreaType,
+                                                           &ZONE::GetRuleAreaType ) );
+                //.SetAvailableFunc( isRuleArea );
+
         const wxString groupFill = _HKI( "Fill Style" );
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
@@ -1658,6 +1681,7 @@ static struct ZONE_DESC
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
+        // TODO: Switch to translated
         auto atLeastMinWidthValidator =
                 []( const wxAny&& aValue, EDA_ITEM* aZone ) -> VALIDATOR_RESULT
                 {
@@ -1763,3 +1787,4 @@ static struct ZONE_DESC
 IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_FILL_MODE )
 IMPLEMENT_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )
+IMPLEMENT_ENUM_TO_WXANY( RULE_AREA_TYPE )
