@@ -18,13 +18,14 @@
 # Ken Ovo <Elektroniker@aon.at>, 2023.
 # Karl SCHUH <k.schuh@schuh-tv.at>, 2023.
 # Julian Daube <julian@daube.xyz>, 2023.
+# Johannes Maibaum <jmaibaum@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2024-01-08 00:06+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-01-09 21:58+0000\n"
+"Last-Translator: Johannes Maibaum <jmaibaum@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7757,7 +7758,7 @@ msgstr "Anzeige eines fensterfüllenden Fadenkreuzes ein-/ausschalten"
 
 #: common/tool/actions.cpp:806
 msgid "Inactive Layer View Mode"
-msgstr "Inaktive Lagen abblenden"
+msgstr "Azeigemodus für inaktive Lagen"
 
 #: common/tool/actions.cpp:807
 msgid "Toggle inactive layers between normal and dimmed"
@@ -9036,13 +9037,12 @@ msgid "Manage Footprint Association Files..."
 msgstr "Footprint-Zuweisungsdateien verwalten..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Liste von Footprint-Zuordnungsdateien (.equ) konfigurieren.  Diese Dateien "
-"werden verwendet, um automatisch Footprintnamen aus Symbolfeldern zuzuordnen."
+"Liste der Footprint-Zuordnungsdateien bearbeiten.  Diese Dateien werden "
+"verwendet, um automatisch Footprintnamen mittels Symbolwerten zuzuordnen."
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save to Schematic"
@@ -12886,7 +12886,7 @@ msgstr "Frequenz"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:56
 #: eeschema/sim/sim_plot_tab.cpp:557
 msgid "Gain"
-msgstr "Gewinn"
+msgstr "Verstärkung"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:61
 #: eeschema/sim/sim_plot_tab.cpp:558 eeschema/sim/sim_plot_tab.cpp:580
@@ -17057,6 +17057,9 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"Pfad zum CADSTAR-Schemaarchiv (*.csa), das zu dieser CADSTAR-"
+"Bauteilbibliothek gehört. Sofern kein Pfad angegeben ist, wird angenommen, "
+"dass 'symbol.csa' im gleichen Verzeichnis existiert."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:255
 msgid ""
@@ -17064,6 +17067,10 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"Name der Footprint-Bibliothek, die zu den in dieser Bibliothek verwendeten "
+"Symbolen gehört. Sie sollten in der Footprint-Bibliothekstabelle einen "
+"separaten Eintrag für die CADSTAR-PCB-Archivdatei (*.cpa). Sofern keine "
+"angegeben ist, wird 'cadstarpcblib' angenommen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:299
 #, c-format
@@ -17197,26 +17204,31 @@ msgid "HTTP library settings file %s missing or invalid"
 msgstr "Einstellungsdatei %s der HTTP Bibliothek fehlt oder ist ungültig"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:227
-#, c-format
+#, c-format, fuzzy
 msgid "HTTP library settings file %s is missing the API version number!"
 msgstr ""
+"Einstellungsdatei %s der HTTP-Bibliothek gibt keine API-Versionsnummer an!"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:236
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
 msgstr ""
+"Einstellungsdatei %s der HTTP-Bibliothekt verwendet API-Version %s, KiCad "
+"benötigt jedoch Version %s"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:247
-#, c-format
+#, c-format, fuzzy
 msgid "HTTP library settings file %s is missing the root URL!"
-msgstr ""
+msgstr "Wurzel-URL fehlt in der Einstellungsdatei %s der HTTP-Bibilothek!"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:259
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
 msgstr ""
+"Einstellungsdatei %s der HTTP-Bibilothek enthält einen ungültigen "
+"Bibliothekstyp"
 
 #: eeschema/sch_plugins/http_lib/sch_http_lib_plugin.cpp:306
 #, c-format
@@ -20929,7 +20941,7 @@ msgstr "Nicht bestücken"
 
 #: eeschema/tools/ee_actions.cpp:943
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "Das Nicht-bestücken-Attribut setzen"
 
 #: eeschema/tools/ee_actions.cpp:948
 #, fuzzy
@@ -20938,7 +20950,7 @@ msgstr "Nicht bestücken"
 
 #: eeschema/tools/ee_actions.cpp:949
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "Das Nicht-bestücken-Attribut löschen"
 
 #: eeschema/tools/ee_actions.cpp:954
 #, fuzzy
@@ -20946,9 +20958,8 @@ msgid "Toggle Do Not Populate"
 msgstr "Nicht bestücken"
 
 #: eeschema/tools/ee_actions.cpp:955
-#, fuzzy
 msgid "Toggle the do not populate attribute"
-msgstr "Anzeige von 3D-Modellen mit 'Virtuell'-Attribut umschalten"
+msgstr "Das Nicht-bestücken-Attribut umschalten"
 
 #: eeschema/tools/ee_actions.cpp:962
 msgid "Open the library symbol in the Symbol Editor"
@@ -23296,6 +23307,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
+"Pfad zum Zeichnungsblatt. Wenn verwendet, überschreibt dieser Pfad jegliche "
+"im Projekt definierten Blätter"
 
 #: kicad/cli/command.cpp:176
 msgid ""
@@ -23303,6 +23316,9 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"Überschreibt oder fügt Projektvariablen hinzu. Kann mehrfach verwendet "
+"werden, um mehrere Variablen zu deklarieren.\n"
+"Im Format '--define-var key=value' oder '-D key=value' verwenden"
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -23375,28 +23391,37 @@ msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Alle DRC-Verletzungen ausgeben. Dies ist gleichbedeutend mit der Angabe "
+"aller übrigen Schweregrads-Argumente"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Alle DRC-Fehlerstufen-Verletzungen ausgeben. Dies kann mit den übrigen "
+"Schweregrads-Argumenten kombiniert werden"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Alle DRC-Warnungslevel-Verletzungen ausgeben. Dies kann mit den übrigen "
+"Schweregrads-Argumenten kombiniert werden"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Alle ausgeschlossenen DRC-Verletzungen ausgeben. Dies kann mit den übrigen "
+"Schweregrads-Argumenten kombiniert werden"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
+"Einen nicht-Null Rückgabewert zurückgeben, sofern DRC-Verletzungen existieren"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:214
 #: kicad/cli/command_pcb_export_drill.cpp:150
@@ -23410,12 +23435,13 @@ msgid "Invalid report format\n"
 msgstr "Ungültiges Berichtsformat\n"
 
 #: kicad/cli/command_pcb_export.h:33
+#, fuzzy
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "Dienstdateien exportieren (Gerber-, Bohr-, Positionsdateien, etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "Ausgabedateiformat, Optionen: step, glb (binäres glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:70
 msgid "Overwrite output file"
@@ -23464,6 +23490,7 @@ msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid "Do not optimize STEP file (enables writing parametric curves)"
 msgstr ""
+"STEP-Datei nicht optimieren (aktiviert die Ausgabe parametrischer Kurven)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:136
 msgid ""
@@ -23483,10 +23510,15 @@ msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
+"Name des Verzeichnisses in dem 3D-Modelle erzeugt und gespeichert werden. "
+"Wenn nicht angegeben oder leer, werden die Modelle in der exportierten Haupt-"
+"VRML-Datei eingebettet"
 
 #: kicad/cli/command_pcb_export_3d.cpp:152
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
+"Wird mit --models-dir verwendet, um in der resultierenden Datei relative "
+"Pfade auszugeben"
 
 #: kicad/cli/command_pcb_export_3d.cpp:195
 msgid "Invalid format specified\n"
@@ -23873,6 +23905,8 @@ msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
+"Liste der zu druckenden Seitenzahlen, getrennt durch Kommata. Wird dies leer "
+"gelassen oder nicht angegeben, werden alle Seiten gedruckt"
 
 #: kicad/cli/command_sch_export_plot.cpp:103
 #, fuzzy
@@ -24818,6 +24852,7 @@ msgstr "Alle Vorgänge erfolgreich abgeschlossen."
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
 msgstr ""
+"%d von %d Operationen wurden initialisiert, waren jedoch nicht erfolgreich."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -24976,15 +25011,15 @@ msgstr "Änderungen zum lokalen Repository committen"
 
 #: kicad/project_tree_pane.cpp:942
 msgid "Push"
-msgstr ""
+msgstr "Pushen"
 
 #: kicad/project_tree_pane.cpp:943
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "Lokal committete Änderungen auf entferntes Repository pushen"
 
 #: kicad/project_tree_pane.cpp:946
 msgid "Pull"
-msgstr ""
+msgstr "Pullen"
 
 #: kicad/project_tree_pane.cpp:947
 #, fuzzy
@@ -25019,7 +25054,7 @@ msgstr "Versionskontrolle entfernen"
 
 #: kicad/project_tree_pane.cpp:981
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "Alle Versionskontrollen-Dateien aus dem Projektverzeichnis löschen."
 
 #: kicad/project_tree_pane.cpp:1039
 #, c-format
@@ -25098,11 +25133,11 @@ msgstr "Verzeichnis %s konnte nicht entfernt werden"
 
 #: kicad/project_tree_pane.cpp:2143
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "Verwerfe Commit aufrgund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:2149
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "Verwerfe Commit, da keine Dateien ausgewählt wurden."
 
 #: kicad/project_tree_pane.cpp:2155
 #, fuzzy, c-format
@@ -26297,11 +26332,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
-msgstr ""
+msgstr "Nennspannung (RMS oder DC):"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr ""
+msgstr "Spannung der Netzversorgung"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
@@ -26357,7 +26392,7 @@ msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr ""
+msgstr "Den Freiraum und Kriechdistanzen berechnen"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 msgid "RMS Voltage:"
@@ -26365,7 +26400,7 @@ msgstr "RMS-Spannung:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
-msgstr ""
+msgstr "Erwartete RMS-Spannung."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
 msgid "Transient overvoltage:"
@@ -26420,7 +26455,7 @@ msgstr "Knotenpunkt"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
-msgstr ""
+msgstr "Verstärkt"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
 msgid "Pollution Degree:"
@@ -26511,7 +26546,7 @@ msgstr "Freiraum:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 msgid "Creepage:"
-msgstr ""
+msgstr "Kriechstrecke:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
 #, fuzzy
@@ -28727,22 +28762,22 @@ msgstr "(mehrere Platinenumrisse werden nicht unterstützt)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:652
 #, c-format
 msgid "(Rectangle has null or very small size: %d nm)"
-msgstr ""
+msgstr "(Rechteck hat keine oder nur sehr kleine Größe: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:669
 #, c-format
 msgid "(Circle has null or very small radius: %d nm)"
-msgstr ""
+msgstr "(Kreis hat keinen oder sehr kleinen Radius: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:689
 #, c-format
 msgid "(Segment has null or very small length: %d nm)"
-msgstr ""
+msgstr "(Abschnitt hat keine oder sehr kleine Länge: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:712
 #, c-format
 msgid "(Arc has null or very small size: %d nm)"
-msgstr ""
+msgstr "(Winkel hat keine oder sehr kleine Größe: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:192
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/pcb_edit_frame.cpp:2404
@@ -29531,7 +29566,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "Unterbrechungen in Leiterbahnumrissen beheben"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -30029,8 +30064,9 @@ msgid "Distance between rows"
 msgstr "Abstand zwischen Zeilen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
+#, fuzzy
 msgid "Grid Spacing Modifiers"
-msgstr ""
+msgstr "Rasterabstandsmodifizierer"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal offset:"
@@ -30038,7 +30074,7 @@ msgstr "Horizontaler Versatz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Offset added to the next row position."
-msgstr ""
+msgstr "Zur nächsten Reihenposition hinzugefügter Versatz."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Vertical offset:"
@@ -30046,7 +30082,7 @@ msgstr "Vertikaler Versatz:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Offset added to the next column position"
-msgstr ""
+msgstr "Zur nächsten Spaltenposition hinzugefügter Versatz"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
 #, fuzzy
@@ -30146,6 +30182,8 @@ msgid ""
 "This is the position of the selected item,\n"
 "or the position of the group to duplicate"
 msgstr ""
+"Dies ist die Position des ausgewählten Elements\n"
+"oder die Position der zu duplizierenden Gruppe"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
 msgid "Ref point pos X:"
@@ -30173,6 +30211,8 @@ msgid ""
 "This is the position of the center of the circle\n"
 "defining the circular area to create"
 msgstr ""
+"Dies ist die Position des Kreismittelpunkts\n"
+"der den zu erstellenden Kreisbereich definiert"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
 msgid "Center pos X:"
@@ -30187,6 +30227,8 @@ msgid ""
 "Array radius,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"Array-Radius,\n"
+"von Ref.-Punkt-Position und dem Array-Mittelpunkt:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
 #, fuzzy
@@ -30198,6 +30240,8 @@ msgid ""
 "Array angle,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"Array-Winkel,\n"
+"von Ref.-Punkt-Position und Array-Mittelpunkt:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:400
 #, fuzzy
@@ -30879,7 +30923,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:63
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:68
 msgid "The number of values following the decimal separator"
-msgstr ""
+msgstr "Die Anzahl der auf den Dezimaltrenner folgenden Werte"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
 msgid "Version:"
@@ -30908,6 +30952,8 @@ msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
 msgstr ""
+"Während des Entwurf intern verwendete Bauteil-ID-Nummer.\n"
+"Diese Nummer muss je Bauteil eindeutig sein."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
 #, fuzzy
@@ -30937,11 +30983,11 @@ msgstr "Hersteller:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "Händler P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr ""
+msgstr "Die die Händer-Bauteilnummer enthaltende Spalte"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 msgid "Distributor:"
@@ -31126,9 +31172,8 @@ msgid "Combine intersecting geometry into one shape."
 msgstr "Überlappende Geometrien in eine gemeinsame Form vereinen."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "Importiere Nicht Kicad Platinendatei"
+msgstr "Als zusammengesetzte Form exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:153
 msgid ""
@@ -31137,23 +31182,16 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid "Export tracks, pads and vias"
-msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
+msgstr "Leiterbahnen, Pads und Vias exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
-#, fuzzy
 msgid "Export tracks, pads and vias on external copper layers."
-msgstr ""
-"Leiterbahnen und Vias auf externen Kupferlagen exportieren.\n"
-"Warnung: Dies ist *extrem* zeitaufwändig."
+msgstr "Leiterbahnen, Pads und Vias auf externen Kupferlagen exportieren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Export zones on external copper layers."
-msgstr ""
-"Leiterbahnen und Vias auf externen Kupferlagen exportieren.\n"
-"Warnung: Dies ist *extrem* zeitaufwändig."
+msgstr "Zonen auf externen Kupferlagen exportieren."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
 msgid "Export silkscreen"
@@ -46218,7 +46256,7 @@ msgstr "Generator entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:2419
 msgid "Rebuilds geometry of all generators"
-msgstr ""
+msgstr "Die Geometrie aller Generatoren neu aufbauen"
 
 #: pcbnew/tools/pcb_actions.cpp:2426
 #, fuzzy
@@ -46227,16 +46265,15 @@ msgstr "Generator entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:2427
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr ""
+msgstr "Die Geometrie der/des ausgewählten Generatoren/s neu aufbauen"
 
 #: pcbnew/tools/pcb_actions.cpp:2455
-#, fuzzy
 msgid "Generators Manager"
-msgstr "Generator-Aliasname:"
+msgstr "Generatoren-Verwaltung"
 
 #: pcbnew/tools/pcb_actions.cpp:2456
 msgid "Show a manager dialog for Generator objects"
-msgstr ""
+msgstr "Einen Verwaltungsdialog for Generatoren-Objekte anzeigen"
 
 #: pcbnew/tools/pcb_control.cpp:232
 msgid "Don't show again"
@@ -46253,12 +46290,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:341
 msgid "Dimmed"
-msgstr ""
+msgstr "Abgeblendet"
 
 #: pcbnew/tools/pcb_control.cpp:342
-#, fuzzy
 msgid "Hidden"
-msgstr "Verborgener Text"
+msgstr "Verborgen"
 
 #: pcbnew/tools/pcb_control.cpp:351
 msgid "Inactive Layer Display"
@@ -46297,9 +46333,8 @@ msgid "Append Board"
 msgstr "Platine hinzufügen..."
 
 #: pcbnew/tools/pcb_control.cpp:1403
-#, fuzzy
 msgid "Active Layer"
-msgstr "Inaktive Lagen:"
+msgstr "Aktive Lage"
 
 #: pcbnew/tools/pcb_control.cpp:1404 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
@@ -46307,8 +46342,9 @@ msgid "All Layers"
 msgstr "Alle Lagen"
 
 #: pcbnew/tools/pcb_control.cpp:1416
+#, fuzzy
 msgid "Object Snapping"
-msgstr ""
+msgstr "An Objekten einrasten"
 
 #: pcbnew/tools/pcb_control.cpp:1492
 #, fuzzy, c-format
