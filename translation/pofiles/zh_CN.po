@@ -22,7 +22,7 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # wh201906 <wh201906@yandex.com>, 2023.
 # Hubert Hu <qinghan.hu@gmail.com>, 2023.
-# Li Yidong <alenks@foxmail.com>, 2023.
+# Li Yidong <alenks@foxmail.com>, 2023, 2024.
 # 欠陥電気 <Misaka13514@gmail.com>, 2023.
 # Pinpang Liao <pinpang@aliyun.com>, 2023.
 # JasonTan <tfx2001@outlook.com>, 2023.
@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-28 12:05+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2024-01-09 21:58+0000\n"
+"Last-Translator: Li Yidong <alenks@foxmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -647,7 +647,6 @@ msgid "Solder Paste"
 msgstr "阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show solder paste"
 msgstr "显示锡膏层"
 
