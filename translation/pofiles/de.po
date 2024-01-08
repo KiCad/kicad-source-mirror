@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2024-01-08 00:06+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"PO-Revision-Date: 2024-01-09 21:58+0000\n"
+"Last-Translator: Johannes Maibaum <jmaibaum@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -6385,7 +6385,7 @@ msgstr "Anzeige eines fensterfüllenden Fadenkreuzes ein-/ausschalten"
 
 #: common/tool/actions.cpp:551
 msgid "Inactive Layer View Mode"
-msgstr "Inaktive Lagen abblenden"
+msgstr "Azeigemodus für inaktive Lagen"
 
 #: common/tool/actions.cpp:552
 msgid "Toggle inactive layers between normal and dimmed"
@@ -16397,7 +16397,7 @@ msgstr "Frequenz"
 
 #: eeschema/sim/sim_plot_panel.cpp:352
 msgid "Gain"
-msgstr "Gewinn"
+msgstr "Verstärkung"
 
 #: eeschema/sim/sim_plot_panel.cpp:353
 msgid "Phase"
