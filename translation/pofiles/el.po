@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-25 13:09+0000\n"
+"PO-Revision-Date: 2024-01-09 21:58+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -101,7 +101,6 @@ msgid "Build Tech layer %d"
 msgstr "Κατασκευή Τεχνικού επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1059
-#, fuzzy
 msgid "Build BVH for holes and vias"
 msgstr "Κατασκευή Ιεραρχίας Ορίων Αντικειμένων για τρύπες και διελεύσεις"
 
@@ -16409,9 +16408,9 @@ msgid "Voltage (measured)"
 msgstr "Τάση (μέτρηση)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Αδυναμία δημιουργίας φακέλου '%s'."
+msgstr "Αδυναμία δημιουργίας μοντέλου πρσομοίωσης από %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19854,9 +19853,8 @@ msgid "Malformed expression"
 msgstr "Λανθασμένη έκφραση"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Το αρχείο %s υπάρχει ήδη."
+msgstr "Το αρχείο lock υπάρχει ήδη"
 
 #: include/lockfile.h:124
 #, fuzzy
@@ -19931,9 +19929,8 @@ msgstr ""
 "Οι έγκυρες επιλογές είναι: δεκαδικό, αποκοπή πριν, αποκοπή μετά, διατήρηση."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Οι έγκυρες επιλογές είναι: απόλυτο, σχεδιαγράφηση"
+msgstr "Οι έγκυρες επιλογές είναι: δρομολόγιση, εναλλακτικό."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19986,7 +19983,7 @@ msgstr "Μη έγκυρος ορισμός μορφής μηδενικών\n"
 #: kicad/cli/command_export_pcb_drill.cpp:181
 #, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Μη έγκυρος ορισμός μορφής χάρτη\n"
+msgstr "Μη έγκυρη καθορισμένη μορφή οβάλ τρύπας\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:209
 msgid "Invalid map format specified\n"
@@ -20086,9 +20083,10 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Καθρεπτισμός πλακέτας (χρήσιμο για προβολή κάτω επιπέδων)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις pcbnew)"
+msgstr ""
+"Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις Επεξεργαστή "
+"Πλακέτας)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -20096,6 +20094,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Ρύθμιση επιλογών σχήματος τρυπανιού έδρας/διέλευσης (0 = χωρίς σχήμα, 1 = "
+"μικρό σχήμα, 2 = πραγματικό σχήμα)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -33442,7 +33442,7 @@ msgstr "(%s %s; πραγματικό %s)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:466
 msgid "No project loaded, skipping library parity tests."
 msgstr ""
-"Δεν έχει φορτωθεί έργο, παραλείπονται οι δοκιμές ισοτιμίας βιβλιοθήκης."
+"Δεν έχει φορτωθεί κάποιο έργο, παραλείπεται ο έλεγχος ισοτιμίας βιβλιοθήκης."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:470
 msgid "Loading footprint library table..."
@@ -33857,9 +33857,9 @@ msgstr ""
 "στο επίπεδο Όρια Άκρων."
 
 #: pcbnew/files.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Το αρχείο PCB \"%s\" είναι ήδη ανοιχτό."
+msgstr "Το αρχείο PCB '%s' είναι ήδη ανοιχτό από το '%s' στο '%s'."
 
 #: pcbnew/files.cpp:639
 msgid "The current PCB has been modified.  Save changes?"
