@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,6 +212,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
+                        ercItem->SetSheetSpecificPath( sheet );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
                         screen->Append( marker );
@@ -228,6 +229,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( &field );
+                        ercItem->SetSheetSpecificPath( sheet );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, field.GetPosition() );
                         screen->Append( marker );
@@ -243,6 +245,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                     {
                         auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                         ercItem->SetItems( pin );
+                        ercItem->SetSheetSpecificPath( sheet );
 
                         SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
                         screen->Append( marker );
@@ -255,6 +258,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( text );
+                    ercItem->SetSheetSpecificPath( sheet );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, text->GetPosition() );
                     screen->Append( marker );
@@ -266,6 +270,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     auto ercItem = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     ercItem->SetItems( textBox );
+                    ercItem->SetSheetSpecificPath( sheet );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, textBox->GetPosition() );
                     screen->Append( marker );
@@ -281,6 +286,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     std::shared_ptr<ERC_ITEM> erc = ERC_ITEM::Create( ERCE_UNRESOLVED_VARIABLE );
                     erc->SetErrorMessage( _( "Unresolved text variable in drawing sheet" ) );
+                    erc->SetSheetSpecificPath( sheet );
 
                     SCH_MARKER* marker = new SCH_MARKER( erc, text->GetPosition() );
                     screen->Append( marker );
@@ -654,6 +660,7 @@ int ERC_TESTER::TestNoConnectPins()
                                    pair.second.size() > 2 ? pair.second[2] : nullptr,
                                    pair.second.size() > 3 ? pair.second[3] : nullptr );
                 ercItem->SetErrorMessage( _( "Pin with 'no connection' type is connected" ) );
+                ercItem->SetSheetSpecificPath( sheet );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
                 sheet.LastScreen()->Append( marker );

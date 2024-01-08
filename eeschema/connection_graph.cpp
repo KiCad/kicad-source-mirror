@@ -3706,6 +3706,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                     ercItem->SetItems( pin );
+                    ercItem->SetSheetSpecificPath( sheet );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
                     sheet.LastScreen()->Append( marker );
