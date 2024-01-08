@@ -351,6 +351,8 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     if( frame == nullptr )
     {
+        // Clean up
+        OnPgmExit();
         return false;
     }
 
