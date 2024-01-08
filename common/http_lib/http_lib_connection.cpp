@@ -20,6 +20,7 @@
 #include <wx/log.h>
 #include <fmt/core.h>
 #include <wx/translation.h>
+#include <ctime>
 
 #include <boost/algorithm/string.hpp>
 #include <nlohmann/json.hpp>
@@ -38,6 +39,7 @@ HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool a
     m_rootURL = aSource.root_url;
     m_token = aSource.token;
     m_sourceType = aSource.type;
+    m_timeout = aSource.timeout;
 
     if( aTestConnectionNow )
     {
@@ -176,9 +178,9 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         return false;
     }
 
-    // if the same part is selected again, use cached part
+    // if the same part is selected again and cache has not expired use cached part
     // instead to minimise http requests.
-    if( m_cached_part.id == aPartID )
+    if( m_cached_part.id == aPartID && ( std::difftime( std::time( nullptr ), m_cached_part.lastCached ) < m_timeout ) )
     {
         aFetchedPart = m_cached_part;
         return true;
@@ -205,8 +207,11 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         std::string    value = "";
 
         // the id used to identify the part, the name is needed to show a human-readable
-        // part descirption to the user inside the symbol chooser dialog
+        // part description to the user inside the symbol chooser dialog
         aFetchedPart.id = response.at( "id" );
+
+        // get a timestamp for caching
+        aFetchedPart.lastCached = std::time( nullptr );
 
         // API might not want to return an optional name.
         if( response.contains( "name" ) )

@@ -90,6 +90,7 @@ private:
 
     std::string m_token;
     std::string m_rootURL;
+    int         m_timeout;
 
     HTTP_LIB_SOURCE_TYPE m_sourceType;
 
