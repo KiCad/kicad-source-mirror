@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-31 00:10+0000\n"
+"PO-Revision-Date: 2024-01-09 21:58+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -8524,7 +8524,7 @@ msgstr "%s リストから除外されます"
 #: eeschema/dialogs/dialog_erc.cpp:692 pcbnew/dialogs/dialog_drc.cpp:629
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "すべての '%s' 違反のエラーの深刻度を変更"
+msgstr "すべての '%s' 違反の深刻度をエラーに変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:694 eeschema/dialogs/dialog_erc.cpp:700
 #: pcbnew/dialogs/dialog_drc.cpp:631 pcbnew/dialogs/dialog_drc.cpp:638
@@ -8534,7 +8534,7 @@ msgstr "違反の深刻度は、基板の設定... ダイアログで編集す�
 #: eeschema/dialogs/dialog_erc.cpp:698 pcbnew/dialogs/dialog_drc.cpp:636
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "すべての '%s' 違反の警告の深刻度を変更"
+msgstr "すべての '%s' 違反の深刻度を警告に変更"
 
 #: eeschema/dialogs/dialog_erc.cpp:703 pcbnew/dialogs/dialog_drc.cpp:642
 #, c-format
