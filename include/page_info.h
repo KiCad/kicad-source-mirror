@@ -30,6 +30,7 @@
 #ifndef PAGE_INFO_H
 #define PAGE_INFO_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include <math/vector2d.h>
 
@@ -54,7 +55,7 @@ class OUTPUTFORMATTER;
  *
  * @author Dick Hollenbeck
  */
-class PAGE_INFO
+class KICOMMON_API PAGE_INFO
 {
 public:
     PAGE_INFO( const wxString& aType = PAGE_INFO::A3, bool IsPortrait = false );

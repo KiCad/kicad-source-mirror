@@ -117,6 +117,7 @@ set( KICOMMON_SRCS
     lset.cpp
     markup_parser.cpp
     netclass.cpp
+    page_info.cpp
     paths.cpp
     richio.cpp
     string_utils.cpp
@@ -490,7 +491,6 @@ set( COMMON_SRCS
     marker_base.cpp
     notifications_manager.cpp
     origin_transforms.cpp
-    page_info.cpp
     printout.cpp
     project.cpp
     ptree.cpp
