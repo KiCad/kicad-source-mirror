@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2024-01-09 21:58+0000\n"
+"PO-Revision-Date: 2024-01-12 17:02+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -3816,7 +3816,7 @@ msgstr "무시"
 
 #: common/dialogs/panel_setup_severities.cpp:116
 msgid "From Pin Conflicts Map"
-msgstr "핀 충돌 맵에서"
+msgstr "핀 충돌 표시 보기"
 
 #: common/dialogs/panel_text_variables.cpp:121
 #: common/dialogs/panel_text_variables.cpp:149
@@ -4387,7 +4387,7 @@ msgstr "와이어 엔트리"
 
 #: common/eda_item.cpp:371
 msgid "Bus Entry"
-msgstr "버스 엔트리"
+msgstr "버스 항목"
 
 #: common/eda_item.cpp:376
 msgid "Net Label"
@@ -4668,7 +4668,7 @@ msgstr "굵게+이탤릭체"
 #: eeschema/lib_text.cpp:435 eeschema/pin_type.cpp:128
 #: eeschema/sch_field.cpp:784
 msgid "Left"
-msgstr "왼쪽"
+msgstr "좌"
 
 #: common/eda_text.cpp:1032 common/eda_text.cpp:1036
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:264
@@ -4681,7 +4681,7 @@ msgstr "왼쪽"
 #: eeschema/sch_field.cpp:785 eeschema/sch_field.cpp:794
 #: gerbview/gerber_file_image.cpp:342 gerbview/gerber_file_image.cpp:345
 msgid "Center"
-msgstr "가운데"
+msgstr "중"
 
 #: common/eda_text.cpp:1033
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
@@ -4691,7 +4691,7 @@ msgstr "가운데"
 #: eeschema/lib_text.cpp:437 eeschema/pin_type.cpp:127
 #: eeschema/sch_field.cpp:786
 msgid "Right"
-msgstr "오른쪽"
+msgstr "우"
 
 #: common/eda_text.cpp:1035
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:288
@@ -4699,7 +4699,7 @@ msgstr "오른쪽"
 #: eeschema/fields_grid_table.cpp:757 eeschema/lib_field.cpp:568
 #: eeschema/lib_text.cpp:444 eeschema/sch_field.cpp:793
 msgid "Top"
-msgstr "맨 위"
+msgstr "상"
 
 #: common/eda_text.cpp:1037
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:288
@@ -4707,7 +4707,7 @@ msgstr "맨 위"
 #: eeschema/fields_grid_table.cpp:761 eeschema/lib_field.cpp:570
 #: eeschema/lib_text.cpp:446 eeschema/sch_field.cpp:795
 msgid "Bottom"
-msgstr "하단"
+msgstr "하"
 
 #: common/eda_text.cpp:1042
 #: eeschema/dialogs/dialog_label_properties_base.cpp:96
@@ -5885,7 +5885,7 @@ msgstr "페이지 설정..."
 
 #: common/tool/actions.cpp:96
 msgid "Settings for paper size and title block info"
-msgstr "용지 크기 및 제목 블록 정보 설정"
+msgstr "페이지 설정 - 용지 크기 및 제목 블록 정보 설정"
 
 #: common/tool/actions.cpp:102
 msgid "Print..."
@@ -8305,7 +8305,7 @@ msgstr "%u 링크가 매핑 됨, %u 을 찾을 수 없음"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:663
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr "모든 %u개의 링크가 해결되었습니다"
+msgstr "모든 %u개의 링크가 확인됨"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:694
 msgid "Invalid symbol library identifier"
@@ -8440,7 +8440,7 @@ msgstr "라벨 확인..."
 
 #: eeschema/dialogs/dialog_erc.cpp:535
 msgid "Checking for unresolved variables..."
-msgstr "해결되지 않은 변수를 확인 중..."
+msgstr "미확인 변수 확인 중..."
 
 #: eeschema/dialogs/dialog_erc.cpp:541
 msgid "Checking SPICE models..."
@@ -8491,7 +8491,7 @@ msgstr "%s 목록에서 제외됩니다"
 #: eeschema/dialogs/dialog_erc.cpp:692 pcbnew/dialogs/dialog_drc.cpp:629
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "'%s' 위반에 대한 심각도를 오류로 변경"
+msgstr "모든 '%s' 위반에 대한 심각도를 오류로 변경"
 
 #: eeschema/dialogs/dialog_erc.cpp:694 eeschema/dialogs/dialog_erc.cpp:700
 #: pcbnew/dialogs/dialog_drc.cpp:631 pcbnew/dialogs/dialog_drc.cpp:638
@@ -8514,7 +8514,7 @@ msgstr "위반 사항을 확인하거나 보고하지 않음"
 
 #: eeschema/dialogs/dialog_erc.cpp:711
 msgid "Edit pin-to-pin conflict map..."
-msgstr "핀 간 충돌 맵 편집..."
+msgstr "핀 간 충돌 표시 편집..."
 
 #: eeschema/dialogs/dialog_erc.cpp:715 pcbnew/dialogs/dialog_drc.cpp:649
 msgid "Edit violation severities..."
@@ -8527,14 +8527,14 @@ msgstr "회로도 설정... 대화 창 열기"
 #: eeschema/dialogs/dialog_erc.cpp:808
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 msgid "Pin Conflicts Map"
-msgstr "충돌 맵 핀 하기"
+msgstr "핀 충돌 표시"
 
 #: eeschema/dialogs/dialog_erc.cpp:812 eeschema/dialogs/dialog_erc.cpp:914
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 #: pcbnew/dialogs/dialog_board_setup.cpp:176 pcbnew/dialogs/dialog_drc.cpp:812
 #: pcbnew/dialogs/dialog_drc.cpp:827
 msgid "Violation Severity"
-msgstr "위반 사항 심각도"
+msgstr "위반 심각도"
 
 #: eeschema/dialogs/dialog_erc.cpp:909
 msgid "Edit ignored violations..."
@@ -8974,7 +8974,7 @@ msgstr "상위 심볼 유형별로 항목 필터링:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
-msgstr "무전원 심볼"
+msgstr "비전원 심볼"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Power symbols"
@@ -10508,12 +10508,12 @@ msgstr "필드 이름 템플릿"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "핀 충돌 맵"
+msgstr "핀 충돌 표시"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
 msgid "Violation severities"
-msgstr "위반 사항 심각도"
+msgstr "위반 심각도"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
@@ -10531,7 +10531,7 @@ msgstr "와일드카드가 옵션으로 있는 텍스트"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr "다음으로 교체 (&w):"
+msgstr "바꾸기 (&w):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
@@ -11446,7 +11446,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
 msgid "Do not populate"
-msgstr "채우지 않음"
+msgstr "부착하지 않음"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
@@ -12634,7 +12634,7 @@ msgstr "양방향 핀"
 
 #: eeschema/erc.cpp:69 eeschema/erc.cpp:86
 msgid "Tri-State Pin"
-msgstr "트라이스테이트 핀"
+msgstr "3상태 핀"
 
 #: eeschema/erc.cpp:70 eeschema/erc.cpp:87
 msgid "Passive Pin"
@@ -12670,7 +12670,7 @@ msgstr "연결 없음"
 
 #: eeschema/erc.cpp:287
 msgid "Unresolved text variable in drawing sheet"
-msgstr "도면 시트의 해결되지 않은 텍스트 변수"
+msgstr "도면 시트의 확인되지 않은 텍스트 변수"
 
 #: eeschema/erc.cpp:324
 #, c-format
@@ -12755,7 +12755,7 @@ msgstr "심볼 핀 또는 와이어 끝 오프 그리드"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
-msgstr "핀이 연결되지 않았습니다"
+msgstr "핀이 연결되지 않음"
 
 #: eeschema/erc_item.cpp:59
 msgid "Input pin not driven by any Output pins"
@@ -12803,11 +12803,11 @@ msgstr "서로 다른 네트가 심볼의 또다른 유닛에 있는 공유 핀�
 
 #: eeschema/erc_item.cpp:107
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr "개략도 시트에서 버스 별칭 정의 간의 충돌"
+msgstr "호로도 시트의 버스 별칭 정의 간 충돌"
 
 #: eeschema/erc_item.cpp:111
 msgid "More than one name given to this bus or net"
-msgstr "이 버스 또는 네트에 둘 이상의 이름이 지정되었습니다"
+msgstr "버스 또는 네트에 둘 이상의 이름이 지정됨"
 
 #: eeschema/erc_item.cpp:115
 msgid "Conflicting netclass assignments"
@@ -12825,7 +12825,7 @@ msgstr "버스 항목에 부착된 라벨이 버스를 설명하지 않습니다
 
 #: eeschema/erc_item.cpp:127
 msgid "Buses are graphically connected but share no bus members"
-msgstr "버스는 그래픽으로 연결되어 있지만 버스 회원은 공유하지 않습니다"
+msgstr "버스는 그래픽으로 연결돼 있지만 버스 멤버를 공유하지 않음"
 
 #: eeschema/erc_item.cpp:131
 msgid "Invalid connection between bus and net items"
@@ -12833,7 +12833,7 @@ msgstr "잘못된 버스와 네트 항목 간의 연결"
 
 #: eeschema/erc_item.cpp:135 pcbnew/drc/drc_item.cpp:193
 msgid "Unresolved text variable"
-msgstr "확인되지 않은 텍스트 변수"
+msgstr "미확인 텍스트 변수"
 
 #: eeschema/erc_item.cpp:139
 msgid "SPICE model issue"
@@ -12853,7 +12853,7 @@ msgstr "심볼이 주석 처리되지 않음"
 
 #: eeschema/erc_item.cpp:155
 msgid "Symbol has more units than are defined"
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있습니다"
+msgstr "심볼에 정의된 것보다 더 많은 유닛이 있음"
 
 #: eeschema/erc_item.cpp:159
 msgid "Symbol has units that are not placed"
@@ -12861,7 +12861,7 @@ msgstr "심볼에 배치되지 않은 장치가 있음"
 
 #: eeschema/erc_item.cpp:163
 msgid "Symbol has input pins that are not placed"
-msgstr "심볼에 정의된 것보다 더 많은 유닛이 있음"
+msgstr "심볼에 배치되지 않은 입력 핀이 있음"
 
 #: eeschema/erc_item.cpp:167
 msgid "Symbol has bidirectional pins that are not placed"
@@ -12873,7 +12873,7 @@ msgstr "심볼에 배치되지 않은 전원 입력 핀이 있음"
 
 #: eeschema/erc_item.cpp:175
 msgid "Units of same symbol have different values"
-msgstr "동일한 심볼의 유닛이 다른 값을 가집니다"
+msgstr "동일한 심볼의 유닛이 다른 값을 가짐"
 
 #: eeschema/erc_item.cpp:179
 msgid "Duplicate reference designators"
@@ -12881,7 +12881,7 @@ msgstr "중복 참조 지정자"
 
 #: eeschema/erc_item.cpp:183
 msgid "Bus Entry needed"
-msgstr "버스 Entry 필요"
+msgstr "버스 항목 필요"
 
 #: eeschema/fields_grid_table.cpp:222 eeschema/files-io.cpp:848
 #: eeschema/tools/sch_editor_control.cpp:110
@@ -13649,11 +13649,11 @@ msgstr "심볼 라이브러리 선택"
 
 #: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
-msgstr "버스 - 와이어 엔트리"
+msgstr "버스 - 와이어 항목"
 
 #: eeschema/sch_bus_entry.cpp:424
 msgid "Bus to Bus Entry"
-msgstr "버스 - 버스 엔트리"
+msgstr "버스 - 버스 항목"
 
 #: eeschema/sch_bus_entry.cpp:496 eeschema/sch_line.cpp:899
 msgid "Wire"
@@ -13665,13 +13665,13 @@ msgstr "버스"
 
 #: eeschema/sch_bus_entry.cpp:500
 msgid "Bus Entry Type"
-msgstr "버스 엔트리 유형"
+msgstr "버스 항목 유형"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
 #: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
 msgid "Resolved Netclass"
-msgstr "해결된 네트클래스"
+msgstr "확인된 네트클래스"
 
 #: eeschema/sch_connection.cpp:410
 msgid "Connection Name"
@@ -13818,7 +13818,7 @@ msgstr "네트"
 
 #: eeschema/sch_label.cpp:1070 eeschema/sch_line.cpp:867
 msgid "Resolved netclass"
-msgstr "해결된 넷클래스"
+msgstr "확인된 네트클래스"
 
 #: eeschema/sch_label.cpp:1086
 msgid "Hierarchical Labels"
@@ -17203,11 +17203,11 @@ msgstr "접합 추가"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add Wire to Bus Entry"
-msgstr "버스 항목 추가"
+msgstr "버스 항목에 와이어 추가"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add a wire entry to a bus"
-msgstr "버스 항목 추가"
+msgstr "버스에 와이어 항목 추가"
 
 #: eeschema/tools/ee_actions.cpp:319
 msgid "Add Label"
@@ -17847,7 +17847,7 @@ msgstr "위로 탐색"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Navigate up one sheet in the hierarchy"
-msgstr "이 계층에서 한 시트 위로 이동"
+msgstr "계층 시트 나가기"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Navigate Back"
@@ -17855,7 +17855,7 @@ msgstr "뒤로 탐색"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Move backward in sheet navigation history"
-msgstr "시트 탐색 기록에서 뒤로 가기"
+msgstr "이전 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Navigate Forward"
@@ -17863,7 +17863,7 @@ msgstr "앞으로 탐색"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Move forward in sheet navigation history"
-msgstr "시트 탐색 기록에서 앞으로 이동"
+msgstr "다음 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:792
 msgid "Previous Sheet"
@@ -17883,7 +17883,7 @@ msgstr "번호로 다음 시트로 이동"
 
 #: eeschema/tools/ee_actions.cpp:804
 msgid "Hierarchy Navigator"
-msgstr "계층 내비게이터"
+msgstr "계층 탐색기"
 
 #: eeschema/tools/ee_actions.cpp:804
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -32040,7 +32040,7 @@ msgstr "금지 영역 '%s'"
 #: pcbnew/drc/drc_engine.cpp:618
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "해결 영역 연결 유형: %s."
+msgstr "확인된 영역 연결 유형: %s."
 
 #: pcbnew/drc/drc_engine.cpp:636
 #, c-format
@@ -35745,9 +35745,8 @@ msgstr ""
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
-msgstr ""
-"형상 '%s'은(는) CADSTAR에서 해치로 채워져 있으며, 이는 KiCad에서 대응되지 않"
-"습니다. 솔리드 채우기를 대신 사용합니다."
+msgstr "'%s'은(는) 해치로 채워진 CADSTAR 형상으로, KiCad에 해당하는 형상이 없습니다. "
+"대신 솔리드 채우기를 사용합니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3601
 #, c-format
@@ -36878,7 +36877,7 @@ msgstr "라우팅 차동 쌍: %s"
 #: pcbnew/router/router_tool.cpp:2507 pcbnew/router/router_tool.cpp:2518
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "해결된 네트클래스: %s"
+msgstr "확인된 네트클래스: %s"
 
 #: pcbnew/router/router_tool.cpp:2515
 #, c-format
@@ -37336,7 +37335,7 @@ msgstr "결합되지 않은 길이의 차동 쌍 해결:"
 #: pcbnew/tools/board_inspection_tool.cpp:832
 #, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "최대 uncoupled 길이를 해결했습니다: %s."
+msgstr "확인된 최대 비연결 길이: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:294
 #: pcbnew/tools/board_inspection_tool.cpp:1246
@@ -37346,7 +37345,7 @@ msgstr "텍스트 높이 해상도:"
 #: pcbnew/tools/board_inspection_tool.cpp:302
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
-msgstr "해결된 높이 제한: min %s; 최대 %s."
+msgstr "확인된 높이 제한: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:309
 #: pcbnew/tools/board_inspection_tool.cpp:1262
@@ -37356,7 +37355,7 @@ msgstr "텍스트 두께 해결:"
 #: pcbnew/tools/board_inspection_tool.cpp:317
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
-msgstr "해결된 두께 제약 조건: 최소 %s; 최대 %s."
+msgstr "확인된 두께 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:324
 #: pcbnew/tools/board_inspection_tool.cpp:1167
@@ -37366,7 +37365,7 @@ msgstr "다음을 위한 배선 폭 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:332
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
-msgstr "해결된 너비 제약 조건: 최소 %s; 최대 %s."
+msgstr "확인된 너비 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:338
 msgid "Connection Width"
@@ -37390,7 +37389,7 @@ msgstr "다음을 위한 비아 직경 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:392
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
-msgstr "해결된 직경 제한: 최소 %s; 최대 %s."
+msgstr "확인된 직경 제약 조건: 최소 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:367
 msgid "Via Annulus"
@@ -37404,7 +37403,7 @@ msgstr "다음을 위한 비아 환형 폭 계산:"
 #: pcbnew/tools/board_inspection_tool.cpp:376
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "해결된 랜드 폭 제약: 최소 %s; 최대 %s."
+msgstr "확인된 환형 폭 제약 조건: 최소 %s, 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 #: pcbnew/tools/board_inspection_tool.cpp:1223
@@ -37518,7 +37517,7 @@ msgstr "단열판 갭 분해능:"
 #: pcbnew/tools/board_inspection_tool.cpp:659
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "단열판 간격 해결: %s."
+msgstr "확인된 단열판 간격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:664
 msgid "Spoke width resolution for:"
@@ -37569,7 +37568,7 @@ msgstr "차동 쌍 간격 해결:"
 #: pcbnew/tools/board_inspection_tool.cpp:811
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "해결된 간격 제약조건: 최소 %s; 최적 %s; 최대 %s."
+msgstr "확인된 간격 제약조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:819
 msgid "Diff pair max uncoupled length resolution for:"
@@ -39677,7 +39676,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1444
 msgid "Resolved clearance"
-msgstr "해결된 클리어런스"
+msgstr "확인된 클리어런스"
 
 #: pcbnew/tools/pcb_control.cpp:1449
 msgid "Actual clearance"
@@ -39685,7 +39684,7 @@ msgstr "실제 유격"
 
 #: pcbnew/tools/pcb_control.cpp:1492
 msgid "Resolved hole clearance"
-msgstr "해결된 클리어런스 홀"
+msgstr "확인된 구멍 간격"
 
 #: pcbnew/tools/pcb_control.cpp:1497
 msgid "Actual hole clearance"
@@ -39693,11 +39692,11 @@ msgstr "실제 홀 유격"
 
 #: pcbnew/tools/pcb_control.cpp:1530
 msgid "Resolved edge clearance"
-msgstr "해결된 클리어런스 가장자리"
+msgstr "확인된 가장자리 간격"
 
 #: pcbnew/tools/pcb_control.cpp:1535
 msgid "Resolved margin clearance"
-msgstr "해결된 클리어런스 마진"
+msgstr "확인된 여유 간격"
 
 #: pcbnew/tools/pcb_control.cpp:1546
 msgid "Selected Items"
@@ -39975,7 +39974,7 @@ msgstr "DRC 경고"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "DRC violations with a Warning severity"
-msgstr "심각도가 '경고' 인 DRC 위반"
+msgstr "경고 수준의 DRC 위반"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC Errors"
@@ -39983,7 +39982,7 @@ msgstr "DRC 오류"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC violations with an Error severity"
-msgstr "심각도가 '오류' 인 DRC 위반"
+msgstr "오류 수준의 DRC 위반"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Exclusions"
