@@ -3274,6 +3274,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_CONNECTED );
             ercItem->SetSheetSpecificPath( sheet );
+            ercItem->SetItemsSheetPaths( sheet );
 
             VECTOR2I pos;
 
@@ -3297,8 +3298,9 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         if( unique_pins.empty() && unique_labels.empty() && settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
-            ercItem->SetSheetSpecificPath( sheet );
             ercItem->SetItems( aSubgraph->m_no_connect );
+            ercItem->SetSheetSpecificPath( sheet );
+            ercItem->SetItemsSheetPaths( sheet );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, aSubgraph->m_no_connect->GetPosition() );
             screen->Append( marker );
@@ -3388,6 +3390,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
             ercItem->SetSheetSpecificPath( sheet );
+            ercItem->SetItemsSheetPaths( sheet );
             ercItem->SetItems( pin );
 
             SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
@@ -3412,6 +3415,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                     ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetItemsSheetPaths( sheet );
                     ercItem->SetItems( testPin );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem,
@@ -3643,6 +3647,7 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_NOT_CONNECTED );
                     ercItem->SetItems( pin );
                     ercItem->SetSheetSpecificPath( sheet );
+                    ercItem->SetItemsSheetPaths( sheet );
 
                     SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
                     sheet.LastScreen()->Append( marker );
