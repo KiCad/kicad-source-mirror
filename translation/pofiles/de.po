@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2024-01-09 21:58+0000\n"
-"Last-Translator: Johannes Maibaum <jmaibaum@gmail.com>\n"
+"PO-Revision-Date: 2024-01-12 17:03+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7758,7 +7758,7 @@ msgstr "Anzeige eines fensterfüllenden Fadenkreuzes ein-/ausschalten"
 
 #: common/tool/actions.cpp:806
 msgid "Inactive Layer View Mode"
-msgstr "Azeigemodus für inaktive Lagen"
+msgstr "Anzeigemodus für inaktive Lagen"
 
 #: common/tool/actions.cpp:807
 msgid "Toggle inactive layers between normal and dimmed"
@@ -23391,37 +23391,37 @@ msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
-"Alle DRC-Verletzungen ausgeben. Dies ist gleichbedeutend mit der Angabe "
-"aller übrigen Schweregrads-Argumente"
+"Alle DRC-Verstöße ausgeben. Dies ist gleichwertig mit der Angabe aller "
+"übrigen Schweregrad-Argumente"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Alle DRC-Fehlerstufen-Verletzungen ausgeben. Dies kann mit den übrigen "
-"Schweregrads-Argumenten kombiniert werden"
+"Alle DRC-Fehlerstufen-Verstöße ausgeben. Dies kann mit den übrigen "
+"Schweregrad-Argumenten kombiniert werden"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Alle DRC-Warnungslevel-Verletzungen ausgeben. Dies kann mit den übrigen "
-"Schweregrads-Argumenten kombiniert werden"
+"Alle DRC-Warnstufen-Verstöße ausgeben. Dies kann mit den übrigen Schweregrad-"
+"Argumenten kombiniert werden"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
-"Alle ausgeschlossenen DRC-Verletzungen ausgeben. Dies kann mit den übrigen "
-"Schweregrads-Argumenten kombiniert werden"
+"Alle ausgeschlossenen DRC-Verstöße ausgeben. Dies kann mit den übrigen "
+"Schweregrad-Argumenten kombiniert werden"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
-"Einen nicht-Null Rückgabewert zurückgeben, sofern DRC-Verletzungen existieren"
+"Einen nicht-Null Rückgabewert zurückgeben, sofern DRC-Verstöße vorliegen"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:214
 #: kicad/cli/command_pcb_export_drill.cpp:150
@@ -25054,7 +25054,7 @@ msgstr "Versionskontrolle entfernen"
 
 #: kicad/project_tree_pane.cpp:981
 msgid "Delete all version control files from the project directory."
-msgstr "Alle Versionskontrollen-Dateien aus dem Projektverzeichnis löschen."
+msgstr "Alle Versionskontrolle-Dateien aus dem Projektverzeichnis löschen."
 
 #: kicad/project_tree_pane.cpp:1039
 #, c-format
@@ -25133,7 +25133,7 @@ msgstr "Verzeichnis %s konnte nicht entfernt werden"
 
 #: kicad/project_tree_pane.cpp:2143
 msgid "Discarding commit due to empty commit message."
-msgstr "Verwerfe Commit aufrgund leerer Commit-Nachricht."
+msgstr "Verwerfe Commit aufgrund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:2149
 msgid "Discarding commit due to empty file selection."
@@ -28762,7 +28762,7 @@ msgstr "(mehrere Platinenumrisse werden nicht unterstützt)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:652
 #, c-format
 msgid "(Rectangle has null or very small size: %d nm)"
-msgstr "(Rechteck hat keine oder nur sehr kleine Größe: %d nm)"
+msgstr "(Rechteck hat keine oder sehr kleine Größe: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:669
 #, c-format
@@ -28777,7 +28777,7 @@ msgstr "(Abschnitt hat keine oder sehr kleine Länge: %d nm)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:712
 #, c-format
 msgid "(Arc has null or very small size: %d nm)"
-msgstr "(Winkel hat keine oder sehr kleine Größe: %d nm)"
+msgstr "(Bogen hat keine oder sehr kleine Größe: %d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:192
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/pcb_edit_frame.cpp:2404
@@ -29566,7 +29566,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr "Unterbrechungen in Leiterbahnumrissen beheben"
+msgstr "Unterbrechungen in Platinenumrissen beheben"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -30952,7 +30952,7 @@ msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
 msgstr ""
-"Während des Entwurf intern verwendete Bauteil-ID-Nummer.\n"
+"Während des Entwurfs intern verwendete Bauteil-ID-Nummer.\n"
 "Diese Nummer muss je Bauteil eindeutig sein."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
@@ -30983,7 +30983,7 @@ msgstr "Hersteller:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
-msgstr "Händler P/N:"
+msgstr "Händler-P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
@@ -38539,7 +38539,7 @@ msgstr "Physische Freiräume werden geprüft..."
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:531
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Verletzung des internen Freiraumes (%s Freiraum %s; tatsächlich %s)"
+msgstr "Interner Freiraum-Verstoß (%s Freiraum %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -44495,23 +44495,24 @@ msgid "Switch the arc posture"
 msgstr "Wechselt die Stellung des Kreisbogens"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "Es wurde keine Datei für die aktive Lage %d geladen."
+msgstr "Nur auf Objekte auf der aktiven Lage einrasten"
 
 #: pcbnew/tools/pcb_actions.cpp:375
 msgid "Enables snapping to objects on the active layer only"
 msgstr ""
+"Ermöglicht das Einrasten nur auf Objekten, die sich auf der aktiven Lage "
+"befinden"
 
 #: pcbnew/tools/pcb_actions.cpp:380
-#, fuzzy
 msgid "Snap to Objects on All Layers"
-msgstr "Edge.Cuts auf allen Lagen plotten"
+msgstr "Auf Objekte auf allen Lagen einrasten"
 
 #: pcbnew/tools/pcb_actions.cpp:381
-#, fuzzy
 msgid "Enables snapping to objects on all visible layers"
-msgstr "Netzlinien zu Elementen auf sichtbaren Lagen anzeigen"
+msgstr ""
+"Ermöglicht das Einrasten auf Objekten, die sich auf einer sichtbaren Lage "
+"befinden"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Toggle Snapping Between Active and All Layers"
@@ -46342,9 +46343,8 @@ msgid "All Layers"
 msgstr "Alle Lagen"
 
 #: pcbnew/tools/pcb_control.cpp:1416
-#, fuzzy
 msgid "Object Snapping"
-msgstr "An Objekten einrasten"
+msgstr "Objektfang"
 
 #: pcbnew/tools/pcb_control.cpp:1492
 #, fuzzy, c-format
