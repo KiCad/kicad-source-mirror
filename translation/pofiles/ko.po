@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2023-12-31 00:10+0000\n"
+"PO-Revision-Date: 2024-01-09 21:58+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -3934,7 +3934,7 @@ msgstr "반복 횟수"
 
 #: common/drawing_sheet/ds_draw_item.cpp:152
 msgid "Repeat Label Increment"
-msgstr "라벨 증분 반복"
+msgstr "라벨 증가 반복"
 
 #: common/drawing_sheet/ds_draw_item.cpp:158
 msgid "Repeat Position Increment"
@@ -6725,7 +6725,7 @@ msgstr "설정 초기화"
 #: common/widgets/paged_dialog.cpp:341
 #, c-format
 msgid "Reset %s to Defaults"
-msgstr "%s를 기본값으로 초기화"
+msgstr "%s을 기본값으로 초기화"
 
 #: common/widgets/properties_panel.cpp:68
 #: common/widgets/properties_panel.cpp:145
@@ -7216,7 +7216,7 @@ msgstr "필터링된 풋프린트"
 #: cvpcb/cvpcb_mainframe.cpp:149
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "Apply, Save Schematic && Continue"
-msgstr "변경 사항 적용, 회로도 저장 && 계속하기"
+msgstr "변경 사항 저장"
 
 #: cvpcb/cvpcb_mainframe.cpp:221
 msgid "Symbol to footprint changes are unsaved"
@@ -9014,7 +9014,7 @@ msgstr "아래쪽"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:288
 #: include/widgets/ui_common.h:43
 msgid "-- leave unchanged --"
-msgstr "-- 설정 변경 없이 유지 --"
+msgstr "-- 변경 없이 유지 --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:260
 msgid "H Align:"
@@ -9139,7 +9139,7 @@ msgstr "회로도의 편집기 색상을 사용하려면 색상을 지웁니다.
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
-msgstr "핀 접합부 속성"
+msgstr "접합부 속성"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:96
 msgid "Pin length:"
@@ -9336,7 +9336,7 @@ msgstr "양방향"
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 #: eeschema/pin_type.cpp:55 eeschema/pin_type.cpp:247
 msgid "Tri-state"
-msgstr "3-스테이트"
+msgstr "3-상태"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:166
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:67
@@ -10565,7 +10565,7 @@ msgstr "핀 이름 또는 번호 찾기 (&n)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
 msgid "Search hidden fields"
-msgstr "숨겨진 필드 찾기"
+msgstr "숨은 필드 찾기"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -11720,7 +11720,7 @@ msgstr "배선 및 버스 속성"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
-msgstr "자동할당 심볼주석"
+msgstr "심볼에 자동으로 주석달기"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:142
 msgid ""
@@ -11757,7 +11757,7 @@ msgstr "기본 글꼴:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:53
 msgid "S&how hidden pins"
-msgstr "숨겨진 핀 표시 (&h)"
+msgstr "숨은 핀 표시 (&h)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:56
 msgid "Show hidden fields"
@@ -11857,7 +11857,7 @@ msgstr "45도 각도"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "마우스를 끌면 끌기(G) 작업을 수행"
+msgstr "마우스 드래그는 끌기 작업을 수행 (G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:47
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -11865,7 +11865,7 @@ msgstr "이 옵션을 선택하지 않으면 마우스 끌기가 이동 (M) 작�
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:51
 msgid "Automatically start wires on unconnected pins"
-msgstr "연결되지 않은 핀에서 자동으로 와이어 시작"
+msgstr "연결되지 않은 핀에 자동으로 선 연결 시작"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:52
 msgid ""
@@ -11878,7 +11878,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
 msgid "<ESC> clears net highlighting"
-msgstr "<ESC>는 네트 강조 표시를 지웁니다"
+msgstr "<ESC>는 네트 강조 표시를 지움"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
@@ -11901,7 +11901,7 @@ msgstr "시트 배경:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:111
 msgid "Clicking on a pin selects the symbol"
-msgstr "핀을 클릭하면 심볼이 선택됩니다"
+msgstr "핀을 클릭하면 심볼이 선택됨"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:112
 msgid ""
@@ -11934,7 +11934,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:194
 msgid "Long Click"
-msgstr "긴 클릭"
+msgstr "길게 클릭"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:150
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:208
@@ -11943,14 +11943,14 @@ msgstr "긴 클릭"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:199
 #: pcbnew/dialogs/panel_edit_options_base.cpp:240
 msgid "Clarify selection from menu."
-msgstr "메뉴에서 선택을 명확히 합니다."
+msgstr "메뉴에서 선택 항목을 명확하게 지정 함."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:137
 #: pcbnew/dialogs/panel_edit_options_base.cpp:209
 msgid "Add item(s) to selection."
-msgstr "선택에 항목을 추가합니다."
+msgstr "선택에 항목을 추가함."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
@@ -11962,7 +11962,7 @@ msgstr "Ctrl+Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:147
 #: pcbnew/dialogs/panel_edit_options_base.cpp:219
 msgid "Remove item(s) from selection."
-msgstr "선택 항목을 제거합니다."
+msgstr "선택 항목을 제거함."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:170
@@ -11988,11 +11988,11 @@ msgstr "심볼 필드를 자동으로 배치 (&u)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:269
 msgid "A&llow field autoplace to change justification"
-msgstr "정렬 변경에 따른 필드 자동 배치 허용 (&l)"
+msgstr "필드 자동 배치가 위치 지정 변경 허용 (&l)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:272
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "자동 배치 필드를 항상 5000만 그리드에 정렬 (&w)"
+msgstr "자동 배치된 필드를 항상 50 mil 그리드에 정렬 (&w)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:281
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:104
@@ -12010,7 +12010,7 @@ msgstr "수직 피치 (&V):"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:318
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:134
 msgid "Label increment:"
-msgstr "라벨 증분:"
+msgstr "라벨 증가:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:337
 msgid "Dialog Preferences"
@@ -12125,20 +12125,20 @@ msgstr "접합 점 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 msgid "Smallest"
-msgstr "가장 작은"
+msgstr "특소형"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 #: pcbnew/dialogs/dialog_plot_base.cpp:112
 msgid "Small"
-msgstr "작은 모양"
+msgstr "소형"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 msgid "Large"
-msgstr "큰"
+msgstr "대형"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:149
 msgid "Largest"
-msgstr "가장 큰"
+msgstr "특대형"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
 msgid "Inter-sheet References"
@@ -12775,7 +12775,7 @@ msgstr "계층 라벨과 시트 핀 간의 불일치"
 
 #: eeschema/erc_item.cpp:79
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "\"연결 없음\" 플래그가 있는 핀이 연결되어 있습니다"
+msgstr "\"연결 없음\" 플래그가 있는 핀이 연결됨"
 
 #: eeschema/erc_item.cpp:83
 msgid "Unconnected \"no connection\" flag"
@@ -13269,12 +13269,12 @@ msgstr "핀 %s [%s, %s]"
 #: eeschema/lib_pin.cpp:1403
 #, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "숨겨진 핀 %s [%s, %s, %s]"
+msgstr "숨은 핀 %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1411
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
-msgstr "숨겨진 핀 %s [%s, %s]"
+msgstr "숨은 핀 %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:474 eeschema/sch_shape.cpp:451
 #, c-format
@@ -16276,8 +16276,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr ""
-"<b>숨겨진 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다 "
+msgstr "<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다 "
 "(변환됨)."
 
 #: eeschema/symbol_checker.cpp:249
@@ -16285,28 +16284,25 @@ msgstr ""
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
-msgstr ""
-"<b>숨겨진 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 발견되었습니다 (유닛 "
+msgstr "<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 발견되었습니다 (유닛 "
 "%c에서 변환됨)."
 
 #: eeschema/symbol_checker.cpp:262
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>숨겨진 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다."
+msgstr "<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다."
 
 #: eeschema/symbol_checker.cpp:270
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"<b>숨겨진 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다 "
-"(유닛 %c)."
+msgstr "<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다 ("
+"유닛 %c)."
 
 #: eeschema/symbol_checker.cpp:281
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
-msgstr "(숨겨진 전원 핀은 연결된 모든 네트에 자신의 핀 이름을 표시합니다.)"
+msgstr "(숨은 전원 핀은 연결된 모든 네트에 자신의 핀 이름을 표시합니다.)"
 
 #: eeschema/symbol_checker.cpp:294
 #, c-format
@@ -17191,7 +17187,7 @@ msgstr "전원 기호 추가"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
-msgstr "연결 없음 추가"
+msgstr "연결 없음 플래그 추가"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add a no-connection flag"
@@ -17541,7 +17537,7 @@ msgstr "핀 일괄 편집을 위해 핀 테이블 표시"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Break"
-msgstr "휴식"
+msgstr "분리"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Divide into connected segments"
@@ -17549,7 +17545,7 @@ msgstr "연결된 세그먼트로 나누기"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr "분리"
+msgstr "분할"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Divide into unconnected segments"
@@ -17597,11 +17593,11 @@ msgstr "심볼 편집기에서 심볼 라이브러리 열기"
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid "Edit Symbol Fields..."
-msgstr "심볼 필드 편집..."
+msgstr "심볼 필드 테이블 ..."
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "회로도에 있는 모든 심볼의 필드 일괄 편집"
+msgstr "심볼 필드 테이블 편집기"
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Edit Symbol Library Links..."
@@ -17740,11 +17736,11 @@ msgstr "숨은 핀 표시"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Toggle display of hidden pins"
-msgstr "숨겨진 핀 표시 전환"
+msgstr "숨은 핀 표시 전환"
 
 #: eeschema/tools/ee_actions.cpp:700
 msgid "Show Hidden Fields"
-msgstr "숨겨진 필드 표시"
+msgstr "숨은 필드 표시"
 
 #: eeschema/tools/ee_actions.cpp:700
 msgid "Toggle display of hidden text fields"
@@ -19911,11 +19907,11 @@ msgstr "풋프린트 경로가 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_sym_export_svg.cpp:52
 msgid "Include hidden pins"
-msgstr "숨겨진 핀 포함"
+msgstr "숨은 핀 포함"
 
 #: kicad/cli/command_sym_export_svg.cpp:57
 msgid "Include hidden fields"
-msgstr "숨겨진 필드 포함"
+msgstr "숨은 필드 포함"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
 msgid "Symbol file does not exist or is not accessible\n"
@@ -25140,7 +25136,7 @@ msgstr "채우기 유형:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
 #: pcbnew/zone.cpp:1419
 msgid "Solid fill"
-msgstr "솔리드 채우기"
+msgstr "단색 채우기"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:290
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:129
@@ -29301,9 +29297,8 @@ msgstr "장애물 뛰어넘기"
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr ""
-"활성화될 경우, 라우터는 충돌을 \"반사\"하는 대신 충돌한 배선을 장애물 (예시: "
-"패드) 뒤로 우회시킵니다"
+msgstr "활성화하면, 라우터는 충돌을 \"반사\"하는 대신 고정된 장애물(예: 패드) 뒤로 "
+"경로를 이동함"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:41
 msgid "Remove redundant tracks"
@@ -34320,12 +34315,12 @@ msgstr "%s에 'BOM에서 제외' 제작 속성이 제거되었습니다."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:470
 #, c-format
 msgid "Disconnect %s pin %s."
-msgstr "%s 핀 %s을(를) 분리합니다."
+msgstr "%s 핀 %s의 연결을 끊습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:476
 #, c-format
 msgid "Disconnected %s pin %s."
-msgstr "%s 핀 %s이(가) 분리되었습니다."
+msgstr "%s 핀 %s의 연결이 끊어졌습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:486
 #, c-format
@@ -35700,10 +35695,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 디자인은 구리 요소를 포함하고 있으나, 이는 KiCad와 직접적으로 대응되"
-"지 않습니다. 솔리드 또는 해치로 채워져 있을 경우 KiCad 영역으로 불러와지고, "
-"영역이 채워지지 않은 테두리라면 (열려있거나 닫혀있는 경우 모두) KiCad 배선으"
-"로 불러와집니다."
+"CADSTAR 디자인에는 직접적인 KiCad와 동등한 것이 없는 COPPER 요소가 포함되어 "
+"있습니다. 솔리드 또는 해치가 채워진 경우 KiCad 영역으로 가져왔고, 모양이 "
+"채워지지 않은 윤곽선(열린 또는 닫힌)인 경우 KiCad 트랙으로 가져왔습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2224
 #, c-format
@@ -38982,7 +38976,7 @@ msgstr "연결선 모드 (3 상태)"
 #: pcbnew/tools/pcb_actions.cpp:887
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "모든 레이어 / 표시 레이어 / 없음 간 연결선 표시 방법 전환"
+msgstr "모든 레이어 / 현재 레이어 / 표시하지 않음 간 ratsnests연결선 표시 방법 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:891
 msgid "Net Color Mode (3-state)"
@@ -38992,8 +38986,8 @@ msgstr "네트 색 모드 (3개 상태)"
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr ""
-"모든 네트에 대해서 / 연결선에 대해서 / 없음 간 네트와 네트클래스 색 사용 전환"
+msgstr "모든 네트 / ratsnests연결선 / 사용하지 않음 간 네트와 네트 클래스 색상 사용 "
+"전환"
 
 #: pcbnew/tools/pcb_actions.cpp:897
 msgid "Sketch Tracks"
