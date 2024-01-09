@@ -927,19 +927,27 @@ static void memberOfSheetFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg]() -> double
             {
-                FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item );
+                FOOTPRINT* fp = item->GetParentFootprint();
 
-                if( !fp )
-                    fp = item->GetParentFootprint();
+                if( !fp && item->Type() == PCB_FOOTPRINT_T )
+                    fp = static_cast<FOOTPRINT*>( item );
 
                 if( !fp )
                     return 0.0;
 
-                if( fp->GetSheetname().Matches( arg->AsString() ) )
+                wxString sheetName = fp->GetSheetname();
+                wxString refName = arg->AsString();
+
+                if( sheetName.EndsWith( wxT("/") ) )
+                    sheetName.RemoveLast();
+                if( refName.EndsWith( wxT("/") ) )
+                    refName.RemoveLast();
+
+                if( sheetName.Matches( refName ) )
                     return 1.0;
 
-                if( ( arg->AsString().Matches( wxT( "/" ) ) || arg->AsString().IsEmpty() )
-                    && fp->GetSheetname() == wxT( "Root" ) )
+                if( ( refName.Matches( wxT( "/" ) ) || refName.IsEmpty() )
+                    && sheetName.IsEmpty() )
                 {
                     return 1.0;
                 }
