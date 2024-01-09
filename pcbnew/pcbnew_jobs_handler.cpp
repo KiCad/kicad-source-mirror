@@ -100,8 +100,28 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     BOARD* brd = LoadBoard( aStepJob->m_filename );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
+    if( aStepJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+
+        switch( aStepJob->m_format )
+        {
+        case JOB_EXPORT_PCB_3D::FORMAT::VRML: fn.SetExt( FILEEXT::VrmlFileExtension );
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP: fn.SetExt( FILEEXT::StepFileExtension );
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB: fn.SetExt( FILEEXT::GltfBinaryFileExtension );
+            break;
+        default: return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
+        }
+
+        aStepJob->m_outputFile = fn.GetFullName();
+    }
+
     if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
+
         double scale = 0.0;
         switch ( aStepJob->m_vrmlUnits )
         {
@@ -164,7 +184,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:
             params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
             break;
-        default: return CLI::EXIT_CODES::ERR_UNKNOWN; // should have gotten here
+        default: return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
         EXPORTER_STEP stepExporter( brd, params );
