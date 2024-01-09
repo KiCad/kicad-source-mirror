@@ -59,6 +59,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aS
         return *this;
 
     case CHT_REMOVE:
+        wxASSERT( m_deletedItems.find( aItem ) == m_deletedItems.end() );
         m_deletedItems.insert( aItem );
         makeEntry( aItem, CHT_REMOVE | flag, nullptr, aScreen );
         return *this;
@@ -162,6 +163,8 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BAS
     ent.m_copy = aCopy;
     ent.m_screen = aScreen;
 
+    wxASSERT( m_changedItems.find( aItem ) == m_changedItems.end() );
+    
     m_changedItems.insert( aItem );
     m_changes.push_back( ent );
 }
