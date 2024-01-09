@@ -34,9 +34,8 @@
 #include <pad.h>
 #include <footprint.h>
 #include <reporter.h>
-#include <core/profile.h>
 
-typedef std::vector<std::pair<FOOTPRINT*, FOOTPRINT*> > FP_PAIRS;
+typedef std::vector<std::pair<FOOTPRINT*, FOOTPRINT*>> FP_PAIRS;
 
 enum class REPEAT_LAYOUT_EDGE_MODE
 {
@@ -47,25 +46,27 @@ enum class REPEAT_LAYOUT_EDGE_MODE
 
 struct REPEAT_LAYOUT_OPTIONS
 {
-    bool m_copyRouting = true;
-    bool m_copyPlacement = true;
-    bool m_groupItems = false;
-    bool m_moveOffRAComponents = true;
-    bool m_includeLockedItems = true;
-    bool m_keepOldRouting = false;
+    bool                    m_copyRouting = true;
+    bool                    m_copyPlacement = true;
+    bool                    m_groupItems = false;
+    bool                    m_moveOffRAComponents = true;
+    bool                    m_includeLockedItems = true;
+    bool                    m_keepOldRouting = false;
     REPEAT_LAYOUT_EDGE_MODE m_edgeMode;
 };
 
 struct PAD_PREFIX_ENTRY
 {
-    PAD_PREFIX_ENTRY( PAD* pad_, wxString pfx_ ):
-        pad(pad_), componentPrefix( pfx_ ), processed( false ) {};
-    PAD* pad;
+    PAD_PREFIX_ENTRY( PAD* pad_, wxString pfx_ ) :
+            pad( pad_ ), componentPrefix( pfx_ ), processed( false ){};
+    PAD*     pad;
     wxString componentPrefix;
-    bool processed;
+    bool     processed;
 
-    wxString format() const {
-        return wxString::Format( wxT("%s-%s[%s]"), componentPrefix, pad->GetNumber(), pad->GetNetname().c_str().AsChar() );
+    wxString format() const
+    {
+        return wxString::Format( wxT( "%s-%s[%s]" ), componentPrefix, pad->GetNumber(),
+                                 pad->GetNetname().c_str().AsChar() );
     }
 
     bool matchesPadNumberAndPrefix( const PAD_PREFIX_ENTRY& aOther ) const
@@ -82,10 +83,10 @@ struct PAD_PREFIX_ENTRY
 
 struct FP_WITH_CONNECTIONS
 {
-    FOOTPRINT* fp;
-    typedef std::unordered_map<PAD*, std::vector<PAD_PREFIX_ENTRY> > PAD_CONNECTION_MAP;
-    PAD_CONNECTION_MAP connsWithinRA;
-    bool processed;
+    FOOTPRINT*                                                      fp;
+    typedef std::unordered_map<PAD*, std::vector<PAD_PREFIX_ENTRY>> PAD_CONNECTION_MAP;
+    PAD_CONNECTION_MAP                                              connsWithinRA;
+    bool                                                            processed;
 
     void sortByPadNumbers()
     {
@@ -94,7 +95,7 @@ struct FP_WITH_CONNECTIONS
         for( auto& ent : connsWithinRA )
         {
             std::vector<PAD_PREFIX_ENTRY> v( ent.second );
-            auto compare = [] ( const PAD_PREFIX_ENTRY& a, const PAD_PREFIX_ENTRY& b ) -> int
+            auto compare = []( const PAD_PREFIX_ENTRY& a, const PAD_PREFIX_ENTRY& b ) -> int
             {
                 if( a.pad->GetNumber() > b.pad->GetNumber() )
                     return 0;
@@ -105,7 +106,7 @@ struct FP_WITH_CONNECTIONS
             };
 
             std::sort( v.begin(), v.end(), compare );
-            sorted[ ent.first ] = v;
+            sorted[ent.first] = v;
         }
 
         connsWithinRA = sorted;
@@ -116,31 +117,31 @@ struct RULE_AREA;
 
 struct RULE_AREA_COMPAT_DATA
 {
-    RULE_AREA* m_refArea;
-    bool m_isOk;
-    bool m_doCopy;
-    wxString m_errorMsg;
-    std::vector< std::pair<FOOTPRINT*, FOOTPRINT*> > m_matchingFootprints;
+    RULE_AREA*                                     m_refArea;
+    bool                                           m_isOk;
+    bool                                           m_doCopy;
+    wxString                                       m_errorMsg;
+    std::vector<std::pair<FOOTPRINT*, FOOTPRINT*>> m_matchingFootprints;
 };
 
 struct RULE_AREA
-    {
-        ZONE* m_area;
-        std::vector<FP_WITH_CONNECTIONS> m_raFootprints;
-        std::set<FOOTPRINT*> m_sheetComponents;
-        std::map<PAD*, FOOTPRINT*> m_fpPads;
-        bool m_existsAlready;
-        bool m_generateEnabled;
-        wxString m_sheetPath;
-        wxString m_sheetName;
-        wxString m_ruleName;
-        VECTOR2I m_center;
-    };
+{
+    ZONE*                            m_area;
+    std::vector<FP_WITH_CONNECTIONS> m_raFootprints;
+    std::set<FOOTPRINT*>             m_sheetComponents;
+    std::map<PAD*, FOOTPRINT*>       m_fpPads;
+    bool                             m_existsAlready;
+    bool                             m_generateEnabled;
+    wxString                         m_sheetPath;
+    wxString                         m_sheetName;
+    wxString                         m_ruleName;
+    VECTOR2I                         m_center;
+};
 
 
 struct RA_SHEET
 {
-    bool m_generateEnabled;
+    bool     m_generateEnabled;
     wxString m_sheetPath;
     wxString m_sheetName;
 };
@@ -148,52 +149,51 @@ struct RA_SHEET
 
 struct RULE_AREAS_DATA
 {
-    bool m_replaceExisting;
-    bool m_groupItems;
-    RULE_AREA* m_refRA;
+    bool                  m_replaceExisting;
+    bool                  m_groupItems;
+    RULE_AREA*            m_refRA;
     REPEAT_LAYOUT_OPTIONS m_options;
 
-    std::vector<RULE_AREA> m_areas;
+    std::vector<RULE_AREA>                                m_areas;
     std::unordered_map<RULE_AREA*, RULE_AREA_COMPAT_DATA> m_compatMap;
-
 };
-
 
 
 class MULTICHANNEL_TOOL : public PCB_TOOL_BASE
 {
-    public:
-        MULTICHANNEL_TOOL();
-        ~MULTICHANNEL_TOOL();
+public:
+    MULTICHANNEL_TOOL();
+    ~MULTICHANNEL_TOOL();
 
-        RULE_AREAS_DATA* GetData() { return &m_areas; }
+    RULE_AREAS_DATA* GetData() { return &m_areas; }
 
-    private:
-        void setTransitions() override;
-        int autogenerateRuleAreas( const TOOL_EVENT& aEvent );
-        int repeatLayout( const TOOL_EVENT& aEvent );
-        wxString stripComponentIndex( wxString aRef ) const;
-        bool identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents );
-        const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
-        std::set<FOOTPRINT*> queryComponentsInSheet( wxString aSheetName );
-        void findExistingRuleAreas();
-        void querySheets();
+private:
+    void     setTransitions() override;
+    int      autogenerateRuleAreas( const TOOL_EVENT& aEvent );
+    int      repeatLayout( const TOOL_EVENT& aEvent );
+    wxString stripComponentIndex( wxString aRef ) const;
+    bool     identifyComponentsInRuleArea( ZONE* aRuleArea, std::set<FOOTPRINT*>& aComponents );
+    const SHAPE_LINE_CHAIN buildRAOutline( std::set<FOOTPRINT*>& aFootprints, int aMargin );
+    std::set<FOOTPRINT*>   queryComponentsInSheet( wxString aSheetName );
+    void                   findExistingRuleAreas();
+    void                   querySheets();
 
-        RULE_AREA* findRAByName( const wxString& aName );
-        bool resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, RULE_AREA_COMPAT_DATA& aMatches );
-        bool copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea, RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts );
-    int findRoutedConnections( std::set<BOARD_ITEM*> &aOutput,
-                                                    std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
-                                                   const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA,
-                                                   FOOTPRINT*                   aFp,
-                                                   const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
+    RULE_AREA* findRAByName( const wxString& aName );
+    bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
+                                          RULE_AREA_COMPAT_DATA& aMatches );
+    bool       copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* aCommit, RULE_AREA* aRefArea,
+                                     RULE_AREA* aTargetArea, REPEAT_LAYOUT_OPTIONS aOpts );
+    int        findRoutedConnections( std::set<BOARD_ITEM*>&             aOutput,
+                                      std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
+                                      const SHAPE_POLY_SET& aRAPoly, RULE_AREA* aRA, FOOTPRINT* aFp,
+                                      const REPEAT_LAYOUT_OPTIONS& aOpts ) const;
 
-        bool checkIfPadNetsMatch( FP_WITH_CONNECTIONS& aRef, FP_WITH_CONNECTIONS& aTgt, FP_PAIRS& aMatches ) const;
+    bool checkIfPadNetsMatch( FP_WITH_CONNECTIONS& aRef, FP_WITH_CONNECTIONS& aTgt,
+                              FP_PAIRS& aMatches ) const;
 
-        std::unique_ptr<REPORTER> m_reporter;
-        RULE_AREAS_DATA m_areas;
+    std::unique_ptr<REPORTER> m_reporter;
+    RULE_AREAS_DATA           m_areas;
 };
-
 
 
 #endif // TOOLS_MULTICHANNEL_TOOL

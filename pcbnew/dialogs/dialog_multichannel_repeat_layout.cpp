@@ -37,8 +37,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     auto data = m_parentTool->GetData();
     m_refRAName->SetLabelText( data->m_refRA->m_area->GetZoneName() );
 
-    printf("CMAP: %d entries\n", (int) data->m_compatMap.size() );
-
     for( auto& ra : data->m_compatMap )
     {
         TABLE_ENTRY ent;
@@ -73,15 +71,14 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT (
     m_raGrid->SetColLabelValue( 1, wxT("Target Rule Area") );
     m_raGrid->SetColLabelValue( 2, wxT("Status") );
     m_raGrid->AppendRows( m_targetRAs.size() - 1 );
-    for( auto& entry : m_targetRAs)
-    {
 
+    for( TABLE_ENTRY& entry : m_targetRAs)
+    {
         m_raGrid->SetCellValue( i, 1, entry.m_raName );
         m_raGrid->SetCellValue( i, 2, entry.m_isOK ? _("OK") : entry.m_errMsg );
         m_raGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer);
         m_raGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor);
         m_raGrid->SetCellValue( i, 0, entry.m_doCopy ? wxT("1") : wxT("0") );
-
         i++;
     }
 
@@ -104,13 +101,12 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
 {
     auto data = m_parentTool->GetData();
 
-    for( size_t i = 0; i < m_targetRAs.size(); i++)
+    for( size_t i = 0; i < m_targetRAs.size(); i++ )
     {
         wxString doCopy = m_raGrid->GetCellValue( i, 0 );
 
-        data->m_compatMap[ m_targetRAs[i].m_targetRA ].m_doCopy = !doCopy.CompareTo( wxT("1") ) ? true : false;
-
-//        printf("RA %d cpy=%d\n", i, data->m_compatMap[ m_targetRAs[i].m_targetRA ].m_doCopy ? 1 : 0);
+        data->m_compatMap[m_targetRAs[i].m_targetRA].m_doCopy =
+                !doCopy.CompareTo( wxT( "1" ) ) ? true : false;
     }
 
     data->m_options.m_copyPlacement = m_cbCopyPlacement->GetValue();
@@ -125,6 +121,8 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
 
 bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
 {
+    // fixme: I have no idea how to use this together with wxGrid so that it resizes correctly...
+
     //if( !wxDialog::TransferDataToWindow() )
         //return false;
 

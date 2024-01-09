@@ -34,10 +34,9 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
         DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS_BASE( aFrame ),
         m_parentTool( aParentTool )
 {
-
     int i = 0;
 
-    auto raData = m_parentTool->GetData();
+    RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
     m_sheetsGrid->AppendCols( 3 );
     m_sheetsGrid->EnableEditing( true );
@@ -46,15 +45,14 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
     m_sheetsGrid->SetColLabelValue( 1, wxT("Sheet Path") );
     m_sheetsGrid->SetColLabelValue( 2, wxT("Sheet Name") );
     m_sheetsGrid->AppendRows( raData->m_areas.size() - 1 );
-    for( auto& sheet : raData->m_areas )
-    {
 
+    for( RULE_AREA& sheet : raData->m_areas )
+    {
         m_sheetsGrid->SetCellValue( i, 1, sheet.m_sheetPath );
         m_sheetsGrid->SetCellValue( i, 2, sheet.m_sheetName );
         m_sheetsGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer);
         m_sheetsGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor);
         m_sheetsGrid->SetCellValue( i, 0, sheet.m_generateEnabled ? wxT("1") : wxT( "0" ) );
-
         i++;
     }
 
@@ -72,12 +70,12 @@ DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS
 
 bool DIALOG_MULTICHANNEL_GENERATE_RULE_AREAS::TransferDataFromWindow()
 {
-    auto raData = m_parentTool->GetData();
+    RULE_AREAS_DATA* raData = m_parentTool->GetData();
 
-    for( size_t i = 0; i < raData->m_areas.size(); i++)
+    for( size_t i = 0; i < raData->m_areas.size(); i++ )
     {
         wxString enabled = m_sheetsGrid->GetCellValue( i, 0 );
-        raData->m_areas[i].m_generateEnabled = ( !enabled.CompareTo( wxT("1") ) ) ? true : false;
+        raData->m_areas[i].m_generateEnabled = ( !enabled.CompareTo( wxT( "1" ) ) ) ? true : false;
     }
 
     raData->m_replaceExisting = m_cbReplaceExisting->GetValue();
