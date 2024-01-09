@@ -52,7 +52,7 @@ public:
 class PCBEXPR_CONTEXT : public LIBEVAL::CONTEXT
 {
 public:
-    PCBEXPR_CONTEXT( int aConstraint, PCB_LAYER_ID aLayer ) :
+    PCBEXPR_CONTEXT( int aConstraint = 0, PCB_LAYER_ID aLayer = F_Cu ) :
             m_constraint( aConstraint ),
             m_layer( aLayer )
     {
