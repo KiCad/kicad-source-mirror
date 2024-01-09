@@ -381,7 +381,7 @@ int MULTICHANNEL_TOOL::findRoutedConnections( std::set<BOARD_ITEM*> &aOutput,
 
     for( auto pad : aFp->Pads() )
     {
-        auto connItems = aConnectivity->GetConnectedItems(
+        auto connItems = aConnectivity->GetConnectedItems (
                 pad, { PCB_PAD_T, PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T }, true );
 
         for( auto item : connItems )
@@ -504,9 +504,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
         targetFP->SetPosition( targetPos );
         targetFP->SetLayerAndFlip( refFP->GetLayer() );
         targetFP->Reference().SetTextAngle( refFP->Reference().GetTextAngle() );
-        targetFP->Reference().SetPosition( refFP->Reference().GetPosition() );
+        targetFP->Reference().SetPosition( refFP->Reference().GetPosition() + disp );
         targetFP->Value().SetTextAngle( refFP->Value().GetTextAngle() );
-        targetFP->Value().SetPosition( refFP->Value().GetPosition() );
+        targetFP->Value().SetPosition( refFP->Value().GetPosition() + disp );
     }
     }
 
@@ -741,7 +741,7 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
             return a.fp->GetPadCount() > b.fp->GetPadCount();
         } );
 
-    const int MATCH_MAX_ATTEMPTS = 10;
+    const int MATCH_MAX_ATTEMPTS = 100;
     FOOTPRINT* failingRefFP = nullptr;
 
     for( int attempt = 0; attempt < MATCH_MAX_ATTEMPTS; attempt++)
@@ -762,6 +762,12 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
         for( auto &targetFP : aTargetArea->m_raFootprints )
         {
             if( stripComponentIndex( refFP.fp->GetReference() ) != stripComponentIndex( targetFP.fp->GetReference() ) )
+                continue;
+
+            if( refFP.fp->GetValue() != targetFP.fp->GetValue() )
+                continue;
+
+            if( refFP.fp->GetFPID() != targetFP.fp->GetFPID() )
                 continue;
 
             if( !targetFP.processed )
