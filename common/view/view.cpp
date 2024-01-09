@@ -683,7 +683,8 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
         new_map[pair.second].id = pair.second;
     }
 
-    m_layers = std::move( new_map );
+    // Transfer reordered data (using the copy assignment operator ):
+    m_layers = new_map;
 
     for( VIEW_ITEM* item : *m_allItems )
     {
