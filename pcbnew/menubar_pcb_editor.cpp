@@ -348,15 +348,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     placeMenu->Add( autoplaceSubmenu );
 
-    ACTION_MENU* multichannelSubmenu = new ACTION_MENU( false, selTool );
-    multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
-    multichannelSubmenu->SetIcon( BITMAPS::mode_module );
-    multichannelSubmenu->Add( PCB_ACTIONS::generatePlacementRuleAreas );
-    multichannelSubmenu->Add( PCB_ACTIONS::repeatLayout );
-
-    placeMenu->Add( multichannelSubmenu );
-
-
     //-- Route Menu ----------------------------------------------------------
     //
     ACTION_MENU* routeMenu = new ACTION_MENU( false, selTool );
@@ -440,6 +431,14 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
         toolsMenu->AppendSeparator();
         toolsMenu->Add( PCB_ACTIONS::showPythonConsole );
     }
+
+    ACTION_MENU* multichannelSubmenu = new ACTION_MENU( false, selTool );
+    multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
+    multichannelSubmenu->SetIcon( BITMAPS::mode_module );
+    multichannelSubmenu->Add( PCB_ACTIONS::generatePlacementRuleAreas );
+    multichannelSubmenu->Add( PCB_ACTIONS::repeatLayout );
+
+    toolsMenu->Add( multichannelSubmenu );
 
     ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
