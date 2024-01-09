@@ -581,6 +581,8 @@ public:
     static TOOL_ACTION ddAppendBoard;
     static TOOL_ACTION ddImportFootprint;
 
+    static TOOL_ACTION repeatLayout;
+
 
 };
 

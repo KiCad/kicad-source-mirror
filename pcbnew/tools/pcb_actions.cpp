@@ -2206,6 +2206,12 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Place Off-Board Footprints" ) )
         .Tooltip( _( "Performs automatic placement of components outside board area" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::repeatLayout( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Autoplacer.repeatLayout" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Clones identical fragments of layout" ) )
+        .Tooltip( _( "" ) ) );
+
 
 // ROUTER_TOOL
 //
@@ -2478,7 +2484,6 @@ TOOL_ACTION PCB_ACTIONS::ddAppendBoard( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::ddImportFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.ddImportFootprint" )
         .Scope( AS_GLOBAL ) );
-
 
 const TOOL_EVENT PCB_EVENTS::SnappingModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
                                                 "common.Interactive.snappingModeChangedByKey" );

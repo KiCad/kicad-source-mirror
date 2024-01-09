@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,6 +22,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bLayersListSizer;
 	bLayersListSizer = new wxBoxSizer( wxVERTICAL );
 
+	bLayersListSizer->SetMinSize( wxSize( 150,-1 ) );
 	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLayerSelection->Wrap( -1 );
 	bLayersListSizer->Add( m_staticTextLayerSelection, 0, wxALL, 4 );
@@ -30,7 +31,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bLayersListSizer->Add( m_layers, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bLayersListSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bUpperSizer->Add( bLayersListSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bUpperSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -59,53 +60,107 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizer6->Add( m_cbLocked, 0, wxALL, 5 );
 
 
-	bSizerRight->Add( bSizer6, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerRight->Add( bSizer6, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 1, 3, 0 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextBasicRules = new wxStaticText( this, wxID_ANY, _("Basic rules:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextBasicRules->Wrap( -1 );
-	fgSizer2->Add( m_staticTextBasicRules, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxString m_rbRuleTypeChoices[] = { _("Keepout"), _("Placement") };
+	int m_rbRuleTypeNChoices = sizeof( m_rbRuleTypeChoices ) / sizeof( wxString );
+	m_rbRuleType = new wxRadioBox( this, wxID_ANY, _("Rule type"), wxDefaultPosition, wxDefaultSize, m_rbRuleTypeNChoices, m_rbRuleTypeChoices, 2, wxRA_SPECIFY_COLS );
+	m_rbRuleType->SetSelection( 0 );
+	fgSizer2->Add( m_rbRuleType, 0, wxALL|wxEXPAND, 5 );
+
+	wxFlexGridSizer* m_keepoutRuleSizer;
+	m_keepoutRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
+	m_keepoutRuleSizer->SetFlexibleDirection( wxBOTH );
+	m_keepoutRuleSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_cbTracksCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTracksCtrl->SetToolTip( _("Prevent tracks from routing into this area") );
 
-	fgSizer2->Add( m_cbTracksCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_keepoutRuleSizer->Add( m_cbTracksCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbViasCtrl->SetToolTip( _("Prevent vias from being placed in this area") );
 
-	fgSizer2->Add( m_cbViasCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_keepoutRuleSizer->Add( m_cbViasCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_cbPadsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPadsCtrl->SetToolTip( _("Raise a DRC error if a pad overlaps this area") );
 
-	fgSizer2->Add( m_cbPadsCtrl, 0, wxRIGHT|wxLEFT, 5 );
+	m_keepoutRuleSizer->Add( m_cbPadsCtrl, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out zone fills"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCopperPourCtrl->SetToolTip( _("Zones will not fill copper into this area") );
 
-	fgSizer2->Add( m_cbCopperPourCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_keepoutRuleSizer->Add( m_cbCopperPourCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_cbFootprintsCtrl = new wxCheckBox( this, wxID_ANY, _("Keep out footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbFootprintsCtrl->SetToolTip( _("Raise a DRC error if a footprint courtyard overlaps this area") );
 
-	fgSizer2->Add( m_cbFootprintsCtrl, 0, wxRIGHT|wxLEFT, 5 );
+	m_keepoutRuleSizer->Add( m_cbFootprintsCtrl, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerRight->Add( fgSizer2, 0, wxEXPAND, 5 );
+	fgSizer2->Add( m_keepoutRuleSizer, 1, wxEXPAND, 5 );
 
 
-	bSizerRight->Add( 0, 3, 0, wxEXPAND, 5 );
+	bSizerRight->Add( fgSizer2, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* m_placementRuleSizer;
+	m_placementRuleSizer = new wxFlexGridSizer( 0, 1, 3, 0 );
+	m_placementRuleSizer->AddGrowableCol( 0 );
+	m_placementRuleSizer->SetFlexibleDirection( wxBOTH );
+	m_placementRuleSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText31 = new wxStaticText( this, wxID_ANY, _("Condition:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31->Wrap( -1 );
+	m_staticText31->SetToolTip( _("A unique name for this rule area for use in DRC rules") );
+
+	m_placementRuleSizer->Add( m_staticText31, 0, wxALL|wxEXPAND, 5 );
+
+	m_ruleText = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
+	m_ruleText->SetUseTabs( true );
+	m_ruleText->SetTabWidth( 4 );
+	m_ruleText->SetIndent( 4 );
+	m_ruleText->SetTabIndents( true );
+	m_ruleText->SetBackSpaceUnIndents( true );
+	m_ruleText->SetViewEOL( false );
+	m_ruleText->SetViewWhiteSpace( false );
+	m_ruleText->SetMarginWidth( 2, 0 );
+	m_ruleText->SetIndentationGuides( true );
+	m_ruleText->SetReadOnly( false );
+	m_ruleText->SetMarginType( 1, wxSTC_MARGIN_SYMBOL );
+	m_ruleText->SetMarginMask( 1, wxSTC_MASK_FOLDERS );
+	m_ruleText->SetMarginWidth( 1, 16);
+	m_ruleText->SetMarginSensitive( 1, true );
+	m_ruleText->SetProperty( wxT("fold"), wxT("1") );
+	m_ruleText->SetFoldFlags( wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED | wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED );
+	m_ruleText->SetMarginType( 0, wxSTC_MARGIN_NUMBER );
+	m_ruleText->SetMarginWidth( 0, m_ruleText->TextWidth( wxSTC_STYLE_LINENUMBER, wxT("_99999") ) );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
+	m_ruleText->MarkerSetBackground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("BLACK") ) );
+	m_ruleText->MarkerSetForeground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("WHITE") ) );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_BOXMINUS );
+	m_ruleText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("BLACK") ) );
+	m_ruleText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("WHITE") ) );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_BOXPLUS );
+	m_ruleText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("BLACK") ) );
+	m_ruleText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("WHITE") ) );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUS );
+	m_ruleText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("BLACK") ) );
+	m_ruleText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("WHITE") ) );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY );
+	m_ruleText->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
+	m_ruleText->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+	m_ruleText->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+	m_placementRuleSizer->Add( m_ruleText, 0, wxALL|wxEXPAND, 5 );
 
 
-	bSizerRight->Add( 0, 0, 0, wxEXPAND, 5 );
-
-
-	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizerRight->Add( m_placementRuleSizer, 0, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 3 );
@@ -140,7 +195,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizerRight->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bSizerRight, 0, wxEXPAND|wxALL, 5 );
+	bUpperSizer->Add( bSizerRight, 1, wxEXPAND|wxALL, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -157,7 +212,6 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 
