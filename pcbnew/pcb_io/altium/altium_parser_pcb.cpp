@@ -226,6 +226,28 @@ ReadAltiumExtendedPrimitiveInformationTypeFromProperties(
 }
 
 
+/**
+ *  Throw an IO_ERROR if the actual length is less than the expected length.
+ *
+ * @param aStreamType the current stream type (e.g. 'Pads6')
+ * @param aSubrecordName the current subrecord name (e.g. 'subrecord5')
+ * @param aExpectedLength the expected length needed to parse the stream
+ * @param aActualLength the actual length of the subrecord encountered
+ */
+static void ExpectSubrecordLengthAtLeast( const std::string& aStreamType,
+                                          const std::string& aSubrecordName, size_t aExpectedLength,
+                                          size_t aActualLength )
+{
+    if( aActualLength < aExpectedLength )
+    {
+        THROW_IO_ERROR( wxString::Format( "%s stream %s has length %d, "
+                                          "which is unexpected (expected at least %d)",
+                                          aStreamType, aSubrecordName, aActualLength,
+                                          aExpectedLength ) );
+    }
+}
+
+
 AEXTENDED_PRIMITIVE_INFORMATION::AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_PARSER& aReader )
 {
     const std::map<wxString, wxString> props = aReader.ReadProperties();
@@ -723,8 +745,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     // Subrecord 5
     size_t subrecord5 = aReader.ReadAndSetSubrecordLength();
 
-    if( subrecord5 < 114 )
-        THROW_IO_ERROR( wxT( "Pads6 stream subrecord5 has length < 114, which is unexpected" ) );
+    ExpectSubrecordLengthAtLeast( "Pads6", "subrecord5", 110, subrecord5 );
 
     layer     = static_cast<ALTIUM_LAYER>( aReader.Read<uint8_t>() );
     tolayer   = ALTIUM_LAYER::UNKNOWN;
@@ -742,13 +763,13 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     net = aReader.Read<uint16_t>();
     aReader.Skip( 2 );
     component = aReader.Read<uint16_t>();
-    aReader.Skip( 4 );
+    aReader.Skip( 4 ); // to 13
 
     position = aReader.ReadVector2IPos();
     topsize  = aReader.ReadVector2ISize();
     midsize  = aReader.ReadVector2ISize();
     botsize  = aReader.ReadVector2ISize();
-    holesize = aReader.ReadKicadUnit();
+    holesize = aReader.ReadKicadUnit(); // to 49
 
     topshape = static_cast<ALTIUM_PAD_SHAPE>( aReader.Read<uint8_t>() );
     midshape = static_cast<ALTIUM_PAD_SHAPE>( aReader.Read<uint8_t>() );
@@ -764,8 +785,29 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     aReader.Skip( 7 );
     pastemaskexpansionmode = static_cast<ALTIUM_MODE>( aReader.Read<uint8_t>() );
     soldermaskexpansionmode = static_cast<ALTIUM_MODE>( aReader.Read<uint8_t>() );
-    aReader.Skip( 3 );
-    holerotation = aReader.Read<double>();
+    aReader.Skip( 3 ); // to 106
+
+    if( subrecord5 == 110 )
+    {
+        // Don't know exactly what this is, but it's always been 0 in the files with
+        // 110-byte subrecord5.
+        // e.g. https://gitlab.com/kicad/code/kicad/-/issues/16514
+        const uint32_t unknown = aReader.ReadKicadUnit(); // to 110
+
+        if( unknown != 0 )
+        {
+            THROW_IO_ERROR( wxString::Format( "Pads6 stream subrecord5 + 106 has value %d, "
+                                              "which is unexpected",
+                                              unknown ) );
+        }
+        holerotation = 0;
+    }
+    else
+    {
+        // More than 110, need at least 114
+        ExpectSubrecordLengthAtLeast( "Pads6", "subrecord5", 114, subrecord5 );
+        holerotation = aReader.Read<double>(); // to 114
+    }
 
     if( subrecord5 >= 120 )
     {
