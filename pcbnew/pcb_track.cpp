@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,13 +292,6 @@ bool PCB_TRACK::ApproxCollinear( const PCB_TRACK& aTrack )
     SEG a( m_Start, m_End );
     SEG b( aTrack.GetStart(), aTrack.GetEnd() );
     return a.ApproxCollinear( b );
-}
-
-
-int PCB_TRACK::GetLocalClearance( wxString* aSource ) const
-{
-    // Not currently implemented
-    return 0;
 }
 
 

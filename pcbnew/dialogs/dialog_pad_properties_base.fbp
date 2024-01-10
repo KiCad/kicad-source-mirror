@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wxFormBuilder_Project>
-  <FileVersion major="1" minor="17"/>
+  <FileVersion major="1" minor="16"/>
   <object class="Project" expanded="true">
     <property name="class_decoration"></property>
     <property name="code_generation">C++</property>
@@ -10378,7 +10378,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Set values to 0 to use parent footprint or netclass values.</property>
+                                  <property name="label">Leave values blank to use parent footprint or netclass values.</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>

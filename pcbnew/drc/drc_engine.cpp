@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -739,39 +739,39 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     // Local overrides take precedence over everything *except* board min clearance
     if( aConstraintType == CLEARANCE_CONSTRAINT || aConstraintType == HOLE_CLEARANCE_CONSTRAINT )
     {
-        int override_val = 0;
-        int overrideA = 0;
-        int overrideB = 0;
+        int                override_val = 0;
+        std::optional<int> overrideA;
+        std::optional<int> overrideB;
 
         if( ac && !b_is_non_copper )
-            overrideA = ac->GetLocalClearanceOverrides( nullptr );
+            overrideA = ac->GetClearanceOverrides( nullptr );
 
         if( bc && !a_is_non_copper )
-            overrideB = bc->GetLocalClearanceOverrides( nullptr );
+            overrideB = bc->GetClearanceOverrides( nullptr );
 
-        if( overrideA > 0 || overrideB > 0 )
+        if( overrideA.has_value() || overrideB.has_value() )
         {
             wxString msg;
 
-            if( overrideA > 0 )
+            if( overrideA.has_value() )
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                           EscapeHTML( a->GetItemDescription( this ) ),
-                                          MessageTextFromValue( overrideA ) ) )
+                                          MessageTextFromValue( overrideA.value() ) ) )
 
-                override_val = ac->GetLocalClearanceOverrides( &msg );
+                override_val = ac->GetClearanceOverrides( &msg ).value();
             }
 
-            if( overrideB > 0 )
+            if( overrideB.has_value() )
             {
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
                                           EscapeHTML( b->GetItemDescription( this ) ),
-                                          EscapeHTML( MessageTextFromValue( overrideB ) ) ) )
+                                          EscapeHTML( MessageTextFromValue( overrideB.value() ) ) ) )
 
                 if( overrideB > override_val )
-                    override_val = bc->GetLocalClearanceOverrides( &msg );
+                    override_val = bc->GetClearanceOverrides( &msg ).value();
             }
 
             if( override_val )
@@ -809,10 +809,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     }
     else if( aConstraintType == ZONE_CONNECTION_CONSTRAINT )
     {
-        if( pad && pad->GetLocalZoneConnectionOverride( nullptr ) != ZONE_CONNECTION::INHERITED )
+        if( pad && pad->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED )
         {
             wxString msg;
-            ZONE_CONNECTION override = pad->GetLocalZoneConnectionOverride( &msg );
+            ZONE_CONNECTION override = pad->GetZoneConnectionOverrides( &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; zone connection: %s." ),
@@ -1326,13 +1326,13 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     if( aConstraintType == CLEARANCE_CONSTRAINT )
     {
         int  global = constraint.m_Value.Min();
-        int  localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
-        int  localB = bc ? bc->GetLocalClearance( nullptr ) : 0;
         int  clearance = global;
         bool needBlankLine = true;
 
-        if( localA > 0 )
+        if( ac && ac->GetLocalClearance().has_value() )
         {
+            int localA = ac->GetLocalClearance().value();
+
             if( needBlankLine )
             {
                 REPORT( "" )
@@ -1346,15 +1346,17 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             if( localA > clearance )
             {
                 wxString msg;
-                clearance = ac->GetLocalClearance( &msg );
+                clearance = ac->GetLocalClearance( &msg ).value();
                 constraint.SetParentRule( nullptr );
                 constraint.SetName( msg );
                 constraint.m_Value.SetMin( clearance );
             }
         }
 
-        if( localB > 0 )
+        if( bc && bc->GetLocalClearance().has_value() )
         {
+            int localB = bc->GetLocalClearance().value();
+
             if( needBlankLine )
             {
                 REPORT( "" )
@@ -1368,7 +1370,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             if( localB > clearance )
             {
                 wxString msg;
-                clearance = bc->GetLocalClearance( &msg );
+                clearance = bc->GetLocalClearance( &msg ).value();
                 constraint.SetParentRule( nullptr );
                 constraint.SetName( msg );
                 constraint.m_Value.SetMin( clearance );
@@ -1415,7 +1417,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( pad && parentFootprint )
         {
-            ZONE_CONNECTION local = parentFootprint->GetZoneConnection();
+            ZONE_CONNECTION local = parentFootprint->GetLocalZoneConnection();
 
             if( local != ZONE_CONNECTION::INHERITED )
             {

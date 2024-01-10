@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,28 +251,20 @@ public:
     wxString GetFilters() const { return m_filters; }
     void SetFilters( const wxString& aFilters ) { m_filters = aFilters; }
 
-    int GetLocalSolderMaskMargin() const { return m_localSolderMaskMargin; }
-    void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
+    std::optional<int> GetLocalClearance() const                 { return m_clearance; }
+    void SetLocalClearance( std::optional<int> aClearance )      { m_clearance = aClearance; }
 
-    int GetLocalClearance() const { return m_localClearance; }
-    void SetLocalClearance( int aClearance ) { m_localClearance = aClearance; }
+    std::optional<int> GetLocalSolderMaskMargin() const          { return m_solderMaskMargin; }
+    void SetLocalSolderMaskMargin( std::optional<int> aMargin )  { m_solderMaskMargin = aMargin; }
 
-    int GetLocalClearance( wxString* aSource ) const
-    {
-        if( aSource )
-            *aSource = wxString::Format( _( "footprint %s" ), GetReference() );
+    std::optional<int> GetLocalSolderPasteMargin() const         { return m_solderPasteMargin; }
+    void SetLocalSolderPasteMargin( std::optional<int> aMargin ) { m_solderPasteMargin = aMargin; }
 
-        return m_localClearance;
-    }
+    std::optional<double> GetLocalSolderPasteMarginRatio() const { return m_solderPasteMarginRatio; }
+    void SetLocalSolderPasteMarginRatio( std::optional<double> aRatio ) { m_solderPasteMarginRatio = aRatio; }
 
-    int GetLocalSolderPasteMargin() const { return m_localSolderPasteMargin; }
-    void SetLocalSolderPasteMargin( int aMargin ) { m_localSolderPasteMargin = aMargin; }
-
-    double GetLocalSolderPasteMarginRatio() const { return m_localSolderPasteMarginRatio; }
-    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
-
-    void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
-    ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
+    void SetLocalZoneConnection( ZONE_CONNECTION aType )         { m_zoneConnection = aType; }
+    ZONE_CONNECTION GetLocalZoneConnection() const               { return m_zoneConnection; }
 
     int GetAttributes() const { return m_attributes; }
     void SetAttributes( int aAttributes ) { m_attributes = aAttributes; }
@@ -290,6 +282,33 @@ public:
         }
 
         return false;
+    }
+
+    std::optional<int> GetLocalClearance( wxString* aSource ) const
+    {
+        if( m_clearance.has_value() && aSource )
+            *aSource = wxString::Format( _( "footprint %s" ), GetReference() );
+
+        return m_clearance;
+    }
+
+    /**
+     * Return any local clearance overrides set in the "classic" (ie: pre-rule) system.
+     *
+     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @return the clearance in internal units.
+     */
+    std::optional<int> GetClearanceOverrides( wxString* aSource ) const
+    {
+        return GetLocalClearance( aSource );
+    }
+
+    ZONE_CONNECTION GetZoneConnectionOverrides( wxString* aSource ) const
+    {
+        if( m_zoneConnection != ZONE_CONNECTION::INHERITED && aSource )
+            *aSource = wxString::Format( _( "footprint %s" ), GetReference() );
+
+        return m_zoneConnection;
     }
 
     /**
@@ -991,11 +1010,13 @@ private:
     // A pad group is a comma-separated list of pad numbers.
     std::vector<wxString> m_netTiePadGroups;
 
-    ZONE_CONNECTION m_zoneConnection;
-    int             m_localClearance;
-    int             m_localSolderMaskMargin;       // Solder mask margin
-    int             m_localSolderPasteMargin;      // Solder paste margin absolute value
-    double          m_localSolderPasteMarginRatio; // Solder mask margin ratio value of pad size
+    // Optional overrides
+    ZONE_CONNECTION       m_zoneConnection;
+    std::optional<int>    m_clearance;
+    std::optional<int>    m_solderMaskMargin;       // Solder mask margin
+    std::optional<int>    m_solderPasteMargin;      // Solder paste margin absolute value
+    std::optional<double> m_solderPasteMarginRatio; // Solder mask margin ratio of pad size
+                                                    // The final margin is the sum of these 2 values
 
     wxString        m_libDescription;    // File name and path for documentation file.
     wxString        m_keywords;          // Search keywords to find footprint in library.

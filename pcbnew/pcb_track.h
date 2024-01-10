@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,14 +188,6 @@ public:
     {
         return wxT( "PCB_TRACK" );
     }
-
-    /**
-     * Return any local clearance overrides set in the "classic" (ie: pre-rule) system.
-     *
-     * @param aSource [out] optionally reports the source as a user-readable string
-     * @return int - the clearance in internal units.
-     */
-    int GetLocalClearance( wxString* aSource ) const override;
 
     virtual MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const;
 

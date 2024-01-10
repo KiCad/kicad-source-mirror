@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -2814,7 +2814,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 for( FOOTPRINT* footprint : aFrame->GetBoard()->Footprints() )
                 {
                     for( PAD* pad : footprint->Pads() )
-                        m_worstClearance = std::max( m_worstClearance, pad->GetLocalClearance() );
+                    {
+                        std::optional<int> padOverride = pad->GetClearanceOverrides( nullptr );
+
+                        if( padOverride.has_value() )
+                            m_worstClearance = std::max( m_worstClearance, padOverride.value() );
+                    }
                 }
             }
             catch( PARSE_ERROR& )

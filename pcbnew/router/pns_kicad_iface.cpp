@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -1555,7 +1555,10 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             if( std::unique_ptr<PNS::SOLID> solid = syncPad( pad ) )
                 aWorld->Add( std::move( solid ) );
 
-            worstClearance = std::max( worstClearance, pad->GetLocalClearance() );
+            std::optional<int> clearanceOverride = pad->GetClearanceOverrides( nullptr );
+
+            if( clearanceOverride.has_value() )
+                worstClearance = std::max( worstClearance, clearanceOverride.value() );
 
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
             {

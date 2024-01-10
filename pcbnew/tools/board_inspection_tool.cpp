@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -782,7 +782,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             r->Report( "" );
             reportHeader( _( "Zone clearance resolution for:" ), a, b, layer, r );
 
-            clearance = zone->GetLocalClearance();
+            clearance = zone->GetLocalClearance().value();
             r->Report( "" );
             r->Report( wxString::Format( _( "Zone clearance: %s." ),
                                          m_frame->StringFromValue( clearance, true ) ) );

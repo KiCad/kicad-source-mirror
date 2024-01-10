@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,13 +304,29 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     // Local Clearances
 
-    m_netClearance.SetValue( m_footprint->GetLocalClearance() );
-    m_solderMask.SetValue( m_footprint->GetLocalSolderMaskMargin() );
-    m_solderPaste.SetValue( m_footprint->GetLocalSolderPasteMargin() );
-    m_solderPasteRatio.SetDoubleValue( m_footprint->GetLocalSolderPasteMarginRatio() * 100.0 );
+    if( m_footprint->GetLocalClearance().has_value() )
+        m_netClearance.SetValue( m_footprint->GetLocalClearance().value() );
+    else
+        m_netClearance.SetValue( wxEmptyString );
+
+    if( m_footprint->GetLocalSolderMaskMargin().has_value() )
+        m_solderMask.SetValue( m_footprint->GetLocalSolderMaskMargin().value() );
+    else
+        m_solderMask.SetValue( wxEmptyString );
+
+    if( m_footprint->GetLocalSolderPasteMargin().has_value() )
+        m_solderPaste.SetValue( m_footprint->GetLocalSolderPasteMargin().value() );
+    else
+        m_solderPaste.SetValue( wxEmptyString );
+
+    if( m_footprint->GetLocalSolderPasteMarginRatio().has_value() )
+        m_solderPasteRatio.SetDoubleValue( m_footprint->GetLocalSolderPasteMarginRatio().value() * 100.0 );
+    else
+        m_solderPasteRatio.SetValue( wxEmptyString );
+
     m_allowSolderMaskBridges->SetValue( m_footprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES );
 
-    switch( m_footprint->GetZoneConnection() )
+    switch( m_footprint->GetLocalZoneConnection() )
     {
     default:
     case ZONE_CONNECTION::INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
@@ -506,18 +522,33 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     }
 
     // Initialize masks clearances
-    m_footprint->SetLocalClearance( m_netClearance.GetValue() );
-    m_footprint->SetLocalSolderMaskMargin( m_solderMask.GetValue() );
-    m_footprint->SetLocalSolderPasteMargin( m_solderPaste.GetValue() );
-    m_footprint->SetLocalSolderPasteMarginRatio( m_solderPasteRatio.GetDoubleValue() / 100.0 );
+    if( m_netClearance.IsNull() )
+        m_footprint->SetLocalClearance( {} );
+    else
+        m_footprint->SetLocalClearance( m_netClearance.GetValue() );
+
+    if( m_solderMask.IsNull() )
+        m_footprint->SetLocalSolderMaskMargin( {} );
+    else
+        m_footprint->SetLocalSolderMaskMargin( m_solderMask.GetValue() );
+
+    if( m_solderPaste.IsNull() )
+        m_footprint->SetLocalSolderPasteMargin( {} );
+    else
+        m_footprint->SetLocalSolderPasteMargin( m_solderPaste.GetValue() );
+
+    if( m_solderPasteRatio.IsNull() )
+        m_footprint->SetLocalSolderPasteMarginRatio( {} );
+    else
+        m_footprint->SetLocalSolderPasteMarginRatio( m_solderPasteRatio.GetDoubleValue() / 100.0 );
 
     switch( m_ZoneConnectionChoice->GetSelection() )
     {
     default:
-    case 0:  m_footprint->SetZoneConnection( ZONE_CONNECTION::INHERITED ); break;
-    case 1:  m_footprint->SetZoneConnection( ZONE_CONNECTION::FULL );      break;
-    case 2:  m_footprint->SetZoneConnection( ZONE_CONNECTION::THERMAL );   break;
-    case 3:  m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
+    case 0:  m_footprint->SetLocalZoneConnection( ZONE_CONNECTION::INHERITED ); break;
+    case 1:  m_footprint->SetLocalZoneConnection( ZONE_CONNECTION::FULL );      break;
+    case 2:  m_footprint->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );   break;
+    case 3:  m_footprint->SetLocalZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
     // Set Footprint Position

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,15 +486,9 @@ bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 }
 
 
-int ZONE::GetLocalClearance( wxString* aSource ) const
+std::optional<int> ZONE::GetLocalClearance() const
 {
-    if( m_isRuleArea )
-        return 0;
-
-    if( aSource )
-        *aSource = _( "zone" );
-
-    return m_ZoneClearance;
+    return m_isRuleArea ? 0 : m_ZoneClearance;
 }
 
 
@@ -1715,7 +1709,7 @@ static struct ZONE_DESC
 
         const wxString groupElectrical = _HKI( "Electrical" );
 
-        auto clearanceOverride = new PROPERTY<ZONE, int>( _HKI( "Clearance" ),
+        auto clearanceOverride = new PROPERTY<ZONE, std::optional<int>>( _HKI( "Clearance" ),
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE );
         clearanceOverride->SetAvailableFunc( isCopperZone );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ bool TEARDROP_MANAGER::areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTr
                     PAD *pad = static_cast<PAD*>( aPadOrVia );
 
                     if( zone->GetPadConnection() == ZONE_CONNECTION::NONE
-                        || pad->GetZoneConnection() == ZONE_CONNECTION::NONE )
+                        || pad->GetZoneConnectionOverrides( nullptr ) == ZONE_CONNECTION::NONE )
                     {
                         return false;
                     }

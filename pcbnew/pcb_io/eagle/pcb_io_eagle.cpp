@@ -2512,7 +2512,7 @@ void PCB_IO_EAGLE::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 
     // Solid connection to copper zones
     if( aEaglePad.thermals && !*aEaglePad.thermals )
-        aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
+        aPad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
 
     FOOTPRINT* footprint = aPad->GetParentFootprint();
     wxCHECK( footprint, /* void */ );

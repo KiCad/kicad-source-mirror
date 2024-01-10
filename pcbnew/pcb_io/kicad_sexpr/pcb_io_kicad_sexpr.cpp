@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1197,34 +1197,34 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
                       m_out->Quotew( aFootprint->GetSheetfile() ).c_str() );
     }
 
-    if( aFootprint->GetLocalSolderMaskMargin() != 0 )
+    if( aFootprint->GetLocalSolderMaskMargin().has_value() )
     {
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
-                      formatInternalUnits( aFootprint->GetLocalSolderMaskMargin() ).c_str() );
+                      formatInternalUnits( aFootprint->GetLocalSolderMaskMargin().value() ).c_str() );
     }
 
-    if( aFootprint->GetLocalSolderPasteMargin() != 0 )
+    if( aFootprint->GetLocalSolderPasteMargin().has_value() )
     {
         m_out->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
-                      formatInternalUnits( aFootprint->GetLocalSolderPasteMargin() ).c_str() );
+                      formatInternalUnits( aFootprint->GetLocalSolderPasteMargin().value() ).c_str() );
     }
 
-    if( aFootprint->GetLocalSolderPasteMarginRatio() != 0 )
+    if( aFootprint->GetLocalSolderPasteMarginRatio().has_value() )
     {
         m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
-                      FormatDouble2Str( aFootprint->GetLocalSolderPasteMarginRatio() ).c_str() );
+                      FormatDouble2Str( aFootprint->GetLocalSolderPasteMarginRatio().value() ).c_str() );
     }
 
-    if( aFootprint->GetLocalClearance() != 0 )
+    if( aFootprint->GetLocalClearance().has_value() )
     {
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
-                      formatInternalUnits( aFootprint->GetLocalClearance() ).c_str() );
+                      formatInternalUnits( aFootprint->GetLocalClearance().value() ).c_str() );
     }
 
-    if( aFootprint->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
+    if( aFootprint->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED )
     {
         m_out->Print( aNestLevel+1, "(zone_connect %d)\n",
-                                    static_cast<int>( aFootprint->GetZoneConnection() ) );
+                                    static_cast<int>( aFootprint->GetLocalZoneConnection() ) );
     }
 
     // Attributes
@@ -1623,34 +1623,34 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
                    formatInternalUnits( aPad->GetPadToDieLength() ).c_str() );
     }
 
-    if( aPad->GetLocalSolderMaskMargin() != 0 )
+    if( aPad->GetLocalSolderMaskMargin().has_value() )
     {
         StrPrintf( &output, " (solder_mask_margin %s)",
-                   formatInternalUnits( aPad->GetLocalSolderMaskMargin() ).c_str() );
+                   formatInternalUnits( aPad->GetLocalSolderMaskMargin().value() ).c_str() );
     }
 
-    if( aPad->GetLocalSolderPasteMargin() != 0 )
+    if( aPad->GetLocalSolderPasteMargin().has_value() )
     {
         StrPrintf( &output, " (solder_paste_margin %s)",
-                   formatInternalUnits( aPad->GetLocalSolderPasteMargin() ).c_str() );
+                   formatInternalUnits( aPad->GetLocalSolderPasteMargin().value() ).c_str() );
     }
 
-    if( aPad->GetLocalSolderPasteMarginRatio() != 0 )
+    if( aPad->GetLocalSolderPasteMarginRatio().has_value() )
     {
         StrPrintf( &output, " (solder_paste_margin_ratio %s)",
-                   FormatDouble2Str( aPad->GetLocalSolderPasteMarginRatio() ).c_str() );
+                   FormatDouble2Str( aPad->GetLocalSolderPasteMarginRatio().value() ).c_str() );
     }
 
-    if( aPad->GetLocalClearance() != 0 )
+    if( aPad->GetLocalClearance().has_value() )
     {
         StrPrintf( &output, " (clearance %s)",
-                   formatInternalUnits( aPad->GetLocalClearance() ).c_str() );
+                   formatInternalUnits( aPad->GetLocalClearance().value() ).c_str() );
     }
 
-    if( aPad->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
+    if( aPad->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED )
     {
         StrPrintf( &output, " (zone_connect %d)",
-                   static_cast<int>( aPad->GetZoneConnection() ) );
+                   static_cast<int>( aPad->GetLocalZoneConnection() ) );
     }
 
     if( aPad->GetThermalSpokeWidth() != 0 )
@@ -2275,9 +2275,11 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
         break;
     }
 
-    m_out->Print( 0, " (clearance %s))\n", formatInternalUnits( aZone->GetLocalClearance() ).c_str() );
+    m_out->Print( 0, " (clearance %s))\n",
+                  formatInternalUnits( aZone->GetLocalClearance().value() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(min_thickness %s)", formatInternalUnits( aZone->GetMinThickness() ).c_str() );
+    m_out->Print( aNestLevel+1, "(min_thickness %s)",
+                  formatInternalUnits( aZone->GetMinThickness() ).c_str() );
 
     // We continue to write this for 3rd-party parsers, but we no longer read it (as of V7).
     m_out->Print( 0, " (filled_areas_thickness no)" );

@@ -192,29 +192,70 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
 }
 
 
-bool padHasOverrides( const PAD* a, const PAD* b, REPORTER* aReporter )
+bool padHasOverrides( const PAD* a, const PAD* b, REPORTER& aReporter )
 {
     bool diff = false;
 
-    TEST( a->GetLocalClearance(), b->GetLocalClearance(),
-          wxString::Format( _( "%s has clearance override." ), PAD_DESC( a ) ) );
-    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin(),
-          wxString::Format( _( "%s has solder mask expansion override." ), PAD_DESC( a ) ) );
-    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin(),
-          wxString::Format( _( "%s has solder paste clearance override." ), PAD_DESC( a ) ) );
-    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio(),
-          wxString::Format( _( "%s has solder paste clearance override." ), PAD_DESC( a ) ) );
+#define REPORT_MSG( s, p ) aReporter.Report( wxString::Format( s, p ) )
 
-    TEST( a->GetZoneConnection(), b->GetZoneConnection(),
-          wxString::Format( _( "%s has zone connection override." ), PAD_DESC( a ) ) );
-    TEST( a->GetThermalGap(), b->GetThermalGap(),
-          wxString::Format( _( "%s has thermal relief gap override." ), PAD_DESC( a ) ) );
-    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth(),
-          wxString::Format( _( "%s has thermal relief spoke width override." ), PAD_DESC( a ) ) );
-    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees(),
-            wxString::Format( _( "%s has thermal relief spoke angle override." ), PAD_DESC( a ) ) );
-    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt(),
-          wxString::Format( _( "%s has zone knockout setting override." ), PAD_DESC( a ) ) );
+    if( a->GetLocalClearance().has_value() && a->GetLocalClearance() != b->GetLocalClearance() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has clearance override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetLocalSolderMaskMargin().has_value()
+            && a->GetLocalSolderMaskMargin() != b->GetLocalSolderMaskMargin() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has solder mask expansion override." ), PAD_DESC( a ) );
+    }
+
+
+    if( a->GetLocalSolderPasteMargin().has_value()
+            && a->GetLocalSolderPasteMargin() != b->GetLocalSolderPasteMargin() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has solder paste clearance override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetLocalSolderPasteMarginRatio()
+            && a->GetLocalSolderPasteMarginRatio() != b->GetLocalSolderPasteMarginRatio() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has solder paste clearance override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED
+            && a->GetLocalZoneConnection() != b->GetLocalZoneConnection() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has zone connection override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetThermalGap() != b->GetThermalGap() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has thermal relief gap override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetThermalSpokeWidth() != b->GetThermalSpokeWidth() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has thermal relief spoke width override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetThermalSpokeAngle() != b->GetThermalSpokeAngle() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has thermal relief spoke angle override." ), PAD_DESC( a ) );
+    }
+
+    if( a->GetCustomShapeInZoneOpt() != b->GetCustomShapeInZoneOpt() )
+    {
+        diff = true;
+        REPORT_MSG( _( "%s has zone knockout setting override." ), PAD_DESC( a ) );
+    }
 
     return diff;
 }
@@ -315,7 +356,7 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     // going to be VERY noisy.
     //
     // So we just do it when we have a reporter.
-    if( aReporter && padHasOverrides( a, b, aReporter ) )
+    if( aReporter && padHasOverrides( a, b, *aReporter ) )
         diff = true;
 
     bool primitivesDiffer = false;
@@ -594,17 +635,40 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
     // For now we report them if there's a reporter, but we DON'T generate DRC errors on them.
     if( aReporter )
     {
-        TEST( GetLocalClearance(), aLibFP->GetLocalClearance(),
-              _( "Pad clearance overridden." ) );
-        TEST( GetLocalSolderMaskMargin(), aLibFP->GetLocalSolderMaskMargin(),
-              _( "Solder mask expansion overridden." ) );
-        TEST( GetLocalSolderPasteMargin(), aLibFP->GetLocalSolderPasteMargin(),
-              _( "Solder paste absolute clearance overridden." ) );
-        TEST_D( GetLocalSolderPasteMarginRatio(), aLibFP->GetLocalSolderPasteMarginRatio(),
-                _( "Solder paste relative clearance overridden." ) );
+        if( GetLocalClearance().has_value() && GetLocalClearance() != aLibFP->GetLocalClearance() )
+        {
+            diff = true;
+            aReporter->Report( _( "Pad clearance overridden." ) );
+        }
 
-        TEST( GetZoneConnection(), aLibFP->GetZoneConnection(),
-              _( "Zone connection overridden." ) );
+        if( GetLocalSolderMaskMargin().has_value()
+                && GetLocalSolderMaskMargin() != aLibFP->GetLocalSolderMaskMargin() )
+        {
+            diff = true;
+            aReporter->Report( _( "Solder mask expansion overridden." ) );
+        }
+
+
+        if( GetLocalSolderPasteMargin().has_value()
+                && GetLocalSolderPasteMargin() != aLibFP->GetLocalSolderPasteMargin() )
+        {
+            diff = true;
+            aReporter->Report( _( "Solder paste absolute clearance overridden." ) );
+        }
+
+        if( GetLocalSolderPasteMarginRatio()
+                && GetLocalSolderPasteMarginRatio() != aLibFP->GetLocalSolderPasteMarginRatio() )
+        {
+            diff = true;
+            aReporter->Report( _( "\"Solder paste relative clearance overridden." ) );
+        }
+
+        if( GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED
+                && GetLocalZoneConnection() != aLibFP->GetLocalZoneConnection() )
+        {
+            diff = true;
+            aReporter->Report( _( "Zone connection overridden." ) );
+        }
     }
 
     TEST( GetNetTiePadGroups().size(), aLibFP->GetNetTiePadGroups().size(),
@@ -698,7 +762,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
         {
             if( padNeedsUpdate( *aIt, *bIt, aReporter ) )
                 diff = true;
-            else if( aReporter && padHasOverrides( *aIt, *bIt, aReporter ) )
+            else if( aReporter && padHasOverrides( *aIt, *bIt, *aReporter ) )
                 diff = true;
         }
     }

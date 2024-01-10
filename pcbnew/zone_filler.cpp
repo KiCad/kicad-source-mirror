@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Włostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -930,10 +930,10 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 constraint = bds.m_DRCEngine->EvalRules( PHYSICAL_CLEARANCE_CONSTRAINT, pad,
                                                          aZone, aLayer );
 
-                if( constraint.GetValue().Min() > aZone->GetLocalClearance() )
+                if( constraint.GetValue().Min() > aZone->GetLocalClearance().value() )
                     padClearance = constraint.GetValue().Min();
                 else
-                    padClearance = aZone->GetLocalClearance();
+                    padClearance = aZone->GetLocalClearance().value();
 
                 if( pad->FlashLayer( aLayer ) )
                 {
@@ -1746,7 +1746,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
     BOX2I                  zoneBB = aZone->GetBoundingBox();
     DRC_CONSTRAINT         constraint;
 
-    zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance() ) );
+    zoneBB.Inflate( std::max( bds.GetBiggestClearanceValue(), aZone->GetLocalClearance().value() ) );
 
     // Is a point on the boundary of the polygon inside or outside?  The boundary may be off by
     // MaxError, and we add 1.5 mil for some wiggle room.

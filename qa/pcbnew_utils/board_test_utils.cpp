@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 
-#define CHECK_ENUM_CLASS_EQUAL( L, R )                                                             \
+#define CHECK_ENUM_CLASS_EQUAL( L, R )                                                      \
     BOOST_CHECK_EQUAL( static_cast<int>( L ), static_cast<int>( R ) )
 
 
@@ -349,13 +349,15 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
         BOOST_CHECK_EQUAL( expected->GetPinFunction(), pad->GetPinFunction() );
         BOOST_CHECK_EQUAL( expected->GetPinType(), pad->GetPinType() );
         BOOST_CHECK_EQUAL( expected->GetPadToDieLength(), pad->GetPadToDieLength() );
-        BOOST_CHECK_EQUAL( expected->GetLocalSolderMaskMargin(), pad->GetLocalSolderMaskMargin() );
-        BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMargin(),
-                           pad->GetLocalSolderPasteMargin() );
-        BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMarginRatio(),
-                           pad->GetLocalSolderPasteMarginRatio() );
-        BOOST_CHECK_EQUAL( expected->GetLocalClearance(), pad->GetLocalClearance() );
-        CHECK_ENUM_CLASS_EQUAL( expected->GetZoneConnection(), pad->GetZoneConnection() );
+        BOOST_CHECK_EQUAL( expected->GetLocalSolderMaskMargin().value_or( 0 ),
+                                  pad->GetLocalSolderMaskMargin().value_or( 0 ) );
+        BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMargin().value_or( 0 ),
+                                  pad->GetLocalSolderPasteMargin().value_or( 0 ) );
+        BOOST_CHECK_EQUAL( expected->GetLocalSolderPasteMarginRatio().value_or( 0 ),
+                                  pad->GetLocalSolderPasteMarginRatio().value_or( 0 ) );
+        BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ),
+                           pad->GetLocalClearance().value_or( 0 ) );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetLocalZoneConnection(), pad->GetLocalZoneConnection() );
         BOOST_CHECK_EQUAL( expected->GetThermalSpokeWidth(), pad->GetThermalSpokeWidth() );
         BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle(), pad->GetThermalSpokeAngle() );
         BOOST_CHECK_EQUAL( expected->GetThermalGap(), pad->GetThermalGap() );
@@ -467,7 +469,8 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone )
         BOOST_CHECK_EQUAL( expected->GetNetCode(), zone->GetNetCode() );
         BOOST_CHECK_EQUAL( expected->GetAssignedPriority(), zone->GetAssignedPriority() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetPadConnection(), zone->GetPadConnection() );
-        BOOST_CHECK_EQUAL( expected->GetLocalClearance(), zone->GetLocalClearance() );
+        BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ),
+                           zone->GetLocalClearance().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );
 
         BOOST_CHECK_EQUAL( expected->GetLayerSet(), zone->GetLayerSet() );

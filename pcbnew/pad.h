@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -374,7 +374,7 @@ public:
     PAD_ATTRIB GetAttribute() const             { return m_attribute; }
 
     void SetProperty( PAD_PROP aProperty );
-    PAD_PROP GetProperty() const              { return m_property; }
+    PAD_PROP GetProperty() const                { return m_property; }
 
     // We don't currently have an attribute for APERTURE, and adding one will change the file
     // format, so for now just infer a copper-less pad to be an APERTURE pad.
@@ -386,19 +386,28 @@ public:
     void SetPadToDieLength( int aLength )       { m_lengthPadToDie = aLength; }
     int GetPadToDieLength() const               { return m_lengthPadToDie; }
 
-    int GetLocalSolderMaskMargin() const        { return m_localSolderMaskMargin; }
-    void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
+    std::optional<int> GetLocalClearance() const override        { return m_clearance; }
+    void SetLocalClearance( std::optional<int> aClearance )      { m_clearance = aClearance; }
 
-    int GetLocalClearance( wxString* aSource ) const override;
-    int GetLocalClearance() const               { return m_localClearance; }
-    void SetLocalClearance( int aClearance )    { m_localClearance = aClearance; }
+    std::optional<int> GetLocalSolderMaskMargin() const          { return m_solderMaskMargin; }
+    void SetLocalSolderMaskMargin( std::optional<int> aMargin )  { m_solderMaskMargin = aMargin; }
 
-    int GetLocalSolderPasteMargin() const       { return m_localSolderPasteMargin; }
-    void SetLocalSolderPasteMargin( int aMargin ) { m_localSolderPasteMargin = aMargin; }
+    std::optional<int> GetLocalSolderPasteMargin() const         { return m_solderPasteMargin; }
+    void SetLocalSolderPasteMargin( std::optional<int> aMargin ) { m_solderPasteMargin = aMargin; }
 
-    double GetLocalSolderPasteMarginRatio() const { return m_localSolderPasteMarginRatio; }
-    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
+    std::optional<double> GetLocalSolderPasteMarginRatio() const { return m_solderPasteMarginRatio; }
+    void SetLocalSolderPasteMarginRatio( std::optional<double> aRatio ) { m_solderPasteMarginRatio = aRatio; }
 
+    void SetLocalZoneConnection( ZONE_CONNECTION aType )         { m_zoneConnection = aType; }
+    ZONE_CONNECTION GetLocalZoneConnection() const               { return m_zoneConnection; }
+
+    /**
+     * Return the pad's "own" clearance in internal units.
+     *
+     * @param aLayer the layer in question.
+     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @return the clearance in internal units.
+     */
     int GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const override;
 
     /**
@@ -465,7 +474,15 @@ public:
      * @param aSource [out] optionally reports the source as a user-readable string.
      * @return the clearance in internal units.
      */
-    int GetLocalClearanceOverrides( wxString* aSource ) const override;
+    std::optional<int> GetLocalClearance( wxString* aSource ) const override;
+
+    /**
+     * Return any clearance overrides set in the "classic" (ie: pre-rule) system.
+     *
+     * @param aSource [out] optionally reports the source as a user-readable string.
+     * @return the clearance in internal units.
+     */
+    std::optional<int> GetClearanceOverrides( wxString* aSource ) const override;
 
     /**
      * @return the expansion for the solder mask layer
@@ -492,10 +509,7 @@ public:
     */
     VECTOR2I GetSolderPasteMargin() const;
 
-    void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
-    ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
-
-    ZONE_CONNECTION GetLocalZoneConnectionOverride( wxString* aSource = nullptr ) const;
+    ZONE_CONNECTION GetZoneConnectionOverrides( wxString* aSource = nullptr ) const;
 
     /**
      * Set the width of the thermal spokes connecting the pad to a zone.  If != 0 this will
@@ -821,13 +835,13 @@ private:
      * LEVEL 2: Rules
      * LEVEL 3: Accumulated local settings, netclass settings, & board design settings
      *
-     * These are the LEVEL 1 settings for a pad.
+     * These are the LEVEL 1 settings (overrides) for a pad.
      */
-    int         m_localClearance;
-    int         m_localSolderMaskMargin;        // Local solder mask margin
-    int         m_localSolderPasteMargin;       // Local solder paste margin absolute value
-    double      m_localSolderPasteMarginRatio;  // Local solder mask margin ratio of pad size
-                                                // The final margin is the sum of these 2 values
+    std::optional<int>    m_clearance;
+    std::optional<int>    m_solderMaskMargin;       // Solder mask margin
+    std::optional<int>    m_solderPasteMargin;      // Solder paste margin absolute value
+    std::optional<double> m_solderPasteMarginRatio; // Solder mask margin ratio of pad size
+                                                    // The final margin is the sum of these 2 values
 
     /*
      * How to build the custom shape in zone, to create the clearance area:

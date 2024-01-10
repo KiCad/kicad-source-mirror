@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,16 +148,27 @@ public:
     void CacheBoundingBox();
 
     /**
-     * Return any local clearances set in the "classic" (ie: pre-rule) system.  These are
-     * things like zone clearance which are NOT an override.
+     * @return the zone's clearance in internal units.
+     */
+    std::optional<int> GetLocalClearance() const override;
+    void SetLocalClearance( std::optional<int> aClearance ) { m_ZoneClearance = aClearance.value(); }
+
+    /**
+     * Return any local clearances set in the "classic" (ie: pre-rule) system.
      *
-     * @param aSource [out] optionally reports the source as a user-readable string
+     * @param aSource [out] optionally reports the source as a user-readable string.
      * @return the clearance in internal units.
      */
-    int GetLocalClearance( wxString* aSource ) const override;
+    std::optional<int> GetLocalClearance( wxString* aSource ) const override
+    {
+        if( m_isRuleArea )
+            return std::optional<int>();
 
-    int GetLocalClearance() const { return GetLocalClearance( nullptr ); }
-    void SetLocalClearance( int aClearance ) { m_ZoneClearance = aClearance; }
+        if( aSource )
+            *aSource = _( "zone" );
+
+        return GetLocalClearance();
+    }
 
     /**
      * @return true if this zone is on a copper layer, false if on a technical layer.

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -532,11 +532,12 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             zone->SetLayer( layer );
 
             wxString netname = arr[3];
+
             if( IsCopperLayer( layer ) )
                 zone->SetNet( getOrAddNetItem( netname ) );
 
             zone->SetLocalClearance( ConvertSize( arr[5] ) );
-            zone->SetThermalReliefGap( zone->GetLocalClearance() );
+            zone->SetThermalReliefGap( zone->GetLocalClearance().value() );
 
             wxString fillStyle = arr[5];
             if( fillStyle == wxS( "none" ) )

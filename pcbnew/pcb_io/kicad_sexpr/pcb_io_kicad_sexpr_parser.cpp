@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4188,30 +4188,47 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             break;
 
         case T_solder_mask_margin:
-            footprint->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin "
-                                                                  "value" ) );
+            footprint->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && footprint->GetLocalSolderMaskMargin() == 0 )
+                footprint->SetLocalSolderMaskMargin( {} );
+
             break;
 
         case T_solder_paste_margin:
-            footprint->SetLocalSolderPasteMargin( parseBoardUnits( "local solder paste margin "
-                                                                   "value" ) );
+            footprint->SetLocalSolderPasteMargin( parseBoardUnits( "local solder paste margin value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && footprint->GetLocalSolderPasteMargin() == 0 )
+                footprint->SetLocalSolderPasteMargin( {} );
+
             break;
 
-        case T_solder_paste_ratio:
-            footprint->SetLocalSolderPasteMarginRatio( parseDouble( "local solder paste margin "
-                                                                    "ratio value" ) );
+        case T_solder_paste_margin_ratio:
+            footprint->SetLocalSolderPasteMarginRatio( parseDouble( "local solder paste margin ratio value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && footprint->GetLocalSolderPasteMarginRatio() == 0 )
+                footprint->SetLocalSolderPasteMarginRatio( {} );
+
             break;
 
         case T_clearance:
             footprint->SetLocalClearance( parseBoardUnits( "local clearance value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && footprint->GetLocalClearance() == 0 )
+                footprint->SetLocalClearance( {} );
+
             break;
 
         case T_zone_connect:
-            footprint->SetZoneConnection((ZONE_CONNECTION) parseInt( "zone connection value" ) );
+            footprint->SetLocalZoneConnection((ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
@@ -4592,8 +4609,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             // than 0 used to fix a bunch of debug assertions even though it is defined as a
             // through hole pad.  Wouldn't a though hole pad with no drill be a surface mount
             // pad (or a conn pad which is a smd pad with no solder paste)?
-            if( ( pad->GetAttribute() != PAD_ATTRIB::SMD )
-                && ( pad->GetAttribute() != PAD_ATTRIB::CONN ) )
+            if( pad->GetAttribute() != PAD_ATTRIB::SMD && pad->GetAttribute() != PAD_ATTRIB::CONN )
                 pad->SetDrillSize( drillSize );
             else
                 pad->SetDrillSize( VECTOR2I( 0, 0 ) );
@@ -4658,24 +4674,43 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_solder_mask_margin:
-            pad->SetLocalSolderMaskMargin( parseBoardUnits( T_solder_mask_margin ) );
+            pad->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && pad->GetLocalSolderMaskMargin() == 0 )
+                pad->SetLocalSolderMaskMargin( {} );
+
             break;
 
         case T_solder_paste_margin:
-            pad->SetLocalSolderPasteMargin( parseBoardUnits( T_solder_paste_margin ) );
+            pad->SetLocalSolderPasteMargin( parseBoardUnits( "local solder paste margin value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && pad->GetLocalSolderPasteMargin() == 0 )
+                pad->SetLocalSolderPasteMargin( {} );
+
             break;
 
         case T_solder_paste_margin_ratio:
-            pad->SetLocalSolderPasteMarginRatio(
-                parseDouble( "pad local solder paste margin ratio value" ) );
+            pad->SetLocalSolderPasteMarginRatio( parseDouble( "local solder paste margin ratio value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && pad->GetLocalSolderPasteMarginRatio() == 0 )
+                pad->SetLocalSolderPasteMarginRatio( {} );
+
             break;
 
         case T_clearance:
             pad->SetLocalClearance( parseBoardUnits( "local clearance value" ) );
             NeedRIGHT();
+
+            // In pre-9.0 files "0" meant inherit.
+            if( m_requiredVersion <= 20240201 && pad->GetLocalClearance() == 0 )
+                pad->SetLocalClearance( {} );
+
             break;
 
         case T_teardrops:
@@ -4683,7 +4718,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_zone_connect:
-            pad->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
+            pad->SetLocalZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 

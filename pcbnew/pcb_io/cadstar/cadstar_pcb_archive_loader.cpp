@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1062,12 +1062,20 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
             if( kiLayer == F_Mask || kiLayer == B_Mask )
             {
-                if( std::abs( pad->GetLocalSolderMaskMargin() ) < std::abs( newMargin ) )
+                std::optional<int> localMargin = pad->GetLocalSolderMaskMargin();
+
+                if( !localMargin.has_value() )
+                    pad->SetLocalSolderMaskMargin( newMargin );
+                else if( std::abs( localMargin.value() ) < std::abs( newMargin ) )
                     pad->SetLocalSolderMaskMargin( newMargin );
             }
             else if( kiLayer == F_Paste || kiLayer == B_Paste )
             {
-                if( std::abs( pad->GetLocalSolderPasteMargin() ) < std::abs( newMargin ) )
+                std::optional<int> localMargin = pad->GetLocalSolderPasteMargin();
+
+                if( !localMargin.has_value() )
+                    pad->SetLocalSolderPasteMargin( newMargin );
+                else if( std::abs( localMargin.value() ) < std::abs( newMargin ) )
                     pad->SetLocalSolderPasteMargin( newMargin );
             }
             else
@@ -3748,7 +3756,8 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             int extra = getKiCadLength( Assignments.Codedefs.SpacingCodes.at( wxT( "C_C" ) ).Spacing )
                         - m_board->GetDesignSettings().m_MinClearance;
 
-            int retval = std::max( aZoneA->GetLocalClearance(), aZoneB->GetLocalClearance() );
+            int retval = std::max( aZoneA->GetLocalClearance().value(),
+                                   aZoneB->GetLocalClearance().value() );
 
             retval += extra;
 

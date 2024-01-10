@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -775,18 +775,21 @@ int BOARD::GetMaxClearanceValue() const
 {
     int worstClearance = m_designSettings->GetBiggestClearanceValue();
 
-       for( ZONE* zone : m_zones )
-        worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
+    for( ZONE* zone : m_zones )
+        worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
 
     for( FOOTPRINT* footprint : m_footprints )
     {
-        worstClearance = std::max( worstClearance, footprint->GetLocalClearance() );
-
         for( PAD* pad : footprint->Pads() )
-            worstClearance = std::max( worstClearance, pad->GetLocalClearance() );
+        {
+            std::optional<int> override = pad->GetClearanceOverrides( nullptr );
+
+            if( override.has_value() )
+                worstClearance = std::max( worstClearance, override.value() );
+        }
 
         for( ZONE* zone : footprint->Zones() )
-            worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
+            worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
     }
 
     return worstClearance;

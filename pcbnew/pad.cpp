@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,10 +77,6 @@ PAD::PAD( FOOTPRINT* parent ) :
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );     // Default pad drill shape is a circle.
     m_attribute           = PAD_ATTRIB::PTH;     // Default pad type is plated through hole
     SetProperty( PAD_PROP::NONE );               // no special fabrication property
-    m_localClearance      = 0;
-    m_localSolderMaskMargin  = 0;
-    m_localSolderPasteMargin = 0;
-    m_localSolderPasteMarginRatio = 0.0;
 
     // Parameters for round rect only:
     m_roundedCornerScale = 0.25;                 // from IPC-7351C standard
@@ -805,26 +801,24 @@ bool PAD::IsOnCopperLayer() const
 }
 
 
-int PAD::GetLocalClearanceOverrides( wxString* aSource ) const
+std::optional<int> PAD::GetLocalClearance( wxString* aSource ) const
 {
-    // A pad can have specific clearance that overrides its NETCLASS clearance value
-    if( GetLocalClearance() )
-        return GetLocalClearance( aSource );
+    if( m_clearance.has_value() && aSource )
+        *aSource = _( "pad" );
 
-    // A footprint can have a specific clearance value
-    if( GetParentFootprint() && GetParentFootprint()->GetLocalClearance() )
-        return GetParentFootprint()->GetLocalClearance( aSource );
-
-    return 0;
+    return m_clearance;
 }
 
 
-int PAD::GetLocalClearance( wxString* aSource ) const
+std::optional<int> PAD::GetClearanceOverrides( wxString* aSource ) const
 {
-    if( aSource )
-        *aSource = _( "pad" );
+    if( m_clearance.has_value() )
+        return GetLocalClearance( aSource );
 
-    return m_localClearance;
+    if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+        return parentFootprint->GetClearanceOverrides( aSource );
+
+    return std::optional<int>();
 }
 
 
@@ -862,35 +856,32 @@ int PAD::GetSolderMaskExpansion() const
     if( ( m_layerMask & LSET::AllCuMask() ).none() )
         return 0;
 
-    int margin = m_localSolderMaskMargin;
+    std::optional<int> margin = m_solderMaskMargin;
 
-    if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+    if( !margin.has_value() )
     {
-        if( margin == 0 )
-        {
-            if( parentFootprint->GetLocalSolderMaskMargin() )
-                margin = parentFootprint->GetLocalSolderMaskMargin();
-        }
-
-        if( margin == 0 )
-        {
-            const BOARD* brd = GetBoard();
-
-            if( brd )
-                margin = brd->GetDesignSettings().m_SolderMaskExpansion;
-        }
+        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+            margin = parentFootprint->GetLocalSolderMaskMargin();
     }
 
+    if( !margin.has_value() )
+    {
+        if( const BOARD* brd = GetBoard() )
+            margin = brd->GetDesignSettings().m_SolderMaskExpansion;
+    }
+
+    int marginValue = margin.value_or( 0 );
+
     // ensure mask have a size always >= 0
-    if( margin < 0 )
+    if( marginValue < 0 )
     {
         int minsize = -std::min( m_size.x, m_size.y ) / 2;
 
-        if( margin < minsize )
-            margin = minsize;
+        if( marginValue < minsize )
+            marginValue = minsize;
     }
 
-    return margin;
+    return marginValue;
 }
 
 
@@ -902,31 +893,36 @@ VECTOR2I PAD::GetSolderPasteMargin() const
     if( ( m_layerMask & LSET::AllCuMask() ).none() )
         return VECTOR2I( 0, 0 );
 
-    int     margin = m_localSolderPasteMargin;
-    double  mratio = m_localSolderPasteMarginRatio;
+    std::optional<int>    margin = m_solderPasteMargin;
+    std::optional<double> mratio = m_solderPasteMarginRatio;
 
-    if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+    if( !margin.has_value() )
     {
-        if( margin == 0 )
+        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
             margin = parentFootprint->GetLocalSolderPasteMargin();
+    }
 
-        auto brd = GetBoard();
+    if( !margin.has_value() )
+    {
+        if( const BOARD* board = GetBoard() )
+            margin = board->GetDesignSettings().m_SolderPasteMargin;
+    }
 
-        if( margin == 0 && brd )
-            margin = brd->GetDesignSettings().m_SolderPasteMargin;
-
-        if( mratio == 0.0 )
+    if( !mratio.has_value() )
+    {
+        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
             mratio = parentFootprint->GetLocalSolderPasteMarginRatio();
+    }
 
-        if( mratio == 0.0 && brd )
-        {
-            mratio = brd->GetDesignSettings().m_SolderPasteMarginRatio;
-        }
+    if( !mratio.has_value() )
+    {
+        if( const BOARD* board = GetBoard() )
+            mratio = board->GetDesignSettings().m_SolderPasteMarginRatio;
     }
 
     VECTOR2I pad_margin;
-    pad_margin.x = margin + KiROUND( m_size.x * mratio );
-    pad_margin.y = margin + KiROUND( m_size.y * mratio );
+    pad_margin.x = margin.value_or( 0 ) + KiROUND( m_size.x * mratio.value_or( 0 ) );
+    pad_margin.y = margin.value_or( 0 ) + KiROUND( m_size.y * mratio.value_or( 0 ) );
 
     // ensure mask have a size always >= 0
     if( m_padShape != PAD_SHAPE::CUSTOM )
@@ -942,12 +938,23 @@ VECTOR2I PAD::GetSolderPasteMargin() const
 }
 
 
-ZONE_CONNECTION PAD::GetLocalZoneConnectionOverride( wxString* aSource ) const
+ZONE_CONNECTION PAD::GetZoneConnectionOverrides( wxString* aSource ) const
 {
-    if( m_zoneConnection != ZONE_CONNECTION::INHERITED && aSource )
-        *aSource = _( "pad" );
+    ZONE_CONNECTION connection = m_zoneConnection;
 
-    return m_zoneConnection;
+    if( connection != ZONE_CONNECTION::INHERITED )
+    {
+        if( aSource )
+            *aSource = _( "pad" );
+    }
+
+    if( connection == ZONE_CONNECTION::INHERITED )
+    {
+        if( FOOTPRINT* parentFootprint = GetParentFootprint() )
+            connection = parentFootprint->GetZoneConnectionOverrides( aSource );
+    }
+
+    return connection;
 }
 
 
@@ -1544,7 +1551,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetLocalSolderPasteMargin( aMasterPad.GetLocalSolderPasteMargin() );
     SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
 
-    SetZoneConnection( aMasterPad.GetZoneConnection() );
+    SetLocalZoneConnection( aMasterPad.GetLocalZoneConnection() );
     SetThermalSpokeWidth( aMasterPad.GetThermalSpokeWidth() );
     SetThermalSpokeAngle( aMasterPad.GetThermalSpokeAngle() );
     SetThermalGap( aMasterPad.GetThermalGap() );
@@ -1733,7 +1740,7 @@ bool PAD::operator==( const BOARD_ITEM& aOther ) const
     if( GetOrientation() != other.GetOrientation() )
         return false;
 
-    if( GetZoneConnection() != other.GetZoneConnection() )
+    if( GetLocalZoneConnection() != other.GetLocalZoneConnection() )
         return false;
 
     if( GetThermalSpokeWidth() != other.GetThermalSpokeWidth() )
@@ -1827,7 +1834,7 @@ double PAD::Similarity( const BOARD_ITEM& aOther ) const
     if( GetOrientation() != other.GetOrientation() )
         similarity *= 0.9;
 
-    if( GetZoneConnection() != other.GetZoneConnection() )
+    if( GetLocalZoneConnection() != other.GetLocalZoneConnection() )
         similarity *= 0.9;
 
     if( GetThermalSpokeWidth() != other.GetThermalSpokeWidth() )
@@ -2019,25 +2026,30 @@ static struct PAD_DESC
 
         const wxString groupOverrides = _HKI( "Overrides" );
 
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Clearance Override" ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
+                    _HKI( "Clearance Override" ),
                     &PAD::SetLocalClearance, &PAD::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Soldermask Margin Override" ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
+                    _HKI( "Soldermask Margin Override" ),
                     &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Solderpaste Margin Override" ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>(
+                    _HKI( "Solderpaste Margin Override" ),
                     &PAD::SetLocalSolderPasteMargin, &PAD::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ), groupOverrides );
 
-        propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Solderpaste Margin Ratio Override" ),
-                    &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio ),
+        propMgr.AddProperty( new PROPERTY<PAD, std::optional<double>>(
+                    _HKI( "Solderpaste Margin Ratio Override" ),
+                    &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio,
+                    PROPERTY_DISPLAY::PT_RATIO ),
                     groupOverrides );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>(
                     _HKI( "Zone Connection Style" ),
-                    &PAD::SetZoneConnection, &PAD::GetZoneConnection ), groupOverrides );
+                    &PAD::SetLocalZoneConnection, &PAD::GetLocalZoneConnection ), groupOverrides );
 
         constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
 

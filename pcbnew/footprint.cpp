@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,12 +70,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_arflag       = 0;
     m_link         = 0;
     m_lastEditTime = 0;
-    m_localClearance              = 0;
-    m_localSolderMaskMargin       = 0;
-    m_localSolderPasteMargin      = 0;
-    m_localSolderPasteMarginRatio = 0.0;
-    m_zoneConnection              = ZONE_CONNECTION::INHERITED;
-    m_fileFormatVersionAtLoad     = 0;
+    m_zoneConnection          = ZONE_CONNECTION::INHERITED;
+    m_fileFormatVersionAtLoad = 0;
 
     // These are the mandatory fields for the editor to work
     for( int i = 0; i < MANDATORY_FIELDS; i++ )
@@ -125,10 +121,10 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_cachedHull                     = aFootprint.m_cachedHull;
     m_hullCacheTimeStamp             = aFootprint.m_hullCacheTimeStamp;
 
-    m_localClearance                 = aFootprint.m_localClearance;
-    m_localSolderMaskMargin          = aFootprint.m_localSolderMaskMargin;
-    m_localSolderPasteMargin         = aFootprint.m_localSolderPasteMargin;
-    m_localSolderPasteMarginRatio    = aFootprint.m_localSolderPasteMarginRatio;
+    m_clearance                      = aFootprint.m_clearance;
+    m_solderMaskMargin               = aFootprint.m_solderMaskMargin;
+    m_solderPasteMargin              = aFootprint.m_solderPasteMargin;
+    m_solderPasteMarginRatio         = aFootprint.m_solderPasteMarginRatio;
     m_zoneConnection                 = aFootprint.m_zoneConnection;
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
     m_fileFormatVersionAtLoad        = aFootprint.m_fileFormatVersionAtLoad;
@@ -448,10 +444,10 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_cachedHull                     = aOther.m_cachedHull;
     m_hullCacheTimeStamp             = aOther.m_hullCacheTimeStamp;
 
-    m_localClearance                 = aOther.m_localClearance;
-    m_localSolderMaskMargin          = aOther.m_localSolderMaskMargin;
-    m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
-    m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
+    m_clearance                      = aOther.m_clearance;
+    m_solderMaskMargin               = aOther.m_solderMaskMargin;
+    m_solderPasteMargin              = aOther.m_solderPasteMargin;
+    m_solderPasteMarginRatio         = aOther.m_solderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
@@ -542,10 +538,10 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_cachedHull                     = aOther.m_cachedHull;
     m_hullCacheTimeStamp             = aOther.m_hullCacheTimeStamp;
 
-    m_localClearance                 = aOther.m_localClearance;
-    m_localSolderMaskMargin          = aOther.m_localSolderMaskMargin;
-    m_localSolderPasteMargin         = aOther.m_localSolderPasteMargin;
-    m_localSolderPasteMarginRatio    = aOther.m_localSolderPasteMarginRatio;
+    m_clearance                      = aOther.m_clearance;
+    m_solderMaskMargin               = aOther.m_solderMaskMargin;
+    m_solderPasteMargin              = aOther.m_solderPasteMargin;
+    m_solderPasteMarginRatio         = aOther.m_solderPasteMarginRatio;
     m_zoneConnection                 = aOther.m_zoneConnection;
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
 
@@ -3528,22 +3524,25 @@ static struct FOOTPRINT_DESC
                     _HKI( "Exempt From Courtyard Requirement" ),
                     &FOOTPRINT::SetAllowMissingCourtyard, &FOOTPRINT::AllowMissingCourtyard ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Clearance Override" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>(
+                    _HKI( "Clearance Override" ),
                     &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Solderpaste Margin Override" ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>(
+                    _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>(
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<double>>(
                     _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio,
-                    &FOOTPRINT::GetLocalSolderPasteMarginRatio ),
+                    &FOOTPRINT::GetLocalSolderPasteMarginRatio,
+                    PROPERTY_DISPLAY::PT_RATIO ),
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, ZONE_CONNECTION>(
                     _HKI( "Zone Connection Style" ),
-                    &FOOTPRINT::SetZoneConnection, &FOOTPRINT::GetZoneConnection ),
+                    &FOOTPRINT::SetLocalZoneConnection, &FOOTPRINT::GetLocalZoneConnection ),
                     groupOverrides );
     }
 } _FOOTPRINT_DESC;
