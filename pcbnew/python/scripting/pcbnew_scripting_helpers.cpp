@@ -179,6 +179,21 @@ BOARD* LoadBoard( wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat )
 
     if( brd )
     {
+        // JEY TODO: move this global to the board
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        layerEnum.Choices().Clear();
+        layerEnum.Undefined( UNDEFINED_LAYER );
+
+        for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+        {
+            // Canonical name
+            layerEnum.Map( *seq, LSET::Name( *seq ) );
+
+            // User name
+            layerEnum.Map( *seq, brd->GetLayerName( *seq ) );
+        }
+
         brd->SetProject( project );
 
         // Move legacy view settings to local project settings
