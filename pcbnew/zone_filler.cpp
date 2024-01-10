@@ -46,6 +46,7 @@
 #include <core/thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
+#include "pcb_dimension.h"
 
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
@@ -841,6 +842,19 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
                                         aIgnoreLineWidth );
         break;
+
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    {
+        PCB_DIMENSION_BASE* dim = static_cast<PCB_DIMENSION_BASE*>( aItem );
+
+        dim->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE, false );
+        dim->PCB_TEXT::TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
+        break;
+    }
 
     default:
         break;
