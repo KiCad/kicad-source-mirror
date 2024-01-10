@@ -576,7 +576,7 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
             }
 
             m_axis_x->SetName( _( "Frequency" ) );
-            m_axis_y1->SetName( _( "Ampltiude" ) );
+            m_axis_y1->SetName( _( "Amplitude" ) );
             m_axis_y2->SetName( _( "Phase" ) );
             break;
 
