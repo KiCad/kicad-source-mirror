@@ -346,7 +346,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_SHAPE_T,             _HKI( "Graphic" ) )
             .Map( PCB_REFERENCE_IMAGE_T,   _HKI( "Reference Image" ) )
             .Map( PCB_GENERATOR_T,         _HKI( "Generator" ) )
-            .Map( PCB_FIELD_T,             _HKI( "Field" ) )
+            .Map( PCB_FIELD_T,             _HKI( "Text" ) )
             .Map( PCB_TEXT_T,              _HKI( "Text" ) )
             .Map( PCB_TEXTBOX_T,           _HKI( "Text Box" ) )
             .Map( PCB_TRACE_T,             _HKI( "Track" ) )
