@@ -91,6 +91,8 @@ public:
         return DistanceToString( aVariant, aArgFlags );
     }
 
+    bool ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const override;
+
     wxValidator* DoGetValidator() const override;
 };
 
@@ -172,6 +174,26 @@ public:
 
 protected:
     std::function<wxColour( int aValue )> m_colorFunc;
+};
+
+
+class PGPROPERTY_RATIO : public wxFloatProperty
+{
+public:
+    PGPROPERTY_RATIO();
+
+    const wxPGEditor* DoGetEditorClass() const override;
+
+    virtual ~PGPROPERTY_RATIO() = default;
+
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        int aArgFlags = 0 ) const override;
+
+    wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
+
+    bool ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const override;
+
+    wxValidator* DoGetValidator() const override;
 };
 
 

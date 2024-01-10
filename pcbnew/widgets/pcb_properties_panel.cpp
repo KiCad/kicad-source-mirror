@@ -80,6 +80,18 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     {
         m_checkboxEditorInstance = static_cast<PG_CHECKBOX_EDITOR*>( it->second );
     }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_RATIO_EDITOR::EDITOR_NAME );
+
+    if( it == wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        PG_RATIO_EDITOR* ratioEditor = new PG_RATIO_EDITOR();
+        m_ratioEditorInstance = static_cast<PG_RATIO_EDITOR*>( wxPropertyGrid::RegisterEditorClass( ratioEditor ) );
+    }
+    else
+    {
+        m_ratioEditorInstance = static_cast<PG_RATIO_EDITOR*>( it->second );
+    }
 }
 
 

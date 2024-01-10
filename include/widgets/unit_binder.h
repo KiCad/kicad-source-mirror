@@ -143,10 +143,9 @@ public:
     bool IsIndeterminate() const;
 
     /**
-     * Return the pre-evaluated text (or the current text if evaluation is not supported).
-     * Used primarily to remember values between dialog invocations.
+     * Return true if the control holds no value (ie: empty string, **not** 0).
      */
-    wxString GetOriginalText() const;
+    bool IsNull() const;
 
     /**
      * Validate the control against the given range, informing the user of any errors found.

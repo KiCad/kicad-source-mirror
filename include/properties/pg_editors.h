@@ -110,4 +110,19 @@ private:
     KIGFX::COLOR4D colorFromProperty( wxPGProperty* aProperty ) const;
 };
 
+
+class PG_RATIO_EDITOR : public wxPGTextCtrlEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    wxString GetName() const override { return EDITOR_NAME; }
+
+    bool GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty,
+                              wxWindow* aCtrl ) const override;
+
+    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override;
+};
+
+
 #endif //KICAD_PG_EDITORS_H

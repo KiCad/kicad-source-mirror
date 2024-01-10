@@ -584,6 +584,7 @@ set( COMMON_SRCS
     properties/pg_editors.cpp
     properties/pg_properties.cpp
     properties/property_mgr.cpp
+    properties/std_optional_variants.cpp
 
     database/database_connection.cpp
     database/database_lib_settings.cpp

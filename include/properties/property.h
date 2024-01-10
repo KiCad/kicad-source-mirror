@@ -42,6 +42,7 @@
 #include <memory>
 #include <typeindex>
 #include <type_traits>
+#include "std_optional_variants.h"
 
 class wxPGProperty;
 class INSPECTABLE;
@@ -58,7 +59,8 @@ enum PROPERTY_DISPLAY
     PT_AREA,       ///< Area expressed in distance units-squared (mm/inch)
     PT_COORD,      ///< Coordinate expressed in distance units (mm/inch)
     PT_DEGREE,     ///< Angle expressed in degrees
-    PT_DECIDEGREE  ///< Angle expressed in decidegrees
+    PT_DECIDEGREE, ///< Angle expressed in decidegrees
+    PT_RATIO
 };
 
 ///< Macro to generate unique identifier for a type
@@ -346,6 +348,16 @@ protected:
             if( pv.CheckType<unsigned>() )
             {
                 a = static_cast<unsigned>( var.GetLong() );
+            }
+            else if( pv.CheckType<std::optional<int>>() )
+            {
+                auto* data = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( var.GetData() );
+                a = data->Value();
+            }
+            else if( pv.CheckType<std::optional<double>>() )
+            {
+                auto* data = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( var.GetData() );
+                a = data->Value();
             }
             else if( pv.CheckType<EDA_ANGLE>() )
             {

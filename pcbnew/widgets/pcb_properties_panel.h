@@ -31,6 +31,7 @@ class PCB_BASE_EDIT_FRAME;
 class PROPERTY_MANAGER;
 class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
+class PG_RATIO_EDITOR;
 
 class PCB_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -54,10 +55,12 @@ protected:
     ///< Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
+protected:
     PCB_BASE_EDIT_FRAME* m_frame;
-    PROPERTY_MANAGER& m_propMgr;
-    PG_UNIT_EDITOR* m_unitEditorInstance;
-    PG_CHECKBOX_EDITOR* m_checkboxEditorInstance;
+    PROPERTY_MANAGER&    m_propMgr;
+    PG_UNIT_EDITOR*      m_unitEditorInstance;
+    PG_CHECKBOX_EDITOR*  m_checkboxEditorInstance;
+    PG_RATIO_EDITOR*     m_ratioEditorInstance;
 
     wxPGChoices m_nets;
 };

@@ -240,13 +240,15 @@ void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 
     if( m_allowEval && textEntry )
     {
-        if( m_eval.Process( textEntry->GetValue() ) )
+        wxString value = textEntry->GetValue();
+
+        if( !value.IsEmpty() && m_eval.Process( value ) )
         {
             textEntry->GetSelection( &m_selStart, &m_selEnd );
 
-            wxString value = m_eval.Result();
+            value = m_eval.Result();
 
-            if( m_unitsInValue )
+            if( m_unitsInValue && !value.IsEmpty() )
             {
                 if( !( m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT ) )
                     value += wxT( " " );
@@ -387,7 +389,7 @@ void UNIT_BINDER::SetValue( const wxString& aValue )
 
     wxString value = aValue;
 
-    if( m_unitsInValue )
+    if( m_unitsInValue && !value.IsEmpty() )
     {
         if( !( m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT ) )
             value += wxT( " " );
@@ -450,7 +452,7 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
 
     wxString value = aValue;
 
-    if( m_unitsInValue )
+    if( m_unitsInValue && !value.IsEmpty() )
     {
         if( !( m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT ) )
             value += wxT( " " );
@@ -479,7 +481,9 @@ long long int UNIT_BINDER::GetValue()
 
     if( textEntry )
     {
-        if( m_needsEval && m_eval.Process( textEntry->GetValue() ) )
+        value = textEntry->GetValue();
+
+        if( m_needsEval && !value.IsEmpty() && m_eval.Process( value ) )
             value = m_eval.Result();
         else
             value = textEntry->GetValue();
@@ -528,7 +532,9 @@ double UNIT_BINDER::GetDoubleValue()
 
     if( textEntry )
     {
-        if( m_needsEval && m_eval.Process( textEntry->GetValue() ) )
+        value = textEntry->GetValue();
+
+        if( m_needsEval && !value.IsEmpty() && m_eval.Process( value ) )
             value = m_eval.Result();
         else
             value = textEntry->GetValue();
@@ -567,19 +573,14 @@ bool UNIT_BINDER::IsIndeterminate() const
 }
 
 
-wxString UNIT_BINDER::GetOriginalText() const
+bool UNIT_BINDER::IsNull() const
 {
-    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
-    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
+    wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
-    if( m_allowEval )
-        return m_eval.OriginalText();
-    else if( textEntry )
-        return textEntry->GetValue();
-    else if( staticText )
-        return staticText->GetLabel();
-    else
-        return wxEmptyString;
+    if( te )
+        return te->GetValue().IsEmpty();
+
+    return false;
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020-2023 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include <eda_draw_frame.h>
 #include <eda_units.h>
 #include <properties/color4d_variant.h>
+#include <properties/std_optional_variants.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_properties.h>
 #include <properties/pg_editors.h>
@@ -34,6 +35,82 @@
 #include <properties/property.h>
 #include <string_utils.h>
 #include <widgets/color_swatch.h>
+
+
+class wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
+{
+public:
+    wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl( wxVariantDataFactory factory )
+        : wxAnyToVariantRegistration( factory )
+    {
+    }
+
+public:
+    static bool IsSameClass(const wxAnyValueType* otherType)
+    {
+        return AreSameClasses( *s_instance.get(), *otherType );
+    }
+
+    static wxAnyValueType* GetInstance()
+    {
+        return s_instance.get();
+    }
+
+    virtual wxAnyValueType* GetAssociatedType() override
+    {
+        return wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::GetInstance();
+    }
+private:
+    static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
+    {
+        return wxTypeId(a) == wxTypeId(b);
+    }
+
+    static wxAnyValueTypeScopedPtr s_instance;
+};
+
+
+wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<std::optional<int>>() );
+
+static wxAnyToSTD_OPTIONAL_INT_VARIANTRegistrationImpl s_wxAnyToSTD_OPTIONAL_INT_VARIANTRegistration( &STD_OPTIONAL_INT_VARIANT_DATA::VariantDataFactory );
+
+
+class wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
+{
+public:
+    wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl( wxVariantDataFactory factory )
+        : wxAnyToVariantRegistration( factory )
+    {
+    }
+
+public:
+    static bool IsSameClass(const wxAnyValueType* otherType)
+    {
+        return AreSameClasses( *s_instance.get(), *otherType );
+    }
+
+    static wxAnyValueType* GetInstance()
+    {
+        return s_instance.get();
+    }
+
+    virtual wxAnyValueType* GetAssociatedType() override
+    {
+        return wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::GetInstance();
+    }
+private:
+    static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
+    {
+        return wxTypeId(a) == wxTypeId(b);
+    }
+
+    static wxAnyValueTypeScopedPtr s_instance;
+};
+
+
+wxAnyValueTypeScopedPtr wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<std::optional<double>>() );
+
+static wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistrationImpl s_wxAnyToSTD_OPTIONAL_DOUBLE_VARIANTRegistration( &STD_OPTIONAL_DOUBLE_VARIANT_DATA::VariantDataFactory );
 
 
 class wxAnyToEDA_ANGLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
@@ -146,6 +223,10 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
         break;
     }
 
+    case PROPERTY_DISPLAY::PT_RATIO:
+        ret = new PGPROPERTY_RATIO();
+        break;
+
     default:
         wxFAIL;
         KI_FALLTHROUGH;
@@ -232,9 +313,27 @@ bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString&
 
 wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFlags ) const
 {
-    wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG, wxEmptyString );
+    long distanceIU;
 
-    long               distanceIU = aVariant.GetLong();
+    if( aVariant.GetType() == wxT( "std::optional<int>" ) )
+    {
+        auto* variantData = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( aVariant.GetData() );
+
+        if( !variantData->Value().has_value() )
+            return wxEmptyString;
+
+        distanceIU = variantData->Value().value();
+    }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        distanceIU = aVariant.GetLong();
+    }
+    else
+    {
+        wxFAIL_MSG( wxT( "Expected int (or std::optional<int>) value type" ) );
+        return wxEmptyString;
+    }
+
     ORIGIN_TRANSFORMS& transforms = m_parentFrame->GetOriginTransforms();
 
     distanceIU = transforms.ToDisplay( static_cast<long long int>( distanceIU ), m_coordType );
@@ -281,6 +380,23 @@ PGPROPERTY_SIZE::PGPROPERTY_SIZE( EDA_DRAW_FRAME* aParentFrame ) :
 }
 
 
+bool PGPROPERTY_SIZE::ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const
+{
+    if( aValue.GetType() == wxT( "std::optional<int>" ) )
+    {
+        auto* data = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( aValue.GetData() );
+
+        if( !data->Value().has_value() )
+            return wxEmptyString;
+
+        wxVariant value( data->Value().value() );
+        return wxUIntProperty::ValidateValue( value, aValidationInfo );
+    }
+
+    return wxUIntProperty::ValidateValue( aValue, aValidationInfo );
+}
+
+
 wxValidator* PGPROPERTY_SIZE::DoGetValidator() const
 {
     return nullptr;
@@ -296,6 +412,79 @@ PGPROPERTY_COORD::PGPROPERTY_COORD( EDA_DRAW_FRAME* aParentFrame,
 
 
 wxValidator* PGPROPERTY_COORD::DoGetValidator() const
+{
+    return nullptr;
+}
+
+
+PGPROPERTY_RATIO::PGPROPERTY_RATIO() :
+        wxFloatProperty( wxPG_LABEL, wxPG_LABEL, 0 )
+{
+    SetEditor( PG_RATIO_EDITOR::EDITOR_NAME );
+}
+
+
+const wxPGEditor* PGPROPERTY_RATIO::DoGetEditorClass() const
+{
+    wxCHECK_MSG( m_customEditor, wxPGEditor_TextCtrl,
+                 wxT( "Make sure to RegisterEditorClass() for PGPROPERTY_RATIO!" ) );
+    return m_customEditor;
+}
+
+
+bool PGPROPERTY_RATIO::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                      int aArgFlags ) const
+{
+    // TODO(JE): Are there actual use cases for this?
+    wxCHECK_MSG( false, false, wxS( "PGPROPERTY_RATIO::StringToValue should not be used." ) );
+}
+
+
+wxString PGPROPERTY_RATIO::ValueToString( wxVariant& aVariant, int aArgFlags ) const
+{
+    double value;
+
+    if( aVariant.GetType() == wxT( "std::optional<double>" ) )
+    {
+        auto* variantData = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( aVariant.GetData() );
+
+        if( !variantData->Value().has_value() )
+            return wxEmptyString;
+
+        value = variantData->Value().value();
+    }
+    else if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
+    {
+        value = aVariant.GetDouble();
+    }
+    else
+    {
+        wxFAIL_MSG( wxT( "Expected double (or std::optional<double>) value type" ) );
+        return wxEmptyString;
+    }
+
+    return wxString::Format( wxS( "%g" ), value );
+}
+
+
+bool PGPROPERTY_RATIO::ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const
+{
+    if( aValue.GetType() == wxT( "std::optional<double>" ) )
+    {
+        auto* data = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( aValue.GetData() );
+
+        if( !data->Value().has_value() )
+            return wxEmptyString;
+
+        wxVariant value( data->Value().value() );
+        return wxFloatProperty::ValidateValue( value, aValidationInfo );
+    }
+
+    return wxFloatProperty::ValidateValue( aValue, aValidationInfo );
+}
+
+
+wxValidator* PGPROPERTY_RATIO::DoGetValidator() const
 {
     return nullptr;
 }
@@ -408,7 +597,7 @@ PGPROPERTY_BOOL::PGPROPERTY_BOOL( const wxString& aLabel, const wxString& aName,
 const wxPGEditor* PGPROPERTY_BOOL::DoGetEditorClass() const
 {
     wxCHECK_MSG( m_customEditor, wxPGEditor_CheckBox,
-                 wxT( "Make sure to set custom editor for PGPROPERTY_BOOL!" ) );
+                 wxT( "Make sure to RegisterEditorClass() for PGPROPERTY_BOOL!" ) );
     return m_customEditor;
 }
 
