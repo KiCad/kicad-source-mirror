@@ -50,9 +50,7 @@ bool PANEL_PACKAGES_AND_UPDATES::TransferDataToWindow()
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-#ifndef KICAD_UPDATE_CHECK
     m_cbKicadUpdate->SetValue( settings->m_KiCadUpdateCheck );
-#endif
     m_cbPcmUpdate->SetValue( settings->m_PcmUpdateCheck );
     m_libAutoAdd->SetValue( settings->m_PcmLibAutoAdd );
     m_libAutoRemove->SetValue( settings->m_PcmLibAutoRemove );
