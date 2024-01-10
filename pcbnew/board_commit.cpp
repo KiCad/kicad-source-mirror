@@ -614,6 +614,14 @@ void BOARD_COMMIT::Revert()
         switch( changeType )
         {
         case CHT_ADD:
+            // Items are auto-added to the parent group by BOARD_ITEM::Duplicate(), not when
+            // the commit is pushed.
+            if( PCB_GROUP* parentGroup = boardItem->GetParentGroup() )
+            {
+                if( GetStatus( parentGroup ) == 0 )
+                    parentGroup->RemoveItem( boardItem );
+            }
+
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
