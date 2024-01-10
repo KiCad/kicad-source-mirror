@@ -69,7 +69,11 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
     m_fabPropRegex.Compile( "^Fabrication_Property\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_shapeRegex.Compile( "^Shape\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_padShapeRegex.Compile( "^Pad_Shape\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_padConnectionsRegex.Compile( "^Pad_Connections\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_zoneConnStyleRegex.Compile( "^Zone_Connection_Style\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_lineStyleRegex.Compile( "^Line_Style\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_hJustRegex.Compile( "^Horizontal_Justification\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_vJustRegex.Compile( "^Vertical_Justification\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
     m_compileButton->SetBitmap( KiBitmapBundle( BITMAPS::drc ) );
 
@@ -585,12 +589,41 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                               "Chamfered rectangle|"
                               "Custom" );
             }
+            else if( m_padConnectionsRegex.Matches( last ) )
+            {
+                tokens = wxT( "Inherited|"
+                              "None|"
+                              "Solid|"
+                              "Thermal reliefs|"
+                              "Thermal reliefs for PTH" );
+            }
             else if( m_zoneConnStyleRegex.Matches( last ) )
             {
                 tokens = wxT( "Inherited|"
                               "None|"
                               "Solid|"
                               "Thermal reliefs" );
+            }
+            else if( m_lineStyleRegex.Matches( last ) )
+            {
+                tokens = wxT( "Default|"
+                              "Solid|"
+                              "Dashed|"
+                              "Dotted|"
+                              "Dash-Dot|"
+                              "Dash-Dot-Dot" );
+            }
+            else if( m_hJustRegex.Matches( last ) )
+            {
+                tokens = wxT( "Left|"
+                              "Center|"
+                              "Right" );
+            }
+            else if( m_vJustRegex.Matches( last ) )
+            {
+                tokens = wxT( "Top|"
+                              "Center|"
+                              "Bottom" );
             }
         }
     }
