@@ -621,44 +621,44 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeAMParamInfos( const st
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
 
-    paramInfo.name = "va";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = aUnit;
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Amplitude";
-    paramInfos.push_back( paramInfo );
-
     paramInfo.name = "vo";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = aUnit;
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "";
-    paramInfo.description = "DC offset";
+    paramInfo.description = "Overall offset";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "mf";
+    paramInfo.name = "vmo";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = aUnit;
+    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "";
+    paramInfo.description = "Modulation signal offset";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "vma";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = aUnit;
+    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "";
+    paramInfo.description = "Modulation signal amplitude";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "fm";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "";
-    paramInfo.description = "Modulating frequency";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "md";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "1.0";
-    paramInfo.description = "Modulation depth";
+    paramInfo.defaultValue = "5/tstop";
+    paramInfo.description = "Modulation signal frequency";
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "fc";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "1/tstop";
-    paramInfo.description = "Carrier frequency";
+    paramInfo.defaultValue = "500/tstop";
+    paramInfo.description = "Carrier signal frequency";
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "td";
@@ -666,10 +666,10 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeAMParamInfos( const st
     paramInfo.unit = "s";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
-    paramInfo.description = "Delay";
+    paramInfo.description = "Overall delay";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "phases";
+    paramInfo.name = "phasem";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "°";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
@@ -713,12 +713,12 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSFFMParamInfos( const 
     paramInfo.description = "Amplitude";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "fc";
+    paramInfo.name = "fm";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "1/tstop";
-    paramInfo.description = "Carrier frequency";
+    paramInfo.defaultValue = "5/tstop";
+    paramInfo.description = "Modulating frequency";
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "mdi";
@@ -729,12 +729,20 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSFFMParamInfos( const 
     paramInfo.description = "Modulation index";
     paramInfos.push_back( paramInfo );
 
-    paramInfo.name = "fs";
+    paramInfo.name = "fc";
     paramInfo.type = SIM_VALUE::TYPE_FLOAT;
     paramInfo.unit = "Hz";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "1/tstop";
-    paramInfo.description = "Signal frequency";
+    paramInfo.defaultValue = "500/tstop";
+    paramInfo.description = "Carrier frequency";
+    paramInfos.push_back( paramInfo );
+
+    paramInfo.name = "phasem";
+    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+    paramInfo.unit = "°";
+    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
+    paramInfo.defaultValue = "0";
+    paramInfo.description = "Modulating signal phase";
     paramInfos.push_back( paramInfo );
 
     paramInfo.name = "phasec";
@@ -742,15 +750,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSFFMParamInfos( const 
     paramInfo.unit = "°";
     paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
     paramInfo.defaultValue = "0";
-    paramInfo.description = "Carrier phase";
-    paramInfos.push_back( paramInfo );
-
-    paramInfo.name = "phases";
-    paramInfo.type = SIM_VALUE::TYPE_FLOAT;
-    paramInfo.unit = "°";
-    paramInfo.category = SIM_MODEL::PARAM::CATEGORY::PRINCIPAL;
-    paramInfo.defaultValue = "0";
-    paramInfo.description = "Signal phase";
+    paramInfo.description = "Carrier signal phase";
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
