@@ -337,6 +337,10 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     if( !m_cancelled )
     {
+        m_sdbSizerCancel->SetDefault();
+        // wxWidgets has a tendency to keep both buttons highlighted without the following:
+        m_sdbSizerOK->Enable( false );
+
         wxMilliSleep( 500 );
         m_runningResultsBook->ChangeSelection( 1 );
         KIPLATFORM::UI::ForceFocus( m_Notebook );

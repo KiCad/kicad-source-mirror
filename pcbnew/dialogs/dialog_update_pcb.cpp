@@ -147,6 +147,6 @@ void DIALOG_UPDATE_PCB::OnUpdateClick( wxCommandEvent& event )
     PerformUpdate( false );
 
     m_sdbSizer1Cancel->SetDefault();
-    // Widgets has a tendency to keep both buttons highlighted without the following:
+    // wxWidgets has a tendency to keep both buttons highlighted without the following:
     m_sdbSizer1OK->Enable( false );
 }

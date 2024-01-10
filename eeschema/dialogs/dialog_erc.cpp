@@ -451,6 +451,10 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     if( !m_cancelled )
     {
+        m_sdbSizer1Cancel->SetDefault();
+        // wxWidgets has a tendency to keep both buttons highlighted without the following:
+        m_sdbSizer1OK->Enable( false );
+
         wxMilliSleep( 500 );
         m_runningResultsBook->ChangeSelection( 1 );
         KIPLATFORM::UI::ForceFocus( m_notebook );
