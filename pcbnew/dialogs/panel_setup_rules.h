@@ -67,6 +67,7 @@ private:
     wxRegEx           m_pinTypeRegex;
     wxRegEx           m_fabPropRegex;
     wxRegEx           m_shapeRegex;
+    wxRegEx           m_padShapeRegex;
     wxRegEx           m_zoneConnStyleRegex;
 
     HTML_MESSAGE_BOX* m_helpWindow;

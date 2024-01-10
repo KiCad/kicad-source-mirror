@@ -1,0 +1,5 @@
+(version 1)
+(rule oval_clearance
+	(constraint clearance(min 5mm))
+	(condition "A.Pad_Shape=='Oval'")
+)

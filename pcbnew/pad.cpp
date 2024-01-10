@@ -1876,7 +1876,7 @@ static struct PAD_DESC
 
         ENUM_MAP<PAD_SHAPE>::Instance()
                 .Map( PAD_SHAPE::CIRCLE,           _HKI( "Circle" ) )
-                .Map( PAD_SHAPE::RECTANGLE,             _HKI( "Rectangle" ) )
+                .Map( PAD_SHAPE::RECTANGLE,        _HKI( "Rectangle" ) )
                 .Map( PAD_SHAPE::OVAL,             _HKI( "Oval" ) )
                 .Map( PAD_SHAPE::TRAPEZOID,        _HKI( "Trapezoid" ) )
                 .Map( PAD_SHAPE::ROUNDRECT,        _HKI( "Rounded rectangle" ) )
@@ -1946,7 +1946,7 @@ static struct PAD_DESC
                     &PAD::SetAttribute, &PAD::GetAttribute );
         propMgr.AddProperty( padType, groupPad );
 
-        auto shape = new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Shape" ),
+        auto shape = new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Pad Shape" ),
                     &PAD::SetShape, &PAD::GetShape );
         propMgr.AddProperty( shape, groupPad );
 
