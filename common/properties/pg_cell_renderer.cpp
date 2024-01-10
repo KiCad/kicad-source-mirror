@@ -63,7 +63,7 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
 
     aProperty->GetDisplayInfo( aColumn, aItem, aFlags, &text, &cell );
 
-    text = wxControl::Ellipsize( text, aDC, wxELLIPSIZE_MIDDLE, aRect.GetWidth() );
+    text = wxControl::Ellipsize( text, aDC, wxELLIPSIZE_END, aRect.GetWidth() );
 
     int imageWidth = PreDrawCell( aDC, aRect, aGrid, cell, preDrawFlags );
 
