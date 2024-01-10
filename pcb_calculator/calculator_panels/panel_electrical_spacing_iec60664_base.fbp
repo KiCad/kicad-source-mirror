@@ -458,7 +458,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">OVC I: Equipments with no direct connection to mains supply&#x0A;&#x0A;OVC II: Energy-consuming equipment to be supplied from the fixed installation. (eg: appliances, portable tools, household loads). OVCIII applies if there are reliability and avaibility requirements&#x0A;&#x0A;OVC III :  Equipements in fixed installation with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)&#x0A;&#x0A;OVC IV: Equipments at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)</property>
+                                                            <property name="tooltip">OVC I: Equipment with no direct connection to mains supply&#x0A;&#x0A;OVC II: Energy-consuming equipment to be supplied from the fixed installation. (eg: appliances, portable tools, household loads). OVCIII applies if there are reliability and avaibility requirements&#x0A;&#x0A;OVC III :  Equipment in fixed installations with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)&#x0A;&#x0A;OVC IV: Equipment at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -623,7 +623,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Given the rated voltage and the overvoltage category, a device should withstand this value whithout a breakdown of insulation. This impulse voltage is a standard 1.2/50µs wave</property>
+                                                            <property name="tooltip">Given the rated voltage and the overvoltage category, a device should withstand this value without a breakdown of insulation. This impulse voltage is a standard 1.2/50µs wave</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
