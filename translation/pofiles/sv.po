@@ -3,7 +3,7 @@
 # Axel Henriksson <axe.henriksson@gmail.com>, 2021, 2022.
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
 # Hanna Breisand <weblate.org@breisand.se>, 2022.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2023-12-20 13:33+0000\n"
+"PO-Revision-Date: 2024-01-12 17:03+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -14306,13 +14306,12 @@ msgid "&Default line width:"
 msgstr "&Förinställd radbredd:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
 msgstr ""
-"Sätt till 0 för att låta symboler ärva linjebredd från\n"
-"kretsschemat"
+"Sätt till 0 för att låta symboler ärva linjebreddsegenskaper\n"
+"från kretsschemat"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -24839,7 +24838,7 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Det gick inte hitta gren '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1772
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Det gick inte att hitta grenhuvud för '%s'"
 
