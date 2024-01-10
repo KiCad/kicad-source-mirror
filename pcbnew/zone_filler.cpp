@@ -35,6 +35,7 @@
 #include <pcb_track.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_dimension.h>
 #include <fp_text.h>
 #include <fp_textbox.h>
 #include <connectivity/connectivity_data.h>
@@ -868,6 +869,19 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         if( textbox->IsVisible() )
             textbox->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
 
+        break;
+    }
+
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    {
+        PCB_DIMENSION_BASE* dim = static_cast<PCB_DIMENSION_BASE*>( aItem );
+
+        dim->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE, false );
+        dim->PCB_TEXT::TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
         break;
     }
 
