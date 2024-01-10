@@ -2216,9 +2216,9 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         if( aAddToFootprint )
         {
             group->RunOnDescendants(
-                    [&]( BOARD_ITEM* aItem )
+                    [&]( BOARD_ITEM* aCurrItem )
                     {
-                        Add( aItem );
+                        Add( aCurrItem );
                     } );
 
             Add( new_item );

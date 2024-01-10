@@ -629,8 +629,6 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
             collectPts( item );
     }
 
-    int64_t combined_length = aSeg1->GetLength() + aSeg2->GetLength();
-
     // This means there is a node in the center
     if( pts.size() > 2 )
         return false;
