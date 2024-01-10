@@ -1264,10 +1264,10 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                     || borderColor == COLOR4D::UNSPECIFIED )
             {
                 borderColor = m_schSettings.GetLayerColor( aLayer );
-
-                if( transparency > 0.0 )
-                    borderColor = borderColor.WithAlpha( borderColor.a * ( 1.0 - transparency ) );
             }
+
+            if( transparency > 0.0 )
+                borderColor = borderColor.WithAlpha( borderColor.a * ( 1.0 - transparency ) );
 
             if( aDimmed )
             {
