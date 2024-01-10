@@ -339,7 +339,7 @@ void DIALOG_EXPORT_STEP::onBrowseClicked( wxCommandEvent& aEvent )
 {
     wxString filter = _( "STEP files" )
                       + AddFileExtListToFilter( { FILEEXT::StepFileExtension, FILEEXT::StepFileAbrvExtension } ) + "|"
-                      + _( "Binary GTLF files" )
+                      + _( "Binary glTF files" )
                       + AddFileExtListToFilter( { FILEEXT::GltfBinaryFileExtension } );
 
     // Build the absolute path of current output directory to preselect it in the file browser.
