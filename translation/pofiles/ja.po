@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2024-01-09 21:58+0000\n"
+"PO-Revision-Date: 2024-01-12 17:03+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -17454,9 +17454,8 @@ msgstr "部品表"
 
 #: eeschema/sch_symbol.cpp:1846 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Exclude from"
-msgstr "部品表から除外"
+msgstr "除外する対象"
 
 #: eeschema/sch_symbol.cpp:1857
 msgid "Power symbol"
@@ -27909,9 +27908,8 @@ msgid "Max Width"
 msgstr "最大幅"
 
 #: pcbnew/board_connected_item.cpp:269
-#, fuzzy
 msgid "Curve Points"
-msgstr "ベジェ曲線の制御点:"
+msgstr "曲線の制御点:"
 
 #: pcbnew/board_connected_item.cpp:275
 msgid "Prefer Zone Connections"
@@ -32194,9 +32192,8 @@ msgstr "最適な高さ:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:517
-#, fuzzy
 msgid "Curved edges"
-msgstr "曲線"
+msgstr "曲線のエッジ"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
@@ -33496,9 +33493,8 @@ msgid "Deselect All Layers"
 msgstr "すべてのレイヤーの選択を解除"
 
 #: pcbnew/dialogs/dialog_plot.cpp:550
-#, fuzzy
 msgid "Order as Board Stackup"
-msgstr "基板スタックアップ"
+msgstr "基板スタックアップの設定の順にする"
 
 #: pcbnew/dialogs/dialog_plot.cpp:949
 msgid "HPGL pen size constrained."
@@ -38271,7 +38267,7 @@ msgstr "%s はサーマルリリーフ スポーク幅が異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:462
 #, c-format
 msgid "%s min thickness differs."
-msgstr "%s の最小幅が異なります。"
+msgstr "%s は最小幅が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:465
 #, c-format
@@ -38316,7 +38312,7 @@ msgstr "%s はハッチングの「スムージング量」が異なります。
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s はハッチ穴の最小値が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
 #, c-format
@@ -39501,18 +39497,16 @@ msgid "Max Amplitude"
 msgstr "最大振幅"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2333
-#, fuzzy
 msgid "Initial Side"
-msgstr "初期時間:"
+msgstr "開始サイド:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2339
 msgid "Min Spacing"
 msgstr "最小間隔"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2345
-#, fuzzy
 msgid "Corner Radius %"
-msgstr "コーナー半径:"
+msgstr "コーナー半径 %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2367
 msgid "Target Length"
@@ -39527,9 +39521,8 @@ msgid "Override Custom Rules"
 msgstr "カスタムルールを上書き"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2396
-#, fuzzy
 msgid "Rounded"
-msgstr "ラウンド"
+msgstr "丸め"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:230
 msgid "Please select a file to import."
