@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:33-0800\n"
-"PO-Revision-Date: 2024-01-08 00:06+0000\n"
+"PO-Revision-Date: 2024-01-12 17:03+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -17438,7 +17438,7 @@ msgstr "Ympyrä, säde %s"
 #: eeschema/sch_shape.cpp:450
 #, c-format
 msgid "Polyline, %d points"
-msgstr "Murtoviiva, %d pistettä"
+msgstr "Murtoviiva, %d pisteet"
 
 #: eeschema/sch_shape.cpp:454
 #, c-format
@@ -20912,11 +20912,11 @@ msgstr "Näytä Piilotetut Nastat"
 
 #: eeschema/tools/ee_actions.cpp:1096
 msgid "Toggle display of hidden pins"
-msgstr "Näytä/piilota piilotetut jalat"
+msgstr "Vaihda piilotettujen nastoiden näyttöä"
 
 #: eeschema/tools/ee_actions.cpp:1102
 msgid "Show Hidden Fields"
-msgstr "Näytä Piilotetut Kentät"
+msgstr "Näytä piilotetut kentät"
 
 #: eeschema/tools/ee_actions.cpp:1103
 msgid "Toggle display of hidden text fields"
