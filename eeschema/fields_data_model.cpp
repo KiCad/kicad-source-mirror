@@ -180,8 +180,14 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
 
             wxString refFieldValue;
 
-            if( resolveVars )
+            // Only resolve vars on actual variables, otherwise we want to get
+            // our values out of the datastore so we can show/export un-applied values
+            if( resolveVars
+                && ( IsTextVar( m_cols[aCol].m_fieldName )
+                     || IsTextVar( m_dataStore[symbolID][m_cols[aCol].m_fieldName] ) ) )
+            {
                 refFieldValue = getFieldShownText( ref, m_cols[aCol].m_fieldName );
+            }
             else
                 refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
 
@@ -391,8 +397,10 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         matchFound = true;
     }
 
-    // Now check all the other columns.  This must be done out of the dataStore
-    // for the refresh button to work after editing.
+    const KIID& lhRefID = lhRef.GetSymbol()->m_Uuid;
+    const KIID& rhRefID = rhRef.GetSymbol()->m_Uuid;
+
+    // Now check all the other columns.
     for( size_t i = 0; i < m_cols.size(); ++i )
     {
         //Handled already
@@ -402,11 +410,32 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         if( !m_cols[i].m_group )
             continue;
 
-        if( getFieldShownText( lhRef, m_cols[i].m_fieldName )
-            != getFieldShownText( rhRef, m_cols[i].m_fieldName ) )
+        // If the field is a variable, we need to resolve it through the symbol
+        // to get the actual current value, otherwise we need to pull it out of the
+        // store so the refresh can regroup based on values that haven't been applied
+        // to the schematic yet.
+        wxString lh, rh;
+
+        if( IsTextVar( m_cols[i].m_fieldName )
+            || IsTextVar( m_dataStore[lhRefID][m_cols[i].m_fieldName] ) )
         {
-            return false;
+            lh = getFieldShownText( lhRef, m_cols[i].m_fieldName );
         }
+        else
+            lh = m_dataStore[lhRefID][m_cols[i].m_fieldName];
+
+        if( IsTextVar( m_cols[i].m_fieldName )
+            || IsTextVar( m_dataStore[rhRefID][m_cols[i].m_fieldName] ) )
+        {
+            rh = getFieldShownText( rhRef, m_cols[i].m_fieldName );
+        }
+        else
+            rh = m_dataStore[rhRefID][m_cols[i].m_fieldName];
+
+        wxString fieldName = m_cols[i].m_fieldName;
+
+        if( lh != rh )
+            return false;
 
         matchFound = true;
     }
