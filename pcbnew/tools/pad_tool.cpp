@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -565,13 +565,17 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
             // If the footprint type and master pad type directly conflict then make some
             // adjustments.  Otherwise assume the user set what they wanted.
+            // Note also a HEATSINK pad (thermal via) is allowed in SMD footprint
             if( ( m_board->GetFirstFootprint()->GetAttributes() & FP_SMD )
                     && master->GetAttribute() == PAD_ATTRIB::PTH )
             {
-                pad->SetAttribute( PAD_ATTRIB::SMD );
-                pad->SetShape( PAD_SHAPE::ROUNDRECT );
-                pad->SetSizeX( 1.5 * pad->GetSizeY() );
-                pad->SetLayerSet( PAD::SMDMask() );
+                if( pad->GetProperty() != PAD_PROP::HEATSINK )
+                {
+                    pad->SetAttribute( PAD_ATTRIB::SMD );
+                    pad->SetShape( PAD_SHAPE::ROUNDRECT );
+                    pad->SetSizeX( 1.5 * pad->GetSizeY() );
+                    pad->SetLayerSet( PAD::SMDMask() );
+                }
             }
             else if( ( m_board->GetFirstFootprint()->GetAttributes() & FP_THROUGH_HOLE )
                     && master->GetAttribute() == PAD_ATTRIB::SMD )
@@ -579,6 +583,13 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
                 pad->SetAttribute( PAD_ATTRIB::PTH );
                 pad->SetShape( PAD_SHAPE::CIRCLE );
                 pad->SetSize( VECTOR2I( pad->GetSizeX(), pad->GetSizeX() ) );
+
+                // Gives an acceptable drill size: it cannot be 0, but from pad master
+                // it is currently 0, therefore change it:
+                pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+                int hole_size = pad->GetSizeX() / 2;
+                pad->SetDrillSize( VECTOR2I( hole_size, hole_size ) );
+
                 pad->SetLayerSet( PAD::PTHMask() );
             }
 
