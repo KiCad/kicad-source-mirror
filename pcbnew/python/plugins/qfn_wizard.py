@@ -178,6 +178,8 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
                 via_diam = min(aper_pad_w, aper_pad_l) / 2
                 via_drill = min(via_diam / 2, epad_via_drill)
                 via = PA.PadMaker(self.module).THRoundPad(via_diam, via_drill)
+                # A thermal via must have the PAD_PROP_HEATSINK set.
+                via.SetProperty( pcbnew.PAD_PROP_HEATSINK )
                 layers = pcbnew.LSET.AllCuMask()
                 layers.AddLayer(pcbnew.B_Mask)
                 layers.AddLayer(pcbnew.F_Mask)
