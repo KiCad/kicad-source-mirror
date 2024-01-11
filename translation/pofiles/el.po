@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 08:35-0800\n"
-"PO-Revision-Date: 2024-01-09 21:58+0000\n"
+"PO-Revision-Date: 2024-01-12 17:02+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -827,7 +827,7 @@ msgstr "Εμφάνιση πάχους χαλκού και τεχνικών επ�
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 #, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Επισήμανση αντικειμένων"
+msgstr "Επισήμανση αντικειμένων σε ανατροπή"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -7711,9 +7711,8 @@ msgid "Delete all associations?"
 msgstr "Διαγραφή όλων των συσχετίσεων;"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Αδυναμία δημιουργίας αρχείου αναφοράς '%s'"
+msgstr "Αδυναμία δημιουργίας παραθύρου προβολής αποτυπώματος"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -9824,9 +9823,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Διαγραφή εναλλακτικού στυλ σώματος (De Morgan) από το σύμβολο;"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Το πεδίο πρέπει να έχει όνομα."
+msgstr "Το σύμβολο πρέπει να έχει όνομα."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -10725,9 +10723,8 @@ msgid "Replace matches in reference designators"
 msgstr "Αντικατάσταση ταύτισης προσδιορισμών αναφοράς"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Αντικατάσταση"
+msgstr "Αντικατάσταση"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -16385,7 +16382,7 @@ msgstr "Τάση"
 
 #: eeschema/sim/sim_plot_panel.cpp:369 eeschema/sim/sim_plot_panel.cpp:442
 msgid "Current"
-msgstr "Ένταση"
+msgstr "Ρεύμα"
 
 #: eeschema/sim/sim_plot_panel.cpp:424
 msgid "Voltage (swept)"
@@ -20910,9 +20907,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:465
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Αδυναμία ανάλυσης αποθετηρίου: %s"
+msgstr "Αποτυχία ανάλυσης τοπικά αποθηκευμένου αποθετηρίου.json."
 
 #: kicad/pcm/pcm.cpp:493
 msgid ""
@@ -22252,7 +22248,7 @@ msgstr "βαθμ C"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:92
 msgid "Current:"
-msgstr "Ένταση ρέυματος:"
+msgstr "Ρεύμα:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:190
 msgid "Length:"
@@ -35413,9 +35409,8 @@ msgid "1234.0 (mm)"
 msgstr "1234 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1374
-#, fuzzy
 msgid "Units Format"
-msgstr "Μορφή Μονάδων:"
+msgstr "Μορφή Μονάδων"
 
 #: pcbnew/pcb_dimension.cpp:1382
 #, fuzzy
@@ -35430,7 +35425,7 @@ msgstr "Κέρσορας Δεξιά"
 #: pcbnew/pcb_dimension.cpp:1415
 #, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Μετατόπιση γραμμής επέκτασης:"
+msgstr "Μετατόπιση Γραμμής Επέκτασης"
 
 #: pcbnew/pcb_dimension.cpp:1498
 #, fuzzy
@@ -35438,9 +35433,8 @@ msgid "Leader Length"
 msgstr "Μήκος Διέλευσης"
 
 #: pcbnew/pcb_dimension.cpp:1547
-#, fuzzy
 msgid "Text Frame"
-msgstr "Πλαίσιο κειμένου:"
+msgstr "Πλαίσιο Κειμένου"
 
 #: pcbnew/pcb_edit_frame.cpp:204
 msgid "KiCad PCB Editor"
@@ -35859,9 +35853,9 @@ msgid "'%s' was not fully parsed."
 msgstr "Το '%s' δεν διαβάστηκε πλήρως."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων."
+msgstr "Δεν βρέθηκε φάκελος αποτυπωμάτων: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -38275,7 +38269,7 @@ msgstr "Ανάλυση κενού διαφορικού ζεύγους για:"
 #: pcbnew/tools/board_inspection_tool.cpp:811
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Ανάλυση περιορισμών πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Επίλυση περιορισμών πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:819
 msgid "Diff pair max uncoupled length resolution for:"
@@ -38283,7 +38277,7 @@ msgstr "Επίλυση αποδιαζευγμένου μήκος διαφορι�
 
 #: pcbnew/tools/board_inspection_tool.cpp:824
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "Δεν ορίστηκαν περιορισμοί 'Διαφορικό ζεύγος μη συζευγμένο'."
+msgstr "Δεν ορίστηκαν περιορισμοί 'diff_pair_uncoupled'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
@@ -38637,12 +38631,12 @@ msgid "Pack footprints"
 msgstr "Συγκέντρωση αποτυπωμάτων"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Κάντε κλικ για τοποθέτιση %s (εξάρτημα %ld του %ld)\n"
+"Κάντε κλικ για τοποθέτιση %s (εξάρτημα %zu του %zu)\n"
 "Πατήστε <esc> για ακύρωση ή διπλό κλικ για εγγραφή"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:376
