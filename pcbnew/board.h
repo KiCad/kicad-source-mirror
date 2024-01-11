@@ -478,6 +478,11 @@ public:
     std::vector<PCB_MARKER*> ResolveDRCExclusions( bool aCreateMarkers );
 
     /**
+     * Scan existing markers and record data from any that are Excluded.
+     */
+    void RecordDRCExclusions();
+
+    /**
      * Update the visibility flags on the current unconnected ratsnest lines.
      */
     void UpdateRatsnestExclusions();

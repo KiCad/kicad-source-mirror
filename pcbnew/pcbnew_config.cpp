@@ -149,7 +149,7 @@ void PCB_EDIT_FRAME::SaveProjectLocalSettings()
     project.m_LayerPresets = m_appearancePanel->GetUserLayerPresets();
     project.m_Viewports = m_appearancePanel->GetUserViewports();
 
-    RecordDRCExclusions();
+    GetBoard()->RecordDRCExclusions();
 
     // Save render settings that aren't stored in PCB_DISPLAY_OPTIONS
 

@@ -994,19 +994,6 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::RecordDRCExclusions()
-{
-    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-    bds.m_DrcExclusions.clear();
-
-    for( PCB_MARKER* marker : GetBoard()->Markers() )
-    {
-        if( marker->IsExcluded() )
-            bds.m_DrcExclusions.insert( marker->Serialize() );
-    }
-}
-
-
 void PCB_EDIT_FRAME::ResolveDRCExclusions( bool aCreateMarkers )
 {
     BOARD_COMMIT commit( this );

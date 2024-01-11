@@ -585,8 +585,14 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
                 }
             } );
 
+    aBoard->RecordDRCExclusions();
+    aBoard->DeleteMARKERs( true, true );
     engine->RunTests( aUnits, aReportAllTrackErrors, false );
     engine->ClearViolationHandler();
+
+    // now "resolve" the drc exclusions again because its the only way to set exclusion status on a marker
+    for( PCB_MARKER* marker : aBoard->ResolveDRCExclusions( false ) )
+        aBoard->Add( marker );
 
     // TODO: Unify this with DIALOG_DRC::writeReport
 

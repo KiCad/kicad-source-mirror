@@ -285,7 +285,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     m_footprintTestsRun = false;
     m_cancelled = false;
 
-    m_frame->RecordDRCExclusions();
+    m_frame->GetBoard()->RecordDRCExclusions();
     deleteAllMarkers( true );
 
     std::vector<std::reference_wrapper<RC_ITEM>> violations = DRC_ITEM::GetItemsWithSeverities();

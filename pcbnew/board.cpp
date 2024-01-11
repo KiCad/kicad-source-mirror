@@ -2720,3 +2720,15 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 
     return true;
 }
+
+
+void BOARD::RecordDRCExclusions()
+{
+    m_designSettings->m_DrcExclusions.clear();
+
+    for( PCB_MARKER* marker : m_markers )
+    {
+        if( marker->IsExcluded() )
+            m_designSettings->m_DrcExclusions.insert( marker->Serialize() );
+    }
+}

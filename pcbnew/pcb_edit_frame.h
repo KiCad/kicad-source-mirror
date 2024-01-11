@@ -234,11 +234,6 @@ public:
     void SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath );
 
     /**
-     * Scan existing markers and record data from any that are Excluded.
-     */
-    void RecordDRCExclusions();
-
-    /**
      * If aCreateMarkers then create DRC exclusion markers from the serialized data.  If false,
      * then use the serialized data to set exclusion flags on existing markers.
      */
