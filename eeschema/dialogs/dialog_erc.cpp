@@ -458,6 +458,9 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
         wxMilliSleep( 500 );
         m_runningResultsBook->ChangeSelection( 1 );
         KIPLATFORM::UI::ForceFocus( m_notebook );
+
+        // now re-enable m_sdbSizerOK button
+        m_sdbSizer1OK->Enable( true );
     }
 
     m_ercRun = true;

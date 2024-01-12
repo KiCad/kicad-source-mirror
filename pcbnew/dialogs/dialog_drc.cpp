@@ -344,6 +344,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         wxMilliSleep( 500 );
         m_runningResultsBook->ChangeSelection( 1 );
         KIPLATFORM::UI::ForceFocus( m_Notebook );
+
+        // now re-enable m_sdbSizerOK button
+        m_sdbSizerOK->Enable( true );
     }
 
     refreshEditor();
