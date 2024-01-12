@@ -1130,6 +1130,10 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     if( !aNewFile )
     {
         m_libMgr->ClearLibraryModified( aLibrary );
+
+        // Update the library modification time so that we don't reload based on the watcher
+        if( aLibrary == getTargetLib() )
+            SetSymModificationTime( fn.GetModificationTime() );
     }
     else
     {

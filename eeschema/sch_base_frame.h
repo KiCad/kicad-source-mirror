@@ -241,6 +241,18 @@ public:
      */
     void OnSymChangeDebounceTimer( wxTimerEvent& aEvent );
 
+    /**
+     * Set the modification time of the symbol library table file.
+     *
+     * This is used to detect changes to the symbol library table file.
+     *
+     * @param aTime is the modification time of the symbol library table file.
+     */
+    void SetSymModificationTime( const wxDateTime& aTime )
+    {
+        m_watcherLastModified = aTime;
+    }
+
 protected:
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
 
