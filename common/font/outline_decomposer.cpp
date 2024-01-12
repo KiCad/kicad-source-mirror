@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <font/outline_decomposer.h>
 #include <bezier_curves.h>
 
@@ -176,10 +177,8 @@ bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS&       aResul
 {
     wxASSERT( aCubicBezier.size() == 4 );
 
-    // minimumSegmentLength defines the "smoothness" of the
-    // curve-to-straight-segments conversion: the larger, the coarser
-    // TODO: find out what the minimum segment length should really be!
-    constexpr int minimumSegmentLength = 10;
+
+    static int minimumSegmentLength = ADVANCED_CFG::GetCfg().m_MinimumSegmentLength;
     BEZIER_POLY   converter( aCubicBezier );
     converter.GetPoly( aResult, minimumSegmentLength );
 

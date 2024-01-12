@@ -498,6 +498,17 @@ public:
      * Default value: 1
      */
     double m_PcbSelectionVisibilityRatio;
+
+    /**
+     * Length of the minimum segment for the outline decomposer.  This is in IU, so
+     * it is nm in pcbnew and 100nm in eeschema.
+     *
+     * Setting name: "MinimumSegmentLength"
+     * Valid values: 10 to 1000
+     * Default value: 50
+     */
+    int m_MinimumSegmentLength;
+
 ///@}
 
 

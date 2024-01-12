@@ -103,6 +103,7 @@ static const wxChar EnableGit[] = wxT( "EnableGit" );
 static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
 static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
+static const wxChar MinimumSegmentLength[] = wxT( "MinimumSegmentLength" );
 } // namespace KEYS
 
 
@@ -244,6 +245,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DisambiguationMenuDelay   = 300;
 
     m_PcbSelectionVisibilityRatio = 1.0;
+
+    m_MinimumSegmentLength      = 50;
 
     loadFromConfigFile();
 }
@@ -436,6 +439,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::PcbSelectionVisibilityRatio,
                                                   &m_PcbSelectionVisibilityRatio,
                                                   m_PcbSelectionVisibilityRatio, 0.0, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MinimumSegmentLength,
+                                                  &m_MinimumSegmentLength,
+                                                  m_MinimumSegmentLength, 10, 1000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
