@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 08:35-0800\n"
+"POT-Creation-Date: 2024-01-12 09:05-0800\n"
 "PO-Revision-Date: 2024-01-12 17:02+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
@@ -380,7 +380,7 @@ msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:786 common/confirm.cpp:134
 #: common/confirm.cpp:324 common/dialogs/panel_setup_severities.cpp:42
-#: eeschema/files-io.cpp:879 eeschema/files-io.cpp:952
+#: eeschema/files-io.cpp:880 eeschema/files-io.cpp:953
 #: kicad/import_proj.cpp:153 kicad/import_project.cpp:102 kicad/kicad.cpp:313
 #: kicad/tools/kicad_manager_control.cpp:173
 #: kicad/tools/kicad_manager_control.cpp:239
@@ -1305,7 +1305,7 @@ msgstr "Virhe muistin varaamisessa potrace-bittikartalle"
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:127 gerbview/files.cpp:399
 #: gerbview/readgerb.cpp:76
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1226
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1262
 #: pcbnew/dialogs/dialog_drc_base.cpp:177
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
@@ -1629,12 +1629,12 @@ msgstr "Tietoa"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:473
 #: pcbnew/footprint_libraries_utils.cpp:1192 pcbnew/router/router_tool.cpp:1833
-#: pcbnew/router/router_tool.cpp:2414 pcbnew/zone_filler.cpp:734
+#: pcbnew/router/router_tool.cpp:2414 pcbnew/zone_filler.cpp:735
 msgid "Confirmation"
 msgstr "Vahvistus"
 
 #: common/confirm.cpp:386 eeschema/lib_field.cpp:549 eeschema/lib_pin.cpp:1173
-#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:222
+#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:231
 #: gerbview/gerber_draw_item.cpp:681 gerbview/gerber_draw_item.cpp:682
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/fp_text.cpp:299 pcbnew/fp_text.cpp:304 pcbnew/fp_textbox.cpp:333
@@ -1647,7 +1647,7 @@ msgid "Yes"
 msgstr "Kyllä"
 
 #: common/confirm.cpp:386 eeschema/lib_field.cpp:549 eeschema/lib_pin.cpp:1173
-#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:222
+#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:231
 #: gerbview/gerber_draw_item.cpp:681 gerbview/gerber_draw_item.cpp:682
 #: pcbnew/fp_text.cpp:299 pcbnew/fp_text.cpp:304 pcbnew/fp_textbox.cpp:333
 #: pcbnew/pcb_text.cpp:126 pcbnew/pcb_textbox.cpp:294
@@ -2035,7 +2035,7 @@ msgstr "Ympäristömuuttujat"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:339 eeschema/lib_pin.cpp:1168
-#: eeschema/sch_pin.cpp:217 eeschema/sch_symbol.cpp:1808
+#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1808
 #: eeschema/sch_symbol.cpp:1856 eeschema/symbol_editor/symbol_editor.cpp:1243
 #: eeschema/symbol_viewer_frame.cpp:522
 #: eeschema/widgets/tuner_slider_base.cpp:26
@@ -4131,7 +4131,7 @@ msgid "Colors"
 msgstr "Värit"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Kytkentäkaavioeditori"
@@ -4455,7 +4455,7 @@ msgid "Symbol"
 msgstr "Symboli"
 
 #: common/eda_item.cpp:382 common/eda_item.cpp:397 eeschema/lib_pin.h:71
-#: eeschema/sch_pin.cpp:206
+#: eeschema/sch_pin.cpp:215
 msgid "Pin"
 msgstr "Nasta"
 
@@ -4567,7 +4567,7 @@ msgstr "Kulma"
 #: common/eda_shape.cpp:648 common/eda_shape.cpp:666
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/lib_pin.cpp:1176 eeschema/sch_pin.cpp:224
+#: eeschema/lib_pin.cpp:1176 eeschema/sch_pin.cpp:233
 msgid "Length"
 msgstr "Pituus"
 
@@ -4754,7 +4754,7 @@ msgstr "Ala"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:348 eeschema/lib_pin.cpp:1179
-#: eeschema/sch_pin.cpp:227
+#: eeschema/sch_pin.cpp:236
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:3072 pcbnew/fp_text_grid_table.cpp:107
@@ -4797,7 +4797,7 @@ msgstr "Peilattu"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/lib_field.cpp:549 eeschema/sch_field.cpp:774
-#: eeschema/sch_pin.cpp:222 include/lib_table_grid.h:194
+#: eeschema/sch_pin.cpp:231 include/lib_table_grid.h:194
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:88
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
@@ -4963,12 +4963,12 @@ msgstr "Virheellinen alias (kaksoisnimi)"
 msgid "Default Font"
 msgstr "Oletuskirjasin"
 
-#: common/font/fontconfig.cpp:263
+#: common/font/fontconfig.cpp:303
 #, c-format
 msgid "Error loading font '%s'."
 msgstr "Virhe ladattaessa kirjasinta '%s'."
 
-#: common/font/fontconfig.cpp:265
+#: common/font/fontconfig.cpp:305
 #, c-format
 msgid "Font '%s' not found; substituting '%s'."
 msgstr "Kirjasinta '%s' ei löydy; korvataan '%s'."
@@ -7723,19 +7723,19 @@ msgid ""
 msgstr ""
 "Sekä %s että %s on kiinnitetty samoihin kohteisiin; %s käytetään netlistissa"
 
-#: eeschema/connection_graph.cpp:3165
+#: eeschema/connection_graph.cpp:3167
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Net %s on graafisesti kytketty väylään %s, mutta ei ole kyseisen väylän jäsen"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3681
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Sivun nastassa %s ei ole vastaavaa hierarkkista nimiötä lehden sisällä"
 
-#: eeschema/connection_graph.cpp:3665
+#: eeschema/connection_graph.cpp:3699
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Hierarkisella nimiöllä %s ei ole vastaavaa lehtinastaa emolehdellä"
@@ -8194,30 +8194,30 @@ msgstr "Vaihda"
 msgid "Update"
 msgstr "Päivitä"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:544
+#: eeschema/dialogs/dialog_change_symbols.cpp:565
 msgid "*** symbol not found ***"
 msgstr "*** symbolia ei löydy ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:555
+#: eeschema/dialogs/dialog_change_symbols.cpp:576
 msgid "*** new symbol has too few units ***"
 msgstr "*** uudessa symbolissa on liian vähän yksiköitä ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:750
+#: eeschema/dialogs/dialog_change_symbols.cpp:771
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
 msgstr "Päivitä symboli %s %s: sta %s: ksi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:757
+#: eeschema/dialogs/dialog_change_symbols.cpp:778
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
 msgstr "Päivitä symbolit %s %s: sta %s: ksi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:767
+#: eeschema/dialogs/dialog_change_symbols.cpp:788
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
 msgstr "Muuta symboli %s arvosta '%s' arvoon '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:774
+#: eeschema/dialogs/dialog_change_symbols.cpp:795
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
 msgstr "Muuta symbolit %s arvosta '%s' arvoon '%s'"
@@ -9461,7 +9461,7 @@ msgstr "Laske"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
 #: eeschema/dialogs/dialog_symbol_properties.cpp:159 eeschema/lib_pin.cpp:1169
-#: eeschema/sch_pin.cpp:218
+#: eeschema/sch_pin.cpp:227
 msgid "Number"
 msgstr "Numero"
 
@@ -10869,7 +10869,7 @@ msgstr "Arkin on oltava määritetty tiedosto."
 #: eeschema/lib_field.cpp:553 eeschema/lib_pin.cpp:1171
 #: eeschema/lib_pin.cpp:1173 eeschema/lib_text.cpp:429
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_field.cpp:778
-#: eeschema/sch_label.cpp:971 eeschema/sch_pin.cpp:220
+#: eeschema/sch_label.cpp:971 eeschema/sch_pin.cpp:229
 #: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
@@ -11247,7 +11247,7 @@ msgstr "Parametri"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:498 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:965
-#: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
+#: eeschema/sch_pin.cpp:215 eeschema/sch_pin.cpp:228
 #: eeschema/symbol_editor/symbol_editor.cpp:1270
 #: gerbview/gerber_draw_item.cpp:620
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -12511,7 +12511,7 @@ msgid "Symbol Libraries"
 msgstr "Symbolikirjastot"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1061
-#: eeschema/tools/sch_editor_control.cpp:463
+#: eeschema/tools/sch_editor_control.cpp:477
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1111
 #, c-format
 msgid ""
@@ -12527,15 +12527,15 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1578
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1630
-#: eeschema/tools/sch_editor_control.cpp:464
-#: eeschema/tools/sch_editor_control.cpp:479
+#: eeschema/tools/sch_editor_control.cpp:478
+#: eeschema/tools/sch_editor_control.cpp:493
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1112
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1125
 msgid "File Save Error"
 msgstr "Tiedoston tallennusvirhe"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1074
-#: eeschema/tools/sch_editor_control.cpp:478
+#: eeschema/tools/sch_editor_control.cpp:492
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1124
 #, c-format
 msgid ""
@@ -12777,73 +12777,73 @@ msgstr "Avoin Emitteri"
 msgid "No Connection"
 msgstr "Liittämätön"
 
-#: eeschema/erc.cpp:287
+#: eeschema/erc.cpp:292
 msgid "Unresolved text variable in drawing sheet"
 msgstr "Piirroslehdellä on tekstimuuttuja, jota ei ole määritelty"
 
-#: eeschema/erc.cpp:324
+#: eeschema/erc.cpp:330
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr "Väylä aliaksella %s on ristiriitaiset määritelmät kohdissa %s ja %s"
 
-#: eeschema/erc.cpp:393
+#: eeschema/erc.cpp:399
 #, c-format
 msgid "Different footprints assigned to %s and %s"
 msgstr "Eri jalanjäljet on osoitettu käyttäjille %s ja %s"
 
-#: eeschema/erc.cpp:483
+#: eeschema/erc.cpp:489
 #, c-format
 msgid "Symbol %s has unplaced units %s"
 msgstr "Symbolissa %s on sijoittamattomia yksiköitä %s"
 
-#: eeschema/erc.cpp:531
+#: eeschema/erc.cpp:537
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
 msgstr ""
 "Symbolissa %s on tulovirtanastat yksiköissä %s, joita ei ole sijoitettu."
 
-#: eeschema/erc.cpp:537
+#: eeschema/erc.cpp:543
 #, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
 msgstr "Symbolissa %s on syöttönastat yksiköissä %s, joita ei ole sijoitettu."
 
-#: eeschema/erc.cpp:543
+#: eeschema/erc.cpp:549
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr ""
 "Symbolissa %s on kaksisuuntaisia nastoja yksiköissä %s, joita ei ole "
 "sijoitettu."
 
-#: eeschema/erc.cpp:582
+#: eeschema/erc.cpp:588
 msgid "Pins with 'no connection' type are connected"
 msgstr "'Ei yhteyttä' -tyyppiset nastat on kytketty"
 
-#: eeschema/erc.cpp:698
+#: eeschema/erc.cpp:705
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "Tyypin %s ja %s nastat on yhdistetty"
 
-#: eeschema/erc.cpp:768
+#: eeschema/erc.cpp:775
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Nasta %s on kytketty molempiin %s ja %s"
 
-#: eeschema/erc.cpp:872
+#: eeschema/erc.cpp:879
 #, c-format
 msgid "The current configuration does not include the library '%s'"
 msgstr "Tämänhetkiset asetukset eivät sisällä kirjastoa \"%s\""
 
-#: eeschema/erc.cpp:883
+#: eeschema/erc.cpp:890
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration"
 msgstr "Kirjasto '%s' ei ole käytössä nykyisessä kokoonpanossa"
 
-#: eeschema/erc.cpp:898
+#: eeschema/erc.cpp:905
 #, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbolia %s ei löydy kirjastosta '%s'"
 
-#: eeschema/erc.cpp:914
+#: eeschema/erc.cpp:921
 #, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
 msgstr "Symbolia '%s' on muokattu kirjastossa '%s'"
@@ -12998,7 +12998,7 @@ msgstr "Päällekkäiset viitteet"
 msgid "Bus Entry needed"
 msgstr "Väylämerkintä tarvitaan"
 
-#: eeschema/fields_grid_table.cpp:222 eeschema/files-io.cpp:848
+#: eeschema/fields_grid_table.cpp:222 eeschema/files-io.cpp:849
 #: eeschema/tools/sch_editor_control.cpp:110
 msgid "Schematic Files"
 msgstr "Kytkentäkaaviotiedostot"
@@ -13050,7 +13050,7 @@ msgstr ""
 "lataamisessa tapahtui virheitä."
 
 #: eeschema/files-io.cpp:254 eeschema/files-io.cpp:262
-#: eeschema/files-io.cpp:1307 eeschema/sheet.cpp:161
+#: eeschema/files-io.cpp:1308 eeschema/sheet.cpp:161
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Virhe ladattaessa kytkentäkaaviota '%s'."
@@ -13060,8 +13060,8 @@ msgstr "Virhe ladattaessa kytkentäkaaviota '%s'."
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "Muisti ehtyi ladatessa kytkentäkaaviota '%s'."
 
-#: eeschema/files-io.cpp:289 eeschema/files-io.cpp:1310
-#: eeschema/files-io.cpp:1324 eeschema/sheet.cpp:164
+#: eeschema/files-io.cpp:289 eeschema/files-io.cpp:1311
+#: eeschema/files-io.cpp:1325 eeschema/sheet.cpp:164
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "'%s' lataaminen epäonnistui."
@@ -13138,15 +13138,15 @@ msgstr ""
 "Tämä tiedosto on luotu KiCadin aiemmalla versiolla. Tiedosto muunnetaan "
 "uuteen tiedostomuotoon tallennettaessa."
 
-#: eeschema/files-io.cpp:522
+#: eeschema/files-io.cpp:523
 msgid "Schematic is read only."
 msgstr "Kytkentäkaavio on vain luettavissa."
 
-#: eeschema/files-io.cpp:547
+#: eeschema/files-io.cpp:548
 msgid "Insert Schematic"
 msgstr "Aseta Kytkentäkaavio"
 
-#: eeschema/files-io.cpp:579
+#: eeschema/files-io.cpp:580
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
@@ -13156,7 +13156,7 @@ msgstr ""
 "\n"
 "Haluatko tallentaa nykyisen asiakirjan ennen jatkamista?"
 
-#: eeschema/files-io.cpp:597
+#: eeschema/files-io.cpp:598
 #, fuzzy
 msgid ""
 "This operation replaces the contents of the current project.\n"
@@ -13167,21 +13167,21 @@ msgstr ""
 "\n"
 "Haluatko tallentaa nykyisen asiakirjan ennen jatkamista?"
 
-#: eeschema/files-io.cpp:634 pcbnew/files.cpp:178
+#: eeschema/files-io.cpp:635 pcbnew/files.cpp:178
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 msgid "All supported formats"
 msgstr "Kaikki tuetut muodot"
 
-#: eeschema/files-io.cpp:637
+#: eeschema/files-io.cpp:638
 msgid "Import Schematic"
 msgstr "Tuo kaavio"
 
-#: eeschema/files-io.cpp:679
+#: eeschema/files-io.cpp:680
 #, c-format
 msgid "Unexpected file extension: '%s'."
 msgstr "Odottamaton tiedostopääte: '%s'."
 
-#: eeschema/files-io.cpp:743
+#: eeschema/files-io.cpp:744
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -13190,12 +13190,12 @@ msgstr ""
 "Virhe tallentaessa kytkentäkaaviotiedostoa '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:748 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Väliaikaisen tiedoston '%s' luominen epäonnistui."
 
-#: eeschema/files-io.cpp:767
+#: eeschema/files-io.cpp:768
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -13204,22 +13204,22 @@ msgstr ""
 "Virhe kytkentäkaaviotiedoston '%s' tallennuksessa.\n"
 "Väliaikaisen tiedoston '%s' nimeäminen uudelleen epäonnistui."
 
-#: eeschema/files-io.cpp:773 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Väliaikaisen tiedoston '%s' uudelleennimeäminen epäonnistui."
 
-#: eeschema/files-io.cpp:796 pagelayout_editor/files.cpp:187
+#: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
 #: pcbnew/files.cpp:1143
 #, c-format
 msgid "File '%s' saved."
 msgstr "Tiedosto '%s' tallennettu."
 
-#: eeschema/files-io.cpp:801
+#: eeschema/files-io.cpp:802
 msgid "File write operation failed."
 msgstr "Tiedoston kirjoittaminen ei onnistunut."
 
-#: eeschema/files-io.cpp:875 eeschema/files-io.cpp:948
+#: eeschema/files-io.cpp:876 eeschema/files-io.cpp:949
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:226
 #, c-format
@@ -13232,15 +13232,15 @@ msgstr ""
 "\n"
 "Varmista, että sinulla on kirjoitusoikeudet ja yritä uudelleen."
 
-#: eeschema/files-io.cpp:1022
+#: eeschema/files-io.cpp:1023
 msgid "Saving will overwrite existing files."
 msgstr "Tallentaminen korvaa olemassa olevat tiedostot."
 
-#: eeschema/files-io.cpp:1023
+#: eeschema/files-io.cpp:1024
 msgid "Save Warning"
 msgstr "Tallennusvaroitus"
 
-#: eeschema/files-io.cpp:1026
+#: eeschema/files-io.cpp:1027
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -13248,33 +13248,33 @@ msgstr ""
 "Seuraavat tiedostot korvataan uusilla:\n"
 "\n"
 
-#: eeschema/files-io.cpp:1027
+#: eeschema/files-io.cpp:1028
 msgid "Overwrite Files"
 msgstr "Korvaa tiedostot"
 
-#: eeschema/files-io.cpp:1028
+#: eeschema/files-io.cpp:1029
 msgid "Abort Project Save"
 msgstr "Keskeytä projektin tallennus"
 
-#: eeschema/files-io.cpp:1245
+#: eeschema/files-io.cpp:1246
 #, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
 msgstr "Kytkentäkaavio '%s' on jo avattu '%s' kohteessa '%s'."
 
-#: eeschema/files-io.cpp:1258
+#: eeschema/files-io.cpp:1259
 msgid "Importing Schematic"
 msgstr "Tuodaan Kytkentäkaaviota"
 
-#: eeschema/files-io.cpp:1320
+#: eeschema/files-io.cpp:1321
 #, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Käsittelemätön poikkeus tapahtui ladattaessa kytkentäkaaviota '%s'."
 
-#: eeschema/files-io.cpp:1354
+#: eeschema/files-io.cpp:1355
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Nykyistä kaaviota on muokattu. Tallenna muutokset?"
 
-#: eeschema/files-io.cpp:1443
+#: eeschema/files-io.cpp:1444
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13288,7 +13288,7 @@ msgstr ""
 "niitä ei tallennettu oikein. Haluatko palauttaa viimeksi tekemäsi "
 "muokkaukset?"
 
-#: eeschema/files-io.cpp:1454
+#: eeschema/files-io.cpp:1455
 #, c-format
 msgid ""
 "The file '%s` could not be opened.\n"
@@ -13297,24 +13297,24 @@ msgstr ""
 "Tiedostoa \"%s\" ei voitu avata.\n"
 "Automaattisesti tallennettujen tiedostojen manuaalinen palautus vaaditaan."
 
-#: eeschema/files-io.cpp:1505
+#: eeschema/files-io.cpp:1506
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr ""
 "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu palauttaa\n"
 
-#: eeschema/files-io.cpp:1510
+#: eeschema/files-io.cpp:1511
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen palautuksen."
 
-#: eeschema/files-io.cpp:1530
+#: eeschema/files-io.cpp:1531
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu poistaa\n"
 
-#: eeschema/files-io.cpp:1535
+#: eeschema/files-io.cpp:1536
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen poiston."
 
-#: eeschema/files-io.cpp:1546
+#: eeschema/files-io.cpp:1547
 #, c-format
 msgid ""
 "The automatic save master file\n"
@@ -13325,7 +13325,7 @@ msgstr ""
 "'%s'\n"
 "ei voitu poistaa."
 
-#: eeschema/files-io.cpp:1554
+#: eeschema/files-io.cpp:1555
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -13352,15 +13352,15 @@ msgstr "Vaakatasaus"
 msgid "V Justification"
 msgstr "Pystytasaus"
 
-#: eeschema/lib_item.cpp:61 eeschema/sch_pin.cpp:209
+#: eeschema/lib_item.cpp:61 eeschema/sch_pin.cpp:218
 msgid "no"
 msgstr "ei"
 
-#: eeschema/lib_item.cpp:63 eeschema/sch_pin.cpp:211
+#: eeschema/lib_item.cpp:63 eeschema/sch_pin.cpp:220
 msgid "yes"
 msgstr "kyllä"
 
-#: eeschema/lib_item.cpp:67 eeschema/sch_pin.cpp:215
+#: eeschema/lib_item.cpp:67 eeschema/sch_pin.cpp:224
 msgid "Converted"
 msgstr "Muunnettu"
 
@@ -13378,22 +13378,22 @@ msgstr "Asema X"
 msgid "Pos Y"
 msgstr "Asento Y"
 
-#: eeschema/lib_pin.cpp:1385
+#: eeschema/lib_pin.cpp:1399
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Nasta %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1393
+#: eeschema/lib_pin.cpp:1407
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Nasta %s [%s, %s]"
 
-#: eeschema/lib_pin.cpp:1403
+#: eeschema/lib_pin.cpp:1417
 #, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr "Piilotettu nasta %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1411
+#: eeschema/lib_pin.cpp:1425
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Piilotettu nasta %s [%s, %s]"
@@ -13812,7 +13812,7 @@ msgstr "Väylän vaihtoehto %s -Jäsenet"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Kytkentäkaavioeditori"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1712
+#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
 msgid "Schematic Hierarchy"
 msgstr "Kytkentäkaaviohierarkkia"
 
@@ -13830,7 +13830,7 @@ msgstr "Uusi kaaviokuva on tallentamaton"
 msgid "Save changes to '%s' before closing?"
 msgstr "Tallennetaanko muutokset '%s' ennen sulkemista?"
 
-#: eeschema/sch_edit_frame.cpp:964
+#: eeschema/sch_edit_frame.cpp:963
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -13840,50 +13840,50 @@ msgstr ""
 "editoriin. Voit luoda/päivittää piirilevyjä kytkentäkaavioista, kun "
 "käynnistät KiCad-ohjelman ja luot projektin."
 
-#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
-#: eeschema/sch_edit_frame.cpp:1118
+#: eeschema/sch_edit_frame.cpp:1117
 msgid "New Schematic"
 msgstr "Uusi kytkentäkaavio"
 
-#: eeschema/sch_edit_frame.cpp:1130
+#: eeschema/sch_edit_frame.cpp:1129
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Kytkentäkaaviotiedosto '%s' on jo olemassa."
 
-#: eeschema/sch_edit_frame.cpp:1151
+#: eeschema/sch_edit_frame.cpp:1150
 msgid "Open Schematic"
 msgstr "Avaa kytkentäkaavio"
 
-#: eeschema/sch_edit_frame.cpp:1220
+#: eeschema/sch_edit_frame.cpp:1219
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Jalanjälkien määrittely edellyttää, että kaikki kytkentäkaavion osat on "
 "numeroitu."
 
-#: eeschema/sch_edit_frame.cpp:1245
+#: eeschema/sch_edit_frame.cpp:1244
 msgid "Could not open CvPcb"
 msgstr "CvPcb: tä ei voitu avata"
 
-#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[Lue ainoastaan]"
 
-#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[Tallentamaton]"
 
-#: eeschema/sch_edit_frame.cpp:1435
+#: eeschema/sch_edit_frame.cpp:1434
 msgid "[no schematic loaded]"
 msgstr "[Kytkentäkaaviota ei ole ladattu]"
 
-#: eeschema/sch_edit_frame.cpp:1735
+#: eeschema/sch_edit_frame.cpp:1734
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Korostettu verkko: %s"
@@ -13971,7 +13971,7 @@ msgstr "Globaali Etiketti \"%s\""
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarkkinen Nimiö \"%s\""
 
-#: eeschema/sch_label.cpp:1807 pcbnew/dialogs/panel_setup_rules.cpp:686
+#: eeschema/sch_label.cpp:1807 pcbnew/dialogs/panel_setup_rules.cpp:687
 msgid "Syntax Help"
 msgstr "Syntaksiohjeet"
 
@@ -14044,7 +14044,7 @@ msgstr "ERC-merkintä"
 msgid "No Connect"
 msgstr "Ei yhteyttä"
 
-#: eeschema/sch_plotter.cpp:175 eeschema/widgets/hierarchy_pane.cpp:319
+#: eeschema/sch_plotter.cpp:175 eeschema/widgets/hierarchy_pane.cpp:316
 msgid "Root"
 msgstr "Juuri"
 
@@ -14443,7 +14443,7 @@ msgstr ""
 "tietokantaan %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3127
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3135
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Tiedostoa '%s' ei voida lukea."
@@ -14596,13 +14596,13 @@ msgstr ""
 "kytkentäkaaviohierarkiassa."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1534
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2177
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2181
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Symbolikirjasto %s on jo olemassa."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1560
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2203
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2207
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Symbolikirjastoa '%s' ei voi poistaa."
@@ -14653,11 +14653,11 @@ msgstr "Odottamaton tiedoston loppu"
 msgid "Unexpected end of file"
 msgstr "Odottamaton tiedoston loppu"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1048
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1052
 msgid "expected 'Italics' or '~'"
 msgstr "odotettu 'kursiivi' tai '~'"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1311
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1315
 msgid "symbol field text attributes must be 3 characters wide"
 msgstr "symbolikentän tekstimääritteiden on oltava 3 merkin levyisiä"
 
@@ -16560,7 +16560,7 @@ msgstr "Symboli %s on johdettu merkistä %s. Symboligrafiikkaa ei voi muokata."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:887
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:938
-#: eeschema/tools/sch_editor_control.cpp:388
+#: eeschema/tools/sch_editor_control.cpp:389
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "Kirjasto '%s' on jo olemassa."
@@ -16893,6 +16893,7 @@ msgstr "Ei pystytä listaamaan kirjastoa '%s'."
 
 #: eeschema/symbol_library_manager.cpp:971
 #: eeschema/symbol_library_manager.cpp:1072
+#: eeschema/tools/sch_editor_control.cpp:436
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Virhe tallentaessa symbolia %s kirjastoon %s."
@@ -18238,33 +18239,33 @@ msgstr "Muuta"
 msgid "Label value cannot go below zero"
 msgstr "Arvo ei voi olla nollaa pienempi"
 
-#: eeschema/tools/sch_edit_tool.cpp:1402 eeschema/tools/sch_edit_tool.cpp:1405
+#: eeschema/tools/sch_edit_tool.cpp:1405 eeschema/tools/sch_edit_tool.cpp:1408
 #: eeschema/tools/symbol_editor_edit_tool.cpp:528
 #, c-format
 msgid "Edit %s Field"
 msgstr "Muokkaa %s kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:1407
+#: eeschema/tools/sch_edit_tool.cpp:1410
 #: eeschema/tools/symbol_editor_edit_tool.cpp:530
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Muokkaa '%s' Kenttää"
 
-#: eeschema/tools/sch_edit_tool.cpp:1945 eeschema/tools/sch_edit_tool.cpp:2034
+#: eeschema/tools/sch_edit_tool.cpp:1948 eeschema/tools/sch_edit_tool.cpp:2037
 msgid "<empty>"
 msgstr "<tyhjä>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2316
+#: eeschema/tools/sch_edit_tool.cpp:2319
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Haluatko poistaa viittaamattomat nastat tältä taulukolta?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2376
+#: eeschema/tools/sch_edit_tool.cpp:2379
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Syötä arkin polun sivunumero %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:2379
-#: eeschema/widgets/hierarchy_pane.cpp:287
+#: eeschema/tools/sch_edit_tool.cpp:2382
+#: eeschema/widgets/hierarchy_pane.cpp:284
 msgid "Edit Sheet Page Number"
 msgstr "Muokkaa arkin sivunumeroa"
 
@@ -18274,32 +18275,32 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr ""
 "Palautetaanko '%s' (ja kaikki välisivut) viimeksi tallennettuun versioon?"
 
-#: eeschema/tools/sch_editor_control.cpp:335
+#: eeschema/tools/sch_editor_control.cpp:336
 msgid "Include power symbols in schematic to the library?"
 msgstr "Sisällytetäänkö tehosymbolit kytkentäkaaviosta kirjastoon?"
 
-#: eeschema/tools/sch_editor_control.cpp:400
+#: eeschema/tools/sch_editor_control.cpp:401
 #, c-format
 msgid "Could not add library '%s'."
 msgstr "Kirjastoa '%s' ei voitu lisätä."
 
-#: eeschema/tools/sch_editor_control.cpp:413
+#: eeschema/tools/sch_editor_control.cpp:414
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Päivitetäänkö kytkentäkaavion symbolit viittaamaan uuteen kirjastoon?"
 
-#: eeschema/tools/sch_editor_control.cpp:778
+#: eeschema/tools/sch_editor_control.cpp:792
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Virhe: päällekkäiset aliarkinimet löytyvät nykyiseltä taulukolta."
 
-#: eeschema/tools/sch_editor_control.cpp:882
+#: eeschema/tools/sch_editor_control.cpp:896
 msgid "No net selected."
 msgstr "Kytkentäverkko valitsematta."
 
-#: eeschema/tools/sch_editor_control.cpp:908
+#: eeschema/tools/sch_editor_control.cpp:922
 msgid "Net must be labeled to assign a netclass."
 msgstr "Verkko on merkittävä verkkoluokan määrittämiseksi."
 
-#: eeschema/tools/sch_editor_control.cpp:1691
+#: eeschema/tools/sch_editor_control.cpp:1724
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18310,26 +18311,26 @@ msgstr ""
 "hylättiin, koska kohteella on jo taulukko tai yksi sen alilomakkeista "
 "vanhempana."
 
-#: eeschema/tools/sch_editor_control.cpp:2098
+#: eeschema/tools/sch_editor_control.cpp:2148
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
 "Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
 
-#: eeschema/tools/sch_editor_control.cpp:2390
+#: eeschema/tools/sch_editor_control.cpp:2440
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d kaksoiskappaleet vaihdettu.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2397
+#: eeschema/tools/sch_editor_control.cpp:2447
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d mahdolliset ongelmat korjattu."
 
-#: eeschema/tools/sch_editor_control.cpp:2404
+#: eeschema/tools/sch_editor_control.cpp:2454
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ei virheitä."
@@ -18434,16 +18435,16 @@ msgstr "Aseta nasta joka tapauksessa"
 msgid "Create a new project for this schematic"
 msgstr "Luo uusi projekti tälle kytkentäkaaviolle"
 
-#: eeschema/widgets/hierarchy_pane.cpp:275
+#: eeschema/widgets/hierarchy_pane.cpp:272
 msgid "Edit Page Number"
 msgstr "Muokkaa sivunumeroa"
 
-#: eeschema/widgets/hierarchy_pane.cpp:283
+#: eeschema/widgets/hierarchy_pane.cpp:280
 #, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "Anna sivunumero arkin polulle %s"
 
-#: eeschema/widgets/hierarchy_pane.cpp:325
+#: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
 msgid "(page %s)"
 msgstr "(sivu %s)"
@@ -19587,8 +19588,8 @@ msgstr "Korosta DKoodi D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:535
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:248
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:310
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:284
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:346
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:45
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
 #: pcbnew/widgets/appearance_controls.cpp:1013
@@ -19800,37 +19801,37 @@ msgstr "Hyväksytyt vaihtoehdot: pdf,gerberx2,ps,dxf,svg"
 msgid "Precision of gerber coordinates (5 or 6)"
 msgstr "Gerber-koordinaattien tarkkuus (5 tai 6)"
 
-#: kicad/cli/command_export_pcb_drill.cpp:108
+#: kicad/cli/command_export_pcb_drill.cpp:109
 msgid "Output must be a directory\n"
 msgstr "Lähdön on oltava hakemisto\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:125
+#: kicad/cli/command_export_pcb_drill.cpp:126
 msgid "Invalid drill format\n"
 msgstr "Virheellinen porausmuoto\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:141
+#: kicad/cli/command_export_pcb_drill.cpp:142
 #: kicad/cli/command_export_pcb_dxf.cpp:94
 #: kicad/cli/command_export_pcb_pos.cpp:142
 msgid "Invalid units specified\n"
 msgstr "Virheelliset yksiköt määritetty\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:165
+#: kicad/cli/command_export_pcb_drill.cpp:166
 msgid "Invalid zeros format specified\n"
 msgstr "Virheellinen nollien muoto määritetty\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:181
+#: kicad/cli/command_export_pcb_drill.cpp:182
 msgid "Invalid oval drill format specified\n"
 msgstr "Virheellinen soikea porausmuoto määritetty\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:209
+#: kicad/cli/command_export_pcb_drill.cpp:210
 msgid "Invalid map format specified\n"
 msgstr "Virheellinen karttamuoto määritetty\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:225
+#: kicad/cli/command_export_pcb_drill.cpp:226
 msgid "Invalid origin mode specified\n"
 msgstr "Virheellinen aloitustila määritetty\n"
 
-#: kicad/cli/command_export_pcb_drill.cpp:237
+#: kicad/cli/command_export_pcb_drill.cpp:238
 #: kicad/cli/command_export_pcb_gerber.cpp:121
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "Gerber-koordinaattitarkkuuden tulee olla joko 5 tai 6\n"
@@ -22028,7 +22029,7 @@ msgstr "Ominaisvastus Ohmeina*m 20 °C:ssa"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:762
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:798
 msgid "..."
 msgstr "..."
 
@@ -22395,7 +22396,7 @@ msgid "Nickel"
 msgstr "Nikkeli"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:49
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:837
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:873
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 msgid "Copper"
 msgstr "Kupari"
@@ -23871,65 +23872,65 @@ msgstr "Kyllä, viistottu"
 msgid "Options for edge card connectors."
 msgstr "Reunakorttiliittimien asetukset."
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:115
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
 msgid "Core"
 msgstr "Ydin"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "PrePreg"
 msgstr "PrePreg()"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:176
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:212
 #, c-format
 msgid "Enter board thickness in %s:"
 msgstr "Piirilevyn paksuus (%s):"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:181
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:217
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
 msgstr "Piirilevyn odotettu paksuus (vähintään %s):"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:221
 msgid "Adjust Unlocked Dielectric Layers"
 msgstr "Säädä Lukitsemattomia dielektrisiä kerroksia"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:194
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:230
 #, c-format
 msgid "Value too small (min value %s)."
 msgstr "Arvo liian pieni (pienin arvo %s)."
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:204
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:240
 msgid "All dielectric  thickness layers are locked"
 msgstr "Kaikki dielektriset  paksuuskerrokset ovat lukittu"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:270
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:306
 #, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
 msgstr "Kerros '%s' (alikerros %d/%d)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:285
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:321
 msgid "Add Dielectric Layer"
 msgstr "Lisää Dielektrinen Kerros"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:288
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:324
 #: pcbnew/dialogs/panel_setup_layers.cpp:844
 msgid "Select layer to add:"
 msgstr "Valitse lisättävä kerros:"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:369
 #, c-format
 msgid "Layer '%s' sublayer %d/%d"
 msgstr "Kerros '%s' alikerros %d/%d"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:343
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:379
 msgid "Remove Dielectric Layer"
 msgstr "Poista dielektrinen kerros"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:346
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:382
 msgid "Select layer to remove:"
 msgstr "Valitse poistettava kerros:"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1128
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1164
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
@@ -23937,18 +23938,18 @@ msgstr ""
 "Epsilon R: n virheellinen arvo (Epsilon R: n on oltava positiivinen tai "
 "nolla, jos sitä ei käytetä)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1149
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1185
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
 "Väärä arvo Häviö tg: lle (Häviö tg: n on oltava positiivinen tai nolla, jos "
 "sitä ei käytetä)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1195
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1231
 msgid "A layer thickness is < 0. Fix it"
 msgstr "Kerroksen paksuus on <0. Korjaa se"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1647
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1683
 msgid "Custom..."
 msgstr "Mukautettu..."
 
@@ -31537,16 +31538,16 @@ msgstr ""
 msgid "Cancel Changes?"
 msgstr "Perutaanko muutokset?"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:563
+#: pcbnew/dialogs/panel_setup_rules.cpp:564
 msgid "DRC rules"
 msgstr "suunnittelusäännöt"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:570
+#: pcbnew/dialogs/panel_setup_rules.cpp:571
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
 msgstr "VIRHE:"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:633
+#: pcbnew/dialogs/panel_setup_rules.cpp:634
 msgid "Design rules cannot be added without a project"
 msgstr "Suunnittelusääntöjä ei voi lisätä ilman projektia"
 
@@ -33039,11 +33040,11 @@ msgstr "Tarkastetaan kuparivyöhykkeen etäisyyksiä ..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:393
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:432
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:516
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:764
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:768
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:800
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:821
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:842
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1204
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124
@@ -33065,7 +33066,7 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s välys %s; todellinen <0)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:509
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:733
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:737
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(verkot %s ja %s)"
@@ -33267,12 +33268,12 @@ msgstr "Puuttuva verkko näkyy kaavamaisesti (%s)."
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
 msgstr "Anturaverkko (%s) ei vastaa kaavion (%s) antamaa verkkoa."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:195
 #, c-format
 msgid "No pad found for pin %s in schematic."
 msgstr "Anturaa ei löydy nastalle %s kytkentäkaaviossa."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:219
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:230
 msgid "Checking PCB to schematic parity..."
 msgstr "Tarkistetaan piirilevyn vastaavuutta kytkentäkaavioon..."
 
@@ -35822,7 +35823,15 @@ msgstr ""
 "suunnittelusäännöt tuotiin. On suositeltavaa tarkistaa sovelletut "
 "suunnittelusäännöt."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:929
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:820
+#, c-format
+msgid ""
+"Footprint definition '%s' has component copper associated to a pad on "
+"multiple layers. Custom padstacks are not supported in KiCad. The copper "
+"items have been imported as graphical elements."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -35832,7 +35841,7 @@ msgstr ""
 "Kirjastokomponentin '%s' CADSTAR-alueella '%s' ei ole vastaavuutta KiCad:"
 "issa. Alue ei ole läpivienti tai johdinkieltoalue. Aluetta ei tuotu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1015
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1037
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -35842,7 +35851,7 @@ msgstr ""
 "CADSTAR-anturamääritys '%s' on kompleksinen anturapino, jota KiCad ei tue. "
 "Tarkasta tuodut anturat sillä ne saattavat vaatia korjauksia."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1234
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -35851,22 +35860,22 @@ msgstr ""
 "CADSTAR-anturamäärityksellä '%s' on aukon muoto anturan muodon ulkopuolella. "
 "Reikä on siirretty anturan keskelle."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1265
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1287
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR anturamäärittelyssä '%s' on tuontivirheitä: %s"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1283
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1305
 #, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
 msgstr "Ei voi löytää anturiluetteloa '%d' jalanjäljestä '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1316
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1338
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr "Ryhmätunnusta %s ei löydy ryhmämäärityksistä."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1322
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1344
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
@@ -35874,7 +35883,7 @@ msgstr ""
 "Ei kykene löytämään alaryhmää %s ei löydy ryhmäkartasta (vanhemman ryhmän "
 "tunnus= %s, nimi = %s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1399
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1426
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -35883,7 +35892,7 @@ msgstr ""
 "Mittatunnus %s on kulmamitta, jolla ei ole KiCad-vastinetta. Sen sijaan "
 "ladattiin tasattu mitta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1410
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1437
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -35894,12 +35903,12 @@ msgstr ""
 "ei vielä tueta KiCadissa. Mitta-objekti tuotiin sen sijaan sisäisellä "
 "mittatyylillä."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1467
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1494
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "Odottamaton Mittatyyppi (ID %s). Tätä ei tuotu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1602
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1629
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
@@ -35907,7 +35916,7 @@ msgid ""
 msgstr ""
 "Mitta %s on kulmamitta, jolla ei ole KiCad-vastinetta. Objektia ei tuotu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1642
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1669
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -35917,7 +35926,7 @@ msgstr ""
 "CADSTAR-alue %s on merkitty sijoitusalueeksi CADSTAR-sovelluksessa. KiCad ei "
 "tue sijoitusalueita. Vain alueen tuetut elementit tuotiin."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1651
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1678
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -35926,17 +35935,17 @@ msgstr ""
 "CADSTAR-alueella '%s' ei ole KiCad-vastaavaa. Puhtaita sijoitusalueita ei "
 "tueta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1678
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1705
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr "Komponenttia '%s' ei löydy kirjastosta (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1798
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1825
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr "Asiakirjamerkkiä ei löydy kirjastosta (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1867
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1894
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -35945,7 +35954,7 @@ msgstr ""
 "CADSTAR-mallin ”%s” asetus ”Salli ei reititysalueilla” on käytössä. Tällä "
 "asetuksella ei ole KiCad-vastaavaa, joten se on ohitettu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1875
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1902
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -35954,7 +35963,7 @@ msgstr ""
 "CADSTAR mallissa '%s' on 'Box Isolated Pins' -asetus käytössä. Tällä "
 "asetuksella ei ole KiCad vastinetta, joten se on jätetty huomiotta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1910
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -35963,7 +35972,7 @@ msgstr ""
 "CADSTAR-mallin '%s' asetus 'Automatic Repour' on käytössä. Tällä asetuksella "
 "ei ole KiCad-vastaavaa, joten se on ohitettu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1894
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1921
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -35974,7 +35983,7 @@ msgstr ""
 "Width -asetukselle. Tätä varten ei ole KiCad-vastaavaa, joten tämä asetus "
 "ohitettiin."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1904
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1931
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -35987,7 +35996,7 @@ msgstr ""
 "kahden asetuksen välillä. KiCad-vyöhykkeen vähimmäissaaren pinta-alana on "
 "käytetty irrotetun kuparin asetusta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1955
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1982
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -35998,7 +36007,7 @@ msgstr ""
 "ja läpivienneissä. KiCad tukee vain yhtä yksittäistä asetusta molemmille. "
 "Anturoiden asetus on otettu käyttöön."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1972
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1999
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
@@ -36013,7 +36022,7 @@ msgstr ""
 "asetettu uuden pinnan leveydeksi ja toteutetaan kun vyöhykkeet seuraavan "
 "kerran täytetään."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2019
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2046
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -36023,7 +36032,7 @@ msgstr ""
 "CADSTAR-kerros %s määritellään tehotasotasoksi. Sellaisen nimistä verkkoa ei "
 "kuitenkaan ole. Kerros on ladattu, mutta kuparivyöhykettä ei luotu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2121
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2148
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -36034,7 +36043,7 @@ msgstr ""
 "vastaavaa. Ne on tuotu KiCad-vyöhykkeeksi, jos kiinteä tai luukku täytetty, "
 "tai KiCad-radana, jos muoto oli täyttämätön ääriviiva (avoin tai suljettu)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2224
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2251
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -36043,7 +36052,7 @@ msgstr ""
 "Verkko %s viittaa komponenttitunnukseen '%s', jota ei ole olemassa. Tämä on "
 "jätetty huomiotta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2230
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2257
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -36052,11 +36061,11 @@ msgstr ""
 "Netto '%s' viittaa olemattomaan tyyppihakemistoon '%d' komponentissa '%s'. "
 "Tämä on jätetty huomiotta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2396
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2423
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr "Tekstimuuttujia ei voitu asettaa, koska projektia ei ole ladattu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2481
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2508
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
@@ -36064,7 +36073,7 @@ msgstr ""
 "CADSTAR-design sisältää kyynelpisaroita. Tämä maahantuoja ei vielä tue "
 "niitä, joten suunnittelun kyynelpisarat on jätetty huomiotta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2512
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2539
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -36075,7 +36084,7 @@ msgstr ""
 "KiCad tukee vain pyöreitä läpivientiä, joten tämä läpivientityyppi on "
 "muutettu läpimitaltaan %.2f mm olevaksi läpivienniksi."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2722
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2749
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -36084,7 +36093,7 @@ msgstr ""
 "Kohteen '%s' muoto on CADSTAR:issa hatch täytetty viiva, jolla ei ole KiCad-"
 "vastinetta. Käytä sen sijaan kiinteää täyttöä."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3601
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3628
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -36095,7 +36104,7 @@ msgstr ""
 "vain kahta hatch-viivoitusta (ristiviivaus) 90 asteen välein. Tuotu "
 "viivoitus on ristiinviivottu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3611
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3638
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -36106,7 +36115,7 @@ msgstr ""
 "KiCad tukee vain yhtä leveyttä hachingille. Tuodussa viivoituksessa "
 "käytetään viivan määrittelyssä ensin määriteltyä leveyttä, ts. %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3623
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3650
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -36117,7 +36126,7 @@ msgstr ""
 "KiCad tukee vain yhtä askelkokoa hachingille. Tuodussa täyttöviivassa "
 "käytetään ensimmäisessä määritelmässä määriteltyä vaihekokoa, eli %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3636
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3663
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -36130,7 +36139,7 @@ msgstr ""
 "kaksi täyttöviivaa 90 asteen päässä toisistaan, suunnattuna %.1f astetta "
 "vaakatasosta."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3706
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3733
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
@@ -36139,7 +36148,7 @@ msgstr ""
 "Mittatunnus %s käyttää yksikkötyyppiä, jota KiCad ei tue. Sen sijaan "
 "käytettiin millimetrejä."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3988
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:4015
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -36151,7 +36160,7 @@ msgstr ""
 "elementtejä ei tuotu. Huomaa: KiCadin 'Net Class' -versio on lähempänä "
 "CADSTARin '' Net Route Code '' -versiota (joka on tuotu kaikille verkkoille)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3998
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:4025
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -41046,27 +41055,27 @@ msgstr "Vähimmäisleveys"
 msgid "Pad Connections"
 msgstr "Anturaliitännät"
 
-#: pcbnew/zone_filler.cpp:109
+#: pcbnew/zone_filler.cpp:110
 msgid "Checking zone fills..."
 msgstr "Tarkastetaan vyöhykkeen täyttämistä ..."
 
-#: pcbnew/zone_filler.cpp:110
+#: pcbnew/zone_filler.cpp:111
 msgid "Building zone fills..."
 msgstr "Rakennusalueen täytöt ..."
 
-#: pcbnew/zone_filler.cpp:524
+#: pcbnew/zone_filler.cpp:525
 msgid "Removing isolated copper islands..."
 msgstr "Poistetaan eristetyt kuparisaarekkeet..."
 
-#: pcbnew/zone_filler.cpp:733
+#: pcbnew/zone_filler.cpp:734
 msgid "Zone fills are out-of-date. Refill?"
 msgstr "Vyöhykkeen aluetäytöt ovat vanhentuneita. Täytetäänkö uudelleen?"
 
-#: pcbnew/zone_filler.cpp:735
+#: pcbnew/zone_filler.cpp:736
 msgid "Refill"
 msgstr "Uudelleentäyttö"
 
-#: pcbnew/zone_filler.cpp:735
+#: pcbnew/zone_filler.cpp:736
 msgid "Continue without Refill"
 msgstr "Jatka ilman uudelleentäyttöä"
 

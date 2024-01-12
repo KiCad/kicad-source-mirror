@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 08:35-0800\n"
+"POT-Creation-Date: 2024-01-12 09:05-0800\n"
 "PO-Revision-Date: 2023-12-08 22:35+0000\n"
 "Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v7/nl/>\n"
@@ -368,7 +368,7 @@ msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:786 common/confirm.cpp:134
 #: common/confirm.cpp:324 common/dialogs/panel_setup_severities.cpp:42
-#: eeschema/files-io.cpp:879 eeschema/files-io.cpp:952
+#: eeschema/files-io.cpp:880 eeschema/files-io.cpp:953
 #: kicad/import_proj.cpp:153 kicad/import_project.cpp:102 kicad/kicad.cpp:313
 #: kicad/tools/kicad_manager_control.cpp:173
 #: kicad/tools/kicad_manager_control.cpp:239
@@ -1295,7 +1295,7 @@ msgstr "Fout bij het toewijzen van geheugen voor potrace-bitmap"
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:127 gerbview/files.cpp:399
 #: gerbview/readgerb.cpp:76
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1226
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1262
 #: pcbnew/dialogs/dialog_drc_base.cpp:177
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:43
 msgid "Errors"
@@ -1622,12 +1622,12 @@ msgstr "Informatie"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:473
 #: pcbnew/footprint_libraries_utils.cpp:1192 pcbnew/router/router_tool.cpp:1833
-#: pcbnew/router/router_tool.cpp:2414 pcbnew/zone_filler.cpp:734
+#: pcbnew/router/router_tool.cpp:2414 pcbnew/zone_filler.cpp:735
 msgid "Confirmation"
 msgstr "Bevestiging"
 
 #: common/confirm.cpp:386 eeschema/lib_field.cpp:549 eeschema/lib_pin.cpp:1173
-#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:222
+#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:231
 #: gerbview/gerber_draw_item.cpp:681 gerbview/gerber_draw_item.cpp:682
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/fp_text.cpp:299 pcbnew/fp_text.cpp:304 pcbnew/fp_textbox.cpp:333
@@ -1640,7 +1640,7 @@ msgid "Yes"
 msgstr "Ja"
 
 #: common/confirm.cpp:386 eeschema/lib_field.cpp:549 eeschema/lib_pin.cpp:1173
-#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:222
+#: eeschema/sch_field.cpp:774 eeschema/sch_pin.cpp:231
 #: gerbview/gerber_draw_item.cpp:681 gerbview/gerber_draw_item.cpp:682
 #: pcbnew/fp_text.cpp:299 pcbnew/fp_text.cpp:304 pcbnew/fp_textbox.cpp:333
 #: pcbnew/pcb_text.cpp:126 pcbnew/pcb_textbox.cpp:294
@@ -2030,7 +2030,7 @@ msgstr "Omgevingsvariabelen"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:339 eeschema/lib_pin.cpp:1168
-#: eeschema/sch_pin.cpp:217 eeschema/sch_symbol.cpp:1808
+#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1808
 #: eeschema/sch_symbol.cpp:1856 eeschema/symbol_editor/symbol_editor.cpp:1243
 #: eeschema/symbol_viewer_frame.cpp:522
 #: eeschema/widgets/tuner_slider_base.cpp:26
@@ -4118,7 +4118,7 @@ msgid "Colors"
 msgstr "Kleuren"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Schematische Editor"
@@ -4442,7 +4442,7 @@ msgid "Symbol"
 msgstr "Symbool"
 
 #: common/eda_item.cpp:382 common/eda_item.cpp:397 eeschema/lib_pin.h:71
-#: eeschema/sch_pin.cpp:206
+#: eeschema/sch_pin.cpp:215
 msgid "Pin"
 msgstr "Pen"
 
@@ -4555,7 +4555,7 @@ msgstr "Hoek"
 #: common/eda_shape.cpp:648 common/eda_shape.cpp:666
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/lib_pin.cpp:1176 eeschema/sch_pin.cpp:224
+#: eeschema/lib_pin.cpp:1176 eeschema/sch_pin.cpp:233
 msgid "Length"
 msgstr "Lengte"
 
@@ -4742,7 +4742,7 @@ msgstr "Onderkant"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:348 eeschema/lib_pin.cpp:1179
-#: eeschema/sch_pin.cpp:227
+#: eeschema/sch_pin.cpp:236
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #: pcbnew/footprint.cpp:3072 pcbnew/fp_text_grid_table.cpp:107
@@ -4785,7 +4785,7 @@ msgstr "Gespiegeld"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/lib_field.cpp:549 eeschema/sch_field.cpp:774
-#: eeschema/sch_pin.cpp:222 include/lib_table_grid.h:194
+#: eeschema/sch_pin.cpp:231 include/lib_table_grid.h:194
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:134
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:88
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
@@ -4951,12 +4951,12 @@ msgstr "Slechte alias (dubbele naam)"
 msgid "Default Font"
 msgstr "Standaardlettertype"
 
-#: common/font/fontconfig.cpp:263
+#: common/font/fontconfig.cpp:303
 #, c-format
 msgid "Error loading font '%s'."
 msgstr "Fout bij het laden van lettertype '%s'."
 
-#: common/font/fontconfig.cpp:265
+#: common/font/fontconfig.cpp:305
 #, c-format
 msgid "Font '%s' not found; substituting '%s'."
 msgstr "Lettertype '%s' niet gevonden; vervangen door '%s'."
@@ -7725,18 +7725,18 @@ msgstr ""
 "Zowel %s als %s zijn aan dezelfde items bevestigd; %s zal worden gebruikt in "
 "de netlijst"
 
-#: eeschema/connection_graph.cpp:3165
+#: eeschema/connection_graph.cpp:3167
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "Net %s is grafisch verbonden met bus %s maar is geen lid van die bus"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3681
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Sheet pin %s heeft geen overeenkomend hiërarchisch label in het vel"
 
-#: eeschema/connection_graph.cpp:3665
+#: eeschema/connection_graph.cpp:3699
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -8116,30 +8116,30 @@ msgstr "Wijzig"
 msgid "Update"
 msgstr "Bijwerken"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:544
+#: eeschema/dialogs/dialog_change_symbols.cpp:565
 msgid "*** symbol not found ***"
 msgstr "*** symbool niet gevonden ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:555
+#: eeschema/dialogs/dialog_change_symbols.cpp:576
 msgid "*** new symbol has too few units ***"
 msgstr "*** nieuw symbool heeft te weinig eenheden ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:750
+#: eeschema/dialogs/dialog_change_symbols.cpp:771
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
 msgstr "Update symbool %s van '%s' naar '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:757
+#: eeschema/dialogs/dialog_change_symbols.cpp:778
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
 msgstr "Update symbolen %s van '%s' naar '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:767
+#: eeschema/dialogs/dialog_change_symbols.cpp:788
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
 msgstr "Wijzig symbool %s van '%s' in '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:774
+#: eeschema/dialogs/dialog_change_symbols.cpp:795
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
 msgstr "Verander symbolen %s van '%s' in '%s'"
@@ -9417,7 +9417,7 @@ msgstr "Aantal"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:120
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:88
 #: eeschema/dialogs/dialog_symbol_properties.cpp:159 eeschema/lib_pin.cpp:1169
-#: eeschema/sch_pin.cpp:218
+#: eeschema/sch_pin.cpp:227
 msgid "Number"
 msgstr "Nummer"
 
@@ -10854,7 +10854,7 @@ msgstr "Een blad moet een gespecificeerd bestand hebben."
 #: eeschema/lib_field.cpp:553 eeschema/lib_pin.cpp:1171
 #: eeschema/lib_pin.cpp:1173 eeschema/lib_text.cpp:429
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_field.cpp:778
-#: eeschema/sch_label.cpp:971 eeschema/sch_pin.cpp:220
+#: eeschema/sch_label.cpp:971 eeschema/sch_pin.cpp:229
 #: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
@@ -11238,7 +11238,7 @@ msgstr "Parameter"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:498 eeschema/lib_item.cpp:51
 #: eeschema/lib_pin.cpp:1170 eeschema/sch_label.cpp:965
-#: eeschema/sch_pin.cpp:206 eeschema/sch_pin.cpp:219
+#: eeschema/sch_pin.cpp:215 eeschema/sch_pin.cpp:228
 #: eeschema/symbol_editor/symbol_editor.cpp:1270
 #: gerbview/gerber_draw_item.cpp:620
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
@@ -12555,7 +12555,7 @@ msgid "Symbol Libraries"
 msgstr "Symboolbibliotheken"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1061
-#: eeschema/tools/sch_editor_control.cpp:463
+#: eeschema/tools/sch_editor_control.cpp:477
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1111
 #, c-format
 msgid ""
@@ -12571,15 +12571,15 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1578
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1630
-#: eeschema/tools/sch_editor_control.cpp:464
-#: eeschema/tools/sch_editor_control.cpp:479
+#: eeschema/tools/sch_editor_control.cpp:478
+#: eeschema/tools/sch_editor_control.cpp:493
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1112
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1125
 msgid "File Save Error"
 msgstr "Fout bij opslaan van bestand"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1074
-#: eeschema/tools/sch_editor_control.cpp:478
+#: eeschema/tools/sch_editor_control.cpp:492
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1124
 #, c-format
 msgid ""
@@ -12827,72 +12827,72 @@ msgstr "Open emitter"
 msgid "No Connection"
 msgstr "Geen verbinding"
 
-#: eeschema/erc.cpp:287
+#: eeschema/erc.cpp:292
 #, fuzzy
 msgid "Unresolved text variable in drawing sheet"
 msgstr "Onopgeloste tekstvariabele in werkblad."
 
-#: eeschema/erc.cpp:324
+#: eeschema/erc.cpp:330
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr "Busalias %s heeft tegenstrijdige definities op %s en %s"
 
-#: eeschema/erc.cpp:393
+#: eeschema/erc.cpp:399
 #, c-format
 msgid "Different footprints assigned to %s and %s"
 msgstr "Verschillende footprints toegewezen aan %s en %s"
 
-#: eeschema/erc.cpp:483
+#: eeschema/erc.cpp:489
 #, fuzzy, c-format
 msgid "Symbol %s has unplaced units %s"
 msgstr "Symbool \"%s\" bestaat al in \"%s\"."
 
-#: eeschema/erc.cpp:531
+#: eeschema/erc.cpp:537
 #, fuzzy, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed."
 msgstr "Symbool heeft meer eenheden dan gedefineerd"
 
-#: eeschema/erc.cpp:537
+#: eeschema/erc.cpp:543
 #, fuzzy, c-format
 msgid "Symbol %s has input pins in units %s that are not placed."
 msgstr "Symbool heeft meer eenheden dan gedefineerd"
 
-#: eeschema/erc.cpp:543
+#: eeschema/erc.cpp:549
 #, fuzzy, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr "Symbool heeft meer eenheden dan gedefineerd"
 
-#: eeschema/erc.cpp:582
+#: eeschema/erc.cpp:588
 #, fuzzy
 msgid "Pins with 'no connection' type are connected"
 msgstr "Pinnen met het type \"geen verbinding\" zijn aangesloten"
 
-#: eeschema/erc.cpp:698
+#: eeschema/erc.cpp:705
 #, c-format
 msgid "Pins of type %s and %s are connected"
 msgstr "Pinnen van het type %s en %s zijn verbonden"
 
-#: eeschema/erc.cpp:768
+#: eeschema/erc.cpp:775
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s is verbonden met zowel %s als %s"
 
-#: eeschema/erc.cpp:872
+#: eeschema/erc.cpp:879
 #, fuzzy, c-format
 msgid "The current configuration does not include the library '%s'"
 msgstr "De huidige configuratie omvat niet de bibliotheek '%s'."
 
-#: eeschema/erc.cpp:883
+#: eeschema/erc.cpp:890
 #, fuzzy, c-format
 msgid "The library '%s' is not enabled in the current configuration"
 msgstr "De bibliotheek '%s' is niet ingeschakeld in de huidige configuratie."
 
-#: eeschema/erc.cpp:898
+#: eeschema/erc.cpp:905
 #, fuzzy, c-format
 msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbool %s niet gevonden in bibliotheek '%s'."
 
-#: eeschema/erc.cpp:914
+#: eeschema/erc.cpp:921
 #, fuzzy, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
 msgstr "Symbool %s niet gevonden in bibliotheek '%s'."
@@ -13051,7 +13051,7 @@ msgstr "Dubbele referentie aanduidingen"
 msgid "Bus Entry needed"
 msgstr "Businvoer nodig"
 
-#: eeschema/fields_grid_table.cpp:222 eeschema/files-io.cpp:848
+#: eeschema/fields_grid_table.cpp:222 eeschema/files-io.cpp:849
 #: eeschema/tools/sch_editor_control.cpp:110
 msgid "Schematic Files"
 msgstr "Schema Bestanden"
@@ -13104,7 +13104,7 @@ msgstr ""
 "het laden van het hiërarchische schema."
 
 #: eeschema/files-io.cpp:254 eeschema/files-io.cpp:262
-#: eeschema/files-io.cpp:1307 eeschema/sheet.cpp:161
+#: eeschema/files-io.cpp:1308 eeschema/sheet.cpp:161
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Fout bij het laden van schema %s."
@@ -13114,8 +13114,8 @@ msgstr "Fout bij het laden van schema %s."
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "'Te weinig geheugen' bij het laden van schema-bestand '%s'."
 
-#: eeschema/files-io.cpp:289 eeschema/files-io.cpp:1310
-#: eeschema/files-io.cpp:1324 eeschema/sheet.cpp:164
+#: eeschema/files-io.cpp:289 eeschema/files-io.cpp:1311
+#: eeschema/files-io.cpp:1325 eeschema/sheet.cpp:164
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "Kan '%s' niet laden."
@@ -13194,15 +13194,15 @@ msgstr ""
 "Dit bestand is gemaakt met een oudere versie van KiCad. Het wordt opgeslagen "
 "in het nieuwe bestandsformaat wanneer u dit bestand opslaat."
 
-#: eeschema/files-io.cpp:522
+#: eeschema/files-io.cpp:523
 msgid "Schematic is read only."
 msgstr "Schema-bestand is 'alleen-lezen'."
 
-#: eeschema/files-io.cpp:547
+#: eeschema/files-io.cpp:548
 msgid "Insert Schematic"
 msgstr "Schema importeren"
 
-#: eeschema/files-io.cpp:579
+#: eeschema/files-io.cpp:580
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
@@ -13212,7 +13212,7 @@ msgstr ""
 "\n"
 "Wilt u het huidige document opslaan voordat u verder gaat?"
 
-#: eeschema/files-io.cpp:597
+#: eeschema/files-io.cpp:598
 #, fuzzy
 msgid ""
 "This operation replaces the contents of the current project.\n"
@@ -13223,21 +13223,21 @@ msgstr ""
 "\n"
 "Wilt u het huidige document opslaan voordat u verder gaat?"
 
-#: eeschema/files-io.cpp:634 pcbnew/files.cpp:178
+#: eeschema/files-io.cpp:635 pcbnew/files.cpp:178
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
 msgid "All supported formats"
 msgstr "Alle ondersteunde formaten"
 
-#: eeschema/files-io.cpp:637
+#: eeschema/files-io.cpp:638
 msgid "Import Schematic"
 msgstr "Schematisch importeren"
 
-#: eeschema/files-io.cpp:679
+#: eeschema/files-io.cpp:680
 #, c-format
 msgid "Unexpected file extension: '%s'."
 msgstr "Onverwachte bestands-extensie: '%s'."
 
-#: eeschema/files-io.cpp:743
+#: eeschema/files-io.cpp:744
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -13246,12 +13246,12 @@ msgstr ""
 "Fout bij het opslaan van schema-bestand '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:748 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Kan tijdelijk bestand '%s' niet aanmaken."
 
-#: eeschema/files-io.cpp:767
+#: eeschema/files-io.cpp:768
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -13260,22 +13260,22 @@ msgstr ""
 "Fout bij het opslaan van schema-bestand '%s'.\n"
 "Nieuwe-naam van tijdelijk bestand '%s' mislukt."
 
-#: eeschema/files-io.cpp:773 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Kan naam van tijdelijk bestand '%s' niet wijzigen."
 
-#: eeschema/files-io.cpp:796 pagelayout_editor/files.cpp:187
+#: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
 #: pcbnew/files.cpp:1143
 #, c-format
 msgid "File '%s' saved."
 msgstr "Bestand '%s' opgeslagen."
 
-#: eeschema/files-io.cpp:801
+#: eeschema/files-io.cpp:802
 msgid "File write operation failed."
 msgstr "Bestand schrijf operatie mislukt."
 
-#: eeschema/files-io.cpp:875 eeschema/files-io.cpp:948
+#: eeschema/files-io.cpp:876 eeschema/files-io.cpp:949
 #: kicad/tools/kicad_manager_control.cpp:118
 #: kicad/tools/kicad_manager_control.cpp:226
 #, c-format
@@ -13288,15 +13288,15 @@ msgstr ""
 "\n"
 "Zorg dat u schrijfrechten heeft en probeer het opnieuw."
 
-#: eeschema/files-io.cpp:1022
+#: eeschema/files-io.cpp:1023
 msgid "Saving will overwrite existing files."
 msgstr "Opslaan zal bestaande bestanden overschrijven."
 
-#: eeschema/files-io.cpp:1023
+#: eeschema/files-io.cpp:1024
 msgid "Save Warning"
 msgstr "Waarschuwing voor opslaan"
 
-#: eeschema/files-io.cpp:1026
+#: eeschema/files-io.cpp:1027
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -13304,33 +13304,33 @@ msgstr ""
 "De volgende bestanden zullen overschreven worden:\n"
 "\n"
 
-#: eeschema/files-io.cpp:1027
+#: eeschema/files-io.cpp:1028
 msgid "Overwrite Files"
 msgstr "Overschreven bestanden"
 
-#: eeschema/files-io.cpp:1028
+#: eeschema/files-io.cpp:1029
 msgid "Abort Project Save"
 msgstr "Project opslaan afbreken"
 
-#: eeschema/files-io.cpp:1245
+#: eeschema/files-io.cpp:1246
 #, fuzzy, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
 msgstr "Schema-bestand '%s' is al geopend."
 
-#: eeschema/files-io.cpp:1258
+#: eeschema/files-io.cpp:1259
 msgid "Importing Schematic"
 msgstr "Schema wordt geïmporteerd"
 
-#: eeschema/files-io.cpp:1320
+#: eeschema/files-io.cpp:1321
 #, fuzzy, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "'Te weinig geheugen' bij het laden van schema-bestand '%s'."
 
-#: eeschema/files-io.cpp:1354
+#: eeschema/files-io.cpp:1355
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Het huidige schema is aangepast. Wijzigingen opslaan?"
 
-#: eeschema/files-io.cpp:1443
+#: eeschema/files-io.cpp:1444
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13343,7 +13343,7 @@ msgstr ""
 "opgeslagen.\n"
 "Wilt u de laatst opgeslagen bewerkingen terughalen?"
 
-#: eeschema/files-io.cpp:1454
+#: eeschema/files-io.cpp:1455
 #, c-format
 msgid ""
 "The file '%s` could not be opened.\n"
@@ -13352,23 +13352,23 @@ msgstr ""
 "Bestand '%s' kan niet worden geopend.\n"
 "U moet automatisch bewaarde bestanden handmatig terugzetten."
 
-#: eeschema/files-io.cpp:1505
+#: eeschema/files-io.cpp:1506
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "Het volgende auto-save bestand kan niet worden teruggehaald\n"
 
-#: eeschema/files-io.cpp:1510
+#: eeschema/files-io.cpp:1511
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "U moet bovenstaande bestand(en) handmatig terugzetten."
 
-#: eeschema/files-io.cpp:1530
+#: eeschema/files-io.cpp:1531
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "Het volgende auto-save bestand(en) kan niet worden verwijderd!\n"
 
-#: eeschema/files-io.cpp:1535
+#: eeschema/files-io.cpp:1536
 msgid "Manual removal will be required for the file(s) above."
 msgstr "U moet bovenstaande bestand(en) handmatig verwijderen."
 
-#: eeschema/files-io.cpp:1546
+#: eeschema/files-io.cpp:1547
 #, c-format
 msgid ""
 "The automatic save master file\n"
@@ -13379,7 +13379,7 @@ msgstr ""
 "'%s'\n"
 "kan niet worden verwijderd."
 
-#: eeschema/files-io.cpp:1554
+#: eeschema/files-io.cpp:1555
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
@@ -13408,15 +13408,15 @@ msgstr "H lijnbreedte aanpassen"
 msgid "V Justification"
 msgstr "V lijnhoogte aanpassen"
 
-#: eeschema/lib_item.cpp:61 eeschema/sch_pin.cpp:209
+#: eeschema/lib_item.cpp:61 eeschema/sch_pin.cpp:218
 msgid "no"
 msgstr "nee"
 
-#: eeschema/lib_item.cpp:63 eeschema/sch_pin.cpp:211
+#: eeschema/lib_item.cpp:63 eeschema/sch_pin.cpp:220
 msgid "yes"
 msgstr "ja"
 
-#: eeschema/lib_item.cpp:67 eeschema/sch_pin.cpp:215
+#: eeschema/lib_item.cpp:67 eeschema/sch_pin.cpp:224
 msgid "Converted"
 msgstr "Geconverteerd"
 
@@ -13435,22 +13435,22 @@ msgstr "Pos X"
 msgid "Pos Y"
 msgstr "Pos Y"
 
-#: eeschema/lib_pin.cpp:1385
+#: eeschema/lib_pin.cpp:1399
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
 msgstr "Pin %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1393
+#: eeschema/lib_pin.cpp:1407
 #, c-format
 msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
-#: eeschema/lib_pin.cpp:1403
+#: eeschema/lib_pin.cpp:1417
 #, fuzzy, c-format
 msgid "Hidden pin %s [%s, %s, %s]"
 msgstr "Pin %s [%s, %s, %s]"
 
-#: eeschema/lib_pin.cpp:1411
+#: eeschema/lib_pin.cpp:1425
 #, fuzzy, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
@@ -13878,7 +13878,7 @@ msgstr "Bus Alias %s Leden"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad schematische editor"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1712
+#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Schematische pariteit"
@@ -13897,7 +13897,7 @@ msgstr "Nieuw schemabestand is niet opgeslagen"
 msgid "Save changes to '%s' before closing?"
 msgstr "Wijzigingen aan '%s' opslaan voor het afsluiten?"
 
-#: eeschema/sch_edit_frame.cpp:964
+#: eeschema/sch_edit_frame.cpp:963
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -13907,48 +13907,48 @@ msgstr ""
 "modus is geopend. Om PCB's van schema's te maken / bij te werken, start de "
 "Kicad-shell en maak een project."
 
-#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/sch_edit_frame.cpp:1118
+#: eeschema/sch_edit_frame.cpp:1117
 msgid "New Schematic"
 msgstr "Nieuw schema"
 
-#: eeschema/sch_edit_frame.cpp:1130
+#: eeschema/sch_edit_frame.cpp:1129
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Schema-bestand '%s' bestaat al."
 
-#: eeschema/sch_edit_frame.cpp:1151
+#: eeschema/sch_edit_frame.cpp:1150
 msgid "Open Schematic"
 msgstr "Schema Openen"
 
-#: eeschema/sch_edit_frame.cpp:1220
+#: eeschema/sch_edit_frame.cpp:1219
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Het toewijzen van footprints vereist een volledig geannoteerd schema."
 
-#: eeschema/sch_edit_frame.cpp:1245
+#: eeschema/sch_edit_frame.cpp:1244
 msgid "Could not open CvPcb"
 msgstr "Kan CvPcb niet openen"
 
-#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[Alleen lezen]"
 
-#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[niet opgeslagen]"
 
-#: eeschema/sch_edit_frame.cpp:1435
+#: eeschema/sch_edit_frame.cpp:1434
 msgid "[no schematic loaded]"
 msgstr "[geen schema geladen]"
 
-#: eeschema/sch_edit_frame.cpp:1735
+#: eeschema/sch_edit_frame.cpp:1734
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Uitgelicht net: %s"
@@ -14039,7 +14039,7 @@ msgstr "Wereldwijd label '%s'"
 msgid "Hierarchical Label '%s'"
 msgstr "Hiërarchisch label '%s'"
 
-#: eeschema/sch_label.cpp:1807 pcbnew/dialogs/panel_setup_rules.cpp:686
+#: eeschema/sch_label.cpp:1807 pcbnew/dialogs/panel_setup_rules.cpp:687
 msgid "Syntax Help"
 msgstr "Syntaxis Help"
 
@@ -14112,7 +14112,7 @@ msgstr "ERC-markering"
 msgid "No Connect"
 msgstr "Geen verbinding"
 
-#: eeschema/sch_plotter.cpp:175 eeschema/widgets/hierarchy_pane.cpp:319
+#: eeschema/sch_plotter.cpp:175 eeschema/widgets/hierarchy_pane.cpp:316
 msgid "Root"
 msgstr "Root"
 
@@ -14500,7 +14500,7 @@ msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3127
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3135
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kan bestand '%s' niet lezen."
@@ -14651,13 +14651,13 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1534
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2177
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2181
 #, c-format
 msgid "Symbol library '%s' already exists."
 msgstr "Bibliotheek-bestand '%s' bestaat al."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1560
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2203
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2207
 #, c-format
 msgid "Symbol library '%s' cannot be deleted."
 msgstr "Bibliotheek '%s' kan niet worden verwijderd."
@@ -14708,11 +14708,11 @@ msgstr "onverwacht bestandseinde"
 msgid "Unexpected end of file"
 msgstr "Onverwacht bestandseinde"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1048
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1052
 msgid "expected 'Italics' or '~'"
 msgstr "verwachte 'Cursief' of '~'"
 
-#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1311
+#: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1315
 msgid "symbol field text attributes must be 3 characters wide"
 msgstr "tekstkenmerken van symbol-velden moeten 3 tekens breed zijn"
 
@@ -16694,7 +16694,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:887
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:938
-#: eeschema/tools/sch_editor_control.cpp:388
+#: eeschema/tools/sch_editor_control.cpp:389
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "Bibliotheek '%s' bestaat al."
@@ -17032,6 +17032,7 @@ msgstr "Kan bibliotheek '%s' niet her-nummeren."
 
 #: eeschema/symbol_library_manager.cpp:971
 #: eeschema/symbol_library_manager.cpp:1072
+#: eeschema/tools/sch_editor_control.cpp:436
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
 msgstr "Fout bij het opslaan van symbool %s in bibliotheek '%s'."
@@ -18443,34 +18444,34 @@ msgstr "Verander Type"
 msgid "Label value cannot go below zero"
 msgstr "Labelwaarde mag niet onder nul komen"
 
-#: eeschema/tools/sch_edit_tool.cpp:1402 eeschema/tools/sch_edit_tool.cpp:1405
+#: eeschema/tools/sch_edit_tool.cpp:1405 eeschema/tools/sch_edit_tool.cpp:1408
 #: eeschema/tools/symbol_editor_edit_tool.cpp:528
 #, c-format
 msgid "Edit %s Field"
 msgstr "Bewerk veld %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1407
+#: eeschema/tools/sch_edit_tool.cpp:1410
 #: eeschema/tools/symbol_editor_edit_tool.cpp:530
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Bewerk veld '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1945 eeschema/tools/sch_edit_tool.cpp:2034
+#: eeschema/tools/sch_edit_tool.cpp:1948 eeschema/tools/sch_edit_tool.cpp:2037
 #, fuzzy
 msgid "<empty>"
 msgstr "Leeg"
 
-#: eeschema/tools/sch_edit_tool.cpp:2316
+#: eeschema/tools/sch_edit_tool.cpp:2319
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Wilt u de niet-gerefereerde pinnen van dit blad verwijderen?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2376
+#: eeschema/tools/sch_edit_tool.cpp:2379
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Voer het paginanummer in voor het bladpad %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:2379
-#: eeschema/widgets/hierarchy_pane.cpp:287
+#: eeschema/tools/sch_edit_tool.cpp:2382
+#: eeschema/widgets/hierarchy_pane.cpp:284
 msgid "Edit Sheet Page Number"
 msgstr "Bewerk paginanummer"
 
@@ -18479,35 +18480,35 @@ msgstr "Bewerk paginanummer"
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "'%s' terugzetten naar de laatst opgeslagen versie?"
 
-#: eeschema/tools/sch_editor_control.cpp:335
+#: eeschema/tools/sch_editor_control.cpp:336
 #, fuzzy
 msgid "Include power symbols in schematic to the library?"
 msgstr "Footprints bijwerken om te verwijzen naar een nieuwe bibliotheek?"
 
-#: eeschema/tools/sch_editor_control.cpp:400
+#: eeschema/tools/sch_editor_control.cpp:401
 #, fuzzy, c-format
 msgid "Could not add library '%s'."
 msgstr "Kon bibliotheek-bestand %s niet vinden."
 
-#: eeschema/tools/sch_editor_control.cpp:413
+#: eeschema/tools/sch_editor_control.cpp:414
 #, fuzzy
 msgid "Update symbols in schematic to refer to new library?"
 msgstr "Footprints bijwerken om te verwijzen naar een nieuwe bibliotheek?"
 
-#: eeschema/tools/sch_editor_control.cpp:778
+#: eeschema/tools/sch_editor_control.cpp:792
 msgid "Error: duplicate sub-sheet names found in current sheet."
 msgstr "Fout: dubbele subbladnamen gevonden in huidig blad."
 
-#: eeschema/tools/sch_editor_control.cpp:882
+#: eeschema/tools/sch_editor_control.cpp:896
 #, fuzzy
 msgid "No net selected."
 msgstr "geen geselecteerd"
 
-#: eeschema/tools/sch_editor_control.cpp:908
+#: eeschema/tools/sch_editor_control.cpp:922
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net moet worden gelabeld om een netclass toe te wijzen."
 
-#: eeschema/tools/sch_editor_control.cpp:1691
+#: eeschema/tools/sch_editor_control.cpp:1724
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18518,26 +18519,26 @@ msgstr ""
 "is verwijderd omdat de bestemming al het blad of een van de subbladen als "
 "ouder heeft."
 
-#: eeschema/tools/sch_editor_control.cpp:2098
+#: eeschema/tools/sch_editor_control.cpp:2148
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "Bibliotheek '%s' kan niet worden verwijderd."
 
-#: eeschema/tools/sch_editor_control.cpp:2390
+#: eeschema/tools/sch_editor_control.cpp:2440
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d dubbele ID's vervangen.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2397
+#: eeschema/tools/sch_editor_control.cpp:2447
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d mogelijke problemen gerepareerd."
 
-#: eeschema/tools/sch_editor_control.cpp:2404
+#: eeschema/tools/sch_editor_control.cpp:2454
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Geen fouten gevonden."
@@ -18645,17 +18646,17 @@ msgstr "Pin toch plaatsen"
 msgid "Create a new project for this schematic"
 msgstr "Maak een nieuw project voor dit schema"
 
-#: eeschema/widgets/hierarchy_pane.cpp:275
+#: eeschema/widgets/hierarchy_pane.cpp:272
 #, fuzzy
 msgid "Edit Page Number"
 msgstr "Bewerk paginanummer"
 
-#: eeschema/widgets/hierarchy_pane.cpp:283
+#: eeschema/widgets/hierarchy_pane.cpp:280
 #, fuzzy, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "Voer het paginanummer in voor het bladpad %s"
 
-#: eeschema/widgets/hierarchy_pane.cpp:325
+#: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
 msgid "(page %s)"
 msgstr "(pagina %s)"
@@ -19822,8 +19823,8 @@ msgstr "Markeer DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:535
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:248
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:310
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:284
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:346
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:45
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
 #: pcbnew/widgets/appearance_controls.cpp:1013
@@ -20039,44 +20040,44 @@ msgstr ""
 msgid "Precision of gerber coordinates (5 or 6)"
 msgstr ""
 
-#: kicad/cli/command_export_pcb_drill.cpp:108
+#: kicad/cli/command_export_pcb_drill.cpp:109
 #, fuzzy
 msgid "Output must be a directory\n"
 msgstr "Uitvoermap:"
 
-#: kicad/cli/command_export_pcb_drill.cpp:125
+#: kicad/cli/command_export_pcb_drill.cpp:126
 #, fuzzy
 msgid "Invalid drill format\n"
 msgstr "Ongeldig archiefbestandsformat."
 
-#: kicad/cli/command_export_pcb_drill.cpp:141
+#: kicad/cli/command_export_pcb_drill.cpp:142
 #: kicad/cli/command_export_pcb_dxf.cpp:94
 #: kicad/cli/command_export_pcb_pos.cpp:142
 #, fuzzy
 msgid "Invalid units specified\n"
 msgstr "Ongeldig eenheidsvoorvoegsel"
 
-#: kicad/cli/command_export_pcb_drill.cpp:165
+#: kicad/cli/command_export_pcb_drill.cpp:166
 #, fuzzy
 msgid "Invalid zeros format specified\n"
 msgstr "Ongeldige footprint opgegeven"
 
-#: kicad/cli/command_export_pcb_drill.cpp:181
+#: kicad/cli/command_export_pcb_drill.cpp:182
 #, fuzzy
 msgid "Invalid oval drill format specified\n"
 msgstr "Ongeldige footprint opgegeven"
 
-#: kicad/cli/command_export_pcb_drill.cpp:209
+#: kicad/cli/command_export_pcb_drill.cpp:210
 #, fuzzy
 msgid "Invalid map format specified\n"
 msgstr "Ongeldige footprint opgegeven"
 
-#: kicad/cli/command_export_pcb_drill.cpp:225
+#: kicad/cli/command_export_pcb_drill.cpp:226
 #, fuzzy
 msgid "Invalid origin mode specified\n"
 msgstr "Ongeldige footprint opgegeven"
 
-#: kicad/cli/command_export_pcb_drill.cpp:237
+#: kicad/cli/command_export_pcb_drill.cpp:238
 #: kicad/cli/command_export_pcb_gerber.cpp:121
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr ""
@@ -22311,7 +22312,7 @@ msgstr "Specifieke weerstand in ohm * meter"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:136
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:96
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:762
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:798
 msgid "..."
 msgstr "..."
 
@@ -22692,7 +22693,7 @@ msgid "Nickel"
 msgstr "Bijnaam"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:49
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:837
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:873
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 msgid "Copper"
 msgstr "Koper"
@@ -24182,65 +24183,65 @@ msgstr "Ja, afgeschuind"
 msgid "Options for edge card connectors."
 msgstr "Opties voor randkaartconnectoren."
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:115
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
 msgid "Core"
 msgstr "Kern"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "PrePreg"
 msgstr "PrePreg"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:176
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:212
 #, c-format
 msgid "Enter board thickness in %s:"
 msgstr "Board dikte in %s:"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:181
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:217
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
 msgstr "Verwachtte board dikte (minimaal %s):"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:221
 msgid "Adjust Unlocked Dielectric Layers"
 msgstr "Onvergrendelde diëlektrische lagen aanpassen"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:194
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:230
 #, c-format
 msgid "Value too small (min value %s)."
 msgstr "Waarde te klein (minimum %s)."
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:204
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:240
 msgid "All dielectric  thickness layers are locked"
 msgstr "Alle diëlektrische dikte-lagen zijn vergrendeld"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:270
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:306
 #, c-format
 msgid "Layer '%s' (sublayer %d/%d)"
 msgstr "Laag '%s' (sub-laag %d/%d)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:285
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:321
 msgid "Add Dielectric Layer"
 msgstr "Voeg een diëlektrische laag toe"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:288
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:324
 #: pcbnew/dialogs/panel_setup_layers.cpp:844
 msgid "Select layer to add:"
 msgstr "Selecteer laag om toe te voegen:"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:333
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:369
 #, c-format
 msgid "Layer '%s' sublayer %d/%d"
 msgstr "Laag '%s' (sub-laag %d/%d)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:343
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:379
 msgid "Remove Dielectric Layer"
 msgstr "Verwijder de diëlektrische laag"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:346
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:382
 msgid "Select layer to remove:"
 msgstr "Selecteer laad om te verplaatsen:"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1128
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1164
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
@@ -24248,18 +24249,18 @@ msgstr ""
 "Onjuiste waarde voor Epsilon R (Epsilon R moet positief of nul zijn als deze "
 "niet wordt gebruikt)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1149
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1185
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
 "Onjuiste waarde voor verlies tg (verlies tg moet positief of nul zijn indien "
 "niet gebruikt)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1195
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1231
 msgid "A layer thickness is < 0. Fix it"
 msgstr "Een laagdikte is <0. Fix it"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1647
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1683
 msgid "Custom..."
 msgstr "Op-maat-gemaakt..."
 
@@ -31986,16 +31987,16 @@ msgstr ""
 msgid "Cancel Changes?"
 msgstr "Wijzigingen annuleren?"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:563
+#: pcbnew/dialogs/panel_setup_rules.cpp:564
 msgid "DRC rules"
 msgstr "DRC regels"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:570
+#: pcbnew/dialogs/panel_setup_rules.cpp:571
 #: pcbnew/drc/drc_rule_condition.cpp:64
 msgid "ERROR:"
 msgstr "FOUT:"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:633
+#: pcbnew/dialogs/panel_setup_rules.cpp:634
 msgid "Design rules cannot be added without a project"
 msgstr "Ontwerpregels kunnen niet worden toegevoegd zonder een project"
 
@@ -33192,11 +33193,11 @@ msgstr "Vrije afstanden van koperzones controleren ..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:393
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:432
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:516
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:764
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:796
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:817
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:838
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1200
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:768
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:800
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:821
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:842
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:1204
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:232
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:265
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:124
@@ -33218,7 +33219,7 @@ msgid "(%s clearance %s; actual < 0)"
 msgstr "(%s vrije afstand %s; werkelijk %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:509
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:733
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:737
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(netten %s en %s)"
@@ -33427,12 +33428,12 @@ msgstr "Pad ontbreekt net gegeven door schema (%s)."
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
 msgstr "Pad net (%s) komt niet overeen met het net gegeven door schema (%s)."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:195
 #, c-format
 msgid "No pad found for pin %s in schematic."
 msgstr "Geen pad gevonden voor pin %s in het schema."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:219
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:230
 msgid "Checking PCB to schematic parity..."
 msgstr "PCB controleren op schematische pariteit ..."
 
@@ -36030,7 +36031,15 @@ msgstr ""
 "compatibele ontwerpregels zijn geïmporteerd. Het wordt aanbevolen om de "
 "toegepaste ontwerpregels door te nemen."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:929
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:820
+#, c-format
+msgid ""
+"Footprint definition '%s' has component copper associated to a pad on "
+"multiple layers. Custom padstacks are not supported in KiCad. The copper "
+"items have been imported as graphical elements."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -36041,7 +36050,7 @@ msgstr ""
 "equivalent. Het gebied is geen via- of route-uitwijkgebied. Het gebied is "
 "niet geïmporteerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1015
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1037
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -36052,7 +36061,7 @@ msgstr ""
 "ondersteund door KiCad. Controleer de geïmporteerde pads want die vereisen "
 "mogelijk een korrektie."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1234
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -36061,22 +36070,22 @@ msgstr ""
 "De CADSTAR-paddefinitie '%s' heeft de vorm van het boor-gat buiten de pad-"
 "vorm. Het gat is verplaatst naar het midden van de pad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1265
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1287
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "De CADSTAR pad definitie '%s' heeft import-fouten: %s"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1283
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1305
 #, c-format
 msgid "Unable to find pad index '%d' in footprint '%s'."
 msgstr "Kan pad-index '%d' niet vinden in footprint '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1316
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1338
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr "Kan groeps-ID %s niet vinden in de groeps-definities."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1322
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1344
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
@@ -36084,7 +36093,7 @@ msgstr ""
 "Kan sub-groep %s niet vinden in de groepskaart (bovenliggende groeps-ID = "
 "%s, naam = %s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1399
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1426
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -36093,7 +36102,7 @@ msgstr ""
 "Dimension Id %s staat onder een hoek. KiCad ondersteunt dat niet. De "
 "dimension is uitgelijnd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1410
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1437
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -36104,12 +36113,12 @@ msgstr ""
 "worden in KiCad nog niet ondersteund. Het dimensie object is geïmporteerd "
 "met een interne dimensie stijl."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1467
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1494
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "Onverwacht Dimensie type (ID %s). Dit is niet geïmporteerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1602
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1629
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
@@ -36118,7 +36127,7 @@ msgstr ""
 "Dimensie %s is een angular dimensie zonder KiCad-equivalent. Dit object is "
 "niet geïmporteerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1642
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1669
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -36129,7 +36138,7 @@ msgstr ""
 "Plaatsingsgebieden worden niet ondersteund in KiCad. Alleen de ondersteunde "
 "elementen voor het gebied zijn geïmporteerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1651
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1678
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -36138,18 +36147,18 @@ msgstr ""
 "Het CADSTAR-gebied '%s' heeft geen KiCad-equivalent. Pure plaatsingsgebieden "
 "worden niet ondersteund."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1678
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1705
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr "Kan component '%s' niet vinden in de bibliotheek (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1798
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1825
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Kan documentatiesymbool niet vinden in de bibliotheek (Symdef-ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1867
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1894
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -36159,7 +36168,7 @@ msgstr ""
 "ingeschakeld. Deze instelling heeft geen KiCad-equivalent, dus het is "
 "genegeerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1875
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1902
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -36169,7 +36178,7 @@ msgstr ""
 "ingeschakeld. Deze instelling heeft geen KiCad-equivalent, dus het is "
 "genegeerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1910
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -36179,7 +36188,7 @@ msgstr ""
 "ingeschakeld. Deze instelling heeft geen KiCad-equivalent, dus het is "
 "genegeerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1894
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1921
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -36190,7 +36199,7 @@ msgstr ""
 "'Sliver Width'-instelling. Er is hiervoor geen KiCad-equivalent, dus deze "
 "instelling werd genegeerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1904
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1931
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -36204,7 +36213,7 @@ msgstr ""
 "onsamenhangend koper is toegepast als het minimum eilandgebied van de KiCad "
 "Zone."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1955
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1982
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -36215,7 +36224,7 @@ msgstr ""
 "reliëf in pads en via's. KiCad ondersteunt slechts één enkele instelling "
 "voor beide. De instelling voor pads is toegepast."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1972
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1999
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
@@ -36230,7 +36239,7 @@ msgstr ""
 "zone. Daarom wordt de minimum zone breedte toegepast als de nieuwe spaak-"
 "breedte zodra de zones opnieuw worden gevuld."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2019
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2046
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -36241,7 +36250,7 @@ msgstr ""
 "bestaat echter geen net met een dergelijke naam. De laag is geladen maar er "
 "is geen koperzone gemaakt."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2121
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2148
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -36253,7 +36262,7 @@ msgstr ""
 "gearceerd zijn, of als een KiCad-spoor als de vorm een niet-gevulde omtrek "
 "was (open of gesloten)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2224
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2251
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -36262,7 +36271,7 @@ msgstr ""
 "Het net '%s' verwijst naar component-ID '%s' die niet bestaat. Dit is "
 "genegeerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2230
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2257
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -36271,18 +36280,18 @@ msgstr ""
 "Het net '%s' verwijst naar de niet-bestaande padindex '%d' in component "
 "'%s'. Dit is genegeerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2396
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2423
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
 "Tekst variabelen kunnen niet gezet worden want er is geen project geladen."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2481
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2508
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2512
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2539
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -36293,7 +36302,7 @@ msgstr ""
 "KiCad ondersteunt alleen circulaire via's, dus dit via-type is gewijzigd in "
 "een via met een ronde vorm van %.2f mm diameter."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2722
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2749
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -36302,7 +36311,7 @@ msgstr ""
 "De vorm voor '%s' is Hatch gevuld in CADSTAR, dat geen KiCad-equivalent "
 "heeft. Gebruik in plaats daarvan effen opvulling."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3601
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3628
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -36313,7 +36322,7 @@ msgstr ""
 "ondersteunt slechts 2 arceringen (kruis-arcering) 90 graden uit elkaar. De "
 "geïmporteerde arcering is kruis-gearceerd."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3611
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3638
 #, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -36325,7 +36334,7 @@ msgstr ""
 "geïmporteerde arcering gebruikt de breedte die is gedefiniëerd in de eerste "
 "arcering-definitie, d.w.z. %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3623
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3650
 #, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -36337,7 +36346,7 @@ msgstr ""
 "geïmporteerde arcering gebruikt de stapgrootte die is gedefinieerd in de "
 "eerste arcering-definitie, d.w.z. %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3636
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3663
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -36350,7 +36359,7 @@ msgstr ""
 "geïmporteerde arcering heeft twee luiken 90 graden uit elkaar, georiënteerd "
 "%.1f graden ten opzichte van horizontaal."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3706
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3733
 #, fuzzy, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
@@ -36359,7 +36368,7 @@ msgstr ""
 "Dimension ID %s gebruikt een eenheid die niet is ondersteund in KiCad. "
 "Millimeters werden toegepast."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3988
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:4015
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -36371,7 +36380,7 @@ msgstr ""
 "niet geïmporteerd. Opmerking: KiCad's versie van 'Net Class' komt dichter "
 "bij CADSTAR's 'Net Route Code' (die voor alle netten is geïmporteerd)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3998
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:4025
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -41370,27 +41379,27 @@ msgstr "Minimale breedte:"
 msgid "Pad Connections"
 msgstr "Pad-aansluitingen"
 
-#: pcbnew/zone_filler.cpp:109
+#: pcbnew/zone_filler.cpp:110
 msgid "Checking zone fills..."
 msgstr "Vullingen van zones controleren ..."
 
-#: pcbnew/zone_filler.cpp:110
+#: pcbnew/zone_filler.cpp:111
 msgid "Building zone fills..."
 msgstr "Bezig met zones vullen..."
 
-#: pcbnew/zone_filler.cpp:524
+#: pcbnew/zone_filler.cpp:525
 msgid "Removing isolated copper islands..."
 msgstr "Geïsoleerde koper-eilanden verwijderen ..."
 
-#: pcbnew/zone_filler.cpp:733
+#: pcbnew/zone_filler.cpp:734
 msgid "Zone fills are out-of-date. Refill?"
 msgstr "Zonevullingen zijn verouderd. Opnieuw vullen?"
 
-#: pcbnew/zone_filler.cpp:735
+#: pcbnew/zone_filler.cpp:736
 msgid "Refill"
 msgstr "Opnieuw vullen"
 
-#: pcbnew/zone_filler.cpp:735
+#: pcbnew/zone_filler.cpp:736
 msgid "Continue without Refill"
 msgstr "Ga verder zonder bijvullen"
 
