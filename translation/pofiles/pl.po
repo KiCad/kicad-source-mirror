@@ -1,5 +1,5 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020, 2023.
-# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022, 2023, 2024.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 # Krzysztof Kawa <christophorus72@gmail.com>, 2022.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
@@ -14,17 +14,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2023-12-21 10:48+0000\n"
+"PO-Revision-Date: 2024-01-14 12:29+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -524,7 +524,6 @@ msgid "Render Solid Colors"
 msgstr "Renderowanie jednolitych kolorów"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "Używa tylko właściwości rozpraszania koloru modelu z pliku modelu 3D"
 
@@ -6424,13 +6423,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "Nie można przetworzyć cyfry z '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s' nie wygląda na prawidłowy plik z projektem programu EasyEDA (JLCEDA) "
-"Pro. Nie można odnaleźć project.json."
+"'%s' nie wygląda na prawidłowy plik z projektem lub biblioteka programu "
+"EasyEDA (JLCEDA) Pro. Nie można odnaleźć project.json lub device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #, c-format
@@ -18840,7 +18839,6 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
 msgstr "Amplituda"
 
@@ -26169,7 +26167,6 @@ msgid "Overvoltage category:"
 msgstr "Kategoria przepięć:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -26218,7 +26215,6 @@ msgid "Impulse voltage:"
 msgstr "Napięcie impulsowe:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
-#, fuzzy
 msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value without a breakdown of insulation. This impulse voltage "
@@ -30963,9 +30959,8 @@ msgid "STEP files"
 msgstr "Pliki STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
-#, fuzzy
 msgid "Binary glTF files"
-msgstr "Pliki binarne GTLF"
+msgstr "Pliki binarne glTF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 msgid "STEP Output File"
@@ -40745,9 +40740,8 @@ msgid "Pad Type"
 msgstr "Typ pola"
 
 #: pcbnew/pad.cpp:1949
-#, fuzzy
 msgid "Pad Shape"
-msgstr "Kształt pola"
+msgstr "Kształt pola lut"
 
 #: pcbnew/pad.cpp:1953
 msgid "Pad Number"
@@ -41413,6 +41407,10 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"Definicja footprintu '%s' zawiera elementy z miedzi powiązane z polem "
+"lutowniczym na wielu warstwach. Niestandardowe stosy warstw nie są "
+"obsługiwane w programie KiCad. Elementy z miedzi zostały zaimportowane jako "
+"elementy graficzne."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42514,9 +42512,9 @@ msgstr ""
 "pierwszy z nich."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
-msgstr "Włącz logowanie <b>błędów</b> dla funkcji Footprint*() w tej wtyczce."
+msgstr ""
+"Włącz logowanie <b>debugowania</b> dla funkcji Footprint*() w tym PCB_IO."
 
 #: pcbnew/pcb_io/pcb_io.cpp:182
 msgid "Regular expression <b>footprint name</b> filter."
@@ -42541,11 +42539,10 @@ msgstr ""
 "serwerów."
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Wprowadź moduł języka Python który implementuje funkcje PLUGIN::Footrpint*()."
+"Wprowadź moduł języka Python który implementuje funkcje PCB_IO::Footrpint*()."
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
@@ -43224,12 +43221,11 @@ msgstr "Przesuń mimo to"
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s i tak pozostało do zatwierdzenia.)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "Położenie przelotki narusza DRC."
+msgstr "Położenie ścieżki narusza DRC."
 
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/tools/pcb_actions.cpp:2381
 msgid "Break Track"
