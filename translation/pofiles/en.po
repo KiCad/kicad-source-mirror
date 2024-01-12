@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 08:33-0800\n"
+"POT-Creation-Date: 2024-01-12 09:03-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -315,8 +315,8 @@ msgstr "Use all material properties from each 3D model file"
 msgid "Render Solid Colors"
 msgstr "Render Solid Colors"
 
-msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Use only the diffuse color property from model 3D model file"
+msgid "Use only the diffuse color property from 3D model file"
+msgstr "Use only the diffuse color property from 3D model file"
 
 msgid "Render CAD Colors"
 msgstr "Render CAD Colors"
@@ -3099,9 +3099,6 @@ msgstr "Reference Image"
 msgid "Generator"
 msgstr "Generator"
 
-msgid "Field"
-msgstr "Field"
-
 msgid "Text Box"
 msgstr "Text Box"
 
@@ -3161,6 +3158,9 @@ msgstr "Global Label"
 
 msgid "Hierarchical Label"
 msgstr "Hierarchical Label"
+
+msgid "Field"
+msgstr "Field"
 
 msgid "Symbol"
 msgstr "Symbol"
@@ -3789,6 +3789,101 @@ msgid "DXF images not currently supported."
 msgstr "DXF images not currently supported."
 
 #, c-format
+msgid "Cannot open file '%s'."
+msgstr "Cannot open file '%s'."
+
+msgid "Error reading file: cannot determine length."
+msgstr "Error reading file: cannot determine length."
+
+msgid "Error reading file."
+msgstr "Error reading file."
+
+msgid ""
+"Missing null byte at end of property list. Imported data might be malformed "
+"or missing."
+msgstr ""
+"Missing null byte at end of property list. Imported data might be malformed "
+"or missing."
+
+#, c-format
+msgid "Unit '%s' does not end with 'mil'."
+msgstr "Unit '%s' does not end with 'mil'."
+
+#, c-format
+msgid "Cannot convert '%s' to double."
+msgstr "Cannot convert '%s' to double."
+
+#, c-format
+msgid "Cannot open file '%s'"
+msgstr "Cannot open file '%s'"
+
+msgid "File import cancelled by user."
+msgstr "File import cancelled by user."
+
+msgid "The selected file is not valid or might be corrupt!"
+msgstr "The selected file is not valid or might be corrupt!"
+
+#, c-format
+msgid "Unexpected number of points in '%s'. Found %d but expected %d."
+msgstr "Unexpected number of points in '%s'. Found %d but expected %d."
+
+#, c-format
+msgid "Missing node '%s' in '%s'"
+msgstr "Missing node '%s' in '%s'"
+
+#, c-format
+msgid "Unknown node '%s' in '%s'"
+msgstr "Unknown node '%s' in '%s'"
+
+#, c-format
+msgid "Missing Parameter '%s' in '%s'"
+msgstr "Missing Parameter '%s' in '%s'"
+
+#, c-format
+msgid "Unknown Parameter '%s' in '%s'"
+msgstr "Unknown Parameter '%s' in '%s'"
+
+#, c-format
+msgid "Unable to parse '%s' in '%s'"
+msgstr "Unable to parse '%s' in '%s'"
+
+#, c-format
+msgid "Invalid size %lld: too large"
+msgstr "Invalid size %lld: too large"
+
+#, c-format
+msgid "Invalid Arc with radius %f and angle %f"
+msgstr "Invalid Arc with radius %f and angle %f"
+
+#, c-format
+msgid "Failed to parse number from '%s'"
+msgstr "Failed to parse number from '%s'"
+
+#, c-format
+msgid ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
+"file. Cannot find project.json or device.json."
+msgstr ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
+"file. Cannot find project.json or device.json."
+
+#, c-format
+msgid "Cannot read ZIP archive '%s'"
+msgstr "Cannot read ZIP archive '%s'"
+
+#, c-format
+msgid "JSON error reading '%s': %s"
+msgstr "JSON error reading '%s': %s"
+
+#, c-format
+msgid "Error reading '%s': %s"
+msgstr "Error reading '%s': %s"
+
+#, c-format
+msgid "Cannot parse JSON line %d in '%s': %s"
+msgstr "Cannot parse JSON line %d in '%s': %s"
+
+#, c-format
 msgid "Failed to verify kiface library '%s' signature."
 msgstr "Failed to verify kiface library '%s' signature."
 
@@ -4178,101 +4273,6 @@ msgstr "Show Page %s"
 #, c-format
 msgid "Open %s"
 msgstr "Open %s"
-
-#, c-format
-msgid "Cannot open file '%s'."
-msgstr "Cannot open file '%s'."
-
-msgid "Error reading file: cannot determine length."
-msgstr "Error reading file: cannot determine length."
-
-msgid "Error reading file."
-msgstr "Error reading file."
-
-msgid ""
-"Missing null byte at end of property list. Imported data might be malformed "
-"or missing."
-msgstr ""
-"Missing null byte at end of property list. Imported data might be malformed "
-"or missing."
-
-#, c-format
-msgid "Unit '%s' does not end with 'mil'."
-msgstr "Unit '%s' does not end with 'mil'."
-
-#, c-format
-msgid "Cannot convert '%s' to double."
-msgstr "Cannot convert '%s' to double."
-
-#, c-format
-msgid "Cannot open file '%s'"
-msgstr "Cannot open file '%s'"
-
-msgid "File import cancelled by user."
-msgstr "File import cancelled by user."
-
-msgid "The selected file is not valid or might be corrupt!"
-msgstr "The selected file is not valid or might be corrupt!"
-
-#, c-format
-msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "Unexpected number of points in '%s'. Found %d but expected %d."
-
-#, c-format
-msgid "Missing node '%s' in '%s'"
-msgstr "Missing node '%s' in '%s'"
-
-#, c-format
-msgid "Unknown node '%s' in '%s'"
-msgstr "Unknown node '%s' in '%s'"
-
-#, c-format
-msgid "Missing Parameter '%s' in '%s'"
-msgstr "Missing Parameter '%s' in '%s'"
-
-#, c-format
-msgid "Unknown Parameter '%s' in '%s'"
-msgstr "Unknown Parameter '%s' in '%s'"
-
-#, c-format
-msgid "Unable to parse '%s' in '%s'"
-msgstr "Unable to parse '%s' in '%s'"
-
-#, c-format
-msgid "Invalid size %lld: too large"
-msgstr "Invalid size %lld: too large"
-
-#, c-format
-msgid "Invalid Arc with radius %f and angle %f"
-msgstr "Invalid Arc with radius %f and angle %f"
-
-#, c-format
-msgid "Failed to parse number from '%s'"
-msgstr "Failed to parse number from '%s'"
-
-#, c-format
-msgid ""
-"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
-"find project.json."
-msgstr ""
-"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
-"find project.json."
-
-#, c-format
-msgid "Cannot read ZIP archive '%s'"
-msgstr "Cannot read ZIP archive '%s'"
-
-#, c-format
-msgid "JSON error reading '%s': %s"
-msgstr "JSON error reading '%s': %s"
-
-#, c-format
-msgid "Error reading '%s': %s"
-msgstr "Error reading '%s': %s"
-
-#, c-format
-msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Cannot parse JSON line %d in '%s': %s"
 
 msgid "Error loading project footprint library table."
 msgstr "Error loading project footprint library table."
@@ -10693,136 +10693,6 @@ msgid "Sheet References"
 msgstr "Sheet References"
 
 #, c-format
-msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr "Plugin “%s” does not implement the “%s” function."
-
-#, c-format
-msgid "Plugin type \"%s\" is not found."
-msgstr "Plugin type “%s” is not found."
-
-#, c-format
-msgid "Unknown SCH_FILE_T value: %d"
-msgstr "Unknown SCH_FILE_T value: %d"
-
-msgid "Size"
-msgstr "Size"
-
-msgid "Diameter"
-msgstr "Diameter"
-
-msgid "Tri-State"
-msgstr "Tri-State"
-
-msgid "Hierarchical Sheet Pin"
-msgstr "Hierarchical Sheet Pin"
-
-msgid "Justification"
-msgstr "Justification"
-
-msgid "Net"
-msgstr "Net"
-
-msgid "Resolved netclass"
-msgstr "Resolved netclass"
-
-msgid "Hierarchical Labels"
-msgstr "Hierarchical Labels"
-
-#, c-format
-msgid "Label '%s'"
-msgstr "Label '%s'"
-
-#, c-format
-msgid "Directive Label [%s %s]"
-msgstr "Directive Label [%s %s]"
-
-#, c-format
-msgid "Global Label '%s'"
-msgstr "Global Label '%s'"
-
-#, c-format
-msgid "Hierarchical Label '%s'"
-msgstr "Hierarchical Label '%s'"
-
-msgid "Pin length"
-msgstr "Pin length"
-
-msgid "Graphic Line"
-msgstr "Graphic Line"
-
-#, c-format
-msgid "Vertical Wire, length %s"
-msgstr "Vertical Wire, length %s"
-
-#, c-format
-msgid "Vertical Bus, length %s"
-msgstr "Vertical Bus, length %s"
-
-#, c-format
-msgid "Vertical Graphic Line, length %s"
-msgstr "Vertical Graphic Line, length %s"
-
-#, c-format
-msgid "Horizontal Wire, length %s"
-msgstr "Horizontal Wire, length %s"
-
-#, c-format
-msgid "Horizontal Bus, length %s"
-msgstr "Horizontal Bus, length %s"
-
-#, c-format
-msgid "Horizontal Graphic Line, length %s"
-msgstr "Horizontal Graphic Line, length %s"
-
-#, c-format
-msgid "Wire, length %s"
-msgstr "Wire, length %s"
-
-#, c-format
-msgid "Bus, length %s"
-msgstr "Bus, length %s"
-
-#, c-format
-msgid "Graphic Line, length %s"
-msgstr "Graphic Line, length %s"
-
-msgid "Graphical"
-msgstr "Graphical"
-
-msgid "Line Type"
-msgstr "Line Type"
-
-msgid "from netclass"
-msgstr "from netclass"
-
-msgid "Electrical Rule Check Error"
-msgstr "Electrical Rule Check Error"
-
-msgid "ERC Marker"
-msgstr "ERC Marker"
-
-msgid "No Connect"
-msgstr "No Connect"
-
-#, c-format
-msgid "Plotted to '%s'.\n"
-msgstr "Plotted to '%s'.\n"
-
-msgid "Done."
-msgstr "Done."
-
-#, c-format
-msgid "Plotted to '%s'."
-msgstr "Plotted to '%s'."
-
-msgid "Done"
-msgstr "Done"
-
-#, c-format
-msgid "Failed to write plot files to folder '%s'."
-msgstr "Failed to write plot files to folder '%s'."
-
-#, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
@@ -11259,16 +11129,70 @@ msgstr "Could not connect to %s. Errors: %s"
 msgid "KiCad HTTP library files"
 msgstr "KiCad HTTP library files"
 
+msgid "Open cancelled by user."
+msgstr "Open cancelled by user."
+
+#, c-format
+msgid "'%s' does not appear to be an Eeschema file."
+msgstr "'%s' does not appear to be an Eeschema file."
+
+msgid "Missing 'EELAYER END'"
+msgstr "Missing ‘EELAYER END’"
+
+msgid "unexpected end of file"
+msgstr "unexpected end of file"
+
+msgid "unexpected end of line"
+msgstr "unexpected end of line"
+
+msgid "Unexpected end of file"
+msgstr "Unexpected end of file"
+
+msgid "expected 'Italics' or '~'"
+msgstr "expected ‘Italics’ or ‘~’"
+
+msgid "symbol field text attributes must be 3 characters wide"
+msgstr "symbol field text attributes must be 3 characters wide"
+
+#, c-format
+msgid "Symbol library '%s' already exists."
+msgstr "Symbol library '%s' already exists."
+
+#, c-format
+msgid "Symbol library '%s' cannot be deleted."
+msgstr "Symbol library '%s' cannot be deleted."
+
+msgid "KiCad legacy symbol library files"
+msgstr "KiCad legacy symbol library files"
+
+msgid "expected unquoted string"
+msgstr "expected unquoted string"
+
 #, c-format
 msgid "Library file '%s' not found."
 msgstr "Library file '%s' not found."
+
+msgid "Unexpected end of file."
+msgstr "Unexpected end of file."
+
+#, c-format
+msgid "Insufficient permissions to read library '%s'."
+msgstr "Insufficient permissions to read library '%s'."
+
+msgid "symbol document library file is empty"
+msgstr "symbol document library file is empty"
 
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "library %s does not contain a symbol named %s"
 
-msgid "Open cancelled by user."
-msgstr "Open cancelled by user."
+#, c-format
+msgid ""
+"Could not load sheet '%s' because it already appears as a direct ancestor in "
+"the schematic hierarchy."
+msgstr ""
+"Could not load sheet '%s' because it already appears as a direct ancestor in "
+"the schematic hierarchy."
 
 #, c-format
 msgid "Cannot parse %s as a symbol"
@@ -11357,63 +11281,6 @@ msgid "Invalid symbol library ID"
 msgstr "Invalid symbol library ID"
 
 #, c-format
-msgid ""
-"Could not load sheet '%s' because it already appears as a direct ancestor in "
-"the schematic hierarchy."
-msgstr ""
-"Could not load sheet '%s' because it already appears as a direct ancestor in "
-"the schematic hierarchy."
-
-#, c-format
-msgid "Symbol library '%s' already exists."
-msgstr "Symbol library '%s' already exists."
-
-#, c-format
-msgid "Symbol library '%s' cannot be deleted."
-msgstr "Symbol library '%s' cannot be deleted."
-
-msgid "Unexpected end of file."
-msgstr "Unexpected end of file."
-
-#, c-format
-msgid "Insufficient permissions to read library '%s'."
-msgstr "Insufficient permissions to read library '%s'."
-
-msgid "symbol document library file is empty"
-msgstr "symbol document library file is empty"
-
-msgid "unexpected end of line"
-msgstr "unexpected end of line"
-
-#, c-format
-msgid "'%s' does not appear to be an Eeschema file."
-msgstr "'%s' does not appear to be an Eeschema file."
-
-msgid "Missing 'EELAYER END'"
-msgstr "Missing ‘EELAYER END’"
-
-msgid "unexpected end of file"
-msgstr "unexpected end of file"
-
-msgid "Unexpected end of file"
-msgstr "Unexpected end of file"
-
-msgid "expected 'Italics' or '~'"
-msgstr "expected ‘Italics’ or ‘~’"
-
-msgid "symbol field text attributes must be 3 characters wide"
-msgstr "symbol field text attributes must be 3 characters wide"
-
-msgid "KiCad legacy symbol library files"
-msgstr "KiCad legacy symbol library files"
-
-msgid "expected unquoted string"
-msgstr "expected unquoted string"
-
-msgid "LTspice schematic files"
-msgstr "LTspice schematic files"
-
-#, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr "File at '%s' was ignored. Using previously found file at '%s' instead."
 
@@ -11461,6 +11328,139 @@ msgstr "Expecting CELL or BLOCK"
 #, c-format
 msgid "Symbol '%s.asy' not found"
 msgstr "Symbol '%s.asy' not found"
+
+msgid "LTspice schematic files"
+msgstr "LTspice schematic files"
+
+#, c-format
+msgid "Plugin \"%s\" does not implement the \"%s\" function."
+msgstr "Plugin “%s” does not implement the “%s” function."
+
+#, c-format
+msgid "Plugin type \"%s\" is not found."
+msgstr "Plugin type “%s” is not found."
+
+#, c-format
+msgid "Unknown SCH_FILE_T value: %d"
+msgstr "Unknown SCH_FILE_T value: %d"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Diameter"
+msgstr "Diameter"
+
+msgid "Tri-State"
+msgstr "Tri-State"
+
+msgid "Hierarchical Sheet Pin"
+msgstr "Hierarchical Sheet Pin"
+
+msgid "Justification"
+msgstr "Justification"
+
+msgid "Net"
+msgstr "Net"
+
+msgid "Resolved netclass"
+msgstr "Resolved netclass"
+
+msgid "Hierarchical Labels"
+msgstr "Hierarchical Labels"
+
+#, c-format
+msgid "Label '%s'"
+msgstr "Label '%s'"
+
+#, c-format
+msgid "Directive Label [%s %s]"
+msgstr "Directive Label [%s %s]"
+
+#, c-format
+msgid "Global Label '%s'"
+msgstr "Global Label '%s'"
+
+#, c-format
+msgid "Hierarchical Label '%s'"
+msgstr "Hierarchical Label '%s'"
+
+msgid "Pin length"
+msgstr "Pin length"
+
+msgid "Graphic Line"
+msgstr "Graphic Line"
+
+#, c-format
+msgid "Vertical Wire, length %s"
+msgstr "Vertical Wire, length %s"
+
+#, c-format
+msgid "Vertical Bus, length %s"
+msgstr "Vertical Bus, length %s"
+
+#, c-format
+msgid "Vertical Graphic Line, length %s"
+msgstr "Vertical Graphic Line, length %s"
+
+#, c-format
+msgid "Horizontal Wire, length %s"
+msgstr "Horizontal Wire, length %s"
+
+#, c-format
+msgid "Horizontal Bus, length %s"
+msgstr "Horizontal Bus, length %s"
+
+#, c-format
+msgid "Horizontal Graphic Line, length %s"
+msgstr "Horizontal Graphic Line, length %s"
+
+#, c-format
+msgid "Wire, length %s"
+msgstr "Wire, length %s"
+
+#, c-format
+msgid "Bus, length %s"
+msgstr "Bus, length %s"
+
+#, c-format
+msgid "Graphic Line, length %s"
+msgstr "Graphic Line, length %s"
+
+msgid "Graphical"
+msgstr "Graphical"
+
+msgid "Line Type"
+msgstr "Line Type"
+
+msgid "from netclass"
+msgstr "from netclass"
+
+msgid "Electrical Rule Check Error"
+msgstr "Electrical Rule Check Error"
+
+msgid "ERC Marker"
+msgstr "ERC Marker"
+
+msgid "No Connect"
+msgstr "No Connect"
+
+#, c-format
+msgid "Plotted to '%s'.\n"
+msgstr "Plotted to '%s'.\n"
+
+msgid "Done."
+msgstr "Done."
+
+#, c-format
+msgid "Plotted to '%s'."
+msgstr "Plotted to '%s'."
+
+msgid "Done"
+msgstr "Done"
+
+#, c-format
+msgid "Failed to write plot files to folder '%s'."
+msgstr "Failed to write plot files to folder '%s'."
 
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)"
@@ -12586,8 +12586,8 @@ msgstr "Number of bits"
 msgid "%d"
 msgstr "%d"
 
-msgid "Ampltiude"
-msgstr "Ampltiude"
+msgid "Amplitude"
+msgstr "Amplitude"
 
 msgid "Noise (V/√Hz)"
 msgstr "Noise (V/√Hz)"
@@ -13671,12 +13671,6 @@ msgstr "Move Symbol Anchor"
 msgid "Specify a new location for the symbol anchor"
 msgstr "Specify a new location for the symbol anchor"
 
-msgid "Import Graphics..."
-msgstr "Import Graphics..."
-
-msgid "Import 2D drawing file"
-msgstr "Import 2D drawing file"
-
 msgid "Push Pin Length"
 msgstr "Push Pin Length"
 
@@ -14142,6 +14136,12 @@ msgstr "Export Drawing to Clipboard"
 msgid "Export drawing of current sheet to clipboard"
 msgstr "Export drawing of current sheet to clipboard"
 
+msgid "Import Graphics..."
+msgstr "Import Graphics..."
+
+msgid "Import 2D drawing file"
+msgstr "Import 2D drawing file"
+
 msgid "Switch to PCB Editor"
 msgstr "Switch to PCB Editor"
 
@@ -14561,20 +14561,8 @@ msgstr "Press <ESC> to cancel sheet creation."
 msgid "Symbol Unit"
 msgstr "Symbol Unit"
 
-msgid "no symbol selected"
-msgstr "no symbol selected"
-
-msgid "symbol is not multi-unit"
-msgstr "symbol is not multi-unit"
-
 msgid "Pin Function"
 msgstr "Pin Function"
-
-msgid "no pin selected"
-msgstr "no pin selected"
-
-msgid "no alternate pin functions defined"
-msgstr "no alternate pin functions defined"
 
 msgid "Pin Helpers"
 msgstr "Pin Helpers"
@@ -14760,6 +14748,9 @@ msgstr "Can't save file '%s'."
 msgid "SVG File Name"
 msgstr "SVG File Name"
 
+msgid "Edit Pin Properties"
+msgstr "Edit Pin Properties"
+
 msgid "Symbol is not derived from another symbol."
 msgstr "Symbol is not derived from another symbol."
 
@@ -14769,9 +14760,6 @@ msgstr "Enter display name for unit %s"
 
 msgid "Set Unit Display Name"
 msgstr "Set Unit Display Name"
-
-msgid "Edit Pin Properties"
-msgstr "Edit Pin Properties"
 
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
@@ -17931,29 +17919,29 @@ msgid "Overvoltage category:"
 msgstr "Overvoltage category:"
 
 msgid ""
-"OVC I: Equipments with no direct connection to mains supply\n"
+"OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
 "OVC II: Energy-consuming equipment to be supplied from the fixed "
 "installation. (eg: appliances, portable tools, household loads). OVCIII "
-"applys if there are reliability and avaibility requirements\n"
+"applies if there are reliability and avaibility requirements\n"
 "\n"
-"OVC III :  Equipements in fixed installation with reliability and avaibility "
+"OVC III :  Equipment in fixed installations with reliability and avaibility "
 "requirements. (eg: electrical switches, equipment for industrial use)\n"
 "\n"
-"OVC IV: Equipments at the origin of the installation (eg: electricity "
-"meters, primary overcurrent protection devices)"
+"OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
+"primary overcurrent protection devices)"
 msgstr ""
-"OVC I: Equipments with no direct connection to mains supply\n"
+"OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
 "OVC II: Energy-consuming equipment to be supplied from the fixed "
 "installation. (eg: appliances, portable tools, household loads). OVCIII "
-"applys if there are reliability and avaibility requirements\n"
+"applies if there are reliability and avaibility requirements\n"
 "\n"
-"OVC III :  Equipements in fixed installation with reliability and avaibility "
+"OVC III :  Equipment in fixed installations with reliability and avaibility "
 "requirements. (eg: electrical switches, equipment for industrial use)\n"
 "\n"
-"OVC IV: Equipments at the origin of the installation (eg: electricity "
-"meters, primary overcurrent protection devices)"
+"OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
+"primary overcurrent protection devices)"
 
 msgid "OVC I"
 msgstr "OVC I"
@@ -17972,12 +17960,12 @@ msgstr "Impulse voltage:"
 
 msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
-"withstand this value whithout a breakdown of insulation. This impulse "
-"voltage is a standard 1.2/50µs wave"
+"withstand this value without a breakdown of insulation. This impulse voltage "
+"is a standard 1.2/50µs wave"
 msgstr ""
 "Given the rated voltage and the overvoltage category, a device should "
-"withstand this value whithout a breakdown of insulation. This impulse "
-"voltage is a standard 1.2/50µs wave"
+"withstand this value without a breakdown of insulation. This impulse voltage "
+"is a standard 1.2/50µs wave"
 
 msgid "kV"
 msgstr "kV"
@@ -21388,8 +21376,8 @@ msgstr "STEP export failed!  Please save the PCB and try again"
 msgid "STEP files"
 msgstr "STEP files"
 
-msgid "Binary GTLF files"
-msgstr "Binary GTLF files"
+msgid "Binary glTF files"
+msgstr "Binary glTF files"
 
 msgid "STEP Output File"
 msgstr "STEP Output File"
@@ -28046,10 +28034,6 @@ msgstr ""
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "The current footprint has been modified.  Save changes?"
 
-#, c-format
-msgid "UNKNOWN (%d)"
-msgstr "UNKNOWN (%d)"
-
 msgid "Clipboard content is not KiCad compatible"
 msgstr "Clipboard content is not KiCad compatible"
 
@@ -28667,6 +28651,9 @@ msgstr "Castellated pad"
 msgid "Pad Type"
 msgstr "Pad Type"
 
+msgid "Pad Shape"
+msgstr "Pad Shape"
+
 msgid "Pad Number"
 msgstr "Pad Number"
 
@@ -28855,303 +28842,6 @@ msgstr "<unnamed>"
 msgid "Members"
 msgstr "Members"
 
-msgid "(not activated)"
-msgstr "(not activated)"
-
-msgid "Violation"
-msgstr "Violation"
-
-msgid "Severity"
-msgstr "Severity"
-
-#, c-format
-msgid "Marker (%s)"
-msgstr "Marker (%s)"
-
-msgid "Associated Layer"
-msgstr "Associated Layer"
-
-msgid "Greyscale"
-msgstr "Greyscale"
-
-msgid "Drawing"
-msgstr "Drawing"
-
-#, c-format
-msgid "%s %s on %s"
-msgstr "%s %s on %s"
-
-#, c-format
-msgid "%s on %s"
-msgstr "%s on %s"
-
-msgid "Pad Primitives"
-msgstr "Pad Primitives"
-
-msgid "PCB Target"
-msgstr "PCB Target"
-
-msgid "PCB Text"
-msgstr "PCB Text"
-
-msgid "Display"
-msgstr "Display"
-
-#, c-format
-msgid "Footprint Text '%s' of %s"
-msgstr "Footprint Text '%s' of %s"
-
-#, c-format
-msgid "PCB Text '%s' on %s"
-msgstr "PCB Text '%s' on %s"
-
-#, c-format
-msgid "PCB Text Box on %s"
-msgstr "PCB Text Box on %s"
-
-msgid "Border Properties"
-msgstr "Border Properties"
-
-msgid "Border Style"
-msgstr "Border Style"
-
-#, c-format
-msgid "Blind/Buried Via %s on %s"
-msgstr "Blind/Buried Via %s on %s"
-
-#, c-format
-msgid "Micro Via %s on %s"
-msgstr "Micro Via %s on %s"
-
-#, c-format
-msgid "Via %s on %s"
-msgstr "Via %s on %s"
-
-msgid "removed annular ring"
-msgstr "removed annular ring"
-
-msgid "Track (arc)"
-msgstr "Track (arc)"
-
-msgid "Segment Length"
-msgstr "Segment Length"
-
-#, c-format
-msgid "Width Constraints: %s"
-msgstr "Width Constraints: %s"
-
-msgid "Micro Via"
-msgstr "Micro Via"
-
-msgid "Blind/Buried Via"
-msgstr "Blind/Buried Via"
-
-msgid "Through Via"
-msgstr "Through Via"
-
-#, c-format
-msgid "Min Annular Width: %s"
-msgstr "Min Annular Width: %s"
-
-msgid "NetCode"
-msgstr "NetCode"
-
-#, c-format
-msgid "Track (arc) %s on %s, length %s"
-msgstr "Track (arc) %s on %s, length %s"
-
-#, c-format
-msgid "Track %s on %s, length %s"
-msgstr "Track %s on %s, length %s"
-
-msgid "Via Properties"
-msgstr "Via Properties"
-
-msgid "Layer Top"
-msgstr "Layer Top"
-
-msgid "Layer Bottom"
-msgstr "Layer Bottom"
-
-msgid "Via Type"
-msgstr "Via Type"
-
-msgid "must be mm, in, or mil"
-msgstr "must be mm, in, or mil"
-
-#, c-format
-msgid "Missing layer name argument to %s."
-msgstr "Missing layer name argument to %s."
-
-#, c-format
-msgid "Unrecognized layer '%s'"
-msgstr "Unrecognized layer '%s'"
-
-#, c-format
-msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Missing footprint argument (A, B, or reference designator) to %s."
-
-msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "Footprint's courtyard is not a single, closed shape."
-
-msgid "Footprint has no front courtyard."
-msgstr "Footprint has no front courtyard."
-
-msgid "Footprint has no back courtyard."
-msgstr "Footprint has no back courtyard."
-
-#, c-format
-msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "Missing rule-area argument (A, B, or rule-area name) to %s."
-
-#, c-format
-msgid "Missing group name argument to %s."
-msgstr "Missing group name argument to %s."
-
-#, c-format
-msgid "Missing sheet name argument to %s."
-msgstr "Missing sheet name argument to %s."
-
-#, c-format
-msgid "Missing footprint argument (reference designator) to %s."
-msgstr "Missing footprint argument (reference designator) to %s."
-
-#, c-format
-msgid "Missing diff-pair name argument to %s."
-msgstr "Missing diff-pair name argument to %s."
-
-#, c-format
-msgid "Missing field name argument to %s."
-msgstr "Missing field name argument to %s."
-
-msgid ""
-"An error occurred attempting to load the global footprint library table.\n"
-"Please edit this global footprint library table in Preferences menu."
-msgstr ""
-"An error occurred attempting to load the global footprint library table.\n"
-"Please edit this global footprint library table in Preferences menu."
-
-msgid "Loading board\n"
-msgstr "Loading board\n"
-
-#, c-format
-msgid "Successfully exported VRML to %s"
-msgstr "Successfully exported VRML to %s"
-
-msgid "Error exporting VRML"
-msgstr "Error exporting VRML"
-
-msgid "Successfully created svg file"
-msgstr "Successfully created svg file"
-
-msgid "Error creating svg file"
-msgstr "Error creating svg file"
-
-#, c-format
-msgid "Failed to plot to '%s'.\n"
-msgstr "Failed to plot to '%s'.\n"
-
-msgid "Failed to create output directory\n"
-msgstr "Failed to create output directory\n"
-
-msgid "Loading footprint library\n"
-msgstr "Loading footprint library\n"
-
-msgid "Saving footprint library\n"
-msgstr "Saving footprint library\n"
-
-msgid "Unable to save library\n"
-msgstr "Unable to save library\n"
-
-msgid "Footprint library was not updated\n"
-msgstr "Footprint library was not updated\n"
-
-msgid "The given footprint could not be found to export."
-msgstr "The given footprint could not be found to export."
-
-#, c-format
-msgid "Plotting footprint '%s' to '%s'\n"
-msgstr "Plotting footprint '%s' to '%s'\n"
-
-msgid "Running DRC...\n"
-msgstr "Running DRC...\n"
-
-msgid "DRC"
-msgstr "DRC"
-
-#, c-format
-msgid "Found %d unconnected items\n"
-msgstr "Found %d unconnected items\n"
-
-#, c-format
-msgid "Found %d schematic parity issues\n"
-msgstr "Found %d schematic parity issues\n"
-
-#, c-format
-msgid "Unable to save DRC report to %s\n"
-msgstr "Unable to save DRC report to %s\n"
-
-#, c-format
-msgid "Saved DRC Report to %s\n"
-msgstr "Saved DRC Report to %s\n"
-
-msgid "Multiple Layers"
-msgstr "Multiple Layers"
-
-msgid ""
-"Selected file contains multiple footprints. Only the first one will be "
-"imported."
-msgstr ""
-"Selected file contains multiple footprints. Only the first one will be "
-"imported."
-
-msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
-msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
-
-msgid "Regular expression <b>footprint name</b> filter."
-msgstr "Regular expression <b>footprint name</b> filter."
-
-msgid ""
-"Enable transaction logging. The mere presence of this option turns on the "
-"logging, no need to set a Value."
-msgstr ""
-"Enable transaction logging. The mere presence of this option turns on the "
-"logging, no need to set a Value."
-
-msgid "User name for <b>login</b> to some special library server."
-msgstr "User name for <b>login</b> to some special library server."
-
-msgid "Password for <b>login</b> to some special library server."
-msgstr "Password for <b>login</b> to some special library server."
-
-msgid ""
-"Enter the python module which implements the PLUGIN::Footprint*() functions."
-msgstr ""
-"Enter the python module which implements the PLUGIN::Footprint*() functions."
-
-msgid "Altium Circuit Maker PCB files"
-msgstr "Altium Circuit Maker PCB files"
-
-msgid "Altium Circuit Studio PCB files"
-msgstr "Altium Circuit Studio PCB files"
-
-#, c-format
-msgid "File not found: '%s'."
-msgstr "File not found: '%s'."
-
-msgid "No footprints in library"
-msgstr "No footprints in library"
-
-#, c-format
-msgid "Footprint directory not found: '%s'."
-msgstr "Footprint directory not found: '%s'."
-
-msgid "Altium Designer PCB files"
-msgstr "Altium Designer PCB files"
-
-msgid "Altium PCB Library or Integrated Library"
-msgstr "Altium PCB Library or Integrated Library"
-
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unknown mapping of the Altium layer '%s'."
@@ -29198,6 +28888,14 @@ msgstr ""
 #, c-format
 msgid "File not found: '%s' for directory '%s'."
 msgstr "File not found: '%s' for directory '%s'."
+
+#, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Footprint directory not found: '%s'."
+
+#, c-format
+msgid "File not found: '%s'."
+msgstr "File not found: '%s'."
 
 #, c-format
 msgid "Record of unknown type: '%d'."
@@ -29358,6 +29056,21 @@ msgstr "Ignored barcode on Altium layer %d (not yet supported)."
 msgid "Loading rectangles..."
 msgstr "Loading rectangles..."
 
+msgid "Altium Circuit Maker PCB files"
+msgstr "Altium Circuit Maker PCB files"
+
+msgid "Altium Circuit Studio PCB files"
+msgstr "Altium Circuit Studio PCB files"
+
+msgid "No footprints in library"
+msgstr "No footprints in library"
+
+msgid "Altium Designer PCB files"
+msgstr "Altium Designer PCB files"
+
+msgid "Altium PCB Library or Integrated Library"
+msgstr "Altium PCB Library or Integrated Library"
+
 msgid "Solidworks PCB files"
 msgstr "Solidworks PCB files"
 
@@ -29446,6 +29159,16 @@ msgstr ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
+
+#, c-format
+msgid ""
+"Footprint definition '%s' has component copper associated to a pad on "
+"multiple layers. Custom padstacks are not supported in KiCad. The copper "
+"items have been imported as graphical elements."
+msgstr ""
+"Footprint definition '%s' has component copper associated to a pad on "
+"multiple layers. Custom padstacks are not supported in KiCad. The copper "
+"items have been imported as graphical elements."
 
 #, c-format
 msgid ""
@@ -29844,12 +29567,6 @@ msgstr "Footprint '%s' not found in project '%s'"
 msgid "EasyEDA (JLCEDA) Pro project"
 msgstr "EasyEDA (JLCEDA) Pro project"
 
-msgid "Fabmaster PCB files"
-msgstr "Fabmaster PCB files"
-
-msgid "Could not read file "
-msgstr "Could not read file "
-
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr "Unknown FABMASTER section %s:%s at row %zu."
@@ -29937,6 +29654,12 @@ msgstr "Could not find custom pad '%s'."
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr "Expecting etch data to be on copper layer. Row found on layer '%s'"
 
+msgid "Could not read file "
+msgstr "Could not read file "
+
+msgid "Fabmaster PCB files"
+msgstr "Fabmaster PCB files"
+
 #, c-format
 msgid "Cannot convert '%s' to an integer."
 msgstr "Cannot convert '%s' to an integer."
@@ -30006,6 +29729,149 @@ msgstr "Failed to save file to buffer"
 
 msgid "IPC-2581 Production File"
 msgstr "IPC-2581 Production File"
+
+#, c-format
+msgid "File '%s' has an unrecognized version: %d."
+msgstr "File '%s' has an unrecognized version: %d."
+
+#, c-format
+msgid "Unknown sheet type '%s' on line: %d."
+msgstr "Unknown sheet type '%s' on line: %d."
+
+#, c-format
+msgid "Missing '$EndMODULE' for MODULE '%s'."
+msgstr "Missing '$EndMODULE' for MODULE '%s'."
+
+#, c-format
+msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
+msgstr "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
+
+#, c-format
+msgid "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
+msgstr "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
+
+#, c-format
+msgid "Duplicate NETCLASS name '%s'."
+msgstr "Duplicate NETCLASS name '%s'."
+
+#, c-format
+msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
+msgstr "Bad ZAux for CZONE_CONTAINER “%s”"
+
+#, c-format
+msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
+msgstr "Bad ZSmoothing for CZONE_CONTAINER “%s”"
+
+msgid ""
+"The legacy segment zone fill mode is no longer supported.\n"
+"Zone fills will be converted on a best-effort basis."
+msgstr ""
+"The legacy segment zone fill mode is no longer supported.\n"
+"Zone fills will be converted on a best-effort basis."
+
+#, c-format
+msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
+msgstr "Bad ZClearance padoption for CZONE_CONTAINER “%s”"
+
+#, c-format
+msgid ""
+"Invalid floating point number in file: '%s'\n"
+"line: %d, offset: %d"
+msgstr ""
+"Invalid floating point number in file: '%s'\n"
+"line: %d, offset: %d"
+
+#, c-format
+msgid ""
+"Missing floating point number in file: '%s'\n"
+"line: %d, offset: %d"
+msgstr ""
+"Missing floating point number in file: '%s'\n"
+"line: %d, offset: %d"
+
+#, c-format
+msgid "File '%s' is empty."
+msgstr "File '%s' is empty."
+
+#, c-format
+msgid "File '%s' is not a legacy library."
+msgstr "File '%s' is not a legacy library."
+
+msgid "Legacy footprint library files"
+msgstr "Legacy footprint library files"
+
+#, c-format
+msgid "Cannot create footprint library '%s'."
+msgstr "Cannot create footprint library '%s'."
+
+#, c-format
+msgid "Footprint library '%s' is read only."
+msgstr "Footprint library '%s' is read only."
+
+#, c-format
+msgid "Cannot rename temporary file '%s' to '%s'"
+msgstr "Cannot rename temporary file '%s' to '%s'"
+
+msgid "Internal Group Data Error"
+msgstr "Internal Group Data Error"
+
+#, c-format
+msgid ""
+"Please report this bug.  Error validating group structure: %s\n"
+"\n"
+"Save anyway?"
+msgstr ""
+"Please report this bug.  Error validating group structure: %s\n"
+"\n"
+"Save anyway?"
+
+msgid "Save Anyway"
+msgstr "Save Anyway"
+
+#, c-format
+msgid "unknown pad type: %d"
+msgstr "unknown pad type: %d"
+
+#, c-format
+msgid "unknown via type %d"
+msgstr "unknown via type %d"
+
+#, c-format
+msgid "unknown zone corner smoothing type %d"
+msgstr "unknown zone corner smoothing type %d"
+
+msgid "This file does not contain a PCB."
+msgstr "This file does not contain a PCB."
+
+#, c-format
+msgid ""
+"Library '%s' does not exist.\n"
+"Would you like to create it?"
+msgstr ""
+"Library '%s' does not exist.\n"
+"Would you like to create it?"
+
+msgid "Library Not Found"
+msgstr "Library Not Found"
+
+#, c-format
+msgid "Footprint file name '%s' is not valid."
+msgstr "Footprint file name '%s' is not valid."
+
+#, c-format
+msgid "Insufficient permissions to delete '%s'."
+msgstr "Insufficient permissions to delete '%s'."
+
+#, c-format
+msgid "Cannot overwrite library path '%s'."
+msgstr "Cannot overwrite library path '%s'."
+
+#, c-format
+msgid "Unexpected file '%s' found in library path '%s'."
+msgstr "Unexpected file '%s' found in library path '%s'."
+
+msgid "KiCad footprint file"
+msgstr "KiCad footprint file"
 
 #, c-format
 msgid "Cannot interpret date code %d"
@@ -30145,149 +30011,6 @@ msgstr ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 
-msgid ""
-"The legacy segment zone fill mode is no longer supported.\n"
-"Zone fills will be converted on a best-effort basis."
-msgstr ""
-"The legacy segment zone fill mode is no longer supported.\n"
-"Zone fills will be converted on a best-effort basis."
-
-#, c-format
-msgid "Cannot create footprint library '%s'."
-msgstr "Cannot create footprint library '%s'."
-
-#, c-format
-msgid "Footprint library '%s' is read only."
-msgstr "Footprint library '%s' is read only."
-
-#, c-format
-msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr "Cannot rename temporary file '%s' to '%s'"
-
-msgid "Internal Group Data Error"
-msgstr "Internal Group Data Error"
-
-#, c-format
-msgid ""
-"Please report this bug.  Error validating group structure: %s\n"
-"\n"
-"Save anyway?"
-msgstr ""
-"Please report this bug.  Error validating group structure: %s\n"
-"\n"
-"Save anyway?"
-
-msgid "Save Anyway"
-msgstr "Save Anyway"
-
-#, c-format
-msgid "unknown pad type: %d"
-msgstr "unknown pad type: %d"
-
-#, c-format
-msgid "unknown via type %d"
-msgstr "unknown via type %d"
-
-#, c-format
-msgid "unknown zone corner smoothing type %d"
-msgstr "unknown zone corner smoothing type %d"
-
-msgid "This file does not contain a PCB."
-msgstr "This file does not contain a PCB."
-
-#, c-format
-msgid ""
-"Library '%s' does not exist.\n"
-"Would you like to create it?"
-msgstr ""
-"Library '%s' does not exist.\n"
-"Would you like to create it?"
-
-msgid "Library Not Found"
-msgstr "Library Not Found"
-
-#, c-format
-msgid "Footprint file name '%s' is not valid."
-msgstr "Footprint file name '%s' is not valid."
-
-#, c-format
-msgid "Insufficient permissions to delete '%s'."
-msgstr "Insufficient permissions to delete '%s'."
-
-#, c-format
-msgid "Cannot overwrite library path '%s'."
-msgstr "Cannot overwrite library path '%s'."
-
-#, c-format
-msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "Unexpected file '%s' found in library path '%s'."
-
-msgid "KiCad footprint file"
-msgstr "KiCad footprint file"
-
-#, c-format
-msgid "File '%s' has an unrecognized version: %d."
-msgstr "File '%s' has an unrecognized version: %d."
-
-#, c-format
-msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Unknown sheet type '%s' on line: %d."
-
-#, c-format
-msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "Missing '$EndMODULE' for MODULE '%s'."
-
-#, c-format
-msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-
-#, c-format
-msgid "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-
-#, c-format
-msgid "Duplicate NETCLASS name '%s'."
-msgstr "Duplicate NETCLASS name '%s'."
-
-#, c-format
-msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
-msgstr "Bad ZAux for CZONE_CONTAINER “%s”"
-
-#, c-format
-msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr "Bad ZSmoothing for CZONE_CONTAINER “%s”"
-
-#, c-format
-msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr "Bad ZClearance padoption for CZONE_CONTAINER “%s”"
-
-#, c-format
-msgid ""
-"Invalid floating point number in file: '%s'\n"
-"line: %d, offset: %d"
-msgstr ""
-"Invalid floating point number in file: '%s'\n"
-"line: %d, offset: %d"
-
-#, c-format
-msgid ""
-"Missing floating point number in file: '%s'\n"
-"line: %d, offset: %d"
-msgstr ""
-"Missing floating point number in file: '%s'\n"
-"line: %d, offset: %d"
-
-#, c-format
-msgid "File '%s' is empty."
-msgstr "File '%s' is empty."
-
-#, c-format
-msgid "File '%s' is not a legacy library."
-msgstr "File '%s' is not a legacy library."
-
-msgid "Legacy footprint library files"
-msgstr "Legacy footprint library files"
-
 #, c-format
 msgid "Unknown PCad layer %u"
 msgstr "Unknown PCad layer %u"
@@ -30295,15 +30018,293 @@ msgstr "Unknown PCad layer %u"
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad only supports 32 signal layers."
 
-msgid "P-Cad 200x ASCII PCB files"
-msgstr "P-Cad 200x ASCII PCB files"
-
 msgid "Unable to find library section."
 msgstr "Unable to find library section."
 
 #, c-format
 msgid "Unable to find viaStyleDef %s."
 msgstr "Unable to find viaStyleDef %s."
+
+msgid "P-Cad 200x ASCII PCB files"
+msgstr "P-Cad 200x ASCII PCB files"
+
+msgid ""
+"Selected file contains multiple footprints. Only the first one will be "
+"imported."
+msgstr ""
+"Selected file contains multiple footprints. Only the first one will be "
+"imported."
+
+msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
+msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
+
+msgid "Regular expression <b>footprint name</b> filter."
+msgstr "Regular expression <b>footprint name</b> filter."
+
+msgid ""
+"Enable transaction logging. The mere presence of this option turns on the "
+"logging, no need to set a Value."
+msgstr ""
+"Enable transaction logging. The mere presence of this option turns on the "
+"logging, no need to set a Value."
+
+msgid "User name for <b>login</b> to some special library server."
+msgstr "User name for <b>login</b> to some special library server."
+
+msgid "Password for <b>login</b> to some special library server."
+msgstr "Password for <b>login</b> to some special library server."
+
+msgid ""
+"Enter the python module which implements the PCB_IO::Footprint*() functions."
+msgstr ""
+"Enter the python module which implements the PCB_IO::Footprint*() functions."
+
+#, c-format
+msgid "UNKNOWN (%d)"
+msgstr "UNKNOWN (%d)"
+
+msgid "(not activated)"
+msgstr "(not activated)"
+
+msgid "Violation"
+msgstr "Violation"
+
+msgid "Severity"
+msgstr "Severity"
+
+#, c-format
+msgid "Marker (%s)"
+msgstr "Marker (%s)"
+
+msgid "Associated Layer"
+msgstr "Associated Layer"
+
+msgid "Greyscale"
+msgstr "Greyscale"
+
+msgid "Drawing"
+msgstr "Drawing"
+
+#, c-format
+msgid "%s %s on %s"
+msgstr "%s %s on %s"
+
+#, c-format
+msgid "%s on %s"
+msgstr "%s on %s"
+
+msgid "Pad Primitives"
+msgstr "Pad Primitives"
+
+msgid "PCB Target"
+msgstr "PCB Target"
+
+msgid "PCB Text"
+msgstr "PCB Text"
+
+msgid "Display"
+msgstr "Display"
+
+#, c-format
+msgid "Footprint Text '%s' of %s"
+msgstr "Footprint Text '%s' of %s"
+
+#, c-format
+msgid "PCB Text '%s' on %s"
+msgstr "PCB Text '%s' on %s"
+
+#, c-format
+msgid "PCB Text Box on %s"
+msgstr "PCB Text Box on %s"
+
+msgid "Border Properties"
+msgstr "Border Properties"
+
+msgid "Border Style"
+msgstr "Border Style"
+
+#, c-format
+msgid "Blind/Buried Via %s on %s"
+msgstr "Blind/Buried Via %s on %s"
+
+#, c-format
+msgid "Micro Via %s on %s"
+msgstr "Micro Via %s on %s"
+
+#, c-format
+msgid "Via %s on %s"
+msgstr "Via %s on %s"
+
+msgid "removed annular ring"
+msgstr "removed annular ring"
+
+msgid "Track (arc)"
+msgstr "Track (arc)"
+
+msgid "Segment Length"
+msgstr "Segment Length"
+
+#, c-format
+msgid "Width Constraints: %s"
+msgstr "Width Constraints: %s"
+
+msgid "Micro Via"
+msgstr "Micro Via"
+
+msgid "Blind/Buried Via"
+msgstr "Blind/Buried Via"
+
+msgid "Through Via"
+msgstr "Through Via"
+
+#, c-format
+msgid "Min Annular Width: %s"
+msgstr "Min Annular Width: %s"
+
+msgid "NetCode"
+msgstr "NetCode"
+
+#, c-format
+msgid "Track (arc) %s on %s, length %s"
+msgstr "Track (arc) %s on %s, length %s"
+
+#, c-format
+msgid "Track %s on %s, length %s"
+msgstr "Track %s on %s, length %s"
+
+msgid "Via Properties"
+msgstr "Via Properties"
+
+msgid "Layer Top"
+msgstr "Layer Top"
+
+msgid "Layer Bottom"
+msgstr "Layer Bottom"
+
+msgid "Via Type"
+msgstr "Via Type"
+
+msgid "must be mm, in, or mil"
+msgstr "must be mm, in, or mil"
+
+#, c-format
+msgid "Missing layer name argument to %s."
+msgstr "Missing layer name argument to %s."
+
+#, c-format
+msgid "Unrecognized layer '%s'"
+msgstr "Unrecognized layer '%s'"
+
+#, c-format
+msgid "Missing footprint argument (A, B, or reference designator) to %s."
+msgstr "Missing footprint argument (A, B, or reference designator) to %s."
+
+msgid "Footprint's courtyard is not a single, closed shape."
+msgstr "Footprint's courtyard is not a single, closed shape."
+
+msgid "Footprint has no front courtyard."
+msgstr "Footprint has no front courtyard."
+
+msgid "Footprint has no back courtyard."
+msgstr "Footprint has no back courtyard."
+
+#, c-format
+msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
+msgstr "Missing rule-area argument (A, B, or rule-area name) to %s."
+
+#, c-format
+msgid "Missing group name argument to %s."
+msgstr "Missing group name argument to %s."
+
+#, c-format
+msgid "Missing sheet name argument to %s."
+msgstr "Missing sheet name argument to %s."
+
+#, c-format
+msgid "Missing footprint argument (reference designator) to %s."
+msgstr "Missing footprint argument (reference designator) to %s."
+
+#, c-format
+msgid "Missing diff-pair name argument to %s."
+msgstr "Missing diff-pair name argument to %s."
+
+#, c-format
+msgid "Missing field name argument to %s."
+msgstr "Missing field name argument to %s."
+
+msgid ""
+"An error occurred attempting to load the global footprint library table.\n"
+"Please edit this global footprint library table in Preferences menu."
+msgstr ""
+"An error occurred attempting to load the global footprint library table.\n"
+"Please edit this global footprint library table in Preferences menu."
+
+msgid "Loading board\n"
+msgstr "Loading board\n"
+
+#, c-format
+msgid "Successfully exported VRML to %s"
+msgstr "Successfully exported VRML to %s"
+
+msgid "Error exporting VRML"
+msgstr "Error exporting VRML"
+
+msgid "Successfully created svg file"
+msgstr "Successfully created svg file"
+
+msgid "Error creating svg file"
+msgstr "Error creating svg file"
+
+#, c-format
+msgid "Failed to plot to '%s'.\n"
+msgstr "Failed to plot to '%s'.\n"
+
+msgid "Failed to create output directory\n"
+msgstr "Failed to create output directory\n"
+
+msgid "Loading footprint library\n"
+msgstr "Loading footprint library\n"
+
+msgid "Saving footprint library\n"
+msgstr "Saving footprint library\n"
+
+msgid "Unable to save library\n"
+msgstr "Unable to save library\n"
+
+msgid "Footprint library was not updated\n"
+msgstr "Footprint library was not updated\n"
+
+msgid "The given footprint could not be found to export."
+msgstr "The given footprint could not be found to export."
+
+#, c-format
+msgid "Plotting footprint '%s' to '%s'\n"
+msgstr "Plotting footprint '%s' to '%s'\n"
+
+msgid "Running DRC...\n"
+msgstr "Running DRC...\n"
+
+msgid "DRC"
+msgstr "DRC"
+
+#, c-format
+msgid "Found %d unconnected items\n"
+msgstr "Found %d unconnected items\n"
+
+#, c-format
+msgid "Found %d schematic parity issues\n"
+msgstr "Found %d schematic parity issues\n"
+
+#, c-format
+msgid "Unable to save DRC report to %s\n"
+msgstr "Unable to save DRC report to %s\n"
+
+#, c-format
+msgid "Saved DRC Report to %s\n"
+msgstr "Saved DRC Report to %s\n"
+
+msgid "Multiple Layers"
+msgstr "Multiple Layers"
 
 msgid "Error loading project footprint libraries."
 msgstr "Error loading project footprint libraries."
@@ -30567,6 +30568,13 @@ msgstr "The selected item is locked."
 
 msgid "Drag Anyway"
 msgstr "Drag Anyway"
+
+#, c-format
+msgid "(%s to commit anyway.)"
+msgstr "(%s to commit anyway.)"
+
+msgid "Track violates DRC."
+msgstr "Track violates DRC."
 
 msgid "Break Track"
 msgstr "Break Track"
@@ -33544,6 +33552,9 @@ msgstr "Dimensions"
 msgid "Other items"
 msgstr "Other items"
 
+msgid "Priority"
+msgstr "Priority"
+
 msgid "Textbox"
 msgstr "Textbox"
 
@@ -33570,9 +33581,6 @@ msgstr "No footprints"
 
 msgid "Restrictions"
 msgstr "Restrictions"
-
-msgid "Priority"
-msgstr "Priority"
 
 #, c-format
 msgid "%s"
@@ -33788,6 +33796,83 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Use only the diffuse color property from model 3D model file"
+#~ msgstr "Use only the diffuse color property from model 3D model file"
+
+#, c-format
+#~ msgid ""
+#~ "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. "
+#~ "Cannot find project.json."
+#~ msgstr ""
+#~ "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. "
+#~ "Cannot find project.json."
+
+#~ msgid "Ampltiude"
+#~ msgstr "Ampltiude"
+
+#~ msgid "no symbol selected"
+#~ msgstr "no symbol selected"
+
+#~ msgid "symbol is not multi-unit"
+#~ msgstr "symbol is not multi-unit"
+
+#~ msgid "no pin selected"
+#~ msgstr "no pin selected"
+
+#~ msgid "no alternate pin functions defined"
+#~ msgstr "no alternate pin functions defined"
+
+#~ msgid ""
+#~ "OVC I: Equipments with no direct connection to mains supply\n"
+#~ "\n"
+#~ "OVC II: Energy-consuming equipment to be supplied from the fixed "
+#~ "installation. (eg: appliances, portable tools, household loads). OVCIII "
+#~ "applys if there are reliability and avaibility requirements\n"
+#~ "\n"
+#~ "OVC III :  Equipements in fixed installation with reliability and "
+#~ "avaibility requirements. (eg: electrical switches, equipment for "
+#~ "industrial use)\n"
+#~ "\n"
+#~ "OVC IV: Equipments at the origin of the installation (eg: electricity "
+#~ "meters, primary overcurrent protection devices)"
+#~ msgstr ""
+#~ "OVC I: Equipments with no direct connection to mains supply\n"
+#~ "\n"
+#~ "OVC II: Energy-consuming equipment to be supplied from the fixed "
+#~ "installation. (eg: appliances, portable tools, household loads). OVCIII "
+#~ "applys if there are reliability and avaibility requirements\n"
+#~ "\n"
+#~ "OVC III :  Equipements in fixed installation with reliability and "
+#~ "avaibility requirements. (eg: electrical switches, equipment for "
+#~ "industrial use)\n"
+#~ "\n"
+#~ "OVC IV: Equipments at the origin of the installation (eg: electricity "
+#~ "meters, primary overcurrent protection devices)"
+
+#~ msgid ""
+#~ "Given the rated voltage and the overvoltage category, a device should "
+#~ "withstand this value whithout a breakdown of insulation. This impulse "
+#~ "voltage is a standard 1.2/50µs wave"
+#~ msgstr ""
+#~ "Given the rated voltage and the overvoltage category, a device should "
+#~ "withstand this value whithout a breakdown of insulation. This impulse "
+#~ "voltage is a standard 1.2/50µs wave"
+
+#~ msgid "Binary GTLF files"
+#~ msgstr "Binary GTLF files"
+
+#~ msgid ""
+#~ "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
+#~ msgstr ""
+#~ "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
+
+#~ msgid ""
+#~ "Enter the python module which implements the PLUGIN::Footprint*() "
+#~ "functions."
+#~ msgstr ""
+#~ "Enter the python module which implements the PLUGIN::Footprint*() "
+#~ "functions."
 
 #~ msgid "Cycle arc editing mode"
 #~ msgstr "Cycle arc editing mode"
@@ -38295,9 +38380,6 @@ msgstr "KiCad Printed Circuit Board"
 #, c-format
 #~ msgid "Zone %s on %s"
 #~ msgstr "Zone %s on %s"
-
-#~ msgid "Use only the diffuse color property from 3D model file"
-#~ msgstr "Use only the diffuse color property from 3D model file"
 
 #~ msgid "Edit ignored violations..."
 #~ msgstr "Edit ignored violations..."
