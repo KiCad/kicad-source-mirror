@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-12 17:02+0000\n"
+"PO-Revision-Date: 2024-01-14 12:31+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -12776,12 +12776,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Άγνωστη μορφή λίστας δικτύων.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Σχεδιογράφιση συμβόλου '%s' μονάδας %d σε '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Σχεδιογράφιση συμβόλου '%s' σε '%s'\n"
 
@@ -14650,7 +14650,7 @@ msgstr "Κενή ονομασία ιδιότητας"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
 msgid "Invalid property value"
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή ιδιότητας"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
 msgid "Invalid pin name"
@@ -14667,7 +14667,7 @@ msgstr "Εναλλακτικό όνομα Pin"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
 msgid "Invalid text string"
-msgstr "Μη έγκυρη τιμή Spice"
+msgstr "Μη έγκυρη τιμή κειμένου"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
 msgid "Invalid page type"
@@ -17414,7 +17414,7 @@ msgstr "Προσθήκη Πλαισίου Κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "Προσθήκη αντικειμένου σαν πλαίσιο κειμένου"
+msgstr "Προσθήκη αντικειμένου πλαισίου κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -19979,7 +19979,6 @@ msgid "Invalid zeros format specified\n"
 msgstr "Μη έγκυρος ορισμός μορφής μηδενικών\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:182
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
 msgstr "Μη έγκυρη καθορισμένη μορφή οβάλ τρύπας\n"
 
@@ -22809,7 +22808,7 @@ msgstr "Μόνο για ρυθμιστές 3 άκρων, το ρεύμα του 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 msgid "uA"
-msgstr "uA"
+msgstr "μA"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
