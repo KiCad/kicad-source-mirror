@@ -384,7 +384,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
             {
                 if( newName.IsEmpty() )
                 {
-                    wxMessageBox( _( "Symbol must have a newName." ) );
+                    wxMessageBox( _( "Symbol must have a name." ) );
                     return false;
                 }
 
