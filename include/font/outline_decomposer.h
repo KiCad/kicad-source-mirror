@@ -64,23 +64,17 @@ public:
     void OutlineToSegments( CONTOURS* aContours );
 
 private:
-    void contourToSegmentsAndArcs( CONTOUR& aResult, unsigned int aContourIndex ) const;
-
     void newContour();
 
     void addContourPoint( const VECTOR2D& p );
-
-    int approximateContour( const GLYPH_POINTS& aPoints, const std::vector<bool>& aPointOnCurve,
-                            GLYPH_POINTS& aResult ) const;
 
     bool approximateBezierCurve( GLYPH_POINTS& result, const GLYPH_POINTS& bezier ) const;
     bool approximateQuadraticBezierCurve( GLYPH_POINTS& result, const GLYPH_POINTS& bezier ) const;
     bool approximateCubicBezierCurve( GLYPH_POINTS& result, const GLYPH_POINTS& bezier ) const;
 
     /**
-     * @return 1 if aContour is in clockwise order, -1 if it is in
-     *     counterclockwise order, or 0 if the winding can't be
-     *     determined.
+     * @return 1 if aContour is in clockwise order, -1 if it is in counterclockwise order,
+     *         or 0 if the winding can't be determined.
      */
     int winding( const GLYPH_POINTS& aContour ) const;
 
