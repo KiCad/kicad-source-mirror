@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski <gitlab@rinta-koski.net>
- * Copyright (C) 2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Outline font class
  *
@@ -39,8 +39,8 @@ OUTLINE_DECOMPOSER::OUTLINE_DECOMPOSER( FT_Outline& aOutline ) :
 
 static VECTOR2D toVector2D( const FT_Vector* aFreeTypeVector )
 {
-    return VECTOR2D( aFreeTypeVector->x * GLYPH_SIZE_SCALER,
-                     aFreeTypeVector->y * GLYPH_SIZE_SCALER );
+    return VECTOR2D( (double) aFreeTypeVector->x * GLYPH_SIZE_SCALER,
+                     (double) aFreeTypeVector->y * GLYPH_SIZE_SCALER );
 }
 
 

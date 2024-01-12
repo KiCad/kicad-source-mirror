@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski <gitlab@rinta-koski.net>
- * Copyright (C) 2021-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,6 +255,38 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                                     aOrigin, aTextStyle );
 }
 
+
+struct GLYPH_CACHE_KEY {
+    FT_Face        face;
+    hb_codepoint_t codepoint;
+    bool           fakeItalic;
+    bool           fakeBold;
+    bool           mirror;
+    EDA_ANGLE      angle;
+
+    bool operator==(const GLYPH_CACHE_KEY& rhs ) const
+    {
+        return face == rhs.face && codepoint == rhs.codepoint
+                   && fakeItalic == rhs.fakeItalic && fakeBold == rhs.fakeBold
+                   && mirror == rhs.mirror && angle == rhs.angle;
+    }
+};
+
+namespace std
+{
+    template <>
+    struct hash<GLYPH_CACHE_KEY>
+    {
+        std::size_t operator()( const GLYPH_CACHE_KEY& k ) const
+        {
+            return hash<const void*>()( k.face ) ^ hash<unsigned>()( k.codepoint )
+                        ^ hash<int>()( k.fakeItalic ) ^ hash<int>()( k.fakeBold )
+                        ^ hash<int>()( k.mirror ) ^ hash<int>()( k.angle.AsTenthsOfADegree() );
+        }
+    };
+}
+
+
 VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                                                 std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                                 const wxString& aText, const VECTOR2I& aSize,
@@ -295,6 +327,10 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
     if( aGlyphs )
         aGlyphs->reserve( glyphCount );
 
+    // GLYPH_DATA is a collection of all outlines in the glyph; for example the 'o' glyph
+    // generally contains 2 contours, one for the glyph outline and one for the hole
+    static std::unordered_map<GLYPH_CACHE_KEY, GLYPH_DATA> s_glyphCache;
+
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
         // Don't process glyphs that were already included in a previous cluster
@@ -303,64 +339,67 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
         if( aGlyphs )
         {
-            if( m_fakeItal )
+            GLYPH_CACHE_KEY key = { face, glyphInfo[i].codepoint, m_fakeItal, m_fakeBold,
+                                    aMirror, aAngle };
+            GLYPH_DATA&     glyphData = s_glyphCache[ key ];
+
+            if( glyphData.m_Contours.empty() )
             {
-                FT_Matrix matrix;
-                // Create a 12 degree slant
-                const float angle = (float)( -M_PI * 12.0f ) / 180.0f;
-                matrix.xx = (FT_Fixed) ( cos( angle ) * 0x10000L );
-                matrix.xy = (FT_Fixed) ( -sin( angle ) * 0x10000L );
-                matrix.yx = (FT_Fixed) ( 0 * 0x10000L );  // Don't rotate in the y direction
-                matrix.yy = (FT_Fixed) ( 1 * 0x10000L );
+                if( m_fakeItal )
+                {
+                    FT_Matrix matrix;
+                    // Create a 12 degree slant
+                    const float angle = (float)( -M_PI * 12.0f ) / 180.0f;
+                    matrix.xx = (FT_Fixed) ( cos( angle ) * 0x10000L );
+                    matrix.xy = (FT_Fixed) ( -sin( angle ) * 0x10000L );
+                    matrix.yx = (FT_Fixed) ( 0 * 0x10000L );  // Don't rotate in the y direction
+                    matrix.yy = (FT_Fixed) ( 1 * 0x10000L );
 
-                FT_Set_Transform( face, &matrix, 0 );
-            }
+                    FT_Set_Transform( face, &matrix, nullptr );
+                }
 
-            FT_Load_Glyph( face, glyphInfo[i].codepoint, FT_LOAD_NO_BITMAP );
+                FT_Load_Glyph( face, glyphInfo[i].codepoint, FT_LOAD_NO_BITMAP );
 
-            if( m_fakeBold )
-                FT_Outline_Embolden( &face->glyph->outline, 1 << 6 );
+                if( m_fakeBold )
+                    FT_Outline_Embolden( &face->glyph->outline, 1 << 6 );
 
-            // contours is a collection of all outlines in the glyph; for example the 'o' glyph
-            // generally contains 2 contours, one for the glyph outline and one for the hole
-            std::vector<CONTOUR> contours;
+                OUTLINE_DECOMPOSER decomposer( face->glyph->outline );
 
-            OUTLINE_DECOMPOSER decomposer( face->glyph->outline );
+                if( !decomposer.OutlineToSegments( &glyphData.m_Contours ) )
+                {
+                    double  hb_advance = glyphPos[i].x_advance * GLYPH_SIZE_SCALER;
+                    BOX2D   tofuBox( { scaler * 0.03, 0.0 },
+                                     { hb_advance - scaler * 0.02, scaler * 0.72 } );
 
-            if( !decomposer.OutlineToSegments( &contours ) )
-            {
-                double  hb_advance = glyphPos[i].x_advance * GLYPH_SIZE_SCALER;
-                BOX2D   tofuBox( { scaler * 0.03, 0.0 },
-                                 { hb_advance - scaler * 0.02, scaler * 0.72 } );
+                    glyphData.m_Contours.clear();
 
-                contours.clear();
+                    CONTOUR outline;
+                    outline.m_Winding = 1;
+                    outline.m_Orientation = FT_ORIENTATION_TRUETYPE;
+                    outline.m_Points.push_back( tofuBox.GetPosition() );
+                    outline.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
+                    outline.m_Points.push_back( tofuBox.GetSize() );
+                    outline.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
+                    glyphData.m_Contours.push_back( outline );
 
-                CONTOUR outline;
-                outline.m_Winding = 1;
-                outline.m_Orientation = FT_ORIENTATION_TRUETYPE;
-                outline.m_Points.push_back( tofuBox.GetPosition() );
-                outline.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
-                outline.m_Points.push_back( tofuBox.GetSize() );
-                outline.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
-                contours.push_back( outline );
-
-                CONTOUR hole;
-                tofuBox.Move( { scaler * 0.06, scaler * 0.06 } );
-                tofuBox.SetSize( { tofuBox.GetWidth() - scaler * 0.06,
-                                   tofuBox.GetHeight() - scaler * 0.06 } );
-                hole.m_Winding = 1;
-                hole.m_Orientation = FT_ORIENTATION_NONE;
-                hole.m_Points.push_back( tofuBox.GetPosition() );
-                hole.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
-                hole.m_Points.push_back( tofuBox.GetSize() );
-                hole.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
-                contours.push_back( hole );
+                    CONTOUR hole;
+                    tofuBox.Move( { scaler * 0.06, scaler * 0.06 } );
+                    tofuBox.SetSize( { tofuBox.GetWidth() - scaler * 0.06,
+                                       tofuBox.GetHeight() - scaler * 0.06 } );
+                    hole.m_Winding = 1;
+                    hole.m_Orientation = FT_ORIENTATION_NONE;
+                    hole.m_Points.push_back( tofuBox.GetPosition() );
+                    hole.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
+                    hole.m_Points.push_back( tofuBox.GetSize() );
+                    hole.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
+                    glyphData.m_Contours.push_back( hole );
+                }
             }
 
             std::unique_ptr<OUTLINE_GLYPH> glyph = std::make_unique<OUTLINE_GLYPH>();
             std::vector<SHAPE_LINE_CHAIN>  holes;
 
-            for( CONTOUR& c : contours )
+            for( CONTOUR& c : glyphData.m_Contours )
             {
                 std::vector<VECTOR2D> points = c.m_Points;
                 SHAPE_LINE_CHAIN      shape;
@@ -409,6 +448,16 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                         }
                     }
                 }
+            }
+
+            if( glyphData.m_TriangulationData.empty() )
+            {
+                glyph->CacheTriangulation( false, false );
+                glyphData.m_TriangulationData = glyph->GetTriangulationData();
+            }
+            else
+            {
+                glyph->CacheTriangulation( glyphData.m_TriangulationData );
             }
 
             aGlyphs->push_back( std::move( glyph ) );

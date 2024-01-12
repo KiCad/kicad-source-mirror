@@ -2891,29 +2891,8 @@ void OPENGL_GAL::DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& 
     }
     else if( allGlyphsAreOutline )
     {
-        // Optimized path for stroke fonts that pre-reserves glyph triangles.
+        // Optimized path for outline fonts that pre-reserves glyph triangles.
         int triangleCount = 0;
-
-        if( aGlyphs.size() > 0 )
-        {
-            thread_pool& tp = GetKiCadThreadPool();
-
-            tp.push_loop( aGlyphs.size(),
-                    [&]( const int a, const int b)
-                    {
-                        for( int ii = a; ii < b; ++ii )
-                        {
-                            auto glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( aGlyphs.at( ii ).get() );
-
-                            // Only call CacheTriangulation() if it has never been done before.
-                            // Otherwise we'll hash the triangulation to see if it has been edited,
-                            // and all our glpyh editing ops update the triangulation anyway.
-                            if( glyph->TriangulatedPolyCount() == 0 )
-                                glyph->CacheTriangulation( false );
-                        }
-                    } );
-            tp.wait_for_tasks();
-        }
 
         for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aGlyphs )
         {

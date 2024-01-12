@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2019 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -2981,7 +2981,8 @@ static SHAPE_POLY_SET partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aP
 }
 
 
-void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
+void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
+                                         std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData )
 {
     bool recalculate = !m_hash.IsValid();
     MD5_HASH hash;
@@ -3005,10 +3006,15 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
     auto triangulate =
             []( SHAPE_POLY_SET& polySet, int forOutline,
-                std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>& dest )
+                std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>& dest,
+                std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* hintData )
             {
                 bool triangulationValid = false;
                 int pass = 0;
+                int index = 0;
+
+                if( hintData && hintData->size() != (unsigned) polySet.OutlineCount() )
+                    hintData = nullptr;
 
                 while( polySet.OutlineCount() > 0 )
                 {
@@ -3021,7 +3027,8 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
                     // If the tessellation fails, we re-fracture the polygon, which will
                     // first simplify the system before fracturing and removing the holes
                     // This may result in multiple, disjoint polygons.
-                    if( !tess.TesselatePolygon( polySet.Polygon( 0 ).front() ) )
+                    if( !tess.TesselatePolygon( polySet.Polygon( 0 ).front(),
+                                                hintData ? hintData->at( index ).get() : nullptr ) )
                     {
                         ++pass;
 
@@ -3033,10 +3040,12 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
                             break;
 
                         triangulationValid = false;
+                        hintData = nullptr;
                         continue;
                     }
 
                     polySet.DeletePolygon( 0 );
+                    index++;
                     triangulationValid = true;
                 }
 
@@ -3067,7 +3076,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
             // This pushes the triangulation for all polys in partitions
             // to be referenced to the ii-th polygon
-            if( !triangulate( partitions, ii , m_triangulatedPolys ) )
+            if( !triangulate( partitions, ii , m_triangulatedPolys, aHintData ) )
             {
                 wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate partitioned polygon %d", ii );
             }
@@ -3081,7 +3090,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
         tmpSet.Fracture( PM_FAST );
 
-        if( !triangulate( tmpSet, -1, m_triangulatedPolys ) )
+        if( !triangulate( tmpSet, -1, m_triangulatedPolys, aHintData ) )
         {
             wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate polygon" );
         }
