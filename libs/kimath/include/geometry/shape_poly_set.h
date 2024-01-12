@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2019 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -517,7 +517,10 @@ public:
      * But not good for Gerbview (1e7 = 10cm), however using a partition is not useful.
      * @param aSimplify = force the algorithm to simplify the POLY_SET before triangulating
      */
-    void CacheTriangulation( bool aPartition = true, bool aSimplify = false );
+    virtual void CacheTriangulation( bool aPartition = true, bool aSimplify = false )
+    {
+        cacheTriangulation( aPartition, aSimplify, nullptr );
+    }
     bool IsTriangulationUpToDate() const;
 
     MD5_HASH GetHash() const;
@@ -1428,6 +1431,10 @@ public:
         aBuffer.Append( *this );
     }
 
+protected:
+    void cacheTriangulation( bool aPartition, bool aSimplify,
+                             std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData );
+
 private:
     enum DROP_TRIANGULATION_FLAG { SINGLETON };
 
@@ -1526,11 +1533,13 @@ private:
 
     MD5_HASH checksum() const;
 
-private:
+protected:
     std::vector<POLYGON>                               m_polys;
     std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
 
     bool     m_triangulationValid = false;
+
+private:
     MD5_HASH m_hash;
 };
 

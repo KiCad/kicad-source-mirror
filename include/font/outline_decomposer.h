@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Outline font class
  *
@@ -46,6 +46,15 @@ struct CONTOUR
     std::vector<VECTOR2D> m_Points;
     int                   m_Winding = 0;
     FT_Orientation        m_Orientation;
+};
+
+struct GLYPH_DATA
+{
+    std::vector<CONTOUR> m_Contours;
+
+    // Cache of the triangulation data.  We'll use this as a hint for triangulating the actual
+    // OUTLINE_GLYPHs.
+    std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> m_TriangulationData;
 };
 
 

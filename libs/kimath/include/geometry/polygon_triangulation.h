@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Modifications Copyright (C) 2018-2023 KiCad Developers
+ * Modifications Copyright (C) 2018-2024 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,8 @@ public:
         m_result( aResult )
     {};
 
-    bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
+    bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly,
+                           SHAPE_POLY_SET::TRIANGULATED_POLYGON* aHintData )
     {
         m_bbox = aPoly.BBox();
         m_result.Clear();
@@ -82,9 +83,17 @@ public:
 
         firstVertex->updateList();
 
-        auto retval = earcutList( firstVertex );
-        m_vertices.clear();
-        return retval;
+        if( aHintData )
+        {
+            m_result.Triangles() = aHintData->Triangles();
+            return true;
+        }
+        else
+        {
+            auto retval = earcutList( firstVertex );
+            m_vertices.clear();
+            return retval;
+        }
     }
 
 private:
