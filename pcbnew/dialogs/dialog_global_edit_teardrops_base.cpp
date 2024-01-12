@@ -139,6 +139,8 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	bSizerLeftCol11 = new wxBoxSizer( wxVERTICAL );
 
 	m_cbPreferZoneConnection = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	m_cbPreferZoneConnection->SetToolTip( _("Do not create teardrops on tracks connected to pads that are also connected to a copper zone.") );
+
 	bSizerLeftCol11->Add( m_cbPreferZoneConnection, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbTeardropsUseNextTrack = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Allow teardrops to span 2 track segments"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );

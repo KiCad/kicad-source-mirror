@@ -612,6 +612,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_cbPreferZoneConnection = new wxCheckBox( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Prefer zone connection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbPreferZoneConnection->SetValue(true);
+	m_cbPreferZoneConnection->SetToolTip( _("Do not create teardrops on tracks connected to pads that are also connected to a copper zone.") );
+
 	bSizerLeftCol11->Add( m_cbPreferZoneConnection, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbTeardropsUseNextTrack = new wxCheckBox( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Allow teardrops to span 2 track segments"), wxDefaultPosition, wxDefaultSize, 0 );
