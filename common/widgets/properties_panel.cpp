@@ -144,6 +144,12 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 
 void PROPERTIES_PANEL::OnLanguageChanged()
 {
+    if( m_grid->IsEditorFocused() )
+        m_grid->CommitChangesFromEditor();
+
+    m_grid->Clear();
+    m_displayed.clear();
+
     UpdateData();
 }
 
