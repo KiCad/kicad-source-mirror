@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <wxFormBuilder_Project>
-  <FileVersion major="1" minor="16"/>
+  <FileVersion major="1" minor="17"/>
   <object class="Project" expanded="true">
     <property name="class_decoration"></property>
     <property name="code_generation">C++</property>
