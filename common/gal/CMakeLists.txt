@@ -98,7 +98,7 @@ string( REGEX MATCH
     )
 
 set_target_properties( gal PROPERTIES
-    OUTPUT_NAME     gal
+    OUTPUT_NAME     kigal
     SOVERSION      ${KICAD_MAJOR_MINOR_PATCH_VERSION}
     )
 
