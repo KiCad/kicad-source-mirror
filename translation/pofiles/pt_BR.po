@@ -5,13 +5,13 @@
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
-# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023.
+# Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2023-12-25 13:07+0000\n"
+"PO-Revision-Date: 2024-01-14 12:30+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -534,7 +534,6 @@ msgid "Render Solid Colors"
 msgstr "Renderize cores sólidas"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "Utilize apenas a propriedade difusa da cor do arquivo do modelo 3D"
 
@@ -6458,7 +6457,7 @@ msgid "Failed to parse number from '%s'"
 msgstr "Houve uma falha ao analisar o número de '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
@@ -18910,9 +18909,8 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
-msgstr "Ampltiude"
+msgstr "Amplitude"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
@@ -26274,7 +26272,6 @@ msgid "Overvoltage category:"
 msgstr "Categoria de sobretensão:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -26290,8 +26287,8 @@ msgid ""
 msgstr ""
 "OVC I: Equipamentos sem ligação direta à rede elétrica\n"
 "\n"
-"OVC II: Equipamentos consumidores de energia a serem alimentados a partir da "
-"instalação fixa. (por exemplo: eletrodomésticos, ferramentas portáteis, "
+"OVC II: Equipamentos consumidores de energia que serão alimentados a partir "
+"da instalação fixa. (por exemplo: eletrodomésticos, ferramentas portáteis, "
 "cargas domésticas). OVCIII se aplica se houver requisitos de confiabilidade "
 "e disponibilidade\n"
 "\n"
@@ -26323,7 +26320,6 @@ msgid "Impulse voltage:"
 msgstr "Tensão de impulso:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
-#, fuzzy
 msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value without a breakdown of insulation. This impulse voltage "
@@ -31070,9 +31066,8 @@ msgid "STEP files"
 msgstr "Arquivos STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
-#, fuzzy
 msgid "Binary glTF files"
-msgstr "Arquivos binários GTLF"
+msgstr "Arquivos binários glTF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 msgid "STEP Output File"
@@ -40868,7 +40863,6 @@ msgid "Pad Type"
 msgstr "Tipo da ilha"
 
 #: pcbnew/pad.cpp:1949
-#, fuzzy
 msgid "Pad Shape"
 msgstr "Formato da ilha"
 
@@ -41530,6 +41524,10 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"A definição do footprint '%s' tem um componente de cobre associado à uma "
+"ilha em diversas camadas. As pilhas de blocos personalizadas não são "
+"compatíveis com o KiCad. Os itens de cobre foram importados como elementos "
+"gráficos."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42628,11 +42626,9 @@ msgstr ""
 "importado."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
 msgstr ""
-"Habilitar o registro de <b>depuração</b> para funções Footprint*() neste "
-"PLUGIN."
+"Ativar o registro de <b>depuração</b> para funções Footprint*() neste PCB_IO."
 
 #: pcbnew/pcb_io/pcb_io.cpp:182
 msgid "Regular expression <b>footprint name</b> filter."
@@ -42658,11 +42654,9 @@ msgstr ""
 "A senha para <b>conectar-se</b> a algum servidor especial da biblioteca."
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr ""
-"Inserir o módulo python que implemente as funções PLUGIN::Footprint*()."
+msgstr "Inserir o módulo python que implemente as funções PCB_IO::Footprint*()."
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
@@ -43345,12 +43339,11 @@ msgstr "Arrasta mesmo assim"
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s para fazer commit mesmo assim.)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "A localização viola o DRC."
+msgstr "A trilha viola o DRC."
 
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/tools/pcb_actions.cpp:2381
 msgid "Break Track"
