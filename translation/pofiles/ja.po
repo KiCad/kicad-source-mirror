@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-12 17:03+0000\n"
+"PO-Revision-Date: 2024-01-14 12:29+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -519,10 +519,8 @@ msgid "Render Solid Colors"
 msgstr "塗りつぶしで描画"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr ""
-"3D モデル ファイルからディフューズ カラー(拡散反射色)のプロパティのみを使用"
+msgstr "3D モデル ファイルからディフューズ カラー(拡散反射色)のプロパティのみを使用"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "Render CAD Colors"
@@ -6388,13 +6386,14 @@ msgid "Failed to parse number from '%s'"
 msgstr "'%s' から数値のパースできませんでした"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s' は有効なEasyEDA (JLCEDA) Pro プロジェクト ファイルではないようです。"
-"project.json が見つかりません。"
+"'%s' は有効なEasyEDA (JLCEDA) Pro "
+"プロジェクトもしくはライブラリのファイルではないようです。project."
+"jsonもdevice.jsonも見つかりません。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #, c-format
@@ -18707,7 +18706,6 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
 msgstr "振幅"
 
@@ -25985,7 +25983,6 @@ msgid "Overvoltage category:"
 msgstr "過電圧のカテゴリー:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -26001,11 +25998,12 @@ msgid ""
 msgstr ""
 "OVC I: 主電源に直接接続されていない機器\n"
 "\n"
-"OVC II: 固定設備から供給されるエネルギー消費機器。 (例: 電化製品、携帯工具、"
-"家庭用品)。 信頼性と可用性の要件がある場合、OVCIII が適用されます。\n"
+"OVC II: 固定設備から供給されるエネルギー消費機器。 (例: "
+"電化製品、携帯工具、家庭用品)。 信頼性と可用性の要件がある場合、OVC III "
+"が適用されます。\n"
 "\n"
-"OVC III : 信頼性と可用性の要件を備えた固定設置の機器。 （例：電気スイッチ、産"
-"業用機器）\n"
+"OVC III :   信頼性と可用性の要件を備えた固定設置の機器。 "
+"（例：電気スイッチ、産業用機器）\n"
 "\n"
 "OVC IV: 設置元の機器 (例: 電力メーター、一次過電流保護装置)"
 
@@ -26030,14 +26028,13 @@ msgid "Impulse voltage:"
 msgstr "インパルス電圧:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
-#, fuzzy
 msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
-"定格電圧と過電圧カテゴリを考慮して、デバイスは絶縁破壊することなくこの値に耐"
-"える必要があります。 このインパルス電圧は標準の 1.2/50μs 波です"
+"定格電圧と過電圧カテゴリを考慮して、装置は絶縁破壊することなくこの値に耐える"
+"必要があります。 このインパルス電圧は標準の 1.2/50μs 波です"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -30722,9 +30719,8 @@ msgid "STEP files"
 msgstr "STEP ファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
-#, fuzzy
 msgid "Binary glTF files"
-msgstr "バイナリGTLFファイル"
+msgstr "バイナリglLFファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 msgid "STEP Output File"
@@ -40417,7 +40413,6 @@ msgid "Pad Type"
 msgstr "パッドのタイプ"
 
 #: pcbnew/pad.cpp:1949
-#, fuzzy
 msgid "Pad Shape"
 msgstr "パッド形状"
 
@@ -42162,10 +42157,9 @@ msgstr ""
 "ンポートされます。"
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
-msgstr ""
-"このプラグインで Footprint*() 関数の<b>デバッグ</b> ログを有効にします。"
+msgstr "このプラグインで PCB_IOのFootprint*() 関数の<b>デバッグ</b> "
+"ログを有効にします。"
 
 #: pcbnew/pcb_io/pcb_io.cpp:182
 msgid "Regular expression <b>footprint name</b> filter."
@@ -42188,11 +42182,9 @@ msgid "Password for <b>login</b> to some special library server."
 msgstr "特別なライブラリサーバーへ <b>ログイン</b> するためのパスワード。"
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr ""
-"PLUGIN::Footprint*() 関数が定義されている Python モジュールを入力して下さい。"
+msgstr "PCB_IO::Footprint*() 関数が定義されている Python モジュールを入力して下さい。"
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
@@ -42868,9 +42860,8 @@ msgid "(%s to commit anyway.)"
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "ビアの場所は DRC に違反します。"
+msgstr "配線はDRCに違反します。"
 
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/tools/pcb_actions.cpp:2381
 msgid "Break Track"
