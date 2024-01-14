@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
 "PO-Revision-Date: 2024-01-15 02:12+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1966,7 +1966,7 @@ msgstr "Vorschau (alt/neu):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:207
 msgid "Reset to Default"
-msgstr "Rücksetzen auf Standardeinstellungen"
+msgstr "Rücksetzen auf Standardeinstellung"
 
 #: common/dialogs/dialog_configure_paths.cpp:193
 #: common/dialogs/dialog_configure_paths.cpp:251
@@ -25523,7 +25523,7 @@ msgstr "Elektrische Eigenschaften"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 msgid "Clearance:"
-msgstr "Freiraum:"
+msgstr "Luftstrecke:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
