@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-12 17:02+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-01-14 12:31+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -18465,7 +18465,8 @@ msgstr "Soll \"%s\" auf die letzte gespeicherte Version zurückgesetzt werden?"
 #, fuzzy
 msgid "Include power symbols in schematic to the library?"
 msgstr ""
-"Symbole im Schaltplan aktualisieren, um auf neue Bibliothek zu verweisen?"
+"Versorgungssymbole im Schaltplan aktualisieren, um auf neue Bibliothek zu "
+"verweisen?"
 
 #: eeschema/tools/sch_editor_control.cpp:401
 #, c-format
@@ -36207,6 +36208,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"Im Footprint '%s' ist auf mehreren Lagen Kupfer mit einem Pad verbunden. "
+"Benutzerdefinierte Padstacks werden von KiCad nicht unterstützt. Die "
+"Kupferelemente wurden als graphische Elemente importiert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
