@@ -339,7 +339,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_not_in_posfile",
                                             &m_Render.show_footprints_not_in_posfile, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_dnp",
-                                            &m_Render.show_footprints_dnp, true ) );
+                                            &m_Render.show_footprints_dnp, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_silkscreen_top",
                                             &m_Render.show_silkscreen_top, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_silkscreen_bottom",
