@@ -22,12 +22,14 @@
 
 #include <utility>
 
-#include "python_manager.h"
+#include <paths.h>
+#include <python_manager.h>
+
 
 class PYTHON_PROCESS : public wxProcess
 {
 public:
-    PYTHON_PROCESS( std::function<void(int, const wxString&)> aCallback ) :
+    PYTHON_PROCESS( std::function<void(int, const wxString&, const wxString&)> aCallback ) :
             wxProcess(),
             m_callback( std::move( aCallback ) )
     {}
@@ -36,7 +38,7 @@ public:
     {
         if( m_callback )
         {
-            wxString output;
+            wxString output, error;
             wxInputStream* processOut = GetInputStream();
             size_t bytesRead = 0;
 
@@ -48,26 +50,88 @@ public:
                 bytesRead += processOut->LastRead();
             }
 
-            m_callback( aStatus, output );
+            processOut = GetErrorStream();
+            bytesRead = 0;
+
+            while( processOut->CanRead() && bytesRead < MAX_OUTPUT_LEN )
+            {
+                char buffer[4096];
+                buffer[ processOut->Read( buffer, sizeof( buffer ) - 1 ).LastRead() ] = '\0';
+                error.append( buffer, sizeof( buffer ) );
+                bytesRead += processOut->LastRead();
+            }
+
+            m_callback( aStatus, output, error );
         }
     }
 
     static constexpr size_t MAX_OUTPUT_LEN = 1024L * 1024L;
 
 private:
-    std::function<void(int, const wxString&)> m_callback;
+    std::function<void(int, const wxString&, const wxString&)> m_callback;
 };
 
 
 void PYTHON_MANAGER::Execute( const wxString& aArgs,
-                              const std::function<void( int, const wxString& )>& aCallback )
+                              const std::function<void( int, const wxString&,
+                                                        const wxString& )>& aCallback,
+                              const wxExecuteEnv* aEnv )
 {
     PYTHON_PROCESS* process = new PYTHON_PROCESS( aCallback );
     process->Redirect();
 
     wxString cmd = wxString::Format( wxS( "%s %s" ), m_interpreterPath, aArgs );
-    long     pid = wxExecute( cmd, wxEXEC_ASYNC, process );
+    long     pid = wxExecute( cmd, wxEXEC_ASYNC, process, aEnv );
 
     if( pid == 0 )
-        aCallback( -1, wxEmptyString );
+        aCallback( -1, wxEmptyString, _( "Process could not be created" ) );
+}
+
+
+wxString PYTHON_MANAGER::FindPythonInterpreter()
+{
+#ifdef __WXMSW__
+    // TODO(JE) where
+#else
+    wxArrayString output;
+
+    if( 0 == wxExecute( wxS( "which -a python" ), output, wxEXEC_SYNC ) )
+    {
+        if( !output.IsEmpty() )
+            return output[0];
+    }
+#endif
+
+    return wxEmptyString;
+}
+
+
+std::optional<wxString> PYTHON_MANAGER::GetPythonEnvironment( const wxString& aNamespace )
+{
+    wxFileName path( PATHS::GetUserCachePath(), wxEmptyString );
+    path.AppendDir( wxS( "python-environments" ) );
+    path.AppendDir( aNamespace );
+
+    if( !PATHS::EnsurePathExists( path.GetPath() ) )
+        return std::nullopt;
+
+    return path.GetPath();
+}
+
+
+std::optional<wxString> PYTHON_MANAGER::GetVirtualPython( const wxString& aNamespace )
+{
+    std::optional<wxString> envPath = GetPythonEnvironment( aNamespace );
+
+    if( !envPath )
+        return std::nullopt;
+
+    wxFileName python( *envPath, wxEmptyString );
+    python.AppendDir( "bin" );
+    python.SetFullName( "python" );
+
+    if( !python.IsFileExecutable() )
+        return std::nullopt;
+
+    return python.GetFullPath();
 }

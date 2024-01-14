@@ -38,7 +38,8 @@ static const wxString s_defaultCommitMessage = wxS( "Modification from API" );
 
 API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
         API_HANDLER(),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_transactionInProgress( false )
 {
     registerHandler<RunAction, RunActionResponse>( &API_HANDLER_PCB::handleRunAction );
     registerHandler<GetOpenDocuments, GetOpenDocumentsResponse>(

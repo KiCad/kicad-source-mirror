@@ -53,6 +53,7 @@ class SETTINGS_MANAGER;
 class SCRIPTING;
 
 #ifdef KICAD_IPC_API
+class API_PLUGIN_MANAGER;
 class KICAD_API_SERVER;
 #endif
 
@@ -147,6 +148,8 @@ public:
     virtual NOTIFICATIONS_MANAGER& GetNotificationsManager() const { return *m_notifications_manager; }
 
 #ifdef KICAD_IPC_API
+    virtual API_PLUGIN_MANAGER& GetPluginManager() const { return *m_plugin_manager; }
+
     KICAD_API_SERVER& GetApiServer() { return *m_api_server; }
 #endif
 
@@ -412,6 +415,7 @@ protected:
     std::unique_ptr<wxSingleInstanceChecker> m_pgm_checker;
 
 #ifdef KICAD_IPC_API
+    std::unique_ptr<API_PLUGIN_MANAGER> m_plugin_manager;
     std::unique_ptr<KICAD_API_SERVER> m_api_server;
 #endif
 

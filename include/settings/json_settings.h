@@ -29,6 +29,7 @@
 #include <functional>
 #include <optional>
 #include <settings/json_settings_internals.h>
+#include <json_conversions.h>
 
 #include <kicommon.h>
 

@@ -43,6 +43,8 @@ public:
 
     void Reply( const std::string& aReply );
 
+    const std::string& SocketPath() const { return m_socketUrl; }
+
 private:
     void listenThread();
 

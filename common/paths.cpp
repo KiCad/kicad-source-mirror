@@ -62,17 +62,6 @@ wxString PATHS::GetUserPluginsPath()
 }
 
 
-wxString PATHS::GetUserPlugins3DPath()
-{
-    wxFileName tmp;
-
-    tmp.AssignDir( PATHS::GetUserPluginsPath() );
-    tmp.AppendDir( wxT( "3d" ) );
-
-    return tmp.GetPath();
-}
-
-
 wxString PATHS::GetUserScriptingPath()
 {
     wxFileName tmp;

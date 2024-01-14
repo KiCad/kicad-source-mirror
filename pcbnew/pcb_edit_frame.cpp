@@ -26,6 +26,7 @@
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <api/api_plugin_manager.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
 #include <confirm.h>
@@ -264,6 +265,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
+    wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+            [&]( wxCommandEvent& aEvt )
+            {
+                wxLogTrace( traceApi, "PCB frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
+                ReCreateHToolbar();
+                aEvt.Skip();
+            } );
 
 
     m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
@@ -2050,6 +2059,24 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
     // Because PROJECT_VAR_NAME can be modified by the python scripts (rewritten in UTF8),
     // regenerate it (in Unicode) for our normal environment
     wxSetEnv( PROJECT_VAR_NAME, evValue );
+}
+
+
+void PCB_EDIT_FRAME::OnApiPluginMenu( wxCommandEvent& aEvent )
+{
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+
+    if( mgr.MenuBindings().count( aEvent.GetId() ) )
+        mgr.InvokeAction( mgr.MenuBindings().at( aEvent.GetId() ) );
+}
+
+
+void PCB_EDIT_FRAME::OnApiPluginButton( wxCommandEvent& aEvent )
+{
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+
+    if( mgr.ButtonBindings().count( aEvent.GetId() ) )
+        mgr.InvokeAction( mgr.ButtonBindings().at( aEvent.GetId() ) );
 }
 
 

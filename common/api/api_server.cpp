@@ -49,6 +49,7 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
 {
     m_server = std::make_unique<KINNG_REQUEST_SERVER>();
     m_server->SetCallback( [&]( std::string* aRequest ) { onApiRequest( aRequest ); } );
+    m_socketPath = m_server->SocketPath();
 
     m_commonHandler = std::make_unique<API_HANDLER_COMMON>();
     RegisterHandler( m_commonHandler.get() );

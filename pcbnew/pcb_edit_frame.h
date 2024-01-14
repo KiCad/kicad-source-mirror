@@ -761,6 +761,11 @@ protected:
     void AddActionPluginTools();
 
     /**
+     * Append actions from API plugins to the main toolbar
+     */
+    void AddApiPluginTools();
+
+    /**
      * Execute action plugin's Run() method and updates undo buffer.
      *
      * @param aActionPlugin action plugin
@@ -780,6 +785,9 @@ protected:
      * @param aEvent sent by wx
      */
     void OnActionPluginButton( wxCommandEvent& aEvent );
+
+    void OnApiPluginMenu( wxCommandEvent& aEvent );
+    void OnApiPluginButton( wxCommandEvent& aEvent );
 
     /**
      * Update the state of the GUI after a new board is loaded or created.

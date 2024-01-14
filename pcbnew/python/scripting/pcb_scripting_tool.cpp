@@ -24,9 +24,11 @@
 #include "pcb_scripting_tool.h"
 
 #include <action_plugin.h>
+#include <api/api_plugin_manager.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <macros.h>
+#include <pgm_base.h>
 #include <python_scripting.h>
 #include <tools/pcb_actions.h>
 
@@ -105,6 +107,9 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
     {
         return -1;
     }
+
+    // TODO move this elsewhere when SWIG plugins are removed
+    Pgm().GetPluginManager().ReloadPlugins();
 
     if( !m_isFootprintEditor )
     {

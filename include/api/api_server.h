@@ -60,6 +60,10 @@ public:
 
     void SetReadyToReply( bool aReady = true ) { m_readyToReply = aReady; }
 
+    const std::string& SocketPath() const { return m_socketPath; }
+
+    const std::string& Token() const { return m_token; }
+
 private:
 
     /**
@@ -82,6 +86,8 @@ private:
     std::unique_ptr<KINNG_REQUEST_SERVER> m_server;
 
     std::set<API_HANDLER*> m_handlers;
+
+    std::string m_socketPath;
 
     std::string m_token;
 

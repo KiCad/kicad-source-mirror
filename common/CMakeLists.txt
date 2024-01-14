@@ -145,6 +145,7 @@ set( KICOMMON_SRCS
     env_vars.cpp
     exceptions.cpp
     gestfich.cpp
+    json_conversions.cpp
     kiid.cpp
     kiway.cpp
     kiway_express.cpp
@@ -177,6 +178,16 @@ set( KICOMMON_SRCS
 
     io/kicad/kicad_io_utils.cpp    # needed by richio
     )
+
+if( KICAD_IPC_API )
+    set( KICOMMON_SRCS
+        ${KICOMMON_SRCS}
+        api/api_plugin.cpp
+        api/api_plugin_manager.cpp
+
+        ../scripting/python_manager.cpp
+    )
+endif()
 
 add_library( kicommon SHARED
     ${KICOMMON_SRCS}
@@ -254,6 +265,7 @@ target_include_directories( kicommon
     PUBLIC
         .
         ${CMAKE_BINARY_DIR}
+        $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
     )

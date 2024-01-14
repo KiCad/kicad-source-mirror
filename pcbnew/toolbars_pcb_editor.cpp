@@ -27,10 +27,12 @@
 #include <memory>
 
 #include <advanced_config.h>
+#include <api/api_plugin_manager.h>
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <kiface_base.h>
+#include <kiplatform/ui.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
@@ -280,16 +282,56 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
 
-    // Access to the scripting console
-    if( SCRIPTING::IsWxAvailable() )
+    // Add SWIG and API plugins
+    bool scriptingAvailable = SCRIPTING::IsWxAvailable();
+    bool haveApiPlugins =
+            !Pgm().GetPluginManager().GetActionsForScope( PLUGIN_ACTION_SCOPE::PCB ).empty();
+
+    if( scriptingAvailable || haveApiPlugins )
     {
         m_mainToolBar->AddScaledSeparator( this );
-        m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
-        AddActionPluginTools();
+
+        if( scriptingAvailable )
+        {
+            m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
+            AddActionPluginTools();
+        }
+
+        if( haveApiPlugins )
+            AddApiPluginTools();
     }
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
+}
+
+
+void PCB_EDIT_FRAME::AddApiPluginTools()
+{
+    // TODO: Add user control over visibility and order
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+
+    mgr.ButtonBindings().clear();
+
+    std::vector<const PLUGIN_ACTION*> actions = mgr.GetActionsForScope( PLUGIN_ACTION_SCOPE::PCB );
+
+    for( auto& action : actions )
+    {
+        if( !action->show_button )
+            continue;
+
+        const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()
+                                             ? action->icon_dark
+                                             : action->icon_light;
+
+        wxAuiToolBarItem* button = m_mainToolBar->AddTool( wxID_ANY, wxEmptyString, icon,
+                                                           action->name );
+
+        Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                 wxCommandEventHandler( PCB_EDIT_FRAME::OnApiPluginButton ) );
+
+        mgr.ButtonBindings().insert( { button->GetId(), action->identifier } );
+    }
 }
 
 

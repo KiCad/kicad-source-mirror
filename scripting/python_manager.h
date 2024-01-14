@@ -35,10 +35,22 @@ public:
     {}
 
     void Execute( const wxString& aArgs,
-                  const std::function<void(int, const wxString&)>& aCallback );
+                  const std::function<void(int, const wxString&, const wxString&)>& aCallback,
+                  const wxExecuteEnv* aEnv = nullptr );
 
     wxString GetInterpreterPath() const { return m_interpreterPath; }
     void SetInterpreterPath( const wxString& aPath ) { m_interpreterPath = aPath; }
+
+    /**
+     * Searches for a Python intepreter on the user's system
+     * @return the absolute path to a Python interpreter, or an empty string if one was not found
+     */
+    static wxString FindPythonInterpreter();
+
+    static std::optional<wxString> GetPythonEnvironment( const wxString& aNamespace );
+
+    /// Returns a full path to the python binary in a venv, if it exists
+    static std::optional<wxString> GetVirtualPython( const wxString& aNamespace );
 
 private:
     wxString m_interpreterPath;

@@ -904,19 +904,6 @@ template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString
 }
 
 
-// Specializations to allow directly reading/writing wxStrings from JSON
-void to_json( nlohmann::json& aJson, const wxString& aString )
-{
-    aJson = aString.ToUTF8();
-}
-
-
-void from_json( const nlohmann::json& aJson, wxString& aString )
-{
-    aString = wxString( aJson.get<std::string>().c_str(), wxConvUTF8 );
-}
-
-
 template<typename ResultType>
 ResultType JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
                                           ResultType aDefault )

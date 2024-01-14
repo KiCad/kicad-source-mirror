@@ -23,6 +23,7 @@
 #include <nlohmann/json.hpp>
 #include <wx/string.h>
 #include <vector>
+#include <json_conversions.h>
 
 /**
  * Contains the json serialization structs for DRC and ERC reports

@@ -53,11 +53,6 @@ public:
     static wxString GetUserPluginsPath();
 
     /**
-     * Gets the user path for 3d viewer plugin
-     */
-    static wxString GetUserPlugins3DPath();
-
-    /**
      * Gets the default path we point users to create projects
      */
     static wxString GetDefaultUserProjectsPath();

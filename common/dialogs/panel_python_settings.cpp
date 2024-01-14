@@ -42,9 +42,8 @@ void PANEL_PYTHON_SETTINGS::ResetPanel()
 bool PANEL_PYTHON_SETTINGS::TransferDataToWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    COMMON_SETTINGS*  settings = mgr.GetCommonSettings();
 
-    m_pickerPythonInterpreter->SetFileName( settings->m_Python.interpreter_path );
+    m_pickerPythonInterpreter->SetFileName( mgr.GetCommonSettings()->m_Python.interpreter_path );
     validateInterpreter();
 
     return true;
@@ -54,10 +53,10 @@ bool PANEL_PYTHON_SETTINGS::TransferDataToWindow()
 bool PANEL_PYTHON_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    COMMON_SETTINGS*  settings = mgr.GetCommonSettings();
+    wxString interpreter = m_pickerPythonInterpreter->GetTextCtrlValue();
 
-    if( m_interpreterValid )
-        settings->m_Python.interpreter_path = m_pickerPythonInterpreter->GetTextCtrlValue();
+    if( m_interpreterValid || interpreter.IsEmpty() )
+        mgr.GetCommonSettings()->m_Python.interpreter_path = interpreter;
 
     return true;
 }
@@ -71,6 +70,20 @@ void PANEL_PYTHON_SETTINGS::OnPythonInterpreterChanged( wxFileDirPickerEvent& ev
 
 void PANEL_PYTHON_SETTINGS::OnBtnDetectAutomaticallyClicked( wxCommandEvent& aEvent )
 {
+#ifdef __WXMSW__
+    // TODO(JE) where
+#else
+    wxArrayString output;
+
+    if( 0 == wxExecute( wxS( "which -a python" ), output, wxEXEC_SYNC ) )
+    {
+        if( !output.IsEmpty() )
+        {
+            m_pickerPythonInterpreter->SetPath( output[0] );
+            validateInterpreter();
+        }
+    }
+#endif
 }
 
 
@@ -90,7 +103,7 @@ void PANEL_PYTHON_SETTINGS::validateInterpreter()
     PYTHON_MANAGER manager( pythonExe.GetFullPath() );
 
     manager.Execute( wxS( "--version" ),
-                     [&]( int aRetCode, const wxString& aStdOut )
+                     [&]( int aRetCode, const wxString& aStdOut, const wxString& aStdErr )
                      {
                          wxString msg;
 
