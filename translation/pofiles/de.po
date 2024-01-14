@@ -26,7 +26,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
 "PO-Revision-Date: 2024-01-14 22:54+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -455,7 +455,7 @@ msgstr "Platine nach unten bewegen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Home View"
-msgstr "Home-Ansicht"
+msgstr "Ausgangsansicht"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:151
 msgid "Home view"
@@ -4658,7 +4658,7 @@ msgstr "Netzklassen-Zuweisungen:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
-msgstr "Muster"
+msgstr "Ausdruck"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:1053 eeschema/sch_label.cpp:251
@@ -5008,7 +5008,7 @@ msgstr "Schaltplaneditor"
 
 #: common/eda_base_frame.cpp:1124
 msgid "Annotation Options"
-msgstr "Anmerkungsoptionen"
+msgstr "Annotierungsoptionen"
 
 #: common/eda_base_frame.cpp:1126
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
@@ -23819,7 +23819,7 @@ msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
-"Alle ERC Verstöße melden, gleichbedeutend zur Einbeziehung aller anderen "
+"Alle ERC-Verstöße melden, gleichbedeutend zur Einbeziehung aller anderen "
 "Schweregrade"
 
 #: kicad/cli/command_sch_erc.cpp:63
@@ -24080,8 +24080,7 @@ msgstr ""
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr ""
-"Herunterladbare Pakete aus KiCad- und Drittanbieter-Zusammenstellungen "
-"verwalten"
+"Herunterladbare Pakete aus KiCad- und Drittanbieter-Repositorys verwalten"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -41257,9 +41256,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
-"Im Footprint '%s' ist auf mehreren Lagen Kupfer mit einem Pad verbunden. "
+"Im Footprint \"%s\" ist auf mehreren Lagen Kupfer mit einem Pad verbunden. "
 "Benutzerdefinierte Padstacks werden von KiCad nicht unterstützt. Die "
-"Kupferelemente wurden als graphische Elemente importiert."
+"Kupferelemente wurden als grafische Elemente importiert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42372,10 +42371,10 @@ msgstr ""
 "importiert."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
 msgstr ""
-"Aktiviere <b>Debug</b> Ausgaben für Footprint*() Funktionen in diesem PLUGIN."
+"<b>Debug</b>-Ausgaben für Footprint*()-Funktionen in diesem PCB_IO "
+"einschalten."
 
 #: pcbnew/pcb_io/pcb_io.cpp:182
 msgid "Regular expression <b>footprint name</b> filter."
@@ -42398,11 +42397,10 @@ msgid "Password for <b>login</b> to some special library server."
 msgstr "Passwort für das <b>Login</b> zu einem bestimmten Bibliothek-Server."
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Gebe das Pythonmodul an, welches die PLUGIN::Footprint*() - Schnittstelle "
+"Geben Sie das Python-Modul an, welches die PCB_IO::Footprint*()-Funktionen "
 "implementiert."
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
@@ -43103,9 +43101,8 @@ msgid "(%s to commit anyway.)"
 msgstr "(%s um trotzdem zu committen.)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "Via-Position verstößt gegen DRC."
+msgstr "Leiterbahn verstößt gegen DRC."
 
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/tools/pcb_actions.cpp:2381
 msgid "Break Track"
