@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-14 12:31+0000\n"
+"PO-Revision-Date: 2024-01-15 02:12+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -19855,7 +19855,6 @@ msgid "Lock file already exists"
 msgstr "Το αρχείο lock υπάρχει ήδη"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
 msgstr "Αποτυχία πρόσβασης σε αρχείο *.lock"
 
