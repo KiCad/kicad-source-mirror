@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-12 17:03+0000\n"
+"PO-Revision-Date: 2024-01-14 22:11+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -543,9 +543,8 @@ msgid "Render Solid Colors"
 msgstr "단색 렌더링"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "모델 3D 모델 파일의 확산 색상 속성만 사용"
+msgstr "3D 모델 파일에서 확산 색상 속성만 사용"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "Render CAD Colors"
@@ -4300,9 +4299,8 @@ msgid "Pan left/right:"
 msgstr "이동 왼쪽/오른쪽:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "되돌리기"
+msgstr "반전"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -4338,9 +4336,8 @@ msgid "General"
 msgstr "일반"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "시작 시 패키지 업데이트 확인"
+msgstr "시작 시 KiCad 업데이트 확인"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -5135,7 +5132,6 @@ msgid "Reference Image"
 msgstr "참조 이미지"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:178
-#, fuzzy
 msgid "Generator"
 msgstr "생성"
 
@@ -6379,13 +6375,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "'%s'에서 숫자를 해석하지 못함"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s'은(는) 유효한 EasyEDA (JLCEDA) Pro 프로젝트 파일이 아닙니다. project.json"
-"을 찾을 수 없습니다."
+"'%s'는 유효한 EasyEDA(JLCEDA) Pro 프로젝트 또는 라이브러리 파일이 아닙니다. "
+"project.json 또는 device.json을 찾을 수 없음."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #, c-format
@@ -12479,9 +12475,8 @@ msgid "Input signals:"
 msgstr "입력 신호:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "DRC 수행 전 모든 영역 다시 채우기"
+msgstr "FFT를 수행하기 전에 입력 선형화하기"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 msgid "Measured node:"
@@ -12545,17 +12540,14 @@ msgid "Find:"
 msgstr "찾기:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles and Zeros"
-msgstr "극 영점"
+msgstr "영점과 극점"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles"
-msgstr "홀"
+msgstr "극점"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Zeros"
 msgstr "영점"
 
@@ -12592,9 +12584,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:679
-#, fuzzy
 msgid "SPICE Command"
-msgstr "Sim 명령"
+msgstr "SPICE 명령"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:686
 #: eeschema/dialogs/dialog_sim_command_base.cpp:725
@@ -12620,12 +12611,10 @@ msgid "Show grid"
 msgstr "그리드 보이기"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:806
-#, fuzzy
 msgid "Show legend"
-msgstr "범례 표시 (&L)"
+msgstr "범례 표시"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
-#, fuzzy
 msgid "Dotted current/phase"
 msgstr "점선 전류/위상"
 
@@ -12640,9 +12629,8 @@ msgstr "왼쪽:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:833
 #: eeschema/dialogs/dialog_sim_command_base.cpp:874
-#, fuzzy
 msgid "70"
-msgstr "0"
+msgstr "70"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:846
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:579
@@ -12660,9 +12648,8 @@ msgid "Bottom:"
 msgstr "하단:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:859
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:870
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:565
@@ -40901,6 +40888,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"풋프린트 정의 '%s'에 여러 레이어에 있는 패드에 연결된 컴포넌트 구리가 "
+"있습니다. 사용자 정의 패드 스택은 KiCad에서 지원되지 않습니다. 구리 항목은 "
+"그래픽 요소로 가져왔습니다."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42691,7 +42681,7 @@ msgstr "강제 드래그"
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s는 무조건 커밋)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
 #, fuzzy
