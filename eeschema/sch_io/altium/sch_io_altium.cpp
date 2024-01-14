@@ -631,11 +631,10 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
-        ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
+        wxString libtype = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
 
-        if( record != ALTIUM_SCH_RECORD::HEADER )
-            THROW_IO_ERROR( "Header expected" );
+        if( libtype.CmpNoCase( "Protel for Windows - Schematic Capture Binary File Version 5.0" ) )
+            THROW_IO_ERROR( _( "Expected Altium Schematic file version 5.0" ) );
     }
 
     // Prepare some local variables
@@ -649,7 +648,7 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", -1 );
         ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         // see: https://github.com/vadmium/python-altium/blob/master/format.md

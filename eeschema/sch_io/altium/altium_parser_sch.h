@@ -56,6 +56,8 @@ struct ASCH_ADDITIONAL_FILE
 
 enum class ALTIUM_SCH_RECORD
 {
+    UNKNOWN             = -1,
+
     HEADER              = 0,
     COMPONENT           = 1,
     PIN                 = 2,

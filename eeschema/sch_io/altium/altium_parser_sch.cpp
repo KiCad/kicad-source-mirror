@@ -36,7 +36,7 @@
 
 ALTIUM_SCH_RECORD ReadRecord( const std::map<wxString, wxString>& aProps )
 {
-    int recordId = ALTIUM_PARSER::ReadInt( aProps, "RECORD", 0 );
+    int recordId = ALTIUM_PARSER::ReadInt( aProps, "RECORD", -1 );
     return static_cast<ALTIUM_SCH_RECORD>( recordId );
 }
 

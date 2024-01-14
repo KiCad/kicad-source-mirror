@@ -441,8 +441,20 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties(
     while( token_end < str.size() && token_end != std::string::npos )
     {
         std::size_t token_start = str.find( '|', token_end );
-        std::size_t token_equal = str.find( '=', token_start );
-        token_end = str.find( '|', token_start + 1 );
+        std::size_t token_equal = str.find( '=', token_end );
+        std::size_t key_start;
+
+        if( token_start <= token_equal )
+        {
+            key_start = token_start + 1;
+        }
+        else
+        {
+            // Leading "|" before "RECORD=28" may be missing in older schematic versions.
+            key_start = token_end;
+        }
+
+        token_end = str.find( '|', key_start );
 
         if( token_equal >= token_end )
         {
@@ -454,7 +466,7 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties(
             token_end = str.size() + 1; // this is the correct offset
         }
 
-        std::string keyS   = str.substr( token_start + 1, token_equal - token_start - 1 );
+        std::string keyS = str.substr( key_start, token_equal - key_start );
         std::string valueS = str.substr( token_equal + 1, token_end - token_equal - 1 );
 
         // convert the strings to wxStrings, since we use them everywhere
