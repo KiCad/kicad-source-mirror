@@ -320,7 +320,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
           {
               this->ParseComponents6Data( aFile, fileHeader );
           } },
-        { true, ALTIUM_PCB_DIR::MODELS,
+        { false, ALTIUM_PCB_DIR::MODELS,
           [this, aFileMapping]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
           {
               std::vector<std::string> dir{ aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) };
