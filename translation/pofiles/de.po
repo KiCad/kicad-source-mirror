@@ -26,7 +26,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
 "PO-Revision-Date: 2024-01-14 22:11+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7559,7 +7559,7 @@ msgstr "Letzten Zoom wiederholen"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
-msgstr "Zoom-Stufe wiederherstellen auf Wert vor Rücknahme"
+msgstr "Zoom-Stufe wieder auf Wert vor Rücknahme setzen"
 
 #: common/tool/actions.cpp:509
 msgid "Cursor Up"
@@ -31055,7 +31055,7 @@ msgstr "Händler-P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr "Die die Händer-Bauteilnummer enthaltende Spalte"
+msgstr "Spalte, welche die Händer-Bauteilnummer enthält"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 msgid "Distributor:"
@@ -35475,12 +35475,11 @@ msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Unzulässiges Zeichen '%c' im Aliasnamen \"%s\"."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:811
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
-"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken im veralteten Format (*."
-"lib) aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
+"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken aus, die im aktuellen "
+"KiCad-Format gespeichert werden sollen."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:819
 #, c-format
@@ -43475,9 +43474,9 @@ msgid "Connection width resolution for:"
 msgstr "Ermittlung der Verbindungsbreite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width: %s."
-msgstr "Ermittelte Mindestverbindungsbreitenbeschränkung: %s."
+msgstr "Ermittelte Mindestverbindungsbreite: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1280
@@ -43520,9 +43519,9 @@ msgid "Hole size resolution for:"
 msgstr "Ermittlung des Lochdurchmessers für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "Ermittelte Höhenbeschränkungen: min %s; max %s."
+msgstr "Ermittelte Lochgrößenbeschränkungen: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole Clearance"
@@ -43554,9 +43553,9 @@ msgstr "Gegenstände gehören zum selben Netz. Der Freiraum beträgt 0."
 #: pcbnew/tools/board_inspection_tool.cpp:1116
 #: pcbnew/tools/board_inspection_tool.cpp:1145
 #: pcbnew/tools/board_inspection_tool.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min clearance: %s."
-msgstr "Ermittelter Freiraum: %s."
+msgstr "Ermittelter Mindestfreiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
@@ -43654,9 +43653,9 @@ msgid "Thermal-relief spoke width resolution for:"
 msgstr "Ermittlung des Abstands der thermischen Entlastung für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved spoke width: %s."
-msgstr "Ermittelte Speichenbreite der thermischen Entlastung: %s."
+msgstr "Ermittelte Speichenbreite: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 #, fuzzy
@@ -43664,9 +43663,9 @@ msgid "Thermal-relief min spoke count resolution for:"
 msgstr "Ermittlung des Abstands der thermischen Entlastung für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:774
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "Ermittelte minimale Speichenanzahl für thermische Entlastung: %d."
+msgstr "Ermittelte Mindestanzahl von Speichen: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
@@ -43752,9 +43751,9 @@ msgstr ""
 "Einschränkungen aus."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "Ermittelte Spaltbeschränkungen: min %s; opt %s; max %s."
+msgstr "Ermittelte Breitenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
 #, c-format
@@ -43771,14 +43770,14 @@ msgid "Resolved annular width constraints: min %s; opt %s; max %s."
 msgstr "Ermittelte Restring-Breitenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "Ermittelte Spaltbeschränkungen: min %s; opt %s; max %s."
+msgstr "Ermittelte Lochgrößenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1347
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "Ermittelte Spaltbeschränkungen: min %s; opt %s; max %s."
+msgstr "Ermittelte Höhenbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, c-format
