@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-12 17:02+0000\n"
+"PO-Revision-Date: 2024-01-15 02:12+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -35502,6 +35502,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"풋프린트 정의 '%s'에 여러 레이어에 있는 패드에 연결된 컴포넌트 구리가 "
+"있습니다. 사용자 정의 패드 스택은 KiCad에서 지원되지 않습니다. 구리 항목은 "
+"그래픽 요소로 가져왔습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
