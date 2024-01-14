@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-14 12:29+0000\n"
+"PO-Revision-Date: 2024-01-14 22:11+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -13521,7 +13521,6 @@ msgstr ""
 "φάκελο του έργου \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -13534,13 +13533,14 @@ msgid ""
 msgstr ""
 "Αυτό το σχηματικό χρησιμοποιεί προς το παρόν τη μέθοδο αναζήτησης λίστας "
 "βιβλιοθήκης συμβόλων έργου για τη φόρτωση των συμβόλων της βιβλιοθήκης. Το "
-"KiCad θα προσπαθήσει να συνδέσει τα υπάρχοντα σύμβολα για να χρησιμοποιήσει "
-"τον νέο κατάλογο βιβλιοθήκης συμβόλων. Η επανασύνδεση θα αλλάξει ορισμένα "
-"αρχεία έργου και τα σχηματικά ενδέχεται να μην είναι συμβατά με παλαιότερες "
-"εκδόσεις του KiCad. Όλα τα αλλαγμένα αρχεία θα δημιουργήσουν αντίγραφα "
-"ασφαλείας στο φάκελο \"remap_backup\" του φακέλου του έργου αν χρειαστεί να "
-"επαναφέρετε τις αλλαγές. Αν επιλέξετε να παραλείψετε αυτό το βήμα, θα είστε "
-"υπεύθυνοι για τη μη αυτόματη επανασύνδεση των συμβόλων."
+"KiCad θα προσπαθήσει να αντιστοιχίσει τα υπάρχοντα σύμβολα για να "
+"χρησιμοποιήσει τον νέο κατάλογο βιβλιοθήκης συμβόλων. Η επανασύνδεση θα "
+"αλλάξει ορισμένα αρχεία έργου και τα σχηματικά ενδέχεται να μην είναι "
+"συμβατά με παλαιότερες εκδόσεις του KiCad. Θα δημιουργηθούν αντίγραφα "
+"ασφαλείας από όλα τα τροποποιημένα αρχεία στο φάκελο \"remap_backup\" του "
+"φακέλου του έργου αν χρειαστεί να επαναφέρετε τις αλλαγές. Αν επιλέξετε να "
+"παραλείψετε αυτό το βήμα, θα είστε υπεύθυνοι για τη χειροκίνητη επανασύνδεση "
+"των συμβόλων."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -19089,14 +19089,13 @@ msgid "Measure Time of Min"
 msgstr "Εργαλείο Μέτρησης"
 
 #: eeschema/sim/simulator_frame_ui.cpp:159
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "Εργαλείο Μέτρησης"
+msgstr "Μέτρηση Χρόνου του Μεγ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:162
 #, fuzzy
 msgid "Measure Integral"
-msgstr "Μέτρηση απόστασης"
+msgstr "Μέτρηση Ολοκληρώματος"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
@@ -19129,9 +19128,8 @@ msgid "Format %s..."
 msgstr "Μορφή %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:398
-#, fuzzy
 msgid "Format Value..."
-msgstr "Μορφή Τιμής..."
+msgstr "Μορφοποίηση Τιμής..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:401
 msgid "Delete Measurement"
@@ -19187,7 +19185,6 @@ msgid "Error: simulation type not defined.\n"
 msgstr "Σφάλμα: δεν ορίστηκε τύπος προσομοίωσης!\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1520
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Σφάλμα: ο τύπος της προσομοίωσης δεν υποστηρίζει σχεδιογράφιση!\n"
 
@@ -20130,7 +20127,7 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Δε βρέθηκε %s ακίδα «%s»."
 
 #: eeschema/tools/backannotate.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Change field '%s' value to '%s'."
 msgstr "Αλλαγή τιμής πεδίου '%s' σε '%s'."
 
@@ -20861,9 +20858,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "Φωτισμός συρμάτων και ακροδεκτών που ανήκουν στο δίκτυο"
 
 #: eeschema/tools/ee_actions.cpp:854
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "Εμφάνιση πλοηγού Δικτύων"
+msgstr "Εμφάνιση Πλοηγού Δικτύων"
 
 #: eeschema/tools/ee_actions.cpp:855
 msgid "Toggle the net navigator panel visibility"
@@ -20886,7 +20882,6 @@ msgid "Set the exclude from bill of materials attribute"
 msgstr "Ορισμός ιδιότητας εξαίρεσης από λίστα υλικών"
 
 #: eeschema/tools/ee_actions.cpp:875
-#, fuzzy
 msgid "Include in Bill of Materials"
 msgstr "Συμπερίληψη σε Λίστα Υλικών"
 
@@ -21179,7 +21174,6 @@ msgid "Show Directive Labels"
 msgstr "Εμφάνιση Ετικετών Οδηγίας"
 
 #: eeschema/tools/ee_actions.cpp:1101
-#, fuzzy
 msgid "Toggle display of directive labels"
 msgstr "Εναλλαγή προβολής ετικετών οδηγίας"
 
@@ -21209,7 +21203,6 @@ msgstr ""
 "Εμφάνιση σημάνσεων για εξαιρεμένες παραβάσεις ελέγχου ηλεκτρικών κανόνων"
 
 #: eeschema/tools/ee_actions.cpp:1124
-#, fuzzy
 msgid "Show OP Voltages"
 msgstr "Προβολή Τάσεων Σημείου Λειτουργίας"
 
@@ -21218,7 +21211,6 @@ msgid "Show operating point voltage data from simulation"
 msgstr "Εμφάνιση τάσεων σημείου λειτουργίας από προσομοίωση"
 
 #: eeschema/tools/ee_actions.cpp:1130
-#, fuzzy
 msgid "Show OP Currents"
 msgstr "Προβολή Ρευμάτων Σημείου Λειτουργίας"
 
@@ -21452,7 +21444,6 @@ msgid "Export Current Plot as CSV..."
 msgstr "Εξαγωγή Τρέχουσας Προβολής ως CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1419
-#, fuzzy
 msgid "Show Legend"
 msgstr "Εμφάνιση Υπομνήματος"
 
@@ -22037,11 +22028,11 @@ msgid "Tune %s"
 msgstr "Ρύθμιση %s"
 
 #: eeschema/widgets/tuner_slider.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr ""
-"Το σύμβολο '%s' έχει μοντέλο προσομοίωσης τύπου '%s %s', το οποίο δεν μπορεί "
-"να συντονιστεί"
+"Το σύμβολο %s έχει μοντέλο προσομοίωσης τύπου '%s %s', μόνο παθητικά RLC "
+"μπορούν να συντονιστούν"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -22088,7 +22079,6 @@ msgid "All visible layers"
 msgstr "Όλα τα ορατά επίπεδα"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
 msgstr "Ρυθμίσεις Επιπέδων"
 
@@ -23270,7 +23260,6 @@ msgid "Lock file already exists"
 msgstr "Το αρχείο lock υπάρχει ήδη"
 
 #: include/lockfile.h:125
-#, fuzzy
 msgid "Failed to access lock file"
 msgstr "Αποτυχία πρόσβασης σε αρχείο *.lock"
 
@@ -23345,7 +23334,6 @@ msgid "Export utilities (svg)"
 msgstr "Εργαλεία εξαγωγής (svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
-#, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
 msgstr "Εξάγει το αποτύπωμα ή όλη την βιβλιοθήκη σε SVG"
 
