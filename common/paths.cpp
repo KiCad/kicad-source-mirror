@@ -398,7 +398,6 @@ void PATHS::EnsureUserPathsExist()
 {
     EnsurePathExists( GetUserCachePath() );
     EnsurePathExists( GetUserPluginsPath() );
-    EnsurePathExists( GetUserPlugins3DPath() );
     EnsurePathExists( GetUserScriptingPath() );
     EnsurePathExists( GetUserTemplatesPath() );
     EnsurePathExists( GetDefaultUserProjectsPath() );
