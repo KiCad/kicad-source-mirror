@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-14 22:11+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-01-14 22:54+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -34117,6 +34117,11 @@ msgid ""
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
 msgstr ""
+"Abgedecke (\"tented\") Vias: werden nicht auf der Lötstoppmaskenlage "
+"ausgegeben\n"
+"Nicht abgedecke (\"not tented\") Vias: werden auf der Lötstoppmaskenlage "
+"ausgegeben\n"
+"(Die Lötstoppmaske ist eine invertierte Lage)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
@@ -39727,6 +39732,7 @@ msgstr "DXF-Standardeinheiten:"
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:74
 msgid "Used when the DXF file has no unit set"
 msgstr ""
+"Wird verwendet, wenn in der DXF-Datei keine Grundeinheit festgelegt ist."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:94
 msgid "Place at:"
@@ -39741,6 +39747,8 @@ msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
+"Wenn aktiviert, wird die in diesem Dialog ausgewählte Lage verwendet.\n"
+"Wenn nicht aktiviert, wird die im Platineneditor aktive Lage verwendet."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 msgid "Group imported items"
@@ -39752,12 +39760,14 @@ msgstr "Alle importierten Elemente einer neuen Gruppe hinzufügen"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Fix discontinuities"
-msgstr ""
+msgstr "Unstetigkeiten beheben"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:174
 msgid ""
 "Trim/extend open shapes or add segments to make vertices of shapes coincide"
 msgstr ""
+"Eckpunkte offener Formen durch Zuschneiden/Erweitern oder dem Hinzufügen von "
+"Segmenten identisch machen"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -40877,6 +40887,9 @@ msgid ""
 "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
+"Diese Datei scheint nicht in einem gültigen \"PCB Binary Version 6.0\"-"
+"Format zu sein. Stellen Sie sicher, dass Sie in Altium Designer als \"PCB "
+"Binary Files (*.PcbDoc)\" speichern."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:503
 #, c-format
@@ -40919,6 +40932,8 @@ msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr ""
+"Mehr als eine Altium-Netzklasse unter dem Namen \"%s\" gefunden. Nur die "
+"erste wird importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1110
 msgid "Loading components..."
@@ -41129,7 +41144,7 @@ msgstr "Altium Designer PCB Dateien"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:47
 msgid "Altium PCB Library or Integrated Library"
-msgstr ""
+msgstr "Altium PCB-Bibliothek oder integrierte Bibliothek"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:31
 #, fuzzy
@@ -41737,7 +41752,7 @@ msgstr "Footprint \"%s\" in Projekt \"%s\" nicht gefunden"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro-Project"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:249
 #, c-format
@@ -41982,7 +41997,7 @@ msgstr "Fehler beim Löschen von '%s'"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h:88
 msgid "IPC-2581 Production File"
-msgstr ""
+msgstr "IPC-2581 Produktionsdatei"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
@@ -42353,6 +42368,8 @@ msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported."
 msgstr ""
+"Die ausgewählte Datei enthält mehrere Footprints. Nur der erste wird "
+"importiert."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
 #, fuzzy
@@ -42706,7 +42723,7 @@ msgstr "Unverbundene Elemente (%d) gefunden\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1037
 #, c-format
 msgid "Found %d schematic parity issues\n"
-msgstr ""
+msgstr "%d Probleme in Schaltplan-Parität gefunden\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1051
 #, c-format
@@ -43083,7 +43100,7 @@ msgstr "Trotzdem ziehen"
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s um trotzdem zu committen.)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
 #, fuzzy
@@ -44430,6 +44447,8 @@ msgid ""
 "Add a bitmap image to be used as a reference (image will not be included in "
 "any output)"
 msgstr ""
+"Fügen Sie eine Bitmap hinzu, das als Referenzbild verwendet werden soll (das "
+"Bild wird in keiner Ausgabe enthalten sein)"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add a wrapped text item"
@@ -44606,11 +44625,13 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr ""
+msgstr "Schalte Einrasten zwischen \"aktive Lage\" und \"alle Lagen\" um"
 
 #: pcbnew/tools/pcb_actions.cpp:388
 msgid "Toggles between snapping on all visible layers and only the active area"
 msgstr ""
+"Schaltet Einrasten zwischen \"auf alle sichtbaren Lagen\" und \"nur im "
+"aktiven Bereich\" um"
 
 #: pcbnew/tools/pcb_actions.cpp:394
 msgid "Delete Last Point"
@@ -44769,16 +44790,18 @@ msgstr "Fügt den ausgewählten Linien tangentiale Bögen hinzu"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Cut away corners between selected lines"
-msgstr ""
+msgstr "Ecken zwischen ausgewählten Linien wegschneiden"
 
 #: pcbnew/tools/pcb_actions.cpp:624
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
 msgstr ""
+"Verbinde Formen, möglicherweise durch verlängern, schneiden oder durch "
+"hinzufügen weiterer Geometrie"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid "Extend lines to meet each other"
-msgstr ""
+msgstr "Linien verlängern bis sie sich treffen"
 
 #: pcbnew/tools/pcb_actions.cpp:636
 #, fuzzy
@@ -44787,7 +44810,7 @@ msgstr "Zonen verbinden"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "Zusammenfügen ausgewählter Polygone zu einzigem Polygon"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 msgid "Subtract Polygons"
@@ -46327,11 +46350,13 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2410
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "Alle Abstimmungsmuster aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:2411
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
+"Versuche die bestehenden Abstimmungsmuster innerhalb ihrer Grenzen neu "
+"abzugleichen"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
 #, fuzzy
@@ -47466,7 +47491,7 @@ msgstr "Gerber-Dateien betrachten"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
-msgstr ""
+msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
@@ -47498,7 +47523,7 @@ msgstr "Rechner für verschiedene elektronikbezogene Berechnungen"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr ""
+msgstr "pcbnew;PCB;Schaltung;Layout;Design;Editor;Footprint;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
