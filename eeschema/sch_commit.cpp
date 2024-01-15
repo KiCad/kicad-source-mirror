@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,7 +209,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         if( schItem->IsSelected() )
             selectedModified = true;
 
-        if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
+        if( !( aCommitFlags & SKIP_CONNECTIVITY ) && schItem->IsConnectable() )
             dirtyConnectivity = true;
 
         switch( changeType )
@@ -325,7 +325,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         if( frame )
         {
             frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
-            frame->RecalculateConnections( this, NO_CLEANUP );
+
+            if( dirtyConnectivity )
+                frame->RecalculateConnections( this, NO_CLEANUP );
         }
     }
 
