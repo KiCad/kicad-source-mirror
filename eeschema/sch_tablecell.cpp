@@ -135,6 +135,41 @@ void SCH_TABLECELL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PAN
 }
 
 
+double SCH_TABLECELL::Similarity( const SCH_ITEM& aOtherItem ) const
+{
+    if( aOtherItem.Type() != Type() )
+        return 0.0;
+
+    const SCH_TABLECELL& other = static_cast<const SCH_TABLECELL&>( aOtherItem );
+
+    double similarity = 1.0;
+
+    if( m_colSpan != other.m_colSpan )
+        similarity *= 0.9;
+
+    if( m_rowSpan != other.m_rowSpan )
+        similarity *= 0.9;
+
+    similarity *= SCH_TEXTBOX::Similarity( other );
+
+    return similarity;
+}
+
+
+bool SCH_TABLECELL::operator==( const SCH_ITEM& aOtherItem ) const
+{
+    if( aOtherItem.Type() != Type() )
+        return false;
+
+    const SCH_TABLECELL& other = static_cast<const SCH_TABLECELL&>( aOtherItem );
+
+    return     m_colSpan == other.m_colSpan
+            && m_rowSpan == other.m_rowSpan
+            && SCH_TEXTBOX::operator==( other );
+}
+
+
+
 static struct SCH_TABLECELL_DESC
 {
     SCH_TABLECELL_DESC()

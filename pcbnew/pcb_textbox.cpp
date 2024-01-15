@@ -38,8 +38,8 @@
 #include <core/ignore.h>
 
 
-PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
-    PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECTANGLE ),
+PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
+    PCB_SHAPE( aParent, aType, SHAPE_T::RECTANGLE ),
     EDA_TEXT( pcbIUScale ),
     m_borderEnabled( true )
 {
@@ -485,7 +485,7 @@ EDA_ITEM* PCB_TEXTBOX::Clone() const
 
 void PCB_TEXTBOX::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_TEXTBOX_T );
+    wxASSERT( aImage->Type() == PCB_TEXTBOX_T );
 
     std::swap( *((PCB_TEXTBOX*) this), *((PCB_TEXTBOX*) aImage) );
 }

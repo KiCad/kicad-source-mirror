@@ -45,6 +45,7 @@
 #include <pcb_target.h>
 #include <pcb_track.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
 #include <pad.h>
 #include <generators_mgr.h>
 #include <zone.h>
@@ -1002,6 +1003,12 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_gr_text_box:
             item = parsePCB_TEXTBOX( m_board );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
+        case T_table:
+            item = parsePCB_TABLE( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -3333,19 +3340,40 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 
     std::unique_ptr<PCB_TEXTBOX> textbox = std::make_unique<PCB_TEXTBOX>( aParent );
 
+    parseTextBoxContent( textbox.get() );
+
+    return textbox.release();
+}
+
+
+PCB_TABLECELL* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLECELL( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_table_cell, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a table cell." ) );
+
+    std::unique_ptr<PCB_TABLECELL> cell = std::make_unique<PCB_TABLECELL>( aParent );
+
+    parseTextBoxContent( cell.get() );
+
+    return cell.release();
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
+{
     STROKE_PARAMS stroke( -1, LINE_STYLE::SOLID );
     T token = NextTok();
 
     if( token == T_locked )
     {
-        textbox->SetLocked( true );
+        aTextBox->SetLocked( true );
         token = NextTok();
     }
 
     if( !IsSymbol( token ) && (int) token != DSN_NUMBER )
         Expecting( "text value" );
 
-    textbox->SetText( FromUTF8() );
+    aTextBox->SetText( FromUTF8() );
 
     NeedLEFT();
     token = NextTok();
@@ -3354,7 +3382,7 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
     {
         int x = parseBoardUnits( "X coordinate" );
         int y = parseBoardUnits( "Y coordinate" );
-        textbox->SetStart( VECTOR2I( x, y ) );
+        aTextBox->SetStart( VECTOR2I( x, y ) );
         NeedRIGHT();
 
         NeedLEFT();
@@ -3365,17 +3393,17 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 
         x = parseBoardUnits( "X coordinate" );
         y = parseBoardUnits( "Y coordinate" );
-        textbox->SetEnd( VECTOR2I( x, y ) );
+        aTextBox->SetEnd( VECTOR2I( x, y ) );
         NeedRIGHT();
     }
     else if( token == T_pts )
     {
-        textbox->SetShape( SHAPE_T::POLY );
-        textbox->GetPolyShape().RemoveAllContours();
-        textbox->GetPolyShape().NewOutline();
+        aTextBox->SetShape( SHAPE_T::POLY );
+        aTextBox->GetPolyShape().RemoveAllContours();
+        aTextBox->GetPolyShape().NewOutline();
 
         while( (token = NextTok() ) != T_RIGHT )
-            parseOutlinePoints( textbox->GetPolyShape().Outline( 0 ) );
+            parseOutlinePoints( aTextBox->GetPolyShape().Outline( 0 ) );
     }
     else
     {
@@ -3394,7 +3422,7 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
         case T_angle:
             // Set the angle of the text only, the coordinates of the box (a polygon) are
             // already at the right position, and must not be rotated
-            textbox->EDA_TEXT::SetTextAngle( EDA_ANGLE( parseDouble( "text box angle" ), DEGREES_T ) );
+            aTextBox->EDA_TEXT::SetTextAngle( EDA_ANGLE( parseDouble( "text box angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 
@@ -3409,48 +3437,224 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
         }
 
         case T_border:
-            textbox->SetBorderEnabled( parseBool() );
+            aTextBox->SetBorderEnabled( parseBool() );
             NeedRIGHT();
             break;
 
         case T_layer:
-            textbox->SetLayer( parseBoardItemLayer() );
+            aTextBox->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+
+        case T_span:
+            if( PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( aTextBox ) )
+            {
+                cell->SetColSpan( parseInt( "column span" ) );
+                cell->SetRowSpan( parseInt( "row span" ) );
+            }
+            else
+            {
+                Expecting( "angle, width, layer, effects, render_cache, uuid or tstamp" );
+            }
+
             NeedRIGHT();
             break;
 
         case T_tstamp:
         case T_uuid:
             NextTok();
-            const_cast<KIID&>( textbox->m_Uuid ) = CurStrToKIID();
+            const_cast<KIID&>( aTextBox->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( textbox.get() ) );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( aTextBox ) );
             break;
 
         case T_render_cache:
-            parseRenderCache( static_cast<EDA_TEXT*>( textbox.get() ) );
+            parseRenderCache( static_cast<EDA_TEXT*>( aTextBox ) );
             break;
 
         default:
-            Expecting( "angle, width, layer, effects, render_cache, uuid or tstamp" );
+            if( PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( aTextBox ) )
+                Expecting( "angle, width, layer, effects, span, render_cache, uuid or tstamp" );
+            else
+                Expecting( "angle, width, layer, effects, render_cache, uuid or tstamp" );
         }
     }
 
-    textbox->SetStroke( stroke );
+    aTextBox->SetStroke( stroke );
 
     if( m_requiredVersion < 20230825 ) // compat, we move to an explicit flag
-        textbox->SetBorderEnabled( stroke.GetWidth() >= 0 );
+        aTextBox->SetBorderEnabled( stroke.GetWidth() >= 0 );
 
 
-    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
+    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aTextBox->GetParent() ) )
     {
-        textbox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-        textbox->Move( parentFP->GetPosition() );
+        aTextBox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+        aTextBox->Move( parentFP->GetPosition() );
+    }
+}
+
+
+PCB_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLE( BOARD_ITEM* aParent )
+{
+    wxCHECK_MSG( CurTok() == T_table, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a table." ) );
+
+    T             token;
+    STROKE_PARAMS borderStroke( -1, LINE_STYLE::SOLID );
+    STROKE_PARAMS separatorsStroke( -1, LINE_STYLE::SOLID );
+    std::unique_ptr<PCB_TABLE> table = std::make_unique<PCB_TABLE>( aParent, -1 );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_locked )
+        {
+            table->SetLocked( true );
+            token = NextTok();
+        }
+
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_column_count:
+            table->SetColCount( parseInt( "column count" ) );
+            NeedRIGHT();
+            break;
+
+        case T_layer:
+            table->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
+            break;
+
+        case T_column_widths:
+        {
+            int col = 0;
+
+            while( ( token = NextTok() ) != T_RIGHT )
+                table->SetColWidth( col++, parseBoardUnits() );
+
+            break;
+        }
+
+        case T_row_heights:
+        {
+            int row = 0;
+
+            while( ( token = NextTok() ) != T_RIGHT )
+                table->SetRowHeight( row++, parseBoardUnits() );
+
+            break;
+        }
+
+        case T_cells:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token != T_table_cell )
+                    Expecting( "table_cell" );
+
+                table->AddCell( parsePCB_TABLECELL( table.get() ) );
+            }
+
+            break;
+
+        case T_border:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_external:
+                    table->SetStrokeExternal( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_header:
+                    table->SetStrokeHeader( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_stroke:
+                {
+                    STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
+                    strokeParser.SyncLineReaderWith( *this );
+
+                    strokeParser.ParseStroke( borderStroke );
+                    SyncLineReaderWith( strokeParser );
+
+                    table->SetBorderStroke( borderStroke );
+                    break;
+                }
+
+                default:
+                    Expecting( "external, header or stroke" );
+                    break;
+                }
+            }
+
+            break;
+
+        case T_separators:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_rows:
+                    table->SetStrokeRows( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_cols:
+                    table->SetStrokeColumns( parseBool() );
+                    NeedRIGHT();
+                    break;
+
+                case T_stroke:
+                {
+                    STROKE_PARAMS_PARSER strokeParser( reader, pcbIUScale.IU_PER_MM );
+                    strokeParser.SyncLineReaderWith( *this );
+
+                    strokeParser.ParseStroke( separatorsStroke );
+                    SyncLineReaderWith( strokeParser );
+
+                    table->SetSeparatorsStroke( separatorsStroke );
+                    break;
+                }
+
+                default:
+                    Expecting( "rows, cols, or stroke" );
+                    break;
+                }
+            }
+
+            break;
+
+        default:
+            Expecting( "columns, layer, col_widths, row_heights, border, separators, header or "
+                       "cells" );
+        }
     }
 
-    return textbox.release();
+    return table.release();
 }
 
 
@@ -4321,6 +4525,13 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         {
             PCB_TEXTBOX* textbox = parsePCB_TEXTBOX( footprint.get() );
             footprint->Add( textbox, ADD_MODE::APPEND, true );
+            break;
+        }
+
+        case T_table:
+        {
+            PCB_TABLE* table = parsePCB_TABLE( footprint.get() );
+            footprint->Add( table, ADD_MODE::APPEND, true );
             break;
         }
 

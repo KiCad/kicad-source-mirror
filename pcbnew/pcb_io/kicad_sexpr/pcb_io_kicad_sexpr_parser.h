@@ -52,9 +52,10 @@ class PCB_DIMENSION_BASE;
 class PCB_SHAPE;
 class PCB_REFERENCE_IMAGE;
 class EDA_TEXT;
-class FP_SHAPE;
 class PCB_TEXT;
 class PCB_TRACK;
+class PCB_TABLE;
+class PCB_TABLECELL;
 class FOOTPRINT;
 class PCB_GROUP;
 class PCB_TARGET;
@@ -207,11 +208,15 @@ private:
 
     void parseTEARDROP_PARAMETERS( TEARDROP_PARAMETERS* tdParams );
 
+    void parseTextBoxContent( PCB_TEXTBOX* aTextBox );
+
     PCB_SHAPE*           parsePCB_SHAPE( BOARD_ITEM* aParent );
     PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent );
     void                 parsePCB_TEXT_effects( PCB_TEXT* aText );
     PCB_REFERENCE_IMAGE* parsePCB_REFERENCE_IMAGE( BOARD_ITEM* aParent );
     PCB_TEXTBOX*         parsePCB_TEXTBOX( BOARD_ITEM* aParent );
+    PCB_TABLECELL*       parsePCB_TABLECELL( BOARD_ITEM* aParent );
+    PCB_TABLE*           parsePCB_TABLE( BOARD_ITEM* aParent );
     PCB_DIMENSION_BASE*  parseDIMENSION( BOARD_ITEM* aParent );
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.

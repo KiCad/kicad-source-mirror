@@ -52,6 +52,7 @@ class ZONE;
 class PCB_REFERENCE_IMAGE;
 class PCB_TEXT;
 class PCB_TEXTBOX;
+class PCB_TABLE;
 class PCB_DIMENSION_BASE;
 class PCB_TARGET;
 class PCB_MARKER;
@@ -185,6 +186,7 @@ protected:
     void draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const PCB_TEXTBOX* aText, int aLayer );
+    void draw( const PCB_TABLE* aTable, int aLayer );
     void draw( const FOOTPRINT* aFootprint, int aLayer );
     void draw( const PCB_GROUP* aGroup, int aLayer );
     void draw( const ZONE* aZone, int aLayer );

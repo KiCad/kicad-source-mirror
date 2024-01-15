@@ -52,6 +52,7 @@ class PCB_TRACK;
 class ZONE;
 class PCB_TEXT;
 class PCB_TEXTBOX;
+class PCB_TABLE;
 class EDA_TEXT;
 class SHAPE_LINE_CHAIN;
 class TEARDROP_PARAMETERS;
@@ -148,9 +149,10 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20231014  // V8 file format normalization
 //#define SEXPR_BOARD_FILE_VERSION    20231212  // Reference image locking/UUIDs, footprint boolean format
 //#define SEXPR_BOARD_FILE_VERSION    20231231  // Use 'uuid' rather than 'id' for generators and groups
-//#define SEXPR_BOARD_FILE_VERSION      20240108  // Convert teardrop parameters to explicit bools
+//#define SEXPR_BOARD_FILE_VERSION    20240108  // Convert teardrop parameters to explicit bools
 //----------------- Start of 9.0 development -----------------
-#define SEXPR_BOARD_FILE_VERSION      20240201  // Use nullable properties for overrides
+//define SEXPR_BOARD_FILE_VERSION     20240201  // Use nullable properties for overrides
+#define SEXPR_BOARD_FILE_VERSION      20240202  // Tables
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -159,7 +161,7 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 #define FIRST_NORMALIZED_VERISON      20230924  ///< Earlier files did not have normalized bools
 
 #define CTL_OMIT_PAD_NETS           (1 << 1)    ///< Omit pads net names (useless in library)
-#define CTL_OMIT_UUIDS              (1 << 2)   ///< Omit component unique ids (useless in library)
+#define CTL_OMIT_UUIDS              (1 << 2)    ///< Omit component unique ids (useless in library)
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit FOOTPRINT initial comments
 #define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
 #define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation. (always saved
@@ -424,6 +426,8 @@ private:
 
     void format( const PCB_TEXT* aText, int aNestLevel = 0 ) const;
     void format( const PCB_TEXTBOX* aTextBox, int aNestLevel = 0 ) const;
+
+    void format( const PCB_TABLE* aTable, int aNestLevel = 0 ) const;
 
     void format( const PCB_GENERATOR* aGenerator, int aNestLevel = 0 ) const;
 

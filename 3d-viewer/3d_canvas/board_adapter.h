@@ -42,6 +42,8 @@
 #include <pcb_track.h>
 #include <pcb_base_frame.h>
 #include <pcb_text.h>
+#include <pcb_textbox.h>
+#include <pcb_table.h>
 #include <pcb_shape.h>
 #include <pcb_dimension.h>
 #include <zone.h>
@@ -374,6 +376,9 @@ private:
                    const BOARD_ITEM* aOwner );
 
     void addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aContainer,
+                   const BOARD_ITEM* aOwner );
+
+    void addTable( const PCB_TABLE* aTable, CONTAINER_2D_BASE* aContainer,
                    const BOARD_ITEM* aOwner );
 
     void addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* aDstContainer,

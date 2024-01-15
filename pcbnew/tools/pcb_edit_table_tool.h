@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,25 +21,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_EDIT_TABLE_TOOL_H
-#define SCH_EDIT_TABLE_TOOL_H
+#ifndef PCB_EDIT_TABLE_TOOL_H
+#define PCB_EDIT_TABLE_TOOL_H
 
-#include <tools/ee_tool_base.h>
+#include <tools/pcb_tool_base.h>
 #include <tool/edit_table_tool_base.h>
-#include <sch_table.h>
-#include <sch_tablecell.h>
-#include <sch_commit.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
+#include <board_commit.h>
 
 
-class SCH_EDIT_FRAME;
-
-
-class SCH_EDIT_TABLE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>,
-                            public EDIT_TABLE_TOOL_BASE<SCH_TABLE, SCH_TABLECELL, SCH_COMMIT>
+class PCB_EDIT_TABLE_TOOL : public PCB_TOOL_BASE,
+                            public EDIT_TABLE_TOOL_BASE<PCB_TABLE, PCB_TABLECELL, BOARD_COMMIT>
 {
 public:
-    SCH_EDIT_TABLE_TOOL();
-    ~SCH_EDIT_TABLE_TOOL() override { }
+    PCB_EDIT_TABLE_TOOL();
+    ~PCB_EDIT_TABLE_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -60,12 +57,12 @@ private:
 
 private:
     TOOL_MANAGER* getToolMgr() override { return m_toolMgr; }
-    BASE_SCREEN* getScreen() override { return m_frame->GetScreen(); }
+    BASE_SCREEN* getScreen() override { return nullptr; }
 
     const SELECTION& getTableCellSelection() override;
-    void clearSelection() override { m_toolMgr->RunAction( EE_ACTIONS::clearSelection ); };
+    void clearSelection() override;
 
-    SCH_TABLECELL* copyCell( SCH_TABLECELL* aSource ) override;
+    PCB_TABLECELL* copyCell( PCB_TABLECELL* aSource ) override;
 };
 
-#endif //SCH_EDIT_TABLE_TOOL_H
+#endif //PCB_EDIT_TABLE_TOOL_H

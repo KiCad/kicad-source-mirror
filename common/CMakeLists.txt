@@ -680,6 +680,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_target.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_reference_image.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_field.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_table.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_tablecell.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_text.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_textbox.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/project_pcb.cpp

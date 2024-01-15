@@ -4226,6 +4226,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
                 cell->SetColSpan( parseInt( "column span" ) );
                 cell->SetRowSpan( parseInt( "row span" ) );
             }
+            else
+            {
+                Expecting( "at, size, stroke, fill, effects or uuid" );
+            }
 
             NeedRIGHT();
             break;
@@ -4252,7 +4256,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
             break;
 
         default:
-            Expecting( "at, size, stroke, fill, effects or uuid" );
+            if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( aTextBox ) )
+                Expecting( "at, size, stroke, fill, effects, span or uuid" );
+            else
+                Expecting( "at, size, stroke, fill, effects or uuid" );
         }
     }
 

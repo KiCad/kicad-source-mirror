@@ -338,7 +338,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_SHAPE_T:            // a shape (normally not on copper layers)
             case PCB_REFERENCE_IMAGE_T:  // a bitmap on an associated layer
             case PCB_GENERATOR_T:        // a generator on a layer
-            case PCB_TEXTBOX_T:          // a wrapped text on a layer
+            case PCB_TEXTBOX_T:          // a line-wrapped (and optionally bordered) text item
+            case PCB_TABLE_T:            // rows and columns of tablecells
             case PCB_TRACE_T:            // a track segment (segment on a copper layer)
             case PCB_ARC_T:              // an arced track segment (segment on a copper layer)
             case PCB_VIA_T:              // a via (like track segment on a copper layer)

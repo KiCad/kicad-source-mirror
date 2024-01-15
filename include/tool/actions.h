@@ -78,6 +78,19 @@ public:
     static TOOL_ACTION centerJustify;
     static TOOL_ACTION rightJustify;
 
+    // Tables
+    static TOOL_ACTION selectRows;
+    static TOOL_ACTION selectColumns;
+    static TOOL_ACTION selectTable;
+    static TOOL_ACTION addRowAbove;
+    static TOOL_ACTION addRowBelow;
+    static TOOL_ACTION addColBefore;
+    static TOOL_ACTION addColAfter;
+    static TOOL_ACTION deleteRows;
+    static TOOL_ACTION deleteColumns;
+    static TOOL_ACTION mergeCells;
+    static TOOL_ACTION unmergeCells;
+
     // Find and Replace
     static TOOL_ACTION showSearch;
     static TOOL_ACTION find;
@@ -185,7 +198,7 @@ public:
     static TOOL_ACTION activatePointEditor;
     static TOOL_ACTION cycleArcEditMode;
     static TOOL_ACTION updatePreferences;
-    static TOOL_ACTION selectColumns;
+    static TOOL_ACTION selectLibTreeColumns;
 
     // Suite
     static TOOL_ACTION openPreferences;

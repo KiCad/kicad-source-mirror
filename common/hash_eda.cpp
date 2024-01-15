@@ -296,6 +296,10 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     }
         break;
 
+    case PCB_TABLE_T:
+        // JEY TODO: tables
+        break;
+
     default:
         wxASSERT_MSG( false, "Unhandled type in function hash_fp_item() (exporter_gencad.cpp)" );
     }

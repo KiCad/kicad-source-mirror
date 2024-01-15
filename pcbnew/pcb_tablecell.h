@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,36 +21,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_TABLECELL_H
-#define SCH_TABLECELL_H
+#ifndef PCB_TABLECELL_H
+#define PCB_TABLECELL_H
 
 
-#include <sch_textbox.h>
+#include <pcb_textbox.h>
 
 
-class SCH_TABLECELL : public SCH_TEXTBOX
+class PCB_TABLECELL : public PCB_TEXTBOX
 {
 public:
-    SCH_TABLECELL( int aLineWidth = 0, FILL_T aFillType = FILL_T::NO_FILL );
+    PCB_TABLECELL( BOARD_ITEM* parent );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && SCH_TABLECELL_T == aItem->Type();
+        return aItem && PCB_TABLECELL_T == aItem->Type();
     }
 
-    virtual wxString GetClass() const override
+    wxString GetClass() const override
     {
-        return wxT( "SCH_TABLECELL" );
+        return wxT( "PCB_TABLECELL" );
     }
 
-    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+    virtual wxString GetFriendlyName() const override
+    {
+        return _( "Table Cell" );
+    }
 
     EDA_ITEM* Clone() const override
     {
-        return new SCH_TABLECELL( *this );
+        return new PCB_TABLECELL( *this );
     }
-
-    void SwapData( SCH_ITEM* aItem ) override;
 
     int GetRow() const;
     int GetColumn() const;
@@ -64,16 +65,16 @@ public:
     int  GetRowSpan() const { return m_rowSpan; }
     void SetRowSpan( int aSpan ) { m_rowSpan = aSpan; }
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
-
-    void Plot( PLOTTER* aPlotter, bool aBackground,
-               const SCH_PLOT_SETTINGS& aPlotSettings ) const override;
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    double Similarity( const SCH_ITEM& aOther ) const override;
+    double Similarity( const BOARD_ITEM& aBoardItem ) const override;
 
-    bool operator==( const SCH_ITEM& aOther ) const override;
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override;
+
+protected:
+    virtual void swapData( BOARD_ITEM* aImage ) override;
 
 protected:
     int m_colSpan;
@@ -81,4 +82,4 @@ protected:
 };
 
 
-#endif /* SCH_TABLECELL_H */
+#endif /* PCB_TABLECELL_H */

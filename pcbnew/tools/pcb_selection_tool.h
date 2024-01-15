@@ -42,6 +42,7 @@
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
+class PCB_TABLE;
 
 namespace KIGFX
 {
@@ -206,6 +207,11 @@ public:
                                      bool aForcePromotion = false ) const;
 
     /**
+     * Promote any table cell selections to the whole table.
+     */
+    void FilterCollectorForTableCells( GENERAL_COLLECTOR& aCollector ) const;
+
+    /**
      * Drop any PCB_MARKERs from the collector.
      */
     void FilterCollectorForMarkers( GENERAL_COLLECTOR& aCollector ) const;
@@ -292,6 +298,8 @@ private:
      * @return true if the function was canceled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
+
+    bool selectTableCells( PCB_TABLE* aTable );
 
     /**
      * Handle disambiguation actions including displaying the menu.

@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "pcb_layer_box_selector.h"
 #include "widgets/bitmap_button.h"
-#include "widgets/color_swatch.h"
 #include "widgets/font_choice.h"
 #include "widgets/wx_infobar.h"
 
@@ -81,15 +81,27 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_textEntrySizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	m_textEntrySizer->SetEmptyCellSize( wxSize( 0,2 ) );
 
+	m_layerLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_layerLabel->Wrap( -1 );
+	m_textEntrySizer->Add( m_layerLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( m_tablePage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_LayerSelectionCtrl->SetMinSize( wxSize( 175,-1 ) );
+
+	m_textEntrySizer->Add( m_LayerSelectionCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_cbLocked = new wxCheckBox( m_tablePage, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textEntrySizer->Add( m_cbLocked, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM, 20 );
+
 	m_borderCheckbox = new wxCheckBox( m_tablePage, wxID_ANY, _("External border"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_borderCheckbox, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 2 );
+	m_textEntrySizer->Add( m_borderCheckbox, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM, 2 );
 
 	m_headerBorder = new wxCheckBox( m_tablePage, wxID_ANY, _("Header border"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_headerBorder, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 20 );
+	m_textEntrySizer->Add( m_headerBorder, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 20 );
 
 	m_borderWidthLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderWidthLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -101,50 +113,30 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_borderWidthUnits->Wrap( -1 );
 	bSizer7->Add( m_borderWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
-	m_borderColorLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_borderColorLabel->Wrap( -1 );
-	bSizer7->Add( m_borderColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
-
-	bSizer7->Add( 5, 0, 0, 0, 5 );
-
-	m_panelBorderColor = new wxPanel( m_tablePage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxVERTICAL );
-
-	m_borderColorSwatch = new COLOR_SWATCH( m_panelBorderColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_borderColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	m_panelBorderColor->SetSizer( bSizer2 );
-	m_panelBorderColor->Layout();
-	bSizer2->Fit( m_panelBorderColor );
-	bSizer7->Add( m_panelBorderColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_textEntrySizer->Add( bSizer7, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( bSizer7, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_borderStyleLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_borderStyleLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( m_tablePage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 200,-1 ) );
 
-	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( m_borderStyleCombo, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 
-	m_textEntrySizer->Add( 0, 20, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( 0, 15, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 	m_rowSeparators = new wxCheckBox( m_tablePage, wxID_ANY, _("Row lines"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_rowSeparators, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
+	m_textEntrySizer->Add( m_rowSeparators, wxGBPosition( 7, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 15 );
 
 	m_colSeparators = new wxCheckBox( m_tablePage, wxID_ANY, _("Column lines"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEntrySizer->Add( m_colSeparators, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 20 );
+	m_textEntrySizer->Add( m_colSeparators, wxGBPosition( 7, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 20 );
 
 	m_separatorsWidthLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_separatorsWidthLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_separatorsWidthLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_separatorsWidthLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxBoxSizer* bSizer71;
 	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
@@ -156,37 +148,17 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_separatorsWidthUnits->Wrap( -1 );
 	bSizer71->Add( m_separatorsWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
-	m_separatorsColorLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_separatorsColorLabel->Wrap( -1 );
-	bSizer71->Add( m_separatorsColorLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
-
-	bSizer71->Add( 5, 0, 0, 0, 5 );
-
-	m_panelSeparatorsColor = new wxPanel( m_tablePage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
-
-	m_separatorsColorSwatch = new COLOR_SWATCH( m_panelSeparatorsColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer21->Add( m_separatorsColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	m_panelSeparatorsColor->SetSizer( bSizer21 );
-	m_panelSeparatorsColor->Layout();
-	bSizer21->Fit( m_panelSeparatorsColor );
-	bSizer71->Add( m_panelSeparatorsColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	m_textEntrySizer->Add( bSizer71, wxGBPosition( 7, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	m_textEntrySizer->Add( bSizer71, wxGBPosition( 9, 1 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_separatorsStyleLabel = new wxStaticText( m_tablePage, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_separatorsStyleLabel->Wrap( -1 );
-	m_textEntrySizer->Add( m_separatorsStyleLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( m_separatorsStyleLabel, wxGBPosition( 10, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separatorsStyleCombo = new wxBitmapComboBox( m_tablePage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_separatorsStyleCombo->SetMinSize( wxSize( 200,-1 ) );
 
-	m_textEntrySizer->Add( m_separatorsStyleCombo, wxGBPosition( 8, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	m_textEntrySizer->Add( m_separatorsStyleCombo, wxGBPosition( 10, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	m_textEntrySizer->AddGrowableCol( 1 );
@@ -287,69 +259,58 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_fontCtrl->SetSelection( 0 );
 	gbSizer2->Add( m_fontCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
-	m_textSizeLabel = new wxStaticText( m_cellPage, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSizeLabel->Wrap( -1 );
-	gbSizer2->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	wxBoxSizer* bSizer15;
-	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_textSizeCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	bSizer15->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_textSizeUnits = new wxStaticText( m_cellPage, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSizeUnits->Wrap( -1 );
-	bSizer15->Add( m_textSizeUnits, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
-
-
-	gbSizer2->Add( bSizer15, wxGBPosition( 1, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL, 5 );
-
 
 	gbSizer2->AddGrowableCol( 1 );
 
 	bMargins->Add( gbSizer2, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 6, 5 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 5 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,8 ) );
 
-	m_textColorLabel = new wxStaticText( m_cellPage, wxID_ANY, _("Text color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textColorLabel->Wrap( -1 );
-	fgSizer1->Add( m_textColorLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_SizeXLabel = new wxStaticText( m_cellPage, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXLabel->Wrap( -1 );
+	m_SizeXLabel->SetToolTip( _("Text width") );
 
-	m_panelTextColor = new wxPanel( m_cellPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer221;
-	bSizer221 = new wxBoxSizer( wxVERTICAL );
+	gbSizer1->Add( m_SizeXLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
 
-	m_textColorSwatch = new COLOR_SWATCH( m_panelTextColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer221->Add( m_textColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_SizeXCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	gbSizer1->Add( m_SizeXCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_SizeXUnits = new wxStaticText( m_cellPage, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXUnits->Wrap( -1 );
+	gbSizer1->Add( m_SizeXUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_SizeYLabel = new wxStaticText( m_cellPage, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYLabel->Wrap( -1 );
+	m_SizeYLabel->SetToolTip( _("Text height") );
+
+	gbSizer1->Add( m_SizeYLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
+
+	m_SizeYCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	gbSizer1->Add( m_SizeYCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_SizeYUnits = new wxStaticText( m_cellPage, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYUnits->Wrap( -1 );
+	gbSizer1->Add( m_SizeYUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_ThicknessLabel = new wxStaticText( m_cellPage, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessLabel->Wrap( -1 );
+	m_ThicknessLabel->SetToolTip( _("Text thickness") );
+
+	gbSizer1->Add( m_ThicknessLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 4 );
+
+	m_ThicknessCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	gbSizer1->Add( m_ThicknessCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_ThicknessUnits = new wxStaticText( m_cellPage, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessUnits->Wrap( -1 );
+	gbSizer1->Add( m_ThicknessUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_panelTextColor->SetSizer( bSizer221 );
-	m_panelTextColor->Layout();
-	bSizer221->Fit( m_panelTextColor );
-	fgSizer1->Add( m_panelTextColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_fillColorLabel = new wxStaticText( m_cellPage, wxID_ANY, _("Background fill:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_fillColorLabel->Wrap( -1 );
-	fgSizer1->Add( m_fillColorLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_panelFillColor = new wxPanel( m_cellPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE|wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer22;
-	bSizer22 = new wxBoxSizer( wxVERTICAL );
-
-	m_fillColorSwatch = new COLOR_SWATCH( m_panelFillColor, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer22->Add( m_fillColorSwatch, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	m_panelFillColor->SetSizer( bSizer22 );
-	m_panelFillColor->Layout();
-	bSizer22->Fit( m_panelFillColor );
-	fgSizer1->Add( m_panelFillColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bMargins->Add( fgSizer1, 1, wxEXPAND|wxTOP, 5 );
+	bMargins->Add( gbSizer1, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bSizer13->Add( bMargins, 1, wxEXPAND|wxALL, 5 );
@@ -400,6 +361,9 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_rowSeparators->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_colSeparators->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_ThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onThickness ), NULL, this );
 	m_applyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnApply ), NULL, this );
 }
 
@@ -410,6 +374,9 @@ DIALOG_TABLECELL_PROPERTIES_BASE::~DIALOG_TABLECELL_PROPERTIES_BASE()
 	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_rowSeparators->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_colSeparators->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_ThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::onThickness ), NULL, this );
 	m_applyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TABLECELL_PROPERTIES_BASE::OnApply ), NULL, this );
 
 }

@@ -2165,13 +2165,14 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
         else if( table && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             VECTOR2I gridSize = grid.GetGridSize( grid.GetItemGrid( table ) );
+            int      fontSize = schematic->Settings().m_DefaultTextSize;
             VECTOR2I origin( table->GetPosition() );
             VECTOR2I requestedSize( cursorPos - origin );
 
-            int colCount = std::max( 1, requestedSize.x / ( gridSize.x * 24 ) );
-            int rowCount = std::max( 1, requestedSize.y / ( gridSize.y * 8  ) );
+            int colCount = std::max( 1, requestedSize.x / ( fontSize * 15 ) );
+            int rowCount = std::max( 1, requestedSize.y / ( fontSize * 2  ) );
 
-            VECTOR2I cellSize( std::max( gridSize.x * 4, requestedSize.x / colCount ),
+            VECTOR2I cellSize( std::max( gridSize.x * 5, requestedSize.x / colCount ),
                                std::max( gridSize.y * 2, requestedSize.y / rowCount ) );
 
             cellSize.x = KiROUND( (double) cellSize.x / gridSize.x ) * gridSize.x;

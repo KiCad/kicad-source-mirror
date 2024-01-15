@@ -301,7 +301,7 @@ public:
      * This is a pure virtual function.  Derived classes must implement this.
     */
     virtual double Similarity( const SCH_ITEM& aItem ) const = 0;
-    virtual bool operator==( const SCH_ITEM& aItem ) const = 0;
+    virtual bool operator==( const SCH_ITEM& aOtherItem ) const = 0;
 
     /**
      * Print a schematic item.

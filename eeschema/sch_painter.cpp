@@ -2418,11 +2418,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer )
 {
-    const_cast<SCH_TABLE*>( aTable )->RunOnChildren(
-            [&]( SCH_ITEM* aChild )
-            {
-                draw( static_cast<SCH_TEXTBOX*>( aChild ), aLayer );
-            } );
+    for( SCH_TABLECELL* cell : aTable->GetCells() )
+        draw( static_cast<SCH_TEXTBOX*>( cell ), aLayer );
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
         return;

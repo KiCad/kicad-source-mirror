@@ -132,6 +132,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_print_pcbnew.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
+    dialogs/dialog_tablecell_properties.cpp
+    dialogs/dialog_tablecell_properties_base.cpp
     dialogs/dialog_target_properties.cpp
     dialogs/dialog_target_properties_base.cpp
     dialogs/dialog_text_properties.cpp
@@ -361,6 +363,7 @@ set( PCBNEW_CLASS_SRCS
     tools/drc_tool.cpp
     tools/edit_tool.cpp
     tools/edit_tool_move_fct.cpp
+        tools/pcb_edit_table_tool.cpp
     tools/global_edit_tool.cpp
     tools/group_tool.cpp
     tools/footprint_editor_control.cpp

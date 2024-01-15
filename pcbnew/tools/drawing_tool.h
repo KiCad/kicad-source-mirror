@@ -157,6 +157,11 @@ public:
      */
     int PlaceText( const TOOL_EVENT& aEvent );
 
+    /*
+     * Start interactively drawing a table (rows & columns of TEXTBOXes).
+     */
+    int DrawTable( const TOOL_EVENT& aEvent );
+
     /**
      * Start interactively drawing a dimension.
      *

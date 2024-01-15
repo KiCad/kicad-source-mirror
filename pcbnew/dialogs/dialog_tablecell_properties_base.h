@@ -11,8 +11,8 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
-class COLOR_SWATCH;
 class FONT_CHOICE;
+class PCB_LAYER_BOX_SELECTOR;
 class WX_INFOBAR;
 
 #include "dialog_shim.h"
@@ -24,12 +24,12 @@ class WX_INFOBAR;
 #include <wx/string.h>
 #include <wx/stc/stc.h>
 #include <wx/sizer.h>
-#include <wx/checkbox.h>
 #include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/panel.h>
 #include <wx/bmpcbox.h>
+#include <wx/checkbox.h>
+#include <wx/textctrl.h>
 #include <wx/gbsizer.h>
+#include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -54,14 +54,14 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxNotebook* m_notebook;
 		wxPanel* m_tablePage;
 		wxGridBagSizer* m_textEntrySizer;
+		wxStaticText* m_layerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
+		wxCheckBox* m_cbLocked;
 		wxCheckBox* m_borderCheckbox;
 		wxCheckBox* m_headerBorder;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;
 		wxStaticText* m_borderWidthUnits;
-		wxStaticText* m_borderColorLabel;
-		wxPanel* m_panelBorderColor;
-		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_borderStyleLabel;
 		wxBitmapComboBox* m_borderStyleCombo;
 		wxCheckBox* m_rowSeparators;
@@ -69,9 +69,6 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_separatorsWidthLabel;
 		wxTextCtrl* m_separatorsWidthCtrl;
 		wxStaticText* m_separatorsWidthUnits;
-		wxStaticText* m_separatorsColorLabel;
-		wxPanel* m_panelSeparatorsColor;
-		COLOR_SWATCH* m_separatorsColorSwatch;
 		wxStaticText* m_separatorsStyleLabel;
 		wxBitmapComboBox* m_separatorsStyleCombo;
 		wxPanel* m_cellPage;
@@ -89,15 +86,15 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_separator4;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
-		wxStaticText* m_textSizeLabel;
-		wxTextCtrl* m_textSizeCtrl;
-		wxStaticText* m_textSizeUnits;
-		wxStaticText* m_textColorLabel;
-		wxPanel* m_panelTextColor;
-		COLOR_SWATCH* m_textColorSwatch;
-		wxStaticText* m_fillColorLabel;
-		wxPanel* m_panelFillColor;
-		COLOR_SWATCH* m_fillColorSwatch;
+		wxStaticText* m_SizeXLabel;
+		wxTextCtrl* m_SizeXCtrl;
+		wxStaticText* m_SizeXUnits;
+		wxStaticText* m_SizeYLabel;
+		wxTextCtrl* m_SizeYCtrl;
+		wxStaticText* m_SizeYUnits;
+		wxStaticText* m_ThicknessLabel;
+		wxTextCtrl* m_ThicknessCtrl;
+		wxStaticText* m_ThicknessUnits;
 		wxButton* m_applyButton;
 		wxStaticText* m_hotkeyHint;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -107,6 +104,8 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnApply( wxCommandEvent& event ) { event.Skip(); }
 
 

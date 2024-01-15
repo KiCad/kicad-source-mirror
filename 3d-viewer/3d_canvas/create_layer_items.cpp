@@ -40,6 +40,7 @@
 #include <pad.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
 #include <pcb_shape.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -622,6 +623,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 
+            case PCB_TABLE_T:
+                addTable( static_cast<PCB_TABLE*>( item ), layerContainer, item );
+                break;
+
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
@@ -685,6 +690,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
+
+                case PCB_TABLE_T:
+                    // JEY TODO: tables
+                    break;
 
                 default:
                     wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
@@ -847,6 +856,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                     break;
 
+                case PCB_TABLE_T:
+                    // JEY TODO: tables
+                    break;
+
                 case PCB_DIM_ALIGNED_T:
                 case PCB_DIM_CENTER_T:
                 case PCB_DIM_RADIAL_T:
@@ -941,6 +954,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
+
+                case PCB_TABLE_T:
+                    // JEY TODO: tables
+                    break;
 
                 default:
                     break;

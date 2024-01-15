@@ -1427,11 +1427,13 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         }
         else if( sch_item->Type() == SCH_FIELD_T )
         {
+            // Hide field
             commit.Modify( item, m_frame->GetScreen() );
             static_cast<SCH_FIELD*>( sch_item )->SetVisible( false );
         }
         else if( sch_item->Type() == SCH_TABLECELL_T )
         {
+            // Clear contents of table cell
             commit.Modify( item, m_frame->GetScreen() );
             static_cast<SCH_TABLECELL*>( sch_item )->SetText( wxEmptyString );
         }

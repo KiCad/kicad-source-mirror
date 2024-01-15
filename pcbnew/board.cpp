@@ -47,6 +47,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
 #include <pcb_dimension.h>
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
@@ -916,6 +917,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
     case PCB_TARGET_T:
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_drawings.push_back( aBoardItem );
@@ -1019,6 +1021,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
     case PCB_TARGET_T:
         alg::delete_matching( m_drawings, aBoardItem );
         break;
@@ -1170,6 +1173,15 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
 
     for( BOARD_ITEM* drawing : Drawings() )
     {
+        if( drawing->Type() == PCB_TABLE_T )
+        {
+            for( PCB_TABLECELL* cell : static_cast<PCB_TABLE*>( drawing )->GetCells() )
+            {
+                if( cell->m_Uuid == aID )
+                    return drawing;
+            }
+        }
+
         if( drawing->m_Uuid == aID )
             return drawing;
     }
@@ -1505,6 +1517,8 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_FIELD_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
+        case PCB_TABLE_T:
+        case PCB_TABLECELL_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
@@ -2524,6 +2538,13 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 
         return textbox->PCB_SHAPE::Compare( other ) && textbox->EDA_TEXT::Compare( other );
     }
+    else if( aFirst->Type() == PCB_TABLE_T )
+    {
+        const PCB_TABLE* table = static_cast<const PCB_TABLE*>( aFirst );
+        const PCB_TABLE* other = static_cast<const PCB_TABLE*>( aSecond );
+
+        return PCB_TABLE::Compare( table, other );
+    }
 
     return aFirst->m_Uuid < aSecond->m_Uuid;
 }
@@ -2594,11 +2615,19 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         {
             const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
 
-            // plot border
+            // border
             textbox->PCB_SHAPE::TransformShapeToPolygon( aOutlines, aLayer, 0, maxError,
                                                          ERROR_INSIDE );
-            // plot text
+            // text
             textbox->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
+            break;
+        }
+
+        case PCB_TABLE_T:
+        {
+            const PCB_TABLE* table = static_cast<const PCB_TABLE*>( item );
+
+            table->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
             break;
         }
 

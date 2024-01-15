@@ -2015,8 +2015,8 @@ static struct EDA_SHAPE_DESC
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
 
         void ( EDA_SHAPE::*lineStyleSetter )( LINE_STYLE ) = &EDA_SHAPE::SetLineStyle;
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>(
-                    _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>( _HKI( "Line Style" ),
+                    lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),
                     &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ) )

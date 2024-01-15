@@ -68,6 +68,7 @@
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_point_editor.h>
 #include <tools/edit_tool.h>
+#include <tools/pcb_edit_table_tool.h>
 #include <tools/group_tool.h>
 #include <tools/generator_tool.h>
 #include <tools/drc_tool.h>
@@ -650,6 +651,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new PCB_EDIT_TABLE_TOOL );
     m_toolManager->RegisterTool( new GLOBAL_EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
@@ -968,6 +970,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeReferenceImage );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeText );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawTextBox );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawTable );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawAlignedDimension );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawOrthogonalDimension );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCenterDimension );

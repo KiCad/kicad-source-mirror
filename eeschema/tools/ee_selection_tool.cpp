@@ -280,9 +280,9 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::clearHighlight,     haveHighlight && EE_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                            haveHighlight && EE_CONDITIONS::Idle, 1 );
 
-    menu.AddItem( EE_ACTIONS::selectColumns,      tableCellSelection && EE_CONDITIONS::Idle, 2 );
-    menu.AddItem( EE_ACTIONS::selectRows,         tableCellSelection && EE_CONDITIONS::Idle, 2 );
-    menu.AddItem( EE_ACTIONS::selectTable,        tableCellSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( ACTIONS::selectColumns,         tableCellSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( ACTIONS::selectRows,            tableCellSelection && EE_CONDITIONS::Idle, 2 );
+    menu.AddItem( ACTIONS::selectTable,           tableCellSelection && EE_CONDITIONS::Idle, 2 );
 
     menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::drawWire,           schEditCondition && EE_CONDITIONS::Empty, 100 );
@@ -2545,9 +2545,9 @@ void EE_SELECTION_TOOL::setTransitions()
     Go( &EE_SELECTION_TOOL::Main,                EE_ACTIONS::selectionActivate.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectNode,          EE_ACTIONS::selectNode.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectConnection,    EE_ACTIONS::selectConnection.MakeEvent() );
-    Go( &EE_SELECTION_TOOL::SelectColumns,       EE_ACTIONS::selectColumns.MakeEvent() );
-    Go( &EE_SELECTION_TOOL::SelectRows,          EE_ACTIONS::selectRows.MakeEvent() );
-    Go( &EE_SELECTION_TOOL::SelectTable,         EE_ACTIONS::selectTable.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectColumns,       ACTIONS::selectColumns.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectRows,          ACTIONS::selectRows.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectTable,         ACTIONS::selectTable.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::ClearSelection,      EE_ACTIONS::clearSelection.MakeEvent() );
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gr_text.h>
-#include <ee_actions.h>
-#include <sch_edit_frame.h>
 #include <widgets/bitmap_button.h>
-#include <widgets/color_swatch.h>
 #include <widgets/font_choice.h>
-#include <settings/color_settings.h>
-#include <sch_table.h>
-#include <sch_commit.h>
+#include <confirm.h>
+#include <board_commit.h>
+#include <board_design_settings.h>
+#include <board.h>
+#include <footprint.h>
+#include <pcb_textbox.h>
+#include <pcb_tablecell.h>
+#include <pcb_table.h>
+#include <project.h>
+#include <pcb_edit_frame.h>
+#include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
-#include <dialog_tablecell_properties.h>
-
+#include <tools/pcb_actions.h>
+#include <scintilla_tricks.h>
+#include "dialog_tablecell_properties.h"
 
 class TABLECELL_SCINTILLA_TRICKS : public SCINTILLA_TRICKS
 {
@@ -58,18 +63,20 @@ private:
 };
 
 
-DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame,
-                                                          SCH_TABLECELL* aCell ) :
+DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame,
+                                                          PCB_TABLECELL* aCell ) :
         DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ),
         m_frame( aFrame ),
         m_table( nullptr ),
         m_cell( aCell ),
         m_borderWidth( aFrame, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
         m_separatorsWidth( aFrame, m_separatorsWidthLabel, m_separatorsWidthCtrl, m_separatorsWidthUnits ),
-        m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
+        m_textHeight( aFrame, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
+        m_textWidth( aFrame, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
+        m_textThickness( aFrame, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
         m_scintillaTricks( nullptr )
 {
-    m_table = static_cast<SCH_TABLE*>( m_cell->GetParent() );
+    m_table = static_cast<PCB_TABLE*>( m_cell->GetParent() );
 
 #ifdef _WIN32
     // Without this setting, on Windows, some esoteric unicode chars create display issue
@@ -98,6 +105,21 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
 
     SetInitialFocus( m_textCtrl );
 
+    if( m_table->GetParentFootprint() )
+    {
+        // Do not allow locking items in the footprint editor
+        m_cbLocked->Show( false );
+    }
+
+    // Configure the layers list selector.  Note that footprints are built outside the current
+    // board and so we may need to show all layers if the text is on an unactivated layer.
+    if( !m_frame->GetBoard()->IsLayerEnabled( m_table->GetLayer() ) )
+        m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
+
+    m_LayerSelectionCtrl->SetLayersHotkeys( false );
+    m_LayerSelectionCtrl->SetBoardFrame( m_frame );
+    m_LayerSelectionCtrl->Resync();
+
     for( const auto& [lineStyle, lineStyleDesc] : lineTypeNames )
     {
         m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
@@ -106,9 +128,6 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
     m_separatorsStyleCombo->Append( DEFAULT_STYLE );
-
-    if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
-        m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 
     m_separator1->SetIsSeparator();
 
@@ -168,13 +187,14 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    m_LayerSelectionCtrl->SetLayerSelection( m_table->GetLayer() );
+    m_cbLocked->SetValue( m_table->IsLocked() );
+
     m_borderCheckbox->SetValue( m_table->StrokeExternal() );
     m_headerBorder->SetValue( m_table->StrokeHeader() );
 
     if( m_table->GetBorderStroke().GetWidth() >= 0 )
         m_borderWidth.SetValue( m_table->GetBorderStroke().GetWidth() );
-
-    m_borderColorSwatch->SetSwatchColor( m_table->GetBorderStroke().GetColor(), false );
 
     int style = static_cast<int>( m_table->GetBorderStroke().GetLineStyle() );
 
@@ -186,8 +206,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         wxFAIL_MSG( "Line type not found in the type lookup map" );
 
     m_borderWidth.Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-    m_borderColorLabel->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-    m_borderColorSwatch->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
     m_borderStyleLabel->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
     m_borderStyleCombo->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
 
@@ -200,8 +218,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     if( m_table->GetSeparatorsStroke().GetWidth() >= 0 )
         m_separatorsWidth.SetValue( m_table->GetSeparatorsStroke().GetWidth() );
 
-    m_separatorsColorSwatch->SetSwatchColor( m_table->GetSeparatorsStroke().GetColor(), false );
-
     style = static_cast<int>( m_table->GetSeparatorsStroke().GetLineStyle() );
 
     if( style == -1 )
@@ -212,14 +228,14 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         wxFAIL_MSG( "Line type not found in the type lookup map" );
 
     m_separatorsWidth.Enable( rows || cols );
-    m_separatorsColorLabel->Enable( rows || cols );
-    m_separatorsColorSwatch->Enable( rows || cols );
     m_separatorsStyleLabel->Enable( rows || cols );
     m_separatorsStyleCombo->Enable( rows || cols );
 
     m_textCtrl->SetValue( m_cell->GetText() );
     m_fontCtrl->SetFontSelection( m_cell->GetFont() );
-    m_textSize.SetValue( m_cell->GetTextWidth() );
+    m_textWidth.SetValue( m_cell->GetTextWidth() );
+    m_textHeight.SetValue( m_cell->GetTextHeight() );
+    m_textThickness.SetValue( m_cell->GetTextThickness() );
 
     m_bold->Check( m_cell->IsBold() );
     m_italic->Check( m_cell->IsItalic() );
@@ -237,13 +253,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
     case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
     }
-
-    m_textColorSwatch->SetSwatchColor( m_cell->GetTextColor(), false );
-
-    if( m_cell->IsFilled() )
-        m_fillColorSwatch->SetSwatchColor( m_cell->GetFillColor(), false );
-    else
-        m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
 
     return true;
 }
@@ -271,14 +280,16 @@ void DIALOG_TABLECELL_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
 
 void DIALOG_TABLECELL_PROPERTIES::onBorderChecked( wxCommandEvent& aEvent )
 {
+    BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
+    PCB_LAYER_ID           currentLayer = ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() );
+    int                    defaultLineThickness = bds.GetLineThickness( currentLayer );
+
     bool border = m_borderCheckbox->GetValue();
 
     if( border && m_borderWidth.GetValue() < 0 )
-        m_borderWidth.SetValue( m_frame->eeconfig()->m_Drawing.default_line_thickness );
+        m_borderWidth.SetValue( defaultLineThickness );
 
     m_borderWidth.Enable( border );
-    m_borderColorLabel->Enable( border );
-    m_borderColorSwatch->Enable( border );
     m_borderStyleLabel->Enable( border );
     m_borderStyleCombo->Enable( border );
 
@@ -286,11 +297,9 @@ void DIALOG_TABLECELL_PROPERTIES::onBorderChecked( wxCommandEvent& aEvent )
     bool col = m_colSeparators->GetValue();
 
     if( ( row || col ) && m_separatorsWidth.GetValue() < 0 )
-        m_separatorsWidth.SetValue( m_frame->eeconfig()->m_Drawing.default_line_thickness );
+        m_separatorsWidth.SetValue( defaultLineThickness );
 
     m_separatorsWidth.Enable( row || col );
-    m_separatorsColorLabel->Enable( row || col );
-    m_separatorsColorSwatch->Enable( row || col );
     m_separatorsStyleLabel->Enable( row || col );
     m_separatorsStyleCombo->Enable( row || col );
 }
@@ -325,8 +334,8 @@ void DIALOG_TABLECELL_PROPERTIES::OnApply( wxCommandEvent& aEvent )
 
             m_cell = m_table->GetCells()[ii];
 
-            m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
-            m_frame->GetToolManager()->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, m_cell );
+            m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+            m_frame->GetToolManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, m_cell );
             break;
         }
     }
@@ -341,11 +350,20 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    SCH_COMMIT commit( m_frame );
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( m_table );
 
-    /* save table in undo list if not already in edit */
-    if( m_table->GetEditFlags() == 0 )
-        commit.Modify( m_table, m_frame->GetScreen() );
+    // If no other command in progress, prepare undo command
+    // (for a command in progress, will be made later, at the completion of command)
+    bool pushCommit = ( m_table->GetEditFlags() == 0 );
+
+    // Set IN_EDIT flag to force undo/redo/abort proper operation and avoid new calls to
+    // SaveCopyInUndoList for the same text if is moved, and then rotated, edited, etc....
+    if( !pushCommit )
+        m_table->SetFlags( IN_EDIT );
+
+    m_table->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_table->SetLocked( m_cbLocked->GetValue() );
 
     m_table->SetStrokeExternal( m_borderCheckbox->GetValue() );
     m_table->SetStrokeHeader( m_headerBorder->GetValue() );
@@ -364,8 +382,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
             stroke.SetLineStyle( LINE_STYLE::DEFAULT );
         else
             stroke.SetLineStyle( it->first );
-
-        stroke.SetColor( m_borderColorSwatch->GetSwatchColor() );
 
         m_table->SetBorderStroke( stroke );
     }
@@ -387,8 +403,6 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
             stroke.SetLineStyle( LINE_STYLE::DEFAULT );
         else
             stroke.SetLineStyle( it->first );
-
-        stroke.SetColor( m_separatorsColorSwatch->GetSwatchColor() );
 
         m_table->SetSeparatorsStroke( stroke );
     }
@@ -413,10 +427,9 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
                                                        m_italic->IsChecked() ) );
     }
 
-    if( m_cell->GetTextWidth() != m_textSize.GetValue() )
-        m_cell->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
-
-    m_cell->SetTextColor( m_textColorSwatch->GetSwatchColor() );
+    m_cell->SetTextWidth( m_textWidth.GetIntValue() );
+    m_cell->SetTextHeight( m_textHeight.GetIntValue() );
+    m_cell->SetTextThickness( m_textThickness.GetIntValue() );
 
     if( m_bold->IsChecked() != m_cell->IsBold() )
     {
@@ -446,20 +459,19 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
     else
         m_cell->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
-    COLOR4D fillColor = m_fillColorSwatch->GetSwatchColor();
-
-    if( fillColor == COLOR4D::UNSPECIFIED )
-    {
-        m_cell->SetFillMode( FILL_T::NO_FILL );
-    }
-    else
-    {
-        m_cell->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-        m_cell->SetFillColor( fillColor );
-    }
-
     if( !commit.Empty() )
         commit.Push( _( "Edit Table Cell" ), SKIP_CONNECTIVITY );
 
     return true;
 }
+
+
+void PCB_BASE_EDIT_FRAME::ShowTableCellPropertiesDialog( PCB_TABLECELL* aTableCell )
+{
+    DIALOG_TABLECELL_PROPERTIES dlg( this, aTableCell );
+
+    // QuasiModal required for Scintilla auto-complete
+    dlg.ShowQuasiModal();
+}
+
+

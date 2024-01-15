@@ -298,6 +298,83 @@ TOOL_ACTION ACTIONS::rightJustify( TOOL_ACTION_ARGS()
         .Tooltip( _( "Right-justify fields and text items" ) )
         .Icon( BITMAPS::text_align_right ) );
 
+TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.SelectColumns" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Select Column(s)" ) )
+        .Tooltip( _( "Select complete column(s) containing the current selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::selectRows( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.Rows" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Select Row(s)" ) )
+        .Tooltip( _( "Select complete row(s) containing the current selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::selectTable( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.SelectTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Select Table" ) )
+        .Tooltip( _( "Select parent table of selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::addRowAbove( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.addRowAbove" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Row Above" ) )
+        .Tooltip( _( "Insert a new table row above the selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::addRowBelow( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.addRowBelow" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Row Below" ) )
+        .Tooltip( _( "Insert a new table row below the selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::addColBefore( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.addColBefore" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Column Before" ) )
+        .Tooltip( _( "Insert a new table column before the selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::addColAfter( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.addColAfter" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Column After" ) )
+        .Tooltip( _( "Insert a new table column after the selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::deleteRows( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.deleteRows" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Delete Row(s)" ) )
+        .Tooltip( _( "Delete rows containing the currently selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::deleteColumns( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.deleteColumns" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Delete Column(s)" ) )
+        .Tooltip( _( "Delete columns containing the currently selected cell(s)" ) )
+        .Icon( BITMAPS::spreadsheet ) );    // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::mergeCells( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.mergeCells" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Merge Cells" ) )
+        .Tooltip( _( "Turn selected table cells into a single cell" ) )
+        .Icon( BITMAPS::spreadsheet ) );   // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::unmergeCells( TOOL_ACTION_ARGS()
+        .Name( "common.TableEditor.unmergeCell" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Unmerge Cells" ) )
+        .Tooltip( _( "Turn merged table cells back into separate cells." ) )
+        .Icon( BITMAPS::spreadsheet ) );   // JEY TODO: need icon
+
 TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
         .Name( "common.Control.activatePointEditor" )
         .Scope( AS_GLOBAL ) );
@@ -765,7 +842,7 @@ TOOL_ACTION ACTIONS::updatePreferences( TOOL_ACTION_ARGS()
         .Name( "common.Control.updatePreferences" )
         .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
+TOOL_ACTION ACTIONS::selectLibTreeColumns( TOOL_ACTION_ARGS()
         .Name( "common.Control.selectColumns" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Select Columns..." ) ) );

@@ -36,6 +36,7 @@
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_tablecell.h>
 #include <pcb_generator.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
@@ -1733,6 +1734,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForTableCells( aCollector );
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
@@ -1758,6 +1760,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                     sTool->FilterCollectorForFreePads( aCollector );
+                    sTool->FilterCollectorForTableCells( aCollector );
                 },
                 true /* prompt user regarding locked items */ );
     }
@@ -1997,6 +2000,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             static_cast<PCB_TEXTBOX*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
 
+        case PCB_TABLE_T:
+            // JEY TODO: tables
+            break;
+
         case PCB_PAD_T:
             if( mirrorLeftRight )
                 mirrorPadX( *static_cast<PAD*>( item ), mirrorPoint );
@@ -2129,6 +2136,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector );
+                sTool->FilterCollectorForTableCells( aCollector );
             },
             !m_dragging /* prompt user regarding locked items */ );
 
@@ -2215,6 +2223,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_TEXT_T:
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
+        case PCB_TABLE_T:
         case PCB_REFERENCE_IMAGE_T:
         case PCB_DIMENSION_T:
         case PCB_DIM_ALIGNED_T:
@@ -2223,6 +2232,12 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
             commit.Remove( board_item );
+            break;
+
+        case PCB_TABLECELL_T:
+            // Clear contents of table cell
+            commit.Modify( board_item );
+            static_cast<PCB_TABLECELL*>( board_item )->SetText( wxEmptyString );
             break;
 
         case PCB_GROUP_T:
@@ -2415,6 +2430,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForTableCells( aCollector );
             },
             true /* prompt user regarding locked items */ );
 
@@ -2509,6 +2525,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
+                    sTool->FilterCollectorForTableCells( aCollector );
                 } );
 
     if( selection.Empty() )
@@ -2597,6 +2614,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
                 new_items.push_back( dupe_item );
                 commit.Add( dupe_item );
+                break;
+
+            case PCB_TABLE_T:
+                // JEY TODO: tables
                 break;
 
             case PCB_GENERATOR_T:

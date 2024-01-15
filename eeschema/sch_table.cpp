@@ -66,10 +66,7 @@ SCH_TABLE::SCH_TABLE( const SCH_TABLE& aTable ) :
     m_rowHeights = aTable.m_rowHeights;
 
     for( SCH_TABLECELL* src : aTable.m_cells )
-        m_cells.push_back( new SCH_TABLECELL( *src ) );
-
-    for( SCH_TABLECELL* dest : m_cells )
-        dest->SetParent( this );
+        AddCell( new SCH_TABLECELL( *src ) );
 }
 
 
@@ -139,6 +136,8 @@ VECTOR2I SCH_TABLE::GetEnd() const
 
 void SCH_TABLE::Normalize()
 {
+    // JEY TODO: pukes on rotated tables...
+
     int y = GetPosition().y;
 
     for( int row = 0; row < GetRowCount(); ++row )
@@ -151,20 +150,29 @@ void SCH_TABLE::Normalize()
             int colWidth = m_colWidths[ col ];
 
             SCH_TABLECELL* cell = GetCell( row, col );
-            cell->SetPosition( VECTOR2I( x, y ) );
-            cell->SetEnd( cell->GetStart() + VECTOR2I( colWidth, rowHeight ) );
+            VECTOR2I       pos( x, y );
+
+            if( cell->GetPosition() != pos )
+            {
+                cell->SetPosition( pos );
+                cell->ClearRenderCache();
+            }
+
+            VECTOR2I end = cell->GetStart() + VECTOR2I( colWidth, rowHeight );
 
             if( cell->GetColSpan() > 1 || cell->GetRowSpan() > 1 )
             {
-                VECTOR2I extraSize;
-
                 for( int ii = col + 1; ii < col + cell->GetColSpan(); ++ii )
-                    extraSize.x += m_colWidths[ii];
+                    end.x += m_colWidths[ii];
 
                 for( int ii = row + 1; ii < row + cell->GetRowSpan(); ++ii )
-                    extraSize.y += m_rowHeights[ii];
+                    end.y += m_rowHeights[ii];
+            }
 
-                cell->SetEnd( cell->GetEnd() + extraSize );
+            if( cell->GetEnd() != end )
+            {
+                cell->SetEnd( end );
+                cell->ClearRenderCache();
             }
 
             x += colWidth;
@@ -198,6 +206,8 @@ void SCH_TABLE::Rotate( const VECTOR2I& aCenter )
 {
     for( SCH_TABLECELL* cell : m_cells )
         cell->Rotate( aCenter );
+
+    Normalize();
 }
 
 
@@ -599,36 +609,48 @@ static struct SCH_TABLE_DESC
                     &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
+        const wxString tableProps = _( "Table Properties" );
+
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "External Border" ),
-                    &SCH_TABLE::SetStrokeExternal, &SCH_TABLE::StrokeExternal ) );
+                    &SCH_TABLE::SetStrokeExternal, &SCH_TABLE::StrokeExternal ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Header Border" ),
-                    &SCH_TABLE::SetStrokeHeader, &SCH_TABLE::StrokeHeader ) );
+                    &SCH_TABLE::SetStrokeHeader, &SCH_TABLE::StrokeHeader ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Border Width" ),
                     &SCH_TABLE::SetBorderWidth, &SCH_TABLE::GetBorderWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>( _HKI( "Border Style" ),
-                    &SCH_TABLE::SetBorderStyle, &SCH_TABLE::GetBorderStyle ) );
+                    &SCH_TABLE::SetBorderStyle, &SCH_TABLE::GetBorderStyle ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Border Color" ),
-                    &SCH_TABLE::SetBorderColor, &SCH_TABLE::GetBorderColor ) );
+                    &SCH_TABLE::SetBorderColor, &SCH_TABLE::GetBorderColor ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Row Separators" ),
-                    &SCH_TABLE::SetStrokeRows, &SCH_TABLE::StrokeRows ) );
+                    &SCH_TABLE::SetStrokeRows, &SCH_TABLE::StrokeRows ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, bool>( _HKI( "Cell Separators" ),
-                    &SCH_TABLE::SetStrokeColumns, &SCH_TABLE::StrokeColumns ) );
+                    &SCH_TABLE::SetStrokeColumns, &SCH_TABLE::StrokeColumns ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Separators Width" ),
                     &SCH_TABLE::SetSeparatorsWidth, &SCH_TABLE::GetSeparatorsWidth,
-                    PROPERTY_DISPLAY::PT_SIZE ) );
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_TABLE, LINE_STYLE>( _HKI( "Separators Style" ),
-                    &SCH_TABLE::SetSeparatorsStyle, &SCH_TABLE::GetSeparatorsStyle ) );
+                    &SCH_TABLE::SetSeparatorsStyle, &SCH_TABLE::GetSeparatorsStyle ),
+                    tableProps );
 
         propMgr.AddProperty( new PROPERTY<SCH_TABLE, COLOR4D>( _HKI( "Separators Color" ),
-                    &SCH_TABLE::SetSeparatorsColor, &SCH_TABLE::GetSeparatorsColor ) );
+                    &SCH_TABLE::SetSeparatorsColor, &SCH_TABLE::GetSeparatorsColor ),
+                    tableProps );
     }
 } _SCH_TABLE_DESC;

@@ -46,6 +46,8 @@ using namespace std::placeholders;
 #include <pcb_generator.h>
 #include <pcb_dimension.h>
 #include <pcb_textbox.h>
+#include <pcb_tablecell.h>
+#include <pcb_table.h>
 #include <pad.h>
 #include <zone.h>
 #include <footprint.h>
@@ -71,6 +73,12 @@ enum RECT_POINTS
 enum RECT_LINES
 {
     RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
+};
+
+
+enum TABLECELL_POINTS
+{
+    COL_WIDTH, ROW_HEIGHT
 };
 
 
@@ -280,6 +288,14 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             break;
         }
 
+        break;
+    }
+
+    case PCB_TABLECELL_T:
+    {
+        PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( aItem );
+        points->AddPoint( cell->GetEnd() - VECTOR2I( 0, cell->GetRectangleHeight() / 2 ) );
+        points->AddPoint( cell->GetEnd() - VECTOR2I( cell->GetRectangleWidth() / 2, 0 ) );
         break;
     }
 
@@ -557,9 +573,16 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, &commit,
                                                      static_cast<PCB_GENERATOR*>( item ) );
                 }
+                else if( item->Type() == PCB_TABLECELL_T )
+                {
+                    PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item );
+                    PCB_TABLE*     table = static_cast<PCB_TABLE*>( cell->GetParent() );
+
+                    commit.Modify( table );
+                }
                 else
                 {
-                    commit.StageItems( selection, CHT_MODIFY );
+                    commit.Modify( item );
                 }
 
                 getViewControls()->ForceCursorPosition( false );
@@ -672,9 +695,13 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genPushEdit, &commit,
                                                  static_cast<PCB_GENERATOR*>( item ) );
             }
+            else if( item->Type() == PCB_TABLECELL_T )
+            {
+                commit.Push( _( "Resize Table Cells" ) );
+            }
             else
             {
-                commit.Push( _( "Drag Corner" ) );
+                commit.Push( _( "Move Point" ) );
             }
 
             inDrag = false;
@@ -1403,6 +1430,40 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         break;
     }
 
+    case PCB_TABLECELL_T:
+    {
+        PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item );
+        PCB_TABLE*     table = static_cast<PCB_TABLE*>( cell->GetParent() );
+
+        if( isModified( m_editPoints->Point( COL_WIDTH ) ) )
+        {
+            cell->SetEnd( VECTOR2I( m_editPoints->Point( 0 ).GetX(), cell->GetEndY() ) );
+
+            int colWidth = cell->GetRectangleWidth();
+
+            for( int ii = 0; ii < cell->GetColSpan() - 1; ++ii )
+                colWidth -= table->GetColWidth( cell->GetColumn() + ii );
+
+            table->SetColWidth( cell->GetColumn() + cell->GetColSpan() - 1, colWidth );
+            table->Normalize();
+        }
+        else if( isModified( m_editPoints->Point( ROW_HEIGHT ) ) )
+        {
+            cell->SetEnd( VECTOR2I( cell->GetEndX(), m_editPoints->Point( 1 ).GetY() ) );
+
+            int rowHeight = cell->GetRectangleHeight();
+
+            for( int ii = 0; ii < cell->GetRowSpan() - 1; ++ii )
+                rowHeight -= table->GetRowHeight( cell->GetRow() + ii );
+
+            table->SetRowHeight( cell->GetRow() + cell->GetRowSpan() - 1, rowHeight );
+            table->Normalize();
+        }
+
+        getView()->Update( table );
+        break;
+    }
+
     case PCB_PAD_T:
     {
         PAD* pad = static_cast<PAD*>( item );
@@ -1930,6 +1991,17 @@ void PCB_POINT_EDITOR::updatePoints()
             break;
         }
 
+        break;
+    }
+
+    case PCB_TABLECELL_T:
+    {
+        PCB_TABLECELL* cell = static_cast<PCB_TABLECELL*>( item );
+
+        m_editPoints->Point( 0 ).SetPosition( cell->GetEndX(),
+                                              cell->GetEndY() - cell->GetRectangleHeight() / 2 );
+        m_editPoints->Point( 1 ).SetPosition( cell->GetEndX() - cell->GetRectangleWidth() / 2,
+                                              cell->GetEndY() );
         break;
     }
 

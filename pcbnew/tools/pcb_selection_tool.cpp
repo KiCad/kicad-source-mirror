@@ -45,6 +45,8 @@ using namespace std::placeholders;
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
 #include <pcb_marker.h>
 #include <pcb_generator.h>
 #include <zone.h>
@@ -399,7 +401,16 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_frame->FocusOnItem( nullptr );
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
-            if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
+            GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
+            GENERAL_COLLECTOR        collector;
+
+            collector.Collect( board(), { PCB_TABLECELL_T }, evt->DragOrigin(), guide );
+
+            if( collector.GetCount() )
+            {
+                selectTableCells( static_cast<PCB_TABLE*>( collector[0]->GetParent() ) );
+            }
+            else if( hasModifier() || dragAction == MOUSE_DRAG_ACTION::SELECT )
             {
                 selectMultiple();
             }
@@ -886,6 +897,112 @@ const TOOL_ACTION* allowedActions[] = { &ACTIONS::panUp,          &ACTIONS::panD
                                         &ACTIONS::zoomInCenter,   &ACTIONS::zoomOutCenter,
                                         &ACTIONS::zoomCenter,     &ACTIONS::zoomFitScreen,
                                         &ACTIONS::zoomFitObjects, nullptr };
+
+
+bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
+{
+    bool cancelled = false;     // Was the tool canceled while it was running?
+    m_multiple = true;          // Multiple selection mode is active
+
+    for( PCB_TABLECELL* cell : aTable->GetCells() )
+    {
+        if( cell->IsSelected() )
+            cell->SetFlags( CANDIDATE );
+        else
+            cell->ClearFlags( CANDIDATE );
+    }
+
+    auto wasSelected =
+            []( EDA_ITEM* aItem )
+            {
+                return ( aItem->GetFlags() & CANDIDATE ) > 0;
+            };
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            cancelled = true;
+            break;
+        }
+        else if( evt->IsDrag( BUT_LEFT ) )
+        {
+            getViewControls()->SetAutoPan( true );
+
+            BOX2I selectionRect( evt->DragOrigin(), evt->Position() - evt->DragOrigin() );
+            selectionRect.Normalize();
+
+            for( PCB_TABLECELL* cell : aTable->GetCells() )
+            {
+                bool doSelect = false;
+
+                if( cell->HitTest( selectionRect, false ) )
+                {
+                    if( m_subtractive )
+                        doSelect = false;
+                    else if( m_exclusive_or )
+                        doSelect = !wasSelected( cell );
+                    else
+                        doSelect = true;
+                }
+                else if( wasSelected( cell ) )
+                {
+                    doSelect = m_additive || m_subtractive || m_exclusive_or;
+                }
+
+                if( doSelect && !cell->IsSelected() )
+                    select( cell );
+                else if( !doSelect && cell->IsSelected() )
+                    unselect( cell );
+            }
+        }
+        else if( evt->IsMouseUp( BUT_LEFT ) )
+        {
+            m_selection.SetIsHover( false );
+
+            bool anyAdded = false;
+            bool anySubtracted = false;
+
+            for( PCB_TABLECELL* cell : aTable->GetCells() )
+            {
+                if( cell->IsSelected() && !wasSelected( cell ) )
+                    anyAdded = true;
+                else if( wasSelected( cell ) && !cell->IsSelected() )
+                    anySubtracted = true;
+            }
+
+            // Inform other potentially interested tools
+            if( anyAdded )
+                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+            if( anySubtracted )
+                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+            break;  // Stop waiting for events
+        }
+        else
+        {
+            // Allow some actions for navigation
+            for( int i = 0; allowedActions[i]; ++i )
+            {
+                if( evt->IsAction( allowedActions[i] ) )
+                {
+                    evt->SetPassEvent();
+                    break;
+                }
+            }
+        }
+    }
+
+    getViewControls()->SetAutoPan( false );
+
+    m_multiple = false;         // Multiple selection mode is inactive
+
+    if( !cancelled )
+        m_selection.ClearReferencePoint();
+
+    return cancelled;
+}
 
 
 bool PCB_SELECTION_TOOL::selectMultiple()
@@ -2322,6 +2439,8 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
+    case PCB_TABLECELL_T:
         return aFilterOptions.includePcbTexts;
 
     default:
@@ -2486,6 +2605,8 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
+    case PCB_TABLECELL_T:
         if( !m_filter.text )
             return false;
 
@@ -2800,6 +2921,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
+    case PCB_TABLECELL_T:
         if( m_isFootprintEditor )
         {
             if( !view()->IsLayerVisible( aItem->GetLayer() ) )
@@ -3042,12 +3165,27 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     }
 
     case PCB_TEXTBOX_T:
+    case PCB_TABLECELL_T:
     {
         PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
 
         // Add a bit of slop to text-shapes
         if( textbox->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance ) )
             distance = std::clamp( distance - ( aMaxDistance / 2 ), 0, distance );
+
+        break;
+    }
+
+    case PCB_TABLE_T:
+    {
+        PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
+
+        for( PCB_TABLECELL* cell : table->GetCells() )
+        {
+            // Add a bit of slop to text-shapes
+            if( cell->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance ) )
+                distance = std::clamp( distance - ( aMaxDistance / 2 ), 0, distance );
+        }
 
         break;
     }
@@ -3286,7 +3424,9 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 {
     static const LSET silkLayers( 2, B_SilkS, F_SilkS );
     static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
-    static std::vector<KICAD_T> singleLayerSilkTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T,
+    static std::vector<KICAD_T> singleLayerSilkTypes = { PCB_FIELD_T,
+                                                         PCB_TEXT_T, PCB_TEXTBOX_T,
+                                                         PCB_TABLE_T, PCB_TABLECELL_T,
                                                          PCB_SHAPE_T };
 
     if( ADVANCED_CFG::GetCfg().m_PcbSelectionVisibilityRatio != 1.0 )
@@ -3537,6 +3677,29 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
         if( !aCollector.HasItem( item ) )
             aCollector.Append( item );
     }
+}
+
+
+void PCB_SELECTION_TOOL::FilterCollectorForTableCells( GENERAL_COLLECTOR& aCollector ) const
+{
+    std::set<BOARD_ITEM*> to_add;
+
+    // Iterate from the back so we don't have to worry about removals.
+    for( int i = (int) aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        BOARD_ITEM* item = aCollector[i];
+
+        if( item->Type() == PCB_TABLECELL_T )
+        {
+            if( !aCollector.HasItem( item->GetParent() ) )
+                to_add.insert( item->GetParent() );
+
+            aCollector.Remove( item );
+        }
+    }
+
+    for( BOARD_ITEM* item : to_add )
+        aCollector.Append( item );
 }
 
 

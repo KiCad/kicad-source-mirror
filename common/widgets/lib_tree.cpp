@@ -931,7 +931,7 @@ void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
 
     ACTION_MENU menu( true, nullptr );
 
-    menu.Add( ACTIONS::selectColumns );
+    menu.Add( ACTIONS::selectLibTreeColumns );
 
     if( GetPopupMenuSelectionFromUser( menu ) != wxID_NONE )
     {

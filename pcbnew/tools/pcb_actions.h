@@ -200,6 +200,7 @@ public:
     static TOOL_ACTION placeReferenceImage;
     static TOOL_ACTION placeText;
     static TOOL_ACTION drawTextBox;
+    static TOOL_ACTION drawTable;
     static TOOL_ACTION spacingIncrease;
     static TOOL_ACTION spacingDecrease;
     static TOOL_ACTION amplIncrease;

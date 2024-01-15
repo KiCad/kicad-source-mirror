@@ -180,8 +180,16 @@ TOOL_ACTION PCB_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.textbox" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Text Box" ) )
-        .Tooltip( _( "Add a wrapped text item" ) )
+        .Tooltip( _( "Add a line-wrapped text item" ) )
         .Icon( BITMAPS::add_textbox )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::drawTable( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.drawTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Table" ) )
+        .Tooltip( _( "Draw table" ) )
+        .Icon( BITMAPS::spreadsheet )   // JEY TODO
         .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION PCB_ACTIONS::spacingIncrease( TOOL_ACTION_ARGS()

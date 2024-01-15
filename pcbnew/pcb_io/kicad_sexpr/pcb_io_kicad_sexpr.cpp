@@ -43,6 +43,8 @@
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_tablecell.h>
+#include <pcb_table.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <pcbnew_settings.h>
@@ -404,6 +406,10 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 
     case PCB_TEXTBOX_T:
         format( static_cast<const PCB_TEXTBOX*>( aItem ), aNestLevel );
+        break;
+
+    case PCB_TABLE_T:
+        format( static_cast<const PCB_TABLE*>( aItem ), aNestLevel );
         break;
 
     case PCB_GROUP_T:
@@ -1448,7 +1454,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
     switch( aPad->GetShape() )
     {
     case PAD_SHAPE::CIRCLE:          shape = "circle";       break;
-    case PAD_SHAPE::RECTANGLE:            shape = "rect";         break;
+    case PAD_SHAPE::RECTANGLE:       shape = "rect";         break;
     case PAD_SHAPE::OVAL:            shape = "oval";         break;
     case PAD_SHAPE::TRAPEZOID:       shape = "trapezoid";    break;
     case PAD_SHAPE::CHAMFERED_RECT:
@@ -1887,7 +1893,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) c
     FOOTPRINT*  parentFP = aTextBox->GetParentFootprint();
 
     m_out->Print( aNestLevel, "(%s %s\n",
-                  parentFP ? "fp_text_box" : "gr_text_box",
+                  aTextBox->Type() == PCB_TABLECELL_T ? "table_cell"
+                                                      : parentFP ? "fp_text_box"
+                                                                 : "gr_text_box",
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
 
     if( aTextBox->IsLocked() )
@@ -1911,6 +1919,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) c
         UNIMPLEMENTED_FOR( aTextBox->SHAPE_T_asString() );
     }
 
+    if( const PCB_TABLECELL* cell = dynamic_cast<const PCB_TABLECELL*>( aTextBox ) )
+        m_out->Print( 0, " (span %d %d)", cell->GetColSpan(), cell->GetRowSpan() );
+
     EDA_ANGLE angle = aTextBox->GetTextAngle();
 
     if( parentFP )
@@ -1930,14 +1941,77 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) c
     // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
-    KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "border", aTextBox->IsBorderEnabled() );
+    if( aTextBox->Type() != PCB_TABLECELL_T )
+    {
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel + 1, "border", aTextBox->IsBorderEnabled() );
 
-    aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
+        aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
+    }
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox, aNestLevel + 1 );
 
     m_out->Print( aNestLevel, ")\n" );
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const PCB_TABLE* aTable, int aNestLevel ) const
+{
+    wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( aNestLevel, "(table (column_count %d)\n",
+                  aTable->GetColCount() );
+
+    if( aTable->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, aNestLevel, "locked", aTable->IsLocked() );
+
+    formatLayer( aTable->GetLayer() );
+
+    m_out->Print( aNestLevel + 1, "(border (external %s) (header %s)",
+                  aTable->StrokeExternal() ? "yes" : "no",
+                  aTable->StrokeHeader() ? "yes" : "no" );
+
+    if( aTable->StrokeExternal() || aTable->StrokeHeader() )
+    {
+        m_out->Print( 0, " " );
+        aTable->GetBorderStroke().Format( m_out, pcbIUScale, 0 );
+    }
+
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel + 1, "(separators (rows %s) (cols %s)",
+                  aTable->StrokeRows() ? "yes" : "no",
+                  aTable->StrokeColumns() ? "yes" : "no" );
+
+    if( aTable->StrokeRows() || aTable->StrokeColumns() )
+    {
+        m_out->Print( 0, " " );
+        aTable->GetSeparatorsStroke().Format( m_out, pcbIUScale, 0 );
+    }
+
+    m_out->Print( 0, ")\n" );               // Close `separators` token.
+
+    m_out->Print( aNestLevel + 1, "(column_widths" );
+
+    for( int col = 0; col < aTable->GetColCount(); ++col )
+        m_out->Print( 0, " %s", formatInternalUnits( aTable->GetColWidth( col ) ).c_str() );
+
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel + 1, "(row_heights" );
+
+    for( int row = 0; row < aTable->GetRowCount(); ++row )
+        m_out->Print( 0, " %s", formatInternalUnits( aTable->GetRowHeight( row ) ).c_str() );
+
+    m_out->Print( 0, ")\n" );
+
+    m_out->Print( aNestLevel + 1, "(cells\n" );
+
+    for( PCB_TABLECELL* cell : aTable->GetCells() )
+        format( static_cast<PCB_TEXTBOX*>( cell ), aNestLevel + 2 );
+
+    m_out->Print( aNestLevel + 1, ")\n" );  // Close `cells` token.
+    m_out->Print( aNestLevel, ")\n" );      // Close `table` token.
 }
 
 

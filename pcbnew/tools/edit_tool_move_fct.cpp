@@ -299,6 +299,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForFreePads( aCollector );
+                sTool->FilterCollectorForTableCells( aCollector );
             },
             true /* prompt user regarding locked items */ );
 
