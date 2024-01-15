@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-14 22:11+0000\n"
+"PO-Revision-Date: 2024-01-16 04:06+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -68,7 +68,7 @@ msgstr "레이어 생성"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:878
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "불러온 풋프린트가 없습니다."
+msgstr "불러온 풋프린트가 없음."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:895
 msgid ""
@@ -8021,7 +8021,7 @@ msgstr "풋프린트 라이브러리 불러오는 중"
 
 #: common/widgets/footprint_select_widget.cpp:148
 msgid "No default footprint"
-msgstr "기본 풋프린트 존재하지 않음"
+msgstr "기본 풋프린트 없음"
 
 #: common/widgets/gal_options_panel_base.cpp:19
 msgid "Rendering Engine"
@@ -8536,7 +8536,7 @@ msgstr "CadStar 네트리스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:449
 msgid "Symbol footprint association files"
-msgstr "심볼 풋프린트 관련성 파일"
+msgstr "심볼 풋프린트 연결 파일"
 
 #: common/wildcards_and_files_ext.cpp:455
 msgid "Zip file"
@@ -8600,7 +8600,7 @@ msgstr "파일 불러오기 오류"
 #: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu 풋프린트/심볼이 발견되었습니다."
+msgstr "%lu 풋프린트/심볼 관련 내용이 발견됨."
 
 #: cvpcb/auto_associate.cpp:263
 #, c-format
@@ -8659,15 +8659,15 @@ msgstr "필터링된 풋프린트"
 #: cvpcb/cvpcb_mainframe.cpp:151
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:331
 msgid "Apply, Save Schematic && Continue"
-msgstr "변경 사항 저장"
+msgstr "적용, 저장 && 계속"
 
 #: cvpcb/cvpcb_mainframe.cpp:210
 msgid "Symbol to footprint changes are unsaved"
-msgstr "풋프린트 심볼의 변경점이 저장되지 않았습니다"
+msgstr "심볼에서 풋프린트 변경 사항이 저장되지 않음"
 
 #: cvpcb/cvpcb_mainframe.cpp:398
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "풋프린트 심볼 링크가 변경되었습니다. 저장하시겠습니까?"
+msgstr "풋프린트 심볼 링크가 변경되었습니다. 저장할까요?"
 
 #: cvpcb/cvpcb_mainframe.cpp:626 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, c-format
@@ -8752,7 +8752,7 @@ msgstr "KiCad에서 선택한 텍스트 편집기가 없습니다.  하나를 �
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:210
 msgid "Footprint Association File"
-msgstr "풋프린트 관련성 파일"
+msgstr "풋프린트 연결 파일"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:249
 #, c-format
@@ -8800,10 +8800,10 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"회로도 네트리스트에서의 풋프린트 할당과 심볼 풋프린트 관련성 파일 (.cmp) 이 "
+"회로도 네트리스트와 심볼 풋프린트 연결 파일(.cmp)의 풋프린트 할당이 "
 "충돌합니다.\n"
 "\n"
-"할당 항목을 선택하세요."
+"할당을 선택하세요."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
@@ -8928,11 +8928,11 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save to Schematic"
-msgstr "회로도로 저장"
+msgstr "회로도에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
+msgstr "회로도 심볼 풋프린트 필드에 풋프린트 연결 저장하기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
 msgid "Save to Schematic and File"
@@ -8950,7 +8950,7 @@ msgstr "할당되지 않은 다음 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
-msgstr "풋프린트 할당이 되지 않은 다음 심볼을 선택"
+msgstr "풋프린트 할당 없이 다음 심볼 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Select previous unassigned symbol"
@@ -8958,7 +8958,7 @@ msgstr "할당되지 않은 이전 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
-msgstr "풋프린트 할당이 되지 않은 이전 심볼을 선택"
+msgstr "풋프린트 할당 없이 이전 심볼 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
 msgid "Assign footprint"
@@ -8982,11 +8982,11 @@ msgstr "관련성 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Delete selected footprint associations"
-msgstr "선택한 풋프린트 관련성 삭제"
+msgstr "선택한 풋프린트 연결 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:148 cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Delete all footprint associations"
-msgstr "모든 풋프린트 관련성 삭제"
+msgstr "모든 풋프린트 연결 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:157
 msgid "Use symbol footprint filters"
@@ -12215,7 +12215,7 @@ msgstr "'%s'회로도 파일을 저장하는 중 오류 발생."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:583
 #, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "'%s'회로도를 저장하지 못했습니다"
+msgstr "회로도 '%s'를 저장하지 못함"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:669
 msgid "A sheet must have a name."
@@ -12914,7 +12914,7 @@ msgstr " (%d개 항목 불러옴)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
-msgstr "반복되는 복사본 배치"
+msgstr "복사본 반복 배치"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:75
 msgid "Keep the symbol selected for subsequent clicks."
@@ -13030,8 +13030,7 @@ msgstr "데이터가 저장되지 않음"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1230
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
-"변경 사항이 저장되지 않습니다. 저장되지 않은 데이터를 내보내시겠습니까?"
+msgstr "변경 사항이 저장되지 않음. 미저장한 데이터를 내보낼까요?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1251
 #, fuzzy
@@ -13105,9 +13104,8 @@ msgid "Entire project"
 msgstr "프로젝트 압축 풀기"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
-#, fuzzy
 msgid "Recursive"
-msgstr "반복 레벨"
+msgstr "반복"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
 msgid "Cross-probe action:"
@@ -13128,7 +13126,6 @@ msgid "Edit"
 msgstr "편집"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimeter:"
 msgstr "필드 구분자:"
 
@@ -13138,7 +13135,6 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimeter:"
 msgstr "문자열 구분자:"
 
@@ -13147,12 +13143,10 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "Reference delimiter:"
 msgstr "참조 구분자:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Range delimiter:"
 msgstr "범위 구분자:"
 
@@ -13174,7 +13168,6 @@ msgid "Keep line breaks"
 msgstr "줄 바꿈 유지"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Format presets:"
 msgstr "형식 사전 설정:"
 
@@ -13330,9 +13323,8 @@ msgid "Base Pin Name"
 msgstr "기본 핀 이름"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
-#, fuzzy
 msgid "Pin Functions"
-msgstr "접합부"
+msgstr "핀 기능"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
@@ -13355,7 +13347,6 @@ msgid ""
 msgstr "프로젝트 폴더 '%s'에 대한 권한이 부족하므로 리매핑이 불가능합니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -13366,13 +13357,13 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"이 회로도는 현재 라이브러리 심볼을 불러오기 위해서 프로젝트 심볼 라이브러리 "
-"목록에서 참조하는 방식을 사용합니다. KiCad는 새로운 심볼 라이브러리 테이블을 "
-"사용할 수 있도록 기존의 심볼을 매핑하려고 시도합니다.  리매핑은 KiCad의 옛날 "
-"버전과 호환되지 않는 일부 프로젝트 파일과 회로도의 내용을 수정할 것입니다.  "
-"수정된 파일의 원본은 \"remap_backup\" 폴더에 백업되며, 변경점을 되돌리고 싶으"
-"면 이를 사용하세요.  이 단계를 건너뛰신다면, 사용자가 직접 수동으로 심볼을 매"
-"핑하여야 합니다."
+"이 회로도는 현재 라이브러리 심볼을 로드하기 위해 프로젝트 심볼 라이브러리 "
+"목록 조회 방법을 사용합니다.  KiCad는 새 심볼 라이브러리 테이블을 사용하기 "
+"위해 기존 심볼을 매핑하려고 시도합니다.  매핑을 다시 수행하면 일부 프로젝트 "
+"파일이 변경되고 회로도가 이전 버전의 KiCad와 호환되지 않을 수 있습니다.  "
+"변경된 모든 파일은 변경 사항을 되돌릴 필요가 있는 경우 프로젝트 폴더의 "
+"\"rescue-backup\" 폴더에 백업됩니다.  이 단계를 건너뛰는 경우 심볼을 "
+"수동으로 다시 매핑해야 합니다."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -13489,7 +13480,6 @@ msgstr ""
 "십시오."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:537
-#, fuzzy
 msgid "Edit Text"
 msgstr "텍스트 편집"
 
@@ -13539,7 +13529,8 @@ msgstr "풋프린트 할당"
 msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
-msgstr "PCB 내 다른 풋프린트로 대체된 심볼의 풋프린트 관련성을 업데이트합니다."
+msgstr "PCB에서 풋프린트가 다른 풋프린트로 대체된 심볼의 풋프린트 연결을 "
+"업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -13550,9 +13541,8 @@ msgid "Net names"
 msgstr "네트 이름"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "그 외의 시트 필드"
+msgstr "기타 필드"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
@@ -13590,14 +13580,12 @@ msgid "User-defined Signals"
 msgstr "사용자 정의 신호"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "배선"
+msgstr "선/버스"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:232
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "버스 마이그레이션"
+msgstr "선/버스"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -13744,9 +13732,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "PCB 편집기에서 강조 표시될 때 네트 강조"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "선 그리기 모드 :"
+msgstr "선 그리기 모드:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
@@ -13926,9 +13913,8 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "심볼 선택기에서 풋프린트 미리 보기 표시"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "심볼 복구"
+msgstr "복구 심볼 도구 표시 안 함"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:264
 #, c-format
@@ -14000,9 +13986,8 @@ msgid "Default text size:"
 msgstr "기본 텍스트 크기:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "라벨 오프셋 비율:"
+msgstr "윗줄 오프셋 비율:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -14017,9 +14002,8 @@ msgstr ""
 "와이어, 버스 또는 핀의 위(또는 아래)에 레이블을 오프셋할 텍스트 크기의 백분율"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "전역 라벨 여백:"
+msgstr "전역 라벨 여백 비율:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -14053,9 +14037,8 @@ msgid "Largest"
 msgstr "특대형"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "연결 문자열:"
+msgstr "연결 격자:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14128,7 +14111,6 @@ msgid "Range (voltages):"
 msgstr "범위(전압):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "fV"
 msgstr "fV"
 
@@ -14245,7 +14227,6 @@ msgid "&Default line width:"
 msgstr "기본 선 너비 (&D):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
@@ -14376,13 +14357,11 @@ msgid "Add Anyway"
 msgstr "강제로 추가"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:852
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
-msgstr ""
-"오래된 형식 (*.lib) 의 라이브러리가 포함된 행을 하나 이상 선택하여 현재 "
-"KiCad 형식 (*.kicad_sym) 으로 저장합니다."
+msgstr "라이브러리가 포함된 행을 하나 이상 선택하여 현재 KiCad 형식(*.kicad_sym)으로 "
+"저장합니다."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:860
 #, c-format
@@ -14394,13 +14373,12 @@ msgstr ""
 "을 바꾸시겠습니까?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:866
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
-msgstr ""
-"%d개의 오래된 형식 라이브러리를 현재 KiCad 형식 (*.kicad_sym) 으로 저장하고 "
-"테이블에서 오래된 항목을 교체하시겠습니까?"
+msgstr "%d 라이브러리를 현재 KiCad 형식(*.kicad_sym)으로 저장하고 테이블의 기존 "
+"항목을 교체할까요?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:894
 #: pcbnew/dialogs/dialog_export_step.cpp:409
@@ -14602,9 +14580,9 @@ msgid "Unknown netlist format.\n"
 msgstr "알 수 없는 네트리스트 형식.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "파일 '%s'을(를) 찾을 수 없습니다"
+msgstr "BOM 사전 설정 '%s'를 찾을 수 없음"
 
 #: eeschema/eeschema_jobs_handler.cpp:533
 #: eeschema/eeschema_jobs_handler.cpp:758
@@ -14767,7 +14745,6 @@ msgid "Netclass %s is not defined"
 msgstr "네트클래스 %s가 정의되지 않았음"
 
 #: eeschema/erc.cpp:662
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
 msgstr "'연결 없음' 유형의 핀이 연결됨"
 
@@ -14850,9 +14827,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "오프 그리드 핀 및 와이어 확인 중..."
 
 #: eeschema/erc.cpp:1263
-#, fuzzy
 msgid "Checking for undefined netclasses..."
-msgstr "해결되지 않은 변수를 확인 중..."
+msgstr "정의되지 않은 네트클래스 확인 중..."
 
 #: eeschema/erc_item.cpp:43
 msgid "Conflicts"
@@ -14868,9 +14844,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "지정된 시트 내에서 시트 이름 복제"
 
 #: eeschema/erc_item.cpp:51
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "심볼 핀 또는 와이어 끝 오프 그리드"
+msgstr "심볼 핀 또는 와이어 끝 연결 그리드 끄기"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
@@ -14955,9 +14930,8 @@ msgid "Unresolved text variable"
 msgstr "미확인 텍스트 변수"
 
 #: eeschema/erc_item.cpp:139
-#, fuzzy
 msgid "Undefined netclass"
-msgstr "해결된 넷클래스"
+msgstr "미정의 네트 클래스"
 
 #: eeschema/erc_item.cpp:143
 msgid "SPICE model issue"
@@ -15072,7 +15046,7 @@ msgstr "회로도 불러오는 중"
 
 #: eeschema/files-io.cpp:212
 msgid "Schematic file changes are unsaved"
-msgstr "회로도 파일 변경 내용이 저장되지 않았음"
+msgstr "회로도 파일 변경 내용이 저장되지 않음"
 
 #: eeschema/files-io.cpp:227
 #, c-format
@@ -15195,16 +15169,15 @@ msgstr ""
 "진행하기 전에 현재 문서를 저장하시겠습니까?"
 
 #: eeschema/files-io.cpp:652
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"이 작업을 취소할 수 없습니다.\n"
+"이 작업은 현재 회로도의 내용을 대체하며, 이 내용은 영구적으로 손실됩니다.\n"
 "\n"
-"진행하기 전에 현재 문서를 저장하시겠습니까?"
+"계속 진행할까요?"
 
 #: eeschema/files-io.cpp:694
 msgid "Import Schematic"
@@ -15221,7 +15194,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"'%s'회로도 파일을 저장하는 중 오류 발생.\n"
+"'%s'회로도 파일 저장 중 오류 발생.\n"
 "%s"
 
 #: eeschema/files-io.cpp:814 pcbnew/files.cpp:1002 pcbnew/files.cpp:1283
@@ -15272,9 +15245,8 @@ msgid "Failed to save %s."
 msgstr "%s을(를) 저장하지 못했습니다."
 
 #: eeschema/files-io.cpp:1087
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "모델 배율 경고"
+msgstr "잠긴 파일 경고"
 
 #: eeschema/files-io.cpp:1089
 msgid ""
@@ -15319,7 +15291,7 @@ msgstr "회로도 '%s'를 로드하는 동안 처리되지 않은 예외가 발�
 
 #: eeschema/files-io.cpp:1468
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "현재 회로도가 수정되었습니다.\t변경 사항을 저장할까요?"
+msgstr "현재 회로도가 수정됨.\t변경 사항을 저장할까요?"
 
 #: eeschema/files-io.cpp:1566
 msgid ""
@@ -15329,19 +15301,19 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"이건 정말 난처한 일이네요!\n"
-"마지막으로 하나 이상의 회로도 파일을 편집하는 중이었던 것 같습니다.\n"
-"파일이 제대로 저장되지 않았습니다.  마지막으로 저장한 편집 내용을 복원하시겠"
-"습니까?"
+"정말 난감한 상황입니다!\n"
+"최근에 하나 이상의 회로도 파일을 편집할 때 제대로 저장되지 않은 것 같습니다."
+"\n"
+"마지막에 저장한 편집 내용을 복원하시겠습니까?"
 
 #: eeschema/files-io.cpp:1577
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
 "'%s' 파일을 열 수 없습니다.\n"
-"자동으로 저장된 파일의 수동 복구가 필요합니다."
+"자동으로 저장된 파일을 수동으로 복구해야 합니다."
 
 #: eeschema/files-io.cpp:1627
 msgid "The following automatically saved file(s) could not be restored\n"
@@ -15480,7 +15452,6 @@ msgid "V Justification"
 msgstr "수직 위치 맞추기"
 
 #: eeschema/lib_field.cpp:654 eeschema/sch_field.cpp:1385
-#, fuzzy
 msgid "Show Field Name"
 msgstr "필드 이름 표시"
 
@@ -15509,7 +15480,6 @@ msgid "Pos Y"
 msgstr "위치 Y"
 
 #: eeschema/lib_pin.cpp:1210
-#, fuzzy
 msgid "Flags"
 msgstr "플래그"
 
@@ -15615,39 +15585,37 @@ msgid "Position Y"
 msgstr "위치 Y"
 
 #: eeschema/lib_shape.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Arc with radius %s"
-msgstr "호, 반지름 %s"
+msgstr "반지름이 %s인 호"
 
 #: eeschema/lib_shape.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Circle with radius %s"
-msgstr "원, 반지름 %s"
+msgstr "반지름이 %s인 원"
 
 #: eeschema/lib_shape.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle with width %s height %s"
-msgstr "직사각형, 너비 %s 높이 %s"
+msgstr "너비 %s 높이 %s의 사각형"
 
 #: eeschema/lib_shape.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline with %d points"
-msgstr "폴리선, %d개 점"
+msgstr "%d 포인트가 있는 폴리라인"
 
 #: eeschema/lib_shape.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve with %d points"
-msgstr "베지어 곡선, %d 포인트"
+msgstr "%d 포인트의 베지어 곡선"
 
 #: eeschema/lib_shape.cpp:593
-#, fuzzy
 msgid "Body outline color"
-msgstr "바디 외곽선 색상으로 채우기"
+msgstr "몸체 외곽선 색상"
 
 #: eeschema/lib_shape.cpp:594
-#, fuzzy
 msgid "Body background color"
-msgstr "배경색을 플롯"
+msgstr "몸체 배경색"
 
 #: eeschema/lib_shape.cpp:595
 msgid "Fill color"
@@ -15668,9 +15636,8 @@ msgstr "단위 수가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:324
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:636
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "파일에 그래픽 항목이 없습니다."
+msgstr "그래픽 항목 수가 다름."
 
 #: eeschema/lib_symbol.cpp:336
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:650
@@ -15688,9 +15655,9 @@ msgid "Pin %s not found."
 msgstr "핀 %s을(를) 찾을 수 없습니다."
 
 #: eeschema/lib_symbol.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "핀 %s가 다릅니다."
+msgstr "핀 %s가 다름."
 
 #: eeschema/lib_symbol.cpp:402
 #, c-format
@@ -15862,23 +15829,23 @@ msgid "P&references"
 msgstr "설정 (&r)"
 
 #: eeschema/net_navigator.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "핀 %s [%s, %s, %s]"
+msgstr "%s, %s에서 %s, %s까지 배선"
 
 #: eeschema/net_navigator.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "패드 %s %s의 %s 위%s"
+msgstr "%s, %s에서 %s, %s까지 버스"
 
 #: eeschema/net_navigator.cpp:72
 msgid "Graphic line not connectable"
 msgstr "그래픽 라인을 연결할 수 없음"
 
 #: eeschema/net_navigator.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "심볼 %s [%s]"
+msgstr "심볼 '%s' 핀 '%s'"
 
 #: eeschema/net_navigator.cpp:97
 #, c-format
@@ -15953,9 +15920,8 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "오류: 시트 이름이 중복됩니다. 계속합니까?"
 
 #: eeschema/picksymbol.cpp:121
-#, fuzzy
 msgid "Change Unit"
-msgstr "네트 변경"
+msgstr "유닛 변경"
 
 #: eeschema/picksymbol.cpp:138
 #, c-format
@@ -15963,14 +15929,12 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "라이브러리 '%s'에서 심볼 '%s'의 대체 바디 스타일을 찾을 수 없습니다."
 
 #: eeschema/picksymbol.cpp:161
-#, fuzzy
 msgid "Convert Symbol"
-msgstr "전원 심볼"
+msgstr "심볼 변경"
 
 #: eeschema/picksymbol.cpp:178
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "핀 설정"
+msgstr "핀 기능 설정"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
@@ -16109,13 +16073,12 @@ msgid "Select Symbol Library"
 msgstr "심볼 라이브러리 선택"
 
 #: eeschema/sch_base_frame.cpp:723
-#, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
 msgstr ""
-"심볼 '%s'은(는) 변경되었습니다.\n"
-"라이브러리에서 해당 심볼을 삭제할까요?"
+"현재 심볼이 포함된 라이브러리가 변경되었습니다.\n"
+"라이브러리를 다시 로드할까요?"
 
 #: eeschema/sch_bus_entry.cpp:426
 msgid "Bus to Wire Entry"
@@ -16181,7 +16144,7 @@ msgstr "새 회로도 파일이 저장되지 않음"
 #: pcbnew/pcb_edit_frame.cpp:1075
 #, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "닫기 전에 '%s'에 대한 변경 사항을 저장하시겠습니까?"
+msgstr "닫기 전에 '%s'의 변경 사항을 저장할까요?"
 
 #: eeschema/sch_edit_frame.cpp:1096
 msgid ""
@@ -16230,9 +16193,8 @@ msgid "[no schematic loaded]"
 msgstr "[불러온 회로도가 없습니다]"
 
 #: eeschema/sch_edit_frame.cpp:1823
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "회로도 설정"
+msgstr "회로도 정리"
 
 #: eeschema/sch_edit_frame.cpp:1936
 #, c-format
@@ -16240,14 +16202,12 @@ msgid "Highlighted net: %s"
 msgstr "강조 표시된 네트: %s"
 
 #: eeschema/sch_edit_frame.cpp:2114
-#, fuzzy
 msgid "Save Symbol to Schematic"
-msgstr "회로도에 심볼 추가"
+msgstr "회로도에 심볼 저장"
 
 #: eeschema/sch_edit_frame.cpp:2219 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "심볼이 라이브러리와 다름"
+msgstr "라이브러리와 심볼 비교"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -16277,9 +16237,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "저장소 파일이 완전히 파싱되지 않았습니다 (%d바이트 남음)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:593
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "컴파일 마스크는 현재 지원되지 않습니다."
+msgstr "블랭킷은 현재 지원되지 않음."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:597
 #, c-format
@@ -16295,9 +16254,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "레코드 '파이차트'가 처리되지 않았습니다."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:790
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "컴파일 마스크는 현재 지원되지 않습니다."
+msgstr "현재 지원되지 않는 매개변수 설정임."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:815
 msgid "Compile mask not currently supported."
@@ -16401,9 +16359,8 @@ msgid "Altium schematic files"
 msgstr "알티움 회로도 파일"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:68
-#, fuzzy
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "알티움 회로도 파일"
+msgstr "Altium 회로도 라이브러리 또는 통합 라이브러리"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:72
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
@@ -16417,13 +16374,12 @@ msgstr ""
 "참조하는 부품의 심볼 %s을(를) 찾을 수 없어 부품 %s이 로드되지 않았습니다."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
-msgstr ""
-"심볼의 핀 번호가 %s 에 정의된 것과 부품 %s이 일치하지 않아 부품이 로드되지 않"
-"았습니다."
+msgstr "심볼 %s의 핀 번호와 파트 %s에 정의된 핀 번호가 일치하지 않음. 부품을 "
+"불러오지 못했습니다."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:367
 #, c-format
@@ -16646,18 +16602,17 @@ msgstr ""
 "야 합니다. 지정하지 않은 경우 'cadstarpcblib'으로 간주합니다."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "풋프린트 라이브러리 '%s'을(를) 만들 수 없습니다."
+msgstr "라이브러리 '%s'에 해당하는 .csa 파일을 찾을 수 없습니다."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR 회로도 보관 파일"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "CADSTAR 보관 파일"
+msgstr "CADSTAR 부품 라이브러리 파일"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:84
 #, c-format
@@ -16683,13 +16638,11 @@ msgid "KiCad database library files"
 msgstr "KiCad 데이터베이스 라이브러리 파일"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:635
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr ""
-"'%s' 은 Eagle 바이너리 형식의 회로도 파일이며, Eagle XML 형식의 회로도만 가져"
-"올 수 있습니다."
+msgstr "'%s'는 Eagle 이진 형식 파일이며, Eagle XML 형식 파일만 가져올 수 있습니다."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3140
@@ -16716,9 +16669,8 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML 회로도 파일"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:96
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Eagle 버전 6.x XML 라이브러리 파일"
+msgstr "Eagle XML 라이브러리 파일"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:145
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:295
@@ -16733,10 +16685,9 @@ msgstr "'%s'에서 올바른 회로도 파일을 찾을 수 없음"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:272
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:466
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr ""
-"심볼 %s을(를) 불러오는 중에 라이브러리 '%s'에서 오류가 발생했습니다. (%s)"
+msgstr "심볼 '%s'를 라이브러리 '%s'에서 불러오는 중 오류 발생: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:392
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:397
@@ -21769,7 +21720,7 @@ msgstr "이동 및 배치"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:561
 msgid "No footprint specified"
-msgstr "풋프린트가 지정되지 않음"
+msgstr "지정된 풋프린트 없음"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:574
 msgid "Invalid footprint specified"
@@ -24948,9 +24899,9 @@ msgid "Failed to get HEAD reference: %s"
 msgstr "디렉토리 %s 삭제에 실패하였습니다"
 
 #: kicad/project_tree_pane.cpp:2208
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "'%s'회로도를 저장하지 못했습니다"
+msgstr "커밋을 가져오지 못함: %s"
 
 #: kicad/project_tree_pane.cpp:2224
 #, c-format
@@ -29425,7 +29376,6 @@ msgstr "허용오차:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
-#, fuzzy
 msgid "Changes to be applied:"
 msgstr "적용할 변경 사항:"
 
@@ -31379,9 +31329,8 @@ msgid "Schematic Association"
 msgstr "회로도 편집기"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "풋프린트 관련성 파일"
+msgstr "풋프린트 연결"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -33421,8 +33370,8 @@ msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
-"기판 상의 상위 풋프린트가 뒤집혀 있습니다.\n"
-"레이어 또한 반전됩니다."
+"보드의 상위 풋프린트가 뒤집어집니다.\n"
+"레이어가 반전됩니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513
 msgid "Front adhesive"
@@ -34440,14 +34389,13 @@ msgid "Push Pad Properties"
 msgstr "패드 속성을 푸시"
 
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:86
-#, fuzzy
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
 msgstr ""
-"풋프린트가 잠겨있어 캔버스상에서 자유롭게 움직이거나 방향을 바꿀 수 없으며, "
-"선택 필터의 '잠긴 항목' 체크박스가 활성화된 경우에만 선택할 수 있습니다."
+"잠긴 항목은 캔버스에서 자유롭게 이동하거나 방향을 바꿀 수 없으며, 선택 "
+"필터에서 '잠긴 항목' 확인란이 선택되어 있는 경우에만 선택할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
@@ -35675,14 +35623,12 @@ msgid "Apply board defaults to footprint fields"
 msgstr "모든 풋프린트 필드 표시"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:61
-#, fuzzy
 msgid "Apply board defaults to footprint text"
-msgstr "기본 풋프린트 존재하지 않음"
+msgstr "풋프린트 텍스트에 보드 기본 설정 적용"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:64
-#, fuzzy
 msgid "Apply board defaults to non-copper footprint shapes"
-msgstr "기본 풋프린트 존재하지 않음"
+msgstr "비구리 풋프린트 형상에 보드 기본값 적용"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:434
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -38431,7 +38377,7 @@ msgstr "D-356 테스트 파일 내보내기"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
-msgstr "풋프린트 관련성 파일 저장"
+msgstr "풋프린트 연결 파일 저장"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:169
 msgid ""
@@ -38961,7 +38907,7 @@ msgstr "[%s에서]"
 
 #: pcbnew/footprint_edit_frame.cpp:978
 msgid "[no footprint loaded]"
-msgstr "[불러온 풋프린트가 없습니다]"
+msgstr "[불러온 풋프린트가 없음]"
 
 #: pcbnew/footprint_edit_frame.cpp:1034
 msgid "Updating Footprint Libraries"
@@ -38969,7 +38915,7 @@ msgstr "풋프린트 라이브러리 업데이트 중"
 
 #: pcbnew/footprint_edit_frame.cpp:1357
 msgid "No footprint selected."
-msgstr "풋프린트가 선택되지 않았습니다."
+msgstr "선택된 풋프린트가 없음."
 
 #: pcbnew/footprint_editor_utils.cpp:247
 msgid "Edit Zone"
@@ -39086,7 +39032,7 @@ msgstr "풋프린트 '%s'이(가) 라이브러리 '%s'에서 삭제되었습니�
 
 #: pcbnew/footprint_libraries_utils.cpp:581
 msgid "No footprints to export!"
-msgstr "내보낼 풋프린트가 없습니다!"
+msgstr "내보낼 풋프린트가 없음!"
 
 #: pcbnew/footprint_libraries_utils.cpp:610
 #, c-format
@@ -39566,11 +39512,11 @@ msgstr "SVG 기판 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:140
 msgid "Footprint Association (.cmp) File..."
-msgstr "풋프린트 관련성 (.cmp) 파일..."
+msgstr "풋프린트 연결 (.cmp) 파일..."
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr "회로도 후면 주석을 위해 풋프린트 관련성 파일 (*.cmp) 내보내기"
+msgstr "회로도 역주석을 위한 풋프린트 연결 파일(*.cmp) 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:143
 msgid "Hyperlynx..."
@@ -40081,7 +40027,7 @@ msgstr ""
 #: pcbnew/netlist_reader/netlist.cpp:164
 #, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "심볼 %s에 대해 정의된 풋프린트가 없습니다."
+msgstr "심볼 %s에 대해 지정된 풋프린트가 없음."
 
 #: pcbnew/netlist_reader/netlist.cpp:191
 #, c-format
@@ -41517,7 +41463,7 @@ msgstr "풋프린트 라이브러리 '%s'을(를) 찾을 수 없습니다."
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:228
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "라이브러리 '%s'에 '%s' 풋프린트가 없습니다."
+msgstr "라이브러리 '%s'에 '%s' 풋프린트가 없음."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:347
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:854
@@ -45447,9 +45393,8 @@ msgid "Show Footprint Associations"
 msgstr "풋프린트 회전"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Show footprint library and schematic symbol associations"
-msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
+msgstr "풋프린트 라이브러리 및 회로도 심볼 연결 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
 msgid "Geographical Reannotate..."
