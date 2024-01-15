@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-15 02:12+0000\n"
+"PO-Revision-Date: 2024-01-16 04:06+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -65,7 +65,7 @@ msgstr "레이어 생성"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:674
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "불러온 풋프린트가 없습니다."
+msgstr "불러온 풋프린트가 없음."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:691
 msgid ""
@@ -6559,7 +6559,7 @@ msgstr "풋프린트 라이브러리 불러오는 중"
 
 #: common/widgets/footprint_select_widget.cpp:148
 msgid "No default footprint"
-msgstr "기본 풋프린트 존재하지 않음"
+msgstr "기본 풋프린트 없음"
 
 #: common/widgets/gal_options_panel.cpp:68
 msgid "Hardware-accelerated graphics (recommended)"
@@ -7094,7 +7094,7 @@ msgstr "CadStar 네트리스트 파일"
 
 #: common/wildcards_and_files_ext.cpp:525
 msgid "Symbol footprint association files"
-msgstr "심볼 풋프린트 관련성 파일"
+msgstr "심볼 풋프린트 연결 파일"
 
 #: common/wildcards_and_files_ext.cpp:531
 msgid "Zip file"
@@ -7158,7 +7158,7 @@ msgstr "파일 불러오기 오류"
 #: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu 풋프린트/심볼이 발견되었습니다."
+msgstr "%lu 풋프린트/심볼 관련 내용이 발견됨."
 
 #: cvpcb/auto_associate.cpp:263
 #, c-format
@@ -7216,15 +7216,15 @@ msgstr "필터링된 풋프린트"
 #: cvpcb/cvpcb_mainframe.cpp:149
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:130
 msgid "Apply, Save Schematic && Continue"
-msgstr "변경 사항 저장"
+msgstr "적용, 저장 && 계속"
 
 #: cvpcb/cvpcb_mainframe.cpp:221
 msgid "Symbol to footprint changes are unsaved"
-msgstr "풋프린트 심볼의 변경점이 저장되지 않았습니다"
+msgstr "심볼에서 풋프린트 변경 사항이 저장되지 않음"
 
 #: cvpcb/cvpcb_mainframe.cpp:402
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "풋프린트 심볼 링크가 변경되었습니다. 저장하시겠습니까?"
+msgstr "풋프린트 심볼 링크가 변경되었습니다. 저장할까요?"
 
 #: cvpcb/cvpcb_mainframe.cpp:630 cvpcb/tools/cvpcb_association_tool.cpp:208
 #, c-format
@@ -7310,7 +7310,7 @@ msgstr "KiCad에서 선택한 텍스트 편집기가 없습니다.  하나를 �
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
-msgstr "풋프린트 관련성 파일"
+msgstr "풋프린트 연결 파일"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:288
 #, c-format
@@ -7402,10 +7402,10 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"회로도 네트리스트에서의 풋프린트 할당과 심볼 풋프린트 관련성 파일 (.cmp) 이 "
+"회로도 네트리스트와 심볼 풋프린트 연결 파일(.cmp)의 풋프린트 할당이 "
 "충돌합니다.\n"
 "\n"
-"할당 항목을 선택하세요."
+"할당을 선택하세요."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
@@ -7530,11 +7530,11 @@ msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
-msgstr "회로도로 저장"
+msgstr "회로도에 저장"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr "풋프린트 관련성을 회로도의 심볼 풋프린트 필드에 저장"
+msgstr "회로도 심볼 풋프린트 필드에 풋프린트 연결 저장하기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
 msgid "Save to Schematic and File"
@@ -7552,7 +7552,7 @@ msgstr "할당되지 않은 다음 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select next symbol with no footprint assignment"
-msgstr "풋프린트 할당이 되지 않은 다음 심볼을 선택"
+msgstr "풋프린트 할당 없이 다음 심볼 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select previous unassigned symbol"
@@ -7560,7 +7560,7 @@ msgstr "할당되지 않은 이전 심볼을 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select previous symbol with no footprint assignment"
-msgstr "풋프린트 할당이 되지 않은 이전 심볼을 선택"
+msgstr "풋프린트 할당 없이 이전 심볼 선택"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Assign footprint"
@@ -7584,11 +7584,11 @@ msgstr "관련성 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:129
 msgid "Delete selected footprint associations"
-msgstr "선택한 풋프린트 관련성 삭제"
+msgstr "선택한 풋프린트 연결 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:134 cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Delete all footprint associations"
-msgstr "모든 풋프린트 관련성 삭제"
+msgstr "모든 풋프린트 연결 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Use symbol footprint filters"
@@ -8245,7 +8245,7 @@ msgstr "브라우저에서 선택"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:158
 msgid "Place repeated copies"
-msgstr "반복되는 복사본 배치"
+msgstr "복사본 반복 배치"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:159
 msgid "Keep the symbol selected for subsequent clicks."
@@ -8271,7 +8271,7 @@ msgstr "심볼 %s을(를) 불러오는 중 라이브러리 '%s'에서 오류 발
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:436
 msgid "No footprint specified"
-msgstr "풋프린트가 지정되지 않음"
+msgstr "지정된 풋프린트 없음"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:449
 msgid "Invalid footprint specified"
@@ -10765,7 +10765,7 @@ msgstr "'%s'회로도 파일을 저장하는 중 오류 발생."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:601
 #, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "'%s'회로도를 저장하지 못했습니다"
+msgstr "회로도 '%s'를 저장하지 못함"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:687
 msgid "A sheet must have a name."
@@ -11313,8 +11313,7 @@ msgstr "데이터가 저장되지 않음"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1382
 msgid "Changes are unsaved. Export unsaved data?"
-msgstr ""
-"변경 사항이 저장되지 않습니다. 저장되지 않은 데이터를 내보내시겠습니까?"
+msgstr "변경 사항이 저장되지 않음. 미저장한 데이터를 내보낼까요?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1392
 msgid "Save as CSV"
@@ -11676,7 +11675,8 @@ msgstr "풋프린트 할당"
 msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
-msgstr "PCB 내 다른 풋프린트로 대체된 심볼의 풋프린트 관련성을 업데이트합니다."
+msgstr "PCB에서 풋프린트가 다른 풋프린트로 대체된 심볼의 풋프린트 연결을 "
+"업데이트합니다."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -12924,7 +12924,7 @@ msgstr "회로도 불러오는 중"
 
 #: eeschema/files-io.cpp:207
 msgid "Schematic file changes are unsaved"
-msgstr "회로도 파일 변경 내용이 저장되지 않았음"
+msgstr "회로도 파일 변경 내용이 저장되지 않음"
 
 #: eeschema/files-io.cpp:247
 msgid ""
@@ -13067,7 +13067,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"'%s'회로도 파일을 저장하는 중 오류 발생.\n"
+"'%s'회로도 파일 저장 중 오류 발생.\n"
 "%s"
 
 #: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
@@ -13152,7 +13152,7 @@ msgstr "회로도 '%s'를 로드하는 동안 처리되지 않은 예외가 발�
 
 #: eeschema/files-io.cpp:1355
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "현재 회로도가 수정되었습니다.\t변경 사항을 저장할까요?"
+msgstr "현재 회로도가 수정됨.\t변경 사항을 저장할까요?"
 
 #: eeschema/files-io.cpp:1444
 msgid ""
@@ -13162,10 +13162,10 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"이건 정말 난처한 일이네요!\n"
-"마지막으로 하나 이상의 회로도 파일을 편집하는 중이었던 것 같습니다.\n"
-"파일이 제대로 저장되지 않았습니다.  마지막으로 저장한 편집 내용을 복원하시겠"
-"습니까?"
+"정말 난감한 상황입니다!\n"
+"최근에 하나 이상의 회로도 파일을 편집할 때 제대로 저장되지 않은 것 같습니다."
+"\n"
+"마지막에 저장한 편집 내용을 복원하시겠습니까?"
 
 #: eeschema/files-io.cpp:1455
 #, c-format
@@ -13703,7 +13703,7 @@ msgstr "새 회로도 파일이 저장되지 않음"
 #: pcbnew/pcb_edit_frame.cpp:1076
 #, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "닫기 전에 '%s'에 대한 변경 사항을 저장하시겠습니까?"
+msgstr "닫기 전에 '%s'의 변경 사항을 저장할까요?"
 
 #: eeschema/sch_edit_frame.cpp:963
 msgid ""
@@ -28526,8 +28526,8 @@ msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
-"기판 상의 상위 풋프린트가 뒤집혀 있습니다.\n"
-"레이어 또한 반전됩니다."
+"보드의 상위 풋프린트가 뒤집어집니다.\n"
+"레이어가 반전됩니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513
 msgid "Front adhesive"
@@ -33069,7 +33069,7 @@ msgstr "D-356 테스트 파일 내보내기"
 
 #: pcbnew/exporters/export_footprint_associations.cpp:73
 msgid "Save Footprint Association File"
-msgstr "풋프린트 관련성 파일 저장"
+msgstr "풋프린트 연결 파일 저장"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:171
 msgid ""
@@ -33495,7 +33495,7 @@ msgstr "[%s에서]"
 
 #: pcbnew/footprint_edit_frame.cpp:944
 msgid "[no footprint loaded]"
-msgstr "[불러온 풋프린트가 없습니다]"
+msgstr "[불러온 풋프린트가 없음]"
 
 #: pcbnew/footprint_edit_frame.cpp:1000
 msgid "Updating Footprint Libraries"
@@ -33503,7 +33503,7 @@ msgstr "풋프린트 라이브러리 업데이트 중"
 
 #: pcbnew/footprint_edit_frame.cpp:1310
 msgid "No footprint selected."
-msgstr "풋프린트가 선택되지 않았습니다."
+msgstr "선택된 풋프린트가 없음."
 
 #: pcbnew/footprint_edit_frame.cpp:1319
 msgid "Footprint Image File Name"
@@ -33624,7 +33624,7 @@ msgstr "풋프린트 '%s'이(가) 라이브러리 '%s'에서 삭제되었습니�
 
 #: pcbnew/footprint_libraries_utils.cpp:674
 msgid "No footprints to export!"
-msgstr "내보낼 풋프린트가 없습니다!"
+msgstr "내보낼 풋프린트가 없음!"
 
 #: pcbnew/footprint_libraries_utils.cpp:696
 #, c-format
@@ -34062,11 +34062,11 @@ msgstr "SVG 기판 표현 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 msgid "Footprint Association (.cmp) File..."
-msgstr "풋프린트 관련성 (.cmp) 파일..."
+msgstr "풋프린트 연결 (.cmp) 파일..."
 
 #: pcbnew/menubar_pcb_editor.cpp:142
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr "회로도 후면 주석을 위해 풋프린트 관련성 파일 (*.cmp) 내보내기"
+msgstr "회로도 역주석을 위한 풋프린트 연결 파일(*.cmp) 내보내기"
 
 #: pcbnew/menubar_pcb_editor.cpp:144
 msgid "Hyperlynx..."
@@ -34525,7 +34525,7 @@ msgstr ""
 #: pcbnew/netlist_reader/netlist.cpp:162
 #, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "심볼 %s에 대해 정의된 풋프린트가 없습니다."
+msgstr "심볼 %s에 대해 지정된 풋프린트가 없음."
 
 #: pcbnew/netlist_reader/netlist.cpp:189
 #, c-format
@@ -36064,7 +36064,7 @@ msgstr "풋프린트 라이브러리 '%s'을(를) 찾을 수 없습니다."
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:229
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "라이브러리 '%s'에 '%s' 풋프린트가 없습니다."
+msgstr "라이브러리 '%s'에 '%s' 풋프린트가 없음."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:722
