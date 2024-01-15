@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-14 12:31+0000\n"
+"PO-Revision-Date: 2024-01-16 04:06+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -9859,7 +9859,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:221
 msgid "Pin Text Options"
-msgstr "Fäst textalternativ"
+msgstr "Alternativ för stifts text"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:223
 msgid "Show pin number"
@@ -29463,7 +29463,7 @@ msgstr "Från designregler"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:80
 msgid "Target length:"
-msgstr "Mållängd:"
+msgstr "Önskad längd:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:98
 msgid "Meandering"
@@ -30075,7 +30075,7 @@ msgstr "Via typ:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1275
 msgid "Through"
-msgstr "Genom"
+msgstr "Genomgående"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1277
