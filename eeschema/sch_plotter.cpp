@@ -773,7 +773,6 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName,
     plotter->SetPageSettings( aPageInfo );
     plotter->SetRenderSettings( aRenderSettings );
     plotter->RenderSettings()->LoadColors( m_colorSettings );
-    plotter->SetColorMode( !aPlotSettings.m_blackAndWhite );
     plotter->SetViewport( aPlot0ffset, schIUScale.IU_PER_MILS/10, aScale, false );
 
     // TODO this could be configurable
