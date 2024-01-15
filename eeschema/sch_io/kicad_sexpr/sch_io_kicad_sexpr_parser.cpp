@@ -3909,7 +3909,10 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchBezier()
         switch( token )
         {
         case T_pts:
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+        {
+            int ii = 0;
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok(), ++ii )
             {
                 if( token != T_LEFT )
                     Expecting( T_LEFT );
@@ -3919,11 +3922,18 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchBezier()
                 if( token != T_xy )
                     Expecting( "xy" );
 
-                bezier->AddPoint( parseXY() );
+                switch( ii )
+                {
+                case 0: bezier->SetStart( parseXY() );    break;
+                case 1: bezier->SetBezierC1( parseXY() ); break;
+                case 2: bezier->SetBezierC2( parseXY() ); break;
+                case 3: bezier->SetEnd( parseXY() );      break;
+                default: Unexpected( "control point" );   break;
+                }
 
                 NeedRIGHT();
             }
-
+        }
             break;
 
         case T_stroke:
