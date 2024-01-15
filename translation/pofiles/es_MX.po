@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-08 00:06+0000\n"
+"PO-Revision-Date: 2024-01-16 04:07+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -637,18 +637,16 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Color de acabado del cobre/superficie..."
+msgstr "Mostrar color de acabado superficial/cobre frontal"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Color de acabado del cobre/superficie..."
+msgstr "Mostrar color de acabado superficial/cobre posterior"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
@@ -812,9 +810,8 @@ msgid "Off-board Silkscreen"
 msgstr "Serigrafía"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Do not clip silk layers to board outline"
-msgstr "No puede calcularse el contorno de la placa."
+msgstr "No recortar las capas de serigrafía al contorno de la placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 #, fuzzy
@@ -2511,14 +2508,12 @@ msgid "Configure Global Library Table"
 msgstr "Configurar tabla global de bibliotecas"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Taladro fuera del rango"
+msgstr "Tamaño de cuadrícula X fuera de rango."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Taladro fuera del rango"
+msgstr "Tamaño de cuadrícula Y fuera de rango."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -3389,9 +3384,8 @@ msgid "Password"
 msgstr "Contraseña:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Aplicando cambios..."
+msgstr "Cometer cambios"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #, fuzzy
@@ -3438,9 +3432,8 @@ msgid "C&ommit"
 msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Componente: el nombre no puede estar vacío."
+msgstr "El mensaje del commit no puede estar vacío"
 
 #: common/dialogs/git/dialog_git_repository.cpp:146
 #: common/dialogs/git/dialog_git_repository.cpp:373
@@ -3453,9 +3446,8 @@ msgid "Test connection"
 msgstr "Seleccionar conexión"
 
 #: common/dialogs/git/dialog_git_repository.cpp:329
-#, fuzzy
 msgid "Connection successful"
-msgstr "Archivo creado satisfactoriamente."
+msgstr "Conexión exitosa"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
 #, c-format
@@ -6040,14 +6032,14 @@ msgid "Invalid directory name, cannot remove root"
 msgstr ""
 
 #: common/gestfich.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "No se puede escribir en la carpeta \"%s\"."
+msgstr "El directorio '%s' no existe"
 
 #: common/gestfich.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' no fue analizado correctamente."
+msgstr "'%s' no es un directorio"
 
 #: common/gestfich.cpp:337
 #, c-format
@@ -6055,19 +6047,19 @@ msgid "Error removing directory '%s': %s"
 msgstr "Error eliminando directorio '%s':%s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "No se puede crear la carpeta de salida '%s'."
+msgstr "No se pudo crear el directorio '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "No se pudo cargar una imagen desde '%s'."
+msgstr "No se pudo clonar el repositorio '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "No se pudo cargar una imagen desde '%s'."
+msgstr "No se pudo buscar el '%s' remoto"
 
 #: common/git/git_pull_handler.cpp:59
 #, fuzzy, c-format
@@ -6110,18 +6102,16 @@ msgid "Failed to perform checkout operation."
 msgstr ""
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "No se pudo cargar una imagen desde '%s'."
+msgstr "No se pudo buscar el commit '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
 msgstr "No se pudo unir los commits"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "No puede abrirse el archivo de biblioteca."
+msgstr "No se pudo obtener el índice del repositorio"
 
 #: common/git/git_pull_handler.cpp:265
 #, fuzzy
@@ -6138,9 +6128,8 @@ msgid "Added"
 msgstr ""
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "No se puede abrir el archivo de almacenamiento."
+msgstr "No se pudo buscar el remoto"
 
 #: common/git/git_push_handler.cpp:58
 #, fuzzy
@@ -6158,9 +6147,9 @@ msgid "Received %u of %u objects"
 msgstr ""
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Actualizado %s de %s a %s."
+msgstr "* [actualizado] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
 #, fuzzy, c-format
@@ -6197,14 +6186,12 @@ msgid "Failed to merge branches."
 msgstr "No ha podido guardarse la biblioteca recuperada %s."
 
 #: common/git/kicad_git_errors.cpp:44
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "No se pudo cargar la URL del repositorio"
+msgstr "No se pudo clonar el repositorio."
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Repositorio"
+msgstr "No se encontró el repositorio remoto."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
@@ -6270,9 +6257,8 @@ msgid "Failed to delete tag."
 msgstr "No se ha podido abrir '%s'."
 
 #: common/git/kicad_git_errors.cpp:72
-#, fuzzy
 msgid "Unknown error."
-msgstr "Error desconocido"
+msgstr "Error desconocido."
 
 #: common/git/kicad_git_errors.cpp:73
 #, fuzzy
@@ -6984,9 +6970,8 @@ msgstr ""
 "Se ha encontrado un carácter ilegal en el nombre de la biblioteca lógica"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "Editar opciones"
+msgstr "Editar opciones..."
 
 #: common/lib_table_grid_tricks.cpp:33
 #, fuzzy
@@ -7806,9 +7791,8 @@ msgid "Edit grid definitions"
 msgstr "Ajustar dimensiones de la cuadrícula"
 
 #: common/tool/actions.cpp:719
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Origen de cuadrícula"
+msgstr "Origen de cuadrícula..."
 
 #: common/tool/actions.cpp:720
 msgid "Set the grid origin point"
@@ -7849,9 +7833,8 @@ msgid "Use millimeters"
 msgstr "Utilizar milímetros"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Seleccionar columnas"
+msgstr "Seleccionar columnas..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -9173,9 +9156,8 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "Mostrar la huella seleccionada el visor de huellas"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Gestionar archivos de asociación de huellas"
+msgstr "Gestionar archivos de asociación de huellas..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
 #, fuzzy
@@ -9827,9 +9809,8 @@ msgid "Update"
 msgstr "Actualizar"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:426
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Actualizar símbolo..."
+msgstr "Actualizar símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 #, fuzzy
@@ -10225,9 +10206,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Abrir el diálogo de Configuración de esquema..."
 
 #: eeschema/dialogs/dialog_erc.cpp:650
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Espaciado mínimo de cuadrícula:"
+msgstr "Editar el espaciado de la cuadrícula de conexión..."
 
 #: eeschema/dialogs/dialog_erc.cpp:743
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -12615,9 +12595,8 @@ msgid "A DC source must be specified."
 msgstr "Una hoja debe tener un archivo especificado."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:361
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "El origen 1 y el origen 2 deben ser diferentes"
+msgstr "La fuente 1 y la fuente 2 deben ser diferentes."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
 msgid "A frequency range must be specified."
@@ -13421,9 +13400,9 @@ msgid "No filename specified in exporter"
 msgstr "No se ingresó un nombre de archivo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "No puede crearse el archivo \"%s\""
+msgstr "No se pudo abrir/crear la ruta '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1274
 #, fuzzy, c-format
@@ -13885,9 +13864,8 @@ msgstr ""
 "una página de este esquema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:537
-#, fuzzy
 msgid "Edit Text"
-msgstr "Editar texto..."
+msgstr "Editar texto"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -15044,9 +15022,9 @@ msgid "Unable to open destination '%s'"
 msgstr "No se puede abrir el destino '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "No se ha encontrado la huella '%s'."
+msgstr "Formato BOM preestablecido '%s' no encontrado"
 
 #: eeschema/eeschema_jobs_handler.cpp:722
 #, fuzzy, c-format
@@ -15714,9 +15692,9 @@ msgstr ""
 "Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
 
 #: eeschema/files-io.cpp:1085
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "No ha podido guardarse \"%s\""
+msgstr "No se pudo guardar %s."
 
 #: eeschema/files-io.cpp:1087
 #, fuzzy
@@ -15850,9 +15828,8 @@ msgstr "Pie"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1568 pcbnew/tools/drawing_tool.cpp:1657
-#, fuzzy
 msgid "Import Graphics"
-msgstr "Importar gráficos..."
+msgstr "Importar gráficos"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 msgid "No file selected!"
@@ -16182,9 +16159,8 @@ msgid "Show pin names settings differ."
 msgstr "Mostrar texto del nombre de pin"
 
 #: eeschema/lib_symbol.cpp:473
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "Mostrar texto del número de pin"
+msgstr "La configuración de mostrar números de pin difiere."
 
 #: eeschema/lib_symbol.cpp:482
 #, fuzzy
@@ -16192,9 +16168,8 @@ msgid "Exclude from simulation settings differ."
 msgstr "La configuración de exentar los requerimientos de patio es diferente."
 
 #: eeschema/lib_symbol.cpp:491
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "Excluir de la lista de materiales"
+msgstr "La configuración de excluir de la lista de materiales difiere."
 
 #: eeschema/lib_symbol.cpp:500
 #, fuzzy
@@ -16389,9 +16364,8 @@ msgid "Unhandled item type %d"
 msgstr "Tipo de elemento no manipulado %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "Fallo al eliminar la carpeta %s"
+msgstr "No se pudo crear el directorio 'dispositivos'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
 #, c-format
@@ -17204,9 +17178,9 @@ msgstr "Archivos XML de biblioteca de Eagle ver. 6.x"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:414
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:458
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "No se puede leer el archivo de datos '%s'."
+msgstr "No se puede encontrar un archivo de esquema válido en '%s'"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:267
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:272
@@ -17237,18 +17211,18 @@ msgstr ""
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "No ha podido almacenar el archivo '%s'."
+msgstr "No se pudo analizar el valor: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
 msgid "httplib plugin missing library table handle!"
 msgstr ""
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
+msgstr "Error al recuperar datos de la biblioteca HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:218
 #, fuzzy, c-format
@@ -19012,9 +18986,8 @@ msgid "expecting trace type"
 msgstr "se esperaba un elemento de un solo carácter"
 
 #: eeschema/sim/legacy_workbook.cpp:236
-#, fuzzy
 msgid "expecting trace name"
-msgstr "Esperando número."
+msgstr "esperando nombre de seguimiento"
 
 #: eeschema/sim/legacy_workbook.cpp:246
 #, fuzzy
@@ -35815,8 +35788,8 @@ msgid ""
 "%s: Text thickness is too large.\n"
 "It will be truncated to %s"
 msgstr ""
-"%s: El grosor del texto es demasiado grande.\n"
-"Será recortará a %s."
+"%s: El grosor del texto es demasiado grande\n"
+"Será recortará a %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:428
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:272
@@ -35825,8 +35798,8 @@ msgid ""
 "%s: Text thickness is too small.\n"
 "It will be truncated to %s"
 msgstr ""
-"%s: El grosor del texto es demasiado grande.\n"
-"Será recortará a %s."
+"%s: El grosor del texto es pequeño\n"
+"Será recortará a %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:476
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:313
@@ -40143,9 +40116,8 @@ msgid "Place at:"
 msgstr "Añadir vía"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:95
-#, fuzzy
 msgid "If not checked: use interactive placement."
-msgstr "Emplazamiento interactivo"
+msgstr "Si no está marcado: utilice la ubicación interactiva."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:139
 msgid ""
@@ -41197,9 +41169,8 @@ msgid "Constraints Report"
 msgstr "Informe de restricciones"
 
 #: pcbnew/pcb_edit_frame.cpp:2521 pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Compare Footprint with Library"
-msgstr "Huellas a biblioteca..."
+msgstr "Comparar huella con biblioteca"
 
 #: pcbnew/pcb_field.cpp:93
 #, fuzzy
@@ -41674,6 +41645,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"La definición de huella '%s' tiene un componente de cobre asociado a un pad "
+"en varias capas. KiCad no admite padstacks personalizados. Los elementos de "
+"cobre han sido importados como elementos gráficos."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42116,9 +42090,9 @@ msgid "Unknown SVGNODE nodeType %d"
 msgstr "SVGNODE nodeType desconocido %d"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid board in '%s'"
-msgstr "No se ha podido encontrar un visor de PDF para '%s'."
+msgstr "No se ha podido encontrar una placa válida en '%s'"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:264
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:269
@@ -42134,9 +42108,9 @@ msgstr "No se pueden encontrar huellas válidas en '%s'"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:360
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
+msgstr "Error al enumerar huellas en la biblioteca '%s': %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:512
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:517
@@ -42151,9 +42125,9 @@ msgid "Cannot load footprint '%s' from '%s'"
 msgstr "No se puede cargar la huella '%s' desde '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "Huella '%s' no encontrada en la biblioteca '%s'."
+msgstr "Huella '%s' no encontrada en el proyecto '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
@@ -42407,9 +42381,8 @@ msgid "Saving file"
 msgstr "Guardando archivo"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2938
-#, fuzzy
 msgid "Failed to save file to buffer"
-msgstr "No se ha podido abrir '%s'."
+msgstr "No se pudo guardar el archivo en el buffer"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h:88
 msgid "IPC-2581 Production File"
@@ -42618,9 +42591,9 @@ msgid "Undefined Layers Warning"
 msgstr "Capas no definidas:"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1213
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "No se puede crear la carpeta de salida '%s'."
+msgstr "No se puede crear un objeto generado de tipo '%s'"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1350
 #, c-format
