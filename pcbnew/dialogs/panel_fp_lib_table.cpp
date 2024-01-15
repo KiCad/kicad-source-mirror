@@ -188,12 +188,17 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
+        wxCHECK( aRow < (int) size(), /* void */ );
+
         LIB_TABLE_GRID::SetValue( aRow, aCol, aValue );
 
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
         {
-            PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aValue );
+            LIB_TABLE_ROW* row = at( (size_t) aRow );
+            wxString       fullURI = row->GetFullURI( true );
+
+            PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::GuessPluginTypeFromLibPath( fullURI );
 
             if( pluginType == PCB_IO_MGR::UNKNOWN )
                 pluginType = PCB_IO_MGR::KICAD_SEXP;

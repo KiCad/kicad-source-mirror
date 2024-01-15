@@ -114,12 +114,17 @@ protected:
 public:
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
+        wxCHECK( aRow < (int) size(), /* void */ );
+
         LIB_TABLE_GRID::SetValue( aRow, aCol, aValue );
 
         // If setting a filepath, attempt to auto-detect the format
         if( aCol == COL_URI )
         {
-            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aValue );
+            LIB_TABLE_ROW* row = at( (size_t) aRow );
+            wxString       fullURI = row->GetFullURI( true );
+
+            SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fullURI );
 
             if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
                 pluginType = SCH_IO_MGR::SCH_KICAD;
