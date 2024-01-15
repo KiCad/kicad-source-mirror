@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-14 12:30+0000\n"
+"PO-Revision-Date: 2024-01-16 04:06+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5160,7 +5160,6 @@ msgid "Reference Image"
 msgstr "Referensbild"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:178
-#, fuzzy
 msgid "Generator"
 msgstr "Generator"
 
@@ -5988,7 +5987,6 @@ msgid "Could not get repository index"
 msgstr "Kunde inte hämta förvarets index"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
 msgstr "Kunde inte hämta konfliktiterator"
 
@@ -7297,14 +7295,12 @@ msgid "Select all items on screen"
 msgstr "Välj alla objekt på skärmen"
 
 #: common/tool/actions.cpp:241
-#, fuzzy
 msgid "Unselect All"
 msgstr "Avlägsna alla val"
 
 #: common/tool/actions.cpp:242
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Ta bort alla objekt på skärmen från urval"
+msgstr "Avlägsna alla objekt på skärmen från val"
 
 #: common/tool/actions.cpp:247
 msgid "Paste Special..."
@@ -11346,7 +11342,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
-msgstr "Fäst textalternativ"
+msgstr "Alternativ för stifts text"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:215
 msgid "Show pin number"
@@ -24466,9 +24462,8 @@ msgid "Local file"
 msgstr "Lokal fil"
 
 #: kicad/pcm/pcm.cpp:1104
-#, fuzzy
 msgid "PCM Update"
-msgstr "Uppdatering av PCM"
+msgstr "Uppdatering av insticksprogramshanterare"
 
 #: kicad/pcm/pcm.cpp:1114
 msgid "Preparing to fetch repositories"
@@ -25716,16 +25711,15 @@ msgstr "Minsta isolationsavstånd"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diameter - drill)"
-msgstr "Via: (diameter - borr)"
+msgstr "Via: (borrdiameter)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diameter - drill)"
-msgstr "Pläterad lödyta: (diameter - borr)"
+msgstr "Lödyta, genompläterad: (borrdiameter)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:77
-#, fuzzy
 msgid "NP Pad: (diameter - drill)"
-msgstr "NP lödyta: (diameter - borr)"
+msgstr "Lödyta, opläterat hål: (borrdiameter)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:95
 msgid "AWG0000"
@@ -29889,9 +29883,8 @@ msgid "Offset added to the next column position"
 msgstr "Förskjutning som läggs till nästa kolumnposition"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
-#, fuzzy
 msgid "Stagger Settings"
-msgstr "Sidinställningar"
+msgstr "Stafflingsinställningar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:146
 msgid "Stagger:"
@@ -31008,7 +31001,7 @@ msgstr "Exportera lodpasta"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
 msgid "Export solder paste graphics."
-msgstr "Exportera grafik på lager för lodpasta"
+msgstr "Exportera grafik på lager för lodpasta."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 msgid "Board outline chaining tolerance:"
@@ -34700,7 +34693,7 @@ msgstr "Via typ:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:287
 #: pcbnew/pcb_track.cpp:1469
 msgid "Through"
-msgstr "Genom"
+msgstr "Genomgående"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:287
 #: pcbnew/pcb_track.cpp:1471
@@ -34750,9 +34743,8 @@ msgid "Track and Via Dimensions"
 msgstr "Fördefinierade ledar- och viadimensioner"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Snedvridning: "
+msgstr "Önskad längdskillnad: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
@@ -34770,7 +34762,7 @@ msgstr "(från %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:31
 msgid "Target length:"
-msgstr "Mållängd:"
+msgstr "Önskad längd:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
 msgid "Override custom rules"
@@ -38322,9 +38314,9 @@ msgid "%s has thermal relief spoke angle override."
 msgstr "%s har undantag för vinkeln för termisk avlastnings eker."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone knockout setting override."
-msgstr "%s har undantag för zonurtagsinställning."
+msgstr "%s har avvikande inställning för zonurtag."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:228
 #, c-format
@@ -38967,9 +38959,9 @@ msgstr ""
 "Export-tid %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
-#, fuzzy, c-format
+#, c-format
 msgid "Build holes for %s\n"
-msgstr "Bygg hål för %s\n"
+msgstr "Bygg upp hål för %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:959
 #, c-format
@@ -39700,9 +39692,8 @@ msgid "Pattern Properties"
 msgstr "Mönsteregenskaper"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2297
-#, fuzzy
 msgid "Tuning Mode"
-msgstr "Justeringsläge"
+msgstr "Längdjusteringsläge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2303
 msgid "Min Amplitude"
@@ -39725,14 +39716,12 @@ msgid "Corner Radius %"
 msgstr "Hörnradie %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2351
-#, fuzzy
 msgid "Target Length"
-msgstr "Mållängd"
+msgstr "Önskad längd"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360
-#, fuzzy
 msgid "Target Skew"
-msgstr "Snedvridning"
+msgstr "Önskad längdskillnad"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368
 msgid "Override Custom Rules"
@@ -43660,9 +43649,8 @@ msgid "Diff Pair"
 msgstr "Differentiellt par"
 
 #: pcbnew/tools/board_inspection_tool.cpp:900
-#, fuzzy
 msgid "Diff-pair gap resolution for:"
-msgstr "Tar reda på mellanrum för differentiellt par:"
+msgstr "Tar reda på ledarmellanrum för differentiellt par:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:905
 #, c-format
