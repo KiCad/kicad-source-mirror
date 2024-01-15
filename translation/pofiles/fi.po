@@ -10,17 +10,17 @@
 # Simo Mattila <simo.mattila@kapsi.fi>, 2021.
 # Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 # Petri Niemelä <petrinm@gmail.com>, 2022, 2023.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
 # Toni Laiho <apelegeos@gmail.com>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-12 17:03+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6418,13 +6418,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "Numeron jäsentäminen kohteesta '%s' epäonnistui"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s' ei näytä olevan kelvollinen EasyEDA (JLCEDA) Pro projektitiedosto. "
-"Project.json ei löydy."
+"'%s' ei näytä olevan kelvollinen EasyEDA (JLCEDA) Pro projekti- tai "
+"kirjastotiedosto. project.json tai device.json ei löydy."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #, c-format
@@ -6751,15 +6751,15 @@ msgstr "Johtimet"
 
 #: common/layer_id.cpp:169
 msgid "Through vias"
-msgstr "Läpivientien kautta"
+msgstr "Läpimenevät läpivienit"
 
 #: common/layer_id.cpp:170
 msgid "Blind/Buried vias"
-msgstr "Sokea/Haudatut läpiviennit"
+msgstr "Sokeat/haudatut läpiviennit"
 
 #: common/layer_id.cpp:171
 msgid "Micro-vias"
-msgstr "Mikro-läpiviennit"
+msgstr "Mikroläpiviennit"
 
 #: common/layer_id.cpp:172
 msgid "Via holes"
@@ -18754,9 +18754,8 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
-msgstr "Värähdyslaajuus"
+msgstr "Amplitudi"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
@@ -27089,7 +27088,7 @@ msgstr "Läpiviennin pituus:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Läpivientien pituus on levyn paksuus läpivientireikien kohdalla"
+msgstr "Läpimenevien läpivientien pituus on piirilevyn paksuus"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
@@ -27159,7 +27158,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Varoitus:\n"
-"Läpiviennin halkaisija >= reiän vapaana pidettävä etäisyys.\n"
+"Läpiviennin anturan halkaisija >= Kuparivyöhykkeen välysreiän halkaisija.\n"
 "Läpiviennille, joka sijaitsee kuparivyöhykkeen sisällä, ei voida laskea "
 "kaikkia parametrejä."
 
@@ -28018,11 +28017,11 @@ msgstr "Verkkonimi"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 msgid "Teardrops"
-msgstr "Kyynelpisarat"
+msgstr "Kupariviisteet"
 
 #: pcbnew/board_connected_item.cpp:237
 msgid "Enable Teardrops"
-msgstr "Ota Kyynelpisarat käyttöön"
+msgstr "Salli kupariviisteiden käytön"
 
 #: pcbnew/board_connected_item.cpp:243
 msgid "Best Length Ratio"
@@ -28050,7 +28049,7 @@ msgstr "Suosi vyöhykeyhteyksiä"
 
 #: pcbnew/board_connected_item.cpp:281
 msgid "Allow Teardrops To Span Two Tracks"
-msgstr "Salli kyynelpisaroiden kattaa kaksi johdinraitaa"
+msgstr "Salli kupariviisteiden ulottuvan kahdelle johtimelle"
 
 #: pcbnew/board_connected_item.cpp:287
 msgid "Max Width Ratio"
@@ -28488,7 +28487,7 @@ msgstr "Poista johdinraita oikosulkemalla kaksi verkkoa"
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
-msgstr "Poista läpivienti oikosulkemalla kaksi verkkoa"
+msgstr "Poista kahta verkkoa oikosukeava läpivienti"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
@@ -28508,7 +28507,7 @@ msgstr "Poista johdinraita, jota ei ole yhdistetty molemmista päistä"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove via connected on less than 2 layers"
-msgstr "Poista läpivienti, jossa on yhdistetty vähemmän kuin 2 kerrosta"
+msgstr "Poista läpivienti, johon liitetty alle kahdella kerroksella"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -29115,7 +29114,7 @@ msgstr "Ennalta valitut koot"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
 msgid "Length-tuning Patterns"
-msgstr "Pituuden säätömallit"
+msgstr "Pituudensäätökuviot"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -29189,7 +29188,7 @@ msgstr "NPTH:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:167
 msgid "Through vias:"
-msgstr "Läpivientien kautta:"
+msgstr "Läpimenevät läpiviennit:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 msgid "Blind/buried:"
@@ -29408,7 +29407,7 @@ msgstr "&Poista tarpeettomat läpiviennit"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:31
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "poista läpiviennit läpirei'istä ja päällekkäin olevista läpivienneistä"
+msgstr "poista läpireikäliitospinnan päällä tai päällekkäin olevat läpiviennit"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "Delete vias connected on only one layer"
@@ -29445,15 +29444,15 @@ msgstr "Siisti Johtimet ja Läpiviennit"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:209
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "Kyynelpisarat Läpivienneissä/Antururoissa Ominaisuudet"
+msgstr "Läpivientien/antururoiden kupariviisteiden ominaisuudet"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:213
 msgid "Teardrop on Tracks Properties"
-msgstr "Kyynelpisara johtimissa Ominaisuudet"
+msgstr "Johtimien kupariviisteiden ominaisuudet"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:217
 msgid "Teardrop Properties"
-msgstr "Kyynelpisara Ominaisuudet"
+msgstr "Kupariviisteiden ominaisuudet"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:223
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
@@ -29758,8 +29757,8 @@ msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
-"Vie tämä alueasetus (poislukien kerros ja verkkovalinta) kaikille muille "
-"samanlaisille kuparialueille (kyynelpisaroille tai tavallisille "
+"Vie tämä alueasetus (poislukien kerros- ja verkkovalinta) kaikille muille "
+"samanlaisille kuparialueille (kupariviisteille tai tavallisille "
 "kuparialueille)."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
@@ -30559,7 +30558,7 @@ msgstr "Vaihda valitut jalanjäljet"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change footprints matching reference designator:"
-msgstr "Vaihda viitenumeroa vastaavia jalanjälkiä:"
+msgstr "Vaihda viitenumeroa vastaavat jalanjäljet:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change footprints matching value:"
@@ -30838,9 +30837,8 @@ msgid "STEP files"
 msgstr "STEP tiedostot"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
-#, fuzzy
 msgid "Binary glTF files"
-msgstr "Binääriset GTLF-tiedostot"
+msgstr "Binääriset glLF-tiedostot"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 msgid "STEP Output File"
@@ -30959,11 +30957,12 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid "Export tracks, pads and vias"
-msgstr "Vie johdinraitoja, anturoita ja läpivientejä"
+msgstr "Vie johdinraidat, anturat ja läpiviennit"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
 msgid "Export tracks, pads and vias on external copper layers."
-msgstr "Vie johdinraidat, anturat ja läpiviennit ulkoisille kuparikerroksille."
+msgstr ""
+"Vie ulkoisilla kuparikerroksilla olevat johdinraidat, anturat ja läpiviennit."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 msgid "Export zones on external copper layers."
@@ -32219,28 +32218,28 @@ msgstr "Poista kohde"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
 msgid "Set teardrops to default values for shape"
-msgstr "Aseta kyynelpisarat muodon oletusarvoiksi"
+msgstr "Aseta kupariviisteet muodon oletusarvoiksi"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:109
 msgid "Set teardrops to specified values:"
-msgstr "Aseta kyynelpisarat määritettyihin arvoihin:"
+msgstr "Aseta kupariviisteet määritettyihin arvoihin:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Add teardrops with default values for shape"
-msgstr "Lisää kyynelpisaroita muodon oletusarvoilla"
+msgstr "Lisää kupariviisteitä muodon oletusarvoilla"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
 msgid "Add teardrops with specified values:"
-msgstr "Lisää kyynelpisaroita tietyillä arvoilla:"
+msgstr "Lisää kupariviisteitä tietyillä arvoilla:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:483
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:491
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:510
 msgid "Edit Teardrops"
-msgstr "Muokkaa Kyynelpisaroita"
+msgstr "Muokkaa kupariviisteitä"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
 msgid "PTH pads"
@@ -32276,11 +32275,11 @@ msgstr "Vain pyöreät anturat"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
 msgid "Existing teardrops only"
-msgstr "Vain olemassa olevat kyynelpisarat"
+msgstr "Vain olemassa olevat kupariviisteet"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
-msgstr "Poista kyynelpisarat"
+msgstr "Poista kupariviisteet"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
 msgid "Edit default values in Board Setup"
@@ -32297,7 +32296,7 @@ msgstr "Suosi vyöhykeliitäntää"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
 msgid "Allow teardrops to span 2 track segments"
-msgstr "Salli kyynelpisaroiden kattaa 2 johdinraidan osaa"
+msgstr "Salli kupariviisteiden kattaa 2 johdinraidan osaa"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:145
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -32306,7 +32305,7 @@ msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
-"Sallii kyynelpisaran leviämisen yli 2 johtimen, jos ensimmäinen "
+"Sallii kupariviisteen leviämisen yli 2 johtimen segmentin, jos ensimmäinen "
 "johdinsegmentti on liian lyhyt"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:161
@@ -32326,21 +32325,21 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"Suurin anturan/läpivientikoon ja johtimen leveyden suhde kyynelpisaran "
-"luomiseksi.\n"
-"100 luo aina kyynelpisaran."
+"Suurin johtimen leveyden ja anturan/läpiviennin koon suhde, jolle "
+"kupariviiste luodaan.\n"
+"100 luo aina kupariviisteen."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:168
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:161
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
 msgstr ""
-"Johdinliuskat, jotka ovat kooltaan samankokoisia kuin antura tai läpivienti, "
-"eivät tarvitse kyynelpisaroita."
+"Johtimet, jotka ovat leveydeltään samankokoisia kuin antura tai läpivienti, "
+"eivät tarvitse kupariviisteitä."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
 msgid "(as a percentage of pad/via size)"
-msgstr "(prosentteina anturan/läpivientien koosta)"
+msgstr "(prosentteina anturan/läpiviennin koosta)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:222
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:458
@@ -32371,7 +32370,7 @@ msgstr "Pisteet:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 msgid "Set Teardrops"
-msgstr "Aseta Kyynelpisarat"
+msgstr "Aseta kupariviisteet"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
@@ -32690,15 +32689,15 @@ msgstr "Suunnittelusäännön rajoitukset"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:66
 msgid "Predefined track && via dimensions"
-msgstr "Ennalta määritellyt johtimen && läpivientimitat"
+msgstr "Ennalta määritellyt johtimien && läpivientien mitat"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
 msgid "Teardrop defaults"
-msgstr "Kyynelpisara oletusarvot"
+msgstr "Kupariviisteiden oletusarvot"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
 msgid "Length-tuning pattern defaults"
-msgstr "Pituus-säätökuvion oletusasetukset"
+msgstr "Pituudensäätökuvioiden oletusasetukset"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
 msgid "Custom rules"
@@ -33437,24 +33436,25 @@ msgstr "Uritettu antura (ainoastaan läpireikä)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 msgid "Board contains legacy teardrops."
-msgstr "Piirilevy sisältää vanhoja kyynelpisaroita."
+msgstr "Piirilevy sisältää vanhoja kupariviisteitä."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr ""
-"Käytä Muokkaa > Muokkaa kyynelpisaroita lisätäksesi automaattiset kyyneleet."
+"Käytä Muokkaa > Muokkaa kupariviisteitä lisätäksesi automaattiset "
+"kupariviisteet."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
 msgid "Add teardrops on pad's track connections"
-msgstr "Lisää kyynelpisaroita anturan johdinliuskan liitäntöihin"
+msgstr "Lisää kupariviisteet anturan johdinliuskan liitäntöihin"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 msgid "Tracks which are similar in size to the pad do not need teardrops."
 msgstr ""
-"Johdinliuskat, jotka ovat kooltaan samankokoisia kuin anturat, eivät "
-"tarvitse kyynelpisaroita."
+"Johdinliuskat, jotka ovat leveydeltään samankokoisia kuin anturat, eivät "
+"tarvitse kupariviisteitä."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:647
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
@@ -33488,7 +33488,7 @@ msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
 msgid "Teardrop Shape"
-msgstr "Kyynelpisaran Muoto"
+msgstr "Kupariviisteen muoto"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:704
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:63
@@ -33752,7 +33752,7 @@ msgstr "Tarkista vyöhykkeen täyttyminen ennen piirtämistä"
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 msgid "Tent vias"
-msgstr "Peitä läpivientejä"
+msgstr "Päällystä läpiviennit juotteenestopinnoitteella"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:99
@@ -33761,8 +33761,8 @@ msgid ""
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
 msgstr ""
-"Teltatut läpiviennit: ei piirretty juotosmaskikerrokselle\n"
-"Ei teltassa: läpiviennit on piirretty juotosmaskikerrokselle\n"
+"Päällystetyt läpiviennit: ei piirretty juotosmaskikerrokselle\n"
+"Ei päälystetyt: läpiviennit on piirretty juotosmaskikerrokselle\n"
 "(Juotemaski on negatiivinen kerros)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
@@ -34143,8 +34143,8 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Kun tämä on käytössä, reititys yrittää rikkoa juotospisteet/läpiviennit "
-"puhtaalla tavalla, välttäen teräviä kulmia ja rosoisia johtimia."
+"Kun tämä on käytössä, reititys yrittää yhdistää juotospisteet/läpiviennit "
+"siistillä tavalla, välttäen teräviä kulmia ja rosoisia johtimia."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Smooth dragged segments"
@@ -34700,7 +34700,7 @@ msgstr "Läpivientityyppi:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:287
 #: pcbnew/pcb_track.cpp:1469
 msgid "Through"
-msgstr "Kautta"
+msgstr "Läpimenevä"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:287
 #: pcbnew/pcb_track.cpp:1471
@@ -34730,13 +34730,13 @@ msgstr "Alku, Loppu, ja yhdistetyt kerrokset"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
 msgid "Add teardrops on via's track connections"
-msgstr "Lisää kyynelpisaroita läpivientien johdinraidan liitäntöihin"
+msgstr "Lisää kupariviisteet läpivientien johdinraidan liitäntöihin"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
 msgstr ""
-"Johdinliuskat, jotka ovat kooltaan samankokoisia kuin läpivienti, eivät "
-"tarvitse kyynelpisaroita."
+"Johdinliuskat, jotka ovat leveydeltään samankokoisia kuin läpivienti, eivät "
+"tarvitse kupariviisteitä."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:418
 msgid "(as a percentage of pad/via/track size)"
@@ -34835,7 +34835,7 @@ msgstr "Yksipuoleinen"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
 msgid "Tuning Pattern Properties"
-msgstr "Viritysmallin ominaisuudet"
+msgstr "Pituudensäätökuvion ominaisuudet"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 msgid "Remove Unused Layers"
@@ -35222,7 +35222,7 @@ msgstr "Näytä kun reititetään"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing w/ via clearance at end"
-msgstr "Näytä reititettäessä w/läpiviennin välys lopussa"
+msgstr "Näytä reititettäessä kun läpiviennin välys lopussa"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing and editing"
@@ -35401,7 +35401,7 @@ msgid ""
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Pienin läpiviennin halkaisija.  Jos asetettu, tämä on absoluuttinen minimi "
-"ja sitä ei voi alittaa netclass:eilla, custom-säännöillä tai muilla "
+"ja sitä ei voi alittaa verkkoluokilla, mukautetuilla säännöillä tai muilla "
 "asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
@@ -35489,8 +35489,8 @@ msgid ""
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
 "Pienin mikro-läpiviennin reiän koko.  Jos asetettu, tämä on absoluuttinen "
-"minimi, jota ei voi alittaa netclass:eilla, kustomisäännöillä, tai muilla "
-"asetuksilla."
+"minimi, jota ei voi alittaa verkkoluokilla, mukautetuilla säännöillä, tai "
+"muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
 msgid "Silkscreen"
@@ -36801,7 +36801,7 @@ msgstr "Kaaripisteet:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:366
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:543
 msgid "Allow teardrop to span two track segments"
-msgstr "Salli kyynelpisaroiden kattaa kaksi johdinraidan osaa"
+msgstr "Salli kupariviisteiden kattaa kaksi johdinraidan osaa"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:199
 msgid "Default properties for rectangular shapes:"
@@ -36809,7 +36809,7 @@ msgstr "Suorakulmaisten muotojen oletusominaisuudet:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:379
 msgid "Properties for track-to-track teardrops:"
-msgstr "Johdinliuskojen välisten kyynelpisaroiden ominaisuudet:"
+msgstr "Johdinliuskojen välisten kupariviisteiden ominaisuudet:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
 msgid "Maximum track width"
@@ -36820,14 +36820,14 @@ msgid ""
 "Max track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"Suurin johdinliuskan leveyden suhde kyynelpisaran luomiseksi.\n"
-"100 luo aina kyynelpisaran."
+"Suurin johdinliuskojen leveyksien suhde kupariviisteen luomiseksi.\n"
+"100 luo aina kupariviisteen."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:518
 msgid "Tracks which are similar in size do not need teardrops."
 msgstr ""
 "Johdinliuskat, jotka ovat kooltaan samankokoisia, eivät tarvitse "
-"kyynelpisaroita."
+"kupariviisteitä."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphics and text:"
@@ -36956,7 +36956,7 @@ msgstr "levyn asennusrajoitukset piha-alue"
 
 #: pcbnew/drc/drc_engine.cpp:212
 msgid "board setup micro-via constraints"
-msgstr "levyn asetusten mikro-läpivienti rajoitteet"
+msgstr "piirilevyn asetusten mikroläpivientien rajoitteet"
 
 #: pcbnew/drc/drc_engine.cpp:246 pcbnew/drc/drc_engine.cpp:325
 #, c-format
@@ -36972,7 +36972,7 @@ msgstr "verkkoluokka '%s' (diff pari)"
 #: pcbnew/drc/drc_engine.cpp:353
 #, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "verkkoluokka '%s' (uvia)"
+msgstr "verkkoluokka '%s' (mikroläpivienti)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 msgid "keepout area"
@@ -37371,7 +37371,7 @@ msgstr "Anturapino ei ole kelvollinen"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Micro via hole size out of range"
-msgstr "Mikroläpivientireiän koko alueen ulkopuolella"
+msgstr "Mikroläpivientireiän koko sallitun alueen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -37763,7 +37763,7 @@ msgstr "Tarkastetaan anturareikiä..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:93
 msgid "Checking via holes..."
-msgstr "Tarkastetaan läpivientien reikiä..."
+msgstr "Tarkastetaan läpivientien reiät..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:98
 msgid "Checking micro-via holes..."
@@ -37967,7 +37967,7 @@ msgstr "%s pidä poissa johtimet asetukset eroavat."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr "%s pidä poissa läpivientiasetus eroaa."
+msgstr "%s asetus pidä poissa läpiviennit eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
 #, c-format
@@ -39114,11 +39114,11 @@ msgstr "Virhe ladattaessa jalanjälkeä %s kirjastosta '%s'."
 #: pcbnew/generators/pcb_tuning_pattern.cpp:259
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
 msgid "Tuning Pattern"
-msgstr "Virityskuvio"
+msgstr "Pituudensäätökuvio"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:264
 msgid "Tuning Patterns"
-msgstr "Virityskuviot"
+msgstr "Pituudensäätökuviot"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:408
 msgid "Tuning"
@@ -39138,7 +39138,7 @@ msgstr "viritetty"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1355
 msgid "Edit Tuning Pattern"
-msgstr "Muokkaa virityskuviota"
+msgstr "Muokkaa pituudensäätökuviota"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1825
 msgid "current skew"
@@ -39168,12 +39168,12 @@ msgstr "Täysipituinen"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1940
 #, c-format
 msgid "Target Skew: %s"
-msgstr "Kohteen Skew: %s"
+msgstr "Tavoitevinous: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1941
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1963
 msgid "(from tuning pattern properties)"
-msgstr "(virityskuvion ominaisuuksista)"
+msgstr "(pituudensäätökuvion ominaisuuksista)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1949
 #, c-format
@@ -39183,7 +39183,7 @@ msgstr "Vinousrajoitukset: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1962
 #, c-format
 msgid "Target Length: %s"
-msgstr "Kohteen pituus: %s"
+msgstr "Tavoitepituus: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1971
 #, c-format
@@ -39236,11 +39236,11 @@ msgstr "Kulman säde %"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2351
 msgid "Target Length"
-msgstr "Kohteen pituus"
+msgstr "Tavoitepituus"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360
 msgid "Target Skew"
-msgstr "Kohteen vinous"
+msgstr "Tavoitevinous"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2368
 msgid "Override Custom Rules"
@@ -40786,8 +40786,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Kirjastokomponentin '%s' CADSTAR-alueella '%s' ei ole vastaavuutta KiCad:"
-"issa. Alue ei ole läpivienti tai johdinkieltoalue. Aluetta ei tuotu."
+"CADSTAR-alueelle '%s' joka sisältyy kirjastokomponenttiin '%s', ei ole "
+"vastaavuutta KiCad:issa. Alue ei ole läpivienti tai johdinkieltoalue. "
+"Aluetta ei tuotu."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1083
 #, c-format
@@ -41018,8 +41019,8 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
-"CADSTAR-design sisältää kyynelpisaroita. Tämä maahantuoja ei vielä tue "
-"niitä, joten suunnittelun kyynelpisarat on jätetty huomiotta."
+"CADSTAR-design sisältää kupariviisteitä. Tämä tuoja ei vielä tue niitä, "
+"joten suunnittelun kupariviisteet on jätetty huomiotta."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2589
 #, c-format
@@ -41028,9 +41029,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
-"CADSTAR läpivientikoodissa %s muoto on erilainen, kuin määritelty ympyrä. "
-"KiCad tukee vain pyöreitä läpivientiä, joten tämä läpivientityyppi on "
-"muutettu läpimitaltaan %.2f mm olevaksi läpivienniksi."
+"CADSTAR läpivientikoodissa '%s' määritelty muoto eroaa ympyrästä. KiCad "
+"tukee vain pyöreitä läpivientiä, joten tämä läpivientityyppi on muutettu "
+"läpimitaltaan %.2f mm olevaksi pyöreäksi läpivienniksi."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2799
 #, c-format
@@ -41853,11 +41854,10 @@ msgstr ""
 "Valittu tiedosto sisältää useita jalanjälkiä. Vain ensimmäinen tuodaan."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
 msgstr ""
-"Ota käyttöön <b> virheenkorjauksen </b> kirjaaminen Footprint * () - "
-"toiminnoille tässä PLUGIN-sovelluksessa."
+"Ota käyttöön <b>virheenkorjauksen</b> kirjaaminen Footprint*()-toiminnoille "
+"tässä PCB_IO-sovelluksessa."
 
 #: pcbnew/pcb_io/pcb_io.cpp:182
 msgid "Regular expression <b>footprint name</b> filter."
@@ -41883,11 +41883,9 @@ msgstr ""
 "Salasana <b> kirjautumiselle </b> johonkin erityiseen kirjastopalvelimeen."
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr ""
-"Syötä python-moduuli, joka toteuttaa PLUGIN :: Footprint * () -toiminnot."
+msgstr "Syötä python-moduuli, joka toteuttaa PCB_IO::Footprint*()-toiminnot."
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
@@ -42359,7 +42357,7 @@ msgstr "Aseta Läpiviennin kautta"
 
 #: pcbnew/router/router_tool.cpp:114
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr "Lisää läpivientireiän nykyisen reititetyn johtimen loppuun."
+msgstr "Lisää läpimenevän läpiviennin nykyisen reititetyn johtimen loppuun."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid "Place Blind/Buried Via"
@@ -42372,7 +42370,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:135
 msgid "Place Microvia"
-msgstr "Aseta Mikroläpivienti"
+msgstr "Aseta mikroläpivienti"
 
 #: pcbnew/router/router_tool.cpp:136
 msgid "Adds a microvia at the end of currently routed track."
@@ -42420,7 +42418,7 @@ msgstr "Mukautettu Johdinraita/Läpivientikoko..."
 #: pcbnew/router/router_tool.cpp:178
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
-"Näyttää valintaikkunan Johtimen leveyden ja läpivientikoon muuttamiseksi."
+"Näyttää valintaikkunan johtimen leveyden ja läpivientikoon muuttamiseksi."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Switch Track Posture"
@@ -42458,7 +42456,7 @@ msgstr "Käytä Verkkoluokan Arvoja"
 
 #: pcbnew/router/router_tool.cpp:243
 msgid "Use track and via sizes from the net class"
-msgstr "Käytä johdinraidan ja läpiviennin kokoja verkkoluokasta"
+msgstr "Käytä verkkoluokan johdinraidan ja läpiviennin kokoja"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/router/router_tool.cpp:372
 #: pcbnew/tools/drawing_tool.cpp:108
@@ -42467,7 +42465,7 @@ msgstr "Käytä Mukautettuja Arvoja ..."
 
 #: pcbnew/router/router_tool.cpp:248 pcbnew/tools/drawing_tool.cpp:109
 msgid "Specify custom track and via sizes"
-msgstr "Määritä mukautetut johdinraidat ja läpivientikoot"
+msgstr "Määritä mukautetut johdinraita- ja läpivientikoot"
 
 #: pcbnew/router/router_tool.cpp:259
 msgid "Track netclass width"
@@ -42562,9 +42560,8 @@ msgid "(%s to commit anyway.)"
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "Läpiviennin sijainti rikkoo suunnittelusääntöjä."
+msgstr "Johdin rikkoo suunnittelusääntöjä."
 
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/tools/pcb_actions.cpp:2381
 msgid "Break Track"
@@ -42711,7 +42708,7 @@ msgstr "Viitettä \"%s\" ei löydy."
 #: pcbnew/specctra_import_export/specctra_import.cpp:520
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "A Wire_via viittaa puuttuvaan padstackiin '%s'."
+msgstr "Yksi wire_via viittaa puuttuvaan anturapinoon '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -43483,7 +43480,7 @@ msgstr "Raahaa Kaarevaa Johdinraitaa"
 
 #: pcbnew/tools/edit_tool.cpp:929
 msgid "Edit track width/via size"
-msgstr "Muokkaa raidan leveyttä / koon kautta"
+msgstr "Muokkaa johdinraidan leveyttä / läpiviennin kokoa"
 
 #: pcbnew/tools/edit_tool.cpp:964
 msgid "At least two straight track segments must be selected."
@@ -43867,7 +43864,7 @@ msgstr "Kasvata Välejä"
 
 #: pcbnew/tools/pcb_actions.cpp:195
 msgid "Increase tuning pattern spacing by one step."
-msgstr "Suurenna virityskuvioiden väliä yhdellä askeleella."
+msgstr "Suurenna pituudensäätökuvion väliä yhdellä askeleella."
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Decrease Spacing"
@@ -43875,7 +43872,7 @@ msgstr "Pienennä Välejä"
 
 #: pcbnew/tools/pcb_actions.cpp:204
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "Pienennä virityskuvion väliä yhdellä askeleella."
+msgstr "Pienennä pituudensäätökuvion väliä yhdellä askeleella."
 
 #: pcbnew/tools/pcb_actions.cpp:212
 msgid "Increase Amplitude"
@@ -43883,7 +43880,7 @@ msgstr "Lisää Amplitudi"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "Lisää virityskuvion amplitudia yhdellä askeleella."
+msgstr "Lisää pituudensäätökuvion amplitudia yhdellä askeleella."
 
 #: pcbnew/tools/pcb_actions.cpp:221
 msgid "Decrease Amplitude"
@@ -43891,7 +43888,7 @@ msgstr "Pienennä amplitudia"
 
 #: pcbnew/tools/pcb_actions.cpp:222
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Pienennä virityskuvion amplitudia yhdellä askeleella."
+msgstr "Pienennä pituudensäätökuvion amplitudia yhdellä askeleella."
 
 #: pcbnew/tools/pcb_actions.cpp:231
 msgid "Add Aligned Dimension"
@@ -43947,7 +43944,7 @@ msgstr "Lisää Läpiviennit"
 
 #: pcbnew/tools/pcb_actions.cpp:289
 msgid "Add free-standing vias"
-msgstr "Lisää vapaasti seisovia läpivientejä"
+msgstr "Lisää irrallisia läpivientejä"
 
 #: pcbnew/tools/pcb_actions.cpp:298
 msgid "Add Rule Area"
@@ -44170,7 +44167,7 @@ msgstr "Muuta liuskan leveys"
 
 #: pcbnew/tools/pcb_actions.cpp:598
 msgid "Updates selected track & via sizes"
-msgstr "Päivittää valitun raidan ja kokoiset koot"
+msgstr "Päivittää valitut johdinraitojen ja läpivientien koot"
 
 #: pcbnew/tools/pcb_actions.cpp:604
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -44347,8 +44344,8 @@ msgstr "Poista käyttämättömät anturat..."
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Poista tai palauta läpireikäisten juotospisteiden ja läpivientien "
-"kytkemättömät sisäkerrokset"
+"Poista tai palauta läpireikäisten liitospintojen ja läpivientien "
+"kytkemättömät sisäkerroksien kaulukset"
 
 #: pcbnew/tools/pcb_actions.cpp:811
 msgid "Assign a different footprint from the library"
@@ -44377,8 +44374,7 @@ msgstr "Muokkaa Johdinraitoja & Läpivientien Ominaisuuksia ..."
 #: pcbnew/tools/pcb_actions.cpp:832
 msgid "Edit track and via properties globally across board"
 msgstr ""
-"Muokkaa kaikkien johdinraitojen ja läpivientien ominaisuuksia yleisesti "
-"piirilevyllä"
+"Muokkaa piirilevyn kaikkien johdinraitojen ja läpivientien ominaisuuksia"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Edit Text and graphics properties globally across board"
@@ -44386,11 +44382,11 @@ msgstr "Muokkaa teksti- ja grafiikkaominaisuuksia yleisesti piirilevyllä"
 
 #: pcbnew/tools/pcb_actions.cpp:845
 msgid "Edit Teardrops..."
-msgstr "Muokkaa Kyynelpisaroita..."
+msgstr "Muokkaa kupariviisteitä..."
 
 #: pcbnew/tools/pcb_actions.cpp:846
 msgid "Add, remove or edit teardrops globally across board"
-msgstr "Lisää, poista tai muokkaa kyynelpisaroita yleisesti piirilevyllä"
+msgstr "Lisää, poista tai muokkaa kupariviisteitä yleisesti piirilevyllä"
 
 #: pcbnew/tools/pcb_actions.cpp:852
 msgid "Global Deletions..."
@@ -44886,7 +44882,7 @@ msgstr "Luonnostele Läpiviennit"
 
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid "Show vias in outline mode"
-msgstr "Näytä läpiviennit ääriviivoina"
+msgstr "Näytä läpiviennit ääriviiva-tilassa"
 
 #: pcbnew/tools/pcb_actions.cpp:1407
 msgid "Sketch Graphic Items"
@@ -45408,7 +45404,7 @@ msgstr "Valitse Kaikki Johtimet Verkossa"
 
 #: pcbnew/tools/pcb_actions.cpp:2112
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "Valitsee kaikki samaan verkkoon kuuluvat johtimet & läpiviennit."
+msgstr "Valitsee kaikki samaan verkkoon kuuluvat johtimet ja läpiviennit."
 
 #: pcbnew/tools/pcb_actions.cpp:2118
 msgid "Deselect All Tracks in Net"
@@ -45417,8 +45413,7 @@ msgstr "Poista valinta Kaikki Johtimet Verkossa"
 #: pcbnew/tools/pcb_actions.cpp:2119
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr ""
-"Poista kaikkien samaan verkkoon kuuluvien johtimien & läpivientien "
-"valintojen valinta."
+"Poista kaikki samaan verkkoon kuuluvat johtimet ja läpiviennit valinnasta."
 
 #: pcbnew/tools/pcb_actions.cpp:2126
 msgid "Select All Unconnected Footprints"
@@ -45686,12 +45681,13 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2410
 msgid "Update All Tuning Patterns"
-msgstr "Päivitä kaikki viritysmallit"
+msgstr "Päivitä kaikki pituudensäätökuviot"
 
 #: pcbnew/tools/pcb_actions.cpp:2411
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
-"Yritä virittää olemassa olevia viritysmalleja uudelleen niiden rajoissa"
+"Yritä virittää olemassa olevia pituudensäätökuvioita uudelleen niiden "
+"rajoissa"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
 msgid "Rebuild All Generators"
@@ -46667,7 +46663,7 @@ msgstr "Sääntöalue"
 
 #: pcbnew/zone.cpp:706
 msgid "Teardrop Area"
-msgstr "Kyynelpisara-alue"
+msgstr "Kupariviiste-alue"
 
 #: pcbnew/zone.cpp:708
 msgid "Copper Zone"
