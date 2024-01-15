@@ -184,8 +184,7 @@ private:
                                       SCH_SHEET_LIST* aPastedSheetsSoFar,
                                       SCH_REFERENCE_LIST* aPastedSymbolsSoFar );
 
-    void setPastedSheetInstances( const SCH_SHEET* aPastedSheet );
-    void setPastedSymbolInstances( SCH_SCREENS& aScreenList );
+    void setPastedSymbolInstances( const SCH_SCREEN* aScreen );
 
     /**
      * Remove all pasted symbol instances that do not belong to the current project.
@@ -238,9 +237,6 @@ private:
 
     // A map of KIID_PATH --> symbol instances for the clipboard contents.
     std::map<KIID_PATH, SCH_SYMBOL_INSTANCE> m_clipboardSymbolInstances;
-
-    // A map of KIID_PATH --> sheet instances for the clipboard contents.
-    std::map<KIID_PATH, SCH_SHEET_INSTANCE>  m_clipboardSheetInstances;
 
     std::set<SCH_SYMBOL*>                    m_pastedSymbols;
 };

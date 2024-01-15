@@ -1511,56 +1511,25 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
 }
 
 
-void SCH_EDITOR_CONTROL::setPastedSheetInstances( const SCH_SHEET* aPastedSheet )
+void SCH_EDITOR_CONTROL::setPastedSymbolInstances( const SCH_SCREEN* aScreen )
 {
-    wxCHECK( aPastedSheet, /* void */ );
+    wxCHECK( aScreen, /* void */ );
 
-    for( const SCH_SHEET_INSTANCE& sheetInstance : aPastedSheet->GetInstances() )
+    for( SCH_ITEM* item : aScreen->Items() )
     {
-        KIID_PATH pathWithSheet = sheetInstance.m_Path;
-
-        pathWithSheet.push_back( aPastedSheet->m_Uuid );
-        m_clipboardSheetInstances[pathWithSheet] = sheetInstance;
-    }
-
-    const SCH_SCREEN* screen = aPastedSheet->GetScreen();
-
-    wxCHECK( screen, /* void */ );
-
-    for( SCH_ITEM* item : screen->Items() )
-    {
-        if( item->Type() == SCH_SHEET_T )
+        if( item->Type() == SCH_SYMBOL_T )
         {
-            const SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            wxCHECK2( sheet, continue );
+            wxCHECK2( symbol, continue );
 
-            setPastedSheetInstances( sheet );
-        }
-    }
-}
-
-
-void SCH_EDITOR_CONTROL::setPastedSymbolInstances( SCH_SCREENS& aScreenList )
-{
-    for( SCH_SCREEN* screen = aScreenList.GetFirst(); screen; screen = aScreenList.GetNext() )
-    {
-        for( SCH_ITEM* item : screen->Items() )
-        {
-            if( item->Type() == SCH_SYMBOL_T )
+            for( const SCH_SYMBOL_INSTANCE& symbolInstance : symbol->GetInstanceReferences() )
             {
-                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                KIID_PATH pathWithSymbol = symbolInstance.m_Path;
 
-                wxCHECK2( symbol, continue );
+                pathWithSymbol.push_back( symbol->m_Uuid );
 
-                for( const SCH_SYMBOL_INSTANCE& symbolInstance : symbol->GetInstanceReferences() )
-                {
-                    KIID_PATH pathWithSymbol = symbolInstance.m_Path;
-
-                    pathWithSymbol.push_back( symbol->m_Uuid );
-
-                    m_clipboardSymbolInstances[pathWithSymbol] = symbolInstance;
-                }
+                m_clipboardSymbolInstances[pathWithSymbol] = symbolInstance;
             }
         }
     }
@@ -1639,15 +1608,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         tempScreen->Append( text_item );
     }
 
-    SCH_SCREENS tempScreens( tempSheet );
-
     m_pastedSymbols.clear();
-    m_clipboardSheetInstances.clear();
     m_clipboardSymbolInstances.clear();
 
-    // Save pasted sheet and symbol instances.
-    setPastedSheetInstances( &tempSheet );
-    setPastedSymbolInstances( tempScreens );
+    // Save pasted symbol instances.
+    setPastedSymbolInstances( tempScreen );
 
     tempScreen->MigrateSimModels();
 
@@ -1850,6 +1815,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     m_frame->InitSheet( sheet, sheet->GetFileName() );
             }
 
+            // Save the symbol instances in case the user chooses to keep the existing
+            // symbol annotation.
+            setPastedSymbolInstances( sheet->GetScreen() );
             sheetsPasted = true;
 
             // Push it to the clipboard path while it still has its old KIID
