@@ -391,6 +391,9 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 {
     wxASSERT( m_workFile );
 
+    if( aFill == FILL_T::NO_FILL && aWidth <= 0 )
+        return;
+
     if( aCornerList.size() <= 1 )
         return;
 

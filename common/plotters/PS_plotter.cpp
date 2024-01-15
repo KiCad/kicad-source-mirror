@@ -561,6 +561,9 @@ void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                            void* aData )
 {
+    if( aFill == FILL_T::NO_FILL && aWidth <= 0 )
+        return;
+
     if( aCornerList.size() <= 1 )
         return;
 

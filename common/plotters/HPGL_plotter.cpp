@@ -448,6 +448,9 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
 void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                              void* aData )
 {
+    if( aFill == FILL_T::NO_FILL && aWidth <= 0 )
+        return;
+
     if( aCornerList.size() <= 1 )
         return;
 
@@ -462,7 +465,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aF
     MoveTo( aCornerList[0] );
     startItem( userToDeviceCoordinates( aCornerList[0] ) );
 
-    if( aFill == FILL_T::FILLED_SHAPE || aFill == FILL_T::FILLED_WITH_COLOR )
+    if( aFill != FILL_T::NO_FILL )
     {
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
