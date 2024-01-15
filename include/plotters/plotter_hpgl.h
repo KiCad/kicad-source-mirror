@@ -68,6 +68,9 @@ public:
      */
     virtual bool EndPlot() override;
 
+    /// HPGL doesn't handle color
+    virtual void SetColorMode( bool aColorMode ) override {};
+
     /// HPGL doesn't handle line thickness or color
     virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override
     {
