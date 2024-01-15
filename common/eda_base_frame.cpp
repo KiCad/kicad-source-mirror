@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2023 CERN (www.cern.ch)
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,7 +521,11 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 
     // Trailing space keeps OSX from hijacking our menu (and disabling everything in it).
     aMenuBar->Append( helpMenu, _( "&Help" ) + wxS( " " ) );
+
+    // This change is only needed on macOS, and creates a bug on Windows
+    #ifdef __WXMAC__
     helpMenu->wxMenu::SetTitle( _( "&Help" ) + wxS( " " ) );
+    #endif
 }
 
 
