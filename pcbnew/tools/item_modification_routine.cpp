@@ -112,6 +112,8 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
         // Nothing to do
         return;
 
+    if( seg_a.Angle( seg_b ).IsHorizontal() )
+        return;
 
     SHAPE_ARC sArc( seg_a, seg_b, m_filletRadiusIU );
     VECTOR2I  t1newPoint, t2newPoint;
