@@ -82,6 +82,11 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
     m_pos = aPos;
     m_size = aSize;
     m_screen = nullptr;
+    
+    m_borderWidth = 0;
+    m_borderColor = COLOR4D::UNSPECIFIED;
+    m_backgroundColor = COLOR4D::UNSPECIFIED;
+    m_fieldsAutoplaced = aAutoplaceFields;
 
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {
@@ -95,13 +100,8 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
         else
             m_fields.back().SetLayer( LAYER_SHEETFIELDS );
     }
-
-    m_fieldsAutoplaced = aAutoplaceFields;
+    
     AutoAutoplaceFields( nullptr );
-
-    m_borderWidth = 0;
-    m_borderColor = COLOR4D::UNSPECIFIED;
-    m_backgroundColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -116,6 +116,11 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_fieldsAutoplaced = aSheet.m_fieldsAutoplaced;
     m_screen = aSheet.m_screen;
 
+    m_borderWidth = aSheet.m_borderWidth;
+    m_borderColor = aSheet.m_borderColor;
+    m_backgroundColor = aSheet.m_backgroundColor;
+    m_instances = aSheet.m_instances;
+
     for( SCH_SHEET_PIN* pin : aSheet.m_pins )
     {
         m_pins.emplace_back( new SCH_SHEET_PIN( *pin ) );
@@ -124,11 +129,6 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
 
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
-
-    m_borderWidth = aSheet.m_borderWidth;
-    m_borderColor = aSheet.m_borderColor;
-    m_backgroundColor = aSheet.m_backgroundColor;
-    m_instances = aSheet.m_instances;
 
     if( m_screen )
         m_screen->IncRefCount();
