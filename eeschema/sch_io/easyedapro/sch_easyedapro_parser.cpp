@@ -1113,22 +1113,31 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                     SPIN_STYLE spin = SPIN_STYLE::LEFT;
 
-                    for( double i = component->rotation; i > 0; i -= 90 )
-                        spin = spin.RotateCCW();
-
-                    label->SetSpinStyle( spin );
-
                     if( esymInfo.symbolAttr )
                     {
                         wxString symStr = esymInfo.symbolAttr->value;
 
                         if( symStr == wxS( "Netport-IN" ) )
+                        {
+                            spin = SPIN_STYLE::LEFT;
                             label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+                        }
                         if( symStr == wxS( "Netport-OUT" ) )
+                        {
+                            spin = SPIN_STYLE::RIGHT;
                             label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+                        }
                         if( symStr == wxS( "Netport-BI" ) )
+                        {
+                            spin = SPIN_STYLE::RIGHT;
                             label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+                        }
                     }
+
+                    for( double i = component->rotation; i > 0; i -= 90 )
+                        spin = spin.RotateCCW();
+
+                    label->SetSpinStyle( spin );
 
                     nlohmann::json style = fontStyles[nameAttr->fontStyle];
 
