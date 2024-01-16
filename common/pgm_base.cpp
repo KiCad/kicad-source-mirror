@@ -813,6 +813,10 @@ wxString PGM_BASE::GetLanguageTag()
 
 void PGM_BASE::SetLanguagePath()
 {
+#ifdef _MSC_VER
+    wxLocale::AddCatalogLookupPathPrefix( PATHS::GetWindowsBaseSharePath()
+                                                  + wxT( "locale" ) );
+#endif
     wxLocale::AddCatalogLookupPathPrefix( PATHS::GetLocaleDataPath() );
 
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )

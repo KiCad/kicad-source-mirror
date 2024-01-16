@@ -184,6 +184,17 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 }
 
 
+#ifdef __WXMSW__
+/**
+ * Gets the stock (install) data path, which is the base path for things like scripting, etc
+ */
+wxString PATHS::GetWindowsBaseSharePath()
+{
+    return getWindowsKiCadRoot() + wxT( "share\\" );
+}
+#endif
+
+
 wxString PATHS::GetStockEDALibraryPath()
 {
     wxString path;

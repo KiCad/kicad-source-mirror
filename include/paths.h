@@ -182,6 +182,12 @@ public:
      * @return The directory the font config support files can be found
      */
     static wxString GetWindowsFontConfigDir();
+
+
+    /**
+     * Gets the stock (install) data path, which is the base path for things like scripting, etc
+     */
+    static wxString GetWindowsBaseSharePath();
 #endif
 
     /**
