@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2023 CERN
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -2445,6 +2445,15 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         if( m_isFootprintEditor )
         {
             FOOTPRINT* parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
+
+            // PCB_FIELD items are specific items (not only graphic, but are properies )
+            // and cannot be duplicated like other footprint items. So skip it:
+            if( orig_item->Type() == PCB_FIELD_T )
+            {
+                orig_item->ClearSelected();
+                continue;
+            }
+
             dupe_item = parentFootprint->DuplicateItem( orig_item );
 
             if( increment && dupe_item->Type() == PCB_PAD_T
@@ -2456,6 +2465,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 padTool->SetLastPadNumber( padNumber );
                 static_cast<PAD*>( dupe_item )->SetNumber( padNumber );
             }
+
+            dupe_item->ClearSelected();
+            new_items.push_back( dupe_item );
+            commit.Add( dupe_item );
         }
         else if( /*FOOTPRINT* parentFootprint =*/ orig_item->GetParentFootprint() )
         {
