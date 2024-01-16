@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-16 16:14+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-01-16 17:32+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3649,7 +3649,7 @@ msgstr ""
 "setzen, typischerweise 2.0.\n"
 "\n"
 "Wenn dieser Wert nicht mit der Systemeinstellung übereinstimmt, wird die "
-"Zeichenfläche nicht mit der Fenstergröße übereinstimmen und der Cursor an "
+"Zeichenfläche nicht mit der Fenstergröße übereinstimmen und der Zeiger an "
 "der falschen Stelle dargestellt."
 
 #: common/dialogs/panel_common_settings.cpp:96
@@ -4220,11 +4220,11 @@ msgstr "Bildschwenk und Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
 msgid "Center and warp cursor on zoom"
-msgstr "Cursor beim Zoomen zentrieren und positionieren"
+msgstr "Zeiger beim Zoomen zentrieren und positionieren"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
-msgstr "Hält beim Zoomen den Cursor an seiner aktuellen Position."
+msgstr "Hält beim Zoomen den Zeiger an seiner aktuellen Position."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
 msgid "Automatically pan while moving object"
@@ -6737,6 +6737,7 @@ msgstr "Hintergrund"
 #: common/widgets/gal_options_panel_base.cpp:120
 #: eeschema/sim/simulator_frame_ui.cpp:595
 #: eeschema/sim/simulator_frame_ui_base.cpp:167
+#, fuzzy
 msgid "Cursor"
 msgstr "Fadenkreuz"
 
@@ -7520,11 +7521,11 @@ msgstr "Auf Objekte zoomen"
 
 #: common/tool/actions.cpp:431 common/tool/actions.cpp:432
 msgid "Zoom In at Cursor"
-msgstr "Am Cursor hinein zoomen"
+msgstr "Am Zeiger hinein zoomen"
 
 #: common/tool/actions.cpp:444 common/tool/actions.cpp:445
 msgid "Zoom Out at Cursor"
-msgstr "Am Cursor heraus zoomen"
+msgstr "Am Zeiger heraus zoomen"
 
 #: common/tool/actions.cpp:451 common/tool/actions.cpp:452
 #: common/widgets/mathplot.cpp:1450 pcbnew/dialogs/panel_setup_rules.cpp:139
@@ -7539,7 +7540,7 @@ msgstr "Heraus zoomen"
 #: common/tool/actions.cpp:467 common/tool/actions.cpp:468
 #: common/widgets/mathplot.cpp:1452
 msgid "Center on Cursor"
-msgstr "Auf Cursor zentrieren"
+msgstr "Auf Zeiger zentrieren"
 
 #: common/tool/actions.cpp:476 common/tool/actions.cpp:477
 msgid "Zoom to Selection"
@@ -7563,35 +7564,35 @@ msgstr "Zoom-Stufe auf wieder auf Wert vor Rücknahme setzen"
 
 #: common/tool/actions.cpp:509
 msgid "Cursor Up"
-msgstr "Cursor hoch"
+msgstr "Zeiger hoch"
 
 #: common/tool/actions.cpp:517
 msgid "Cursor Down"
-msgstr "Cursor runter"
+msgstr "Zeiger runter"
 
 #: common/tool/actions.cpp:525
 msgid "Cursor Left"
-msgstr "Cursor links"
+msgstr "Zeiger links"
 
 #: common/tool/actions.cpp:533
 msgid "Cursor Right"
-msgstr "Cursor rechts"
+msgstr "Zeiger rechts"
 
 #: common/tool/actions.cpp:542
 msgid "Cursor Up Fast"
-msgstr "Cursor schnell hoch"
+msgstr "Zeiger schnell hoch"
 
 #: common/tool/actions.cpp:550
 msgid "Cursor Down Fast"
-msgstr "Cursor schnell runter"
+msgstr "Zeiger schnell runter"
 
 #: common/tool/actions.cpp:558
 msgid "Cursor Left Fast"
-msgstr "Cursor schnell links"
+msgstr "Zeiger schnell links"
 
 #: common/tool/actions.cpp:566
 msgid "Cursor Right Fast"
-msgstr "Cursor schnell rechts"
+msgstr "Zeiger schnell rechts"
 
 #: common/tool/actions.cpp:575 pcbnew/dialogs/panel_edit_options_base.cpp:113
 #: pcbnew/dialogs/panel_edit_options_base.cpp:185
@@ -7759,7 +7760,7 @@ msgstr "Lokale Koordinaten zurücksetzen"
 
 #: common/tool/actions.cpp:791
 msgid "Always Show Cursor"
-msgstr "Cursor immer anzeigen"
+msgstr "Zeiger immer anzeigen"
 
 #: common/tool/actions.cpp:792
 msgid "Display crosshairs even in selection tool"
@@ -16578,7 +16579,7 @@ msgstr "Pin hat unerwarteten inner edge type."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1498
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "Bezier hat %d Kontrollpunkte. Mindestens 2 werden erwartet."
+msgstr "Bezier hat %d Stützstellen. Mindestens 2 werden erwartet."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2522
 #, c-format
@@ -20200,7 +20201,7 @@ msgstr "Knoten auswählen"
 
 #: eeschema/tools/ee_actions.cpp:114
 msgid "Select a connection item under the cursor"
-msgstr "Wählt ein Verbindungselement unter dem Cursor"
+msgstr "Wählt ein Verbindungselement unter dem Zeiger"
 
 #: eeschema/tools/ee_actions.cpp:121
 msgid "Select Connection"
@@ -20829,7 +20830,7 @@ msgstr "In nicht-verbundene Segmente zerschneiden"
 
 #: eeschema/tools/ee_actions.cpp:829 pcbnew/tools/pcb_actions.cpp:1243
 msgid "Highlight net under cursor"
-msgstr "Netz unter dem Cursor hervorheben"
+msgstr "Netz unter dem Zeiger hervorheben"
 
 #: eeschema/tools/ee_actions.cpp:836 pcbnew/tools/pcb_actions.cpp:1258
 msgid "Clear Net Highlighting"
@@ -23882,19 +23883,19 @@ msgstr "Zu verwendendes Farbthema (Standard sind Schaltplaneinstellungen)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
 msgid "Do not generate property popups in PDF"
-msgstr "Kein Popups für Eigenschaften im PDF erzeugen"
+msgstr "Keine Popups für Eigenschaften im PDF erzeugen"
 
 #: kicad/cli/command_sch_export_plot.cpp:89
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr "Festlegen von Hintergrundfarben vermeiden (unabhängig vom Thema)"
+msgstr "Festlegen einer Hintergrundfarbe vermeiden (unabhängig vom Thema)"
 
 #: kicad/cli/command_sch_export_plot.cpp:95
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
-"Liste der zu druckenden Seitenzahlen, getrennt durch Kommata. Wird dies leer "
-"gelassen oder nicht angegeben, werden alle Seiten gedruckt"
+"Liste der zu druckenden Seitenzahlen, getrennt durch Kommata; leer oder "
+"nicht angegeben ist gleichbedeutend mit allen Seiten"
 
 #: kicad/cli/command_sch_export_plot.cpp:102
 msgid "Pen size [mm]"
@@ -24729,7 +24730,7 @@ msgstr "Rufe Repository ab ..."
 
 #: kicad/pcm/pcm.cpp:1145
 msgid "Reviewing packages..."
-msgstr "Überprüfung des Pakets..."
+msgstr "Überprüfe Pakete ..."
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
 #, c-format
@@ -25068,7 +25069,7 @@ msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
 #: kicad/project_tree_pane.cpp:1572
 #, fuzzy
 msgid "Set default remote"
-msgstr "Als Standard-Remote setzen"
+msgstr "Standard-Remote setzen"
 
 #: kicad/project_tree_pane.cpp:1625
 #, fuzzy
@@ -25125,17 +25126,17 @@ msgstr "Verwerfe Commit, da keine Dateien ausgewählt wurden."
 #: kicad/project_tree_pane.cpp:2161
 #, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Konnte Repository-Index nicht entfernen: %s"
+msgstr "Konnte Repository-Index nicht beziehen: %s"
 
 #: kicad/project_tree_pane.cpp:2169
 #, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Konnte Datei nicht zu Index hinzufügen: %s"
+msgstr "Konnte Datei nicht zum Index hinzufügen: %s"
 
 #: kicad/project_tree_pane.cpp:2177
 #, c-format
 msgid "Failed to write index: %s"
-msgstr "Fehler beim Schreiben von Index: %s"
+msgstr "Konnte Index nicht schreiben: %s"
 
 #: kicad/project_tree_pane.cpp:2184
 #, c-format
@@ -25160,12 +25161,12 @@ msgstr "Konnte Commit nicht abrufen: %s"
 #: kicad/project_tree_pane.cpp:2224
 #, c-format
 msgid "Failed to create author signature: %s"
-msgstr "Fehler beim Erstellen der Autorensignatur: %s"
+msgstr "Konnte Autorensignatur nicht erstellen: %s"
 
 #: kicad/project_tree_pane.cpp:2234
 #, c-format
 msgid "Failed to create commit: %s"
-msgstr "Konnte Commit \"%s\" nicht erstellen"
+msgstr "Konnte Commit nicht erstellen: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -31022,7 +31023,7 @@ msgstr "Spalte, welche die Hersteller-Teilenummer enthält"
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
 msgid "Omit"
-msgstr "Weglassen"
+msgstr "Auslassen"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
 msgid "Manufacturer:"
@@ -32388,7 +32389,7 @@ msgstr "Ausgewählte erneuern"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
 msgid "Rebuild this type"
-msgstr "Diese Typ erneuern"
+msgstr "Diesen Typ erneuern"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
 msgid "Rebuild All"
@@ -32659,7 +32660,7 @@ msgstr "Punkte:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 msgid "Set Teardrops"
-msgstr "Teardrops hinzufügen"
+msgstr "Teardrops setzen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
@@ -34515,8 +34516,8 @@ msgid ""
 "remain free and follow the cursor."
 msgstr ""
 "Wenn diese Option aktiviert ist, werden alle Leiterbahnsegmente bis zur "
-"Cursorposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
-"Cursor am nächsten liegt) frei und folgt dem Cursor."
+"Zeigerposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
+"Zeiger am nächsten liegt) frei und folgt dem Zeiger."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -34822,7 +34823,7 @@ msgstr "Endpunkt"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:114
 msgid "Bezier Control Point"
-msgstr "Bezier-Kontrollpunkt"
+msgstr "Bezier-Stützstelle"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:206
 msgid "Arc angle:"
@@ -35292,7 +35293,7 @@ msgstr "Auf Pads einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
 #: pcbnew/dialogs/panel_edit_options_base.cpp:301
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Cursorform wenn sich die Maus einem Pad-Bereich nähert"
+msgstr "Zeiger fangen wenn er sich in einen Pad-Bereich begibt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
@@ -35306,7 +35307,7 @@ msgstr "Auf Leiterbahnen einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:307
 #: pcbnew/dialogs/panel_edit_options_base.cpp:315
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Cursorform wenn die Maus sich einer Leiterbahn nähert"
+msgstr "Zeiger fangen wenn er sich einer Leiterbahn nähert"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Snap to graphics:"
@@ -35315,7 +35316,7 @@ msgstr "Auf Grafiken einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:321
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr "Cursorform wenn die Maus sich einem Grafikkontrollpunkt nähert"
+msgstr "Zeiger fangen wenn er sich einem Grafik-Kontrollpunkt nähert"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 msgid "Always show selected ratsnest"
@@ -35450,7 +35451,7 @@ msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
 msgstr ""
 "Das Verzeichnis \"%s\" existiert bereits. Möchten Sie bereits vorhandene "
-"überschreiben?"
+"Footprints überschreiben?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:885
 #, c-format
@@ -37498,7 +37499,7 @@ msgstr "%s wird geprüft: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:1091
 msgid "Netclass clearances apply only between copper items."
-msgstr "Netzklassen-Freiräume gelten nur für Kupferelemente."
+msgstr "Netzklassen-Freiräume gelten nur zwischen Kupferelementen."
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
 #, c-format
@@ -38193,12 +38194,12 @@ msgstr "%s Pad-zu-Die-Länge weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:230
 #, c-format
 msgid "%s position differs."
-msgstr "%s Position ist unterschiedlich."
+msgstr "%s Position weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:233
 #, c-format
 msgid "%s has different numbers."
-msgstr "%s hat unterschiedliche Zahlen/Werte."
+msgstr "%s hat abweichende numerische Werte."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:255
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
@@ -38209,7 +38210,7 @@ msgstr "%s Lagen weichen ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:261
 #, c-format
 msgid "%s pad shape type differs."
-msgstr "%s Padform weicht ab."
+msgstr "%s Padform-Typ weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:264
 #, c-format
@@ -38239,7 +38240,7 @@ msgstr "%s trapezförmiges Delta weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:284
 #, c-format
 msgid "%s rounded corners differ."
-msgstr "%s abgerundete kanten weichen ab."
+msgstr "%s abgerundete Kanten weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:295
 #, c-format
@@ -38521,9 +38522,8 @@ msgid "Checking length constraints..."
 msgstr "Längenbeschränkungen werden geprüft..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:119
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "(keine Kanten auf Edge.Cuts-Lage gefunden)"
+msgstr "(Verdächtige Elemente auf Edge.Cuts-Lage gefunden)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:145
 msgid "(no edges found on Edge.Cuts layer)"
@@ -38843,24 +38843,20 @@ msgid "Cutting %d/%d %s\n"
 msgstr "Schneide %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:981
-#, fuzzy
 msgid "pads"
-msgstr "Keine Pads"
+msgstr "Pads"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:982
-#, fuzzy
 msgid "shapes"
-msgstr "Form"
+msgstr "Formen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:983
-#, fuzzy
 msgid "tracks"
 msgstr "Leiterbahnen"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:984
-#, fuzzy
 msgid "zones"
-msgstr "Zone"
+msgstr "Zonen"
 
 #: pcbnew/files.cpp:146
 msgid "All KiCad Board Files"
@@ -39143,22 +39139,18 @@ msgid "Thermal reliefs for PTH"
 msgstr "Thermische Entlastungen für PTH"
 
 #: pcbnew/footprint.cpp:3453
-#, fuzzy
 msgid "Library Link"
 msgstr "Bibliotheksverknüpfung"
 
 #: pcbnew/footprint.cpp:3456 pcbnew/plot_board_layers.cpp:114
-#, fuzzy
 msgid "Library Description"
-msgstr "Beschreibung"
+msgstr "Bibliotheksbeschreibung"
 
 #: pcbnew/footprint.cpp:3465
-#, fuzzy
 msgid "Not in Schematic"
 msgstr "Nicht im Schaltplan"
 
 #: pcbnew/footprint.cpp:3467
-#, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Von Positionsdateien ausschließen"
 
@@ -39167,7 +39159,6 @@ msgid "Overrides"
 msgstr "Überschreibungen"
 
 #: pcbnew/footprint.cpp:3480
-#, fuzzy
 msgid "Exempt From Courtyard Requirement"
 msgstr "Keine Abstandsfläche erforderlich"
 
@@ -39193,14 +39184,12 @@ msgid "footprint %s"
 msgstr "Footprint %s"
 
 #: pcbnew/footprint_chooser_frame.cpp:73
-#, fuzzy
 msgid "Footprint Chooser"
-msgstr "Footprint-Prüfer"
+msgstr "Footprint-Auswahl"
 
 #: pcbnew/footprint_chooser_frame.cpp:83
-#, fuzzy
 msgid "Apply footprint filters"
-msgstr "Footprintfilter hinzufügen"
+msgstr "Footprintfilter anwenden"
 
 #: pcbnew/footprint_edit_frame.cpp:115
 msgid "KiCad Footprint Editor"
@@ -39422,14 +39411,14 @@ msgstr "Neuer Footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:1253
 #: pcbnew/tools/footprint_editor_control.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' already exists in library '%s'."
-msgstr "Footprint-Name \"%s\" ist in Bibliothek \"%s\" bereits vorhanden."
+msgstr "Footprint \"%s\" ist in Bibliothek \"%s\" bereits vorhanden."
 
 #: pcbnew/footprint_viewer_frame.cpp:116
 #, fuzzy
 msgid "KiCad Footprint Library Browser"
-msgstr "Footprintbibliotheks-Browser"
+msgstr "KiCad Footprint-Bibliothekbrowser"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -39497,17 +39486,17 @@ msgstr ""
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
 #, fuzzy
 msgid "Tuning Pattern"
-msgstr "Muster"
+msgstr "Abstimmungsmuster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:264
 #, fuzzy
 msgid "Tuning Patterns"
-msgstr "Muster"
+msgstr "Abstimmungsmuster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:408
 #, fuzzy
 msgid "Tuning"
-msgstr "Warnung"
+msgstr "Abstimmung"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1279
 msgid "too long"
@@ -39524,7 +39513,7 @@ msgstr "abgestimmt"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1355
 #, fuzzy
 msgid "Edit Tuning Pattern"
-msgstr "Mit Texteditor bearbeiten"
+msgstr "Abstimmungsmuster bearbeiten"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1825
 msgid "current skew"
@@ -39535,9 +39524,8 @@ msgid "current length"
 msgstr "Aktuelle Länge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1913
-#, fuzzy
 msgid "Routed Lengths"
-msgstr "Geroutete Länge"
+msgstr "Geroutete Längen"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1919 pcbnew/pcb_track.cpp:1093
 msgid "Routed Length"
@@ -44600,7 +44588,7 @@ msgid ""
 "for moving"
 msgstr ""
 "Wählt einen Footprint anhand des Referenzbezeichners und platziert diesen "
-"zum Verschieben unter dem Cursor"
+"zum Verschieben unter dem Zeiger"
 
 #: pcbnew/tools/pcb_actions.cpp:459
 msgid "Move Individually"
@@ -46256,7 +46244,7 @@ msgstr "Ausgewählte Pads nacheinander versuchen, automatisch zu verbinden."
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
-"Trennt das Leiterbahnelement an der Cursorposition in zwei verbundene "
+"Trennt das Leiterbahnelement an der Zeigerposition in zwei verbundene "
 "Segmente auf."
 
 #: pcbnew/tools/pcb_actions.cpp:2390
