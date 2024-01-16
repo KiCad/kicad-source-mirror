@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-16 17:32+0000\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
@@ -5391,7 +5391,6 @@ msgid "Background"
 msgstr "Hintergrund"
 
 #: common/layer_id.cpp:146 common/layer_id.cpp:182
-#, fuzzy
 msgid "Cursor"
 msgstr "Fadenkreuz"
 
@@ -7700,11 +7699,11 @@ msgstr "Zuordnung löschen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:129
 msgid "Delete selected footprint associations"
-msgstr "Ausgewählte Footprint-Zuordnungen entfernen"
+msgstr "Ausgewählte Footprintzuordnungen entfernen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:134 cvpcb/tools/cvpcb_actions.cpp:135
 msgid "Delete all footprint associations"
-msgstr "Alle Footprint-Zuordnungen entfernen"
+msgstr "Alle Footprintzuordnungen entfernen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Use symbol footprint filters"
@@ -12558,7 +12557,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:923
 #: pcbnew/footprint_libraries_utils.cpp:527 pcbnew/tools/pcb_actions.cpp:355
 msgid "Skip"
-msgstr "Auslassen"
+msgstr "Überspringen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:535
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:923
@@ -20351,7 +20350,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
-msgstr "Gerber Dateien betrachten"
+msgstr "Gerber-Dateien betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -22266,7 +22265,7 @@ msgid "Linear resistance:"
 msgstr "Linearer Widerstand:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
 msgstr "Frequenz für 100% Eindringtiefe:"
 
@@ -22309,7 +22308,7 @@ msgstr "Länge schließt den Rückpfad ein"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:204
 msgid "Resistance DC:"
-msgstr "Widerstand Gleichstrom:"
+msgstr "Gleichstromwiderstand:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:206
 msgid "DC Resistance of the conductor"
@@ -25521,7 +25520,7 @@ msgstr "Elektrische Eigenschaften"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 msgid "Clearance:"
-msgstr "Luftstrecke:"
+msgstr "Freiraum:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -34012,7 +34011,7 @@ msgstr "aus pos-Dateien ausschließen"
 
 #: pcbnew/footprint.cpp:1132
 msgid "exclude from BOM"
-msgstr "von der Bauteilliste ausschließen"
+msgstr "von Stückliste ausschließen"
 
 #: pcbnew/footprint.cpp:1134
 msgid "Status: "
@@ -34981,22 +34980,22 @@ msgstr "%s Eigenschaften aktualisiert."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:372
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut hinzufügen."
+msgstr "Füge %s Fertigungsattribut \"Von Stückliste ausschließen\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut entfernen."
+msgstr "Entferne %s Fertigungsattribut \"Von Stückliste ausschließen\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:388
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut hinzugefügt."
+msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:394
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut entfernt."
+msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:470
 #, c-format
@@ -39877,131 +39876,131 @@ msgstr "Anzeige wechseln zwischen ausgefüllten Zonen und nur deren Konturen"
 
 #: pcbnew/tools/pcb_actions.cpp:957
 msgid "Switch to Component (F.Cu) layer"
-msgstr "Wechsel zur oberen Kupferlage bzw. Bestückungsseite (F.Cu)"
+msgstr "Zur oberen Kupferlage bzw. Lötseite (F.Cu) wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:963
 msgid "Switch to Inner layer 1"
-msgstr "Wechsel zur Innenlage 1"
+msgstr "Zur Innenlage 1 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:969
 msgid "Switch to Inner layer 2"
-msgstr "Wechsel zur Innenlage 2"
+msgstr "Zur Innenlage 2 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:975
 msgid "Switch to Inner layer 3"
-msgstr "Wechsel zur Innenlage 3"
+msgstr "Zur Innenlage 3 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:981
 msgid "Switch to Inner layer 4"
-msgstr "Wechsel zur Innenlage 4"
+msgstr "Zur Innenlage 4 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:987
 msgid "Switch to Inner layer 5"
-msgstr "Wechsel zur Innenlage 5"
+msgstr "Zur Innenlage 5 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:993
 msgid "Switch to Inner layer 6"
-msgstr "Wechsel zur Innenlage 6"
+msgstr "Zur Innenlage 6 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:998
 msgid "Switch to Inner layer 7"
-msgstr "Wechsel zur Innenlage 7"
+msgstr "Zur Innenlage 7 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Switch to Inner layer 8"
-msgstr "Wechsel zur Innenlage 8"
+msgstr "Zur Innenlage 8 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1008
 msgid "Switch to Inner layer 9"
-msgstr "Wechsel zur Innenlage 9"
+msgstr "Zur Innenlage 9 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1013
 msgid "Switch to Inner layer 10"
-msgstr "Wechsel zur Innenlage 10"
+msgstr "Zur Innenlage 10 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1018
 msgid "Switch to Inner layer 11"
-msgstr "Wechsel zur Innenlage 11"
+msgstr "Zur Innenlage 11 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1023
 msgid "Switch to Inner layer 12"
-msgstr "Wechsel zur Innenlage 12"
+msgstr "Zur Innenlage 12 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1028
 msgid "Switch to Inner layer 13"
-msgstr "Wechsel zur Innenlage 13"
+msgstr "Zur Innenlage 13 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1033
 msgid "Switch to Inner layer 14"
-msgstr "Wechsel zur Innenlage 14"
+msgstr "Zur Innenlage 14 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1038
 msgid "Switch to Inner layer 15"
-msgstr "Wechsel zur Innenlage 15"
+msgstr "Zur Innenlage 15 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1043
 msgid "Switch to Inner layer 16"
-msgstr "Wechsel zur Innenlage 16"
+msgstr "Zur Innenlage 16 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1048
 msgid "Switch to Inner layer 17"
-msgstr "Wechsel zur Innenlage 17"
+msgstr "Zur Innenlage 17 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Switch to Inner layer 18"
-msgstr "Wechsel zur Innenlage 18"
+msgstr "Zur Innenlage 18 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1058
 msgid "Switch to Inner layer 19"
-msgstr "Wechsel zur Innenlage 19"
+msgstr "Zur Innenlage 19 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Switch to Inner layer 20"
-msgstr "Wechsel zur Innenlage 20"
+msgstr "Zur Innenlage 20 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1068
 msgid "Switch to Inner layer 21"
-msgstr "Wechsel zur Innenlage 21"
+msgstr "Zur Innenlage 21 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1073
 msgid "Switch to Inner layer 22"
-msgstr "Wechsel zur Innenlage 22"
+msgstr "Zur Innenlage 22 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1078
 msgid "Switch to Inner layer 23"
-msgstr "Wechsel zur Innenlage 23"
+msgstr "Zur Innenlage 23 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1083
 msgid "Switch to Inner layer 24"
-msgstr "Wechsel zur Innenlage 24"
+msgstr "Zur Innenlage 24 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Switch to Inner layer 25"
-msgstr "Wechsel zur Innenlage 25"
+msgstr "Zur Innenlage 25 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
 msgid "Switch to Inner layer 26"
-msgstr "Wechsel zur Innenlage 26"
+msgstr "Zur Innenlage 26 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1098
 msgid "Switch to Inner layer 27"
-msgstr "Wechsel zur Innenlage 27"
+msgstr "Zur Innenlage 27 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1103
 msgid "Switch to Inner layer 28"
-msgstr "Wechsel zur Innenlage 28"
+msgstr "Zur Innenlage 28 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1108
 msgid "Switch to Inner layer 29"
-msgstr "Wechsel zur Innenlage 29"
+msgstr "Zur Innenlage 29 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1113
 msgid "Switch to Inner layer 30"
-msgstr "Wechsel zur Innenlage 30"
+msgstr "Zur Innenlage 30 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1119
 msgid "Switch to Copper (B.Cu) layer"
-msgstr "Wechsel zur unteren Kupferlage bzw. Lötseite (B.Cu)"
+msgstr "Zur unteren Kupferlage bzw. Lötseite (B.Cu) wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1125
 msgid "Switch to Next Layer"
