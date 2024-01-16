@@ -408,8 +408,8 @@ void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
 
     SetMinSize( wxDefaultSize );
     wxSize minSize = GetBestSize();
-    minSize.IncTo( wxSize( 600, 500 ) );
-    minSize.DecTo( wxSize( 1500, 900 ) ); // Failsafe
+    minSize.IncTo( FromDIP( wxSize( 600, 500 ) ) );
+    minSize.DecTo( FromDIP( wxSize( 1500, 900 ) ) ); // Failsafe
     SetMinSize( minSize );
 
     wxSize currentSize = GetSize();
