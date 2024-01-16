@@ -26,7 +26,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
 "PO-Revision-Date: 2024-01-16 21:33+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -42611,9 +42611,8 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Plotte Footprint \"%s\" auf \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:997
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "DRC ausführen...\n"
+msgstr "Führe DRC aus ...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1012 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
