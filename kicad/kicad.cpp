@@ -222,7 +222,7 @@ bool PGM_KICAD::OnPgmInit()
     if( appType == KICAD_MAIN_FRAME_T )
     {
         managerFrame = new KICAD_MANAGER_FRAME( nullptr, wxT( "KiCad" ), wxDefaultPosition,
-                                                wxSize( 775, -1 ) );
+                                                wxWindow::FromDIP( wxSize( 775, -1 ), NULL ) );
         frame = managerFrame;
     }
     else
