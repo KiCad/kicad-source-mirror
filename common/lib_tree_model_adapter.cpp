@@ -47,7 +47,9 @@ public:
 
     wxSize GetSize() const override
     {
-        return wxSize( GetOwner()->GetWidth(), GetTextExtent( m_text ).y );
+        wxSize size( GetOwner()->GetWidth(), GetTextExtent( m_text ).y );
+        size.IncBy( 2, 2 );
+        return size;
     }
 
     bool GetValue( wxVariant& aValue ) const override
