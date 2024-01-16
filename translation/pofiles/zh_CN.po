@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2023-12-28 12:05+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9609,9 +9609,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "从符号删除备用主体样式（德摩根）？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "字段必须要有一个名称。"
+msgstr "符号必须要有一个名称。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -11950,7 +11949,7 @@ msgstr "网络/嵌套总线名称"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:27
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Annotations"
-msgstr "批注"
+msgstr "标注"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
@@ -12475,7 +12474,7 @@ msgstr "将符号 '%s' 单元 %d 绘制到 '%s'\n"
 #: eeschema/eeschema_jobs_handler.cpp:358
 #, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "将符号 '%s' 绘制到 '%s'\n"
+msgstr "绘制符号 '%s'到 '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:382
 #, c-format
@@ -12676,7 +12675,7 @@ msgstr "标签未连接到任何对象"
 
 #: eeschema/erc_item.cpp:91
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "全局标签未连接到原理图中的其他位置"
+msgstr "在原理图中的任何其他位置都未连接全局标签"
 
 #: eeschema/erc_item.cpp:95
 msgid "Labels are similar (lower/upper case difference only)"
@@ -16917,7 +16916,7 @@ msgstr "添加文本框"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "添加文本框项目"
+msgstr "添加文本块"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -23149,7 +23148,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:65
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 msgid "inch"
-msgstr "inch"
+msgstr "英寸"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
@@ -23169,7 +23168,7 @@ msgstr "Hz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
-msgstr "rad"
+msgstr "弧度"
 
 #: pcb_calculator/widgets/unit_selector.cpp:211
 msgid "m"
@@ -34820,9 +34819,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "绘制到 '%s' 时失败。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "无法创建输出目录 \"%s\"。"
+msgstr "创建输出目录失败\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -36354,7 +36352,7 @@ msgstr "在当前布线的导线末端增加一个微孔。"
 
 #: pcbnew/router/router_tool.cpp:135
 msgid "Select Layer and Place Through Via..."
-msgstr "选择层并添加过孔..."
+msgstr "选择层并放置通孔..."
 
 #: pcbnew/router/router_tool.cpp:136
 msgid ""
@@ -37309,7 +37307,7 @@ msgstr "运行 DRC 进行全面分析。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1296
 msgid "Item <b>disallowed</b> at current location."
-msgstr "当前位置 <b>不允许</b> 对象。"
+msgstr "当前位置 <b>不允许</b> 的项目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1298
 msgid "Item allowed at current location."
