@@ -102,6 +102,7 @@ constexpr ret_type KiROUND( fp_type v )
         else
             return 0;
     }
+#if __cplusplus >= 202302L // isnan is not constexpr until C++23
     else if constexpr( std::is_floating_point_v<fp_type> )
     {
         if( std::isnan( v ) )
@@ -111,6 +112,7 @@ constexpr ret_type KiROUND( fp_type v )
             return 0;
         }
     }
+#endif
 
     return ret_type( max_ret( ret ) );
 }
