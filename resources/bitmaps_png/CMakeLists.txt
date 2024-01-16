@@ -637,6 +637,21 @@ set( BMAPS_128
     icon_pcbcalculator
     )
 
+# 256 x 256 for icon sets (windows namely)
+set( BMAPS_256
+    icon_cvpcb
+    icon_eeschema
+    icon_gerbview
+    icon_kicad
+    icon_kicad_nightly
+    icon_libedit
+    icon_modedit
+    icon_pcbnew
+    icon_pagelayout_editor
+    icon_bitmap2component
+    icon_pcbcalculator
+    )
+
 # Images in this section are generated at whatever resolution is set in the source SVG file
 # Use Inkscape Document Properties > Custom Size to set (make sure units are pixels)
 # These are used for images in the UI that are not-square or very large (infographics, etc)
@@ -915,6 +930,8 @@ if( MAINTAIN_PNGS )
     bitmap_dir( 64 64 "${BMAPS_64}" )
 
     bitmap_dir( 128 128 "${BMAPS_128}" )
+
+    bitmap_dir( 256 256 "${BMAPS_256}" )
 
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
 
