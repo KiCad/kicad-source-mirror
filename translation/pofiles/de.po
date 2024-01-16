@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-01-16 16:14+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7559,7 +7559,7 @@ msgstr "Letzten Zoom wiederholen"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
-msgstr "Zoom-Stufe wieder auf Wert vor Rücknahme setzen"
+msgstr "Zoom-Stufe auf wieder auf Wert vor Rücknahme setzen"
 
 #: common/tool/actions.cpp:509
 msgid "Cursor Up"
@@ -17037,7 +17037,7 @@ msgid "HTTP library settings file %s missing or invalid"
 msgstr "Einstellungsdatei %s der HTTP Bibliothek fehlt oder ist ungültig"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number!"
 msgstr ""
 "Einstellungsdatei %s der HTTP-Bibliothek gibt keine API-Versionsnummer an!"
@@ -17052,9 +17052,9 @@ msgstr ""
 "benötigt jedoch Version %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL!"
-msgstr "Wurzel-URL fehlt in der Einstellungsdatei %s der HTTP-Bibliothek!"
+msgstr "Einstellungsdatei %s der HTTP-Bibliothek gibt keine Wurzel-URL an!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:259
 #, c-format
@@ -21753,11 +21753,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Soll \"%s\" auf die letzte gespeicherte Version zurückgesetzt werden?"
 
 #: eeschema/tools/sch_editor_control.cpp:342
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr ""
-"Versorgungssymbole im Schaltplan aktualisieren, um auf neue Bibliothek zu "
-"verweisen?"
+msgstr "Versorgungssymbole aus Schaltplan in die Bibliothek einbeziehen?"
 
 #: eeschema/tools/sch_editor_control.cpp:407
 #, c-format
@@ -23642,7 +23639,6 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "Platinendatei existiert nicht oder ist nicht zugreifbar\n"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:41
-#, fuzzy
 msgid "Plot given layers to a single Gerber file"
 msgstr "Lagen in gemeinsamer Gerber-Datei ausgeben"
 
@@ -23885,9 +23881,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "Zu verwendendes Farbthema (Standard sind Schaltplaneinstellungen)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "Gerber-Dateien für die Fertigung erstellen"
+msgstr "Kein Popups für Eigenschaften im PDF erzeugen"
 
 #: kicad/cli/command_sch_export_plot.cpp:89
 msgid "Avoid setting a background color (regardless of theme)"
@@ -24733,9 +24728,8 @@ msgid "Fetching repository..."
 msgstr "Rufe Repository ab ..."
 
 #: kicad/pcm/pcm.cpp:1145
-#, fuzzy
 msgid "Reviewing packages..."
-msgstr "Leiterbahnen in Pads werden entfernt..."
+msgstr "Überprüfung des Pakets..."
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
 #, c-format
@@ -25015,12 +25009,10 @@ msgid "Pull"
 msgstr "Pullen"
 
 #: kicad/project_tree_pane.cpp:949
-#, fuzzy
 msgid "Pull changes from remote repository into local"
-msgstr "Änderungen vom Schaltplan an Platine übertragen"
+msgstr "Änderungen vom entfernten Repository in das lokale übernehmen"
 
 #: kicad/project_tree_pane.cpp:954
-#, fuzzy
 msgid "Commit File..."
 msgstr "Datei committen..."
 
@@ -25037,9 +25029,8 @@ msgid "Switch to a different branch"
 msgstr "Zu einem anderen Branch wechseln"
 
 #: kicad/project_tree_pane.cpp:978
-#, fuzzy
 msgid "Switch to Branch"
-msgstr "Zum Platineneditor wechseln"
+msgstr "Zum Branch wechseln"
 
 #: kicad/project_tree_pane.cpp:982
 msgid "Remove Version Control"
@@ -25077,12 +25068,12 @@ msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
 #: kicad/project_tree_pane.cpp:1572
 #, fuzzy
 msgid "Set default remote"
-msgstr "Auf Vorgabewerte zurücksetzen"
+msgstr "Als Standard-Remote setzen"
 
 #: kicad/project_tree_pane.cpp:1625
 #, fuzzy
 msgid "Failed to set default remote."
-msgstr "Konnte Datei \"%s\" nicht erstellen."
+msgstr "Konnte Standard-Remote nicht setzen."
 
 #: kicad/project_tree_pane.cpp:1641 kicad/project_tree_pane.cpp:1678
 #: kicad/project_tree_pane.cpp:1698
@@ -25090,9 +25081,8 @@ msgid "Fetching Remote"
 msgstr "Remote abrufen"
 
 #: kicad/project_tree_pane.cpp:1704
-#, fuzzy
 msgid "Failed to push project"
-msgstr "Datenausgabe fehlgeschlagen"
+msgstr "Konnte Projekt nicht übertragen (push)."
 
 #: kicad/project_tree_pane.cpp:1766
 #, c-format
@@ -25110,19 +25100,19 @@ msgid "Failed to switch to branch '%s'"
 msgstr "Fehler beim Wechsel zu Branch \"%s\""
 
 #: kicad/project_tree_pane.cpp:1800
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
-msgstr "Konnte Bus-Gruppe %s nicht laden"
+msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren"
 
 #: kicad/project_tree_pane.cpp:1818
-#, fuzzy
 msgid "Are you sure you want to remove git tracking from this project?"
-msgstr "Sind Sie sicher, dass Sie das Feld \"%s\" entfernen möchten?"
+msgstr ""
+"Sind Sie sicher, dass Sie die git-Versionsverwaltung aus diesem Projekt "
+"entfernen möchten?"
 
 #: kicad/project_tree_pane.cpp:1835
-#, fuzzy
 msgid "Failed to remove git directory"
-msgstr "Verzeichnis %s konnte nicht entfernt werden"
+msgstr "Konnte git-Verzeichnis nicht entfernen"
 
 #: kicad/project_tree_pane.cpp:2149
 msgid "Discarding commit due to empty commit message."
@@ -25133,14 +25123,14 @@ msgid "Discarding commit due to empty file selection."
 msgstr "Verwerfe Commit, da keine Dateien ausgewählt wurden."
 
 #: kicad/project_tree_pane.cpp:2161
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Kann Repository nicht parsen: %s"
+msgstr "Konnte Repository-Index nicht entfernen: %s"
 
 #: kicad/project_tree_pane.cpp:2169
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Fehler beim Löschen von '%s'"
+msgstr "Konnte Datei nicht zu Index hinzufügen: %s"
 
 #: kicad/project_tree_pane.cpp:2177
 #, c-format
@@ -25148,24 +25138,24 @@ msgid "Failed to write index: %s"
 msgstr "Fehler beim Schreiben von Index: %s"
 
 #: kicad/project_tree_pane.cpp:2184
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Fehler beim Löschen von '%s'"
+msgstr "Konnte Baum nicht schreiben: %s"
 
 #: kicad/project_tree_pane.cpp:2193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Fehler beim Löschen von '%s'"
+msgstr "Konnte Baum nicht auflösen: %s"
 
 #: kicad/project_tree_pane.cpp:2201
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Verzeichnis %s konnte nicht entfernt werden"
+msgstr "Konnte HEAD-Referenz nicht abrufen: %s"
 
 #: kicad/project_tree_pane.cpp:2208
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "Konnte Schaltplan \"%s\" nicht speichern"
+msgstr "Konnte Commit nicht abrufen: %s"
 
 #: kicad/project_tree_pane.cpp:2224
 #, c-format
@@ -26605,9 +26595,8 @@ msgid "Creepage:"
 msgstr "Kriechstrecke:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
-#, fuzzy
 msgid "Min groove width:"
-msgstr "Linenbreite:"
+msgstr "Min. Nutbreite:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:284
 msgid ""
@@ -29396,9 +29385,8 @@ msgid "Pre-defined Sizes"
 msgstr "Vordefinierte Größen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
-#, fuzzy
 msgid "Length-tuning Patterns"
-msgstr "Längenabstimmung"
+msgstr "Längenabstimmungsmuster"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -30105,9 +30093,8 @@ msgid "Bad parameters"
 msgstr "Ungültige Parameter"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
-#, fuzzy
 msgid "Grid Array Size"
-msgstr "Raster-Array"
+msgstr "Größe des Raster-Arrays"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:40
 msgid "Horizontal count:"
@@ -30140,7 +30127,7 @@ msgstr "Abstand zwischen Zeilen"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 #, fuzzy
 msgid "Grid Spacing Modifiers"
-msgstr "Rasterabstandsmodifizierer"
+msgstr "Rasterabstandsmodifikatoren"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal offset:"
@@ -30159,9 +30146,8 @@ msgid "Offset added to the next column position"
 msgstr "Zur nächsten Spaltenposition hinzugefügter Versatz"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
-#, fuzzy
 msgid "Stagger Settings"
-msgstr "Seite einrichten"
+msgstr "Staffelungseinstellungen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:146
 msgid "Stagger:"
@@ -30268,9 +30254,8 @@ msgid "Ref point pos Y:"
 msgstr "Ref.-Punkt Pos. Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:318
-#, fuzzy
 msgid "Circular array params"
-msgstr "Kreis Array"
+msgstr "Parameter für kreisförmiges Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:320
 msgid "Set center by position"
@@ -30305,9 +30290,8 @@ msgstr ""
 "von Ref.-Punkt-Position und dem Array-Mittelpunkt:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
-#, fuzzy
 msgid "Distance between Ref point and Center pos."
-msgstr "Abstand zwischen Ref.-Punkt und Mittelpunkt-Position."
+msgstr "Abstand zwischen Referenzpunkt- und Mittelpunkt-Position."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:384
 msgid ""
@@ -30974,9 +30958,8 @@ msgid "manufacturer"
 msgstr "Hersteller"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:140
-#, fuzzy
 msgid "mfg"
-msgstr "meg"
+msgstr "Herst."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
@@ -31007,9 +30990,8 @@ msgid "Compress output into 'zip' file"
 msgstr "Ausgabe komprimiert als ZIP-Archiv ausgeben"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
-#, fuzzy
 msgid "BOM Columns"
-msgstr "Spalten"
+msgstr "BOM-Spalten"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
 msgid "Internal ID:"
@@ -31025,9 +31007,8 @@ msgstr ""
 "Diese Nummer muss je Bauteil eindeutig sein."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
-#, fuzzy
 msgid "Generate Unique"
-msgstr "Erzeuge Warnhinweis"
+msgstr "Erzeuge Eindeutige"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
 msgid "Manufacturer P/N:"
@@ -31040,9 +31021,8 @@ msgstr "Spalte, welche die Hersteller-Teilenummer enthält"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Omit"
-msgstr "Netze weglassen"
+msgstr "Weglassen"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
 msgid "Manufacturer:"
@@ -31135,9 +31115,8 @@ msgid "STEP files"
 msgstr "STEP-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
-#, fuzzy
 msgid "Binary glTF files"
-msgstr "Binäre GTLF-Dateien"
+msgstr "Binäre glTF-Dateien"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 msgid "STEP Output File"
@@ -31377,9 +31356,8 @@ msgid "Export as black elements on a white background"
 msgstr "Als schwarze Elemente auf weißem Hintergrund exportieren"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
-#, fuzzy
 msgid "Use current board theme"
-msgstr "Aktuelle Platine speichern"
+msgstr "Farbthema der aktuellen Platine"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:114
 msgid "Page with frame and title block"
@@ -31597,19 +31575,16 @@ msgid "Sheet: "
 msgstr "Schaltplanblatt "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "Bibliotheksbeschreibung"
+msgstr "Bibliothekszuordnung"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "Schaltplaneditor"
+msgstr "Schaltplanzuordnung"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "Footprints Assoziierungsdatei"
+msgstr "Footprintzuordnung"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -32408,24 +32383,20 @@ msgid "Generators A (%s)"
 msgstr "Generatoren A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild selected"
-msgstr "Kein Bus ausgewählt"
+msgstr "Ausgewählte erneuern"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
-#, fuzzy
 msgid "Rebuild this type"
-msgstr "Netzlinien neu zeichnen"
+msgstr "Diese Typ erneuern"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
-#, fuzzy
 msgid "Rebuild All"
-msgstr "Alle ersetzen"
+msgstr "Alle erneuern"
 
 #: pcbnew/dialogs/dialog_generators_base.h:63
-#, fuzzy
 msgid "Generator Objects"
-msgstr "Generator-Datei"
+msgstr "Generator-Objekte"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:69
@@ -32535,14 +32506,12 @@ msgid "Delete Items"
 msgstr "Elemente entfernen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
-#, fuzzy
 msgid "Set teardrops to default values for shape"
-msgstr "Auf 0 setzen um Vorgabe zu benutzen"
+msgstr "Teardrops für diese Form auf Standardwerte setzen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:109
-#, fuzzy
 msgid "Set teardrops to specified values:"
-msgstr "Auf eingestellte Werte setzen:"
+msgstr "Teardrops auf eingestellte Werte setzen:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
@@ -32551,9 +32520,8 @@ msgstr "Teardrops mit Standardeinstellungen zur Form hinzufügen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
-#, fuzzy
 msgid "Add teardrops with specified values:"
-msgstr "Auf eingestellte Werte setzen:"
+msgstr "Teardrops mit eingestellten Werten hinzufügen:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:483
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:487
@@ -32563,9 +32531,8 @@ msgid "Edit Teardrops"
 msgstr "Teardrops bearbeiten"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
-#, fuzzy
 msgid "PTH pads"
-msgstr "PTH-Pads"
+msgstr "Durchsteckpads"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
@@ -32617,7 +32584,6 @@ msgstr "Zonenverbindung bevorzugen"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span 2 track segments"
 msgstr "Teardrops können zwei Leiterbahnsegmente überspannen"
 
@@ -32682,9 +32648,8 @@ msgstr "Beste Höhe:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:517
-#, fuzzy
 msgid "Curved edges"
-msgstr "Gebogen"
+msgstr "Abgerundete Kanten"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
@@ -32693,7 +32658,6 @@ msgid "Points:"
 msgstr "Punkte:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
-#, fuzzy
 msgid "Set Teardrops"
 msgstr "Teardrops hinzufügen"
 
@@ -32796,9 +32760,8 @@ msgid "Footprint graphic items"
 msgstr "Footprint-Grafikelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Footprint dimension items"
-msgstr "Footprint-Grafikelemente"
+msgstr "Footprint-Bemaßungselemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -32809,9 +32772,8 @@ msgid "PCB text items"
 msgstr "Platinen-Textelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "Bemaßungslinie"
+msgstr "Platinen-Bemaßungselemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "Filter items by parent footprint library id:"
@@ -32828,19 +32790,16 @@ msgid "Keep upright"
 msgstr "Aufrecht halten"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
-#, fuzzy
 msgid "Center on footprint"
-msgstr "Ursprungs-Footprint"
+msgstr "Auf Footprint zentrieren"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
-#, fuzzy
 msgid "Filter tracks by width:"
-msgstr "Elemente nach Netz filtern:"
+msgstr "Leiterbahnen nach Breite filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:99
-#, fuzzy
 msgid "Filter vias by size:"
-msgstr "Elemente nach Netz filtern:"
+msgstr "Vias nach Größe filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
 msgid "Via size:"
@@ -33033,7 +32992,6 @@ msgid "Teardrop defaults"
 msgstr "Vorgaben für Teardrops"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Length-tuning pattern defaults"
 msgstr "Vorgaben für Längenabstimmungsmuster"
 
@@ -33789,9 +33747,8 @@ msgstr ""
 "erzeugen."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
-#, fuzzy
 msgid "Add teardrops on pad's track connections"
-msgstr "Teardrops auf Pads in Zonen einsetzen"
+msgstr "Teardrops zu Leiterbahnenverbindungen des Pads hinzufügen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
@@ -34018,9 +33975,8 @@ msgid "Deselect All Layers"
 msgstr "Alle Lagen abwählen"
 
 #: pcbnew/dialogs/dialog_plot.cpp:550
-#, fuzzy
 msgid "Order as Board Stackup"
-msgstr "Lagenaufbau der Platine"
+msgstr "Wie Lagenaufbau sortieren"
 
 #: pcbnew/dialogs/dialog_plot.cpp:952
 msgid "HPGL pen size constrained."
@@ -34078,9 +34034,8 @@ msgid "Plot reference designators"
 msgstr "Referenzbezeichner plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
-#, fuzzy
 msgid "Plot footprint text"
-msgstr "Footprintwerte plotten"
+msgstr "Footprint-Text plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Force plotting of invisible values / refs"
@@ -34866,9 +34821,8 @@ msgstr "Endpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:114
-#, fuzzy
 msgid "Bezier Control Point"
-msgstr "Bezierkontrollpunkt"
+msgstr "Bezier-Kontrollpunkt"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:206
 msgid "Arc angle:"
@@ -34919,9 +34873,8 @@ msgid "Footprint Value Properties"
 msgstr "Footprint-Wert-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:120
-#, fuzzy
 msgid "Footprint Field Properties"
-msgstr "Footprint-Eigenschaften"
+msgstr "Footprint-Feldeigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:126
 msgid "Footprint Text Properties"
@@ -35029,9 +34982,8 @@ msgid "End X:"
 msgstr "Ende X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:120
-#, fuzzy
 msgid "Use net class / custom rule widths"
-msgstr "Verwende Breiten der Netzklasse"
+msgstr "Verwende Breite der Netzklasse / benutzerdef. Regel"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:124
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:225
@@ -35039,9 +34991,8 @@ msgid "Pre-defined sizes:"
 msgstr "Vordefinierte Größen:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
-#, fuzzy
 msgid "Use net class / custom rule sizes"
-msgstr "Verwende Größen der Netzklasse"
+msgstr "Verwende Größen der Netzklasse / benutzerdef. Regel"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:238
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -35089,9 +35040,8 @@ msgid "Start, end, and connected layers"
 msgstr "Start, Ende und verbundene Lagen"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
-#, fuzzy
 msgid "Add teardrops on via's track connections"
-msgstr "Teardrops zu Vias und Pads mit Löchern hinzufügen"
+msgstr "Teardrops zu Leiterbahnenverbindungen des Vias hinzufügen"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
@@ -35134,9 +35084,8 @@ msgid "Target length:"
 msgstr "Ziellänge:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
-#, fuzzy
 msgid "Override custom rules"
-msgstr "Sperren ignorieren"
+msgstr "Benutzerdefinierte Regeln überschreiben"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
@@ -35167,13 +35116,12 @@ msgstr "Zwischenraum (s):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:74
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:203
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:338
-#, fuzzy
 msgid ""
 "Minimum spacing between adjacent tuning segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
-"Mindestabstand zwischen benachbarten Mäander-Segmenten. Der resultierende "
-"Abstand kann auf Basis der Designregeln größer ausfallen."
+"Mindestabstand zwischen benachbarten Abstimmungssegmenten. Der sich "
+"ergebende Abstand kann aufgrund von Designregeln größer ausfallen."
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:84
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
@@ -35197,9 +35145,8 @@ msgid "Single-sided"
 msgstr "Einseitig"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
-#, fuzzy
 msgid "Tuning Pattern Properties"
-msgstr "Linien-Eigenschaften"
+msgstr "Abstimmungsmuster-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 msgid "Remove Unused Layers"
@@ -35285,7 +35232,7 @@ msgstr "Endpunkte oder Richtung des Startpunkts beibehalten"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 #, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "Maus-Ziehen Verhalten:"
+msgstr "Verhalten beim an Leiterbahnziehen mit der Maus:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
@@ -35380,9 +35327,8 @@ msgid "Show ratsnest with curved lines"
 msgstr "Netzlinien mit geschwungenen Linien anzeigen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
-#, fuzzy
 msgid "Ratsnest line thickness:"
-msgstr "Linienstärke:"
+msgstr "Netzlinienstärke:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
 msgid "Draw an outline to show the sheet size."
@@ -35394,7 +35340,6 @@ msgstr ""
 "Kollisionen zwischen Abstandsflächen beim Bewegen oder Verschieben anzeigen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
-#, fuzzy
 msgid "Automatically refill zones"
 msgstr "Zonen automatisch neu füllen"
 
@@ -35493,20 +35438,22 @@ msgstr ""
 "ersetzen?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
-"%d veraltete Bibliotheken im aktuellen KiCad-Format (*.kicad_sym) speichern "
-"und veraltete Einträge in der Tabelle ersetzen?"
+"%d Bibliotheken in aktuellem KiCad-Format speichern und Tabelleneinträge "
+"ersetzen?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "Die Datei '%s' existiert bereits. Möchten Sie diese überschreiben?"
+msgstr ""
+"Das Verzeichnis \"%s\" existiert bereits. Möchten Sie bereits vorhandene "
+"überschreiben?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:885
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Fehler beim Speichern der Symbolbibliotheksdatei \"%s\"."
 
@@ -35558,16 +35505,15 @@ msgstr "Nicht anzeigen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Show on pads"
-msgstr "Zeige auf Pads"
+msgstr "Auf Pads anzeigen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Show on tracks"
-msgstr "Zeige auf Leiterbahnen"
+msgstr "Auf Leiterbahnen anzeigen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on pads & tracks"
-msgstr "Zeige auf Pads und Leiterbahnen"
+msgstr "Auf Pads & Leiterbahnen anzeigen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:59
 #: pcbnew/tools/pcb_actions.cpp:1422
@@ -35584,9 +35530,8 @@ msgid "Tracks:"
 msgstr "Leiterbahnen:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
-#, fuzzy
 msgid "Do not show clearances"
-msgstr "Nicht wieder anzeigen"
+msgstr "Freiraum nicht anzeigen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -35609,14 +35554,12 @@ msgid "Show pad clearance"
 msgstr "Pad-Freiraum anzeigen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
-#, fuzzy
 msgid "Show all fields when parent footprint is selected"
-msgstr "Symbole hervorheben wenn Footprints ausgewählt sind"
+msgstr "Alle Felder anzeigen, wenn Footprint ausgewählt ist"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
-#, fuzzy
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "Wählt entsprechende Elemente im Schaltplaneditor aus"
+msgstr "Objektauswahl/-hervorhebung entsprechend der Auswahl im Schaltplan"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:132
 msgid "Highlight footprints corresponding to selected symbols"
@@ -35649,7 +35592,6 @@ msgid "Icon"
 msgstr "Icons"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show Button"
 msgstr "Schaltfläche anzeigen"
 
@@ -35909,7 +35851,6 @@ msgid "Arc/circle approximated by segments"
 msgstr "Bogen / Kreis durch Segmente angenähert"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
-#, fuzzy
 msgid "Maximum allowed deviation:"
 msgstr "Maximal zulässige Abweichung:"
 
@@ -35970,9 +35911,8 @@ msgstr ""
 "deaktiviert, wird die Höhe des Lagenaufbaus ignoriert."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
-#, fuzzy
 msgid "When Adding Footprints to Board"
-msgstr "Im Footprinteditor öffnen"
+msgstr "Wenn Footprints zur Platine hinzugefügt werden"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:58
 msgid "Apply board defaults to footprint fields"
@@ -37218,7 +37158,6 @@ msgid "Maximum track width"
 msgstr "Maximale Leiterbahnbreite"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
-#, fuzzy
 msgid ""
 "Max track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
@@ -37366,18 +37305,18 @@ msgstr "Einschränkungen aus Platinenkonfiguration zu Mikro-Vias"
 #: pcbnew/drc/drc_engine.cpp:246 pcbnew/drc/drc_engine.cpp:325
 #, c-format
 msgid "netclass '%s'"
-msgstr "Netzklasse '%s'"
+msgstr "Netzklasse \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:272 pcbnew/drc/drc_engine.cpp:290
 #: pcbnew/drc/drc_engine.cpp:307
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "Netzklasse '%s' (Differenzialpaar)"
+msgstr "Netzklasse \"%s\" (Differenzialpaar)"
 
 #: pcbnew/drc/drc_engine.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "Netzklasse '%s' (Differenzialpaar)"
+msgstr "Netzklasse \"%s\" (µVia)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 msgid "keepout area"
@@ -37558,14 +37497,13 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "%s wird geprüft: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:1091
-#, fuzzy
 msgid "Netclass clearances apply only between copper items."
-msgstr "Platinen- und Netzklassen-Freiräume gelten nur für Kupferelemente."
+msgstr "Netzklassen-Freiräume gelten nur für Kupferelemente."
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Rule ignored."
-msgstr "%s ist kein gebohrtes Loch; Regel ignoriert."
+msgstr "%s enthält kein Kupfer; Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1156
 msgid "Keepout constraint not met."
@@ -37590,9 +37528,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "Regellage stimmt nicht überein, Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1201
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "Sperrflächen-Lage(n) stimmen nicht überein."
+msgstr "Lage(n) der Einschränkung stimmen nicht überein."
 
 #: pcbnew/drc/drc_engine.cpp:1221
 #, c-format
@@ -37638,9 +37575,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Bedingung nicht erfüllt; Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1342 pcbnew/drc/drc_engine.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s: %s."
-msgstr "Lokaler Freiraum auf %s; Freiraum: %s."
+msgstr "Lokaler Freiraum von %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1423
 #, c-format
@@ -37777,9 +37714,8 @@ msgid "Padstack is not valid"
 msgstr "Padstack ist ungültig"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Micro via hole size out of range"
-msgstr "Mikro-Via-Bohrung außerhalb des zulässigen Bereichs"
+msgstr "µVia-Bohrung außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -38245,40 +38181,40 @@ msgid "%s has thermal relief spoke angle override."
 msgstr "%s überschreibt thermischen Speichenwinkel."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:217
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone knockout setting override."
-msgstr "%s überschreibt Zonen-Knockout-Einstellung."
+msgstr "%s überschreibt Einstellung für Zonenaussparung."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad to die length differs."
-msgstr "%s weicht ab."
+msgstr "%s Pad-zu-Die-Länge weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "%s position differs."
-msgstr "%s weicht ab."
+msgstr "%s Position ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "%s has different numbers."
-msgstr "%s weicht ab."
+msgstr "%s hat unterschiedliche Zahlen/Werte."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:255
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "%s layers differ."
-msgstr "%s weicht ab."
+msgstr "%s Lagen weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs."
-msgstr "%s weicht ab."
+msgstr "%s Padform weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad type differs."
-msgstr "%s weicht ab."
+msgstr "%s Padtyp weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:266
 #, c-format
@@ -38291,24 +38227,24 @@ msgid "%s orientation differs."
 msgstr "Orientierung von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:274
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs."
-msgstr "%s weicht ab."
+msgstr "%s Größe weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:276
 #, fuzzy, c-format
 msgid "%s trapezoid delta differs."
-msgstr "%s weicht ab."
+msgstr "%s trapezförmiges Delta weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ."
-msgstr "%s weicht ab."
+msgstr "%s abgerundete kanten weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ."
-msgstr "%s weicht ab."
+msgstr "%s angefaste Kanten weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:301
 #, c-format
@@ -38316,19 +38252,19 @@ msgid "%s shape offset from hole differs."
 msgstr "%s Form-Offset von Loch weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill shape differs."
-msgstr "%s weicht ab."
+msgstr "%s Bohrform weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill size differs."
-msgstr "%s weicht ab."
+msgstr "%s Bohrgröße weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ."
-msgstr "%s weicht ab."
+msgstr "%s Formprimitiven weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
@@ -38341,9 +38277,9 @@ msgid "%s corner smoothing radius differs."
 msgstr "%s Abrundungssradius weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "%s name differs."
-msgstr "%s weicht ab."
+msgstr "%s Name weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:434
 #, fuzzy, c-format
@@ -43911,7 +43847,7 @@ msgstr "Dicke (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Loss Tangent"
-msgstr "Verlustfaktor"
+msgstr "Tangens des Verlustwinkels"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
 msgid "Dielectric"
