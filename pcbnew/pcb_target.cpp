@@ -225,7 +225,7 @@ double PCB_TARGET::Similarity( const BOARD_ITEM& aOther ) const
     if( GetPosition() != other.GetPosition() )
         similarity *= 0.9;
 
-    return 1.0;
+    return similarity;
 }
 
 static struct PCB_TARGET_DESC

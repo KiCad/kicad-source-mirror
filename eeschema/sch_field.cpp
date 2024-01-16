@@ -1341,7 +1341,7 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
 
     const SCH_FIELD& field = static_cast<const SCH_FIELD&>( aOther );
 
-    double retval = 0.99; // The UUIDs are different, so we start with non-identity
+    double similarity = 0.99; // The UUIDs are different, so we start with non-identity
 
     if( GetId() != field.GetId() )
     {
@@ -1349,25 +1349,25 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
         if( GetId() < MANDATORY_FIELDS || field.GetId() < MANDATORY_FIELDS )
             return 0.0;
         else
-            retval *= 0.5;
+            similarity *= 0.5;
     }
 
     if( GetPosition() != field.GetPosition() )
-        retval *= 0.5;
+        similarity *= 0.5;
 
     if( IsNamedVariable() != field.IsNamedVariable() )
-        retval *= 0.5;
+        similarity *= 0.5;
 
     if( IsNameShown() != field.IsNameShown() )
-        retval *= 0.5;
+        similarity *= 0.5;
 
     if( CanAutoplace() != field.CanAutoplace() )
-        retval *= 0.5;
+        similarity *= 0.5;
 
     if( GetText() != field.GetText() )
-        retval *= Levenshtein( field );
+        similarity *= Levenshtein( field );
 
-    return 1.0;
+    return similarity;
 }
 
 
