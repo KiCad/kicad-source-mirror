@@ -1,0 +1,997 @@
+*
+* File     : silicon_carbide_schottky_v9.LIB
+* Revision : 9.0
+* Date     : DEC 2021
+**********************************************************************
+*Please Read Carefully:
+*Information in this document is provided solely in connection with ST products.
+*STMicroelectronics NV and its subsidiaries (“ST”) reserve the right to make :
+*changes, corrections, modifications or improvements, to this document,
+*and the products and services described herein at any time, without notice.
+*All ST products are sold pursuant to ST’s terms and conditions of sale.
+*Purchasers are solely responsible for the choice, selection and use of the ST products, and services described herein,
+*and ST assumes no liability whatsoever relating to the choice, selection or use of the ST products and services described herein.
+*No license, express or implied, by estoppel or otherwise, to any intellectual property rights is granted under this document.
+*If any part of this document refers to any third party products xor
+*services it shall not be deemed a license grant by ST for the use of such third party products or
+*services, or any intellectual property contained therein or
+*considered as a warranty covering the use in any manner whatsoever of such third party products or
+*services or any intellectual property contained therein.
+*UNLESS OTHERWISE SET FORTH IN ST’S TERMS AND CONDITIONS OF SALE ST DISCLAIMS ANY EXPRESS OR IMPLIED
+*WARRANTY WITH RESPECT TO THE USE AND/OR SALE OF ST PRODUCTS INCLUDING WITHOUT LIMITATION IMPLIED
+*WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE (AND THEIR EQUIVALENTS UNDER THE LAWS
+*OF ANY JURISDICTION), OR INFRINGEMENT OF ANY PATENT, COPYRIGHT OR OTHER INTELLECTUAL PROPERTY RIGHT.
+*UNLESS EXPRESSLY APPROVED IN WRITING BY AN AUTHORIZED ST REPRESENTATIVE, ST PRODUCTS ARE NOT
+*RECOMMENDED, AUTHORIZED OR WARRANTED FOR USE IN MILITARY, AIR CRAFT, SPACE, LIFE SAVING, OR LIFE SUSTAINING
+*APPLICATIONS, NOR IN PRODUCTS OR SYSTEMS WHERE FAILURE OR MALFUNCTION MAY RESULT IN PERSONAL INJURY,
+*DEATH, OR SEVERE PROPERTY OR ENVIRONMENTAL DAMAGE. ST PRODUCTS WHICH ARE NOT SPECIFIED AS "AUTOMOTIVE
+*GRADE" MAY ONLY BE USED IN AUTOMOTIVE APPLICATIONS AT USER’S OWN RISK.
+*Resale of ST products with provisions different from the statements and/or technical features
+*set forth in this document shall immediately void any warranty granted by ST for the ST product or
+*service described herein and shall not create or extend in any manner whatsoever, any liability of ST.
+*ST and the ST logo are trademarks or registered trademarks of ST in various countries.
+*Information in this document supersedes and replaces all information previously supplied.
+*The ST logo is a registered trademark of STMicroelectronics.
+*All other names are the property of their respective owners.
+*
+*© 2006 STMicroelectronics - All rights reserved
+*
+*STMicroelectronics group of companies
+*Australia - Belgium - Brazil - Canada - China - Czech Republic - Finland - France
+*Germany - Hong Kong - India - Israel - Italy - Japan - Malaysia - Malta - Morocco
+*Singapore - Spain - Sweden - Switzerland - United Kingdom - United States of America
+*www.st.com
+*
+
+
+
+
+*******************************************************************
+* POWER SCHOTTKY SiC DIODE 600V			60 
+* POWER SCHOTTKY SiC DIODE 650V        166
+* POWER SCHOTTKY SiC DIODE 1200V       689
+* POWER SCHOTTKY SiC DIODE 1300V       935
+*******************************************************************                         
+         
+         
+               
+         
+*******************************************************************
+* POWER SCHOTTKY SiC DIODE 600V
+*******************************************************************
+
+  
+*******************************************************************
+* Model name       : STPSC406D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC406D D
++ IS=10.000E-21 N=.70243 RS=.18245 IKF=185.81 XTI=2 EG=3.26 CJO=190.97E-12
++ M=.44869 VJ=.96959 ISR=15.036E-9 NR=4.9950 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC406B-TR
+* Description      : Power Schottky SiC rectifier
+* Package type     : DPAK
+*******************************************************************
+.MODEL STPSC406B-TR D
++ IS=10.000E-21 N=.70243 RS=.18245 IKF=185.81 XTI=2 EG=3.26 CJO=190.97E-12
++ M=.44869 VJ=.96959 ISR=15.036E-9 NR=4.9950 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC606D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC606D D
++ IS=548.81E-18 N=.99749 RS=78.375E-3 IKF=996.79 XTI=2 EG=3.26 CJO=360.14E-12
++ M=.45014 VJ=.95033 ISR=6.5847E-9 NR=4.9950 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC606G-TR
+* Description      : Power Schottky SiC rectifier
+* Package type     : D²PAK
+*******************************************************************
+.MODEL STPSC606G-TR D
++ IS=548.81E-18 N=.99749 RS=78.375E-3 IKF=996.79 XTI=2 EG=3.26 CJO=360.14E-12
++ M=.45014 VJ=.95033 ISR=6.5847E-9 NR=4.9950 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC806D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC806D D
++ IS=669.44E-18 N=1.0007 RS=52.685E-3 IKF=956.57 EG=3.26 XTI=2 CJO=447.94E-12
++ M=.46633 VJ=.93433 ISR=135.59E-9 NR=3.7748 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC1006D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC1006D D
++ IS=3.1022E-15 N=1.0304 RS=47.951E-3 IKF=773.29 XTI=2 EG=3.26 CJO=654.04E-12
++ M=.46875 VJ=.96902 ISR=9.0046E-9 NR=4.9950 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC1206D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC1206D D
++ IS=2.7762E-15 N=1.0262 RS=38.647E-3 IKF=74.814 XTI=2 EG=3.26 CJO=728.14E-12
++ M=.46636 VJ=1.0002 ISR=98.644E-9 NR=3.0260 FC=0.5 TT=0
+*$
+
+*******************************************************************
+* Model name       : STPSC1206D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC1206Dte D
++ IS=2.7762E-15 N=1.0262 RS=38.647E-3 IKF=74.814 XTI=2 EG=3.26 CJO=728.14E-12
++ M=.46636 VJ=1.0002 ISR=98.644E-9 NR=3.0260 FC=0.5 TT=0
+*$           
+
+*******************************************************************
+* Model name       : STPSC2006CW
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC2006CW  anode1
+*				    | cathode
+*				    | | anode2
+*				    | | |
+.subckt STPSC2006CW 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=2.9521E-15 N=1.0150 RS=49.305E-3 IKF=1.0000E3 CJO=628.09E-12 M=.47423
++			 VJ=.98071 ISR=150.74E-9 NR=4.6460 fc=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+          
+ 
+ 
+
+*******************************************************************
+* POWER SCHOTTKY SiC DIODE 650V
+*******************************************************************
+*******************************************************************
+* Model name       : STPSC2H065B
+* Description      : Power Schottky rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC2H065B  anode
+*		    	    | cathode
+*		    	  	| |
+.subckt STPSC2H065B 3 4
+d1 3 4 dx
+.model dx	D(IS=120.94E-21 N=.87973 RS=.18752 IKF=1.0000E3 CJO=134.65E-12 M=.42566
++ VJ=1.3834 ISR=43.192E-9 NR=2.8756 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+         
+*******************************************************************
+* Model name       : STPSC4C065D-L
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC4C065D-L D
++ IS=10.000E-21 N=.75911 RS=.16868 IKF=410.85 CJO=169.63E-12 M=.42856
++ VJ=1.2769 ISR=11.168E-9 NR=3.4763 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC4H065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC4H065D D
++ IS=1.9848E-15 N=1.1121 RS=.13786 IKF=503.11 CJO=203.01E-12 M=.40956
++ VJ=1.4591 ISR=96.358E-9 NR=3.1198 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC4H065DLF
+* Description      : Power Schottky SiC rectifier
+* Package type     : PowerFlat8*8
+*******************************************************************
+.MODEL STPSC4H065DLF D
++ IS=10.000E-21 N=.73941 RS=.11717 IKF=316.44 CJO=243.35E-12 M=.42636
++ VJ=1.3224 ISR=80.967E-9 NR=2.1660  TT=0
++ XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC4H065B-TR
+* Description      : Power Schottky rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC4H065B-TR  anode
+*		    	  	   | cathode
+*		    	  	   | |
+.subckt STPSC4H065B-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=1.9848E-15 N=1.1121 RS=.13786 IKF=503.11 CJO=203.01E-12 M=.40956
++ VJ=1.4591 ISR=96.358E-9 NR=3.1198 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+       
+*******************************************************************
+* Model name       : STPSC6C065D-L
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC6C065D-L D
++ IS=175.01E-18 N=1.0028 RS=95.661E-3 IKF=999.94 CJO=267.13E-12 M=.40967
++ VJ=1.1027 ISR=67.274E-9 NR=4.2782 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+                             
+*******************************************************************
+* Model name       : STPSC6H065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC6H065D D
++ IS=1.0831E-15 N=1.0873 RS=92.529E-3 IKF=1.8184 CJO=289.19E-12 M=.44088
++ VJ=1.6095 ISR=34.491E-9 NR=2.6336 FC=0.5 TT=0 XTI=2 EG=3.26 
+*$
+
+*******************************************************************
+* Model name       : STPSC6H065DLF
+* Description      : Power Schottky SiC rectifier
+* Package type     : PowerFlat8*8
+*******************************************************************
+.MODEL STPSC6H065DLF D
++ IS=200.30E-21 N=.81908 RS=71.183E-3 IKF=999 CJO=351.70E-12 M=.4361
++ VJ=1.3668 ISR=135.30E-9 NR=2.0084  TT=0
++ XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC6H065B-TR
+* Description      : Power Schottky rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC6H065B-TR  anode
+*		    	  	   | cathode
+*		    	  	   | |
+.subckt STPSC6H065B-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=1.0831E-15 N=1.0873 RS=92.529E-3 IKF=1.8184 CJO=289.19E-12 M=.44088
++			  VJ=1.6095 ISR=34.491E-9 NR=2.6336 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC6H065G-TR
+* Description      : Power Schottky rectifier
+* Package type     : D²PAK   in tape&reel
+*******************************************************************
+*model STPSC6H065G-TR  anode
+*					   | cathode
+*					   | |
+.subckt STPSC6H065G-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=1.0831E-15 N=1.0873 RS=92.529E-3 IKF=1.8184 CJO=289.19E-12 M=.44088
++			  VJ=1.6095 ISR=34.491E-9 NR=2.6336 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=D²PAK      Delivery = Tape & reel
+.ends
+           
+*******************************************************************
+* Model name       : STPSC8C065D-L
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC8C065D-L D
++ IS=1.3002E-18 N=.84468 RS=75.035E-3 IKF=999 CJO=387.43E-12 M=.44027
++ VJ=1.2639 ISR=89.874E-9 NR=2.1667 TT=0 XTI=2 EG=3.26 FC=0.5
+*$                         
+
+*******************************************************************
+* Model name       : STPSC8H065CT
+* Description      : High Voltage Power Schottky rectifier
+* Package type     : TO-220AB
+*******************************************************************
+*model STPSC8H065CT  anode1
+*				     | cathode
+*				     | | anode2
+*				     | | |
+.subckt STPSC8H065CT 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=1.9848E-15 N=1.1121 RS=.13786 IKF=503.11 CJO=203.01E-12 M=.40956
++ VJ=1.4591 ISR=96.358E-9 NR=3.1198 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO-220AB	Delivery = Tube
+.ends
+                            
+*******************************************************************
+* Model name       : STPSC8H065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC8H065D D
++ IS=15.653E-18 N=.93123 RS=77.690E-3 IKF=1.0000E3 CJO=409.87E-12 M=.43606
++ VJ=1.5432 ISR=54.323E-9 NR=1.8317 FC=0.5 TT=0 XTI=2 EG=3.26
+*$
+
+*******************************************************************
+* Model name       : STPSC8H065DLF
+* Description      : Power Schottky SiC rectifier
+* Package type     : PowerFlat8*8
+*******************************************************************
+.MODEL STPSC8H065DLF D
++ IS=10.000E-21 N=.74615 RS=55.316E-3 IKF=999 CJO=461.36E-12 M=.43378
++ VJ=1.3005 ISR=187.77E-9 NR=4.9950 TT=0
++ XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC8H065B-TR
+* Description      : Power Schottky rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC8H065B-TR  anode
+*		    	  	   | cathode
+*		    	  	   | |
+.subckt STPSC8H065B-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=15.653E-18 N=.93123 RS=77.690E-3 IKF=1.0000E3 CJO=409.87E-12 M=.43606
++			  VJ=1.5432 ISR=54.323E-9 NR=1.8317 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC8H065G-TR
+* Description      : Power Schottky rectifier
+* Package type     : D²PAK   in tape&reel
+*******************************************************************
+*model STPSC8H065G-TR  anode
+*					   | cathode
+*					   | |
+.subckt STPSC8H065G-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=15.653E-18 N=.93123 RS=77.690E-3 IKF=1.0000E3 CJO=409.87E-12 M=.43606
++			  VJ=1.5432 ISR=54.323E-9 NR=1.8317 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=D²PAK      Delivery = Tape & reel
+.ends                             
+                            
+*******************************************************************
+* Model name       : STPSC8065D
+* Description      : power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC8065D D
++ IS=1.2130E-15 N=1.0679 RS=37.107E-3 IKF=327.57 CJO=521.46E-12 M=.43648
++ VJ=1.2571 ISR=49.077E-9 NR=2.6209 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC10C065D-L
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC10C065D-L D
++ IS=61.024E-18 N=.9221 RS=50.339E-3 IKF=999 CJO=453.35E-12 M=.43858
++ VJ=1.2818 ISR=73.998E-9 NR=3.0192 TT=0 XTI=2 EG=3.26 FC=0.5
+*$  
+
+*******************************************************************
+* Model name       : STPSC10H065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC10H065D D
++ IS=510.14E-21 N=.94967 RS=54.909E-3 IKF=1.0000E3 CJO=483.36E-12 M=.44365
++ VJ=1.7167 ISR=55.766E-9 NR=2.8818 FC=0.5 TT=0 XTI=2 EG=3.26
+*$
+
+*******************************************************************
+* Model name       : STPSC10H065DLF
+* Description      : Power Schottky SiC rectifier
+* Package type     : Power Flat 8*8
+*******************************************************************
+.MODEL STPSC10H065DLF D
++ IS=384.75E-18 N=1.0293 RS=34.076E-3 IKF=574.71 CJO=597.48E-12 M=.42327 
++ VJ=1.1804 ISR=245.45E-9 NR=2.7261 FC=0.5 TT=0 XTI=2 EG=3.26
+*$
+
+*******************************************************************
+* Model name       : STPSC10H065B-TR
+* Description      : Power Schottky SiC rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC10H065B-TR  anode
+*		    	  	    | cathode
+*		    	  	    | |
+.subckt STPSC10H065B-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=510.14E-21 N=.94967 RS=54.909E-3 IKF=1.0000E3 CJO=483.36E-12 M=.44365
++			  VJ=1.7167 ISR=55.766E-9 NR=2.8818 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC10H065G-TR
+* Description      : Power Schottky rectifier
+* Package type     : D²PAK   in tape&reel
+*******************************************************************
+*model STPSC10H065G-TR  anode
+*					    | cathode
+*					    | |
+.subckt STPSC10H065G-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=510.14E-21 N=.94967 RS=54.909E-3 IKF=1.0000E3 CJO=483.36E-12 M=.44365
++			  VJ=1.7167 ISR=55.766E-9 NR=2.8818 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=D²PAK      Delivery = Tape & reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC10H065FP
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220FP
+*******************************************************************
+.MODEL STPSC10H065FP D
++ IS=510.14E-21 N=.94967 RS=54.909E-3 IKF=1.0000E3 CJO=483.36E-12 M=.44365
++ VJ=1.7167 ISR=55.766E-9 NR=2.8818 FC=0.5 TT=0 XTI=2 EG=3.26
+*$
+
+*******************************************************************
+* Model name       : STPSC10065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC10065D D
++ IS=3.5158E-15 N=1.1047 RS=27.657E-3 IKF=18.928 CJO=670.65E-12 M=.44145
++ VJ=1.2574 ISR=154.66E-9 NR=2.8944 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC12065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC12065D D
++ IS=1.9245E-15 N=1.0670 RS=25.745E-3 IKF=7.2390 CJO=726.63E-12 M=.45631
++ VJ=1.2565 ISR=282.07E-9 NR=2.9420 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC12C065D-L
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC12C065D-L D
++ IS=1.3751E-15 N=1.0586 RS=50.779E-3 IKF=232.74 CJO=533.26E-12 M=.41939 
++ VJ=1.1507 ISR=56.398E-9 NR=3.2958 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC12H065CT
+* Description      : Power Schottky silicon carbide diode
+* Package type     : TO-220AB
+*******************************************************************
+*model STPSC12H065CT  anode1
+*				      | cathode
+*				      | | anode2
+*				      | | |
+.subckt STPSC12H065CT 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=56.099E-21 N=.77797 RS=.10031 IKF=1.0000E3 EG=3.2600 CJO=301.80E-12 M=.33678
++ VJ=.3905 ISR=25.848E-12 NR=4.9950 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO-220AB	Delivery = Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC12H065CFP
+* Description      : Power Schottky silicon carbide diode
+* Package type     : TO-220FP
+*******************************************************************
+*model STPSC12H065CFP  anode1
+*				       | cathode
+*				       | | anode2
+*				       | | |
+.subckt STPSC12H065CFP 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=56.099E-21 N=.77797 RS=.10031 IKF=1.0000E3 EG=3.2600 CJO=301.80E-12 M=.33678
++ VJ=.3905 ISR=25.848E-12 NR=4.9950 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO-220FP	Delivery = Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC12H065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC12H065D D
++ IS=1.0773E-14 N=1.0548 RS=50.078E-3 IKF=8.2204 CJO=602.01E-12 M=.43897
++ VJ=1.6031 ISR=201.30E-8 NR=2.6372 FC=0.5 TT=0 XTI=2 EG=3.26
+*$
+
+*******************************************************************
+* Model name       : STPSC12H065B-TR
+* Description      : Power Schottky rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC12H065B-TR  anode
+*		    	  	    | cathode
+*		    	  	    | |
+.subckt STPSC12H065B-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=1.0773E-15 N=1.0548 RS=50.078E-3 IKF=8.2204 CJO=602.01E-12 M=.43897
++			  VJ=1.6031 ISR=201.30E-9 NR=2.6372 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC12H065G-TR
+* Description      : Power Schottky rectifier
+* Package type     : D²PAK   in tape&reel
+*******************************************************************
+*model STPSC12H065G-TR  anode
+*					    | cathode
+*					    | |
+.subckt STPSC12H065G-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=1.0773E-15 N=1.0548 RS=50.078E-3 IKF=8.2204 CJO=602.01E-12 M=.43897
++			  VJ=1.6031 ISR=201.30E-9 NR=2.6372 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=D²PAK      Delivery = Tape & reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC16C065D-L
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC16C065D-L D
++ IS=2.7545E-15 N=1.0418 RS=34.951E-3 IKF=1.0000E3 EG=3.2600 CJO=725.73E-12
++ M=.43703 VJ=1.2721 ISR=56.045E-9 NR=4.5672 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+ 
+*******************************************************************
+* Model name       : STPSC16H065AW
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-247
+*******************************************************************
+.MODEL STPSC16H065AW D
++ IS=1.8662E-15 N=1.0557 RS=37.486E-3 IKF=1.0000E3 CJO=763.57E-12 M=.41291
++ VJ=.98398 ISR=261.33E-9 NR=2.3669 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC16H065CT
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AB
+*******************************************************************
+*model STPSC16H065CT  anode1
+*				      | cathode
+*				      | | anode2
+*				      | | |
+.subckt STPSC16H065CT 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=10.000E-21 N=.72324 RS=74.003E-3 IKF=662.40 CJO=440.60E-12 M=.35832
++ 			VJ=.47043 ISR=167.74E-9 NR=2.3391 TT=0	XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO-220AB   Delivery= Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC20065D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC20065D D
++ IS=3.6600E-15 N=1.0636 RS=13.497E-3 IKF=5.2496 CJO=1.2707E-9 M=.48038
++ VJ=1.3183 ISR=478.97E-9 NR=2.2672 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC20065DI
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC Ins
+*******************************************************************
+.MODEL STPSC20065DI D
++ IS=3.6600E-15 N=1.0636 RS=13.497E-3 IKF=5.2496 CJO=1.2707E-9 M=.48038
++ VJ=1.3183 ISR=478.97E-9 NR=2.2672 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC20065W
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-247
+*******************************************************************
+.MODEL STPSC20065W D
++ IS=3.6600E-15 N=1.0636 RS=13.497E-3 IKF=5.2496 CJO=1.2707E-9 M=.48038
++ VJ=1.3183 ISR=478.97E-9 NR=2.2672 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC20H065CT
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AB
+*******************************************************************
+*model STPSC20H065CT  anode1
+*				      | cathode
+*				      | | anode2
+*				      | | |
+.subckt STPSC20H065CT 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=9.4625E-18 N=.82669 RS=58.839E-3 IKF=20.421 CJO=541.7E-12 M=.34698
++ VJ=.3905 ISR=278.97E-12 NR=3.3432 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO-220AB   Delivery= Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC20H065CW
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC20H065CW  anode1
+*				      | cathode
+*				      | | anode2
+*				      | | |
+.subckt STPSC20H065CW 1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=9.4625E-18 N=.82669 RS=58.839E-3 IKF=20.421 CJO=541.7E-12 M=.34698
++ 			VJ=.3905 ISR=278.97E-12 NR=3.3432 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC40065CW
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC40065CW   anode1
+*				      | cathode
+*				      | | anode2
+*				      | | |
+.subckt STPSC40065CW  1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=2.9237E-15 N=1.0528 RS=13.559E-3 IKF=5.2246 CJO=1.2707E-9 M=.48038
++ VJ=1.3183 ISR=30.425E-6 NR=4.0082 TT=0 XTI=2 EG=3.2600 FC=0.5)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+
+
+*******************************************************************
+* POWER SCHOTTKY SiC DIODE 1200V
+*******************************************************************
+
+*******************************************************************
+* Model name       : STPSC2H12D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC2H12D D
++ IS=10.000E-21 N=.71989 RS=.23903 IKF=685.76 CJO=188.42E-12 M=.41995
++ VJ=1.1533 ISR=13.624E-9 NR=2.2965 TT=0 XTI=2 EG=3.2600 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC2H12B
+* Description      : Power Schottky SiC rectifier
+* Package type     : DPAK HV 2L
+*******************************************************************
+.MODEL STPSC2H12B D
++ IS=10.000E-21 N=.71989 RS=.23903 IKF=685.76 CJO=188.42E-12 M=.41995
++ VJ=1.1533 ISR=13.624E-9 NR=2.2965 TT=0 XTI=2 EG=3.2600 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC5H12D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC5H12D D
++ IS=23.367E-18 N=.9983 RS=77.399E-3 IKF=1.0000E3 CJO=454.33E-12 M=.42869
++ VJ=1.1290 ISR=32.063E-9 NR=2.8453 TT=0 XTI=2 EG=3.2600 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC6H12B-TR1
+* Description      : Power Schottky rectifier
+* Package type     : DPAK   in tape&reel
+*******************************************************************
+*model STPSC6H12B-TR1  anode
+*		    	  	   | cathode
+*		    	  	   | |
+.subckt STPSC6H12B-TR1 3 4
+d1 3 4 dx
+.model dx	D(IS=13.528E-21 N=.72931 RS=.11699 IKF=1.0000E3 CJO=281.99E-12 M=.39479
++ VJ=1.0046 ISR=3.5497E-6 NR=4.9950  TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC10H12CWL
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC10H12CWL   anode1
+*				       | cathode
+*				       | | anode2
+*				       | | |
+.subckt STPSC10H12CWL  1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=23.367E-18 N=.9983 RS=77.399E-3 IKF=1.0000E3 CJO=453.20E-12 M=.44242
++ VJ=1.3170 ISR=31.573E-9 NR=2.4162 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC10H12D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC10H12D D
++ IS=1.4928E-15 N=1.0069 RS=39.775E-3 IKF=1.0000E3 CJO=721.76E-12 M=.44358
++ VJ=1.3339 ISR=62.986E-9 NR=2.9284 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC10H12G2-TR
+* Description      : 1200 V, 10 A, silicon carbide power Schottky diode
+* Package type     : D²PAK HV  in tape&reel
+*******************************************************************
+*model STPSC10H12G2-TR  anode
+*		    	  	    | cathode
+*		    	  	    | |
+.subckt STPSC10H12G2-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=1.4928E-15 N=1.0069 RS=39.775E-3 IKF=1.0000E3 CJO=720.76E-12 M=.44739
++ VJ=1.3700 ISR=62.320E-9 NR=2.6327 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC10H12WL
+* Description      : Power Schottky SiC rectifier
+* Package type     : DO-247LL
+*******************************************************************
+.MODEL STPSC10H12WL D
++ IS=1.4928E-15 N=1.0069 RS=39.775E-3 IKF=1.0000E3 CJO=721.76E-12 M=.44358
++ VJ=1.3339 ISR=62.986E-9 NR=2.9284 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC15H12D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC15H12D D
++ IS=6.3295E-15 N=1.0856 RS=22.804E-3 IKF=8.7967 CJO=1.1813E-9 M=.44455
++ VJ=1.3745 ISR=95.226E-9 NR=4.9888 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC15H12G2-TR
+* Description      : 1200 V, 10 A, silicon carbide power Schottky diode
+* Package type     : D²PAK HV  in tape&reel
+*******************************************************************
+*model STPSC15H12G2-TR  anode
+*		    	  	    | cathode
+*		    	  	    | |
+.subckt STPSC15H12G2-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=6.3295E-15 N=1.0856 RS=22.804E-3 IKF=8.7967 CJO=1.1811E-9 M=.43937
++ VJ=1.3374 ISR=97.000E-9 NR=4.5483 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC15H12WL
+* Description      : Power Schottky SiC rectifier
+* Package type     : DO-247LL
+*******************************************************************
+.MODEL STPSC15H12WL D
++ IS=6.3295E-15 N=1.0856 RS=22.804E-3 IKF=8.7967 CJO=1.1813E-9 M=.44455
++ VJ=1.3745 ISR=95.226E-9 NR=4.9888 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC20H12CWL
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC20H12CWL   anode1
+*				       | cathode
+*				       | | anode2
+*				       | | |
+.subckt STPSC20H12CWL  1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=1.4928E-15 N=1.0069 RS=39.775E-3 IKF=1.0000E3 CJO=721.47E-12 M=.44436
++ VJ=1.3609 ISR=63.258E-9 NR=4.6106  TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC20H12D
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO-220AC
+*******************************************************************
+.MODEL STPSC20H12D D
++ IS=30.694E-15 N=1.1357 RS=16.654E-3 IKF=3.5832 CJO=1.6E-9 M=.4315
++ VJ=1.1575 ISR=412.90E-9 NR=4.9461 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC20H12G
+* Description      : Power Schottky rectifier
+* Package type     : D²PAK   in tape&reel
+*******************************************************************
+*model STPSC20H12G		anode
+*					    | cathode
+*					    | |
+.subckt STPSC20H12G		3 4
+d1 3 4 dx
+.model dx	D(IS=30.694E-15 N=1.1357 RS=16.654E-3 IKF=3.5832 CJO=1.6E-9 M=.4315
++ VJ=1.1575 ISR=412.90E-9 NR=4.9461 TT=0 XTI=2 EG=3.26 FC=0.5)
+
+*	STMicroelectronics	case=D²PAK      Delivery = Tape & reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC20H12G2-TR
+* Description      : 1200 V, 10 A, silicon carbide power Schottky diode
+* Package type     : D²PAK HV  in tape&reel
+*******************************************************************
+*model STPSC20H12G2-TR  anode
+*		    	  	    | cathode
+*		    	  	    | |
+.subckt STPSC20H12G2-TR 3 4
+d1 3 4 dx
+.model dx	D(IS=41.752E-15 N=1.1270 RS=17.536E-3 IKF=11.227 CJO=1.6708E-9 M=.43557
++ VJ=1.2230 ISR=127.16E-9 NR=4.9950 FC=0.5 TT=0 XTI=2 EG=3.26)
+
+*	STMicroelectronics	case=DPAK      Delivery = tape&reel
+.ends
+
+*******************************************************************
+* Model name       : STPSC20H12WL
+* Description      : Power Schottky SiC rectifier
+* Package type     : DO-247LL
+*******************************************************************
+.MODEL STPSC20H12WL D
++ IS=30.694E-15 N=1.1357 RS=16.654E-3 IKF=3.5832 CJO=1.6E-9 M=.4315
++ VJ=1.1575 ISR=412.90E-9 NR=4.9461 TT=0 XTI=2 EG=3.26 FC=0.5
+*$
+
+*******************************************************************
+* Model name       : STPSC30H12CWL
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC30H12CWL   anode1
+*				       | cathode
+*				       | | anode2
+*				       | | |
+.subckt STPSC30H12CWL  1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=3.6351E-15 N=1.0632 RS=24.832E-3 IKF=1.0000E3 CJO=1.1808E-9
++ M=.44199 VJ=1.3671 ISR=96.443E-12 NR=4.9950 TT=0 XTI=2 EG=3.2600)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+
+*******************************************************************
+* Model name       : STPSC40H12CWL
+* Description      : Power Schottky SiC rectifier
+* Package type     : TO247
+*******************************************************************
+*model STPSC40H12CWL   anode1
+*				       | cathode
+*				       | | anode2
+*				       | | |
+.subckt STPSC40H12CWL  1 2 3
+d1 1 2 dx
+d2 3 2 dx
+.model dx	D(IS=42.775E-15 N=1.1282 RS=18.693E-3 IKF=999.99 CJO=1.6657E-9 M=.44539
++ VJ=1.3610 ISR=125.72E-9 NR=4.2041 TT=0 XTI=2 EG=3.2600 FC=0.5)
+
+*	STMicroelectronics	case=TO247   Delivery= Tube
+.ends
+
+*******************************************************************
+* POWER SCHOTTKY SiC DIODE 1300V
+*******************************************************************
+ 
+*******************************************************************
+* Model name       : STPSC6H13TI
+* Description      : Dual 650 V power Schottky silicon carbide diode in series
+* Package type     : TO220-AB
+*******************************************************************
+*model STPSC6H13TI  anode1
+*				    | cathode1-anode2
+*				    | | cathode2
+*				    | | |
+.subckt STPSC6H13TI 1 2 3
+d1 3 2 dx
+d2 2 1 dx
+.model dx	D(IS=350.00E-18 N=1.0235 RS=95.314E-3 IKF=1.0000E3 CJO=291.01E-12 M=.32943
++ VJ=.3905 ISR=71.624E-9 NR=2.6093 TT=0 XTI=2 EG=3.26 FC=0.5)
+*	STMicroelectronics	case=TO220-AB     Delivery = Tube
+.ends
+*$
+
+*******************************************************************
+* Model name       : STPSC8H13TI
+* Description      : Dual 650 V power Schottky silicon carbide diode in series
+* Package type     : TO220-AB
+*******************************************************************
+*model STPSC8H13TI  anode1
+*				    | cathode1-anode2
+*				    | | cathode2
+*				    | | |
+.subckt STPSC8H13TI 1 2 3
+d1 3 2 dx
+d2 2 1 dx
+.model dx	D(IS=4.2344E-15 N=1.1161 RS=72.099E-3 IKF=293.19 CJO=174.82E-12 M=.31026
++ VJ=.3905 ISR=118.60E-9 NR=4.9950 TT=0 XTI=2 EG=3.26 FC=0.5)
+*	STMicroelectronics	case=TO220-AB     Delivery = Tube
+.ends
+*$
+
+*******************************************************************
+* Model name       : STPSC10H13TI
+* Description      : Dual 650 V power Schottky silicon carbide diode in series
+* Package type     : TO220-AB
+*******************************************************************
+*model STPSC10H13TI  anode1
+*				     | cathode1-anode2
+*				     | | cathode2
+*				     | | |
+.subckt STPSC10H13TI 1 2 3
+d1 3 2 dx
+d2 2 1 dx
+.model dx	D(IS=5.3933E-15 N=1.1108 RS=61.407E-3 IKF=1.0000E3 CJO=483.83E-12 M=.39737 
++ VJ=1.1952 ISR=299.29E-9 NR=3.5129 TT=0 XTI=2 EG=3.26 FC=0.5)
+*	STMicroelectronics	case=TO220-AB     Delivery = Tube
+.ends
+*$
+
+*-------------------------------------
+*THANKS TO USE THE ST'S PRODUCTS
+*-------------------------------------
+
+* End of library.
+*$

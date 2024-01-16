@@ -1,0 +1,53 @@
+{
+  "last_sch_text_sim_command": ".tran 200n 120m\n.option chgtol=1e-11 reltol=0.01 method=gear",
+  "tabs": [
+    {
+      "analysis": "TRAN",
+      "commands": [
+        ".tran 200n 120m\n.option chgtol=1e-11 reltol=0.01 method=gear",
+        ".kicad adjustpaths",
+        ".save all",
+        ".probe alli",
+        ".probe allp"
+      ],
+      "dottedSecondary": false,
+      "margins": {
+        "bottom": 45,
+        "left": 70,
+        "right": 70,
+        "top": 30
+      },
+      "measurements": [
+        {
+          "expr": "AVG V(/out) from=100m to=120m",
+          "format": "2~V"
+        },
+        {
+          "expr": "AVG P(R1)",
+          "format": "2~W"
+        },
+        {
+          "expr": "AVG P(V1)",
+          "format": "2~W"
+        }
+      ],
+      "showGrid": true,
+      "traces": [
+        {
+          "color": "rgb(231, 138, 195)",
+          "signal": "V(/out)",
+          "trace_type": 257
+        },
+        {
+          "color": "rgb(166, 216, 84)",
+          "signal": "abs(v1:power)",
+          "trace_type": 256
+        }
+      ]
+    }
+  ],
+  "user_defined_signals": [
+    "abs(v1:power)"
+  ],
+  "version": 6
+}

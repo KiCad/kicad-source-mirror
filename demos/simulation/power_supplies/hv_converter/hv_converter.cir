@@ -1,0 +1,51 @@
+.title KiCad schematic
+.include "GaN_PSpice_GS-065-018-2-L_L1V3P3.lib"
+.include "ST_SILICON_CARBIDE_SCHOTTKY_V9.LIB"
+D8 /d7 /d8 STPSC5H12D
+D9 /d8 /out STPSC5H12D
+C9 /d7 /out 1u
+C10 /out 0 1u
+R1 /out 0 R = 'TIME > 70m ? 10k : 25k'
+D2 /d1 /d2 STPSC5H12D
+C3 /d1 /d3 1u
+C1 /d1 0 1u
+D4 /d3 /d4 STPSC5H12D
+C4 /d2 /d4 1u
+D3 /d2 /d3 STPSC5H12D
+V1 /pwr 0 pulse(0 28 1m 2m 1m 1 1)
+C2 /d /d2 1u
+D1 /d /d1 STPSC5H12D
+XQ1 /g /d 0 0 GaN_PSpice_GS-065-018-2-L_L1V3P3
+V2 /g 0 pulse(0 6 1m 20n 20n 2u 4u)
+RESR1 Net-_L1-Pad2_ /d 230m
+L1 /pwr Net-_L1-Pad2_ 22u
+D5 /d4 /d5 STPSC5H12D
+C6 /d4 /d6 1u
+C5 /d3 /d5 1u
+D6 /d5 /d6 STPSC5H12D
+C7 /d5 /d7 1u
+D7 /d6 /d7 STPSC5H12D
+C8 /d6 /d8 1u
+.tran 200n 120m
+.option chgtol=1e-11 reltol=0.01 method=gear
+.probe p(R1) p(V1)
+.control
+set controlswait
+if $?sharedmode
+else
+run
+plot V(/d) V(/d1) V(/d2) V(/d3) V(/d4) V(/d5) V(/d6) V(/d7) V(/d8) V(/out)
+plot i(L1)
+end
+rusage time
+let v1power = abs(v1:power)
+meas tran pv1 avg v1power from=50m to=70m
+meas tran pr1 avg r1:power from=50m to=70m
+let eff = 100 * pr1 / pv1
+echo efficiency is $&eff %
+meas tran pv1_2 avg v1power from=100m to=120m
+meas tran pr1_2 avg r1:power from=100m to=120m
+let eff = 100 * pr1_2 / pv1_2
+echo efficiency is $&eff %
+.endc
+.end

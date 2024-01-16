@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "PWM_Library")(type "KiCad")(uri "${KIPRJMOD}/PWM_Library.kicad_sym")(options "")(descr ""))
+  (lib (name "PWM")(type "KiCad")(uri "${KIPRJMOD}/PWM.kicad_sym")(options "")(descr ""))
+)

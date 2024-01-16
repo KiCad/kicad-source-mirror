@@ -1,0 +1,19 @@
+* PWM model analog in and out
+* Input: 0 - 1 V
+* Output: Vlo, Vhi
+* Frequency: freq
+
+.subckt pwm out+ out- in+ in- params: freq = 100k vlo=0.7 vhi=3.5
+* the pwm (analog in, digital out)
+a5 %vd (in+ in-) dout pwm_osc
+.model pwm_osc d_pwm(cntl_array = [0 0.01 0.99 1]
++ dc_array = [0.01 0.01 0.99 0.99]
++ frequency = {freq} init_phase = 90.0
++ rise_delay = 2e-9 fall_delay=2e-9)
+* the D to A converter
+abridge1 [dout] %vd[out+ out-] dac1
+.model dac1 dac_bridge(out_low = {vlo} out_high = {vhi} out_undef = {oundef}
++ input_load = 5.0e-12 t_rise = 2e-9
++ t_fall = 2e-9)
+.param oundef={(vhi-vlo)/2}
+.ends

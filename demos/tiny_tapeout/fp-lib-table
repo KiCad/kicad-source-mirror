@@ -1,0 +1,6 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "ttlib")(type "KiCad")(uri "${KIPRJMOD}/tinytapeout-kicad-libs/footprints/ttlib.pretty")(options "")(descr ""))
+  (lib (name "TinyTapeout")(type "KiCad")(uri "${KIPRJMOD}/tinytapeout-kicad-libs/footprints/TinyTapeout.pretty")(options "")(descr ""))
+  (lib (name "MCU_RaspberryPi_and_Boards")(type "KiCad")(uri "${KIPRJMOD}/tinytapeout-kicad-libs/footprints/MCU_RaspberryPi_and_Boards.pretty")(options "")(descr ""))
+)

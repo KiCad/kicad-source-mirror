@@ -1,0 +1,55 @@
+* Class D audio amp frontend (to drive a power MOS half bridge)
+* analog input
+* pwm clock generator
+* digital one-shot
+* non-overlapping clock
+* two floating half-bridge drivers
+
+
+* Calling the subcircuit
+* Xpwm ain lo+ lo- hi+ hi- DAudioDriver freq = 500k dtime = 100n voutp = 1.4 voutn = 0
+
+.subckt DAudioDriver ain lo+ lo- hi+ hi- params: freq = 317k dtime = 50n voutp = 12 voutn = 0
+apwm1 ain dfast1 pwm_osc
+.model pwm_osc d_pwm(cntl_array = [-2 -1.99 1.99 2]
++ dc_array = [0.1 0.1 0.9 0.9]
++ frequency = {freq} init_phase = 90.0
+
+a6 dfast1 _d1 inv1
+.model inv1 d_inverter(rise_delay = 0.3e-9 fall_delay = 0.3e-9
++ input_load = 0.5e-12)
+
+* equalize d1 and _d1
+abuf2 dfast1 d1 buff2
+.model buff2 d_buffer(rise_delay = 0.3e-9 fall_delay = 0.3e-9
++ input_load = 0.5e-12)
+
+*** one-shot ***
+* buffer
+abuf1 dfast1 d2 buff1
+.model buff1 d_buffer(rise_delay = {dtime} fall_delay = {dtime}
++ input_load = 0.5e-12)
+* one-shot 1->0 output
+a9 [dfast1 d2] dos xnor3
+.model xnor3 d_xnor(rise_delay = 0.2e-9 fall_delay = 0.2e-9
++ input_load = 0.5e-12)
+***
+
+* outputs: inverted, non-overlapping
+aand1 [d1 dos] dout1 and1
+aand2 [_d1 dos] dout2 and1
+.model and1 d_and(rise_delay = 0.4e-9 fall_delay = 0.4e-9
++ input_load = 0.5e-12)
+
+* analog out, differential
+abridge1 [dout1] [%vd(lo+ lo-)] dac1
+abridge2 [dout2] [%vd(hi+ hi-)] dac1
+.model dac1 dac_bridge(out_low = {voutn} out_high = {voutp} out_undef = 0
++ input_load = 5.0e-12 t_rise = 20e-9
++ t_fall = 20e-9)
+
+* test
+* do we have overlap?
+* aandtest [dout1 dout2] dtest and1
+
+.ends

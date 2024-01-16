@@ -1,0 +1,14 @@
+Up-Down Counter
+
+This project contains a home-made symbol, a home-made subcircuit counter model, and a mix of digital and analog nodes.
+
+The subcircuit counter model is made by the built-in ngspice/XSPICE state machine.
+This is a very simple method to run a programmable sequencer. The 'program'
+is contained in file state-3bit-count.in.
+
+Please see chapter 12.4.18 'State Machine' of the ngspice manual for more information.
+
+The digital nodes of the state machine are interfaced to the analog world by D/A bridges.
+
+When plotting the output, we use User-defined signals to allow plotting of
+multiple signal vertically without overlap, thus emulating multiple panes.

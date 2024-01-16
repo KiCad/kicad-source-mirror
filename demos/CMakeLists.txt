@@ -14,6 +14,7 @@ install( DIRECTORY
     stickhub
     test_pads_inside_pads
     test_xil_95108
+    tiny_tapeout
     video
     DESTINATION ${KICAD_DEMOS}
     COMPONENT resources

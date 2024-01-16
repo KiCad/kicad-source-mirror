@@ -1,0 +1,21 @@
+* This is an example state.in file. This file
+* defines a simple 3-bit counter with one input. The
+* value of this input determines whether the counter counts
+* up (in = 1) or down (in = 0).
+* [state#] [output1 output2 output3] [input] [next state]
+0 0s 0s 0s 0 -> 7
+           1 -> 1
+1 0s 0s 1z 0 -> 0
+           1 -> 2
+2 0s 1z 0s 0 -> 1
+           1 -> 3
+3 0s 1z 1z 0 -> 2
+           1 -> 4
+4 1z 0s 0s 0 -> 3
+           1 -> 5
+5 1z 0s 1z 0 -> 4
+           1 -> 6
+6 1z 1z 0s 0 -> 5
+           1 -> 7
+7 1z 1z 1z 0 -> 6
+           1 -> 0

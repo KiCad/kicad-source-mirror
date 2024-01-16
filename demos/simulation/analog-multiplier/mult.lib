@@ -1,0 +1,6 @@
+* multiplier subcircuit
+.subckt mult in1 in2 out
+A1 [in1 in2] out mul
+.model mul mult
+.ends
+

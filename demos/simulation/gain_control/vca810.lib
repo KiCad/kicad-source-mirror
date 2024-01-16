@@ -1,0 +1,110 @@
+* VCA810
+*****************************************************************************
+* (C) Copyright 2012 Texas Instruments Incorporated. All rights reserved.                                            
+*****************************************************************************
+** This model is designed as an aid for customers of Texas Instruments.
+** TI and its licensors and suppliers make no warranties, either expressed
+** or implied, with respect to this model, including the warranties of 
+** merchantability or fitness for a particular purpose.  The model is
+** provided solely on an "as is" basis.  The entire risk as to its quality
+** and performance is with the customer.
+*****************************************************************************
+*
+** Released by: WEBENCH(R) Design Center, Texas Instruments Inc.
+* Part: VCA810
+* Date: 01/15/2014
+* Model Type: All In One
+* Simulator: TINA-TI
+* Simulator Version: 9.3.80.256 SF-TI
+* EVM Order Number: N/A 
+* EVM Users Guide: N/A
+* Datasheet: SBOS275F –JUNE 2003–REVISED DECEMBER 2010
+*
+* Model Version: 1.0
+*
+*****************************************************************************
+*
+* Updates:
+*
+* Version 1.0 : Based on Pspice macro netlist w/following comments:
+*               "VCA810 VOLTAGE CONTROLLED AMPLIFIER "MACROMODEL" SUBCIRCUIT
+*               CREATED 7/30/04 RRS" 
+*               Release to Web 
+*
+*****************************************************************************
+* Notes: 
+* 1. The model still missing dc and noise to be added latter
+***************************************************************************** 
+*
+* CONNECTIONS:   NON-INVERTING INPUT
+*                |  GROUND
+*                |  |  GAIN CONTROL, VC
+*                |  |  |  OUTPUT
+*                |  |  |  |  POSITIVE SUPPLY VOLTAGE
+*                |  |  |  |  |  NEGATIVE SUPPLY VOLTAGE
+*                |  |  |  |  |  |  INVERTING INPUT
+*                |  |  |  |  |  |  |
+.SUBCKT  VCA810  1  2  3  5  6  7  8
+* CONTROL VOLTAGE
+Q1   7   3  13  P
+C1   3   7  1E-12
+Q2   7   2  13  P
+I1   6  13  384E-6
+Q3  10  11  7  N
+R2   6  10  2
+E1  11   7  POLY(1) (3,0) 0.45  -0.11911
+G3  12   0  POLY(1) (10,6) 0 1
+R3  12   0  139
+C3  12   0  1.145E-9
+G1   6   7  POLY(1) (6,10) 13.5102E-3 -0.489
+G2   0   7  POLY(1) (6,10) 1.7958E-3 2.939E-3
+* INPUT STAGE
+Q01  20   1  26  N
+C01   1   0  1E-12
+Q02  21   8  26  N
+C02   8   0  1E-12
+R01  20  27  1E3
+D01  29  27  DX
+D03   6  29  DX
+R02  21  28  1E3
+D02  24  28  DX
+D04   6  24  DX
+IS   26   7  2.32E-3
+* GAIN STAGE 1
+R31  31   0  1E6
+G31  31   0  POLY(2) (8,1) (12,0) 0 0 0 0 1.1E-6 0
+* GAIN STAGE 2
+R41  41  44  20E3
+C41  41  44  230.25E-15
+G41  41  44  0  31  1E-3
+D41  41  43  DX
+E41  44  43  POLY(1) (3,0) 100.2 14.87
+R42  41  45  20E3
+C42  41  45  230.25E-15
+G42  41  45  0  31  1E-3
+D42  42  41  DX
+E42  42  45  POLY(1)  (3,0) 100.2 14.87
+E43  44   0  6  0  20
+E44   0  45  0  7  20
+* OUTPUT STAGE
+E51  55  0 41 0 50E-3
+D53  55  51  DX
+D54  52  55  DX
+D55   6  53  DX
+D56   6  54  DX
+D57   7  53  DZ
+D58   7  54  DZ
+G54  53   7  5  55  50E-3
+G53  54   7  55  5  50E-3
+V53  51   5  0.1833
+V54   5  52  0.1833
+G51   5   6  6  55  50E-3
+G52   7   5  55   7  50E-3
+R53   6   5  20
+R54   7   5  20
+.MODEL N NPN (IS=1E-12 BF=193)
+.MODEL P PNP (IS=1E-12 BF=96)
+.MODEL  DX  D(IS=1E-15 BV=200)
+.MODEL  DZ  D(IS=1E-15 BV=50)
+.ENDS
+*$

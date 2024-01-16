@@ -1,0 +1,22 @@
+* Simple generic single-pole OpAmp model
+* Parameters are pole frequency, gain, offset, output resistance.
+* the output is limited to the supply voltage
+* Author Holger Vogt, Public Domain
+.subckt genopa1 in+ in- vcc vee out params: POLE=20 GAIN=20k VOFF=10m ROUT=10
+* add offset voltage
+  Voff in+ inoff dc {VOFF}
+* gain stage with RC pole
+  G10 0 int inoff in- 100u
+  R1 int 0 {GAIN/100u}
+  C1 int 0 {1/(6.28*(GAIN/100u)*POLE)}
+* output decoupling, output resistance
+  Eout 2 0 int 0 1
+  Rout 2 out {ROUT}
+* output limited to vee, vcc
+  Elow lee 0 vee 0 1
+  Ehigh lcc 0 vcc 0 1
+  Dlow lee int Dlimit
+  Dhigh int lcc Dlimit
+  .model Dlimit D N=0.01
+*
+.ends

@@ -1,0 +1,7 @@
+.SUBCKT XFORMER 1 2 3 4
+Rp 1 11 0.1
+Rs 3 33 1
+L1 11 2 50
+L2 33 4 500m
+K1 L1 L2 1
+.ends

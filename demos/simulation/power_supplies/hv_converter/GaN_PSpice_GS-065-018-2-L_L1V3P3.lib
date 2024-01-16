@@ -1,0 +1,103 @@
+*****************************************************************
+* GaN Systems Inc. Power Transistors                            *
+* LTSpice Library for GaN Transistors                           *
+* Version 3.1         		                                    *
+*                                                               *
+*****************************************************************
+*****************************************************************
+*                                                               *
+* Models provided by GaN Systems Inc. are not warranted by      *
+* GaN Systems Inc. as fully representing all of the 			*
+* specifications and operating characteristics of the 			*
+* semiconductor product to which the model relates. The model 	*
+* describes the characteristics of a typical device.			*
+* In all cases, the current data sheet information for a given  *
+* device is the final design guideline and the only actual      *
+* performance specification.                                    *
+* Although models can be a useful tool in evaluating the devices*
+* performance, they cannot model exact device performance under *
+* all conditions, nor are they intended to replace bread-       *
+* boarding for final verification. GaN Systems Inc. therefore   *
+* does not assume any liability arising from their use.         *
+* GaN Systems Inc. reserves the right to change models without  *
+* prior notice.                                                 *
+*                                                               *
+* This library contains models of the following GaN Systems     *
+* Inc. transistors:                                             *
+*                                                               *
+* GS-065-018-2-L                                             	*
+*****************************************************************
+*Level. This level focus on the simulation speed.
+*
+*
+.subckt GaN_PSpice_GS-065-018-2-L_L1V3P3 gatein drainin sourcein source_S
+*
+*
+.param sf=1.93706
+.param rTC=-0.004	gan_res={58e-3}	metal_res={10.43e-3 + 5.1e-3}	gtc=2.915	sh_s = 0.05263	sh_d = 0.94376
+.param  cur=0.0319	x0_0=1.1	x0_1=0.3 	x0_2=1.0 	thr = 1.7 	itc=0.147	atc=30.83459808
+*
+*
+rd drainin drain {sh_d*(metal_res*(1-1*rTc*(Temp-25)) + gan_res*PWR((Temp+273)/298,gtc)) }
+rs sourcein source {sh_s * (metal_res*(1-1*rTc*(Temp-25)) + gan_res*PWR((Temp+273)/298,gtc)) }
+RSS source_S source {0.035}
+rg gatein gate {1.4+0.065}
+*
+*
+Rcsdconv drain source {4000Meg}
+Rcgsconv gate source {4000Meg}
+Rcgdconv gate drain {4000Meg}
+*
+*
+gswitch drain2 source2 value { (if(v(drain2,source2)>0,
++   (cur*(-(Temp-25)*itc+atc)*log(1.0+exp(26*(v(gate,source2)-thr)))*
++	v(drain2,source2)/(1 + max(x0_0+x0_1*(v(gate,source2)+x0_2),0.2)*v(drain2,source2))),
+
++   (-cur*(-(Temp-25)*itc+atc)*log(1.0+exp(26*(v(gate,drain2)-thr)))*
++	v(source2, drain2)/(1 + max(x0_0+x0_1*(v(gate,drain2)+x0_2),0.2)*v(source2,drain2))))) * sf}
+*
+*
+R_drain2 drain2 drain {(1e-4)}
+R_source2 source2 source {(1e-4)}
+*
+*
+C_GS1	gate source  	{6.8e-11 * sf} 
+E_IGS1	tl_gs1 bl_gs1	Value ={ (	-2.65e-11*(1-1./(1+exp(0.07*(-v(drain, source)+20))))
++								-0.37e-10*(-0.682+0.66/(1+exp(0.11*(-v(drain, source)+.01))))) * v(gate,source) * sf }
+V_INGS1 br_gs1 bl_gs1 	{0.0}
+C_IGS1  br_gs1 tr_gs1 	{1.0e-6}
+R_IGS1  tr_gs1 tl_gs1 	{1e-3}
+F_IGS1  gate source 	V_INGS1 {1.0e6}
+R_IGS12 bl_gs1 source 	{100Meg}
+*
+*
+E_IGS2  tl_gs2 bl_gs2 	Value={ 3.15e-011*log(1+exp(8*(v(gate,source)-0.9))) * sf }
+V_INGS2 br_gs2 bl_gs2 	{0.0}
+C_IGS2  br_gs2 tr_gs2 	{1.0e-6}
+R_IGS2  tr_gs2 tl_gs2 	{1e-3}
+F_IGS2  gate source 	V_INGS2 {1.0e6}
+R_IGS22 bl_gs2 source 	{100Meg}
+*
+*
+C_GD	gate drain		{0.35e-012 * sf}
+E_IGD	tl_gd bl_gd 	Value={ 375e-12*log(1+exp(0.07*(v(gate,drain)+20))) * sf }
+V_INGD 	br_gd bl_gd 	{0.0}
+C_IGD  	br_gd tr_gd 	{1.0e-6}
+R_IGD  	tr_gd tl_gd 	{1e-3}
+F_IGD  	gate drain 		V_INGD {1.0e6}
+R_IGD2 	bl_gd drain 	{100Meg}
+*
+*
+C_SD	source drain	{2e-011 * sf}
+E_ISD	tl_sd bl_sd 	Value={ 0.85e-9*log(1+exp(0.085*(v(source,drain)+63))) * sf 
++							+1.45e-9*log(1+exp(0.025*(v(source,drain)+180)))  * sf
++							-2.65e-11*(1-1./(1+exp(0.07*(v(source,drain)+20))) * sf) }
+V_INSD 	br_sd bl_sd 	{0.0}
+C_ISD  	br_sd tr_sd 	{1.0e-6}
+R_ISD  	tr_sd tl_sd 	{1e-3}
+F_ISD  	source drain	V_INSD {1.0e6}
+R_ISD2 	bl_sd drain 	{100Meg}
+*
+*
+.ends
+*$

@@ -1,0 +1,33 @@
+* another state machine example
+* by Holger Vogt, July 9th, 2020
+* 3-bit counter in a subcircuit with 5 V analog in and out
+
+*** counter
+.subckt 3bcounter clock updown out_b0 out_b1 out_b2
+* Define a simple 3 bit up/down counter that counts clk edges.
+* Digital outputs are on b2 b1 b0.
+*   inputs  clock   reset     outputs (all digital)
+a0  [upd]  clk    n_zero   [b2 b1 b0]   state2
+
+* This needs to be edited: enter the absolute path of file state-3bit-count.in
+.model state2 d_state(state_file = "D:\Spice_general\KiCad-799\up-down-counter\state-3bit-count.in")
+*.model state2 d_state(state_file = "state-3bit-count.in")
+
+* Digital "one" and "zero"
+a1 n_one pullup1
+.model pullup1 d_pullup(load = 1pF)
+a2 n_zero pulldown1
+.model pulldown1 d_pulldown(load = 1pF)
+
+* Convert the digital outputs to analog
+a3 [b2] [out_b2] dac1
+a4 [b1] [out_b1] dac1
+a5 [b0] [out_b0] dac1
+.model dac1 dac_bridge(out_low = 0 out_high = 5 out_undef = 2.5)
+* Convert the analog inputs to digital
+a6 [clock] [clk] adc1
+a7 [updown] [upd] adc1
+.model adc1 adc_bridge(in_low = 0.3 in_high = 3.5)
+.ends
+*** end counter
+

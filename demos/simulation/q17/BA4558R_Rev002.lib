@@ -1,0 +1,95 @@
+* PSpice Model Editor - Version 16.6.0
+*$
+* BA4558R/BA4558Y-M
+*
+* Rev.002 2016.Apr
+*
+* Low Noise Operational Amplifier 'Macromodel' Subcircuit
+*
+* All Rights Reserved Copyright (c) ROHM CO., LTD.
+*
+.subckt BA4558R OUT1 -IN1 +IN1 VEE +IN2 -IN2 OUT2 VCC
+X_U1 +IN1 -IN1 VCC VEE OUT1  ba4558r_sub
+X_U2 +IN2 -IN2 VCC VEE OUT2  ba4558r_sub
+.ends
+*$
+.SUBCKT ba4558r_sub +IN -IN VCC VEE OUT
+R_R27         N227606 N165981  10 TC=0.001,0 
+R_R24         N226095 VCC  1.4k TC=0.0037,0 
+Q_Q17         N227264 N168651 VCC QP3 38.7
+Q_Q1         N165977 -IN N164947 QP2 27
+Q_Q50         N226799 N165981 N226803 QN1 17
+Q_Q9         N165977 N165977 N165985 QN1 2
+R_R23         VEE N165985  4k TC=0.001,0 
+Q_Q49         N168651 N168651 VCC QP1 1
+C_C3         N227606 N227621  33.5p  TC=0,0    
+R_R26         VEE N226803  32k TC=0.001,0 
+G_G1         N168651 VEE N215189 VEE 1
+R_R20         VEE N215189  40 TC=-0.0015,0 
+Q_Q2         N165981 +IN N164947 QP2 27.4
+I_I5         VEE N215189 DC 1uAdc  
+Q_Q51         N227621 N226803 VEE QN2 4
+C_C2         VEE N165985  30p  TC=0,0 
+R_R22         VEE N166000  4k TC=0.001,0 
+Q_Q10         N165981 N165977 N166000 QN1 2
+R_R25         N226799 VCC  900 TC=0.001,0 
+Q_Q15         N164947 N168651 N226095 QP1 2.2
+Q_Q52         VEE N168651 VCC QP4 0.01
+R_R28         N227621 N233224  50k TC=0.001,0 
+Q_Q53         VEE N227621 N233626 QP3 6
+Q_Q54         VCC N227264 N233088 QN2 30
+Q_Q55         N227264 N227264 N233224 QN1 4
+Q_Q56         N227264 N233224 N227621 QN1 4
+R_R29         OUT N233088  50 TC=0.001,0 
+R_R30         N233626 OUT  80 TC=0.001,0
+*
+*
+*
+.model QN1 npn
++ is=5e-016
++ bf=380
++ nf=1
++ vaf=100
++ ikf=0.001
+*
+.model QN2 npn
++ is=5e-016
++ bf=400
++ nf=1
++ vaf=100
++ ikf=0.001
++ xtb=1
+*
+.model QP1 pnp
++ is=7e-016
++ bf=100
++ nf=1
++ vaf=45
++ ikf=2.0e-005
++ xti=2
+*
+.model QP2 pnp
++ is=5e-016
++ bf=100
++ nf=1
++ vaf=22
++ ikf=0.5e-005
++ xti=2
+*
+.model QP3 pnp
++ is=5e-016
++ bf=1400
++ nf=1
++ vaf=110
++ ikf=2e-005
++ xti=1.5
+*
+.model QP4 pnp
++ is=5e-016
++ bf=1400
++ nf=1
++ vaf=3
++ ikf=2e-005
++ xti=10
+.ends
+*$

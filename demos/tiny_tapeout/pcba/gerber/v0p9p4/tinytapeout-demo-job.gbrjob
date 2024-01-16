@@ -1,0 +1,209 @@
+{
+  "Header": {
+    "GenerationSoftware": {
+      "Vendor": "KiCad",
+      "Application": "Pcbnew",
+      "Version": "7.0.9-7.0.9~ubuntu22.04.1"
+    },
+    "CreationDate": "2023-12-15T15:20:45-05:00"
+  },
+  "GeneralSpecs": {
+    "ProjectId": {
+      "Name": "tinytapeout-demo",
+      "GUID": "74696e79-7461-4706-956f-75742d64656d",
+      "Revision": "0.9.4"
+    },
+    "Size": {
+      "X": 104.6,
+      "Y": 81.1
+    },
+    "LayerNumber": 4,
+    "BoardThickness": 1.5625,
+    "Finish": "None",
+    "ImpedanceControlled": true
+  },
+  "DesignRules": [
+    {
+      "Layers": "Outer",
+      "PadToPad": 0.18,
+      "PadToTrack": 0.18,
+      "TrackToTrack": 0.2,
+      "MinLineWidth": 0.16,
+      "TrackToRegion": 0.25,
+      "RegionToRegion": 0.25
+    },
+    {
+      "Layers": "Inner",
+      "PadToPad": 0.18,
+      "PadToTrack": 0.18,
+      "TrackToTrack": 0.2,
+      "MinLineWidth": 0.23,
+      "TrackToRegion": 0.25,
+      "RegionToRegion": 0.25
+    }
+  ],
+  "FilesAttributes": [
+    {
+      "Path": "tinytapeout-demo-F_Cu.gbr",
+      "FileFunction": "Copper,L1,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-In1_Cu.gbr",
+      "FileFunction": "Copper,L2,Inr",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-In2_Cu.gbr",
+      "FileFunction": "Copper,L3,Inr",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-B_Cu.gbr",
+      "FileFunction": "Copper,L4,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-F_Paste.gbr",
+      "FileFunction": "SolderPaste,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-B_Paste.gbr",
+      "FileFunction": "SolderPaste,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-F_Silkscreen.gbr",
+      "FileFunction": "Legend,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-B_Silkscreen.gbr",
+      "FileFunction": "Legend,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-F_Mask.gbr",
+      "FileFunction": "SolderMask,Top",
+      "FilePolarity": "Negative"
+    },
+    {
+      "Path": "tinytapeout-demo-B_Mask.gbr",
+      "FileFunction": "SolderMask,Bot",
+      "FilePolarity": "Negative"
+    },
+    {
+      "Path": "tinytapeout-demo-Edge_Cuts.gbr",
+      "FileFunction": "Profile",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "tinytapeout-demo-User_2.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    }
+  ],
+  "MaterialStackup": [
+    {
+      "Type": "Legend",
+      "Color": "White",
+      "Name": "Top Silk Screen"
+    },
+    {
+      "Type": "SolderPaste",
+      "Name": "Top Solder Paste"
+    },
+    {
+      "Type": "SolderMask",
+      "Color": "Green",
+      "Thickness": 0.01,
+      "Name": "Top Solder Mask"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "F.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Color": "R109G116B75",
+      "Thickness": 0.0681,
+      "Material": "R-1551(W)",
+      "DielectricConstant": "4.3",
+      "LossTangent": "0.02",
+      "Name": "F.Cu/In1.Cu (1/2)",
+      "Notes": "Type: dielectric layer 1 - 1/2 (from F.Cu to In1.Cu)"
+    },
+    {
+      "Type": "Dielectric",
+      "Color": "R109G116B75",
+      "Thickness": 0.0681,
+      "Material": "R-1551(W)",
+      "DielectricConstant": "4.3",
+      "LossTangent": "0.02",
+      "Name": "F.Cu/In1.Cu (2/2)",
+      "Notes": "Type: dielectric layer 1 - 2/2 (from F.Cu to In1.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "In1.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Color": "R109G116B75",
+      "Thickness": 1.13,
+      "Material": "R-1566(W)",
+      "DielectricConstant": "4.6",
+      "LossTangent": "0.02",
+      "Name": "In1.Cu/In2.Cu",
+      "Notes": "Type: dielectric layer 2 (from In1.Cu to In2.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "In2.Cu"
+    },
+    {
+      "Type": "Dielectric",
+      "Color": "R109G116B75",
+      "Thickness": 0.0681,
+      "Material": "R-1551(W)",
+      "DielectricConstant": "4.3",
+      "LossTangent": "0.02",
+      "Name": "In2.Cu/B.Cu (1/2)",
+      "Notes": "Type: dielectric layer 3 - 1/2 (from In2.Cu to B.Cu)"
+    },
+    {
+      "Type": "Dielectric",
+      "Color": "R109G116B75",
+      "Thickness": 0.0681,
+      "Material": "R-1551(W)",
+      "DielectricConstant": "4.3",
+      "LossTangent": "0.02",
+      "Name": "In2.Cu/B.Cu (2/2)",
+      "Notes": "Type: dielectric layer 3 - 2/2 (from In2.Cu to B.Cu)"
+    },
+    {
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "B.Cu"
+    },
+    {
+      "Type": "SolderMask",
+      "Color": "Green",
+      "Thickness": 0.01,
+      "Name": "Bottom Solder Mask"
+    },
+    {
+      "Type": "SolderPaste",
+      "Name": "Bottom Solder Paste"
+    },
+    {
+      "Type": "Legend",
+      "Color": "White",
+      "Name": "Bottom Silk Screen"
+    }
+  ]
+}

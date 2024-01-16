@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "VCA810")(type "KiCad")(uri "${KIPRJMOD}/VCA810.kicad_sym")(options "")(descr ""))
+)
