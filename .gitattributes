@@ -30,3 +30,7 @@ bitmaps_png/cpp_*/*.cpp     generated
 # Lemon grammars
 common/libeval/grammar.c    generated
 common/libeval/grammar.h    generated
+
+# Scripts
+*.sh    text eol=lf
+*.bat   text eol=crlf
