@@ -26,7 +26,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
 "PO-Revision-Date: 2024-01-18 07:31+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -24007,7 +24007,7 @@ msgstr "Auf Aktualisierungen prüfen"
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
 msgstr ""
-"KiCad %s ist verfügbar (Sie verwenden %s). Möchten Sie es jetzt "
+"KiCad %s ist jetzt verfügbar (Sie verwenden %s). Möchten Sie es jetzt "
 "herunterladen?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
@@ -24583,8 +24583,8 @@ msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
-"Die Version dieses Paketes ist mit Ihrer KiCad-Version oder Plattform "
-"inkompatibel. Sind Sie sicher, dass Sie es trotzdem installieren möchten?"
+"Diese Paketversion ist mit Ihrer KiCad-Version oder Plattform inkompatibel. "
+"Sind Sie sicher, dass Sie es trotzdem installieren möchten?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:612
 #: kicad/pcm/pcm_task_manager.cpp:385
@@ -27577,12 +27577,12 @@ msgstr ""
 "signifikante Stellen für E24\n"
 "und darunter, auf 3 Stellen für E48 und darüber. Suchen Sie dann in der "
 "Tabelle den Wert,\n"
-"der dem verbleibenden Stellen am nächsten kommt.\n"
+"der den verbleibenden Stellen am nächsten kommt.\n"
 "\n"
 "Beträgt der berechnete Zielwert z. B. 16.834,2Ω, wird auf 16.800Ω gerundet.\n"
 "Der zu 168 nächstgelegene E96-Wert ist 169, womit 16,9kΩ ausgewählt wird.\n"
 "\n"
-"Als Sonderfall kommt der Wert 0 in keiner Reihe vor."
+"Der Wert 0 bildet einen Sonderfall und kommt in keiner Reihe vor."
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -27599,7 +27599,7 @@ msgstr ""
 "Mit diesem Rechner können Sie prüfen, ob eine dünne Leiterbahn für kurze "
 "Zeit einen hohen Strom verkraften kann.<br>\n"
 "Dieses Werkzeug ermöglicht Ihnen, eine Leiterbahn-Sicherung zu entwerfen, "
-"jedoch sollte es nur für eine Schätzung verwendet werden.\n"
+"sollte jedoch nur für eine Schätzung verwendet werden.\n"
 "\n"
 "Der Rechner schätzt die Energie, die erforderlich ist, um die Leiterbahn bis "
 "zu ihrem Schmelzpunkt zu<br>\n"
@@ -27624,20 +27624,20 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"Diese Tabelle zeigt den Unterschied im elektrochemischen Potential zwischen "
+"Diese Tabelle zeigt den Unterschied im elektrochemischen Potenzial zwischen "
 "verschiedenen Metallen und Legierungen. Galvanische Korrosion betrifft "
 "verschiedene Metalle in Kontakt und unter bestimmten Bedingungen.<br>\n"
 "Die Anode eines elektrochemischen Paares wird oxidiert und weggefressen, "
 "während die Kathode mit gelösten Metallen plattiert wird, aber geschützt "
 "bleibt.<br>\n"
 "Eine positive Zahl zeigt an, dass die Zeile anodisch und die Spalte "
-"kathodisch ist. Kalte und warme Farbtöne geben auch das Potenzial der Zeile "
+"kathodisch ist. Kalte und warme Farbtöne geben auch das Potenzial der Zeilen "
 "an.<br>\n"
 "EN 50310 empfiehlt eine Spannungsdifferenz von unter 300mV. Bekannte "
-"Verfahren verwenden ein drittes Grenzflächenmetall zwischen dem Hauptpaar "
-"(siehe beispielsweise die ENIG-Oberflächenbeschichtung).<br>\n"
+"Verfahren verwenden ein drittes Grenzflächenmetall zwischen dem Hauptpaar ("
+"siehe beispielsweise die ENIG-Oberflächenbeschichtung).<br>\n"
 "Ausgewählte Zellen werden nach einem Neubefüllen der Tabelle mit der "
-"Standardfarbe des Systemes angezeigt.\n"
+"Standardfarbe des Systems angezeigt.\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -27656,7 +27656,7 @@ msgid ""
 "in the scope of IEC60664"
 msgstr ""
 "Ziel der IEC60664-1 ist es, eine Anleitung für die Isolationskoordination "
-"von Betriebsmitteln, die an das Niederspannungsnetz angeschlossen werde, zu "
+"von Betriebsmitteln, die an das Niederspannungsnetz angeschlossen werden, zu "
 "geben.\n"
 "\n"
 "Einige Fälle werden von diesem Rechner jedoch nicht abgedeckt:\n"
@@ -34313,7 +34313,7 @@ msgstr "Zu benutzende Maßeinheit in der exportieren DXF-Datei"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:350
 msgid "Use KiCad font to plot text"
-msgstr "Benutze KiCad-Schriftart, um Text zu Plotten"
+msgstr "KiCad-Schriftart verwenden, um Text zu plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:351
 msgid ""
@@ -42814,11 +42814,11 @@ msgstr "Marker (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
 msgid "Associated Layer"
-msgstr "Zugehlrige Lage"
+msgstr "Zugehörige Lage"
 
 #: pcbnew/pcb_reference_image.cpp:358
 msgid "Greyscale"
-msgstr "Grauwert"
+msgstr "Graustufen"
 
 #: pcbnew/pcb_shape.cpp:471
 msgid "Drawing"
@@ -44363,7 +44363,6 @@ msgid "Draw Arc"
 msgstr "Kreisbogen zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:722
-#, fuzzy
 msgid "Place Image"
 msgstr "Bild hinzufügen"
 
@@ -44468,12 +44467,11 @@ msgid "Enter chamfer setback:"
 msgstr "Fasungsabsatz eingeben:"
 
 #: pcbnew/tools/edit_tool.cpp:1208
-#, fuzzy
 msgid ""
 "A setback of zero was entered.\n"
 "The chamfer operation was not performed."
 msgstr ""
-"Es wurde Absatz von Null eingegeben.\n"
+"Es wurde ein Absatz von Null eingegeben.\n"
 "Die Abfasung wurde nicht durchgeführt."
 
 #: pcbnew/tools/edit_tool.cpp:1300
@@ -46216,11 +46214,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1893
 msgid "Show Footprint Associations"
-msgstr "Zeige Footprintzuordnungen"
+msgstr "Footprintzuordnungen anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
 msgid "Show footprint library and schematic symbol associations"
-msgstr "Zeige Footprintbibliothek- und Schaltplansymbol-Zuordnungen"
+msgstr "Zeigt Footprintbibliothek- und Schaltplansymbol-Zuordnungen an"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
 msgid "Geographical Reannotate..."
@@ -46563,7 +46561,8 @@ msgstr "Länge abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:2307
 msgid "Tune length of a single track or differential pair"
-msgstr "Länge einer Leiterbahn oder eines Differenzialpaares abstimmen"
+msgstr ""
+"Länge einer einzelnen Leiterbahn oder eines Differenzialpaares abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:2318
 msgid "Tune Skew of a Differential Pair"
@@ -46672,11 +46671,11 @@ msgstr "Die Geometrie aller Generatoren neu aufbauen"
 
 #: pcbnew/tools/pcb_actions.cpp:2426
 msgid "Rebuild Selected Generators"
-msgstr "Ausgewählten Generator erneuern"
+msgstr "Ausgewählte Generatoren erneuern"
 
 #: pcbnew/tools/pcb_actions.cpp:2427
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr "Die Geometrie der/des ausgewählten Generatoren/s neu aufbauen"
+msgstr "Baut die Geometrie der ausgewählten Generatoren neu auf"
 
 #: pcbnew/tools/pcb_actions.cpp:2455
 msgid "Generators Manager"
@@ -46822,7 +46821,7 @@ msgstr "Ecke aus Zone entfernen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2451
 msgid "Remove Polygon Corner"
-msgstr "Ecke aus Zone/Polygon entfernen"
+msgstr "Ecke aus Polygon entfernen"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1263
 msgid "Select/Expand Connection..."
@@ -47068,7 +47067,7 @@ msgstr "Schatten im Konflikt stehender Footprints"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show a shadow marker on conflicting footprints"
-msgstr "Eine Schattenmarkierung auf abweichenden Footprints anzeigen"
+msgstr "Eine Schattenmarkierung auf kollidierenden Footprints anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show drawing sheet borders and title block"
