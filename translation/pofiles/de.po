@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
 "PO-Revision-Date: 2024-01-16 17:32+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -18463,11 +18463,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "Soll \"%s\" auf die letzte gespeicherte Version zurückgesetzt werden?"
 
 #: eeschema/tools/sch_editor_control.cpp:336
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr ""
-"Versorgungssymbole im Schaltplan aktualisieren, um auf neue Bibliothek zu "
-"verweisen?"
+msgstr "Versorgungssymbole aus Schaltplan in die Bibliothek einbeziehen?"
 
 #: eeschema/tools/sch_editor_control.cpp:401
 #, c-format
@@ -30466,11 +30463,11 @@ msgstr "Nicht anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on pads"
-msgstr "Zeige auf Pads"
+msgstr "Auf Pads anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on tracks"
-msgstr "Zeige auf Leiterbahnen"
+msgstr "Auf Leiterbahnen anzeigen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Show on pads and tracks"
@@ -32658,13 +32655,13 @@ msgstr "Einschränkungen aus Platinenkonfiguration zu Mikro-Vias"
 #: pcbnew/drc/drc_engine.cpp:348
 #, c-format
 msgid "netclass '%s'"
-msgstr "Netzklasse '%s'"
+msgstr "Netzklasse \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:267 pcbnew/drc/drc_engine.cpp:285
 #: pcbnew/drc/drc_engine.cpp:302
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "Netzklasse '%s' (Differenzialpaar)"
+msgstr "Netzklasse \"%s\" (Differenzialpaar)"
 
 #: pcbnew/drc/drc_engine.cpp:422
 msgid "keepout area"
@@ -38490,7 +38487,7 @@ msgstr "Dicke (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
 msgid "Loss Tangent"
-msgstr "Verlustfaktor"
+msgstr "Tangens des Verlustwinkels"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
