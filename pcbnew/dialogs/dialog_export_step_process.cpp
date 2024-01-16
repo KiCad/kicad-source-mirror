@@ -54,7 +54,6 @@ public:
     ~STDSTREAM_THREAD()
     {
         delete[] m_buffer;
-        delete m_process;
     }
 
 private:
@@ -210,10 +209,21 @@ void DIALOG_EXPORT_STEP_LOG::onClose( wxCloseEvent& aEvent )
     {
         m_msgQueue.Post( STATE_MESSAGE::REQUEST_EXIT );
         m_stdioThread->Wait();
-        delete m_stdioThread;
+
+        m_process->DeletePendingEvents();
+        m_process->Unlink();
+        m_process->CloseOutput();
+        m_process->Detach();
+
+        m_stdioThread->Delete();
     }
 
-    Destroy();
+    aEvent.Skip();
+}
+
+DIALOG_EXPORT_STEP_LOG::~DIALOG_EXPORT_STEP_LOG()
+{
+    delete m_stdioThread;
 }
 
 

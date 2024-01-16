@@ -41,6 +41,7 @@ public:
     };
 
     DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, wxString aStepCmd );
+    ~DIALOG_EXPORT_STEP_LOG() override;
 
 private:
     void appendMessage( const wxString& aMessage );
