@@ -903,26 +903,30 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
 
             ERECT        r( gr );
             PCB_LAYER_ID layer = kicad_layer( r.layer );
-            ZONE*        zone = new ZONE( m_board );
 
-            m_board->Add( zone, ADD_MODE::APPEND );
+            if( layer != UNDEFINED_LAYER )
+            {
+                ZONE* zone = new ZONE( m_board );
 
-            zone->SetLayer( layer );
-            zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                m_board->Add( zone, ADD_MODE::APPEND );
 
-            ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
+                zone->SetLayer( layer );
+                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-            const int outlineIdx = -1;      // this is the id of the copper zone main outline
-            zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
-            zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
-            zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
-            zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
+                ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
 
-            if( r.rot )
-                zone->Rotate( zone->GetPosition(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+                const int outlineIdx = -1; // this is the id of the copper zone main outline
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
-            // this is not my fault:
-            zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(), true );
+                if( r.rot )
+                    zone->Rotate( zone->GetPosition(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+
+                // this is not my fault:
+                zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(), true );
+            }
 
             m_xpath->pop();
         }
