@@ -45,7 +45,7 @@ for fl in $ICON_FILES
 do
     NAME=${fl%.*} # strip the file extension
     icotool -c tmp/22/$NAME.png tmp/26/$NAME.png tmp/32/$NAME.png tmp/48/$NAME.png \
-	tmp/64/$NAME.png tmp/128/$NAME.png -o tmp/ico/$NAME.ico
+	tmp/64/$NAME.png tmp/128/$NAME.png tmp/256/$NAME.png -o tmp/ico/$NAME.ico
 	echo "file $fl converted in .ico file."
 done
 
