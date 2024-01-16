@@ -337,7 +337,15 @@ public:
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const override
     {
-        return GetBoundingBox().Intersects( aRect );
+        BOX2I sel = aRect;
+
+        if ( aAccuracy )
+            sel.Inflate( aAccuracy );
+
+        if( aContained )
+            return sel.Contains( GetBoundingBox() );
+
+        return sel.Intersects( GetBoundingBox() );
     }
 
     const BOX2I ViewBBox() const override { return GetBoundingBox(); }
