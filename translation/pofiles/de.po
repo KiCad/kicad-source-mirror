@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-16 17:32+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-01-16 21:33+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6737,7 +6737,6 @@ msgstr "Hintergrund"
 #: common/widgets/gal_options_panel_base.cpp:120
 #: eeschema/sim/simulator_frame_ui.cpp:595
 #: eeschema/sim/simulator_frame_ui_base.cpp:167
-#, fuzzy
 msgid "Cursor"
 msgstr "Fadenkreuz"
 
@@ -9125,11 +9124,11 @@ msgstr "Zuordnung löschen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Delete selected footprint associations"
-msgstr "Ausgewählte Footprint-Zuordnungen entfernen"
+msgstr "Ausgewählte Footprintzuordnungen entfernen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:148 cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Delete all footprint associations"
-msgstr "Alle Footprint-Zuordnungen entfernen"
+msgstr "Alle Footprintzuordnungen entfernen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:157
 msgid "Use symbol footprint filters"
@@ -14587,7 +14586,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1036
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:590
 msgid "Skip"
-msgstr "Auslassen"
+msgstr "Überspringen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:651
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1036
@@ -19884,7 +19883,7 @@ msgstr "Symbol importieren"
 #: pcbnew/load_select_footprint.cpp:345
 #, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Es konnte kein Leser für \"%s\" gefunden werden."
+msgstr "Es konnte keine Lesemethode für \"%s\" gefunden werden."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #, c-format
@@ -25067,12 +25066,10 @@ msgid "Failed to initialize git project."
 msgstr "Initialisieren des Git-Projekts fehlgeschlagen."
 
 #: kicad/project_tree_pane.cpp:1572
-#, fuzzy
 msgid "Set default remote"
 msgstr "Standard-Remote setzen"
 
 #: kicad/project_tree_pane.cpp:1625
-#, fuzzy
 msgid "Failed to set default remote."
 msgstr "Konnte Standard-Remote nicht setzen."
 
@@ -27570,6 +27567,23 @@ msgid ""
 "\n"
 "The value 0 is a special case and is not present in any series."
 msgstr ""
+"Passive Bauelemente werden üblicherweise mit Werten der E-Reihe, zu ihrer "
+"Genauigkeit passend, hergestellt.\n"
+"Kondensatoren verwenden meist E12-Werte. Für 10% und 5%-Widerstände sind E24-"
+"Werte gebräuchlich.\n"
+"1% Widerstände verwenden E96-Werte. Andere Serien werden in der Regel nicht "
+"verwendet.\n"
+"\n"
+"Um einen Wert auszuwählen, runden Sie den berechneten Zielwert auf 2 "
+"signifikante Stellen für E24\n"
+"und darunter, auf 3 Stellen für E48 und darüber. Suchen Sie dann in der "
+"Tabelle den Wert,\n"
+"der dem verbleibenden Stellen am nächsten kommt.\n"
+"\n"
+"Beträgt der berechnete Zielwert z. B. 16.834,2Ω, wird auf 16.800Ω gerundet.\n"
+"Der zu 168 nächstgelegene E96-Wert ist 169, womit 16,9kΩ ausgewählt wird.\n"
+"\n"
+"Als Sonderfall kommt der Wert 0 in keiner Reihe vor."
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -30126,7 +30140,6 @@ msgid "Distance between rows"
 msgstr "Abstand zwischen Zeilen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
-#, fuzzy
 msgid "Grid Spacing Modifiers"
 msgstr "Rasterabstandsmodifikatoren"
 
@@ -31300,9 +31313,9 @@ msgid "Export STEP / GLTF"
 msgstr "STEP/GLTF exportieren"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Process failed with exit code %d"
-msgstr "Prozess fehlgeschlagen mit Beendigungscode %d"
+msgstr "Prozess mit Rückgabewert %d fehlgeschlagen"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:192
 msgid "Success"
@@ -38283,9 +38296,9 @@ msgid "%s name differs."
 msgstr "%s Name weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "%s priority differs."
-msgstr "%s weicht ab."
+msgstr "%s Priorität weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:437
 #, c-format
@@ -38353,19 +38366,19 @@ msgid "%s minimum island size setting differs."
 msgstr "%s Mindestgröße von Inseln unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "%s fill type differs."
-msgstr "%s weicht ab."
+msgstr "%s Füllart weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch width differs."
-msgstr "%s weicht ab."
+msgstr "%s Gitterbreite weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch gap differs."
-msgstr "%s weicht ab."
+msgstr "%s Gitterabstand weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:476
 #, c-format
@@ -38393,9 +38406,9 @@ msgid "%s outline corner count differs."
 msgstr "Die Anzahl der Ecken des Umrisses von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "%s corners differ."
-msgstr "%s weicht ab."
+msgstr "%s Ecken weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:544
 msgid "Footprint descriptions differ."
@@ -38416,9 +38429,8 @@ msgstr ""
 "weichen ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:554
-#, fuzzy
 msgid "Exempt from courtyard requirement settings differ."
-msgstr "Von den Abstandsflächen abweichende Einstellungen."
+msgstr "Einstellung \"keine Abstandsfläche erforderlich\" weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:569
 msgid "Pad clearance overridden."
@@ -38450,7 +38462,6 @@ msgid "Pad count differs."
 msgstr "Padanzahl weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:684
-#, fuzzy
 msgid "Rule area count differs."
 msgstr "Die Anzahl der Regelbereiche ist unterschiedlich."
 
@@ -39000,27 +39011,26 @@ msgid "The board must be saved before generating IPC2581 file."
 msgstr "Vor dem Erzeugen der IPC2581 muss die Platine gespeichert werden."
 
 #: pcbnew/files.cpp:1257
-#, fuzzy
 msgid "Generating IPC2581 file"
-msgstr "Eine Datei einer IPC-D-356-Netzliste erstellen"
+msgstr "Erzeuge IPC2581-Datei"
 
 #: pcbnew/files.cpp:1280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Speichern von Platinendatei '%s'.\n"
+"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
 "%s"
 
 #: pcbnew/files.cpp:1344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fehler beim Speichern der Platinendatei \"%s\".\n"
-"Konnte Temporärdatei \"%s\" nicht umbenennen."
+"Fehler beim Erzeugen der IPC2581-Datei \"%s\".\n"
+"Konnte temporäre Datei \"%s\" nicht umbenennen."
 
 #: pcbnew/footprint.cpp:952 pcbnew/footprint_libraries_utils.cpp:1205
 msgid "Other"
@@ -39062,7 +39072,7 @@ msgstr "aus pos-Dateien ausschließen"
 
 #: pcbnew/footprint.cpp:1312
 msgid "exclude from BOM"
-msgstr "von der Bauteilliste ausschließen"
+msgstr "von Stückliste ausschließen"
 
 #: pcbnew/footprint.cpp:1317
 msgid "Status: "
@@ -39416,7 +39426,6 @@ msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Footprint \"%s\" ist in Bibliothek \"%s\" bereits vorhanden."
 
 #: pcbnew/footprint_viewer_frame.cpp:116
-#, fuzzy
 msgid "KiCad Footprint Library Browser"
 msgstr "KiCad Footprint-Bibliothekbrowser"
 
@@ -39484,17 +39493,14 @@ msgstr ""
 #: pcbnew/generators/pcb_tuning_pattern.cpp:254
 #: pcbnew/generators/pcb_tuning_pattern.cpp:259
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1979
-#, fuzzy
 msgid "Tuning Pattern"
 msgstr "Abstimmungsmuster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:264
-#, fuzzy
 msgid "Tuning Patterns"
 msgstr "Abstimmungsmuster"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:408
-#, fuzzy
 msgid "Tuning"
 msgstr "Abstimmung"
 
@@ -39511,7 +39517,6 @@ msgid "tuned"
 msgstr "abgestimmt"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1355
-#, fuzzy
 msgid "Edit Tuning Pattern"
 msgstr "Abstimmungsmuster bearbeiten"
 
@@ -39547,14 +39552,13 @@ msgstr "Zielversatz: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1941
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1963
-#, fuzzy
 msgid "(from tuning pattern properties)"
-msgstr "Footprint Eigenschaften"
+msgstr "(aus Abstimmungsmuster-Einstellungen)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1949
-#, fuzzy, c-format
+#, c-format
 msgid "Skew Constraints: %s"
-msgstr "Breitenbeschränkungen: min %s"
+msgstr "Versatzbeschränkungen: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1962
 #, c-format
@@ -39562,9 +39566,9 @@ msgid "Target Length: %s"
 msgstr "Ziellänge: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1971
-#, fuzzy, c-format
+#, c-format
 msgid "Length Constraints: %s"
-msgstr "Breitenbeschränkungen: min %s"
+msgstr "Längenbeschränkungen: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2169
 msgid "Tune"
@@ -39579,14 +39583,12 @@ msgid "Differential pair"
 msgstr "Differenzialpaar"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2268
-#, fuzzy
 msgid "Diff pair skew"
-msgstr "Differenzialpaar"
+msgstr "Differenzialpaarversatz"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2282
-#, fuzzy
 msgid "Pattern Properties"
-msgstr "Pin-Eigenschaften"
+msgstr "Mustereigenschaften"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2297
 msgid "Tuning Mode"
@@ -39625,14 +39627,12 @@ msgid "Override Custom Rules"
 msgstr "Überschreibung benutzerdefinierter Regeln"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2380
-#, fuzzy
 msgid "Rounded"
-msgstr "Rundung"
+msgstr "Abgerundet"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:230
-#, fuzzy
 msgid "Please select a file to import."
-msgstr "Bitte wählen Sie eine gültige Lage."
+msgstr "Bitte eine zu importierende Datei wählen."
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:236
 msgid "Please select a valid layer."
@@ -39713,9 +39713,9 @@ msgid "Footprints [%u items]"
 msgstr "Footprints [%u Elemente]"
 
 #: pcbnew/load_select_footprint.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a writer for '%s'."
-msgstr "Konnte keinen PDF-Betrachter für \"%s\" finden."
+msgstr "Es konnte keine Ausgabemethode für \"%s\" gefunden werden."
 
 #: pcbnew/load_select_footprint.cpp:366
 #, c-format
@@ -40101,47 +40101,47 @@ msgstr "Aktualisiere %s Footprint-Filter auf \"%s\"."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:532
 #, c-format
 msgid "Updated %s footprint filters to '%s'."
-msgstr "Aktualisiere %s Footprint-Filter auf \"%s\"."
+msgstr "%s Footprint-Filter auf \"%s\" aktualisiert."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:547
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut hinzufügen."
+msgstr "Füge %s Fertigungsattribut \"Von Stückliste ausschließen\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut entfernen."
+msgstr "Entferne %s Fertigungsattribut \"Von Stückliste ausschließen\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:563
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut hinzugefügt."
+msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:569
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut entfernt."
+msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:587
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut hinzufügen."
+msgstr "Füge %s Fertigungsattribut \"Nicht bestücken\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:592
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut entfernen."
+msgstr "Entferne %s Fertigungsattribut \"Nicht bestücken\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:603
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut hinzugefügt."
+msgstr "%s Fertigungsattribut \"Nicht bestücken\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr "%s 'Von Bauteilliste ausschließen'-Fertigungsattribut entfernt."
+msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:694
 #, c-format
@@ -40508,9 +40508,8 @@ msgid "Pad Type"
 msgstr "Padtyp"
 
 #: pcbnew/pad.cpp:1949
-#, fuzzy
 msgid "Pad Shape"
-msgstr "Pad-Form"
+msgstr "Padform"
 
 #: pcbnew/pad.cpp:1953
 msgid "Pad Number"
@@ -40525,9 +40524,8 @@ msgid "Size Y"
 msgstr "Größe Y"
 
 #: pcbnew/pad.cpp:1981
-#, fuzzy
 msgid "Corner Radius Ratio"
-msgstr "Rundungs-Radius-Verhältnis"
+msgstr "Eckradius-Verhältnis"
 
 #: pcbnew/pad.cpp:1993
 msgid "Hole Size X"
@@ -40699,14 +40697,12 @@ msgid "Constraints Report"
 msgstr "Bericht zu Einschränkungen"
 
 #: pcbnew/pcb_edit_frame.cpp:2521 pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Compare Footprint with Library"
 msgstr "Footprint mit Bibliothek vergleichen"
 
 #: pcbnew/pcb_field.cpp:93
-#, fuzzy
 msgid "User Field"
-msgstr "%s Felder"
+msgstr "Benutzerdefiniertes Feld"
 
 #: pcbnew/pcb_field.cpp:102
 #, c-format
@@ -40719,29 +40715,27 @@ msgid "Value '%s' of %s"
 msgstr "Wert \"%s\" auf %s"
 
 #: pcbnew/pcb_field.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' of %s"
-msgstr "Footprint-Text „%s“ von %s"
+msgstr "Footprint \"%s\" von %s"
 
 #: pcbnew/pcb_field.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet '%s' of %s"
-msgstr "Wert \"%s\" auf %s"
+msgstr "Datenblatt \"%s\" von %s"
 
 #: pcbnew/pcb_field.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' of %s"
-msgstr "Feld %s (%s)"
+msgstr "Feld \"%s\" von %s"
 
 #: pcbnew/pcb_generator.cpp:169 pcbnew/pcb_generator.cpp:206
-#, fuzzy
 msgid "Update Order"
-msgstr "Aktualisiert"
+msgstr "Aktualisierungsreihenfolge"
 
 #: pcbnew/pcb_generator.cpp:204
-#, fuzzy
 msgid "Generator Properties"
-msgstr "Generatorskript-Eigenschaften"
+msgstr "Generator-Eigenschaften"
 
 #: pcbnew/pcb_group.cpp:384
 #, c-format
@@ -40917,13 +40911,13 @@ msgstr "Lade Platinenbereiche..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2027
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2138
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Zone auf Altium-Lage %d hat kein KiCad-Äquivalent. Sie wurde auf die KiCad-"
-"Lage Eco1_User verschoben."
+"Auf einer Altium-Lage (%d) wurde ein gestrichelter Umriss gefunden, wofür es "
+"kein KiCad-Äquivalent gibt. Er wurde auf die KiCad-Lage Eco1_User verschoben."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2068
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2171
@@ -41070,9 +41064,8 @@ msgid "Altium PCB Library or Integrated Library"
 msgstr "Altium PCB-Bibliothek oder integrierte Bibliothek"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:31
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Solide Füllung"
+msgstr "Solidworks PCB-Datei"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -41663,9 +41656,9 @@ msgstr ""
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:342
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s'"
-msgstr "Footprint '%s' kann nicht von '%s' geladen werden"
+msgstr "Footprint \"%s\" kann nicht von \"%s\" geladen werden"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:380
 #, c-format
@@ -41870,34 +41863,29 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Footprintbibliothek \"%s\" kann nicht gelöscht werden."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:52
-#, fuzzy
 msgid "gEDA PCB footprint file"
-msgstr "Footprintfilter hinzufügen"
+msgstr "gEDA PCB Footprint-Datei"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:57
-#, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Altium PCB Footprint-Bibliotheksdateien"
+msgstr "gEDA PCB Footprint-Bibliotheksverzeichnis"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:305
-#, fuzzy
 msgid "Generating content section"
-msgstr "Verbindung testen"
+msgstr "Erzeuge Inhalts-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1120
-#, fuzzy
 msgid "Generating history section"
-msgstr "Nummerierungsrichtung"
+msgstr "Erzeuge Geschichts-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1147
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2739
-#, fuzzy
 msgid "Generating BOM section"
-msgstr "Rendering-Optionen"
+msgstr "Erzeuge Stücklisten(BOM)-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1311
 msgid "Generating CAD data"
-msgstr "CAD-Daten werden erstellt"
+msgstr "Erzeuge CAD-Daten"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2352
 #, c-format
@@ -41905,18 +41893,16 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "Exportieren der Lage %s und der Netzliste %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2894
-#, fuzzy
 msgid "Generating logistic section"
-msgstr "Positionsdatei generieren"
+msgstr "Erzeuge Logistik-Abschnitt"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2906
 msgid "Saving file"
 msgstr "Datei wird gespeichert"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2938
-#, fuzzy
 msgid "Failed to save file to buffer"
-msgstr "Fehler beim Löschen von '%s'"
+msgstr "Konnte Datei nicht im Puffer speichern"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h:88
 msgid "IPC-2581 Production File"
@@ -41943,10 +41929,10 @@ msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Unbekannte Padform '%c=0x%02x' in Zeile: %d von Footprint: \"%s\"."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1601
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
-"Unbekannter FP_SHAPE-Typ:\"%c=0x%02x\" auf Linie:%d des Footprints:\"%s\"."
+"Unbekannter PCB_SHAPE-Typ:\"%c=0x%02x\" auf Linie %d des Footprints\"%s\"."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2362
 #, c-format
@@ -42100,9 +42086,8 @@ msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Unerwartete Datei \"%s\" im Bibliothekspfad \"%s\" gefunden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:293
-#, fuzzy
 msgid "KiCad footprint file"
-msgstr "KiCad Footprintdateien"
+msgstr "KiCad Footprint-Datei"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:281
 #, c-format
@@ -42351,9 +42336,8 @@ msgid "Marker (%s)"
 msgstr "Marker (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
-#, fuzzy
 msgid "Associated Layer"
-msgstr "Lage"
+msgstr "Zugehlrige Lage"
 
 #: pcbnew/pcb_reference_image.cpp:358
 msgid "Greyscale"
@@ -42374,9 +42358,8 @@ msgid "%s on %s"
 msgstr "%s auf %s"
 
 #: pcbnew/pcb_shape.cpp:741
-#, fuzzy
 msgid "Pad Primitives"
-msgstr "Form hinzufügen"
+msgstr "Pad-Primitiven"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -42411,9 +42394,8 @@ msgid "PCB Text Box on %s"
 msgstr "PCB-Textfeld auf %s"
 
 #: pcbnew/pcb_textbox.cpp:678
-#, fuzzy
 msgid "Border Properties"
-msgstr "Kurven-Eigenschaften"
+msgstr "Randeigenschaften"
 
 #: pcbnew/pcb_textbox.cpp:688
 msgid "Border Style"
@@ -42447,9 +42429,9 @@ msgid "Segment Length"
 msgstr "Segmentlänge"
 
 #: pcbnew/pcb_track.cpp:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: %s"
-msgstr "Breitenbeschränkungen: min %s"
+msgstr "Breitenbeschränkungen: %s"
 
 #: pcbnew/pcb_track.cpp:1129
 msgid "Micro Via"
@@ -42541,14 +42523,14 @@ msgid "Missing group name argument to %s."
 msgstr "Fehlendes Gruppenname-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Fehlendes Lagenname-Argument für %s."
+msgstr "Fehlendes Schaltplanname-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (reference designator) to %s."
-msgstr "Fehlendes Footprint-Argument (A, B oder Referenzbezeichner) für %s."
+msgstr "Fehlendes Footprint-Argument (Referenzbezeichner) für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:984
 #, c-format
@@ -42764,7 +42746,6 @@ msgstr ""
 "Stellen Sie bitte sicher, dass es kein selbst-schneidendes Polygon ist."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1987
-#, fuzzy
 msgid "Routing"
 msgstr "Route Leiterbahn"
 
@@ -43336,9 +43317,8 @@ msgid "Some zones did not intersect and were not merged."
 msgstr "Einige Zonen hatten keine Schnittfläche und wurden nicht vereint."
 
 #: pcbnew/tools/board_editor_control.cpp:1453
-#, fuzzy
 msgid "Duplicate Zone"
-msgstr "Zone duplizieren"
+msgstr "Zone verdoppeln"
 
 #: pcbnew/tools/board_editor_control.cpp:1526
 msgid "Selection contains no items with labeled nets."
@@ -43452,7 +43432,6 @@ msgstr "Lochgröße"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #: pcbnew/tools/board_inspection_tool.cpp:1319
-#, fuzzy
 msgid "Hole size resolution for:"
 msgstr "Ermittlung des Lochdurchmessers für:"
 
@@ -43511,7 +43490,6 @@ msgstr "Loch zu Loch"
 
 #: pcbnew/tools/board_inspection_tool.cpp:481
 #: pcbnew/tools/board_inspection_tool.cpp:1068
-#, fuzzy
 msgid "Hole-to-hole clearance resolution for:"
 msgstr "Ermittlung des Loch-zu-Loch-Freiraums für:"
 
@@ -43560,25 +43538,24 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Freiraum-Bericht kann nicht für leere Gruppe erstellt werden."
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy
 msgid "Cannot generate clearance report on footprint with no pads."
-msgstr "Freiraum-Bericht kann nicht für leere Gruppe erstellt werden."
+msgstr "Freiraum-Bericht kann nicht für Footprint ohne Pads erstellt werden."
 
 #: pcbnew/tools/board_inspection_tool.cpp:673
-#, fuzzy
 msgid ""
 "Cannot generate clearance report on footprint with multiple pads.  Select a "
 "single pad."
-msgstr "Freiraum-Bericht kann nicht für leere Gruppe erstellt werden."
+msgstr ""
+"Freiraum-Bericht kann nicht für Footprint mit mehreren Pads erstellt "
+"werden.     Wählen Sie ein einzelnes Pad aus."
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Zone connection resolution for:"
 msgstr "Ermittlung der Zonenverbindungen für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:737
-#, fuzzy
 msgid "Thermal-relief gap resolution for:"
-msgstr "Ermittlung des Abstands der thermischen Entlastung für:"
+msgstr "Ermittlung des thermischen Entlastungsspalts für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:746
 #, c-format
@@ -43586,9 +43563,8 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Ermittelter thermischer Entlastungsspalt: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
-#, fuzzy
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Ermittlung des Abstands der thermischen Entlastung für:"
+msgstr "Ermittlung der thermischen Speichenbreite für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
 #, c-format
@@ -43596,9 +43572,8 @@ msgid "Resolved spoke width: %s."
 msgstr "Ermittelte Speichenbreite: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
-#, fuzzy
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Ermittlung des Abstands der thermischen Entlastung für:"
+msgstr "Ermittlung der min. thermischen Speichenanzahl für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:774
 #, c-format
@@ -43621,15 +43596,14 @@ msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "Überschrieben durch größeren physischen Freiraum von %s; Freiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:813
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
 msgstr ""
 "Überschrieben durch größeren physischen Loch-Freiraum von %s; Freiraum: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:857
-#, fuzzy
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "Gegenstände gehören zum selben Netz. Der Freiraum beträgt 0."
+msgstr "Elemente gehören zum selben Netz. Der min. Freiraum beträgt 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:872
 msgid "Min clearance is 0."
@@ -43645,9 +43619,8 @@ msgid "Diff Pair"
 msgstr "Differenzialpaar"
 
 #: pcbnew/tools/board_inspection_tool.cpp:900
-#, fuzzy
 msgid "Diff-pair gap resolution for:"
-msgstr "Ermittlung des Differenzialpaar-Abstands für:"
+msgstr "Ermittlung des Diff-Paar-Abstands für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:905
 #, c-format
@@ -43655,9 +43628,8 @@ msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "Ermittelte Spaltbeschränkungen: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:913
-#, fuzzy
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Ermittlung der max. ungekoppelten Länge des Differenzialpaars für:"
+msgstr "Ermittlung der max. ungekoppelten Länge des Diff-Paars für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:919
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -43757,16 +43729,12 @@ msgstr ""
 "werden soll."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
-#, fuzzy
 msgid "Select a footprint for a footprint associations report."
-msgstr ""
-"Wählen Sie ein einzelnes Element für einen Bericht zur Ermittlung von "
-"Einschränkungen aus."
+msgstr "Wählen Sie einen Footprint für einen Bericht über Footprintzuordnungen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1491
-#, fuzzy
 msgid "Board vs library diff for:"
-msgstr "Lokaler Ordner der Bibliotheken:"
+msgstr "Unterschiede zwischen Platine und Bibliothek für:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1514
 #: pcbnew/tools/board_inspection_tool.cpp:1522
@@ -43961,9 +43929,8 @@ msgid "Positioning Tools"
 msgstr "Positionierung"
 
 #: pcbnew/tools/edit_tool.cpp:120
-#, fuzzy
 msgid "Shape Modification"
-msgstr "Form Option"
+msgstr "Formänderungen"
 
 #: pcbnew/tools/edit_tool.cpp:531
 #, c-format
@@ -44016,14 +43983,13 @@ msgstr "Linien abrunden"
 #: pcbnew/tools/edit_tool.cpp:1194
 #: pcbnew/tools/item_modification_routine.cpp:173
 #: pcbnew/tools/pcb_actions.cpp:616
-#, fuzzy
 msgid "Chamfer Lines"
 msgstr "Linien abfasen"
 
 #: pcbnew/tools/edit_tool.cpp:1194
 #, fuzzy
 msgid "Enter chamfer setback:"
-msgstr "Abfasungsabstand:"
+msgstr "Fasungsabsatz eingeben:"
 
 #: pcbnew/tools/edit_tool.cpp:1208
 #, fuzzy
@@ -44031,22 +43997,20 @@ msgid ""
 "A setback of zero was entered.\n"
 "The chamfer operation was not performed."
 msgstr ""
-"Ein Radius von Null wurde eingegeben.\n"
-"Die Abrundung wurde nicht durchgeführt."
+"Es wurde Absatz von Null eingegeben.\n"
+"Die Abfasung wurde nicht durchgeführt."
 
 #: pcbnew/tools/edit_tool.cpp:1300
 msgid "A shape with least two lines must be selected."
 msgstr "Es muss eine Form mit mindestens zwei Linien ausgewählt werden."
 
 #: pcbnew/tools/edit_tool.cpp:1375
-#, fuzzy
 msgid "Exactly two lines must be selected to extend them."
-msgstr "Es muss eine Form mit mindestens zwei Linien ausgewählt werden."
+msgstr "Es müssen genau zwei Linien ausgewählt werden, um sie zu verlängern."
 
 #: pcbnew/tools/edit_tool.cpp:1472 pcbnew/tools/pcb_actions.cpp:623
-#, fuzzy
 msgid "Heal Shapes"
-msgstr "Teardrop-Bereich"
+msgstr "Formen heilen"
 
 #: pcbnew/tools/edit_tool.cpp:1472
 msgid "Tolerance value:"
@@ -44116,9 +44080,8 @@ msgid "No footprint problems found."
 msgstr "Keine Footprintprobleme gefunden."
 
 #: pcbnew/tools/generator_tool.cpp:173
-#, fuzzy
 msgid "Regenerate All"
-msgstr "Alle ersetzen"
+msgstr "Alle erneuern"
 
 #: pcbnew/tools/generator_tool.cpp:180
 #, c-format
@@ -44126,14 +44089,12 @@ msgid "Update %s"
 msgstr "%s aktualisieren"
 
 #: pcbnew/tools/generator_tool.cpp:235
-#, fuzzy
 msgid "Regenerate Selected"
-msgstr "Leiterbahnen an Auswahl entfernen"
+msgstr "Ausgewählte erneuern"
 
 #: pcbnew/tools/generator_tool.cpp:254
-#, fuzzy
 msgid "Regenerate Item"
-msgstr "Wiederholte Elemente"
+msgstr "Element erneuern"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -44164,14 +44125,12 @@ msgid "Some of the lines could not be filleted."
 msgstr "Manche Linien konnten nicht abgerundet werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:181
-#, fuzzy
 msgid "Unable to chamfer the selected lines."
-msgstr "Die ausgewählten Linien können nicht abgerundet werden."
+msgstr "Die ausgewählten Linien können nicht angefast werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:185
-#, fuzzy
 msgid "Some of the lines could not be chamfered."
-msgstr "Manche Linien konnten nicht abgerundet werden."
+msgstr "Manche Linien können nicht angefast werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:240
 #: pcbnew/tools/pcb_actions.cpp:630
@@ -44179,56 +44138,49 @@ msgid "Extend Lines to Meet"
 msgstr "Linien bis Treffpunkt verlängern"
 
 #: pcbnew/tools/item_modification_routine.cpp:248
-#, fuzzy
 msgid "Unable to extend the selected lines to meet."
-msgstr "Die ausgewählten Linien können nicht abgerundet werden."
+msgstr ""
+"Die ausgewählten Linien können nicht bis zum Treffpunkt verlängert werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:252
-#, fuzzy
 msgid "Some of the lines could not be extended to meet."
-msgstr "Manche Linien konnten nicht abgerundet werden."
+msgstr "Manche Linien können nicht bis zum Treffpunkt verlängert werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:380
 msgid "Merge polygons."
 msgstr "Polygone vereinen."
 
 #: pcbnew/tools/item_modification_routine.cpp:388
-#, fuzzy
 msgid "Unable to merge the selected polygons."
-msgstr "Die ausgewählten Linien können nicht abgerundet werden."
+msgstr "Die ausgewählten Polygone konnten nicht vereint werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:392
-#, fuzzy
 msgid "Some of the polygons could not be merged."
-msgstr "Manche Linien konnten nicht abgerundet werden."
+msgstr "Manche Polygone konnten nicht vereint werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:418
 msgid "Subtract polygons."
 msgstr "Polygone subtrahieren."
 
 #: pcbnew/tools/item_modification_routine.cpp:426
-#, fuzzy
 msgid "Unable to subtract the selected polygons."
-msgstr "Die ausgewählten Linien können nicht abgerundet werden."
+msgstr "Die ausgewählten Polygone konnten nicht subtrahiert werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:430
-#, fuzzy
 msgid "Some of the polygons could not be subtracted."
-msgstr "Manche Linien konnten nicht abgerundet werden."
+msgstr "Manche Polygone konnten nicht subtrahiert werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:459
 msgid "Intersect polygons."
 msgstr "Polygone schneiden."
 
 #: pcbnew/tools/item_modification_routine.cpp:467
-#, fuzzy
 msgid "Unable to intersect the selected polygons."
-msgstr "Die ausgewählten Linien können nicht abgerundet werden."
+msgstr "Die ausgewählten Polygone konnten nicht geschnitten werden."
 
 #: pcbnew/tools/item_modification_routine.cpp:471
-#, fuzzy
 msgid "Some of the polygons could not be intersected."
-msgstr "Manche Linien konnten nicht abgerundet werden."
+msgstr "Manche Polygone konnten nicht geschnitten werden."
 
 #: pcbnew/tools/pad_tool.cpp:162
 msgid "Paste Pad Properties"
@@ -44380,36 +44332,32 @@ msgid "Increase Spacing"
 msgstr "Abstand vergrößern"
 
 #: pcbnew/tools/pcb_actions.cpp:195
-#, fuzzy
 msgid "Increase tuning pattern spacing by one step."
-msgstr "Erhöhen des Mäander-Abstands um eine Stufe."
+msgstr "Erhöhen des Abstimmungsmuster-Abstands um eine Stufe."
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Decrease Spacing"
 msgstr "Abstand verkleinern"
 
 #: pcbnew/tools/pcb_actions.cpp:204
-#, fuzzy
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "Verringern des Mäander-Abstands um eine Stufe."
+msgstr "Verringern des Abstimmungsmuster-Abstands um eine Stufe."
 
 #: pcbnew/tools/pcb_actions.cpp:212
 msgid "Increase Amplitude"
 msgstr "Amplitude vergrößern"
 
 #: pcbnew/tools/pcb_actions.cpp:213
-#, fuzzy
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "Erhöhen der Mäander-Amplitude um eine Stufe."
+msgstr "Erhöhen der Abstimmungsmuster-Amplitude um eine Stufe."
 
 #: pcbnew/tools/pcb_actions.cpp:221
 msgid "Decrease Amplitude"
 msgstr "Amplitude verringern"
 
 #: pcbnew/tools/pcb_actions.cpp:222
-#, fuzzy
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Verringern der Mäander-Amplitude um eine Stufe."
+msgstr "Verringern der Abstimmungsmuster-Amplitude um eine Stufe."
 
 #: pcbnew/tools/pcb_actions.cpp:231
 msgid "Add Aligned Dimension"
@@ -44725,13 +44673,12 @@ msgid "Extend lines to meet each other"
 msgstr "Linien verlängern bis sie sich treffen"
 
 #: pcbnew/tools/pcb_actions.cpp:636
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "Zonen verbinden"
+msgstr "Polygone zusammenfügen"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
-msgstr "Zusammenfügen ausgewählter Polygone zu einzigem Polygon"
+msgstr "Zusammenfügen ausgewählter Polygone zu einem einzigem Polygon"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 msgid "Subtract Polygons"
@@ -45438,9 +45385,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Footprint-Texte als Linien darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1421
-#, fuzzy
 msgid "Show Pad Numbers"
-msgstr "Pinnummern anzeigen"
+msgstr "Padnummern anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1428
 msgid "Draw Zone Fills"
@@ -45477,286 +45423,255 @@ msgstr "Anzeige wechseln zwischen ausgefüllten Zonen und nur deren Konturen"
 
 #: pcbnew/tools/pcb_actions.cpp:1518 pcbnew/tools/pcb_actions.cpp:1519
 msgid "Switch to Component (F.Cu) layer"
-msgstr "Wechsel zur oberen Kupferlage bzw. Bestückungsseite (F.Cu)"
+msgstr "Zur oberen Kupferlage bzw. Lötseite (F.Cu) wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1528
-#, fuzzy
 msgid "Switch to Inner Layer 1"
-msgstr "Wechsel zur Innenlage 1"
+msgstr "Zur Innenlage 1 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1529
 msgid "Switch to Inner layer 1"
-msgstr "Wechsel zur Innenlage 1"
+msgstr "Zur Innenlage 1 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Switch to Inner Layer 2"
-msgstr "Wechsel zur Innenlage 2"
+msgstr "Zur Innenlage 2 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1539
 msgid "Switch to Inner layer 2"
-msgstr "Wechsel zur Innenlage 2"
+msgstr "Zur Innenlage 2 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1548
-#, fuzzy
 msgid "Switch to Inner Layer 3"
-msgstr "Wechsel zur Innenlage 3"
+msgstr "Zur Innenlage 3 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1549
 msgid "Switch to Inner layer 3"
-msgstr "Wechsel zur Innenlage 3"
+msgstr "Zur Innenlage 3 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1558
-#, fuzzy
 msgid "Switch to Inner Layer 4"
-msgstr "Wechsel zur Innenlage 4"
+msgstr "Zur Innenlage 4 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1559
 msgid "Switch to Inner layer 4"
-msgstr "Wechsel zur Innenlage 4"
+msgstr "Zur Innenlage 4 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1568
-#, fuzzy
 msgid "Switch to Inner Layer 5"
-msgstr "Wechsel zur Innenlage 5"
+msgstr "Zur Innenlage 5 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1569
 msgid "Switch to Inner layer 5"
-msgstr "Wechsel zur Innenlage 5"
+msgstr "Zur Innenlage 5 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1578
-#, fuzzy
 msgid "Switch to Inner Layer 6"
-msgstr "Wechsel zur Innenlage 6"
+msgstr "Zur Innenlage 6 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1579
 msgid "Switch to Inner layer 6"
-msgstr "Wechsel zur Innenlage 6"
+msgstr "Zur Innenlage 6 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1587
-#, fuzzy
 msgid "Switch to Inner Layer 7"
-msgstr "Wechsel zur Innenlage 7"
+msgstr "Zur Innenlage 7 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1588
 msgid "Switch to Inner layer 7"
-msgstr "Wechsel zur Innenlage 7"
+msgstr "Zur Innenlage 7 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1596
-#, fuzzy
 msgid "Switch to Inner Layer 8"
-msgstr "Wechsel zur Innenlage 8"
+msgstr "Zur Innenlage 8 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1597
 msgid "Switch to Inner layer 8"
-msgstr "Wechsel zur Innenlage 8"
+msgstr "Zur Innenlage 8 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1605
-#, fuzzy
 msgid "Switch to Inner Layer 9"
-msgstr "Wechsel zur Innenlage 9"
+msgstr "Zur Innenlage 9 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1606
 msgid "Switch to Inner layer 9"
-msgstr "Wechsel zur Innenlage 9"
+msgstr "Zur Innenlage 9 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1614
-#, fuzzy
 msgid "Switch to Inner Layer 10"
-msgstr "Wechsel zur Innenlage 10"
+msgstr "Zur Innenlage 10 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1615
 msgid "Switch to Inner layer 10"
-msgstr "Wechsel zur Innenlage 10"
+msgstr "Zur Innenlage 10 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1623
-#, fuzzy
 msgid "Switch to Inner Layer 11"
-msgstr "Wechsel zur Innenlage 11"
+msgstr "Zur Innenlage 11 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1624
 msgid "Switch to Inner layer 11"
-msgstr "Wechsel zur Innenlage 11"
+msgstr "Zur Innenlage 11 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1632
-#, fuzzy
 msgid "Switch to Inner Layer 12"
-msgstr "Wechsel zur Innenlage 12"
+msgstr "Zur Innenlage 12 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1633
 msgid "Switch to Inner layer 12"
-msgstr "Wechsel zur Innenlage 12"
+msgstr "Zur Innenlage 12 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1641
-#, fuzzy
 msgid "Switch to Inner Layer 13"
-msgstr "Wechsel zur Innenlage 13"
+msgstr "Zur Innenlage 13 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1642
 msgid "Switch to Inner layer 13"
-msgstr "Wechsel zur Innenlage 13"
+msgstr "Zur Innenlage 13 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1650
-#, fuzzy
 msgid "Switch to Inner Layer 14"
-msgstr "Wechsel zur Innenlage 14"
+msgstr "Zur Innenlage 14 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1651
 msgid "Switch to Inner layer 14"
-msgstr "Wechsel zur Innenlage 14"
+msgstr "Zur Innenlage 14 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1659
-#, fuzzy
 msgid "Switch to Inner Layer 15"
-msgstr "Wechsel zur Innenlage 15"
+msgstr "Zur Innenlage 15 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1660
 msgid "Switch to Inner layer 15"
-msgstr "Wechsel zur Innenlage 15"
+msgstr "Zur Innenlage 15 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1668
-#, fuzzy
 msgid "Switch to Inner Layer 16"
-msgstr "Wechsel zur Innenlage 16"
+msgstr "Zur Innenlage 16 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1669
 msgid "Switch to Inner layer 16"
-msgstr "Wechsel zur Innenlage 16"
+msgstr "Zur Innenlage 16 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1677
-#, fuzzy
 msgid "Switch to Inner Layer 17"
-msgstr "Wechsel zur Innenlage 17"
+msgstr "Zur Innenlage 17 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1678
 msgid "Switch to Inner layer 17"
-msgstr "Wechsel zur Innenlage 17"
+msgstr "Zur Innenlage 17 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1686
-#, fuzzy
 msgid "Switch to Inner Layer 18"
-msgstr "Wechsel zur Innenlage 18"
+msgstr "Zur Innenlage 18 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1687
 msgid "Switch to Inner layer 18"
-msgstr "Wechsel zur Innenlage 18"
+msgstr "Zur Innenlage 18 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1695
-#, fuzzy
 msgid "Switch to Inner Layer 19"
-msgstr "Wechsel zur Innenlage 19"
+msgstr "Zur Innenlage 19 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1696
 msgid "Switch to Inner layer 19"
-msgstr "Wechsel zur Innenlage 19"
+msgstr "Zur Innenlage 19 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1704
-#, fuzzy
 msgid "Switch to Inner Layer 20"
-msgstr "Wechsel zur Innenlage 20"
+msgstr "Zur Innenlage 20 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1705
 msgid "Switch to Inner layer 20"
-msgstr "Wechsel zur Innenlage 20"
+msgstr "Zur Innenlage 20 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1713
-#, fuzzy
 msgid "Switch to Inner Layer 21"
-msgstr "Wechsel zur Innenlage 21"
+msgstr "Zur Innenlage 21 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1714
 msgid "Switch to Inner layer 21"
-msgstr "Wechsel zur Innenlage 21"
+msgstr "Zur Innenlage 21 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1722
-#, fuzzy
 msgid "Switch to Inner Layer 22"
-msgstr "Wechsel zur Innenlage 22"
+msgstr "Zur Innenlage 22 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1723
 msgid "Switch to Inner layer 22"
-msgstr "Wechsel zur Innenlage 22"
+msgstr "Zur Innenlage 22 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1731
-#, fuzzy
 msgid "Switch to Inner Layer 23"
-msgstr "Wechsel zur Innenlage 23"
+msgstr "Zur Innenlage 23 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1732
 msgid "Switch to Inner layer 23"
-msgstr "Wechsel zur Innenlage 23"
+msgstr "Zur Innenlage 23 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1740
-#, fuzzy
 msgid "Switch to Inner Layer 24"
-msgstr "Wechsel zur Innenlage 24"
+msgstr "Zur Innenlage 24 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1741
 msgid "Switch to Inner layer 24"
-msgstr "Wechsel zur Innenlage 24"
+msgstr "Zur Innenlage 24 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1749
-#, fuzzy
 msgid "Switch to Inner Layer 25"
-msgstr "Wechsel zur Innenlage 25"
+msgstr "Zur Innenlage 25 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1750
 msgid "Switch to Inner layer 25"
-msgstr "Wechsel zur Innenlage 25"
+msgstr "Zur Innenlage 25 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1758
-#, fuzzy
 msgid "Switch to Inner Layer 26"
-msgstr "Wechsel zur Innenlage 26"
+msgstr "Zur Innenlage 26 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1759
 msgid "Switch to Inner layer 26"
-msgstr "Wechsel zur Innenlage 26"
+msgstr "Zur Innenlage 26 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1767
-#, fuzzy
 msgid "Switch to Inner Layer 27"
-msgstr "Wechsel zur Innenlage 27"
+msgstr "Zur Innenlage 27 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1768
 msgid "Switch to Inner layer 27"
-msgstr "Wechsel zur Innenlage 27"
+msgstr "Zur Innenlage 27 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1776
-#, fuzzy
 msgid "Switch to Inner Layer 28"
-msgstr "Wechsel zur Innenlage 28"
+msgstr "Zur Innenlage 28 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1777
 msgid "Switch to Inner layer 28"
-msgstr "Wechsel zur Innenlage 28"
+msgstr "Zur Innenlage 28 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1785
-#, fuzzy
 msgid "Switch to Inner Layer 29"
-msgstr "Wechsel zur Innenlage 29"
+msgstr "Zur Innenlage 29 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1786
 msgid "Switch to Inner layer 29"
-msgstr "Wechsel zur Innenlage 29"
+msgstr "Zur Innenlage 29 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1794
-#, fuzzy
 msgid "Switch to Inner Layer 30"
-msgstr "Wechsel zur Innenlage 30"
+msgstr "Zur Innenlage 30 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1795
 msgid "Switch to Inner layer 30"
-msgstr "Wechsel zur Innenlage 30"
+msgstr "Zur Innenlage 30 wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1805
-#, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
-msgstr "Wechsel zur unteren Kupferlage bzw. Lötseite (B.Cu)"
+msgstr "Zur unteren Kupferlage bzw. Lötseite (B.Cu) wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1806
 msgid "Switch to Copper (B.Cu) layer"
-msgstr "Wechsel zur unteren Kupferlage bzw. Lötseite (B.Cu)"
+msgstr "Zur unteren Kupferlage bzw. Lötseite (B.Cu) wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:1815 pcbnew/tools/pcb_actions.cpp:1816
 msgid "Switch to Next Layer"
@@ -45824,14 +45739,12 @@ msgstr ""
 "aus der Bibliothek anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1893
-#, fuzzy
 msgid "Show Footprint Associations"
-msgstr "Footprints Assoziierungsdatei speichern"
+msgstr "Zeige Footprintzuordnungen"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Show footprint library and schematic symbol associations"
-msgstr "Liste der Footprints nach Schaltplan-Schlüsselwörtern filtern"
+msgstr "Zeige Footprintbibliothek- und Schaltplansymbol-Zuordnungen"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
 msgid "Geographical Reannotate..."
@@ -45924,7 +45837,6 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Ausgewählte Elemente entlang der vertikalen Achse verteilen"
 
 #: pcbnew/tools/pcb_actions.cpp:2003
-#, fuzzy
 msgid "Keep Arc Center, Adjust Radius"
 msgstr "Bogenmitte beibehalten, Radius anpassen"
 
@@ -45935,9 +45847,8 @@ msgstr ""
 "und Endpunkte anzupassen"
 
 #: pcbnew/tools/pcb_actions.cpp:2010
-#, fuzzy
 msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr "Bogenendpunkte oder Richtung des Startpunkts beibehalten"
+msgstr "Bogenendpunkte oder Richtung des Bogenstartpunkts beibehalten"
 
 #: pcbnew/tools/pcb_actions.cpp:2011
 msgid ""
@@ -46171,17 +46082,14 @@ msgid "Change active layer pair for routing"
 msgstr "Das aktive Lagenpaar zum Routen auswählen"
 
 #: pcbnew/tools/pcb_actions.cpp:2306
-#, fuzzy
 msgid "Tune Length"
-msgstr "Anpassen Leiterbahnlänge"
+msgstr "Länge abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:2307
-#, fuzzy
 msgid "Tune length of a single track or differential pair"
-msgstr "Länge eines Differenzialpaares abstimmen"
+msgstr "Länge einer Leiterbahn oder eines Differenzialpaares abstimmen"
 
 #: pcbnew/tools/pcb_actions.cpp:2318
-#, fuzzy
 msgid "Tune Skew of a Differential Pair"
 msgstr "Versatz eines Differenzialpaares abstimmen"
 
@@ -46248,7 +46156,6 @@ msgstr ""
 "Segmente auf."
 
 #: pcbnew/tools/pcb_actions.cpp:2390
-#, fuzzy
 msgid "Drag 45 Degree Mode"
 msgstr "Ziehen (45°-Modus)"
 
@@ -46280,18 +46187,16 @@ msgstr ""
 "abzugleichen"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
-#, fuzzy
 msgid "Rebuild All Generators"
-msgstr "Generator entfernen"
+msgstr "Alle Generatoren erneuern"
 
 #: pcbnew/tools/pcb_actions.cpp:2419
 msgid "Rebuilds geometry of all generators"
 msgstr "Die Geometrie aller Generatoren neu aufbauen"
 
 #: pcbnew/tools/pcb_actions.cpp:2426
-#, fuzzy
 msgid "Rebuild Selected Generators"
-msgstr "Generator entfernen"
+msgstr "Ausgewählten Generator erneuern"
 
 #: pcbnew/tools/pcb_actions.cpp:2427
 msgid "Rebuilds geometry of selected generator(s)"
@@ -46375,9 +46280,9 @@ msgid "Object Snapping"
 msgstr "Objektfang"
 
 #: pcbnew/tools/pcb_control.cpp:1497
-#, fuzzy, c-format
+#, c-format
 msgid "DP Gap Constraints: %s"
-msgstr "Breitenbeschränkungen: min %s"
+msgstr "DP-Abstandsbeschränkungen: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1544
 msgid "Resolved clearance"
@@ -46408,49 +46313,40 @@ msgid "Selected Items"
 msgstr "Ausgewählte Elemente"
 
 #: pcbnew/tools/pcb_point_editor.cpp:663
-#, fuzzy
 msgid "Drag Corner"
 msgstr "Ecke ziehen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:731
-#, fuzzy
 msgid "Move Midpoint to Location"
-msgstr "Footprint-Standort"
+msgstr "Mittelpunkt zu Position verschieben"
 
 #: pcbnew/tools/pcb_point_editor.cpp:732
-#, fuzzy
 msgid "Move Midpoint"
-msgstr "Nach unten schieben"
+msgstr "Mittelpunkt verschieben"
 
 #: pcbnew/tools/pcb_point_editor.cpp:736
-#, fuzzy
 msgid "Move Corner to Location"
-msgstr "Footprint-Standort"
+msgstr "Ecke zu Position verschieben"
 
 #: pcbnew/tools/pcb_point_editor.cpp:737
-#, fuzzy
 msgid "Move Corner"
-msgstr "Ecke entfernen"
+msgstr "Ecke verschieben"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2357
-#, fuzzy
 msgid "Add Zone Corner"
-msgstr "Ecke zur Zone hinzufügen"
+msgstr "Ecke zu Zone hinzufügen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2377
-#, fuzzy
 msgid "Split Segment"
 msgstr "Segment teilen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2449
-#, fuzzy
 msgid "Remove Zone Corner"
-msgstr "Ecke entfernen"
+msgstr "Ecke aus Zone entfernen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2451
-#, fuzzy
 msgid "Remove Polygon Corner"
-msgstr "Ecke von Zone/Polygon entfernen"
+msgstr "Ecke aus Zone/Polygon entfernen"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1263
 msgid "Select/Expand Connection..."
@@ -46465,7 +46361,6 @@ msgid "Align to Middle"
 msgstr "Mittig ausrichten"
 
 #: pcbnew/tools/placement_tool.cpp:473
-#, fuzzy
 msgid "Align to Center"
 msgstr "Mittig ausrichten"
 
@@ -46478,7 +46373,6 @@ msgid "Click on reference item..."
 msgstr "Bezugselement anklicken ..."
 
 #: pcbnew/tools/zone_create_helper.cpp:197
-#, fuzzy
 msgid "Add Zone Cutout"
 msgstr "Zonenaussparung hinzufügen"
 
@@ -46649,9 +46543,8 @@ msgid "Hidden Text"
 msgstr "Verborgener Text"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show text marked as hidden"
-msgstr "Als unsichtbar markierten Footprinttext anzeigen"
+msgstr "Als unsichtbar markierten Text anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show unconnected nets as a ratsnest"
@@ -46694,14 +46587,12 @@ msgid "Show a shadow marker on locked items"
 msgstr "Eine Schattenmarkierung auf gesperrten Elementen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Conflict Footprint Shadow"
-msgstr "Schatten im Konflikt stehender Elemente"
+msgstr "Schatten im Konflikt stehender Footprints"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Show a shadow marker on conflicting footprints"
-msgstr "Eine Schattenmarkierung auf gesperrten Elementen anzeigen"
+msgstr "Eine Schattenmarkierung auf abweichenden Footprints anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show drawing sheet borders and title block"
@@ -46890,9 +46781,8 @@ msgid "Set Net Color"
 msgstr "Netzfarbe setzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:919
-#, fuzzy
 msgid "Clear Net Color"
-msgstr "Farbe zurücksetzen"
+msgstr "Netzfarbe zurücksetzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:925
 #, c-format
@@ -47286,9 +47176,9 @@ msgid "on %s"
 msgstr "auf %s"
 
 #: pcbnew/zone.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "on %s and %s"
-msgstr "%s und %s"
+msgstr "auf %s und %s"
 
 #: pcbnew/zone.cpp:855
 #, c-format
@@ -47301,14 +47191,14 @@ msgid "on %s, %s and %zu more"
 msgstr "auf %s, %s und %zu mehr"
 
 #: pcbnew/zone.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout %s"
-msgstr "Regelbereichsausschnitt auf %s"
+msgstr "Regelbereichsaussparung %s"
 
 #: pcbnew/zone.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout %s"
-msgstr "Zonenausschnitt auf %s"
+msgstr "Zonenaussparung %s"
 
 #: pcbnew/zone.cpp:879
 #, c-format
@@ -47316,9 +47206,9 @@ msgid "Rule Area %s"
 msgstr "Regelbereich %s"
 
 #: pcbnew/zone.cpp:881
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s"
-msgstr "Zone %s auf %s"
+msgstr "Zone %s %s"
 
 #: pcbnew/zone.cpp:1696
 msgid "Minimum Width"
