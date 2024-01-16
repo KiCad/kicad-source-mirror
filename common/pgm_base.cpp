@@ -417,6 +417,12 @@ void PGM_BASE::BuildArgvUtf8()
 
 void PGM_BASE::ShowSplash()
 {
+    // Disabling until we change to load each DSO at startup rather than lazy-load when needed.
+    // Note that once the splash screen is re-enabled, there are some remaining bugs to fix:
+    // Any wxWidgets error dialogs that appear during startup are hidden by the splash screen,
+    // so we either need to prevent these from happening (probably not feasible) or else change
+    // the error-handling path to make sure errors go on top of the splash.
+#if 0
     if( m_splash )
         return;
 
@@ -424,6 +430,7 @@ void PGM_BASE::ShowSplash()
                               NULL, -1, wxDefaultPosition, wxDefaultSize,
                               wxBORDER_NONE | wxSTAY_ON_TOP );
     wxYield();
+#endif
 }
 
 
