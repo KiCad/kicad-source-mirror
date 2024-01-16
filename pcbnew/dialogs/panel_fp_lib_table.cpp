@@ -200,7 +200,7 @@ public:
 
             PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::GuessPluginTypeFromLibPath( fullURI );
 
-            if( pluginType == PCB_IO_MGR::UNKNOWN )
+            if( pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
                 pluginType = PCB_IO_MGR::KICAD_SEXP;
 
             SetValue( aRow, COL_TYPE, PCB_IO_MGR::ShowType( pluginType ) );
