@@ -55,6 +55,7 @@
 #include <tool/tool_dispatcher.h>
 #include <trace_helpers.h>
 #include <widgets/paged_dialog.h>
+#include <widgets/wx_busy_indicator.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_aui_art_providers.h>
 #include <widgets/wx_grid.h>
@@ -1050,7 +1051,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParentPage )
 {
-    wxBeginBusyCursor( wxHOURGLASS_CURSOR );
+    WX_BUSY_INDICATOR busy_cursor;
 
     PAGED_DIALOG dlg( this, _( "Preferences" ), true, true, wxEmptyString, wxSize( 980, 560 ) );
 
@@ -1107,6 +1108,9 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
     {
         kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
 
+        if( !kiface )
+            return;
+
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
@@ -1136,6 +1140,9 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
     try
     {
         kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+
+        if( !kiface )
+            return;
 
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
@@ -1177,6 +1184,9 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
     {
         kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
 
+        if( !kiface )
+            return;
+
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_GERBER )
@@ -1194,6 +1204,10 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
     try
     {
         kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+
+        if( !kiface )
+            return;
+
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_PL_EDITOR )
@@ -1228,7 +1242,6 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
         dlg.SetInitialPage( aStartPage, aStartParentPage );
 
     dlg.SetEvtHandlerEnabled( true );
-    wxEndBusyCursor();
 
     if( dlg.ShowModal() == wxID_OK )
     {
