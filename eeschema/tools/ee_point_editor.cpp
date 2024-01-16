@@ -52,15 +52,18 @@ enum ARC_POINTS
     ARC_CENTER, ARC_START, ARC_END
 };
 
+
 enum CIRCLE_POINTS
 {
     CIRC_CENTER, CIRC_END
 };
 
+
 enum RECTANGLE_POINTS
 {
     RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT
 };
+
 
 enum RECTANGLE_LINES
 {
@@ -72,6 +75,16 @@ enum LINE_POINTS
 {
     LINE_START, LINE_END
 };
+
+
+enum BEZIER_CURVE_POINTS
+{
+    BEZIER_CURVE_START,
+    BEZIER_CURVE_CONTROL_POINT1,
+    BEZIER_CURVE_CONTROL_POINT2,
+    BEZIER_CURVE_END
+};
+
 
 class EDIT_POINTS_FACTORY
 {
@@ -134,7 +147,10 @@ public:
                 break;
 
             case SHAPE_T::BEZIER:
-                // TODO
+                points->AddPoint( mapCoords( shape->GetStart() ) );
+                points->AddPoint( mapCoords( shape->GetBezierC1() ) );
+                points->AddPoint( mapCoords( shape->GetBezierC2() ) );
+                points->AddPoint( mapCoords( shape->GetEnd() ) );
                 break;
 
             default:
@@ -218,7 +234,10 @@ public:
                 break;
 
             case SHAPE_T::BEZIER:
-                // TODO
+                points->AddPoint( shape->GetStart() );
+                points->AddPoint( shape->GetBezierC1() );
+                points->AddPoint( shape->GetBezierC2() );
+                points->AddPoint( shape->GetEnd() );
                 break;
 
             default:
@@ -771,7 +790,12 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         }
 
         case SHAPE_T::BEZIER:
-            // TODO
+            shape->SetStart( mapCoords( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() ) );
+            shape->SetBezierC1( mapCoords( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() ) );
+            shape->SetBezierC2( mapCoords( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() ) );
+            shape->SetEnd( mapCoords( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() ) );
+
+            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
             break;
 
         default:
@@ -925,7 +949,12 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         }
 
         case SHAPE_T::BEZIER:
-            // TODO
+            shape->SetStart( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() );
+            shape->SetBezierC1( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() );
+            shape->SetBezierC2( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() );
+            shape->SetEnd( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() );
+
+            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
             break;
 
         default:
@@ -1196,7 +1225,10 @@ void EE_POINT_EDITOR::updatePoints()
         }
 
         case SHAPE_T::BEZIER:
-            // TODO
+            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( mapCoords( shape->GetStart() ) );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( mapCoords( shape->GetBezierC1() ) );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( mapCoords( shape->GetBezierC2() ) );
+            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( mapCoords( shape->GetEnd() ) );
             break;
 
         default:
@@ -1284,7 +1316,10 @@ void EE_POINT_EDITOR::updatePoints()
         }
 
         case SHAPE_T::BEZIER:
-            // TODO
+            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezierC1() );
+            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezierC2() );
+            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( shape->GetEnd() );
             break;
 
         default:

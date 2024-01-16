@@ -1353,6 +1353,16 @@ void EDA_SHAPE::beginEdit( const VECTOR2I& aPosition )
         m_editState = 1;
         break;
 
+    case SHAPE_T::BEZIER:
+        SetStart( aPosition );
+        SetEnd( aPosition );
+        SetBezierC1( aPosition );
+        SetBezierC2( aPosition );
+        m_editState = 1;
+
+        RebuildBezierToSegmentsPointsList( GetWidth() );
+        break;
+
     case SHAPE_T::POLY:
         m_poly.NewOutline();
         m_poly.Outline( 0 ).SetClosed( false );
@@ -1377,6 +1387,13 @@ bool EDA_SHAPE::continueEdit( const VECTOR2I& aPosition )
     case SHAPE_T::CIRCLE:
     case SHAPE_T::RECTANGLE:
         return false;
+
+    case SHAPE_T::BEZIER:
+        if( m_editState == 3 )
+            return false;
+
+        m_editState++;
+        return true;
 
     case SHAPE_T::POLY:
     {
@@ -1406,6 +1423,28 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
     case SHAPE_T::RECTANGLE:
         SetEnd( aPosition );
         break;
+
+    case SHAPE_T::BEZIER:
+    {
+        switch( m_editState )
+        {
+        case 0:
+            SetStart( aPosition );
+            SetEnd( aPosition );
+            SetBezierC1( aPosition );
+            SetBezierC2( aPosition );
+            break;
+        case 1:
+            SetBezierC2( aPosition );
+            SetEnd( aPosition );
+            break;
+        case 2: SetBezierC1( aPosition ); break;
+        case 3: SetBezierC2( aPosition ); break;
+        }
+
+        RebuildBezierToSegmentsPointsList( GetWidth() );
+    }
+    break;
 
     case SHAPE_T::ARC:
     {
@@ -1528,6 +1567,7 @@ void EDA_SHAPE::endEdit( bool aClosed )
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
     case SHAPE_T::RECTANGLE:
+    case SHAPE_T::BEZIER:
         break;
 
     case SHAPE_T::POLY:
