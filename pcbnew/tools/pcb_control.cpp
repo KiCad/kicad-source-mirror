@@ -45,6 +45,7 @@
 #include <pcb_group.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
+#include <pcb_generator.h>
 #include <wildcards_and_files_ext.h>
 #include <zone.h>
 #include <confirm.h>
@@ -1140,6 +1141,8 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aA
     // selection created aBoard that has the group and all descendants in it.
     moveUnflaggedItems( aBoard->Groups(), items, isNew );
 
+    moveUnflaggedItems( aBoard->Generators(), items, isNew );
+
     pruneItemLayers( items );
 
     return placeBoardItems( aCommit, items, isNew, aAnchorAtOrigin, aReannotateDuplicates );
@@ -1167,6 +1170,8 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
             // items that aren't in the entered group.
             if( selectionTool->GetEnteredGroup() && !item->GetParentGroup() )
                 selectionTool->GetEnteredGroup()->AddItem( item );
+
+            item->SetParent( board() );
         }
 
         // Update item attributes if needed

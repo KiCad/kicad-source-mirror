@@ -31,6 +31,7 @@
 #include <core/ignore.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
@@ -234,6 +235,10 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             {
                 copy = static_cast<PCB_GROUP*>( boardItem )->DeepClone();
             }
+            else if( boardItem->Type() == PCB_GENERATOR_T )
+            {
+                copy = static_cast<PCB_GENERATOR*>( boardItem )->DeepClone();
+            }
             else
             {
                 copy = static_cast<BOARD_ITEM*>( boardItem->Clone() );
@@ -248,7 +253,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
                 Format( copy, 1 );
 
-                if( copy->Type() == PCB_GROUP_T )
+                if( copy->Type() == PCB_GROUP_T || copy->Type() == PCB_GENERATOR_T )
                 {
                     copy->RunOnDescendants(
                             [&]( BOARD_ITEM* titem )

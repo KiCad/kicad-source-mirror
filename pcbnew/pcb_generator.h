@@ -47,6 +47,11 @@ public:
 
     virtual ~PCB_GENERATOR();
 
+    /*
+     * Clone() this and all descendants
+     */
+    PCB_GENERATOR* DeepClone() const;
+
     virtual void EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit );
 
     virtual void EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,

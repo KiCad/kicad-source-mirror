@@ -36,6 +36,24 @@ PCB_GENERATOR::~PCB_GENERATOR()
 }
 
 
+PCB_GENERATOR* PCB_GENERATOR::DeepClone() const
+{
+    // Use copy constructor to get the same uuid and other fields
+    PCB_GENERATOR* newGenerator = static_cast<PCB_GENERATOR*>( Clone() );
+    newGenerator->m_items.clear();
+
+    for( BOARD_ITEM* member : m_items )
+    {
+        if( member->Type() == PCB_GROUP_T )
+            newGenerator->AddItem( static_cast<PCB_GROUP*>( member )->DeepClone() );
+        else
+            newGenerator->AddItem( static_cast<BOARD_ITEM*>( member->Clone() ) );
+    }
+
+    return newGenerator;
+}
+
+
 void PCB_GENERATOR::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     aCommit->Modify( this );
