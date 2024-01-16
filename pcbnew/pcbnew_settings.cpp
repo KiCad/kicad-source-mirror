@@ -447,10 +447,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_ImportGraphics.group_items, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "import_graphics.fix_discontinuities",
-            &m_ImportGraphics.fix_discontinuities, false ) );
+            &m_ImportGraphics.fix_discontinuities, true ) );
 
     m_params.emplace_back( new PARAM<double>( "import_graphics.tolerance",
-            &m_ImportGraphics.tolerance, 0.01, 0.0, 10.0 ) );
+            &m_ImportGraphics.tolerance, 1.0, 0.0, 10.0 ) );
 
     m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
             &m_ImportGraphics.dxf_line_width_units, 0 ) );

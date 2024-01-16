@@ -45,7 +45,7 @@ bool   DIALOG_IMPORT_GRAPHICS::s_useDlgLayerSelection = true;
 bool   DIALOG_IMPORT_GRAPHICS::s_placementInteractive = true;
 bool   DIALOG_IMPORT_GRAPHICS::s_shouldGroupItems     = true;
 bool   DIALOG_IMPORT_GRAPHICS::s_fixDiscontinuities   = true;
-int    DIALOG_IMPORT_GRAPHICS::s_toleranceValue       = pcbIUScale.mmToIU( 0.01 );
+int    DIALOG_IMPORT_GRAPHICS::s_toleranceValue       = pcbIUScale.mmToIU( 1.0 );
 double DIALOG_IMPORT_GRAPHICS::s_importScale = 1.0; // Do not change the imported items size
 
 
