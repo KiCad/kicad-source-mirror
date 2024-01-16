@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-15 02:12+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-01-16 17:32+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -3062,7 +3062,7 @@ msgstr ""
 "setzen, typischerweise 2.0.\n"
 "\n"
 "Wenn dieser Wert nicht mit der Systemeinstellung übereinstimmt, wird die "
-"Zeichenfläche nicht mit der Fenstergröße übereinstimmen und der Cursor an "
+"Zeichenfläche nicht mit der Fenstergröße übereinstimmen und der Zeiger an "
 "der falschen Stelle dargestellt."
 
 #: common/dialogs/panel_common_settings.cpp:125
@@ -3504,11 +3504,11 @@ msgstr "Bildschwenk und Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
 msgid "Center and warp cursor on zoom"
-msgstr "Cursor beim Zoomen zentrieren und positionieren"
+msgstr "Zeiger beim Zoomen zentrieren und positionieren"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
-msgstr "Hält beim Zoomen den Cursor an seiner aktuellen Position."
+msgstr "Hält beim Zoomen den Zeiger an seiner aktuellen Position."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
 msgid "Automatically pan while moving object"
@@ -5391,6 +5391,7 @@ msgid "Background"
 msgstr "Hintergrund"
 
 #: common/layer_id.cpp:146 common/layer_id.cpp:182
+#, fuzzy
 msgid "Cursor"
 msgstr "Fadenkreuz"
 
@@ -6170,11 +6171,11 @@ msgstr "Auf Objekte zoomen"
 
 #: common/tool/actions.cpp:308
 msgid "Zoom In at Cursor"
-msgstr "Am Cursor hinein zoomen"
+msgstr "Am Zeiger hinein zoomen"
 
 #: common/tool/actions.cpp:319
 msgid "Zoom Out at Cursor"
-msgstr "Am Cursor heraus zoomen"
+msgstr "Am Zeiger heraus zoomen"
 
 #: common/tool/actions.cpp:325 common/widgets/mathplot.cpp:1696
 #: eeschema/sim/sim_plot_frame_base.cpp:87
@@ -6190,7 +6191,7 @@ msgstr "Heraus zoomen"
 
 #: common/tool/actions.cpp:337 common/widgets/mathplot.cpp:1694
 msgid "Center on Cursor"
-msgstr "Auf Cursor zentrieren"
+msgstr "Auf Zeiger zentrieren"
 
 #: common/tool/actions.cpp:343
 msgid "Zoom to Selection"
@@ -6198,35 +6199,35 @@ msgstr "Zoom auf Auswahl"
 
 #: common/tool/actions.cpp:356
 msgid "Cursor Up"
-msgstr "Cursor hoch"
+msgstr "Zeiger hoch"
 
 #: common/tool/actions.cpp:362
 msgid "Cursor Down"
-msgstr "Cursor runter"
+msgstr "Zeiger runter"
 
 #: common/tool/actions.cpp:368
 msgid "Cursor Left"
-msgstr "Cursor links"
+msgstr "Zeiger links"
 
 #: common/tool/actions.cpp:374
 msgid "Cursor Right"
-msgstr "Cursor rechts"
+msgstr "Zeiger rechts"
 
 #: common/tool/actions.cpp:381
 msgid "Cursor Up Fast"
-msgstr "Cursor schnell hoch"
+msgstr "Zeiger schnell hoch"
 
 #: common/tool/actions.cpp:387
 msgid "Cursor Down Fast"
-msgstr "Cursor schnell runter"
+msgstr "Zeiger schnell runter"
 
 #: common/tool/actions.cpp:393
 msgid "Cursor Left Fast"
-msgstr "Cursor schnell links"
+msgstr "Zeiger schnell links"
 
 #: common/tool/actions.cpp:399
 msgid "Cursor Right Fast"
-msgstr "Cursor schnell rechts"
+msgstr "Zeiger schnell rechts"
 
 #: common/tool/actions.cpp:405
 msgid "Click"
@@ -6369,7 +6370,7 @@ msgstr "Lokale Koordinaten zurücksetzen"
 
 #: common/tool/actions.cpp:540
 msgid "Always Show Cursor"
-msgstr "Cursor immer anzeigen"
+msgstr "Zeiger immer anzeigen"
 
 #: common/tool/actions.cpp:540
 msgid "Display crosshairs even in selection tool"
@@ -14303,7 +14304,7 @@ msgstr "Pin hat unerwarteten inner edge type."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "Bezier hat %d Kontrollpunkte. Mindestens 2 werden erwartet."
+msgstr "Bezier hat %d Stützstellen. Mindestens 2 werden erwartet."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
@@ -17273,7 +17274,7 @@ msgstr "Knoten auswählen"
 
 #: eeschema/tools/ee_actions.cpp:87
 msgid "Select a connection item under the cursor"
-msgstr "Wählt ein Verbindungselement unter dem Cursor"
+msgstr "Wählt ein Verbindungselement unter dem Zeiger"
 
 #: eeschema/tools/ee_actions.cpp:92
 msgid "Select Connection"
@@ -17894,7 +17895,7 @@ msgstr "Einen Wert wählen, der abgestimmt werden soll"
 
 #: eeschema/tools/ee_actions.cpp:577 pcbnew/tools/pcb_actions.cpp:790
 msgid "Highlight net under cursor"
-msgstr "Netz unter dem Cursor hervorheben"
+msgstr "Netz unter dem Zeiger hervorheben"
 
 #: eeschema/tools/ee_actions.cpp:582 pcbnew/tools/pcb_actions.cpp:800
 msgid "Clear Net Highlighting"
@@ -20268,7 +20269,7 @@ msgstr "Zu verwendendes Farbthema (Standard sind Schaltplaneinstellungen)"
 
 #: kicad/cli/command_export_sch_plot.cpp:64
 msgid "Avoid setting a background color (regardless of theme)"
-msgstr "Festlegen von Hintergrundfarben vermeiden (unabhängig vom Thema)"
+msgstr "Festlegen einer Hintergrundfarbe vermeiden (unabhängig vom Thema)"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #: kicad/cli/command_sym_export_svg.cpp:44
@@ -29948,8 +29949,8 @@ msgid ""
 "remain free and follow the cursor."
 msgstr ""
 "Wenn diese Option aktiviert ist, werden alle Leiterbahnsegmente bis zur "
-"Cursorposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
-"Cursor am nächsten liegt) frei und folgt dem Cursor."
+"Zeigerposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
+"Zeiger am nächsten liegt) frei und folgt dem Zeiger."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 msgid "Interactive Router Settings"
@@ -30635,7 +30636,7 @@ msgstr "Auf Pads einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:292
 #: pcbnew/dialogs/panel_edit_options_base.cpp:300
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "Cursorform wenn sich die Maus einem Pad-Bereich nähert"
+msgstr "Zeiger fangen wenn er sich in einen Pad-Bereich begibt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:296
 #: pcbnew/dialogs/panel_edit_options_base.cpp:310
@@ -30649,7 +30650,7 @@ msgstr "Auf Leiterbahnen einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 #: pcbnew/dialogs/panel_edit_options_base.cpp:314
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Cursorform wenn die Maus sich einer Leiterbahn nähert"
+msgstr "Zeiger fangen wenn er sich einer Leiterbahn nähert"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:318
 msgid "Snap to graphics:"
@@ -30658,7 +30659,7 @@ msgstr "Auf Grafiken einrasten:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
 #: pcbnew/dialogs/panel_edit_options_base.cpp:328
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr "Cursorform wenn die Maus sich einem Grafikkontrollpunkt nähert"
+msgstr "Zeiger fangen wenn er sich einem Grafik-Kontrollpunkt nähert"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 msgid "Always show selected ratsnest"
@@ -39056,7 +39057,7 @@ msgid ""
 "for moving"
 msgstr ""
 "Wählt einen Footprint anhand des Referenzbezeichners und platziert diesen "
-"zum Verschieben unter dem Cursor"
+"zum Verschieben unter dem Zeiger"
 
 #: pcbnew/tools/pcb_actions.cpp:276
 msgid "Move Individually"
@@ -40466,7 +40467,7 @@ msgstr "Ausgewählte Pads nacheinander versuchen, automatisch zu verbinden."
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
-"Trennt das Leiterbahnelement an der Cursorposition in zwei verbundene "
+"Trennt das Leiterbahnelement an der Zeigerposition in zwei verbundene "
 "Segmente auf."
 
 #: pcbnew/tools/pcb_actions.cpp:1564
