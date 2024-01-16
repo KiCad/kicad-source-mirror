@@ -120,7 +120,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxIcon icon;
     wxIconBundle icon_bundle;
 
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit ) );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit, 48 ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit, 128 ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit, 256 ) );
     icon_bundle.AddIcon( icon );
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_modedit_32 ) );
     icon_bundle.AddIcon( icon );
