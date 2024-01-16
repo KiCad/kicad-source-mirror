@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-14 12:30+0000\n"
+"PO-Revision-Date: 2024-01-16 21:33+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -20640,37 +20640,30 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Открыть выбранный символ в редакторе символов"
 
 #: eeschema/tools/ee_actions.cpp:869
-#, fuzzy
 msgid "Exclude from Bill of Materials"
 msgstr "Исключить из перечня элементов"
 
 #: eeschema/tools/ee_actions.cpp:870
-#, fuzzy
 msgid "Set the exclude from bill of materials attribute"
-msgstr "Исключить из перечня элементов"
+msgstr "Установить атрибут Исключить из перечня элементов"
 
 #: eeschema/tools/ee_actions.cpp:875
-#, fuzzy
 msgid "Include in Bill of Materials"
-msgstr "Исключить из перечня элементов"
+msgstr "Включить в перечень элементов"
 
 #: eeschema/tools/ee_actions.cpp:876
-#, fuzzy
 msgid "Clear the exclude from bill of materials attribute"
-msgstr "Исключить из перечня элементов"
+msgstr "Очистить атрибут исключения из перечня элементов"
 
 #: eeschema/tools/ee_actions.cpp:881
-#, fuzzy
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "Исключить из перечня элементов"
+msgstr "Переключить Исключить из перечня элементов"
 
 #: eeschema/tools/ee_actions.cpp:882
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "Исключить из перечня элементов"
+msgstr "Переключить атрибут Исключить из перечня элементов"
 
 #: eeschema/tools/ee_actions.cpp:887
-#, fuzzy
 msgid "Exclude from Simulation"
 msgstr "Исключить из симуляции"
 
@@ -20880,9 +20873,8 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "Экспорт файла списка цепей в один из нескольких форматов"
 
 #: eeschema/tools/ee_actions.cpp:1043
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Сформировать ПЭ (старый вариант)"
+msgstr "Сформировать перечень элементов (BOM)..."
 
 #: eeschema/tools/ee_actions.cpp:1044
 msgid "Generate a bill of materials for the current schematic"
@@ -21301,18 +21293,16 @@ msgid "Select a value to be tuned"
 msgstr "Выбрать значение для подстройки"
 
 #: eeschema/tools/ee_actions.cpp:1473
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "Сигналы, заданные пользователем"
+msgstr "Сигналы, заданные пользователем..."
 
 #: eeschema/tools/ee_actions.cpp:1474
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1480
-#, fuzzy
 msgid "Show SPICE Netlist"
-msgstr "Показать список цепей SPICE..."
+msgstr "Показать список цепей SPICE"
 
 #: eeschema/tools/ee_inspection_tool.cpp:237
 msgid "No symbol issues found."
@@ -21328,14 +21318,14 @@ msgid "Select a symbol to diff against its library equivalent."
 msgstr "Проверка посад.мест платы по библиотеке..."
 
 #: eeschema/tools/ee_inspection_tool.cpp:274
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Символы"
+msgstr "Символ %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Summary"
-msgstr ""
+msgstr "Сводка"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, fuzzy
@@ -21345,15 +21335,13 @@ msgstr "Файл схемы доступен только для чтения."
 #: eeschema/tools/ee_inspection_tool.cpp:284
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
 #: pcbnew/tools/board_inspection_tool.cpp:1493
-#, fuzzy
 msgid "Library: "
-msgstr "Библиотека:"
+msgstr "Библиотека: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:285
 #: pcbnew/tools/board_inspection_tool.cpp:1494
-#, fuzzy
 msgid "Library item: "
-msgstr "Ссылка на библиотеку:"
+msgstr "Элемент в библиотеке: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #: pcbnew/tools/board_inspection_tool.cpp:1512
