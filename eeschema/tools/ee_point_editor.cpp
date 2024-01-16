@@ -49,7 +49,7 @@ using namespace std::placeholders;
 // Few constants to avoid using bare numbers for point indices
 enum ARC_POINTS
 {
-    ARC_CENTER, ARC_START, ARC_END
+    ARC_START, ARC_END, ARC_CENTER
 };
 
 

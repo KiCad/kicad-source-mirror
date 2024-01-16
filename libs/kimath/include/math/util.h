@@ -102,6 +102,12 @@ constexpr ret_type KiROUND( fp_type v )
         else
             return 0;
     }
+    else if( std::isnan( v ) )
+    {
+        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+
+        return 0;
+    }
 
     return ret_type( max_ret( ret ) );
 }

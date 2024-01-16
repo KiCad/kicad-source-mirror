@@ -1481,13 +1481,15 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
                 m_end = aPosition;
 
             v = m_start - m_end;
+
             double chordAfter = sq( v.x ) + sq( v.y );
-            double ratio = chordAfter / chordBefore;
+            double ratio = 0.0;
+
+            if( chordBefore > 0 )
+                ratio = chordAfter / chordBefore;
 
             if( ratio != 0 )
-            {
                 radius = std::max( sqrt( sq( radius ) * ratio ), sqrt( chordAfter ) / 2 );
-            }
         }
             break;
 
@@ -1507,13 +1509,18 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         // Calculate center based on start, end, and radius
         //
         // Let 'l' be the length of the chord and 'm' the middle point of the chord
-        double  l = GetLineLength( m_start, m_end );
+        double   l = GetLineLength( m_start, m_end );
         VECTOR2D m = ( m_start + m_end ) / 2;
+        double   sqRadDiff = sq( radius ) - sq( l / 2 );
 
         // Calculate 'd', the vector from the chord midpoint to the center
         VECTOR2D d;
-        d.x = sqrt( sq( radius ) - sq( l / 2 ) ) * ( m_start.y - m_end.y ) / l;
-        d.y = sqrt( sq( radius ) - sq( l / 2 ) ) * ( m_end.x - m_start.x ) / l;
+
+        if( l > 0 && sqRadDiff >= 0 )
+        {
+            d.x = sqrt( sqRadDiff ) * ( m_start.y - m_end.y ) / l;
+            d.y = sqrt( sqRadDiff ) * ( m_end.x - m_start.x ) / l;
+        }
 
         VECTOR2I c1 = KiROUND( m + d );
         VECTOR2I c2 = KiROUND( m - d );
