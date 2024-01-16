@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -1354,6 +1354,10 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         return;
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     bool drawingDangling = aLayer == LAYER_DANGLING;
     bool drawingOP = aLayer == LAYER_OP_CURRENTS;
     bool isDangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
@@ -1374,7 +1378,12 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
             color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
         }
         else
+        {
+            if( drawingDangling && isDangling && aPin->IsGlobalPower() )
+                drawPinDanglingIndicator( pos, color, drawingShadows, aPin->IsBrightened() );
+
             return;
+        }
     }
 
     if( drawingDangling )
@@ -1842,6 +1851,9 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 void SCH_PAINTER::drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                          bool aDangling, bool aDrawingShadows, bool aBrightened )
 {
+    if( m_schSettings.IsPrinting() )
+        return;
+
     int size = aDangling ? DANGLING_SYMBOL_SIZE : UNSELECTED_END_SIZE;
 
     if( !aDangling )
@@ -1866,6 +1878,9 @@ void SCH_PAINTER::draw( const SCH_JUNCTION* aJct, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     if( drawingShadows && !( aJct->IsBrightened() || aJct->IsSelected() ) )
         return;
 
@@ -1888,6 +1903,10 @@ void SCH_PAINTER::draw( const SCH_JUNCTION* aJct, int aLayer )
 void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     bool drawingDangling = aLayer == LAYER_DANGLING;
     bool drawingOP = aLayer == LAYER_OP_VOLTAGES;
 
@@ -1991,6 +2010,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 {
     bool       drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     LINE_STYLE lineStyle = aShape->GetEffectiveLineStyle();
     COLOR4D    color = getRenderColor( aShape, aLayer, drawingShadows );
 
@@ -2124,6 +2147,9 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
 
     if( drawingShadows && !( aText->IsBrightened() || aText->IsSelected() ) )
         return;
@@ -2260,6 +2286,10 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 {
     bool          drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     COLOR4D       color = getRenderColor( aTextBox, aLayer, drawingShadows );
     float         borderWidth = getLineWidth( aTextBox, drawingShadows );
     KIFONT::FONT* font = getFont( aTextBox );
@@ -2440,6 +2470,9 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSymbol->GetFields() )
@@ -2561,6 +2594,9 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
 
     if( drawingShadows && !( aField->IsBrightened() || aField->IsSelected() ) )
         return;
@@ -2702,6 +2738,10 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
@@ -2761,6 +2801,10 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
 void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
@@ -2796,6 +2840,10 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
 void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( !( drawingShadows || drawingDangling ) || eeconfig()->m_Selection.draw_selected_children )
@@ -2861,6 +2909,9 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer )
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aLabel->GetFields() )
@@ -2923,6 +2974,9 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aSheet->GetFields() )
@@ -2968,6 +3022,9 @@ void SCH_PAINTER::draw( const SCH_NO_CONNECT* aNC, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     if( drawingShadows && !( aNC->IsBrightened() || aNC->IsSelected() ) )
         return;
 
@@ -2989,6 +3046,10 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     SCH_LAYER_ID layer = aEntry->Type() == SCH_BUS_WIRE_ENTRY_T ? LAYER_WIRE : LAYER_BUS;
     SCH_LINE     line( VECTOR2I(), layer );
     bool         drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     bool         drawingDangling = aLayer == LAYER_DANGLING;
 
     if( drawingShadows && !( aEntry->IsBrightened() || aEntry->IsSelected() ) )
@@ -3090,6 +3151,9 @@ void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
 void SCH_PAINTER::draw( const SCH_MARKER* aMarker, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
 
     if( drawingShadows && !( aMarker->IsBrightened() || aMarker->IsSelected() ) )
         return;
