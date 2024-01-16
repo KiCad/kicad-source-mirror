@@ -19,6 +19,7 @@
  */
 
 #include <wildcards_and_files_ext.h>
+#include <env_vars.h>
 #include <executable_names.h>
 #include <pgm_base.h>
 #include <policy_keys.h>
@@ -213,16 +214,17 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     wxFileName  templatePath;
 
     // KiCad system template path.
-    ENV_VAR_MAP_CITER it =  Pgm().GetLocalEnvVariables().find( "KICAD7_TEMPLATE_DIR" );
+    std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( Pgm().GetLocalEnvVariables(),
+                                                                  wxT( "TEMPLATE_DIR" ) );
 
-    if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
+    if( v && !v->IsEmpty() )
     {
-        templatePath.AssignDir( it->second.GetValue() );
+        templatePath.AssignDir( *v );
         ps->AddTemplatesPage( _( "System Templates" ), templatePath );
     }
 
     // User template path.
-    it = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
+    ENV_VAR_MAP_CITER it = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 
     if( it != Pgm().GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
     {

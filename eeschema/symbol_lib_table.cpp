@@ -24,6 +24,7 @@
  */
 
 
+#include <env_vars.h>
 #include <lib_id.h>
 #include <lib_table_lexer.h>
 #include <paths.h>
@@ -546,7 +547,7 @@ LIB_SYMBOL* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLib
 
 const wxString SYMBOL_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD7_SYMBOL_DIR";
+    return ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) );
 }
 
 
@@ -568,12 +569,15 @@ public:
         wxFileName file = wxFileName::FileName( aFilePath );
 
         // consider a file to be a lib if it's name ends with .kicad_sym and
-        // it is under $KICAD7_3RD_PARTY/symbols/<pkgid>/ i.e. has nested level of at least +2
+        // it is under $KICADn_3RD_PARTY/symbols/<pkgid>/ i.e. has nested level of at least +2
         if( file.GetExt() == wxT( "kicad_sym" ) && file.GetDirCount() >= m_prefix_dir_count + 2 )
         {
+            wxString versionedPath = wxString::Format( wxS( "${%s}" ),
+                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
+
             wxArrayString parts = file.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
-            parts.Insert( "${KICAD7_3RD_PARTY}", 0 );
+            parts.Insert( versionedPath, 0 );
             parts.Add( file.GetFullName() );
 
             wxString libPath = wxJoin( parts, '/' );
@@ -633,11 +637,12 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
 
         SystemDirsAppend( &ss );
 
-        wxString templatePath =
-            Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();
+        const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars,
+                                                                      wxT( "TEMPLATE_DIR" ) );
 
-        if( !templatePath.IsEmpty() )
-            ss.AddPaths( templatePath, 0 );
+        if( v && !v->IsEmpty() )
+            ss.AddPaths( *v, 0 );
 
         wxString fileName = ss.FindValidPath( global_tbl_name );
 
@@ -658,7 +663,11 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
 
     wxCHECK( settings, false );
 
-    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_3RD_PARTY" ) ).GetValue();
+    wxString packagesPath;
+    const ENV_VAR_MAP& vars = Pgm().GetLocalEnvVariables();
+
+    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( vars, wxT( "3RD_PARTY" ) ) )
+        packagesPath = *v;
 
     if( settings->m_PcmLibAutoAdd )
     {

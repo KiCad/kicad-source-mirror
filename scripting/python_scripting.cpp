@@ -37,6 +37,7 @@
 #include <string>
 
 #include <eda_base_frame.h>
+#include <env_vars.h>
 #include <gal/color4d.h>
 #include <gestfich.h>
 #include <trace_helpers.h>
@@ -578,19 +579,27 @@ wxString SCRIPTING::PyScriptingPath( PATH_TYPE aPathType )
     case STOCK:
         path = PATHS::GetStockScriptingPath();
         break;
+
     case USER:
         path = PATHS::GetUserScriptingPath();
         break;
-    case THIRDPARTY:
-        const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-        auto               it = env.find( "KICAD7_3RD_PARTY" );
 
-        if( it != env.end() && !it->second.GetValue().IsEmpty() )
-            path = it->second.GetValue();
+    case THIRDPARTY:
+    {
+        const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
+
+        if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env,
+                                                                          wxT( "3RD_PARTY" ) ) )
+        {
+            path = *v;
+        }
         else
+        {
             path = PATHS::GetDefault3rdPartyPath();
+        }
 
         break;
+    }
     }
 
     wxFileName scriptPath( path );

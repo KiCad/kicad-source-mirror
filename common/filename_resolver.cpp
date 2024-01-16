@@ -31,6 +31,7 @@
 #include <trace_helpers.h>
 
 #include <common.h>
+#include <env_vars.h>
 #include <filename_resolver.h>
 #include <confirm.h>
 #include <wx_filename.h>
@@ -338,7 +339,8 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
     if( !tname.StartsWith( wxS( ":" ) ) )
     {
         wxFileName fpath;
-        wxString fullPath( wxS( "${KICAD7_3DMODEL_DIR}" ) );
+        wxString fullPath( wxString::Format( wxS( "${%s}" ),
+                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) ) );
         fullPath.Append( fpath.GetPathSeparator() );
         fullPath.Append( tname );
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -437,7 +439,10 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     if( !path.DirExists() )
     {
-        if( aPath.m_Pathvar == wxS( "${KICAD7_3DMODEL_DIR}" )
+        wxString versionedPath = wxString::Format( wxS( "${%s}" ),
+                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
+
+        if( aPath.m_Pathvar == versionedPath
                 || aPath.m_Pathvar == wxS( "${KIPRJMOD}" ) || aPath.m_Pathvar == wxS( "$(KIPRJMOD)" )
                 || aPath.m_Pathvar == wxS( "${KISYS3DMOD}" ) || aPath.m_Pathvar == wxS( "$(KISYS3DMOD)" ) )
         {
@@ -812,7 +817,7 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths ) const
     }
 
     if( !hasKisys3D )
-        paths.emplace_back( wxS("KICAD7_3DMODEL_DIR") );
+        paths.emplace_back( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
 
     return true;
 }

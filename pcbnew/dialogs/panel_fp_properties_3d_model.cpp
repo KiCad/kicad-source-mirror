@@ -27,6 +27,7 @@
 #include <panel_fp_properties_3d_model.h>
 
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <env_vars.h>
 #include <bitmaps.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -77,7 +78,10 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     if( cfg->m_lastFootprint3dDir.IsEmpty() )
-        wxGetEnv( KICAD7_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );
+    {
+        wxGetEnv( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ),
+                  &cfg->m_lastFootprint3dDir );
+    }
 
     // Icon showing warning/error information
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -145,7 +149,7 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
 {
     wxString default_path;
-    wxGetEnv( KICAD7_3DMODEL_DIR, &default_path );
+    wxGetEnv( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), &default_path );
 
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
@@ -296,8 +300,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     // variable and fall back to the project path if necessary.
     if( initialpath.IsEmpty() )
     {
-        if( !wxGetEnv( wxT( "KICAD7_3DMODEL_DIR" ), &initialpath ) || initialpath.IsEmpty() )
+        if( !wxGetEnv( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), &initialpath )
+            || initialpath.IsEmpty() )
+        {
             initialpath = prj.GetProjectPath();
+        }
     }
 
     if( !sidx.empty() )

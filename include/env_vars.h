@@ -26,8 +26,11 @@
 #define ENV_VARS_H
 
 #include <wx/string.h>
+#include <map>
 #include <vector>
 #include <optional>
+
+class ENV_VAR_ITEM;
 
 namespace ENV_VAR
 {
@@ -46,6 +49,24 @@ namespace ENV_VAR
      * Get the list of pre-defined environment variables.
      */
     const ENV_VAR_LIST& GetPredefinedEnvVars();
+
+    /**
+     * Constructs a versioned environment variable based on this KiCad major version
+     * @param aBaseName is the suffix, like TEMPLATE_DIR
+     * @return an environment variable name, like KICAD8_TEMPLATE_DIR
+     */
+    wxString GetVersionedEnvVarName( const wxString& aBaseName );
+
+    /**
+     * Attempts to retrieve the value of a versioned environment variable, such as
+     * KICAD8_TEMPLATE_DIR.  If this value exists in the map, it will be returned.  If not, the
+     * map will be searched for keys matching KICAD*_<aBaseName>, and the first match's value will
+     * be returned.  If there are no matches, std::nullopt will be returned.
+     * @param aMap is an ENV_VAR_MAP (@see environment.h)
+     * @param aBaseName is the suffix for the environment variable (@see GetVersionedEnvVarName)
+     */
+    std::optional<wxString> GetVersionedEnvVarValue( const std::map<wxString, ENV_VAR_ITEM>& aMap,
+                                                     const wxString& aBaseName );
 
     /**
      * Look up long-form help text for a given environment variable.

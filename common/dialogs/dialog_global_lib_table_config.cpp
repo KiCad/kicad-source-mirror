@@ -20,6 +20,7 @@
 
 #include <dialogs/dialog_global_lib_table_config.h>
 
+#include <env_vars.h>
 #include <pgm_base.h>
 #include <search_stack.h>
 #include <systemdirsappend.h>
@@ -109,8 +110,14 @@ bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
 
     GlobalPathsAppend( &ss, m_faceType );
 
-    wxString templatePath =
-        Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();
+    wxString templatePath;
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+
+    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars,
+                                                                      wxT( "TEMPLATE_DIR" ) ) )
+    {
+        templatePath = *v;
+    }
 
     if( !templatePath.IsEmpty() )
         ss.AddPaths( templatePath, 0 );

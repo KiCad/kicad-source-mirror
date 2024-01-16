@@ -24,6 +24,7 @@
 #include <kicad_curl/kicad_curl.h>
 
 #include "core/wx_stl_compat.h"
+#include <env_vars.h>
 #include <background_jobs_monitor.h>
 #include "build_version.h"
 #include "paths.h"
@@ -188,10 +189,9 @@ void PLUGIN_CONTENT_MANAGER::ReadEnvVar()
 {
     // Get 3rd party path
     const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
-    auto               it = env.find( wxT( "KICAD7_3RD_PARTY" ) );
 
-    if( it != env.end() && !it->second.GetValue().IsEmpty() )
-        m_3rdparty_path = it->second.GetValue();
+    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env, wxT( "3RD_PARTY" ) ) )
+        m_3rdparty_path = *v;
     else
         m_3rdparty_path = PATHS::GetDefault3rdPartyPath();
 }

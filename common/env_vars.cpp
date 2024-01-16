@@ -17,10 +17,13 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <build_version.h>
 #include <env_vars.h>
+#include <settings/environment.h>
 
 #include <map>
 
+#include <wx/regex.h>
 #include <wx/translation.h>
 #include <wx/utils.h>
 
@@ -35,18 +38,23 @@ using STRING_MAP = std::map<wxString, wxString>;
  */
 static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
     wxS( "KIPRJMOD" ),
-    wxS( "KICAD7_SYMBOL_DIR" ),
-    wxS( "KICAD7_3DMODEL_DIR" ),
-    wxS( "KICAD7_FOOTPRINT_DIR" ),
-    wxS( "KICAD7_TEMPLATE_DIR" ),
+    ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ),
+    ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ),
+    ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ),
+    ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ),
     wxS( "KICAD_USER_TEMPLATE_DIR" ),
     wxS( "KICAD_PTEMPLATES" ),
-    wxS( "KICAD7_3RD_PARTY" ),
+    ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ),
 };
+
+const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
 
 
 bool ENV_VAR::IsEnvVarImmutable( const wxString& aEnvVar )
 {
+    if( versionedEnvVarRegex.Matches( aEnvVar ) )
+        return true;
+
     for( const wxString& s : predefinedEnvVars )
     {
         if( s == aEnvVar )
@@ -63,23 +71,52 @@ const ENV_VAR::ENV_VAR_LIST& ENV_VAR::GetPredefinedEnvVars()
 }
 
 
+wxString ENV_VAR::GetVersionedEnvVarName( const wxString& aBaseName )
+{
+    int version = 0;
+    std::tie(version, std::ignore, std::ignore) = GetMajorMinorPatchTuple();
+
+    return wxString::Format( "KICAD%d_%s", version, aBaseName );
+}
+
+
+std::optional<wxString> ENV_VAR::GetVersionedEnvVarValue( const ENV_VAR_MAP& aMap,
+                                                          const wxString& aBaseName )
+{
+    wxString exactMatch = ENV_VAR::GetVersionedEnvVarName( aBaseName );
+
+    if( aMap.count( exactMatch ) )
+        return aMap.at( exactMatch ).GetValue();
+
+    wxString partialMatch = wxString::Format( "KICAD*_%s", aBaseName );
+
+    for( const auto& [k, v] : aMap )
+    {
+        if( k.Matches( partialMatch ) )
+            return v.GetValue();
+    }
+
+    return std::nullopt;
+}
+
+
 static void initialiseEnvVarHelp( STRING_MAP& aMap )
 {
     // Set up dynamically, as we want to be able to use _() translations,
     // which can't be done statically
-    aMap[wxS( "KICAD7_FOOTPRINT_DIR" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) )] =
         _( "The base path of locally installed system "
             "footprint libraries (.pretty folders).");
-    aMap[wxS( "KICAD7_3DMODEL_DIR" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) )] =
         _( "The base path of system footprint 3D shapes (.3Dshapes folders).");
-    aMap[wxS( "KICAD7_SYMBOL_DIR" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) )] =
         _( "The base path of the locally installed symbol libraries.");
-    aMap[wxS( "KICAD7_TEMPLATE_DIR" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) )] =
         _( "A directory containing project templates installed with KiCad.");
     aMap[wxS( "KICAD_USER_TEMPLATE_DIR" )] =
         _( "Optional. Can be defined if you want to create your own project "
            "templates folder.");
-    aMap[wxS( "KICAD7_3RD_PARTY" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) )] =
         _( "A directory containing 3rd party plugins, libraries and other "
            "downloadable content.");
     aMap[wxS( "KIPRJMOD" )] =
@@ -88,9 +125,9 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
           "variable can be used to define files and paths relative to the currently loaded "
           "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
           "folder containing a project specific footprint library named footprints.pretty." );
-    aMap[wxS( "KICAD7_SCRIPTING_DIR" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "SCRIPTING_DIR" ) )] =
         _( "A directory containing system-wide scripts installed with KiCad" );
-    aMap[wxS( "KICAD7_USER_SCRIPTING_DIR" )] =
+    aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "USER_SCRIPTING_DIR" ) )] =
         _( "A directory containing user-specific scripts installed with KiCad" );
 
     // Deprecated vars

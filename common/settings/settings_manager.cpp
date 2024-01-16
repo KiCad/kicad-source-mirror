@@ -615,7 +615,11 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
             wxT( "KICAD7_SYMBOL_DIR" ),
             wxT( "KICAD7_3DMODEL_DIR" ),
             wxT( "KICAD7_FOOTPRINT_DIR" ),
-            wxT( "KICAD7_TEMPLATE_DIR" ), // Stores the default library table to be copied
+            wxT( "KICAD7_TEMPLATE_DIR" ),
+            wxT( "KICAD8_SYMBOL_DIR" ),
+            wxT( "KICAD8_3DMODEL_DIR" ),
+            wxT( "KICAD8_FOOTPRINT_DIR" ),
+            wxT( "KICAD8_TEMPLATE_DIR" ),
 
             // Deprecated keys
             wxT( "KICAD_PTEMPLATES" ),

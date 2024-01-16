@@ -22,6 +22,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <env_vars.h>
 #include <paths.h>
 #include <search_stack.h>
 #include <settings/settings_manager.h>
@@ -36,14 +37,7 @@
 
 
 ///! The following environment variables will never be migrated from a previous version
-const std::set<wxString> envVarBlacklist =
-        {
-            wxT( "KICAD7_SYMBOL_DIR" ),
-            wxT( "KICAD7_FOOTPRINT_DIR" ),
-            wxT( "KICAD7_TEMPLATES_DIR" ),
-            wxT( "KICAD7_3DMODEL_DIR" )
-        };
-
+const wxRegEx versionedEnvVarRegex( wxS( "KICAD[0-9]+_[A-Z0-9_]+(_DIR)?" ) );
 
 ///! Update the schema version whenever a migration is required
 const int commonSchemaVersion = 3;
@@ -543,7 +537,7 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
                 while( aCfg->GetNextEntry( key, index ) )
                 {
-                    if( envVarBlacklist.count( key ) )
+                    if( versionedEnvVarRegex.Matches( key ) )
                     {
                         wxLogTrace( traceSettings,
                                     wxT( "Migrate Env: %s is blacklisted; skipping." ), key );
@@ -633,21 +627,23 @@ void COMMON_SETTINGS::InitializeEnvironment()
 
     wxFileName path( basePath );
     path.AppendDir( wxT( "footprints" ) );
-    addVar( wxT( "KICAD7_FOOTPRINT_DIR" ), path.GetFullPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ), path.GetFullPath() );
 
     path = basePath;
     path.AppendDir( wxT( "3dmodels" ) );
-    addVar( wxT( "KICAD7_3DMODEL_DIR" ), path.GetFullPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), path.GetFullPath() );
 
-    addVar( wxT( "KICAD7_TEMPLATE_DIR" ), PATHS::GetStockTemplatesPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ),
+            PATHS::GetStockTemplatesPath() );
 
     addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
 
-    addVar( wxT( "KICAD7_3RD_PARTY" ), PATHS::GetDefault3rdPartyPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ),
+            PATHS::GetDefault3rdPartyPath() );
 
     path = basePath;
     path.AppendDir( wxT( "symbols" ) );
-    addVar( wxT( "KICAD7_SYMBOL_DIR" ), path.GetFullPath() );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ), path.GetFullPath() );
 }
 
 
@@ -725,9 +721,12 @@ bool COMMON_SETTINGS::readLegacy3DResolverCfg( const wxString&                  
         if( !getLegacy3DHollerith( cfgLine, idx, al.m_Alias ) )
             continue;
 
-        // Don't add KICAD7_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
-        // config file.  They're system variables are are defined at runtime.
-        if( al.m_Alias == wxS( "${KICAD7_3DMODEL_DIR}" ) || al.m_Alias == wxS( "${KIPRJMOD}" )
+        // Don't add KICADn_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
+        // config file.  They're system variables which are defined at runtime.
+        wxString versionedPath = wxString::Format( wxS( "${%s}" ),
+                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
+
+        if( al.m_Alias == versionedPath || al.m_Alias == wxS( "${KIPRJMOD}" )
             || al.m_Alias == wxS( "$(KIPRJMOD)" ) || al.m_Alias == wxS( "${KISYS3DMOD}" )
             || al.m_Alias == wxS( "$(KISYS3DMOD)" ) )
         {

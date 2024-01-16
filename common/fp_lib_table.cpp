@@ -25,6 +25,7 @@
 
 
 #include <kiface_base.h>
+#include <env_vars.h>
 #include <footprint_info.h>
 #include <lib_id.h>
 #include <lib_table_lexer.h>
@@ -502,7 +503,7 @@ FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootp
 
 const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  wxS( "KICAD7_FOOTPRINT_DIR" );
+    return ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) );
 }
 
 
@@ -526,12 +527,15 @@ public:
         wxFileName dir = wxFileName::DirName( dirPath );
 
         // consider a directory to be a lib if it's name ends with .pretty and
-        // it is under $KICAD7_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
+        // it is under $KICADn_3RD_PARTY/footprints/<pkgid>/ i.e. has nested level of at least +3
         if( dirPath.EndsWith( wxS( ".pretty" ) ) && dir.GetDirCount() >= m_prefix_dir_count + 3 )
         {
+            wxString versionedPath = wxString::Format( wxS( "${%s}" ),
+                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
+
             wxArrayString parts = dir.GetDirs();
             parts.RemoveAt( 0, m_prefix_dir_count );
-            parts.Insert( wxS( "${KICAD7_3RD_PARTY}" ), 0 );
+            parts.Insert( versionedPath, 0 );
 
             wxString libPath = wxJoin( parts, '/' );
 
@@ -588,11 +592,12 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
 
         SystemDirsAppend( &ss );
 
-        wxString templatePath =
-            Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_TEMPLATE_DIR" ) ).GetValue();
+        const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+        std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( envVars,
+                                                                      wxT( "TEMPLATE_DIR" ) );
 
-        if( !templatePath.IsEmpty() )
-            ss.AddPaths( templatePath, 0 );
+        if( v && !v->IsEmpty() )
+            ss.AddPaths( *v, 0 );
 
         wxString fileName = ss.FindValidPath( global_tbl_name );
 
@@ -611,7 +616,11 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-    wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_3RD_PARTY" ) ).GetValue();
+    const ENV_VAR_MAP& env = Pgm().GetLocalEnvVariables();
+    wxString packagesPath;
+
+    if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( env, wxT( "3RD_PARTY" ) ) )
+        packagesPath = *v;
 
     if( settings->m_PcmLibAutoAdd )
     {
