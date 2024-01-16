@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"PO-Revision-Date: 2024-01-16 17:32+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -10369,7 +10369,7 @@ msgstr "배경색 인쇄"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
 msgid "Use a different color theme for printing:"
-msgstr "출력 시에 다른 색상 테마 사용:"
+msgstr "인쇄할 때 다른 색상 테마 사용:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:101
 msgid ""
@@ -11651,7 +11651,7 @@ msgstr "회로도 업데이트"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "참조 지정자를 기반으로 풋프린트를 회로 심볼에 재연결합니다"
+msgstr "참조 지정자를 기반으로 풋프린트를 회로도 심볼에 연결하기"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
