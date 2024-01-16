@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
 "PO-Revision-Date: 2024-01-18 07:31+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -23372,7 +23372,7 @@ msgstr ""
 "Mit diesem Rechner können Sie prüfen, ob eine dünne Leiterbahn für kurze "
 "Zeit einen hohen Strom verkraften kann.<br>\n"
 "Dieses Werkzeug ermöglicht Ihnen, eine Leiterbahn-Sicherung zu entwerfen, "
-"jedoch sollte es nur für eine Schätzung verwendet werden.\n"
+"sollte jedoch nur für eine Schätzung verwendet werden.\n"
 "\n"
 "Der Rechner schätzt die Energie, die erforderlich ist, um die Leiterbahn bis "
 "zu ihrem Schmelzpunkt zu<br>\n"
@@ -29599,7 +29599,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:332
 msgid "Use KiCad font to plot text"
-msgstr "Benutze KiCad-Schriftart, um Text zu Plotten"
+msgstr "KiCad-Schriftart verwenden, um Text zu plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:333
 msgid ""
@@ -35434,7 +35434,7 @@ msgstr "Bitmap-Eigenschaften"
 
 #: pcbnew/pcb_bitmap.cpp:280
 msgid "Greyscale"
-msgstr "Grauwert"
+msgstr "Graustufen"
 
 #: pcbnew/pcb_dimension.cpp:301 pcbnew/pcb_dimension.cpp:1352
 msgid "Prefix"
