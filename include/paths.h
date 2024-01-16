@@ -175,6 +175,12 @@ public:
      * @return The macOS specific bundle data directory for KiCad
      */
     static wxString GetWindowsFontConfigDir();
+
+
+    /**
+     * Gets the stock (install) data path, which is the base path for things like scripting, etc
+     */
+    static wxString GetWindowsBaseSharePath();
 #endif
 
 private:
