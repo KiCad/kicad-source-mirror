@@ -432,10 +432,8 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
             if( ext == wxT( "" ) )
                 continue;
 
-            reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ),
-                         wxRE_ICASE );
-
-            if( reg.Matches( aName ) )
+            if( reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ),
+                         wxRE_ICASE ) && reg.Matches( aName ) )
             {
                 type = (TREE_FILE_TYPE) i;
                 break;
