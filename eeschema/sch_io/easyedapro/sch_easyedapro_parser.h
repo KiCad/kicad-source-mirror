@@ -112,6 +112,9 @@ public:
 protected:
     SCHEMATIC* m_schematic;
 
+    wxString ResolveFieldVariables( const wxString                      aInput,
+                                    const std::map<wxString, wxString>& aDeviceAttributes );
+
     template <typename T>
     void ApplyFontStyle( const std::map<wxString, nlohmann::json>& fontStyles, T& text,
                          const wxString& styleStr );
@@ -123,7 +126,8 @@ protected:
     template <typename T>
     void ApplyAttrToField( const std::map<wxString, nlohmann::json>& fontStyles, T* text,
                            const EASYEDAPRO::SCH_ATTR& aAttr, bool aIsSym, bool aToSym,
-                           SCH_SYMBOL* aParent = nullptr );
+                           const std::map<wxString, wxString>& aDeviceAttributes = {},
+                           SCH_SYMBOL*                         aParent = nullptr );
 };
 
 

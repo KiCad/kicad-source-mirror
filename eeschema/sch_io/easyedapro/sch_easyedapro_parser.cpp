@@ -221,15 +221,78 @@ void SCH_EASYEDAPRO_PARSER::ApplyLineStyle( const std::map<wxString, nlohmann::j
 }
 
 
+wxString SCH_EASYEDAPRO_PARSER::ResolveFieldVariables(
+        const wxString aInput, const std::map<wxString, wxString>& aDeviceAttributes )
+{
+    wxString inputText = aInput;
+    wxString resolvedText;
+    int      variableCount = 0;
+
+    // Resolve variables
+    // ={Variable1}text{Variable2}
+    do
+    {
+        if( !inputText.StartsWith( wxS( "={" ) ) )
+            return inputText;
+
+        resolvedText.Clear();
+        variableCount = 0;
+
+        for( size_t i = 1; i < inputText.size(); )
+        {
+            wxUniChar c = inputText[i++];
+
+            if( c == '{' )
+            {
+                wxString varName;
+                bool     endFound = false;
+
+                while( i < inputText.size() )
+                {
+                    c = inputText[i++];
+
+                    if( c == '}' )
+                    {
+                        endFound = true;
+                        break;
+                    }
+
+                    varName << c;
+                }
+
+                if( !endFound )
+                    return inputText;
+
+                wxString varValue =
+                        get_def( aDeviceAttributes, varName, wxString::Format( "{%s!}", varName ) );
+
+                resolvedText << varValue;
+                variableCount++;
+            }
+            else
+            {
+                resolvedText << c;
+            }
+        }
+        inputText = resolvedText;
+
+    } while( variableCount > 0 );
+
+    return resolvedText;
+}
+
+
 template <typename T>
 void SCH_EASYEDAPRO_PARSER::ApplyAttrToField( const std::map<wxString, nlohmann::json>& fontStyles,
                                               T* field, const EASYEDAPRO::SCH_ATTR& aAttr,
-                                              bool aIsSym, bool aToSym, SCH_SYMBOL* aParent )
+                                              bool aIsSym, bool aToSym,
+                                              const std::map<wxString, wxString>& aDeviceAttributes,
+                                              SCH_SYMBOL*                         aParent )
 {
     EDA_TEXT* text = static_cast<EDA_TEXT*>( field );
 
+    text->SetText( ResolveFieldVariables( aAttr.value, aDeviceAttributes ) );
     text->SetVisible( aAttr.keyVisible || aAttr.valVisible );
-    text->SetText( aAttr.value );
 
     field->SetNameShown( aAttr.keyVisible );
 
@@ -1088,7 +1151,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 if( auto globalNetAttr = get_opt( attributes, "Global Net Name" ) )
                 {
                     ApplyAttrToField( fontStyles, schSym->GetField( VALUE_FIELD ), *globalNetAttr,
-                                      false, true, schSym.get() );
+                                      false, true, compAttrs, schSym.get() );
 
                     for( LIB_PIN* pin : schSym->GetAllLibPins() )
                         pin->SetName( globalNetAttr->value );
@@ -1169,17 +1232,21 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     targetValueAttr = nameAttr;
 
                 if( targetValueAttr )
+                {
                     ApplyAttrToField( fontStyles, schSym->GetField( VALUE_FIELD ), *targetValueAttr,
-                                      false, true, schSym.get() );
+                                      false, true, compAttrs, schSym.get() );
+                }
 
                 if( auto descrAttr = get_opt( attributes, "Description" ) )
+                {
                     ApplyAttrToField( fontStyles, schSym->GetField( DESCRIPTION_FIELD ), *descrAttr,
-                                      false, true, schSym.get() );
+                                      false, true, compAttrs, schSym.get() );
+                }
 
                 if( auto designatorAttr = get_opt( attributes, "Designator" ) )
                 {
                     ApplyAttrToField( fontStyles, schSym->GetField( REFERENCE_FIELD ),
-                                      *designatorAttr, false, true, schSym.get() );
+                                      *designatorAttr, false, true, compAttrs, schSym.get() );
 
                     schSym->SetRef( &aSchematic->CurrentSheet(), designatorAttr->value );
                 }
@@ -1203,7 +1270,9 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                     text->SetPosition( schSym->GetPosition() );
 
-                    ApplyAttrToField( fontStyles, text, attr, false, true, schSym.get() );
+                    ApplyAttrToField( fontStyles, text, attr, false, true, compAttrs,
+                                      schSym.get() );
+
                     schSym->AddField( *text );
                 }
             }
