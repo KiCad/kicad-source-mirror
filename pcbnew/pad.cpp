@@ -1547,6 +1547,8 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 
     SetCustomShapeInZoneOpt( aMasterPad.GetCustomShapeInZoneOpt() );
 
+    m_teardropParams = aMasterPad.m_teardropParams;
+
     // Add or remove custom pad shapes:
     ReplacePrimitives( aMasterPad.GetPrimitives() );
     SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
