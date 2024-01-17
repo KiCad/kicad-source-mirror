@@ -34,6 +34,7 @@
 %include <std_vector.i>
 
 %{
+#include <geometry/corner_strategy.h>
 #include <geometry/seg.h>
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
@@ -61,6 +62,7 @@
 
 // ignore warning from nested classes
 #pragma SWIG nowarn=325
+%include <geometry/corner_strategy.h>
 %include <geometry/seg.h>
 %include <geometry/shape.h>
 %include <geometry/shape_arc.h>
