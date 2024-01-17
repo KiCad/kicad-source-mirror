@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2023-11-21 22:03+0000\n"
-"Last-Translator: Erkan <erkankarakas@outlook.com>\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
+"Last-Translator: Mert Kalkancı <mertkalkanci79@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -4057,7 +4057,7 @@ msgstr "'%s' dosyası bulunamadı."
 
 #: common/eda_base_frame.cpp:1025
 msgid "Preferences"
-msgstr "Seçenekler"
+msgstr "Tercihler"
 
 #: common/eda_base_frame.cpp:1041 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
@@ -4310,7 +4310,7 @@ msgstr "Ekran"
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
 #: pcbnew/pad.cpp:998 pcbnew/plot_board_layers.cpp:95
 msgid "Footprint"
-msgstr "Ayak izi"
+msgstr "PCB Modeli"
 
 #: common/eda_item.cpp:338 pcbnew/dialogs/dialog_board_statistics.cpp:501
 #: pcbnew/pad.cpp:1001
@@ -4426,7 +4426,7 @@ msgstr "Sembol"
 #: common/eda_item.cpp:382 common/eda_item.cpp:397 eeschema/lib_pin.h:71
 #: eeschema/sch_pin.cpp:215
 msgid "Pin"
-msgstr "Bacak"
+msgstr "Pin"
 
 #: common/eda_item.cpp:383
 msgid "Sheet Pin"
@@ -5021,8 +5021,9 @@ msgstr "Seçili hücreleri panoya kopyala"
 
 #: common/grid_tricks.cpp:329 common/tool/actions.cpp:165
 #: pcbnew/dialogs/panel_setup_rules.cpp:114
+#, fuzzy
 msgid "Paste"
-msgstr "Yapıştır"
+msgstr "pasta"
 
 #: common/grid_tricks.cpp:330
 msgid "Paste clipboard cells to matrix at current cell"
@@ -5243,7 +5244,7 @@ msgstr "Şematik metin && grafik arka planları"
 
 #: common/layer_id.cpp:130
 msgid "Pins"
-msgstr "Bacaklar"
+msgstr "Pinler"
 
 #: common/layer_id.cpp:131
 msgid "Sheet borders"
@@ -5300,7 +5301,7 @@ msgstr "Yardımcı öğeler"
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Grid"
-msgstr "Kullanıcı Kılavuzları"
+msgstr "Arkaplan Ölçü Çizgileri"
 
 #: common/layer_id.cpp:144
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
@@ -5406,7 +5407,7 @@ msgstr "BL/Gömülü Geçiş"
 
 #: common/layer_id.cpp:168
 msgid "Micro-vias"
-msgstr "Mikro-geçişler"
+msgstr "Mikro-katmansal geçişler"
 
 #: common/layer_id.cpp:169
 msgid "Via holes"
@@ -5917,7 +5918,7 @@ msgstr "Çiz..."
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:182
 #: pcbnew/dialogs/dialog_plot_base.h:157
 msgid "Plot"
-msgstr "Çizdir"
+msgstr "Çiz"
 
 #: common/tool/actions.cpp:114
 msgid "Close the current editor"
@@ -7761,7 +7762,7 @@ msgstr "Numaralandırma Mesajları:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:93
 msgid "Annotate"
-msgstr "Numaralandır"
+msgstr "Notlandır"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -12270,7 +12271,7 @@ msgstr "Veri Yolu Tanımları"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
-msgstr "Takma Ad"
+msgstr "Grup"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
 #, fuzzy
@@ -15010,9 +15011,8 @@ msgid "Excluded from board"
 msgstr "Karta ekleme"
 
 #: eeschema/sch_symbol.cpp:1374
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "Yerleştirilmemeli"
 
 #: eeschema/sch_symbol.cpp:1797
 msgid "Power symbol"
@@ -29078,7 +29078,7 @@ msgstr "Yol ve Geçiş Özellikleri"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
 #: pcbnew/drc/drc_engine.cpp:1430
 msgid "footprint"
-msgstr "ayak izi"
+msgstr "PCB modeli"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
 #, c-format
@@ -43159,7 +43159,7 @@ msgstr "Şematik düzenleyici renk temasını kullan"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr "eeschema"
+msgstr "şema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -43214,7 +43214,7 @@ msgstr "KiCad kartları için bağımsız devre kartı editörü"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "pcbnew"
-msgstr "pcbnew"
+msgstr "pcb yeni"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
