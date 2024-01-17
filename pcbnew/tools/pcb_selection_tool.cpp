@@ -2977,8 +2977,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         {
             BOARD_ITEM* item = aCollector[i];
 
-            if( item->IsType( { PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T, PCB_FOOTPRINT_T } )
-                && item->IsOnLayer( activeLayer ) )
+            if( item->IsType( { PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T } )
+                && silkLayers[ item->GetLayer() ] )
             {
                 preferred.insert( item );
             }
