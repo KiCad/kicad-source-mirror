@@ -3388,11 +3388,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             {
                 SCH_PIN* test_pin = static_cast<SCH_PIN*>( item );
 
-                if( test_pin->GetParentSymbol()->IsPower() )
-                    continue;
-
                 // Stacked pins do not count as other connections but non-stacked pins do
-                if( !has_other_connections && !pins.empty() )
+                if( !has_other_connections && !pins.empty() && !test_pin->GetParentSymbol()->IsPower() )
                 {
                     for( SCH_PIN* other_pin  : pins )
                     {
