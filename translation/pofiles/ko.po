@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-16 17:32+0000\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -3104,7 +3104,7 @@ msgstr "이 변경 사항은 편집기를 다시 시작할 때 적용됩니다."
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr "회로도와 PCB 편집기 사이에서 마우스를 따라가는 포커스"
+msgstr "마우스를 따라 회로도와 PCB 편집기 간 포커스 이동"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
@@ -3190,7 +3190,7 @@ msgstr "편집"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Warp mouse to origin of moved object"
-msgstr "마우스를 이동된 개체의 원점으로 이동"
+msgstr "이동한 개체의 원점으로 마우스 이동"
 
 #: common/dialogs/panel_common_settings_base.cpp:254
 msgid "First hotkey selects tool"
@@ -3210,7 +3210,7 @@ msgstr "세션"
 
 #: common/dialogs/panel_common_settings_base.cpp:275
 msgid "Remember open files for next project launch"
-msgstr "다음 프로젝트 시작을 위해 열린 파일 기억"
+msgstr "프로젝트 시작 시 열린 파일 기억"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
 msgid ""
@@ -6574,7 +6574,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel_base.cpp:20
 msgid "Accelerated graphics"
-msgstr "가속된 그래픽"
+msgstr "가속 그래픽"
 
 #: common/widgets/gal_options_panel_base.cpp:20
 msgid "Fallback graphics"
@@ -9497,7 +9497,7 @@ msgstr "그룹 선택됨"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
-msgstr "단위로 필터링:"
+msgstr "유닛 필터링:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:82
 msgid "Pin Table"
@@ -9815,7 +9815,7 @@ msgstr "핀 이름 표시 또는 숨기기"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:238
 msgid "Place pin names inside"
-msgstr "핀 이름을 안쪽에 배치"
+msgstr "내부에 핀 이름 배치"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:240
 msgid ""
@@ -9974,7 +9974,7 @@ msgstr "이름 사용"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr "버스 마이그레이션"
+msgstr "버스 이주"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
@@ -12382,7 +12382,7 @@ msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니�
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:776
 msgid "Migrate Library"
-msgstr "라이브러리 이동"
+msgstr "라이브러리 이주"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:800 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
@@ -12497,7 +12497,7 @@ msgstr "테이블에서 라이브러리 제거"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 msgid "Migrate Libraries"
-msgstr "라이브러리 이동"
+msgstr "라이브러리 이주"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:157
