@@ -13,15 +13,16 @@
 # Marine Biologist <fatihvolkanster@gmail.com>, 2023.
 # Mert Gülsoy <mgulsoy@gmail.com>, 2023.
 # Erkan <erkankarakas@outlook.com>, 2023.
+# Mert Kalkancı <mertkalkanci79@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2023-12-26 08:38+0000\n"
-"Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2024-01-18 07:32+0000\n"
+"Last-Translator: Mert Kalkancı <mertkalkanci79@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -610,23 +611,20 @@ msgid "F.Cu"
 msgstr "Ö.Bkr"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Bakır/yüzey kaplama:"
+msgstr "Ön bakır kaplamasını göster / yüzey son rengi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "A.Bkr"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Bakır/yüzey kaplama:"
+msgstr "Arka bakır kaplamasını göster / yüzey son rengi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Adhesive"
-msgstr "A.Yapışkan"
+msgstr "Yapışkan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
@@ -634,97 +632,84 @@ msgid "Show adhesive"
 msgstr "Yapışkan katmanları göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Lehim pastası:"
+msgstr "Lehim pastası"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Lehim pastası katmanlarını göster"
+msgstr "Lehim pastasını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "F.Silkscreen"
-msgstr "Ön Yüz Baskısı"
+msgstr "Ö.Yüzbaskısı"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Ön ipek baskı"
+msgstr "Önyüz baskısını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
-msgstr "A. ipek baskı"
+msgstr "A.Yüzeybaskısı"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Ön ipek baskı"
+msgstr "Arka yüzey baskısını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
 msgstr "Ö.Maske"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Ön lehim maskesi"
+msgstr "Ön lehim maskesini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
 msgstr "A.Maske"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Ön lehim maskesi"
+msgstr "Arka lehim maskesini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Çizim"
+msgstr "Kullanıcı Çizimleri"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Yorumları ve çizim katmanlarını göster"
+msgstr "Kullanıcı katmanlarını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Comments"
 msgstr "Kullanıcı.Yorumları"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Lehim maskesi katmanlarını göster"
+msgstr "Kullanıcı yorumları katmanını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Eco1"
 msgstr "Kullanıcı.Eko1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "ECO katmanlarını göster"
+msgstr "ECO1 kullanıcı katmanlarını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco2"
 msgstr "Kullanıcı.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "ECO katmanlarını göster"
+msgstr "Kullanıcı ECO2 katmanlarını göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Delikli ayak izleri"
+msgstr "THT Modelleri"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "3B Modeller"
+msgstr "SMD Modelleri"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 #, fuzzy
@@ -732,19 +717,16 @@ msgid "Virtual Models"
 msgstr "Sanal 3B modelleri aç/kapat"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Pos dosyasında olmayan 3B modellere geçiş yap"
+msgstr "Modeller POS Dosyasında Değil"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "SMD 3D modelleri aç/kapat"
+msgstr "Yertleştirilmemeli olarak (DNP) işaretlenmiş modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Model Sınırlama Kutusunu Göster"
+msgstr "Model Sınır Çerçevesi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -4967,7 +4949,7 @@ msgstr "'%s' dosyası bulunamadı."
 
 #: common/eda_base_frame.cpp:1051
 msgid "Preferences"
-msgstr "Seçenekler"
+msgstr "Tercihler"
 
 #: common/eda_base_frame.cpp:1067 common/hotkey_store.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
@@ -5227,7 +5209,7 @@ msgstr "Ekran"
 #: pcbnew/pcb_shape.cpp:468 pcbnew/pcb_text.cpp:220
 #: pcbnew/plot_board_layers.cpp:94
 msgid "Footprint"
-msgstr "Ayak izi"
+msgstr "PCB Modeli"
 
 #: common/eda_item.cpp:345 pcbnew/dialogs/dialog_board_statistics.cpp:503
 #: pcbnew/pad.cpp:983
@@ -5354,7 +5336,7 @@ msgstr "Sembol"
 #: common/eda_item.cpp:383 common/eda_item.cpp:398 eeschema/lib_pin.h:65
 #: eeschema/sch_pin.cpp:216
 msgid "Pin"
-msgstr "Bacak"
+msgstr "Pin"
 
 #: common/eda_item.cpp:384
 msgid "Sheet Pin"
@@ -6272,8 +6254,9 @@ msgstr "Seçili hücreleri panoya kopyala"
 #: eeschema/tools/sch_editor_control.cpp:2127
 #: eeschema/tools/symbol_editor_edit_tool.cpp:863
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1032
+#, fuzzy
 msgid "Paste"
-msgstr "Yapıştır"
+msgstr "pasta"
 
 #: common/grid_tricks.cpp:359
 msgid "Paste clipboard cells to matrix at current cell"
@@ -6710,7 +6693,7 @@ msgstr "Şematik metin && grafik arka planları"
 
 #: common/layer_id.cpp:130
 msgid "Pins"
-msgstr "Bacaklar"
+msgstr "Pinler"
 
 #: common/layer_id.cpp:131
 msgid "Sheet borders"
@@ -6773,7 +6756,7 @@ msgstr "Yardımcı öğeler"
 #: gerbview/widgets/gerbview_layer_widget.cpp:134
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Grid"
-msgstr "Kullanıcı Kılavuzları"
+msgstr "Arkaplan Ölçü Çizgileri"
 
 #: common/layer_id.cpp:145
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
@@ -6882,7 +6865,7 @@ msgstr "BL/Gömülü Geçiş"
 
 #: common/layer_id.cpp:171
 msgid "Micro-vias"
-msgstr "Mikro-geçişler"
+msgstr "Mikro-katmansal geçişler"
 
 #: common/layer_id.cpp:172
 msgid "Via holes"
@@ -7391,7 +7374,7 @@ msgstr "Çiz..."
 #: eeschema/sim/simulator_frame_ui_base.cpp:112
 #: pcbnew/dialogs/dialog_plot.cpp:188 pcbnew/dialogs/dialog_plot_base.h:154
 msgid "Plot"
-msgstr "Çizdir"
+msgstr "Çiz"
 
 #: common/tool/actions.cpp:137
 msgid "Close the current editor"
@@ -9372,7 +9355,7 @@ msgstr "Numaralandırma Mesajları:"
 #: eeschema/dialogs/dialog_annotate.cpp:92
 #: eeschema/dialogs/dialog_annotate.cpp:226
 msgid "Annotate"
-msgstr "Numaralandır"
+msgstr "Notlandır"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -14452,7 +14435,7 @@ msgstr "Veri Yolu Tanımları"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:44
 msgid "Alias"
-msgstr "Takma Ad"
+msgstr "Grup"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:76
 #, fuzzy
@@ -18115,9 +18098,8 @@ msgstr "Bu ihlali hariç tut"
 
 #: eeschema/sch_symbol.cpp:1432 eeschema/sch_symbol.cpp:1840
 #: eeschema/widgets/search_handlers.cpp:139 pcbnew/footprint.cpp:1315
-#, fuzzy
 msgid "DNP"
-msgstr "DPI"
+msgstr "Yerleştirilmemeli"
 
 #: eeschema/sch_symbol.cpp:1831 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
@@ -18126,9 +18108,8 @@ msgid "Simulation"
 msgstr "Simülasyon"
 
 #: eeschema/sch_symbol.cpp:1834
-#, fuzzy
 msgid "BOM"
-msgstr "ÜRÜN REÇETESİ..."
+msgstr "Malzeme Listesi"
 
 #: eeschema/sch_symbol.cpp:1846 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
@@ -34310,7 +34291,7 @@ msgstr "Yol ve Geçiş Özellikleri"
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
 #: pcbnew/drc/drc_engine.cpp:1428
 msgid "footprint"
-msgstr "ayak izi"
+msgstr "PCB modeli"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:60
 #, c-format
@@ -49549,7 +49530,7 @@ msgstr "Şematik düzenleyici renk temasını kullan"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
-msgstr "eeschema"
+msgstr "şema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
