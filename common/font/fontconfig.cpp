@@ -371,10 +371,12 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
                 // GTK, on the other hand, doesn't appear to support wxLocale::IsAvailable(),
                 // so we can't run these checks.
 
+                static std::map<wxString, bool> availableLanguages;
+
                 FcStrSet*  langStrSet = FcLangSetGetLangs( langSet );
                 FcStrList* langStrList = FcStrListCreate( langStrSet );
                 FcChar8*   langStr = FcStrListNext( langStrList );
-                bool langSupported = false;
+                bool       langSupported = false;
 
                 if( !langStr )
                 {
@@ -384,9 +386,16 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
                 else while( langStr )
                 {
                     wxString langWxStr( reinterpret_cast<char *>( langStr ) );
-                    const wxLanguageInfo* langInfo = wxLocale::FindLanguageInfo( langWxStr );
 
-                    if( langInfo && wxLocale::IsAvailable( langInfo->Language ) )
+                    if( availableLanguages.find( langWxStr ) == availableLanguages.end() )
+                    {
+                        const wxLanguageInfo* langInfo = wxLocale::FindLanguageInfo( langWxStr );
+                        bool  available = langInfo && wxLocale::IsAvailable( langInfo->Language );
+
+                        availableLanguages[ langWxStr ] = available;
+                    }
+
+                    if( availableLanguages[ langWxStr ] )
                     {
                         langSupported = true;
                         break;
