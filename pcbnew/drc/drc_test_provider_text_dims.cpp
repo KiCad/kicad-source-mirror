@@ -150,7 +150,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                 if( font->IsOutline() )
                 {
-                    if( !constraint.Value().HasMin() )
+                    if( !constraint.Value().HasMin() || constraint.Value().Min() <= 0 )
                         return true;
 
                     auto* glyphs = text->GetRenderCache( font, text->GetShownText( true ) );
