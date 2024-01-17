@@ -3261,6 +3261,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 {
     static const LSET silkLayers( 2, B_SilkS, F_SilkS );
     static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
+    static std::vector<KICAD_T> singleLayerSilkTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T,
+                                                         PCB_SHAPE_T };
 
     if( ADVANCED_CFG::GetCfg().m_PcbSelectionVisibilityRatio != 1.0 )
         pruneObscuredSelectionCandidates( aCollector );
@@ -3274,28 +3276,27 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
     PCB_LAYER_ID           activeLayer = m_frame->GetActiveLayer();
 
+    // If a silk layer is in front, we assume the user is working with silk and give preferential
+    // treatment to single-layer items on *either* silk layer.
     if( silkLayers[activeLayer] )
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             BOARD_ITEM* item = aCollector[i];
 
-            if( item->IsType( { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T,
-                                PCB_FOOTPRINT_T } )
-                && item->IsOnLayer( activeLayer ) )
-            {
+            if( item->IsType( singleLayerSilkTypes ) && silkLayers[ item->GetLayer() ] )
                 preferred.insert( item );
-            }
         }
     }
+    // Similarly, if a courtyard layer is in front, we assume the user is positioning footprints
+    // and give preferential treatment to footprints on *both* top and bottom.
     else if( courtyardLayers[activeLayer] && settings->GetHighContrast() )
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             BOARD_ITEM* item = aCollector[i];
-            KICAD_T     type = item->Type();
 
-            if( type == PCB_FOOTPRINT_T )
+            if( item->Type() == PCB_FOOTPRINT_T )
                 preferred.insert( item );
         }
     }
