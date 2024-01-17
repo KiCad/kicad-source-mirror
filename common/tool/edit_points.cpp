@@ -41,8 +41,12 @@ bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
 }
 
 
-EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent )
-        : EDA_ITEM( NOT_USED ), m_parent( aParent ), m_allowPoints( true )
+EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent ) :
+        EDA_ITEM( NOT_USED ),
+        m_parent( aParent ),
+        m_swapX( false ),
+        m_swapY( false ),
+        m_allowPoints( true )
 {
 }
 

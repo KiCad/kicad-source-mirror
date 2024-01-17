@@ -522,12 +522,20 @@ public:
         return wxT( "EDIT_POINTS" );
     }
 
+    bool SwapX() const             { return m_swapX; }
+    void SetSwapX( bool aSwap )    { m_swapX = aSwap; }
+
+    bool SwapY() const             { return m_swapY; }
+    void SetSwapY( bool aSwap )    { m_swapY = aSwap; }
+
 private:
-    EDA_ITEM* m_parent;                 ///< Parent of the EDIT_POINTs.
-    std::deque<EDIT_POINT> m_points;    ///< EDIT_POINTs for modifying m_parent.
-    std::deque<EDIT_LINE> m_lines;      ///< EDIT_LINEs for modifying m_parent.
-    std::list<int> m_contours;          ///< Indices of end contour points.
-    bool m_allowPoints;                 ///< If false, only allow editing of EDIT_LINES.
+    EDA_ITEM*              m_parent;       ///< Parent of the EDIT_POINTs.
+    bool                   m_swapX;        ///< Parent's X coords are inverted.
+    bool                   m_swapY;        ///< Parent's Y coords are inverted.
+    std::deque<EDIT_POINT> m_points;       ///< EDIT_POINTs for modifying m_parent.
+    std::deque<EDIT_LINE>  m_lines;        ///< EDIT_LINEs for modifying m_parent.
+    std::list<int>         m_contours;     ///< Indices of end contour points.
+    bool                   m_allowPoints;  ///< If false, only allow editing of EDIT_LINES.
 };
 
 #endif /* EDIT_POINTS_H_ */
