@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
 "Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3936,7 +3936,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -13010,9 +13009,8 @@ msgstr "层预设名称："
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1587
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1988
-#, fuzzy
 msgid "Save BOM Preset"
-msgstr "保存层预设"
+msgstr "保存BOM预设"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1613
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2014
@@ -13272,7 +13270,6 @@ msgid "Base Pin Name"
 msgstr "基引脚名称"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
-#, fuzzy
 msgid "Pin Functions"
 msgstr "引脚功能"
 
@@ -18800,9 +18797,8 @@ msgid "Small-Signal Analysis"
 msgstr "小信号分析"
 
 #: eeschema/sim/spice_simulator.cpp:59
-#, fuzzy
 msgid "DC Sweep Analysis"
-msgstr "直流电/交流电扫描分析"
+msgstr "直流扫描分析"
 
 #: eeschema/sim/spice_simulator.cpp:60
 msgid "Transient Analysis"
@@ -20419,9 +20415,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "从物料清单中排除"
 
 #: eeschema/tools/ee_actions.cpp:887
-#, fuzzy
 msgid "Exclude from Simulation"
-msgstr "排除于在仿真外"
+msgstr "从仿真中排除"
 
 #: eeschema/tools/ee_actions.cpp:888
 #, fuzzy
@@ -20429,9 +20424,8 @@ msgid "Set the exclude from simulation attribute"
 msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
 
 #: eeschema/tools/ee_actions.cpp:893
-#, fuzzy
 msgid "Include in Simulation"
-msgstr "仿真中的 SPICE 值"
+msgstr "包括在仿真中"
 
 #: eeschema/tools/ee_actions.cpp:894
 #, fuzzy
@@ -20441,7 +20435,7 @@ msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
 #: eeschema/tools/ee_actions.cpp:899
 #, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "排除于在仿真外"
+msgstr "切换从仿真中排除"
 
 #: eeschema/tools/ee_actions.cpp:900
 #, fuzzy
@@ -20449,7 +20443,6 @@ msgid "Toggle the exclude from simulation attribute"
 msgstr "删除 %s “从 BOM 中排除”的制造属性。"
 
 #: eeschema/tools/ee_actions.cpp:905
-#, fuzzy
 msgid "Exclude from Board"
 msgstr "从电路板中排除"
 
@@ -20459,9 +20452,8 @@ msgid "Set the exclude from board attribute"
 msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
 
 #: eeschema/tools/ee_actions.cpp:911
-#, fuzzy
 msgid "Include on Board"
-msgstr "从电路板中排除"
+msgstr "包括在电路板中"
 
 #: eeschema/tools/ee_actions.cpp:912
 #, fuzzy
@@ -20479,27 +20471,24 @@ msgid "Toggle the exclude from board attribute"
 msgstr "删除 %s “从 BOM 中排除”的制造属性。"
 
 #: eeschema/tools/ee_actions.cpp:923
-#, fuzzy
 msgid "Set Do Not Populate"
-msgstr "不填充"
+msgstr "设为不装配（DNP）"
 
 #: eeschema/tools/ee_actions.cpp:924
 msgid "Set the do not populate attribute"
 msgstr "设置“不装配(DNP)”属性"
 
 #: eeschema/tools/ee_actions.cpp:929
-#, fuzzy
 msgid "Unset Do Not Populate"
-msgstr "不填充"
+msgstr "设置为装配"
 
 #: eeschema/tools/ee_actions.cpp:930
 msgid "Clear the do not populate attribute"
 msgstr "清除“不装配(DNP)”属性"
 
 #: eeschema/tools/ee_actions.cpp:936
-#, fuzzy
 msgid "Toggle Do Not Populate"
-msgstr "不填充"
+msgstr "切换DNP属性"
 
 #: eeschema/tools/ee_actions.cpp:937
 #, fuzzy
@@ -20618,9 +20607,8 @@ msgid "Export file containing netlist in one of several formats"
 msgstr "导出某种格式的网表的文件"
 
 #: eeschema/tools/ee_actions.cpp:1043
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "生成物料清单... (&M)"
+msgstr "生成物料清单..."
 
 #: eeschema/tools/ee_actions.cpp:1044
 msgid "Generate a bill of materials for the current schematic"
@@ -20893,9 +20881,8 @@ msgid "Break a wire out of a bus"
 msgstr "从总线上引出一连线"
 
 #: eeschema/tools/ee_actions.cpp:1307
-#, fuzzy
 msgid "Draw graphic lines"
-msgstr "添加图形线条"
+msgstr "添加图形线"
 
 #: eeschema/tools/ee_actions.cpp:1316 pcbnew/tools/pcb_actions.cpp:2333
 msgid "Undo Last Segment"
@@ -21025,9 +21012,8 @@ msgid "Select a value to be tuned"
 msgstr "选择要调整的值"
 
 #: eeschema/tools/ee_actions.cpp:1473
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "用户自定义信号"
+msgstr "用户自定义信号..."
 
 #: eeschema/tools/ee_actions.cpp:1474
 msgid "Add, edit or delete user-defined simulation signals"
@@ -21084,9 +21070,8 @@ msgstr "当前配置中未启用库。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #: eeschema/tools/ee_inspection_tool.cpp:303
-#, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "管理符号库..."
+msgstr "管理符号库"
 
 #: eeschema/tools/ee_inspection_tool.cpp:301
 #: pcbnew/tools/board_inspection_tool.cpp:1520
@@ -21116,14 +21101,12 @@ msgid "No datasheet defined."
 msgstr "未定义数据表。"
 
 #: eeschema/tools/ee_point_editor.cpp:518
-#, fuzzy
 msgid "Move Point"
-msgstr "移动终点"
+msgstr "移动端点"
 
 #: eeschema/tools/ee_point_editor.cpp:1458
-#, fuzzy
 msgid "Add Corner"
-msgstr "添加电源端口"
+msgstr "添加拐角"
 
 #: eeschema/tools/sch_drawing_tools.cpp:285
 msgid "Press <ESC> to cancel symbol creation."
@@ -21206,9 +21189,8 @@ msgid "Pin Helpers"
 msgstr "引脚属性"
 
 #: eeschema/tools/sch_edit_tool.cpp:455
-#, fuzzy
 msgid "Transform Selection"
-msgstr "从选区创建"
+msgstr "旋转和镜像"
 
 #: eeschema/tools/sch_edit_tool.cpp:497
 msgid "Edit Main Fields"
@@ -21281,12 +21263,12 @@ msgstr "编辑图纸页码"
 #: eeschema/tools/sch_edit_tool.cpp:2534
 #, fuzzy
 msgid "Set Attribute"
-msgstr "属性"
+msgstr "设置属性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2571
 #, fuzzy
 msgid "Clear Attribute"
-msgstr "属性"
+msgstr "清除属性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2608
 #, fuzzy
@@ -21456,9 +21438,8 @@ msgstr "没有要导出的符号"
 
 #: eeschema/tools/symbol_editor_control.cpp:578
 #: pcbnew/footprint_edit_frame.cpp:1366
-#, fuzzy
 msgid "Export View as PNG"
-msgstr "导出视图为 PNG..."
+msgstr "导出视图为 PNG"
 
 #: eeschema/tools/symbol_editor_control.cpp:589
 #, c-format
@@ -21471,9 +21452,8 @@ msgstr "SVG 文件名称"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:650
 #: eeschema/tools/symbol_editor_pin_tool.cpp:190
-#, fuzzy
 msgid "Edit Pin Properties"
-msgstr "引脚属性"
+msgstr "编辑引脚属性"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:666
 msgid "Symbol is not derived from another symbol."
@@ -21880,7 +21860,6 @@ msgid "These parameters are usually specified in files, but not always."
 msgstr "这些参数通常在文件中指定，但并不总是如此。"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
-#, fuzzy
 msgid "File Units"
 msgstr "文件单位"
 
@@ -21893,9 +21872,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr "无前省零 (LZ 格式)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:39
-#, fuzzy
 msgid "Zero Format"
-msgstr "零的格式"
+msgstr "零格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:41
 msgid ""
@@ -22548,7 +22526,6 @@ msgid "Move Layer Up"
 msgstr "上移层"
 
 #: gerbview/tools/gerbview_actions.cpp:183
-#, fuzzy
 msgid "Move Current Layer up"
 msgstr "将当前层上移"
 
@@ -22630,9 +22607,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr "Gerber 层没有包含数据"
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "导入非 KiCad 电路板文件"
+msgstr "导出为 KiCad 电路板文件"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -23027,9 +23003,8 @@ msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr "与 --models-dir 一起使用可在生成的文件中输出相对路径"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "指定的地图格式无效\n"
+msgstr "指定格式无效\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:106
 #, c-format
@@ -23042,9 +23017,8 @@ msgid ""
 msgstr "要包括的英文逗号分隔的未翻译的图层名，如 F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_base.cpp:139
-#, fuzzy
 msgid "At least one layer must be specified\n"
-msgstr "必须指定一个或多个层\n"
+msgstr "必须至少指定一个层\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:47
 #: pcbnew/dialogs/dialog_gendrill_base.h:93
@@ -23185,7 +23159,6 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "剔除阻焊开窗中的丝印"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:68
-#, fuzzy
 msgid "Disable aperture macros"
 msgstr "禁用光圈（Aperture）宏"
 
@@ -23684,34 +23657,28 @@ msgid "Export STEP"
 msgstr "导出 STEP"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export VRML"
-msgstr "导出"
+msgstr "导出 VRML"
 
 #: kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "导出 IDFv3"
+msgstr "导出 DXF"
 
 #: kicad/kicad_cli.cpp:148
-#, fuzzy
 msgid "Export HPGL"
-msgstr "导出 STEP"
+msgstr "导出 HPGL"
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export PDF"
-msgstr "导出 IDFv3"
+msgstr "导出 PDF"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export PS"
-msgstr "导出 STEP"
+msgstr "导出 PostScript"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export SVG"
-msgstr "导出 SVG 文件"
+msgstr "导出 SVG"
 
 #: kicad/kicad_cli.cpp:317
 msgid "prints version information and exits"
@@ -23736,7 +23703,6 @@ msgid "%d package update(s) avaliable"
 msgstr "%d 个包可被更新"
 
 #: kicad/kicad_manager_frame.cpp:749
-#, fuzzy
 msgid "Edit File in Text Editor"
 msgstr "在文本编辑器中编辑"
 
@@ -23787,19 +23753,16 @@ msgid "EasyEDA (JLCEDA) Std Backup..."
 msgstr "EasyEDA (JLCEDA) 标准版备份..."
 
 #: kicad/menubar.cpp:117
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "导入 EAGLE CAD XML 原理图和电路板"
+msgstr "导入 EasyEDA (JLCEDA) 原理图和电路板"
 
 #: kicad/menubar.cpp:121
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "Eagle 工程..."
+msgstr "EasyEDA (JLCEDA) 专业版工程 ..."
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "导入 EAGLE CAD XML 原理图和电路板"
+msgstr "导入 EasyEDA (JLCEDA) 专业版原理图和电路板"
 
 #: kicad/menubar.cpp:128
 msgid "&Archive Project..."
@@ -40765,9 +40728,8 @@ msgid "Altium PCB Library or Integrated Library"
 msgstr "Altium PCB 库或集成库"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:31
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "实心填充"
+msgstr "Solidworks PCB文件"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
