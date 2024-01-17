@@ -328,6 +328,7 @@ public:
     {
         aCount = 0;
         aLayers[aCount++] = LAYER_ANCHOR;
+        aLayers[aCount++] = GetLayer();
     }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override

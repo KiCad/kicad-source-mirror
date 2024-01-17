@@ -2660,6 +2660,9 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         return false;
     }
 
+    if( aItem->GetParentGroup() && aItem->GetParentGroup()->Type() == PCB_GENERATOR_T )
+        return false;
+
     const ZONE*     zone = nullptr;
     const PCB_VIA*  via = nullptr;
     const PAD*      pad = nullptr;

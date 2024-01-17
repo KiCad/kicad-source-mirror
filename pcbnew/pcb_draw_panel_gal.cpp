@@ -35,6 +35,7 @@
 #include <pcb_track.h>
 #include <macros.h>
 #include <pcb_marker.h>
+#include <pcb_generator.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <ratsnest/ratsnest_data.h>
@@ -289,6 +290,9 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
     // Load zones
     for( ZONE* zone : aBoard->Zones() )
         m_view->Add( zone );
+
+    for( PCB_GENERATOR* generator : aBoard->Generators() )
+        m_view->Add( generator );
 
     // Ratsnest
     if( !aBoard->IsFootprintHolder() )
