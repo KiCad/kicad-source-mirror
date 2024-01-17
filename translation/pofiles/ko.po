@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-16 16:14+0000\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -3679,7 +3679,7 @@ msgstr "이 변경 사항은 편집기를 다시 시작할 때 적용됩니다."
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr "회로도와 PCB 편집기 사이에서 마우스를 따라가는 포커스"
+msgstr "마우스를 따라 회로도와 PCB 편집기 간 포커스 이동"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
@@ -3826,7 +3826,7 @@ msgstr "편집"
 
 #: common/dialogs/panel_common_settings_base.cpp:280
 msgid "Warp mouse to origin of moved object"
-msgstr "마우스를 이동된 개체의 원점으로 이동"
+msgstr "이동한 개체의 원점으로 마우스 이동"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "First hotkey selects tool"
@@ -3846,7 +3846,7 @@ msgstr "세션"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
 msgid "Remember open files for next project launch"
-msgstr "다음 프로젝트 시작을 위해 열린 파일 기억"
+msgstr "프로젝트 시작 시 열린 파일 기억"
 
 #: common/dialogs/panel_common_settings_base.cpp:307
 msgid ""
@@ -8029,7 +8029,7 @@ msgstr "렌더링 엔진"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
-msgstr "가속된 그래픽"
+msgstr "가속 그래픽"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
@@ -10948,7 +10948,7 @@ msgstr "그룹 선택됨"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
 msgid "Filter by unit:"
-msgstr "단위로 필터링:"
+msgstr "유닛 필터링:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:83
 msgid "Pin Table"
@@ -11292,7 +11292,7 @@ msgstr "핀 이름 표시 또는 숨기기"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:230
 msgid "Place pin names inside"
-msgstr "핀 이름을 안쪽에 배치"
+msgstr "내부에 핀 이름 배치"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:232
 msgid ""
@@ -11449,7 +11449,7 @@ msgstr "이름 사용"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr "버스 마이그레이션"
+msgstr "버스 이주"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
@@ -12657,14 +12657,12 @@ msgid "Right:"
 msgstr "오른쪽:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:889
-#, fuzzy
 msgid "Plot Setup"
-msgstr "인쇄 설정 (&E)"
+msgstr "플롯 설정"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
-#, fuzzy
 msgid "Simulation Analysis"
-msgstr "시뮬레이션 설정"
+msgstr "시뮬레이션 해석"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:36
 #: eeschema/sim/sim_plot_tab.cpp:652
@@ -12847,9 +12845,8 @@ msgid "Device:"
 msgstr "장치:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:118
-#, fuzzy
 msgid "Device type:"
-msgstr "Spice 유형:"
+msgstr "기기 유형:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:145
 #: eeschema/widgets/search_handlers.cpp:133
@@ -12895,14 +12892,12 @@ msgid "Simulation Model Editor"
 msgstr "시뮬레이션 모델 편집기"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
 msgstr "심볼 선택"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:67
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "전원 심볼"
+msgstr "전원 심볼 선택"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:69
 #: eeschema/symbol_chooser_frame.cpp:103
@@ -12999,19 +12994,16 @@ msgid "Field name %s already exists. Cannot rename over existing field."
 msgstr "필드 이름 %s가 이미 존재합니다. 기존 필드의 이름을 변경할 수 없습니다."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "수량 열은 그룹화 할 수 없습니다."
+msgstr "수량 열은 그룹화할 수 없음."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:850
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "수량 열은 그룹화 할 수 없습니다."
+msgstr "항목 번호 열은 그룹화할 수 없음."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1197
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "BOM"
+msgstr "BOM 출력 파일"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1209
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1218
@@ -13033,24 +13025,23 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "변경 사항이 저장되지 않음. 미저장한 데이터를 내보낼까요?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1251
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "파일 이름을 입력하지 않았습니다"
+msgstr "내보내기에 지정된 파일 이름이 없음"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "%s 파일을 만들 수 없습니다."
+msgstr "경로 '%s'를 열거나 만들 수 없음."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1274
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "BOM 출력을 '%s'에 쓸 수 없습니다."
+msgstr "BOM 출력 '%s'를 만들 수 없음."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "BOM 출력을 '%s'에 쓸 수 없습니다."
+msgstr "BOM 출력 '%s'를 작성할 수 없음."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1288
 #, c-format
@@ -13078,7 +13069,6 @@ msgstr ""
 "다른 이름을 사용해 주세요."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
-#, fuzzy
 msgid "View presets:"
 msgstr "사전 설정 보기:"
 
@@ -13099,9 +13089,8 @@ msgid "Scope:"
 msgstr "범위:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Entire project"
-msgstr "프로젝트 압축 풀기"
+msgstr "전체 프로젝트"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
 msgid "Recursive"
@@ -14389,7 +14378,7 @@ msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니�
 #: eeschema/dialogs/panel_sym_lib_table.cpp:897
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:858
 msgid "Migrate Library"
-msgstr "라이브러리 이동"
+msgstr "라이브러리 이주"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:924 eeschema/libarch.cpp:129
 #: eeschema/libarch.cpp:135
@@ -14498,7 +14487,7 @@ msgstr "테이블에서 라이브러리 제거"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:159
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:156
 msgid "Migrate Libraries"
-msgstr "라이브러리 이동"
+msgstr "라이브러리 이주"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:197
@@ -16724,11 +16713,9 @@ msgid "Error retriving data from HTTP library %s: %s"
 msgstr "HTTP 라이브러리 %s에서 데이터를 검색하는 중 오류 발생: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid"
-msgstr ""
-"데이터베이스 라이브러리를 로드할 수 없습니다: 설정 파일 %s이 없거나 잘못되었"
-"습니다"
+msgstr "HTTP 라이브러리 설정 파일 %s이 없거나 손상됨"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:227
 #, c-format
@@ -16760,9 +16747,8 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "%s에 연결할 수 없습니다. 오류: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:47
-#, fuzzy
 msgid "KiCad HTTP library files"
-msgstr "KiCad 심볼 라이브러리 파일"
+msgstr "KiCad HTTP 라이브러리 파일"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:116
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:288
@@ -17016,37 +17002,35 @@ msgid "Extra data found on line %d in file %s"
 msgstr "%d 라인 %s 파일에서 추가 데이터가 발견됨"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:415
-#, fuzzy
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr "0, 1, 2 또는 3 필요"
+msgstr "0, 1, 2, 3, 4를 예상"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
 msgstr "NORMAL 또는 WIDE 필요"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:447
-#, fuzzy
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr "I, O, B 또는 OUT 필요"
+msgstr "I, O, B, IN, OUT, BIDIR를 예상"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "R0, R90, R18, R270, M0, M90, M180 또는 M270 필요"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:490
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
-"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP 또는 VBOTTOM 필요"
+"LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP, VBOTTOM를 "
+"예상"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:512
-#, fuzzy
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
-msgstr "NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT 또는 VRIGHT 필요"
+msgstr ""
+"NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT, VRIGHT를 예상"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
@@ -17058,9 +17042,8 @@ msgid "Symbol '%s.asy' not found"
 msgstr "심볼 '%s.asy'를 찾을 수 없음"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
-#, fuzzy
 msgid "LTspice schematic files"
-msgstr "Ltspice 회로도 파일"
+msgstr "LTspice 회로도 파일"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:43 pcbnew/pcb_io/pcb_io_mgr.cpp:49
 #, c-format
@@ -17363,9 +17346,8 @@ msgid "Border Color"
 msgstr "테두리 색상"
 
 #: eeschema/sch_sheet.cpp:1514
-#, fuzzy
 msgid "Background Color"
-msgstr "배경색, 상단"
+msgstr "배경색"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:414
 msgid "(Deleted Item)"
@@ -17385,7 +17367,6 @@ msgid "Excluded from board"
 msgstr "기판에서 제외됨"
 
 #: eeschema/sch_symbol.cpp:1426
-#, fuzzy
 msgid "Excluded from simulation"
 msgstr "시뮬레이션에서 제외"
 
@@ -17396,20 +17377,17 @@ msgstr "DNP"
 
 #: eeschema/sch_symbol.cpp:1831 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Simulation"
 msgstr "시뮬레이션"
 
 #: eeschema/sch_symbol.cpp:1834
-#, fuzzy
 msgid "BOM"
-msgstr "부품 목록..."
+msgstr "BOM"
 
 #: eeschema/sch_symbol.cpp:1846 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Exclude from"
-msgstr "BOM에서 제외"
+msgstr "다음에서 제외"
 
 #: eeschema/sch_symbol.cpp:1857
 msgid "Power symbol"
@@ -17446,17 +17424,14 @@ msgid "Symbol %s [%s]"
 msgstr "심볼 %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2610
-#, fuzzy
 msgid "Exclude From Board"
 msgstr "기판에서 제외"
 
 #: eeschema/sch_symbol.cpp:2613
-#, fuzzy
 msgid "Exclude From Simulation"
 msgstr "시뮬레이션에서 제외"
 
 #: eeschema/sch_symbol.cpp:2616 pcbnew/footprint.cpp:3470
-#, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "BOM에서 제외"
 
@@ -17469,7 +17444,6 @@ msgid "Graphic Text"
 msgstr "그래픽 텍스트"
 
 #: eeschema/sch_text.cpp:420
-#, fuzzy
 msgid "Align center"
 msgstr "가운데 맞춤"
 
@@ -17974,18 +17948,16 @@ msgid "Checking component "
 msgstr "Component 확인 중 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
-msgstr "Component 이름은 비워둘 수 없습니다."
+msgstr "컴포넌트: 이름은 비워 둘 수 없음."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:263
 msgid "Component: manufacturer cannot be empty."
 msgstr "Component: 제조업체는 비어있을 수 없습니다."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "Component: 잘못된 패키지입니다."
+msgstr "컴포넌트: 잘못된 패키지."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -17996,9 +17968,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "이 IV 테이블을 기반으로는 전류를 보간(Interpolate)할 수 없습니다."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "IV 테이블에 Nan 전압이 있습니다"
+msgstr "IV 테이블에 잘못된 전압이 있음"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -18009,14 +17980,12 @@ msgid "Invalid R_load."
 msgstr "잘못된 R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "잘못된 하향 dv/dt."
+msgstr "잘못된 하강 dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
-msgstr "잘못된 상향 dv/dt."
+msgstr "잘못된 상승 dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:470
 msgid "Model name cannot be empty"
@@ -18047,9 +18016,8 @@ msgid "Invalid C_ref value."
 msgstr "잘못된 C_ref 값입니다."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
-msgstr "잘못된 V_ref 값입니다."
+msgstr "잘못된 V_ref 값."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:531
 msgid "Invalid V_meas value."
@@ -18447,29 +18415,24 @@ msgid "Error loading workbook: line %d: %s."
 msgstr "통합 문서 로드 중 오류: %d 줄: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:133
-#, fuzzy
 msgid "expecting version"
-msgstr "%s 예상됨"
+msgstr "예상 버전"
 
 #: eeschema/sim/legacy_workbook.cpp:150
-#, fuzzy
 msgid "expecting simulation tab count"
-msgstr "외부 시뮬레이터를 찾을 수 없음"
+msgstr "예상 시뮬레이션 탭 개수"
 
 #: eeschema/sim/legacy_workbook.cpp:164
-#, fuzzy
 msgid "expecting simulation tab type"
-msgstr "시뮬레이션 워크북 열기"
+msgstr "예상되는 시뮬레이션 탭 유형"
 
 #: eeschema/sim/legacy_workbook.cpp:210
-#, fuzzy
 msgid "expecting trace count"
-msgstr "기존 배선"
+msgstr "예상 트래이스 수"
 
 #: eeschema/sim/legacy_workbook.cpp:226
-#, fuzzy
 msgid "expecting trace type"
-msgstr "기존 배선"
+msgstr "예상 트레이스 유형"
 
 #: eeschema/sim/legacy_workbook.cpp:236
 msgid "expecting trace name"
@@ -18480,14 +18443,12 @@ msgid "expecting trace color"
 msgstr "트레이스 색상 예상"
 
 #: eeschema/sim/legacy_workbook.cpp:262
-#, fuzzy
 msgid "expecting measurement count"
-msgstr "세그먼트 삭제"
+msgstr "예상 측정 횟수"
 
 #: eeschema/sim/legacy_workbook.cpp:274
-#, fuzzy
 msgid "expecting measurement definition"
-msgstr "잘못된 핀 이름 정의"
+msgstr "예상 측정 정의"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
@@ -18640,7 +18601,6 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
 msgstr "진폭"
 
@@ -18657,9 +18617,8 @@ msgid "Intensity"
 msgstr "강도"
 
 #: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:786
-#, fuzzy
 msgid "Power"
-msgstr "전원 추가"
+msgstr "전원"
 
 #: eeschema/sim/sim_plot_tab.cpp:721
 msgid "Voltage (swept)"
@@ -18720,12 +18679,11 @@ msgstr "시뮬레이터는 완전히 주석 처리된 회로도가 필요합니�
 
 #: eeschema/sim/simulator_frame.cpp:353 eeschema/sim/simulator_frame.cpp:544
 #: eeschema/tools/simulator_control.cpp:75
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"네트리스트 생성 중 오류; 시뮬레이션이 중단되었습니다.\n"
+"네트리스트 생성 중 오류.\n"
 "\n"
 
 #: eeschema/sim/simulator_frame.cpp:378
@@ -18753,54 +18711,44 @@ msgid "Save changes to workbook?"
 msgstr "통합 문서에 변경 내용을 저장하시겠습니까?"
 
 #: eeschema/sim/simulator_frame_ui.cpp:145
-#, fuzzy
 msgid "Measure Min"
-msgstr "측정 노드"
+msgstr "최소 측정값"
 
 #: eeschema/sim/simulator_frame_ui.cpp:146
-#, fuzzy
 msgid "Measure Max"
-msgstr "측정 도구"
+msgstr "최대 측정값"
 
 #: eeschema/sim/simulator_frame_ui.cpp:147
-#, fuzzy
 msgid "Measure Average"
-msgstr "측정 노드"
+msgstr "평균 측정값"
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
-#, fuzzy
 msgid "Measure RMS"
-msgstr "측정 도구"
+msgstr "RMS 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:149
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "측정 노드"
+msgstr "피크-피크 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "측정 도구"
+msgstr "최소 주파수 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "측정 도구"
+msgstr "최대 주파수 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:158
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "측정 도구"
+msgstr "최소 시간 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:159
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "측정 도구"
+msgstr "최대 시간 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:162
-#, fuzzy
 msgid "Measure Integral"
-msgstr "측정 노드"
+msgstr "적분 측정"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
@@ -18823,9 +18771,8 @@ msgid "Fourier Analyses of Multiple Signals"
 msgstr "다중 신호의 푸리에 해석"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "신호 주파수:"
+msgstr "기본 주파수:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
 #, c-format
@@ -18833,14 +18780,12 @@ msgid "Format %s..."
 msgstr "형식 %s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:398
-#, fuzzy
 msgid "Format Value..."
-msgstr "값 편집..."
+msgstr "서식 값..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:401
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "세그먼트 삭제"
+msgstr "측정 항목 삭제"
 
 #: eeschema/sim/simulator_frame_ui.cpp:582
 #: eeschema/sim/simulator_frame_ui.cpp:953
@@ -18857,21 +18802,18 @@ msgstr "신호"
 
 #: eeschema/sim/simulator_frame_ui.cpp:592
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
-#, fuzzy
 msgid "Cursor 1"
-msgstr "커서"
+msgstr "커서 1"
 
 #: eeschema/sim/simulator_frame_ui.cpp:593
 #: eeschema/sim/simulator_frame_ui_base.cpp:115
-#, fuzzy
 msgid "Cursor 2"
-msgstr "커서"
+msgstr "커서 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1148
 #: eeschema/sim/simulator_frame_ui.cpp:2544
-#, fuzzy
 msgid "Diff"
-msgstr "차동 쌍"
+msgstr "차동쌍"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1407
 #: eeschema/sim/simulator_frame_ui.cpp:1420
@@ -18890,14 +18832,12 @@ msgid "Error: no current simulation.\n"
 msgstr "오류: 현재 시뮬레이션 없음.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1514
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "오류: 시뮬레이션 유형이 정의되지 않았습니다!\n"
+msgstr "오류: 시뮬레이션 유형이 정의되지 않음.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1520
-#, fuzzy
 msgid "Error: simulation type doesn't support plotting.\n"
-msgstr "오류: 시뮬레이션 유형이 플로팅을 지원하지 않습니다!\n"
+msgstr "오류: 시뮬레이션 유형이 플로팅을 지원하지 않음.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:2647
 #: eeschema/sim/simulator_frame_ui.cpp:2762
@@ -18914,9 +18854,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:221
-#, fuzzy
 msgid "Measurement"
-msgstr "측정 노드"
+msgstr "측정"
 
 #: eeschema/sim/simulator_frame_ui_base.cpp:223
 #: gerbview/gerber_file_image.cpp:337
@@ -18936,19 +18875,16 @@ msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr "복사할 모델 '%s''를 \"A Kind Of\" 모델 '%s'에서 찾을 수 없음"
 
 #: eeschema/sim/spice_simulator.cpp:57
-#, fuzzy
 msgid "DC Operating Point"
-msgstr "동작점"
+msgstr "DC 동작점"
 
 #: eeschema/sim/spice_simulator.cpp:58
-#, fuzzy
 msgid "Small-Signal Analysis"
-msgstr "과도 해석"
+msgstr "소신호 분석"
 
 #: eeschema/sim/spice_simulator.cpp:59
-#, fuzzy
 msgid "DC Sweep Analysis"
-msgstr "DC/AC 분석"
+msgstr "DC 스윕 분석"
 
 #: eeschema/sim/spice_simulator.cpp:60
 msgid "Transient Analysis"
@@ -18959,34 +18895,28 @@ msgid "Small-Signal Distortion Analysis"
 msgstr "소신호 왜곡 분석"
 
 #: eeschema/sim/spice_simulator.cpp:62
-#, fuzzy
 msgid "Noise Analysis"
-msgstr "과도 해석"
+msgstr "잡음 분석"
 
 #: eeschema/sim/spice_simulator.cpp:63
-#, fuzzy
 msgid "Pole-Zero Analysis"
-msgstr "극 영점"
+msgstr "극-영점 분석"
 
 #: eeschema/sim/spice_simulator.cpp:64
-#, fuzzy
 msgid "Sensitivity Analysis"
-msgstr "감도"
+msgstr "감도 분석"
 
 #: eeschema/sim/spice_simulator.cpp:65
-#, fuzzy
 msgid "Transfer Function Analysis"
-msgstr "전송 함수"
+msgstr "전달 함수 해석"
 
 #: eeschema/sim/spice_simulator.cpp:66
-#, fuzzy
 msgid "S-Parameter Analysis"
-msgstr "과도 해석"
+msgstr "S-파라미터 분석"
 
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Frequency Content Analysis"
-msgstr "입력 신호의 주파수"
+msgstr "주파수 내용 분석"
 
 #: eeschema/sim/spice_value.cpp:378
 msgid "Please, fill required fields"
@@ -18998,9 +18928,8 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s'은(는) 유효한 Spice 값이 아닙니다."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
-#, fuzzy
 msgid "&Simulation"
-msgstr "시뮬레이션"
+msgstr "시뮬레이션(&S)"
 
 #: eeschema/sim/user_defined_signals_help_md.h:2
 msgid ""
@@ -19150,22 +19079,17 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>전원 심볼에는 핀이 하나만 있어야 함</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:213
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
-msgstr ""
-"<b>의심스러운 전원 심볼</b><br>하나의 입력 또는 출력 전원 핀만이 의미가 있습"
-"니다<br><br>"
+msgstr "<b>의미 없는 전원 심볼은</b><br>입력 또는 출력 전원 핀에만 의미가 "
+"있음<br><br>"
 
 #: eeschema/symbol_checker.cpp:220
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
-msgstr ""
-"<b>의심스러운 전원 심볼</b><br>보이지 않는 입력 전원 핀만이 자동으로 연결됩니"
-"다<br><br>"
+msgstr "<b>의미없는 전원 심볼</b><br>보이지 않는 입력 전원 핀은 없어도 됨<br><br>"
 
 #: eeschema/symbol_checker.cpp:245
 #, c-format
@@ -19244,14 +19168,12 @@ msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr "<b>(%s, %s)</b> 에서 <b>그래픽 직사각형의 크기는 0</b>입니다."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "심볼 검사기"
+msgstr "심볼 선택기"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "KiCad 심볼 라이브러리 뷰어"
+msgstr "KiCad 심볼 차이점 뷰어"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 msgid ""
@@ -19444,9 +19366,8 @@ msgid "Deriving from symbol '%s'."
 msgstr "심볼 '%s'에서 파생됨."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:387
-#, fuzzy
 msgid "Symbol must have a newName."
-msgstr "필드에는 이름이 포함되어 있어야 합니다."
+msgstr "심볼에는 새 이름을 지정해야 함."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:393
 #: eeschema/symbol_editor/symbol_editor.cpp:698
@@ -19481,9 +19402,8 @@ msgstr "라이브러리에 저장:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:686
 #: pcbnew/footprint_libraries_utils.cpp:1086
-#, fuzzy
 msgid "A library must be specified."
-msgstr "지정된 라이브러리가 없습니다."
+msgstr "라이브러리를 지정해야 합니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:713
 msgid ""
@@ -19591,9 +19511,9 @@ msgstr "심볼 가져오기"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: pcbnew/load_select_footprint.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
+msgstr "'%s'의 리더를 찾을 수 없음."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #, c-format
@@ -19680,9 +19600,8 @@ msgid "Error updating library buffer: %s"
 msgstr "라이브러리 버퍼 업데이트 오류 발생: %s"
 
 #: eeschema/symbol_library_manager.cpp:853
-#, fuzzy
 msgid "Error updating library buffer."
-msgstr "전역 라이브러리 테이블 저장 오류."
+msgstr "라이브러리 버퍼 업데이트 중 오류 발생."
 
 #: eeschema/symbol_library_manager.cpp:993
 #: eeschema/tools/sch_editor_control.cpp:442
@@ -19695,9 +19614,8 @@ msgid "(failed to load)"
 msgstr "(불러오기 실패하였습니다)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "심볼 라이브러리 브라우저"
+msgstr "KiCad 심볼 라이브러리 브라우저"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021
@@ -19750,15 +19668,14 @@ msgid "Select at least one property to back annotate."
 msgstr "주석을 달기 위해 최소한 한 개의 속성을 선택하세요."
 
 #: eeschema/tools/backannotate.cpp:100
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"Eeschema가 스탠드얼론 모드로 실행 중이기 때문에 PCB 네트리스트를 불러올 수 없"
-"습니다.\n"
-"KiCad 프로젝트 매니저를 실행하여 프로젝트를 생성하여야 합니다."
+"회로도 편집기가 독립 실행형 모드로 열렸기 때문에 PCB 네트리스트를 가져올 수 "
+"없습니다.\n"
+"KiCad 프로젝트 관리자를 실행하고 프로젝트를 생성해야 합니다."
 
 #: eeschema/tools/backannotate.cpp:168
 #, c-format
@@ -19793,7 +19710,6 @@ msgid "Footprint re-linking cancelled by user."
 msgstr "풋프린트의 재 연결이 사용자에 의해 취소되었습니다."
 
 #: eeschema/tools/backannotate.cpp:381
-#, fuzzy
 msgid "true"
 msgstr "참"
 
@@ -19817,14 +19733,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "%s 값을 '%s'에서 '%s'(으)로 변경합니다."
 
 #: eeschema/tools/backannotate.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 변경합니다."
+msgstr "'%s'의 '채우지 않음'을 '%s'에서 '%s'로 변경."
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "풋프린트 %s을(를) '%s'에서 '%s'(으)로 변경합니다."
+msgstr "%s 'BOM에서 제외'를 '%s'에서 '%s'로 변경."
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -19969,14 +19885,12 @@ msgid "Rename the selected symbol"
 msgstr "선택한 심볼 이름 변경"
 
 #: eeschema/tools/ee_actions.cpp:203
-#, fuzzy
 msgid "Save Copy As..."
-msgstr "다른 이름으로 저장 (&S)..."
+msgstr "복사본 다른 이름으로 저장..."
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "현재 심볼을 다른 라이브러리에 저장합니다."
+msgstr "현재 심볼의 복사본을 다른 라이브러리에 저장합니다."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
@@ -20106,9 +20020,8 @@ msgid "Add Text Box"
 msgstr "텍스트 상자 추가"
 
 #: eeschema/tools/ee_actions.cpp:342
-#, fuzzy
 msgid "Add a text box item"
-msgstr "텍스트 항목 추가"
+msgstr "텍스트 상자 항목 추가"
 
 #: eeschema/tools/ee_actions.cpp:349 eeschema/tools/ee_actions.cpp:1306
 msgid "Add Lines"
@@ -20119,14 +20032,12 @@ msgid "Add connected graphic lines"
 msgstr "연결된 그래픽 라인 추가"
 
 #: eeschema/tools/ee_actions.cpp:358 pcbnew/tools/zone_create_helper.cpp:251
-#, fuzzy
 msgid "Add Polygon"
-msgstr "다각형"
+msgstr "다각형 추가"
 
 #: eeschema/tools/ee_actions.cpp:359
-#, fuzzy
 msgid "Draw polygons"
-msgstr "그래픽 폴리곤 그리기"
+msgstr "다각형 그리기"
 
 #: eeschema/tools/ee_actions.cpp:367
 msgid "Move Symbol Anchor"
@@ -20165,7 +20076,6 @@ msgid "Add Symbol"
 msgstr "심볼 추가"
 
 #: eeschema/tools/ee_actions.cpp:404
-#, fuzzy
 msgid "Add symbols"
 msgstr "심볼 추가"
 
@@ -20174,9 +20084,8 @@ msgid "Add Power"
 msgstr "전원 추가"
 
 #: eeschema/tools/ee_actions.cpp:415
-#, fuzzy
 msgid "Add power symbols"
-msgstr "전원 기호 추가"
+msgstr "전원 심볼 추가"
 
 #: eeschema/tools/ee_actions.cpp:425 eeschema/tools/sch_drawing_tools.cpp:950
 msgid "Add No Connect Flag"
@@ -20191,9 +20100,8 @@ msgid "Add Junction"
 msgstr "접합 추가"
 
 #: eeschema/tools/ee_actions.cpp:437
-#, fuzzy
 msgid "Draw junctions"
-msgstr "버스 접합부"
+msgstr "교차점 그리기"
 
 #: eeschema/tools/ee_actions.cpp:447 eeschema/tools/sch_drawing_tools.cpp:963
 msgid "Add Wire to Bus Entry"
@@ -20210,9 +20118,8 @@ msgid "Add Label"
 msgstr "라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:459
-#, fuzzy
 msgid "Draw net labels"
-msgstr "네트 라벨 추가"
+msgstr "네트 라벨 그리기"
 
 #: eeschema/tools/ee_actions.cpp:466
 msgid "Add Net Class Directive"
@@ -20227,7 +20134,6 @@ msgid "Add Hierarchical Label"
 msgstr "계층 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:477
-#, fuzzy
 msgid "Add hierarchical labels"
 msgstr "계층 라벨 추가"
 
@@ -20236,16 +20142,14 @@ msgid "Add Sheet"
 msgstr "시트 추가"
 
 #: eeschema/tools/ee_actions.cpp:487
-#, fuzzy
 msgid "Draw hierarchical sheets"
-msgstr "계층 시트 추가"
+msgstr "계층 시트 그리기"
 
 #: eeschema/tools/ee_actions.cpp:495
 msgid "Import Sheet Pin"
 msgstr "시트 핀 가져오기"
 
 #: eeschema/tools/ee_actions.cpp:496
-#, fuzzy
 msgid "Import hierarchical sheet pins"
 msgstr "계층 시트 핀 가져오기"
 
@@ -20254,35 +20158,30 @@ msgid "Add Global Label"
 msgstr "전역 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:506
-#, fuzzy
 msgid "Add global labels"
 msgstr "전역 라벨 추가"
 
 #: eeschema/tools/ee_actions.cpp:516
-#, fuzzy
 msgid "Draw text items"
-msgstr "기타 텍스트 항목"
+msgstr "텍스트 항목 그리기"
 
 #: eeschema/tools/ee_actions.cpp:524
-#, fuzzy
 msgid "Draw text box items"
-msgstr "텍스트 상자 항목 추가"
+msgstr "텍스트 상자 항목 그리기"
 
 #: eeschema/tools/ee_actions.cpp:532 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
 msgstr "직사각형 추가"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Draw rectangles"
-msgstr "직사각형 그리기"
+msgstr "사각형 그리기"
 
 #: eeschema/tools/ee_actions.cpp:541
 msgid "Add Circle"
 msgstr "원 추가"
 
 #: eeschema/tools/ee_actions.cpp:542
-#, fuzzy
 msgid "Draw circles"
 msgstr "원 그리기"
 
@@ -20291,7 +20190,6 @@ msgid "Add Arc"
 msgstr "호 추가"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Draw arcs"
 msgstr "원호 그리기"
 
@@ -20300,7 +20198,6 @@ msgid "Add Image"
 msgstr "이미지 추가"
 
 #: eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Add bitmap images"
 msgstr "비트맵 이미지 추가"
 
@@ -20571,9 +20468,8 @@ msgid "Highlight wires and pins of a net"
 msgstr "네트의 도선과 핀 강조"
 
 #: eeschema/tools/ee_actions.cpp:854
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "래츠네스트에서 네트 보기"
+msgstr "네트 탐색기 표시"
 
 #: eeschema/tools/ee_actions.cpp:855
 msgid "Toggle the net navigator panel visibility"
@@ -20588,37 +20484,30 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "심볼 편집기에서 선택한 심볼 열기"
 
 #: eeschema/tools/ee_actions.cpp:869
-#, fuzzy
 msgid "Exclude from Bill of Materials"
 msgstr "BOM에서 제외"
 
 #: eeschema/tools/ee_actions.cpp:870
-#, fuzzy
 msgid "Set the exclude from bill of materials attribute"
-msgstr "BOM에서 제외"
+msgstr "BOM에서 제외 속성 설정"
 
 #: eeschema/tools/ee_actions.cpp:875
-#, fuzzy
 msgid "Include in Bill of Materials"
-msgstr "BOM에서 제외"
+msgstr "BOM에 포함"
 
 #: eeschema/tools/ee_actions.cpp:876
-#, fuzzy
 msgid "Clear the exclude from bill of materials attribute"
-msgstr "BOM에서 제외"
+msgstr "BOM에서 제외 속성 지우기"
 
 #: eeschema/tools/ee_actions.cpp:881
-#, fuzzy
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "BOM에서 제외"
+msgstr "BOM에서 제외 토글"
 
 #: eeschema/tools/ee_actions.cpp:882
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "BOM에서 제외"
+msgstr "BOM에서 제외 속성 토글"
 
 #: eeschema/tools/ee_actions.cpp:887
-#, fuzzy
 msgid "Exclude from Simulation"
 msgstr "시뮬레이션에서 제외"
 
@@ -20627,25 +20516,22 @@ msgid "Set the exclude from simulation attribute"
 msgstr "시뮬레이션 속성에서 제외 설정"
 
 #: eeschema/tools/ee_actions.cpp:893
-#, fuzzy
 msgid "Include in Simulation"
-msgstr "시뮬레이션 상의 Spice 값"
+msgstr "시뮬레이션에 포함"
 
 #: eeschema/tools/ee_actions.cpp:894
 msgid "Clear the exclude from simulation attribute"
 msgstr "시뮬레이션에서 제외 속성 선택 취소"
 
 #: eeschema/tools/ee_actions.cpp:899
-#, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "시뮬레이션에서 제외"
+msgstr "시뮬레이션에서 제외 토글"
 
 #: eeschema/tools/ee_actions.cpp:900
 msgid "Toggle the exclude from simulation attribute"
 msgstr "시뮬레이션에서 제외 속성 토글"
 
 #: eeschema/tools/ee_actions.cpp:905
-#, fuzzy
 msgid "Exclude from Board"
 msgstr "기판에서 제외"
 
@@ -20654,18 +20540,16 @@ msgid "Set the exclude from board attribute"
 msgstr "보드에서 제외 속성 설정"
 
 #: eeschema/tools/ee_actions.cpp:911
-#, fuzzy
 msgid "Include on Board"
-msgstr "기판에서 제외"
+msgstr "기판에 포함"
 
 #: eeschema/tools/ee_actions.cpp:912
 msgid "Clear the exclude from board attribute"
 msgstr "보드에서 제외 속성 지우기"
 
 #: eeschema/tools/ee_actions.cpp:917
-#, fuzzy
 msgid "Toggle Exclude from Board"
-msgstr "기판에서 제외"
+msgstr "기판에서 제외 토글"
 
 #: eeschema/tools/ee_actions.cpp:918
 msgid "Toggle the exclude from board attribute"
@@ -20692,9 +20576,8 @@ msgid "Toggle Do Not Populate"
 msgstr "부착하지 않음 토글"
 
 #: eeschema/tools/ee_actions.cpp:937
-#, fuzzy
 msgid "Toggle the do not populate attribute"
-msgstr "풋프린트 필터"
+msgstr "부착하지 않음 속성 토글"
 
 #: eeschema/tools/ee_actions.cpp:944
 msgid "Open the library symbol in the Symbol Editor"
@@ -20820,21 +20703,19 @@ msgid "Generate Legacy Bill of Materials..."
 msgstr "기존 BOM 생성..."
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "회로도 BOM 생성"
+msgstr "현재 회로도에 대한 BOM 생성('기존 생성기')"
 
 #: eeschema/tools/ee_actions.cpp:1057
 msgid "Generate Bill of Materials (External)..."
 msgstr "BOM 생성(외부)..."
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "회로도 BOM 생성"
+msgstr "외부 생성기를 사용하여 현재 회로도에 대한 BOM 생성"
 
 #: eeschema/tools/ee_actions.cpp:1064
 msgid "Export Symbols to Library..."
@@ -20885,14 +20766,12 @@ msgid "Toggle display of hidden text fields"
 msgstr "비표시 텍스트 필드의 표시 전환"
 
 #: eeschema/tools/ee_actions.cpp:1100
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "지시문 레이블"
+msgstr "지시문 라벨 표시"
 
 #: eeschema/tools/ee_actions.cpp:1101
-#, fuzzy
 msgid "Toggle display of directive labels"
-msgstr "접착 레이어 표시 전환"
+msgstr "지시문 라벨 표시 토글"
 
 #: eeschema/tools/ee_actions.cpp:1106
 msgid "Show ERC Warnings"
@@ -20919,18 +20798,16 @@ msgid "Show markers for excluded electrical rules checker violations"
 msgstr "제외된 전기 규칙 검사기 위반에 대한 마커 표시"
 
 #: eeschema/tools/ee_actions.cpp:1124
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "페이지 표시 %s"
+msgstr "OP 전압 표시"
 
 #: eeschema/tools/ee_actions.cpp:1125
 msgid "Show operating point voltage data from simulation"
 msgstr "시뮬레이션에서 동작점 전압 데이터 표시"
 
 #: eeschema/tools/ee_actions.cpp:1130
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "커서 표시"
+msgstr "OP 전류 표시"
 
 #: eeschema/tools/ee_actions.cpp:1131
 msgid "Show operating point current data from simulation"
@@ -20964,9 +20841,8 @@ msgid "Annotate Automatically"
 msgstr "자동으로 주석 달기"
 
 #: eeschema/tools/ee_actions.cpp:1171
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "새 부품 기호에 대한 자동 주석 전환"
+msgstr "새 심볼의 자동 주석 토글"
 
 #: eeschema/tools/ee_actions.cpp:1177
 msgid "Repair Schematic"
@@ -21083,9 +20959,8 @@ msgid "Break a wire out of a bus"
 msgstr "버스에서 도선 끊기"
 
 #: eeschema/tools/ee_actions.cpp:1307
-#, fuzzy
 msgid "Draw graphic lines"
-msgstr "그래픽 원 추가"
+msgstr "그래픽 선 그리기"
 
 #: eeschema/tools/ee_actions.cpp:1316 pcbnew/tools/pcb_actions.cpp:2333
 msgid "Undo Last Segment"
@@ -21161,9 +21036,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "현재 플롯을 CSV로 내보내기 ..."
 
 #: eeschema/tools/ee_actions.cpp:1419
-#, fuzzy
 msgid "Show Legend"
-msgstr "범례 표시 (&L)"
+msgstr "범례 보기"
 
 #: eeschema/tools/ee_actions.cpp:1425
 msgid "Dotted Current/Phase"
@@ -21174,9 +21048,8 @@ msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr "점선으로 2차 신호 트레이스(전류 또는 위상) 그리기"
 
 #: eeschema/tools/ee_actions.cpp:1431
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "3D 모델"
+msgstr "암흑 모드 플롯"
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Draw plots with a black background"
@@ -21187,23 +21060,20 @@ msgid "Edit Analysis Tab..."
 msgstr "분석 탭 편집..."
 
 #: eeschema/tools/ee_actions.cpp:1438
-#, fuzzy
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "현재 개체의 마지막으로 추가된 점 삭제"
+msgstr "현재 분석 탭의 SPICE 명령 및 플롯 설정을 편집"
 
 #: eeschema/tools/ee_actions.cpp:1445
 msgid "Run Simulation"
 msgstr "시뮬레이터 실행"
 
 #: eeschema/tools/ee_actions.cpp:1451
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "시뮬레이션 실행/중지"
+msgstr "시뮬레이션 중지"
 
 #: eeschema/tools/ee_actions.cpp:1458
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "회로도 주석 달기..."
+msgstr "회로도 검사..."
 
 #: eeschema/tools/ee_actions.cpp:1459
 msgid "Add a simulator probe"
@@ -21238,9 +21108,8 @@ msgid "Symbol Warnings"
 msgstr "심볼 경고"
 
 #: eeschema/tools/ee_inspection_tool.cpp:263
-#, fuzzy
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
+msgstr "라이브러리에 해당하는 심볼과 비교할 심볼을 선택합니다."
 
 #: eeschema/tools/ee_inspection_tool.cpp:274
 #, c-format
@@ -21264,15 +21133,13 @@ msgstr "라이브러리: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:285
 #: pcbnew/tools/board_inspection_tool.cpp:1494
-#, fuzzy
 msgid "Library item: "
-msgstr "라이브러리 파일: "
+msgstr "라이브러리 항목: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #: pcbnew/tools/board_inspection_tool.cpp:1512
-#, fuzzy
 msgid "The library is not included in the current configuration."
-msgstr "라이브러리 '%s'이(가) 현재 구성에서 사용하도록 설정되어 있지 않습니다."
+msgstr "현재 설정에 라이브러리가 포함되어 있지 않습니다."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #: eeschema/tools/ee_inspection_tool.cpp:303
@@ -21281,9 +21148,8 @@ msgstr "심볼 라이브러리 관리"
 
 #: eeschema/tools/ee_inspection_tool.cpp:301
 #: pcbnew/tools/board_inspection_tool.cpp:1520
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
-msgstr "라이브러리 '%s'이(가) 현재 구성에서 사용하도록 설정되어 있지 않습니다."
+msgstr "현재 설정에는 라이브러리가 활성화되지 않았습니다."
 
 #: eeschema/tools/ee_inspection_tool.cpp:321
 #: pcbnew/tools/board_inspection_tool.cpp:1540
@@ -21293,13 +21159,11 @@ msgstr "라이브러리에 더 이상 %s 항목이 포함되어 있지 않습니
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 #: pcbnew/tools/board_inspection_tool.cpp:1546
-#, fuzzy
 msgid "No relevant differences detected."
-msgstr "레이어가 선택되지 않았습니다."
+msgstr "관련 차이점이 발견되지 않음."
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
 #: pcbnew/tools/board_inspection_tool.cpp:1548
-#, fuzzy
 msgid "Visual"
 msgstr "시각적"
 
@@ -21308,14 +21172,12 @@ msgid "No datasheet defined."
 msgstr "정의된 데이터시트가 없습니다."
 
 #: eeschema/tools/ee_point_editor.cpp:518
-#, fuzzy
 msgid "Move Point"
-msgstr "핀 이동"
+msgstr "지점 이동"
 
 #: eeschema/tools/ee_point_editor.cpp:1458
-#, fuzzy
 msgid "Add Corner"
-msgstr "전원 추가"
+msgstr "모서리 추가"
 
 #: eeschema/tools/sch_drawing_tools.cpp:285
 msgid "Press <ESC> to cancel symbol creation."
@@ -21364,9 +21226,8 @@ msgid "No new hierarchical labels found."
 msgstr "새 계층 라벨을 찾을 수 없습니다."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1579
-#, fuzzy
 msgid "Add Sheet Pin"
-msgstr "시트 추가"
+msgstr "시트 핀 추가"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1855
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:479
@@ -21388,19 +21249,16 @@ msgid "Symbol Unit"
 msgstr "심볼 단위"
 
 #: eeschema/tools/sch_edit_tool.cpp:126
-#, fuzzy
 msgid "Pin Function"
-msgstr "접합부"
+msgstr "핀 기능"
 
 #: eeschema/tools/sch_edit_tool.cpp:176
-#, fuzzy
 msgid "Pin Helpers"
-msgstr "핀 속성"
+msgstr "핀 도우미"
 
 #: eeschema/tools/sch_edit_tool.cpp:455
-#, fuzzy
 msgid "Transform Selection"
-msgstr "선택 항목 생성"
+msgstr "변환 선택"
 
 #: eeschema/tools/sch_edit_tool.cpp:497
 msgid "Edit Main Fields"
@@ -21427,7 +21285,6 @@ msgid "Label value cannot go below zero"
 msgstr "라벨 값은 0보다 작아서는 안 됩니다"
 
 #: eeschema/tools/sch_edit_tool.cpp:1322
-#, fuzzy
 msgid "Repeat Item"
 msgstr "반복 항목"
 
@@ -21448,9 +21305,8 @@ msgid "<empty>"
 msgstr "<비어있음>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2393
-#, fuzzy
 msgid "Slice Wire"
-msgstr "와이어 삭제"
+msgstr "선 분할"
 
 #: eeschema/tools/sch_edit_tool.cpp:2393
 msgid "Break Wire"
@@ -21471,19 +21327,16 @@ msgid "Edit Sheet Page Number"
 msgstr "시트 페이지 번호 편집"
 
 #: eeschema/tools/sch_edit_tool.cpp:2534
-#, fuzzy
 msgid "Set Attribute"
-msgstr "속성"
+msgstr "속성 설정"
 
 #: eeschema/tools/sch_edit_tool.cpp:2571
-#, fuzzy
 msgid "Clear Attribute"
-msgstr "속성"
+msgstr "속성 지우기"
 
 #: eeschema/tools/sch_edit_tool.cpp:2608
-#, fuzzy
 msgid "Toggle Attribute"
-msgstr "속성"
+msgstr "속성 전환"
 
 #: eeschema/tools/sch_editor_control.cpp:152
 #, c-format
@@ -21576,9 +21429,8 @@ msgid "Press <ESC> to cancel drawing."
 msgstr "<ESC>를 눌러 그리기를 취소하세요."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1220
-#, fuzzy
 msgid "Draw Wires"
-msgstr "와이어 끊기"
+msgstr "선 그리기"
 
 #: eeschema/tools/sch_move_tool.cpp:795
 msgid "Press <ESC> to cancel drag."
@@ -21591,9 +21443,8 @@ msgstr "<ESC>를 눌러 이동을 취소하세요."
 
 #: eeschema/tools/sch_move_tool.cpp:1751
 #: eeschema/tools/symbol_editor_move_tool.cpp:505
-#, fuzzy
 msgid "Align"
-msgstr "H 정렬"
+msgstr "정렬"
 
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
