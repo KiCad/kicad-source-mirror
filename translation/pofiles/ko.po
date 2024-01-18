@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-18 07:31+0000\n"
+"PO-Revision-Date: 2024-01-19 12:00+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -7706,7 +7706,7 @@ msgstr "3D 뷰어 창 표시"
 #: common/tool/actions.cpp:872 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:1104
 msgid "Symbol Library Browser"
-msgstr "심볼 라이브러리 브라우저"
+msgstr "심볼 라이브러리 탐색"
 
 #: common/tool/actions.cpp:873
 msgid "Browse symbol libraries"
@@ -12780,11 +12780,11 @@ msgstr "모델:"
 #: eeschema/dialogs/dialog_sim_model.cpp:557
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr "값 필드에 '%s (%s)' 매개 변수 저장"
+msgstr "매개변수 '%s (%s)'을 값 필드에 저장"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:565
 msgid "Save primary parameter in Value field"
-msgstr "값 필드에 기본 매개 변수 저장"
+msgstr "기본 매개변수를 값 필드에 저장"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:582
 #: pcbnew/footprint_wizard_frame.cpp:325
@@ -19615,7 +19615,7 @@ msgstr "(불러오기 실패하였습니다)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
 msgid "KiCad Symbol Library Browser"
-msgstr "KiCad 심볼 라이브러리 브라우저"
+msgstr "KiCad 심볼 라이브러리 탐색"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021
