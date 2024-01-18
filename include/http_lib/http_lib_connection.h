@@ -94,7 +94,8 @@ private:
 
     HTTP_LIB_SOURCE_TYPE m_sourceType;
 
-    HTTP_LIB_PART m_cached_part;
+    //          part.id     part
+    std::map<std::string, HTTP_LIB_PART> m_cachedParts;
 
     //        part.name               part.id     category.id
     std::map<std::string, std::tuple<std::string, std::string>> m_cache;

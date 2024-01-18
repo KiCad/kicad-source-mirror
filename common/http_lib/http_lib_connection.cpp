@@ -178,12 +178,16 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         return false;
     }
 
-    // if the same part is selected again and cache has not expired use cached part
-    // instead to minimise http requests.
-    if( m_cached_part.id == aPartID && ( std::difftime( std::time( nullptr ), m_cached_part.lastCached ) < m_timeout ) )
+    // Check if there is already a part in our cache, if not fetch it
+    if( m_cachedParts.find( aPartID ) != m_cachedParts.end() )
     {
-        aFetchedPart = m_cached_part;
-        return true;
+        // check if it's outdated, if so re-fetch
+        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached ) < m_timeout )
+        {
+            aFetchedPart = m_cachedParts[aPartID];
+            return true;
+        }
+
     }
 
     std::string res = "";
@@ -290,7 +294,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         return false;
     }
 
-    m_cached_part = aFetchedPart;
+    m_cachedParts[aFetchedPart.id] = aFetchedPart;
 
     return true;
 }

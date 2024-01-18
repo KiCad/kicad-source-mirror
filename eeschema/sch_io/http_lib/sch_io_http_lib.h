@@ -100,7 +100,7 @@ private:
 
     SYMBOL_LIB_TABLE* m_libTable;
 
-    std::map<std::string, std::vector<HTTP_LIB_PART>> m_cachedParts;
+    std::map<std::string, std::vector<HTTP_LIB_PART>> m_cachedCategoryParts;
 
      /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;

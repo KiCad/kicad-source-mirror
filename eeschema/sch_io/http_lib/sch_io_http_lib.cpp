@@ -70,7 +70,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
               && aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
 
     // clear buffer
-    m_cachedParts.clear();
+    m_cachedCategoryParts.clear();
 
     for(const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
     {
@@ -89,7 +89,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
         }
 
         // cache information for later use in LoadSymbol()
-        m_cachedParts.emplace( category.id, found_parts );
+        m_cachedCategoryParts.emplace( category.id, found_parts );
 
         for( const HTTP_LIB_PART& part : found_parts )
         {
@@ -147,7 +147,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString&        aLibraryPath,
     }
 
     // get the matching query ID
-    for( const HTTP_LIB_PART& part : m_cachedParts[foundCategory->id] )
+    for( const HTTP_LIB_PART& part : m_cachedCategoryParts[foundCategory->id] )
     {
         if( part.id == std::get<0>( relations ) )
         {
