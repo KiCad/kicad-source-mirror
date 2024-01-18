@@ -60,8 +60,6 @@ class PolygonTriangulation
 {
 public:
     PolygonTriangulation( SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult ) :
-        m_prefactor_x( 0.0 ),
-        m_prefactor_y( 0.0 ),
         m_result( aResult )
     {};
 
@@ -303,7 +301,7 @@ private:
 
         while( p != aStart )
         {
-            if( area( p->prev, p, p->next ) == 0.0 )
+            if( *p == *( p->next ) || area( p->prev, p, p->next ) == 0.0 )
             {
                 p = p->prev;
                 p->next->remove();
@@ -312,6 +310,7 @@ private:
                 if( p == p->next )
                     break;
             }
+
             p = p->next;
         };
 
@@ -474,7 +473,9 @@ private:
                 }
 
                 // If we don't have any NULL triangles left, cut the polygon in two and try again
-                splitPolygon( aPoint );
+                if( !splitPolygon( aPoint ) )
+                    return false;
+
                 break;
             }
         }
@@ -559,7 +560,7 @@ private:
      * independently.  This is assured to generate at least one new ear if the
      * split is successful
      */
-    void splitPolygon( Vertex* start )
+    bool splitPolygon( Vertex* start )
     {
         Vertex* origPoly = start;
 
@@ -577,9 +578,7 @@ private:
                     origPoly->updateList();
                     newPoly->updateList();
 
-                    earcutList( origPoly );
-                    earcutList( newPoly );
-                    return;
+                    return earcutList( origPoly ) && earcutList( newPoly );
                 }
 
                 marker = marker->next;
@@ -587,22 +586,31 @@ private:
 
             origPoly = origPoly->next;
         } while( origPoly != start );
+
+        return false;
     }
 
     /**
      * Check if a segment joining two vertices lies fully inside the polygon.
      * To do this, we first ensure that the line isn't along the polygon edge.
      * Next, we know that if the line doesn't intersect the polygon, then it is
-     * either fully inside or fully outside the polygon.  Finally, by checking whether
-     * the segment is enclosed by the local triangles, we distinguish between
-     * these two cases and no further checks are needed.
+     * either fully inside or fully outside the polygon.  Next, we ensure that
+     * the proposed split is inside the local area of the polygon at both ends
+     * and the midpoint. Finally, we check to split creates two new polygons,
+     * each with positive area.
      */
     bool goodSplit( const Vertex* a, const Vertex* b ) const
     {
-        return a->next->i != b->i &&
-               a->prev->i != b->i &&
-               !intersectsPolygon( a, b ) &&
-               locallyInside( a, b );
+        bool a_on_edge = ( a->nextZ && *a == *a->nextZ ) || ( a->prevZ && *a == *a->prevZ );
+        bool b_on_edge = ( b->nextZ && *b == *b->nextZ ) || ( b->prevZ && *b == *b->prevZ );
+        bool no_intersect = a->next->i != b->i && a->prev->i != b->i && !intersectsPolygon( a, b );
+        bool local_split = locallyInside( a, b ) && locallyInside( b, a ) && middleInside( a, b );
+        bool same_dir = area( a->prev, a, b->prev ) != 0.0 || area( a, b->prev, b ) != 0.0;
+        bool has_len = ( *a == *b ) && area( a->prev, a, a->next ) > 0 && area( b->prev, b, b->next ) > 0;
+
+
+        return no_intersect && local_split && ( same_dir || has_len ) && !a_on_edge && !b_on_edge;
+
     }
 
     /**
@@ -613,6 +621,23 @@ private:
         return ( q->y - p->y ) * ( r->x - q->x ) - ( q->x - p->x ) * ( r->y - q->y );
     }
 
+
+    constexpr int sign( double aVal ) const
+    {
+        return ( aVal > 0 ) - ( aVal < 0 );
+    }
+
+    /**
+     * If p, q, and r are collinear and r lies between p and q, then return true.
+    */
+    constexpr bool overlapping( const Vertex* p, const Vertex* q, const Vertex* r ) const
+    {
+        return q->x <= std::max( p->x, r->x ) &&
+               q->x >= std::min( p->x, r->x ) &&
+               q->y <= std::max( p->y, r->y ) &&
+               q->y >= std::min( p->y, r->y );
+    }
+
     /**
      * Check for intersection between two segments, end points included.
      *
@@ -620,11 +645,28 @@ private:
      */
     bool intersects( const Vertex* p1, const Vertex* q1, const Vertex* p2, const Vertex* q2 ) const
     {
-        if( ( *p1 == *q1 && *p2 == *q2 ) || ( *p1 == *q2 && *p2 == *q1 ) )
+        int sign1 = sign( area( p1, q1, p2 ) );
+        int sign2 = sign( area( p1, q1, q2 ) );
+        int sign3 = sign( area( p2, q2, p1 ) );
+        int sign4 = sign( area( p2, q2, q1 ) );
+
+        if( sign1 != sign2 && sign3 != sign4 )
             return true;
 
-        return ( area( p1, q1, p2 ) > 0 ) != ( area( p1, q1, q2 ) > 0 )
-                && ( area( p2, q2, p1 ) > 0 ) != ( area( p2, q2, q1 ) > 0 );
+        if( sign1 == 0 && overlapping( p1, p2, q1 ) )
+            return true;
+
+        if( sign2 == 0 && overlapping( p1, q2, q1 ) )
+            return true;
+
+        if( sign3 == 0 && overlapping( p2, p1, q2 ) )
+            return true;
+
+        if( sign4 == 0 && overlapping( p2, q1, q2 ) )
+            return true;
+
+
+        return false;
     }
 
     /**
@@ -666,6 +708,28 @@ private:
             return area( a, b, a->next ) >= 0 && area( a, a->prev, b ) >= 0;
         else
             return area( a, b, a->prev ) < 0 || area( a, a->next, b ) < 0;
+    }
+
+    /**
+     * Check to see if the segment halfway point between a and b is inside the polygon
+    */
+    bool middleInside( const Vertex* a, const Vertex* b ) const
+    {
+        const Vertex* p = a;
+        bool          inside = false;
+        double        px = ( a->x + b->x ) / 2;
+        double        py = ( a->y + b->y ) / 2;
+
+        do
+        {
+            if( ( ( p->y > py ) != ( p->next->y > py ) )
+                && ( px < ( p->next->x - p->x ) * ( py - p->y ) / ( p->next->y - p->y ) + p->x ) )
+                inside = !inside;
+
+            p = p->next;
+        } while( p != a );
+
+        return inside;
     }
 
     /**
