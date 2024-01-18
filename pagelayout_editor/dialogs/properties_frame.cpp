@@ -161,7 +161,7 @@ void PROPERTIES_FRAME::OnPageChanged( wxNotebookEvent& event )
 
 wxSize PROPERTIES_FRAME::GetMinSize() const
 {
-    return wxSize( 150, -1 );
+    return FromDIP( wxSize( 150, -1 ) );
 }
 
 
