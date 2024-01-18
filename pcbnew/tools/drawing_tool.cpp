@@ -1604,6 +1604,12 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     layer = newItems.front()->GetLayer();
 
+    if( !m_view->IsLayerVisible( layer ) )
+    {
+        m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+        m_frame->GetCanvas()->Refresh();
+    }
+
     m_view->Add( &preview );
 
     // Clear the current selection then select the drawings so that edit tools work on them
