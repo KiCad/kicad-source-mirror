@@ -108,7 +108,7 @@ public:
     /**
      * Update the contents of the menu based on the supplied conditions.
      */
-    void Evaluate( SELECTION& aSelection );
+    void Evaluate( const SELECTION& aSelection );
 
     /**
      * Update the initial contents so that wxWidgets doesn't get its knickers tied in a knot

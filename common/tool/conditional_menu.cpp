@@ -124,7 +124,7 @@ void CONDITIONAL_MENU::Resolve()
 }
 
 
-void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
+void CONDITIONAL_MENU::Evaluate( const SELECTION& aSelection )
 {
     Clear();
 

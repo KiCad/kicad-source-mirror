@@ -182,6 +182,22 @@ bool EDIT_TOOL::Init()
     std::shared_ptr<CONDITIONAL_MENU> shapeModificationSubMenu = makeShapeModificationMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( shapeModificationSubMenu );
 
+    auto positioningToolsCondition =
+            [&]( const SELECTION& aSel )
+            {
+                std::shared_ptr<CONDITIONAL_MENU> subMenu = makePositioningToolsMenu( this );
+                subMenu->Evaluate( aSel );
+                return subMenu->GetMenuItemCount() > 0;
+            };
+
+    auto shapeModificationCondition =
+            [&]( const SELECTION& aSel )
+            {
+                std::shared_ptr<CONDITIONAL_MENU> subMenu = makeShapeModificationMenu( this );
+                subMenu->Evaluate( aSel );
+                return subMenu->GetMenuItemCount() > 0;
+            };
+
     auto propertiesCondition =
             [&]( const SELECTION& aSel )
             {
@@ -337,8 +353,8 @@ bool EDIT_TOOL::Init()
 
     // Add the submenu for the special tools: modfiers and positioning tools
     menu.AddSeparator( 100 );
-    menu.AddMenu( shapeModificationSubMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
-    menu.AddMenu( positioningToolsSubMenu.get(),  SELECTION_CONDITIONS::NotEmpty, 100 );
+    menu.AddMenu( shapeModificationSubMenu.get(), shapeModificationCondition, 100 );
+    menu.AddMenu( positioningToolsSubMenu.get(),  positioningToolsCondition, 100 );
 
     menu.AddSeparator( 150 );
     menu.AddItem( ACTIONS::cut,                   SELECTION_CONDITIONS::NotEmpty, 150 );
