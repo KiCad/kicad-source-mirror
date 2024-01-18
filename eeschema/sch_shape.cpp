@@ -542,12 +542,12 @@ static struct SCH_SHAPE_DESC
         // On other shapes, these are duplicates of the Start properties.
         auto isPolygon =
                 []( INSPECTABLE* aItem ) -> bool
-        {
-            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
-                return shape->GetShape() == SHAPE_T::POLY;
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::POLY;
 
-            return false;
-        };
+                    return false;
+                };
 
         propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( SCH_ITEM ),
                                       _HKI( "Position X" ), isPolygon );
