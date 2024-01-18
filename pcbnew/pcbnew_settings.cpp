@@ -108,7 +108,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_AuiPanels.search_panel_width, -1 ) );
 
     m_params.emplace_back( new PARAM<int>( "aui.search_panel_dock_direction",
-            &m_AuiPanels.search_panel_dock_direction, 0 ) );
+            &m_AuiPanels.search_panel_dock_direction, 3 ) );
 
     m_params.emplace_back( new PARAM<int>( "aui.appearance_panel_tab",
             &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );

@@ -227,7 +227,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_AuiPanels.search_panel_width, -1 ) );
 
     m_params.emplace_back( new PARAM<int>( "aui.search_panel_dock_direction",
-            &m_AuiPanels.search_panel_dock_direction, 0 ) );
+            &m_AuiPanels.search_panel_dock_direction, 3 ) );
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_search",
             &m_AuiPanels.show_search, false ) );
