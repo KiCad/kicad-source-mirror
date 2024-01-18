@@ -204,10 +204,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .TopDockable( false )
                       .BottomDockable( false )
                       .CloseButton( true )
-                      .MinSize( 120, 60 )
-                      .BestSize( 200, 200 )
-                      .FloatingSize( 200, 200 )
-                      .FloatingPosition( 50, 50 )
+                      .MinSize( FromDIP( wxSize( 120, 60 ) ) )
+                      .BestSize( FromDIP( wxSize( 200, 200 ) ) )
+                      .FloatingSize( FromDIP( wxSize( 200, 200 ) ) )
+                      .FloatingPosition( FromDIP( wxPoint( 50, 50 ) ) )
                       .Show( false ) );
 
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo() );
@@ -229,9 +229,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Bottom()
                       .Caption( _( "Search" ) )
                       .PaneBorder( false )
-                      .MinSize( 180, 60 )
-                      .BestSize( 180, 100 )
-                      .FloatingSize( 480, 200 )
+                      .MinSize( FromDIP( wxSize( 180, 60 ) ) )
+                      .BestSize( FromDIP( wxSize( 180, 100 ) ) )
+                      .FloatingSize( FromDIP( wxSize( 480, 200 ) ) )
                       .CloseButton( true )
                       .DestroyOnClose( false )
                       .Show( m_show_search ) );
@@ -331,8 +331,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
         // back to minimum.
-        hierarchy_pane.MinSize( 120, 60 );
-        netNavigatorPane.MinSize( 120, 60 );
+        hierarchy_pane.MinSize( FromDIP( wxSize( 120, 60 ) ) );
+        netNavigatorPane.MinSize( FromDIP( wxSize( 120, 60 ) ) );
     }
     else
     {
