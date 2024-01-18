@@ -68,8 +68,6 @@ public:
     bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
     {
         m_bbox = aPoly.BBox();
-        m_prefactor_x = 32767.0 / m_bbox.GetWidth();
-        m_prefactor_y = 32767.0 / m_bbox.GetHeight();
         m_result.Clear();
 
         if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
@@ -275,8 +273,8 @@ private:
      */
     int32_t zOrder( const double aX, const double aY ) const
     {
-        int32_t x = static_cast<int32_t>( m_prefactor_x * ( aX - m_bbox.GetX() ) );
-        int32_t y = static_cast<int32_t>( m_prefactor_y * ( aY - m_bbox.GetY() ) );
+        int32_t x = static_cast<int32_t>( 32767.0 * ( aX - m_bbox.GetX() ) / m_bbox.GetWidth() );
+        int32_t y = static_cast<int32_t>( 32767.0 * ( aY - m_bbox.GetY() ) / m_bbox.GetHeight() );
 
         x = ( x | ( x << 8 ) ) & 0x00FF00FF;
         x = ( x | ( x << 4 ) ) & 0x0F0F0F0F;
@@ -305,7 +303,7 @@ private:
 
         while( p != aStart )
         {
-            if( *p == *( p->next ) || area( p->prev, p, p->next ) == 0.0 )
+            if( area( p->prev, p, p->next ) == 0.0 )
             {
                 p = p->prev;
                 p->next->remove();
@@ -314,7 +312,6 @@ private:
                 if( p == p->next )
                     break;
             }
-
             p = p->next;
         };
 
@@ -441,37 +438,25 @@ private:
                 continue;
             }
 
-            Vertex* p = next;
-            bool removed = false;
+            Vertex* nextNext = next->next;
 
-            do
+            if( *prev != *nextNext && intersects( prev, aPoint, next, nextNext ) &&
+                    locallyInside( prev, nextNext ) &&
+                    locallyInside( nextNext, prev ) )
             {
-                Vertex* nextNext = p->next->next;
-                prev = p->prev;
+                m_result.AddTriangle( prev->i, aPoint->i, nextNext->i );
 
-                if( *prev != *nextNext && intersects( prev, p, p->next, nextNext ) &&
-                        locallyInside( prev, nextNext ) &&
-                        locallyInside( nextNext, prev ) )
-                {
-                    m_result.AddTriangle( prev->i, p->i, nextNext->i );
+                // remove two nodes involved
+                next->remove();
+                aPoint->remove();
 
-                    // remove two nodes involved
-                    p->next->remove();
-                    p->remove();
+                aPoint = nextNext;
+                stop = nextNext;
 
-                    next = nextNext;
-                    p = nextNext;
-                    removed = true;
-                }
-
-                p = p->next;
-
-            } while ( p != next );
+                continue;
+            }
 
             aPoint = next;
-
-            if( removed )
-                continue;
 
             /*
              * We've searched the entire polygon for available ears and there are still
@@ -489,9 +474,7 @@ private:
                 }
 
                 // If we don't have any NULL triangles left, cut the polygon in two and try again
-                if ( !splitPolygon( aPoint ) )
-                    return false;
-
+                splitPolygon( aPoint );
                 break;
             }
         }
@@ -576,7 +559,7 @@ private:
      * independently.  This is assured to generate at least one new ear if the
      * split is successful
      */
-    bool splitPolygon( Vertex* start )
+    void splitPolygon( Vertex* start )
     {
         Vertex* origPoly = start;
 
@@ -584,29 +567,19 @@ private:
         {
             Vertex* marker = origPoly->next->next;
 
-            if( m_splits.count( origPoly ) )
-            {
-                origPoly = origPoly->next;
-                continue;
-            }
-
             while( marker != origPoly->prev )
             {
-                if( m_splits.count( marker ) )
-                {
-                    marker = marker->next;
-                    continue;
-                }
-
                 // Find a diagonal line that is wholly enclosed by the polygon interior
                 if( origPoly->i != marker->i && goodSplit( origPoly, marker ) )
                 {
                     Vertex* newPoly = origPoly->split( marker );
 
-                    m_splits.insert( origPoly );
-                    m_splits.insert( marker );
+                    origPoly->updateList();
+                    newPoly->updateList();
 
-                    return ( earcutList( origPoly ) && earcutList( newPoly ) );
+                    earcutList( origPoly );
+                    earcutList( newPoly );
+                    return;
                 }
 
                 marker = marker->next;
@@ -614,8 +587,6 @@ private:
 
             origPoly = origPoly->next;
         } while( origPoly != start );
-
-        return false;
     }
 
     /**
@@ -628,15 +599,10 @@ private:
      */
     bool goodSplit( const Vertex* a, const Vertex* b ) const
     {
-        bool a_on_edge = ( a->nextZ && *a == *a->nextZ ) || ( a->prevZ && *a == *a->prevZ );
-        bool b_on_edge = ( b->nextZ && *b == *b->nextZ ) || ( b->prevZ && *b == *b->prevZ );
-        bool no_intersect = a->next->i != b->i && a->prev->i != b->i && !intersectsPolygon( a, b );
-        bool local_split = locallyInside( a, b ) && locallyInside( b, a ) && middleInside( a, b );
-        bool same_dir = area( a->prev, a, b->prev ) != 0.0 || area( a, b->prev, b ) != 0.0;
-        bool has_len = ( *a == *b ) && area( a->prev, a, a->next ) > 0 && area( b->prev, b, b->next ) > 0;
-
-
-        return no_intersect && local_split && ( same_dir || has_len ) && !a_on_edge && !b_on_edge;
+        return a->next->i != b->i &&
+               a->prev->i != b->i &&
+               !intersectsPolygon( a, b ) &&
+               locallyInside( a, b );
     }
 
     /**
@@ -645,22 +611,6 @@ private:
     double area( const Vertex* p, const Vertex* q, const Vertex* r ) const
     {
         return ( q->y - p->y ) * ( r->x - q->x ) - ( q->x - p->x ) * ( r->y - q->y );
-    }
-
-    constexpr int sign( double aVal ) const
-    {
-        return ( aVal > 0 ) - ( aVal < 0 );
-    }
-
-    /**
-     * If p, q, and r are collinear and r lies between p and q, then return true.
-    */
-    constexpr bool overlapping( const Vertex* p, const Vertex* q, const Vertex* r ) const
-    {
-        return q->x <= std::max( p->x, r->x ) &&
-               q->x >= std::min( p->x, r->x ) &&
-               q->y <= std::max( p->y, r->y ) &&
-               q->y >= std::min( p->y, r->y );
     }
 
     /**
@@ -673,28 +623,8 @@ private:
         if( ( *p1 == *q1 && *p2 == *q2 ) || ( *p1 == *q2 && *p2 == *q1 ) )
             return true;
 
-        int sign1 = sign( area( p1, q1, p2 ) );
-        int sign2 = sign( area( p1, q1, q2 ) );
-        int sign3 = sign( area( p2, q2, p1 ) );
-        int sign4 = sign( area( p2, q2, q1 ) );
-
-        if( sign1 != sign2 && sign3 != sign4 )
-            return true;
-
-        if( sign1 == 0 && overlapping( p1, p2, q1 ) )
-            return true;
-
-        if( sign2 == 0 && overlapping( p1, q2, q1 ) )
-            return true;
-
-        if( sign3 == 0 && overlapping( p2, p1, q2 ) )
-            return true;
-
-        if( sign4 == 0 && overlapping( p2, q1, q2 ) )
-            return true;
-
-
-        return false;
+        return ( area( p1, q1, p2 ) > 0 ) != ( area( p1, q1, q2 ) > 0 )
+                && ( area( p2, q2, p1 ) > 0 ) != ( area( p2, q2, q1 ) > 0 );
     }
 
     /**
@@ -739,28 +669,6 @@ private:
     }
 
     /**
-     * Check to see if the segment halfway point between a and b is inside the polygon
-    */
-    bool middleInside( const Vertex* a, const Vertex* b ) const
-    {
-        const Vertex* p = a;
-        bool          inside = false;
-        double        px = ( a->x + b->x ) / 2;
-        double        py = ( a->y + b->y ) / 2;
-
-        do
-        {
-            if( ( ( p->y > py ) != ( p->next->y > py ) )
-                && ( px < ( p->next->x - p->x ) * ( py - p->y ) / ( p->next->y - p->y ) + p->x ) )
-                inside = !inside;
-
-            p = p->next;
-        } while( p != a );
-
-        return inside;
-    }
-
-    /**
      * Create an entry in the vertices lookup and optionally inserts the newly created vertex
      * into an existing linked list.
      *
@@ -790,10 +698,7 @@ private:
 
 private:
     BOX2I                                 m_bbox;
-    double                                m_prefactor_x;
-    double                                m_prefactor_y;
     std::deque<Vertex>                    m_vertices;
-    std::set<Vertex*>                     m_splits;
     SHAPE_POLY_SET::TRIANGULATED_POLYGON& m_result;
 };
 
