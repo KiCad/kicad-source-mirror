@@ -57,6 +57,9 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER
         DIALOG_PCM_BASE( parent ),
         m_pcm( pcm )
 {
+    // correct the min size from wxfb with fromdip
+    SetMinSize( FromDIP( GetMinSize() ) );
+
     SetDoubleBuffered( true );
 
     m_defaultBitmap = KiBitmap( BITMAPS::icon_pcm );

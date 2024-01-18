@@ -65,7 +65,7 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
     m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
                           NULL, this );
 
-    m_splitter1->SetPaneMinimums( 350, 450 );
+    m_splitter1->SetPaneMinimums( FromDIP( 350 ), FromDIP( 450 ) );
 
 #ifdef __WXGTK__
     // wxSearchCtrl vertical height is not calculated correctly on some GTK setups

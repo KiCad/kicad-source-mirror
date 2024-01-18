@@ -30,6 +30,9 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
         m_pinCallback( aPinCallback ),
         m_data( aData )
 {
+    // correct the min size from wxfb with fromdip
+    SetMinSize( FromDIP( GetMinSize() ) );
+
     // Propagate clicks on static elements to the panel handler.
     m_name->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE::OnClick ), NULL, this );
     m_desc->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE::OnClick ), NULL, this );
@@ -57,7 +60,7 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
     int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
     wxSize minSize = GetMinSize();
-    minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
+    minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + FromDIP( 15 ), m_minHeight );
     SetMinSize( minSize );
 
     m_splitButton->SetLabel( _( "Update" ) );
