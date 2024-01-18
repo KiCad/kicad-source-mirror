@@ -37,6 +37,11 @@ SCH_SEARCH_PANE::SCH_SEARCH_PANE( SCH_EDIT_FRAME* aFrame ) :
     m_schFrame->Connect( EDA_EVT_SCHEMATIC_CHANGED,
                          wxCommandEventHandler( SCH_SEARCH_PANE::onSchChanged ), nullptr, this );
 
+    m_schFrame->Bind( EDA_EVT_SCHEMATIC_CHANGING, [&]( wxCommandEvent& )
+                                                  {
+                                                      ClearAllResults();
+                                                  } );
+
     wxFont infoFont = KIUI::GetDockedPaneFont( this );
     SetFont( infoFont );
     m_notebook->SetFont( infoFont );

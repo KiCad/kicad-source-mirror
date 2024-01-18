@@ -137,6 +137,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
     }
 
+    wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGING );
+    ProcessEventLocally( e );
+
     // unload current project file before loading new
     {
         ClearUndoRedoList();
@@ -548,8 +551,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     UpdateHierarchyNavigator();
 
-    wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGED );
-    ProcessEventLocally( e );
+    wxCommandEvent changedEvt( EDA_EVT_SCHEMATIC_CHANGED );
+    ProcessEventLocally( changedEvt );
 
     for( wxEvtHandler* listener : m_schematicChangeListeners )
     {
@@ -1314,6 +1317,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     wxFileName             newfilename;
     SCH_SHEET_LIST         sheetList = Schematic().GetSheets();
     SCH_IO_MGR::SCH_FILE_T fileType = (SCH_IO_MGR::SCH_FILE_T) aFileType;
+
+    wxCommandEvent changingEvt( EDA_EVT_SCHEMATIC_CHANGING );
+    ProcessEventLocally( changingEvt );
 
     switch( fileType )
     {
