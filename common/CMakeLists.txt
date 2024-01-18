@@ -182,8 +182,11 @@ set( KICOMMON_SRCS
 if( KICAD_IPC_API )
     set( KICOMMON_SRCS
         ${KICOMMON_SRCS}
+        api/api_handler.cpp
+        api/api_handler_common.cpp
         api/api_plugin.cpp
         api/api_plugin_manager.cpp
+        api/api_server.cpp
 
         ../scripting/python_manager.cpp
     )
@@ -224,6 +227,12 @@ if( KICAD_USE_SENTRY )
         sentry )
 
     set_property(SOURCE pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
+endif()
+
+if( KICAD_IPC_API )
+    target_link_libraries( kicommon
+        kinng
+        )
 endif()
 
 include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
@@ -267,6 +276,7 @@ target_include_directories( kicommon
         ${CMAKE_BINARY_DIR}
         $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:expected,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
@@ -349,8 +359,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_mouse_settings_base.cpp
     dialogs/panel_packages_and_updates.cpp
     dialogs/panel_packages_and_updates_base.cpp
-    dialogs/panel_python_settings.cpp
-    dialogs/panel_python_settings_base.cpp
+    dialogs/panel_plugin_settings.cpp
+    dialogs/panel_plugin_settings_base.cpp
     dialogs/panel_setup_netclasses.cpp
     dialogs/panel_setup_netclasses_base.cpp
     dialogs/panel_setup_severities.cpp
@@ -691,7 +701,6 @@ add_dependencies( common pegtl )
 target_include_directories( common PUBLIC
     $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:expected,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 target_include_directories( common SYSTEM PUBLIC

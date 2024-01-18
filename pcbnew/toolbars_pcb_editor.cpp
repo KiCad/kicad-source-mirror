@@ -284,7 +284,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     // Add SWIG and API plugins
     bool scriptingAvailable = SCRIPTING::IsWxAvailable();
-    bool haveApiPlugins =
+    bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
             !Pgm().GetPluginManager().GetActionsForScope( PLUGIN_ACTION_SCOPE::PCB ).empty();
 
     if( scriptingAvailable || haveApiPlugins )

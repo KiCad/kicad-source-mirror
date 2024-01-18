@@ -309,7 +309,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
     {
         wxLogTrace( traceApi, wxString::Format( "Manager: creating Python env at %s",
                                                 job.env_path ) );
-        PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Python.interpreter_path );
+        PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
 
         manager.Execute( wxString::Format( wxS( "-m venv %s"), job.env_path ),
                 [=]( int aRetVal, const wxString& aOutput, const wxString& aError )

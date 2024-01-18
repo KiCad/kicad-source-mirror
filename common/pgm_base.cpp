@@ -77,6 +77,7 @@
 #ifdef KICAD_IPC_API
 #include <api/api_plugin_manager.h>
 #include <api/api_server.h>
+#include <python_manager.h>
 #endif
 
 /**
@@ -570,13 +571,20 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
         return false;
 
     // Set up built-in environment variables (and override them from the system environment if set)
-    GetCommonSettings()->InitializeEnvironment();
+    COMMON_SETTINGS* commonSettings = GetCommonSettings();
+    commonSettings->InitializeEnvironment();
 
     // Load color settings after env is initialized
     m_settings_manager->ReloadColorSettings();
 
     // Load common settings from disk after setting up env vars
-    GetSettingsManager().Load( GetCommonSettings() );
+    GetSettingsManager().Load( commonSettings );
+
+#ifdef KICAD_IPC_API
+    // If user doesn't have a saved Python interpreter, try (potentially again) to find one
+    if( commonSettings->m_Api.python_interpreter.IsEmpty() )
+        commonSettings->m_Api.python_interpreter = PYTHON_MANAGER::FindPythonInterpreter();
+#endif
 
     // Init user language *before* calling loadSettings, because
     // env vars could be incorrectly initialized on Linux

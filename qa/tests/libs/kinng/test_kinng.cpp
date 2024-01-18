@@ -18,6 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
+
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <kinng.h>
 
@@ -28,7 +31,7 @@ BOOST_AUTO_TEST_SUITE( KiNNG )
 
 BOOST_AUTO_TEST_CASE( CreateIPCResponder )
 {
-    KINNG_REQUEST_SERVER server;
+    KINNG_REQUEST_SERVER server( wxFileName::CreateTempFileName( "test-kinng" ).ToStdString() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

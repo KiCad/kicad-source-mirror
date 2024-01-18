@@ -18,7 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/panel_python_settings.h>
+#include <dialogs/panel_plugin_settings.h>
+#include <api/api_server.h>
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <python_manager.h>
@@ -26,70 +27,98 @@
 #include <settings/settings_manager.h>
 
 
-PANEL_PYTHON_SETTINGS::PANEL_PYTHON_SETTINGS( wxWindow* aParent ) :
-        PANEL_PYTHON_SETTINGS_BASE( aParent )
+PANEL_PLUGIN_SETTINGS::PANEL_PLUGIN_SETTINGS( wxWindow* aParent ) :
+        PANEL_PLUGIN_SETTINGS_BASE( aParent )
 {
     wxFont helpFont = KIUI::GetInfoFont( this ).Italic();
     m_stPythonStatus->SetFont( helpFont );
+    m_stApiStatus->SetFont( helpFont );
 }
 
 
-void PANEL_PYTHON_SETTINGS::ResetPanel()
+void PANEL_PLUGIN_SETTINGS::ResetPanel()
 {
 }
 
 
-bool PANEL_PYTHON_SETTINGS::TransferDataToWindow()
+bool PANEL_PLUGIN_SETTINGS::TransferDataToWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    COMMON_SETTINGS* settings = mgr.GetCommonSettings();
 
-    m_pickerPythonInterpreter->SetFileName( mgr.GetCommonSettings()->m_Python.interpreter_path );
-    validateInterpreter();
+    m_cbEnableApi->SetValue( settings->m_Api.enable_server );
+    m_pickerPythonInterpreter->SetFileName( settings->m_Api.python_interpreter );
+    validatePythonInterpreter();
+    updateApiStatusText();
 
     return true;
 }
 
 
-bool PANEL_PYTHON_SETTINGS::TransferDataFromWindow()
+bool PANEL_PLUGIN_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    COMMON_SETTINGS* settings = mgr.GetCommonSettings();
     wxString interpreter = m_pickerPythonInterpreter->GetTextCtrlValue();
 
-    if( m_interpreterValid || interpreter.IsEmpty() )
-        mgr.GetCommonSettings()->m_Python.interpreter_path = interpreter;
+    if( m_pythonInterpreterValid || interpreter.IsEmpty() )
+        settings->m_Api.python_interpreter = interpreter;
+
+    settings->m_Api.enable_server = m_cbEnableApi->GetValue();
 
     return true;
 }
 
 
-void PANEL_PYTHON_SETTINGS::OnPythonInterpreterChanged( wxFileDirPickerEvent& event )
+void PANEL_PLUGIN_SETTINGS::OnPythonInterpreterChanged( wxFileDirPickerEvent& event )
 {
-    validateInterpreter();
+    validatePythonInterpreter();
 }
 
 
-void PANEL_PYTHON_SETTINGS::OnBtnDetectAutomaticallyClicked( wxCommandEvent& aEvent )
+void PANEL_PLUGIN_SETTINGS::OnBtnDetectAutomaticallyClicked( wxCommandEvent& aEvent )
 {
-#ifdef __WXMSW__
-    // TODO(JE) where
-#else
-    wxArrayString output;
+    wxString interpreter = PYTHON_MANAGER::FindPythonInterpreter();
 
-    if( 0 == wxExecute( wxS( "which -a python" ), output, wxEXEC_SYNC ) )
+    if( !interpreter.IsEmpty() )
     {
-        if( !output.IsEmpty() )
-        {
-            m_pickerPythonInterpreter->SetPath( output[0] );
-            validateInterpreter();
-        }
+        m_pickerPythonInterpreter->SetPath( interpreter );
+        validatePythonInterpreter();
     }
-#endif
 }
 
 
-void PANEL_PYTHON_SETTINGS::validateInterpreter()
+void PANEL_PLUGIN_SETTINGS::OnEnableApiChecked( wxCommandEvent& aEvent )
 {
-    m_interpreterValid = false;
+    validatePythonInterpreter();
+    updateApiStatusText();
+}
+
+
+void PANEL_PLUGIN_SETTINGS::updateApiStatusText()
+{
+    if( m_cbEnableApi->GetValue() && Pgm().GetApiServer().Running() )
+    {
+        m_stApiStatus->SetLabel( wxString::Format( _( "Listening at %s" ),
+                                                      Pgm().GetApiServer().SocketPath() ) );
+    }
+    else
+    {
+        m_stApiStatus->SetLabel( wxEmptyString );
+    }
+}
+
+
+void PANEL_PLUGIN_SETTINGS::validatePythonInterpreter()
+{
+    if( !m_cbEnableApi->GetValue() )
+    {
+        m_stPythonStatus->SetLabel( _( "KiCad API is not enabled; external Python plugins will "
+                                       "not be available" ) );
+        return;
+    }
+
+    m_pythonInterpreterValid = false;
 
     wxFileName pythonExe( m_pickerPythonInterpreter->GetTextCtrlValue() );
 
@@ -110,7 +139,7 @@ void PANEL_PYTHON_SETTINGS::validateInterpreter()
                          if( aRetCode == 0 && aStdOut.Contains( wxS( "Python 3" ) ) )
                          {
                              msg = wxString::Format( _( "Found %s" ), aStdOut );
-                             m_interpreterValid = true;
+                             m_pythonInterpreterValid = true;
                          }
                          else
                          {

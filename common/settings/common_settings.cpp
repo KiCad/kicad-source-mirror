@@ -54,7 +54,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_DoNotShowAgain(),
         m_NetclassPanel(),
         m_PackageManager(),
-        m_Python()
+        m_Api()
 {
     /*
      * Automatic dark mode detection works fine on Mac.
@@ -398,8 +398,11 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "git.useDefaultAuthor",
             &m_Git.useDefaultAuthor, true ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "python.interpreter_path",
-            &m_Python.interpreter_path, wxS( "" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "api.interpreter_path",
+            &m_Api.python_interpreter, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "api.enable_server",
+            &m_Api.enable_server, false ) );
 
     registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
     registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );

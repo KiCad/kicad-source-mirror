@@ -21,14 +21,17 @@
 #include <wx/app.h>
 #include <wx/datetime.h>
 #include <wx/event.h>
+#include <wx/stdpaths.h>
 
 #include <advanced_config.h>
+#include <api/api_plugin_manager.h> // traceApi
 #include <api/api_server.h>
 #include <api/api_handler_common.h>
 #include <kiid.h>
 #include <kinng.h>
 #include <paths.h>
 #include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <string_utils.h>
 
 #include <api/common/envelope.pb.h>
@@ -47,9 +50,43 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
         m_token( KIID().AsStdString() ),
         m_readyToReply( false )
 {
-    m_server = std::make_unique<KINNG_REQUEST_SERVER>();
+    if( !Pgm().GetCommonSettings()->m_Api.enable_server )
+    {
+        wxLogTrace( traceApi, "Server: disabled by user preferences." );
+        return;
+    }
+
+    wxFileName socket;
+#ifdef __WXMAC__
+    socket.AssignDir( wxS( "/tmp" ) );
+#else
+    socket.AssignDir( wxStandardPaths::Get().GetTempDir() );
+#endif
+    socket.AppendDir( wxS( "kicad" ) );
+    socket.SetFullName( wxS( "api.sock" ) );
+
+    if( !PATHS::EnsurePathExists( socket.GetPath() ) )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Server: socket path %s could not be created",
+                                                socket.GetPath() ) );
+        return;
+    }
+
+    if( socket.FileExists() )
+    {
+        socket.SetFullName( wxString::Format( wxS( "api-%ul.sock" ), ::wxGetProcessId() ) );
+
+        if( socket.FileExists() )
+        {
+            wxLogTrace( traceApi, wxString::Format( "Server: PID socket path %s already exists!",
+                                                    socket.GetFullPath() ) );
+            return;
+        }
+    }
+
+    m_server = std::make_unique<KINNG_REQUEST_SERVER>(
+            fmt::format( "ipc://{}", socket.GetFullPath().ToStdString() ) );
     m_server->SetCallback( [&]( std::string* aRequest ) { onApiRequest( aRequest ); } );
-    m_socketPath = m_server->SocketPath();
 
     m_commonHandler = std::make_unique<API_HANDLER_COMMON>();
     RegisterHandler( m_commonHandler.get() );
@@ -60,7 +97,8 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
     if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
         PATHS::EnsurePathExists( PATHS::GetLogsPath() );
 
-    log( "--- KiCad API server started ---\n" );
+    log( fmt::format( "--- KiCad API server started at {} ---\n", SocketPath() ) );
+    wxLogTrace( traceApi, wxString::Format( "Server: listening at %s", SocketPath() ) );
 
     Bind( API_REQUEST_EVENT, &KICAD_API_SERVER::handleApiEvent, this );
 }
@@ -68,6 +106,12 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
 
 KICAD_API_SERVER::~KICAD_API_SERVER()
 {
+}
+
+
+bool KICAD_API_SERVER::Running() const
+{
+    return m_server && m_server->Running();
 }
 
 
@@ -81,6 +125,12 @@ void KICAD_API_SERVER::RegisterHandler( API_HANDLER* aHandler )
 void KICAD_API_SERVER::DeregisterHandler( API_HANDLER* aHandler )
 {
     m_handlers.erase( aHandler );
+}
+
+
+std::string KICAD_API_SERVER::SocketPath() const
+{
+    return m_server ? m_server->SocketPath() : "";
 }
 
 

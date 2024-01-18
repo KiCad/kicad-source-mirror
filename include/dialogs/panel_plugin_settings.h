@@ -18,18 +18,18 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PANEL_PYTHON_SETTINGS_H
-#define KICAD_PANEL_PYTHON_SETTINGS_H
+#ifndef KICAD_PANEL_PLUGIN_SETTINGS_H
+#define KICAD_PANEL_PLUGIN_SETTINGS_H
 
-#include <dialogs/panel_python_settings_base.h>
+#include <dialogs/panel_plugin_settings_base.h>
 
 class PAGED_DIALOG;
 
 
-class PANEL_PYTHON_SETTINGS : public PANEL_PYTHON_SETTINGS_BASE
+class PANEL_PLUGIN_SETTINGS : public PANEL_PLUGIN_SETTINGS_BASE
 {
 public:
-    PANEL_PYTHON_SETTINGS( wxWindow* aParent );
+    PANEL_PLUGIN_SETTINGS( wxWindow* aParent );
 
     void ResetPanel() override;
 
@@ -39,11 +39,13 @@ protected:
 
     void OnPythonInterpreterChanged( wxFileDirPickerEvent& event ) override;
     void OnBtnDetectAutomaticallyClicked( wxCommandEvent& aEvent ) override;
+    void OnEnableApiChecked( wxCommandEvent& aEvent ) override;
 
 private:
-    void validateInterpreter();
+    void updateApiStatusText();
+    void validatePythonInterpreter();
 
-    bool m_interpreterValid;
+    bool m_pythonInterpreterValid;
 };
 
-#endif //KICAD_PANEL_PYTHON_SETTINGS_H
+#endif //KICAD_PANEL_PLUGIN_SETTINGS_H

@@ -32,7 +32,7 @@
 #include <dialogs/panel_common_settings.h>
 #include <dialogs/panel_mouse_settings.h>
 #include <dialogs/panel_data_collection.h>
-#include <dialogs/panel_python_settings.h>
+#include <dialogs/panel_plugin_settings.h>
 #include <eda_dde.h>
 #include <file_history.h>
 #include <id.h>
@@ -1237,7 +1237,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         }
 
 #ifdef KICAD_IPC_API
-        book->AddPage( new PANEL_PYTHON_SETTINGS( book ), _( "Python Scripting" ) );
+        book->AddPage( new PANEL_PLUGIN_SETTINGS( book ), _( "Plugins" ) );
 #endif
 
         // Update all of the action hotkeys. The process of loading the actions through

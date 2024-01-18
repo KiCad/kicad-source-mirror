@@ -44,6 +44,8 @@ public:
 
     ~KICAD_API_SERVER();
 
+    bool Running() const;
+
     /**
      * Adds a new request handler to the server.  Each handler maintains its own list of API
      * messages that it knows how to handle, and the server will pass every incoming message to all
@@ -60,7 +62,7 @@ public:
 
     void SetReadyToReply( bool aReady = true ) { m_readyToReply = aReady; }
 
-    const std::string& SocketPath() const { return m_socketPath; }
+    std::string SocketPath() const;
 
     const std::string& Token() const { return m_token; }
 
@@ -86,8 +88,6 @@ private:
     std::unique_ptr<KINNG_REQUEST_SERVER> m_server;
 
     std::set<API_HANDLER*> m_handlers;
-
-    std::string m_socketPath;
 
     std::string m_token;
 

@@ -31,13 +31,15 @@
 class KINNG_REQUEST_SERVER
 {
 public:
-    KINNG_REQUEST_SERVER();
+    KINNG_REQUEST_SERVER( const std::string& aSocketUrl );
 
     ~KINNG_REQUEST_SERVER();
 
     bool Start();
 
     void Stop();
+
+    bool Running() const;
 
     void SetCallback( std::function<void(std::string*)> aFunc ) { m_callback = aFunc; }
 

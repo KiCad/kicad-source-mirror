@@ -21,18 +21,12 @@
 #include <kinng.h>
 #include <nng/nng.h>
 #include <nng/protocol/reqrep0/rep.h>
-#include <nng/protocol/reqrep0/req.h>
 
 
-KINNG_REQUEST_SERVER::KINNG_REQUEST_SERVER() :
+KINNG_REQUEST_SERVER::KINNG_REQUEST_SERVER( const std::string& aSocketUrl ) :
+        m_socketUrl( aSocketUrl ),
         m_callback()
 {
-#ifdef WIN32
-    m_socketUrl = "ipc://\\.\\pipe\\kicad";
-#else
-    m_socketUrl = "ipc:///tmp/kicad.sock";
-#endif
-
     Start();
 }
 
@@ -40,6 +34,12 @@ KINNG_REQUEST_SERVER::KINNG_REQUEST_SERVER() :
 KINNG_REQUEST_SERVER::~KINNG_REQUEST_SERVER()
 {
     Stop();
+}
+
+
+bool KINNG_REQUEST_SERVER::Running() const
+{
+    return m_thread.joinable();
 }
 
 

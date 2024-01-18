@@ -166,9 +166,10 @@ public:
         wxString                    authorEmail;
     };
 
-    struct PYTHON
+    struct API
     {
-        wxString interpreter_path;
+        wxString python_interpreter;
+        bool enable_server;
     };
 
     COMMON_SETTINGS();
@@ -223,7 +224,7 @@ public:
 
     GIT m_Git;
 
-    PYTHON m_Python;
+    API m_Api;
 };
 
 #endif
