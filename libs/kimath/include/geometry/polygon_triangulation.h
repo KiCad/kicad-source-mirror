@@ -489,7 +489,7 @@ private:
                 }
 
                 // If we don't have any NULL triangles left, cut the polygon in two and try again
-                if ( !splitPolygon( aPoint ) )
+                if( !splitPolygon( aPoint ) )
                     return false;
 
                 break;
@@ -662,9 +662,10 @@ private:
      * Check if a segment joining two vertices lies fully inside the polygon.
      * To do this, we first ensure that the line isn't along the polygon edge.
      * Next, we know that if the line doesn't intersect the polygon, then it is
-     * either fully inside or fully outside the polygon.  Finally, by checking whether
-     * the segment is enclosed by the local triangles, we distinguish between
-     * these two cases and no further checks are needed.
+     * either fully inside or fully outside the polygon.  Next, we ensure that
+     * the proposed split is inside the local area of the polygon at both ends
+     * and the midpoint. Finally, we check to split creates two new polygons,
+     * each with positive area.
      */
     bool goodSplit( const Vertex* a, const Vertex* b ) const
     {
@@ -710,9 +711,6 @@ private:
      */
     bool intersects( const Vertex* p1, const Vertex* q1, const Vertex* p2, const Vertex* q2 ) const
     {
-        if( ( *p1 == *q1 && *p2 == *q2 ) || ( *p1 == *q2 && *p2 == *q1 ) )
-            return true;
-
         int sign1 = sign( area( p1, q1, p2 ) );
         int sign2 = sign( area( p1, q1, q2 ) );
         int sign3 = sign( area( p2, q2, p1 ) );
