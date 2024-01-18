@@ -1504,14 +1504,14 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> selectedItems;     // the group, or newItems if no group
     PCB_SELECTION            preview;
     BOARD_COMMIT             commit( m_frame );
+    PCB_GROUP*               group = nullptr;
     PICKED_ITEMS_LIST        groupUndoList;
     PCB_LAYER_ID             layer = F_Cu;
 
-    PCB_GROUP* group = dlg.ShouldGroupItems() ? new PCB_GROUP( m_frame->GetModel() )
-                                              : nullptr;
-
-    if( group )
+    if( dlg.ShouldGroupItems() )
     {
+        group = new PCB_GROUP( m_frame->GetModel() );
+
         newItems.push_back( group );
         selectedItems.push_back( group );
         preview.Add( group );
@@ -1542,20 +1542,28 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.release() );
         wxCHECK2( item, continue );
 
+        newItems.push_back( item );
+
         if( group )
+        {
             group->AddItem( item );
+            groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
+        }
         else
         {
-            newItems.push_back( item );
             selectedItems.push_back( item );
         }
-
-        groupUndoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
 
         layer = item->GetLayer();
 
         preview.Add( item );
     }
+
+    // Clear the current selection then select the drawings so that edit tools work on them
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
+    EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &selItems );
 
     if( !dlg.IsPlacementInteractive() )
     {
@@ -1570,13 +1578,13 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    if( !m_view->IsLayerVisible( layer ) )
+    {
+        m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+        m_frame->GetCanvas()->Refresh();
+    }
+
     m_view->Add( &preview );
-
-    // Clear the current selection then select the drawings so that edit tools work on them
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-
-    EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &selItems );
 
     m_frame->PushTool( aEvent );
 
