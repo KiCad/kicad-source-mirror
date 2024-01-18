@@ -1177,63 +1177,53 @@ static struct EDA_TEXT_DESC
         const wxString textProps = _( "Text Properties" );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ),
-                                                               &EDA_TEXT::SetText,
-                                                               &EDA_TEXT::GetText ),
-                             textProps );
+                &EDA_TEXT::SetText, &EDA_TEXT::GetText ),
+                textProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, int>( _HKI( "Font" ),
-                                                               &EDA_TEXT::SetFontIndex,
-                                                               &EDA_TEXT::GetFontIndex ),
-                             textProps )
-                .SetIsHiddenFromRulesEditor();
+                &EDA_TEXT::SetFontIndex, &EDA_TEXT::GetFontIndex ),
+                textProps )
+            .SetIsHiddenFromRulesEditor();
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
-                                                          &EDA_TEXT::SetTextThickness,
-                                                          &EDA_TEXT::GetTextThickness,
-                                                          PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps );
+                &EDA_TEXT::SetTextThickness, &EDA_TEXT::GetTextThickness,
+                PROPERTY_DISPLAY::PT_SIZE ),
+                textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ),
-                                                         &EDA_TEXT::SetItalic,
-                                                         &EDA_TEXT::IsItalic ),
-                             textProps );
+                &EDA_TEXT::SetItalic,
+                &EDA_TEXT::IsItalic ),
+                textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Bold" ),
-                                                         &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ),
-                             textProps );
+                &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ),
+                textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ),
-                                                         &EDA_TEXT::SetMirrored,
-                                                         &EDA_TEXT::IsMirrored ),
-                             textProps );
+                &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ),
+                textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ),
-                                                         &EDA_TEXT::SetVisible,
-                                                         &EDA_TEXT::IsVisible ),
-                             textProps );
+                &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ),
+                textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
-                                                          &EDA_TEXT::SetTextWidth,
-                                                          &EDA_TEXT::GetTextWidth,
-                                                          PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps );
+                &EDA_TEXT::SetTextWidth, &EDA_TEXT::GetTextWidth,
+                PROPERTY_DISPLAY::PT_SIZE ),
+                textProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ),
-                                                          &EDA_TEXT::SetTextHeight,
-                                                          &EDA_TEXT::GetTextHeight,
-                                                          PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps );
+                &EDA_TEXT::SetTextHeight, &EDA_TEXT::GetTextHeight,
+                PROPERTY_DISPLAY::PT_SIZE ),
+                textProps );
 
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT,
-                             GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
-                                                 &EDA_TEXT::SetHorizJustify,
-                                                 &EDA_TEXT::GetHorizJustify ),
-                             textProps );
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT,
-                             GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
-                                                 &EDA_TEXT::SetVertJustify,
-                                                 &EDA_TEXT::GetVertJustify ),
-                             textProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_H_ALIGN_T>(
+                _HKI( "Horizontal Justification" ),
+                &EDA_TEXT::SetHorizJustify, &EDA_TEXT::GetHorizJustify ),
+                textProps );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_V_ALIGN_T>(
+                _HKI( "Vertical Justification" ),
+                &EDA_TEXT::SetVertJustify, &EDA_TEXT::GetVertJustify ),
+                textProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ),
-                                                               &EDA_TEXT::SetHyperlink,
-                                                               &EDA_TEXT::GetHyperlink ),
-                             textProps );
+                &EDA_TEXT::SetHyperlink, &EDA_TEXT::GetHyperlink ),
+                textProps );
     }
 } _EDA_TEXT_DESC;
 
