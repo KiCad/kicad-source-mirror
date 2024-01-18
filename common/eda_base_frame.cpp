@@ -76,28 +76,28 @@ wxDEFINE_EVENT( EDA_EVT_UNITS_CHANGED, wxCommandEvent );
 
 
 // Minimum window size
-static const wxSize minSize( FRAME_T aFrameType )
+static const wxSize minSizeLookup( FRAME_T aFrameType, wxWindow* aWindow )
 {
     switch( aFrameType )
     {
     case KICAD_MAIN_FRAME_T:
-        return wxSize( 406, 354 );
+        return wxWindow::FromDIP( wxSize( 406, 354 ), aWindow );
 
     default:
-        return wxSize( 500, 400 );
+        return wxWindow::FromDIP( wxSize( 500, 400 ), aWindow );
     }
 }
 
 
-static const wxSize defaultSize( FRAME_T aFrameType )
+static const wxSize defaultSize( FRAME_T aFrameType, wxWindow* aWindow )
 {
     switch( aFrameType )
     {
     case KICAD_MAIN_FRAME_T:
-        return wxSize( 850, 540 );
+        return wxWindow::FromDIP( wxSize( 850, 540 ), aWindow );
 
     default:
-        return wxSize( 1280, 720 );
+        return wxWindow::FromDIP( wxSize( 1280, 720 ), aWindow );
     }
 }
 
@@ -135,7 +135,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_autoSaveTimer     = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_autoSaveRequired  = false;
     m_mruPath           = PATHS::GetDefaultUserProjectsPath();
-    m_frameSize         = defaultSize( aFrameType );
+    m_frameSize         = defaultSize( aFrameType, this );
     m_displayIndex      = -1;
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
@@ -143,7 +143,8 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_settingsManager = &Pgm().GetSettingsManager();
 
     // Set a reasonable minimal size for the frame
-    SetSizeHints( minSize( aFrameType ).x, minSize( aFrameType ).y, -1, -1, -1, -1 );
+    wxSize minSize = minSizeLookup( aFrameType, this );
+    SetSizeHints( minSize.x, minSize.y, -1, -1, -1, -1 );
 
     // Store dimensions of the user area of the main window.
     GetClientSize( &m_frameSize.x, &m_frameSize.y );
@@ -626,9 +627,10 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // Ensure minimum size is set if the stored config was zero-initialized
-    if( m_frameSize.x < minSize( m_ident ).x || m_frameSize.y < minSize( m_ident ).y )
+    wxSize minSize = minSizeLookup( m_ident, this );
+    if( m_frameSize.x < minSize.x || m_frameSize.y < minSize.y )
     {
-        m_frameSize = defaultSize( m_ident );
+        m_frameSize = defaultSize( m_ident, this );
         wasDefault  = true;
 
         wxLogTrace( traceDisplayLocation, wxS( "Using minimum size (%d, %d)" ),
