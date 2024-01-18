@@ -38,7 +38,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	bSizerFile->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerMain->Add( bSizerFile, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerMain->Add( bSizerFile, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 3, 5, 3 );
@@ -81,13 +81,16 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	fgSizer3->Add( m_dxfUnitsChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( fgSizer3, 0, wxBOTTOM|wxEXPAND, 5 );
+	bSizerMain->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerMain->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerMain->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
 
 	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 5, 3 );
+	gbSizer2 = new wxGridBagSizer( 0, 0 );
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -132,7 +135,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_yUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yUnits->Wrap( -1 );
-	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_setLayerCheckbox = new wxCheckBox( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_setLayerCheckbox->SetValue(true);
@@ -147,10 +150,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	gbSizer2->AddGrowableCol( 2 );
 	gbSizer2->AddGrowableCol( 4 );
 
-	bSizerMain->Add( gbSizer2, 0, wxBOTTOM|wxEXPAND, 5 );
-
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerMain->Add( gbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerGroupOpt;
 	bSizerGroupOpt = new wxBoxSizer( wxVERTICAL );
@@ -159,13 +159,13 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	m_cbGroupItems->SetValue(true);
 	m_cbGroupItems->SetToolTip( _("Add all imported items to a new group") );
 
-	bSizerGroupOpt->Add( m_cbGroupItems, 0, wxLEFT|wxTOP, 5 );
+	bSizerGroupOpt->Add( m_cbGroupItems, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+
+	bSizerMain->Add( bSizerGroupOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerGroupOpt->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
-
-
-	bSizerMain->Add( bSizerGroupOpt, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_staticline3, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -177,17 +177,17 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_toleranceLabel = new wxStaticText( this, wxID_ANY, _("Tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_toleranceLabel->Wrap( -1 );
-	bSizer11->Add( m_toleranceLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 20 );
+	bSizer11->Add( m_toleranceLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
 
 	m_toleranceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	bSizer11->Add( m_toleranceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+	bSizer11->Add( m_toleranceCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_toleranceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_toleranceUnits->Wrap( -1 );
 	bSizer11->Add( m_toleranceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerMain->Add( bSizer11, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
+	bSizerMain->Add( bSizer11, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 
 	bSizerMain->Add( 0, 3, 1, wxEXPAND, 5 );

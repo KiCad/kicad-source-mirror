@@ -65,7 +65,6 @@ class DIALOG_IMPORT_GRAPHICS_BASE : public DIALOG_SHIM
 		wxStaticText* m_yUnits;
 		wxCheckBox* m_setLayerCheckbox;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
-		wxStaticLine* m_staticline1;
 		wxCheckBox* m_cbGroupItems;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_rbFixDiscontinuities;
