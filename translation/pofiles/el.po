@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-15 02:12+0000\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -18424,9 +18424,8 @@ msgstr ""
 "έκδοση;"
 
 #: eeschema/tools/sch_editor_control.cpp:336
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Ενημέρωση συμβόλων σχηματικού ώστε να αναφέρουν τη νέα βιβλιοθήκη;"
+msgstr "Συμπερίληψη συμβόλων ισχύος σχηματικού στη βιβλιοθήκη;"
 
 #: eeschema/tools/sch_editor_control.cpp:401
 #, c-format
