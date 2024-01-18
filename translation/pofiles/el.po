@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-18 07:31+0000\n"
+"PO-Revision-Date: 2024-01-19 12:00+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -8139,7 +8139,6 @@ msgstr ""
 "επιτάχυνσης υλικού του KiCad)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
 msgstr "Εμφάνιση Πλέγματος"
 
@@ -14184,7 +14183,7 @@ msgstr "Προκαθορισμένο μέγεθος κειμένου:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
 #, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Λόγος απόκλισης ετικέτας:"
+msgstr "Αναλογία απόκλισης Overbar:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -14200,9 +14199,8 @@ msgstr ""
 "το καλώδιο, δίαυλο ή ακροδέκτη"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Περιθώριο καθολικής ετικέτας:"
+msgstr "Αναλογία περιθωρίου καθολικής ετικέτας:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -14240,7 +14238,7 @@ msgstr "Μέγιστο"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
 #, fuzzy
 msgid "Connection grid:"
-msgstr "Σύνδεσμος:"
+msgstr "Πλέγμα συνδέσεων:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14302,9 +14300,8 @@ msgstr ""
 "Το μήκος της παύλας και της τελείας είναι σε αναλογία με το πάχος γραμμής."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:279
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "Σημείο Λειτουργίας"
+msgstr "Επικάλυψη Σημείου Λειτουργίας"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
@@ -14564,13 +14561,12 @@ msgid "Add Anyway"
 msgstr "Προσθήκη Ούτως ή Άλλως"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:852
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
 "Επιλέξτε μία ή περισσότερες σειρές του πίνακα που περιέχουν βιβλιοθήκες "
-"παλαιού τύπου για αποθήκευση με την τρέχουσα μορφή (* .kicad_sym)."
+"παλαιού τύπου για αποθήκευση με την τρέχουσα μορφή (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:860
 #, c-format
@@ -15722,9 +15718,8 @@ msgid "Pos Y"
 msgstr "Θέση Ψ"
 
 #: eeschema/lib_pin.cpp:1210
-#, fuzzy
 msgid "Flags"
-msgstr "σημαίες"
+msgstr "Σημάνσεις"
 
 #: eeschema/lib_pin.cpp:1426
 #, c-format
@@ -16997,11 +16992,9 @@ msgid "Error retriving data from HTTP library %s: %s"
 msgstr "Σφάλμα κατά την ανάκτηση δεδομένων από τη βιβλιοθήκη HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid"
-msgstr ""
-"Αδυναμία φόρτωσης βιβλιοθήκης βάσης δεδομένων: το αρχείο ρυθμίσεων %s λείπει "
-"ή είναι εσφαλμένο"
+msgstr "Λείπει το αρχείο ρυθμίσεων βιβλιοθήκης HTTP %s ή δεν είναι έγκυρο"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:227
 #, c-format
@@ -18919,14 +18912,12 @@ msgid "Amplitude"
 msgstr "Πλάτος"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
-#, fuzzy
 msgid "Noise (V/√Hz)"
-msgstr "Noise (V/√Hz)"
+msgstr "Θόρυβος (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
-#, fuzzy
 msgid "Noise (A/√Hz)"
-msgstr "Noise (A/√Hz)"
+msgstr "Θόρυβος (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 msgid "Intensity"
@@ -19043,22 +19034,18 @@ msgid "Measure RMS"
 msgstr "Μέτρηση Ενεργού Τιμής"
 
 #: eeschema/sim/simulator_frame_ui.cpp:149
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Μέτρηση Peak-to-peak"
+msgstr "Μέτρηση Κορυφή με κορυφή"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Min"
 msgstr "Μέτρηση Συχνότητας του Ελαχ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
-#, fuzzy
 msgid "Measure Frequency of Max"
 msgstr "Μέτρηση Συχνότητας του Μεγ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:158
-#, fuzzy
 msgid "Measure Time of Min"
 msgstr "Μέτρηση Χρόνου του Ελαχ"
 
@@ -19067,7 +19054,6 @@ msgid "Measure Time of Max"
 msgstr "Μέτρηση Χρόνου του Μεγ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:162
-#, fuzzy
 msgid "Measure Integral"
 msgstr "Μέτρηση Ολοκληρώματος"
 
@@ -19092,9 +19078,8 @@ msgid "Fourier Analyses of Multiple Signals"
 msgstr "Ανάλυση Fourier σε Πολλαπλά Σήματα"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "Συχνότητα σήματος:"
+msgstr "Θεμελιώδης συχνότητα:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
 #, c-format
@@ -19205,7 +19190,7 @@ msgstr "Σημείο Λειτουργίας DC"
 #: eeschema/sim/spice_simulator.cpp:58
 #, fuzzy
 msgid "Small-Signal Analysis"
-msgstr "Ανάλυση Μεταβατικής Απόκρισης"
+msgstr "Ανάλυση Μικρού Σήματος"
 
 #: eeschema/sim/spice_simulator.cpp:59
 msgid "DC Sweep Analysis"
@@ -19218,7 +19203,7 @@ msgstr "Ανάλυση Μεταβατικής Απόκρισης"
 #: eeschema/sim/spice_simulator.cpp:61
 #, fuzzy
 msgid "Small-Signal Distortion Analysis"
-msgstr "Small-Signal Distortion Analysis"
+msgstr "Ανάλυση Παραμόρφωσης Μικρού-Σήματος"
 
 #: eeschema/sim/spice_simulator.cpp:62
 msgid "Noise Analysis"
@@ -19241,9 +19226,8 @@ msgid "S-Parameter Analysis"
 msgstr "Ανάλυση S-Parameter"
 
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Frequency Content Analysis"
-msgstr "Συχνότητα του σήματος εισόδου"
+msgstr "Ανάλυση Συχνότητας Περιεχομένου"
 
 #: eeschema/sim/spice_value.cpp:378
 msgid "Please, fill required fields"
@@ -19501,12 +19485,10 @@ msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr "<b>Το ορθογώνιο γραφικών έχει μέγεθος 0</b> στη θέση <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Επιλογή Συμβόλου"
+msgstr "Επιλογέας Συμβόλου"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
 msgstr "Πρόγραμμα Προβολής Διαφορών Συμβόλων KiCad"
 
@@ -20087,7 +20069,7 @@ msgid "Change %s 'Do not populate' from '%s' to '%s'."
 msgstr "Αλλαγή %s 'Να Μην Τοποθετηθεί' από '%s' σε '%s'."
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Αλλαγή %s 'Εξαίρεση από Λίστα Υλικών' από '%s' σε '%s'."
 
@@ -20205,9 +20187,8 @@ msgid "Create a new symbol"
 msgstr "Δημιουργία νέου συμβόλου"
 
 #: eeschema/tools/ee_actions.cpp:175
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Να προέλθει από Υπάρχον Σύμβολο"
+msgstr "Να Προέλθει από Υπάρχον Σύμβολο"
 
 #: eeschema/tools/ee_actions.cpp:176
 msgid "Create a new symbol, derived from an existing symbol"
@@ -21067,7 +21048,6 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "Δημιουργία λίστας υλικών για το τρέχον σχηματικό"
 
 #: eeschema/tools/ee_actions.cpp:1050
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
 msgstr "Δημιουργία Προγενέστερης Λίστας Υλικών..."
 
@@ -21426,23 +21406,22 @@ msgstr ""
 "Σχεδίαση ίχνους του δευτερεύον σήματος (ρεύμα ή φάση) με διακεκομμένη γραμμή"
 
 #: eeschema/tools/ee_actions.cpp:1431
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "Dark Mode Plots"
+msgstr "Σχεδιογραφήσεις Σκούρου Θέματος"
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Draw plots with a black background"
 msgstr "Σχεδίαση σχεδιαγραφίσεων με μαύρο φόντο"
 
 #: eeschema/tools/ee_actions.cpp:1437
-#, fuzzy
 msgid "Edit Analysis Tab..."
 msgstr "Επεξεργασία Καρτέλας Ανάλυσης..."
 
 #: eeschema/tools/ee_actions.cpp:1438
-#, fuzzy
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "Διαγραφή του τελευταίου σημείου που προστέθηκε στο τρέχον αντικείμενο"
+msgstr ""
+"Επεξεργασία εντολής SPICE και ρύθμιση σχεδιογράφησης της τρέχουσας καρτέλας "
+"ανάλυσης"
 
 #: eeschema/tools/ee_actions.cpp:1445
 msgid "Run Simulation"
@@ -21455,7 +21434,7 @@ msgstr "Τερματισμός Προσομοίωσης"
 #: eeschema/tools/ee_actions.cpp:1458
 #, fuzzy
 msgid "Probe Schematic..."
-msgstr "Ονοματοδοσία Σχηματικού..."
+msgstr "Επισκόπηση Σχηματικού..."
 
 #: eeschema/tools/ee_actions.cpp:1459
 msgid "Add a simulator probe"
@@ -21492,9 +21471,8 @@ msgid "Symbol Warnings"
 msgstr "Προειδοποιήσεις Συμβόλου"
 
 #: eeschema/tools/ee_inspection_tool.cpp:263
-#, fuzzy
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "Έλεγχος αποτυπωμάτων πλακέτας σε σχέση με τη βιβλιοθήκη..."
+msgstr "Επιλέξτε ένα σύμβολο για έλεγχο διαφορών με αντιστοιχία βιβλιοθήκης."
 
 #: eeschema/tools/ee_inspection_tool.cpp:274
 #, c-format
@@ -21833,7 +21811,7 @@ msgstr "Πατήστε <ESC> για ακύρωση μετακίνησης."
 #: eeschema/tools/sch_move_tool.cpp:1751
 #: eeschema/tools/symbol_editor_move_tool.cpp:505
 msgid "Align"
-msgstr "Στοίχιση"
+msgstr "Ευθυγράμμιση"
 
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
@@ -23344,7 +23322,6 @@ msgid "Report all errors for each track"
 msgstr "Αναφορά όλων των σφαλμάτων των διαδρόμων"
 
 #: kicad/cli/command_pcb_drc.cpp:60 kicad/cli/command_sch_erc.cpp:55
-#, fuzzy
 msgid "Report units; valid options: in, mm, mils"
 msgstr "Μονάδες αναφοράς, έγκυρες επιλογές: in, mm, mils"
 
@@ -23417,9 +23394,8 @@ msgid "Use Drill Origin for output origin"
 msgstr "Χρήση αρχικού σημείου διάτρησης ως αρχικό σημείο εξόδου"
 
 #: kicad/cli/command_pcb_export_3d.cpp:85
-#, fuzzy
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
-msgstr "Εξαίρεση 3Δ μοντέλων εξαρτημάτων με τύπο 'Απροσδιόριστο'"
+msgstr "Εξαίρεση 3Δ μοντέλων εξαρτημάτων με τύπο αποτυπώματος 'Απροσδιόριστο'"
 
 #: kicad/cli/command_pcb_export_3d.cpp:91
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
@@ -23740,9 +23716,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
-#, fuzzy
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "Εξαίρεση όλων των εξαρτημάτων με σημείωση Να Μην Τοποθετηθεί"
+msgstr "Εξαίρεση όλων των αποτυπωμάτων με σημείωση Να Μην Τοποθετηθεί"
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
 msgid "Include board edge layer (Gerber only)"
@@ -23854,9 +23829,8 @@ msgstr ""
 "cadstar, orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_sch_export_plot.cpp:64
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις pcbnew)"
+msgstr "Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις σχηματικού)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
 msgid "Do not generate property popups in PDF"
@@ -23906,9 +23880,10 @@ msgid "Exports the symbol or entire symbol library to SVG"
 msgstr "Εξαγωγή συμβόλου ή βιβλιοθήκης σε SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
-#, fuzzy
 msgid "Color theme to use (will default to symbol editor settings)"
-msgstr "Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις pcbnew)"
+msgstr ""
+"Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις επεξεργαστή "
+"συμβόλου)"
 
 #: kicad/cli/command_sym_export_svg.cpp:54
 msgid "Specific symbol to export within the library"
@@ -23936,9 +23911,8 @@ msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr "Εξαναγκάζει την επαναποθήκευση της βιβλιοθήκης ανεξαρτήτως έκδοσης"
 
 #: kicad/cli/command_sym_upgrade.cpp:59
-#, fuzzy
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "Το αρχείο του συμβόλου δεν υπάρχει ή δεν είναι προσβάσιμο\n"
+msgstr "Η βιβλιοθήκη του συμβόλου δεν υπάρχει ή δεν είναι προσβάσιμη\n"
 
 #: kicad/cli/command_version.cpp:35
 msgid "Reports the version info in various formats"
@@ -25084,10 +25058,9 @@ msgid "Failed to update HEAD reference for branch '%s'"
 msgstr "Αποτυχία ενημέρωσης αναφοράς HEAD του κλάδου '%s'"
 
 #: kicad/project_tree_pane.cpp:1818
-#, fuzzy
 msgid "Are you sure you want to remove git tracking from this project?"
 msgstr ""
-"Είστε βέβαιοι ότι θέλετε να καταργήσετε την παρακολούθηση git από αυτό το "
+"Είστε βέβαιοι ότι θέλετε να καταργήσετε το ιστορικό από το git σε αυτό το "
 "έργο;"
 
 #: kicad/project_tree_pane.cpp:1835
@@ -25108,9 +25081,9 @@ msgid "Failed to get repository index: %s"
 msgstr "Αδυναμία ανάλυσης αποθετηρίου: %s"
 
 #: kicad/project_tree_pane.cpp:2169
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Αποτυχία προσθήκης αρχείου στο index: '%s'"
+msgstr "Αποτυχία προσθήκης αρχείου στο index: %s"
 
 #: kicad/project_tree_pane.cpp:2177
 #, c-format
@@ -25118,12 +25091,12 @@ msgid "Failed to write index: %s"
 msgstr "Αποτυχία εγγραφής ευρετηρίου: %s"
 
 #: kicad/project_tree_pane.cpp:2184
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Αποτυχία δημιουργίας tree: %s"
+msgstr "Αποτυχία εγγραφής tree: %s"
 
 #: kicad/project_tree_pane.cpp:2193
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
 msgstr "Αποτυχία ανεύρεσης tree: %s"
 
@@ -25133,7 +25106,7 @@ msgid "Failed to get HEAD reference: %s"
 msgstr "Αδυναμία λήψης αναφοράς HEAD: %s"
 
 #: kicad/project_tree_pane.cpp:2208
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
 msgstr "Αποτυχία λήψης commit: %s"
 
@@ -25143,7 +25116,7 @@ msgid "Failed to create author signature: %s"
 msgstr "Αποτυχία δημιουργίας υπογραφής συγγραφέα: %s"
 
 #: kicad/project_tree_pane.cpp:2234
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
 msgstr "Αποτυχία δημιουργίας commit: %s"
 
@@ -25268,7 +25241,6 @@ msgid "Clone Project from Git Repository"
 msgstr "Αντιγραφή Έργου από Αποθετήριο Git"
 
 #: kicad/tools/kicad_manager_control.cpp:187
-#, fuzzy
 msgid "Cloning Repository"
 msgstr "Αντιγραφή Αποθετηρίου"
 
@@ -29353,9 +29325,8 @@ msgid "Pre-defined Sizes"
 msgstr "Προκαθορισμένα μεγέθη"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
-#, fuzzy
 msgid "Length-tuning Patterns"
-msgstr "Μικρο-ρύθμιση Μήκους Δρόμου"
+msgstr "Μοτίβα συντονισμού Μήκους"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -30092,30 +30063,30 @@ msgid "Horizontal spacing:"
 msgstr "Οριζόντια απόσταση:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
-#, fuzzy
 msgid "Distance between columns"
-msgstr "Μέτρηση απόστασης ανάμεσα σε δύο σημεία"
+msgstr "Απόσταση μεταξύ στηλών"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
 msgid "Vertical spacing:"
 msgstr "Κάθετη απόσταση:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
-#, fuzzy
 msgid "Distance between rows"
-msgstr "Απόσταση μεταξύ ταινίας και πάνω μετάλου"
+msgstr "Απόσταση μεταξύ σειρών"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
+#, fuzzy
 msgid "Grid Spacing Modifiers"
-msgstr ""
+msgstr "Τροποποιητές Απόστασης Πλέγματος"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal offset:"
 msgstr "Οριζόντια Μετατόπιση:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:107
+#, fuzzy
 msgid "Offset added to the next row position."
-msgstr ""
+msgstr "Η μετατόπιση προστέθηκε στη θέση της επόμενης σειράς."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Vertical offset:"
@@ -30123,7 +30094,7 @@ msgstr "Κάθετη Μετατόπιση:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Offset added to the next column position"
-msgstr ""
+msgstr "Η μετατόπιση προστέθηκε στη θέση της επόμενης στήλης"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
 #, fuzzy
@@ -30227,12 +30198,10 @@ msgstr ""
 "ή τη θέση της ομάδας προς διπλασιασμό"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Ref point pos X:"
 msgstr "Σημείο Αναφοράς θέσης Χ:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:300
-#, fuzzy
 msgid "Ref point pos Y:"
 msgstr "Σημείο Αναφοράς θέσης Ψ:"
 
@@ -30242,12 +30211,10 @@ msgid "Circular array params"
 msgstr "Συστοιχία σε Κύκλο"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:320
-#, fuzzy
 msgid "Set center by position"
 msgstr "Ορισμός κέντρου με βάση τη θέση"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:324
-#, fuzzy
 msgid "Set center by radius"
 msgstr "Ορισμός κέντρου με βάση την ακτίνα"
 
@@ -30260,12 +30227,10 @@ msgstr ""
 "ορίζοντας την κυκλική περιοχή που πρέπει να δημιουργηθεί"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
 msgstr "Κέντρο θέση Χ:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
-#, fuzzy
 msgid "Center pos Y:"
 msgstr "Κέντρο θέση Ψ:"
 
@@ -30949,9 +30914,8 @@ msgid "manufacturer"
 msgstr "κατασκευαστής"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:140
-#, fuzzy
 msgid "mfg"
-msgstr "meg"
+msgstr "mfg"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
@@ -31000,12 +30964,10 @@ msgstr ""
 "Αυτός ο αριθμός πρέπει να είναι μοναδικός για κάθε εξάρτημα."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
-#, fuzzy
 msgid "Generate Unique"
 msgstr "Δημιουργία Μοναδικού"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
-#, fuzzy
 msgid "Manufacturer P/N:"
 msgstr "P/N Κατασκευαστή:"
 
@@ -31209,17 +31171,17 @@ msgstr ""
 "συμβατότητα με άλλο λογισμικό."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
+#, fuzzy
 msgid "Fuse shapes (time consuming)"
-msgstr ""
+msgstr "Συγχώνευση σχημάτων (χρονοβόρο)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
 msgstr "Συνδυασμός τεμνόμενης γεωμετρίας σε ένα σχήμα."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "Εξαγωγή Εξαρτήματος"
+msgstr "Εξαγωγή ως Σύνθετο σχήμα"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:153
 msgid ""
@@ -31575,14 +31537,12 @@ msgid "Library Association"
 msgstr "Συσχετισμός Βιβλιοθηκών"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "Επεξεργαστής Σχηματικού"
+msgstr "Συσχετισμός Σχηματικού"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "Αρχείο Συσχέτισης Αποτυπωμάτων"
+msgstr "Συσχετισμοί Αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -32566,9 +32526,8 @@ msgid "Remove teardrops"
 msgstr "Αφαίρεση teardrops"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
-#, fuzzy
 msgid "Edit default values in Board Setup"
-msgstr "Ορισμός προκαθορισμένων τιμών και επιλογών Επεξεργαστή Εξαρτημάτων"
+msgstr "Επεξεργασία προκαθορισμένων τιμών στο Ρύθμιση Πλακέτας"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:141
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
@@ -32645,9 +32604,8 @@ msgstr "Βέλτιστο ύψος:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:517
-#, fuzzy
 msgid "Curved edges"
-msgstr "Καμπύλη"
+msgstr "Καμπυλωμένες άκρες"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
@@ -32741,9 +32699,8 @@ msgid "Upright"
 msgstr "Όρθιο"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:341
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "Ορισμός στις προκαθορισμένες τιμές επιπέδου:"
+msgstr "Ορισμός προκαθορισμένων τιμών επιπέδου και διάστασης:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:343
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:258
@@ -32772,9 +32729,8 @@ msgid "PCB text items"
 msgstr "Αντικείμενα κειμένου PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "Γραμμή Διάστασης"
+msgstr "Αντικείμενα διαστασιολόγησης PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "Filter items by parent footprint library id:"
@@ -32988,9 +32944,8 @@ msgid "Teardrop defaults"
 msgstr "Προκαθορισμένα δακρύων"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Length-tuning pattern defaults"
-msgstr "Μικρο-ρύθμιση Μήκους Δρόμου"
+msgstr "Προκαθορισμένα μοτίβων ρύθμισης μήκους"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
 msgid "Custom rules"
@@ -33452,9 +33407,8 @@ msgstr "Μέγεθος τρύπας Χ:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:79
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
-#, fuzzy
 msgid "d"
-msgstr "%"
+msgstr "d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
@@ -33470,7 +33424,6 @@ msgstr "Μέγεθος Pad Χ:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:439
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:479
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:530
-#, fuzzy
 msgid "w"
 msgstr "w"
 
@@ -33747,11 +33700,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr ""
+"Χρησιμοποιήστε το Επεξεργασία > Επεξεργασία Δακρύων για να εφαρμόσετε "
+"αυτόματα δάκρυα."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
-#, fuzzy
 msgid "Add teardrops on pad's track connections"
-msgstr "Εφαρμογή teardrops σε έδρες εντός ζώνης"
+msgstr "Προσθήκη δακρύων σε συνδέσεις διαδρόμων εδρών"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
@@ -35054,9 +35008,8 @@ msgid "Start, end, and connected layers"
 msgstr "Αρχικά, τελικά και συνδεδεμένα επίπεδα"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
-#, fuzzy
 msgid "Add teardrops on via's track connections"
-msgstr "Προσθήκη δακρύων σε διελεύσεις και έδρες με τρύπες"
+msgstr "Προσθήκη δακρύων σε συνδέσεις διαδρόμων διελεύσεων"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
@@ -35124,7 +35077,6 @@ msgstr "Μέγιστο πλάτος (A):"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:66
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:195
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:330
-#, fuzzy
 msgid "Spacing (s):"
 msgstr "Απόσταση (s):"
 
@@ -35260,9 +35212,9 @@ msgid "Drag (free angle)"
 msgstr "Σύρσιμο (ελεύθερη γωνία)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid "Flip board items left/right (default is top/bottom)"
-msgstr "Αντιστροφή αντικειμένων πλακέτας Αρ/Δε (το προκαθοσριμένο είναι Πα/Κα)"
+msgstr ""
+"Αντιστροφή αντικειμένων πλακέτας Αριστερά/Δεξιά (προκαθοσριμένο Πάνω/Κάτω)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 msgid "Allow free pads"
@@ -35440,32 +35392,32 @@ msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Απαγορευμένος χαρακτήρας «%c» στο ψευδώνυμο «%s»."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:811
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
-"Επιλέξτε μία ή περισσότερες σειρές του πίνακα που περιέχουν βιβλιοθήκες "
-"παλαιού τύπου για αποθήκευση με την τρέχουσα μορφή (* .kicad_sym)."
+"Επιλέξτε μία ή περισσότερες σειρές του πίνακα βιβλιοθηκών παλαιού τύπου για "
+"αποθήκευση με την τρέχουσα μορφή."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:819
-#, fuzzy, c-format
+#, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr ""
-"Αποθήκευση '%s' με την τρέχουσα μορφή (* .kicad_sym) και αντικατάσταση της "
-"καταχώρισης παλαιού τύπου στον πίνακα;"
+"Αποθήκευση '%s' με την τρέχουσα μορφή και αντικατάσταση της καταχώρισης "
+"παλαιού τύπου στον πίνακα;"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:825
-#, fuzzy, c-format
+#, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
-"Αποθήκευση %d βιβλιοθηκών παλαιού τύπου ως τρέχουσα μορφή (* .kicad_sym) και "
+"Αποθήκευση %d βιβλιοθηκών παλαιού τύπου με την τρέχουσα μορφή και "
 "αντικατάσταση των καταχωρήσεων παλαιού τύπου στον πίνακα;"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:855
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "Ο φάκελος '%s' υπάρχει ήδη. Να αντικατασταθεί;"
+msgstr ""
+"Ο φάκελος '%s' υπάρχει ήδη. Να αντικατασταθούν τα υπάρχοντα αποτυπώματα;"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:885
 #, c-format
@@ -35571,7 +35523,7 @@ msgstr "Προβολή διάκενου έδρας"
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
 #, fuzzy
 msgid "Show all fields when parent footprint is selected"
-msgstr "Επισήμανση συμβόλων κατα την επιλογή αποτυπωμάτων"
+msgstr "Επισήμανση όλων των πεδίων όταν επιλεγεί γονικό αποτύπωμα"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
 #, fuzzy
@@ -37587,9 +37539,8 @@ msgstr ""
 "org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default properties for round shapes:"
-msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
+msgstr "Προκαθορισμένες ιδιότητες για κυκλικά σχήματα:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:38
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:218
@@ -37623,9 +37574,8 @@ msgid "Allow teardrop to span two track segments"
 msgstr "Να επιτρέπεται σε δάκρυα να εκτείνονται σε δύο τμήματα διαδρομής"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:199
-#, fuzzy
 msgid "Default properties for rectangular shapes:"
-msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
+msgstr "Προκαθορισμένες ιδιότητες για παραλληλόγραμμα σχήματα:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:379
 msgid "Properties for track-to-track teardrops:"
@@ -37650,9 +37600,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr "Οι διάδρομοι που έχουν παρόμοιο μέγεθος δεν χρειάζονται δάκρυα."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphics and text:"
-msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
+msgstr "Προκαθορισμένες ιδιότητες νέων στοιχείων γραφικών και κειμένου:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
@@ -37734,9 +37683,8 @@ msgid "Default properties for single-track tuning:"
 msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default properties for differential-pairs:"
-msgstr "Προκαθορισμένες ιδιότητες για νέα στοιχεία γραφικών:"
+msgstr "Προκαθορισμένες ιδιότητες για διαφορικά ζεύγη:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:283
 msgid "Default properties for differential-pair skews:"
@@ -37796,7 +37744,7 @@ msgstr "netclass '%s'"
 #: pcbnew/drc/drc_engine.cpp:353
 #, fuzzy, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "netclass '%s'"
+msgstr "κλάση δικτύου '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 msgid "keepout area"
@@ -37916,9 +37864,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "Έλεγχος %s πλάτος διαδρόμου: ιδανικό %s."
 
 #: pcbnew/drc/drc_engine.cpp:980
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Έλεγχος %s πλάτος διαδρόμου: ιδανικό %s."
+msgstr "Έλεγχος %s πλάτος διαδρόμου: ελάχ %s."
 
 #: pcbnew/drc/drc_engine.cpp:988
 #, c-format
@@ -37931,9 +37879,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "Έλεγχος %s διάμετρος διέλευσης: ιδανικού %s."
 
 #: pcbnew/drc/drc_engine.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Έλεγχος %s διάμετρος διέλευσης: ιδανικού %s."
+msgstr "Έλεγχος %s διάμετρος διέλευσης: ελάχ %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
 #, c-format
@@ -37941,9 +37889,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "Έλεγχος %s μεγέθους οπών: ιδανικό %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Έλεγχος %s μεγέθους οπών: ιδανικό %s."
+msgstr "Έλεγχος %s μεγέθους οπών: ελάχ %s."
 
 #: pcbnew/drc/drc_engine.cpp:1027
 #, c-format
@@ -37956,14 +37904,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "Έλεγχος %s διακένου διαφορικού ζεύγους: ιδανικό %s."
 
 #: pcbnew/drc/drc_engine.cpp:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "Έλεγχος %s διάκενο: %s."
+msgstr "Έλεγχος %s διάκενο: ελάχ %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Έλεγχος %s μεγέθους οπών: ιδανικό %s."
+msgstr "Έλεγχος %s οπής με οπή: ελάχ %s."
 
 #: pcbnew/drc/drc_engine.cpp:1055 pcbnew/drc/drc_engine.cpp:1081
 #: pcbnew/drc/drc_engine.cpp:1525
@@ -37977,14 +37925,13 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Έλεγχος %s: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:1091
-#, fuzzy
 msgid "Netclass clearances apply only between copper items."
-msgstr "Διάκενα πλακέτας και netclass ισχύουν μόνο μεταξύ αντικειμένων χαλκού."
+msgstr "Διάκενα κλάσεων δικτύου ισχύουν μόνο μεταξύ αντικειμένων χαλκού."
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Rule ignored."
-msgstr "Το %s δεν είναι τρύπα, ο κανόνας αγνοήθηκε."
+msgstr "%s δεν περιέχει χαλκό.  ο κανόνας αγνοήθηκε."
 
 #: pcbnew/drc/drc_engine.cpp:1156
 msgid "Keepout constraint not met."
@@ -38011,7 +37958,7 @@ msgstr "Κανόνας επιπέδου δεν ταιριάζει."
 #: pcbnew/drc/drc_engine.cpp:1201
 #, fuzzy
 msgid "Constraint layer not matched."
-msgstr "Επίπεδο(α) καθαρής(ών) περιοχής(ών) δεν ταιριάζουν."
+msgstr "Επίπεδο περιορισμού δεν ταίριαξε."
 
 #: pcbnew/drc/drc_engine.cpp:1221
 #, c-format
@@ -38057,9 +38004,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Ο όρος δεν ικανοποιείται; ο κανόνας αγνοήθηκε."
 
 #: pcbnew/drc/drc_engine.cpp:1342 pcbnew/drc/drc_engine.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s: %s."
-msgstr "Τοπικό διάκενο στο %s; διάκενο: %s."
+msgstr "Τοπικό διάκενο στο %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1423
 #, c-format
@@ -38184,9 +38131,8 @@ msgid "Annular width"
 msgstr "Πλάτος δακτυλίου"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Hole size out of range"
-msgstr "Μήκος ίσχνους εκτός έυρους"
+msgstr "Μέγεθος οπής εκτός εύρους"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Via diameter"
@@ -38197,9 +38143,8 @@ msgid "Padstack is not valid"
 msgstr "Το Padstack δεν είναι έγκυρο"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Micro via hole size out of range"
-msgstr "Διάτρηση μίκρο-διέλευσης εκτός εύρους"
+msgstr "Μέγεθος οπής μίκρο-διέλευσης εκτός εύρους"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -38329,9 +38274,9 @@ msgid "Local override"
 msgstr "Τοπική παράκαμψη"
 
 #: pcbnew/drc/drc_rule.h:156
-#, fuzzy, c-format
+#, c-format
 msgid "rule '%s'"
-msgstr "κανόνας %s"
+msgstr "κανόνας '%s'"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
@@ -38624,9 +38569,9 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s %s; πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "Έδρα %s\t"
+msgstr "Έδρα %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
 #, c-format
@@ -40101,7 +40046,7 @@ msgstr "Αρχική Πλευρά"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2323
 msgid "Min Spacing"
-msgstr "Ελάχιστη Απόσταση"
+msgstr "Ελάχ Απόσταση"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2329
 msgid "Corner Radius %"
@@ -42384,25 +42329,21 @@ msgid "gEDA PCB footprint file"
 msgstr "Προσθήκη φίλτρου αποτυπωμάτων"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:57
-#, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Αρχεία βιβλιοθήκης αποτυπωμάτων Altium PCB"
+msgstr "Κατάλογος βιβλιοθήκης αποτυπώματος gEDA PCB"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:305
-#, fuzzy
 msgid "Generating content section"
-msgstr "Επιλογή Σύνδεσης"
+msgstr "Δημιουργία ενότητας περιεχομένου"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1120
-#, fuzzy
 msgid "Generating history section"
-msgstr "Κατεύθυνση Αρίθμησης"
+msgstr "Δημιουργία ενότητας ιστορικού"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1147
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2739
-#, fuzzy
 msgid "Generating BOM section"
-msgstr "Επιλογές Απόδοσης"
+msgstr "Δημιουργία ενότητας BOM"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1311
 msgid "Generating CAD data"
@@ -42414,9 +42355,8 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "Εξαγωγή Επιπέδου %s, Δίκτυο %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2894
-#, fuzzy
 msgid "Generating logistic section"
-msgstr "Δημιουργία Αρχείου Θέσης"
+msgstr "Δημιουργία ενότητας επιμελητείας"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2906
 msgid "Saving file"
@@ -42425,10 +42365,9 @@ msgstr "Αποθήκευση αρχείου"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2938
 #, fuzzy
 msgid "Failed to save file to buffer"
-msgstr "Αποτυχία διαγραφής '%s'"
+msgstr "Αποτυχία αποθήκευσής αρχείου στον buffer"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h:88
-#, fuzzy
 msgid "IPC-2581 Production File"
 msgstr "Αρχείο Παραγωγής IPC-2581"
 
@@ -42453,10 +42392,10 @@ msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Άγνωστο σχήμα έδρας '%c=0x%02x' στη γραμμή: %d του αποτυπώματος: '%s'."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1601
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
-"Άγνωστος τύπος FP_SHAPE:'%c=0x%02x' στη γραμμή:%d του αποτυπώματος: '%s'."
+"Άγνωστος τύπος PCB_SHAPE:'%c=0x%02x' στη γραμμή %d του αποτυπώματος '%s'."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2362
 #, c-format
@@ -42612,9 +42551,8 @@ msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Μη αναμενόμενο αρχείο \"%s\" βρέθηκε στη διαδρομή βιβλιοθήκης \"%s\"."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:293
-#, fuzzy
 msgid "KiCad footprint file"
-msgstr "Αρχεία Αποτυπωμάτων KiCad"
+msgstr "Αρχείο αποτυπώματος KiCad"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:281
 #, c-format
@@ -42805,11 +42743,10 @@ msgstr ""
 "εισαχθεί."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
 msgstr ""
-"Ενεργοποίηση καταγραφής <b>εκσφαλμάτωσης</b> για συναρτήσεις Footprint*() σε "
-"αυτό το ΠΡΟΣΘΕΤΟ."
+"Ενεργοποίηση καταγραφής <b>αποσφαλμάτωσης</b> για συναρτήσεις Footprint*() "
+"σε αυτό το PCB_IO."
 
 #: pcbnew/pcb_io/pcb_io.cpp:182
 msgid "Regular expression <b>footprint name</b> filter."
@@ -42833,12 +42770,11 @@ msgid "Password for <b>login</b> to some special library server."
 msgstr "Κωδικός για <b>είσοδο</b> σε κάποιον ειδικό εξυπηρετητή βιβλιοθήκης."
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Εισάγετε το πρόγραμμα python που υλοποιεί τις συναρτήσεις PLUGIN::"
-"Footprint*()."
+"Εισάγετε το πρόγραμμα python που υλοποιεί τις συναρτήσεις "
+"PCB_IO::Footprint*() ."
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
@@ -42886,9 +42822,8 @@ msgid "%s on %s"
 msgstr "%s σε %s"
 
 #: pcbnew/pcb_shape.cpp:741
-#, fuzzy
 msgid "Pad Primitives"
-msgstr "Προσθήξη Πρωτεύοντος Σχήματος"
+msgstr "Πρωτεύοντα Σχήματα Έδρας"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -42920,7 +42855,7 @@ msgstr "Πλαίσιο κειμένου PCB %s"
 #: pcbnew/pcb_textbox.cpp:678
 #, fuzzy
 msgid "Border Properties"
-msgstr "Ιδιότητες Καμπύλης"
+msgstr "Ιδιότητες Ορίων"
 
 #: pcbnew/pcb_textbox.cpp:688
 msgid "Border Style"
@@ -42954,9 +42889,9 @@ msgid "Segment Length"
 msgstr "Μήκος τμήματος"
 
 #: pcbnew/pcb_track.cpp:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: %s"
-msgstr "Περιορισμός Πλάτους: ελάχιστο %s"
+msgstr "Περιορισμοί Πλάτους: %s"
 
 #: pcbnew/pcb_track.cpp:1129
 msgid "Micro Via"
@@ -43049,15 +42984,14 @@ msgid "Missing group name argument to %s."
 msgstr "Λείπει παράμετρος ονόματος ομάδας σε %s."
 
 #: pcbnew/pcbexpr_functions.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Λείπει παράμετρος ονομασίας επιπέδου από %s."
+msgstr "Λείπει παράμετρος ονομασίας φύλλου στο %s."
 
 #: pcbnew/pcbexpr_functions.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (reference designator) to %s."
-msgstr ""
-"Λείπει στοιχείο του αποτυπώματος (Α, Β, ή προσδιορισμός αναφοράς) για %s."
+msgstr "Λείπει παράμετρος του αποτυπώματος (προσδιορισμός αναφοράς) για %s."
 
 #: pcbnew/pcbexpr_functions.cpp:984
 #, c-format
@@ -43267,9 +43201,8 @@ msgstr ""
 "Επιβεβαιώστε ότι δεν είναι πολύγωνο που τέμνει τον εαυτό του."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1987
-#, fuzzy
 msgid "Routing"
-msgstr "Δρομολόγηση Ενός Διαδρόμου"
+msgstr "Δρομολόγηση"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
 msgid "Please select a differential pair trace you want to tune."
@@ -43522,14 +43455,13 @@ msgid "Drag Anyway"
 msgstr "Σύρσιμο ούτως ή άλλως"
 
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
-#, c-format
+#, c-format, fuzzy
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s commit έτσι κι αλλιώς.)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "Η θέση της διέλευσης παραβιάζει τον ΕΚΣ."
+msgstr "Ο διάδρομος παραβιάζει τον ΕΚΣ."
 
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/tools/pcb_actions.cpp:2381
 msgid "Break Track"
@@ -43949,9 +43881,8 @@ msgstr "Μέγεθος Οπής"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #: pcbnew/tools/board_inspection_tool.cpp:1319
-#, fuzzy
 msgid "Hole size resolution for:"
-msgstr "Ανάλυση διαμέτρου οπής για:"
+msgstr "Ανάλυση μεγέθους οπής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
 #, fuzzy, c-format
@@ -44243,9 +44174,8 @@ msgid "Item allowed at current location."
 msgstr "Το στοιχείο επιτρέπεται στην τρέχουσα τοποθεσία."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1446
-#, fuzzy
 msgid "Select a footprint to diff with its library equivalent."
-msgstr "Έλεγχος αποτυπωμάτων πλακέτας σε σχέση με τη βιβλιοθήκη..."
+msgstr "Επιλέξτε ένα αποτύπωμα για έλεγχο διαφορών με αντιστοιχία βιβλιοθήκης."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
 #, fuzzy
@@ -44354,7 +44284,7 @@ msgstr "Σχεδίαση διάστασης "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
 msgid "Min track/spacing: "
-msgstr "Ελάχιστη απόσταση διαδρόμου: "
+msgstr "Ελάχ διαδρόμου/απόσταση: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:445
 msgid "Copper Finish: "
@@ -44860,7 +44790,7 @@ msgstr "Προσθήκη καταλόγου στοίβαξης πλακέτας,
 #: pcbnew/tools/pcb_actions.cpp:165
 #, fuzzy
 msgid "Add Reference Image"
-msgstr "Κόμβος αναφοράς"
+msgstr "Προσθήκη Εικόνας Αναφοράς"
 
 #: pcbnew/tools/pcb_actions.cpp:166
 msgid ""
@@ -44879,36 +44809,32 @@ msgid "Increase Spacing"
 msgstr "Αύξηση Απόστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:195
-#, fuzzy
 msgid "Increase tuning pattern spacing by one step."
-msgstr "Αύξηση της απόστασης μαιάνδρου κατά ένα βήμα."
+msgstr "Αύξηση της απόστασης μοτίβου κατά ένα βήμα."
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Decrease Spacing"
 msgstr "Μείωση Απόστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:204
-#, fuzzy
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "Μείωση της απόστασης μαιάνδρου κατά ένα βήμα."
+msgstr "Μείωση της απόστασης μοτίβου κατά ένα βήμα."
 
 #: pcbnew/tools/pcb_actions.cpp:212
 msgid "Increase Amplitude"
 msgstr "Αύξηση Πλάτους"
 
 #: pcbnew/tools/pcb_actions.cpp:213
-#, fuzzy
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "Αύξηση του πλάτους μαιάνδρου κατά ένα βήμα."
+msgstr "Αύξηση του πλάτους μοτίβου κατά ένα βήμα."
 
 #: pcbnew/tools/pcb_actions.cpp:221
 msgid "Decrease Amplitude"
 msgstr "Μείωση Πλάτους"
 
 #: pcbnew/tools/pcb_actions.cpp:222
-#, fuzzy
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Μείωση του πλάτους μαιάνδρου κατά ένα βήμα."
+msgstr "Μείωση του πλάτους μοτίβου κατά ένα βήμα."
 
 #: pcbnew/tools/pcb_actions.cpp:231
 msgid "Add Aligned Dimension"
@@ -45023,31 +44949,26 @@ msgid "Switch the arc posture"
 msgstr "Αλλαγή της στάσης του τόξου"
 
 #: pcbnew/tools/pcb_actions.cpp:374
-#, fuzzy
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "Snap Μόνο σε Αντικείμενα Ενεργού Επιπέδου"
+msgstr "Πρόσδεση Μόνο σε Αντικείμενα Ενεργού Επιπέδου"
 
 #: pcbnew/tools/pcb_actions.cpp:375
 msgid "Enables snapping to objects on the active layer only"
 msgstr "Επιτρέπει την πρόσδεση σε αντικείμενα μόνο στο ενεργό επίπεδο"
 
 #: pcbnew/tools/pcb_actions.cpp:380
-#, fuzzy
 msgid "Snap to Objects on All Layers"
-msgstr "Σχεδιογράφηση της αναφοράς φύλλου σε όλα τα επίπεδα"
+msgstr "Πρόσδεση Σε Αντικείμενα σε Όλα τα Επίπεδα"
 
 #: pcbnew/tools/pcb_actions.cpp:381
-#, fuzzy
 msgid "Enables snapping to objects on all visible layers"
-msgstr ""
-"Οι γραμμές της φωλιάς συνδέσεων εμφανίζονται σε αντικείμενα στα ορατά επίπεδα"
+msgstr "Ενεργοποιεί την πρόσδεση σε αντικείμενα σε όλα τα ορατά επίπεδα"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Toggle Snapping Between Active and All Layers"
 msgstr "Εναλλαγή Πρόσδεσης Μεταξύ Ενεργών και Όλων των Επιπέδων"
 
 #: pcbnew/tools/pcb_actions.cpp:388
-#, fuzzy
 msgid "Toggles between snapping on all visible layers and only the active area"
 msgstr ""
 "Εναλλαγή πρόσδεσης μεταξύ όλων των ορατών επιπέδων, και μόνο της ενεργής "
@@ -45208,9 +45129,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Προσθέτει εφαπτόμενα τόξα στις επιλεγμένες γραμμές"
 
 #: pcbnew/tools/pcb_actions.cpp:617
-#, fuzzy
 msgid "Cut away corners between selected lines"
-msgstr "Κόψτε τις γωνίες μεταξύ των επιλεγμένων γραμμών"
+msgstr "Αφαίρεση γωνιών μεταξύ των επιλεγμένων γραμμών"
 
 #: pcbnew/tools/pcb_actions.cpp:624
 msgid ""
@@ -45224,18 +45144,16 @@ msgid "Extend lines to meet each other"
 msgstr "Επέκταση γραμμών για να συναντηθούν μεταξύ τους"
 
 #: pcbnew/tools/pcb_actions.cpp:636
-#, fuzzy
 msgid "Merge Polygons"
-msgstr "Πολύγωνα"
+msgstr "Συγχώνευση Πολυγώνων"
 
 #: pcbnew/tools/pcb_actions.cpp:637
 msgid "Merge selected polygons into a single polygon"
 msgstr "Συγχώνευση επιλεγμένων πολυγώνων σε ένα"
 
 #: pcbnew/tools/pcb_actions.cpp:643
-#, fuzzy
 msgid "Subtract Polygons"
-msgstr "Περίγραμμα Πολύγωνων"
+msgstr "Αφαίρεση Πολύγωνων"
 
 #: pcbnew/tools/pcb_actions.cpp:644
 msgid "Subtract selected polygons from the last one selected"
@@ -45244,12 +45162,12 @@ msgstr "Αφαίρεση επιλεγμένων πολυγώνων από το �
 #: pcbnew/tools/pcb_actions.cpp:650
 #, fuzzy
 msgid "Intersect Polygons"
-msgstr "Λανθασμένο πολύγωνο"
+msgstr "Τομή Πολύγωνων"
 
 #: pcbnew/tools/pcb_actions.cpp:651
 #, fuzzy
 msgid "Create the intersection of the selected polygons"
-msgstr "Δημιουργία διαδρόμων από τις επιλεγμένες γραμμές γραφικών"
+msgstr "Δημιουργία τομής από τα επιλεγμένα πολύγωνα"
 
 #: pcbnew/tools/pcb_actions.cpp:659
 msgid "Delete Full Track"
@@ -45332,14 +45250,12 @@ msgid "Import footprint from file"
 msgstr "Δεν είναι αρχείο αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:766
-#, fuzzy
 msgid "Export Current Footprint..."
-msgstr "Εξαγωγή Αποτυπώματος..."
+msgstr "Εξαγωγή Τρέχοντος Αποτυπώματος..."
 
 #: pcbnew/tools/pcb_actions.cpp:767
-#, fuzzy
 msgid "Export edited footprint to file"
-msgstr "Εξαγωγή αποτυπώματος στον επεξεργαστή"
+msgstr "Εξαγωγή επεξεργασμένου αποτυπώματος σε αρχείο"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Footprint Properties..."
@@ -45416,15 +45332,12 @@ msgstr ""
 "Επεξεργασία ιδιοτήτων Κειμένου και γραφικών, καθολικά για όλη την πλακέτα"
 
 #: pcbnew/tools/pcb_actions.cpp:845
-#, fuzzy
 msgid "Edit Teardrops..."
-msgstr "Προσθήκη Δακρύων..."
+msgstr "Επεξεργασία Δακρύων..."
 
 #: pcbnew/tools/pcb_actions.cpp:846
-#, fuzzy
 msgid "Add, remove or edit teardrops globally across board"
-msgstr ""
-"Επεξεργασία ιδιοτήτων διαδρόμου και διέλευσης, καθολικά για όλη την πλακέτα"
+msgstr "Προσθήκη, αφαίρεση ή επεξεργασία δακρύων, καθολικά για όλη την πλακέτα"
 
 #: pcbnew/tools/pcb_actions.cpp:852
 msgid "Global Deletions..."
@@ -45631,9 +45544,8 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Δημιουργία αρχείου(ων) διατρήσεων Excellon"
 
 #: pcbnew/tools/pcb_actions.cpp:1048
-#, fuzzy
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "Τοποθέτηση Στοιχείου (.pos)..."
+msgstr "Τοποθέτηση Στοιχείου (.pos .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Generate component placement file(s) for pick and place"
@@ -45654,9 +45566,8 @@ msgid "IPC-2581 File (.xml)..."
 msgstr "Αρχείο IPC-2581 (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1063
-#, fuzzy
 msgid "Generate an IPC-2581 file"
-msgstr "Δημιουργία αρχείου λίστας δικτύων IPC-D-356"
+msgstr "Δημιουργία αρχείου IPC-2581"
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "IPC-D-356 Netlist File..."
@@ -45853,9 +45764,8 @@ msgid "Switch to Schematic Editor"
 msgstr "Μετάβαση σε Επεξεργαστή Σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1302
-#, fuzzy
 msgid "Open schematic in schematic editor"
-msgstr "Άνοιγμα στον επεξεργαστή σχηματικού"
+msgstr "Άνοιγμα σχηματικού στον επεξεργαστή σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1312
 msgid "Local Ratsnest"
@@ -45953,9 +45863,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Εμφάνιση κειμένων αποτυπώματος σε λειτουργία γραμμής"
 
 #: pcbnew/tools/pcb_actions.cpp:1421
-#, fuzzy
 msgid "Show Pad Numbers"
-msgstr "Προβολή Αριθμού Ακροδέκτη"
+msgstr "Προβολή Αριθμών Έδρας"
 
 #: pcbnew/tools/pcb_actions.cpp:1428
 msgid "Draw Zone Fills"
@@ -45995,279 +45904,248 @@ msgid "Switch to Component (F.Cu) layer"
 msgstr "Μετάβαση στο επίπεδο Εξαρτημάτων (F.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1528
-#, fuzzy
 msgid "Switch to Inner Layer 1"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 1"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 1"
 
 #: pcbnew/tools/pcb_actions.cpp:1529
 msgid "Switch to Inner layer 1"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 1"
 
 #: pcbnew/tools/pcb_actions.cpp:1538
-#, fuzzy
 msgid "Switch to Inner Layer 2"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 2"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 2"
 
 #: pcbnew/tools/pcb_actions.cpp:1539
 msgid "Switch to Inner layer 2"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 2"
 
 #: pcbnew/tools/pcb_actions.cpp:1548
-#, fuzzy
 msgid "Switch to Inner Layer 3"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 3"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 3"
 
 #: pcbnew/tools/pcb_actions.cpp:1549
 msgid "Switch to Inner layer 3"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 3"
 
 #: pcbnew/tools/pcb_actions.cpp:1558
-#, fuzzy
 msgid "Switch to Inner Layer 4"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 4"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 4"
 
 #: pcbnew/tools/pcb_actions.cpp:1559
 msgid "Switch to Inner layer 4"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 4"
 
 #: pcbnew/tools/pcb_actions.cpp:1568
-#, fuzzy
 msgid "Switch to Inner Layer 5"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 5"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 5"
 
 #: pcbnew/tools/pcb_actions.cpp:1569
 msgid "Switch to Inner layer 5"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 5"
 
 #: pcbnew/tools/pcb_actions.cpp:1578
-#, fuzzy
 msgid "Switch to Inner Layer 6"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 6"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 6"
 
 #: pcbnew/tools/pcb_actions.cpp:1579
 msgid "Switch to Inner layer 6"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 6"
 
 #: pcbnew/tools/pcb_actions.cpp:1587
-#, fuzzy
 msgid "Switch to Inner Layer 7"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 7"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 7"
 
 #: pcbnew/tools/pcb_actions.cpp:1588
 msgid "Switch to Inner layer 7"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 7"
 
 #: pcbnew/tools/pcb_actions.cpp:1596
-#, fuzzy
 msgid "Switch to Inner Layer 8"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 8"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 8"
 
 #: pcbnew/tools/pcb_actions.cpp:1597
 msgid "Switch to Inner layer 8"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 8"
 
 #: pcbnew/tools/pcb_actions.cpp:1605
-#, fuzzy
 msgid "Switch to Inner Layer 9"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 9"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 9"
 
 #: pcbnew/tools/pcb_actions.cpp:1606
 msgid "Switch to Inner layer 9"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 9"
 
 #: pcbnew/tools/pcb_actions.cpp:1614
-#, fuzzy
 msgid "Switch to Inner Layer 10"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 10"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 10"
 
 #: pcbnew/tools/pcb_actions.cpp:1615
 msgid "Switch to Inner layer 10"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 10"
 
 #: pcbnew/tools/pcb_actions.cpp:1623
-#, fuzzy
 msgid "Switch to Inner Layer 11"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 11"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 11"
 
 #: pcbnew/tools/pcb_actions.cpp:1624
 msgid "Switch to Inner layer 11"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 11"
 
 #: pcbnew/tools/pcb_actions.cpp:1632
-#, fuzzy
 msgid "Switch to Inner Layer 12"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 12"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 12"
 
 #: pcbnew/tools/pcb_actions.cpp:1633
 msgid "Switch to Inner layer 12"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 12"
 
 #: pcbnew/tools/pcb_actions.cpp:1641
-#, fuzzy
 msgid "Switch to Inner Layer 13"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 13"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 13"
 
 #: pcbnew/tools/pcb_actions.cpp:1642
 msgid "Switch to Inner layer 13"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 13"
 
 #: pcbnew/tools/pcb_actions.cpp:1650
-#, fuzzy
 msgid "Switch to Inner Layer 14"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 14"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 14"
 
 #: pcbnew/tools/pcb_actions.cpp:1651
 msgid "Switch to Inner layer 14"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 14"
 
 #: pcbnew/tools/pcb_actions.cpp:1659
-#, fuzzy
 msgid "Switch to Inner Layer 15"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 15"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 15"
 
 #: pcbnew/tools/pcb_actions.cpp:1660
 msgid "Switch to Inner layer 15"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 15"
 
 #: pcbnew/tools/pcb_actions.cpp:1668
-#, fuzzy
 msgid "Switch to Inner Layer 16"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 16"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 16"
 
 #: pcbnew/tools/pcb_actions.cpp:1669
 msgid "Switch to Inner layer 16"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 16"
 
 #: pcbnew/tools/pcb_actions.cpp:1677
-#, fuzzy
 msgid "Switch to Inner Layer 17"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 17"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 17"
 
 #: pcbnew/tools/pcb_actions.cpp:1678
 msgid "Switch to Inner layer 17"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 17"
 
 #: pcbnew/tools/pcb_actions.cpp:1686
-#, fuzzy
 msgid "Switch to Inner Layer 18"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 18"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 18"
 
 #: pcbnew/tools/pcb_actions.cpp:1687
 msgid "Switch to Inner layer 18"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 18"
 
 #: pcbnew/tools/pcb_actions.cpp:1695
-#, fuzzy
 msgid "Switch to Inner Layer 19"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 19"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 19"
 
 #: pcbnew/tools/pcb_actions.cpp:1696
 msgid "Switch to Inner layer 19"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 19"
 
 #: pcbnew/tools/pcb_actions.cpp:1704
-#, fuzzy
 msgid "Switch to Inner Layer 20"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 20"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 20"
 
 #: pcbnew/tools/pcb_actions.cpp:1705
 msgid "Switch to Inner layer 20"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 20"
 
 #: pcbnew/tools/pcb_actions.cpp:1713
-#, fuzzy
 msgid "Switch to Inner Layer 21"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 21"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 21"
 
 #: pcbnew/tools/pcb_actions.cpp:1714
 msgid "Switch to Inner layer 21"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 21"
 
 #: pcbnew/tools/pcb_actions.cpp:1722
-#, fuzzy
 msgid "Switch to Inner Layer 22"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 22"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 22"
 
 #: pcbnew/tools/pcb_actions.cpp:1723
 msgid "Switch to Inner layer 22"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 22"
 
 #: pcbnew/tools/pcb_actions.cpp:1731
-#, fuzzy
 msgid "Switch to Inner Layer 23"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 23"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 23"
 
 #: pcbnew/tools/pcb_actions.cpp:1732
 msgid "Switch to Inner layer 23"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 23"
 
 #: pcbnew/tools/pcb_actions.cpp:1740
-#, fuzzy
 msgid "Switch to Inner Layer 24"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 24"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 24"
 
 #: pcbnew/tools/pcb_actions.cpp:1741
 msgid "Switch to Inner layer 24"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 24"
 
 #: pcbnew/tools/pcb_actions.cpp:1749
-#, fuzzy
 msgid "Switch to Inner Layer 25"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 25"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 25"
 
 #: pcbnew/tools/pcb_actions.cpp:1750
 msgid "Switch to Inner layer 25"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 25"
 
 #: pcbnew/tools/pcb_actions.cpp:1758
-#, fuzzy
 msgid "Switch to Inner Layer 26"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 26"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1759
 msgid "Switch to Inner layer 26"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1767
-#, fuzzy
 msgid "Switch to Inner Layer 27"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 27"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1768
 msgid "Switch to Inner layer 27"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1776
-#, fuzzy
 msgid "Switch to Inner Layer 28"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 28"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1777
 msgid "Switch to Inner layer 28"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1785
-#, fuzzy
 msgid "Switch to Inner Layer 29"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 29"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1786
 msgid "Switch to Inner layer 29"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1794
-#, fuzzy
 msgid "Switch to Inner Layer 30"
-msgstr "Μετάβαση σε Εσωτερικό επίπεδο 30"
+msgstr "Μετάβαση σε Εσωτερικό Επίπεδο 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1795
 msgid "Switch to Inner layer 30"
 msgstr "Μετάβαση σε Εσωτερικό επίπεδο 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1805
-#, fuzzy
 msgid "Switch to Copper (B.Cu) Layer"
-msgstr "Μετάβαση στο επίπεδο Χαλκού (B.Cu)"
+msgstr "Μετάβαση στο Επίπεδο Χαλκού (B.Cu)"
 
 #: pcbnew/tools/pcb_actions.cpp:1806
 msgid "Switch to Copper (B.Cu) layer"
@@ -46337,14 +46215,12 @@ msgid "Show differences between board footprint and its library equivalent"
 msgstr "Εμφάνιση διαφορών αποτυπώματος πλακέτας και ισοδύναμου από βιβλιοθήκη"
 
 #: pcbnew/tools/pcb_actions.cpp:1893
-#, fuzzy
 msgid "Show Footprint Associations"
-msgstr "Εξαγωγή Αρχείου Συσχέτισης Αποτυπώματος"
+msgstr "Εμφάνιση Συσχετισμών Αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Show footprint library and schematic symbol associations"
-msgstr "Φίλτραρισμα λίστας αποτυπωμάτων με βάση λέξεις κλειδιά σχηματικού"
+msgstr "Εμφάνιση συσχετίσεων βιβλιοθήκης αποτυπώματος και συμβόλων σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
 msgid "Geographical Reannotate..."
@@ -46435,9 +46311,8 @@ msgid "Distributes selected items along the vertical axis"
 msgstr "Διανομή επιλεγμένων αντικειμένων κατά μήκος του κάθετου άξονα"
 
 #: pcbnew/tools/pcb_actions.cpp:2003
-#, fuzzy
 msgid "Keep Arc Center, Adjust Radius"
-msgstr "Διατήρηση κέντρου τόξου, τροποποίηση ακτίνας"
+msgstr "Διατήρηση Κέντρου Τόξου, Τροποποίηση Ακτίνας"
 
 #: pcbnew/tools/pcb_actions.cpp:2004
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
@@ -46446,9 +46321,8 @@ msgstr ""
 "τελικών σημείων"
 
 #: pcbnew/tools/pcb_actions.cpp:2010
-#, fuzzy
 msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr "Διατήρηση τελικών σημείων τόξου ή κατεύθυνσης αρχικού σημείου"
+msgstr "Διατήρηση Τελικών Σημείων Τόξου ή Κατεύθυνσης Αρχικού Σημείου"
 
 #: pcbnew/tools/pcb_actions.cpp:2011
 msgid ""
@@ -46681,9 +46555,8 @@ msgid "Change active layer pair for routing"
 msgstr "Αλλαγή του ενεργού ζεύγους επιπέδων για δρομολόγηση"
 
 #: pcbnew/tools/pcb_actions.cpp:2306
-#, fuzzy
 msgid "Tune Length"
-msgstr "Μικρο-ρύθμιση Μήκους Δρόμου"
+msgstr "Συντονισμός Μήκους"
 
 #: pcbnew/tools/pcb_actions.cpp:2307
 msgid "Tune length of a single track or differential pair"
@@ -47869,7 +47742,6 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "Αποτυχία φόρτωσης [INFO]: η γραμμή εισαγωγής είναι πολύ μεγάλη\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
@@ -47906,12 +47778,10 @@ msgid "View Gerber files"
 msgstr "Προβολή αρχείων Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-#, fuzzy
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
@@ -47928,7 +47798,6 @@ msgid "KiCad PCB Calculator"
 msgstr "Εκτέλεση PCB Calculator"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
@@ -47942,7 +47811,6 @@ msgstr ""
 "Αριθμομηχανή για διάφορους υπολογισμούς σχετιζόμενους με την ηλεκτρονική"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#, fuzzy
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
