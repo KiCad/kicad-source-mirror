@@ -44,6 +44,7 @@
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
+#include <schematic.h>
 #include <sch_field.h>
 #include <sch_item.h>
 #include <sch_pin.h>
@@ -72,6 +73,33 @@ typedef std::weak_ptr<LIB_SYMBOL> PART_REF;
 
 
 extern std::string toUTFTildaText( const wxString& txt );
+
+
+// @todo Move this to transform alone with all of the transform manipulation code.
+/// enum used in RotationMiroir()
+enum SYMBOL_ORIENTATION_T
+{
+    SYM_NORMAL,                     // Normal orientation, no rotation or mirror
+    SYM_ROTATE_CLOCKWISE,           // Rotate -90
+    SYM_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
+    SYM_ORIENT_0,                   // No rotation and no mirror id SYM_NORMAL
+    SYM_ORIENT_90,                  // Rotate 90, no mirror
+    SYM_ORIENT_180,                 // Rotate 180, no mirror
+    SYM_ORIENT_270,                 // Rotate -90, no mirror
+    SYM_MIRROR_X = 0x100,           // Mirror around X axis
+    SYM_MIRROR_Y = 0x200            // Mirror around Y axis
+};
+
+
+// Cover for SYMBOL_ORIENTATION_T for property manager (in order to expose only a subset of
+// SYMBOL_ORIENTATION_T's values).
+enum SYMBOL_ORIENTATION_PROP
+{
+    SYMBOL_ANGLE_0   = SYMBOL_ORIENTATION_T::SYM_ORIENT_0,
+    SYMBOL_ANGLE_90  = SYMBOL_ORIENTATION_T::SYM_ORIENT_90,
+    SYMBOL_ANGLE_180 = SYMBOL_ORIENTATION_T::SYM_ORIENT_180,
+    SYMBOL_ANGLE_270 = SYMBOL_ORIENTATION_T::SYM_ORIENT_270
+};
 
 
 /**
@@ -173,6 +201,8 @@ public:
     void SetLibId( const LIB_ID& aName );
 
     const LIB_ID& GetLibId() const { return m_lib_id; }
+
+    wxString GetSymbolIDAsString() const { return m_lib_id.Format(); }
 
     /**
      * The name of the symbol in the schematic library symbol list.
@@ -320,6 +350,18 @@ public:
     int GetOrientation() const;
 
     /**
+     * Access for property manager.
+     */
+    void SetOrientationProp( SYMBOL_ORIENTATION_PROP aAngle )
+    {
+        SetOrientation( aAngle );
+    }
+    SYMBOL_ORIENTATION_PROP GetOrientationProp() const
+    {
+        return (SYMBOL_ORIENTATION_PROP) GetOrientation();
+    }
+
+    /**
      * Return the list of system text vars & fields for this symbol.
      */
     void GetContextualTextVars( wxArrayString* aVars ) const;
@@ -456,6 +498,26 @@ public:
     const wxString GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
                                           bool aAllowExtraText ) const;
     void SetFootprintFieldText( const wxString& aFootprint );
+
+    /*
+     * Field access for property manager
+     */
+    wxString GetRefProp() const
+    {
+        return GetRef( &Schematic()->CurrentSheet() );
+    }
+    void SetRefProp( const wxString aRef )
+    {
+        SetRef( &Schematic()->CurrentSheet(), aRef );
+    }
+    wxString GetValueProp() const
+    {
+        return GetValueFieldText( false, &Schematic()->CurrentSheet(), false );
+    }
+    void SetValueProp( const wxString aRef )
+    {
+        SetValueFieldText( aRef );
+    }
 
     /**
      * Restore fields to the original library values.
@@ -699,6 +761,12 @@ public:
 
     VECTOR2I GetPosition() const override { return m_pos; }
     void    SetPosition( const VECTOR2I& aPosition ) override { Move( aPosition - m_pos ); }
+
+    int GetX() const { return GetPosition().x; };
+    void SetX( int aX ) { SetPosition( VECTOR2I( aX, GetY() ) ); }
+
+    int GetY() const { return GetPosition().y; }
+    void SetY( int aY ) { SetPosition( VECTOR2I( GetX(), aY ) ); }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;

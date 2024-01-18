@@ -64,22 +64,6 @@ class RESCUER;
 class HIERARCHY_PANE;
 
 
-// @todo Move this to transform alone with all of the transform manipulation code.
-/// enum used in RotationMiroir()
-enum SYMBOL_ORIENTATION_T
-{
-    SYM_NORMAL,                     // Normal orientation, no rotation or mirror
-    SYM_ROTATE_CLOCKWISE,           // Rotate -90
-    SYM_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
-    SYM_ORIENT_0,                   // No rotation and no mirror id SYM_NORMAL
-    SYM_ORIENT_90,                  // Rotate 90, no mirror
-    SYM_ORIENT_180,                 // Rotate 180, no mirror
-    SYM_ORIENT_270,                 // Rotate -90, no mirror
-    SYM_MIRROR_X = 0x100,           // Mirror around X axis
-    SYM_MIRROR_Y = 0x200            // Mirror around Y axis
-};
-
-
 /// Schematic search type used by the socket link with Pcbnew
 enum SCH_SEARCH_T
 {

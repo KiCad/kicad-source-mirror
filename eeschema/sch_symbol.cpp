@@ -2601,9 +2601,57 @@ static struct SCH_SYMBOL_DESC
 {
     SCH_SYMBOL_DESC()
     {
+        ENUM_MAP<SYMBOL_ORIENTATION_PROP>::Instance()
+                .Map( SYMBOL_ANGLE_0,   wxS( "0" ) )
+                .Map( SYMBOL_ANGLE_90,  wxS( "90" ) )
+                .Map( SYMBOL_ANGLE_180, wxS( "180" ) )
+                .Map( SYMBOL_ANGLE_270, wxS( "270" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_SYMBOL );
         propMgr.InheritsAfter( TYPE_HASH( SCH_SYMBOL ), TYPE_HASH( SCH_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Position X" ),
+                    &SCH_SYMBOL::SetX, &SCH_SYMBOL::GetX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Position Y" ),
+                    &SCH_SYMBOL::SetY, &SCH_SYMBOL::GetY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_SYMBOL, SYMBOL_ORIENTATION_PROP>(
+                    _HKI( "Orientation" ), &SCH_SYMBOL::SetOrientationProp,
+                &SCH_SYMBOL::GetOrientationProp ) );
+
+        auto isMultiUnitSymbol =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                        return symbol->GetUnitCount() > 1;
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ),
+                    &SCH_SYMBOL::SetUnit, &SCH_SYMBOL::GetUnit ) )
+                .SetAvailableFunc( isMultiUnitSymbol );
+
+        const wxString groupFields = _HKI( "Fields" );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Reference" ),
+                    &SCH_SYMBOL::SetRefProp, &SCH_SYMBOL::GetRefProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Value" ),
+                    &SCH_SYMBOL::SetValueProp, &SCH_SYMBOL::GetValueProp ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Library Link" ),
+                    NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetSymbolIDAsString ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Library Description" ),
+                    NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetDescription ),
+                    groupFields );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, wxString>( _HKI( "Keywords" ),
+                    NO_SETTER( SCH_SYMBOL, wxString ), &SCH_SYMBOL::GetKeyWords ),
+                    groupFields );
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
@@ -2621,3 +2669,5 @@ static struct SCH_SYMBOL_DESC
                 groupAttributes );
     }
 } _SCH_SYMBOL_DESC;
+
+ENUM_TO_WXANY( SYMBOL_ORIENTATION_PROP )
