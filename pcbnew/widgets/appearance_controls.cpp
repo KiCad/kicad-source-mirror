@@ -406,6 +406,9 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_lastSelectedUserPreset( nullptr ),
         m_layerContextMenu( nullptr )
 {
+    // Correct the min size from wxformbuilder not using fromdip
+    SetMinSize( FromDIP( GetMinSize() ) );
+
     DPI_SCALING_COMMON dpi( nullptr, m_frame );
 
     int indicatorSize = ConvertDialogToPixels( wxSize( 6, 6 ) ).x / dpi.GetContentScaleFactor();
