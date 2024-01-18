@@ -129,8 +129,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
         m_mainToolBar( nullptr ),
         m_lastToolbarIconSize( 0 )
 {
+    const int defaultLeftWinWidth = FromDIP( 250 );
+
     m_active_project = false;
-    m_leftWinWidth = 250;       // Default value
+    m_leftWinWidth = defaultLeftWinWidth; // Default value
     m_aboutTitle = "KiCad";
 
     // JPC: A very ugly hack to fix an issue on Linux: if the wxbase315u_xml_gcc_custom.so is
@@ -223,7 +225,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_auimgr.Update();
 
     // Now the actual m_leftWin size is set, give it a reasonable min width
-    m_auimgr.GetPane( m_leftWin ).MinSize( 250, -1 );
+    m_auimgr.GetPane( m_leftWin ).MinSize( defaultLeftWinWidth, -1 );
 
     wxSizer* mainSizer = GetSizer();
 
