@@ -200,9 +200,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Left().Layer( 3 )
                       .TopDockable( false ).BottomDockable( false )
                       .Caption( _( "Libraries" ) )
-                      .MinSize( 250, -1 ).BestSize( 250, -1 ) );
+                      .MinSize( FromDIP( 250 ), -1 ).BestSize( FromDIP( 250 ), -1 ) );
 
-    m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo() );
+    m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
     // Show or hide m_propertiesPanel depending on current settings:
     wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
     propertiesPaneInfo.Show( m_settings->m_AuiPanels.show_properties );

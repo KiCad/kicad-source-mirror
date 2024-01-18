@@ -33,7 +33,7 @@ using KIGFX::COLOR4D;
 
 
 extern const wxAuiPaneInfo& defaultNetNavigatorPaneInfo();
-extern const wxAuiPaneInfo& defaultPropertiesPaneInfo();
+extern const wxAuiPaneInfo& defaultPropertiesPaneInfo( wxWindow* aWindow );
 
 
 

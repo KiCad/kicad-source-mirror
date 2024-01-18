@@ -84,7 +84,7 @@ const wxAuiPaneInfo& defaultNetNavigatorPaneInfo()
 }
 
 
-const wxAuiPaneInfo& defaultPropertiesPaneInfo()
+const wxAuiPaneInfo& defaultPropertiesPaneInfo( wxWindow* aWindow )
 {
     static wxAuiPaneInfo paneInfo;
 
@@ -96,10 +96,10 @@ const wxAuiPaneInfo& defaultPropertiesPaneInfo()
             .TopDockable( false )
             .BottomDockable( false )
             .CloseButton( true )
-            .MinSize( 240, 60 )
-            .BestSize( 300, 200 )
-            .FloatingSize( 300, 400 )
-            .FloatingPosition( 50, 200 )
+            .MinSize( aWindow->FromDIP( wxSize( 240, 60 ) ) )
+            .BestSize( aWindow->FromDIP( wxSize( 300, 200 ) ) )
+            .FloatingSize( aWindow->FromDIP( wxSize( 300, 400 ) ) )
+            .FloatingPosition( aWindow->FromDIP( wxPoint( 50, 200 ) ) )
             .Show( true );
 
     return paneInfo;

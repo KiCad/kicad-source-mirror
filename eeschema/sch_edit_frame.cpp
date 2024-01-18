@@ -210,7 +210,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .FloatingPosition( FromDIP( wxPoint( 50, 50 ) ) )
                       .Show( false ) );
 
-    m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo() );
+    m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 

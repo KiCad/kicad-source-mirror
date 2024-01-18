@@ -226,11 +226,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" )
                       .Left().Layer( 4 )
                       .Caption( _( "Libraries" ) )
-                      .MinSize( 250, -1 ).BestSize( 250, -1 ) );
+                      .MinSize( FromDIP( 250 ), -1 ).BestSize( FromDIP( 250 ), -1 ) );
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 3 )
                       .Caption( _( "Properties" ) ).PaneBorder( false )
-                      .MinSize( 240, 60 ).BestSize( 300, 200 ) );
+                      .MinSize( FromDIP( wxSize( 240, 60 ) ) ).BestSize( FromDIP( wxSize( 300, 200 ) ) ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
 
@@ -239,11 +239,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
                       .Right().Layer( 3 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
-                      .MinSize( 180, -1 ).BestSize( 180, -1 ) );
+                      .MinSize( FromDIP( 180 ), -1 ).BestSize( FromDIP( 180 ), -1 ) );
     m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Palette().Name( "SelectionFilter" )
                       .Right().Layer( 3 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
-                      .MinSize( 180, -1 ).BestSize( 180, -1 ) );
+                      .MinSize( FromDIP( 180 ), -1 ).BestSize( FromDIP( 180 ), -1 ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
