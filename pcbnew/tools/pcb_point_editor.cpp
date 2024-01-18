@@ -254,10 +254,10 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         }
 
         case SHAPE_T::ARC:
-            points->AddPoint( shape->GetCenter() );
             points->AddPoint( shape->GetStart() );
             points->AddPoint( shape->GetArcMid() );
             points->AddPoint( shape->GetEnd() );
+            points->AddPoint( shape->GetCenter() );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -693,7 +693,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                                                      static_cast<PCB_GENERATOR*>( item ) );
                 }
                 commit.Revert();
-                
+
                 inDrag = false;
                 frame()->UndoRedoBlock( false );
             }
